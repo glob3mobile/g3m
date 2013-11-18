@@ -34,17 +34,6 @@ int G3MDemoScene::getOptionIndex(const std::string& option) const {
 }
 
 void G3MDemoScene::selectOption(const std::string& option) {
-//  if (option != _selectedOption) {
-//    const int optionIndex = getOptionIndex(option);
-//    if (optionIndex >= 0) {
-//      _selectedOption = option;
-//
-//      rawSelectOption(option, optionIndex);
-//
-//      _model->onChangeSceneOption(this, _selectedOption, optionIndex);
-//    }
-//  }
-
   const int optionIndex = getOptionIndex(option);
   if (optionIndex != _selectedOptionIndex) {
     if (optionIndex >= 0) {
@@ -55,5 +44,4 @@ void G3MDemoScene::selectOption(const std::string& option) {
       _model->onChangeSceneOption(this, option, optionIndex);
     }
   }
-
 }

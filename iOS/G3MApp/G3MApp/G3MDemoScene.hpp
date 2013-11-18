@@ -19,7 +19,6 @@ class G3MContext;
 class G3MDemoScene {
 private:
   G3MDemoModel* _model;
-  //std::string   _selectedOption;
   int _selectedOptionIndex;
 
   int getOptionIndex(const std::string& option) const;
@@ -62,7 +61,6 @@ public:
   }
 
   bool isSelectedOption(const std::string& option) const {
-//    return _selectedOption == option;
     return _options[_selectedOptionIndex] == option;
   }
 

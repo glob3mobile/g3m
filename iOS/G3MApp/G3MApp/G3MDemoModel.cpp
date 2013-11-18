@@ -23,6 +23,8 @@
 #include "G3MRasterLayersDemoScene.hpp"
 #include "G3MVectorialDemoScene.hpp"
 #include "G3MMarkersDemoScene.hpp"
+#include "G3M3DSymbologyDemoScene.hpp"
+
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
                            LayerSet* layerSet,
@@ -38,7 +40,7 @@ _context(NULL)
   //  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
   _scenes.push_back( new G3MMarkersDemoScene(this) );
-  //  _scenes.push_back( new G3MDemoScene("3D Symbology") );
+  _scenes.push_back( new G3M3DSymbologyDemoScene(this) );
   //  _scenes.push_back( new G3MDemoScene("Point clouds") );
   //  _scenes.push_back( new G3MDemoScene("3D Model") );
   //  _scenes.push_back( new G3MDemoScene("Camera") );
@@ -67,12 +69,13 @@ void G3MDemoModel::reset() {
 
   _g3mWidget->setShownSector( Sector::fullSphere() );
 
-  _layerSet->removeAllLayers(true);
-
-  getGEOTileRasterizer()->clear();
   getMarksRenderer()->removeAllMarks();
   getMeshRenderer()->clearMeshes();
   getShapesRenderer()->removeAllShapes(true);
+  getGEOTileRasterizer()->clear();
+
+  _layerSet->removeAllLayers(true);
+
 }
 
 GEOTileRasterizer* G3MDemoModel::getGEOTileRasterizer() const {

@@ -25,6 +25,8 @@
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
 		CFE3B3C7183A99070078C796 /* G3MMarkersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */; };
+		CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */; };
+		CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */; };
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
 		CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4818329FE6006ABFF6 /* libicucore.dylib */; };
@@ -136,6 +138,9 @@
 		CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MMarkersDemoScene.cpp; sourceTree = "<group>"; };
 		CFE3B3C6183A99070078C796 /* G3MMarkersDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MMarkersDemoScene.hpp; sourceTree = "<group>"; };
+		CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3M3DSymbologyDemoScene.cpp; sourceTree = "<group>"; };
+		CFE3B3CA183ABAC70078C796 /* G3M3DSymbologyDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3M3DSymbologyDemoScene.hpp; sourceTree = "<group>"; };
+		CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = uscitieslite.geojson; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CFF64D4818329FE6006ABFF6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -240,6 +245,8 @@
 		CF6920AD1837E7EE007409D8 /* DemoBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */,
+				CFE3B3CA183ABAC70078C796 /* G3M3DSymbologyDemoScene.hpp */,
 				CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */,
 				CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */,
 				CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */,
@@ -252,12 +259,12 @@
 				CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */,
 				CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */,
 				CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */,
+				CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */,
+				CFE3B3C6183A99070078C796 /* G3MMarkersDemoScene.hpp */,
 				CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */,
 				CF6920B31837F1CA007409D8 /* G3MRasterLayersDemoScene.hpp */,
 				CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */,
 				CF6920B61837F26B007409D8 /* G3MVectorialDemoScene.hpp */,
-				CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */,
-				CFE3B3C6183A99070078C796 /* G3MMarkersDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -410,6 +417,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */,
 				CF6920C818394F56007409D8 /* restaurant-48x48.png */,
 				CF6920C618394E44007409D8 /* restaurant-96x96.png */,
 				CF6920C018394DB6007409D8 /* buildings_monaco.geojson */,
@@ -556,6 +564,7 @@
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
 				E780A3DA16D29FAA000F0395 /* A320.bson in Resources */,
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
+				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
 				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
@@ -581,6 +590,7 @@
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
 				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */,
+				CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */,
 				CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */,
 				CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */,
 				E7D1B80716D27DC600AF47C1 /* G3MToolbar.m in Sources */,
