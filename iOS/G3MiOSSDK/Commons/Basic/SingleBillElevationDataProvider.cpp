@@ -30,17 +30,13 @@ _elevationData(NULL),
 _elevationDataResolved(false),
 _currentRequestID(0),
 _downloader(NULL),
-_requestToDownloaderID(-1)
+_requestToDownloaderID(-1),
+_listener(NULL),
+_hasBeenInitialized(false)
 {
 
 }
 
-SingleBillElevationDataProvider::~SingleBillElevationDataProvider(){
-#warning it does not work
-  if (_downloader != NULL && _requestToDownloaderID > -1){
-    _downloader->cancelRequest(_requestToDownloaderID);
-  }
-}
 
 class SingleBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
@@ -66,6 +62,10 @@ public:
 
   }
 
+  void notifyProviderHasBeenDeleted(){
+    _singleBillElevationDataProvider = NULL;
+  }
+
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
@@ -75,15 +75,22 @@ public:
 
     delete buffer;
 
-    _singleBillElevationDataProvider->onElevationData(elevationData);
+    if (_singleBillElevationDataProvider != NULL){
+      _singleBillElevationDataProvider->onElevationData(elevationData);
+    }
   }
 
   void onError(const URL& url) {
-    _singleBillElevationDataProvider->onElevationData(NULL);
+    if (_singleBillElevationDataProvider != NULL){
+      _singleBillElevationDataProvider->onElevationData(NULL);
+    }
   }
 
   void onCancel(const URL& url) {
     ILogger::instance()->logInfo("SingleBillElevationDataProvider download petition was canceled.");
+    if (_singleBillElevationDataProvider != NULL){
+      _singleBillElevationDataProvider->onElevationData(NULL);
+    }
   }
 
   void onCanceledDownload(const URL& url,
@@ -91,6 +98,19 @@ public:
                           bool expired) {
   }
 };
+
+
+SingleBillElevationDataProvider::~SingleBillElevationDataProvider(){
+#warning it does not work
+  if (_downloader != NULL && _requestToDownloaderID > -1){
+    _downloader->cancelRequest(_requestToDownloaderID);
+  }
+
+  if (_listener != NULL){
+    _listener->notifyProviderHasBeenDeleted();
+    _listener = NULL;
+  }
+}
 
 void SingleBillElevationDataProvider::onElevationData(ElevationData* elevationData) {
   _elevationData = elevationData;
@@ -101,22 +121,29 @@ void SingleBillElevationDataProvider::onElevationData(ElevationData* elevationDa
   }
 
   drainQueue();
+
+
+  _listener = NULL; //The listener will be autodeleted
 }
 
 void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
   if (!_elevationDataResolved) {
     _downloader = context->getDownloader();
+
+    _listener = new SingleBillElevationDataProvider_BufferDownloadListener(this,
+                                                                           _sector,
+                                                                           _extentWidth,
+                                                                           _extentHeight,
+                                                                           _deltaHeight);
+
     _requestToDownloaderID = _downloader->requestBuffer(_bilUrl,
                                                         2000000000,
                                                         TimeInterval::fromDays(30),
                                                         true,
-                                                        new SingleBillElevationDataProvider_BufferDownloadListener(this,
-                                                                                                                   _sector,
-                                                                                                                   _extentWidth,
-                                                                                                                   _extentHeight,
-                                                                                                                   _deltaHeight),
+                                                        _listener,
                                                         true);
   }
+  _hasBeenInitialized = true;
 }
 
 const long long SingleBillElevationDataProvider::requestElevationData(const Sector& sector,

@@ -18,6 +18,8 @@
 #include <map>
 #include "Sector.hpp"
 
+class SingleBillElevationDataProvider_BufferDownloadListener;
+
 
 struct SingleBillElevationDataProvider_Request {
   const Sector _sector;
@@ -79,6 +81,9 @@ private:
 
   IDownloader* _downloader;
   long long    _requestToDownloaderID;
+  SingleBillElevationDataProvider_BufferDownloadListener* _listener;
+
+  bool _hasBeenInitialized;
 
 
 public:
@@ -113,6 +118,10 @@ public:
 
   const Vector2I getMinResolution() const{
     return Vector2I(_extentWidth, _extentHeight);
+  }
+
+  bool hasBeenInitialized(){
+    return _hasBeenInitialized;
   }
   
 };

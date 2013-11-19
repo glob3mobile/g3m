@@ -54,6 +54,8 @@ public:
 
   virtual void initialize(const G3MContext* context) = 0;
 
+  virtual bool hasBeenInitialized() = 0;
+
   virtual const long long requestElevationData(const Sector& sector,
                                                const Vector2I& extent,
                                                IElevationDataListener* listener,
