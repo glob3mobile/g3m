@@ -2615,7 +2615,7 @@ public:
           void run(const G3MContext* context) {
 
 
-            int i = rand()%3;
+            int i = rand()%4;
             switch (i) {
               case 0:
                 [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider1, false);
