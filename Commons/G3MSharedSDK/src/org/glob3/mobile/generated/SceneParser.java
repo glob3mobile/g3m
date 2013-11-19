@@ -296,12 +296,30 @@ public class SceneParser {
 
          final IStringBuilder url = IStringBuilder.newStringBuilder();
          url.addString(geojsonDatasource);
-         url.addString("/");
-         url.addString(namefile);
+
+         final int _todoCpp;
+
+         if (geojsonDatasource.endsWith("=") || geojsonDatasource.endsWith("?") || geojsonDatasource.endsWith("&")) {
+            url.addString(namefile);
+         }
+         else {
+            url.addString("/");
+            url.addString(namefile);
+         }
 
          final IStringUtils iISU = IStringUtils.instance();
-         final String namefileTruncated = iISU.capitalize(iISU.replaceSubstring(
-                  iISU.substring(namefile, 0, iISU.indexOf(namefile, ".")), "_", " "));
+
+         final String[] aux = namefile.split("\\.");
+
+         final String basicname;
+         if (aux.length > 1) {
+            basicname = iISU.substring(namefile, 0, iISU.indexOf(namefile, "."));
+         }
+         else {
+            basicname = namefile;
+         }
+
+         final String namefileTruncated = iISU.capitalize(iISU.replaceSubstring(basicname, "_", " "));
 
          String nameFileFormatted;
          final int pos = IStringUtils.instance().indexOf(namefileTruncated, "-");
