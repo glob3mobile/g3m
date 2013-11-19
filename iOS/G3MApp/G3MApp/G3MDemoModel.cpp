@@ -27,6 +27,7 @@
 #include "G3MPointCloudDemoScene.hpp"
 #include "G3M3DModelDemoScene.hpp"
 #include "G3MCameraDemoScene.hpp"
+#include "G3MIsosurfaceDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
                            LayerSet* layerSet,
@@ -46,6 +47,7 @@ _context(NULL)
   _scenes.push_back( new G3MPointCloudDemoScene(this) );
   _scenes.push_back( new G3M3DModelDemoScene(this) );
   _scenes.push_back( new G3MCameraDemoScene(this) );
+  _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
