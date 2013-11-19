@@ -65,11 +65,6 @@ public:
     return _hasNoData;
   }
 
-  bool hasBeenInitialized(){
-#warning TODO
-    return false;
-  }
-
 };
 
 #endif

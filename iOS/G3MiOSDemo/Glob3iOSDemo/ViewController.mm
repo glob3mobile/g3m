@@ -2614,11 +2614,13 @@ public:
 
           void run(const G3MContext* context) {
 
-            if (rand() % 2){
 
-              if (rand() % 2 == 0){
+            int i = rand()%3;
+            switch (i) {
+              case 0:
                 [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider1, false);
-              } else{
+                break;
+              case 1:
 
                 _elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
                                                                               Sector::fromDegrees(
@@ -2632,12 +2634,17 @@ public:
 
 
                 [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider2, true);
-              }
-            }
-            else{
-              [_iosWidget widget]->getPlanetRenderer()->setVerticalExaggeration(rand() % 5);
-            }
+                break;
+              case 2:
+                [_iosWidget widget]->getPlanetRenderer()->setVerticalExaggeration(rand() % 5);
+                break;
+              case 3:
+                [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(NULL, false);
+                break;
 
+              default:
+                break;
+            }
 
           }
         };

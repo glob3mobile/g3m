@@ -83,9 +83,6 @@ private:
   long long    _requestToDownloaderID;
   SingleBillElevationDataProvider_BufferDownloadListener* _listener;
 
-  bool _hasBeenInitialized;
-
-
 public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
@@ -120,10 +117,6 @@ public:
     return Vector2I(_extentWidth, _extentHeight);
   }
 
-  bool hasBeenInitialized(){
-    return _hasBeenInitialized;
-  }
-  
 };
 
 #endif

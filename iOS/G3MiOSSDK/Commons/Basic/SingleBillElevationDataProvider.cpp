@@ -31,8 +31,7 @@ _elevationDataResolved(false),
 _currentRequestID(0),
 _downloader(NULL),
 _requestToDownloaderID(-1),
-_listener(NULL),
-_hasBeenInitialized(false)
+_listener(NULL)
 {
 
 }
@@ -126,7 +125,7 @@ void SingleBillElevationDataProvider::onElevationData(ElevationData* elevationDa
 }
 
 void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
-  if (!_elevationDataResolved) {
+  if (!_elevationDataResolved || _listener != NULL) {
     _downloader = context->getDownloader();
 
     _listener = new SingleBillElevationDataProvider_BufferDownloadListener(this,
@@ -142,7 +141,6 @@ void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
                                                         _listener,
                                                         true);
   }
-  _hasBeenInitialized = true;
 }
 
 const long long SingleBillElevationDataProvider::requestElevationData(const Sector& sector,

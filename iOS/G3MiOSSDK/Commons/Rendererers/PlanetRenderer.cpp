@@ -427,11 +427,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
   if (_elevationDataProvider != NULL) {
     if (!_elevationDataProvider->isReadyToRender(rc)) {
-
-      if (!_elevationDataProvider->hasBeenInitialized()){
-        _elevationDataProvider->initialize(rc); //Initializing EDP in case it wasn't
-      }
-
       return RenderState::busy();
     }
   }
@@ -827,6 +822,14 @@ void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDa
 
     _ownsElevationDataProvider = owned;
     _elevationDataProvider = elevationDataProvider;
+
+    if (_elevationDataProvider != NULL){
+      _elevationDataProvider->setChangedListener(this);
+      if (_context != NULL){
+        _elevationDataProvider->initialize(_context); //Initializing EDP in case it wasn't
+      }
+    }
+
     changed();
   }
 }
