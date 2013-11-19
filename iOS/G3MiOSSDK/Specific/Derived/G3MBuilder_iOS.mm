@@ -12,6 +12,7 @@
 #include "SQLiteStorage_iOS.hpp"
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
+#include "BasicShadersGL2.hpp"
 
 G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
   _nativeWidget = nativeWidget;
@@ -22,6 +23,13 @@ G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
 void G3MBuilder_iOS::initializeWidget() {
   setGL([_nativeWidget getGL]);
 
+  BasicShadersGL2 basicShaders;
+  for (int i = 0; i < basicShaders.size(); i++) {
+    addGPUProgramSources(basicShaders.get(i));
+  }
+
+
+/*
   addGPUProgramSources(loadGPUProgramSources("Default"));
   addGPUProgramSources(loadGPUProgramSources("Billboard"));
   addGPUProgramSources(loadGPUProgramSources("FlatColorMesh"));
@@ -31,6 +39,7 @@ void G3MBuilder_iOS::initializeWidget() {
   addGPUProgramSources(loadGPUProgramSources("TexturedMesh_DirectionLight"));
   addGPUProgramSources(loadGPUProgramSources("FlatColorMesh_DirectionLight"));
   addGPUProgramSources(loadGPUProgramSources("NoColorMesh"));
+ */
 
   [_nativeWidget setWidget: create()];
 }

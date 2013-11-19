@@ -12,6 +12,7 @@
 #include "ThreadUtils_iOS.hpp"
 #include "SQLiteStorage_iOS.hpp"
 #include "GPUProgramManager.hpp"
+#include "BasicShadersGL2.hpp"
 
 MapBooBuilder_iOS::MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
                                      const URL& serverURL,
@@ -81,7 +82,13 @@ GPUProgramSources MapBooBuilder_iOS::loadDefaultGPUProgramSources(const std::str
 
 GPUProgramManager* MapBooBuilder_iOS::createGPUProgramManager() {
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
-  
+
+  BasicShadersGL2 basicShaders;
+  for (int i = 0; i < basicShaders.size(); i++) {
+    gpuProgramFactory->add(basicShaders.get(i));
+  }
+
+  /*
   gpuProgramFactory->add(loadDefaultGPUProgramSources("Billboard"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("Default"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh"));
@@ -91,6 +98,7 @@ GPUProgramManager* MapBooBuilder_iOS::createGPUProgramManager() {
   gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh_DirectionLight"));
   gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh_DirectionLight"));
   gpuProgramFactory->add( loadDefaultGPUProgramSources("NoColorMesh") );
+   */
 
 
   return new GPUProgramManager(gpuProgramFactory);
