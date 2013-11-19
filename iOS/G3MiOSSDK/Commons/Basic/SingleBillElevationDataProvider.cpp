@@ -83,7 +83,7 @@ public:
   }
 
   void onCancel(const URL& url) {
-
+    ILogger::instance()->logInfo("SingleBillElevationDataProvider download petition was canceled.");
   }
 
   void onCanceledDownload(const URL& url,
