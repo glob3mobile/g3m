@@ -15,6 +15,7 @@
 #include "Tile.hpp"
 #include "ILogger.hpp"
 #include "IStringUtils.hpp"
+#include "LayerCondition.hpp"
 
 
 TMSLayer::TMSLayer(const std::string& mapLayer,
@@ -90,3 +91,45 @@ const std::string TMSLayer::description() const {
   return "[TMSLayer]";
 }
 
+bool TMSLayer::rawIsEquals(const Layer* that) const {
+  TMSLayer* t = (TMSLayer*) that;
+  
+  if (!(_mapServerURL.isEquals(t->_mapServerURL))) {
+    return false;
+  }
+  
+  if (_mapLayer != t->_mapLayer) {
+    return false;
+  }
+  
+  if (!(_sector.isEquals(t->_sector))) {
+    return false;
+  }
+  
+  if (_format != t->_format) {
+    return false;
+  }
+  
+  if (_srs != t->_srs) {
+    return false;
+  }
+  
+  if (_isTransparent != t->_isTransparent) {
+    return false;
+  }
+  
+  return true;
+}
+
+TMSLayer* TMSLayer::copy() const {
+  return new TMSLayer(_mapLayer,
+                     _mapServerURL,
+                     _sector,
+                     _format,
+                     _srs,
+                     _isTransparent,
+                     (_condition == NULL) ? NULL : _condition->copy(),
+                     TimeInterval::fromMilliseconds(_timeToCacheMS),
+                     _readExpired,
+                      (_parameters == NULL) ? NULL : _parameters->copy());
+}

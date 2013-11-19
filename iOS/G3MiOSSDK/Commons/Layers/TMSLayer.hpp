@@ -29,6 +29,14 @@ private:
   const std::string   _format;
   const std::string   _srs;
   const bool          _isTransparent;
+  
+protected:
+  
+  std::string getLayerType() const {
+    return "TMS";
+  }
+  
+  bool rawIsEquals(const Layer* that) const;
 
 public:
 
@@ -50,6 +58,8 @@ public:
                         const Sector& sector) const;
   
   const std::string description() const;
+  
+  TMSLayer* copy() const;
   
 };
 
