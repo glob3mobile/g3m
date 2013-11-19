@@ -28,19 +28,9 @@ public:
   }
 
   void onAfterAddMesh(Mesh* mesh) {
-    // Camera position=(lat=31.613874455759333415d, lon=-97.828982315232607903d, height=281177.11811743001454)
-    // heading=1.784589
-    // pitch=54.669069
-
     _g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(31.61, -97.83, 281177),
-                                          Angle::zero(), // heading
-                                          Angle::fromDegrees(55) // pitch
-                                          );
-
-//    _g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(30.42, -97.77, 320962),
-//                                          Angle::zero(), // heading
-//                                          Angle::fromDegrees(65) // pitch
-//                                          );
+                                          Angle::zero(),
+                                          Angle::fromDegrees(55));
   }
 };
 
