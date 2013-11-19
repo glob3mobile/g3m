@@ -50,7 +50,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   if (flatColor && !texture && !color) {
 
     if (hasLight) {
-      return compileProgramWithName(gl, "FlatColorMesh+DirectionLight");
+      return compileProgramWithName(gl, "FlatColorMesh_DirectionLight");
     }
 
     return compileProgramWithName(gl, "FlatColorMesh");
@@ -62,7 +62,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     }
 
     if (hasLight) {
-      return compileProgramWithName(gl, "TexturedMesh+DirectionLight");
+      return compileProgramWithName(gl, "TexturedMesh_DirectionLight");
     }
 
     return compileProgramWithName(gl, "TexturedMesh");
