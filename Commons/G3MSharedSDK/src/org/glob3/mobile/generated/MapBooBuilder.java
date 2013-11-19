@@ -952,7 +952,7 @@ public abstract class MapBooBuilder
 
   protected final SceneLighting createSceneLighting()
   {
-    return new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, 1.0), Color.yellow());
+    return new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0), Color.yellow());
   }
 
   protected final URL createApplicationRestURL()
