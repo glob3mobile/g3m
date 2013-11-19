@@ -73,8 +73,6 @@ public class Mark implements SurfaceElevationListener
   private TextureIDReference _textureId;
 
   private Vector3D _cartesianPosition;
-
-
   private boolean _textureSolved;
   private IImage _textureImage;
   private int _textureWidth;

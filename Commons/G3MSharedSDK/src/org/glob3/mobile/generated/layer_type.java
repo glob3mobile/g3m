@@ -1,7 +1,4 @@
-
-
-package org.glob3.mobile.generated;
-
+package org.glob3.mobile.generated; 
 //
 //  SceneParser.cpp
 //  G3MiOSSDK
@@ -20,20 +17,25 @@ package org.glob3.mobile.generated;
 //
 
 
-public enum layer_type {
-   WMS,
-   TMS,
-   THREED,
-   PLANARIMAGE,
-   GEOJSON,
-   SPHERICALIMAGE;
 
-   public int getValue() {
+
+
+public enum layer_type
+{
+  WMS,
+  TMS,
+  THREED,
+  PLANARIMAGE,
+  GEOJSON,
+  SPHERICALIMAGE;
+
+   public int getValue()
+   {
       return this.ordinal();
    }
 
-
-   public static layer_type forValue(final int value) {
+   public static layer_type forValue(int value)
+   {
       return values()[value];
    }
 }
