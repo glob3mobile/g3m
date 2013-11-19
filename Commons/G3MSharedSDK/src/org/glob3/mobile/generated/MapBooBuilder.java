@@ -54,7 +54,7 @@ public abstract class MapBooBuilder
   
     final Sector renderedSector = Sector.fullSphere();
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
   
     if (_enableNotifications)
     {

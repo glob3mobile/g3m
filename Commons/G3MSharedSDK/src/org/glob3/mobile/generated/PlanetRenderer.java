@@ -3,6 +3,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
+  private boolean _ownsElevationDataProvider;
   private TileTexturizer _texturizer;
   private TileRasterizer _tileRasterizer;
   private LayerSet _layerSet;
@@ -314,10 +315,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
+     _ownsElevationDataProvider = ownsElevationDataProvider;
      _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
@@ -575,6 +577,12 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       if (!_elevationDataProvider.isReadyToRender(rc))
       {
+  
+        if (!_elevationDataProvider.hasBeenInitialized())
+        {
+          _elevationDataProvider.initialize(rc); //Initializing EDP in case it wasn't
+        }
+  
         return RenderState.busy();
       }
     }
@@ -833,6 +841,29 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       _terrainTouchListeners.add(listener);
     }
+  }
+
+  public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
+  {
+  
+    if (_elevationDataProvider != elevationDataProvider)
+    {
+  
+      if (_ownsElevationDataProvider)
+      {
+        if (_elevationDataProvider != null)
+           _elevationDataProvider.dispose();
+      }
+  
+      _ownsElevationDataProvider = owned;
+      _elevationDataProvider = elevationDataProvider;
+      changed();
+    }
+  }
+  public final void setVerticalExaggeration(float verticalExaggeration)
+  {
+    _verticalExaggeration = verticalExaggeration;
+    changed();
   }
 
 }
