@@ -6,6 +6,14 @@ public class GPUUniformValueVec3Float extends GPUUniformValue
   protected float _y;
   protected float _z;
 
+  public GPUUniformValueVec3Float(Color color)
+  {
+     super(GLType.glVec3Float());
+     _x = color._red;
+     _y = color._green;
+     _z = color._blue;
+  }
+
   public GPUUniformValueVec3Float(float x, float y, float z)
   {
      super(GLType.glVec3Float());

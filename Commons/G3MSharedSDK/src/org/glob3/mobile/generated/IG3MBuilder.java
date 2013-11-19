@@ -998,7 +998,7 @@ public abstract class IG3MBuilder
     if (_sceneLighting == null)
     {
       //_sceneLighting = new DefaultSceneLighting();
-      _sceneLighting = new CameraFocusSceneLighting();
+      _sceneLighting = new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, 1.0), Color.yellow());
     }
     return _sceneLighting;
   }

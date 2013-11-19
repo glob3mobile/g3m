@@ -2,6 +2,21 @@ package org.glob3.mobile.generated;
 public class CameraFocusSceneLighting extends SceneLighting
 {
 
+  private Color _ambientColor ;
+  private Color _diffuseColor ;
+
+
+  public CameraFocusSceneLighting(Color ambient, Color diffuse)
+  {
+     _ambientColor = new Color(ambient);
+     _diffuseColor = new Color(diffuse);
+  
+  }
+
+  public void dispose()
+  {
+  }
+
   public final void modifyGLState(GLState glState, G3MRenderContext rc)
   {
   
@@ -16,7 +31,7 @@ public class CameraFocusSceneLighting extends SceneLighting
     if (f == null)
     {
       glState.clearGLFeatureGroup(GLFeatureGroupName.LIGHTING_GROUP);
-      glState.addGLFeature(new DirectionLightGLFeature(lightDir, Color.white(), (float)0.4), false);
+      glState.addGLFeature(new DirectionLightGLFeature(lightDir, _diffuseColor, _ambientColor), false);
     }
     else
     {

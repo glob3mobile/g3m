@@ -132,8 +132,7 @@ public class MercatorUtils
 
   public static double longitudeToMeters(Angle longitude)
   {
-      final double mx = longitude._degrees * _originShift / 180.0;
-      return mx;
+      return longitude._degrees * _originShift / 180.0;
   }
 
   public static double latitudeToMeters(Angle latitude)
