@@ -77,12 +77,17 @@ private:
 
   void removeQueueRequest(const long long requestId);
 
+  IDownloader* _downloader;
+  long long    _requestToDownloaderID;
+
 
 public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
                                   const Vector2I& extent,
                                   double deltaHeight = 0);
+
+  ~SingleBillElevationDataProvider();
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);

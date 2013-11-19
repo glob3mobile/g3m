@@ -2593,11 +2593,8 @@ public:
           ElevationDataProvider* _elevationDataProvider1;
 
           ElevationDataProvider* _elevationDataProvider2;
-          int _nExec;
         public:
           ElevationTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget) {
-
-            _nExec = 0;
 
             _elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                         Sector::fullSphere(),
@@ -2617,15 +2614,11 @@ public:
 
           void run(const G3MContext* context) {
 
-            if (_nExec > 2){
-
             if (rand() % 2 == 0){
               [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider1, true);
             } else{
               [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider2, true);
             }
-            }
-            _nExec++;
           }
         };
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new ElevationTask(_iosWidget));

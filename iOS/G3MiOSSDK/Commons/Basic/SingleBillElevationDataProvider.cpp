@@ -28,9 +28,18 @@ _extentHeight(extent._y),
 _deltaHeight(deltaHeight),
 _elevationData(NULL),
 _elevationDataResolved(false),
-_currentRequestID(0)
+_currentRequestID(0),
+_downloader(NULL),
+_requestToDownloaderID(-1)
 {
 
+}
+
+SingleBillElevationDataProvider::~SingleBillElevationDataProvider(){
+#warning it does not work
+  if (_downloader != NULL && _requestToDownloaderID > -1){
+    _downloader->cancelRequest(_requestToDownloaderID);
+  }
 }
 
 class SingleBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
@@ -96,17 +105,17 @@ void SingleBillElevationDataProvider::onElevationData(ElevationData* elevationDa
 
 void SingleBillElevationDataProvider::initialize(const G3MContext* context) {
   if (!_elevationDataResolved) {
-    IDownloader* downloader = context->getDownloader();
-    downloader->requestBuffer(_bilUrl,
-                              2000000000,
-                              TimeInterval::fromDays(30),
-                              true,
-                              new SingleBillElevationDataProvider_BufferDownloadListener(this,
-                                                                                         _sector,
-                                                                                         _extentWidth,
-                                                                                         _extentHeight,
-                                                                                         _deltaHeight),
-                              true);
+    _downloader = context->getDownloader();
+    _requestToDownloaderID = _downloader->requestBuffer(_bilUrl,
+                                                        2000000000,
+                                                        TimeInterval::fromDays(30),
+                                                        true,
+                                                        new SingleBillElevationDataProvider_BufferDownloadListener(this,
+                                                                                                                   _sector,
+                                                                                                                   _extentWidth,
+                                                                                                                   _extentHeight,
+                                                                                                                   _deltaHeight),
+                                                        true);
   }
 }
 
