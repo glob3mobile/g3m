@@ -51,9 +51,8 @@ Shape::~Shape() {
 
   _glState->_release();
 
-#warning TALK TO DIEGO
   if (_surfaceElevationProvider != NULL) {
-    if (!_surfaceElevationProvider->removeListener(this)){
+    if (!_surfaceElevationProvider->removeListener(this)) {
       ILogger::instance()->logError("Couldn't remove shape as listener of Surface Elevation Provider.");
     }
   }

@@ -12,15 +12,22 @@
 
 void G3MDemoScene::deactivate(const G3MContext* context) {
   _model->reset();
+
+  _selectedOptionIndex = -1;
 }
 
 void G3MDemoScene::activate(const G3MContext* context) {
   rawActivate(context);
+}
 
-  if (_options.size() > 0) {
-    selectOption(_options[0]);
+void G3MDemoScene::activateOptions(const G3MContext* context) {
+  if (_autoselectOptionIndex >= 0) {
+    if (_options.size() > _autoselectOptionIndex) {
+      selectOption(_options[_autoselectOptionIndex]);
+    }
   }
 }
+
 
 int G3MDemoScene::getOptionIndex(const std::string& option) const {
   const int optionsSize = _options.size();

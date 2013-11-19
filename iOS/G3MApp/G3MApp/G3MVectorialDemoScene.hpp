@@ -22,7 +22,7 @@ protected:
 
 public:
   G3MVectorialDemoScene(G3MDemoModel* model) :
-  G3MDemoScene("Vectorial", model)
+  G3MDemoScene(model, "Vectorial", "", -1)
   {
   }
 

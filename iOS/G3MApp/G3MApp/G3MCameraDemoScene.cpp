@@ -89,7 +89,7 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
 
 
   shapesRenderer->loadBSONSceneJS(URL("file:///sphinx.bson"),
-                                  "file:///images/",
+                                  "file:///",
                                   false, // isTransparent
                                   new Geodetic3D(Angle::fromDegreesMinutesSeconds(29, 58, 30.99),
                                                  Angle::fromDegreesMinutesSeconds(31, 8, 15.84),

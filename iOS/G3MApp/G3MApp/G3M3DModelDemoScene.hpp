@@ -22,7 +22,7 @@ protected:
 
 public:
   G3M3DModelDemoScene(G3MDemoModel* model) :
-  G3MDemoScene("3D Model", model)
+  G3MDemoScene(model, "3D Model", "", -1)
   {
   }
 

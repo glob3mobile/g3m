@@ -94,7 +94,8 @@ public:
   [self.demoSelector setTitle: [NSString stringWithCppString: scene->getName()]
                      forState: UIControlStateNormal];
 
-
+  [self.optionSelector setTitle: [NSString stringWithCppString: scene->getOptionSelectorDefaultTitle()]
+                       forState: UIControlStateNormal];
   self.secondaryToolbar.hidden = (scene->getOptionsCount() == 0);
 }
 

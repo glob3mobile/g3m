@@ -23,7 +23,7 @@ protected:
 
 public:
   G3MPointCloudDemoScene(G3MDemoModel* model) :
-  G3MDemoScene("Point Clouds", model)
+  G3MDemoScene(model, "Point Clouds", "", -1)
   {
   }
 

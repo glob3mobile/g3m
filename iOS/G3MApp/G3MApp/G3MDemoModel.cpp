@@ -65,7 +65,8 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
 }
 
 void G3MDemoModel::reset() {
-  _g3mWidget->stopCameraAnimation();
+  //_g3mWidget->cancelCameraAnimation();
+  _g3mWidget->cancelAllEffects();
 
   _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
 
@@ -81,7 +82,7 @@ void G3MDemoModel::reset() {
 }
 
 GEOTileRasterizer* G3MDemoModel::getGEOTileRasterizer() const {
-  return _geoRenderer->getGeoTileRasterizer();
+  return _geoRenderer->getGEOTileRasterizer();
 }
 
 MarksRenderer* G3MDemoModel::getMarksRenderer() const {
@@ -133,11 +134,12 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
     ILogger::instance()->logInfo("Selected scene \"%s\"", scene->getName().c_str());
 
     _selectedScene = scene;
-    _selectedScene->activate(_context);
 
+    _selectedScene->activate(_context);
     if (_listener != NULL) {
       _listener->onChangedScene(_selectedScene);
     }
+    _selectedScene->activateOptions(_context);
   }
 
 }

@@ -22,7 +22,7 @@ protected:
 
 public:
   G3M3DSymbologyDemoScene(G3MDemoModel* model) :
-  G3MDemoScene("3D Symbology", model)
+  G3MDemoScene(model, "3D Symbology", "", -1)
   {
   }
 

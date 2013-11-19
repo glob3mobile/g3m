@@ -234,6 +234,8 @@ public:
   void startEffect(Effect* effect,
                    EffectTarget* target);
 
+  void cancelAllEffects();
+  
   void cancelAllEffectsFor(EffectTarget* target);
 
   void onResume(const G3MContext* context) {

@@ -25,12 +25,19 @@ private:
 
 protected:
   const std::string        _name;
+  const std::string        _optionSelectorDefaultTitle;
   std::vector<std::string> _options;
+  const int _autoselectOptionIndex;
 
-  G3MDemoScene(const std::string& name,
-               G3MDemoModel* model) :
+  G3MDemoScene(G3MDemoModel* model,
+               const std::string& name,
+               const std::string& optionSelectorDefaultTitle,
+               const int autoselectOptionIndex) :
+  _model(model),
   _name(name),
-  _model(model)
+  _optionSelectorDefaultTitle(optionSelectorDefaultTitle),
+  _autoselectOptionIndex(autoselectOptionIndex),
+  _selectedOptionIndex(-1)
   {
   }
 
@@ -48,6 +55,10 @@ public:
     return _name;
   }
 
+  const std::string getOptionSelectorDefaultTitle() const {
+    return _optionSelectorDefaultTitle;
+  }
+
   G3MDemoModel* getModel() const {
     return _model;
   }
@@ -61,12 +72,17 @@ public:
   }
 
   bool isSelectedOption(const std::string& option) const {
+    if (_selectedOptionIndex < 0) {
+      return false;
+    }
     return _options[_selectedOptionIndex] == option;
   }
 
   void selectOption(const std::string& option);
 
   void activate(const G3MContext* context);
+
+  void activateOptions(const G3MContext* context);
 
   virtual void deactivate(const G3MContext* context);
   

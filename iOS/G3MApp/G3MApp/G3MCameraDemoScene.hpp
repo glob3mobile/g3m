@@ -27,7 +27,7 @@ protected:
 
 public:
   G3MCameraDemoScene(G3MDemoModel* model) :
-  G3MDemoScene("Camera", model),
+  G3MDemoScene(model, "Camera", "<select model>", -1),
   _thePhynxShape(NULL),
   _theEiffelTowerShape(NULL),
   _arcDeTriompheShape(NULL)

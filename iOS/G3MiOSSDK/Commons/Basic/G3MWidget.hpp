@@ -191,8 +191,10 @@ public:
                                  const bool linearTiming  = false,
                                  const bool linearHeight  = false);
   
-  void stopCameraAnimation();
-  
+  void cancelCameraAnimation();
+
+  void cancelAllEffects();
+
   //  void resetCameraPosition();
   
   CameraRenderer* getCameraRenderer() const {

@@ -712,7 +712,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
                                   const TouchEvent* touchEvent) {
   if (_lastCamera == NULL) {
     return false;
-  }
+  } 
 
   if (touchEvent->getType() == LongPress) {
     const Vector2I pixel = touchEvent->getTouch(0)->getPos();
