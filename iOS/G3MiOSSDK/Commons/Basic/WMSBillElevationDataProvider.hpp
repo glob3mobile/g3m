@@ -63,7 +63,12 @@ public:
 //    int WORKING_JM;
     return Vector2I::zero();
   }
-  
+
+  bool hasBeenInitialized(){
+#warning TODO
+    return false;
+  }
+
 };
 
 #endif

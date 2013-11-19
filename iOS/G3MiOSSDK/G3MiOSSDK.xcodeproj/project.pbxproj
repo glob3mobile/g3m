@@ -296,7 +296,6 @@
 		CFD15C4916E793A7004DC360 /* ElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */; };
 		CFD15C4A16E793A7004DC360 /* WMSBillElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */; };
 		CFD15C4B16E793A7004DC360 /* BilParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF35A20616D3D44E00D795D8 /* BilParser.hpp */; };
-		CFD15C4C16E793A7004DC360 /* SingleBillElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */; };
 		CFD15C4D16E793A7004DC360 /* FloatBufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */; };
 		CFD15C4E16E793A7004DC360 /* SubviewElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */; };
 		CFD15C4F16E793A7004DC360 /* BufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */; };
@@ -745,7 +744,6 @@
 				CFD15C4916E793A7004DC360 /* ElevationData.hpp in CopyFiles */,
 				CFD15C4A16E793A7004DC360 /* WMSBillElevationDataProvider.hpp in CopyFiles */,
 				CFD15C4B16E793A7004DC360 /* BilParser.hpp in CopyFiles */,
-				CFD15C4C16E793A7004DC360 /* SingleBillElevationDataProvider.hpp in CopyFiles */,
 				CFD15C4D16E793A7004DC360 /* FloatBufferElevationData.hpp in CopyFiles */,
 				CFD15C4E16E793A7004DC360 /* SubviewElevationData.hpp in CopyFiles */,
 				CFD15C4F16E793A7004DC360 /* BufferElevationData.hpp in CopyFiles */,
@@ -1371,7 +1369,6 @@
 		CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerTilesRenderParameters.cpp; path = Commons/Rendererers/LayerTilesRenderParameters.cpp; sourceTree = "<group>"; };
 		CFD42ABB16DBFE8600B03961 /* LayerTilesRenderParameters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerTilesRenderParameters.hpp; path = Commons/Rendererers/LayerTilesRenderParameters.hpp; sourceTree = "<group>"; };
 		CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleBillElevationDataProvider.cpp; path = Commons/Basic/SingleBillElevationDataProvider.cpp; sourceTree = "<group>"; };
-		CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBillElevationDataProvider.hpp; path = Commons/Basic/SingleBillElevationDataProvider.hpp; sourceTree = "<group>"; };
 		CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferElevationData.cpp; path = Commons/Basic/FloatBufferElevationData.cpp; sourceTree = "<group>"; };
 		CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferElevationData.hpp; path = Commons/Basic/FloatBufferElevationData.hpp; sourceTree = "<group>"; };
 		CFDA835B16D6758200295F96 /* BilinearInterpolator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BilinearInterpolator.cpp; path = Commons/Math/BilinearInterpolator.cpp; sourceTree = "<group>"; };
@@ -1812,7 +1809,6 @@
 				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
 				D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */,
 				CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */,
-				CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */,
 				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
 				CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */,
 				CFE0844015E27A310004EC0E /* LayerTouchEventListener.hpp */,
@@ -1840,7 +1836,6 @@
 				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
 				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
 				CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */,
-				CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */,
 				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
 				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,

@@ -101,7 +101,6 @@ public:
 
 
 SingleBillElevationDataProvider::~SingleBillElevationDataProvider(){
-#warning it does not work
   if (_downloader != NULL && _requestToDownloaderID > -1){
     _downloader->cancelRequest(_requestToDownloaderID);
   }
