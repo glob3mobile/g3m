@@ -70,11 +70,6 @@ void G3MDemoBuilder::build() {
 
   GEORenderer* geoRenderer = builder->createGEORenderer(NULL);
 
-  // Setup the builder
-  //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
-  //  builder.setInitializationTask(new G3MAppInitializationTask(self.g3mWidget), true);
-  //  builder.setUserData(userData);
-
   _initialized = true;
   _model = new G3MDemoModel(_listener, layerSet, geoRenderer);
 
