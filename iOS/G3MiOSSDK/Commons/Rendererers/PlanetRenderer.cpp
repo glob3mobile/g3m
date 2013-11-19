@@ -31,6 +31,8 @@
 
 #include <algorithm>
 
+#include "Petition.hpp"
+
 class VisibleSectorListenerEntry {
 private:
   VisibleSectorListener* _listener;
@@ -139,7 +141,8 @@ _recreateTilesPending(false),
 _glState(new GLState()),
 _renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector(renderedSector)),
 _layerTilesRenderParameters(NULL),
-_layerTilesRenderParametersDirty(true)
+_layerTilesRenderParametersDirty(true),
+_renderContext(NULL)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -580,6 +583,8 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
 void PlanetRenderer::render(const G3MRenderContext* rc,
                             GLState* glState) {
 
+  _renderContext = rc;
+
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
     return;
@@ -808,4 +813,43 @@ void PlanetRenderer::setRenderedSector(const Sector& sector) {
   _tessellator->setRenderedSector(sector);
 
   changed();
+}
+
+
+class GetTilesURLVisitor: public ITileVisitor{
+  const G3MRenderContext* _renderContext;
+
+public:
+
+
+  mutable std::list<std::string> _urls;
+
+  GetTilesURLVisitor(const G3MRenderContext* renderContext): _renderContext(renderContext){}
+
+  void visitTile(std::vector<Layer*>& layers, const Tile* tile) const{
+
+    for (int i = 0; i < layers.size(); i++) {
+      std::vector<Petition*> pets = layers[i]->createTileMapPetitions(_renderContext, tile);
+      for (int j = 0; j < pets.size(); j++) {
+        _urls.push_back( pets[j]->getURL().getPath() );
+      }
+    }
+
+  }
+
+};
+
+std::list<std::string> PlanetRenderer::getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD){
+
+  Sector sector(lower, upper);
+  const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
+  GetTilesURLVisitor* visitor = new GetTilesURLVisitor(_renderContext);
+
+  acceptTileVisitor(visitor, sector, parameters->_firstLevel, maxLOD);
+
+  std::list<std::string> urls = visitor->_urls;
+
+  delete visitor;
+  return urls;
+
 }

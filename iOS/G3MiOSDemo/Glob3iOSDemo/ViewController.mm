@@ -2583,6 +2583,40 @@ public:
         }
       }
 
+      if (true){ //GETTING URLS
+
+        int time = 2; //SECS
+
+        class GetURL: public GTask{
+          G3MWidget_iOS* _iosWidget;
+
+          bool _firstExec;
+        public:
+          GetURL(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget), _firstExec(true) {}
+
+
+          void run(const G3MContext* context) {
+
+            if (!_firstExec){
+
+
+            Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
+            Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
+
+            std::list<std::string> urls = [_iosWidget widget]->getPlanetRenderer()->getTilesURL(lower, upper, 15);
+
+              for (std::list<std::string>::iterator it=urls.begin(); it != urls.end(); ++it){
+                printf("%s \n ", (*it).c_str());
+              }
+
+            }
+
+            _firstExec = false;
+          }
+        };
+        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new GetURL(_iosWidget));
+      }
+
 
 
       if (false) { //Incomplete world

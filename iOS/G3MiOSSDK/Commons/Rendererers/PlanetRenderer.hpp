@@ -294,6 +294,8 @@ private:
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
+  const G3MRenderContext* _renderContext;
+
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -441,6 +443,8 @@ public:
   void setRenderedSector(const Sector& sector);
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
+
+  std::list<std::string> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD);
 
 };
 
