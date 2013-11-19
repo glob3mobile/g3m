@@ -81,7 +81,7 @@ void G3MDemoModel::reset() {
 }
 
 GEOTileRasterizer* G3MDemoModel::getGEOTileRasterizer() const {
-  return _geoRenderer->getGEOTileRasterizer();
+  return _geoRenderer->getGeoTileRasterizer();
 }
 
 MarksRenderer* G3MDemoModel::getMarksRenderer() const {
