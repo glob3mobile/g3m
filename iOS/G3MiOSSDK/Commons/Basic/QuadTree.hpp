@@ -23,20 +23,31 @@ public:
 
 };
 
+class QuadTree_Content {
+public:
+#ifdef C_CODE
+  virtual ~QuadTree_Content() {
+  }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
+};
 
 class QuadTree_Element {
 public:
-  const Sector _sector;
-  const void*  _element;
+  const Sector            _sector;
+  const QuadTree_Content* _element;
 
-  QuadTree_Element(const Sector& sector,
-                   const void*   element) :
+  QuadTree_Element(const Sector&           sector,
+                   const QuadTree_Content* element) :
   _sector(sector),
   _element(element)
   {
   }
 
   ~QuadTree_Element() {
+    delete _element;
   }
 
 };
@@ -70,7 +81,7 @@ public:
   ~QuadTree_Node();
 
   bool add(const Sector& sector,
-           const void* element,
+           const QuadTree_Content* element,
            int maxElementsPerNode,
            int maxDepth);
 
@@ -108,7 +119,7 @@ public:
   ~QuadTree();
 
   bool add(const Sector& sector,
-           const void* element);
+           const QuadTree_Content* element);
 
   bool acceptVisitor(const Sector& sector,
                      const QuadTreeVisitor& visitor) const;

@@ -17,7 +17,9 @@
 class GEORasterProjection;
 class ICanvas;
 
-class GEORasterSymbol : public GEOSymbol {
+#include "QuadTree.hpp"
+
+class GEORasterSymbol : public GEOSymbol, public QuadTree_Content {
 private:
   GEORasterSymbol(const GEORasterSymbol& that);
 

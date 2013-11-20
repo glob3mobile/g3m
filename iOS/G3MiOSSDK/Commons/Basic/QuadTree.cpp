@@ -26,7 +26,7 @@ QuadTree_Node::~QuadTree_Node() {
 
 
 bool QuadTree_Node::add(const Sector& sector,
-                        const void* element,
+                        const QuadTree_Content* element,
                         int maxElementsPerNode,
                         int maxDepth) {
   if (!_sector.fullContains(sector)) {
@@ -135,7 +135,7 @@ QuadTree::~QuadTree() {
 }
 
 bool QuadTree::add(const Sector& sector,
-                   const void* element) {
+                   const QuadTree_Content* element) {
   return _root->add(sector, element, _maxElementsPerNode, _maxDepth);
 }
 

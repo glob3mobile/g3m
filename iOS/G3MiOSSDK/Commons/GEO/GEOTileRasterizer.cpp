@@ -30,8 +30,8 @@ void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
   const Sector* sector = symbol->getSector();
 
   if (sector == NULL) {
-    //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
-    //                                  symbol->description().c_str());
+//    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
+//                                  symbol->description().c_str());
     delete symbol;
   }
   else {

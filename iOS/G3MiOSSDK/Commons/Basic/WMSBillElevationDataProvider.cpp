@@ -52,7 +52,11 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     const Vector2I resolution(_width, _height);
-    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer, _deltaHeight);
+    
+    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector,
+                                                                    resolution,
+                                                                    buffer,
+                                                                    _deltaHeight);
     delete buffer;
 
     if (elevationData == NULL) {

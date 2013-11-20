@@ -68,15 +68,15 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    const Vector2I resolution(_resolutionWidth, _resolutionHeight);
-
-    ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector, resolution, buffer, _deltaHeight);
-
-    delete buffer;
-
     if (_singleBillElevationDataProvider != NULL) {
+      ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector,
+                                                                      Vector2I(_resolutionWidth, _resolutionHeight),
+                                                                      buffer,
+                                                                      _deltaHeight);
+
       _singleBillElevationDataProvider->onElevationData(elevationData);
     }
+    delete buffer;
   }
 
   void onError(const URL& url) {
@@ -100,6 +100,8 @@ public:
 
 
 SingleBillElevationDataProvider::~SingleBillElevationDataProvider() {
+  delete _elevationData;
+
   if (_downloader != NULL && _requestToDownloaderID > -1) {
     _downloader->cancelRequest(_requestToDownloaderID);
   }
@@ -119,7 +121,6 @@ void SingleBillElevationDataProvider::onElevationData(ElevationData* elevationDa
   }
 
   drainQueue();
-
 
   _listener = NULL; //The listener will be autodeleted
 }
