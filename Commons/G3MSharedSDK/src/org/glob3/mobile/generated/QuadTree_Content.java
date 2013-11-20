@@ -1,5 +1,7 @@
 package org.glob3.mobile.generated; 
-public class QuadTree_Content
+public interface QuadTree_Content
 {
   void dispose();
+
+  void unusedMethod();
 }
