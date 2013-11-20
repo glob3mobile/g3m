@@ -44,10 +44,7 @@ public:
     }
   }
 
-  ~SGShape()
-  {
-    _glState->_release();
-  }
+  ~SGShape();
 
   SGNode* getNode() const {
     return _node;
