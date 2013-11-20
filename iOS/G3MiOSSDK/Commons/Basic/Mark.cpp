@@ -514,7 +514,12 @@ void Mark::elevationChanged(const Geodetic2D& position,
                             double rawElevation,            //Without considering vertical exaggeration
                             double verticalExaggeration) {
 
-  _currentSurfaceElevation = rawElevation * verticalExaggeration;
+  if (ISNAN(rawElevation)){
+    _currentSurfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
+  } else{
+    _currentSurfaceElevation = rawElevation * verticalExaggeration;
+  }
+
   delete _cartesianPosition;
   _cartesianPosition = NULL;
 

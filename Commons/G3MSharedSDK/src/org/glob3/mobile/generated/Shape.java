@@ -365,7 +365,15 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
   {
-    _surfaceElevation = rawElevation * verticalExaggeration;
+  
+    if ((rawElevation != rawElevation))
+    {
+      _surfaceElevation = 0; //USING 0 WHEN NO ELEVATION DATA
+    }
+    else
+    {
+      _surfaceElevation = rawElevation * verticalExaggeration;
+    }
   
     if (_transformMatrix != null)
        _transformMatrix.dispose();

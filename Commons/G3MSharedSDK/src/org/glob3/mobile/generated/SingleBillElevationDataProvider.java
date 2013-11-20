@@ -46,6 +46,9 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     _requestsQueue.remove(requestId);
   }
 
+  private IDownloader _downloader;
+  private long _requestToDownloaderID;
+  private SingleBillElevationDataProvider_BufferDownloadListener _listener;
 
   public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent)
   {
@@ -61,7 +64,24 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
      _elevationData = null;
      _elevationDataResolved = false;
      _currentRequestID = 0;
+     _downloader = null;
+     _requestToDownloaderID = -1;
+     _listener = null;
   
+  }
+
+  public void dispose()
+  {
+    if (_downloader != null && _requestToDownloaderID > -1)
+    {
+      _downloader.cancelRequest(_requestToDownloaderID);
+    }
+  
+    if (_listener != null)
+    {
+      _listener.notifyProviderHasBeenDeleted();
+      _listener = null;
+    }
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
@@ -71,10 +91,13 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
   public final void initialize(G3MContext context)
   {
-    if (!_elevationDataResolved)
+    if (!_elevationDataResolved || _listener != null)
     {
-      IDownloader downloader = context.getDownloader();
-      downloader.requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight, _deltaHeight), true);
+      _downloader = context.getDownloader();
+  
+      _listener = new SingleBillElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight, _deltaHeight);
+  
+      _requestToDownloaderID = _downloader.requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, _listener, true);
     }
   }
 
@@ -124,6 +147,9 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     }
   
     drainQueue();
+  
+  
+    _listener = null; //The listener will be autodeleted
   }
 
   public final java.util.ArrayList<Sector> getSectors()
