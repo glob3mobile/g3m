@@ -70,8 +70,6 @@
 		D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */; };
 		D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */; };
 		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
-		D8FFA4C7183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8FFA4C5183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh */; };
-		D8FFA4C8183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8FFA4C6183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh */; };
 		D8FFA4C9183D042F004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8FFA4C5183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh */; };
 		D8FFA4CA183D042F004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8FFA4C6183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh */; };
 		D8FFA6A217A14DA8006EE310 /* TexturedMesh+DirectionLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8FFA6A017A14DA8006EE310 /* TexturedMesh+DirectionLight.fsh */; };
@@ -533,11 +531,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8FFA4C8183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh in Sources */,
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
-				D8FFA4C7183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
