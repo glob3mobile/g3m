@@ -133,8 +133,10 @@ public:
                                                 false));
 
       delete vertices;
+
+      delete jsonBaseObject;
     }
-    
+
     delete buffer;
   }
 
