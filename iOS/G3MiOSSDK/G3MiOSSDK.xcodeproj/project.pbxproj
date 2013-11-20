@@ -414,8 +414,6 @@
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
-		D8FFA4C3183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh */; };
-		D8FFA4C4183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E720E8C416EE470300103F20 /* SceneJSParserStatistics.cpp */; };
@@ -2684,7 +2682,6 @@
 				E7EC944516C4F43300B32D9F /* DownloadPriority.cpp in Sources */,
 				CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */,
 				CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */,
-				D8FFA4C4183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh in Sources */,
 				FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */,
 				CFD3D8A116CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp in Sources */,
 				CFD3D8A516D15BC900CE9242 /* MeshHolder.cpp in Sources */,
@@ -2778,7 +2775,6 @@
 				CF5363E3178B44AC00EE3D49 /* DebugTileRasterizer.cpp in Sources */,
 				CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */,
 				CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */,
-				D8FFA4C3183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh in Sources */,
 				CF5C119D178CA747000ED715 /* GEORasterSymbol.cpp in Sources */,
 				CF2DF7CE178DE79200FF5FF0 /* GEOTileRasterizer.cpp in Sources */,
 				CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */,
