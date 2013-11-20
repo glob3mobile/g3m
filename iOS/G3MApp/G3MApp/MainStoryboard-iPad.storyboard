@@ -51,7 +51,7 @@
                                 <rect key="frame" x="0.0" y="966" width="768" height="58"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Czs-4F-pgG">
+                                    <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Czs-4F-pgG">
                                         <rect key="frame" x="563" y="5" width="200" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -70,6 +70,8 @@
                                 <color key="backgroundColor" white="0.5" alpha="0.5" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="58" id="43z-3F-ddP"/>
+                                    <constraint firstAttribute="bottom" secondItem="Czs-4F-pgG" secondAttribute="bottom" constant="5" id="9KY-TY-OOJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="Czs-4F-pgG" secondAttribute="trailing" constant="5" id="b4v-oq-q5U"/>
                                 </constraints>
                             </view>
                         </subviews>
