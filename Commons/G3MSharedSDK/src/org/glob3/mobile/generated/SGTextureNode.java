@@ -43,7 +43,9 @@ public class SGTextureNode extends SGNode
     }
   
     if (_glState != null)
-       _glState.dispose();
+    {
+      _glState._release();
+    }
   
     super.dispose();
   }
@@ -58,7 +60,9 @@ public class SGTextureNode extends SGNode
     }
   
     if (_glState != null)
-       _glState.dispose();
+    {
+      _glState._release();
+    }
     _glState = null;
   }
 
