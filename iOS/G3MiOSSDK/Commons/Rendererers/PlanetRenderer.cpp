@@ -799,10 +799,10 @@ void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
 
 void PlanetRenderer::setRenderedSector(const Sector& sector) {
   if ((_renderedSector != NULL && !_renderedSector->isEquals(sector)) ||
-      (_renderedSector == NULL && !sector.isEquals(Sector::fullSphere()))){
+      (_renderedSector == NULL && !sector.isEquals(Sector::fullSphere()))) {
     delete _renderedSector;
 
-    if (sector.isEquals(Sector::fullSphere())){
+    if (sector.isEquals(Sector::fullSphere())) {
       _renderedSector = NULL;
     } else{
       _renderedSector = new Sector(sector);
@@ -814,20 +814,19 @@ void PlanetRenderer::setRenderedSector(const Sector& sector) {
   changed();
 }
 
-void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDataProvider, bool owned) {
-
-  if (_elevationDataProvider != elevationDataProvider){
-
-    if (_ownsElevationDataProvider){
+void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
+                                              bool owned) {
+  if (_elevationDataProvider != elevationDataProvider) {
+    if (_ownsElevationDataProvider) {
       delete _elevationDataProvider;
     }
 
     _ownsElevationDataProvider = owned;
     _elevationDataProvider = elevationDataProvider;
 
-    if (_elevationDataProvider != NULL){
+    if (_elevationDataProvider != NULL) {
       _elevationDataProvider->setChangedListener(this);
-      if (_context != NULL){
+      if (_context != NULL) {
         _elevationDataProvider->initialize(_context); //Initializing EDP in case it wasn't
       }
     }
@@ -836,8 +835,8 @@ void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDa
   }
 }
 
-void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration){
-  if (_verticalExaggeration != verticalExaggeration){
+void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
+  if (_verticalExaggeration != verticalExaggeration) {
     _verticalExaggeration = verticalExaggeration;
     changed();
   }

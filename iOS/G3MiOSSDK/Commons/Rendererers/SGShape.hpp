@@ -37,7 +37,7 @@ public:
   _isTransparent(isTransparent)
   {
     _glState = new GLState();
-    if (_isTransparent){
+    if (_isTransparent) {
       _glState->addGLFeature(new BlendingModeGLFeature(true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
     } else{
       _glState->addGLFeature(new BlendingModeGLFeature(false, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);

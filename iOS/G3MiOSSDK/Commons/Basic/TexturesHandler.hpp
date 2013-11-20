@@ -144,7 +144,7 @@ public:
 
   TextureIDReference(const IGLTextureId* id,
                      TexturesHandler* texHandler):
-  _texHandler(texHandler), _id(id){}
+  _texHandler(texHandler), _id(id) {}
 
   virtual ~TextureIDReference();
 

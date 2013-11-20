@@ -219,7 +219,7 @@ double ElevationData::getElevationAt(const Angle& latitude,
   const double u = uv._x;
   const double v = uv._y;
 
-  if (u < 0 || u > 1 || v < 0 || v > 1){
+  if (u < 0 || u > 1 || v < 0 || v > 1) {
     return NAND;
   }
 

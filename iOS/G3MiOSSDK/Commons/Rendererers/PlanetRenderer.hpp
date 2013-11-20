@@ -444,7 +444,8 @@ public:
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
-  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider, bool owned);
+  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
+                                bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
 
   ElevationDataProvider* getElevationDataProvider() const{

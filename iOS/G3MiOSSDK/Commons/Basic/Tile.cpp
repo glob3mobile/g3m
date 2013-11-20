@@ -998,7 +998,7 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
 
 //const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
 //  const Sector* renderedSector = pr->getRenderedSector();
-//  if (renderedSector != NULL){
+//  if (renderedSector != NULL) {
 //    if (!renderedSector->fullContains(_sector)) {
 //      Sector meshSector = renderedSector->intersection(_sector);
 //      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;

@@ -61,7 +61,7 @@ public:
 
   }
 
-  void notifyProviderHasBeenDeleted(){
+  void notifyProviderHasBeenDeleted() {
     _singleBillElevationDataProvider = NULL;
   }
 
@@ -74,20 +74,20 @@ public:
 
     delete buffer;
 
-    if (_singleBillElevationDataProvider != NULL){
+    if (_singleBillElevationDataProvider != NULL) {
       _singleBillElevationDataProvider->onElevationData(elevationData);
     }
   }
 
   void onError(const URL& url) {
-    if (_singleBillElevationDataProvider != NULL){
+    if (_singleBillElevationDataProvider != NULL) {
       _singleBillElevationDataProvider->onElevationData(NULL);
     }
   }
 
   void onCancel(const URL& url) {
     ILogger::instance()->logInfo("SingleBillElevationDataProvider download petition was canceled.");
-    if (_singleBillElevationDataProvider != NULL){
+    if (_singleBillElevationDataProvider != NULL) {
       _singleBillElevationDataProvider->onElevationData(NULL);
     }
   }
@@ -99,12 +99,12 @@ public:
 };
 
 
-SingleBillElevationDataProvider::~SingleBillElevationDataProvider(){
-  if (_downloader != NULL && _requestToDownloaderID > -1){
+SingleBillElevationDataProvider::~SingleBillElevationDataProvider() {
+  if (_downloader != NULL && _requestToDownloaderID > -1) {
     _downloader->cancelRequest(_requestToDownloaderID);
   }
 
-  if (_listener != NULL){
+  if (_listener != NULL) {
     _listener->notifyProviderHasBeenDeleted();
     _listener = NULL;
   }

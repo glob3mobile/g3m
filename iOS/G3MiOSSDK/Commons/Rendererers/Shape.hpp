@@ -259,7 +259,7 @@ public:
               bool renderNotReadyShapes);
 
   virtual void initialize(const G3MContext* context) {
-    if (_altitudeMode == RELATIVE_TO_GROUND){
+    if (_altitudeMode == RELATIVE_TO_GROUND) {
       _surfaceElevationProvider = context->getSurfaceElevationProvider();
       if (_surfaceElevationProvider != NULL) {
         _surfaceElevationProvider->addListener(_position->_latitude,

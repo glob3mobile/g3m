@@ -225,9 +225,9 @@ class GPUUniformValueVec3FloatMutable :public GPUUniformValueVec3Float{
 public:
 
   GPUUniformValueVec3FloatMutable(float x, float y, float z):
-  GPUUniformValueVec3Float(x,y,z){}
+  GPUUniformValueVec3Float(x,y,z) {}
 
-  void changeValue(float x, float y, float z){
+  void changeValue(float x, float y, float z) {
     _x = x;
     _y = y;
     _z = z;

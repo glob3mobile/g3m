@@ -14,7 +14,7 @@
 class IFloatBuffer : public IBuffer {
 public:
 
-  IFloatBuffer(): IBuffer(){}
+  IFloatBuffer(): IBuffer() {}
   
   virtual ~IFloatBuffer() {
   }

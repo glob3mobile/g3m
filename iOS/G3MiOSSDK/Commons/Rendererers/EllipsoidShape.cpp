@@ -38,7 +38,7 @@ EllipsoidShape::~EllipsoidShape() {
 
 const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
 
-  if (_texId == NULL){
+  if (_texId == NULL) {
     if (_textureImage == NULL) {
       return NULL;
     }
@@ -56,7 +56,7 @@ const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* r
     rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
   }
 
-  if (_texId == NULL){
+  if (_texId == NULL) {
     return NULL;
   }
 

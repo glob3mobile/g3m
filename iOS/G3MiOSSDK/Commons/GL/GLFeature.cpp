@@ -180,7 +180,7 @@ void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 }
 
 BlendingModeGLFeature::BlendingModeGLFeature(bool blend, int sFactor, int dFactor):
-GLColorGroupFeature(GLF_BLENDING_MODE, 4, blend, sFactor, dFactor){
+GLColorGroupFeature(GLF_BLENDING_MODE, 4, blend, sFactor, dFactor) {
 }
 
 void BlendingModeGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
@@ -237,7 +237,7 @@ GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
 
 }
 
-void DirectionLightGLFeature::setLightDirection(const Vector3D& lightDir){
+void DirectionLightGLFeature::setLightDirection(const Vector3D& lightDir) {
   Vector3D dirN = lightDir.normalized();
   _lightDirectionUniformValue->changeValue((float)dirN._x,
                                            (float)dirN._y,

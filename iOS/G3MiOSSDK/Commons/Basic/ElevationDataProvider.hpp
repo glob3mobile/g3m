@@ -54,7 +54,7 @@ protected:
 
 public:
 
-  ElevationDataProvider():_changedListener(NULL), _enabled(true){}
+  ElevationDataProvider():_changedListener(NULL), _enabled(true) {}
 
   virtual ~ElevationDataProvider() {
 
@@ -75,7 +75,7 @@ public:
 
   virtual const Vector2I getMinResolution() const = 0;
 
-  void setChangedListener(ChangedListener* changedListener){
+  void setChangedListener(ChangedListener* changedListener) {
     _changedListener = changedListener;
   }
 
@@ -83,8 +83,8 @@ public:
     _changedListener->changed();
   }
 
-  void setEnabled(bool enabled){
-    if (_enabled != enabled){
+  void setEnabled(bool enabled) {
+    if (_enabled != enabled) {
       _enabled = enabled;
       onChanged();
     }

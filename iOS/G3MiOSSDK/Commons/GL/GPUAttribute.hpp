@@ -236,7 +236,7 @@ public:
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
   _buffer(buffer),
   _timeStamp(buffer->timestamp()),
-  _id(buffer->getID()){}
+  _id(buffer->getID()) {}
 
   void setAttribute(GL* gl, const int id) const{
     if (_index != 0) {

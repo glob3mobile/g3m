@@ -67,7 +67,7 @@ UIInterfaceOrientation orientation;
     self.targetObject = targetObj;
 
     // create a UITextField instance and assign it to the source text field
-    if ([targetObject isKindOfClass:[UITextField class]]){
+    if ([targetObject isKindOfClass:[UITextField class]]) {
       self.selectedTextField = [[UITextField alloc] init];
       self.selectedTextField = (UITextField *)targetObject;
       self.selectedTextField.delegate = self;
@@ -75,7 +75,7 @@ UIInterfaceOrientation orientation;
     }
 
     // if the targetObject is a button then create a UIButton instance and assign it to the source button
-    if ([targetObject isKindOfClass:[UIButton class]]){
+    if ([targetObject isKindOfClass:[UIButton class]]) {
       self.selectedButton = [[UIButton alloc] init];
       self.selectedButton = (UIButton *)targetObject;
       [self.selectedButton addTarget:self action:@selector(selectedObjectClicked:) forControlEvents:UIControlEventTouchDown];
@@ -118,7 +118,7 @@ UIInterfaceOrientation orientation;
   // if the device is an iPhone or iPod touch the menu is set to fill the screen.
 
   if (![self menuFillParent]) {
-    //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
+    //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
     // Device is an iPad
 
     int screenheight =  screenheight = parentView.frame.size.height;
@@ -129,9 +129,9 @@ UIInterfaceOrientation orientation;
     int tableOriginX = 0;
     int tableOriginY = 0;
 
-    if ([targetObject isKindOfClass:[UITextField class]]){
+    if ([targetObject isKindOfClass:[UITextField class]]) {
       // set the frame width to match the target object width if ScaleToFitParent is true, otherwise set to Width variable
-      if (scaleToFitParent){
+      if (scaleToFitParent) {
         tablewidth = self.selectedTextField.frame.size.width;
       }
       else{
@@ -142,7 +142,7 @@ UIInterfaceOrientation orientation;
       tableOriginY = self.selectedTextField.frame.origin.y;
       objectheight = self.selectedTextField.frame.size.height;
 
-      if ((tablewidth + self.selectedTextField.frame.origin.x) < parentView.frame.size.width){
+      if ((tablewidth + self.selectedTextField.frame.origin.x) < parentView.frame.size.width) {
         tableOriginX = self.selectedTextField.frame.origin.x;
       }
       else{
@@ -152,7 +152,7 @@ UIInterfaceOrientation orientation;
 
     }
 
-    if ([targetObject isKindOfClass:[UIButton class]]){
+    if ([targetObject isKindOfClass:[UIButton class]]) {
 
 
       // set the frame origin (if the x origin puts the menu off the side of the screen then right align instead)+
@@ -160,7 +160,7 @@ UIInterfaceOrientation orientation;
       tableOriginY = self.selectedButton.frame.origin.y;
       objectheight = self.selectedButton.frame.size.height;
 
-      if ((tablewidth + self.selectedButton.frame.origin.x) < parentView.frame.size.width){
+      if ((tablewidth + self.selectedButton.frame.origin.x) < parentView.frame.size.width) {
         tableOriginX = self.selectedButton.frame.origin.x;
       }
       else{
@@ -169,7 +169,7 @@ UIInterfaceOrientation orientation;
 
     }
 
-    if (((tableOriginX + objectheight) + ([titleArray count] * rowHeight)) >= parentView.frame.size.height - rowHeight){
+    if (((tableOriginX + objectheight) + ([titleArray count] * rowHeight)) >= parentView.frame.size.height - rowHeight) {
       tableheight = screenheight - rowHeight - (tableOriginX + objectheight);
 
       // enable scrolling and bounce
@@ -240,7 +240,7 @@ UIInterfaceOrientation orientation;
 - (void) didChangeOrientation:(NSNotification *)notification
 {
   // remove the menu on rotation
-  if (orientation != [[UIApplication sharedApplication] statusBarOrientation]){
+  if (orientation != [[UIApplication sharedApplication] statusBarOrientation]) {
     orientation = [[UIApplication sharedApplication] statusBarOrientation];
     [self dismissMenu];
   }
@@ -267,7 +267,7 @@ UIInterfaceOrientation orientation;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
   // Return the number of rows in the section.
-  if (titleArray.count > 0){
+  if (titleArray.count > 0) {
     return titleArray.count;
   }
   else{
@@ -285,7 +285,7 @@ UIInterfaceOrientation orientation;
   NSUInteger row = [indexPath row];
   static NSString *CellIdentifier = @"Cell";
   UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-  if (cell == nil){
+  if (cell == nil) {
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
   }
   // Configure the cell...

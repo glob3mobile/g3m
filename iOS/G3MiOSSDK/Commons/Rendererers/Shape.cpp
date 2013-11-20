@@ -179,7 +179,7 @@ void Shape::elevationChanged(const Geodetic2D& position,
                       double rawElevation,
                       double verticalExaggeration) {
 
-  if (ISNAN(rawElevation)){
+  if (ISNAN(rawElevation)) {
     _surfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
   } else{
     _surfaceElevation = rawElevation * verticalExaggeration;

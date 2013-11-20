@@ -73,6 +73,8 @@ void G3MDemoModel::reset() {
 
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(1);
+  ElevationDataProvider* elevationDataProvider;
+  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
   _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
 

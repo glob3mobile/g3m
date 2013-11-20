@@ -365,7 +365,7 @@ Mark::~Mark() {
   delete _position;
 
   if (_surfaceElevationProvider != NULL) {
-    if (!_surfaceElevationProvider->removeListener(this)){
+    if (!_surfaceElevationProvider->removeListener(this)) {
       ILogger::instance()->logError("Couldn't remove mark as listener of Surface Elevation Provider.");
     }
   }
@@ -383,7 +383,7 @@ Mark::~Mark() {
 
   _glState->_release();
 
-  if (_textureId != NULL){
+  if (_textureId != NULL) {
 #ifdef JAVA_CODE
     _textureId.dispose();
 #endif
@@ -514,7 +514,7 @@ void Mark::elevationChanged(const Geodetic2D& position,
                             double rawElevation,            //Without considering vertical exaggeration
                             double verticalExaggeration) {
 
-  if (ISNAN(rawElevation)){
+  if (ISNAN(rawElevation)) {
     _currentSurfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
   } else{
     _currentSurfaceElevation = rawElevation * verticalExaggeration;
