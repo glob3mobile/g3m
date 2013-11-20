@@ -1,6 +1,11 @@
 package org.glob3.mobile.generated; 
 public class GPUUniformValueFloat extends GPUUniformValue
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public final float _value;
 
   public GPUUniformValueFloat(float d)

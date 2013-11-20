@@ -1,6 +1,11 @@
 package org.glob3.mobile.generated; 
 public class GPUUniformValueVec2Float extends GPUUniformValue
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public final float _x;
   public final float _y;
 

@@ -25,16 +25,16 @@ public abstract class GPUUniformValue extends RCObject
 {
   private final int _type;
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public GPUUniformValue(int type)
   {
      _type = type;
   }
 
-  public void dispose()
-  {
-    //    ILogger::instance()->logInfo("Deleting Uniform Value");
-    super.dispose();
-  }
 
 
   public final int getType()

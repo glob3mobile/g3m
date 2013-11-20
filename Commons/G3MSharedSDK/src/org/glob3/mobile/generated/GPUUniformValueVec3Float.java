@@ -1,10 +1,15 @@
 package org.glob3.mobile.generated; 
-////////////////////////////////////////////////////////////
 public class GPUUniformValueVec3Float extends GPUUniformValue
 {
   protected float _x;
   protected float _y;
   protected float _z;
+
+  public void dispose()
+  {
+    super.dispose();
+  }
+
 
   public GPUUniformValueVec3Float(float x, float y, float z)
   {

@@ -25,22 +25,6 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
     }
   }
 
-  public Matrix44DMultiplicationHolder(Matrix44DProvider[] providers, int nMatrix)
-  {
-     _nMatrix = nMatrix;
-     _modelview = null;
-    _matrix = new Matrix44D[nMatrix];
-    _providers = new Matrix44DProvider[nMatrix];
-    for (int i = 0; i < _nMatrix; i++)
-    {
-      _matrix[i] = null;
-      _providers[i] = providers[i];
-      _providers[i]._retain();
-    }
-  
-    pullMatrixes();
-  }
-
   public void dispose()
   {
   
@@ -58,6 +42,26 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
     {
       _modelview._release();
     }
+    {
+  
+      super.dispose();
+    }
+  }
+
+  public Matrix44DMultiplicationHolder(Matrix44DProvider[] providers, int nMatrix)
+  {
+     _nMatrix = nMatrix;
+     _modelview = null;
+    _matrix = new Matrix44D[nMatrix];
+    _providers = new Matrix44DProvider[nMatrix];
+    for (int i = 0; i < _nMatrix; i++)
+    {
+      _matrix[i] = null;
+      _providers[i] = providers[i];
+      _providers[i]._retain();
+    }
+  
+    pullMatrixes();
   }
 
   public final Matrix44D getMatrix()

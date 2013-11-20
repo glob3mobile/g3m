@@ -3,6 +3,11 @@ public class TextureGLFeature extends GLColorGroupFeature
 {
   private IGLTextureId _texID = null;
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public TextureGLFeature(IGLTextureId texID, IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean blend, int sFactor, int dFactor, boolean coordsTransformed, Vector2D translate, Vector2D scale)
   {
      super(GLFeatureID.GLF_TEXTURE, 4, blend, sFactor, dFactor);
