@@ -99,7 +99,7 @@
             <objects>
                 <tableViewController id="esp-gn-RRS" customClass="G3MSelectDemoSceneViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1yb-IB-Sk6">
-                        <rect key="frame" x="0.0" y="0.0" width="164" height="350"/>
+                        <rect key="frame" x="0.0" y="0.0" width="164" height="395"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="1ZR-Dl-Ttf">
