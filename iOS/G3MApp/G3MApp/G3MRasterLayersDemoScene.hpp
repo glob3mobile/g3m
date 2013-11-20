@@ -36,7 +36,7 @@ public:
     _options.push_back("MapBox Terrain");
     _options.push_back("MapBox Aerial");
     _options.push_back("CartoDB Meteorites");
-    _options.push_back("WMS Nasa Blue Marble");
+    _options.push_back("Nasa Blue Marble (WMS)");
 
     // _options.push_back("ESRI ArcGis Online");
 

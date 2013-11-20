@@ -72,7 +72,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
                                       new LevelTileCondition(0, 18),
                                       TimeInterval::fromDays(30),
                                       true);
-  blueMarble->setTitle("WMS Nasa Blue Marble");
+  blueMarble->setTitle("Nasa Blue Marble (WMS)");
   blueMarble->setEnable(false);
   layerSet->addLayer(blueMarble);
 
@@ -172,8 +172,8 @@ void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
   else if (option == "MapQuest OSM") {
     layerSet->getLayerByTitle("MapQuest OSM")->setEnable(true);
   }
-  else if (option == "WMS Nasa Blue Marble") {
-    layerSet->getLayerByTitle("WMS Nasa Blue Marble")->setEnable(true);
+  else if (option == "Nasa Blue Marble (WMS)") {
+    layerSet->getLayerByTitle("Nasa Blue Marble (WMS)")->setEnable(true);
   }
   else if (option == "ESRI ArcGis Online") {
     layerSet->getLayerByTitle("Map Box Aerial")->setEnable(true);
