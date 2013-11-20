@@ -30,8 +30,7 @@ void Sphere::createWireframeMesh(Color* color,
   const double delta = PI / (resolution-1);
 
   // create vertices
-//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(), Vector3D::zero);
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
   for (int i=0; i<2*resolution-2; i++) {
     const double longitude = -PI + i*delta;
     for (int j=0; j<resolution; j++) {
@@ -40,7 +39,7 @@ void Sphere::createWireframeMesh(Color* color,
       const double x = h * mu->cos(longitude);
       const double y = h * mu->sin(longitude);
       const double z = mu->sin(latitude);
-      vertices.add(Vector3D(x,y,z).times(_radius).add(_center));
+      vertices->add(Vector3D(x,y,z).times(_radius).add(_center));
     }
   }
 
@@ -68,12 +67,14 @@ void Sphere::createWireframeMesh(Color* color,
 
   _mesh = new IndexedMesh(GLPrimitive::lines(),
                           true,
-                          vertices.getCenter(),
-                          vertices.create(),
+                          vertices->getCenter(),
+                          vertices->create(),
                           indices.create(),
                           1,
                           1,
                           color);
+
+  delete vertices;
 }
 
 

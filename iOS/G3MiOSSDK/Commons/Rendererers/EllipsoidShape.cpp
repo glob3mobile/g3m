@@ -225,11 +225,10 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
                                               ));
   const Sector sector(Sector::fullSphere());
 
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &ellipsoid, Vector3D::zero);
-  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::zero);
   FloatBufferBuilderFromCartesian2D texCoords;
 
-  FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  FloatBufferBuilderFromCartesian3D* normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
   const short resolution2Minus2 = (short) (2*_resolution-2);
   const short resolutionMinus1  = (short) (_resolution-1);
@@ -241,11 +240,11 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 
       const Geodetic2D innerPoint = sector.getInnerPoint(u, v);
 
-      vertices.add(innerPoint);
+      vertices->add(innerPoint);
 
       if (_withNormals) {
         Vector3D n = ellipsoid.geodeticSurfaceNormal(innerPoint);
-        normals.add(n);
+        normals->add(n);
       }
 
       const double vv = _mercator ? MercatorUtils::getMercatorV(innerPoint._latitude) : v;
@@ -255,14 +254,17 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   }
 
 
-  Mesh* surfaceMesh = createSurfaceMesh(rc, &vertices, &texCoords, &normals);
+  Mesh* surfaceMesh = createSurfaceMesh(rc, vertices, &texCoords, normals);
 
   if (_borderWidth > 0) {
     CompositeMesh* compositeMesh = new CompositeMesh();
     compositeMesh->addMesh(surfaceMesh);
-    compositeMesh->addMesh(createBorderMesh(rc, &vertices));
+    compositeMesh->addMesh(createBorderMesh(rc, vertices));
     return compositeMesh;
   }
+
+  delete vertices;
+  delete normals;
 
   return surfaceMesh;
 }

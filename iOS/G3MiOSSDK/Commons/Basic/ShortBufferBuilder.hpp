@@ -16,6 +16,8 @@ class IShortBuffer;
 
 class ShortBufferBuilder {
 private:
+  ShortBufferBuilder(const ShortBufferBuilder& that);
+
 #ifdef C_CODE
   std::vector<short> _values;
 #endif
@@ -71,6 +73,8 @@ private:
 #endif
 
 public:
+  ShortBufferBuilder() {
+  }
 
   void add(short value) {
     _values.push_back(value);

@@ -77,7 +77,7 @@ public:
       const JSONObject* object = jsonBaseObject->asObject();
       const JSONArray* pointsJson = object->getAsArray("points");
 
-      FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
+      FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
 
       FloatBufferBuilderFromColor colors;
 
@@ -107,9 +107,9 @@ public:
         const double lonDegrees = pointsJson->getAsNumber(i, 0);
         const double height = pointsJson->get(i + 2)->asNumber()->value();
 
-        vertices.add(Angle::fromDegrees(latDegrees),
-                     Angle::fromDegrees(lonDegrees),
-                     height - 150);
+        vertices->add(Angle::fromDegrees(latDegrees),
+                      Angle::fromDegrees(lonDegrees),
+                      height - 150);
 
         const Color interpolatedColor = interpolateColor(fromColor,
                                                          middleColor,
@@ -123,14 +123,16 @@ public:
       const float pointSize = 4;
       _scene->setPointsCloudMesh(new DirectMesh(GLPrimitive::points(),
                                                 true,
-                                                vertices.getCenter(),
-                                                vertices.create(),
+                                                vertices->getCenter(),
+                                                vertices->create(),
                                                 lineWidth,
                                                 pointSize,
                                                 NULL, // flatColor
                                                 colors.create(),
                                                 1, // colorsIntensity
                                                 false));
+
+      delete vertices;
     }
     
     delete buffer;
