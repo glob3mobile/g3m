@@ -118,12 +118,6 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.9f, 0.21f, 0.21f, 1.0f));
 
-
-//  MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
-//                                       TimeInterval::fromDays(30),
-//                                       true,
-//                                       2);
-
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                            TimeInterval::fromDays(30));
@@ -134,7 +128,7 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
   _requestId = downloader->requestBuffer(URL("http://openweathermap.org/data/2.1/find/city?bbox=-80,-180,80,180,4&cluster=yes"),
                                          DownloadPriority::HIGHEST,
                                          TimeInterval::fromHours(1),
-                                         false,
+                                         true,
                                          new G3MMarkersDemoScene_BufferDownloadListener(this),
                                          true);
 
