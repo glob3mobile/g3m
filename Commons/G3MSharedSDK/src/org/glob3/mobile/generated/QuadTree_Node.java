@@ -43,7 +43,7 @@ public class QuadTree_Node
     }
   }
 
-  public final boolean add(Sector sector, Object element, int maxElementsPerNode, int maxDepth)
+  public final boolean add(Sector sector, QuadTree_Content element, int maxElementsPerNode, int maxDepth)
   {
     if (!_sector.fullContains(sector))
     {
