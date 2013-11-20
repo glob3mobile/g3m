@@ -11,13 +11,15 @@
 
 #include "Sector.hpp"
 
+class QuadTree_Content;
+
 class QuadTreeVisitor {
 public:
   virtual ~QuadTreeVisitor() {
   }
 
-  virtual bool visitElement(const Sector& sector,
-                            const void*   element) const = 0;
+  virtual bool visitElement(const Sector&           sector,
+                            const QuadTree_Content* element) const = 0;
 
   virtual void endVisit(bool aborted) const = 0;
 
