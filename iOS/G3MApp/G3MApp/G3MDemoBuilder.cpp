@@ -56,7 +56,7 @@ void G3MDemoBuilder::build() {
   IG3MBuilder* builder = getG3MBuilder();
 
 //  builder->getPlanetRendererBuilder()->setRenderDebug(true);
-//  const float verticalExaggeration = 1.0f;
+  const float verticalExaggeration = 10.0f;
 //  builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),

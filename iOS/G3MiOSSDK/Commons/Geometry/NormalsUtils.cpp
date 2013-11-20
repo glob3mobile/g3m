@@ -14,17 +14,17 @@
 
 Vector3F NormalsUtils::getVertex(const IFloatBuffer* vertices,
                                  short index) {
-  return Vector3F(vertices->get(index),
-                  vertices->get(index + 1),
-                  vertices->get(index + 2));
+  return Vector3F(vertices->get(index*3),
+                  vertices->get(index*3 + 1),
+                  vertices->get(index*3 + 2));
 }
 
 void NormalsUtils::addNormal(IFloatBuffer* normals,
                              int index,
                              const Vector3F& normal) {
-  normals->rawAdd(index    , normal._x);
-  normals->rawAdd(index + 1, normal._y);
-  normals->rawAdd(index + 2, normal._z);
+  normals->rawAdd(index*3    , normal._x);
+  normals->rawAdd(index*3 + 1, normal._y);
+  normals->rawAdd(index*3 + 2, normal._z);
 }
 
 Vector3F NormalsUtils::calculateNormal(const IFloatBuffer* vertices,
