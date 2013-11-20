@@ -21,6 +21,9 @@ package org.glob3.mobile.generated;
 
 public class FloatBufferBuilder
 {
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  FloatBufferBuilder(FloatBufferBuilder that);
+
   protected enum CenterStrategy
   {
     NO_CENTER,
@@ -90,6 +93,11 @@ public class FloatBufferBuilder
   }
 
   protected final FloatArrayList _values = new FloatArrayList();
+
+  protected FloatBufferBuilder()
+  {
+
+  }
 
   public final IFloatBuffer create()
   {

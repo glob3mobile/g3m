@@ -21,6 +21,9 @@ package org.glob3.mobile.generated;
 
 public class ShortBufferBuilder
 {
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  ShortBufferBuilder(ShortBufferBuilder that);
+
 
   public final class ShortArrayList {
     private short[] _array;
@@ -70,6 +73,9 @@ public class ShortBufferBuilder
 
   protected final ShortArrayList _values = new ShortArrayList();
 
+  public ShortBufferBuilder()
+  {
+  }
 
   public final void add(short value)
   {

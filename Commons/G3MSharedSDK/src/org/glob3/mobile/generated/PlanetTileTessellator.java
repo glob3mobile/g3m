@@ -402,18 +402,23 @@ public class PlanetTileTessellator extends TileTessellator
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Testing_Terrain_Normals;
-  //  IFloatBuffer* verticesB = vertices.create();
-  //  IShortBuffer* indicesB  = indices.create();
-  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-  //  //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
-  //
-  //  return new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
-  //                                 vertices.getCenter(),
-  //                                 verticesB, true,
-  //                                 normals,   true,
-  //                                 indicesB,  true);
+    //  IFloatBuffer* verticesB = vertices.create();
+    //  IShortBuffer* indicesB  = indices.create();
+    //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+    //  //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
+    //
+    //  Mesh* result = new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
+    //                                 vertices.getCenter(),
+    //                                 verticesB, true,
+    //                                 normals,   true,
+    //                                 indicesB,  true);
   
-    return new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true);
+    Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true);
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
 
   public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)
@@ -462,7 +467,12 @@ public class PlanetTileTessellator extends TileTessellator
   
     Color color = Color.newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
   
-    return new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color, null, 0, false); // colorsIntensity -  colors
+    Mesh result = new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color, null, 0, false); // colorsIntensity -  colors
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
 
   public final boolean isReady(G3MRenderContext rc)
