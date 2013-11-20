@@ -52,10 +52,11 @@ SGTextureNode::~SGTextureNode() {
     delete layer;
   }
 
+  delete _glState;
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLState* parentState) {
