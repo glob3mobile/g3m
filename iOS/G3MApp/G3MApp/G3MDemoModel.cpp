@@ -17,6 +17,7 @@
 #include <G3MiOSSDK/ShapesRenderer.hpp>
 #include <G3MiOSSDK/ErrorHandling.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -70,6 +71,9 @@ void G3MDemoModel::reset() {
   //_g3mWidget->cancelCameraAnimation();
   _g3mWidget->cancelAllEffects();
 
+  PlanetRenderer* planetRenderer = getPlanetRenderer();
+  planetRenderer->setVerticalExaggeration(1);
+
   _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
 
   _g3mWidget->setShownSector( Sector::fullSphere() );
@@ -99,6 +103,9 @@ ShapesRenderer* G3MDemoModel::getShapesRenderer() const {
   return _geoRenderer->getShapesRenderer();
 }
 
+PlanetRenderer* G3MDemoModel::getPlanetRenderer() const {
+  return _g3mWidget->getPlanetRenderer();
+}
 
 G3MDemoScene* G3MDemoModel::getSceneByName(const std::string& sceneName) const {
   const int scenesSize = _scenes.size();

@@ -22,7 +22,7 @@ class GEOTileRasterizer;
 class MarksRenderer;
 class MeshRenderer;
 class ShapesRenderer;
-
+class PlanetRenderer;
 
 class G3MDemoModel {
 private:
@@ -68,6 +68,7 @@ public:
 
   ShapesRenderer* getShapesRenderer() const;
 
+  PlanetRenderer* getPlanetRenderer() const;
 
   int getScenesCount() const {
     return _scenes.size();
