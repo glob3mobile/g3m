@@ -125,11 +125,4 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
     return Vector2I.zero();
   }
 
-  public final boolean hasBeenInitialized()
-  {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
-    return false;
-  }
-
 }

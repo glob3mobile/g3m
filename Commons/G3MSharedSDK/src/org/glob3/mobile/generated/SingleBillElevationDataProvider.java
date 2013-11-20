@@ -50,9 +50,6 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   private long _requestToDownloaderID;
   private SingleBillElevationDataProvider_BufferDownloadListener _listener;
 
-  private boolean _hasBeenInitialized;
-
-
   public SingleBillElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent)
   {
      this(bilUrl, sector, extent, 0);
@@ -70,7 +67,6 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
      _downloader = null;
      _requestToDownloaderID = -1;
      _listener = null;
-     _hasBeenInitialized = false;
   
   }
 
@@ -95,7 +91,7 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
   public final void initialize(G3MContext context)
   {
-    if (!_elevationDataResolved)
+    if (!_elevationDataResolved || _listener != null)
     {
       _downloader = context.getDownloader();
   
@@ -103,7 +99,6 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   
       _requestToDownloaderID = _downloader.requestBuffer(_bilUrl, 2000000000, TimeInterval.fromDays(30), true, _listener, true);
     }
-    _hasBeenInitialized = true;
   }
 
   public final long requestElevationData(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener)
@@ -167,11 +162,6 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
   public final Vector2I getMinResolution()
   {
     return new Vector2I(_extentWidth, _extentHeight);
-  }
-
-  public final boolean hasBeenInitialized()
-  {
-    return _hasBeenInitialized;
   }
 
 }

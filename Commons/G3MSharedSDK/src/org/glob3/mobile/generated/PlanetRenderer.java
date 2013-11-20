@@ -577,12 +577,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       if (!_elevationDataProvider.isReadyToRender(rc))
       {
-  
-        if (!_elevationDataProvider.hasBeenInitialized())
-        {
-          _elevationDataProvider.initialize(rc); //Initializing EDP in case it wasn't
-        }
-  
         return RenderState.busy();
       }
     }
@@ -857,6 +851,16 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       _ownsElevationDataProvider = owned;
       _elevationDataProvider = elevationDataProvider;
+  
+      if (_elevationDataProvider != null)
+      {
+        _elevationDataProvider.setChangedListener(this);
+        if (_context != null)
+        {
+          _elevationDataProvider.initialize(_context); //Initializing EDP in case it wasn't
+        }
+      }
+  
       changed();
     }
   }
@@ -864,6 +868,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   {
     _verticalExaggeration = verticalExaggeration;
     changed();
+  }
+
+  public final ElevationDataProvider getElevationDataProvider()
+  {
+    return _elevationDataProvider;
   }
 
 }

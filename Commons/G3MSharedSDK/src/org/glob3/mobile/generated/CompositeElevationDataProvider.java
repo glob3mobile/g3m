@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 
 //class CompositeElevationData;
 
-public abstract class CompositeElevationDataProvider extends ElevationDataProvider
+public class CompositeElevationDataProvider extends ElevationDataProvider
 {
   private G3MContext _context;
 
@@ -316,6 +316,10 @@ public abstract class CompositeElevationDataProvider extends ElevationDataProvid
     {
       edp.initialize(_context);
     }
+  
+    edp.setChangedListener(_changedListener); //Setting Changed Listener on child
+  
+    onChanged();
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
