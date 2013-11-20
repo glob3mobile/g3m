@@ -208,6 +208,10 @@ public:
   PlanetRenderer* getPlanetRenderer();
 
   void setShownSector(const Sector& sector);
+
+  G3MRenderContext* getRenderContext() const{
+    return _renderContext;
+  }
   
 private:
   IStorage*                _storage;
