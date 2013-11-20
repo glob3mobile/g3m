@@ -16,13 +16,16 @@ class BasicShadersGL2: public GPUProgramFactory{
 public:
   BasicShadersGL2(){
 
-    GPUProgramSources sourcesBillboard("Billboard",
 #ifdef C_CODE
-                                       std::string() +
+#define STRING std::string() +
 #endif
 #ifdef JAVA_CODE
-                                       new String() +
+#define STRING new String() +
 #endif
+
+
+    GPUProgramSources sourcesBillboard("Billboard",
+                                       STRING
                                        "attribute vec2 aTextureCoord; \n " +
                                        "uniform mat4 uModelview; \n " +
                                        "uniform vec4 uBillboardPosition; \n " +
