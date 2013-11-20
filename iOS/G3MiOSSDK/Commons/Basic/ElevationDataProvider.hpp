@@ -46,8 +46,12 @@ public:
 
 
 class ElevationDataProvider {
+protected:
 
   ChangedListener* _changedListener;
+
+  bool _enabled;
+
 public:
 
   ElevationDataProvider():_changedListener(NULL){}
@@ -77,6 +81,17 @@ public:
 
   void onChanged() const{
     _changedListener->changed();
+  }
+
+  void setEnabled(bool enabled){
+    if (_enabled != enabled){
+      _enabled = enabled;
+      onChanged();
+    }
+  }
+
+  bool isEnabled() const{
+    return _enabled;
   }
   
 };

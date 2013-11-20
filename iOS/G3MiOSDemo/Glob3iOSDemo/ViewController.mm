@@ -2646,6 +2646,11 @@ public:
                 break;
             }
 
+            ElevationDataProvider* edp = [_iosWidget widget]->getPlanetRenderer()->getElevationDataProvider();
+            if (edp != NULL){
+              edp->setEnabled(rand()%2 == 0);
+            }
+
           }
         };
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new ElevationTask(_iosWidget));

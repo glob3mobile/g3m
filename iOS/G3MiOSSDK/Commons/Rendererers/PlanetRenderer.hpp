@@ -447,6 +447,10 @@ public:
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider, bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
 
+  ElevationDataProvider* getElevationDataProvider() const{
+    return _elevationDataProvider;
+  }
+
 };
 
 
