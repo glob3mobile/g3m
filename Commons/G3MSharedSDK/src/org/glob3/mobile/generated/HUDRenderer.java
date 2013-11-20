@@ -70,6 +70,9 @@ public class HUDRenderer extends LeafRenderer
     
       DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
     
+      if (vertices != null)
+         vertices.dispose();
+    
       TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
     
       return new TexturedMesh(im, true, texMap, true, true);
