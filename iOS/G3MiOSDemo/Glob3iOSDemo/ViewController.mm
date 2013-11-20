@@ -137,6 +137,7 @@
 #import <G3MiOSSDK/TextCanvasElement.hpp>
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
+#import <G3MiOSSDK/IImageDownloadListener.hpp>
 
 
 
@@ -1447,7 +1448,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -2585,36 +2586,86 @@ public:
 
       if (true){ //GETTING URLS
 
-        int time = 2; //SECS
 
-        class GetURL: public GTask{
+
+        int time = 5; //SECS
+
+        class GetURLTask: public GTask{
           G3MWidget_iOS* _iosWidget;
 
           bool _firstExec;
+          bool _executed;
+          int _nImagesDownloaded;
+          std::list<std::string> _urls;
         public:
-          GetURL(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget), _firstExec(true) {}
+          GetURLTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget), _firstExec(true), _nImagesDownloaded(0),
+          _executed(false){}
 
+          class DownloadListener: public IImageDownloadListener{
+
+            GetURLTask* _task;
+          public:
+            DownloadListener(GetURLTask* task):_task(task){}
+
+            virtual void onDownload(const URL& url,
+                                    IImage* image,
+                                    bool expired){
+              _task->imageDownloaded();
+            }
+
+            virtual void onError(const URL& url){}
+
+            virtual void onCancel(const URL& url){}
+
+            virtual void onCanceledDownload(const URL& url,
+                                            IImage* image,
+                                            bool expired){}
+
+
+          };
+
+          void imageDownloaded(){
+            _nImagesDownloaded++;
+            if (_nImagesDownloaded % 50 == 0){
+              printf("IMAGE DOWNLOADED %d\n", _nImagesDownloaded);
+            }
+            int size = _urls.size() ;
+            if (_nImagesDownloaded == size  ){
+              printf("ALL IMAGES DOWNLOADED \n");
+            }
+
+          }
 
           void run(const G3MContext* context) {
 
-            if (!_firstExec){
+            if (!_firstExec && !_executed){
 
 
-            Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
-            Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
+              Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
+              Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
 
-            std::list<std::string> urls = [_iosWidget widget]->getPlanetRenderer()->getTilesURL(lower, upper, 15);
+              _urls = [_iosWidget widget]->getPlanetRenderer()->getTilesURL(lower, upper, 15);
 
-              for (std::list<std::string>::iterator it=urls.begin(); it != urls.end(); ++it){
-                printf("%s \n ", (*it).c_str());
+              IDownloader* downloader = context->getDownloader();
+              int n = 0;
+              for (std::list<std::string>::iterator it= _urls.begin(); it != _urls.end(); ++it){
+                std::string url = *it;
+                printf("%s \n ", url.c_str());
+
+                downloader->requestImage(URL(url), 1000, TimeInterval::fromSeconds(0), false,
+                                          new DownloadListener(this), true);
+                n++;
               }
+              printf("N PETITIONS MADE %d\n", n);
+
+              _executed = true;
 
             }
 
             _firstExec = false;
           }
         };
-        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new GetURL(_iosWidget));
+        [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new GetURLTask(_iosWidget));
       }
 
 
