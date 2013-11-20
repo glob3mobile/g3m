@@ -40,12 +40,12 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
         return getProgram(gl, "TransformedTexCoorTexturedMesh+DirectionLight");
       }
       return getProgram(gl, "TexturedMesh+DirectionLight");
-    } else{
-      if (transformTC) {
-        return getProgram(gl, "TransformedTexCoorTexturedMesh");
-      }
-      return getProgram(gl, "TexturedMesh");
     }
+
+    if (transformTC) {
+      return getProgram(gl, "TransformedTexCoorTexturedMesh");
+    }
+    return getProgram(gl, "TexturedMesh");
   }
 
   if (!flatColor && !texture && color) {
