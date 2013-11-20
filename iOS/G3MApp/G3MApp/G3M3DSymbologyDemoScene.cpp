@@ -21,6 +21,8 @@
 #include <G3MiOSSDK/Mark.hpp>
 #include <G3MiOSSDK/GEOShapeSymbol.hpp>
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -98,6 +100,15 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   //  g3mWidget->setShownSector(sector);
 
   //  builder.setPlanet(Planet.createFlatEarth());
+
+  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
+  planetRenderer->setVerticalExaggeration(16);
+
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+                                                                                     Sector::fullSphere(),
+                                                                                     Vector2I(2048, 1024));
+  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
                                        TimeInterval::fromDays(30),

@@ -24,6 +24,9 @@
 #include <G3MiOSSDK/Mark.hpp>
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
+#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+
 
 
 class G3MVectorialDemoSymbolizer : public GEOSymbolizer {
@@ -137,6 +140,22 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
 
+
+//  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
+//  planetRenderer->setVerticalExaggeration(2);
+//
+//  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+//                                                                                     Sector::fullSphere(),
+//                                                                                     Vector2I(2048, 1024));
+//  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+
+  /*
+   final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///monaco-dem.bil", false), demSector,
+   new Vector2I(16, 13), DELTA_HEIGHT);
+
+   builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
+   builder.getPlanetRendererBuilder().setVerticalExaggeration(_VerticalExaggeration);
+   */
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
                                        TimeInterval::fromDays(30),

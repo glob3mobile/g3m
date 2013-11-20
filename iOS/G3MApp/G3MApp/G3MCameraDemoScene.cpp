@@ -15,7 +15,7 @@
 #include <G3MiOSSDK/SGShape.hpp>
 #include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
+//#include <G3MiOSSDK/PlanetRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -82,8 +82,8 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel*   model          = getModel();
   ShapesRenderer* shapesRenderer = model->getShapesRenderer();
 
-  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
-  planetRenderer->setVerticalExaggeration(0);
+//  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
+//  planetRenderer->setVerticalExaggeration(0);
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
                                        TimeInterval::fromDays(30),
