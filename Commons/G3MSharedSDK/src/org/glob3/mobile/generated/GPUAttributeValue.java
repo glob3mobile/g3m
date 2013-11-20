@@ -25,6 +25,11 @@ package org.glob3.mobile.generated;
 
 public abstract class GPUAttributeValue extends RCObject
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public final boolean _enabled;
   public final int _type;
   public final int _attributeSize;
@@ -55,18 +60,13 @@ public abstract class GPUAttributeValue extends RCObject
      _arrayElementSize = arrayElementSize;
   }
 
-//  int getType() const { return _type;}
-//  int getAttributeSize() const { return _attributeSize;}
-//  int getIndex() const { return _index;}
-//  int getStride() const { return _stride;}
-//  bool getNormalized() const { return _normalized;}
-//  bool getEnabled() const { return _enabled;}
+  //  int getType() const { return _type;}
+  //  int getAttributeSize() const { return _attributeSize;}
+  //  int getIndex() const { return _index;}
+  //  int getStride() const { return _stride;}
+  //  bool getNormalized() const { return _normalized;}
+  //  bool getEnabled() const { return _enabled;}
 
-  public void dispose()
-  {
-    super.dispose();
-
-  }
   public abstract void setAttribute(GL gl, int id);
   public abstract boolean isEquals(GPUAttributeValue v);
   public abstract String description();

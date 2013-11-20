@@ -1,8 +1,12 @@
 package org.glob3.mobile.generated; 
 public class DirectionLightGLFeature extends GLFeature
 {
-
   private GPUUniformValueVec3FloatMutable _lightDirectionUniformValue;
+
+  public void dispose()
+  {
+    super.dispose();
+  }
 
   public DirectionLightGLFeature(Vector3D dir, Color lightColor, float ambientLight)
   {
