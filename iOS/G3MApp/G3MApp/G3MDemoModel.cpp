@@ -30,6 +30,7 @@
 #include "G3M3DModelDemoScene.hpp"
 #include "G3MCameraDemoScene.hpp"
 #include "G3MIsosurfaceDemoScene.hpp"
+#include "G3MScenarioDEMDemoScene.hpp"
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
                            LayerSet* layerSet,
@@ -42,7 +43,7 @@ _selectedScene(NULL),
 _context(NULL)
 {
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
-  //  _scenes.push_back( new G3MDemoScene("Scenario+DEM") );
+  _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
   _scenes.push_back( new G3MMarkersDemoScene(this) );
   _scenes.push_back( new G3M3DSymbologyDemoScene(this) );

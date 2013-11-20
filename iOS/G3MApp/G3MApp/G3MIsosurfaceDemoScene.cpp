@@ -49,6 +49,4 @@ void G3MIsosurfaceDemoScene::rawActivate(const G3MContext* context) {
                              Color::newFromRGBA(1, 1, 0, 1),
                              new G3MIsosurfaceDemoScene_MeshLoadListener(g3mWidget),
                              true);
-
-#warning Diego at work!
 }
