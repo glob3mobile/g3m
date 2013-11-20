@@ -80,6 +80,9 @@ public:
   virtual void rawRasterize(ICanvas*                   canvas,
                             const GEORasterProjection* projection) const = 0;
 
+  void unusedMethod() const {
+  }
+
 };
 
 #endif

@@ -34,6 +34,8 @@ public:
 #ifdef JAVA_CODE
   void dispose();
 #endif
+
+  virtual void unusedMethod() const = 0;
 };
 
 class QuadTree_Element {
