@@ -866,8 +866,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   }
   public final void setVerticalExaggeration(float verticalExaggeration)
   {
-    _verticalExaggeration = verticalExaggeration;
-    changed();
+    if (_verticalExaggeration != verticalExaggeration)
+    {
+      _verticalExaggeration = verticalExaggeration;
+      changed();
+    }
   }
 
   public final ElevationDataProvider getElevationDataProvider()

@@ -603,15 +603,15 @@ public class Mark implements SurfaceElevationListener
 
   public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
   {
-	  
+  
     if ((rawElevation != rawElevation))
-	{
-    	_currentSurfaceElevation = 0; //USING 0 WHEN NO ELEVATION DATA
-	}
+    {
+      _currentSurfaceElevation = 0; //USING 0 WHEN NO ELEVATION DATA
+    }
     else
-	{
-    	_currentSurfaceElevation = rawElevation * verticalExaggeration;
-	}
+    {
+      _currentSurfaceElevation = rawElevation * verticalExaggeration;
+    }
   
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();
