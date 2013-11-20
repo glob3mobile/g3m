@@ -174,7 +174,6 @@ public class WMSLayer extends Layer
       return petitions;
     }
   
-  
     //TODO: MUST SCALE WIDTH,HEIGHT
   
     final Vector2I tileTextureResolution = _parameters._tileTextureResolution;

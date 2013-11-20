@@ -341,11 +341,30 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, const JSONObject* jsonL
     
     IStringBuilder *url = IStringBuilder::newStringBuilder();
     url->addString(geojsonDatasource);
-    url->addString("/");
-    url->addString(namefile);
     
     const IStringUtils* iISU = IStringUtils::instance();
-    const std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(iISU->substring(namefile, 0, iISU->indexOf(namefile, ".")), "_", " "));
+    
+    ////// Check if we have an url to web service or an url to a geojson file
+    
+    if (iISU->endsWith(geojsonDatasource,"=") || iISU->endsWith(geojsonDatasource,"?") || iISU->endsWith(geojsonDatasource,"&")) {
+      url->addString(namefile);
+    }
+    else {
+      url->addString("/");
+      url->addString(namefile);
+    }
+  
+    std::string basicname;
+    if (iISU->indexOf(namefile,".") != -1) {
+      basicname = iISU->substring(namefile, 0, iISU->indexOf(namefile, "."));
+    }
+    else {
+      basicname = namefile;
+    }
+    
+    /////
+
+    const std::string namefileTruncated = iISU->capitalize(iISU->replaceSubstring(basicname, "_", " "));
     
     std::string nameFileFormatted;
     int pos = IStringUtils::instance()->indexOf(namefileTruncated, "-");

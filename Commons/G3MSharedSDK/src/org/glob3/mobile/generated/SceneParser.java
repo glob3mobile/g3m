@@ -84,7 +84,6 @@ public class SceneParser {
 
    private void parserJSONLayerList(final LayerSet layerSet,
                                     final JSONObject jsonLayers) {
-      //TODO
       for (int i = 0; i < jsonLayers.size(); i++) {
          final IStringBuilder isb = IStringBuilder.newStringBuilder();
          isb.addInt(i);
@@ -105,7 +104,7 @@ public class SceneParser {
                parserJSONPlanarImageLayer(layerSet, jsonLayer);
                break;
             case GEOJSON:
-               parserGEOJSONLayer(jsonLayer);
+               parserGEOJSONLayer(layerSet, jsonLayer);
                break;
             case SPHERICALIMAGE:
                parserJSONSphericalImageLayer(layerSet, jsonLayer);
@@ -273,7 +272,8 @@ public class SceneParser {
    }
 
 
-   private void parserGEOJSONLayer(final JSONObject jsonLayer) {
+   private void parserGEOJSONLayer(final LayerSet layerSet,
+                                   final JSONObject jsonLayer) {
       System.out.print("Parsing GEOJSON Layer ");
       System.out.print(jsonLayer.getAsString(NAME).value());
       System.out.print("...");
@@ -297,9 +297,12 @@ public class SceneParser {
          final IStringBuilder url = IStringBuilder.newStringBuilder();
          url.addString(geojsonDatasource);
 
-         final int _todoCpp;
+         final IStringUtils iISU = IStringUtils.instance();
 
-         if (geojsonDatasource.endsWith("=") || geojsonDatasource.endsWith("?") || geojsonDatasource.endsWith("&")) {
+         ////// Check if we have an url to web service or an url to a geojson file
+
+         if (iISU.endsWith(geojsonDatasource, "=") || iISU.endsWith(geojsonDatasource, "?")
+             || iISU.endsWith(geojsonDatasource, "&")) {
             url.addString(namefile);
          }
          else {
@@ -307,17 +310,15 @@ public class SceneParser {
             url.addString(namefile);
          }
 
-         final IStringUtils iISU = IStringUtils.instance();
-
-         final String[] aux = namefile.split("\\.");
-
-         final String basicname;
-         if (aux.length > 1) {
+         String basicname;
+         if (iISU.indexOf(namefile, ".") != -1) {
             basicname = iISU.substring(namefile, 0, iISU.indexOf(namefile, "."));
          }
          else {
             basicname = namefile;
          }
+
+         /////
 
          final String namefileTruncated = iISU.capitalize(iISU.replaceSubstring(basicname, "_", " "));
 
