@@ -203,7 +203,6 @@ public:
   _dstRects(dstRects),
   _textureId(textureId)
   {
-
   }
 
   void imageCreated(const IImage* image);

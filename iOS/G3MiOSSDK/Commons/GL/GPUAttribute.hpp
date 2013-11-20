@@ -23,6 +23,13 @@
 class GPUAttribute;
 
 class GPUAttributeValue : public RCObject {
+protected:
+  virtual ~GPUAttributeValue() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   const bool _enabled;
   const int  _type;
@@ -52,26 +59,20 @@ public:
   _arrayElementSize(arrayElementSize)
   {}
 
-//  int getType() const { return _type;}
-//  int getAttributeSize() const { return _attributeSize;}
-//  int getIndex() const { return _index;}
-//  int getStride() const { return _stride;}
-//  bool getNormalized() const { return _normalized;}
-//  bool getEnabled() const { return _enabled;}
+  //  int getType() const { return _type;}
+  //  int getAttributeSize() const { return _attributeSize;}
+  //  int getIndex() const { return _index;}
+  //  int getStride() const { return _stride;}
+  //  bool getNormalized() const { return _normalized;}
+  //  bool getEnabled() const { return _enabled;}
 
-  virtual ~GPUAttributeValue() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-
-  }
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEquals(const GPUAttributeValue* v) const = 0;
   virtual std::string description() const = 0;
 
 };
 
-class GPUAttribute: public GPUVariable{
+class GPUAttribute: public GPUVariable {
 private:
 
   bool _dirty;
@@ -92,12 +93,11 @@ public:
   const GPUAttributeKey _key;
 
   virtual ~GPUAttribute() {
-    delete _value;
+    _value->_release();
 
 #ifdef JAVA_CODE
     super.dispose();
 #endif
-
   }
 
   GPUAttribute(const std::string&name, int id, int type, int size):
@@ -112,13 +112,13 @@ public:
   {
   }
 
-//  const std::string getName() const{ return _name;}
-//  const int getID() const{ return _id;}
-//  int getType() const{ return _type;}
-//  int getSize() const{ return _size;}
+  //  const std::string getName() const{ return _name;}
+  //  const int getID() const{ return _id;}
+  //  int getType() const{ return _type;}
+  //  int getSize() const{ return _size;}
   bool wasSet() const{ return _value != NULL;}
   bool isEnabled() const { return _enabled;}
-//  GPUAttributeKey getKey() const { return _key;}
+  //  GPUAttributeKey getKey() const { return _key;}
 
 
   int getIndex() const {
@@ -192,7 +192,14 @@ public:
 
 ///////////
 
-class GPUAttributeValueDisabled: public GPUAttributeValue{
+class GPUAttributeValueDisabled : public GPUAttributeValue {
+private:
+  ~GPUAttributeValueDisabled() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeValueDisabled():
   GPUAttributeValue(false) {}
@@ -213,24 +220,31 @@ public:
   }
 
   GPUAttributeValue* copyOrCreate(GPUAttributeValue* oldAtt) const{
-
     if (oldAtt == NULL) {
       return new GPUAttributeValueDisabled();
     }
     if (oldAtt->_enabled) {
-      delete oldAtt;
+      oldAtt->_release();
       return new GPUAttributeValueDisabled();
     }
     return oldAtt;
-
   }
 
 };
 
-class GPUAttributeValueVecFloat: public GPUAttributeValue{
+class GPUAttributeValueVecFloat : public GPUAttributeValue {
+private:
   const IFloatBuffer* _buffer;
   const int _timeStamp;
   const long long _id;
+
+protected:
+  ~GPUAttributeValueVecFloat() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeValueVecFloat(IFloatBuffer* buffer, int attributeSize, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValue(GLType::glFloat(), attributeSize, arrayElementSize, index, stride, normalized),
@@ -254,11 +268,11 @@ public:
     }
     GPUAttributeValueVecFloat* vecV = (GPUAttributeValueVecFloat*)v;
     bool equal = ((_id      == vecV->_buffer->getID())     &&
-            (_timeStamp     == vecV->_timeStamp)  &&
-            (_type          == v->_type)          &&
-            (_attributeSize == v->_attributeSize) &&
-            (_stride        == v->_stride)        &&
-            (_normalized    == v->_normalized) );
+                  (_timeStamp     == vecV->_timeStamp)  &&
+                  (_type          == v->_type)          &&
+                  (_attributeSize == v->_attributeSize) &&
+                  (_stride        == v->_stride)        &&
+                  (_normalized    == v->_normalized) );
 
     return equal;
   }
@@ -285,48 +299,106 @@ public:
 
 };
 
-class GPUAttributeValueVec1Float: public GPUAttributeValueVecFloat{
+class GPUAttributeValueVec1Float: public GPUAttributeValueVecFloat {
+private:
+  ~GPUAttributeValueVec1Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeValueVec1Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValueVecFloat(buffer, 1, arrayElementSize, index, stride, normalized) {}
 };
-class GPUAttributeVec1Float: public GPUAttribute{
+
+class GPUAttributeVec1Float: public GPUAttribute {
+private:
+  ~GPUAttributeVec1Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeVec1Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 1) {}
 };
-////////
-///////////
-class GPUAttributeValueVec2Float: public GPUAttributeValueVecFloat{
+
+class GPUAttributeValueVec2Float: public GPUAttributeValueVecFloat {
+private:
+  ~GPUAttributeValueVec2Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeValueVec2Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValueVecFloat(buffer, 2, arrayElementSize, index, stride, normalized) {}
 };
 
-class GPUAttributeVec2Float: public GPUAttribute{
+class GPUAttributeVec2Float: public GPUAttribute {
+private:
+  ~GPUAttributeVec2Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeVec2Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 2) {}
 };
 ////////
 
 ///////////
-class GPUAttributeValueVec3Float: public GPUAttributeValueVecFloat{
+class GPUAttributeValueVec3Float: public GPUAttributeValueVecFloat {
+private:
+  ~GPUAttributeValueVec3Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeValueVec3Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValueVecFloat(buffer, 3, arrayElementSize, index, stride, normalized) {}
 };
+
 class GPUAttributeVec3Float: public GPUAttribute{
+private:
+  ~GPUAttributeVec3Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeVec3Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 3) {}
 };
 ////////
 
 ///////////
-class GPUAttributeValueVec4Float: public GPUAttributeValueVecFloat{
+class GPUAttributeValueVec4Float: public GPUAttributeValueVecFloat {
+private:
+  ~GPUAttributeValueVec4Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   GPUAttributeValueVec4Float(IFloatBuffer* buffer, int arrayElementSize, int index, int stride, bool normalized):
   GPUAttributeValueVecFloat(buffer, 4, arrayElementSize, index, stride, normalized) {}
 };
+
 class GPUAttributeVec4Float: public GPUAttribute{
+private:
+  ~GPUAttributeVec4Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
 public:
   GPUAttributeVec4Float(const std::string&name, int id):GPUAttribute(name, id, GLType::glFloat(), 4) {}
 };

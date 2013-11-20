@@ -104,7 +104,6 @@ GeometryGLFeature::~GeometryGLFeature() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
