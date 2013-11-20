@@ -2593,7 +2593,7 @@ public:
         }
       }
 
-      if (true) { //Changing elevation
+      if (false) { //Changing elevation
 
         int time = 4; //SECS
 
