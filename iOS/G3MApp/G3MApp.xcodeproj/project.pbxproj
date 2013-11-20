@@ -307,18 +307,18 @@
 				CF8B1A531837DBFA004D3902 /* G3MDemoModel.hpp */,
 				CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */,
 				CF6920B01837EA35007409D8 /* G3MDemoScene.hpp */,
+				CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */,
+				CFE3B3EE183C05F70078C796 /* G3MIsosurfaceDemoScene.hpp */,
 				CFE3B3C5183A99070078C796 /* G3MMarkersDemoScene.cpp */,
 				CFE3B3C6183A99070078C796 /* G3MMarkersDemoScene.hpp */,
 				CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */,
 				CFE3B3CF183AC7D20078C796 /* G3MPointCloudDemoScene.hpp */,
 				CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */,
 				CF6920B31837F1CA007409D8 /* G3MRasterLayersDemoScene.hpp */,
-				CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */,
-				CF6920B61837F26B007409D8 /* G3MVectorialDemoScene.hpp */,
-				CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */,
-				CFE3B3EE183C05F70078C796 /* G3MIsosurfaceDemoScene.hpp */,
 				CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */,
 				CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */,
+				CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */,
+				CF6920B61837F26B007409D8 /* G3MVectorialDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
