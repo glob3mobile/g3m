@@ -101,14 +101,12 @@ public class GPUProgramManager
         }
         return getProgram(gl, "TexturedMesh+DirectionLight");
       }
-      else
+  
+      if (transformTC)
       {
-        if (transformTC)
-        {
-          return getProgram(gl, "TransformedTexCoorTexturedMesh");
-        }
-        return getProgram(gl, "TexturedMesh");
+        return getProgram(gl, "TransformedTexCoorTexturedMesh");
       }
+      return getProgram(gl, "TexturedMesh");
     }
   
     if (!flatColor && !texture && color)
