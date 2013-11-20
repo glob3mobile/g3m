@@ -59,7 +59,7 @@ void G3MDemoBuilder::build() {
 //  const float verticalExaggeration = 10.0f;
 //  builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
-  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
                                                                                      Sector::fullSphere(),
                                                                                      Vector2I(2048, 1024));
   builder->getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
