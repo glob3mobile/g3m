@@ -18,7 +18,9 @@ void SGTextureNode::addLayer(SGLayerNode* layer) {
     layer->initialize(_context, _shape);
   }
 
-  delete _glState;
+  if (_glState != NULL) {
+    _glState->_release();
+  }
   _glState = NULL;
 }
 
@@ -52,7 +54,9 @@ SGTextureNode::~SGTextureNode() {
     delete layer;
   }
 
-  delete _glState;
+  if (_glState != NULL) {
+    _glState->_release();
+  }
 
 #ifdef JAVA_CODE
   super.dispose();

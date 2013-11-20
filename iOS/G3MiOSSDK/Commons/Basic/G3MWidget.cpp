@@ -261,7 +261,9 @@ G3MWidget::~G3MWidget() {
 
   delete _context;
 
-  delete _rootState;
+  if (_rootState != NULL) {
+    _rootState->_release();
+  }
   delete _initialCameraPositionProvider;
 }
 
