@@ -26,7 +26,7 @@ QuadTree_Node::~QuadTree_Node() {
 
 
 bool QuadTree_Node::add(const Sector& sector,
-                        const QuadTree_Content* element,
+                        const QuadTree_Content* content,
                         int maxElementsPerNode,
                         int maxDepth) {
   if (!_sector.fullContains(sector)) {
@@ -38,7 +38,7 @@ bool QuadTree_Node::add(const Sector& sector,
 
   if ((_elements.size() < maxElementsPerNode) ||
       (_depth >= maxDepth)) {
-    _elements.push_back( new QuadTree_Element(sector, element) );
+    _elements.push_back( new QuadTree_Element(sector, content) );
     return true;
   }
 
@@ -85,13 +85,13 @@ bool QuadTree_Node::add(const Sector& sector,
   }
 
   if (keepHere) {
-    _elements.push_back( new QuadTree_Element(sector, element) );
+    _elements.push_back( new QuadTree_Element(sector, content) );
     return true;
   }
 
   if (selectedChildrenIndex >= 0) {
     return _children[selectedChildrenIndex]->add(sector,
-                                                 element,
+                                                 content,
                                                  maxElementsPerNode,
                                                  maxDepth);
   }
@@ -110,7 +110,7 @@ bool QuadTree_Node::acceptVisitor(const Sector& sector,
   for (int i = 0; i < elementsSize; i++) {
     QuadTree_Element* element = _elements[i];
     if (element->_sector.touchesWith(sector)) {
-      const bool abort = visitor.visitElement(element->_sector, element->_element);
+      const bool abort = visitor.visitElement(element->_sector, element->_content);
       if (abort) {
         return true;
       }
@@ -135,8 +135,8 @@ QuadTree::~QuadTree() {
 }
 
 bool QuadTree::add(const Sector& sector,
-                   const QuadTree_Content* element) {
-  return _root->add(sector, element, _maxElementsPerNode, _maxDepth);
+                   const QuadTree_Content* content) {
+  return _root->add(sector, content, _maxElementsPerNode, _maxDepth);
 }
 
 bool QuadTree::acceptVisitor(const Sector& sector,

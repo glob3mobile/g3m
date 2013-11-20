@@ -19,7 +19,7 @@ public:
   }
 
   virtual bool visitElement(const Sector&           sector,
-                            const QuadTree_Content* element) const = 0;
+                            const QuadTree_Content* content) const = 0;
 
   virtual void endVisit(bool aborted) const = 0;
 
@@ -39,17 +39,17 @@ public:
 class QuadTree_Element {
 public:
   const Sector            _sector;
-  const QuadTree_Content* _element;
+  const QuadTree_Content* _content;
 
   QuadTree_Element(const Sector&           sector,
-                   const QuadTree_Content* element) :
+                   const QuadTree_Content* content) :
   _sector(sector),
-  _element(element)
+  _content(content)
   {
   }
 
   ~QuadTree_Element() {
-    delete _element;
+    delete _content;
   }
 
 };
@@ -83,7 +83,7 @@ public:
   ~QuadTree_Node();
 
   bool add(const Sector& sector,
-           const QuadTree_Content* element,
+           const QuadTree_Content* content,
            int maxElementsPerNode,
            int maxDepth);
 
@@ -121,7 +121,7 @@ public:
   ~QuadTree();
 
   bool add(const Sector& sector,
-           const QuadTree_Content* element);
+           const QuadTree_Content* content);
 
   bool acceptVisitor(const Sector& sector,
                      const QuadTreeVisitor& visitor) const;

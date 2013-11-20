@@ -62,8 +62,8 @@ public:
   }
 
   bool visitElement(const Sector&           sector,
-                    const QuadTree_Content* element) const {
-    GEORasterSymbol* symbol = (GEORasterSymbol*) element;
+                    const QuadTree_Content* content) const {
+    GEORasterSymbol* symbol = (GEORasterSymbol*) content;
 
     symbol->rasterize(_canvas, _projection, _tileLevel);
 
