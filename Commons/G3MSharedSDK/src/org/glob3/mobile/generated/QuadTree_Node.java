@@ -43,7 +43,7 @@ public class QuadTree_Node
     }
   }
 
-  public final boolean add(Sector sector, QuadTree_Content element, int maxElementsPerNode, int maxDepth)
+  public final boolean add(Sector sector, QuadTree_Content content, int maxElementsPerNode, int maxDepth)
   {
     if (!_sector.fullContains(sector))
     {
@@ -56,7 +56,7 @@ public class QuadTree_Node
   
     if ((_elements.size() < maxElementsPerNode) || (_depth >= maxDepth))
     {
-      _elements.add(new QuadTree_Element(sector, element));
+      _elements.add(new QuadTree_Element(sector, content));
       return true;
     }
   
@@ -105,13 +105,13 @@ public class QuadTree_Node
   
     if (keepHere)
     {
-      _elements.add(new QuadTree_Element(sector, element));
+      _elements.add(new QuadTree_Element(sector, content));
       return true;
     }
   
     if (selectedChildrenIndex >= 0)
     {
-      return _children[selectedChildrenIndex].add(sector, element, maxElementsPerNode, maxDepth);
+      return _children[selectedChildrenIndex].add(sector, content, maxElementsPerNode, maxDepth);
     }
   
     ILogger.instance().logError("Logic error in QuadTree");
@@ -131,7 +131,7 @@ public class QuadTree_Node
       QuadTree_Element element = _elements.get(i);
       if (element._sector.touchesWith(sector))
       {
-        final boolean abort = visitor.visitElement(element._sector, element._element);
+        final boolean abort = visitor.visitElement(element._sector, element._content);
         if (abort)
         {
           return true;
