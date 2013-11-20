@@ -11,10 +11,6 @@
 #include "G3MDemoScene.hpp"
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
-@interface G3MSelectOptionViewController ()
-
-@end
-
 @implementation G3MSelectOptionViewController
 
 - (BOOL)prefersStatusBarHidden {
@@ -56,8 +52,6 @@
 
   button.clipsToBounds = YES;
   button.layer.cornerRadius = 8;
-  //button.layer.borderColor = [UIColor darkGrayColor].CGColor;
-  //button.layer.borderWidth = 1;
 
   return cell;
 }

@@ -13,10 +13,6 @@
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
-@interface G3MSelectDemoSceneViewController ()
-
-@end
-
 @implementation G3MSelectDemoSceneViewController
 
 @synthesize popoverController = _myPopoverController;
@@ -28,16 +24,6 @@
 -(void)setDemoModel:(G3MDemoModel*) demoModel
 {
   _demoModel = demoModel;
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-  [super viewDidAppear:animated];
-
-  CGSize currentSetSizeForPopover = self.contentSizeForViewInPopover;
-  CGSize fakeMomentarySize = CGSizeMake(currentSetSizeForPopover.width - 1.0f, currentSetSizeForPopover.height - 1.0f);
-  self.contentSizeForViewInPopover = fakeMomentarySize;
-  self.contentSizeForViewInPopover = currentSetSizeForPopover;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -69,8 +55,6 @@
 
   button.clipsToBounds = YES;
   button.layer.cornerRadius = 8;
-  //button.layer.borderColor = [UIColor darkGrayColor].CGColor;
-  //button.layer.borderWidth = 1;
 
   return cell;
 }
@@ -87,7 +71,6 @@
   else {
     [self dismissViewControllerAnimated:YES
                              completion:nil];
-
   }
 }
 

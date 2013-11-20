@@ -9,9 +9,9 @@
 #import "G3MViewController.h"
 
 #import <G3MiOSSDK/G3MWidget_iOS.h>
-#import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
 #import <G3MiOSSDK/NSString_CppAdditions.h>
+
 #import "G3MSelectDemoSceneViewController.h"
 #import "G3MSelectOptionViewController.h"
 

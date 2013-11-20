@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import <string>
+
 @class G3MWidget_iOS;
 class G3MDemoModel;
 class G3MDemoScene;
