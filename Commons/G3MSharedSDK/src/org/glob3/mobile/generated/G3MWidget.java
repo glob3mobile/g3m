@@ -92,7 +92,9 @@ public class G3MWidget
        _context.dispose();
   
     if (_rootState != null)
-       _rootState.dispose();
+    {
+      _rootState._release();
+    }
     if (_initialCameraPositionProvider != null)
        _initialCameraPositionProvider.dispose();
   }
