@@ -35,6 +35,7 @@ public:
   void dispose();
 #endif
 
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
   virtual void unusedMethod() const = 0;
 };
 
