@@ -134,8 +134,8 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   
     if (sector == null)
     {
-      //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
-      //                                  symbol->description().c_str());
+  //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
+  //                                  symbol->description().c_str());
       if (symbol != null)
          symbol.dispose();
     }

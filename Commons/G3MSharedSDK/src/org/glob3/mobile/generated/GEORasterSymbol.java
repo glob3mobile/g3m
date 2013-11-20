@@ -20,7 +20,9 @@ package org.glob3.mobile.generated;
 //class GEORasterProjection;
 //class ICanvas;
 
-public abstract class GEORasterSymbol extends GEOSymbol
+
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public abstract class GEORasterSymbol extends GEOSymbol, QuadTree_Content
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GEORasterSymbol(GEORasterSymbol that);
@@ -268,11 +270,10 @@ public abstract class GEORasterSymbol extends GEOSymbol
     if (geoTileRasterizer == null)
     {
       ILogger.instance().logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
+      return true;
     }
-    else
-    {
-      geoTileRasterizer.addSymbol(this);
-    }
+  
+    geoTileRasterizer.addSymbol(this);
   
     return false;
   }

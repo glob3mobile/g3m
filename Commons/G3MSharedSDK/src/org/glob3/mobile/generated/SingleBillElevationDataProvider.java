@@ -72,6 +72,9 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
 
   public void dispose()
   {
+    if (_elevationData != null)
+       _elevationData.dispose();
+  
     if (_downloader != null && _requestToDownloaderID > -1)
     {
       _downloader.cancelRequest(_requestToDownloaderID);
@@ -147,7 +150,6 @@ public class SingleBillElevationDataProvider extends ElevationDataProvider
     }
   
     drainQueue();
-  
   
     _listener = null; //The listener will be autodeleted
   }

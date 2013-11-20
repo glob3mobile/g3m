@@ -27,7 +27,7 @@ public class QuadTree
        _root.dispose();
   }
 
-  public final boolean add(Sector sector, Object element)
+  public final boolean add(Sector sector, QuadTree_Content element)
   {
     return _root.add(sector, element, _maxElementsPerNode, _maxDepth);
   }

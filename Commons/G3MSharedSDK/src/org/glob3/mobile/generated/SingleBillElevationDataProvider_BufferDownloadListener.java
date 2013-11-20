@@ -25,17 +25,14 @@ public class SingleBillElevationDataProvider_BufferDownloadListener extends IBuf
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    final Vector2I resolution = new Vector2I(_resolutionWidth, _resolutionHeight);
-
-    ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer, _deltaHeight);
-
-    if (buffer != null)
-       buffer.dispose();
-
     if (_singleBillElevationDataProvider != null)
     {
+      ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, new Vector2I(_resolutionWidth, _resolutionHeight), buffer, _deltaHeight);
+
       _singleBillElevationDataProvider.onElevationData(elevationData);
     }
+    if (buffer != null)
+       buffer.dispose();
   }
 
   public final void onError(URL url)
