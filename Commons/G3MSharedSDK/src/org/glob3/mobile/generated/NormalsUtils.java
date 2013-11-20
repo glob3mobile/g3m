@@ -28,14 +28,14 @@ public class NormalsUtils
 
   private static Vector3F getVertex(IFloatBuffer vertices, short index)
   {
-    return new Vector3F(vertices.get(index), vertices.get(index + 1), vertices.get(index + 2));
+    return new Vector3F(vertices.get(index *3), vertices.get(index *3 + 1), vertices.get(index *3 + 2));
   }
 
   private static void addNormal(IFloatBuffer normals, int index, Vector3F normal)
   {
-    normals.rawAdd(index, normal._x);
-    normals.rawAdd(index + 1, normal._y);
-    normals.rawAdd(index + 2, normal._z);
+    normals.rawAdd(index *3, normal._x);
+    normals.rawAdd(index *3 + 1, normal._y);
+    normals.rawAdd(index *3 + 2, normal._z);
   }
 
   private static Vector3F calculateNormal(IFloatBuffer vertices, short index0, short index1, short index2)

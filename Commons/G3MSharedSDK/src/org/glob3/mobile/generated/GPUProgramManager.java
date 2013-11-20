@@ -92,17 +92,23 @@ public class GPUProgramManager
   
     if (!flatColor && texture && !color)
     {
-      if (transformTC)
-      {
-        return getProgram(gl, "TransformedTexCoorTexturedMesh");
-      }
   
       if (hasLight)
       {
+        if (transformTC)
+        {
+          return getProgram(gl, "TransformedTexCoorTexturedMesh+DirectionLight");
+        }
         return getProgram(gl, "TexturedMesh+DirectionLight");
       }
-  
-      return getProgram(gl, "TexturedMesh");
+      else
+      {
+        if (transformTC)
+        {
+          return getProgram(gl, "TransformedTexCoorTexturedMesh");
+        }
+        return getProgram(gl, "TexturedMesh");
+      }
     }
   
     if (!flatColor && !texture && color)
