@@ -54,7 +54,7 @@ protected:
 
 public:
 
-  ElevationDataProvider():_changedListener(NULL){}
+  ElevationDataProvider():_changedListener(NULL), _enabled(true){}
 
   virtual ~ElevationDataProvider() {
 

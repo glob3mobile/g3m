@@ -10,6 +10,7 @@ public abstract class ElevationDataProvider
   public ElevationDataProvider()
   {
      _changedListener = null;
+     _enabled = true;
   }
 
   public void dispose()

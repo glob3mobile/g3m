@@ -835,6 +835,8 @@ void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDa
 }
 
 void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration){
-  _verticalExaggeration = verticalExaggeration;
-  changed();
+  if (_verticalExaggeration != verticalExaggeration){
+    _verticalExaggeration = verticalExaggeration;
+    changed();
+  }
 }
