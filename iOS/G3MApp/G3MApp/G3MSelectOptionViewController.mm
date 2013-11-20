@@ -17,6 +17,10 @@
 
 @implementation G3MSelectOptionViewController
 
+- (BOOL)prefersStatusBarHidden {
+  return YES;
+}
+
 -(void)setScene:(G3MDemoScene*) scene
 {
   _scene = scene;
@@ -64,7 +68,13 @@
 
   _scene->selectOption( [option toCppString] );
 
-  [self.popoverController dismissPopoverAnimated:YES];
+  if (self.popoverController) {
+    [self.popoverController dismissPopoverAnimated:YES];
+  }
+  else {
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
+  }
 }
 
 @end

@@ -21,6 +21,10 @@
 
 @synthesize popoverController = _myPopoverController;
 
+- (BOOL)prefersStatusBarHidden {
+  return YES;
+}
+
 -(void)setDemoModel:(G3MDemoModel*) demoModel
 {
   _demoModel = demoModel;
@@ -77,7 +81,14 @@
 
   _demoModel->selectScene( [sceneName toCppString] );
 
-  [self.popoverController dismissPopoverAnimated:YES];
+  if (self.popoverController) {
+    [self.popoverController dismissPopoverAnimated:YES];
+  }
+  else {
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
+
+  }
 }
 
 @end

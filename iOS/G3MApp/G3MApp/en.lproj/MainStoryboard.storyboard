@@ -8,6 +8,7 @@
         <!--Web View Controller-->
         <scene sceneID="9Xt-ck-V7C">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1Ip-xz-7A2" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="G3MWebViewController" id="xuR-iq-Zg7" customClass="G3MWebViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9kg-uh-0Yn">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -38,13 +39,13 @@
                         <outlet property="webView" destination="6b5-9U-BYT" id="PYe-kI-eiC"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1Ip-xz-7A2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="110" y="183"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="54j-pm-Wpo">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z4Y-5P-zNw" sceneMemberID="firstResponder"/>
                 <viewController id="pAS-cz-Wce" customClass="G3MViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="je4-7d-jQJ" customClass="G3MWidget_iOS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -80,7 +81,6 @@
                         <outlet property="g3mWidget" destination="je4-7d-jQJ" id="LLv-sG-RPR"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Z4Y-5P-zNw" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-318" y="183"/>
         </scene>

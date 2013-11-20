@@ -466,15 +466,23 @@ public:
 
   if ([segue.destinationViewController isKindOfClass:[G3MSelectDemoSceneViewController class]]) {
     G3MSelectDemoSceneViewController* viewController = (G3MSelectDemoSceneViewController*) segue.destinationViewController;
-    UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
-    viewController.popoverController = popoverSegue.popoverController;
+
+    if ( [segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+      UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
+      viewController.popoverController = popoverSegue.popoverController;
+    }
+
     viewController.demoModel = _demoModel;
   }
 
   if ([segue.destinationViewController isKindOfClass:[G3MSelectOptionViewController class]]) {
     G3MSelectOptionViewController* viewController = (G3MSelectOptionViewController*) segue.destinationViewController;
-    UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
-    viewController.popoverController = popoverSegue.popoverController;
+
+    if ( [segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+      UIStoryboardPopoverSegue* popoverSegue = (UIStoryboardPopoverSegue*)segue;
+      viewController.popoverController = popoverSegue.popoverController;
+    }
+
     viewController.scene = _demoModel->getSelectedScene();
   }
 
