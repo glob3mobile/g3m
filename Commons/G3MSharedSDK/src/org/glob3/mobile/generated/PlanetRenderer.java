@@ -843,10 +843,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
   {
-  
     if (_elevationDataProvider != elevationDataProvider)
     {
-  
       if (_ownsElevationDataProvider)
       {
         if (_elevationDataProvider != null)
