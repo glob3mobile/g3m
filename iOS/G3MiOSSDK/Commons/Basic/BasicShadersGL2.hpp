@@ -17,7 +17,7 @@ public:
   BasicShadersGL2(){
 
     GPUProgramSources sourcesBillboard("Billboard",
-                                       std::string("attribute vec2 aTextureCoord; \n ") +
+                                       std::string() + "attribute vec2 aTextureCoord; \n " +
                                        "uniform mat4 uModelview; \n " +
                                        "uniform vec4 uBillboardPosition; \n " +
                                        "uniform vec2 uTextureExtent; \n " +
@@ -29,7 +29,7 @@ public:
                                        "gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w; \n " +
                                        "TextureCoordOut = aTextureCoord; \n " +
                                        "} \n ",
-                                       std::string("varying mediump vec2 TextureCoordOut; \n ") +
+                                       std::string() + "varying mediump vec2 TextureCoordOut; \n " +
                                        "uniform sampler2D Sampler; \n " +
                                        "void main() { \n " +
                                        "gl_FragColor = texture2D(Sampler, TextureCoordOut); \n " +
@@ -37,7 +37,7 @@ public:
     this->add(sourcesBillboard);
 
     GPUProgramSources sourcesColorMesh("ColorMesh",
-                                       std::string("attribute vec4 aPosition; \n ") +
+                                       std::string() + "attribute vec4 aPosition; \n " +
                                        "attribute vec4 aColor; \n " +
                                        "uniform mat4 uModelview; \n " +
                                        "uniform float uPointSize; \n " +
@@ -47,14 +47,14 @@ public:
                                        "VertexColor = aColor; \n " +
                                        "gl_PointSize = uPointSize; \n " +
                                        "} \n ",
-                                       std::string("varying mediump vec4 VertexColor; \n ") +
+                                       std::string() + "varying mediump vec4 VertexColor; \n " +
                                        "void main() { \n " +
                                        "gl_FragColor = VertexColor; \n " +
                                        "} \n ");
     this->add(sourcesColorMesh);
 
     GPUProgramSources sourcesDefault("Default",
-                                     std::string("attribute vec4 aPosition; \n ") +
+                                     std::string() + "attribute vec4 aPosition; \n " +
                                      "attribute vec2 aTextureCoord; \n " +
                                      "attribute vec4 aColor; \n " +
                                      "uniform mediump vec2 uTranslationTexCoord; \n " +
@@ -69,7 +69,7 @@ public:
                                      "VertexColor = aColor; \n " +
                                      "gl_PointSize = uPointSize; \n " +
                                      "} \n ",
-                                     std::string("varying mediump vec2 TextureCoordOut; \n ") +
+                                     std::string() + "varying mediump vec2 TextureCoordOut; \n " +
                                      "varying mediump vec4 VertexColor; \n " +
                                      "uniform sampler2D Sampler; \n " +
                                      "uniform bool EnableTexture; \n " +
@@ -113,21 +113,21 @@ public:
     this->add(sourcesDefault);
 
     GPUProgramSources sourcesFlatColorMesh("FlatColorMesh",
-                                           std::string("attribute vec4 aPosition; \n ") +
+                                           std::string() + "attribute vec4 aPosition; \n " +
                                            "uniform mat4 uModelview; \n " +
                                            "uniform float uPointSize; \n " +
                                            "void main() { \n " +
                                            "gl_Position = uModelview * aPosition; \n " +
                                            "gl_PointSize = uPointSize; \n " +
                                            "} \n ",
-                                           std::string("uniform lowp vec4 uFlatColor; \n ") +
+                                           std::string() + "uniform lowp vec4 uFlatColor; \n " +
                                            "void main() { \n " +
                                            "gl_FragColor = uFlatColor; \n " +
                                            "} \n ");
     this->add(sourcesFlatColorMesh);
 
     GPUProgramSources sourcesFlatColorMesh_DirectionLight("FlatColorMesh_DirectionLight",
-                                                          std::string("attribute vec4 aPosition; \n ") +
+                                                          std::string() + "attribute vec4 aPosition; \n " +
                                                           "attribute vec3 aNormal; \n " +
                                                           "uniform mat4 uModelview; \n " +
                                                           "uniform mat4 uModel; \n " +
@@ -144,7 +144,7 @@ public:
                                                           "gl_PointSize = uPointSize; \n " +
                                                           "lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity; \n " +
                                                           "} \n ",
-                                                          std::string("precision highp float; \n ") +
+                                                          std::string() + "precision highp float; \n " +
                                                           "uniform lowp vec4 uFlatColor; \n " +
                                                           "varying vec3 lightColor; \n " +
                                                           "void main() { \n " +
@@ -156,20 +156,20 @@ public:
     this->add(sourcesFlatColorMesh_DirectionLight);
 
     GPUProgramSources sourcesNoColorMesh("NoColorMesh",
-                                         std::string("attribute vec4 aPosition; \n ") +
+                                         std::string() + "attribute vec4 aPosition; \n " +
                                          "uniform mat4 uModelview; \n " +
                                          "uniform float uPointSize; \n " +
                                          "void main() { \n " +
                                          "gl_Position = uModelview * aPosition; \n " +
                                          "gl_PointSize = uPointSize; \n " +
                                          "} \n ",
-                                         std::string("void main() { \n ") +
+                                         std::string() + "void main() { \n " +
                                          "gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED \n " +
                                          "} \n ");
     this->add(sourcesNoColorMesh);
     
     GPUProgramSources sourcesShader("Shader",
-                                    std::string("attribute vec4 Position; \n ") + 
+                                    std::string() + "attribute vec4 Position; \n " + 
                                     "attribute vec2 TextureCoord; \n " + 
                                     "attribute vec4 Color; \n " + 
                                     "uniform mediump vec2 TranslationTexCoord; \n " + 
@@ -192,7 +192,7 @@ public:
                                     "VertexColor = Color; \n " + 
                                     "gl_PointSize = PointSize; \n " + 
                                     "} \n ",
-                                    std::string("varying mediump vec2 TextureCoordOut; \n ") + 
+                                    std::string() + "varying mediump vec2 TextureCoordOut; \n " + 
                                     "varying mediump vec4 VertexColor; \n " + 
                                     "uniform sampler2D Sampler; \n " + 
                                     "uniform bool EnableTexture; \n " + 
@@ -236,7 +236,7 @@ public:
     this->add(sourcesShader);
     
     GPUProgramSources sourcesTexturedMesh("TexturedMesh",
-                                          std::string("attribute vec4 aPosition; \n ") + 
+                                          std::string() + "attribute vec4 aPosition; \n " + 
                                           "attribute vec2 aTextureCoord; \n " + 
                                           "uniform mat4 uModelview; \n " + 
                                           "uniform float uPointSize; \n " + 
@@ -247,7 +247,7 @@ public:
                                           "TextureCoordOut = aTextureCoord; \n " + 
                                           "gl_PointSize = uPointSize; \n " + 
                                           "} \n ",
-                                          std::string("varying mediump vec2 TextureCoordOut; \n ") + 
+                                          std::string() + "varying mediump vec2 TextureCoordOut; \n " + 
                                           "varying mediump vec4 VertexColor; \n " + 
                                           "uniform sampler2D Sampler; \n " + 
                                           "void main() { \n " + 
@@ -256,7 +256,7 @@ public:
     this->add(sourcesTexturedMesh);
     
     GPUProgramSources sourcesTexturedMesh_DirectionLight("TexturedMesh_DirectionLight",
-                                                         std::string("attribute vec4 aPosition; \n ") + 
+                                                         std::string() + "attribute vec4 aPosition; \n " + 
                                                          "attribute vec2 aTextureCoord; \n " + 
                                                          "attribute vec3 aNormal; \n " + 
                                                          "uniform mat4 uModelview; \n " + 
@@ -277,7 +277,7 @@ public:
                                                          "gl_PointSize = uPointSize; \n " + 
                                                          "lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity; \n " + 
                                                          "} \n ",
-                                                         std::string("precision highp float; \n ") + 
+                                                         std::string() + "precision highp float; \n " + 
                                                          "varying mediump vec2 TextureCoordOut; \n " + 
                                                          "uniform sampler2D Sampler; \n " + 
                                                          "varying vec3 lightColor; \n " + 
@@ -291,7 +291,7 @@ public:
     this->add(sourcesTexturedMesh_DirectionLight);
     
     GPUProgramSources sourcesTransformedTexCoorTexturedMesh("TransformedTexCoorTexturedMesh",
-                                                            std::string("attribute vec4 aPosition; \n ") + 
+                                                            std::string() + "attribute vec4 aPosition; \n " + 
                                                             "attribute vec2 aTextureCoord; \n " + 
                                                             "uniform mediump vec2 uTranslationTexCoord; \n " + 
                                                             "uniform mediump vec2 uScaleTexCoord; \n " + 
@@ -304,7 +304,7 @@ public:
                                                             "TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
                                                             "gl_PointSize = uPointSize; \n " + 
                                                             "} \n ",
-                                                            std::string("varying mediump vec2 TextureCoordOut; \n ") + 
+                                                            std::string() + "varying mediump vec2 TextureCoordOut; \n " + 
                                                             "varying mediump vec4 VertexColor; \n " + 
                                                             "uniform sampler2D Sampler; \n " + 
                                                             "void main() { \n " + 
