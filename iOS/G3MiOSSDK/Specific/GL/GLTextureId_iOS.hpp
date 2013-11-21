@@ -11,33 +11,24 @@
 
 #include "IStringBuilder.hpp"
 
-
 #include "IGLTextureId.hpp"
 
-class GLTextureId_iOS: public IGLTextureId{
+class GLTextureId_iOS: public IGLTextureId {
 private:
-  unsigned int _textureId;
-public:
-  
-  
-  GLTextureId_iOS() {
-    _textureId = -1;
-  }
-  
-  GLTextureId_iOS(unsigned int textureId) {
-    _textureId = textureId;
-  }
+  const unsigned int _textureId;
 
-  GLTextureId_iOS(const GLTextureId_iOS* that) :
-  _textureId(that->_textureId)
+  GLTextureId_iOS(const GLTextureId_iOS* that);
+
+public:
+  GLTextureId_iOS(unsigned int textureId) :
+  _textureId(textureId)
   {
-    
   }
 
   unsigned int getGLTextureId() const {
     return _textureId;
   }
-  
+
   const std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("(GLTextureId_iOS #");
@@ -47,10 +38,11 @@ public:
     delete isb;
     return s;
   }
-  
+
   bool isEquals(const IGLTextureId* that) const {
     return (_textureId == ((GLTextureId_iOS*) that)->_textureId);
   }
+
 };
 
 #endif

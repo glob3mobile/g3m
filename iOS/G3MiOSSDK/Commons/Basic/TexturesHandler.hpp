@@ -140,6 +140,10 @@ class TextureIDReference{
 private:
   const IGLTextureId* _id;
   TexturesHandler* _texHandler;
+
+private:
+  TextureIDReference(const TextureIDReference& that);
+  
 public:
 
   TextureIDReference(const IGLTextureId* id,
