@@ -24,13 +24,19 @@
 #include <G3MiOSSDK/DirectMesh.hpp>
 #include <G3MiOSSDK/GLConstants.hpp>
 #include <G3MiOSSDK/MeshRenderer.hpp>
+#include <G3MiOSSDK/IThreadUtils.hpp>
 
 #include "G3MDemoModel.hpp"
 
-class G3MPointCloudDemoScene_BufferDownloadListener : public IBufferDownloadListener {
+
+class G3MPointCloudDemoScene_ParserAsyncTask : public GAsyncTask {
 private:
   G3MPointCloudDemoScene* _scene;
-  const Planet* _planet;
+  const Planet*           _planet;
+  const URL               _url;
+  IByteBuffer*            _buffer;
+
+  Mesh* _mesh;
 
   static double normalize(double value,
                           double max,
@@ -57,21 +63,28 @@ private:
   }
 
 public:
-  G3MPointCloudDemoScene_BufferDownloadListener(G3MPointCloudDemoScene* scene,
-                                                const Planet* planet) :
+  G3MPointCloudDemoScene_ParserAsyncTask(G3MPointCloudDemoScene* scene,
+                                         const Planet*           planet,
+                                         const URL&              url,
+                                         IByteBuffer*            buffer) :
   _scene(scene),
-  _planet(planet)
+  _planet(planet),
+  _url(url),
+  _buffer(buffer),
+  _mesh(NULL)
   {
   }
 
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
+  ~G3MPointCloudDemoScene_ParserAsyncTask() {
+    delete _buffer;
+    delete _mesh;
+  }
 
-    const JSONBaseObject* jsonBaseObject = BSONParser::parse(buffer);
+  void runInBackground(const G3MContext* context) {
+    const JSONBaseObject* jsonBaseObject = BSONParser::parse(_buffer);
 
     if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse \"%s\" (1)", url.getPath().c_str());
+      ILogger::instance()->logError("Can't parse \"%s\" (1)", _url.getPath().c_str());
     }
     else {
       const JSONObject* object = jsonBaseObject->asObject();
@@ -121,23 +134,61 @@ public:
 
       const float lineWidth = 1;
       const float pointSize = 4;
-      _scene->setPointsCloudMesh(new DirectMesh(GLPrimitive::points(),
-                                                true,
-                                                vertices->getCenter(),
-                                                vertices->create(),
-                                                lineWidth,
-                                                pointSize,
-                                                NULL, // flatColor
-                                                colors.create(),
-                                                1, // colorsIntensity
-                                                false));
+
+      _mesh = new DirectMesh(GLPrimitive::points(),
+                             true,
+                             vertices->getCenter(),
+                             vertices->create(),
+                             lineWidth,
+                             pointSize,
+                             NULL, // flatColor
+                             colors.create(),
+                             1, // colorsIntensity
+                             false);
 
       delete vertices;
 
       delete jsonBaseObject;
     }
 
-    delete buffer;
+    delete _buffer;
+    _buffer = NULL;
+  }
+
+  void onPostExecute(const G3MContext* context) {
+    if (_mesh == NULL) {
+      ILogger::instance()->logError("Can't parse \"%s\" (2)", _url.getPath().c_str());
+    }
+    else {
+      _scene->setPointsCloudMesh(_mesh);
+      _mesh = NULL;
+    }
+  }
+};
+
+
+class G3MPointCloudDemoScene_BufferDownloadListener : public IBufferDownloadListener {
+private:
+  const IThreadUtils* _threadUtils;
+  G3MPointCloudDemoScene* _scene;
+  const Planet* _planet;
+
+public:
+  G3MPointCloudDemoScene_BufferDownloadListener(G3MPointCloudDemoScene* scene,
+                                                const Planet*           planet,
+                                                const IThreadUtils*     threadUtils) :
+  _scene(scene),
+  _planet(planet),
+  _threadUtils(threadUtils)
+  {
+  }
+
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+
+    _threadUtils->invokeAsyncTask(new G3MPointCloudDemoScene_ParserAsyncTask(_scene, _planet, url, buffer),
+                                  true);
   }
 
   void onError(const URL& url) {
@@ -165,14 +216,17 @@ void G3MPointCloudDemoScene::setPointsCloudMesh(Mesh* mesh) {
 
   model->getMeshRenderer()->addMesh(mesh);
 
+  g3mWidget->setForceBusyRenderer(false);
+
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                        Geodetic3D::fromDegrees(39.12787093899339, -77.59965772558118, 5000));
-
 }
 
 void G3MPointCloudDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
+
+  g3mWidget->setForceBusyRenderer(true);
 
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
@@ -188,6 +242,8 @@ void G3MPointCloudDemoScene::rawActivate(const G3MContext* context) {
                             DownloadPriority::HIGHEST,
                             TimeInterval::forever(),
                             true,
-                            new G3MPointCloudDemoScene_BufferDownloadListener(this, context->getPlanet()),
+                            new G3MPointCloudDemoScene_BufferDownloadListener(this,
+                                                                              context->getPlanet(),
+                                                                              context->getThreadUtils()),
                             true);
 }
