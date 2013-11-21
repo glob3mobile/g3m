@@ -111,7 +111,6 @@ public:
 
   void put(int i,
            float value) {
-
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
