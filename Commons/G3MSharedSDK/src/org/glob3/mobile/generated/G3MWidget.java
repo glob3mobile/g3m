@@ -176,7 +176,7 @@ public class G3MWidget
   
     if (_mainRendererState != null)
        _mainRendererState.dispose();
-    _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer.getRenderState(_renderContext) : RenderState.busy());
+    _mainRendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer) ? _mainRenderer.getRenderState(_renderContext) : RenderState.busy());
     RenderState_Type renderStateType = _mainRendererState._type;
   
     _renderContext.clear();
@@ -600,6 +600,11 @@ public class G3MWidget
     _initialCameraPositionHasBeenSet = false;
   }
 
+  public final void setForceBusyRenderer(boolean forceBusyRenderer)
+  {
+    _forceBusyRenderer = forceBusyRenderer;
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -666,6 +671,8 @@ public class G3MWidget
 
   private G3MRenderContext _renderContext;
 
+  private boolean _forceBusyRenderer;
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -709,6 +716,7 @@ public class G3MWidget
      _rootState = null;
      _initialCameraPositionProvider = initialCameraPositionProvider;
      _initialCameraPositionHasBeenSet = false;
+     _forceBusyRenderer = false;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
