@@ -68,7 +68,7 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
 
   //Light slightly different of camera position
   const Vector3D rotationLightDirAxis = rc->getCurrentCamera()->getUp().cross(cameraVector);
-  const Vector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle::fromDegrees(10.0));
+  const Vector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle::fromDegrees(45.0));
 
   DirectionLightGLFeature* f = (DirectionLightGLFeature*) glState->getGLFeature(GLF_DIRECTION_LIGTH);
   if (f == NULL) {
@@ -80,8 +80,6 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   }
   else{
     f->setLightDirection(lightDir);
-
-    printf("LD: %f, %f, %f\n", lightDir._x, lightDir._y, lightDir._z);
   }
   
 }
