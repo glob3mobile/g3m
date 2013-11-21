@@ -40,7 +40,7 @@ public class CameraFocusSceneLighting extends SceneLighting
   
     //Light slightly different of camera position
     final Vector3D rotationLightDirAxis = rc.getCurrentCamera().getUp().cross(cameraVector);
-    final Vector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle.fromDegrees(10.0));
+    final Vector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle.fromDegrees(45.0));
   
     DirectionLightGLFeature f = (DirectionLightGLFeature) glState.getGLFeature(GLFeatureID.GLF_DIRECTION_LIGTH);
     if (f == null)
@@ -51,8 +51,6 @@ public class CameraFocusSceneLighting extends SceneLighting
     else
     {
       f.setLightDirection(lightDir);
-  
-      System.out.printf("LD: %f, %f, %f\n", lightDir._x, lightDir._y, lightDir._z);
     }
   
   }
