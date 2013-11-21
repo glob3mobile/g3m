@@ -74,12 +74,8 @@ public class MapBooBuilder_Android
 
    @Override
    protected GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
+      final GPUProgramFactory gpuProgramFactory = new BasicShadersGL2();
       
-	  BasicShadersGL2 shaders = new BasicShadersGL2();
-	  for (int i = 0; i < shaders.size(); i++){
-		  gpuProgramFactory.add(shaders.get(i));
-	  }
 /*
       gpuProgramFactory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
                GL2Shaders._billboardFragmentShader));
