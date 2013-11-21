@@ -11,6 +11,7 @@
 
 class GLState;
 class G3MRenderContext;
+class Vector3D;
 #include "Color.hpp"
 
 class SceneLighting{
@@ -30,6 +31,8 @@ class CameraFocusSceneLighting: public SceneLighting {
 
   Color _ambientColor;
   Color _diffuseColor;
+
+  double _cameraDirX, _cameraDirY, _cameraDirZ;
 
 public:
 

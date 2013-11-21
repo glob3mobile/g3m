@@ -46,15 +46,25 @@ void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCon
 
 CameraFocusSceneLighting::CameraFocusSceneLighting(const Color& ambient, const Color& diffuse):
 _ambientColor(ambient),
-_diffuseColor(diffuse)
+_diffuseColor(diffuse),
+_cameraDirX(0),
+_cameraDirY(0),
+_cameraDirZ(0)
 {
 
 }
 
 void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
 
-  const Vector3D cameraVector = rc->getCurrentCamera()->getViewDirection().times(-1);
-  //const Vector3D lightDir = cameraVector; //Light from camera
+  Vector3D camDir = rc->getCurrentCamera()->getViewDirection();
+  if (_cameraDirX == camDir._x && _cameraDirY == camDir._y && _cameraDirZ == camDir._z){
+    return;
+  }
+  _cameraDirX = camDir._x;
+  _cameraDirY = camDir._y;
+  _cameraDirZ = camDir._z;
+
+  const Vector3D cameraVector = camDir.times(-1);
 
   //Light slightly different of camera position
   const Vector3D rotationLightDirAxis = rc->getCurrentCamera()->getUp().cross(cameraVector);
@@ -70,6 +80,8 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   }
   else{
     f->setLightDirection(lightDir);
+
+    printf("LD: %f, %f, %f\n", lightDir._x, lightDir._y, lightDir._z);
   }
   
 }
