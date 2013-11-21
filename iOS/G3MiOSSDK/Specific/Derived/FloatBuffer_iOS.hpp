@@ -101,7 +101,6 @@ public:
   }
 
   float get(int i) const {
-
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Get error.");
     }
