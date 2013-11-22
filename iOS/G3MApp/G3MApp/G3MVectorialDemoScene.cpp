@@ -26,11 +26,31 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 #include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+#include <G3MiOSSDK/MarkTouchListener.hpp>
 
-
-
-class G3MVectorialDemoSymbolizer : public GEOSymbolizer {
+class G3MVectorialDemoScene_RestaurantMarkTouchListener : public MarkTouchListener {
 private:
+  G3MDemoModel*     _model;
+  const std::string _name;
+
+public:
+  G3MVectorialDemoScene_RestaurantMarkTouchListener(G3MDemoModel* model,
+                                                    const std::string& name) :
+  _model(model),
+  _name(name)
+  {
+  }
+
+  bool touchedMark(Mark* mark) {
+    const std::string name = _name.empty() ? "<no name>" : _name;
+    _model->showDialog(name, "Restaurant");
+    return true;
+  }
+};
+
+class G3MVectorialDemoScene_GEOSymbolizer : public GEOSymbolizer {
+private:
+  G3MDemoModel* _model;
 
   static GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) {
     const JSONObject* properties = geometry->getFeature()->getProperties();
@@ -88,12 +108,16 @@ private:
 
 
 public:
+  G3MVectorialDemoScene_GEOSymbolizer(G3MDemoModel* model) :
+  _model(model)
+  {
+  }
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const {
     std::vector<GEOSymbol*>* result = new std::vector<GEOSymbol*>();
 
-    //    const JSONObject* properties = geometry->getFeature()->getProperties();
-    //    const std::string name = properties->getAsString("name", "");
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+    const std::string name = properties->getAsString("name", "");
 
     Mark* mark = new Mark(URL("file:///restaurant-48x48.png"),
                           Geodetic3D(geometry->getPosition(), 0),
@@ -101,7 +125,7 @@ public:
                           15000,
                           NULL,
                           false,
-                          NULL, // markListener,
+                          new G3MVectorialDemoScene_RestaurantMarkTouchListener(_model, name), // markListener,
                           true);
 
     result->push_back(new GEOMarkSymbol(mark));
@@ -140,45 +164,19 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
 
-
-//  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
-//  planetRenderer->setVerticalExaggeration(2);
-//
-//  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
-//                                                                                     Sector::fullSphere(),
-//                                                                                     Vector2I(2048, 1024));
-//  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
-
-  /*
-   final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///monaco-dem.bil", false), demSector,
-   new Vector2I(16, 13), DELTA_HEIGHT);
-
-   builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
-   builder.getPlanetRendererBuilder().setVerticalExaggeration(_VerticalExaggeration);
-   */
-
   MapBoxLayer* layer = new MapBoxLayer("examples.map-qogxobv1",
                                        TimeInterval::fromDays(30),
                                        true,
                                        13);
   model->getLayerSet()->addLayer(layer);
 
-
   GEORenderer* geoRenderer = model->getGEORenderer();
-  geoRenderer->loadJSON(URL("file:///buildings_monaco.geojson"),   new G3MVectorialDemoSymbolizer());
-  geoRenderer->loadJSON(URL("file:///roads_monaco.geojson"),       new G3MVectorialDemoSymbolizer());
-  geoRenderer->loadJSON(URL("file:///restaurants_monaco.geojson"), new G3MVectorialDemoSymbolizer());
+  geoRenderer->loadJSON(URL("file:///buildings_monaco.geojson"),   new G3MVectorialDemoScene_GEOSymbolizer(model));
+  geoRenderer->loadJSON(URL("file:///roads_monaco.geojson"),       new G3MVectorialDemoScene_GEOSymbolizer(model));
+  geoRenderer->loadJSON(URL("file:///restaurants_monaco.geojson"), new G3MVectorialDemoScene_GEOSymbolizer(model));
 
   const Sector demSector = Sector::fromDegrees(43.69200778158779, 7.36351850323685,
                                                43.7885865186124,  7.48617349925817);
-
-  g3mWidget->setShownSector(demSector.shrinkedByPercent(0.1f));
-
-
-  //  final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///monaco-dem.bil", false), demSector,
-  //                                                                        new Vector2I(16, 13), DELTA_HEIGHT);
-  //
-  //  builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
-  //  builder.getPlanetRendererBuilder().setVerticalExaggeration(_VerticalExaggeration);
   
+  g3mWidget->setShownSector(demSector.shrinkedByPercent(0.1f));
 }

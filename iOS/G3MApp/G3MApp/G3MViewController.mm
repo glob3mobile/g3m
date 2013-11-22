@@ -52,6 +52,16 @@ public:
     [_viewController onChangedOption: option
                              inScene: scene];
   }
+
+  void showDialog(const std::string& title,
+                  const std::string& message) const {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: [NSString stringWithCppString:title]
+                                                    message: [NSString stringWithCppString:message]
+                                                   delegate: nil
+                                          cancelButtonTitle: @"OK"
+                                          otherButtonTitles: nil];
+    [alert show];
+  }
 };
 
 -(void) onChangedScene:(const G3MDemoScene*) scene

@@ -207,22 +207,22 @@ Mesh* createSectorMesh(const Planet* planet,
     indices.add(indicesCounter++);
   }
 
-  Vector3D center = vertices->getCenter();
-  IFloatBuffer* vertex = vertices->create();
+  Mesh* result = new IndexedMesh(GLPrimitive::lineLoop(),
+                                 true,
+                                 vertices->getCenter(),
+                                 vertices->create(),
+                                 indices.create(),
+                                 lineWidth,
+                                 1,
+                                 new Color(color),
+                                 NULL, //colors
+                                 0,    // colorsIntensity
+                                 false //depthTest
+                                 );
+
   delete vertices;
 
-  return new IndexedMesh(GLPrimitive::lineLoop(),
-                         true,
-                         center,
-                         vertex,
-                         indices.create(),
-                         lineWidth,
-                         1,
-                         new Color(color),
-                         NULL, //colors
-                         0,    // colorsIntensity
-                         false //depthTest
-                         );
+  return result;
 }
 
 
@@ -751,6 +751,7 @@ public:
                                           1.0,
                                           Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
 
+    delete vertex;
 
   }
 
@@ -978,6 +979,7 @@ public:
 
   meshRenderer->addMesh( mesh );
 
+  delete vertices;
 
   delete planet;
 }
@@ -1015,18 +1017,19 @@ public:
   const float lineWidth = 1;
   const float pointSize = 2;
   Color* flatColor = NULL;
-  Mesh* mesh = new DirectMesh(GLPrimitive::points(),
-                        true,
-                        vertices->getCenter(),
-                        vertices->create(),
-                        lineWidth,
-                        pointSize,
-                        flatColor,
-                        colors.create());
+
+  Mesh* result = new DirectMesh(GLPrimitive::points(),
+                                true,
+                                vertices->getCenter(),
+                                vertices->create(),
+                                lineWidth,
+                                pointSize,
+                                flatColor,
+                                colors.create());
 
   delete vertices;
 
-  return mesh;
+  return result;
 }
 
 - (CameraRenderer*) createCameraRenderer
@@ -2454,18 +2457,16 @@ public:
                      height);
       }
 
-
-      Mesh* mesh = new DirectMesh(GLPrimitive::lineStrip(),
-                            true,
-                            vertices->getCenter(),
-                            vertices->create(),
-                            2,
-                            1,
-                            color);
-
+      Mesh* result = new DirectMesh(GLPrimitive::lineStrip(),
+                                    true,
+                                    vertices->getCenter(),
+                                    vertices->create(),
+                                    2,
+                                    1,
+                                    color);
       delete vertices;
 
-      return mesh;
+      return result;
     }
 
     //    void testMeshLoad(const G3MContext* context) {

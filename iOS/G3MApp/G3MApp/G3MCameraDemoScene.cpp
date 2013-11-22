@@ -29,9 +29,9 @@ protected:
   }
 };
 
-class ThePhynxShapeLoadListener : public G3MCameraDemoSceneShapeLoadListener {
+class TheSphynxShapeLoadListener : public G3MCameraDemoSceneShapeLoadListener {
 public:
-  ThePhynxShapeLoadListener(G3MCameraDemoScene* scene) :
+  TheSphynxShapeLoadListener(G3MCameraDemoScene* scene) :
   G3MCameraDemoSceneShapeLoadListener(scene)
   {
   }
@@ -41,7 +41,7 @@ public:
   }
 
   void onAfterAddShape(SGShape* shape) {
-    _scene->setThePhynxShape(shape);
+    _scene->setTheSphynxShape(shape);
   }
 };
 
@@ -82,8 +82,8 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel*   model          = getModel();
   ShapesRenderer* shapesRenderer = model->getShapesRenderer();
 
-//  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
-//  planetRenderer->setVerticalExaggeration(0);
+  //  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
+  //  planetRenderer->setVerticalExaggeration(0);
 
   MapBoxLayer* layer = new MapBoxLayer("examples.map-m0t0lrpu",
                                        TimeInterval::fromDays(30),
@@ -99,7 +99,7 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
                                                  Angle::fromDegreesMinutesSeconds(31, 8, 15.84),
                                                  0),
                                   RELATIVE_TO_GROUND,
-                                  new ThePhynxShapeLoadListener(this));
+                                  new TheSphynxShapeLoadListener(this));
 
   shapesRenderer->loadBSONSceneJS(URL("file:///eifeltower.bson"),
                                   "file:///eifel/",
@@ -122,8 +122,8 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
 
 void G3MCameraDemoScene::rawSelectOption(const std::string& option,
                                          int optionIndex) {
-  if (option == "The Phynx") {
-    if (_thePhynxShape != NULL) {
+  if (option == "The Sphynx") {
+    if (_theSphynxShape != NULL) {
       const double fromDistance = 6000;
       const double toDistance = 2000;
 
@@ -133,10 +133,10 @@ void G3MCameraDemoScene::rawSelectOption(const std::string& option,
       const Angle fromAltitude = Angle::fromDegrees(90);
       const Angle toAltitude   = Angle::fromDegrees(30);
 
-      _thePhynxShape->orbitCamera(TimeInterval::fromSeconds(20),
-                                  fromDistance, toDistance,
-                                  fromAzimuth,  toAzimuth,
-                                  fromAltitude, toAltitude);
+      _theSphynxShape->orbitCamera(TimeInterval::fromSeconds(20),
+                                   fromDistance, toDistance,
+                                   fromAzimuth,  toAzimuth,
+                                   fromAltitude, toAltitude);
     }
   }
   else if (option == "The Eiffel Tower") {

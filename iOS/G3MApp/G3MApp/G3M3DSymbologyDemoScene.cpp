@@ -40,14 +40,6 @@ public:
     const double volume = popMax * boxExtent * 3500;
     const double height = volume / baseArea;
 
-    //    Geodetic3D* position,
-    //    AltitudeMode altitudeMode,
-    //    const Vector3D& extent,
-    //    float borderWidth,
-    //    const Color& surfaceColor,
-    //    Color* borderColor = NULL,
-    //    bool useNormals = true
-
     BoxShape* bs = new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                                 RELATIVE_TO_GROUND,
                                 Vector3D(boxExtent / 4, boxExtent / 4, height / 2),
@@ -93,13 +85,6 @@ void G3M3DSymbologyDemoScene::rawSelectOption(const std::string& option,
 void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
-
-  //  const Sector sector = Sector::fromDegrees(17.7504, -174.2,
-  //                                               71.2906, -64.75);
-
-  //  g3mWidget->setShownSector(sector);
-
-  //  builder.setPlanet(Planet.createFlatEarth());
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(16);
