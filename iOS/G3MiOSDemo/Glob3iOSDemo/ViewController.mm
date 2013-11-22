@@ -974,12 +974,9 @@ public:
                               pointSize,
                               flatColor,
                               colors.create());
-
   delete vertices;
 
   meshRenderer->addMesh( mesh );
-
-  delete vertices;
 
   delete planet;
 }

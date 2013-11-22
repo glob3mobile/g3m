@@ -18,8 +18,6 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
   GPUProgram* p = new GPUProgram();
 
   p->_name = name;
-
-  p->_programCreated = false;
   p->_programID = gl->createProgram();
   p->_gl = gl;
 
@@ -61,7 +59,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     return NULL;
   }
 
-  // free shaders
+  //Mark shaders for deleting when program is deleted
   p->deleteShader(gl, vertexShader);
   p->deleteShader(gl, fragmentShader);
 
@@ -79,7 +77,9 @@ GPUProgram::~GPUProgram() {
   delete[] _createdAttributes;
   delete[] _createdUniforms;
 
-  _gl->deleteShader(_programID);
+  if (!_gl->deleteProgram(_programID)){
+    ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
+  }
 }
 
 bool GPUProgram::linkProgram(GL* gl) const {
@@ -116,7 +116,6 @@ void GPUProgram::deleteProgram(GL* gl, int p) {
   if (!gl->deleteProgram(p)) {
     ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
   }
-  _programCreated = false;
 }
 
 void GPUProgram::getVariables(GL* gl) {

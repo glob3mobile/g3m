@@ -30,6 +30,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
     }
 
   }
+
   return p;
 }
 
@@ -86,6 +87,7 @@ GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attribut
   for (std::map<std::string, GPUProgramData>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
     GPUProgram* p = it->second._program;
     if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
+      it->second._usedSinceLastCleanUp = true; //Marked as used
       return p;
     }
   }
@@ -94,6 +96,7 @@ GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attribut
   for (final GPUProgramData pd : _programs.values()) {
     GPUProgram p = pd._program;
     if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
+      pd._usedSinceLastCleanUp = true; //Marked as used
       return p;
     }
   }
@@ -141,4 +144,28 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 #ifdef JAVA_CODE
   return _programs.get(name);
 #endif
+}
+
+void GPUProgramManager::deleteUnusedPrograms(){
+//#ifdef C_CODE
+//
+//
+//
+//  for (std::map<std::string, GPUProgramData>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+//    GPUProgram* p = it->second._program;
+//    if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
+//      it->second._usedSinceLastCleanUp = true; //Marked as used
+//      return p;
+//    }
+//  }
+//#endif
+//#ifdef JAVA_CODE
+//  for (final GPUProgramData pd : _programs.values()) {
+//    GPUProgram p = pd._program;
+//    if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
+//      pd._usedSinceLastCleanUp = true; //Marked as used
+//      return p;
+//    }
+//  }
+//#endif
 }

@@ -422,11 +422,7 @@ public:
   
   bool deleteProgram(int program) const {
     glDeleteProgram(program);
-    return true;
-//    int NOT_WORKING_APPARENTLY;
-//    int ps;
-//    glGetProgramiv(program, GL_DELETE_STATUS, &ps);
-//    return (ps == GL_TRUE);
+    return (glIsProgram(program) == GL_FALSE);
   }
   
   void attachShader(int program, int shader) const {

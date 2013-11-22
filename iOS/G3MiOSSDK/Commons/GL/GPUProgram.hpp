@@ -36,7 +36,6 @@ enum ShaderType {
 
 class GPUProgram {
   int _programID;
-  bool _programCreated;
 
   GPUUniform* _uniforms[32];
   GPUAttribute* _attributes[32];
@@ -80,7 +79,6 @@ public:
   std::string getName() const { return _name;}
   
   int getProgramID() const{ return _programID;}
-  bool isCreated() const{ return _programCreated;}
   void deleteProgram(GL* gl, int p);
   
   int getGPUAttributesNumber() const { return _nAttributes;}
