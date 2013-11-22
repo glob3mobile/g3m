@@ -108,11 +108,11 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
   const double w = _size._x;
   const double h = _size._y;
 
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  vertices.add(Vector3D(0, h, 0).sub(halfViewportAndPosition));
-  vertices.add(Vector3D(0, 0, 0).sub(halfViewportAndPosition));
-  vertices.add(Vector3D(w, h, 0).sub(halfViewportAndPosition));
-  vertices.add(Vector3D(w, 0, 0).sub(halfViewportAndPosition));
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  vertices->add(Vector3D(0, h, 0).sub(halfViewportAndPosition));
+  vertices->add(Vector3D(0, 0, 0).sub(halfViewportAndPosition));
+  vertices->add(Vector3D(w, h, 0).sub(halfViewportAndPosition));
+  vertices->add(Vector3D(w, 0, 0).sub(halfViewportAndPosition));
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
@@ -122,10 +122,12 @@ Mesh* HUDRenderer::ShownImage::createMesh(const G3MRenderContext* rc) const {
 
   DirectMesh *im = new DirectMesh(GLPrimitive::triangleStrip(),
                                   true,
-                                  vertices.getCenter(),
-                                  vertices.create(),
+                                  vertices->getCenter(),
+                                  vertices->create(),
                                   1,
                                   1);
+
+  delete vertices;
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),

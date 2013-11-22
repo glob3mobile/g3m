@@ -52,10 +52,6 @@ MarksRenderer::~MarksRenderer() {
   }
   _markTouchListener = NULL;
   
-  if (_billboardTexCoord != NULL) {
-    delete _billboardTexCoord;
-  }
-
   _glState->_release();
 
 #ifdef JAVA_CODE

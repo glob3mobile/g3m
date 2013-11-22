@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_BasicShadersGL2_h
 #define G3MiOSSDK_BasicShadersGL2_h
 
-#include <GPUProgramFactory.hpp>
+#include "GPUProgramFactory.hpp"
 
 class BasicShadersGL2: public GPUProgramFactory{
 
@@ -176,31 +176,31 @@ public:
                                          "attribute vec4 aPosition; \n " +
                                          "uniform mat4 uModelview; \n " +
                                          "uniform float uPointSize; \n " +
-                                         "void main() { \n " + 
-                                         "gl_Position = uModelview * aPosition; \n " + 
-                                         "gl_PointSize = uPointSize; \n " + 
+                                         "void main() { \n " +
+                                         "gl_Position = uModelview * aPosition; \n " +
+                                         "gl_PointSize = uPointSize; \n " +
                                          "} \n ",
-                                         emptyString +  
-                                         "void main() { \n " + 
-                                         "gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED \n " + 
+                                         emptyString +
+                                         "void main() { \n " +
+                                         "gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED \n " +
                                          "} \n ");
     this->add(sourcesNoColorMesh);
-    
+
     GPUProgramSources sourcesShader("Shader",
-                                    emptyString +  
-                                    "attribute vec4 Position; \n " + 
-                                    "attribute vec2 TextureCoord; \n " + 
-                                    "attribute vec4 Color; \n " + 
-                                    "uniform mediump vec2 TranslationTexCoord; \n " + 
-                                    "uniform mediump vec2 ScaleTexCoord; \n " + 
-                                    "uniform mat4 Projection; \n " + 
-                                    "uniform mat4 Modelview; \n " + 
-                                    "uniform bool BillBoard; \n " + 
-                                    "uniform vec2 TextureExtent; \n " + 
-                                    "uniform vec2 ViewPortExtent; \n " + 
-                                    "uniform float PointSize; \n " + 
-                                    "varying vec4 VertexColor; \n " + 
-                                    "varying vec2 TextureCoordOut; \n " + 
+                                    emptyString +
+                                    "attribute vec4 Position; \n " +
+                                    "attribute vec2 TextureCoord; \n " +
+                                    "attribute vec4 Color; \n " +
+                                    "uniform mediump vec2 TranslationTexCoord; \n " +
+                                    "uniform mediump vec2 ScaleTexCoord; \n " +
+                                    "uniform mat4 Projection; \n " +
+                                    "uniform mat4 Modelview; \n " +
+                                    "uniform bool BillBoard; \n " +
+                                    "uniform vec2 TextureExtent; \n " +
+                                    "uniform vec2 ViewPortExtent; \n " +
+                                    "uniform float PointSize; \n " +
+                                    "varying vec4 VertexColor; \n " +
+                                    "varying vec2 TextureCoordOut; \n " +
                                     "void main() { \n " + 
                                     "gl_Position = Projection * Modelview * Position; \n " + 
                                     "if (BillBoard) { \n " + 
@@ -337,6 +337,43 @@ public:
                                                             "gl_FragColor = texture2D(Sampler, TextureCoordOut); \n " + 
                                                             "} \n ");
     this->add(sourcesTransformedTexCoorTexturedMesh);
+    
+    GPUProgramSources sourcesTransformedTexCoorTexturedMesh_DirectionLight("TransformedTexCoorTexturedMesh_DirectionLight",
+                                                                           emptyString +  
+                                                                           "attribute vec4 aPosition; \n " + 
+                                                                           "attribute vec2 aTextureCoord; \n " + 
+                                                                           "attribute vec3 aNormal; \n " + 
+                                                                           "uniform mat4 uModelview; \n " + 
+                                                                           "uniform mat4 uModel; \n " + 
+                                                                           "uniform float uPointSize; \n " + 
+                                                                           "varying vec4 VertexColor; \n " + 
+                                                                           "varying vec2 TextureCoordOut; \n " + 
+                                                                           "uniform vec3 uLightDirection; //MUST BE NORMALIZED \n " + 
+                                                                           "varying float diffuseLightIntensity; \n " + 
+                                                                           "uniform mediump vec2 uTranslationTexCoord; \n " + 
+                                                                           "uniform mediump vec2 uScaleTexCoord; \n " + 
+                                                                           "void main() { \n " + 
+                                                                           "vec3 normal = normalize( vec3(uModel * vec4(aNormal, 0.0) )); \n " + 
+                                                                           "vec3 lightDir = normalize( uLightDirection ); \n " + 
+                                                                           "diffuseLightIntensity = max(dot(normal, lightDir), 0.0); \n " + 
+                                                                           "gl_Position = uModelview * aPosition; \n " + 
+                                                                           "TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
+                                                                           "gl_PointSize = uPointSize; \n " + 
+                                                                           "} \n ",
+                                                                           emptyString +  
+                                                                           "precision highp float; \n " + 
+                                                                           "varying mediump vec2 TextureCoordOut; \n " + 
+                                                                           "varying mediump vec4 VertexColor; \n " + 
+                                                                           "uniform sampler2D Sampler; \n " + 
+                                                                           "uniform float uAmbientLight; \n " + 
+                                                                           "uniform vec4 uLightColor; \n " + 
+                                                                           "varying float diffuseLightIntensity; \n " + 
+                                                                           "void main() { \n " + 
+                                                                           "gl_FragColor = texture2D(Sampler, TextureCoordOut); \n " + 
+                                                                           "vec4 lightColor = vec4(uAmbientLight, uAmbientLight, uAmbientLight, 1.0) + uLightColor * diffuseLightIntensity; \n " + 
+                                                                           "gl_FragColor *= lightColor; \n " + 
+                                                                           "} \n ");
+    this->add(sourcesTransformedTexCoorTexturedMesh_DirectionLight);
     
   }
   

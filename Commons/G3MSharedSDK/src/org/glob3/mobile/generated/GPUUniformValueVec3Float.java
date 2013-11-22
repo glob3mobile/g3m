@@ -1,11 +1,11 @@
 package org.glob3.mobile.generated; 
-////////////////////////////////////////////////////////////
 public class GPUUniformValueVec3Float extends GPUUniformValue
 {
   protected float _x;
   protected float _y;
   protected float _z;
 
+<<<<<<< HEAD
   public GPUUniformValueVec3Float(Color color)
   {
      super(GLType.glVec3Float());
@@ -14,6 +14,14 @@ public class GPUUniformValueVec3Float extends GPUUniformValue
      _z = color._blue;
   }
 
+=======
+  public void dispose()
+  {
+    super.dispose();
+  }
+
+
+>>>>>>> ios-demo
   public GPUUniformValueVec3Float(float x, float y, float z)
   {
      super(GLType.glVec3Float());

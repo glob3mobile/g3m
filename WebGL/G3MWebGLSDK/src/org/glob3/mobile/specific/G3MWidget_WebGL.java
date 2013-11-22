@@ -529,8 +529,8 @@ public class G3MWidget_WebGL
    }
 
 
-   public void stopCameraAnimation() {
-      getG3MWidget().stopCameraAnimation();
+   public void cancelCameraAnimation() {
+      getG3MWidget().cancelCameraAnimation();
    }
 
 

@@ -316,6 +316,10 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     {
       edp.initialize(_context);
     }
+  
+    edp.setChangedListener(_changedListener); //Setting Changed Listener on child
+  
+    onChanged();
   }
 
   public final boolean isReadyToRender(G3MRenderContext rc)

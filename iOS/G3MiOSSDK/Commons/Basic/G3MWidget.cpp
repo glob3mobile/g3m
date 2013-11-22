@@ -261,7 +261,9 @@ G3MWidget::~G3MWidget() {
 
   delete _context;
 
-  delete _rootState;
+  if (_rootState != NULL) {
+    _rootState->_release();
+  }
   delete _initialCameraPositionProvider;
 }
 
@@ -676,7 +678,7 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                                              finalLonInDegrees,
                                                              toPosition._height);
 
-  stopCameraAnimation();
+  cancelCameraAnimation();
 
   _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval,
                                                               fromPosition, finalToPosition,
@@ -687,7 +689,11 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                  _nextCamera->getEffectTarget());
 }
 
-void G3MWidget::stopCameraAnimation() {
+void G3MWidget::cancelAllEffects() {
+  _effectsScheduler->cancelAllEffects();
+}
+
+void G3MWidget::cancelCameraAnimation() {
   EffectTarget* target = _nextCamera->getEffectTarget();
   _effectsScheduler->cancelAllEffectsFor(target);
 }

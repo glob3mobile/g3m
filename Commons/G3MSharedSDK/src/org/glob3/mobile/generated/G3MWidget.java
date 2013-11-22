@@ -92,7 +92,9 @@ public class G3MWidget
        _context.dispose();
   
     if (_rootState != null)
-       _rootState.dispose();
+    {
+      _rootState._release();
+    }
     if (_initialCameraPositionProvider != null)
        _initialCameraPositionProvider.dispose();
   }
@@ -546,15 +548,20 @@ public class G3MWidget
   
     final Geodetic3D finalToPosition = Geodetic3D.fromDegrees(finalLatInDegrees, finalLonInDegrees, toPosition._height);
   
-    stopCameraAnimation();
+    cancelCameraAnimation();
   
     _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, finalToPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
   }
 
-  public final void stopCameraAnimation()
+  public final void cancelCameraAnimation()
   {
     EffectTarget target = _nextCamera.getEffectTarget();
     _effectsScheduler.cancelAllEffectsFor(target);
+  }
+
+  public final void cancelAllEffects()
+  {
+    _effectsScheduler.cancelAllEffects();
   }
 
   //  void resetCameraPosition();

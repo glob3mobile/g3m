@@ -9,7 +9,8 @@
 #ifndef __G3MiOSSDK__Vector3F__
 #define __G3MiOSSDK__Vector3F__
 
-#include "Vector3D.hpp"
+#include "IMathUtils.hpp"
+
 
 class Vector3F {
 private:
@@ -23,30 +24,29 @@ public:
 
   Vector3F(const float x,
            const float y,
-           const float z): _x(x), _y(y), _z(z) {
+           const float z) :
+  _x(x),
+  _y(y),
+  _z(z)
+  {
+  }
 
+  Vector3F(const Vector3F& that) :
+  _x(that._x),
+  _y(that._y),
+  _z(that._z)
+  {
   }
 
   ~Vector3F() {
   }
 
-  Vector3F(const Vector3F &v): _x(v._x), _y(v._y), _z(v._z) {
 
-  }
-
-  inline float dot(const Vector3D& v) const {
-    return ((_x * (float) v._x) +
-            (_y * (float) v._y) +
-            (_z * (float) v._z));
-  }
-  
-  inline float dot(const Vector3F& v) const {
+  float dot(const Vector3F& v) const {
     return ((_x * v._x) +
             (_y * v._y) +
             (_z * v._z));
   }
-
-  Vector3F normalized() const;
 
   double length() const {
     return IMathUtils::instance()->sqrt(squaredLength());
@@ -54,6 +54,26 @@ public:
 
   double squaredLength() const {
     return _x * _x + _y * _y + _z * _z;
+  }
+
+  Vector3F normalized() const {
+    const double d = length();
+    return Vector3F((float) (_x / d),
+                    (float) (_y / d),
+                    (float) (_z / d));
+  }
+
+
+  Vector3F sub(const Vector3F& that) const {
+    return Vector3F(_x - that._x,
+                    _y - that._y,
+                    _z - that._z);
+  }
+
+  Vector3F cross(const Vector3F& that) const {
+    return Vector3F(_y * that._z - _z * that._y,
+                    _z * that._x - _x * that._z,
+                    _x * that._y - _y * that._x);
   }
 
 };

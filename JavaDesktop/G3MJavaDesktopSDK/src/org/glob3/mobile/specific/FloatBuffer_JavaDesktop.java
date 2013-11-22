@@ -108,6 +108,13 @@ public class FloatBuffer_JavaDesktop
    }
 
 
+   @Override
+   public void rawAdd(final int i,
+                      final float value) {
+      _buffer.put(i, _buffer.get(i) + value);
+   }
+
+
    public FloatBuffer getBuffer() {
       return _buffer;
    }

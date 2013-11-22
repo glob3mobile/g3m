@@ -81,25 +81,6 @@ GPUProgramSources MapBooBuilder_iOS::loadDefaultGPUProgramSources(const std::str
 }
 
 GPUProgramManager* MapBooBuilder_iOS::createGPUProgramManager() {
-  GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
-
-  BasicShadersGL2 basicShaders;
-  for (int i = 0; i < basicShaders.size(); i++) {
-    gpuProgramFactory->add(basicShaders.get(i));
-  }
-
-  /*
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("Billboard"));
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("Default"));
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh"));
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh"));
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("ColorMesh"));
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("TransformedTexCoorTexturedMesh"));
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("TexturedMesh_DirectionLight"));
-  gpuProgramFactory->add(loadDefaultGPUProgramSources("FlatColorMesh_DirectionLight"));
-  gpuProgramFactory->add( loadDefaultGPUProgramSources("NoColorMesh") );
-   */
-
-
+  GPUProgramFactory * gpuProgramFactory = new BasicShadersGL2();
   return new GPUProgramManager(gpuProgramFactory);
 }

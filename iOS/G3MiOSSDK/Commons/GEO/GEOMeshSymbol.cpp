@@ -22,30 +22,31 @@ Mesh* GEOMeshSymbol::createLine2DMesh(const std::vector<Geodetic2D*>* coordinate
                                       float lineWidth,
                                       double deltaHeight,
                                       const Planet* planet) const {
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-//                                          planet,
-//                                          Geodetic2D::zero());
 
-  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
 
   const int coordinatesCount = coordinates->size();
   for (int i = 0; i < coordinatesCount; i++) {
     const Geodetic2D* coordinate = coordinates->at(i);
-    vertices.add(coordinate->_latitude,
-                 coordinate->_longitude,
-                 deltaHeight);
+    vertices->add(coordinate->_latitude,
+                  coordinate->_longitude,
+                  deltaHeight);
   }
 
-  return new DirectMesh(GLPrimitive::lineStrip(),
-                        true,
-                        vertices.getCenter(),
-                        vertices.create(),
-                        lineWidth,
-                        1,
-                        new Color(lineColor),
-                        NULL,
-                        0.0f,
-                        false);
+  Mesh* result = new DirectMesh(GLPrimitive::lineStrip(),
+                                true,
+                                vertices->getCenter(),
+                                vertices->create(),
+                                lineWidth,
+                                1,
+                                new Color(lineColor),
+                                NULL,
+                                0.0f,
+                                false);
+
+  delete vertices;
+
+  return result;
 }
 
 Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
@@ -54,10 +55,7 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
                                        double deltaHeight,
                                        const Planet* planet) const {
 
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-//                                          planet,
-//                                          Geodetic2D::zero());
-  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   ShortBufferBuilder indices;
 
   const int coordinatesArrayCount = coordinatesArray->size();
@@ -68,9 +66,9 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
     for (int j = 0; j < coordinatesCount; j++) {
       const Geodetic2D* coordinate = coordinates->at(j);
 
-      vertices.add(coordinate->_latitude,
-                   coordinate->_longitude,
-                   deltaHeight);
+      vertices->add(coordinate->_latitude,
+                    coordinate->_longitude,
+                    deltaHeight);
 
       indices.add(index);
       if ((j > 0) && (j < (coordinatesCount-1))) {
@@ -80,17 +78,21 @@ Mesh* GEOMeshSymbol::createLines2DMesh(const std::vector<std::vector<Geodetic2D*
     }
   }
 
-  return new IndexedMesh(GLPrimitive::lines(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         lineWidth,
-                         1,
-                         new Color(lineColor),
-                         NULL,
-                         0.0f,
-                         false);
+  Mesh* result = new IndexedMesh(GLPrimitive::lines(),
+                                 true,
+                                 vertices->getCenter(),
+                                 vertices->create(),
+                                 indices.create(),
+                                 lineWidth,
+                                 1,
+                                 new Color(lineColor),
+                                 NULL,
+                                 0.0f,
+                                 false);
+
+  delete vertices;
+
+  return result;
 }
 
 bool GEOMeshSymbol::symbolize(const G3MRenderContext* rc,

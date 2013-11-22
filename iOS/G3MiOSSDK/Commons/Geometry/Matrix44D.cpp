@@ -45,7 +45,6 @@ Matrix44D::~Matrix44D()
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 Matrix44D::Matrix44D(const Matrix44D& m):

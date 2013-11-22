@@ -12,9 +12,9 @@ public class GEOTileRasterizer_QuadTreeVisitor extends QuadTreeVisitor
      _tileLevel = tileLevel;
   }
 
-  public final boolean visitElement(Sector sector, Object element)
+  public final boolean visitElement(Sector sector, QuadTree_Content content)
   {
-    GEORasterSymbol symbol = (GEORasterSymbol) element;
+    GEORasterSymbol symbol = (GEORasterSymbol) content;
 
     symbol.rasterize(_canvas, _projection, _tileLevel);
 

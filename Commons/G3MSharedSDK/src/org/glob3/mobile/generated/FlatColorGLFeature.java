@@ -1,6 +1,11 @@
 package org.glob3.mobile.generated; 
 public class FlatColorGLFeature extends GLColorGroupFeature
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public FlatColorGLFeature(Color color, boolean blend, int sFactor, int dFactor)
   {
      super(GLFeatureID.GLF_FLATCOLOR, 2, blend, sFactor, dFactor);

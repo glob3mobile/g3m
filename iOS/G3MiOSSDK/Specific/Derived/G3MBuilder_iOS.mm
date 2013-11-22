@@ -27,20 +27,7 @@ void G3MBuilder_iOS::initializeWidget() {
   for (int i = 0; i < basicShaders.size(); i++) {
     addGPUProgramSources(basicShaders.get(i));
   }
-
-
-/*
-  addGPUProgramSources(loadGPUProgramSources("Default"));
-  addGPUProgramSources(loadGPUProgramSources("Billboard"));
-  addGPUProgramSources(loadGPUProgramSources("FlatColorMesh"));
-  addGPUProgramSources(loadGPUProgramSources("TexturedMesh"));
-  addGPUProgramSources(loadGPUProgramSources("ColorMesh"));
-  addGPUProgramSources(loadGPUProgramSources("TransformedTexCoorTexturedMesh"));
-  addGPUProgramSources(loadGPUProgramSources("TexturedMesh_DirectionLight"));
-  addGPUProgramSources(loadGPUProgramSources("FlatColorMesh_DirectionLight"));
-  addGPUProgramSources(loadGPUProgramSources("NoColorMesh"));
- */
-
+  
   [_nativeWidget setWidget: create()];
 }
 

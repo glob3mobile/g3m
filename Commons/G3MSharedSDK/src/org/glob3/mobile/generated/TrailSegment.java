@@ -104,21 +104,10 @@ public class TrailSegment
   
     Mesh surfaceMesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, new Color(_color), null, 0.0f, true); // depthTest -  colorsIntensity -  colors
   
+    if (vertices != null)
+       vertices.dispose();
+  
     return surfaceMesh;
-  
-  //  // Debug unions
-  //  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
-  //                                   false,
-  //                                   vertices.getCenter(),
-  //                                   vertices.create(),
-  //                                   2,
-  //                                   1,
-  //                                   Color::newFromRGBA(1, 1, 1, 0.7f));
-  //  CompositeMesh* cm = new CompositeMesh();
-  //  cm->addMesh(surfaceMesh);
-  //  cm->addMesh(edgesMesh);
-  //  return cm;
-  
   }
 
   private Mesh _mesh;
