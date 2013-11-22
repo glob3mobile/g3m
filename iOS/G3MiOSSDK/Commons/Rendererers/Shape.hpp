@@ -91,11 +91,8 @@ public:
   _enable(true),
   _surfaceElevation(0),
   _glState(new GLState()),
-<<<<<<< HEAD
-  _selected(false)
-=======
+  _selected(false),
   _surfaceElevationProvider(NULL)
->>>>>>> origin/purgatory
   {
     
   }

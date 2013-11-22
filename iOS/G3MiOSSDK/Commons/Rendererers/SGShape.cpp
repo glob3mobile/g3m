@@ -16,14 +16,9 @@
 SGShape::~SGShape()
 {
   _glState->_release();
+  delete _node;
   if (_boundingVolume)
     delete _boundingVolume;
-}
-
-
-SGShape::~SGShape() {
-  _glState->_release();
-  delete _node;
 }
 
 void SGShape::initialize(const G3MContext* context) {

@@ -602,12 +602,7 @@ public:
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
 
-<<<<<<< HEAD
   ShapesRenderer* shapesRenderer = [self createShapesRenderer];
-=======
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
-
->>>>>>> origin/purgatory
   builder.addRenderer(shapesRenderer);
   
   MeshRenderer* meshRenderer = new MeshRenderer();
@@ -1573,7 +1568,7 @@ public:
 - (ShapesRenderer*) createShapesRenderer
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
-  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+/*  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-122),
                                               8000),
                                RELATIVE_TO_GROUND,
@@ -1599,9 +1594,6 @@ public:
                                   Color::fromRGBA(1, 1, 0, 0.5));
   shapesRenderer->addShape(circle);
 
-<<<<<<< HEAD
-/*  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
-=======
   Shape* sphere = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(40),
                                                     Angle::fromDegrees(-123.5),
                                                     8000),
@@ -1616,11 +1608,9 @@ public:
 
 
   Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
->>>>>>> origin/purgatory
                                            Angle::fromDegrees(-122),
                                            45000),
                             ABSOLUTE,
-                            planet,
                             Vector3D(20000, 30000, 50000),
                             2,
                             Color::fromRGBA(0,    1, 0, 0.5),
@@ -1628,7 +1618,6 @@ public:
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);*/
 
-<<<<<<< HEAD
 //    const URL textureURL("file:///world.jpg", false);
 //
   const double factor = 2e5;
@@ -1745,61 +1734,6 @@ public:
 
   shapesRenderer->setShapeTouchListener(new TestShapeTouchListener, true);
   
-
-=======
-  //    const URL textureURL("file:///world.jpg", false);
-  //
-  //  const double factor = 2e5;
-  //  const Vector3D radius1(factor, factor, factor);
-  //  const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
-  //  const Vector3D radiusBox(factor, factor*1.5, factor*2);
-
-
-  //  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
-  //                                           Angle::fromDegrees(10),
-  //                                           radiusBox.z()/2),
-  //                            ABSOLUTE,
-  //                            radiusBox,
-  //                            2,
-  //                            Color::fromRGBA(0,    1, 0, 1),
-  //                            Color::newFromRGBA(0, 0.75, 0, 1));
-  //  //box->setAnimatedScale(1, 1, 20);
-  //  shapesRenderer->addShape(box1);
-  //
-  //
-  //    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-  //                                                          Angle::fromDegrees(0),
-  //                                                          radius1._x),
-  //                                           ABSOLUTE,
-  //                                           planet,
-  //                                           URL("file:///world.jpg", false),
-  //                                           radius1,
-  //                                           32,
-  //                                           0,
-  //                                           false,
-  //                                           false
-  //                                           //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
-  //                                           //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                           );
-  //  //ellipsoid1->setScale(2);
-  //    shapesRenderer->addShape(ellipsoid1);
-  //
-  //  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-  //                                                       Angle::fromDegrees(5),
-  //                                                       radius2._x),
-  //                                          ABSOLUTE,
-  //                                          planet,
-  //                                          URL("file:///mercator_debug.png", false),
-  //                                          radius2,
-  //                                          32,
-  //                                          0,
-  //                                          false,
-  //                                          true
-  //                                          //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
-  //                                          //Color::newFromRGBA(0, 0.75, 0, 0.75)
-  //                                          );
-  //    shapesRenderer->addShape(mercator1);
->>>>>>> origin/purgatory
 
   //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                       Angle::fromDegrees(-117),
@@ -1931,13 +1865,7 @@ public:
 class SampleSymbolizer : public GEOSymbolizer {
 private:
   mutable int _colorIndex = 0;
-<<<<<<< HEAD
   
-=======
-
-  const Planet* _planet;
-
->>>>>>> origin/purgatory
 private:
 
   //  GEOLine2DStyle createLineStyle(const GEOGeometry* geometry) const {
@@ -3137,14 +3065,7 @@ public:
                                                                          shapesRenderer,
                                                                          geoRenderer,
                                                                          meshRenderer,
-<<<<<<< HEAD
                                                                          marksRenderer);
-
-=======
-                                                                         marksRenderer,
-                                                                         planet);
-  
->>>>>>> origin/purgatory
   return initializationTask;
 }
 

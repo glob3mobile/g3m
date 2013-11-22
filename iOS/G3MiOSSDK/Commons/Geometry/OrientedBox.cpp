@@ -166,12 +166,12 @@ void OrientedBox::createMesh(Color* color) const {
     4, 5, 5, 7, 7, 6, 6, 4
   };
   
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
   ShortBufferBuilder indices;
   
   const unsigned int numVertices = 8;
   for (unsigned int n=0; n<numVertices; n++) {
-    vertices.add(v[n*3], v[n*3+1], v[n*3+2]);
+    vertices->add(v[n*3], v[n*3+1], v[n*3+2]);
   }
   
   const int numIndices = 24;
@@ -181,11 +181,12 @@ void OrientedBox::createMesh(Color* color) const {
   
   _mesh = new IndexedMesh(GLPrimitive::lines(),
                           true,
-                          vertices.getCenter(),
-                          vertices.create(),
+                          vertices->getCenter(),
+                          vertices->create(),
                           indices.create(),
                           1,
                           1,
                           color);
+  delete vertices;
 }
 

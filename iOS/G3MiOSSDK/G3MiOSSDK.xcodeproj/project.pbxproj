@@ -1963,13 +1963,10 @@
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
 				CF5C1193178C76F2000ED715 /* BoundingArea.cpp */,
 				CF5C1194178C76F2000ED715 /* BoundingArea.hpp */,
-<<<<<<< HEAD
-=======
 				FB2B1B2517F880B5006307EC /* Quadric.cpp */,
 				FB2B1B2617F880B5006307EC /* Quadric.hpp */,
 				CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */,
 				CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */,
->>>>>>> origin/purgatory
 			);
 			name = Geometry;
 			sourceTree = "<group>";
