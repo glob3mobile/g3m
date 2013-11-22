@@ -153,7 +153,7 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features,
     if (f->_group == COLOR_GROUP) {
       PriorityGLFeature* pf = ((PriorityGLFeature*) f);
       if (pf->_priority > priority) {
-        if (pf->_id != GLF_BLENDING_MODE){  //We do not take into account Blending if TexID not set
+        if (pf->_id != GLF_BLENDING_MODE) {  //We do not take into account Blending if TexID not set
           priority = pf->_priority;
         }
       }

@@ -1,6 +1,11 @@
 package org.glob3.mobile.generated; 
 public class BillboardGLFeature extends GLFeature
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public BillboardGLFeature(Vector3D position, int textureWidth, int textureHeight)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_BILLBOARD);

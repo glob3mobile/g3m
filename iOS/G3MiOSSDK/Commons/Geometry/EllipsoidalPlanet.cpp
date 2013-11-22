@@ -546,8 +546,7 @@ MutableMatrix44D EllipsoidalPlanet::drag(const Geodetic3D& origin, const Geodeti
 void EllipsoidalPlanet::applyCameraConstrainers(const Camera* previousCamera,
                                                 Camera* nextCamera) const
 {
-
-  int __ASK_JM;
+#warning __ASK_JM
 
   //  Vector3D pos = nextCamera->getCartesianPosition();
   //  Vector3D origin = _origin.asVector3D();

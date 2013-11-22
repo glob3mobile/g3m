@@ -506,6 +506,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
+                                              true,
                                               verticalExaggeration,
                                               texturizer,
                                               tileRasterizer,
@@ -1381,7 +1382,7 @@ void MapBooBuilder::saveApplicationData() const {
   //  std::vector<MapBoo_Scene*> _applicationScenes;
   //  int                        _applicationCurrentSceneIndex;
   //  int                        _lastApplicationCurrentSceneIndex;
-  int __DGD_at_work;
+#warning Diego at work!
 }
 
 void MapBooBuilder::setHasParsedApplication() {

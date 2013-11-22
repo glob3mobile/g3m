@@ -53,10 +53,7 @@ public abstract class ElevationData
   public void dispose()
   {
     if (_interpolator != null)
-    {
-      if (_interpolator != null)
-         _interpolator.dispose();
-    }
+       _interpolator.dispose();
   }
 
   public Vector2I getExtent()
@@ -101,10 +98,6 @@ public abstract class ElevationData
   
     ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
-  
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-  //                                          planet,
-  //                                          Vector3D::zero);
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
@@ -140,8 +133,13 @@ public abstract class ElevationData
     final float lineWidth = 1F;
     Color flatColor = null;
   
-    return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
-                          //GLPrimitive::lineStrip(),
+    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
+                                  //GLPrimitive::lineStrip(),
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
 
   public Mesh createMesh(Planet planet, float verticalExaggeration, Geodetic3D positionOffset, float pointSize, Sector sector, Vector2I resolution)
@@ -154,15 +152,7 @@ public abstract class ElevationData
   
     ILogger.instance().logInfo("Elevations: average=%f, min=%f max=%f delta=%f", averageElevation, minElevation, maxElevation, deltaElevation);
   
-  
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-  //                                          ellipsoid,
-  //                                          Vector3D::zero);
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-  //                                          planet,
-  //                                          sector._center);
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithGivenCenter(planet, sector._center);
-  
   
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
@@ -196,39 +186,15 @@ public abstract class ElevationData
       }
     }
   
-  //  for (int x = 0; x < _width; x++) {
-  //    const double u = (double) x / (_width  - 1);
-  //
-  //    for (int y = 0; y < _height; y++) {
-  //      const double v = 1.0 - ( (double) y / (_height - 1) );
-  //      const Geodetic2D position = _sector.getInnerPoint(u, v);
-  //      if (!sector.contains(position)) {
-  //        continue;
-  //      }
-  //
-  //      const double elevation = getElevationAt(x, y);
-  //      if (mu->isNan(elevation)) {
-  //        continue;
-  //      }
-  //
-  //      vertices.add(position.add(positionOffset2D),
-  //                   positionOffset._height + (elevation * verticalExaggeration));
-  //
-  //
-  //      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
-  //      const float r = alpha;
-  //      const float g = alpha;
-  //      const float b = alpha;
-  //      colors.add(r, g, b, 1);
-  //    }
-  //  }
-  
-  
     final float lineWidth = 1F;
     Color flatColor = null;
   
-    return new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
-                          //GLPrimitive::lineStrip(),
+    Mesh result = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), lineWidth, pointSize, flatColor, colors.create(), 0, false);
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
 
   public Sector getSector()

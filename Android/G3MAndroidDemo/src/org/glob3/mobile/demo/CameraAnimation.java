@@ -53,31 +53,26 @@ public class CameraAnimation
       final ShapesRenderer sphinxRenderer = new ShapesRenderer();
       final Angle latitude = Angle.fromDegreesMinutesSeconds(29, 58, 30.99);
       final Angle longitude = Angle.fromDegreesMinutesSeconds(31, 8, 15.84);
-      final ShapeLoadListener listener = new ShapeLoadListener() {
+      final ShapeLoadListener sphynxListener = new ShapeLoadListener() {
          @Override
          public void onBeforeAddShape(final SGShape shape) {
-            // shape.setScale(20);
             shape.setPitch(Angle.fromDegrees(90));
          }
 
 
          @Override
          public void onAfterAddShape(final SGShape shape) {
-
             _sphynxShape = shape;
-
          }
 
 
          @Override
          public void dispose() {
-            // TODO Auto-generated method stub
-
          }
       };
 
       sphinxRenderer.loadBSONSceneJS(new URL("file:///sphinx.bson", false), "file:///images/", false, new Geodetic3D(latitude,
-               longitude, 0), AltitudeMode.ABSOLUTE, listener);
+               longitude, 0), AltitudeMode.ABSOLUTE, sphynxListener);
 
 
       final ShapesRenderer eifelTowerRenderer = new ShapesRenderer();
@@ -85,27 +80,21 @@ public class CameraAnimation
       final Angle longitudeP = Angle.fromDegreesMinutesSeconds(2, 17, 40.48);
 
 
-      final ShapeLoadListener Plistener = new ShapeLoadListener() {
+      final ShapeLoadListener eiffelListener = new ShapeLoadListener() {
          @Override
          public void onBeforeAddShape(final SGShape shape) {
             shape.setScale(0.02);
-
-            // shape.setPitch(Angle.fromDegrees(90));
          }
 
 
          @Override
          public void onAfterAddShape(final SGShape shape) {
-
             _eiffelShape = shape;
-
          }
 
 
          @Override
          public void dispose() {
-            // TODO Auto-generated method stub
-
          }
       };
 
@@ -115,7 +104,7 @@ public class CameraAnimation
                "file:///images/eifel/", //
                true, // isTransparent
                new Geodetic3D(latitudeP, longitudeP, 0), //
-               AltitudeMode.ABSOLUTE, Plistener);
+               AltitudeMode.ABSOLUTE, eiffelListener);
 
 
       final ShapesRenderer arcRenderer = new ShapesRenderer();
@@ -123,11 +112,10 @@ public class CameraAnimation
       final Angle longitudeA = Angle.fromDegreesMinutesSeconds(2, 17, 42.12);
 
 
-      final ShapeLoadListener alistener = new ShapeLoadListener() {
+      final ShapeLoadListener arcListener = new ShapeLoadListener() {
          @Override
          public void onBeforeAddShape(final SGShape shape) {
             shape.setScale(0.5);
-
             shape.setPitch(Angle.fromDegrees(90));
          }
 
@@ -140,14 +128,12 @@ public class CameraAnimation
 
          @Override
          public void dispose() {
-            // TODO Auto-generated method stub
-
          }
       };
 
 
       arcRenderer.loadBSONSceneJS(new URL("file:///arcdeTriomphe.bson", false), "file:///images/arc/", false, new Geodetic3D(
-               latitudeA, longitudeA, 0), AltitudeMode.ABSOLUTE, alistener);
+               latitudeA, longitudeA, 0), AltitudeMode.ABSOLUTE, arcListener);
 
 
       final Button sphynxButton = (Button) findViewById(R.id.sphinx);

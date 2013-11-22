@@ -50,6 +50,8 @@ public class SGShape extends Shape
   public void dispose()
   {
     _glState._release();
+    if (_node != null)
+       _node.dispose();
   }
 
   public final SGNode getNode()

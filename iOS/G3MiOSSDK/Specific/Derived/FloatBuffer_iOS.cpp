@@ -36,6 +36,31 @@ const std::string FloatBuffer_iOS::description() const {
   return oss.str();
 }
 
+void FloatBuffer_iOS::bindAsVBOToGPU() const {
+  if (!_vertexBufferCreated) {
+    glGenBuffers(1, &_vertexBuffer);
+    _vertexBufferCreated = true;
+  }
+
+  if (_vertexBuffer != _boundVertexBuffer) {
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    _boundVertexBuffer = _vertexBuffer;
+  }
+
+  if (_vertexBufferTimeStamp != _timestamp) {
+    _vertexBufferTimeStamp = _timestamp;
+
+    float* vertices = getPointer();
+    int vboSize = sizeof(float) * size();
+
+    glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
+  }
+
+  //if (GL_NO_ERROR != glGetError()) {
+  //  ILogger::instance()->logError("Problem using VBO");
+  //}
+}
+
 FloatBuffer_iOS::~FloatBuffer_iOS() {
   if (_vertexBufferCreated) {
     glDeleteBuffers(1, &_vertexBuffer);

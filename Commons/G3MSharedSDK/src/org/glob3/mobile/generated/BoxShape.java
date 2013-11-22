@@ -69,7 +69,12 @@ public class BoxShape extends AbstractMeshShape
   
     Color borderColor = (_borderColor != null) ? new Color(_borderColor) : new Color(_surfaceColor);
   
-    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
+    Mesh result = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, borderColor);
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
   private Mesh createSurfaceMesh(G3MRenderContext rc)
   {
@@ -85,7 +90,6 @@ public class BoxShape extends AbstractMeshShape
     final int numIndices = 23;
     short[] i = { 3, 0, 7, 4, 6, 5, 2, 1, 3, 0, 0, 2, 2, 3, 6, 7, 7, 5, 5, 4, 1, 0, 0 };
   
-  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
@@ -102,7 +106,12 @@ public class BoxShape extends AbstractMeshShape
   
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
   
-    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
+    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, 1, surfaceColor);
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
 
   private Mesh createSurfaceMeshWithNormals(G3MRenderContext rc)
@@ -154,7 +163,14 @@ public class BoxShape extends AbstractMeshShape
   
     Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
   
-    return new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), _borderWidth, 1, surfaceColor, null, 1, true, normals.create());
+    Mesh result = new DirectMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), _borderWidth, 1, surfaceColor, null, 1, true, normals.create());
+  
+    if (vertices != null)
+       vertices.dispose();
+    if (normals != null)
+       normals.dispose();
+  
+    return result;
   }
 
   protected final Mesh createMesh(G3MRenderContext rc)

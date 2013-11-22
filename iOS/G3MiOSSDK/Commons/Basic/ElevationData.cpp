@@ -29,9 +29,7 @@ _interpolator(NULL)
 }
 
 ElevationData::~ElevationData() {
-  if (_interpolator != NULL) {
-    delete _interpolator;
-  }
+  delete _interpolator;
 }
 
 double ElevationData::getElevationAt(const Vector2I& position) const {
@@ -57,15 +55,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
   ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
                                averageElevation, minElevation, maxElevation, deltaElevation);
 
-  
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-//                                          ellipsoid,
-//                                          Vector3D::zero);
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(),
-//                                          planet,
-//                                          sector._center);
-  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
-
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, sector._center);
 
   FloatBufferBuilderFromColor colors;
 
@@ -92,53 +82,28 @@ Mesh* ElevationData::createMesh(const Planet* planet,
       const float b = alpha;
       colors.add(r, g, b, 1);
 
-      vertices.add(position.add(positionOffset2D),
-                   positionOffset._height + (elevation * verticalExaggeration));
+      vertices->add(position.add(positionOffset2D),
+                    positionOffset._height + (elevation * verticalExaggeration));
     }
   }
-
-//  for (int x = 0; x < _width; x++) {
-//    const double u = (double) x / (_width  - 1);
-//
-//    for (int y = 0; y < _height; y++) {
-//      const double v = 1.0 - ( (double) y / (_height - 1) );
-//      const Geodetic2D position = _sector.getInnerPoint(u, v);
-//      if (!sector.contains(position)) {
-//        continue;
-//      }
-//
-//      const double elevation = getElevationAt(x, y);
-//      if (mu->isNan(elevation)) {
-//        continue;
-//      }
-//
-//      vertices.add(position.add(positionOffset2D),
-//                   positionOffset._height + (elevation * verticalExaggeration));
-//
-//
-//      const float alpha = (float) ((elevation - minElevation) / deltaElevation);
-//      const float r = alpha;
-//      const float g = alpha;
-//      const float b = alpha;
-//      colors.add(r, g, b, 1);
-//    }
-//  }
-
 
   const float lineWidth = 1;
   Color* flatColor = NULL;
 
-  return new DirectMesh(GLPrimitive::points(),
-                        //GLPrimitive::lineStrip(),
-                        true,
-                        vertices.getCenter(),
-                        vertices.create(),
-                        lineWidth,
-                        pointSize,
-                        flatColor,
-                        colors.create(),
-                        0,
-                        false);
+  Mesh* result = new DirectMesh(GLPrimitive::points(),
+                                true,
+                                vertices->getCenter(),
+                                vertices->create(),
+                                lineWidth,
+                                pointSize,
+                                flatColor,
+                                colors.create(),
+                                0,
+                                false);
+
+  delete vertices;
+
+  return result;
 }
 
 Mesh* ElevationData::createMesh(const Planet* planet,
@@ -155,11 +120,7 @@ Mesh* ElevationData::createMesh(const Planet* planet,
   ILogger::instance()->logInfo("Elevations: average=%f, min=%f max=%f delta=%f",
                                averageElevation, minElevation, maxElevation, deltaElevation);
 
-
-//  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-//                                          planet,
-//                                          Vector3D::zero);
-  FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+  FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
   FloatBufferBuilderFromColor colors;
 
   const Geodetic2D positionOffset2D = positionOffset.asGeodetic2D();
@@ -183,8 +144,8 @@ Mesh* ElevationData::createMesh(const Planet* planet,
 
       const Geodetic2D position = _sector.getInnerPoint(u, v).add(positionOffset2D);
 
-      vertices.add(position,
-                   positionOffset._height + (elevation * verticalExaggeration));
+      vertices->add(position,
+                    positionOffset._height + (elevation * verticalExaggeration));
 
     }
   }
@@ -192,17 +153,21 @@ Mesh* ElevationData::createMesh(const Planet* planet,
   const float lineWidth = 1;
   Color* flatColor = NULL;
 
-  return new DirectMesh(GLPrimitive::points(),
-                        //GLPrimitive::lineStrip(),
-                        true,
-                        vertices.getCenter(),
-                        vertices.create(),
-                        lineWidth,
-                        pointSize,
-                        flatColor,
-                        colors.create(),
-                        0,
-                        false);
+  Mesh* result = new DirectMesh(GLPrimitive::points(),
+                                //GLPrimitive::lineStrip(),
+                                true,
+                                vertices->getCenter(),
+                                vertices->create(),
+                                lineWidth,
+                                pointSize,
+                                flatColor,
+                                colors.create(),
+                                0,
+                                false);
+
+  delete vertices;
+
+  return result;
 }
 
 Interpolator* ElevationData::getInterpolator() const {
@@ -219,7 +184,7 @@ double ElevationData::getElevationAt(const Angle& latitude,
   const double u = uv._x;
   const double v = uv._y;
 
-  if (u < 0 || u > 1 || v < 0 || v > 1){
+  if (u < 0 || u > 1 || v < 0 || v > 1) {
     return NAND;
   }
 

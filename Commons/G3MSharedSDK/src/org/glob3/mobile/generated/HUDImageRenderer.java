@@ -147,6 +147,9 @@ public class HUDImageRenderer extends LeafRenderer
   
     DirectMesh mesh = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
   
+    if (vertices != null)
+       vertices.dispose();
+  
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
     texCoords.add(0, 0);
     texCoords.add(0, 1);

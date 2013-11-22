@@ -217,6 +217,7 @@ class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProv
 private:
   TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
+  bool                         _ownsElevationDataProvider;
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
@@ -297,6 +298,7 @@ private:
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
+                 bool                         ownsElevationDataProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
                  TileRasterizer*              tileRasterizer,
@@ -441,6 +443,14 @@ public:
   void setRenderedSector(const Sector& sector);
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
+
+  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
+                                bool owned);
+  void setVerticalExaggeration(float verticalExaggeration);
+
+  ElevationDataProvider* getElevationDataProvider() const{
+    return _elevationDataProvider;
+  }
 
 };
 

@@ -29,3 +29,40 @@ const std::string ShortBuffer_iOS::description() const {
 
   return oss.str();
 }
+
+ShortBuffer_iOS::~ShortBuffer_iOS() {
+  if (_indexBufferCreated) {
+    glDeleteBuffers(1, &_indexBuffer);
+    if (GL_NO_ERROR != glGetError()) {
+      ILogger::instance()->logError("Problem deleting IBO");
+    }
+  }
+  delete [] _values;
+}
+
+void ShortBuffer_iOS::bindAsIBOToGPU() {
+  if (!_indexBufferCreated) {
+    glGenBuffers(1, &_indexBuffer);
+    _indexBufferCreated = true;
+  }
+
+  if (_boundIBO != _indexBuffer) {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    _boundIBO = _indexBuffer;
+  }
+  //else {
+  //  printf("REUSING");
+  //}
+
+  if (_indexBufferTimeStamp != _timestamp) {
+    _indexBufferTimeStamp = _timestamp;
+    short* index = getPointer();
+    int iboSize = sizeof(short) * size();
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize, index, GL_STATIC_DRAW);
+  }
+
+  //if (GL_NO_ERROR != glGetError()) {
+  //  ILogger::instance()->logError("Problem using IBO");
+  //}
+}

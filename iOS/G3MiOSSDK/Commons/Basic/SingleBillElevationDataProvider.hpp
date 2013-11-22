@@ -18,6 +18,8 @@
 #include <map>
 #include "Sector.hpp"
 
+class SingleBillElevationDataProvider_BufferDownloadListener;
+
 
 struct SingleBillElevationDataProvider_Request {
   const Sector _sector;
@@ -77,12 +79,17 @@ private:
 
   void removeQueueRequest(const long long requestId);
 
+  IDownloader* _downloader;
+  long long    _requestToDownloaderID;
+  SingleBillElevationDataProvider_BufferDownloadListener* _listener;
 
 public:
   SingleBillElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
                                   const Vector2I& extent,
                                   double deltaHeight = 0);
+
+  ~SingleBillElevationDataProvider();
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);
@@ -109,7 +116,7 @@ public:
   const Vector2I getMinResolution() const{
     return Vector2I(_extentWidth, _extentHeight);
   }
-  
+
 };
 
 #endif

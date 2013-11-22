@@ -291,7 +291,7 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {

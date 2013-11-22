@@ -18,26 +18,38 @@ public class SingleBillElevationDataProvider_BufferDownloadListener extends IBuf
 
   }
 
+  public final void notifyProviderHasBeenDeleted()
+  {
+    _singleBillElevationDataProvider = null;
+  }
+
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    final Vector2I resolution = new Vector2I(_resolutionWidth, _resolutionHeight);
+    if (_singleBillElevationDataProvider != null)
+    {
+      ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, new Vector2I(_resolutionWidth, _resolutionHeight), buffer, _deltaHeight);
 
-    ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer, _deltaHeight);
-
+      _singleBillElevationDataProvider.onElevationData(elevationData);
+    }
     if (buffer != null)
        buffer.dispose();
-
-    _singleBillElevationDataProvider.onElevationData(elevationData);
   }
 
   public final void onError(URL url)
   {
-    _singleBillElevationDataProvider.onElevationData(null);
+    if (_singleBillElevationDataProvider != null)
+    {
+      _singleBillElevationDataProvider.onElevationData(null);
+    }
   }
 
   public final void onCancel(URL url)
   {
-
+    ILogger.instance().logInfo("SingleBillElevationDataProvider download petition was canceled.");
+    if (_singleBillElevationDataProvider != null)
+    {
+      _singleBillElevationDataProvider.onElevationData(null);
+    }
   }
 
   public final void onCanceledDownload(URL url, IByteBuffer data, boolean expired)
