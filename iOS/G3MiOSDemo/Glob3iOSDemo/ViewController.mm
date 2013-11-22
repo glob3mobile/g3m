@@ -35,6 +35,7 @@
 #import <G3MiOSSDK/CircleShape.hpp>
 #import <G3MiOSSDK/QuadShape.hpp>
 #import <G3MiOSSDK/BoxShape.hpp>
+#import <G3MiOSSDK/PointShape.hpp>
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
 #import <G3MiOSSDK/LayoutUtils.hpp>
@@ -1626,6 +1627,17 @@ public:
   const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
   const Vector3D radiusBox(factor, factor*1.5, factor*2);
   //const Vector3D radiusBox(1000, 2000, 3000);
+  
+  
+  for (int i=1; i<5; i++) {
+    Shape* point = new PointShape(new Geodetic3D(Angle::fromDegrees(39.70),
+                                                  Angle::fromDegrees(3.30),
+                                                  i*radiusBox._z),
+                                   ABSOLUTE,
+                                   6,
+                                   Color::fromRGBA(0, 1, 0, 1));
+    shapesRenderer->addShape(point);
+  }
   
   
   Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.70),
