@@ -21,6 +21,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
 
   p->_programCreated = false;
   p->_programID = gl->createProgram();
+  p->_gl = gl;
 
   // compile vertex shader
   int vertexShader= gl->createShader(VERTEX_SHADER);
@@ -77,6 +78,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
 GPUProgram::~GPUProgram() {
   delete[] _createdAttributes;
   delete[] _createdUniforms;
+
+  _gl->deleteShader(_programID);
 }
 
 bool GPUProgram::linkProgram(GL* gl) const {
@@ -299,17 +302,6 @@ void GPUProgram::onUnused(GL* gl) {
       _createdAttributes[i]->unset(gl);
     }
   }
-
-  //  for (int i = 0; i < 32; i++) {
-  //    GPUUniform* u = _uniforms[i];
-  //    GPUAttribute* a = _attributes[i];
-  //    if (u != NULL) {
-  //      u->unset();
-  //    }
-  //    if (a != NULL) {
-  //      a->unset(gl);
-  //    }
-  //  }
 }
 
 /**
@@ -330,18 +322,6 @@ void GPUProgram::applyChanges(GL* gl) {
       attribute->applyChanges(gl);
     }
   }
-
-
-  //  for (int i = 0; i < 32; i++) {
-  //    GPUUniform* u = _uniforms[i];
-  //    GPUAttribute* a = _attributes[i];
-  //    if (u != NULL) {
-  //      u->applyChanges(gl);
-  //    }
-  //    if (a != NULL) {
-  //      a->applyChanges(gl);
-  //    }
-  //  }
 }
 
 GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) const{

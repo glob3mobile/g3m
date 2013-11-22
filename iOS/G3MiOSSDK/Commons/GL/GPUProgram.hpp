@@ -50,6 +50,8 @@ class GPUProgram {
   int _attributesCode;
 
   std::string _name;
+
+  GL* _gl;
   
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
@@ -63,7 +65,8 @@ class GPUProgram {
   _nUniforms(0),
   _nAttributes(0),
   _uniformsCode(0),
-  _attributesCode(0) {}
+  _attributesCode(0),
+  _gl(NULL){}
 
   GPUProgram(const GPUProgram& that);
   
