@@ -779,11 +779,12 @@ public:
   
   if (true) {
     //Geodetic3D position(Geodetic3D(Angle::fromDegrees(-12.0875), Angle::fromDegrees(15.2036), 2328992));
-    Geodetic3D position(Geodetic3D(Angle::fromDegrees(-17.56), Angle::fromDegrees(19.20), 4390000));
+    //Geodetic3D position(Geodetic3D(Angle::fromDegrees(-17.56), Angle::fromDegrees(19.20), 4390000));
+    Geodetic3D position(Geodetic3D(Angle::fromDegrees(39.08), Angle::fromDegrees(2.90), 113000));
     //[self G3MWidget].widget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
     [self G3MWidget].widget->setCameraPosition(position);
-    [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-40.72));
-    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(30));
+    [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(5));
+    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24));
   }
 
 }
@@ -1620,15 +1621,15 @@ public:
 
 //    const URL textureURL("file:///world.jpg", false);
 //
-  const double factor = 2e5;
+  const double factor = 3000;
   const Vector3D radius1(factor, factor, factor);
   const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
   const Vector3D radiusBox(factor, factor*1.5, factor*2);
   //const Vector3D radiusBox(1000, 2000, 3000);
   
   
-  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(0),
-                                           Angle::fromDegrees(10),
+  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.70),
+                                           Angle::fromDegrees(2.80),
                                            radiusBox._z/2),
                             ABSOLUTE,
                             radiusBox,
@@ -1639,8 +1640,8 @@ public:
   shapesRenderer->addShape(box1);
  
   
-    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-                                                          Angle::fromDegrees(0),
+    Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(39.80),
+                                                          Angle::fromDegrees(2.90),
                                                           radius1._z),
                                            ABSOLUTE,
                                            URL("file:///world.jpg", false),
@@ -1655,8 +1656,8 @@ public:
   //ellipsoid1->setScale(2);
     shapesRenderer->addShape(ellipsoid1);
   
-  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(0),
-                                                       Angle::fromDegrees(5),
+  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(39.60),
+                                                       Angle::fromDegrees(3.00),
                                                        radius2._x),
                                           ABSOLUTE,
                                           URL("file:///mercator_debug.png", false),
@@ -1683,16 +1684,16 @@ public:
         Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON,
                                                           URL::FILE_PROTOCOL + "/" ,
                                                           false,
-                                                          new Geodetic3D(Angle::fromDegrees(0),
-                                                                         Angle::fromDegrees(5),
+                                                          new Geodetic3D(Angle::fromDegrees(39.70),
+                                                                         Angle::fromDegrees(2.60),
                                                                          7*factor),
                                                           ABSOLUTE);
         
         // Washington, DC
-        const double scale = factor/4;
+        const double scale = factor/5;
         plane->setScale(scale, scale, scale);
-        plane->setPitch(Angle::fromDegrees(80));
-        plane->setHeading(Angle::fromDegrees(-150));
+        plane->setPitch(Angle::fromDegrees(120));
+        plane->setHeading(Angle::fromDegrees(-110));
         shapesRenderer->addShape(plane);
         
         
