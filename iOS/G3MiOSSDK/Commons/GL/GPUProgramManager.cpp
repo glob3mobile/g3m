@@ -13,8 +13,8 @@
 GPUProgramManager::~GPUProgramManager() {
 #ifdef C_CODE
   delete _factory;
-  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
-    delete it->second;
+  for (std::map<std::string, GPUProgramData>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+    delete it->second._program;
   }
 #endif
 }
@@ -83,15 +83,16 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
 GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode) {
 #ifdef C_CODE
-  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
-    GPUProgram* p = it->second;
+  for (std::map<std::string, GPUProgramData>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+    GPUProgram* p = it->second._program;
     if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
       return p;
     }
   }
 #endif
 #ifdef JAVA_CODE
-  for (final GPUProgram p : _programs.values()) {
+  for (final GPUProgramData pd : _programs.values()) {
+    GPUProgram p = pd._program;
     if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
       return p;
     }
@@ -117,7 +118,11 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl, const std::string&
         return NULL;
       }
 
-      _programs[name] = prog;
+      GPUProgramData pd;
+      pd._program = prog;
+      pd._usedSinceLastCleanUp = true;
+
+      _programs[name] = pd;
     }
 
   }
@@ -126,9 +131,9 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl, const std::string&
 
 GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 #ifdef C_CODE
-  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
+  std::map<std::string, GPUProgramData>::iterator it = _programs.find(name);
   if (it != _programs.end()) {
-    return it->second;
+    return it->second._program;
   } else{
     return NULL;
   }
