@@ -77,6 +77,11 @@ GPUProgram::~GPUProgram() {
   delete[] _createdAttributes;
   delete[] _createdUniforms;
 
+  for (std::list<const GPUProgramListener*>::iterator it = _listeners.begin(); it != _listeners.end(); ++it) {
+    const GPUProgramListener* listener = *it;
+    listener->gpuProgramDeleted();
+  }
+
   if (!_gl->deleteProgram(_programID)){
     ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
   }

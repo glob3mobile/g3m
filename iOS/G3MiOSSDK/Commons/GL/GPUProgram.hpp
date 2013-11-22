@@ -11,6 +11,7 @@
 
 #include <string>
 #include <map>
+#include <list>
 
 class GPUAttribute;
 class GPUUniform;
@@ -34,6 +35,15 @@ enum ShaderType {
   FRAGMENT_SHADER
 };
 
+class GPUProgramListener{
+public:
+  virtual ~GPUProgramListener() {
+  }
+
+  virtual void gpuProgramDeleted() const = 0;
+
+};
+
 class GPUProgram {
   int _programID;
 
@@ -49,6 +59,8 @@ class GPUProgram {
   int _attributesCode;
 
   std::string _name;
+
+  std::list<const GPUProgramListener*> _listeners;
 
   GL* _gl;
   
@@ -114,6 +126,14 @@ public:
 
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);
+
+  void addListener(const GPUProgramListener* l){
+    _listeners.push_back(l);
+  }
+  
+  void removeListener(const GPUProgramListener* l){
+    _listeners.remove(l);
+  }
 };
 
 #endif

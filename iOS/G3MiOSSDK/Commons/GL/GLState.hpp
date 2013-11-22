@@ -21,7 +21,7 @@
 
 #include "RCObject.hpp"
 
-class GLState: public RCObject {
+class GLState: public RCObject, GPUProgramListener {
 private:
   GLFeatureSet _features;
   mutable GLFeatureSet* _accumulatedFeatures;
@@ -32,7 +32,7 @@ private:
   mutable GPUVariableValueSet* _valuesSet;
   mutable GLGlobalState*   _globalState;
 
-  mutable GPUProgram* _lastGPUProgramUsed;
+  mutable GPUProgram* _linkedProgram;
 
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
@@ -47,11 +47,13 @@ private:
 
   ~GLState();
 
+  void setLinkedProgram(GPUProgram* program) const;
+
 public:
 
   GLState():
   _parentGLState(NULL),
-  _lastGPUProgramUsed(NULL),
+  _linkedProgram(NULL),
   _parentsTimeStamp(-1),
   _timeStamp(0),
   _valuesSet(NULL),
@@ -79,6 +81,8 @@ public:
   int getNumberOfGLFeatures() const;
 
   GLFeature* getGLFeature(GLFeatureID id) const;
+
+  void gpuProgramDeleted() const;
 };
 
 #endif

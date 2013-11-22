@@ -509,9 +509,10 @@ void G3MWidget::render(int width, int height) {
   }
 
   //Deleting programs that haven't been used in the last 500 frames
-  if (_renderCounter % 500 == 0){
-    _renderContext->getGPUProgramManager()->deleteUnusedPrograms();
-  }
+#warning DOES NOT WORK
+//  if (_renderCounter % 500 == 0){
+//    _renderContext->getGPUProgramManager()->deleteUnusedPrograms();
+//  }
 
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {

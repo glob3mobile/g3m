@@ -159,6 +159,7 @@ void GPUProgramManager::deleteUnusedPrograms(){
       _programs.erase(it++);
     } else{
       it->second._usedSinceLastCleanUp = false; //Marking as unused
+      ++it;
     }
   }
 
