@@ -147,25 +147,36 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 }
 
 void GPUProgramManager::deleteUnusedPrograms(){
-//#ifdef C_CODE
-//
-//
-//
-//  for (std::map<std::string, GPUProgramData>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
-//    GPUProgram* p = it->second._program;
-//    if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
-//      it->second._usedSinceLastCleanUp = true; //Marked as used
-//      return p;
-//    }
-//  }
-//#endif
-//#ifdef JAVA_CODE
-//  for (final GPUProgramData pd : _programs.values()) {
-//    GPUProgram p = pd._program;
-//    if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
-//      pd._usedSinceLastCleanUp = true; //Marked as used
-//      return p;
-//    }
-//  }
-//#endif
+#ifdef C_CODE
+
+  std::map<std::string, GPUProgramData>::iterator it = _programs.begin();
+  while (it != _programs.end()) {
+    bool shouldRemove = !(it->second._usedSinceLastCleanUp);
+    if (shouldRemove){
+      ILogger::instance()->logInfo("Removing program %s because it hasn't been used in last frames.",
+                                   it->second._program->getName().c_str());
+      delete it->second._program;
+      _programs.erase(it++);
+    } else{
+      it->second._usedSinceLastCleanUp = false; //Marking as unused
+    }
+  }
+
+#endif
+#ifdef JAVA_CODE
+  Iterator<Object> it = _programs.EntrySet().iterator();
+  while (it.hasNext())
+  {
+    GPUProgramData pd = it.next();
+    bool shouldRemove = !(pd._usedSinceLastCleanUp);
+    if (shouldRemove){
+      ILogger.instance().logInfo("Removing program %s because it hasn't been used in last frames.",
+                                   it.second._program.getName());
+      pd._program.dispose();
+      it.remove();
+    } else{
+      pd._usedSinceLastCleanUp = false; //Marking as unused
+    }
+  }
+#endif
 }
