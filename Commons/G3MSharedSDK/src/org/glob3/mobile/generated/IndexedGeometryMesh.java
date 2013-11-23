@@ -46,7 +46,9 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
      super(primitive, center, vertices, ownsVertices, null, false, lineWidth, pointSize, depthTest);
      _indices = indices;
      _ownsIndices = ownsIndices;
-  
+  //  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices",
+  //                               vertices->size(),
+  //                               indices->size());
   }
 
   public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize)
@@ -66,7 +68,10 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
      super(primitive, center, vertices, ownsVertices, normals, ownsNormals, lineWidth, pointSize, depthTest);
      _indices = indices;
      _ownsIndices = ownsIndices;
-  
+  //  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices, %d normals",
+  //                               vertices->size(),
+  //                               indices->size(),
+  //                               normals->size());
   }
 
   public void dispose()

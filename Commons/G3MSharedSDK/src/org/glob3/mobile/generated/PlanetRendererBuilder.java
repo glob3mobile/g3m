@@ -219,7 +219,8 @@ public class PlanetRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-    return new PlanetTileTessellator(true, getRenderedSector());
+    final boolean skirted = true;
+    return new PlanetTileTessellator(skirted, getRenderedSector());
   }
 
   private ElevationDataProvider getElevationDataProvider()
