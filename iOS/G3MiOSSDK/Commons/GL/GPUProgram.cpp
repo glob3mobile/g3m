@@ -28,7 +28,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     gl->printShaderInfoLog(vertexShader);
 
     p->deleteShader(gl, vertexShader);
-    p->deleteProgram(gl, p->_programID);
+    p->deleteProgram(gl, p);
     return NULL;
   }
 
@@ -41,7 +41,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     gl->printShaderInfoLog(fragmentShader);
 
     p->deleteShader(gl, fragmentShader);
-    p->deleteProgram(gl, p->_programID);
+    p->deleteProgram(gl, p);
     return NULL;
   }
 
@@ -54,7 +54,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
     ILogger::instance()->logError("GPUProgram: ERROR linking graphic program\n");
     p->deleteShader(gl, vertexShader);
     p->deleteShader(gl, fragmentShader);
-    p->deleteProgram(gl, p->_programID);
+    p->deleteProgram(gl, p);
     ILogger::instance()->logError("GPUProgram: ERROR linking graphic program");
     return NULL;
   }
@@ -74,6 +74,9 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
 
 
 GPUProgram::~GPUProgram() {
+
+  onUnused(_gl);
+
   delete[] _createdAttributes;
   delete[] _createdUniforms;
 
@@ -82,7 +85,7 @@ GPUProgram::~GPUProgram() {
     listener->gpuProgramDeleted();
   }
 
-  if (!_gl->deleteProgram(_programID)){
+  if (!_gl->deleteProgram(this)){
     ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
   }
 }
@@ -117,7 +120,7 @@ void GPUProgram::deleteShader(GL* gl, int shader) const{
   }
 }
 
-void GPUProgram::deleteProgram(GL* gl, int p) {
+void GPUProgram::deleteProgram(GL* gl, const GPUProgram* p) {
   if (!gl->deleteProgram(p)) {
     ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
   }

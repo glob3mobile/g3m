@@ -178,8 +178,13 @@ public:
     _nativeGL->linkProgram(program);
   }
   
-  bool deleteProgram(int program) const  {
-    return _nativeGL->deleteProgram(program);
+  bool deleteProgram(const GPUProgram* program) {
+
+    if (_currentGPUProgram == program){ //In case of deleting active program
+      _currentGPUProgram = NULL;
+    }
+
+    return _nativeGL->deleteProgram(program->getProgramID());
   }
   
   INativeGL* getNative() const{

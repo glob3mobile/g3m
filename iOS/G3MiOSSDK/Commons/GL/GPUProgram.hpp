@@ -67,6 +67,7 @@ class GPUProgram {
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
   void deleteShader(GL* gl, int shader) const;
+  void deleteProgram(GL* gl, const GPUProgram* p);
   
   void getVariables(GL* gl);
   
@@ -91,7 +92,6 @@ public:
   std::string getName() const { return _name;}
   
   int getProgramID() const{ return _programID;}
-  void deleteProgram(GL* gl, int p);
   
   int getGPUAttributesNumber() const { return _nAttributes;}
   int getGPUUniformsNumber() const { return _nUniforms;}

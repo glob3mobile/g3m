@@ -153,8 +153,8 @@ void GPUProgramManager::deleteUnusedPrograms(){
   while (it != _programs.end()) {
     bool shouldRemove = !(it->second._usedSinceLastCleanUp);
     if (shouldRemove){
-      ILogger::instance()->logInfo("Removing program %s because it hasn't been used in last frames.",
-                                   it->second._program->getName().c_str());
+      ILogger::instance()->logInfo("Removing program %s [0x%x] because it hasn't been used in last frames.",
+                                   it->second._program->getName().c_str(), it->second._program);
       delete it->second._program;
       _programs.erase(it++);
     } else{
