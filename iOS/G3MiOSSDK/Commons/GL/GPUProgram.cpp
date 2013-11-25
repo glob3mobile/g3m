@@ -75,6 +75,14 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
 
 GPUProgram::~GPUProgram() {
 
+  for (int i = 0; i < _nUniforms; i++) {
+    delete _createdUniforms[i];
+  }
+
+  for (int i = 0; i < _nAttributes; i++) {
+    delete _createdAttributes[i];
+  }
+
   delete[] _createdAttributes;
   delete[] _createdUniforms;
 
