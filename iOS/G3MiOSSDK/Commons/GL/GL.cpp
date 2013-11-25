@@ -196,9 +196,9 @@ void GL::useProgram(GPUProgram* program) {
     }
     program->setUsedMark(true);
 
-    if (!_nativeGL->isProgram(program->getProgramID())){
-      ILogger::instance()->logError("INVALID PROGRAM.");
-    }
+//    if (!_nativeGL->isProgram(program->getProgramID())){
+//      ILogger::instance()->logError("INVALID PROGRAM.");
+//    }
   }
 
 }
