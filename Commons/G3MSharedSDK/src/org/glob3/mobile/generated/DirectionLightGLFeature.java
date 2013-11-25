@@ -3,16 +3,12 @@ public class DirectionLightGLFeature extends GLFeature
 {
   private GPUUniformValueVec3FloatMutable _lightDirectionUniformValue;
 
-<<<<<<< HEAD
-  public DirectionLightGLFeature(Vector3D diffuseLightDirection, Color diffuseLightColor, Color ambientLightColor)
-=======
   public void dispose()
   {
     super.dispose();
   }
 
-  public DirectionLightGLFeature(Vector3D dir, Color lightColor, float ambientLight)
->>>>>>> ios-demo
+  public DirectionLightGLFeature(Vector3D diffuseLightDirection, Color diffuseLightColor, Color ambientLightColor)
   {
      super(GLFeatureGroupName.LIGHTING_GROUP, GLFeatureID.GLF_DIRECTION_LIGTH);
     _values.addUniformValue(GPUUniformKey.AMBIENT_LIGHT_COLOR, new GPUUniformValueVec3Float(ambientLightColor), false);

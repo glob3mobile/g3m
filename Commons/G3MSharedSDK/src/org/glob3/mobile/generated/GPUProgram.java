@@ -2,7 +2,6 @@ package org.glob3.mobile.generated;
 public class GPUProgram
 {
   private int _programID;
-  private boolean _programCreated;
 
   private GPUUniform[] _uniforms = new GPUUniform[32];
   private GPUAttribute[] _attributes = new GPUAttribute[32];
@@ -16,6 +15,12 @@ public class GPUProgram
   private int _attributesCode;
 
   private String _name;
+
+  private final java.util.LinkedList<GPUProgramListener> _listeners = new java.util.LinkedList<GPUProgramListener>();
+
+  private GL _gl;
+
+  private boolean _usedMark; //If true means the shader has been used in the last frames
 
   private boolean compileShader(GL gl, int shader, String source)
   {
@@ -49,6 +54,13 @@ public class GPUProgram
     if (!gl.deleteShader(shader))
     {
       ILogger.instance().logError("GPUProgram: Problem encountered while deleting shader.");
+    }
+  }
+  private void deleteProgram(GL gl, GPUProgram p)
+  {
+    if (!gl.deleteProgram(p))
+    {
+      ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
     }
   }
 
@@ -114,6 +126,8 @@ public class GPUProgram
      _nAttributes = 0;
      _uniformsCode = 0;
      _attributesCode = 0;
+     _gl = null;
+     _usedMark = false;
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -126,9 +140,8 @@ public class GPUProgram
     GPUProgram p = new GPUProgram();
   
     p._name = name;
-  
-    p._programCreated = false;
     p._programID = gl.createProgram();
+    p._gl = gl;
   
     // compile vertex shader
     int vertexShader = gl.createShader(ShaderType.VERTEX_SHADER);
@@ -138,7 +151,7 @@ public class GPUProgram
       gl.printShaderInfoLog(vertexShader);
   
       p.deleteShader(gl, vertexShader);
-      p.deleteProgram(gl, p._programID);
+      p.deleteProgram(gl, p);
       return null;
     }
   
@@ -152,7 +165,7 @@ public class GPUProgram
       gl.printShaderInfoLog(fragmentShader);
   
       p.deleteShader(gl, fragmentShader);
-      p.deleteProgram(gl, p._programID);
+      p.deleteProgram(gl, p);
       return null;
     }
   
@@ -166,12 +179,12 @@ public class GPUProgram
       ILogger.instance().logError("GPUProgram: ERROR linking graphic program\n");
       p.deleteShader(gl, vertexShader);
       p.deleteShader(gl, fragmentShader);
-      p.deleteProgram(gl, p._programID);
+      p.deleteProgram(gl, p);
       ILogger.instance().logError("GPUProgram: ERROR linking graphic program");
       return null;
     }
   
-    // free shaders
+    //Mark shaders for deleting when program is deleted
     p.deleteShader(gl, vertexShader);
     p.deleteShader(gl, fragmentShader);
   
@@ -187,8 +200,20 @@ public class GPUProgram
 
   public void dispose()
   {
+  
     _createdAttributes = null;
     _createdUniforms = null;
+  
+    for (java.util.Iterator<const GPUProgramListener> it = _listeners.iterator(); it.hasNext();)
+    {
+      final GPUProgramListener listener = it.next();
+      listener.gpuProgramDeleted();
+    }
+  
+    if (!_gl.deleteProgram(this))
+    {
+      ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
+    }
   }
 
   public final String getName()
@@ -199,18 +224,6 @@ public class GPUProgram
   public final int getProgramID()
   {
      return _programID;
-  }
-  public final boolean isCreated()
-  {
-     return _programCreated;
-  }
-  public final void deleteProgram(GL gl, int p)
-  {
-    if (!gl.deleteProgram(p))
-    {
-      ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
-    }
-    _programCreated = false;
   }
 
   public final int getGPUAttributesNumber()
@@ -344,6 +357,7 @@ public class GPUProgram
   public final void onUsed()
   {
     //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
+    _usedMark = true;
   }
   /**
    Must be called when the program is no longer used
@@ -367,17 +381,6 @@ public class GPUProgram
         _createdAttributes[i].unset(gl);
       }
     }
-  
-    //  for (int i = 0; i < 32; i++) {
-    //    GPUUniform* u = _uniforms[i];
-    //    GPUAttribute* a = _attributes[i];
-    //    if (u != NULL) {
-    //      u->unset();
-    //    }
-    //    if (a != NULL) {
-    //      a->unset(gl);
-    //    }
-    //  }
   }
 
   /**
@@ -403,18 +406,6 @@ public class GPUProgram
         attribute.applyChanges(gl);
       }
     }
-  
-  
-    //  for (int i = 0; i < 32; i++) {
-    //    GPUUniform* u = _uniforms[i];
-    //    GPUAttribute* a = _attributes[i];
-    //    if (u != NULL) {
-    //      u->applyChanges(gl);
-    //    }
-    //    if (a != NULL) {
-    //      a->applyChanges(gl);
-    //    }
-    //  }
   }
 
   public final GPUUniform getUniformOfType(String name, int type)
@@ -500,4 +491,25 @@ public class GPUProgram
     }
     a.set(v);
   }
+
+  public final void addListener(GPUProgramListener l)
+  {
+    _listeners.addLast(l);
+  }
+
+  public final void removeListener(GPUProgramListener l)
+  {
+    _listeners.remove(l);
+  }
+
+  public final void setUsedMark(boolean used)
+  {
+    _usedMark = used;
+  }
+
+  public final boolean hasBeenUsed()
+  {
+    return _usedMark;
+  }
+
 }
