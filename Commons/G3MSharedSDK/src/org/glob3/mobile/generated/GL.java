@@ -51,9 +51,9 @@ public class GL
 
   private IGLTextureId getGLTextureId()
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::getGLTextureId()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::getGLTextureId()");
+    //  }
   
     if (_texturesIdBag.size() == 0)
     {
@@ -140,9 +140,9 @@ public class GL
 
   public final void clearScreen(Color color)
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::clearScreen()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::clearScreen()");
+    //  }
     _clearScreenState.setClearColor(color);
     _clearScreenState.applyChanges(this, _currentGLGlobalState);
   
@@ -170,12 +170,12 @@ public class GL
 
   public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-  //                                 mode,
-  //                                 first,
-  //                                 count);
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+    //                                 mode,
+    //                                 first,
+    //                                 count);
+    //  }
   
     state.applyOnGPU(this, progManager);
   
@@ -184,9 +184,9 @@ public class GL
 
   public final int getError()
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::getError()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::getError()");
+    //  }
   
     return _nativeGL.getError();
   }
@@ -194,9 +194,9 @@ public class GL
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
   
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::uploadTexture()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::uploadTexture()");
+    //  }
   
     final IGLTextureId texId = getGLTextureId();
     if (texId != null)
@@ -236,9 +236,9 @@ public class GL
   public final void deleteTexture(IGLTextureId textureId)
   {
   
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::deleteTexture()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::deleteTexture()");
+    //  }
   
     if (textureId != null)
     {
@@ -254,14 +254,14 @@ public class GL
   
       if (_currentGLGlobalState.getBoundTexture() == textureId)
       {
-         _currentGLGlobalState.bindTexture(null);
+        _currentGLGlobalState.bindTexture(null);
       }
   
-  //    GLState::textureHasBeenDeleted(textureId);
+      //    GLState::textureHasBeenDeleted(textureId);
   
-  //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-  //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-  //    }
+      //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
+      //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
+      //    }
   
       //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
     }
@@ -319,9 +319,15 @@ public class GL
     _nativeGL.linkProgram(program);
   }
 
-  public final boolean deleteProgram(int program)
+  public final boolean deleteProgram(GPUProgram program)
   {
-    return _nativeGL.deleteProgram(program);
+
+    if (_currentGPUProgram == program) //In case of deleting active program
+    {
+      _currentGPUProgram = null;
+    }
+
+    return _nativeGL.deleteProgram(program.getProgramID());
   }
 
   public final INativeGL getNative()
@@ -387,17 +393,25 @@ public class GL
 
   public final void useProgram(GPUProgram program)
   {
-    if (program != null && _currentGPUProgram != program)
+    if (program != null)
     {
-  
-      if (_currentGPUProgram != null)
+      if (_currentGPUProgram != program)
       {
-        _currentGPUProgram.onUnused(this);
-      }
   
-      _nativeGL.useProgram(program);
-      program.onUsed();
-      _currentGPUProgram = program;
+        if (_currentGPUProgram != null)
+        {
+          _currentGPUProgram.onUnused(this);
+        }
+  
+        _nativeGL.useProgram(program);
+        program.onUsed();
+        _currentGPUProgram = program;
+      }
+      program.setUsedMark(true);
+  
+  //    if (!_nativeGL->isProgram(program->getProgramID())){
+  //      ILogger::instance()->logError("INVALID PROGRAM.");
+  //    }
     }
   
   }

@@ -83,21 +83,20 @@ public class GPUProgramManager
   
     if (!flatColor && texture && !color)
     {
-
       if (hasLight)
       {
         if (transformTC)
         {
-          return getProgram(gl, "TransformedTexCoorTexturedMesh_DirectionLight");
+          return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_DirectionLight");
         }
-        return getProgram(gl, "TexturedMesh_DirectionLight");
+        return compileProgramWithName(gl, "TexturedMesh_DirectionLight");
       }
   
       if (transformTC)
       {
-        return getProgram(gl, "TransformedTexCoorTexturedMesh");
+        return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
       }
-      return getProgram(gl, "TexturedMesh");
+      return compileProgramWithName(gl, "TexturedMesh");
     }
   
     if (!flatColor && !texture && color)
@@ -115,8 +114,10 @@ public class GPUProgramManager
 
   private GPUProgram getCompiledProgram(int uniformsCode, int attributesCode)
   {
-    for (final GPUProgram p : _programs.values()) {
+    for (final GPUProgramData pd : _programs.values()) {
+      GPUProgram p = pd._program;
       if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
+        pd._usedSinceLastCleanUp = true; //Marked as used
         return p;
       }
     }
@@ -145,6 +146,26 @@ public class GPUProgramManager
       }
   
     }
+  
     return p;
+  }
+
+  //Remove all shaders that have not been used since last call
+  public final void deleteUnusedPrograms()
+  {
+    Iterator<Object> it = _programs.EntrySet().iterator();
+    while (it.hasNext())
+    {
+      GPUProgramData pd = it.next();
+      bool shouldRemove = !(pd._usedSinceLastCleanUp);
+      if (shouldRemove){
+        ILogger.instance().logInfo("Removing program %s because it hasn't been used in last frames.",
+                                     it.second._program.getName());
+        pd._program.dispose();
+        it.remove();
+      } else{
+        pd._usedSinceLastCleanUp = false; //Marking as unused
+      }
+    }
   }
 }
