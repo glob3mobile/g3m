@@ -37,6 +37,7 @@ void SGShape::rawRender(const G3MRenderContext* rc,
 }
 
 std::vector<double> SGShape::intersectionsDistances(const Planet* planet,
+                                                    const Camera* camera,
                                                     const Vector3D& origin,
                                                     const Vector3D& direction) const {
   return _boundingVolume->intersectionsDistances(origin, direction);

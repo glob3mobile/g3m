@@ -49,6 +49,7 @@ Mesh* PointShape::createMesh(const G3MRenderContext* rc) {
 
 
 std::vector<double> PointShape::intersectionsDistances(const Planet* planet,
+                                                       const Camera* camera,
                                                        const Vector3D& origin,
                                                        const Vector3D& direction) const {
   return _boundingVolume->intersectionsDistances(origin, direction);

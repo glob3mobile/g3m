@@ -224,8 +224,8 @@ public:
   void render(const G3MRenderContext* rc, GLState* glState);
 
   std::vector<ShapeDistance> intersectionsDistances(const Planet* planet,
-                                                    const Vector3D& origin,
-                                                    const Vector3D& direction) const;
+                                                    const Camera* camera,
+                                                    const Vector2I& pixel) const;
 
   void loadJSONSceneJS(const URL&          url,
                        long long           priority,

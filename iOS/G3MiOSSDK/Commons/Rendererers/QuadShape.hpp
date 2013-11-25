@@ -105,6 +105,7 @@ public:
   void imageDownloaded(IImage* image);
   
   std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Camera* camera,
                                              const Vector3D& origin,
                                              const Vector3D& direction) const
   {
