@@ -421,6 +421,7 @@ public:
   }
   
   bool deleteProgram(int program) const {
+    ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
 
     if (glIsProgram(program) == GL_FALSE){
@@ -578,6 +579,10 @@ public:
         return NULL;
         break;
     }
+  }
+
+  bool isProgram(int program) const{
+    return glIsProgram(program) == GL_TRUE;
   }
   
 };

@@ -75,8 +75,6 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
 
 GPUProgram::~GPUProgram() {
 
-  onUnused(_gl);
-
   delete[] _createdAttributes;
   delete[] _createdUniforms;
 
@@ -291,6 +289,7 @@ GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string na
  */
 void GPUProgram::onUsed() {
   //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
+  _usedMark = true;
 }
 /**
  Must be called when the program is no longer used

@@ -17,13 +17,8 @@
 #include "GL.hpp"
 
 class GPUProgramManager {
-
-  struct GPUProgramData{
-    GPUProgram* _program;
-    bool _usedSinceLastCleanUp;
-  };
   
-  std::map<std::string, GPUProgramData> _programs;
+  std::map<std::string, GPUProgram*> _programs;
   
   GPUProgramFactory *_factory;
 

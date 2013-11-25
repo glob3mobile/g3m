@@ -63,6 +63,8 @@ class GPUProgram {
   std::list<const GPUProgramListener*> _listeners;
 
   GL* _gl;
+
+  bool _usedMark; //If true means the shader has been used in the last frames
   
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
@@ -78,7 +80,8 @@ class GPUProgram {
   _nAttributes(0),
   _uniformsCode(0),
   _attributesCode(0),
-  _gl(NULL){}
+  _gl(NULL),
+  _usedMark(false){}
 
   GPUProgram(const GPUProgram& that);
   
@@ -134,6 +137,15 @@ public:
   void removeListener(const GPUProgramListener* l){
     _listeners.remove(l);
   }
+
+  void setUsedMark(bool used){
+    _usedMark = used;
+  }
+
+  bool hasBeenUsed() const{
+    return _usedMark;
+  }
+
 };
 
 #endif

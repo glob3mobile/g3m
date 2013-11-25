@@ -13,8 +13,8 @@
 GPUProgramManager::~GPUProgramManager() {
 #ifdef C_CODE
   delete _factory;
-  for (std::map<std::string, GPUProgramData>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
-    delete it->second._program;
+  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+    delete it->second;
   }
 #endif
 }
@@ -84,10 +84,9 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
 GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode) {
 #ifdef C_CODE
-  for (std::map<std::string, GPUProgramData>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
-    GPUProgram* p = it->second._program;
+  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+    GPUProgram* p = it->second;
     if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
-      it->second._usedSinceLastCleanUp = true; //Marked as used
       return p;
     }
   }
@@ -121,11 +120,7 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl, const std::string&
         return NULL;
       }
 
-      GPUProgramData pd;
-      pd._program = prog;
-      pd._usedSinceLastCleanUp = true;
-
-      _programs[name] = pd;
+      _programs[name] = prog;
     }
 
   }
@@ -134,9 +129,9 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl, const std::string&
 
 GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 #ifdef C_CODE
-  std::map<std::string, GPUProgramData>::iterator it = _programs.find(name);
+  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
   if (it != _programs.end()) {
-    return it->second._program;
+    return it->second;
   } else{
     return NULL;
   }
@@ -149,16 +144,17 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 void GPUProgramManager::deleteUnusedPrograms(){
 #ifdef C_CODE
 
-  std::map<std::string, GPUProgramData>::iterator it = _programs.begin();
+  std::map<std::string, GPUProgram*>::iterator it = _programs.begin();
   while (it != _programs.end()) {
-    bool shouldRemove = !(it->second._usedSinceLastCleanUp);
+    GPUProgram* program = it->second;
+    bool shouldRemove = !(program->hasBeenUsed());
     if (shouldRemove){
-      ILogger::instance()->logInfo("Removing program %s [0x%x] because it hasn't been used in last frames.",
-                                   it->second._program->getName().c_str(), it->second._program);
-      delete it->second._program;
+      ILogger::instance()->logInfo("Removing program %s [0x%x, id = %d] because it hasn't been used in last frames.",
+                                   program->getName().c_str(), program, program->getProgramID());
+      delete it->second;
       _programs.erase(it++);
     } else{
-      it->second._usedSinceLastCleanUp = false; //Marking as unused
+      program->setUsedMark(false);  //Marking as unused since now
       ++it;
     }
   }
