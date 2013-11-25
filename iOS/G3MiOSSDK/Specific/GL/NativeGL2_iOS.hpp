@@ -421,7 +421,7 @@ public:
   }
   
   bool deleteProgram(int program) const {
-    ILogger::instance()->logInfo("Deleting program id = %d", program);
+    //ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
 
     if (glIsProgram(program) == GL_FALSE){

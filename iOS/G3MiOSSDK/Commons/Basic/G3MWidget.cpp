@@ -131,7 +131,8 @@ _sceneLighting(sceneLighting),
 _rootState(NULL),
 _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
-_forceBusyRenderer(false)
+_forceBusyRenderer(false),
+_nFramesBeetweenProgramsCleanUp(500)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -508,9 +509,8 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
-  //Deleting programs that haven't been used in the last 100 frames
-#warning DOES NOT WORK
-  if (_renderCounter % 100 == 0){
+  //Deleting programs that haven't been used in the last _nFramesBeetweenProgramsCleanUp frames
+  if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0){
     _renderContext->getGPUProgramManager()->deleteUnusedPrograms();
   }
 
