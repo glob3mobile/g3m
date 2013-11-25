@@ -34,7 +34,8 @@ public abstract class MapBooBuilder
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
   {
-    TileTessellator tessellator = new PlanetTileTessellator(true, Sector.fullSphere());
+    final boolean skirted = true;
+    TileTessellator tessellator = new PlanetTileTessellator(skirted, Sector.fullSphere());
   
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;

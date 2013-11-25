@@ -46,7 +46,10 @@ AbstractGeometryMesh(primitive,
 _indices(indices),
 _ownsIndices(ownsIndices)
 {
-
+//  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices, %d normals",
+//                               vertices->size(),
+//                               indices->size(),
+//                               normals->size());
 }
 
 IndexedGeometryMesh::IndexedGeometryMesh(const int primitive,
@@ -70,7 +73,9 @@ AbstractGeometryMesh(primitive,
 _indices(indices),
 _ownsIndices(ownsIndices)
 {
-
+//  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices",
+//                               vertices->size(),
+//                               indices->size());
 }
 
 void IndexedGeometryMesh::rawRender(const G3MRenderContext* rc) const{

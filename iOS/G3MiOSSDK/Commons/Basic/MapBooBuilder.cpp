@@ -480,7 +480,8 @@ bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
 }
 
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
-  TileTessellator* tessellator = new PlanetTileTessellator(true, Sector::fullSphere());
+  const bool skirted = true;
+  TileTessellator* tessellator = new PlanetTileTessellator(skirted, Sector::fullSphere());
 
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
