@@ -92,13 +92,12 @@ GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attribut
   }
 #endif
 #ifdef JAVA_CODE
-  for (final GPUProgramData pd : _programs.values()) {
-    GPUProgram p = pd._program;
+  for (final GPUProgram p : _programs.values()) {
     if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
-      pd._usedSinceLastCleanUp = true; //Marked as used
       return p;
     }
   }
+  return null;
 #endif
   return NULL;
 }
@@ -161,18 +160,16 @@ void GPUProgramManager::deleteUnusedPrograms(){
 
 #endif
 #ifdef JAVA_CODE
-  Iterator<Object> it = _programs.EntrySet().iterator();
-  while (it.hasNext())
-  {
-    GPUProgramData pd = it.next();
-    bool shouldRemove = !(pd._usedSinceLastCleanUp);
-    if (shouldRemove){
-      ILogger.instance().logInfo("Removing program %s because it hasn't been used in last frames.",
-                                   it.second._program.getName());
-      pd._program.dispose();
-      it.remove();
+  java.util.Iterator it = _programs.entrySet().iterator();
+  while (it.hasNext()) {
+    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+    GPUProgram program = (GPUProgram) pairs.getValue();
+
+    if (program.hasBeenUsed()){
+      program.setUsedMark(false);
     } else{
-      pd._usedSinceLastCleanUp = false; //Marking as unused
+      program.dispose();
+      it.remove();
     }
   }
 #endif

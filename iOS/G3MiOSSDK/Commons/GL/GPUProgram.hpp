@@ -37,8 +37,12 @@ enum ShaderType {
 
 class GPUProgramListener{
 public:
-  virtual ~GPUProgramListener() {
-  }
+#ifdef C_CODE
+  virtual ~GPUProgramListener() { }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
 
   virtual void gpuProgramDeleted() const = 0;
 
