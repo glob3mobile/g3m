@@ -1629,12 +1629,12 @@ public:
   //const Vector3D radiusBox(1000, 2000, 3000);
   
   
-  for (int i=1; i<5; i++) {
+  for (int i=1; i<=4; i++) {
     Shape* point = new PointShape(new Geodetic3D(Angle::fromDegrees(39.70),
                                                   Angle::fromDegrees(3.30),
                                                   i*radiusBox._z),
                                    ABSOLUTE,
-                                   6,
+                                   2*i,
                                    Color::fromRGBA(0, 1, 0, 1));
     shapesRenderer->addShape(point);
   }

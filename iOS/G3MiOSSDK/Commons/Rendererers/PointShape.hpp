@@ -27,7 +27,9 @@ private:
   Color* _originalColor;
   
   OrientedBox* computeOrientedBox(const Planet* planet,
-                                  const Camera* camera) const;
+                                  const Camera* camera);
+  
+  Vector3D* _cartesianPosition;
   
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
@@ -39,6 +41,7 @@ public:
              float width,
              const Color& color) :
   AbstractMeshShape(position, altitudeMode),
+  _cartesianPosition(NULL),
   _boundingVolume(NULL),
   _width(width),
   _color(new Color(color)),

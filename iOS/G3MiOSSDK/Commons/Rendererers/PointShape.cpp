@@ -14,6 +14,7 @@
 #include "DirectMesh.hpp"
 #include "OrientedBox.hpp"
 #include "Camera.hpp"
+#include "Vector3D.hpp"
 
 
 PointShape::~PointShape() {
@@ -21,6 +22,8 @@ PointShape::~PointShape() {
   delete _originalColor;
   if (_boundingVolume)
     delete _boundingVolume;
+  if (_cartesianPosition)
+    delete _cartesianPosition;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -66,9 +69,16 @@ bool PointShape::isVisible(const G3MRenderContext *rc)
 
 
 OrientedBox* PointShape::computeOrientedBox(const Planet* planet,
-                                            const Camera* camera) const
+                                            const Camera* camera)
 {
-  const Vector3D upper = Vector3D(1000, 1000, 1000);
+  if (_cartesianPosition == NULL)
+    _cartesianPosition = new Vector3D(planet->toCartesian(getPosition()));
+  double distanceToCamera = camera->getCartesianPosition().distanceTo(*_cartesianPosition);
+  FrustumData frustum = camera->getFrustumData();
+  double scale = 2 * distanceToCamera * frustum._top / camera->getHeight() / frustum._znear;
+  const int pixelWidth = 6;
+  setScale(scale*pixelWidth);
+  const Vector3D upper = Vector3D(1, 1, 1);
   const Vector3D lower = upper.times(-1);
   return new OrientedBox(lower, upper, *getTransformMatrix(planet));
 }
