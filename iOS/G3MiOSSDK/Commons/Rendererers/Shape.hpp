@@ -297,7 +297,7 @@ public:
   virtual std::vector<double> intersectionsDistances(const Planet* planet,
                                                      const Camera* camera,
                                                      const Vector3D& origin,
-                                                     const Vector3D& direction) const = 0;
+                                                     const Vector3D& direction) = 0;
   
   virtual bool isVisible(const G3MRenderContext *rc) = 0;
   

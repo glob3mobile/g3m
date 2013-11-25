@@ -26,6 +26,9 @@ private:
   Color* _color;
   Color* _originalColor;
   
+  OrientedBox* computeOrientedBox(const Planet* planet,
+                                  const Camera* camera) const;
+  
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
   BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
@@ -62,7 +65,7 @@ public:
   std::vector<double> intersectionsDistances(const Planet* planet,
                                              const Camera* camera,
                                              const Vector3D& origin,
-                                             const Vector3D& direction) const;
+                                             const Vector3D& direction);
   
   bool isVisible(const G3MRenderContext *rc);
   

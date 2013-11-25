@@ -21,7 +21,7 @@ PointShape::~PointShape() {
   delete _originalColor;
   if (_boundingVolume)
     delete _boundingVolume;
-  
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -51,7 +51,10 @@ Mesh* PointShape::createMesh(const G3MRenderContext* rc) {
 std::vector<double> PointShape::intersectionsDistances(const Planet* planet,
                                                        const Camera* camera,
                                                        const Vector3D& origin,
-                                                       const Vector3D& direction) const {
+                                                       const Vector3D& direction) {
+  if (_boundingVolume != NULL)
+    delete _boundingVolume;
+  _boundingVolume = computeOrientedBox(planet, camera);
   return _boundingVolume->intersectionsDistances(origin, direction);
 }
 
@@ -62,13 +65,20 @@ bool PointShape::isVisible(const G3MRenderContext *rc)
 }
 
 
+OrientedBox* PointShape::computeOrientedBox(const Planet* planet,
+                                            const Camera* camera) const
+{
+  const Vector3D upper = Vector3D(1000, 1000, 1000);
+  const Vector3D lower = upper.times(-1);
+  return new OrientedBox(lower, upper, *getTransformMatrix(planet));
+}
+
+
 BoundingVolume* PointShape::getBoundingVolume(const G3MRenderContext *rc)
 {
-  if (_boundingVolume == NULL) {
-    const Vector3D upper = Vector3D(1000, 1000, 1000);
-    const Vector3D lower = upper.times(-1);
-    _boundingVolume = new OrientedBox(lower, upper, *getTransformMatrix(rc->getPlanet()));
-  }
+  if (_boundingVolume != NULL)
+    delete _boundingVolume;
+  _boundingVolume = computeOrientedBox(rc->getPlanet(), rc->getCurrentCamera());
   return _boundingVolume;
 }
 
