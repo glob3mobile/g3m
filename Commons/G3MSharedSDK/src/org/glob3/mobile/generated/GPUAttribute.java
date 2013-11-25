@@ -15,7 +15,10 @@ public class GPUAttribute extends GPUVariable
 
   public void dispose()
   {
-    _value._release();
+    if (_value != null)
+    {
+      _value._release();
+    }
 
     super.dispose();
   }

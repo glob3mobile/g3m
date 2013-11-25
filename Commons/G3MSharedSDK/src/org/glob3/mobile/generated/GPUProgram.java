@@ -201,6 +201,18 @@ public class GPUProgram
   public void dispose()
   {
   
+    for (int i = 0; i < _nUniforms; i++)
+    {
+      if (_createdUniforms[i] != null)
+         _createdUniforms[i].dispose();
+    }
+  
+    for (int i = 0; i < _nAttributes; i++)
+    {
+      if (_createdAttributes[i] != null)
+         _createdAttributes[i].dispose();
+    }
+  
     _createdAttributes = null;
     _createdUniforms = null;
   
