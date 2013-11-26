@@ -555,14 +555,23 @@ public:
 
 - (void) initCustomizedWithBuilder
 {
-
-
   G3MBuilder_iOS builder([self G3MWidget]);
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  
+  // PRUEBA JM
+  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>;
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.0)));
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.0)));
+  float dashLengths[] = {};
+  GEO2DLineRasterStyle lineStyle(Color::blue(), 5, CAP_ROUND, JOIN_ROUND, 1, dashLengths, 0, 0);
+  GEORasterSymbol* line1 = new GEORasterLineSymbol(coordinates, lineStyle);
+  //extern GEOTileRasterizer* geoTileRasterizer;
+  geoTileRasterizer->addSymbol(line1);
+
 
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
@@ -606,6 +615,8 @@ public:
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer];
   builder.addRenderer(shapesRenderer);
+  
+  
   
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );

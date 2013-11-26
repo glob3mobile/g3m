@@ -17,6 +17,10 @@
 #include "Vector3D.hpp"
 
 
+#include "GEORasterLineSymbol.hpp"
+#include "GEO2DLineRasterStyle.hpp"
+
+
 LineShape::~LineShape() {
   delete _color;
   delete _originalColor;
