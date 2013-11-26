@@ -197,6 +197,16 @@ public class BoxShape extends AbstractMeshShape
   
     return surface;
   }
+  protected final BoundingVolume getBoundingVolume(G3MRenderContext rc)
+  {
+    if (_boundingVolume == null)
+    {
+      final Vector3D upper = getExtent().times(0.5);
+      final Vector3D lower = upper.times(-1);
+      _boundingVolume = new OrientedBox(lower, upper, getTransformMatrix(rc.getPlanet()));
+    }
+    return _boundingVolume;
+  }
 
   public BoxShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D extent, float borderWidth, Color surfaceColor, Color borderColor)
   {
@@ -278,16 +288,14 @@ public class BoxShape extends AbstractMeshShape
     }
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
   {
     return _boundingVolume.intersectionsDistances(origin, direction);
   }
 
   public final boolean isVisible(G3MRenderContext rc)
   {
-    if (_boundingVolume == null)
-      _boundingVolume = new OrientedBox(getExtent(), getTransformMatrix(rc.getPlanet()));
-    return _boundingVolume.touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
+    return getBoundingVolume(rc).touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
   }
 
   public final void setSelectedDrawMode(boolean mode)

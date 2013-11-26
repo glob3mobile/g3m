@@ -266,18 +266,16 @@ public class ShapesRenderer extends LeafRenderer
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
     boolean handled = false;
-        
     if (_lastCamera != null)
     {
-      if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() <=1 && touchEvent.getType() == TouchEventType.Down)
+      if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount()<=1 && touchEvent.getType() == TouchEventType.Down)
       {
-        final Vector3D origin = _lastCamera.getCartesianPosition();
         final Vector2I pixel = touchEvent.getTouch(0).getPos();
-        final Vector3D direction = _lastCamera.pixel2Ray(pixel);
-        java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(ec.getPlanet(), origin, direction);
+        java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(ec.getPlanet(), _lastCamera, pixel);
   
         if (!shapeDistances.isEmpty())
         {
+          //printf ("Found %d intersections with shapes:\n", (int)shapeDistances.size());
           if (_shapeTouchListener != null)
               handled = _shapeTouchListener.touchedShape(shapeDistances.get(0)._shape);
         }
@@ -335,13 +333,15 @@ public class ShapesRenderer extends LeafRenderer
     }
   }
 
-  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<ShapeDistance> intersectionsDistances(Planet planet, Camera camera, Vector2I pixel)
   {
+    final Vector3D origin = camera.getCartesianPosition();
+    final Vector3D direction = camera.pixel2Ray(pixel);
     java.util.ArrayList<ShapeDistance> shapeDistances = new java.util.ArrayList<ShapeDistance>();
     for (int n = 0; n<_shapes.size(); n++)
     {
       Shape shape = _shapes.get(n);
-      java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
+      java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, camera, origin, direction);
       for (int i = 0; i<distances.size(); i++)
       {
         shapeDistances.add(new ShapeDistance(distances.get(i), shape));

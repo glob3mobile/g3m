@@ -19,6 +19,8 @@ package org.glob3.mobile.generated;
 
 
 //class SGNode;
+//class OrientedBox;
+//class BoundingVolume;
 
 public class SGShape extends Shape
 {
@@ -29,6 +31,21 @@ public class SGShape extends Shape
 
   private GLState _glState;
 
+  private OrientedBox _boundingVolume;
+
+  protected final BoundingVolume getBoundingVolume(G3MRenderContext rc)
+  {
+    if (_boundingVolume == null)
+    {
+      Box boundingBox = _node.getCopyBoundingBox();
+      _boundingVolume = new OrientedBox(boundingBox, getTransformMatrix(rc.getPlanet()));
+      if (boundingBox != null)
+         boundingBox.dispose();
+    }
+    return _boundingVolume;
+  }
+
+
 
   public SGShape(SGNode node, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {
@@ -36,6 +53,7 @@ public class SGShape extends Shape
      _node = node;
      _uriPrefix = uriPrefix;
      _isTransparent = isTransparent;
+     _boundingVolume = null;
     _glState = new GLState();
     if (_isTransparent)
     {
@@ -52,6 +70,9 @@ public class SGShape extends Shape
     _glState._release();
     if (_node != null)
        _node.dispose();
+    if (_boundingVolume != null)
+      if (_boundingVolume != null)
+         _boundingVolume.dispose();
   }
 
   public final SGNode getNode()
@@ -85,17 +106,15 @@ public class SGShape extends Shape
     return _isTransparent;
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
   {
-    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
-    return intersections;
+    return _boundingVolume.intersectionsDistances(origin, direction);
   }
 
 
   public final boolean isVisible(G3MRenderContext rc)
   {
-    int __TODO_isVisible_Method;
-    return true;
+    return getBoundingVolume(rc).touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
   }
 
   public final void setSelectedDrawMode(boolean mode)

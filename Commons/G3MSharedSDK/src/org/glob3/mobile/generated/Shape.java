@@ -19,6 +19,8 @@ package org.glob3.mobile.generated;
 
 //class MutableMatrix44D;
 //class G3MRenderContext;
+//class BoundingVolume;
+
 
 
 
@@ -93,6 +95,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     return _transformMatrix;
   }
 
+  protected abstract BoundingVolume getBoundingVolume(G3MRenderContext rc);
 
 
 
@@ -343,6 +346,13 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
         getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
         _glState.setParent(parentGLState);
         rawRender(rc, _glState, renderNotReadyShapes);
+        if (isSelected())
+        {
+          BoundingVolume boundingVolume = getBoundingVolume(rc);
+          if (boundingVolume != null)
+            boundingVolume.render(rc, _glState);
+        }
+  
       }
     }
   }
@@ -386,7 +396,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
   }
 
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
+  public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction);
 
   public abstract boolean isVisible(G3MRenderContext rc);
 

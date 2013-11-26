@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class IShortBuffer;
 //class GPUProgramState;
 
+
 public class SGGeometryNode extends SGNode
 {
   private final int _primitive;
@@ -54,6 +55,8 @@ public class SGGeometryNode extends SGNode
     }
   }
 
+  private Box _boundingBox;
+
 
   public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IShortBuffer indices)
   {
@@ -66,6 +69,36 @@ public class SGGeometryNode extends SGNode
      _indices = indices;
      _glState = new GLState();
     createGLState();
+  
+    // compute boundingBox
+    float xmin = 1e10F;
+    float ymin = 1e10F;
+    float zmin = 1e10F;
+    float xmax = -1e10F;
+    float ymax = -1e10F;
+    float zmax = -1e10F;
+    int verticesCount = vertices.size() / 3;
+    for (int i = 0; i < verticesCount *3; i+=3)
+    {
+      float x = vertices.get(i);
+      float y = vertices.get(i+1);
+      float z = vertices.get(i+2);
+      if (x<xmin)
+         xmin = x;
+      if (y<ymin)
+         ymin = y;
+      if (z<zmin)
+         zmin = z;
+      if (x>xmax)
+         xmax = x;
+      if (y>ymax)
+         ymax = y;
+      if (z>zmax)
+         zmax = z;
+    }
+    final Vector3D lower = new Vector3D(xmin, ymin, zmin);
+    final Vector3D upper = new Vector3D(xmax, ymax, zmax);
+    _boundingBox = new Box(lower, upper);
   }
 
   public void dispose()
@@ -82,6 +115,9 @@ public class SGGeometryNode extends SGNode
        _indices.dispose();
   
     _glState._release();
+  
+    if (_boundingBox != null)
+       _boundingBox.dispose();
   
     super.dispose();
   
@@ -102,6 +138,11 @@ public class SGGeometryNode extends SGNode
   public final String description()
   {
     return "SGGeometryNode";
+  }
+
+  public final Box getCopyBoundingBox()
+  {
+    return new Box(_boundingBox);
   }
 
 }

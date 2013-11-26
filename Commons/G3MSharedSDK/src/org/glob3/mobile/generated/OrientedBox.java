@@ -17,34 +17,87 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class Vector3D;
 //class MutableMatrix44D;
+//class Mesh;
+//class Color;
 
 
 public class OrientedBox extends BoundingVolume
 {
 
-  private final double _halfExtentX;
-  private final double _halfExtentY;
-  private final double _halfExtentZ;
+  private final double _lowerX;
+  private final double _lowerY;
+  private final double _lowerZ;
+  private final double _upperX;
+  private final double _upperY;
+  private final double _upperZ;
   private final MutableMatrix44D _transformMatrix;
 
   private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
 
-
-  public OrientedBox(Vector3D extent, MutableMatrix44D transformMatrix)
+  private Mesh _mesh;
+  private void createMesh(Color color)
   {
-     _halfExtentX = extent._x/2;
-     _halfExtentY = extent._y/2;
-     _halfExtentZ = extent._z/2;
+    float[] v = { (float)_upperX, (float)_upperY, (float)_upperZ, (float)_lowerX, (float)_upperY, (float)_upperZ, (float)_upperX, (float)_lowerY, (float)_upperZ, (float)_lowerX, (float)_lowerY, (float)_upperZ, (float)_upperX, (float)_upperY, (float)_lowerZ, (float)_lowerX, (float)_upperY, (float)_lowerZ, (float)_upperX, (float)_lowerY, (float)_lowerZ, (float)_lowerX, (float)_lowerY, (float)_lowerZ };
+  
+    short[] i = { 0, 1, 1, 3, 3, 2, 2, 0, 0, 4, 1, 5, 3, 7, 2, 6, 4, 5, 5, 7, 7, 6, 6, 4 };
+  
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+    ShortBufferBuilder indices = new ShortBufferBuilder();
+  
+    final int numVertices = 8;
+    for (int n = 0; n<numVertices; n++)
+    {
+      vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
+    }
+  
+    final int numIndices = 24;
+    for (int n = 0; n<numIndices; n++)
+    {
+      indices.add(i[n]);
+    }
+  
+    _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+    if (vertices != null)
+       vertices.dispose();
+  }
+
+  public OrientedBox(Vector3D lower, Vector3D upper, MutableMatrix44D transformMatrix)
+  {
+     _lowerX = lower._x;
+     _lowerY = lower._y;
+     _lowerZ = lower._z;
+     _upperX = upper._x;
+     _upperY = upper._y;
+     _upperZ = upper._z;
      _transformMatrix = new MutableMatrix44D(transformMatrix);
+     _mesh = null;
+  }
+
+  public OrientedBox(Box box, MutableMatrix44D transformMatrix)
+  {
+     _lowerX = box.getLower()._x;
+     _lowerY = box.getLower()._y;
+     _lowerZ = box.getLower()._z;
+     _upperX = box.getUpper()._x;
+     _upperY = box.getUpper()._y;
+     _upperZ = box.getUpper()._z;
+     _transformMatrix = new MutableMatrix44D(transformMatrix);
+     _mesh = null;
   }
 
   public void dispose()
   {
     if (_transformMatrix != null)
        _transformMatrix.dispose();
+    if (_mesh != null)
+       if (_mesh != null)
+          _mesh.dispose();
+    super.dispose();
   }
+
 
   public final double projectedArea(G3MRenderContext rc)
   {
@@ -54,7 +107,11 @@ public class OrientedBox extends BoundingVolume
 
   public final void render(G3MRenderContext rc, GLState parentState)
   {
-    int __TODO_OrientedBox_render;
+    if (_mesh == null)
+    {
+      createMesh(Color.newFromRGBA(1.0f, 0.0f, 1.0f, 1.0f));
+    }
+    _mesh.render(rc, parentState);
   }
 
   public final boolean touches(BoundingVolume that)
@@ -168,12 +225,12 @@ public class OrientedBox extends BoundingVolume
     // QUESTION: CREATE 6 MATRICES EVERYTIME OR SAVE THEM INSIDE THE CLASS??
     MutableMatrix44D inverse = _transformMatrix.inversed();
     MutableMatrix44D transpose = inverse.transposed();
-    Quadric front = Quadric.fromPlane(1, 0, 0, -_halfExtentX).transformBy(inverse, transpose);
-    Quadric back = Quadric.fromPlane(-1, 0, 0, -_halfExtentX).transformBy(inverse, transpose);
-    Quadric left = Quadric.fromPlane(0, -1, 0, -_halfExtentY).transformBy(inverse, transpose);
-    Quadric right = Quadric.fromPlane(0, 1, 0, -_halfExtentY).transformBy(inverse, transpose);
-    Quadric top = Quadric.fromPlane(0, 0, 1, -_halfExtentZ).transformBy(inverse, transpose);
-    Quadric bottom = Quadric.fromPlane(0, 0, -1, -_halfExtentZ).transformBy(inverse, transpose);
+    Quadric front = Quadric.fromPlane(1, 0, 0, -_upperX).transformBy(inverse, transpose);
+    Quadric back = Quadric.fromPlane(-1, 0, 0, _lowerX).transformBy(inverse, transpose);
+    Quadric left = Quadric.fromPlane(0, -1, 0, _lowerY).transformBy(inverse, transpose);
+    Quadric right = Quadric.fromPlane(0, 1, 0, -_upperY).transformBy(inverse, transpose);
+    Quadric top = Quadric.fromPlane(0, 0, 1, -_upperZ).transformBy(inverse, transpose);
+    Quadric bottom = Quadric.fromPlane(0, 0, -1, _lowerZ).transformBy(inverse, transpose);
   
     // ALL THIS CODE COULD BE OPTIMIZED
     // FOR EXAMPLE, WHEN CUADRICS ARE PLANES, MATH EXPRESSIONS ARE SIMPLER
@@ -249,6 +306,4 @@ public class OrientedBox extends BoundingVolume
   
     return distances;
   }
-
-
 }

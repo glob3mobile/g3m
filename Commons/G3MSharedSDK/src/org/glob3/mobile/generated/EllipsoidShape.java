@@ -254,6 +254,16 @@ public class EllipsoidShape extends AbstractMeshShape
   
     return surfaceMesh;
   }
+  protected final BoundingVolume getBoundingVolume(G3MRenderContext rc)
+  {
+    if (_boundingVolume == null)
+    {
+      final Vector3D upper = _ellipsoid.getRadii();
+      final Vector3D lower = upper.times(-1);
+      _boundingVolume = new OrientedBox(lower, upper, getTransformMatrix(rc.getPlanet()));
+    }
+    return _boundingVolume;
+  }
 
   public EllipsoidShape(Geodetic3D position, AltitudeMode altitudeMode, Vector3D radius, short resolution, float borderWidth, boolean texturedInside, boolean mercator, Color surfaceColor, Color borderColor)
   {
@@ -356,7 +366,7 @@ public class EllipsoidShape extends AbstractMeshShape
   }
 
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Camera camera, Vector3D origin, Vector3D direction)
   {
     MutableMatrix44D M = getTransformMatrix(planet);
     final Quadric transformedQuadric = Quadric.fromEllipsoid(_ellipsoid).transformBy(M);
@@ -369,12 +379,7 @@ public class EllipsoidShape extends AbstractMeshShape
 
   public final boolean isVisible(G3MRenderContext rc)
   {
-    if (_boundingVolume == null)
-    {
-      final Vector3D extent = _ellipsoid.getRadii().times(2);
-      _boundingVolume = new OrientedBox(extent, getTransformMatrix(rc.getPlanet()));
-    }
-    return _boundingVolume.touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
+    return getBoundingVolume(rc).touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
   }
 
   public final void setSelectedDrawMode(boolean mode)

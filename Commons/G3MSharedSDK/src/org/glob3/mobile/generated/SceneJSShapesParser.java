@@ -474,7 +474,8 @@ public class SceneJSShapesParser
       return null;
     }
     processedKeys++;
-    int verticesCount = jsPositions.size();
+  
+   int verticesCount = jsPositions.size();
     IFloatBuffer vertices = IFactory.instance().createFloatBuffer(verticesCount);
     for (int i = 0; i < verticesCount; i++)
     {
