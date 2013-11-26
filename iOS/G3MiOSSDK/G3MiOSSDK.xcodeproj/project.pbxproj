@@ -616,6 +616,8 @@
 		FB0F2B9F1816C3240058394E /* OrientedBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB0F2B9D1816C3240058394E /* OrientedBox.cpp */; };
 		FB2B1B2717F880B5006307EC /* Quadric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2B1B2517F880B5006307EC /* Quadric.cpp */; };
 		FB2B1B2817F8857D006307EC /* Quadric.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2B1B2617F880B5006307EC /* Quadric.hpp */; };
+		FB2FD50D1844C632002D2E78 /* LineShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2FD50B1844C632002D2E78 /* LineShape.cpp */; };
+		FB2FD50E1844C79A002D2E78 /* LineShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2FD50C1844C632002D2E78 /* LineShape.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
@@ -630,6 +632,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FB2FD50E1844C79A002D2E78 /* LineShape.hpp in CopyFiles */,
 				CCAD3260183FE7F9008F500D /* PointShape.hpp in CopyFiles */,
 				CF6920BE18392F83007409D8 /* ErrorHandling.hpp in CopyFiles */,
 				CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */,
@@ -1590,6 +1593,8 @@
 		FB0F2B9E1816C3240058394E /* OrientedBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OrientedBox.hpp; path = Commons/Geometry/OrientedBox.hpp; sourceTree = "<group>"; };
 		FB2B1B2517F880B5006307EC /* Quadric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quadric.cpp; path = Commons/Geometry/Quadric.cpp; sourceTree = "<group>"; };
 		FB2B1B2617F880B5006307EC /* Quadric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Quadric.hpp; path = Commons/Geometry/Quadric.hpp; sourceTree = "<group>"; };
+		FB2FD50B1844C632002D2E78 /* LineShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LineShape.cpp; path = Commons/Rendererers/LineShape.cpp; sourceTree = "<group>"; };
+		FB2FD50C1844C632002D2E78 /* LineShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LineShape.hpp; path = Commons/Rendererers/LineShape.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
@@ -2272,6 +2277,8 @@
 				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
 				CCAD325D183FE063008F500D /* PointShape.cpp */,
 				CCAD325E183FE063008F500D /* PointShape.hpp */,
+				FB2FD50B1844C632002D2E78 /* LineShape.cpp */,
+				FB2FD50C1844C632002D2E78 /* LineShape.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -2726,6 +2733,7 @@
 				CF8AE0061702049F00FE9F56 /* GEOLine2DStyle.cpp in Sources */,
 				CF8AE0071702049F00FE9F56 /* GEOLine2DMeshSymbol.cpp in Sources */,
 				CF8AE0081702049F00FE9F56 /* GEOMultiLine2DMeshSymbol.cpp in Sources */,
+				FB2FD50D1844C632002D2E78 /* LineShape.cpp in Sources */,
 				CF8AE0091702049F00FE9F56 /* GEOStyle.cpp in Sources */,
 				CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */,
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,

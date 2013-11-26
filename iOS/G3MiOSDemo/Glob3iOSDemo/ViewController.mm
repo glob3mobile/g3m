@@ -36,6 +36,7 @@
 #import <G3MiOSSDK/QuadShape.hpp>
 #import <G3MiOSSDK/BoxShape.hpp>
 #import <G3MiOSSDK/PointShape.hpp>
+#import <G3MiOSSDK/LineShape.hpp>
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
 #import <G3MiOSSDK/LayoutUtils.hpp>
@@ -1638,6 +1639,19 @@ public:
                                    Color::fromRGBA(0, 1, 0, 1));
     shapesRenderer->addShape(point);
   }
+  
+  
+  Shape* line1 = new LineShape(new Geodetic3D(Angle::fromDegrees(39.50),
+                                               Angle::fromDegrees(3.00),
+                                               radiusBox._z),
+                               new Geodetic3D(Angle::fromDegrees(39.50),
+                                              Angle::fromDegrees(3.00),
+                                              radiusBox._z),
+
+                               ABSOLUTE,
+                                5,
+                                Color::fromRGBA(1, 0.5, 0, 1));
+  shapesRenderer->addShape(line1);
   
   
   Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.70),

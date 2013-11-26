@@ -14,7 +14,6 @@
 
 GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std::string& vertexSource,
                                       const std::string& fragmentSource) {
-
   GPUProgram* p = new GPUProgram();
 
   p->_name = name;
