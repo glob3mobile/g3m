@@ -17,17 +17,14 @@
 #include "Vector3D.hpp"
 
 
-#include "GEORasterLineSymbol.hpp"
-#include "GEO2DLineRasterStyle.hpp"
-
-
 LineShape::~LineShape() {
   delete _color;
   delete _originalColor;
   if (_boundingVolume)
     delete _boundingVolume;
-  if (_cartesianPosition)
-    delete _cartesianPosition;
+  if (_cartesianStartPos)
+    delete _cartesianStartPos;
+  delete _geodeticEndPos;
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -40,7 +37,11 @@ Mesh* LineShape::createMesh(const G3MRenderContext* rc) {
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   
   vertices->add(0.0f, 0.0f, 0.0f);
-  vertices->add(0.0f, 0.0f, 5000.0f);
+  vertices->add(0.0f, 0.0f, 1.0f);
+  
+  if (_cartesianStartPos==NULL)
+    computeOrientationParams(rc->getPlanet());
+  
   Color* color = (_color == NULL) ? NULL : new Color(*_color);
   
   Mesh* mesh = new DirectMesh(GLPrimitive::lines(),
@@ -77,15 +78,29 @@ bool LineShape::isVisible(const G3MRenderContext *rc)
 OrientedBox* LineShape::computeOrientedBox(const Planet* planet,
                                            const Camera* camera)
 {
-  if (_cartesianPosition == NULL)
-    _cartesianPosition = new Vector3D(planet->toCartesian(getPosition()));
-  double distanceToCamera = camera->getCartesianPosition().distanceTo(*_cartesianPosition);
+  if (_cartesianStartPos == NULL)
+    computeOrientationParams(planet);
+  double distanceToCamera = camera->getCartesianPosition().distanceTo(*_cartesianStartPos);
   FrustumData frustum = camera->getFrustumData();
-  const int pixelWidth = 6*2;
+  const int pixelWidth = 16;
   double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getHeight() / frustum._znear;
-  const Vector3D upper = Vector3D(scale, scale, 10*scale);
+  const Vector3D upper = Vector3D(scale, scale, 1);
   const Vector3D lower = Vector3D(-scale, -scale, 0);
   return new OrientedBox(lower, upper, *getTransformMatrix(planet));
+}
+
+
+void LineShape::computeOrientationParams(const Planet* planet)
+{
+  _cartesianStartPos = new Vector3D(planet->toCartesian(getPosition()));
+  const Vector3D cartesianEndPos = Vector3D(planet->toCartesian(*_geodeticEndPos));
+  const Vector3D line = cartesianEndPos.sub(*_cartesianStartPos);
+  setScale(1, 1, line.length());
+  const Vector3D normal = planet->geodeticSurfaceNormal(*_cartesianStartPos);
+  setPitch(line.angleBetween(normal).times(-1));
+  const Vector3D north2D = planet->getNorth().projectionInPlane(normal);
+  const Vector3D projectedLine = line.projectionInPlane(normal);
+  setHeading(projectedLine.signedAngleBetween(north2D, normal));
 }
 
 

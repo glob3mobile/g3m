@@ -562,17 +562,6 @@ public:
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
   
-  // PRUEBA JM
-  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>;
-  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.0)));
-  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.0)));
-  float dashLengths[] = {};
-  GEO2DLineRasterStyle lineStyle(Color::blue(), 5, CAP_ROUND, JOIN_ROUND, 1, dashLengths, 0, 0);
-  GEORasterSymbol* line1 = new GEORasterLineSymbol(coordinates, lineStyle);
-  //extern GEOTileRasterizer* geoTileRasterizer;
-  geoTileRasterizer->addSymbol(line1);
-
-
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
 
@@ -1652,12 +1641,12 @@ public:
   }
   
   
-  Shape* line1 = new LineShape(new Geodetic3D(Angle::fromDegrees(39.50),
-                                               Angle::fromDegrees(3.00),
-                                               radiusBox._z),
-                               new Geodetic3D(Angle::fromDegrees(39.50),
+  Shape* line1 = new LineShape(new Geodetic3D(Angle::fromDegrees(39.80),
+                                               Angle::fromDegrees(2.90),
+                                               2*radius1._z),
+                               new Geodetic3D(Angle::fromDegrees(39.60),
                                               Angle::fromDegrees(3.00),
-                                              radiusBox._z),
+                                              2*radius2._x),
 
                                ABSOLUTE,
                                 5,

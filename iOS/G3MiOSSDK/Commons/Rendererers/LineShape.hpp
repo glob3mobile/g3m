@@ -29,20 +29,25 @@ private:
   OrientedBox* computeOrientedBox(const Planet* planet,
                                   const Camera* camera);
   
-  Vector3D* _cartesianPosition;
+  Vector3D* _cartesianStartPos;
+  Geodetic3D* _geodeticEndPos;
+  
+  void computeOrientationParams(const Planet* planet);
+
   
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
   BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
   
 public:
-  LineShape(Geodetic3D* position0,
-            Geodetic3D* position1,
+  LineShape(Geodetic3D* startPosition,
+            Geodetic3D* endPosition,
             AltitudeMode altitudeMode,
             float width,
             const Color& color) :
-  AbstractMeshShape(position0, altitudeMode),
-  _cartesianPosition(NULL),
+  AbstractMeshShape(startPosition, altitudeMode),
+  _cartesianStartPos(NULL),
+  _geodeticEndPos(new Geodetic3D(*endPosition)),
   _boundingVolume(NULL),
   _width(width),
   _color(new Color(color)),
@@ -80,6 +85,7 @@ public:
       setColor(new Color(*_originalColor));
     }
   }
+  
   
 };
 
