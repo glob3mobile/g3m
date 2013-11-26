@@ -1630,28 +1630,73 @@ public:
   //const Vector3D radiusBox(1000, 2000, 3000);
   
   
-  for (int i=1; i<=4; i++) {
+  {
     Shape* point = new PointShape(new Geodetic3D(Angle::fromDegrees(39.70),
-                                                  Angle::fromDegrees(3.30),
-                                                  i*radiusBox._z),
-                                   ABSOLUTE,
-                                   2*i,
-                                   Color::fromRGBA(0, 1, 0, 1));
+                                                 Angle::fromDegrees(3.30),
+                                                 radiusBox._z),
+                                  ABSOLUTE,
+                                  8,
+                                  Color::fromRGBA(0, 0, 1, 1));
+    shapesRenderer->addShape(point);
+  }
+  {
+    Shape* point = new PointShape(new Geodetic3D(Angle::fromDegrees(39.55),
+                                                 Angle::fromDegrees(3.40),
+                                                 radiusBox._z),
+                                  ABSOLUTE,
+                                  6,
+                                  Color::fromRGBA(0, 0, 1, 1));
+    shapesRenderer->addShape(point);
+  }
+  {
+    Shape* point = new PointShape(new Geodetic3D(Angle::fromDegrees(39.70),
+                                                 Angle::fromDegrees(3.50),
+                                                 radiusBox._z),
+                                  ABSOLUTE,
+                                  4,
+                                  Color::fromRGBA(0, 0, 1, 1));
     shapesRenderer->addShape(point);
   }
   
-  
-  Shape* line1 = new LineShape(new Geodetic3D(Angle::fromDegrees(39.80),
-                                               Angle::fromDegrees(2.90),
-                                               2*radius1._z),
-                               new Geodetic3D(Angle::fromDegrees(39.60),
-                                              Angle::fromDegrees(3.00),
-                                              2*radius2._x),
-
-                               ABSOLUTE,
+  {
+    Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(39.69),
+                                               Angle::fromDegrees(3.31),
+                                               radiusBox._z),
+                                new Geodetic3D(Angle::fromDegrees(39.56),
+                                               Angle::fromDegrees(3.39),
+                                               radiusBox._z),
+                                
+                                ABSOLUTE,
                                 5,
                                 Color::fromRGBA(1, 0.5, 0, 1));
-  shapesRenderer->addShape(line1);
+    shapesRenderer->addShape(line);
+  }
+  {
+    Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(39.56),
+                                               Angle::fromDegrees(3.41),
+                                               radiusBox._z),
+                                new Geodetic3D(Angle::fromDegrees(39.69),
+                                               Angle::fromDegrees(3.49),
+                                               radiusBox._z),
+                                
+                                ABSOLUTE,
+                                5,
+                                Color::fromRGBA(1, 0.5, 0, 1));
+    shapesRenderer->addShape(line);
+  }
+  {
+    Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(39.70),
+                                               Angle::fromDegrees(3.31),
+                                               radiusBox._z),
+                                new Geodetic3D(Angle::fromDegrees(39.70),
+                                               Angle::fromDegrees(3.49),
+                                               radiusBox._z),
+                                
+                                ABSOLUTE,
+                                5,
+                                Color::fromRGBA(1, 0.5, 0, 1));
+    shapesRenderer->addShape(line);
+  }
   
   
   Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.70),
