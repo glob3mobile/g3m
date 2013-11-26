@@ -97,7 +97,10 @@ public:
   void onChangeSceneOption(G3MDemoScene* scene,
                            const std::string& option,
                            int optionIndex);
-  
+
+  void showDialog(const std::string& title,
+                  const std::string& message) const;
+
 };
 
 #endif

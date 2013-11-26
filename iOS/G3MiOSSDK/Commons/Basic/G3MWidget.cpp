@@ -130,7 +130,8 @@ _gpuProgramManager(gpuProgramManager),
 _sceneLighting(sceneLighting),
 _rootState(NULL),
 _initialCameraPositionProvider(initialCameraPositionProvider),
-_initialCameraPositionHasBeenSet(false)
+_initialCameraPositionHasBeenSet(false),
+_forceBusyRenderer(false)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -443,7 +444,9 @@ void G3MWidget::render(int width, int height) {
 
 
   delete _mainRendererState;
-  _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer->getRenderState(_renderContext) : RenderState::busy());
+  _mainRendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer)
+                                       ? _mainRenderer->getRenderState(_renderContext)
+                                       : RenderState::busy());
   RenderState_Type renderStateType = _mainRendererState->_type;
 
   _renderContext->clear();

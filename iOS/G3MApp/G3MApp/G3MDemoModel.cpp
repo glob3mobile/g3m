@@ -76,9 +76,9 @@ void G3MDemoModel::reset() {
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(1);
 
-//  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
-//                                                                                     Sector::fullSphere(),
-//                                                                                     Vector2I(2048, 1024));
+  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+  //                                                                                     Sector::fullSphere(),
+  //                                                                                     Vector2I(2048, 1024));
   ElevationDataProvider* elevationDataProvider = NULL;
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
@@ -164,10 +164,25 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
 void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
                                        const std::string& option,
                                        int optionIndex) {
-  ILogger::instance()->logInfo("Selected option \"%s\" in scene \"%s\"", option.c_str(), scene->getName().c_str());
+  ILogger::instance()->logInfo("Selected option \"%s\" in scene \"%s\"",
+                               option.c_str(),
+                               scene->getName().c_str());
 
   if (_listener != NULL) {
     _listener->onChangeSceneOption(scene, option, optionIndex);
   }
-  
+
+}
+
+
+void G3MDemoModel::showDialog(const std::string& title,
+                              const std::string& message) const {
+  ILogger::instance()->logInfo("Show dialog title=\"%s\", message=\"%s\"",
+                               title.c_str(),
+                               message.c_str());
+
+  if (_listener != NULL) {
+    _listener->showDialog(title, message);
+  }
+
 }

@@ -348,7 +348,8 @@ TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-  return new PlanetTileTessellator(true, getRenderedSector());
+  const bool skirted = true;
+  return new PlanetTileTessellator(skirted, getRenderedSector());
 }
 
 LayerSet* PlanetRendererBuilder::createLayerSet() {

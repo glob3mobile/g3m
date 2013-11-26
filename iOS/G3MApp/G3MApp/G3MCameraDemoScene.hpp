@@ -15,7 +15,7 @@ class SGShape;
 
 class G3MCameraDemoScene : public G3MDemoScene {
 private:
-  SGShape* _thePhynxShape;
+  SGShape* _theSphynxShape;
   SGShape* _theEiffelTowerShape;
   SGShape* _arcDeTriompheShape;
 
@@ -28,17 +28,17 @@ protected:
 public:
   G3MCameraDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "Camera", "<select model>", -1),
-  _thePhynxShape(NULL),
+  _theSphynxShape(NULL),
   _theEiffelTowerShape(NULL),
   _arcDeTriompheShape(NULL)
   {
-    _options.push_back("The Phynx");
+    _options.push_back("The Sphynx");
     _options.push_back("The Eiffel Tower");
     _options.push_back("Arc de Triomphe");
   }
 
-  void setThePhynxShape(SGShape* shape) {
-    _thePhynxShape = shape;
+  void setTheSphynxShape(SGShape* shape) {
+    _theSphynxShape = shape;
   }
 
   void setTheEiffelTowerShape(SGShape* shape) {

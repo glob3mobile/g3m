@@ -21,6 +21,9 @@ public:
                                    const std::string& option,
                                    int optionIndex) = 0;
 
+  virtual void showDialog(const std::string& title,
+                          const std::string& message) const = 0;
+
   virtual ~G3MDemoListener() {
 
   }
