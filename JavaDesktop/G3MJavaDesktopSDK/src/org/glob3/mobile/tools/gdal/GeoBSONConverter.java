@@ -83,8 +83,12 @@ public class GeoBSONConverter {
                gpxToBson(inputFile, outputDir, outputFileName, false);
             }
             else if (inputFileName.endsWith(".gtm") || inputFileName.endsWith(".gtz")) {
-               _logger.logInfo("GPSTrackMaker file");
+               _logger.logInfo("GPSTrackMaker file -- Pending to test --");
                gpsTrackMakerToBson(inputFile, outputDir, outputFileName);
+            }
+            else if (inputFileName.endsWith(".kml")) {
+               final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName);
+               _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")));
             }
             else if (inputFileName.endsWith(".xml")) {
                geoRSSToBson(inputFile, outputDir, outputFileName);
