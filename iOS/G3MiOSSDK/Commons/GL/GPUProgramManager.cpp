@@ -14,7 +14,7 @@ GPUProgramManager::~GPUProgramManager() {
 #ifdef C_CODE
   delete _factory;
   for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
-    delete it->second;
+    it->second->_release();
   }
 #endif
 }
@@ -29,6 +29,8 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
       ILogger::instance()->logError("New compiled program does not match GL state.");
     }
 
+  } else{
+    p->_retain();
   }
 
   return p;
@@ -137,40 +139,5 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 #endif
 #ifdef JAVA_CODE
   return _programs.get(name);
-#endif
-}
-
-void GPUProgramManager::deleteUnusedPrograms(){
-#ifdef C_CODE
-
-  std::map<std::string, GPUProgram*>::iterator it = _programs.begin();
-  while (it != _programs.end()) {
-    GPUProgram* program = it->second;
-    bool shouldRemove = !(program->hasBeenUsed());
-    if (shouldRemove){
-      ILogger::instance()->logInfo("Removing program %s [0x%x, id = %d] because it hasn't been used in last frames.",
-                                   program->getName().c_str(), program, program->getProgramID());
-      delete it->second;
-      _programs.erase(it++);
-    } else{
-      program->setUsedMark(false);  //Marking as unused since now
-      ++it;
-    }
-  }
-
-#endif
-#ifdef JAVA_CODE
-  java.util.Iterator it = _programs.entrySet().iterator();
-  while (it.hasNext()) {
-    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-    GPUProgram program = (GPUProgram) pairs.getValue();
-
-    if (program.hasBeenUsed()){
-      program.setUsedMark(false);
-    } else{
-      program.dispose();
-      it.remove();
-    }
-  }
 #endif
 }

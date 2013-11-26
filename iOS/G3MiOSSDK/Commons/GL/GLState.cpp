@@ -20,7 +20,7 @@ GLState::~GLState() {
   }
 
   if (_linkedProgram != NULL){
-    _linkedProgram->removeListener(this);
+    _linkedProgram->_release();
   }
 }
 
@@ -30,8 +30,10 @@ void GLState::hasChangedStructure() const {
   _valuesSet = NULL;
   delete _globalState;
   _globalState = NULL;
-  
-  setLinkedProgram(NULL);
+
+  if (_linkedProgram != NULL){
+    _linkedProgram->_release();
+  }
 
   delete _accumulatedFeatures;
   _accumulatedFeatures = NULL;
@@ -107,8 +109,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     const int uniformsCode   = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
 
-    GPUProgram* prog = progManager.getProgram(gl, uniformsCode, attributesCode);
-    setLinkedProgram(prog);
+    _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
   }
 
   if (_valuesSet == NULL || _globalState == NULL) {
@@ -156,31 +157,4 @@ GLFeature* GLState::getGLFeature(GLFeatureID id) const{
   }
 
   return NULL;
-}
-
-void GLState::gpuProgramDeleted() const{
-  //Deleting all references to GPU Program
-  _timeStamp++;
-  delete _valuesSet;
-  _valuesSet = NULL;
-  delete _globalState;
-  _globalState = NULL;
-  _linkedProgram = NULL;
-
-  delete _accumulatedFeatures;
-  _accumulatedFeatures = NULL;
-}
-
-void GLState::setLinkedProgram(GPUProgram* program) const{
-
-  if (program != _linkedProgram){
-    if (_linkedProgram != NULL){
-      _linkedProgram->removeListener(this);
-    }
-    if (program != NULL){
-      program->addListener(this);
-    }
-    _linkedProgram = program;
-  }
-
 }

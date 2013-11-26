@@ -13,6 +13,8 @@
 #include <map>
 #include <list>
 
+#include "RCObject.hpp"
+
 class GPUAttribute;
 class GPUUniform;
 
@@ -35,20 +37,7 @@ enum ShaderType {
   FRAGMENT_SHADER
 };
 
-class GPUProgramListener{
-public:
-#ifdef C_CODE
-  virtual ~GPUProgramListener() { }
-#endif
-#ifdef JAVA_CODE
-  void dispose();
-#endif
-
-  virtual void gpuProgramDeleted() const = 0;
-
-};
-
-class GPUProgram {
+class GPUProgram:public RCObject {
   int _programID;
 
   GPUUniform* _uniforms[32];
@@ -63,8 +52,6 @@ class GPUProgram {
   int _attributesCode;
 
   std::string _name;
-
-  std::list<const GPUProgramListener*> _listeners;
 
   GL* _gl;
 
@@ -88,14 +75,14 @@ class GPUProgram {
   _usedMark(false){}
 
   GPUProgram(const GPUProgram& that);
+
+  ~GPUProgram();
   
 public:
   
   static GPUProgram* createProgram(GL* gl, const std::string name, const std::string& vertexSource,
                                    const std::string& fragmentSource);
-  
-  ~GPUProgram();
-  
+
   std::string getName() const { return _name;}
   
   int getProgramID() const{ return _programID;}
@@ -133,22 +120,6 @@ public:
 
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);
-
-  void addListener(const GPUProgramListener* l){
-    _listeners.push_back(l);
-  }
-  
-  void removeListener(const GPUProgramListener* l){
-    _listeners.remove(l);
-  }
-
-  void setUsedMark(bool used){
-    _usedMark = used;
-  }
-
-  bool hasBeenUsed() const{
-    return _usedMark;
-  }
 
 };
 

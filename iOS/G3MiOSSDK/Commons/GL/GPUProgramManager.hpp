@@ -36,9 +36,6 @@ public:
   ~GPUProgramManager();
 
   GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode);
-
-  //Remove all shaders that have not been used since last call
-  void deleteUnusedPrograms();
 };
 
 #endif

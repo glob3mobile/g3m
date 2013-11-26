@@ -509,11 +509,6 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
-  //Deleting programs that haven't been used in the last _nFramesBeetweenProgramsCleanUp frames
-  if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0){
-    _renderContext->getGPUProgramManager()->deleteUnusedPrograms();
-  }
-
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {
   //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);

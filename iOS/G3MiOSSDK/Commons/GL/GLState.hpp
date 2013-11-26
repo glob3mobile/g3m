@@ -21,7 +21,7 @@
 
 #include "RCObject.hpp"
 
-class GLState: public RCObject, GPUProgramListener {
+class GLState: public RCObject{
 private:
   GLFeatureSet _features;
   mutable GLFeatureSet* _accumulatedFeatures;
@@ -46,8 +46,6 @@ private:
   void hasChangedStructure() const;
 
   ~GLState();
-
-  void setLinkedProgram(GPUProgram* program) const;
 
 public:
 
@@ -81,8 +79,6 @@ public:
   int getNumberOfGLFeatures() const;
 
   GLFeature* getGLFeature(GLFeatureID id) const;
-
-  void gpuProgramDeleted() const;
 };
 
 #endif
