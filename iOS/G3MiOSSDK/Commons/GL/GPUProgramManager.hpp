@@ -36,6 +36,8 @@ public:
   ~GPUProgramManager();
 
   GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode);
+
+  void compiledProgramDeleted(const std::string& name);
 };
 
 #endif

@@ -141,3 +141,15 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
   return _programs.get(name);
 #endif
 }
+
+void GPUProgramManager::compiledProgramDeleted(const std::string& name) {
+#ifdef C_CODE
+  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
+  if (it != _programs.end()) {
+    _programs.erase(it);
+  } else{
+    ILogger::instance()->logError("Trying to delete program from GPUProgramManager that does not exist.");
+  }
+#endif
+#warning TODO JAVA
+}
