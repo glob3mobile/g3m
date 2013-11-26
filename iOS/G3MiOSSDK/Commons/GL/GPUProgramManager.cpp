@@ -99,7 +99,6 @@ GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attribut
       return p;
     }
   }
-  return null;
 #endif
   return NULL;
 }
@@ -152,5 +151,9 @@ void GPUProgramManager::compiledProgramDeleted(const std::string& name) {
     ILogger::instance()->logError("Trying to delete program from GPUProgramManager that does not exist.");
   }
 #endif
-#warning TODO JAVA
+#ifdef JAVA_CODE
+  if (_programs.remove(name) == null){
+    ILogger.instance().logError("Trying to delete program from GPUProgramManager that does not exist.");
+  }
+#endif
 }

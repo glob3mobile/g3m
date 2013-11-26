@@ -120,7 +120,6 @@ public class GPUProgramManager
       }
     }
     return null;
-    return null;
   }
 
   public GPUProgramManager(GPUProgramFactory factory)
@@ -155,7 +154,8 @@ public class GPUProgramManager
 
   public final void compiledProgramDeleted(String name)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO JAVA
+	  if (_programs.remove(name) == null){
+		  ILogger.instance().logError("Trying to delete program from GPUProgramManager that does not exist.");
+	  }
   }
 }
