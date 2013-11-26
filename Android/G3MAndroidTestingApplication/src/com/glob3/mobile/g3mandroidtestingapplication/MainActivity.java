@@ -9,6 +9,8 @@ import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -64,6 +66,10 @@ public class MainActivity
       final MeshRenderer meshRenderer = new MeshRenderer();
       meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
       builder.addRenderer(meshRenderer);
+      
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       // final ShapeLoadListener Plistener = new ShapeLoadListener() {
       // @Override
@@ -324,13 +330,13 @@ public class MainActivity
 
       if (true) {      
     	  // testing selecting shapes
-    	  final double factor = 2e5;
+    	  final double factor = 3000;
     	  final Vector3D radius1 = new Vector3D(factor, factor, factor);
     	  final Vector3D radius2 = new Vector3D(factor*1.5, factor*1.5, factor*1.5);
     	  final Vector3D radiusBox = new Vector3D(factor, factor*1.5, factor*2);
 
-    	  Shape box1 = new BoxShape(new Geodetic3D(Angle.fromDegrees(0),
-    			  Angle.fromDegrees(10),
+    	  Shape box1 = new BoxShape(new Geodetic3D(Angle.fromDegrees(39.70),
+    			  Angle.fromDegrees(2.80),
     			  radiusBox._z/2),
     			  AltitudeMode.ABSOLUTE,
     			  radiusBox,
@@ -338,9 +344,9 @@ public class MainActivity
     			  Color.fromRGBA(0,    1, 0, 1));
     	  shapesRenderer.addShape(box1);
 
-    	  Shape ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0),
-    			  Angle.fromDegrees(0),
-    			  radius1._x),
+    	  Shape ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(39.80),
+    			  Angle.fromDegrees(2.90),
+    			  radius1._z),
     			  AltitudeMode.ABSOLUTE,
     			  new URL("file:///world.jpg", false),
     			  radius1,
@@ -350,8 +356,8 @@ public class MainActivity
     			  false);
     	  shapesRenderer.addShape(ellipsoid1);
 
-    	  Shape mercator1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0),
-    			  Angle.fromDegrees(5),
+    	  Shape mercator1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(39.60),
+    			  Angle.fromDegrees(3),
     			  radius2._x),
     			  AltitudeMode.ABSOLUTE,
     			  new URL("file:///mercator_debug.png", false),
@@ -397,10 +403,10 @@ public class MainActivity
       _placeHolder.addView(_g3mWidget);
       
       if (true) {
-    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(-12.0875), Angle.fromDegrees(15.2036), 2328992);
+    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.08), Angle.fromDegrees(2.90), 113000);
     	  _g3mWidget.setCameraPosition(position);
-    	  _g3mWidget.setCameraHeading(Angle.fromDegrees(-40.72));
-    	  _g3mWidget.setCameraPitch(Angle.fromDegrees(35.48));
+    	  _g3mWidget.setCameraHeading(Angle.fromDegrees(5.0));
+    	  _g3mWidget.setCameraPitch(Angle.fromDegrees(24.0));
       }
 
 
