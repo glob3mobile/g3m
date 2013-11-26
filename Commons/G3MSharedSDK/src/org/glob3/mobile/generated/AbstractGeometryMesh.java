@@ -26,10 +26,12 @@ public abstract class AbstractGeometryMesh extends Mesh
 {
 
   protected final int _primitive;
-  protected final boolean _owner;
   protected Vector3D _center ;
   protected final MutableMatrix44D _translationMatrix;
   protected IFloatBuffer _vertices;
+  protected final boolean _ownsVertices;
+  protected IFloatBuffer _normals;
+  protected final boolean _ownsNormals;
   protected final float _lineWidth;
   protected final float _pointSize;
   protected final boolean _depthTest;
@@ -79,11 +81,13 @@ public abstract class AbstractGeometryMesh extends Mesh
     return new Box(new Vector3D(minX, minY, minZ), new Vector3D(maxX, maxY, maxZ));
   }
 
-  protected AbstractGeometryMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, boolean depthTest)
+  protected AbstractGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, float lineWidth, float pointSize, boolean depthTest)
   {
      _primitive = primitive;
-     _owner = owner;
      _vertices = vertices;
+     _ownsVertices = ownsVertices;
+     _normals = normals;
+     _ownsNormals = ownsNormals;
      _extent = null;
      _center = new Vector3D(center);
      _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
@@ -98,8 +102,12 @@ public abstract class AbstractGeometryMesh extends Mesh
 
   protected final void createGLState()
   {
-  
     _glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+    if (_normals != null)
+    {
+      _glState.addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0), false);
+    }
   
     if (_translationMatrix != null)
     {
@@ -115,10 +123,15 @@ public abstract class AbstractGeometryMesh extends Mesh
   
   public void dispose()
   {
-    if (_owner)
+    if (_ownsVertices)
     {
       if (_vertices != null)
          _vertices.dispose();
+    }
+    if (_ownsNormals)
+    {
+      if (_normals != null)
+         _normals.dispose();
     }
   
     if (_extent != null)

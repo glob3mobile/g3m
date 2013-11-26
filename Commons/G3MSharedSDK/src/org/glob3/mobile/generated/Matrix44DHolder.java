@@ -2,6 +2,14 @@ package org.glob3.mobile.generated;
 public class Matrix44DHolder extends Matrix44DProvider
 {
   private Matrix44D _matrix;
+
+  public void dispose()
+  {
+    _matrix._release();
+
+    super.dispose();
+  }
+
   public Matrix44DHolder(Matrix44D matrix)
   {
      _matrix = matrix;
@@ -10,11 +18,6 @@ public class Matrix44DHolder extends Matrix44DProvider
       ILogger.instance().logError("Setting NULL in Matrix44D Holder");
     }
     _matrix._retain();
-  }
-
-  public void dispose()
-  {
-    _matrix._release();
   }
 
   public final void setMatrix(Matrix44D matrix)

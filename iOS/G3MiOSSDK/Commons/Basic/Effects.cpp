@@ -18,6 +18,36 @@ void EffectsScheduler::initialize(const G3MContext* context) {
   _timer = _factory->createTimer();
 }
 
+void EffectsScheduler::cancelAllEffects() {
+  std::vector<int> indicesToRemove;
+  const TimeInterval now = _timer->now();
+
+  const int size = _effectsRuns.size();
+  for (int i = 0; i < size; i++) {
+    EffectRun* effectRun = _effectsRuns[i];
+
+    if (effectRun->_started) {
+      effectRun->_effect->cancel(now);
+    }
+    indicesToRemove.push_back(i);
+  }
+
+  // backward iteration, to remove from bottom to top
+  for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
+    const int indexToRemove = indicesToRemove[i];
+    EffectRun* effectRun = _effectsRuns[indexToRemove];
+    delete effectRun;
+
+#ifdef C_CODE
+    _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
+#endif
+#ifdef JAVA_CODE
+    _effectsRuns.remove(indexToRemove);
+#endif
+  }
+
+}
+
 void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
   std::vector<int> indicesToRemove;
   const TimeInterval now = _timer->now();

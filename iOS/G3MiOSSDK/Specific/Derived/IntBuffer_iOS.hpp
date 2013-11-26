@@ -60,7 +60,6 @@ public:
   }
   
   void put(int i, int value) {
-    
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
@@ -72,7 +71,6 @@ public:
   }
   
   void rawPut(int i, int value) {
-    
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }

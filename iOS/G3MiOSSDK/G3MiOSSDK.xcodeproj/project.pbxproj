@@ -152,6 +152,8 @@
 		CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */; };
 		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
 		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
+		CF6920BE18392F83007409D8 /* ErrorHandling.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6920BC18392EEB007409D8 /* ErrorHandling.hpp */; };
+		CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */; };
 		CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */; };
 		CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */; };
 		CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6316C194D200C590C1 /* JSONInteger.cpp */; };
@@ -169,6 +171,7 @@
 		CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */; };
 		CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */; };
 		CF6D724E17186C090043C74B /* ImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723717184BE40043C74B /* ImageBuilder.hpp */; };
+		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
 		CF75C39616E92D1300F7EE9F /* HereLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */; };
@@ -296,7 +299,6 @@
 		CFD15C4916E793A7004DC360 /* ElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD3D8AC16D1686800CE9242 /* ElevationData.hpp */; };
 		CFD15C4A16E793A7004DC360 /* WMSBillElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */; };
 		CFD15C4B16E793A7004DC360 /* BilParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF35A20616D3D44E00D795D8 /* BilParser.hpp */; };
-		CFD15C4C16E793A7004DC360 /* SingleBillElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */; };
 		CFD15C4D16E793A7004DC360 /* FloatBufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */; };
 		CFD15C4E16E793A7004DC360 /* SubviewElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */; };
 		CFD15C4F16E793A7004DC360 /* BufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */; };
@@ -312,7 +314,6 @@
 		CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */; };
 		CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */; };
 		CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */; };
-		CFDA835516D6602500295F96 /* SingleBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */; };
 		CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */; };
 		CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835B16D6758200295F96 /* BilinearInterpolator.cpp */; };
 		CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */; };
@@ -370,6 +371,8 @@
 		D87F26F217130AF60048AD70 /* GPUProgram.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */; };
 		D87F26F317130BA80048AD70 /* GPUUniform.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87BF6DB170F0628004D467D /* GPUUniform.hpp */; };
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
+		D87F4D77183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */; };
+		D87F4D78183BBF1500C57835 /* SingleBillElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */; };
 		D88CC14117CF86E80001BF4D /* SceneLighting.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */; };
 		D88CC14217CF86E80001BF4D /* CameraEffects.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBC2309817972F4F009343FC /* CameraEffects.hpp */; };
 		D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAAD917CB81B600ACD249 /* Extent.hpp */; };
@@ -630,6 +633,9 @@
 			files = (
 				E8B610F416DD2619003F653B /* PanoDownloadListener.hpp in CopyFiles */,
 				E8B610F516DD2619003F653B /* SceneParser.hpp in CopyFiles */,
+				CF6920BE18392F83007409D8 /* ErrorHandling.hpp in CopyFiles */,
+				CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */,
+				D87F4D78183BBF1500C57835 /* SingleBillElevationDataProvider.hpp in CopyFiles */,
 				CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */,
 				CF4F784B1804AE7C00550409 /* IDeviceInfo.hpp in CopyFiles */,
 				CF26127517F9CBFD003C2006 /* RenderState.hpp in CopyFiles */,
@@ -751,7 +757,6 @@
 				CFD15C4916E793A7004DC360 /* ElevationData.hpp in CopyFiles */,
 				CFD15C4A16E793A7004DC360 /* WMSBillElevationDataProvider.hpp in CopyFiles */,
 				CFD15C4B16E793A7004DC360 /* BilParser.hpp in CopyFiles */,
-				CFD15C4C16E793A7004DC360 /* SingleBillElevationDataProvider.hpp in CopyFiles */,
 				CFD15C4D16E793A7004DC360 /* FloatBufferElevationData.hpp in CopyFiles */,
 				CFD15C4E16E793A7004DC360 /* SubviewElevationData.hpp in CopyFiles */,
 				CFD15C4F16E793A7004DC360 /* BufferElevationData.hpp in CopyFiles */,
@@ -1177,6 +1182,7 @@
 		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
 		CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IIntBuffer.cpp; path = Commons/Basic/IIntBuffer.cpp; sourceTree = "<group>"; };
 		CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IIntBuffer.hpp; path = Commons/Basic/IIntBuffer.hpp; sourceTree = "<group>"; };
+		CF6920BC18392EEB007409D8 /* ErrorHandling.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ErrorHandling.hpp; sourceTree = "<group>"; };
 		CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONDouble.cpp; sourceTree = "<group>"; };
 		CF6B5F5C16C1910500C590C1 /* JSONDouble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONDouble.hpp; sourceTree = "<group>"; };
 		CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONFloat.cpp; sourceTree = "<group>"; };
@@ -1199,6 +1205,8 @@
 		CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GroupCanvasElement.hpp; path = Commons/Basic/GroupCanvasElement.hpp; sourceTree = "<group>"; };
 		CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnCanvasElement.cpp; path = Commons/Basic/ColumnCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColumnCanvasElement.hpp; path = Commons/Basic/ColumnCanvasElement.hpp; sourceTree = "<group>"; };
+		CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalsUtils.cpp; path = Commons/Geometry/NormalsUtils.cpp; sourceTree = "<group>"; };
+		CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NormalsUtils.hpp; path = Commons/Geometry/NormalsUtils.hpp; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
 		CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HereLayer.cpp; sourceTree = "<group>"; };
@@ -1376,8 +1384,6 @@
 		CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WMSBillElevationDataProvider.hpp; path = Commons/Basic/WMSBillElevationDataProvider.hpp; sourceTree = "<group>"; };
 		CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerTilesRenderParameters.cpp; path = Commons/Rendererers/LayerTilesRenderParameters.cpp; sourceTree = "<group>"; };
 		CFD42ABB16DBFE8600B03961 /* LayerTilesRenderParameters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerTilesRenderParameters.hpp; path = Commons/Rendererers/LayerTilesRenderParameters.hpp; sourceTree = "<group>"; };
-		CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleBillElevationDataProvider.cpp; path = Commons/Basic/SingleBillElevationDataProvider.cpp; sourceTree = "<group>"; };
-		CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBillElevationDataProvider.hpp; path = Commons/Basic/SingleBillElevationDataProvider.hpp; sourceTree = "<group>"; };
 		CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferElevationData.cpp; path = Commons/Basic/FloatBufferElevationData.cpp; sourceTree = "<group>"; };
 		CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferElevationData.hpp; path = Commons/Basic/FloatBufferElevationData.hpp; sourceTree = "<group>"; };
 		CFDA835B16D6758200295F96 /* BilinearInterpolator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BilinearInterpolator.cpp; path = Commons/Math/BilinearInterpolator.cpp; sourceTree = "<group>"; };
@@ -1480,6 +1486,8 @@
 		D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WMSLayer.cpp; sourceTree = "<group>"; };
 		D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WMSLayer.hpp; sourceTree = "<group>"; };
 		D87EC5D215BEC73400E38C36 /* Rectangle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Rectangle.hpp; path = Commons/Geometry/Rectangle.hpp; sourceTree = "<group>"; };
+		D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleBillElevationDataProvider.cpp; path = Commons/Basic/SingleBillElevationDataProvider.cpp; sourceTree = "<group>"; };
+		D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBillElevationDataProvider.hpp; path = Commons/Basic/SingleBillElevationDataProvider.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D89ABFA917CCD31F00E25A0C /* TexturedMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
@@ -1556,6 +1564,8 @@
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLGlobalState.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
+		D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TransformedTexCoorTexturedMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
+		D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TransformedTexCoorTexturedMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
 		E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanetRendererBuilder.cpp; path = Commons/Basic/PlanetRendererBuilder.cpp; sourceTree = "<group>"; };
 		E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PlanetRendererBuilder.hpp; path = Commons/Basic/PlanetRendererBuilder.hpp; sourceTree = "<group>"; };
 		E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
@@ -1714,6 +1724,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */,
+				D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */,
 				D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */,
 				D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */,
 				D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */,
@@ -1821,8 +1833,6 @@
 				CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */,
 				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
 				D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */,
-				CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */,
-				CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */,
 				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
 				CFDA836116D6776B00295F96 /* SubviewElevationData.hpp */,
 				CFE0844015E27A310004EC0E /* LayerTouchEventListener.hpp */,
@@ -1849,8 +1859,6 @@
 				CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */,
 				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
 				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
-				CFDA835316D6602500295F96 /* SingleBillElevationDataProvider.cpp */,
-				CFDA835416D6602500295F96 /* SingleBillElevationDataProvider.hpp */,
 				CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */,
 				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */,
@@ -1889,6 +1897,7 @@
 				CFA2EEED17EA0B1100EB4526 /* CartoCSSLexer.hpp */,
 				CF423A2B17F8874E00F50525 /* RenderState.cpp */,
 				CF423A2C17F8874E00F50525 /* RenderState.hpp */,
+				CF6920BC18392EEB007409D8 /* ErrorHandling.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1959,6 +1968,8 @@
 				CF5C1194178C76F2000ED715 /* BoundingArea.hpp */,
 				FB2B1B2517F880B5006307EC /* Quadric.cpp */,
 				FB2B1B2617F880B5006307EC /* Quadric.hpp */,
+				CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */,
+				CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2444,6 +2455,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh */,
+				D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh */,
 				D87DFC7017CF5EA70036C466 /* FlatColorMesh+DirectionLight.fsh */,
 				D87DFC7117CF5EA70036C466 /* FlatColorMesh+DirectionLight.vsh */,
 				D89ABFA917CCD31F00E25A0C /* TexturedMesh+DirectionLight.fsh */,
@@ -2629,6 +2642,7 @@
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
 				CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */,
 				CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */,
+				CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */,
 				CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */,
 				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
 				CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */,
@@ -2692,7 +2706,6 @@
 				CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */,
 				CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */,
 				CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */,
-				CFDA835516D6602500295F96 /* SingleBillElevationDataProvider.cpp in Sources */,
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
 				CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */,
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
@@ -2721,6 +2734,7 @@
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
+				D87F4D77183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp in Sources */,
 				CF1871B71703534200092888 /* GEO2DPointGeometry.cpp in Sources */,
 				CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */,
 				CF423A2817F7A0A000F50525 /* HUDErrorRenderer.cpp in Sources */,

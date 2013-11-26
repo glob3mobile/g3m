@@ -88,7 +88,7 @@ private:
                        const ElevationData* elevationData,
                        float verticalExaggeration,
                        bool mercator,
-                       FloatBufferBuilderFromGeodetic& vertices,
+                       FloatBufferBuilderFromGeodetic* vertices,
                        ShortBufferBuilder& indices,
                        FloatBufferBuilderFromCartesian2D& textCoords) const;
 
@@ -97,7 +97,7 @@ private:
                        const Sector& meshSector,
                        const Vector2I& meshResolution,
                        double skirtHeight,
-                       FloatBufferBuilderFromGeodetic& vertices,
+                       FloatBufferBuilderFromGeodetic* vertices,
                        ShortBufferBuilder& indices,
                        FloatBufferBuilderFromCartesian2D& textCoords) const;
 
@@ -106,7 +106,7 @@ private:
                         const Sector& meshSector,
                         const Vector2I& meshResolution,
                         double skirtHeight,
-                        FloatBufferBuilderFromGeodetic& vertices,
+                        FloatBufferBuilderFromGeodetic* vertices,
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
 
@@ -115,7 +115,7 @@ private:
                        const Sector& meshSector,
                        const Vector2I& meshResolution,
                        double skirtHeight,
-                       FloatBufferBuilderFromGeodetic& vertices,
+                       FloatBufferBuilderFromGeodetic* vertices,
                        ShortBufferBuilder& indices,
                        FloatBufferBuilderFromCartesian2D& textCoords) const;
 
@@ -124,7 +124,7 @@ private:
                         const Sector& meshSector,
                         const Vector2I& meshResolution,
                         double skirtHeight,
-                        FloatBufferBuilderFromGeodetic& vertices,
+                        FloatBufferBuilderFromGeodetic* vertices,
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
 

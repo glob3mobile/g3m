@@ -3,6 +3,11 @@ public class TextureIDGLFeature extends PriorityGLFeature
 {
   private IGLTextureId _texID = null;
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
 
   //////////////////////////////////////////
   

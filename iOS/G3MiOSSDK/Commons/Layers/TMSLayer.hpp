@@ -22,12 +22,9 @@ private:
   private final URL _mapServerURL;
 #endif
 
-  const std::string      _mapLayer;
-
+  const std::string   _mapLayer;
   Sector              _sector;
-
   const std::string   _format;
-  const std::string   _srs;
   const bool          _isTransparent;
   
 protected:
@@ -44,7 +41,6 @@ public:
            const URL& mapServerURL,
            const Sector& sector,
            const std::string& format,
-           const std::string srs,
            const bool isTransparent,
            LayerCondition* condition,
            const TimeInterval& timeToCache,

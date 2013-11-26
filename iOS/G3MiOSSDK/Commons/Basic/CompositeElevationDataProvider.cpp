@@ -17,6 +17,10 @@ void CompositeElevationDataProvider::addElevationDataProvider(ElevationDataProvi
   if (_context != NULL) {
     edp->initialize(_context);
   }
+
+  edp->setChangedListener(_changedListener); //Setting Changed Listener on child
+
+  onChanged();
 }
 
 bool CompositeElevationDataProvider::isReadyToRender(const G3MRenderContext* rc) {

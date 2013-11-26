@@ -37,12 +37,41 @@ public class IndexedGeometryMesh extends AbstractGeometryMesh
   {
      this(primitive, center, vertices, ownsVertices, indices, ownsIndices, lineWidth, 1, true);
   }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices)
+  {
+     this(primitive, center, vertices, ownsVertices, indices, ownsIndices, 1, 1, true);
+  }
   public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest)
   {
-     super(primitive, ownsVertices, center, vertices, lineWidth, pointSize, depthTest);
+     super(primitive, center, vertices, ownsVertices, null, false, lineWidth, pointSize, depthTest);
      _indices = indices;
      _ownsIndices = ownsIndices;
-  
+  //  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices",
+  //                               vertices->size(),
+  //                               indices->size());
+  }
+
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize)
+  {
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, pointSize, true);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth)
+  {
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, lineWidth, 1, true);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices)
+  {
+     this(primitive, center, vertices, ownsVertices, normals, ownsNormals, indices, ownsIndices, 1, 1, true);
+  }
+  public IndexedGeometryMesh(int primitive, Vector3D center, IFloatBuffer vertices, boolean ownsVertices, IFloatBuffer normals, boolean ownsNormals, IShortBuffer indices, boolean ownsIndices, float lineWidth, float pointSize, boolean depthTest)
+  {
+     super(primitive, center, vertices, ownsVertices, normals, ownsNormals, lineWidth, pointSize, depthTest);
+     _indices = indices;
+     _ownsIndices = ownsIndices;
+  //  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices, %d normals",
+  //                               vertices->size(),
+  //                               indices->size(),
+  //                               normals->size());
   }
 
   public void dispose()

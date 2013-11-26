@@ -35,27 +35,27 @@ private:
 public:
 
 
-  static FloatBufferBuilderFromCartesian3D builderWithoutCenter() {
+  static FloatBufferBuilderFromCartesian3D* builderWithoutCenter() {
 #ifdef C_CODE
-    return FloatBufferBuilderFromCartesian3D(NO_CENTER,Vector3D::zero);
+    return new FloatBufferBuilderFromCartesian3D(NO_CENTER,Vector3D::zero);
 #endif
 #ifdef JAVA_CODE
     return new FloatBufferBuilderFromCartesian3D(CenterStrategy.NO_CENTER, Vector3D.zero);
 #endif
   }
 
-  static FloatBufferBuilderFromCartesian3D builderWithFirstVertexAsCenter() {
+  static FloatBufferBuilderFromCartesian3D* builderWithFirstVertexAsCenter() {
 #ifdef C_CODE
-    return FloatBufferBuilderFromCartesian3D(FIRST_VERTEX,Vector3D::zero);
+    return new FloatBufferBuilderFromCartesian3D(FIRST_VERTEX,Vector3D::zero);
 #endif
 #ifdef JAVA_CODE
     return new FloatBufferBuilderFromCartesian3D(CenterStrategy.FIRST_VERTEX, Vector3D.zero);
 #endif
   }
 
-  static FloatBufferBuilderFromCartesian3D builderWithGivenCenter(const Vector3D& center) {
+  static FloatBufferBuilderFromCartesian3D* builderWithGivenCenter(const Vector3D& center) {
 #ifdef C_CODE
-    return FloatBufferBuilderFromCartesian3D(GIVEN_CENTER, center);
+    return new FloatBufferBuilderFromCartesian3D(GIVEN_CENTER, center);
 #endif
 #ifdef JAVA_CODE
     return new FloatBufferBuilderFromCartesian3D(CenterStrategy.GIVEN_CENTER, center);

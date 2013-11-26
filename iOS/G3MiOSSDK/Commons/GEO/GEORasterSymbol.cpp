@@ -175,10 +175,10 @@ bool GEORasterSymbol::symbolize(const G3MRenderContext* rc,
                                 GEOTileRasterizer*      geoTileRasterizer) const {
   if (geoTileRasterizer == NULL) {
     ILogger::instance()->logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
+    return true;
   }
-  else {
-    geoTileRasterizer->addSymbol( this );
-  }
+
+  geoTileRasterizer->addSymbol( this );
 
   return false;
 }

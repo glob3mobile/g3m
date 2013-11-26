@@ -14,6 +14,8 @@
 #include "RCObject.hpp"
 
 class Matrix44D: public RCObject {
+private:
+  ~Matrix44D();
 
 public:
 
@@ -38,8 +40,6 @@ public:
   mutable float*        _columnMajorFloatArray;
   mutable IFloatBuffer* _columnMajorFloatBuffer;
 
-public:
-
   explicit Matrix44D(const Matrix44D& m);
 
   Matrix44D(double m00, double m10, double m20, double m30,
@@ -47,7 +47,6 @@ public:
             double m02, double m12, double m22, double m32,
             double m03, double m13, double m23, double m33);
 
-  ~Matrix44D();
 
   Matrix44D* createMultiplication(const Matrix44D &that) const;
 

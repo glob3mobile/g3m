@@ -17,13 +17,15 @@ package org.glob3.mobile.generated;
 
 
 
+//class QuadTree_Content;
+
 public abstract class QuadTreeVisitor
 {
   public void dispose()
   {
   }
 
-  public abstract boolean visitElement(Sector sector, Object element);
+  public abstract boolean visitElement(Sector sector, QuadTree_Content content);
 
   public abstract void endVisit(boolean aborted);
 

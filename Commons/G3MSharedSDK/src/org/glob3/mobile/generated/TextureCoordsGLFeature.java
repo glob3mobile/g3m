@@ -1,6 +1,11 @@
 package org.glob3.mobile.generated; 
 public class TextureCoordsGLFeature extends PriorityGLFeature
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public TextureCoordsGLFeature(IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean coordsTransformed, Vector2D translate, Vector2D scale)
   {
      super(GLFeatureGroupName.COLOR_GROUP, GLFeatureID.GLF_TEXTURE_COORDS, 4);

@@ -22,7 +22,6 @@ TMSLayer::TMSLayer(const std::string& mapLayer,
                    const URL& mapServerURL,
                    const Sector& sector,
                    const std::string& format,
-                   const std::string srs,
                    const bool isTransparent,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
@@ -40,7 +39,6 @@ _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),
 _sector(sector),
 _format(format),
-_srs(srs),
 _isTransparent(isTransparent)
 {
 }
@@ -110,10 +108,6 @@ bool TMSLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
   
-  if (_srs != t->_srs) {
-    return false;
-  }
-  
   if (_isTransparent != t->_isTransparent) {
     return false;
   }
@@ -126,7 +120,6 @@ TMSLayer* TMSLayer::copy() const {
                      _mapServerURL,
                      _sector,
                      _format,
-                     _srs,
                      _isTransparent,
                      (_condition == NULL) ? NULL : _condition->copy(),
                      TimeInterval::fromMilliseconds(_timeToCacheMS),

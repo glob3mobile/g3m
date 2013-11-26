@@ -111,6 +111,36 @@ public class EffectsScheduler
     _effectsRuns.add(new EffectRun(effect, target));
   }
 
+  public final void cancelAllEffects()
+  {
+    java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
+    final TimeInterval now = _timer.now();
+  
+    final int size = _effectsRuns.size();
+    for (int i = 0; i < size; i++)
+    {
+      EffectRun effectRun = _effectsRuns.get(i);
+  
+      if (effectRun._started)
+      {
+        effectRun._effect.cancel(now);
+      }
+      indicesToRemove.add(i);
+    }
+  
+    // backward iteration, to remove from bottom to top
+    for (int i = indicesToRemove.size() - 1; i >= 0; i--)
+    {
+      final int indexToRemove = indicesToRemove.get(i);
+      EffectRun effectRun = _effectsRuns.get(indexToRemove);
+      if (effectRun != null)
+         effectRun.dispose();
+  
+      _effectsRuns.remove(indexToRemove);
+    }
+  
+  }
+
   public final void cancelAllEffectsFor(EffectTarget target)
   {
     java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();

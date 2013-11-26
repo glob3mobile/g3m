@@ -219,7 +219,6 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
                                     URL(jsonURL, false),
                                     sector,
                                     format,
-                                    "EPSG:4326",
                                     transparent,
                                     levelTileCondition,
                                     TimeInterval::fromDays(30),

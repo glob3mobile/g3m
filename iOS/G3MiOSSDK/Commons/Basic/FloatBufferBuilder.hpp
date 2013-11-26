@@ -16,6 +16,9 @@
 class IFloatBuffer;
 
 class FloatBufferBuilder {
+private:
+  FloatBufferBuilder(const FloatBufferBuilder& that);
+
 protected:
   enum CenterStrategy{
     NO_CENTER,FIRST_VERTEX,GIVEN_CENTER
@@ -78,6 +81,10 @@ protected:
 
   protected final FloatArrayList _values = new FloatArrayList();
 #endif
+
+  FloatBufferBuilder() {
+
+  }
 
 public:
   IFloatBuffer* create() const;

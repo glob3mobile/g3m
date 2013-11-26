@@ -21,7 +21,6 @@ public class TextureUploader extends IImageListener
      _srcRects = srcRects;
      _dstRects = dstRects;
      _textureId = textureId;
-
   }
 
   public final void imageCreated(IImage image)

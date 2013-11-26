@@ -50,6 +50,16 @@ public class BingMapsLayer extends Layer
     return "BingMaps";
   }
 
+  protected final String getBrandLogoUri()
+  {
+    return _brandLogoUri;
+  }
+
+  protected final String getCopyright()
+  {
+    return _copyright;
+  }
+
   protected final boolean rawIsEquals(Layer that)
   {
     BingMapsLayer t = (BingMapsLayer) that;
@@ -71,7 +81,6 @@ public class BingMapsLayer extends Layer
   
     return true;
   }
-
 
 
   /**

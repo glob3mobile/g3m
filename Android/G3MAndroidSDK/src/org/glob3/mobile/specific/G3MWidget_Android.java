@@ -426,8 +426,8 @@ public final class G3MWidget_Android
    }
 
 
-   public void stopCameraAnimation() {
-      getG3MWidget().stopCameraAnimation();
+   public void cancelCameraAnimation() {
+      getG3MWidget().cancelCameraAnimation();
    }
 
 

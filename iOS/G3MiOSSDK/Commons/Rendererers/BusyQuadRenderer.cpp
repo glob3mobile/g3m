@@ -63,12 +63,11 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 
   const double halfWidth = _size._x / 2;
   const double hadfHeight = _size._y / 2;
-//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  vertices.add(-halfWidth, +hadfHeight, 0);
-  vertices.add(-halfWidth, -hadfHeight, 0);
-  vertices.add(+halfWidth, +hadfHeight, 0);
-  vertices.add(+halfWidth, -hadfHeight, 0);
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  vertices->add(-halfWidth, +hadfHeight, 0);
+  vertices->add(-halfWidth, -hadfHeight, 0);
+  vertices->add(+halfWidth, +hadfHeight, 0);
+  vertices->add(+halfWidth, -hadfHeight, 0);
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
@@ -78,11 +77,13 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 
   DirectMesh *im = new DirectMesh(GLPrimitive::triangleStrip(),
                                   true,
-                                  vertices.getCenter(),
-                                  vertices.create(),
+                                  vertices->getCenter(),
+                                  vertices->create(),
                                   1,
                                   1);
 
+  delete vertices;
+  
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
                                                     true,

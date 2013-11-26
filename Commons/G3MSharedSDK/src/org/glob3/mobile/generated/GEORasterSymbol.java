@@ -20,7 +20,8 @@ package org.glob3.mobile.generated;
 //class GEORasterProjection;
 //class ICanvas;
 
-public abstract class GEORasterSymbol extends GEOSymbol
+
+public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Content
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GEORasterSymbol(GEORasterSymbol that);
@@ -268,11 +269,10 @@ public abstract class GEORasterSymbol extends GEOSymbol
     if (geoTileRasterizer == null)
     {
       ILogger.instance().logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
+      return true;
     }
-    else
-    {
-      geoTileRasterizer.addSymbol(this);
-    }
+  
+    geoTileRasterizer.addSymbol(this);
   
     return false;
   }
@@ -291,5 +291,10 @@ public abstract class GEORasterSymbol extends GEOSymbol
   }
 
   public abstract void rawRasterize(ICanvas canvas, GEORasterProjection projection);
+
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  public final void unusedMethod()
+  {
+  }
 
 }

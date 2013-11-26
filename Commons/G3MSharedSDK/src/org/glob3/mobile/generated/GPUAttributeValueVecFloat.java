@@ -4,6 +4,12 @@ public class GPUAttributeValueVecFloat extends GPUAttributeValue
   private final IFloatBuffer _buffer;
   private final int _timeStamp;
   private final long _id;
+
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public GPUAttributeValueVecFloat(IFloatBuffer buffer, int attributeSize, int arrayElementSize, int index, int stride, boolean normalized)
   {
      super(GLType.glFloat(), attributeSize, arrayElementSize, index, stride, normalized);

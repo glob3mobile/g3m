@@ -22,7 +22,7 @@
 #include "RCObject.hpp"
 
 class GLState: public RCObject {
-
+private:
   GLFeatureSet _features;
   mutable GLFeatureSet* _accumulatedFeatures;
 
@@ -45,6 +45,8 @@ class GLState: public RCObject {
 
   void hasChangedStructure() const;
 
+  ~GLState();
+
 public:
 
   GLState():
@@ -63,7 +65,6 @@ public:
   GLFeatureSet* getAccumulatedFeatures() const;
 //  GLFeatureSet* createAccumulatedFeatures() const;
 
-  ~GLState();
 
   void setParent(const GLState* p) const;
 

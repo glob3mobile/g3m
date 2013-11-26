@@ -18,6 +18,9 @@ package org.glob3.mobile.generated;
 public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 {
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  FloatBufferBuilderFromGeodetic(FloatBufferBuilderFromGeodetic that);
+
   private final CenterStrategy _centerStrategy;
   private float _cx;
   private float _cy;

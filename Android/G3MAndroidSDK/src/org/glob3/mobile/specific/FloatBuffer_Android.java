@@ -23,10 +23,10 @@ public final class FloatBuffer_Android
    //   private boolean           _disposed              = false;
    private int               _vertexBuffer          = -1;
    private int               _vertexBufferTimeStamp = -1;
-   
+
    //ID
-   private static long _nextID = 0;
-   private final long _id = _nextID++;
+   private static long       _nextID                = 0;
+   private final long        _id                    = _nextID++;
 
 
    FloatBuffer_Android(final int size) {
@@ -120,6 +120,13 @@ public final class FloatBuffer_Android
    }
 
 
+   @Override
+   public void rawAdd(final int i,
+                      final float value) {
+      _buffer.put(i, _buffer.get(i) + value);
+   }
+
+
    public FloatBuffer getBuffer() {
       return _buffer;
    }
@@ -178,10 +185,10 @@ public final class FloatBuffer_Android
    }
 
 
-@Override
-public long getID() {
-	return _id;
-}
+   @Override
+   public long getID() {
+      return _id;
+   }
 
 
    //   @Override

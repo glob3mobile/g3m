@@ -36,6 +36,8 @@ public:
                     bool autodelete) const;
 
   void addSymbol(const GEORasterSymbol* symbol);
+
+  void clear();
   
 };
 
