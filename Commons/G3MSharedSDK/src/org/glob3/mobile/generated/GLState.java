@@ -21,8 +21,7 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class GLState extends RCObject, GPUProgramListener
+public class GLState extends RCObject
 {
   private GLFeatureSet _features = new GLFeatureSet();
   private GLFeatureSet _accumulatedFeatures;
@@ -50,7 +49,10 @@ public class GLState extends RCObject, GPUProgramListener
        _globalState.dispose();
     _globalState = null;
   
-    setLinkedProgram(null);
+    if (_linkedProgram != null)
+    {
+      _linkedProgram._release();
+    }
   
     if (_accumulatedFeatures != null)
        _accumulatedFeatures.dispose();
@@ -74,26 +76,8 @@ public class GLState extends RCObject, GPUProgramListener
   
     if (_linkedProgram != null)
     {
-      _linkedProgram.removeListener(this);
+      _linkedProgram._release();
     }
-  }
-
-  private void setLinkedProgram(GPUProgram program)
-  {
-  
-    if (program != _linkedProgram)
-    {
-      if (_linkedProgram != null)
-      {
-        _linkedProgram.removeListener(this);
-      }
-      if (program != null)
-      {
-        program.addListener(this);
-      }
-      _linkedProgram = program;
-    }
-  
   }
 
 
@@ -187,8 +171,7 @@ public class GLState extends RCObject, GPUProgramListener
       final int uniformsCode = _valuesSet.getUniformsCode();
       final int attributesCode = _valuesSet.getAttributesCode();
   
-      GPUProgram prog = progManager.getProgram(gl, uniformsCode, attributesCode);
-      setLinkedProgram(prog);
+      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
     }
   
     if (_valuesSet == null || _globalState == null)
@@ -257,22 +240,5 @@ public class GLState extends RCObject, GPUProgramListener
     }
   
     return null;
-  }
-
-  public final void gpuProgramDeleted()
-  {
-    //Deleting all references to GPU Program
-    _timeStamp++;
-    if (_valuesSet != null)
-       _valuesSet.dispose();
-    _valuesSet = null;
-    if (_globalState != null)
-       _globalState.dispose();
-    _globalState = null;
-    _linkedProgram = null;
-  
-    if (_accumulatedFeatures != null)
-       _accumulatedFeatures.dispose();
-    _accumulatedFeatures = null;
   }
 }

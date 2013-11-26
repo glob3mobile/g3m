@@ -407,7 +407,6 @@ public class GL
         program.onUsed();
         _currentGPUProgram = program;
       }
-      program.setUsedMark(true);
   
   //    if (!_nativeGL->isProgram(program->getProgramID())){
   //      ILogger::instance()->logError("INVALID PROGRAM.");

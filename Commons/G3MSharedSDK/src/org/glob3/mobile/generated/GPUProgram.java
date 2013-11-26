@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GPUProgram
+public class GPUProgram extends RCObject
 {
   private int _programID;
 
@@ -15,8 +15,6 @@ public class GPUProgram
   private int _attributesCode;
 
   private String _name;
-
-  private final java.util.LinkedList<GPUProgramListener> _listeners = new java.util.LinkedList<GPUProgramListener>();
 
   private GL _gl;
 
@@ -118,7 +116,9 @@ public class GPUProgram
     //ILogger::instance()->logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
   }
 
-  private GPUProgram()
+  private GPUProgramManager _manager;
+
+  private GPUProgram(GPUProgramManager manager)
   {
      _createdAttributes = null;
      _createdUniforms = null;
@@ -128,16 +128,48 @@ public class GPUProgram
      _attributesCode = 0;
      _gl = null;
      _usedMark = false;
+     _manager = manager;
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GPUProgram(GPUProgram that);
 
-
-  public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
+  public void dispose()
   {
   
-    GPUProgram p = new GPUProgram();
+    //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
+  
+    if (_manager != null)
+    {
+      _manager.compiledProgramDeleted(this._name);
+    }
+  
+    for (int i = 0; i < _nUniforms; i++)
+    {
+      if (_createdUniforms[i] != null)
+         _createdUniforms[i].dispose();
+    }
+  
+    for (int i = 0; i < _nAttributes; i++)
+    {
+      if (_createdAttributes[i] != null)
+         _createdAttributes[i].dispose();
+    }
+  
+    _createdAttributes = null;
+    _createdUniforms = null;
+  
+    if (!_gl.deleteProgram(this))
+    {
+      ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
+    }
+  }
+
+
+  public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource, GPUProgramManager manager)
+  {
+  
+    GPUProgram p = new GPUProgram(manager);
   
     p._name = name;
     p._programID = gl.createProgram();
@@ -196,41 +228,6 @@ public class GPUProgram
     }
   
     return p;
-  }
-
-  public void dispose()
-  {
-  
-    for (int i = 0; i < _nUniforms; i++)
-    {
-      if (_createdUniforms[i] != null)
-         _createdUniforms[i].dispose();
-    }
-  
-    for (int i = 0; i < _nAttributes; i++)
-    {
-      if (_createdAttributes[i] != null)
-         _createdAttributes[i].dispose();
-    }
-  
-    _createdAttributes = null;
-    _createdUniforms = null;
-    
-    for (GPUProgramListener listener: _listeners){
-    	listener.gpuProgramDeleted();
-    }
-    
-  
-    for (java.util.Iterator<const GPUProgramListener> it = _listeners.iterator(); it.hasNext();)
-    {
-      final GPUProgramListener listener = it.next();
-      listener.gpuProgramDeleted();
-    }
-  
-    if (!_gl.deleteProgram(this))
-    {
-      ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
-    }
   }
 
   public final String getName()
@@ -507,26 +504,6 @@ public class GPUProgram
       return;
     }
     a.set(v);
-  }
-
-  public final void addListener(GPUProgramListener l)
-  {
-    _listeners.addLast(l);
-  }
-
-  public final void removeListener(GPUProgramListener l)
-  {
-    _listeners.remove(l);
-  }
-
-  public final void setUsedMark(boolean used)
-  {
-    _usedMark = used;
-  }
-
-  public final boolean hasBeenUsed()
-  {
-    return _usedMark;
   }
 
 }
