@@ -8,11 +8,13 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
@@ -53,8 +55,8 @@ public class MainActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
 
-      // final ShapesRenderer shapesRenderer = new ShapesRenderer();
-      // builder.addRenderer(shapesRenderer);
+      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+      builder.addRenderer(shapesRenderer);
 
       final MarksRenderer marksRenderer = new MarksRenderer(true);
       builder.addRenderer(marksRenderer);
@@ -318,6 +320,7 @@ public class MainActivity
          };
 
          builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
+      }
 
       if (true) {      
     	  // testing selecting shapes
