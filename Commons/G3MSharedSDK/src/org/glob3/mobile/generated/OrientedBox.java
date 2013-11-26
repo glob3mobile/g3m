@@ -200,14 +200,14 @@ public class OrientedBox extends BoundingVolume
   
     if (_cornersD == null) {
       _cornersD = new java.util.ArrayList<Vector3D>(8);
-      _cornersD.add(new Vector3D(_halfExtentX,  _halfExtentY,   _halfExtentZ).transformedBy(_transformMatrix, 1));
-      _cornersD.add(new Vector3D(-_halfExtentX, _halfExtentY,   _halfExtentZ).transformedBy(_transformMatrix, 1));
-      _cornersD.add(new Vector3D(_halfExtentX,  -_halfExtentY,  _halfExtentZ).transformedBy(_transformMatrix, 1));
-      _cornersD.add(new Vector3D(-_halfExtentX, -_halfExtentY,  _halfExtentZ).transformedBy(_transformMatrix, 1));
-      _cornersD.add(new Vector3D(_halfExtentX,  _halfExtentY,   -_halfExtentZ).transformedBy(_transformMatrix, 1));
-      _cornersD.add(new Vector3D(-_halfExtentX, _halfExtentY,   -_halfExtentZ).transformedBy(_transformMatrix, 1));
-      _cornersD.add(new Vector3D(_halfExtentX,  -_halfExtentY,  -_halfExtentZ).transformedBy(_transformMatrix, 1));
-      _cornersD.add(new Vector3D(-_halfExtentX, -_halfExtentY,  -_halfExtentZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_upperX, _upperY, _upperZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_lowerX, _upperY, _upperZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_upperX, _lowerY, _upperZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_lowerX, _lowerY, _upperZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_upperX, _upperY, _lowerZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_lowerX, _upperY, _lowerZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_upperX, _lowerY, _lowerZ).transformedBy(_transformMatrix, 1));
+      _cornersD.add(new Vector3D(_lowerX, _lowerY, _lowerZ).transformedBy(_transformMatrix, 1));
     }
     return _cornersD;
   
