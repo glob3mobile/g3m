@@ -11,11 +11,14 @@
 #include "GL.hpp"
 #include "GPUAttribute.hpp"
 #include "GPUUniform.hpp"
+#include "GPUProgramManager.hpp"
 
-GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std::string& vertexSource,
-                                      const std::string& fragmentSource) {
+GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name,
+                                      const std::string& vertexSource,
+                                      const std::string& fragmentSource,
+                                      GPUProgramManager* manager) {
 
-  GPUProgram* p = new GPUProgram();
+  GPUProgram* p = new GPUProgram(manager);
 
   p->_name = name;
   p->_programID = gl->createProgram();
@@ -74,6 +77,12 @@ GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name, const std:
 
 
 GPUProgram::~GPUProgram() {
+
+  //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
+
+  if (_manager != NULL){
+    _manager->compiledProgramDeleted(this->_name);
+  }
 
   for (int i = 0; i < _nUniforms; i++) {
     delete _createdUniforms[i];

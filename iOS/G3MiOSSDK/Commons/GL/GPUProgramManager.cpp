@@ -115,7 +115,8 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl, const std::string&
       prog = GPUProgram::createProgram(gl,
                                        ps->_name,
                                        ps->_vertexSource,
-                                       ps->_fragmentSource);
+                                       ps->_fragmentSource,
+                                       this);
       if (prog == NULL) {
         ILogger::instance()->logError("Problem at creating program named %s.", name.c_str());
         return NULL;

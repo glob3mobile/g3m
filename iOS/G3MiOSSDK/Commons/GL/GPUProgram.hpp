@@ -31,6 +31,7 @@ class GPUUniformValue;
 class GPUAttributeValue;
 class IFloatBuffer;
 class GL;
+class GPUProgramManager;
 
 enum ShaderType {
   VERTEX_SHADER,
@@ -63,8 +64,10 @@ class GPUProgram:public RCObject {
   void deleteProgram(GL* gl, const GPUProgram* p);
   
   void getVariables(GL* gl);
+
+  GPUProgramManager* _manager;
   
-  GPUProgram():
+  GPUProgram(GPUProgramManager* manager):
   _createdAttributes(NULL),
   _createdUniforms(NULL),
   _nUniforms(0),
@@ -72,7 +75,8 @@ class GPUProgram:public RCObject {
   _uniformsCode(0),
   _attributesCode(0),
   _gl(NULL),
-  _usedMark(false){}
+  _usedMark(false),
+  _manager(manager){}
 
   GPUProgram(const GPUProgram& that);
 
@@ -80,8 +84,10 @@ class GPUProgram:public RCObject {
   
 public:
   
-  static GPUProgram* createProgram(GL* gl, const std::string name, const std::string& vertexSource,
-                                   const std::string& fragmentSource);
+  static GPUProgram* createProgram(GL* gl, const std::string name,
+                                   const std::string& vertexSource,
+                                   const std::string& fragmentSource,
+                                   GPUProgramManager* manager);
 
   std::string getName() const { return _name;}
   
