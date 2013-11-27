@@ -140,22 +140,6 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 #endif
 }
 
-//void GPUProgramManager::compiledProgramDeleted(const std::string& name) {
-//#ifdef C_CODE
-//  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
-//  if (it != _programs.end()) {
-//    _programs.erase(it);
-//  } else{
-//    ILogger::instance()->logError("Trying to delete program from GPUProgramManager that does not exist.");
-//  }
-//#endif
-//#ifdef JAVA_CODE
-//  if (_programs.remove(name) == null){
-//    ILogger.instance().logError("Trying to delete program from GPUProgramManager that does not exist.");
-//  }
-//#endif
-//}
-
 void GPUProgramManager::removeUnused() {
 #ifdef C_CODE
   std::map<std::string, GPUProgram*>::iterator it = _programs.begin();
@@ -166,6 +150,17 @@ void GPUProgramManager::removeUnused() {
       _programs.erase(it++);
     } else{
       ++it;
+    }
+  }
+#endif
+#ifdef JAVA_CODE
+  java.util.Iterator it = _programs.entrySet().iterator();
+  while (it.hasNext()) {
+    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+    GPUProgram program = (GPUProgram) pairs.getValue();
+    if (program.getNReferences() == 0){
+      ILogger.instance().logInfo("Deleting program %s", program.getName() );
+      it.remove();
     }
   }
 #endif
