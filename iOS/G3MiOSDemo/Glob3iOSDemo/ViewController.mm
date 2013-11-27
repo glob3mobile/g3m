@@ -1666,7 +1666,6 @@ public:
                                 new Geodetic3D(Angle::fromDegrees(39.56),
                                                Angle::fromDegrees(3.39),
                                                radiusBox._z),
-                                
                                 ABSOLUTE,
                                 5,
                                 Color::fromRGBA(1, 0.5, 0, 1));
@@ -1679,7 +1678,6 @@ public:
                                 new Geodetic3D(Angle::fromDegrees(39.69),
                                                Angle::fromDegrees(3.49),
                                                radiusBox._z),
-                                
                                 ABSOLUTE,
                                 5,
                                 Color::fromRGBA(1, 0.5, 0, 1));
@@ -1692,7 +1690,6 @@ public:
                                 new Geodetic3D(Angle::fromDegrees(39.70),
                                                Angle::fromDegrees(3.49),
                                                radiusBox._z),
-                                
                                 ABSOLUTE,
                                 5,
                                 Color::fromRGBA(1, 0.5, 0, 1));

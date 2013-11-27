@@ -15,6 +15,8 @@ import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.PlanetRenderer;
+import org.glob3.mobile.generated.PointShape;
+import org.glob3.mobile.generated.LineShape;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
@@ -368,7 +370,74 @@ public class MainActivity
     			  true);
     	  shapesRenderer.addShape(mercator1);
     	  
-    	 
+    	  // DRAWING POINTS
+    	  {
+    		  Shape point = new PointShape(new Geodetic3D(Angle.fromDegrees(39.70),
+    				  Angle.fromDegrees(3.30),
+    				  radiusBox._z),
+    				  AltitudeMode.ABSOLUTE,
+    				  8,
+    				  Color.fromRGBA(0, 0, 1, 1));
+    		  shapesRenderer.addShape(point);
+    	  }
+    	  {
+    		  Shape point = new PointShape(new Geodetic3D(Angle.fromDegrees(39.55),
+    				  Angle.fromDegrees(3.40),
+    				  radiusBox._z),
+    				  AltitudeMode.ABSOLUTE,
+    				  6,
+    				  Color.fromRGBA(0, 0, 1, 1));
+    		  shapesRenderer.addShape(point);
+    	  }
+    	  {
+    		  Shape point = new PointShape(new Geodetic3D(Angle.fromDegrees(39.70),
+    				  Angle.fromDegrees(3.50),
+    				  radiusBox._z),
+    				  AltitudeMode.ABSOLUTE,
+    				  4,
+    				  Color.fromRGBA(0, 0, 1, 1));
+    		  shapesRenderer.addShape(point);
+    	  }
+
+    	  // DRAWING LINES
+    	  {
+    		  Shape line = new LineShape(new Geodetic3D(Angle.fromDegrees(39.69),
+    				  Angle.fromDegrees(3.31),
+    				  radiusBox._z),
+    				  new Geodetic3D(Angle.fromDegrees(39.56),
+    						  Angle.fromDegrees(3.39),
+    						  radiusBox._z),
+    						  AltitudeMode.ABSOLUTE,
+    						  5,
+    						  Color.fromRGBA(1, 0.5f, 0, 1));
+    		  shapesRenderer.addShape(line);
+    	  }
+    	  {
+    		  Shape line = new LineShape(new Geodetic3D(Angle.fromDegrees(39.56),
+    				  Angle.fromDegrees(3.41),
+    				  radiusBox._z),
+    				  new Geodetic3D(Angle.fromDegrees(39.69),
+    						  Angle.fromDegrees(3.49),
+    						  radiusBox._z),   		                                
+    						  AltitudeMode.ABSOLUTE,
+    						  5,
+    						  Color.fromRGBA(1, 0.5f, 0, 1));
+    		  shapesRenderer.addShape(line);
+    	  }
+    	  {
+    		  Shape line = new LineShape(new Geodetic3D(Angle.fromDegrees(39.70),
+    				  Angle.fromDegrees(3.31),
+    				  radiusBox._z),
+    				  new Geodetic3D(Angle.fromDegrees(39.70),
+    						  Angle.fromDegrees(3.49),
+    						  radiusBox._z),
+    						  AltitudeMode.ABSOLUTE,
+    						  5,
+    						  Color.fromRGBA(1, 0.5f, 0, 1));
+    		  shapesRenderer.addShape(line);
+    	  }
+
+
 
     	  // adding touch listener
     	  ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
