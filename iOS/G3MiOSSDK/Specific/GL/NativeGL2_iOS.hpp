@@ -580,10 +580,6 @@ public:
         break;
     }
   }
-
-  bool isProgram(int program) const{
-    return glIsProgram(program) == GL_TRUE;
-  }
   
 };
 

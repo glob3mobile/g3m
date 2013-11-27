@@ -188,7 +188,6 @@ public:
   virtual void printShaderInfoLog(int shader) const = 0;
   virtual bool linkProgram(int program) const = 0;
   virtual void printProgramInfoLog(int program) const = 0;
-  virtual bool isProgram(int program) const = 0;
   
   virtual void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const = 0;
   

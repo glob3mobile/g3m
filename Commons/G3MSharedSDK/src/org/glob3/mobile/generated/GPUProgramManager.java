@@ -169,5 +169,14 @@ public class GPUProgramManager
   
   public final void removeUnused()
   {
+	    java.util.Iterator it = _programs.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+	    	GPUProgram program = (GPUProgram) pairs.getValue();
+	    	if (program.getNReferences() == 0){
+	    		ILogger.instance().logInfo("Deleting program %s", program.getName() );
+	    		it.remove();
+	    	}
+	    }
   }
 }
