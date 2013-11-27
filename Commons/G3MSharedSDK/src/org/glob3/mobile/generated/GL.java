@@ -43,9 +43,6 @@ public class GL
   private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
 
-  //  GLGlobalState *_currentState;
-  //  GPUProgram* _currentGPUProgram;
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void loadModelView();
 
@@ -96,9 +93,6 @@ public class GL
   }
 
   //Get Locations warning of errors
-//  bool _errorGettingLocationOcurred;
-//  int checkedGetAttribLocation(GPUProgram* program,
-//                               const std::string& name);
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
 //  const bool _verbose;
@@ -322,8 +316,14 @@ public class GL
   public final boolean deleteProgram(GPUProgram program)
   {
 
+    if (program == null)
+    {
+      return false;
+    }
+
     if (_currentGPUProgram == program) //In case of deleting active program
     {
+      _currentGPUProgram.removeReference();
       _currentGPUProgram = null;
     }
 
@@ -401,11 +401,13 @@ public class GL
         if (_currentGPUProgram != null)
         {
           _currentGPUProgram.onUnused(this);
+          _currentGPUProgram.removeReference();
         }
   
         _nativeGL.useProgram(program);
         program.onUsed();
         _currentGPUProgram = program;
+        _currentGPUProgram.addReference();
       }
   
   //    if (!_nativeGL->isProgram(program->getProgramID())){

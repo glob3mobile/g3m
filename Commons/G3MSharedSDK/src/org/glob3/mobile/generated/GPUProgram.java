@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GPUProgram extends RCObject
+public class GPUProgram
 {
   private int _programID;
 
@@ -18,7 +18,7 @@ public class GPUProgram extends RCObject
 
   private GL _gl;
 
-  private boolean _usedMark; //If true means the shader has been used in the last frames
+  private int _nReferences; //Number of items that reference this Program
 
   private boolean compileShader(GL gl, int shader, String source)
   {
@@ -127,22 +127,23 @@ public class GPUProgram extends RCObject
      _uniformsCode = 0;
      _attributesCode = 0;
      _gl = null;
-     _usedMark = false;
      _manager = manager;
+     _nReferences = 0;
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GPUProgram(GPUProgram that);
+
+
 
   public void dispose()
   {
   
     //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
   
-    if (_manager != null)
-    {
-      _manager.compiledProgramDeleted(this._name);
-    }
+  //  if (_manager != NULL){
+  //    _manager->compiledProgramDeleted(this->_name);
+  //  }
   
     for (int i = 0; i < _nUniforms; i++)
     {
@@ -164,7 +165,6 @@ public class GPUProgram extends RCObject
       ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
     }
   }
-
 
   public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource, GPUProgramManager manager)
   {
@@ -371,7 +371,6 @@ public class GPUProgram extends RCObject
   public final void onUsed()
   {
     //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
-    _usedMark = true;
   }
   /**
    Must be called when the program is no longer used
@@ -504,6 +503,19 @@ public class GPUProgram extends RCObject
       return;
     }
     a.set(v);
+  }
+
+  public final void addReference()
+  {
+     ++_nReferences;
+  }
+  public final void removeReference()
+  {
+     --_nReferences;
+  }
+  public final int getNReferences()
+  {
+     return _nReferences;
   }
 
 }

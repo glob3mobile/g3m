@@ -51,7 +51,8 @@ public class GLState extends RCObject
   
     if (_linkedProgram != null)
     {
-      _linkedProgram._release();
+      _linkedProgram.removeReference();
+      _linkedProgram = null;
     }
   
     if (_accumulatedFeatures != null)
@@ -76,7 +77,7 @@ public class GLState extends RCObject
   
     if (_linkedProgram != null)
     {
-      _linkedProgram._release();
+      _linkedProgram.removeReference();
     }
   }
 

@@ -137,25 +137,37 @@ public class GPUProgramManager
     if (p == null)
     {
       p = getNewProgram(gl, uniformsCode, attributesCode);
-  
       if (p.getAttributesCode() != attributesCode || p.getUniformsCode() != uniformsCode)
       {
         ILogger.instance().logError("New compiled program does not match GL state.");
       }
+    }
   
-    }
-    else
-    {
-      p._retain();
-    }
+    p.addReference();
   
     return p;
   }
 
-  public final void compiledProgramDeleted(String name)
+//  void compiledProgramDeleted(const std::string& name);
+
+
+  //void GPUProgramManager::compiledProgramDeleted(const std::string& name) {
+  ///#ifdef C_CODE
+  //  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
+  //  if (it != _programs.end()) {
+  //    _programs.erase(it);
+  //  } else{
+  //    ILogger::instance()->logError("Trying to delete program from GPUProgramManager that does not exist.");
+  //  }
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  if (_programs.remove(name) == null){
+  //    ILogger.instance().logError("Trying to delete program from GPUProgramManager that does not exist.");
+  //  }
+  ///#endif
+  //}
+  
+  public final void removeUnused()
   {
-	  if (_programs.remove(name) == null){
-		  ILogger.instance().logError("Trying to delete program from GPUProgramManager that does not exist.");
-	  }
   }
 }
