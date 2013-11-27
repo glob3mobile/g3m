@@ -43,9 +43,9 @@ public:
                   Geodetic2D* endPosition,
                   float width,
                   const Color& color) :
+  Shape(new Geodetic3D(*startPosition, 0), RELATIVE_TO_GROUND),
   _geodeticStartPos(startPosition),
   _geodeticEndPos(endPosition),
-  Shape(new Geodetic3D(*startPosition, 0), RELATIVE_TO_GROUND),
   _cartesianStartPos(NULL),
   _boundingVolume(NULL),
   _width(width),

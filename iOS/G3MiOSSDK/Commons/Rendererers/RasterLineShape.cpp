@@ -55,7 +55,7 @@ OrientedBox* RasterLineShape::computeOrientedBox(const Planet* planet,
     computeOrientationParams(planet);
   double distanceToCamera = camera->getCartesianPosition().distanceTo(*_cartesianStartPos);
   FrustumData frustum = camera->getFrustumData();
-  const int pixelWidth = 6;
+  const int pixelWidth = 10;
   double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getHeight() / frustum._znear;
   const Vector3D upper = Vector3D(scale, scale, 1);
   const Vector3D lower = Vector3D(-scale, -scale, 0);

@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
@@ -17,6 +18,7 @@ import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PointShape;
 import org.glob3.mobile.generated.LineShape;
+import org.glob3.mobile.generated.RasterLineShape;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
@@ -437,6 +439,16 @@ public class MainActivity
     		  shapesRenderer.addShape(line);
     	  }
 
+    	  {
+    		    Shape rasterLine = new RasterLineShape(new Geodetic2D(Angle.fromDegrees(39.40),
+    		                                                           Angle.fromDegrees(2.70)),
+    		                                            new Geodetic2D(Angle.fromDegrees(39.40),
+    		                                                           Angle.fromDegrees(3.00)),
+    		                                            2,
+    		                                            Color.fromRGBA(0, 0, 1, 1));
+    		    shapesRenderer.addShape(rasterLine);
+    		  }
+    		  
 
 
     	  // adding touch listener
