@@ -97,6 +97,8 @@ public class ShapesRenderer extends LeafRenderer
 
   private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
 
+  private GEOTileRasterizer _geoTileRasterizer;
+
   private void drainLoadQueue()
   {
   
@@ -136,7 +138,21 @@ public class ShapesRenderer extends LeafRenderer
      _lastCamera = null;
      _autoDeleteShapeTouchListener = false;
      _shapeTouchListener = null;
+     _geoTileRasterizer = null;
   }
+
+  public ShapesRenderer(GEOTileRasterizer geoTileRasterizer)
+  {
+     _geoTileRasterizer = geoTileRasterizer;
+     _renderNotReadyShapes = true;
+     _context = null;
+     _glState = new GLState();
+     _glStateTransparent = new GLState();
+     _lastCamera = null;
+     _autoDeleteShapeTouchListener = false;
+     _shapeTouchListener = null;
+  }
+
 
   public void dispose()
   {
@@ -170,6 +186,9 @@ public class ShapesRenderer extends LeafRenderer
     {
       shape.initialize(_context);
     }
+    GEORasterSymbol geoRasterSymbol = shape.createRasterSymbolIfNeeded();
+    if (geoRasterSymbol != null)
+      _geoTileRasterizer.addSymbol(geoRasterSymbol);
   }
 
   public final void removeAllShapes()

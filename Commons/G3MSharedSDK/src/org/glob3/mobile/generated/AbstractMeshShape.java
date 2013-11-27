@@ -89,4 +89,10 @@ public abstract class AbstractMeshShape extends Shape
     }
     return mesh.isTransparent(rc);
   }
+
+  public final GEORasterSymbol createRasterSymbolIfNeeded()
+  {
+    return null;
+  }
+
 }

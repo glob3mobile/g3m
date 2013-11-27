@@ -121,5 +121,10 @@ public class SGShape extends Shape
   {
   }
 
+  public final GEORasterSymbol createRasterSymbolIfNeeded()
+  {
+    return null;
+  }
+
 
 }

@@ -419,4 +419,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   {
      return _selected;
   }
+
+  public abstract GEORasterSymbol createRasterSymbolIfNeeded();
+
 }
