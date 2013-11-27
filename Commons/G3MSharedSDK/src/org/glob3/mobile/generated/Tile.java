@@ -238,9 +238,10 @@ public class Tile
     return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates));
   }
 
-  private ITimer _lodTimer;
   private boolean _lastLodTest;
-  private boolean meetsRenderCriteria(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, TilesStatistics tilesStatistics, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared)
+  private double _lastLodTimeInMS;
+
+  private boolean meetsRenderCriteria(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, TilesStatistics tilesStatistics, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, double nowInMS)
   {
   
     if ((_level >= layerTilesRenderParameters._maxLevelForPoles) && (_sector.touchesPoles()))
@@ -261,7 +262,7 @@ public class Tile
       }
     }
   
-    if ((_lodTimer != null) && (_lodTimer.elapsedTimeInMilliseconds() < 500))
+    if (_lastLodTimeInMS != 0 && (nowInMS - _lastLodTimeInMS) < 500)
     {
       return _lastLodTest;
     }
@@ -284,14 +285,7 @@ public class Tile
       }
     }
   
-    if (_lodTimer == null)
-    {
-      _lodTimer = rc.getFactory().createTimer();
-    }
-    else
-    {
-      _lodTimer.start();
-    }
+    _lastLodTimeInMS = nowInMS; //Storing time of result
   
     final Planet planet = rc.getPlanet();
   
@@ -573,7 +567,7 @@ public class Tile
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
      _boundingVolume = null;
-     _lodTimer = null;
+     _lastLodTimeInMS = 0;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
      _middleNorthPoint = null;
@@ -630,9 +624,6 @@ public class Tile
          _elevationDataRequest.dispose();
       _elevationDataRequest = null;
     }
-  
-    if (_lodTimer != null)
-       _lodTimer.dispose();
   
     if (_tessellatorData != null)
        _tessellatorData.dispose();
@@ -709,7 +700,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS)
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -727,7 +718,7 @@ public class Tile
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {
