@@ -20,7 +20,9 @@ import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PointShape;
 import org.glob3.mobile.generated.LineShape;
 import org.glob3.mobile.generated.RasterLineShape;
+import org.glob3.mobile.generated.SGShape;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
@@ -38,6 +40,7 @@ import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.ShapeTouchListener;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.SceneJSShapesParser;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -455,6 +458,49 @@ public class MainActivity
     						  Color.fromRGBA(0, 0, 1, 1));
     		  shapesRenderer.addShape(rasterLine);
     	  }
+
+    	  // DRAWING JSON
+         /* shapesRenderer.loadJSONSceneJS(new URL("file:///seymour-plane.json", false), 
+        		  "file:////", 
+        		  false,
+    			  new Geodetic3D(Angle.fromDegrees(39.70),
+    					  Angle.fromDegrees(2.60),
+    					  7*factor),
+    					  AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+
+                     @Override
+                     public void onBeforeAddShape(final SGShape shape) {
+                    	 double scale = factor/5;
+                   	  shape.setScale(scale, scale, scale);
+                   	  shape.setPitch(Angle.fromDegrees(120));
+                   	  shape.setHeading(Angle.fromDegrees(-110));
+                     }
+
+
+                     @Override
+                     public void onAfterAddShape(final SGShape shape) {
+                     }
+
+
+                     @Override
+                     public void dispose() {
+                        // TODO Auto-generated method stub
+
+                     }
+                  });*/
+
+    	  Shape plane = SceneJSShapesParser.parseFromJSON("file:///seymour-plane.json", 
+    			  "file:////", 
+    			  false,
+    			  new Geodetic3D(Angle.fromDegrees(39.70),
+    					  Angle.fromDegrees(2.60),
+    					  7*factor),
+    					  AltitudeMode.ABSOLUTE);
+    	  double scale = factor/5;
+    	  plane.setScale(scale, scale, scale);
+    	  plane.setPitch(Angle.fromDegrees(120));
+    	  plane.setHeading(Angle.fromDegrees(-110));
+    	  shapesRenderer.addShape(plane);
 
 
 
