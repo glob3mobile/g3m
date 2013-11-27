@@ -643,9 +643,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const double texWidthSquared = texWidth * texWidth;
   const double texHeightSquared = texHeight * texHeight;
 
-  ITimer* timer = IFactory::instance()->createTimer();
-  const double nowInMS = timer->now().milliseconds();
-  delete timer;
+  const double nowInMS = _lastSplitTimer->now().milliseconds(); //Getting now from _lastSplitTimer
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
