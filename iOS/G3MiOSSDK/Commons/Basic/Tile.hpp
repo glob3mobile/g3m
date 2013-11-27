@@ -101,8 +101,9 @@ private:
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const TilesRenderParameters* tilesRenderParameters);
 
-  ITimer* _lodTimer;
   bool _lastLodTest;
+  double _lastLodTimeInMS;
+
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const LayerTilesRenderParameters* layerTilesRenderParameters,
                                   TileTexturizer* texturizer,
@@ -110,7 +111,8 @@ private:
                                   const TilesStatistics* tilesStatistics,
                                   const ITimer* lastSplitTimer,
                                   double texWidthSquared,
-                                  double texHeightSquared);
+                                  double texHeightSquared,
+                                  double nowInMS);
 
   inline void rawRender(const G3MRenderContext* rc,
                         const GLState* glState,
@@ -244,7 +246,8 @@ public:
               bool isForcedFullRender,
               long long texturePriority,
               double texWidth,
-              double texHeight);
+              double texHeight,
+              double nowInMS);
 
   const TileKey getKey() const;
 

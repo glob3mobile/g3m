@@ -643,6 +643,10 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const double texWidthSquared = texWidth * texWidth;
   const double texHeightSquared = texHeight * texHeight;
 
+  ITimer* timer = IFactory::instance()->createTimer();
+  const double nowInMS = timer->now().milliseconds();
+  delete timer;
+
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.
@@ -671,7 +675,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _firstRender, /* if first render, force full render */
                    _texturePriority,
                    texWidthSquared,
-                   texHeightSquared);
+                   texHeightSquared,
+                   nowInMS);
     }
   }
   else {
@@ -709,7 +714,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _firstRender, /* if first render, force full render */
                      _texturePriority,
                      texWidth * texWidth,     //SENDING SQUARED TEX SIZE
-                     texHeight * texHeight);
+                     texHeight * texHeight,
+                     nowInMS);
       }
 
       toVisit = toVisitInNextIteration;

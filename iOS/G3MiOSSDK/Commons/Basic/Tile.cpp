@@ -61,7 +61,7 @@ _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _boundingVolume(NULL),
-_lodTimer(NULL),
+_lastLodTimeInMS(0),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
 _middleNorthPoint(NULL),
@@ -110,8 +110,6 @@ Tile::~Tile() {
     delete _elevationDataRequest;
     _elevationDataRequest = NULL;
   }
-
-  delete _lodTimer;
 
   delete _tessellatorData;
 }
@@ -360,7 +358,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                const TilesStatistics* tilesStatistics,
                                const ITimer* lastSplitTimer,
                                double texWidthSquared,
-                               double texHeightSquared) {
+                               double texHeightSquared,
+                               double nowInMS) {
 
   if ((_level >= layerTilesRenderParameters->_maxLevelForPoles) &&
       (_sector.touchesPoles())) {
@@ -377,8 +376,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
   }
 
-  if ((_lodTimer != NULL) &&
-      (_lodTimer->elapsedTimeInMilliseconds() < 500)) {
+  if (_lastLodTimeInMS != 0 &&
+      (nowInMS - _lastLodTimeInMS) < 500 ){
     return _lastLodTest;
   }
 
@@ -396,12 +395,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
   }
 
-  if (_lodTimer == NULL) {
-    _lodTimer = rc->getFactory()->createTimer();
-  }
-  else {
-    _lodTimer->start();
-  }
+  _lastLodTimeInMS = nowInMS; //Storing time of result
 
   const Planet* planet = rc->getPlanet();
 
@@ -668,7 +662,8 @@ void Tile::render(const G3MRenderContext* rc,
                   bool isForcedFullRender,
                   long long texturePriority,
                   double texWidthSquared,
-                  double texHeightSquared) {
+                  double texHeightSquared,
+                  double nowInMS) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -701,7 +696,8 @@ void Tile::render(const G3MRenderContext* rc,
                                                   tilesStatistics,
                                                   lastSplitTimer,
                                                   texWidthSquared,
-                                                  texHeightSquared) ||
+                                                  texHeightSquared,
+                                                  nowInMS) ||
                               (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
                               );
 
