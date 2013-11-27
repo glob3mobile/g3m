@@ -85,6 +85,10 @@ public:
   
   void setSelectedDrawMode(bool mode) {}
 
+  GEORasterSymbol* createRasterSymbolIfNeeded() const {
+    return NULL;
+  }
+
   
 };
 

@@ -70,7 +70,7 @@ protected:
   MutableMatrix44D* getTransformMatrix(const Planet* planet) const;
 
   virtual BoundingVolume* getBoundingVolume(const G3MRenderContext *rc) = 0;
-
+  
   
 public:
   
@@ -315,6 +315,9 @@ public:
   }
 
   bool isSelected() { return _selected; }
+  
+  virtual GEORasterSymbol* createRasterSymbolIfNeeded() const = 0;
+
 };
 
 #endif

@@ -37,6 +37,7 @@
 #import <G3MiOSSDK/BoxShape.hpp>
 #import <G3MiOSSDK/PointShape.hpp>
 #import <G3MiOSSDK/LineShape.hpp>
+#import <G3MiOSSDK/RasterLineShape.hpp>
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
 #import <G3MiOSSDK/LayoutUtils.hpp>
@@ -602,7 +603,7 @@ public:
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
 
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer];
+  ShapesRenderer* shapesRenderer = [self createShapesRenderer: geoTileRasterizer];
   builder.addRenderer(shapesRenderer);
   
   
@@ -1568,9 +1569,9 @@ public:
 
 }
 
-- (ShapesRenderer*) createShapesRenderer
+- (ShapesRenderer*) createShapesRenderer: (GEOTileRasterizer*) geoTileRasterizer
 {
-  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
 /*  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-122),
                                               8000),
@@ -1696,6 +1697,16 @@ public:
                                 5,
                                 Color::fromRGBA(1, 0.5, 0, 1));
     shapesRenderer->addShape(line);
+  }
+  
+  {
+    Shape* rasterLine = new RasterLineShape(new Geodetic2D(Angle::fromDegrees(39.40),
+                                                           Angle::fromDegrees(2.70)),
+                                            new Geodetic2D(Angle::fromDegrees(39.40),
+                                                           Angle::fromDegrees(3.00)),
+                                            2,
+                                            Color::fromRGBA(0, 0, 1, 1));
+    shapesRenderer->addShape(rasterLine);
   }
   
   

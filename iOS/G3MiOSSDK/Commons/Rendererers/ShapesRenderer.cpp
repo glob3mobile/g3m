@@ -563,3 +563,15 @@ void ShapesRenderer::disableAll() {
     shape->setEnable(false);
   }
 }
+
+
+void ShapesRenderer::addShape(Shape* shape) {
+  _shapes.push_back(shape);
+  if (_context != NULL) {
+    shape->initialize(_context);
+  }
+  GEORasterSymbol* geoRasterSymbol = shape->createRasterSymbolIfNeeded();
+  if (geoRasterSymbol != NULL)
+    _geoTileRasterizer->addSymbol(geoRasterSymbol);
+}
+

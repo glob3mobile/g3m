@@ -127,6 +127,8 @@ private:
   void updateGLState(const G3MRenderContext* rc);
 
   std::vector<LoadQueueItem*> _loadQueue;
+  
+  GEOTileRasterizer* _geoTileRasterizer;
 
   void drainLoadQueue();
 
@@ -152,9 +154,23 @@ public:
   _glStateTransparent(new GLState()),
   _lastCamera(NULL),
   _autoDeleteShapeTouchListener(false),
+  _shapeTouchListener(NULL),
+  _geoTileRasterizer(NULL)
+  {
+  }
+  
+  ShapesRenderer(GEOTileRasterizer* geoTileRasterizer):
+  _geoTileRasterizer(geoTileRasterizer),
+  _renderNotReadyShapes(true),
+  _context(NULL),
+  _glState(new GLState()),
+  _glStateTransparent(new GLState()),
+  _lastCamera(NULL),
+  _autoDeleteShapeTouchListener(false),
   _shapeTouchListener(NULL)
   {
   }
+  
 
   ~ShapesRenderer() {
     const int shapesCount = _shapes.size();
@@ -178,13 +194,8 @@ public:
 
   }
 
-  void addShape(Shape* shape) {
-    _shapes.push_back(shape);
-    if (_context != NULL) {
-      shape->initialize(_context);
-    }
-  }
-
+  void addShape(Shape* shape);
+  
   void removeAllShapes(bool deleteShapes=true);
 
   void enableAll();
