@@ -186,9 +186,12 @@ public class ShapesRenderer extends LeafRenderer
     {
       shape.initialize(_context);
     }
-    GEORasterSymbol geoRasterSymbol = shape.createRasterSymbolIfNeeded();
-    if (geoRasterSymbol != null)
-      _geoTileRasterizer.addSymbol(geoRasterSymbol);
+    if (_geoTileRasterizer != null)
+    {
+      GEORasterSymbol geoRasterSymbol = shape.createRasterSymbolIfNeeded();
+      if (geoRasterSymbol != null)
+        _geoTileRasterizer.addSymbol(geoRasterSymbol);
+    }
   }
 
   public final void removeAllShapes()
