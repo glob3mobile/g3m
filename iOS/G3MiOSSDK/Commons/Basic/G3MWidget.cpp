@@ -509,7 +509,8 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
-  if (_renderCounter % 100){
+  //Removing unused programs
+  if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0){
     _gpuProgramManager->removeUnused();
   }
 

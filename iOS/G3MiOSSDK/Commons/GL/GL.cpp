@@ -188,11 +188,13 @@ void GL::useProgram(GPUProgram* program) {
 
       if (_currentGPUProgram != NULL) {
         _currentGPUProgram->onUnused(this);
+        _currentGPUProgram->removeReference();
       }
 
       _nativeGL->useProgram(program);
       program->onUsed();
       _currentGPUProgram = program;
+      _currentGPUProgram->addReference();
     }
 
 //    if (!_nativeGL->isProgram(program->getProgramID())){

@@ -158,12 +158,14 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 
 void GPUProgramManager::removeUnused() {
 #ifdef C_CODE
-  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+  std::map<std::string, GPUProgram*>::iterator it = _programs.begin();
+  while (it != _programs.end()) {
     if (it->second->getNReferences() == 0){
-
       ILogger::instance()->logInfo("Deleting program %s", it->second->getName().c_str() );
       delete it->second;
-      _programs.erase(it);
+      _programs.erase(it++);
+    } else{
+      ++it;
     }
   }
 #endif
