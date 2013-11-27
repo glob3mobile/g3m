@@ -7,6 +7,7 @@ import java.util.Random;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -60,6 +61,11 @@ public class MainActivity
       setContentView(R.layout.activity_main);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
+      
+      // GeoTileRasterizer is needed to draw RasterShapes
+      GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
+      builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+
 
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
@@ -439,16 +445,17 @@ public class MainActivity
     		  shapesRenderer.addShape(line);
     	  }
 
+    	  // DRAWING RASTER LINES
     	  {
-    		    Shape rasterLine = new RasterLineShape(new Geodetic2D(Angle.fromDegrees(39.40),
-    		                                                           Angle.fromDegrees(2.70)),
-    		                                            new Geodetic2D(Angle.fromDegrees(39.40),
-    		                                                           Angle.fromDegrees(3.00)),
-    		                                            2,
-    		                                            Color.fromRGBA(0, 0, 1, 1));
-    		    shapesRenderer.addShape(rasterLine);
-    		  }
-    		  
+    		  Shape rasterLine = new RasterLineShape(new Geodetic2D(Angle.fromDegrees(39.40),
+    				  Angle.fromDegrees(2.70)),
+    				  new Geodetic2D(Angle.fromDegrees(39.40),
+    						  Angle.fromDegrees(3.00)),
+    						  2,
+    						  Color.fromRGBA(0, 0, 1, 1));
+    		  shapesRenderer.addShape(rasterLine);
+    	  }
+
 
 
     	  // adding touch listener

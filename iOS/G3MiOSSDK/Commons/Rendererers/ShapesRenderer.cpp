@@ -570,8 +570,10 @@ void ShapesRenderer::addShape(Shape* shape) {
   if (_context != NULL) {
     shape->initialize(_context);
   }
-  GEORasterSymbol* geoRasterSymbol = shape->createRasterSymbolIfNeeded();
-  if (geoRasterSymbol != NULL)
-    _geoTileRasterizer->addSymbol(geoRasterSymbol);
+  if (_geoTileRasterizer) {
+    GEORasterSymbol* geoRasterSymbol = shape->createRasterSymbolIfNeeded();
+    if (geoRasterSymbol != NULL)
+      _geoTileRasterizer->addSymbol(geoRasterSymbol);
+  }
 }
 
