@@ -24,7 +24,6 @@ protected:
 
   GPUProgramSources loadGPUProgramSources(const std::string& name);
 
-
 public:
   G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);
 
