@@ -1,5 +1,5 @@
 //
-//  Default.vsh
+//  FlatColorMesh_DirectionLight
 //
 //  Created by José Miguel Santana Núñez
 //
@@ -31,4 +31,7 @@ void main() {
 
   //Computing Total Light in Vertex
   lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;
+  lightColor.x = min(lightColor.x, 1.0);
+  lightColor.y = min(lightColor.y, 1.0);
+  lightColor.z = min(lightColor.z, 1.0);
 }

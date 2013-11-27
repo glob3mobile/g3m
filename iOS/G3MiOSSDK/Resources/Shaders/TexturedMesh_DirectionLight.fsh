@@ -1,5 +1,5 @@
 //
-//  Default.vsh
+//  TexturedMesh_DirectionLight
 //
 //  Created by José Miguel Santana Núñez
 //
