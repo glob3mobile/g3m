@@ -67,16 +67,15 @@ private:
   BoundingVolume* _boundingVolume;
 
   //LOD TEST DATA
-  Vector3D* _cornerNE;
-  Vector3D* _cornerNW;
-  Vector3D* _cornerSE;
-  Vector3D* _cornerSW;
+  Vector3D* _middleNorthPoint;
+  Vector3D* _middleSouthPoint;
+  Vector3D* _middleEastPoint;
+  Vector3D* _middleWestPoint;
   void computeTileCorners(const Planet* planet);
 
-  double _northArcSegmentRatioSquared;
-  double _eastArcSegmentRatioSquared;
-  double _westArcSegmentRatioSquared;
-  double _southArcSegmentRatioSquared;
+  double _latitudeArcSegmentRatioSquared;
+  double _longitudeArcSegmentRatioSquared;
+
 
   void prepareTestLODData(const Planet* planet);
   //////////////////////////////////////////
@@ -291,10 +290,6 @@ public:
 
   void toBeDeleted(TileTexturizer*        texturizer,
                    ElevationDataProvider* elevationDataProvider);
-
-  
-//  double getMinHeight() const;
-//  double getMaxHeight() const;
 
   const std::string description() const;
 
