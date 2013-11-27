@@ -155,7 +155,6 @@ public abstract class INativeGL
   public abstract void printShaderInfoLog(int shader);
   public abstract boolean linkProgram(int program);
   public abstract void printProgramInfoLog(int program);
-  public abstract boolean isProgram(int program);
 
   public abstract void bindAttribLocation(GPUProgram program, int loc, String name);
 

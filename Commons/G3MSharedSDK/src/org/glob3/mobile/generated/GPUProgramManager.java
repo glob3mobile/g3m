@@ -148,35 +148,16 @@ public class GPUProgramManager
     return p;
   }
 
-//  void compiledProgramDeleted(const std::string& name);
-
-
-  //void GPUProgramManager::compiledProgramDeleted(const std::string& name) {
-  ///#ifdef C_CODE
-  //  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
-  //  if (it != _programs.end()) {
-  //    _programs.erase(it);
-  //  } else{
-  //    ILogger::instance()->logError("Trying to delete program from GPUProgramManager that does not exist.");
-  //  }
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  if (_programs.remove(name) == null){
-  //    ILogger.instance().logError("Trying to delete program from GPUProgramManager that does not exist.");
-  //  }
-  ///#endif
-  //}
-  
   public final void removeUnused()
   {
-	    java.util.Iterator it = _programs.entrySet().iterator();
-	    while (it.hasNext()) {
-	    	java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-	    	GPUProgram program = (GPUProgram) pairs.getValue();
-	    	if (program.getNReferences() == 0){
-	    		ILogger.instance().logInfo("Deleting program %s", program.getName() );
-	    		it.remove();
-	    	}
-	    }
+    java.util.Iterator it = _programs.entrySet().iterator();
+    while (it.hasNext()) {
+      java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
+      GPUProgram program = (GPUProgram) pairs.getValue();
+      if (program.getNReferences() == 0){
+        ILogger.instance().logInfo("Deleting program %s", program.getName() );
+        it.remove();
+      }
+    }
   }
 }
