@@ -67,7 +67,7 @@ public class MainActivity
       builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
 
 
-      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+      final ShapesRenderer shapesRenderer = new ShapesRenderer(geoTileRasterizer);
       builder.addRenderer(shapesRenderer);
 
       final MarksRenderer marksRenderer = new MarksRenderer(true);
