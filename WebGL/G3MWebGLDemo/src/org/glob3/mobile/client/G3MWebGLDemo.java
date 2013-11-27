@@ -18,7 +18,6 @@ import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DirectMesh;
-import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.FixedFocusSceneLighting;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
@@ -34,9 +33,7 @@ import org.glob3.mobile.generated.GEO2DPolygonData;
 import org.glob3.mobile.generated.GEO2DPolygonGeometry;
 import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
 import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOJSONParser;
 import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
-import org.glob3.mobile.generated.GEOObject;
 import org.glob3.mobile.generated.GEORasterLineSymbol;
 import org.glob3.mobile.generated.GEORasterPolygonSymbol;
 import org.glob3.mobile.generated.GEORenderer;
@@ -58,7 +55,6 @@ import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.IImageListener;
 import org.glob3.mobile.generated.IImageUtils;
 import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.InitialCameraPositionProvider;
@@ -81,7 +77,6 @@ import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.RectangleF;
-import org.glob3.mobile.generated.SceneJSShapesParser;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
@@ -382,178 +377,176 @@ public class G3MWebGLDemo
       builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
 
 
-      final GInitializationTask initializationTask = new GInitializationTask() {
-
-         private boolean done = false;
-
-
-         @Override
-         public void run(final G3MContext context) {
-            // meshRenderer.addMesh(createPointsMesh(context.getPlanet()));
-
-            context.getDownloader().requestBuffer( //
-                     new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false), //
-                     0, //
-                     TimeInterval.forever(), //
-                     true, //
-                     new IBufferDownloadListener() {
-
-                        @Override
-                        public void onError(final URL url) {
-                           ILogger.instance().logError("error downloading A320.bson");
-                           done = true;
-                        }
-
-
-                        @Override
-                        public void onDownload(final URL url,
-                                               final IByteBuffer buffer,
-                                               final boolean expired) {
-                           final Shape aircraft = SceneJSShapesParser.parseFromBSON( //
-                                    buffer, //
-                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/", //
-                                    false, //
-                                    new Geodetic3D( //
-                                             Angle.fromDegreesMinutesSeconds(38, 53, 42.24), //
-                                             Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), //
-                                             10000), // Washington, DC
-                                    AltitudeMode.ABSOLUTE);
-
-                           if (aircraft != null) {
-                              final double scale = 200;
-                              aircraft.setScale(scale, scale, scale);
-                              aircraft.setPitch(Angle.fromDegrees(90));
-                              shapeRenderer.addShape(aircraft);
-                           }
-                           done = true;
-                        }
-
-
-                        @Override
-                        public void onCanceledDownload(final URL url,
-                                                       final IByteBuffer data,
-                                                       final boolean expired) {
-                           done = true;
-                        }
-
-
-                        @Override
-                        public void onCancel(final URL url) {
-                           done = true;
-                        }
-                     }, false);
-
-            final IBufferDownloadListener listener = new IBufferDownloadListener() {
-
-               @Override
-               public void onDownload(final URL url,
-                                      final IByteBuffer buffer,
-                                      final boolean expired) {
-                  final GEOObject geoObject = GEOJSONParser.parseJSON(buffer);
-                  if (geoObject != null) {
-                     geoRenderer.addGEOObject(geoObject);
-                  }
-               }
-
-
-               @Override
-               public void onError(final URL url) {
-                  ILogger.instance().logError("Error downloading: " + url.description());
-               }
-
-
-               @Override
-               public void onCancel(final URL url) {
-                  ILogger.instance().logError("Canceled download: " + url.description());
-               }
-
-
-               @Override
-               public void onCanceledDownload(final URL url,
-                                              final IByteBuffer buffer,
-                                              final boolean expired) {
-                  // do nothing
-               }
-            };
-
-            // final URL geoJSONURL = new
-            // URL("http://127.0.0.1:8888/countries-50m.geojson", false);
-            final URL geoJSONURL = new URL("/countries-50m.geojson", false);
-            // final URL geoJSONURL = new
-            // URL("file:///boundary_lines_land.geojson", false);
-            context.getDownloader().requestBuffer( //
-                     geoJSONURL, //
-                     DownloadPriority.HIGHER, //
-                     TimeInterval.fromDays(30), //
-                     true, //
-                     listener, //
-                     true);
-
-            if (true) {
-               final URL planeFilePath = new URL("http://serdis.dis.ulpgc.es/~a044526/seymour-plane.json", false);
-               final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
-
-                  @Override
-                  public void onDownload(final URL url,
-                                         final IByteBuffer buffer,
-                                         final boolean expired) {
-
-                     final Shape plane = SceneJSShapesParser.parseFromJSON( //
-                              buffer, //
-                              "http://serdis.dis.ulpgc.es/~a044526/", //
-                              false, //
-                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
-                              AltitudeMode.ABSOLUTE);
-
-                     final double scale = 1000;
-                     plane.setScale(scale, scale, scale);
-                     plane.setPitch(Angle.fromDegrees(90));
-                     plane.setHeading(Angle.fromDegrees(0));
-                     plane.setAnimatedPosition( //
-                              TimeInterval.fromSeconds(60), //
-                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
-                              Angle.fromDegrees(90), //
-                              Angle.fromDegrees(720), //
-                              Angle.zero());
-
-                     _shapesRenderer.addShape(plane);
-                     ILogger.instance().logInfo("PLANE SHOWN");
-                  }
-
-
-                  @Override
-                  public void onError(final URL url) {
-                     ILogger.instance().logError("NO SEYMOUR");
-                  }
-
-
-                  @Override
-                  public void onCancel(final URL url) {
-                     // DO Nothing
-                  }
-
-
-                  @Override
-                  public void onCanceledDownload(final URL url,
-                                                 final IByteBuffer data,
-                                                 final boolean expired) {
-                     // Do Nothing
-                  }
-               };
-
-               downloader.requestBuffer(planeFilePath, 1000, TimeInterval.fromHours(1.0), true, listenerPlane, true);
-            }
-         }
-
-
-         @Override
-         public boolean isDone(final G3MContext context) {
-            return done;
-         }
-      };
-
-
-      //builder.setInitializationTask(initializationTask);
+      //      final GInitializationTask initializationTask = new GInitializationTask() {
+      //
+      //         private boolean done = false;
+      //
+      //
+      //         @Override
+      //         public void run(final G3MContext context) {
+      //            // meshRenderer.addMesh(createPointsMesh(context.getPlanet()));
+      //
+      //            context.getDownloader().requestBuffer( //
+      //                     new URL("http://glob3m.glob3mobile.com/test/aircraft-A320/A320.bson", false), //
+      //                     0, //
+      //                     TimeInterval.forever(), //
+      //                     true, //
+      //                     new IBufferDownloadListener() {
+      //
+      //                        @Override
+      //                        public void onError(final URL url) {
+      //                           ILogger.instance().logError("error downloading A320.bson");
+      //                           done = true;
+      //                        }
+      //
+      //
+      //                        @Override
+      //                        public void onDownload(final URL url,
+      //                                               final IByteBuffer buffer,
+      //                                               final boolean expired) {
+      //                           final Shape aircraft = SceneJSShapesParser.parseFromBSON( //
+      //                                    buffer, //
+      //                                    "http://glob3m.glob3mobile.com/test/aircraft-A320/textures-A320/", //
+      //                                    false, //
+      //                                    new Geodetic3D( //
+      //                                             Angle.fromDegreesMinutesSeconds(38, 53, 42.24), //
+      //                                             Angle.fromDegreesMinutesSeconds(-77, 2, 10.92), //
+      //                                             10000), // Washington, DC
+      //                                    AltitudeMode.ABSOLUTE);
+      //
+      //                           if (aircraft != null) {
+      //                              final double scale = 200;
+      //                              aircraft.setScale(scale, scale, scale);
+      //                              aircraft.setPitch(Angle.fromDegrees(90));
+      //                              shapeRenderer.addShape(aircraft);
+      //                           }
+      //                           done = true;
+      //                        }
+      //
+      //
+      //                        @Override
+      //                        public void onCanceledDownload(final URL url,
+      //                                                       final IByteBuffer data,
+      //                                                       final boolean expired) {
+      //                           done = true;
+      //                        }
+      //
+      //
+      //                        @Override
+      //                        public void onCancel(final URL url) {
+      //                           done = true;
+      //                        }
+      //                     }, false);
+      //
+      //            final IBufferDownloadListener listener = new IBufferDownloadListener() {
+      //
+      //               @Override
+      //               public void onDownload(final URL url,
+      //                                      final IByteBuffer buffer,
+      //                                      final boolean expired) {
+      //                  final GEOObject geoObject = GEOJSONParser.parseJSON(buffer);
+      //                  if (geoObject != null) {
+      //                     geoRenderer.addGEOObject(geoObject);
+      //                  }
+      //               }
+      //
+      //
+      //               @Override
+      //               public void onError(final URL url) {
+      //                  ILogger.instance().logError("Error downloading: " + url.description());
+      //               }
+      //
+      //
+      //               @Override
+      //               public void onCancel(final URL url) {
+      //                  ILogger.instance().logError("Canceled download: " + url.description());
+      //               }
+      //
+      //
+      //               @Override
+      //               public void onCanceledDownload(final URL url,
+      //                                              final IByteBuffer buffer,
+      //                                              final boolean expired) {
+      //                  // do nothing
+      //               }
+      //            };
+      //
+      //            // final URL geoJSONURL = new
+      //            // URL("http://127.0.0.1:8888/countries-50m.geojson", false);
+      //            final URL geoJSONURL = new URL("/countries-50m.geojson", false);
+      //            // final URL geoJSONURL = new
+      //            // URL("file:///boundary_lines_land.geojson", false);
+      //            context.getDownloader().requestBuffer( //
+      //                     geoJSONURL, //
+      //                     DownloadPriority.HIGHER, //
+      //                     TimeInterval.fromDays(30), //
+      //                     true, //
+      //                     listener, //
+      //                     true);
+      //
+      //            if (true) {
+      //               final URL planeFilePath = new URL("http://serdis.dis.ulpgc.es/~a044526/seymour-plane.json", false);
+      //               final IBufferDownloadListener listenerPlane = new IBufferDownloadListener() {
+      //
+      //                  @Override
+      //                  public void onDownload(final URL url,
+      //                                         final IByteBuffer buffer,
+      //                                         final boolean expired) {
+      //
+      //                     final Shape plane = SceneJSShapesParser.parseFromJSON( //
+      //                              buffer, //
+      //                              "http://serdis.dis.ulpgc.es/~a044526/", //
+      //                              false, //
+      //                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
+      //                              AltitudeMode.ABSOLUTE);
+      //
+      //                     final double scale = 1000;
+      //                     plane.setScale(scale, scale, scale);
+      //                     plane.setPitch(Angle.fromDegrees(90));
+      //                     plane.setHeading(Angle.fromDegrees(0));
+      //                     plane.setAnimatedPosition( //
+      //                              TimeInterval.fromSeconds(60), //
+      //                              new Geodetic3D(Angle.fromDegrees(28.127222), Angle.fromDegrees(-15.431389), 10000), //
+      //                              Angle.fromDegrees(90), //
+      //                              Angle.fromDegrees(720), //
+      //                              Angle.zero());
+      //
+      //                     _shapesRenderer.addShape(plane);
+      //                     ILogger.instance().logInfo("PLANE SHOWN");
+      //                  }
+      //
+      //
+      //                  @Override
+      //                  public void onError(final URL url) {
+      //                     ILogger.instance().logError("NO SEYMOUR");
+      //                  }
+      //
+      //
+      //                  @Override
+      //                  public void onCancel(final URL url) {
+      //                     // DO Nothing
+      //                  }
+      //
+      //
+      //                  @Override
+      //                  public void onCanceledDownload(final URL url,
+      //                                                 final IByteBuffer data,
+      //                                                 final boolean expired) {
+      //                     // Do Nothing
+      //                  }
+      //               };
+      //
+      //               downloader.requestBuffer(planeFilePath, 1000, TimeInterval.fromHours(1.0), true, listenerPlane, true);
+      //            }
+      //         }
+      //
+      //
+      //         @Override
+      //         public boolean isDone(final G3MContext context) {
+      //            return done;
+      //         }
+      //      };
+      //      builder.setInitializationTask(initializationTask);
 
       _widget = builder.createWidget();
    }

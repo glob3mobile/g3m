@@ -25,10 +25,10 @@ private:
 
 
   //IBO
-  mutable bool      _indexBufferCreated;
-  mutable GLuint    _indexBuffer; //IBO
-  mutable int       _indexBufferTimeStamp;
-  static GLuint _boundIBO;
+  mutable bool   _indexBufferCreated;
+  mutable GLuint _indexBuffer; //IBO
+  mutable int    _indexBufferTimeStamp;
+  static GLuint  _boundIBO;
 
 public:
   ShortBuffer_iOS(int size) :
@@ -49,15 +49,7 @@ public:
     return _id;
   }
 
-  virtual ~ShortBuffer_iOS() {
-    if (_indexBufferCreated) {
-      glDeleteBuffers(1, &_indexBuffer);
-      if (GL_NO_ERROR != glGetError()) {
-        ILogger::instance()->logError("Problem deleting IBO");
-      }
-    }
-    delete [] _values;
-  }
+  ~ShortBuffer_iOS();
 
   int size() const {
     return _size;
@@ -68,20 +60,18 @@ public:
   }
 
   short get(int i) const {
-    
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
-    
+
     return _values[i];
   }
 
   void put(int i, short value) {
-    
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
-    
+
     if (_values[i] != value) {
       _values[i] = value;
       _timestamp++;
@@ -101,31 +91,7 @@ public:
 
   const std::string description() const;
 
-  void bindAsIBOToGPU() {
-    if (!_indexBufferCreated) {
-      glGenBuffers(1, &_indexBuffer);
-      _indexBufferCreated = true;
-    }
-
-    if (_boundIBO != _indexBuffer) {
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-      _boundIBO = _indexBuffer;
-    } else{
-      //printf("REUSING");
-    }
-
-    if (_indexBufferTimeStamp != _timestamp) {
-      _indexBufferTimeStamp = _timestamp;
-      short* index = getPointer();
-      int iboSize = sizeof(short) * size();
-
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize, index, GL_STATIC_DRAW);
-    }
-
-//    if (GL_NO_ERROR != glGetError()) {
-//      ILogger::instance()->logError("Problem using IBO");
-//    }
-  }
+  void bindAsIBOToGPU();
 
 };
 

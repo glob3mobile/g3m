@@ -180,7 +180,8 @@ public class CartoCSSParser
           final StringCartoCSSToken stringToken = (StringCartoCSSToken) token;
           selectors.add(stringToken.str());
           //ILogger::instance()->logInfo("\"%s\"", stringToken->str().c_str());
-          int _DGD_At_Work1;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
           break;
         }
   
@@ -189,7 +190,8 @@ public class CartoCSSParser
           final ExpressionCartoCSSToken expressionToken = (ExpressionCartoCSSToken) token;
           selectors.add("[" + expressionToken._source + "]");
           //ILogger::instance()->logInfo("[%s]", expressionToken->_source.c_str());
-          int _DGD_At_Work2;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
           break;
         }
   
@@ -227,7 +229,8 @@ public class CartoCSSParser
       }
   
       ILogger.instance().logInfo("****%s", _tokens.get(cursor).description());
-      int _DGD_At_Work3;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
       cursor++;
     }
   

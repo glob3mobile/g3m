@@ -59,7 +59,7 @@ void BusyMeshRenderer::createGLState() {
 Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
   const int numStrides = 5;
 
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
   FloatBufferBuilderFromColor colors;
   ShortBufferBuilder indices;
@@ -82,8 +82,8 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
     const double c = mu->cos(angle);
     const double s = mu->sin(angle);
 
-    vertices.add( (innerRadius * c), (innerRadius * s), 0);
-    vertices.add( (outerRadius * c), (outerRadius * s), 0);
+    vertices->add( (innerRadius * c), (innerRadius * s), 0);
+    vertices->add( (outerRadius * c), (outerRadius * s), 0);
 
     indices.add((short) (indicesCounter++));
     indices.add((short) (indicesCounter++));
@@ -109,16 +109,19 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
   indices.add((short) 0);
   indices.add((short) 1);
 
-  // create mesh
-  return new IndexedMesh(GLPrimitive::triangleStrip(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         1,
-                         1,
-                         NULL,
-                         colors.create());
+
+  Mesh* result = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                true,
+                                vertices->getCenter(),
+                                vertices->create(),
+                                indices.create(),
+                                1,
+                                1,
+                                NULL,
+                                colors.create());
+  delete vertices;
+
+  return result;
 }
 
 Mesh* BusyMeshRenderer::getMesh(const G3MRenderContext* rc) {

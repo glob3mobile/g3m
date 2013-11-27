@@ -37,6 +37,13 @@ enum GLFeatureID{
 
 class GLFeature: public RCObject {
 protected:
+  ~GLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+protected:
   GPUVariableValueSet _values;
 
 public:
@@ -58,7 +65,14 @@ public:
 
 };
 
-class BillboardGLFeature: public GLFeature{
+class BillboardGLFeature: public GLFeature {
+private:
+  ~BillboardGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   BillboardGLFeature(const Vector3D& position,
                      int textureWidth,
@@ -68,6 +82,13 @@ public:
 };
 
 class ViewportExtentGLFeature: public GLFeature {
+private:
+  ~ViewportExtentGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
@@ -76,6 +97,7 @@ public:
 
 
 class GeometryGLFeature: public GLFeature {
+private:
   //Position + cull + depth + polygonoffset + linewidth
   GPUAttributeValueVec4Float* _position;
 
@@ -86,6 +108,8 @@ class GeometryGLFeature: public GLFeature {
   const float _polygonOffsetFactor;
   const float _polygonOffsetUnits;
   const float _lineWidth;
+
+  ~GeometryGLFeature();
 
 public:
 
@@ -104,7 +128,6 @@ public:
                     bool needsPointSize,
                     float pointSize);
 
-  ~GeometryGLFeature();
 
   void applyOnGlobalGLState(GLGlobalState* state) const ;
 
@@ -120,6 +143,16 @@ private:
 #ifdef JAVA_CODE
   private Matrix44DHolder _matrixHolder = null;
 #endif
+
+protected:
+  ~GLCameraGroupFeature() {
+    _matrixHolder->_release();
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
 
   GLCameraGroupFeature(Matrix44D* matrix,
@@ -127,14 +160,6 @@ public:
   GLFeature(CAMERA_GROUP, id),
   _matrixHolder(new Matrix44DHolder(matrix))
   {
-  }
-
-  ~GLCameraGroupFeature() {
-    _matrixHolder->_release();
-
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
   }
 
   const Matrix44D* getMatrix() const {
@@ -153,6 +178,13 @@ public:
 };
 
 class ModelViewGLFeature: public GLCameraGroupFeature {
+private:
+  ~ModelViewGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   ModelViewGLFeature(Matrix44D* modelview) :
   GLCameraGroupFeature(modelview, GLF_MODEL_VIEW)
@@ -163,6 +195,13 @@ public:
 };
 
 class ModelGLFeature: public GLCameraGroupFeature {
+private:
+  ~ModelGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   ModelGLFeature(Matrix44D* model) :
   GLCameraGroupFeature(model, GLF_MODEL)
@@ -173,8 +212,14 @@ public:
 };
 
 class ProjectionGLFeature: public GLCameraGroupFeature {
-public:
+private:
+  ~ProjectionGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
 
+public:
   ProjectionGLFeature(Matrix44D* projection) :
   GLCameraGroupFeature(projection, GLF_PROJECTION)
   {
@@ -184,8 +229,14 @@ public:
 };
 
 class ModelTransformGLFeature: public GLCameraGroupFeature {
-public:
+private:
+  ~ModelTransformGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
 
+public:
   ModelTransformGLFeature(Matrix44D* transform) :
   GLCameraGroupFeature(transform, GLF_MODEL_TRANSFORM)
   {
@@ -194,6 +245,13 @@ public:
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 class PriorityGLFeature: public GLFeature {
+protected:
+  ~PriorityGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   const int _priority;
 
@@ -207,10 +265,17 @@ public:
 };
 
 class GLColorGroupFeature: public PriorityGLFeature {
-
+private:
   const bool _blend;
   const int _sFactor;
   const int _dFactor;
+
+protected:
+  ~GLColorGroupFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
 
 public:
   GLColorGroupFeature(GLFeatureID id,
@@ -237,12 +302,19 @@ public:
 };
 
 class TextureGLFeature: public GLColorGroupFeature {
+private:
 #ifdef C_CODE
   IGLTextureId const* _texID;
 #endif
 #ifdef JAVA_CODE
   private IGLTextureId _texID = null;
 #endif
+
+  ~TextureGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
 
 public:
   TextureGLFeature(const IGLTextureId* texID,
@@ -261,7 +333,14 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
-class ColorGLFeature: public GLColorGroupFeature{
+class ColorGLFeature: public GLColorGroupFeature {
+private:
+  ~ColorGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   ColorGLFeature(IFloatBuffer* colors,
                  int arrayElementSize,
@@ -277,7 +356,14 @@ public:
   }
 };
 
-class FlatColorGLFeature: public GLColorGroupFeature{
+class FlatColorGLFeature: public GLColorGroupFeature {
+private:
+  ~FlatColorGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   FlatColorGLFeature(const Color& color,
                      bool blend, int sFactor, int dFactor);
@@ -287,6 +373,7 @@ public:
 };
 
 class TextureIDGLFeature: public PriorityGLFeature {
+private:
 #ifdef C_CODE
   IGLTextureId const* _texID;
 #endif
@@ -294,18 +381,38 @@ class TextureIDGLFeature: public PriorityGLFeature {
   private IGLTextureId _texID = null;
 #endif
 
+  ~TextureIDGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   TextureIDGLFeature(const IGLTextureId* texID);
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
-class BlendingModeGLFeature: public GLColorGroupFeature{
+class BlendingModeGLFeature: public GLColorGroupFeature {
+private:
+  ~BlendingModeGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   BlendingModeGLFeature(bool blend, int sFactor, int dFactor);
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 
 class TextureCoordsGLFeature: public PriorityGLFeature {
+private:
+  ~TextureCoordsGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   TextureCoordsGLFeature(IFloatBuffer* texCoords,
                          int arrayElementSize,
@@ -320,8 +427,14 @@ public:
 };
 
 class DirectionLightGLFeature: public GLFeature {
-
+private:
   GPUUniformValueVec3FloatMutable* _lightDirectionUniformValue;
+
+  ~DirectionLightGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
 
 public:
   DirectionLightGLFeature(const Vector3D& dir,
@@ -333,7 +446,14 @@ public:
   void setLightDirection(const Vector3D& lightDir);
 };
 
-class VertexNormalGLFeature: public GLFeature{
+class VertexNormalGLFeature: public GLFeature {
+private:
+  ~VertexNormalGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   VertexNormalGLFeature(IFloatBuffer* buffer,
                         int arrayElementSize,

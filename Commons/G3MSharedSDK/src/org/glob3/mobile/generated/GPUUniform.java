@@ -5,10 +5,6 @@ public class GPUUniform extends GPUVariable
   private boolean _dirty;
   private GPUUniformValue _value;
 
-  public final IGLUniformID _id;
-  public final int _type;
-  public final GPUUniformKey _key;
-
   public void dispose()
   {
     if (_id != null)
@@ -19,8 +15,12 @@ public class GPUUniform extends GPUVariable
     }
 
     super.dispose();
-
   }
+
+  public final IGLUniformID _id;
+  public final int _type;
+  public final GPUUniformKey _key;
+
 
   public GPUUniform(String name, IGLUniformID id, int type)
   {

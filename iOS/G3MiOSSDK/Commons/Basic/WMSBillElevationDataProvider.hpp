@@ -63,7 +63,7 @@ public:
 //    int WORKING_JM;
     return Vector2I::zero();
   }
-  
+
 };
 
 #endif

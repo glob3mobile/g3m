@@ -3,6 +3,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
+  private boolean _ownsElevationDataProvider;
   private TileTexturizer _texturizer;
   private TileRasterizer _tileRasterizer;
   private LayerSet _layerSet;
@@ -314,10 +315,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
+     _ownsElevationDataProvider = ownsElevationDataProvider;
      _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
@@ -413,6 +415,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     updateGLState(rc);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Testing_Terrain_Normals;
+    _glState.setParent(glState);
   
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
@@ -598,7 +603,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     if (!_layerSet.isReady())
     {
-      int __TODO_Layer_error;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning __TODO_Layer_error;
       return RenderState.busy();
     }
   
@@ -722,7 +728,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       _recreateTilesPending = true;
       // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
       //   so it has to be executed in the OpenGL thread
-      _context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
+      if (_context == null)
+      {
+        ILogger.instance().logError("_context if not initialized");
+      }
+      else
+      {
+        _context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
+      }
     }
   }
 
@@ -864,6 +877,45 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       _terrainTouchListeners.add(listener);
     }
+  }
+
+  public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
+  {
+    if (_elevationDataProvider != elevationDataProvider)
+    {
+      if (_ownsElevationDataProvider)
+      {
+        if (_elevationDataProvider != null)
+           _elevationDataProvider.dispose();
+      }
+  
+      _ownsElevationDataProvider = owned;
+      _elevationDataProvider = elevationDataProvider;
+  
+      if (_elevationDataProvider != null)
+      {
+        _elevationDataProvider.setChangedListener(this);
+        if (_context != null)
+        {
+          _elevationDataProvider.initialize(_context); //Initializing EDP in case it wasn't
+        }
+      }
+  
+      changed();
+    }
+  }
+  public final void setVerticalExaggeration(float verticalExaggeration)
+  {
+    if (_verticalExaggeration != verticalExaggeration)
+    {
+      _verticalExaggeration = verticalExaggeration;
+      changed();
+    }
+  }
+
+  public final ElevationDataProvider getElevationDataProvider()
+  {
+    return _elevationDataProvider;
   }
 
 }

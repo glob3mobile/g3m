@@ -18,10 +18,10 @@ public final class FloatBuffer_WebGL
 
    private JavaScriptObject       _webGLBuffer     = null;
    private JavaScriptObject       _gl              = null;
-   
+
    //ID
-   private static long _nextID = 0;
-   private final long _id = _nextID++;
+   private static long            _nextID          = 0;
+   private final long             _id              = _nextID++;
 
 
    public JavaScriptObject getWebGLBuffer(final JavaScriptObject gl) {
@@ -203,6 +203,14 @@ public final class FloatBuffer_WebGL
    }-*/;
 
 
+   @Override
+   public native void rawAdd(final int i,
+                             final float value) /*-{
+		var buffer = this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer;
+		buffer[i] = buffer[i] + value;
+   }-*/;
+
+
    public JavaScriptObject getBuffer() {
       return _buffer;
    }
@@ -229,9 +237,9 @@ public final class FloatBuffer_WebGL
    }
 
 
-@Override
-public long getID() {
-	return _id;
-}
+   @Override
+   public long getID() {
+      return _id;
+   }
 
 }

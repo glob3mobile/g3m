@@ -28,9 +28,6 @@ public abstract class GEOMeshSymbol extends GEOSymbol
 
   protected final Mesh createLine2DMesh(java.util.ArrayList<Geodetic2D> coordinates, Color lineColor, float lineWidth, double deltaHeight, Planet planet)
   {
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-  //                                          planet,
-  //                                          Geodetic2D::zero());
   
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
   
@@ -41,15 +38,17 @@ public abstract class GEOMeshSymbol extends GEOSymbol
       vertices.add(coordinate._latitude, coordinate._longitude, deltaHeight);
     }
   
-    return new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
+    Mesh result = new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
 
   protected final Mesh createLines2DMesh(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, Color lineColor, float lineWidth, double deltaHeight, Planet planet)
   {
   
-  //  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
-  //                                          planet,
-  //                                          Geodetic2D::zero());
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(planet);
     ShortBufferBuilder indices = new ShortBufferBuilder();
   
@@ -74,7 +73,12 @@ public abstract class GEOMeshSymbol extends GEOSymbol
       }
     }
   
-    return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
+    Mesh result = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), lineWidth, 1, new Color(lineColor), null, 0.0f, false);
+  
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
 
 

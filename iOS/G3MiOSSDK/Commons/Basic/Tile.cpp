@@ -156,7 +156,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TilesRenderParameters* tilesRenderParameters) {
 
 
-  if ( (_elevationData == NULL) && (elevationDataProvider != NULL) ) {
+  if ( (_elevationData == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled()) ) {
     initializeElevationData(elevationDataProvider,
                             tessellator,
                             layerTilesRenderParameters->_tileMeshResolution,
@@ -927,14 +927,6 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
   _lastTileMeshResolutionX = tileMeshResolution._x;
   _lastTileMeshResolutionY = tileMeshResolution._y;
   if (_elevationDataRequest == NULL) {
-    //    const Sector caceresSector = Sector::fromDegrees(39.4642996294239623,
-    //                                                     -6.3829977122432933,
-    //                                                     39.4829891936013553,
-    //                                                     -6.3645288909498845);
-    //
-    //    if (caceresSector.touchesWith(_sector)) {
-    //      printf("break point on me\n");
-    //    }
 
     const Vector2I res = tessellator->getTileMeshResolution(planet,
                                                             tileMeshResolution,
@@ -944,7 +936,7 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
     _elevationDataRequest->sendRequest();
   }
 
-  //If after petition we still have no data we request from ancestor
+  //If after petition we still have no data we request from ancestor (provider asynchronous)
   if (_elevationData == NULL) {
     getElevationDataFromAncestor(tileMeshResolution);
   }
@@ -1053,4 +1045,3 @@ void Tile::computeTileCorners(const Planet* planet){
   _middleEastPoint = new Vector3D(planet->toCartesian(gE));
   _middleWestPoint = new Vector3D(planet->toCartesian(gW));
 }
-

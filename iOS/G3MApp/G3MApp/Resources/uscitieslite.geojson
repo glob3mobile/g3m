@@ -1,0 +1,106 @@
+{
+"type": "FeatureCollection",
+                                                                                
+"features": [
+{ "type": "Feature", "id": 605, "properties": { "NAME": "Mesa", "ADM0NAME": "United States of America", "POP_MAX": 1085394 }, "geometry": { "type": "Point", "coordinates": [ -111.736084433827784, 33.423914610827183 ] } }
+,
+{ "type": "Feature", "id": 1852, "properties": { "NAME": "Irvine", "ADM0NAME": "United States of America", "POP_MAX": 3010232 }, "geometry": { "type": "Point", "coordinates": [ -117.829950197198457, 33.680410582507875 ] } }
+,
+{ "type": "Feature", "id": 1994, "properties": { "NAME": "Fort Lauderdale", "ADM0NAME": "United States of America", "POP_MAX": 2042042 }, "geometry": { "type": "Point", "coordinates": [ -80.141785524196052, 26.13606487935283 ] } }
+,
+{ "type": "Feature", "id": 4875, "properties": { "NAME": "Long Beach", "ADM0NAME": "United States of America", "POP_MAX": 2036134 }, "geometry": { "type": "Point", "coordinates": [ -118.158043865819593, 33.786967385893718 ] } }
+,
+{ "type": "Feature", "id": 4901, "properties": { "NAME": "Providence", "ADM0NAME": "United States of America", "POP_MAX": 1277000 }, "geometry": { "type": "Point", "coordinates": [ -71.416925555951195, 41.823048172924359 ] } }
+,
+{ "type": "Feature", "id": 4902, "properties": { "NAME": "Birmingham", "ADM0NAME": "United States of America", "POP_MAX": 1128047 }, "geometry": { "type": "Point", "coordinates": [ -86.82499515963957, 33.530006326322507 ] } }
+,
+{ "type": "Feature", "id": 4911, "properties": { "NAME": "Virginia Beach", "ADM0NAME": "United States of America", "POP_MAX": 1491000 }, "geometry": { "type": "Point", "coordinates": [ -75.980264585917439, 36.855160192761275 ] } }
+,
+{ "type": "Feature", "id": 5392, "properties": { "NAME": "Oakland", "ADM0NAME": "United States of America", "POP_MAX": 1510271 }, "geometry": { "type": "Point", "coordinates": [ -122.221103354768161, 37.76892071436032 ] } }
+,
+{ "type": "Feature", "id": 5414, "properties": { "NAME": "West Palm Beach", "ADM0NAME": "United States of America", "POP_MAX": 1250000 }, "geometry": { "type": "Point", "coordinates": [ -80.123621258245578, 26.745019957480224 ] } }
+,
+{ "type": "Feature", "id": 5432, "properties": { "NAME": "Columbus", "ADM0NAME": "United States of America", "POP_MAX": 1270000 }, "geometry": { "type": "Point", "coordinates": [ -82.991955463224087, 39.981920243229297 ] } }
+,
+{ "type": "Feature", "id": 6170, "properties": { "NAME": "San Bernardino", "ADM0NAME": "United States of America", "POP_MAX": 1745000 }, "geometry": { "type": "Point", "coordinates": [ -117.301980080874387, 34.122329585653802 ] } }
+,
+{ "type": "Feature", "id": 6171, "properties": { "NAME": "Bridgeport", "ADM0NAME": "United States of America", "POP_MAX": 1018000 }, "geometry": { "type": "Point", "coordinates": [ -73.201907041961078, 41.1819245156953 ] } }
+,
+{ "type": "Feature", "id": 6229, "properties": { "NAME": "Kansas City", "ADM0NAME": "United States of America", "POP_MAX": 1469000 }, "geometry": { "type": "Point", "coordinates": [ -94.606040077545799, 39.109034368397488 ] } }
+,
+{ "type": "Feature", "id": 6234, "properties": { "NAME": "Ft. Worth", "ADM0NAME": "United States of America", "POP_MAX": 1440454 }, "geometry": { "type": "Point", "coordinates": [ -97.340038087741448, 32.739977029444219 ] } }
+,
+{ "type": "Feature", "id": 6236, "properties": { "NAME": "Austin", "ADM0NAME": "United States of America", "POP_MAX": 1161000 }, "geometry": { "type": "Point", "coordinates": [ -97.744724221421166, 30.268895544297379 ] } }
+,
+{ "type": "Feature", "id": 6244, "properties": { "NAME": "Orlando", "ADM0NAME": "United States of America", "POP_MAX": 1350000 }, "geometry": { "type": "Point", "coordinates": [ -81.381976215170766, 28.511922684589933 ] } }
+,
+{ "type": "Feature", "id": 6248, "properties": { "NAME": "Indianapolis", "ADM0NAME": "United States of America", "POP_MAX": 1436000 }, "geometry": { "type": "Point", "coordinates": [ -86.171993915385201, 39.751934281314504 ] } }
+,
+{ "type": "Feature", "id": 6253, "properties": { "NAME": "Baltimore", "ADM0NAME": "United States of America", "POP_MAX": 2255000 }, "geometry": { "type": "Point", "coordinates": [ -76.621930845685483, 39.301935908916732 ] } }
+,
+{ "type": "Feature", "id": 6777, "properties": { "NAME": "San Jose", "ADM0NAME": "United States of America", "POP_MAX": 1668000 }, "geometry": { "type": "Point", "coordinates": [ -121.851934914877006, 37.301928788140458 ] } }
+,
+{ "type": "Feature", "id": 6778, "properties": { "NAME": "Sacramento", "ADM0NAME": "United States of America", "POP_MAX": 1604000 }, "geometry": { "type": "Point", "coordinates": [ -121.471983946450962, 38.576967240294152 ] } }
+,
+{ "type": "Feature", "id": 6779, "properties": { "NAME": "Las Vegas", "ADM0NAME": "United States of America", "POP_MAX": 1823000 }, "geometry": { "type": "Point", "coordinates": [ -115.221952004694174, 36.211943640024288 ] } }
+,
+{ "type": "Feature", "id": 6781, "properties": { "NAME": "Portland", "ADM0NAME": "United States of America", "POP_MAX": 1875000 }, "geometry": { "type": "Point", "coordinates": [ -122.681935932132888, 45.521969681728024 ] } }
+,
+{ "type": "Feature", "id": 6788, "properties": { "NAME": "San Antonio", "ADM0NAME": "United States of America", "POP_MAX": 1473000 }, "geometry": { "type": "Point", "coordinates": [ -98.509251198963284, 29.48927904852593 ] } }
+,
+{ "type": "Feature", "id": 6792, "properties": { "NAME": "Raleigh", "ADM0NAME": "United States of America", "POP_MAX": 1163515 }, "geometry": { "type": "Point", "coordinates": [ -78.644693442484481, 35.818781350745724 ] } }
+,
+{ "type": "Feature", "id": 6793, "properties": { "NAME": "Cleveland", "ADM0NAME": "United States of America", "POP_MAX": 1890000 }, "geometry": { "type": "Point", "coordinates": [ -81.696944069989627, 41.471932653717317 ] } }
+,
+{ "type": "Feature", "id": 6794, "properties": { "NAME": "Cincinnati", "ADM0NAME": "United States of America", "POP_MAX": 1636000 }, "geometry": { "type": "Point", "coordinates": [ -84.458868508477337, 39.163830643616848 ] } }
+,
+{ "type": "Feature", "id": 6796, "properties": { "NAME": "Memphis", "ADM0NAME": "United States of America", "POP_MAX": 1081000 }, "geometry": { "type": "Point", "coordinates": [ -90.001941018265143, 35.121932653691829 ] } }
+,
+{ "type": "Feature", "id": 6797, "properties": { "NAME": "Norfolk", "ADM0NAME": "United States of America", "POP_MAX": 1047869 }, "geometry": { "type": "Point", "coordinates": [ -76.280005739024489, 36.849958718913911 ] } }
+,
+{ "type": "Feature", "id": 6798, "properties": { "NAME": "Milwaukee", "ADM0NAME": "United States of America", "POP_MAX": 1388000 }, "geometry": { "type": "Point", "coordinates": [ -87.921912942084987, 43.054600907304177 ] } }
+,
+{ "type": "Feature", "id": 6799, "properties": { "NAME": "Buffalo", "ADM0NAME": "United States of America", "POP_MAX": 1016000 }, "geometry": { "type": "Point", "coordinates": [ -78.881947935538278, 42.881924108800831 ] } }
+,
+{ "type": "Feature", "id": 6800, "properties": { "NAME": "Pittsburgh", "ADM0NAME": "United States of America", "POP_MAX": 1838000 }, "geometry": { "type": "Point", "coordinates": [ -80.00193125260023, 40.43194445384313 ] } }
+,
+{ "type": "Feature", "id": 7106, "properties": { "NAME": "Minneapolis", "ADM0NAME": "United States of America", "POP_MAX": 2616000 }, "geometry": { "type": "Point", "coordinates": [ -93.25373219666352, 44.981925126061867 ] } }
+,
+{ "type": "Feature", "id": 7108, "properties": { "NAME": "Seattle", "ADM0NAME": "United States of America", "POP_MAX": 3074000 }, "geometry": { "type": "Point", "coordinates": [ -122.34193084586849, 47.571947912530732 ] } }
+,
+{ "type": "Feature", "id": 7109, "properties": { "NAME": "Phoenix", "ADM0NAME": "United States of America", "POP_MAX": 3551000 }, "geometry": { "type": "Point", "coordinates": [ -112.071937559694675, 33.541925736367602 ] } }
+,
+{ "type": "Feature", "id": 7110, "properties": { "NAME": "San Diego", "ADM0NAME": "United States of America", "POP_MAX": 2916000 }, "geometry": { "type": "Point", "coordinates": [ -117.181935728660278, 32.821969681677331 ] } }
+,
+{ "type": "Feature", "id": 7111, "properties": { "NAME": "St. Louis", "ADM0NAME": "United States of America", "POP_MAX": 2199000 }, "geometry": { "type": "Point", "coordinates": [ -90.241926369828604, 38.636963578185146 ] } }
+,
+{ "type": "Feature", "id": 7113, "properties": { "NAME": "Dallas", "ADM0NAME": "United States of America", "POP_MAX": 4798000 }, "geometry": { "type": "Point", "coordinates": [ -96.841962787498176, 32.821969681677331 ] } }
+,
+{ "type": "Feature", "id": 7115, "properties": { "NAME": "Boston", "ADM0NAME": "United States of America", "POP_MAX": 4467000 }, "geometry": { "type": "Point", "coordinates": [ -71.071959532186838, 42.331906001702293 ] } }
+,
+{ "type": "Feature", "id": 7116, "properties": { "NAME": "Tampa", "ADM0NAME": "United States of America", "POP_MAX": 2314000 }, "geometry": { "type": "Point", "coordinates": [ -82.46056670996677, 27.94893379298594 ] } }
+,
+{ "type": "Feature", "id": 7117, "properties": { "NAME": "Philadelphia", "ADM0NAME": "United States of America", "POP_MAX": 5492000 }, "geometry": { "type": "Point", "coordinates": [ -75.171941832007917, 40.001919022526465 ] } }
+,
+{ "type": "Feature", "id": 7118, "properties": { "NAME": "Detroit", "ADM0NAME": "United States of America", "POP_MAX": 4101000 }, "geometry": { "type": "Point", "coordinates": [ -83.082001646492699, 42.331906001702293 ] } }
+,
+{ "type": "Feature", "id": 7222, "properties": { "NAME": "San Francisco", "ADM0NAME": "United States of America", "POP_MAX": 3450000 }, "geometry": { "type": "Point", "coordinates": [ -122.417168773552248, 37.769195629687431 ] } }
+,
+{ "type": "Feature", "id": 7223, "properties": { "NAME": "Denver", "ADM0NAME": "United States of America", "POP_MAX": 2313000 }, "geometry": { "type": "Point", "coordinates": [ -104.985961810968206, 39.741133906965501 ] } }
+,
+{ "type": "Feature", "id": 7224, "properties": { "NAME": "Houston", "ADM0NAME": "United States of America", "POP_MAX": 4459000 }, "geometry": { "type": "Point", "coordinates": [ -95.341925149145993, 29.821920243188856 ] } }
+,
+{ "type": "Feature", "id": 7225, "properties": { "NAME": "Miami", "ADM0NAME": "United States of America", "POP_MAX": 5585000 }, "geometry": { "type": "Point", "coordinates": [ -80.226051939450031, 25.789556555021534 ] } }
+,
+{ "type": "Feature", "id": 7226, "properties": { "NAME": "Atlanta", "ADM0NAME": "United States of America", "POP_MAX": 4506000 }, "geometry": { "type": "Point", "coordinates": [ -84.40189524187565, 33.831959712605851 ] } }
+,
+{ "type": "Feature", "id": 7227, "properties": { "NAME": "Chicago", "ADM0NAME": "United States of America", "POP_MAX": 8990000 }, "geometry": { "type": "Point", "coordinates": [ -87.752000832709314, 41.831936519278429 ] } }
+,
+{ "type": "Feature", "id": 7262, "properties": { "NAME": "Los Angeles", "ADM0NAME": "United States of America", "POP_MAX": 12500000 }, "geometry": { "type": "Point", "coordinates": [ -118.181926369940413, 33.991924108765431 ] } }
+,
+{ "type": "Feature", "id": 7263, "properties": { "NAME": "Washington, D.C.", "ADM0NAME": "United States of America", "POP_MAX": 4338000 }, "geometry": { "type": "Point", "coordinates": [ -77.011364439437159, 38.901495235087054 ] } }
+,
+{ "type": "Feature", "id": 7264, "properties": { "NAME": "New York", "ADM0NAME": "United States of America", "POP_MAX": 19040000 }, "geometry": { "type": "Point", "coordinates": [ -73.981962787406815, 40.75192492259464 ] } }
+
+]
+}

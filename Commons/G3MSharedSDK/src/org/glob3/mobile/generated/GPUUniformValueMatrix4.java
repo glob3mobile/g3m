@@ -8,6 +8,20 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
   protected Matrix44DProvider _provider = null;
   protected  Matrix44D _lastModelSet;
 
+  public void dispose()
+  {
+    //    if (_ownsProvider) {
+    _provider._release();
+    //    }
+    if (_lastModelSet != null)
+    {
+      _lastModelSet._release();
+    }
+
+    super.dispose();
+  }
+
+
   public GPUUniformValueMatrix4(Matrix44DProvider[] providers, int nMatrix)
 //  _ownsProvider(true)
   {
@@ -31,17 +45,6 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
      super(GLType.glMatrix4Float());
      _provider = new Matrix44DHolder(m);
      _lastModelSet = null;
-  }
-
-  public void dispose()
-  {
-//    if (_ownsProvider) {
-      _provider._release();
-//    }
-    if (_lastModelSet != null)
-    {
-      _lastModelSet._release();
-    }
   }
 
   public final void setUniform(GL gl, IGLUniformID id)

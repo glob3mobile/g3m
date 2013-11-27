@@ -61,6 +61,12 @@ Matrix44DMultiplicationHolder::~Matrix44DMultiplicationHolder() {
   if (_modelview != NULL) {
     _modelview->_release();
   }
+  {
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
 }
 
 Matrix44D* Matrix44DMultiplicationHolder::getMatrix() const {

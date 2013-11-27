@@ -56,7 +56,7 @@ public:
   }
 };
 
-SGLayerNode::~SGLayerNode(){
+SGLayerNode::~SGLayerNode() {
 #ifdef C_CODE
   delete _textureId; //Releasing texture through TextureIDReference class
 #endif

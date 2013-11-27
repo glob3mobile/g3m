@@ -100,7 +100,7 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
   const Vector3D offsetP(_ribbonWidth/2, 0, 0);
   const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
 
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
 
 
   const Vector3D rotationAxis = Vector3D::downZ();
@@ -112,14 +112,14 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
     const MutableMatrix44D geoMatrix = planet->createGeodeticTransformMatrix(*position);
     const MutableMatrix44D matrix = geoMatrix.multiply(rotationMatrix);
 
-    vertices.add(offsetN.transformedBy(matrix, 1));
-    vertices.add(offsetP.transformedBy(matrix, 1));
+    vertices->add(offsetN.transformedBy(matrix, 1));
+    vertices->add(offsetP.transformedBy(matrix, 1));
   }
 
   Mesh* surfaceMesh = new DirectMesh(GLPrimitive::triangleStrip(),
                                      true,
-                                     vertices.getCenter(),
-                                     vertices.create(),
+                                     vertices->getCenter(),
+                                     vertices->create(),
                                      1,
                                      1,
                                      new Color(_color),
@@ -128,21 +128,9 @@ Mesh* TrailSegment::createMesh(const Planet* planet) {
                                      true // depthTest
                                      );
 
+  delete vertices;
+
   return surfaceMesh;
-
-//  // Debug unions
-//  Mesh* edgesMesh = new DirectMesh(GLPrimitive::lines(),
-//                                   false,
-//                                   vertices.getCenter(),
-//                                   vertices.create(),
-//                                   2,
-//                                   1,
-//                                   Color::newFromRGBA(1, 1, 1, 0.7f));
-//  CompositeMesh* cm = new CompositeMesh();
-//  cm->addMesh(surfaceMesh);
-//  cm->addMesh(edgesMesh);
-//  return cm;
-
 }
 
 void Trail::clear() {
