@@ -13,8 +13,6 @@
 #include <map>
 #include <list>
 
-#include "RCObject.hpp"
-
 class GPUAttribute;
 class GPUUniform;
 
@@ -38,7 +36,7 @@ enum ShaderType {
   FRAGMENT_SHADER
 };
 
-class GPUProgram:public RCObject {
+class GPUProgram{
   int _programID;
 
   GPUUniform* _uniforms[32];
@@ -56,7 +54,7 @@ class GPUProgram:public RCObject {
 
   GL* _gl;
 
-  bool _usedMark; //If true means the shader has been used in the last frames
+  int _nReferences; //Number of items that reference this Program
   
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
@@ -75,14 +73,15 @@ class GPUProgram:public RCObject {
   _uniformsCode(0),
   _attributesCode(0),
   _gl(NULL),
-  _usedMark(false),
-  _manager(manager){}
+  _manager(manager),
+  _nReferences(0){}
 
   GPUProgram(const GPUProgram& that);
 
-  ~GPUProgram();
-  
 public:
+
+
+  ~GPUProgram();
   
   static GPUProgram* createProgram(GL* gl, const std::string name,
                                    const std::string& vertexSource,
@@ -126,6 +125,10 @@ public:
 
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);
+
+  void addReference(){ ++_nReferences;}
+  void removeReference() { --_nReferences;}
+  int getNReferences() const { return _nReferences;}
 
 };
 

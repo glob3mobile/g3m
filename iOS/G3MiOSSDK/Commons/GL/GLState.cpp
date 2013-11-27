@@ -20,7 +20,7 @@ GLState::~GLState() {
   }
 
   if (_linkedProgram != NULL){
-    _linkedProgram->_release();
+    _linkedProgram->removeReference();
   }
 }
 
@@ -32,7 +32,8 @@ void GLState::hasChangedStructure() const {
   _globalState = NULL;
 
   if (_linkedProgram != NULL){
-    _linkedProgram->_release();
+    _linkedProgram->removeReference();
+    _linkedProgram = NULL;
   }
 
   delete _accumulatedFeatures;

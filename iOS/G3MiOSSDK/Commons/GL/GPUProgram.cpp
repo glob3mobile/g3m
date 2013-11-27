@@ -80,9 +80,9 @@ GPUProgram::~GPUProgram() {
 
   //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
 
-  if (_manager != NULL){
-    _manager->compiledProgramDeleted(this->_name);
-  }
+//  if (_manager != NULL){
+//    _manager->compiledProgramDeleted(this->_name);
+//  }
 
   for (int i = 0; i < _nUniforms; i++) {
     delete _createdUniforms[i];
@@ -301,7 +301,6 @@ GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string na
  */
 void GPUProgram::onUsed() {
   //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
-  _usedMark = true;
 }
 /**
  Must be called when the program is no longer used

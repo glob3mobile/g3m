@@ -14,7 +14,7 @@ GPUProgramManager::~GPUProgramManager() {
 #ifdef C_CODE
   delete _factory;
   for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
-    it->second->_release();
+    delete it->second;
   }
 #endif
 }
@@ -23,15 +23,13 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
   GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
   if (p == NULL) {
     p = getNewProgram(gl, uniformsCode, attributesCode);
-
     if (p->getAttributesCode() != attributesCode ||
         p->getUniformsCode() != uniformsCode){
       ILogger::instance()->logError("New compiled program does not match GL state.");
     }
-
-  } else{
-    p->_retain();
   }
+
+  p->addReference();
 
   return p;
 }
@@ -142,18 +140,31 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 #endif
 }
 
-void GPUProgramManager::compiledProgramDeleted(const std::string& name) {
+//void GPUProgramManager::compiledProgramDeleted(const std::string& name) {
+//#ifdef C_CODE
+//  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
+//  if (it != _programs.end()) {
+//    _programs.erase(it);
+//  } else{
+//    ILogger::instance()->logError("Trying to delete program from GPUProgramManager that does not exist.");
+//  }
+//#endif
+//#ifdef JAVA_CODE
+//  if (_programs.remove(name) == null){
+//    ILogger.instance().logError("Trying to delete program from GPUProgramManager that does not exist.");
+//  }
+//#endif
+//}
+
+void GPUProgramManager::removeUnused() {
 #ifdef C_CODE
-  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
-  if (it != _programs.end()) {
-    _programs.erase(it);
-  } else{
-    ILogger::instance()->logError("Trying to delete program from GPUProgramManager that does not exist.");
-  }
-#endif
-#ifdef JAVA_CODE
-  if (_programs.remove(name) == null){
-    ILogger.instance().logError("Trying to delete program from GPUProgramManager that does not exist.");
+  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+    if (it->second->getNReferences() == 0){
+
+      ILogger::instance()->logInfo("Deleting program %s", it->second->getName().c_str() );
+      delete it->second;
+      _programs.erase(it);
+    }
   }
 #endif
 }
