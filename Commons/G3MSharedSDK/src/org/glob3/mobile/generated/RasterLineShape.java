@@ -37,7 +37,7 @@ public class RasterLineShape extends Shape
       computeOrientationParams(planet);
     double distanceToCamera = camera.getCartesianPosition().distanceTo(_cartesianStartPos);
     FrustumData frustum = camera.getFrustumData();
-    final int pixelWidth = 6;
+    final int pixelWidth = 10;
     double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera.getHeight() / frustum._znear;
     final Vector3D upper = new Vector3D(scale, scale, 1);
     final Vector3D lower = new Vector3D(-scale, -scale, 0);
@@ -73,9 +73,9 @@ public class RasterLineShape extends Shape
 
   public RasterLineShape(Geodetic2D startPosition, Geodetic2D endPosition, float width, Color color)
   {
+     super(new Geodetic3D(startPosition, 0), AltitudeMode.RELATIVE_TO_GROUND);
      _geodeticStartPos = startPosition;
      _geodeticEndPos = endPosition;
-     super(new Geodetic3D(startPosition, 0), AltitudeMode.RELATIVE_TO_GROUND);
      _cartesianStartPos = null;
      _boundingVolume = null;
      _width = width;

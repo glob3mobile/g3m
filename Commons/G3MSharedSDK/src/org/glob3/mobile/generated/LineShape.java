@@ -37,7 +37,7 @@ public class LineShape extends AbstractMeshShape
       computeOrientationParams(planet);
     double distanceToCamera = camera.getCartesianPosition().distanceTo(_cartesianStartPos);
     FrustumData frustum = camera.getFrustumData();
-    final int pixelWidth = 6;
+    final int pixelWidth = 10;
     double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera.getHeight() / frustum._znear;
     final Vector3D upper = new Vector3D(scale, scale, 1);
     final Vector3D lower = new Vector3D(-scale, -scale, 0);
