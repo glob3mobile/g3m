@@ -62,15 +62,39 @@ OrientedBox* RasterPolygonShape::computeOrientedBox(const Planet* planet,
   FrustumData frustum = camera->getFrustumData();
   const int pixelWidth = 10;
   double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getHeight() / frustum._znear;
-  const Vector3D upper = Vector3D(1e4,1e4,1e4); //(scale, scale, 1);
-  const Vector3D lower = Vector3D(-1e4,-1e4,-1e4); //(-scale, -scale, 0);
+  //const Vector3D upper = Vector3D(1e4,1e4,1e4); //(scale, scale, 1);
+  //const Vector3D lower = Vector3D(-1e4,-1e4,-1e4); //(-scale, -scale, 0);
+  const Vector3D upper = Vector3D(_maxX, _maxY, _maxZ);
+  const Vector3D lower = Vector3D(_minX, _minY, _minZ);
   return new OrientedBox(lower, upper, *getTransformMatrix(planet));
 }
 
 
 void RasterPolygonShape::computeOrientationParams(const Planet* planet)
 {
+  _minX = _minY = _minZ = 0;
+  _maxX = _maxY = _maxZ = 0;
   _cartesianStartPos = new Vector3D(planet->toCartesian(*_coordinates->at(0)));
+  const Vector3D normal = planet->geodeticSurfaceNormal(*_cartesianStartPos);
+  Plane Z0 = Plane::fromPointAndNormal(*_cartesianStartPos, normal);
+  const Vector3D north2D = planet->getNorth().projectionInPlane(normal);
+  Plane Y0 = Plane::fromPointAndNormal(*_cartesianStartPos, north2D);
+  const Vector3D east2D = north2D.cross(normal);
+  Plane X0 = Plane::fromPointAndNormal(*_cartesianStartPos, east2D);
+  for (int n=1; n<_coordinates->size(); n++) {
+    Vector3D vertex = planet->toCartesian(*_coordinates->at(n));
+    double x = X0.signedDistance(vertex);
+    if (x < _minX) _minX = x;
+    if (x > _maxX) _maxX = x;
+    double y = Y0.signedDistance(vertex);
+    if (y < _minY) _minY = y;
+    if (y > _maxY) _maxY = y;
+    double z = Z0.signedDistance(vertex);
+    if (z < _minZ) _minZ = z;
+    if (z > _maxZ) _maxZ = z;
+  }
+
+  
   /*const Vector3D cartesianEndPos = Vector3D(planet->toCartesian(*_geodeticEndPos));
   const Vector3D line = cartesianEndPos.sub(*_cartesianStartPos);
   setScale(1, 1, line.length());

@@ -34,6 +34,9 @@ private:
   
   void computeOrientationParams(const Planet* planet);
   
+  double _minX, _minY, _minZ;
+  double _maxX, _maxY, _maxZ;
+  
   
 protected:
   BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
