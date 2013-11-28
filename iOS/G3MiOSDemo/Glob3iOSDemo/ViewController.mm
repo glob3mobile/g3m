@@ -644,7 +644,7 @@ public:
   builder.addRenderer(geoRenderer);
 
   //Showing light directions
-  if (true){
+  if (false){
     CameraFocusSceneLighting* light = new CameraFocusSceneLighting(Color::fromRGBA(0.3, 0.3, 0.3, 1.0),
                                                                    Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
     light->setLightDirectionsMeshRenderer(meshRenderer);
@@ -1951,13 +1951,16 @@ private:
     _colorIndex = (_colorIndex + 1) % wheelSize;
 
 
-    return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
+    BoxShape* box = new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
                         Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                         Color::newFromRGBA(0.2, 0.2, 0, 1));
+
+    //box->setPitch(Angle::fromDegrees(45));
+    return box;
 
   }
 
