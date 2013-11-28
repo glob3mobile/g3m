@@ -1,36 +1,36 @@
 //
-//  RasterLineShape.hpp
+//  RasterPolygonShape.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo on 27/11/13.
+//  Created by Agustín Trujillo on 28/11/13.
 //
 //
 
-#ifndef __G3MiOSSDK__RasterLineShape__
-#define __G3MiOSSDK__RasterLineShape__
-
+#ifndef __G3MiOSSDK__RasterPolygonShape__
+#define __G3MiOSSDK__RasterPolygonShape__
 
 #include "Shape.hpp"
+#include "GEORasterSymbol.hpp"
+
 
 class OrientedBox;
 
 
-class RasterLineShape : public Shape {
+class RasterPolygonShape : public Shape {
 private:
   
   OrientedBox* _boundingVolume;
   
-  float _width;
+  float _borderWidth;
   
-  Color* _color;
-  //Color* _originalColor;
+  Color* _borderColor;
+  Color* _surfaceColor;
   
   OrientedBox* computeOrientedBox(const Planet* planet,
                                   const Camera* camera);
   
-  Geodetic2D* _geodeticStartPos;
-  Geodetic2D* _geodeticEndPos;
   Vector3D*   _cartesianStartPos;
+  std::vector<Geodetic2D*>* _coordinates;
   
   void computeOrientationParams(const Planet* planet);
   
@@ -39,33 +39,34 @@ protected:
   BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
   
 public:
-  RasterLineShape(Geodetic2D* startPosition,
-                  Geodetic2D* endPosition,
-                  float width,
-                  const Color& color) :
-  Shape(new Geodetic3D(*startPosition, 0), RELATIVE_TO_GROUND),
-  _geodeticStartPos(startPosition),
-  _geodeticEndPos(endPosition),
+  RasterPolygonShape(std::vector<Geodetic2D*>* coordinates,
+                     float borderWidth,
+                     const Color& borderColor,
+                     const Color& surfaceColor) :
+  Shape(new Geodetic3D(*coordinates->at(0), 0), RELATIVE_TO_GROUND),
+  _coordinates(GEORasterSymbol::copyCoordinates(coordinates)),
   _cartesianStartPos(NULL),
   _boundingVolume(NULL),
-  _width(width),
-  //_originalColor(new Color(color)),
-  _color(new Color(color))
+  _borderWidth(borderWidth),
+  _borderColor(new Color(borderColor)),
+  _surfaceColor(new Color(surfaceColor))
   {
+    printf("RasterPolygonShape git. Coordinates 0 =%f\n", _coordinates->at(0)->_latitude._degrees);
   }
+
   
-  ~RasterLineShape();
+  ~RasterPolygonShape();
   
   
   void setColor(Color* color) {
-    delete _color;
-    _color = color;
+   /* delete _color;
+    _color = color;*/
   }
   
   void setWidth(float width) {
-    if (_width != width) {
+   /* if (_width != width) {
       _width = width;
-    }
+    }*/
   }
   
   std::vector<double> intersectionsDistances(const Planet* planet,
@@ -90,15 +91,15 @@ public:
   bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
-
+  
   void rawRender(const G3MRenderContext* rc,
                  GLState* parentState,
                  bool renderNotReadyShapes)
   {}
-
+  
   GEORasterSymbol* createRasterSymbolIfNeeded() const;
-
+  
 };
 
 
-#endif /* defined(__G3MiOSSDK__RasterLineShape__) */
+#endif /* defined(__G3MiOSSDK__RasterPolygonShape__) */

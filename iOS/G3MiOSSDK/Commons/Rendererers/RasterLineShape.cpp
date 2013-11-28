@@ -15,7 +15,7 @@
 
 RasterLineShape::~RasterLineShape() {
   delete _color;
-  delete _originalColor;
+//  delete _originalColor;
   if (_boundingVolume)
     delete _boundingVolume;
   delete _geodeticStartPos;

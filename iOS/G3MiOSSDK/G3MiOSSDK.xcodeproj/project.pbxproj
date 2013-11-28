@@ -620,6 +620,8 @@
 		FB2FD50E1844C79A002D2E78 /* LineShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2FD50C1844C632002D2E78 /* LineShape.hpp */; };
 		FB2FD511184606FC002D2E78 /* RasterLineShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2FD50F184606FC002D2E78 /* RasterLineShape.cpp */; };
 		FB2FD51218460AA9002D2E78 /* RasterLineShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2FD510184606FC002D2E78 /* RasterLineShape.hpp */; };
+		FB2FD5151847B898002D2E78 /* RasterPolygonShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2FD5131847B898002D2E78 /* RasterPolygonShape.cpp */; };
+		FB2FD5161847C5C3002D2E78 /* RasterPolygonShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2FD5141847B898002D2E78 /* RasterPolygonShape.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
@@ -634,6 +636,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FB2FD5161847C5C3002D2E78 /* RasterPolygonShape.hpp in CopyFiles */,
 				FB2FD51218460AA9002D2E78 /* RasterLineShape.hpp in CopyFiles */,
 				FB2FD50E1844C79A002D2E78 /* LineShape.hpp in CopyFiles */,
 				CCAD3260183FE7F9008F500D /* PointShape.hpp in CopyFiles */,
@@ -1600,6 +1603,8 @@
 		FB2FD50C1844C632002D2E78 /* LineShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LineShape.hpp; path = Commons/Rendererers/LineShape.hpp; sourceTree = "<group>"; };
 		FB2FD50F184606FC002D2E78 /* RasterLineShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RasterLineShape.cpp; path = Commons/Rendererers/RasterLineShape.cpp; sourceTree = "<group>"; };
 		FB2FD510184606FC002D2E78 /* RasterLineShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RasterLineShape.hpp; path = Commons/Rendererers/RasterLineShape.hpp; sourceTree = "<group>"; };
+		FB2FD5131847B898002D2E78 /* RasterPolygonShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RasterPolygonShape.cpp; path = Commons/Rendererers/RasterPolygonShape.cpp; sourceTree = "<group>"; };
+		FB2FD5141847B898002D2E78 /* RasterPolygonShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RasterPolygonShape.hpp; path = Commons/Rendererers/RasterPolygonShape.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
@@ -2286,6 +2291,8 @@
 				FB2FD50C1844C632002D2E78 /* LineShape.hpp */,
 				FB2FD50F184606FC002D2E78 /* RasterLineShape.cpp */,
 				FB2FD510184606FC002D2E78 /* RasterLineShape.hpp */,
+				FB2FD5131847B898002D2E78 /* RasterPolygonShape.cpp */,
+				FB2FD5141847B898002D2E78 /* RasterPolygonShape.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -2769,6 +2776,7 @@
 				D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */,
 				D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */,
 				D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */,
+				FB2FD5151847B898002D2E78 /* RasterPolygonShape.cpp in Sources */,
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
 				D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */,
 				D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */,

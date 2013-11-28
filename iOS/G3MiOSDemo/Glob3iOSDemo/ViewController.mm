@@ -38,6 +38,7 @@
 #import <G3MiOSSDK/PointShape.hpp>
 #import <G3MiOSSDK/LineShape.hpp>
 #import <G3MiOSSDK/RasterLineShape.hpp>
+#import <G3MiOSSDK/RasterPolygonShape.hpp>
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
 #import <G3MiOSSDK/LayoutUtils.hpp>
@@ -607,24 +608,6 @@ public:
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: geoTileRasterizer];
   builder.addRenderer(shapesRenderer);
-  
-  
-  // PRUEBA JM
-  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>;
-  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.10)));
-  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.38), Angle::fromDegrees(3.20)));
-  float dashLengths[] = {};
-  GEO2DLineRasterStyle lineStyle(Color::green(), 1, CAP_ROUND, JOIN_ROUND, 1, dashLengths, 0, 0);
-  GEORasterSymbol* line1 = new GEORasterLineSymbol(coordinates, lineStyle);
-  //extern GEOTileRasterizer* geoTileRasterizer;
-  //geoTileRasterizer->addSymbol(line1);
-
-  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.60), Angle::fromDegrees(3.25)));
-  GEO2DPolygonData* polygonData = new GEO2DPolygonData(coordinates, NULL);
-  GEO2DSurfaceRasterStyle surfaceStyle(Color::fromRGBA(1.0, 1.0, 1, 0.6));
-  GEORasterSymbol* pol1 = new GEORasterPolygonSymbol(polygonData, lineStyle, surfaceStyle);
-  geoTileRasterizer->addSymbol(pol1);
-  
   
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
@@ -1723,6 +1706,21 @@ public:
                                             Color::fromRGBA(0, 0, 1, 1));
     shapesRenderer->addShape(rasterLine);
   }
+  
+  {
+    std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
+    vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.10)));
+    vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.38), Angle::fromDegrees(3.20)));
+    vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.60), Angle::fromDegrees(3.25)));
+    
+    Shape* pol1 = new RasterPolygonShape(vertices,
+                                         2,
+                                         Color::green(),
+                                         Color::fromRGBA(1.0, 1.0, 1, 0.6));
+    shapesRenderer->addShape(pol1);
+  }
+  
+  
   
   
   Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.70),
