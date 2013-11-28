@@ -1007,10 +1007,18 @@ void Tile::prepareTestLODData(const Planet* planet){
    */
 
   Angle latitudeAngle = nN.angleBetween(nS);
-  double latitudeArcSegmentRatio = latitudeAngle.isZero()? 1 : latitudeAngle._radians / (2 * SIN(latitudeAngle._radians/2));
+  const double latRad = latitudeAngle._radians;
+  const double sin_lat_2 = SIN(latRad / 2);
+  const double latitudeArcSegmentRatio = sin_lat_2 == 0? 1 : latRad / 2 * sin_lat_2;
+
+//  double latitudeArcSegmentRatio = latitudeAngle.isZero()? 1 : latitudeAngle._radians / (2 * SIN(latitudeAngle._radians/2));
 
   Angle longitudeAngle = nE.angleBetween(nW);
-  double longitudeArcSegmentRatio = longitudeAngle.isZero()? 1 : longitudeAngle._radians / (2 * SIN(longitudeAngle._radians/2));
+  const double lonRad = longitudeAngle._radians;
+  const double sin_lon_2 = SIN(lonRad / 2);
+  const double longitudeArcSegmentRatio = sin_lon_2 == 0? 1 : lonRad / 2 * sin_lon_2;
+
+  //double longitudeArcSegmentRatio = longitudeAngle.isZero()? 1 : longitudeAngle._radians / (2 * SIN(longitudeAngle._radians/2));
 
   _latitudeArcSegmentRatioSquared = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
   _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
