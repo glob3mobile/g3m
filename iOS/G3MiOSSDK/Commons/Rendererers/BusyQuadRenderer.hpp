@@ -115,7 +115,10 @@ public:
   void onDestroy(const G3MContext* context) {
     
   }
-  
+
+  void zRender(const G3MRenderContext* rc,
+               GLState* glState){}
+
 };
 
 //***************************************************************
@@ -146,8 +149,6 @@ public:
   void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
-
-  void zRender(const G3MRenderContext* rc, GLState* glState){}
 
 };
 

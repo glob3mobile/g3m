@@ -923,6 +923,13 @@ public native double read1PixelAsDouble(int x, int y) /*-{
 }-*/;
 
 
+@Override
+public native void depthMask(boolean v) /*-{
+	var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+	gl.depthMask(v);
+}-*/;
+
+
    // @Override
    //   public void uniform2f(final IGLUniformID loc,
    //                         final float x,
