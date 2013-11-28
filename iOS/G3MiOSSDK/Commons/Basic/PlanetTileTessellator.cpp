@@ -402,7 +402,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
     indices.add((short) (jTimesResolution + 2*rx - 1));
   }
 
-  return maxElevation - minElevation;
+  return minElevation;
 }
 
 void PlanetTileTessellator::createEastSkirt(const Planet* planet,
