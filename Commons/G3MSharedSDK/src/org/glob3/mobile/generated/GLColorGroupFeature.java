@@ -1,10 +1,14 @@
 package org.glob3.mobile.generated; 
 public abstract class GLColorGroupFeature extends PriorityGLFeature
 {
-
   private final boolean _blend;
   private final int _sFactor;
   private final int _dFactor;
+
+  public void dispose()
+  {
+    super.dispose();
+  }
 
   public GLColorGroupFeature(GLFeatureID id, int priority, boolean blend, int sFactor, int dFactor)
   {

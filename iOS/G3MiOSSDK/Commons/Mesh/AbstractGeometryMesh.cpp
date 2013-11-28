@@ -19,8 +19,11 @@
 #include "GLState.hpp"
 
 AbstractGeometryMesh::~AbstractGeometryMesh() {
-  if (_owner) {
+  if (_ownsVertices) {
     delete _vertices;
+  }
+  if (_ownsNormals) {
+    delete _normals;
   }
 
   delete _extent;
@@ -33,16 +36,20 @@ AbstractGeometryMesh::~AbstractGeometryMesh() {
 #endif
 }
 
-AbstractGeometryMesh::AbstractGeometryMesh(const int primitive,
-                                           bool owner,
+AbstractGeometryMesh::AbstractGeometryMesh(const int       primitive,
                                            const Vector3D& center,
-                                           IFloatBuffer* vertices,
-                                           float lineWidth,
-                                           float pointSize,
-                                           bool depthTest) :
+                                           IFloatBuffer*   vertices,
+                                           bool            ownsVertices,
+                                           IFloatBuffer*   normals,
+                                           bool            ownsNormals,
+                                           float           lineWidth,
+                                           float           pointSize,
+                                           bool            depthTest) :
 _primitive(primitive),
-_owner(owner),
 _vertices(vertices),
+_ownsVertices(ownsVertices),
+_normals(normals),
+_ownsNormals(ownsNormals),
 _extent(NULL),
 _center(center),
 _translationMatrix(( center.isNan() || center.isZero() )
@@ -111,17 +118,21 @@ int AbstractGeometryMesh::getVertexCount() const {
 }
 
 void AbstractGeometryMesh::createGLState() {
-
   _glState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
-                                              3,            //Our buffer contains elements of 3
-                                              0,            //Index 0
-                                              false,        //Not normalized
-                                              0,            //Stride 0
-                                              true,         //Depth test
-                                              false, 0,
-                                              false, (float)0.0, (float)0.0,
-                                              _lineWidth,
-                                              true, _pointSize), false);
+                                               3,            //Our buffer contains elements of 3
+                                               0,            //Index 0
+                                               false,        //Not normalized
+                                               0,            //Stride 0
+                                               true,         //Depth test
+                                               false, 0,
+                                               false, (float)0.0, (float)0.0,
+                                               _lineWidth,
+                                               true, _pointSize), false);
+
+  if (_normals != NULL) {
+    _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
+                           false);
+  }
 
   if (_translationMatrix != NULL) {
     _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);

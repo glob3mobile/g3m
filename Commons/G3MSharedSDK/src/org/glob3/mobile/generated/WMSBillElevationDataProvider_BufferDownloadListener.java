@@ -25,6 +25,7 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
     final Vector2I resolution = new Vector2I(_width, _height);
+
     ShortBufferElevationData elevationData = BilParser.parseBil16(_sector, resolution, buffer, _deltaHeight);
     if (buffer != null)
        buffer.dispose();

@@ -73,7 +73,7 @@ public class Tile
   {
   
   
-    if ((_elevationData == null) && (elevationDataProvider != null))
+    if ((_elevationData == null) && (elevationDataProvider != null) && (elevationDataProvider.isEnabled()))
     {
       initializeElevationData(elevationDataProvider, tessellator, layerTilesRenderParameters._tileMeshResolution, rc.getPlanet(), tilesRenderParameters._renderDebug);
     }
@@ -1180,21 +1180,13 @@ public class Tile
     _lastTileMeshResolutionY = tileMeshResolution._y;
     if (_elevationDataRequest == null)
     {
-      //    const Sector caceresSector = Sector::fromDegrees(39.4642996294239623,
-      //                                                     -6.3829977122432933,
-      //                                                     39.4829891936013553,
-      //                                                     -6.3645288909498845);
-      //
-      //    if (caceresSector.touchesWith(_sector)) {
-      //      printf("break point on me\n");
-      //    }
   
       final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
       _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
       _elevationDataRequest.sendRequest();
     }
   
-    //If after petition we still have no data we request from ancestor
+    //If after petition we still have no data we request from ancestor (provider asynchronous)
     if (_elevationData == null)
     {
       getElevationDataFromAncestor(tileMeshResolution);
@@ -1255,5 +1247,20 @@ public class Tile
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
 
+<<<<<<< HEAD
 
 
+=======
+//const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
+//  const Sector* renderedSector = pr->getRenderedSector();
+//  if (renderedSector != NULL) {
+//    if (!renderedSector->fullContains(_sector)) {
+//      Sector meshSector = renderedSector->intersection(_sector);
+//      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
+//      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
+//      return Vector2D(rx,ry);
+//    }
+//  }
+//  return Vector2D(1.0,1.0);
+//}
+>>>>>>> purgatory

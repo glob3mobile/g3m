@@ -1,6 +1,11 @@
 package org.glob3.mobile.generated; 
 public abstract class GLFeature extends RCObject
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   protected GPUVariableValueSet _values = new GPUVariableValueSet();
 
   public final GLFeatureGroupName _group;

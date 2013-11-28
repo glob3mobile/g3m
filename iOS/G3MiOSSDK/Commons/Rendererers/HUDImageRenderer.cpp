@@ -138,18 +138,20 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const double halfWidth  = camera->getWidth()  / 2.0;
   const double halfHeight = camera->getHeight() / 2.0;
 
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  vertices.add(-halfWidth,  halfHeight, 0);
-  vertices.add(-halfWidth, -halfHeight, 0);
-  vertices.add( halfWidth,  halfHeight, 0);
-  vertices.add( halfWidth, -halfHeight, 0);
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  vertices->add(-halfWidth,  halfHeight, 0);
+  vertices->add(-halfWidth, -halfHeight, 0);
+  vertices->add( halfWidth,  halfHeight, 0);
+  vertices->add( halfWidth, -halfHeight, 0);
 
   DirectMesh* mesh = new DirectMesh(GLPrimitive::triangleStrip(),
                                     true,
-                                    vertices.getCenter(),
-                                    vertices.create(),
+                                    vertices->getCenter(),
+                                    vertices->create(),
                                     1,
                                     1);
+
+  delete vertices;
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);

@@ -115,6 +115,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _enable = true;
      _surfaceElevation = 0;
      _glState = new GLState();
+     _surfaceElevationProvider = null;
 
   }
 
@@ -142,6 +143,14 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
        _transformMatrix.dispose();
   
     _glState._release();
+  
+    if (_surfaceElevationProvider != null)
+    {
+      if (!_surfaceElevationProvider.removeListener(this))
+      {
+        ILogger.instance().logError("Couldn't remove shape as listener of Surface Elevation Provider.");
+      }
+    }
   }
 
   public final Geodetic3D getPosition()
@@ -338,10 +347,13 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public void initialize(G3MContext context)
   {
-    _surfaceElevationProvider = context.getSurfaceElevationProvider();
-    if (_surfaceElevationProvider != null)
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
-      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+      _surfaceElevationProvider = context.getSurfaceElevationProvider();
+      if (_surfaceElevationProvider != null)
+      {
+        _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+      }
     }
   }
 
@@ -353,7 +365,15 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
   {
-    _surfaceElevation = rawElevation * verticalExaggeration;
+  
+    if ((rawElevation != rawElevation))
+    {
+      _surfaceElevation = 0; //USING 0 WHEN NO ELEVATION DATA
+    }
+    else
+    {
+      _surfaceElevation = rawElevation * verticalExaggeration;
+    }
   
     if (_transformMatrix != null)
        _transformMatrix.dispose();

@@ -23,7 +23,6 @@ package org.glob3.mobile.generated;
 
 public class GLState extends RCObject
 {
-
   private GLFeatureSet _features = new GLFeatureSet();
   private GLFeatureSet _accumulatedFeatures;
 
@@ -54,6 +53,22 @@ public class GLState extends RCObject
     if (_accumulatedFeatures != null)
        _accumulatedFeatures.dispose();
     _accumulatedFeatures = null;
+  }
+
+  public void dispose()
+  {
+    if (_accumulatedFeatures != null)
+       _accumulatedFeatures.dispose();
+  
+    if (_valuesSet != null)
+       _valuesSet.dispose();
+    if (_globalState != null)
+       _globalState.dispose();
+  
+    if (_parentGLState != null)
+    {
+      _parentGLState._release();
+    }
   }
 
 
@@ -95,21 +110,6 @@ public class GLState extends RCObject
   }
 //  GLFeatureSet* createAccumulatedFeatures() const;
 
-  public void dispose()
-  {
-    if (_accumulatedFeatures != null)
-       _accumulatedFeatures.dispose();
-  
-    if (_valuesSet != null)
-       _valuesSet.dispose();
-    if (_globalState != null)
-       _globalState.dispose();
-  
-    if (_parentGLState != null)
-    {
-      _parentGLState._release();
-    }
-  }
 
   public final void setParent(GLState parent)
   {

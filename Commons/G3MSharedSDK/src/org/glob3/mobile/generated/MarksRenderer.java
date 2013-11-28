@@ -38,8 +38,6 @@ public class MarksRenderer extends LeafRenderer
 
   private long _downloadPriority;
 
-  private IFloatBuffer _billboardTexCoord;
-
   private GLState _glState;
 
 
@@ -181,12 +179,6 @@ public class MarksRenderer extends LeafRenderer
          _markTouchListener.dispose();
     }
     _markTouchListener = null;
-  
-    if (_billboardTexCoord != null)
-    {
-      if (_billboardTexCoord != null)
-         _billboardTexCoord.dispose();
-    }
   
     _glState._release();
   

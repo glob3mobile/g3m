@@ -130,7 +130,8 @@ _gpuProgramManager(gpuProgramManager),
 _sceneLighting(sceneLighting),
 _rootState(NULL),
 _initialCameraPositionProvider(initialCameraPositionProvider),
-_initialCameraPositionHasBeenSet(false)
+_initialCameraPositionHasBeenSet(false),
+_forceBusyRenderer(false)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -261,7 +262,9 @@ G3MWidget::~G3MWidget() {
 
   delete _context;
 
-  delete _rootState;
+  if (_rootState != NULL) {
+    _rootState->_release();
+  }
   delete _initialCameraPositionProvider;
 }
 
@@ -480,7 +483,9 @@ void G3MWidget::render(int width, int height) {
 
 
   delete _mainRendererState;
-  _mainRendererState = new RenderState(_initializationTaskReady ? _mainRenderer->getRenderState(_renderContext) : RenderState::busy());
+  _mainRendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer)
+                                       ? _mainRenderer->getRenderState(_renderContext)
+                                       : RenderState::busy());
   RenderState_Type renderStateType = _mainRendererState->_type;
 
   _renderContext->clearForNewFrame();
@@ -715,7 +720,7 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                                              finalLonInDegrees,
                                                              toPosition._height);
 
-  stopCameraAnimation();
+  cancelCameraAnimation();
 
   _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval,
                                                               fromPosition, finalToPosition,
@@ -726,7 +731,11 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                  _nextCamera->getEffectTarget());
 }
 
-void G3MWidget::stopCameraAnimation() {
+void G3MWidget::cancelAllEffects() {
+  _effectsScheduler->cancelAllEffects();
+}
+
+void G3MWidget::cancelCameraAnimation() {
   EffectTarget* target = _nextCamera->getEffectTarget();
   _effectsScheduler->cancelAllEffectsFor(target);
 }

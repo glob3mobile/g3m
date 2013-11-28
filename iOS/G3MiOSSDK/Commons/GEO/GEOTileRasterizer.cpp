@@ -22,12 +22,16 @@
 void GEOTileRasterizer::initialize(const G3MContext* context) {
 }
 
+void GEOTileRasterizer::clear() {
+  _quadTree.clear();
+}
+
 void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
   const Sector* sector = symbol->getSector();
 
   if (sector == NULL) {
-    //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
-    //                                  symbol->description().c_str());
+//    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
+//                                  symbol->description().c_str());
     delete symbol;
   }
   else {
@@ -57,9 +61,9 @@ public:
   {
   }
 
-  bool visitElement(const Sector& sector,
-                    const void*   element) const {
-    GEORasterSymbol* symbol = (GEORasterSymbol*) element;
+  bool visitElement(const Sector&           sector,
+                    const QuadTree_Content* content) const {
+    GEORasterSymbol* symbol = (GEORasterSymbol*) content;
 
     symbol->rasterize(_canvas, _projection, _tileLevel);
 

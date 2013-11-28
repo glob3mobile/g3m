@@ -40,8 +40,6 @@ private:
 
   long long _downloadPriority;
   
-  IFloatBuffer* _billboardTexCoord;
-  
   GLState* _glState;
   
   void updateGLState(const G3MRenderContext* rc);

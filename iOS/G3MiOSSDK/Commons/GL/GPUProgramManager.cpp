@@ -34,14 +34,17 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   }
 
   if (!flatColor && texture && !color) {
+
+    if (hasLight) {
+      if (transformTC) {
+        return getProgram(gl, "TransformedTexCoorTexturedMesh+DirectionLight");
+      }
+      return getProgram(gl, "TexturedMesh+DirectionLight");
+    }
+
     if (transformTC) {
       return getProgram(gl, "TransformedTexCoorTexturedMesh");
     }
-
-    if (hasLight) {
-      return getProgram(gl, "TexturedMesh_DirectionLight");
-    }
-
     return getProgram(gl, "TexturedMesh");
   }
 

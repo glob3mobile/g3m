@@ -24,26 +24,22 @@ public abstract class TMSLayer extends Layer
   private final URL _mapServerURL;
 
   private final String _mapLayer;
-
   private Sector _sector ;
-
   private final String _format;
-  private final String _srs;
   private final boolean _isTransparent;
 
 
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, String srs, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapLayer, mapServerURL, sector, format, srs, isTransparent, condition, timeToCache, readExpired, null);
+     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, null);
   }
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, String srs, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
      super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector) : parameters);
      _mapServerURL = mapServerURL;
      _mapLayer = mapLayer;
      _sector = new Sector(sector);
      _format = format;
-     _srs = srs;
      _isTransparent = isTransparent;
   }
 

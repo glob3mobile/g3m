@@ -111,6 +111,7 @@ public:
 
 PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                ElevationDataProvider*       elevationDataProvider,
+                               bool                         ownsElevationDataProvider,
                                float                        verticalExaggeration,
                                TileTexturizer*              texturizer,
                                TileRasterizer*              tileRasterizer,
@@ -121,6 +122,7 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const Sector&                renderedSector) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
+_ownsElevationDataProvider(ownsElevationDataProvider),
 _verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
 _tileRasterizer(tileRasterizer),
@@ -182,7 +184,12 @@ void PlanetRenderer::changed() {
     _recreateTilesPending = true;
     // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
     //   so it has to be executed in the OpenGL thread
-    _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);
+    if (_context == NULL) {
+      ILogger::instance()->logError("_context if not initialized");
+    }
+    else {
+      _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);
+    }
   }
 }
 
@@ -420,7 +427,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   }
 
   if (!_layerSet->isReady()) {
-    int __TODO_Layer_error;
+#warning __TODO_Layer_error;
     return RenderState::busy();
   }
 
@@ -587,6 +594,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   }
 
   updateGLState(rc);
+#warning Testing_Terrain_Normals;
+  _glState->setParent(glState);
 
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
@@ -599,13 +608,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
 
-  //  const Planet* planet = rc->getPlanet();
-  //  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
-  //  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
-  //  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
-
-  //  _tilesRenderedInLastFrame.clear();
-
   _renderedTiles.clear();
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
@@ -613,66 +615,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     // loaded as they will be used as last-chance fallback texture for any tile.
     _firstRender = false;
 
-    //    for (int i = 0; i < firstLevelTilesCount; i++) {
-    //      _firstLevelTiles[i]->actualizeQuadTree(rc,
-    //                                             _renderedTiles,
-    //                                             planet,
-    //                                             cameraNormalizedPosition,
-    //                                             cameraAngle2HorizonInRadians,
-    //                                             cameraFrustumInModelCoordinates,
-    //                                             &_statistics,
-    //                                             _verticalExaggeration,
-    //                                             layerTilesRenderParameters,
-    //                                             _texturizer,
-    //                                             _tilesRenderParameters,
-    //                                             _lastSplitTimer,
-    //                                             _elevationDataProvider,
-    //                                             _tessellator,
-    //                                             _tileRasterizer,
-    //                                             _layerSet,
-    //                                             _renderedSector,
-    //                                             _firstRender, // if first render, force full render
-    //                                             _texturePriority,
-    //                                             dpiFactor,
-    //                                             deviceQualityFactor);
-    //    }
-
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
 
       tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
     }
-    /*
-     for (int i = 0; i < firstLevelTilesCount; i++) {
-     Tile* tile = _firstLevelTiles[i];
-     bool rawRender = tile->render(rc,
-     *_glState,
-     NULL,
-     planet,
-     cameraNormalizedPosition,
-     cameraAngle2HorizonInRadians,
-     cameraFrustumInModelCoordinates,
-     &_statistics,
-     _verticalExaggeration,
-     layerTilesRenderParameters,
-     _texturizer,
-     _tilesRenderParameters,
-     _lastSplitTimer,
-     _elevationDataProvider,
-     _tessellator,
-     _tileRasterizer,
-     _layerSet,
-     _renderedSector,
-     _firstRender, // if first render, force full render
-     _texturePriority,
-     dpiFactor,
-     deviceQualityFactor);
-
-     if (rawRender){
-     _tilesRenderedInLastFrame.push_back(tile);
-     }
-     }
-     */
   }
   else {
 
@@ -685,53 +632,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
       tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
     }
-
-    /*
-
-     std::list<Tile*> toVisit;
-     for (int i = 0; i < firstLevelTilesCount; i++) {
-     toVisit.push_back(_firstLevelTiles[i]);
-     }
-
-     while (toVisit.size() > 0) {
-     std::list<Tile*> toVisitInNextIteration;
-
-     for (std::list<Tile*>::iterator iter = toVisit.begin();
-     iter != toVisit.end();
-     iter++) {
-     Tile* tile = *iter;
-
-     bool rawRender = tile->render(rc,
-     *_glState,
-     &toVisitInNextIteration,
-     planet,
-     cameraNormalizedPosition,
-     cameraAngle2HorizonInRadians,
-     cameraFrustumInModelCoordinates,
-     &_statistics,
-     _verticalExaggeration,
-     layerTilesRenderParameters,
-     _texturizer,
-     _tilesRenderParameters,
-     _lastSplitTimer,
-     _elevationDataProvider,
-     _tessellator,
-     _tileRasterizer,
-     _layerSet,
-     _renderedSector,
-     _firstRender, // if first render, force full render
-     _texturePriority,
-     dpiFactor,
-     deviceQualityFactor);
-
-     if (rawRender){
-     _tilesRenderedInLastFrame.push_back(tile);
-     }
-     }
-
-     toVisit = toVisitInNextIteration;
-     }
-     */
   }
 
   if (_showStatistics) {
@@ -768,7 +668,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
                                   const TouchEvent* touchEvent) {
   if (_lastCamera == NULL) {
     return false;
-  }
+  } 
 
   if (touchEvent->getType() == LongPress) {
     const Vector2I pixel = touchEvent->getTouch(0)->getPos();
@@ -853,10 +753,10 @@ void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
 
 void PlanetRenderer::setRenderedSector(const Sector& sector) {
   if ((_renderedSector != NULL && !_renderedSector->isEquals(sector)) ||
-      (_renderedSector == NULL && !sector.isEquals(Sector::fullSphere()))){
+      (_renderedSector == NULL && !sector.isEquals(Sector::fullSphere()))) {
     delete _renderedSector;
 
-    if (sector.isEquals(Sector::fullSphere())){
+    if (sector.isEquals(Sector::fullSphere())) {
       _renderedSector = NULL;
     } else{
       _renderedSector = new Sector(sector);
@@ -946,5 +846,32 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
   }
 
   return &_renderedTiles;
+}
 
+void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
+                                              bool owned) {
+  if (_elevationDataProvider != elevationDataProvider) {
+    if (_ownsElevationDataProvider) {
+      delete _elevationDataProvider;
+    }
+
+    _ownsElevationDataProvider = owned;
+    _elevationDataProvider = elevationDataProvider;
+
+    if (_elevationDataProvider != NULL) {
+      _elevationDataProvider->setChangedListener(this);
+      if (_context != NULL) {
+        _elevationDataProvider->initialize(_context); //Initializing EDP in case it wasn't
+      }
+    }
+
+    changed();
+  }
+}
+
+void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
+  if (_verticalExaggeration != verticalExaggeration) {
+    _verticalExaggeration = verticalExaggeration;
+    changed();
+  }
 }

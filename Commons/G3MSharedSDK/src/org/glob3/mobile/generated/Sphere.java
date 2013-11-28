@@ -34,7 +34,6 @@ public class Sphere extends BoundingVolume
     final double delta = DefineConstants.PI / (resolution-1);
   
     // create vertices
-  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::firstVertex(), Vector3D::zero);
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
     for (int i = 0; i<2 *resolution-2; i++)
     {
@@ -78,6 +77,9 @@ public class Sphere extends BoundingVolume
     }
   
     _mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color);
+  
+    if (vertices != null)
+       vertices.dispose();
   }
 
 

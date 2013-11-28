@@ -446,8 +446,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   [self widget]->setCameraPitch(angle);
 }
 
-- (void)stopCameraAnimation {
-  [self widget]->stopCameraAnimation();
+- (void)cancelCameraAnimation {
+  [self widget]->cancelCameraAnimation();
 }
 
 //- (void)resetCameraPosition {

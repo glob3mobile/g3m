@@ -44,6 +44,7 @@ void G3MBuilder_iOS::initializeWidget() {
   addGPUProgramSources(loadGPUProgramSources("FlatColorMesh_DirectionLight"));
   addGPUProgramSources(loadGPUProgramSources("NoColorMesh"));
   addGPUProgramSources(loadGPUProgramSources("ZRender"));
+  addGPUProgramSources(loadGPUProgramSources("TransformedTexCoorTexturedMesh+DirectionLight"));
 
   [_nativeWidget setWidget: create()];
 }

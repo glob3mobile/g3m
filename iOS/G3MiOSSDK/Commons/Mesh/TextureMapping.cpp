@@ -18,7 +18,7 @@
 
 void SimpleTextureMapping::releaseGLTextureId() {
 
-  if (_glTextureId != NULL){
+  if (_glTextureId != NULL) {
 #ifdef C_CODE
     delete _glTextureId;
 #endif

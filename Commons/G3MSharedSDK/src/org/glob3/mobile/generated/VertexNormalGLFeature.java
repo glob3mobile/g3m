@@ -1,6 +1,11 @@
 package org.glob3.mobile.generated; 
 public class VertexNormalGLFeature extends GLFeature
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public VertexNormalGLFeature(IFloatBuffer buffer, int arrayElementSize, int index, boolean normalized, int stride)
   {
      super(GLFeatureGroupName.LIGHTING_GROUP, GLFeatureID.GLF_VERTEX_NORMAL);

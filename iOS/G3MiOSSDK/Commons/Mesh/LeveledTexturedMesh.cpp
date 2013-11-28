@@ -62,7 +62,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
 }
 
 void LazyTextureMapping::releaseGLTextureId() {
-  if (_glTextureId != NULL){
+  if (_glTextureId != NULL) {
 #ifdef C_CODE
     delete _glTextureId;
 #endif

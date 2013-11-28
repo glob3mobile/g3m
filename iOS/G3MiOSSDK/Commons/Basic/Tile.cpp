@@ -152,7 +152,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TilesRenderParameters* tilesRenderParameters) {
 
 
-  if ( (_elevationData == NULL) && (elevationDataProvider != NULL) ) {
+  if ( (_elevationData == NULL) && (elevationDataProvider != NULL) && (elevationDataProvider->isEnabled()) ) {
     initializeElevationData(elevationDataProvider,
                             tessellator,
                             layerTilesRenderParameters->_tileMeshResolution,
@@ -935,14 +935,6 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
   _lastTileMeshResolutionX = tileMeshResolution._x;
   _lastTileMeshResolutionY = tileMeshResolution._y;
   if (_elevationDataRequest == NULL) {
-    //    const Sector caceresSector = Sector::fromDegrees(39.4642996294239623,
-    //                                                     -6.3829977122432933,
-    //                                                     39.4829891936013553,
-    //                                                     -6.3645288909498845);
-    //
-    //    if (caceresSector.touchesWith(_sector)) {
-    //      printf("break point on me\n");
-    //    }
 
     const Vector2I res = tessellator->getTileMeshResolution(planet,
                                                             tileMeshResolution,
@@ -952,7 +944,7 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
     _elevationDataRequest->sendRequest();
   }
 
-  //If after petition we still have no data we request from ancestor
+  //If after petition we still have no data we request from ancestor (provider asynchronous)
   if (_elevationData == NULL) {
     getElevationDataFromAncestor(tileMeshResolution);
   }
@@ -1133,22 +1125,14 @@ void Tile::actualizeQuadTree(const G3MRenderContext* rc,
 
         subTile->actualizeQuadTree(rc,/* parentState,*/ renderedTiles, planet,
                                    cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, dpiFactor, deviceQualityFactor);
-
-//        toVisitInNextIteration->push_back(subTile);
       }
     }
-
-
-//    return isRawRender; //RETURN ISRAWRENDER
   }
   else {
     setIsVisible(false, texturizer);
 
     prune(texturizer, elevationDataProvider);
     //TODO: AVISAR CAMBIO DE TERRENO
-    
-    
-//    return false;   //RETURN ISRAWRENDER
   }
   
 }
@@ -1164,6 +1148,3 @@ void Tile::zRender(const G3MRenderContext* rc,
     _tessellatorMesh->zRender(rc, &parentState);
   }
 }
-
-
-

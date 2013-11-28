@@ -47,7 +47,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   double getElevationAt(int x,

@@ -87,7 +87,7 @@ private:
   
 public:
 
-  static void initializationAvailable(){
+  static void initializationAvailable() {
     _initializationAvailable = true;
   }
   
@@ -111,7 +111,7 @@ public:
   _clearColorA(0.0)
   {
 
-    if (!_initializationAvailable){
+    if (!_initializationAvailable) {
       ILogger::instance()->logError("GLGlobalState creation before it is available.");
     }
 

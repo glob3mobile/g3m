@@ -51,6 +51,12 @@ Shape::~Shape() {
   delete _transformMatrix;
 
   _glState->_release();
+
+  if (_surfaceElevationProvider != NULL) {
+    if (!_surfaceElevationProvider->removeListener(this)) {
+      ILogger::instance()->logError("Couldn't remove shape as listener of Surface Elevation Provider.");
+    }
+  }
 }
 
 void Shape::cleanTransformMatrix() {
@@ -173,7 +179,12 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
 void Shape::elevationChanged(const Geodetic2D& position,
                       double rawElevation,
                       double verticalExaggeration) {
-  _surfaceElevation = rawElevation * verticalExaggeration;
+
+  if (ISNAN(rawElevation)) {
+    _surfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
+  } else{
+    _surfaceElevation = rawElevation * verticalExaggeration;
+  }
 
   delete _transformMatrix;
   _transformMatrix = NULL;

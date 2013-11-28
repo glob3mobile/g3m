@@ -174,7 +174,7 @@ public:
     return _shapesRenderer;
   }
 
-  GEOTileRasterizer* getGeoTileRasterizer() {
+  GEOTileRasterizer* getGEOTileRasterizer() {
     return _geoTileRasterizer;
   }
 

@@ -27,7 +27,7 @@ class MutableMatrix44D;
 class ShapePendingEffect;
 class GPUProgramState;
 
-class Shape : public SurfaceElevationListener, EffectTarget{
+class Shape : public SurfaceElevationListener, EffectTarget {
 private:
   Geodetic3D* _position;
   AltitudeMode _altitudeMode;
@@ -82,7 +82,8 @@ public:
   _transformMatrix(NULL),
   _enable(true),
   _surfaceElevation(0),
-  _glState(new GLState())
+  _glState(new GLState()),
+  _surfaceElevationProvider(NULL)
   {
     
   }
@@ -258,11 +259,13 @@ public:
               bool renderNotReadyShapes);
 
   virtual void initialize(const G3MContext* context) {
-    _surfaceElevationProvider = context->getSurfaceElevationProvider();
-    if (_surfaceElevationProvider != NULL) {
-      _surfaceElevationProvider->addListener(_position->_latitude,
-                                             _position->_longitude,
-                                             this);
+    if (_altitudeMode == RELATIVE_TO_GROUND) {
+      _surfaceElevationProvider = context->getSurfaceElevationProvider();
+      if (_surfaceElevationProvider != NULL) {
+        _surfaceElevationProvider->addListener(_position->_latitude,
+                                               _position->_longitude,
+                                               this);
+      }
     }
   }
 

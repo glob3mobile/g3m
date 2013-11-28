@@ -18,7 +18,9 @@ void SGTextureNode::addLayer(SGLayerNode* layer) {
     layer->initialize(_context, _shape);
   }
 
-  delete _glState;
+  if (_glState != NULL) {
+    _glState->_release();
+  }
   _glState = NULL;
 }
 
@@ -52,10 +54,13 @@ SGTextureNode::~SGTextureNode() {
     delete layer;
   }
 
+  if (_glState != NULL) {
+    _glState->_release();
+  }
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 const GLState* SGTextureNode::createState(const G3MRenderContext* rc, const GLState* parentState) {
