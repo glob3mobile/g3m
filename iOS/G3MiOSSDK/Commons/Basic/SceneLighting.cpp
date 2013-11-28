@@ -13,6 +13,9 @@
 #include "Context.hpp"
 #include "Camera.hpp"
 
+#include "DirectMesh.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+
 void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Vector3D lightDir(1, 0,0);
 
@@ -49,25 +52,26 @@ _ambientColor(ambient),
 _diffuseColor(diffuse),
 _cameraDirX(0),
 _cameraDirY(0),
-_cameraDirZ(0)
+_cameraDirZ(0),
+_meshRenderer(NULL)
 {
 
 }
 
 void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
 
-  Vector3D camDir = rc->getCurrentCamera()->getViewDirection();
-  if (_cameraDirX == camDir._x && _cameraDirY == camDir._y && _cameraDirZ == camDir._z){
+  const Camera* cam = rc->getCurrentCamera();
+  const Vector3D camDir = cam->getViewDirection();
+  const Vector3D up = cam->getUp();
+  if (_cameraDirX == camDir._x && _cameraDirY == camDir._y && _cameraDirZ == camDir._z &&
+      _upX == up._x && _upY == up._y && _upZ == up._z){
     return;
   }
-  _cameraDirX = camDir._x;
-  _cameraDirY = camDir._y;
-  _cameraDirZ = camDir._z;
 
   const Vector3D cameraVector = camDir.times(-1);
 
   //Light slightly different of camera position
-  const Vector3D rotationLightDirAxis = rc->getCurrentCamera()->getUp().cross(cameraVector);
+  const Vector3D rotationLightDirAxis = up.cross(cameraVector);
   const Vector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle::fromDegrees(45.0));
 
   DirectionLightGLFeature* f = (DirectionLightGLFeature*) glState->getGLFeature(GLF_DIRECTION_LIGTH);
@@ -81,5 +85,35 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   else{
     f->setLightDirection(lightDir);
   }
+
+  //ADD MESH
+  if (_meshRenderer != NULL){
+    Vector3D lastCamDir(_cameraDirX, _cameraDirY, _cameraDirZ);
+
+    if (lastCamDir.angleBetween(lightDir)._degrees > 10){
+
+      FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+      vertices->add(cam->getCartesianPosition());
+      vertices->add(cam->getCartesianPosition().add(lightDir.times(1000)) );
+
+      DirectMesh* mesh = new DirectMesh(GLPrimitive::lines(),
+                                        true,
+                                        vertices->getCenter(),
+                                        vertices->create(),
+                                        3.0,
+                                        1.0,
+                                        new Color(Color::red()));
+      _meshRenderer->addMesh(mesh);
+    }
+  }
+
+  //SAVING STATE
+  _cameraDirX = camDir._x;
+  _cameraDirY = camDir._y;
+  _cameraDirZ = camDir._z;
+  
+  _upX = up._x;
+  _upY = up._y;
+  _upZ = up._z;
   
 }

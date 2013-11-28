@@ -138,6 +138,8 @@
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
 
+#import <G3MiOSSDK/SceneLighting.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -641,6 +643,13 @@ public:
                                                           planet: builder.getPlanet()];
   builder.addRenderer(geoRenderer);
 
+  //Showing light directions
+  if (true){
+    CameraFocusSceneLighting* light = new CameraFocusSceneLighting(Color::fromRGBA(0.3, 0.3, 0.3, 1.0),
+                                                                   Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
+    light->setLightDirectionsMeshRenderer(meshRenderer);
+    builder.setSceneLighting(light);
+  }
 
   if (true) { //HUD
     //    HUDRenderer* hudRenderer = new HUDRenderer();
