@@ -63,14 +63,15 @@ public class JBson2BJson {
 
 
    public void transform(final File firstFile,
-                         final File secondFile) throws JBson2BJsonException {
+                         final File secondFile,
+                         final boolean overwrite) throws JBson2BJsonException {
       if ((firstFile.getName().toLowerCase().endsWith(".json") || firstFile.getName().toLowerCase().endsWith(".geojson"))
           && secondFile.getName().toLowerCase().endsWith(".bson")) {
-         JBson2BJson.instance().json2bson(firstFile, secondFile);
+         JBson2BJson.instance().json2bson(firstFile, secondFile, overwrite);
       }
       else if ((secondFile.getName().toLowerCase().endsWith(".json") || secondFile.getName().toLowerCase().endsWith(".geojson"))
                && firstFile.getName().toLowerCase().endsWith(".bson")) {
-         JBson2BJson.instance().bson2json(firstFile, secondFile);
+         JBson2BJson.instance().bson2json(firstFile, secondFile, overwrite);
       }
       else {
          throw new JBson2BJsonException("File format isn't ready: " + firstFile.getName() + " and " + secondFile.getName());
@@ -85,8 +86,15 @@ public class JBson2BJson {
     * @throws JBson2BJsonException
     */
    public void json2bson(final File fJson,
-                         final File fBson) throws JBson2BJsonException {
+                         final File fBson,
+                         final boolean overwrite) throws JBson2BJsonException {
       if (Utils.checkFileIsJson(fJson)) {
+         if (overwrite && fBson.exists()) {
+            if (!fBson.delete()) {
+               throw new JBson2BJsonException("Output bson file exist and can't to delete it for overwrite", null);
+            }
+         }
+
          final JSONBaseObject jbase = readJsonFile(fJson);
          if (jbase != null) {
             try {
@@ -94,7 +102,7 @@ public class JBson2BJson {
                   writeBsonFile(jbase, fBson);
                }
                else {
-                  throw new JBson2BJsonException("Output file does not exist or it was not possible to be created");
+                  throw new JBson2BJsonException("Output bson file does not exist or it was not possible to be created");
                }
             }
             catch (final IOException e) {
@@ -113,12 +121,20 @@ public class JBson2BJson {
 
    /**
     * 
-    * @param fJson
     * @param fBson
+    * @param overwrite
+    * @param fsJson
     * @throws JBson2BJsonException
     */
    public void jsons2bson(final File fBson,
+                          final boolean overwrite,
                           final File... fsJson) throws JBson2BJsonException {
+      if (overwrite && fBson.exists()) {
+         if (!fBson.delete()) {
+            throw new JBson2BJsonException("Output bson file exist and can't to delete it for overwrite", null);
+         }
+      }
+
       final JSONObject jRoot = new JSONObject();
       jRoot.put("type", new JSONString("FeatureCollection"));
 
@@ -144,7 +160,7 @@ public class JBson2BJson {
             writeBsonFile(jRoot, fBson);
          }
          else {
-            throw new JBson2BJsonException("Output file does not exist or it was not possible to be created");
+            throw new JBson2BJsonException("Output bson file does not exist or it was not possible to be created");
          }
       }
       catch (final IOException e) {
@@ -157,9 +173,17 @@ public class JBson2BJson {
     * 
     * @param fBson
     * @param fJson
+    * @param overwrite
+    * @throws JBson2BJsonException
     */
    public void bson2json(final File fBson,
-                         final File fJson) {
+                         final File fJson,
+                         final boolean overwrite) throws JBson2BJsonException {
+      if (overwrite && fJson.exists()) {
+         if (!fJson.delete()) {
+            throw new JBson2BJsonException("Output JSON file exist and can't to delete it for overwrite", null);
+         }
+      }
       if (Utils.checkFileIsBson(fBson)) {
          final JSONBaseObject jbase = readBsonFile(fBson);
          if (jbase != null) {
@@ -168,23 +192,19 @@ public class JBson2BJson {
                   writeJsonFile(jbase, fJson);
                }
                else {
-                  System.out.println("Output file does not exist or it was not possible to be created");
-                  System.exit(1);
+                  throw new JBson2BJsonException("Output JSON file does not exist or it was not possible to be created");
                }
             }
             catch (final IOException e) {
-               System.out.println("Error while creating new file");
-               System.exit(1);
+               throw new JBson2BJsonException(e.getMessage(), e.getCause());
             }
          }
          else {
-            System.out.println("BSON file was not properly parsed");
-            System.exit(1);
+            throw new JBson2BJsonException("BSON file was not properly parsed");
          }
       }
       else {
-         System.out.println("Input JSON file was not properly specified");
-         System.exit(1);
+         throw new JBson2BJsonException("Input BSON file was not properly specified");
       }
    }
 
