@@ -49,8 +49,11 @@ public class MainActivity
       builder.addRenderer(marksRenderer);
 
       final MeshRenderer meshRenderer = new MeshRenderer();
-      meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
       builder.addRenderer(meshRenderer);
+      
+      if (false){
+          meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
+      }
 
       // final ShapeLoadListener Plistener = new ShapeLoadListener() {
       // @Override
@@ -257,7 +260,7 @@ public class MainActivity
       //
       // }
 
-      if (true) {
+      if (false) {
 
          final int time = 10; // SECS
 
