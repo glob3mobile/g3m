@@ -12,10 +12,8 @@
 class GLState;
 class G3MRenderContext;
 class Vector3D;
+class MeshRenderer;
 #include "Color.hpp"
-
-
-#include "MeshRenderer.hpp"
 
 class SceneLighting{
 public:

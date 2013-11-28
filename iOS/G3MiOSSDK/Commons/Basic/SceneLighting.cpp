@@ -15,6 +15,7 @@
 
 #include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "MeshRenderer.hpp"
 
 void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Vector3D lightDir(1, 0,0);
