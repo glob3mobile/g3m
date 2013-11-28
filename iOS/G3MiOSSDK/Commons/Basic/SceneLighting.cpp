@@ -101,8 +101,8 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
                                         true,
                                         vertices->getCenter(),
                                         vertices->create(),
-                                        3.0,
-                                        1.0,
+                                        (float)3.0,
+                                        (float)1.0,
                                         new Color(Color::red()));
       _meshRenderer->addMesh(mesh);
     }
