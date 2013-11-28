@@ -466,10 +466,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     final double texWidthSquared = texWidth * texWidth;
     final double texHeightSquared = texHeight * texHeight;
   
-    ITimer timer = IFactory.instance().createTimer();
-    final double nowInMS = timer.now().milliseconds();
-    if (timer != null)
-       timer.dispose();
+    final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {

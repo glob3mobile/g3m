@@ -195,7 +195,7 @@ public class PlanetTileTessellator extends TileTessellator
       indices.add((short)(jTimesResolution + 2 *rx - 1));
     }
   
-    return maxElevation - minElevation;
+    return minElevation;
   }
 
   private void createEastSkirt(Planet planet, Sector tileSector, Sector meshSector, Vector2I meshResolution, double skirtHeight, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
