@@ -87,6 +87,7 @@
 #import <G3MiOSSDK/GEOMultiLine2DMeshSymbol.hpp>
 #import <G3MiOSSDK/GEOLine2DStyle.hpp>
 #import <G3MiOSSDK/GEO2DPointGeometry.hpp>
+#import <G3MiOSSDK/GEO2DPolygonData.hpp>
 #import <G3MiOSSDK/GEOShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 #import <G3MiOSSDK/GFont.hpp>
@@ -114,6 +115,7 @@
 #import <G3MiOSSDK/DebugTileRasterizer.hpp>
 #import <G3MiOSSDK/GEOTileRasterizer.hpp>
 
+#import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
 #import <G3MiOSSDK/GEORasterLineSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
@@ -606,6 +608,22 @@ public:
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: geoTileRasterizer];
   builder.addRenderer(shapesRenderer);
   
+  
+  // PRUEBA JM
+  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>;
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.10)));
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.38), Angle::fromDegrees(3.20)));
+  float dashLengths[] = {};
+  GEO2DLineRasterStyle lineStyle(Color::green(), 1, CAP_ROUND, JOIN_ROUND, 1, dashLengths, 0, 0);
+  GEORasterSymbol* line1 = new GEORasterLineSymbol(coordinates, lineStyle);
+  //extern GEOTileRasterizer* geoTileRasterizer;
+  //geoTileRasterizer->addSymbol(line1);
+
+  coordinates->push_back(new Geodetic2D(Angle::fromDegrees(39.60), Angle::fromDegrees(3.25)));
+  GEO2DPolygonData* polygonData = new GEO2DPolygonData(coordinates, NULL);
+  GEO2DSurfaceRasterStyle surfaceStyle(Color::fromRGBA(1.0, 1.0, 1, 0.6));
+  GEORasterSymbol* pol1 = new GEORasterPolygonSymbol(polygonData, lineStyle, surfaceStyle);
+  geoTileRasterizer->addSymbol(pol1);
   
   
   MeshRenderer* meshRenderer = new MeshRenderer();
