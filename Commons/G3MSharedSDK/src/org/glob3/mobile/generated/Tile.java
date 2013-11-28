@@ -844,13 +844,8 @@ public class Tile
           Tile subTile = subTiles.get(i);
   
           subTile.actualizeQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, dpiFactor, deviceQualityFactor); // parentState,
-  
-  //        toVisitInNextIteration->push_back(subTile);
         }
       }
-  
-  
-  //    return isRawRender; //RETURN ISRAWRENDER
     }
     else
     {
@@ -858,9 +853,6 @@ public class Tile
   
       prune(texturizer, elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
-  
-  
-  //    return false;   //RETURN ISRAWRENDER
     }
   
   }
@@ -1246,21 +1238,3 @@ public class Tile
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
-
-<<<<<<< HEAD
-
-
-=======
-//const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
-//  const Sector* renderedSector = pr->getRenderedSector();
-//  if (renderedSector != NULL) {
-//    if (!renderedSector->fullContains(_sector)) {
-//      Sector meshSector = renderedSector->intersection(_sector);
-//      const double rx = meshSector._deltaLongitude._degrees / _sector._deltaLongitude._degrees;
-//      const double ry = meshSector._deltaLatitude._degrees / _sector._deltaLatitude._degrees;
-//      return Vector2D(rx,ry);
-//    }
-//  }
-//  return Vector2D(1.0,1.0);
-//}
->>>>>>> purgatory

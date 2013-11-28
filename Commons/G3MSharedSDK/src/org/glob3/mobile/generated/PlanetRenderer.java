@@ -315,7 +315,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-<<<<<<< HEAD
 //  std::list<Tile*> _tilesRenderedInLastFrame;
 
   private long _renderedTilesListFrame;
@@ -358,13 +357,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     return _renderedTiles;
-  
   }
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
-=======
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
->>>>>>> purgatory
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -480,13 +475,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
-    //  const Planet* planet = rc->getPlanet();
-    //  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
-    //  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
-    //  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
-  
-    //  _tilesRenderedInLastFrame.clear();
-  
     _renderedTiles.clear();
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
@@ -495,67 +483,12 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       // loaded as they will be used as last-chance fallback texture for any tile.
       _firstRender = false;
   
-      //    for (int i = 0; i < firstLevelTilesCount; i++) {
-      //      _firstLevelTiles[i]->actualizeQuadTree(rc,
-      //                                             _renderedTiles,
-      //                                             planet,
-      //                                             cameraNormalizedPosition,
-      //                                             cameraAngle2HorizonInRadians,
-      //                                             cameraFrustumInModelCoordinates,
-      //                                             &_statistics,
-      //                                             _verticalExaggeration,
-      //                                             layerTilesRenderParameters,
-      //                                             _texturizer,
-      //                                             _tilesRenderParameters,
-      //                                             _lastSplitTimer,
-      //                                             _elevationDataProvider,
-      //                                             _tessellator,
-      //                                             _tileRasterizer,
-      //                                             _layerSet,
-      //                                             _renderedSector,
-      //                                             _firstRender, // if first render, force full render
-      //                                             _texturePriority,
-      //                                             dpiFactor,
-      //                                             deviceQualityFactor);
-      //    }
-  
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
   
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics);
       }
-      /*
-       for (int i = 0; i < firstLevelTilesCount; i++) {
-       Tile* tile = _firstLevelTiles[i];
-       bool rawRender = tile->render(rc,
-       *_glState,
-       NULL,
-       planet,
-       cameraNormalizedPosition,
-       cameraAngle2HorizonInRadians,
-       cameraFrustumInModelCoordinates,
-       &_statistics,
-       _verticalExaggeration,
-       layerTilesRenderParameters,
-       _texturizer,
-       _tilesRenderParameters,
-       _lastSplitTimer,
-       _elevationDataProvider,
-       _tessellator,
-       _tileRasterizer,
-       _layerSet,
-       _renderedSector,
-       _firstRender, // if first render, force full render
-       _texturePriority,
-       dpiFactor,
-       deviceQualityFactor);
-  
-       if (rawRender){
-       _tilesRenderedInLastFrame.push_back(tile);
-       }
-       }
-       */
     }
     else
     {
@@ -568,53 +501,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics);
       }
-  
-      /*
-  
-       std::list<Tile*> toVisit;
-       for (int i = 0; i < firstLevelTilesCount; i++) {
-       toVisit.push_back(_firstLevelTiles[i]);
-       }
-  
-       while (toVisit.size() > 0) {
-       std::list<Tile*> toVisitInNextIteration;
-  
-       for (std::list<Tile*>::iterator iter = toVisit.begin();
-       iter != toVisit.end();
-       iter++) {
-       Tile* tile = *iter;
-  
-       bool rawRender = tile->render(rc,
-       *_glState,
-       &toVisitInNextIteration,
-       planet,
-       cameraNormalizedPosition,
-       cameraAngle2HorizonInRadians,
-       cameraFrustumInModelCoordinates,
-       &_statistics,
-       _verticalExaggeration,
-       layerTilesRenderParameters,
-       _texturizer,
-       _tilesRenderParameters,
-       _lastSplitTimer,
-       _elevationDataProvider,
-       _tessellator,
-       _tileRasterizer,
-       _layerSet,
-       _renderedSector,
-       _firstRender, // if first render, force full render
-       _texturePriority,
-       dpiFactor,
-       deviceQualityFactor);
-  
-       if (rawRender){
-       _tilesRenderedInLastFrame.push_back(tile);
-       }
-       }
-  
-       toVisit = toVisitInNextIteration;
-       }
-       */
     }
   
     if (_showStatistics)
@@ -995,7 +881,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   }
 
-<<<<<<< HEAD
   public final void zRender(G3MRenderContext rc, GLState glState)
   {
   
@@ -1021,7 +906,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
   
     zRenderGLState._release();
-=======
+  }
+
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
   {
     if (_elevationDataProvider != elevationDataProvider)
@@ -1059,7 +945,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final ElevationDataProvider getElevationDataProvider()
   {
     return _elevationDataProvider;
->>>>>>> purgatory
   }
 
 }
