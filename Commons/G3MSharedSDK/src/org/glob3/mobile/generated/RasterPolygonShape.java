@@ -103,7 +103,7 @@ public class RasterPolygonShape extends Shape
 
   public RasterPolygonShape(java.util.ArrayList<Geodetic2D> coordinates, float borderWidth, Color borderColor, Color surfaceColor)
   {
-     super(new Geodetic3D(*coordinates.get(0), 0), AltitudeMode.RELATIVE_TO_GROUND);
+     super(new Geodetic3D(*(coordinates.get(0)), 0), AltitudeMode.RELATIVE_TO_GROUND);
      _coordinates = GEORasterSymbol.copyCoordinates(coordinates);
      _cartesianStartPos = null;
      _boundingVolume = null;
