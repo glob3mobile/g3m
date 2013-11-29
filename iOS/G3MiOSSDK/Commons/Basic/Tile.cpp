@@ -1012,10 +1012,6 @@ void Tile::prepareTestLODData(const Planet* planet){
   const double sin_lat_2 = SIN(latRad / 2);
   const double latitudeArcSegmentRatio = sin_lat_2 == 0? 1 : latRad / (2 * sin_lat_2);
 
-  if (latitudeArcSegmentRatio < 1){
-    printf("PROBLEM");
-  }
-
   Angle longitudeAngle = nE.angleBetween(nW);
   const double lonRad = longitudeAngle._radians;
   const double sin_lon_2 = SIN(lonRad / 2);
