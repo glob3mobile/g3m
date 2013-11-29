@@ -71,7 +71,7 @@ _depthTest(depthTest),
 _glState(new GLState()),
 _normals(normals),
 _normalsMesh(NULL),
-_showNormals(true)
+_showNormals(false)
 {
   createGLState();
 }
