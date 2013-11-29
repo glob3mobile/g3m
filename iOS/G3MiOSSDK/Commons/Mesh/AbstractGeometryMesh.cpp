@@ -58,7 +58,8 @@ _translationMatrix(( center.isNan() || center.isZero() )
 _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
-_glState(new GLState())
+_glState(new GLState()),
+_showNormals(false)
 {
   createGLState();
 }

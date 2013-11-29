@@ -31,6 +31,8 @@ AbstractMesh::~AbstractMesh() {
 
   _glState->_release();
 
+  delete _normalsMesh;
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -63,7 +65,9 @@ _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
 _glState(new GLState()),
-_normals(normals)
+_normals(normals),
+_normalsMesh(NULL),
+_showNormals(true)
 {
   createGLState();
 }
@@ -132,17 +136,17 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 void AbstractMesh::createGLState() {
 
   _glState->addGLFeature(new GeometryGLFeature(_vertices,   // The attribute is a float vector of 4 elements
-                                              3,            // Our buffer contains elements of 3
-                                              0,            // Index 0
-                                              false,        // Not normalized
-                                              0,            // Stride 0
-                                              _depthTest,   // Depth test
-                                              false, 0,
-                                              false, 0.0f, 0.0f,
-                                              _lineWidth,
-                                              true,
+                                               3,            // Our buffer contains elements of 3
+                                               0,            // Index 0
+                                               false,        // Not normalized
+                                               0,            // Stride 0
+                                               _depthTest,   // Depth test
+                                               false, 0,
+                                               false, 0.0f, 0.0f,
+                                               _lineWidth,
+                                               true,
                                                _pointSize),
-                        false);   //POINT SIZE
+                         false);   //POINT SIZE
 
   if (_normals != NULL) {
     _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
@@ -156,9 +160,9 @@ void AbstractMesh::createGLState() {
   if (_flatColor != NULL && _colors == NULL) {  //FlatColorMesh Shader
 
     _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
-                                                 _flatColor->isTransparent(),
-                                                 GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
-                          false);
+                                                  _flatColor->isTransparent(),
+                                                  GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                           false);
 
 
 
@@ -168,11 +172,11 @@ void AbstractMesh::createGLState() {
 
   if (_colors != NULL) {
     _glState->addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
-                                             4,            //Our buffer contains elements of 4
-                                             0,            //Index 0
-                                             false,        //Not normalized
-                                             0,            //Stride 0
-                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+                                              4,            //Our buffer contains elements of 4
+                                              0,            //Index 0
+                                              false,        //Not normalized
+                                              0,            //Stride 0
+                                              true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 
   }
 
@@ -182,4 +186,23 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
                              const GLState* parentGLState) const{
   _glState->setParent(parentGLState);
   rawRender(rc);
+
+  //RENDERING NORMALS
+  if (_normals != NULL){
+    if (_showNormals){
+      if (_normalsMesh == NULL){
+        _normalsMesh = createNormalsMesh();
+      }
+      if (_normals != NULL){
+        _normalsMesh->render(rc, parentGLState);
+      }
+    } else{
+      if (_normalsMesh != NULL){
+        delete _normalsMesh;
+        _normalsMesh = NULL;
+      }
+    }
+  }
 }
+
+
