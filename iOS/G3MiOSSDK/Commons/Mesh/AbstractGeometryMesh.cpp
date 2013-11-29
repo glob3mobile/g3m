@@ -174,20 +174,17 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
 
 Mesh* AbstractGeometryMesh::createNormalsMesh() const{
 
-  FloatBufferBuilderFromCartesian3D* fbb2 = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  const int size = _vertices->size();
-  for (int i = 0; i < size; i+=3) {
-    fbb2->add(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
-  }
-
   DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
-                                            true,
+                                            false,
                                             _center,
-                                            fbb2->create(),
+                                            _vertices,
                                             1.0,
-                                            3.0,
-                                            new Color(Color::red()));
-  delete fbb2;
+                                            2.0,
+                                            new Color(Color::red()),
+                                            NULL,
+                                            1.0,
+                                            false,
+                                            NULL);
 
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
@@ -196,7 +193,7 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const{
   double normalsSize = sphere->getRadius() / 100.0;
   delete sphere;
 
-  //const int size = _vertices->size();
+  const int size = _vertices->size();
   for (int i = 0; i < size; i+=3) {
 
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));

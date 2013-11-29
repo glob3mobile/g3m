@@ -71,7 +71,7 @@ _depthTest(depthTest),
 _glState(new GLState()),
 _normals(normals),
 _normalsMesh(NULL),
-_showNormals(false)
+_showNormals(true)
 {
   createGLState();
 }
@@ -217,8 +217,12 @@ Mesh* AbstractMesh::createNormalsMesh() const{
                                             _center,
                                             _vertices,
                                             1.0,
-                                            3.0,
-                                            new Color(Color::red()));
+                                            2.0,
+                                            new Color(Color::red()),
+                                            NULL,
+                                            1.0,
+                                            false,
+                                            NULL);
 
   FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
