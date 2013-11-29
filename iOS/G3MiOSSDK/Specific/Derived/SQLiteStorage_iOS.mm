@@ -258,29 +258,31 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
 
 IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
                                                 bool readExpired) {
-  IByteBuffer* buffer = NULL;
-  bool expired = false;
+  @autoreleasepool {
+    IByteBuffer* buffer = NULL;
+    bool expired = false;
 
-  NSString* name = [NSString stringWithCppString: url.getPath()];
-  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
-  if ([rs next]) {
-    NSData* nsData = [rs dataColumnByIndex: 0];
-    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
-    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+    NSString* name = [NSString stringWithCppString: url.getPath()];
+    SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
+    if ([rs next]) {
+      NSData* nsData = [rs dataColumnByIndex: 0];
+      const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
+      NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-    expired = [expiration compare:[NSDate date]] != NSOrderedDescending;
+      expired = [expiration compare:[NSDate date]] != NSOrderedDescending;
 
-    if (readExpired || !expired) {
-      NSUInteger length = [nsData length];
-      unsigned char* bytes = new unsigned char[length];
-      [nsData getBytes: bytes
-                length: length];
+      if (readExpired || !expired) {
+        NSUInteger length = [nsData length];
+        unsigned char* bytes = new unsigned char[length];
+        [nsData getBytes: bytes
+                  length: length];
 
-      buffer = IFactory::instance()->createByteBuffer(bytes, length);
+        buffer = IFactory::instance()->createByteBuffer(bytes, length);
+      }
     }
+
+    [rs close];
+    
+    return IByteBufferResult(buffer, expired);
   }
-
-  [rs close];
-
-  return IByteBufferResult(buffer, expired);
 }
