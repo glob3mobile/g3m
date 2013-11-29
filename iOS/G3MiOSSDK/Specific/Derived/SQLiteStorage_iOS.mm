@@ -213,7 +213,7 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
 
 IImageResult SQLiteStorage_iOS::readImage(const URL& url,
                                           bool readExpired) {
-  @autoreleasepool {
+//  @autoreleasepool {
     //  NSDate* startAll = [NSDate date];
 
     IImage* image = NULL;
@@ -252,13 +252,13 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
     //        parsedTime);
     
     return IImageResult(image, expired);
-  }
+//  }
 }
 
 
 IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
                                                 bool readExpired) {
-  @autoreleasepool {
+//  @autoreleasepool {
     IByteBuffer* buffer = NULL;
     bool expired = false;
 
@@ -284,5 +284,5 @@ IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
     [rs close];
     
     return IByteBufferResult(buffer, expired);
-  }
+//  }
 }

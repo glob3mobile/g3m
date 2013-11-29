@@ -491,6 +491,7 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
 
+#warning ASK JM - Is not easier to delete the state?
         if (_glState->getNumberOfGLFeatures() == 0) {
           createGLState(planet);    //GLState was disposed due to elevation change
         }
