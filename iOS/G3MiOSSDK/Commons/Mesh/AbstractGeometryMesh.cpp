@@ -159,7 +159,7 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
       if (_normalsMesh == NULL){
         _normalsMesh = createNormalsMesh();
       }
-      if (_normals != NULL){
+      if (_normalsMesh != NULL){
         _normalsMesh->render(rc, parentGLState);
       }
     } else{
@@ -190,12 +190,14 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const{
 
   BoundingVolume* volume = getBoundingVolume();
   Sphere* sphere = volume->createSphere();
-  double normalsSize = sphere->getRadius() / 100.0;
+  double normalsSize = sphere->getRadius() / 10.0;
   delete sphere;
 
   const int size = _vertices->size();
-  for (int i = 0; i < size; i+=3) {
 
+#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
+
+  for (int i = 0; i < size; i+=6) {
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
     Vector3D n(_normals->get(i), _normals->get(i+1), _normals->get(i+2));
 
@@ -205,20 +207,23 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const{
     fbb->add(v_n);
   }
 
+  IFloatBuffer* normalsVer = fbb->create();
+  delete fbb;
+
+
+
   DirectMesh* normalsMesh = new DirectMesh(GLPrimitive::lines(),
                                            true,
                                            _center,
-                                           fbb->create(),
+                                           normalsVer,
                                            2.0,
                                            1.0,
                                            new Color(Color::blue()));
-
-  delete fbb;
 
   CompositeMesh* compositeMesh = new CompositeMesh();
   compositeMesh->addMesh(verticesMesh);
   compositeMesh->addMesh(normalsMesh);
 
-  return compositeMesh;
+  return normalsMesh;
   
 }

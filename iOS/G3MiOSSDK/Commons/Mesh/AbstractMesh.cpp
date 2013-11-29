@@ -195,10 +195,10 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
   if (_normals != NULL){
     if (_showNormals){
       if (_normalsMesh == NULL){
-        _normalsMesh = createNormalsMesh();
+        //_normalsMesh = createNormalsMesh();
       }
-      if (_normals != NULL){
-        _normalsMesh->render(rc, parentGLState);
+      if (_normalsMesh != NULL){
+        //_normalsMesh->render(rc, parentGLState);
       }
     } else{
       if (_normalsMesh != NULL){
