@@ -1711,6 +1711,7 @@ public:
     std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
     vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.10)));
     vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.38), Angle::fromDegrees(3.20)));
+    vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.40), Angle::fromDegrees(3.28)));
     vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.60), Angle::fromDegrees(3.25)));
     
     Shape* pol1 = new RasterPolygonShape(vertices,

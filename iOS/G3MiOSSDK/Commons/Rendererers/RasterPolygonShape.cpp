@@ -62,10 +62,10 @@ OrientedBox* RasterPolygonShape::computeOrientedBox(const Planet* planet,
   FrustumData frustum = camera->getFrustumData();
   const int pixelWidth = 10;
   double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getHeight() / frustum._znear;
-  //const Vector3D upper = Vector3D(1e4,1e4,1e4); //(scale, scale, 1);
-  //const Vector3D lower = Vector3D(-1e4,-1e4,-1e4); //(-scale, -scale, 0);
-  const Vector3D upper = Vector3D(_maxX, _maxY, _maxZ);
-  const Vector3D lower = Vector3D(_minX, _minY, _minZ);
+  double incZ = scale - (_maxZ - _minZ);
+  if (incZ < 0) incZ = 0;
+  const Vector3D upper = Vector3D(_maxX, _maxY, _maxZ+incZ);
+  const Vector3D lower = Vector3D(_minX, _minY, _minZ-incZ);
   return new OrientedBox(lower, upper, *getTransformMatrix(planet));
 }
 
