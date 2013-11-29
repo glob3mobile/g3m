@@ -14,6 +14,21 @@
 long long FloatBuffer_iOS::_nextID = 0;
 GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;
 
+//long long FloatBuffer_iOS::_newCounter    = 0;
+//long long FloatBuffer_iOS::_deleteCounter = 0;
+//long long FloatBuffer_iOS::_genBufferCounter  = 0;
+//long long FloatBuffer_iOS::_deleteBufferCounter = 0;
+//
+//void FloatBuffer_iOS::showStatistics() {
+//  printf("FloatBuffer_iOS: new=%lld delete=%lld (delta=%lld)   genBuffer=%lld deleteBuffer=%lld (delta=%lld) \n",
+//         _newCounter,
+//         _deleteCounter,
+//         _newCounter - _deleteCounter,
+//         _genBufferCounter,
+//         _deleteBufferCounter,
+//         _genBufferCounter - _deleteBufferCounter);
+//}
+
 const std::string FloatBuffer_iOS::description() const {
   std::ostringstream oss;
 
@@ -38,6 +53,8 @@ const std::string FloatBuffer_iOS::description() const {
 
 void FloatBuffer_iOS::bindAsVBOToGPU() const {
   if (!_vertexBufferCreated) {
+//    _genBufferCounter++;
+//    showStatistics();
     glGenBuffers(1, &_vertexBuffer);
     _vertexBufferCreated = true;
   }
@@ -62,7 +79,11 @@ void FloatBuffer_iOS::bindAsVBOToGPU() const {
 }
 
 FloatBuffer_iOS::~FloatBuffer_iOS() {
+//  _deleteCounter++;
+
   if (_vertexBufferCreated) {
+//    _deleteBufferCounter++;
+
     glDeleteBuffers(1, &_vertexBuffer);
     if (GL_NO_ERROR != glGetError()) {
       ILogger::instance()->logError("Problem deleting VBO");
@@ -74,4 +95,6 @@ FloatBuffer_iOS::~FloatBuffer_iOS() {
   }
 
   delete [] _values;
+
+//  showStatistics();
 }
