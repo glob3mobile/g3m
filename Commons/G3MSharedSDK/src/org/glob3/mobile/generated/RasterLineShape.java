@@ -29,7 +29,7 @@ public class RasterLineShape extends Shape
   private float _width;
 
   private Color _color;
-  private Color _originalColor;
+  //Color* _originalColor;
 
   private OrientedBox computeOrientedBox(Planet planet, Camera camera)
   {
@@ -72,6 +72,7 @@ public class RasterLineShape extends Shape
   }
 
   public RasterLineShape(Geodetic2D startPosition, Geodetic2D endPosition, float width, Color color)
+  //_originalColor(new Color(color)),
   {
      super(new Geodetic3D(startPosition, 0), AltitudeMode.RELATIVE_TO_GROUND);
      _geodeticStartPos = startPosition;
@@ -80,15 +81,13 @@ public class RasterLineShape extends Shape
      _boundingVolume = null;
      _width = width;
      _color = new Color(color);
-     _originalColor = new Color(color);
   }
 
   public void dispose()
   {
     if (_color != null)
        _color.dispose();
-    if (_originalColor != null)
-       _originalColor.dispose();
+  //  delete _originalColor;
     if (_boundingVolume != null)
       if (_boundingVolume != null)
          _boundingVolume.dispose();
@@ -137,14 +136,11 @@ public class RasterLineShape extends Shape
 
   public final void setSelectedDrawMode(boolean mode)
   {
-    if (mode)
-    {
-      setColor(Color.newFromRGBA(1, 0, 0, 1));
-    }
-    else
-    {
-      setColor(new Color(_originalColor));
-    }
+  /*  if (mode) {
+      setColor(Color::newFromRGBA(1, 0, 0, 1));
+    } else {
+      setColor(new Color(*_originalColor));
+    }*/
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

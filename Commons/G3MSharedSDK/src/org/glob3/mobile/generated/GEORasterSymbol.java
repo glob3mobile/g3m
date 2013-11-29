@@ -31,10 +31,6 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
 
   protected final Sector _sector;
 
-  protected static java.util.ArrayList<Geodetic2D> copyCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
-  {
-    return coordinates;
-  }
   protected static java.util.ArrayList<java.util.ArrayList<Geodetic2D>> copyCoordinatesArray(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {
     return coordinatesArray;
@@ -295,6 +291,11 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
   // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
   public final void unusedMethod()
   {
+  }
+
+  public static java.util.ArrayList<Geodetic2D> copyCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
+  {
+    return coordinates;
   }
 
 }
