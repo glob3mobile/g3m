@@ -52,6 +52,8 @@ protected:
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 
   mutable bool _showNormals;
+  mutable Mesh* _normalsMesh;
+  virtual Mesh* createNormalsMesh() const = 0;
   
 public:
   ~AbstractGeometryMesh();

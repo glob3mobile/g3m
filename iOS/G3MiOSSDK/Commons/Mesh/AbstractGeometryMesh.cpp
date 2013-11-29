@@ -144,4 +144,21 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
                                      const GLState* parentGLState) const{
   _glState->setParent(parentGLState);
   rawRender(rc);
+
+  //RENDERING NORMALS
+  if (_normals != NULL){
+    if (_showNormals){
+      if (_normalsMesh == NULL){
+        _normalsMesh = createNormalsMesh();
+      }
+      if (_normals != NULL){
+        _normalsMesh->render(rc, parentGLState);
+      }
+    } else{
+      if (_normalsMesh != NULL){
+        delete _normalsMesh;
+        _normalsMesh = NULL;
+      }
+    }
+  }
 }
