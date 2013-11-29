@@ -419,6 +419,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   //Testing Area
   _lastLodTest = ((latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared*texWidthSquared));
 
+
   return _lastLodTest;
 }
 
@@ -1007,18 +1008,18 @@ void Tile::prepareTestLODData(const Planet* planet){
    */
 
   Angle latitudeAngle = nN.angleBetween(nS);
-  const double latRad = latitudeAngle._radians;
+  double latRad = latitudeAngle._radians;
   const double sin_lat_2 = SIN(latRad / 2);
-  const double latitudeArcSegmentRatio = sin_lat_2 == 0? 1 : latRad / 2 * sin_lat_2;
+  const double latitudeArcSegmentRatio = sin_lat_2 == 0? 1 : latRad / (2 * sin_lat_2);
 
-//  double latitudeArcSegmentRatio = latitudeAngle.isZero()? 1 : latitudeAngle._radians / (2 * SIN(latitudeAngle._radians/2));
+  if (latitudeArcSegmentRatio < 1){
+    printf("PROBLEM");
+  }
 
   Angle longitudeAngle = nE.angleBetween(nW);
   const double lonRad = longitudeAngle._radians;
   const double sin_lon_2 = SIN(lonRad / 2);
-  const double longitudeArcSegmentRatio = sin_lon_2 == 0? 1 : lonRad / 2 * sin_lon_2;
-
-  //double longitudeArcSegmentRatio = longitudeAngle.isZero()? 1 : longitudeAngle._radians / (2 * SIN(longitudeAngle._radians/2));
+  const double longitudeArcSegmentRatio = sin_lon_2 == 0? 1 : lonRad / (2 * sin_lon_2);
 
   _latitudeArcSegmentRatioSquared = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
   _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
