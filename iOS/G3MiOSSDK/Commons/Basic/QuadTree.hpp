@@ -93,6 +93,8 @@ public:
   bool acceptVisitor(const Sector& sector,
                      const QuadTreeVisitor& visitor) const;
 
+  bool isEmpty() const;
+
 };
 
 
@@ -130,6 +132,8 @@ public:
                      const QuadTreeVisitor& visitor) const;
 
   void clear();
+
+  bool isEmpty() const;
 
 };
 
