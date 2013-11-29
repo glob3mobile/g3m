@@ -101,18 +101,18 @@ public class RasterPolygonShape extends Shape
     return _boundingVolume;
   }
 
+
+
   public RasterPolygonShape(java.util.ArrayList<Geodetic2D> coordinates, float borderWidth, Color borderColor, Color surfaceColor)
   {
-     super(new Geodetic3D(*(coordinates.get(0)), 0), AltitudeMode.RELATIVE_TO_GROUND);
-     _coordinates = GEORasterSymbol.copyCoordinates(coordinates);
-     _cartesianStartPos = null;
-     _boundingVolume = null;
-     _borderWidth = borderWidth;
-     _borderColor = new Color(borderColor);
-     _surfaceColor = new Color(surfaceColor);
-    System.out.printf("RasterPolygonShape git. Coordinates 0 =%f\n", _coordinates.get(0)._latitude._degrees);
+    super(new Geodetic3D(coordinates.get(0), 0), AltitudeMode.RELATIVE_TO_GROUND);
+    _coordinates = GEORasterSymbol.copyCoordinates(coordinates);
+    _cartesianStartPos = null;
+    _boundingVolume = null;
+    _borderWidth = borderWidth;
+    _borderColor = new Color(borderColor);
+    _surfaceColor = new Color(surfaceColor);
   }
-
 
   public void dispose()
   {
