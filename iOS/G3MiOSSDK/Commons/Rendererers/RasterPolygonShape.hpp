@@ -46,7 +46,7 @@ public:
                      float borderWidth,
                      const Color& borderColor,
                      const Color& surfaceColor) :
-  Shape(new Geodetic3D(*coordinates->at(0), 0), RELATIVE_TO_GROUND),
+  Shape(new Geodetic3D(*(coordinates->at(0)), 0), RELATIVE_TO_GROUND),
   _coordinates(GEORasterSymbol::copyCoordinates(coordinates)),
   _cartesianStartPos(NULL),
   _boundingVolume(NULL),
