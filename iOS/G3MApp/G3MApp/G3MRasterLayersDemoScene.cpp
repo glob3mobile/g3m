@@ -151,7 +151,8 @@ void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
   layerSet->disableAllLayers();
 
   if (option == "MapBox OSM") {
-    layerSet->getLayerByTitle("Map Box OSM")->setEnable(true);
+#warning TOTOTOTOTOTOTOT
+    //layerSet->getLayerByTitle("Map Box OSM")->setEnable(true);
   }
   else if (option == "Open Street Map") {
     layerSet->getLayerByTitle("Open Street Map")->setEnable(true);

@@ -97,13 +97,13 @@ public:
                            const IFloatBuffer* buffer) const {
     const FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
 
-    buffer_iOS->bindAsVBOToGPU();
-    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    buffer_iOS->bindAsVBOToGPU();
+//    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 #warning uncoment for no VBO
-//    const float* pointer = buffer_iOS->getPointer();
-//    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
+    const float* pointer = buffer_iOS->getPointer();
+    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
   }
 
 //  void drawElements(int mode,
