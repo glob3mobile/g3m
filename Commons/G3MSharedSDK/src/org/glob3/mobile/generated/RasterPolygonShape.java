@@ -54,7 +54,8 @@ public class RasterPolygonShape extends Shape
   {
     _minX = _minY = _minZ = 0;
     _maxX = _maxY = _maxZ = 0;
-    _cartesianStartPos = new Vector3D(planet.toCartesian(*_coordinates.get(0)));
+    Geodetic2D geodeticStartPos = _coordinates.get(0);
+    _cartesianStartPos = new Vector3D(planet.toCartesian(geodeticStartPos));
     final Vector3D normal = planet.geodeticSurfaceNormal(_cartesianStartPos);
     Plane Z0 = Plane.fromPointAndNormal(_cartesianStartPos, normal);
     final Vector3D north2D = planet.getNorth().projectionInPlane(normal);
@@ -63,7 +64,8 @@ public class RasterPolygonShape extends Shape
     Plane X0 = Plane.fromPointAndNormal(_cartesianStartPos, east2D);
     for (int n = 1; n<_coordinates.size(); n++)
     {
-      Vector3D vertex = planet.toCartesian(*_coordinates.get(n));
+      Geodetic2D geodeticVertex = _coordinates.get(n);
+      Vector3D vertex = planet.toCartesian(geodeticVertex);
       double x = X0.signedDistance(vertex);
       if (x < _minX)
          _minX = x;
@@ -80,16 +82,6 @@ public class RasterPolygonShape extends Shape
       if (z > _maxZ)
          _maxZ = z;
     }
-  
-  
-    /*const Vector3D cartesianEndPos = Vector3D(planet->toCartesian(*_geodeticEndPos));
-    const Vector3D line = cartesianEndPos.sub(*_cartesianStartPos);
-    setScale(1, 1, line.length());
-    const Vector3D normal = planet->geodeticSurfaceNormal(*_cartesianStartPos);
-    setPitch(line.angleBetween(normal).times(-1));
-    const Vector3D north2D = planet->getNorth().projectionInPlane(normal);
-    const Vector3D projectedLine = line.projectionInPlane(normal);
-    setHeading(projectedLine.signedAngleBetween(north2D, normal));*/
   }
 
   private double _minX;
