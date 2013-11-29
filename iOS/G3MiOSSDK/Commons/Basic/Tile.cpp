@@ -197,6 +197,8 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
     _planetRenderer->sectorElevationChanged(_elevationData);
   }
 
+  _tessellatorMesh->showNormals(true);
+
   return _tessellatorMesh;
 }
 

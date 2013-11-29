@@ -20,8 +20,6 @@ private:
 protected:
   void rawRender(const G3MRenderContext* rc) const;
 
-  Mesh* createNormalsMesh() const;
-
 public:
   IndexedGeometryMesh(const int       primitive,
                       const Vector3D& center,

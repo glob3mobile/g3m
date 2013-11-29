@@ -53,7 +53,7 @@ protected:
 
   mutable bool _showNormals;
   mutable Mesh* _normalsMesh;
-  virtual Mesh* createNormalsMesh() const = 0;
+  Mesh* createNormalsMesh() const;
   
 public:
   ~AbstractGeometryMesh();

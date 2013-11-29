@@ -13,7 +13,12 @@
 #include "GL.hpp"
 #include "Box.hpp"
 
-//#include "GPUProgramState.hpp"
+
+#include "DirectMesh.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "CompositeMesh.hpp"
+#include "Sphere.hpp"
+
 #include "Camera.hpp"
 
 #include "GLState.hpp"
@@ -30,6 +35,8 @@ AbstractGeometryMesh::~AbstractGeometryMesh() {
   delete _translationMatrix;
 
   _glState->_release();
+
+  delete _normalsMesh;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -59,6 +66,7 @@ _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
 _glState(new GLState()),
+_normalsMesh(NULL),
 _showNormals(false)
 {
   createGLState();
@@ -161,4 +169,59 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
       }
     }
   }
+}
+
+
+Mesh* AbstractGeometryMesh::createNormalsMesh() const{
+
+  FloatBufferBuilderFromCartesian3D* fbb2 = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  const int size = _vertices->size();
+  for (int i = 0; i < size; i+=3) {
+    fbb2->add(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
+  }
+
+  DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
+                                            true,
+                                            _center,
+                                            fbb2->create(),
+                                            1.0,
+                                            3.0,
+                                            new Color(Color::red()));
+  delete fbb2;
+
+  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  BoundingVolume* volume = getBoundingVolume();
+  Sphere* sphere = volume->createSphere();
+  double normalsSize = sphere->getRadius() / 100.0;
+  delete sphere;
+
+  //const int size = _vertices->size();
+  for (int i = 0; i < size; i+=3) {
+
+    Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
+    Vector3D n(_normals->get(i), _normals->get(i+1), _normals->get(i+2));
+
+    Vector3D v_n = v.add(n.normalized().times(normalsSize));
+
+    fbb->add(v);
+    fbb->add(v_n);
+  }
+
+  DirectMesh* normalsMesh = new DirectMesh(GLPrimitive::lines(),
+                                           true,
+                                           _center,
+                                           fbb->create(),
+                                           2.0,
+                                           1.0,
+                                           new Color(Color::blue()));
+
+  delete fbb;
+
+  CompositeMesh* compositeMesh = new CompositeMesh();
+  compositeMesh->addMesh(verticesMesh);
+  compositeMesh->addMesh(normalsMesh);
+
+  return compositeMesh;
+  
 }
