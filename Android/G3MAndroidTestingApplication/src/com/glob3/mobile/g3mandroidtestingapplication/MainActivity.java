@@ -459,6 +459,21 @@ public class MainActivity
     		  shapesRenderer.addShape(rasterLine);
     	  }
 
+    	  // DRAWING RASTER POLYGON
+    	  {
+    		  java.util.ArrayList<Geodetic2D> vertices = new java.util.ArrayList<Geodetic2D>();
+    		  vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.10)));
+    		  vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.38), Angle::fromDegrees(3.20)));
+    		  vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.40), Angle::fromDegrees(3.28)));
+    		  vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.60), Angle::fromDegrees(3.25)));
+
+    		  Shape* pol1 = new RasterPolygonShape(vertices,
+    				  2,
+    				  Color::green(),
+    				  Color::fromRGBA(1.0, 1.0, 1, 0.6));
+    		  shapesRenderer->addShape(pol1);
+    	  }
+
     	  // DRAWING JSON
          /* shapesRenderer.loadJSONSceneJS(new URL("file:///seymour-plane.json", false), 
         		  "file:////", 
