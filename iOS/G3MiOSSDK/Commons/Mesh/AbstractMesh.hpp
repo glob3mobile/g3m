@@ -55,7 +55,7 @@ protected:
   
   void createGLState();
 
-  bool _showNormals;
+  mutable bool _showNormals;
   mutable Mesh* _normalsMesh;
   virtual Mesh* createNormalsMesh() const = 0;
 
@@ -73,7 +73,7 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v){
+  void showNormals(bool v) const{
     _showNormals = v;
   }
   

@@ -68,7 +68,7 @@ Mesh* DirectMesh::createNormalsMesh() const{
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
     Vector3D n(_normals->get(i), _normals->get(i+1), _normals->get(i+2));
 
-    Vector3D v_n = v.add(n.times(normalsSize));
+    Vector3D v_n = v.add(n.normalized().times(normalsSize));
 
     fbb->add(v);
     fbb->add(v_n);

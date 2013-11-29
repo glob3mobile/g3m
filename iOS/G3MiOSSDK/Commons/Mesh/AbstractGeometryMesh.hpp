@@ -51,7 +51,7 @@ protected:
   
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
 
-  bool _showNormals;
+  mutable bool _showNormals;
   
 public:
   ~AbstractGeometryMesh();
@@ -69,7 +69,7 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
-  void showNormals(bool v){
+  void showNormals(bool v) const{
     _showNormals = v;
   }
   

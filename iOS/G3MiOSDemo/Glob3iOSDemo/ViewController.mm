@@ -633,6 +633,8 @@ public:
   meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
                              Color::newFromRGBA(1, 1, 0, 1));
 
+  meshRenderer->showNormals(true); //SHOWING NORMALS
+
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
 
