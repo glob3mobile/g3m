@@ -20,6 +20,7 @@ import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PointShape;
 import org.glob3.mobile.generated.LineShape;
 import org.glob3.mobile.generated.RasterLineShape;
+import org.glob3.mobile.generated.RasterPolygonShape;
 import org.glob3.mobile.generated.SGShape;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapeLoadListener;
@@ -76,13 +77,13 @@ public class MainActivity
       final MarksRenderer marksRenderer = new MarksRenderer(true);
       builder.addRenderer(marksRenderer);
 
-      final MeshRenderer meshRenderer = new MeshRenderer();
+      /*final MeshRenderer meshRenderer = new MeshRenderer();
       meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
-      builder.addRenderer(meshRenderer);
+      builder.addRenderer(meshRenderer);*/
       
-      final LayerSet layerSet = new LayerSet();
+      /*final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);*/
 
       // final ShapeLoadListener Plistener = new ShapeLoadListener() {
       // @Override
@@ -289,7 +290,7 @@ public class MainActivity
       //
       // }
 
-      if (true) {
+      if (false) {
 
          final int time = 10; // SECS
 
@@ -341,7 +342,7 @@ public class MainActivity
          builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
       }
 
-      if (true) {      
+      if (false) {      
     	  // testing selecting shapes
     	  final double factor = 3000;
     	  final Vector3D radius1 = new Vector3D(factor, factor, factor);
@@ -462,16 +463,16 @@ public class MainActivity
     	  // DRAWING RASTER POLYGON
     	  {
     		  java.util.ArrayList<Geodetic2D> vertices = new java.util.ArrayList<Geodetic2D>();
-    		  vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.10)));
-    		  vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.38), Angle::fromDegrees(3.20)));
-    		  vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.40), Angle::fromDegrees(3.28)));
-    		  vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.60), Angle::fromDegrees(3.25)));
+    		  vertices.add(new Geodetic2D(Angle.fromDegrees(39.50), Angle.fromDegrees(3.10)));
+    		  vertices.add(new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(3.20)));
+    		  vertices.add(new Geodetic2D(Angle.fromDegrees(39.40), Angle.fromDegrees(3.28)));
+    		  vertices.add(new Geodetic2D(Angle.fromDegrees(39.60), Angle.fromDegrees(3.25)));
 
-    		  Shape* pol1 = new RasterPolygonShape(vertices,
+    		  Shape pol1 = new RasterPolygonShape(vertices,
     				  2,
-    				  Color::green(),
-    				  Color::fromRGBA(1.0, 1.0, 1, 0.6));
-    		  shapesRenderer->addShape(pol1);
+    				  Color.green(),
+    				  Color.fromRGBA(1, 1, 1, 0.6f));
+    		  shapesRenderer.addShape(pol1);
     	  }
 
     	  // DRAWING JSON
@@ -503,7 +504,7 @@ public class MainActivity
 
                      }
                   });*/
-
+/*
     	  Shape plane = SceneJSShapesParser.parseFromJSON("file:///seymour-plane.json", 
     			  "file:////", 
     			  false,
@@ -515,7 +516,7 @@ public class MainActivity
     	  plane.setScale(scale, scale, scale);
     	  plane.setPitch(Angle.fromDegrees(120));
     	  plane.setHeading(Angle.fromDegrees(-110));
-    	  shapesRenderer.addShape(plane);
+    	  shapesRenderer.addShape(plane);*/
 
 
 

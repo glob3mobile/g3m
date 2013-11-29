@@ -42,11 +42,13 @@ protected:
   BoundingVolume* getBoundingVolume(const G3MRenderContext *rc);
   
 public:
+  
+#ifdef C_CODE
   RasterPolygonShape(std::vector<Geodetic2D*>* coordinates,
                      float borderWidth,
                      const Color& borderColor,
                      const Color& surfaceColor) :
-  Shape(new Geodetic3D(*(coordinates->at(0)), 0), RELATIVE_TO_GROUND),
+  Shape(new Geodetic3D(*coordinates->at(0), 0), RELATIVE_TO_GROUND),
   _coordinates(GEORasterSymbol::copyCoordinates(coordinates)),
   _cartesianStartPos(NULL),
   _boundingVolume(NULL),
@@ -54,9 +56,21 @@ public:
   _borderColor(new Color(borderColor)),
   _surfaceColor(new Color(surfaceColor))
   {
-    printf("RasterPolygonShape git. Coordinates 0 =%f\n", _coordinates->at(0)->_latitude._degrees);
   }
-
+#endif
+  
+#ifdef JAVA_CODE
+  public RasterPolygonShape(java.util.ArrayList<Geodetic2D> coordinates, float borderWidth, Color borderColor, Color surfaceColor)
+  {
+    super(new Geodetic3D(coordinates.get(0), 0), AltitudeMode.RELATIVE_TO_GROUND);
+    _coordinates = GEORasterSymbol.copyCoordinates(coordinates);
+    _cartesianStartPos = null;
+    _boundingVolume = null;
+    _borderWidth = borderWidth;
+    _borderColor = new Color(borderColor);
+    _surfaceColor = new Color(surfaceColor);
+  }
+#endif
   
   ~RasterPolygonShape();
   
