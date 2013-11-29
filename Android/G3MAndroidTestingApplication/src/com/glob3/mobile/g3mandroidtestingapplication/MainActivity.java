@@ -81,9 +81,9 @@ public class MainActivity
       meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
       builder.addRenderer(meshRenderer);*/
       
-      /*final LayerSet layerSet = new LayerSet();
+      final LayerSet layerSet = new LayerSet();
       layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);*/
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       // final ShapeLoadListener Plistener = new ShapeLoadListener() {
       // @Override
@@ -342,7 +342,7 @@ public class MainActivity
          builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
       }
 
-      if (false) {      
+      if (true) {      
     	  // testing selecting shapes
     	  final double factor = 3000;
     	  final Vector3D radius1 = new Vector3D(factor, factor, factor);
