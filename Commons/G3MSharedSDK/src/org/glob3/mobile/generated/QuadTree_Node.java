@@ -155,4 +155,26 @@ public class QuadTree_Node
     return false;
   }
 
+  public final boolean isEmpty()
+  {
+    if (!_elements.isEmpty())
+    {
+      return false;
+    }
+  
+    if (_children != null)
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        QuadTree_Node child = _children[i];
+        if (!child.isEmpty())
+        {
+          return false;
+        }
+      }
+    }
+  
+    return true;
+  }
+
 }

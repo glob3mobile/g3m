@@ -95,6 +95,8 @@ public abstract class AbstractGeometryMesh extends Mesh
      _pointSize = pointSize;
      _depthTest = depthTest;
      _glState = new GLState();
+     _normalsMesh = null;
+     _showNormals = false;
     createGLState();
   }
 
@@ -117,10 +119,53 @@ public abstract class AbstractGeometryMesh extends Mesh
 
   protected abstract void rawRender(G3MRenderContext rc);
 
+  protected boolean _showNormals;
+  protected Mesh _normalsMesh;
+  protected final Mesh createNormalsMesh()
+  {
+  
+    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, 1.0, 2.0, new Color(Color.red()), null, 1.0, false, null);
+  
+    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+  
+    BoundingVolume volume = getBoundingVolume();
+    Sphere sphere = volume.createSphere();
+    double normalsSize = sphere.getRadius() / 10.0;
+    if (sphere != null)
+       sphere.dispose();
+  
+    final int size = _vertices.size();
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's ! enough graphical memory]
+  
+    for (int i = 0; i < size; i+=6)
+    {
+      Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
+      Vector3D n = new Vector3D(_normals.get(i), _normals.get(i+1), _normals.get(i+2));
+  
+      Vector3D v_n = v.add(n.normalized().times(normalsSize));
+  
+      fbb.add(v);
+      fbb.add(v_n);
+    }
+  
+    IFloatBuffer normalsVer = fbb.create();
+    if (fbb != null)
+       fbb.dispose();
+  
+  
+  
+    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, normalsVer, 2.0, 1.0, new Color(Color.blue()));
+  
+    CompositeMesh compositeMesh = new CompositeMesh();
+    compositeMesh.addMesh(verticesMesh);
+    compositeMesh.addMesh(normalsMesh);
+  
+    return normalsMesh;
+  
+  }
 
-  ///#include "GPUProgramState.hpp"
-  
-  
   public void dispose()
   {
     if (_ownsVertices)
@@ -140,6 +185,9 @@ public abstract class AbstractGeometryMesh extends Mesh
        _translationMatrix.dispose();
   
     _glState._release();
+  
+    if (_normalsMesh != null)
+       _normalsMesh.dispose();
   
     super.dispose();
   }
@@ -173,6 +221,36 @@ public abstract class AbstractGeometryMesh extends Mesh
   {
     _glState.setParent(parentGLState);
     rawRender(rc);
+  
+    //RENDERING NORMALS
+    if (_normals != null)
+    {
+      if (_showNormals)
+      {
+        if (_normalsMesh == null)
+        {
+          _normalsMesh = createNormalsMesh();
+        }
+        if (_normalsMesh != null)
+        {
+          _normalsMesh.render(rc, parentGLState);
+        }
+      }
+      else
+      {
+        if (_normalsMesh != null)
+        {
+          if (_normalsMesh != null)
+             _normalsMesh.dispose();
+          _normalsMesh = null;
+        }
+      }
+    }
+  }
+
+  public final void showNormals(boolean v)
+  {
+    _showNormals = v;
   }
 
 }

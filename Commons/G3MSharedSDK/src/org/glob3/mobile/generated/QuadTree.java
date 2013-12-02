@@ -48,4 +48,9 @@ public class QuadTree
     _root = new QuadTree_Node(sector);
   }
 
+  public final boolean isEmpty()
+  {
+    return _root.isEmpty();
+  }
+
 }
