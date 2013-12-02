@@ -68,6 +68,7 @@ import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LayerTouchEvent;
 import org.glob3.mobile.generated.LayerTouchEventListener;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.LineShape;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
@@ -79,7 +80,10 @@ import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PlanetRendererBuilder;
+import org.glob3.mobile.generated.PointShape;
 import org.glob3.mobile.generated.QuadShape;
+import org.glob3.mobile.generated.RasterLineShape;
+import org.glob3.mobile.generated.RasterPolygonShape;
 import org.glob3.mobile.generated.RectangleF;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.Sector;
@@ -1378,15 +1382,19 @@ public class G3MWebGLDemo
       
       if (true) {      
     	  // testing selecting shapes
-    	  final ShapesRenderer shapesRenderer = new ShapesRenderer();
+          // GeoTileRasterizer is needed to draw RasterShapes
+          GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
+          builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+          final ShapesRenderer shapesRenderer = new ShapesRenderer(geoTileRasterizer);
+          builder.addRenderer(shapesRenderer);
     	  
-    	  final double factor = 2e5;
+    	  final double factor = 3000;
     	  final Vector3D radius1 = new Vector3D(factor, factor, factor);
     	  final Vector3D radius2 = new Vector3D(factor*1.5, factor*1.5, factor*1.5);
     	  final Vector3D radiusBox = new Vector3D(factor, factor*1.5, factor*2);
 
-    	  Shape box1 = new BoxShape(new Geodetic3D(Angle.fromDegrees(0),
-    			  Angle.fromDegrees(10),
+    	  Shape box1 = new BoxShape(new Geodetic3D(Angle.fromDegrees(39.70),
+    			  Angle.fromDegrees(2.80),
     			  radiusBox._z/2),
     			  AltitudeMode.ABSOLUTE,
     			  radiusBox,
@@ -1394,11 +1402,11 @@ public class G3MWebGLDemo
     			  Color.fromRGBA(0,    1, 0, 1));
     	  shapesRenderer.addShape(box1);
 
-    	  Shape ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0),
-    			  Angle.fromDegrees(0),
-    			  radius1._x),
+    	  Shape ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(39.80),
+    			  Angle.fromDegrees(2.90),
+    			  radius1._z),
     			  AltitudeMode.ABSOLUTE,
-    			  new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/world.jpg", false),
+    			  new URL("file:///world.jpg", false),
     			  radius1,
     			  (short)32,
     			  (short)0,
@@ -1406,17 +1414,155 @@ public class G3MWebGLDemo
     			  false);
     	  shapesRenderer.addShape(ellipsoid1);
 
-    	  Shape mercator1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(0),
-    			  Angle.fromDegrees(5),
+    	  Shape mercator1 = new EllipsoidShape(new Geodetic3D(Angle.fromDegrees(39.60),
+    			  Angle.fromDegrees(3),
     			  radius2._x),
     			  AltitudeMode.ABSOLUTE,
-    			  new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/mercator_debug.png", false),
+    			  new URL("file:///mercator_debug.png", false),
     			  radius2,
     			  (short)32,
     			  (short)0,
     			  false,
     			  true);
     	  shapesRenderer.addShape(mercator1);
+    	  
+    	  // DRAWING POINTS
+    	  {
+    		  Shape point = new PointShape(new Geodetic3D(Angle.fromDegrees(39.70),
+    				  Angle.fromDegrees(3.30),
+    				  radiusBox._z),
+    				  AltitudeMode.ABSOLUTE,
+    				  8,
+    				  Color.fromRGBA(0, 0, 1, 1));
+    		  shapesRenderer.addShape(point);
+    	  }
+    	  {
+    		  Shape point = new PointShape(new Geodetic3D(Angle.fromDegrees(39.55),
+    				  Angle.fromDegrees(3.40),
+    				  radiusBox._z),
+    				  AltitudeMode.ABSOLUTE,
+    				  6,
+    				  Color.fromRGBA(0, 0, 1, 1));
+    		  shapesRenderer.addShape(point);
+    	  }
+    	  {
+    		  Shape point = new PointShape(new Geodetic3D(Angle.fromDegrees(39.70),
+    				  Angle.fromDegrees(3.50),
+    				  radiusBox._z),
+    				  AltitudeMode.ABSOLUTE,
+    				  4,
+    				  Color.fromRGBA(0, 0, 1, 1));
+    		  shapesRenderer.addShape(point);
+    	  }
+
+    	  // DRAWING LINES
+    	  {
+    		  Shape line = new LineShape(new Geodetic3D(Angle.fromDegrees(39.69),
+    				  Angle.fromDegrees(3.31),
+    				  radiusBox._z),
+    				  new Geodetic3D(Angle.fromDegrees(39.56),
+    						  Angle.fromDegrees(3.39),
+    						  radiusBox._z),
+    						  AltitudeMode.ABSOLUTE,
+    						  5,
+    						  Color.fromRGBA(1, 0.5f, 0, 1));
+    		  shapesRenderer.addShape(line);
+    	  }
+    	  {
+    		  Shape line = new LineShape(new Geodetic3D(Angle.fromDegrees(39.56),
+    				  Angle.fromDegrees(3.41),
+    				  radiusBox._z),
+    				  new Geodetic3D(Angle.fromDegrees(39.69),
+    						  Angle.fromDegrees(3.49),
+    						  radiusBox._z),   		                                
+    						  AltitudeMode.ABSOLUTE,
+    						  5,
+    						  Color.fromRGBA(1, 0.5f, 0, 1));
+    		  shapesRenderer.addShape(line);
+    	  }
+    	  {
+    		  Shape line = new LineShape(new Geodetic3D(Angle.fromDegrees(39.70),
+    				  Angle.fromDegrees(3.31),
+    				  radiusBox._z),
+    				  new Geodetic3D(Angle.fromDegrees(39.70),
+    						  Angle.fromDegrees(3.49),
+    						  radiusBox._z),
+    						  AltitudeMode.ABSOLUTE,
+    						  5,
+    						  Color.fromRGBA(1, 0.5f, 0, 1));
+    		  shapesRenderer.addShape(line);
+    	  }
+
+    	  // DRAWING RASTER LINES
+    	  {
+    		  Shape rasterLine = new RasterLineShape(new Geodetic2D(Angle.fromDegrees(39.40),
+    				  Angle.fromDegrees(2.70)),
+    				  new Geodetic2D(Angle.fromDegrees(39.40),
+    						  Angle.fromDegrees(3.00)),
+    						  2,
+    						  Color.fromRGBA(0, 0, 1, 1));
+    		  shapesRenderer.addShape(rasterLine);
+    	  }
+
+    	  // DRAWING RASTER POLYGON
+    	  {
+    		  java.util.ArrayList<Geodetic2D> vertices = new java.util.ArrayList<Geodetic2D>();
+    		  vertices.add(new Geodetic2D(Angle.fromDegrees(39.50), Angle.fromDegrees(3.10)));
+    		  vertices.add(new Geodetic2D(Angle.fromDegrees(39.38), Angle.fromDegrees(3.20)));
+    		  vertices.add(new Geodetic2D(Angle.fromDegrees(39.40), Angle.fromDegrees(3.28)));
+    		  vertices.add(new Geodetic2D(Angle.fromDegrees(39.60), Angle.fromDegrees(3.25)));
+
+    		  Shape pol1 = new RasterPolygonShape(vertices,
+    				  2,
+    				  Color.green(),
+    				  Color.fromRGBA(1, 1, 1, 0.6f));
+    		  shapesRenderer.addShape(pol1);
+    	  }
+
+    	  // DRAWING JSON
+         /* shapesRenderer.loadJSONSceneJS(new URL("file:///seymour-plane.json", false), 
+        		  "file:////", 
+        		  false,
+    			  new Geodetic3D(Angle.fromDegrees(39.70),
+    					  Angle.fromDegrees(2.60),
+    					  7*factor),
+    					  AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+
+                     @Override
+                     public void onBeforeAddShape(final SGShape shape) {
+                    	 double scale = factor/5;
+                   	  shape.setScale(scale, scale, scale);
+                   	  shape.setPitch(Angle.fromDegrees(120));
+                   	  shape.setHeading(Angle.fromDegrees(-110));
+                     }
+
+
+                     @Override
+                     public void onAfterAddShape(final SGShape shape) {
+                     }
+
+
+                     @Override
+                     public void dispose() {
+                        // TODO Auto-generated method stub
+
+                     }
+                  });*/
+/*
+    	  Shape plane = SceneJSShapesParser.parseFromJSON("file:///seymour-plane.json", 
+    			  "file:////", 
+    			  false,
+    			  new Geodetic3D(Angle.fromDegrees(39.70),
+    					  Angle.fromDegrees(2.60),
+    					  7*factor),
+    					  AltitudeMode.ABSOLUTE);
+    	  double scale = factor/5;
+    	  plane.setScale(scale, scale, scale);
+    	  plane.setPitch(Angle.fromDegrees(120));
+    	  plane.setHeading(Angle.fromDegrees(-110));
+    	  shapesRenderer.addShape(plane);*/
+
+
 
     	  // adding touch listener
     	  ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
@@ -1442,7 +1588,6 @@ public class G3MWebGLDemo
     	  };
       
     	  shapesRenderer.setShapeTouchListener(myShapeTouchListener, true);
-    	  builder.addRenderer(shapesRenderer);
       }
 
       // camera constrainer
@@ -1489,7 +1634,7 @@ public class G3MWebGLDemo
       _widget = builder.createWidget();
       
       if (true) {
-    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.08), Angle.fromDegrees(2.90), 140000);
+    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.08), Angle.fromDegrees(2.90), 160000);
     	  _widget.setCameraPosition(position);
     	  _widget.setCameraHeading(Angle.fromDegrees(5.0));
     	  _widget.setCameraPitch(Angle.fromDegrees(24.0));
