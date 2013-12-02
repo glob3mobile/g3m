@@ -152,7 +152,6 @@
 		CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */; };
 		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
 		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
-		CF6920BE18392F83007409D8 /* ErrorHandling.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6920BC18392EEB007409D8 /* ErrorHandling.hpp */; };
 		CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */; };
 		CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */; };
 		CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */; };
@@ -627,7 +626,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				CF6920BE18392F83007409D8 /* ErrorHandling.hpp in CopyFiles */,
 				CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */,
 				D87F4D78183BBF1500C57835 /* SingleBillElevationDataProvider.hpp in CopyFiles */,
 				CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */,
@@ -1176,7 +1174,6 @@
 		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
 		CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IIntBuffer.cpp; path = Commons/Basic/IIntBuffer.cpp; sourceTree = "<group>"; };
 		CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IIntBuffer.hpp; path = Commons/Basic/IIntBuffer.hpp; sourceTree = "<group>"; };
-		CF6920BC18392EEB007409D8 /* ErrorHandling.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ErrorHandling.hpp; sourceTree = "<group>"; };
 		CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONDouble.cpp; sourceTree = "<group>"; };
 		CF6B5F5C16C1910500C590C1 /* JSONDouble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONDouble.hpp; sourceTree = "<group>"; };
 		CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONFloat.cpp; sourceTree = "<group>"; };
@@ -1555,6 +1552,7 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GenericQuadTree.hpp; path = Commons/Basic/GenericQuadTree.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GenericQuadTree.cpp; path = Commons/Basic/GenericQuadTree.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D8F2C5B8184CB3C700A8D6FC /* ErrorHandling.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ErrorHandling.hpp; path = Commons/Basic/ErrorHandling.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLGlobalState.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
@@ -1714,6 +1712,7 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D8F2C5B8184CB3C700A8D6FC /* ErrorHandling.hpp */,
 				D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */,
 				D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */,
 				D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */,
@@ -1887,7 +1886,6 @@
 				CFA2EEED17EA0B1100EB4526 /* CartoCSSLexer.hpp */,
 				CF423A2B17F8874E00F50525 /* RenderState.cpp */,
 				CF423A2C17F8874E00F50525 /* RenderState.hpp */,
-				CF6920BC18392EEB007409D8 /* ErrorHandling.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
