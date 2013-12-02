@@ -68,6 +68,8 @@ import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LayerTouchEvent;
 import org.glob3.mobile.generated.LayerTouchEventListener;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.MapBoxLayer;
+import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -1204,6 +1206,13 @@ public class G3MWebGLDemo
                   true);
          layerSet.addLayer(bing);
       }
+      
+      final boolean useMapQuest = true;
+      if (useMapQuest) {
+    	  final MapQuestLayer mqlOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
+    	  layerSet.addLayer(mqlOSM);
+    	  //layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
+      }
 
       /*
        * final WMSLayer political = new WMSLayer("topp:cia", new
@@ -1355,7 +1364,8 @@ public class G3MWebGLDemo
       builder.setInitializationTask(initializationTask);
       */
 
-      //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
 
       // set elevations
       //      final Sector sector = Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992, -16.0019401695656);
@@ -1436,7 +1446,7 @@ public class G3MWebGLDemo
       }
 
       // camera constrainer
-      if (true) {
+      if (false) {
          final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
             private boolean firstTime = true;
 
@@ -1479,12 +1489,11 @@ public class G3MWebGLDemo
       _widget = builder.createWidget();
       
       if (true) {
-    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(-12.0875), Angle.fromDegrees(15.2036), 2328992);
+    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.08), Angle.fromDegrees(2.90), 140000);
     	  _widget.setCameraPosition(position);
-    	  _widget.setCameraHeading(Angle.fromDegrees(-40.72));
-    	  _widget.setCameraPitch(Angle.fromDegrees(35.48));
+    	  _widget.setCameraHeading(Angle.fromDegrees(5.0));
+    	  _widget.setCameraPitch(Angle.fromDegrees(24.0));
       }
-
 
 
       /*

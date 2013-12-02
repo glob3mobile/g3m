@@ -4,7 +4,6 @@ package org.glob3.mobile.server.proxy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -43,6 +42,7 @@ public class Proxy
    public void doGet(final HttpServletRequest request,
                      final HttpServletResponse response) throws IOException {
 
+
       String reqUrl = request.getQueryString();
 
       if (reqUrl == null) {
@@ -63,6 +63,7 @@ public class Proxy
 
          final Enumeration headerNames = request.getHeaderNames();
          final Map<String, String> headers = new HashMap<String, String>();
+
          while (headerNames.hasMoreElements()) {
             final String headerName = (String) headerNames.nextElement();
             String headerValue = request.getHeader(headerName);
@@ -88,19 +89,21 @@ public class Proxy
             connection = (HttpURLConnection) url.openConnection();
             connection.setUseCaches(true);
             connection.setDoInput(true);
-            connection.setDoOutput(true);
+            connection.setDoOutput(false);
 
             for (final String headerName : headers.keySet()) {
                connection.setRequestProperty(headerName, headers.get(headerName));
             }
 
+            connection.setRequestMethod("GET");
+
             // Set maxAge
             //            connection.setRequestProperty("Cache-Control", "max-age=" + CACHE_DURATION_IN_SECOND);
 
             // Send request
-            final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            wr.flush();
-            wr.close();
+            //            final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            //            wr.flush();
+            //            wr.close();
 
             // Get content type
             final String contentType = connection.getContentType();
