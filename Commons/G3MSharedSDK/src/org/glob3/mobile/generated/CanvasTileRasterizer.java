@@ -46,7 +46,6 @@ public abstract class CanvasTileRasterizer extends TileRasterizer
        _transparent.dispose();
   
     super.dispose();
-  
   }
 
   protected final ICanvas getCanvas(int width, int height)

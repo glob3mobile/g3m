@@ -110,15 +110,15 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   ShortBufferBuilder indices;
   FloatBufferBuilderFromCartesian2D* textCoords = new FloatBufferBuilderFromCartesian2D();
 
-  double minElevation = createSurface(tileSector,
-                                      meshSector,
-                                      meshResolution,
-                                      elevationData,
-                                      verticalExaggeration,
-                                      mercator,
-                                      vertices,
-                                      indices,
-                                      *textCoords);
+  const double minElevation = createSurface(tileSector,
+                                            meshSector,
+                                            meshResolution,
+                                            elevationData,
+                                            verticalExaggeration,
+                                            mercator,
+                                            vertices,
+                                            indices,
+                                            *textCoords);
 
   if (_skirted) {
     const Vector3D se = planet->toCartesian(tileSector.getSE());
@@ -175,7 +175,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   //Storing textCoords in Tile
   tile->setTessellatorData(new PlanetTileTessellatorData(textCoords));
 
-#warning Testing_Terrain_Normals;
+#warning Testing Terrain Normals
 //  IFloatBuffer* verticesB = vertices->create();
 //  IShortBuffer* indicesB  = indices.create();
 //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
@@ -355,8 +355,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         const double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
 
         textCoords.add((float)m_u, (float)m_v);
-      } else{
-
+      }
+      else {
         Vector2D uv = tileSector.getUVCoordinates(position);
         textCoords.add(uv);
       }

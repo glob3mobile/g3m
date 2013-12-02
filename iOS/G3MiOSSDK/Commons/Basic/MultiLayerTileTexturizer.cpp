@@ -482,10 +482,10 @@ public:
         const bool isMipmap = false;
 
         const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
-                                                                           GLFormat::rgba(),
-                                                                           textureId,
-                                                                           isMipmap);
-
+                                                                                        GLFormat::rgba(),
+                                                                                        textureId,
+                                                                                        isMipmap);
+        
         if (glTextureId != NULL) {
           if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
             delete glTextureId;

@@ -38,7 +38,10 @@ public:
   void addSymbol(const GEORasterSymbol* symbol);
 
   void clear();
-  
+
+  ICanvas* getCanvas(int width, int height) const {
+    return CanvasTileRasterizer::getCanvas(width, height);
+  }
 };
 
 #endif
