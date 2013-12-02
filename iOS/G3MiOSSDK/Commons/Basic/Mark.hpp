@@ -135,7 +135,7 @@ private:
   GLState* _glState;
   void createGLState(const Planet* planet);
 
-  IFloatBuffer* getBillboardTexCoords();
+  static IFloatBuffer* getBillboardTexCoords();
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _currentSurfaceElevation;

@@ -21,6 +21,7 @@ IFloatBuffer* FloatBufferBuilder::create() const {
     result->rawPut(i, _values.at(i));
   }
 
+//  ILogger::instance()->logInfo("Created FloatBuffer with %d floats", result->size());
   return result;
 #endif
 #ifdef JAVA_CODE
