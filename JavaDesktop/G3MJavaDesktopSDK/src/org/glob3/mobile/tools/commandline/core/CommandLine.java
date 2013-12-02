@@ -202,13 +202,11 @@ public class CommandLine {
       @Override
       public void run() {
          try {
-            System.out.println("Running " + getTypeName());
             String line = null;
             while (((line = _br.readLine()) != null)) {
                _sb.append(line);
                //               System.out.println(_type + ">" + line);
             }
-            System.out.println("BufferedReader " + getTypeName() + " completed.");
             _br.close();
          }
          catch (final IOException e) {
@@ -219,7 +217,6 @@ public class CommandLine {
 
       @Override
       final public void destroy() {
-         System.out.println("Destroying " + getTypeName());
          try {
             _br.close();
          }
