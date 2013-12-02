@@ -15,6 +15,14 @@
 
 class FloatBuffer_iOS : public IFloatBuffer {
 private:
+
+  static long long _newCounter;
+  static long long _deleteCounter;
+  static long long _genBufferCounter;
+  static long long _deleteBufferCounter;
+
+  static void showStatistics();
+
   const int _size;
   float*    _values;
   int       _timestamp;
@@ -42,6 +50,9 @@ public:
     if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
+
+    _newCounter++;
+    showStatistics();
   }
 
   long long getID() const{
@@ -88,6 +99,9 @@ public:
     _values[13] = f13;
     _values[14] = f14;
     _values[15] = f15;
+
+    _newCounter++;
+    showStatistics();
   }
 
   virtual ~FloatBuffer_iOS();

@@ -130,6 +130,23 @@ bool QuadTree_Node::acceptVisitor(const Sector& sector,
   return false;
 }
 
+bool QuadTree_Node::isEmpty() const {
+  if (!_elements.empty()) {
+    return false;
+  }
+
+  if (_children != NULL) {
+    for (int i = 0; i < 4; i++) {
+      QuadTree_Node* child = _children[i];
+      if (!child->isEmpty()) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 QuadTree::~QuadTree() {
   delete _root;
 }
@@ -144,6 +161,10 @@ bool QuadTree::acceptVisitor(const Sector& sector,
   const bool aborted = _root->acceptVisitor(sector, visitor);
   visitor.endVisit(aborted);
   return aborted;
+}
+
+bool QuadTree::isEmpty() const {
+  return _root->isEmpty();
 }
 
 void QuadTree::clear() {

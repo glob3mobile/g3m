@@ -49,7 +49,7 @@
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
 #include "URLTemplateLayer.hpp"
-
+#include "ErrorHandling.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -241,12 +241,14 @@ IThreadUtils* MapBooBuilder::getThreadUtils() {
 
 void MapBooBuilder::setGL(GL *gl) {
   if (_gl != NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
-    return;
+    //ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
+    //return;
+    ERROR("LOGIC ERROR: _gl already initialized");
   }
   if (gl == NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
-    return;
+    //ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+    //return;
+    ERROR("LOGIC ERROR: _gl cannot be NULL");
   }
   _gl = gl;
 }
