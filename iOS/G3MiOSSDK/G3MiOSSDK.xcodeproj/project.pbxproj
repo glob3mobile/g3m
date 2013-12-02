@@ -347,10 +347,6 @@
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D80270BE17B3AADF0029F0BE /* CameraDoubleDragHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDD17AB983200077004 /* CameraDoubleDragHandler.hpp */; };
-		D80787621846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */; };
-		D80787631846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D807875F1846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh */; };
-		D80787641846141400A6DB28 /* TexturedMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D80787601846141400A6DB28 /* TexturedMesh_DirectionLight.fsh */; };
-		D80787651846141400A6DB28 /* TexturedMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D80787611846141400A6DB28 /* TexturedMesh_DirectionLight.vsh */; };
 		D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A28691746474E0058CEC3 /* Planet.cpp */; };
 		D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286A1746474E0058CEC3 /* EllipsoidalPlanet.cpp */; };
 		D80A28711746572E0058CEC3 /* GLState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80A286F1746572E0058CEC3 /* GLState.cpp */; };
@@ -2601,7 +2597,6 @@
 				CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */,
 				CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */,
 				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
-				D80787631846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh in Sources */,
 				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
 				CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */,
 				CFA1899A15F8D7CA0048BF46 /* FloatBuffer_iOS.cpp in Sources */,
@@ -2766,10 +2761,8 @@
 				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,
 				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */,
 				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,
-				D80787641846141400A6DB28 /* TexturedMesh_DirectionLight.fsh in Sources */,
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
-				D80787651846141400A6DB28 /* TexturedMesh_DirectionLight.vsh in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
@@ -2783,7 +2776,6 @@
 				CF5C1195178C76F2000ED715 /* BoundingArea.cpp in Sources */,
 				CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */,
 				CF5C119D178CA747000ED715 /* GEORasterSymbol.cpp in Sources */,
-				D80787621846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh in Sources */,
 				CF2DF7CE178DE79200FF5FF0 /* GEOTileRasterizer.cpp in Sources */,
 				CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */,
 				CF2DF7D6178DECC400FF5FF0 /* GEORasterLineSymbol.cpp in Sources */,
