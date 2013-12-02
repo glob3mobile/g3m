@@ -77,7 +77,12 @@ void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
 class GEOTileRasterizer_QuadTreeVisitor : public QuadTreeVisitor {
 private:
   const GEOTileRasterizer*     _geoTileRasterizer;
+#ifdef C_CODE
   mutable const IImage*        _originalImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _originalImage;
+#endif
   const TileRasterizerContext* _trc;
   IImageListener*              _listener;
   bool                         _autodelete;
