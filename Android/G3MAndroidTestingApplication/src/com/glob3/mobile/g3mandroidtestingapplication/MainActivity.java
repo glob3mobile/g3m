@@ -12,17 +12,23 @@ import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRenderer;
+import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
+import org.glob3.mobile.specific.TileVisitorCache_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -42,6 +48,11 @@ public class MainActivity
    protected void onCreate(final Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
+      onCreateCache();
+   }
+
+
+   private void onCreateDefault() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
 
@@ -317,6 +328,76 @@ public class MainActivity
       //      _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       //      _placeHolder.addView(_g3mWidget);
 
+   }
+
+
+   private void onCreateCache() {
+      //Sector Mining
+      final Geodetic2D lower = new Geodetic2D( //
+               Angle.fromDegrees(-17.2605373678851670), //
+               Angle.fromDegrees(145.4760907919427950));
+      final Geodetic2D upper = new Geodetic2D( //
+               Angle.fromDegrees(-17.2423142646939311), //
+               Angle.fromDegrees(145.4950606689779420));
+
+      final Sector demSector = new Sector(lower, upper);
+
+
+      //Sector Farm
+
+      final Geodetic2D lowerFarm = new Geodetic2D( //
+               Angle.fromDegrees(-17.1596722413563398), //
+               Angle.fromDegrees(144.9450185314975954));
+      final Geodetic2D upperFarm = new Geodetic2D( //
+               Angle.fromDegrees(-17.1386328271386219), //
+               Angle.fromDegrees(144.9843876856850784));
+
+
+      final Sector sectorFarm = new Sector(lowerFarm, upperFarm);
+
+
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      builder.setLogFPS(true);
+      //final Planet planet = Planet.createEarth();
+
+      final Planet planet = Planet.createSphericalEarth();
+      builder.setPlanet(planet);
+
+
+      //   builder.setShownSector(demSector);
+
+      final PlanetRendererBuilder planetRendererBuilder = builder.getPlanetRendererBuilder();
+
+      final LayerSet layerset = new LayerSet();
+      final WMSLayer img2011 = new WMSLayer("redearthmapping:srhoj_satImg2011", new URL(
+               "http://redearthmesh.com:8080/geoserver/redearthmapping/wms?", false), WMSServerVersion.WMS_1_3_0,
+               Sector.fullSphere(), "image/jpeg", "EPSG:4326", "raster", false, null, TimeInterval.fromDays(30), true,
+               LayerTilesRenderParameters.createDefaultWGS84(sectorFarm, 0, 0));//   reateDefaultMercator(0, 20));
+      layerset.addLayer(img2011);
+      planetRendererBuilder.setLayerSet(layerset);
+
+      //  planetRendererBuilder.setLayerSet(MiningLayerBuilder.createMiningLayerSet());
+      planetRendererBuilder.setRenderDebug(true);
+
+      _g3mWidget = builder.createWidget();
+      _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(Double.valueOf(-17.14)),
+               Angle.fromDegrees(Double.valueOf(144.96)), 3000));
+      final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_g3mWidget.getG3MContext());
+      //  _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, demSector, 0, 20);
+
+      //      _g3mWidget.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, sectorFarm, 0, 0);
+
+
+      //
+      //      pr.acceptTileVisitor(new TileVisitorCache_Android(widget.getG3MContext(), MiningLayerBuilder.createMiningLayerSet(), 256,
+      //               256));
+      //
+
+
+      _g3mWidget.getG3MContext().getLogger().logInfo("Precaching has been completed");
+
+      _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+      _placeHolder.addView(_g3mWidget);
    }
 
 
