@@ -10,7 +10,8 @@
 #define __G3MiOSSDK__ErrorHandling__
 
 #ifdef C_CODE
-#define ERROR(x) throw(x);
+#include <string>
+#define ERROR(x) throw(std::string(x));
 #else
 #define ERROR(x) throw new RuntimeException(x);
 #endif
