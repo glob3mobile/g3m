@@ -241,14 +241,14 @@ IThreadUtils* MapBooBuilder::getThreadUtils() {
 
 void MapBooBuilder::setGL(GL *gl) {
   if (_gl != NULL) {
-    //ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
-    //return;
-    ERROR("LOGIC ERROR: _gl already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
+    return;
+    //ERROR("LOGIC ERROR: _gl already initialized");
   }
   if (gl == NULL) {
-    //ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
-    //return;
-    ERROR("LOGIC ERROR: _gl cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+    return;
+    //ERROR("LOGIC ERROR: _gl cannot be NULL");
   }
   _gl = gl;
 }
