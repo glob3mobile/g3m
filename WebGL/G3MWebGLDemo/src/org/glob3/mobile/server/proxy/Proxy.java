@@ -100,7 +100,7 @@ public class Proxy
             // Set maxAge
             //            connection.setRequestProperty("Cache-Control", "max-age=" + CACHE_DURATION_IN_SECOND);
 
-            // Send request
+            // Send request (THESE THREE LINES WERE ORIGINALLY UNCOMMENTED IN PREVIOUS VERSION, BUT DO NOT WORK WITH MAPQUEST LAYERS)
             //            final DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
             //            wr.flush();
             //            wr.close();

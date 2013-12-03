@@ -4,103 +4,7 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.AltitudeMode;
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BoxShape;
-import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.Camera;
-import org.glob3.mobile.generated.CameraDoubleDragHandler;
-import org.glob3.mobile.generated.CameraDoubleTapHandler;
-import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.CameraRotationHandler;
-import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.CircleShape;
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.DirectMesh;
-import org.glob3.mobile.generated.DownloadPriority;
-import org.glob3.mobile.generated.EllipsoidShape;
-import org.glob3.mobile.generated.ErrorRenderer;
-import org.glob3.mobile.generated.FixedFocusSceneLighting;
-import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
-import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MEventContext;
-import org.glob3.mobile.generated.GEO2DLineRasterStyle;
-import org.glob3.mobile.generated.GEO2DLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
-import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DPointGeometry;
-import org.glob3.mobile.generated.GEO2DPolygonData;
-import org.glob3.mobile.generated.GEO2DPolygonGeometry;
-import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
-import org.glob3.mobile.generated.GEOGeometry;
-import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
-import org.glob3.mobile.generated.GEORasterLineSymbol;
-import org.glob3.mobile.generated.GEORasterPolygonSymbol;
-import org.glob3.mobile.generated.GEORenderer;
-import org.glob3.mobile.generated.GEOSymbol;
-import org.glob3.mobile.generated.GEOSymbolizer;
-import org.glob3.mobile.generated.GEOTileRasterizer;
-import org.glob3.mobile.generated.GInitializationTask;
-import org.glob3.mobile.generated.GLPrimitive;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.HUDErrorRenderer;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.ICameraActivityListener;
-import org.glob3.mobile.generated.ICameraConstrainer;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.IImageUtils;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.InitialCameraPositionProvider;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LayerTilesRenderParameters;
-import org.glob3.mobile.generated.LayerTouchEvent;
-import org.glob3.mobile.generated.LayerTouchEventListener;
-import org.glob3.mobile.generated.LevelTileCondition;
-import org.glob3.mobile.generated.LineShape;
-import org.glob3.mobile.generated.MapBoxLayer;
-import org.glob3.mobile.generated.MapQuestLayer;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarkTouchListener;
-import org.glob3.mobile.generated.MarksRenderer;
-import org.glob3.mobile.generated.Mesh;
-import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.PeriodicalTask;
-import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.PlanetRenderer;
-import org.glob3.mobile.generated.PlanetRendererBuilder;
-import org.glob3.mobile.generated.PointShape;
-import org.glob3.mobile.generated.QuadShape;
-import org.glob3.mobile.generated.RasterLineShape;
-import org.glob3.mobile.generated.RasterPolygonShape;
-import org.glob3.mobile.generated.RectangleF;
-import org.glob3.mobile.generated.SceneLighting;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.Shape;
-import org.glob3.mobile.generated.ShapeTouchListener;
-import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.SimpleCameraConstrainer;
-import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2I;
-import org.glob3.mobile.generated.Vector3D;
-import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.WMSServerVersion;
-import org.glob3.mobile.generated.WidgetUserData;
+import org.glob3.mobile.generated.*;
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
@@ -1406,7 +1310,7 @@ public class G3MWebGLDemo
     			  Angle.fromDegrees(2.90),
     			  radius1._z),
     			  AltitudeMode.ABSOLUTE,
-    			  new URL("file:///world.jpg", false),
+    			  new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/world.jpg", false),
     			  radius1,
     			  (short)32,
     			  (short)0,
@@ -1418,7 +1322,7 @@ public class G3MWebGLDemo
     			  Angle.fromDegrees(3),
     			  radius2._x),
     			  AltitudeMode.ABSOLUTE,
-    			  new URL("file:///mercator_debug.png", false),
+    			  new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/mercator_debug.png", false),
     			  radius2,
     			  (short)32,
     			  (short)0,
@@ -1520,35 +1424,26 @@ public class G3MWebGLDemo
     	  }
 
     	  // DRAWING JSON
-         /* shapesRenderer.loadJSONSceneJS(new URL("file:///seymour-plane.json", false), 
-        		  "file:////", 
-        		  false,
-    			  new Geodetic3D(Angle.fromDegrees(39.70),
-    					  Angle.fromDegrees(2.60),
-    					  7*factor),
-    					  AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
-
-                     @Override
-                     public void onBeforeAddShape(final SGShape shape) {
-                    	 double scale = factor/5;
-                   	  shape.setScale(scale, scale, scale);
-                   	  shape.setPitch(Angle.fromDegrees(120));
-                   	  shape.setHeading(Angle.fromDegrees(-110));
-                     }
-
-
-                     @Override
-                     public void onAfterAddShape(final SGShape shape) {
-                     }
-
-
-                     @Override
-                     public void dispose() {
-                        // TODO Auto-generated method stub
-
-                     }
-                  });*/
-/*
+    	  shapesRenderer.loadJSONSceneJS(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/seymour-plane.json", false), 
+    			  "http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/", 
+    			  false, 
+    			  new Geodetic3D(Angle.fromDegrees(39.70), Angle.fromDegrees(2.60), 7*factor),
+    			  AltitudeMode.ABSOLUTE, 
+    			  new ShapeLoadListener() {
+    		  @Override
+    		  public void onBeforeAddShape(SGShape shape) {
+    			  double scale = factor/5;
+    			  shape.setScale(scale, scale, scale);
+    			  shape.setPitch(Angle.fromDegrees(120));
+    			  shape.setHeading(Angle.fromDegrees(-110));
+    		  }
+    		  @Override
+    		  public void dispose() {}
+    		  @Override
+    		  public void onAfterAddShape(SGShape shape) {}
+    	  });
+ 
+    	  /*
     	  Shape plane = SceneJSShapesParser.parseFromJSON("file:///seymour-plane.json", 
     			  "file:////", 
     			  false,
@@ -1634,7 +1529,7 @@ public class G3MWebGLDemo
       _widget = builder.createWidget();
       
       if (true) {
-    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.08), Angle.fromDegrees(2.90), 160000);
+    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.00), Angle.fromDegrees(2.90), 150000);
     	  _widget.setCameraPosition(position);
     	  _widget.setCameraHeading(Angle.fromDegrees(5.0));
     	  _widget.setCameraPitch(Angle.fromDegrees(24.0));
