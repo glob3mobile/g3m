@@ -361,9 +361,9 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
       Vector3D pixel3D(x,y,z);
       MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
       Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-      ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+      //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
       ILogger::instance()->logInfo("DIST: %f\n", _currentCamera->getCartesianPosition().sub(pos).length());
-      ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+      //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
     } else{
       ILogger::instance()->logInfo("NO Z");
     }

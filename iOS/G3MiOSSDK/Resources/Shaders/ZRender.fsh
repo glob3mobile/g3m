@@ -4,6 +4,8 @@
 //  Created by José Miguel Santana Núñez
 //
 
+/*
+
 void main() {
 
   // convert float z value to 24bits integer (32bits causes precision error)
@@ -18,3 +20,15 @@ void main() {
   // writes zvalue
   gl_FragColor = vec4(R/255.0, G/255.0, B/255.0, 0.0);
 }
+
+*/
+
+varying highp float R;
+varying highp float G;
+varying highp float B;
+
+void main() {
+  // writes zvalue
+  gl_FragColor = vec4(R, G, B, 0.0);
+}
+

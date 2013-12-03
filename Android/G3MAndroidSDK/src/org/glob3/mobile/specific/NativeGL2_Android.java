@@ -774,7 +774,7 @@ public final class NativeGL2_Android extends INativeGL {
 		winZ += b;
 		winZ /= 16777215.0;
 		
-		ILogger.instance().logInfo("DIST %f, %f, %f", r,g,b);
+		ILogger.instance().logInfo("DIST %f, %f, %f -> Z = %f", r,g,b, winZ);
 
 		return winZ;
 	}
