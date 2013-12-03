@@ -745,60 +745,8 @@ public class Camera
 
   private FrustumData calculateFrustumData()
   {
-    //    // compute znear value
-    //    const double maxRadius = _planet->getRadii().maxAxis();
-    //    const double distanceToPlanetCenter = _position.length();
-    //    const double distanceToSurface = distanceToPlanetCenter - maxRadius;
-    //
-    //    double znear;
-    //    if (distanceToSurface > maxRadius/5) {
-    //      znear = maxRadius / 10;
-    //    }
-    //    else if (distanceToSurface > maxRadius/500) {
-    //      znear = maxRadius / 1e4;
-    //    }
-    //    else if (distanceToSurface > maxRadius/2000) {
-    //      znear = maxRadius / 1e5;
-    //    }
-    //    else {
-    //      znear = maxRadius / 1e6 * 3;
-    //    }
-    //
-    //    // compute zfar value
-    //    double zfar = 10000 * znear;
-    //    if (zfar > distanceToPlanetCenter) {
-    //      zfar = distanceToPlanetCenter;
-    //    }
-    //
-    //    // compute rest of frustum numbers
-    //    const double ratioScreen = (double) _height / _width;
-    //    const double right = 0.3 / ratioScreen * znear;
-    //    const double left = -right;
-    //    const double top = 0.3 * znear;
-    //    const double bottom = -top;
-    //
-    //    return FrustumData(left, right,
-    //                       bottom, top,
-    //                       znear, zfar);
-  
     final double height = getGeodeticPosition()._height;
     double zNear = height * 0.1;
-  
-    /*
-    // compute zfar value using distance to horizon (Agustin version)
-    const double distanceToPlanetCenter = _position.length();
-    const double planetRadius = distanceToPlanetCenter - height;
-    const double distanceToHorizon = sqrt(distanceToPlanetCenter*distanceToPlanetCenter-planetRadius*planetRadius);
-    const double zfar = distanceToHorizon * 2.0;
-    printf ("ratio z = %f\n", zfar/znear);
-     */
-  
-    /*
-     double zFar = 10000 * zNear;
-    const double distance2ToPlanetCenter = _position.squaredLength();
-    if ((zFar * zFar) > distance2ToPlanetCenter) {
-      zFar = IMathUtils::instance()->sqrt(distance2ToPlanetCenter) * 1.001;
-    }*/
   
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
   
@@ -807,7 +755,6 @@ public class Camera
     if (ratio < goalRatio)
     {
       zNear = zFar / goalRatio;
-      //ratio = zFar / zNear;
     }
   
   //  int __TODO_remove_debug_code;
