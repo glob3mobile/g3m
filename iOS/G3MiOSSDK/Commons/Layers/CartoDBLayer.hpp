@@ -63,6 +63,7 @@ public:
 
   CartoDBLayer* copy() const;
 
+  RenderState getRenderState(const G3MRenderContext* rc);
 };
 
 #endif

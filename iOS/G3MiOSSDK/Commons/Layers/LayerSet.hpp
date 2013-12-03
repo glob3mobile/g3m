@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "Layer.hpp"
+#include "Renderer.hpp"
 
 class Petition;
 class Vector2I;
@@ -25,7 +26,7 @@ private:
   ChangedListener* _listener;
   
 //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
-
+  std::vector<std::string> _errors;
   
   void layersChanged() const;
 
@@ -58,7 +59,7 @@ public:
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
   
-  bool isReady() const;
+  RenderState getRenderState(const G3MRenderContext* rc);
   
   void initialize(const G3MContext* context)const;
   

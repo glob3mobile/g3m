@@ -86,18 +86,47 @@ void LayerSet::initialize(const G3MContext* context) const {
   }
 }
 
-bool LayerSet::isReady() const {
+RenderState LayerSet::getRenderState(const G3MRenderContext* rc) {
+  _errors.clear();
+  bool busyFlag  = false;
+  bool errorFlag = false;
   const int layersCount = _layers.size();
-  if (layersCount < 1) {
-    return false;
-  }
-
+  
   for (int i = 0; i < layersCount; i++) {
-    if (!(_layers[i]->isReady())) {
-      return false;
+    Layer* child = _layers[i];
+    if (child->isEnable()) {
+      const RenderState childRenderState = child->getRenderState(rc);
+      
+      const RenderState_Type childRenderStateType = childRenderState._type;
+      
+      if (childRenderStateType == RENDER_ERROR) {
+        errorFlag = true;
+        
+        const std::vector<std::string> childErrors = childRenderState.getErrors();
+#ifdef C_CODE
+        _errors.insert(_errors.end(),
+        childErrors.begin(),
+        childErrors.end());
+#endif
+#ifdef JAVA_CODE
+        _errors.addAll(childErrors);
+#endif
+      }
+      else if (childRenderStateType == RENDER_BUSY) {
+        busyFlag = true;
+      }
     }
   }
-  return true;
+  
+  if (errorFlag) {
+    return RenderState::error(_errors);
+  }
+  else if (busyFlag) {
+    return RenderState::busy();
+  }
+  else {
+    return RenderState::ready();
+  }
 }
 
 Layer* LayerSet::getLayer(int index) const {

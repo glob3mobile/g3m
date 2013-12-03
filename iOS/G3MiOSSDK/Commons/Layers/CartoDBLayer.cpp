@@ -27,3 +27,10 @@ CartoDBLayer* CartoDBLayer::copy() const {
                           _readExpired,
                           (_condition == NULL) ? NULL : _condition->copy());
 }
+
+RenderState CartoDBLayer::getRenderState(const G3MRenderContext* rc) {
+  if (_table) {
+    
+  }
+  return RenderState::ready();
+}
