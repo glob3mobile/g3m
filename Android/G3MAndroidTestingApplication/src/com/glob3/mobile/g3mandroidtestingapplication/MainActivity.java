@@ -7,7 +7,9 @@ import java.util.Random;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -312,8 +314,28 @@ public class MainActivity
          builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
 
       }
+      
+      if (true) {
+
+          final int time = 10; // SECS
+
+          final GTask elevationTask = new GTask() {
+
+             @Override
+             public void run(final G3MContext context) {
+            	 
+            	 _g3mWidget.setCameraPosition(Geodetic3D.fromDegrees(0, 0, 1e5));
+               
+             }
+          };
+
+          builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
+
+       }
 
       _g3mWidget = builder.createWidget();
+      
+      
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
 

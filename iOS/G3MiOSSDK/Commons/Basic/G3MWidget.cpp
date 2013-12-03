@@ -299,6 +299,25 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 }
 
+Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
+  zRender();
+
+  const double z = _gl->readPixelAsDouble(x,y, _width, _height);
+
+  if (!ISNAN(z)){
+    Vector3D pixel3D(x,y,z);
+    MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
+    Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+    //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+    ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
+    //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+    return pos;
+  } else{
+    ILogger::instance()->logInfo("NO Z");
+    return Vector3D::nan();
+  }
+}
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
   G3MEventContext ec(IFactory::instance(),
@@ -348,25 +367,11 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
 
   if (touchEvent->getType() == Down) {
-    zRender();
-
     int x = touchEvent->getTouch(0)->getPos()._x; //_width/2;
     int y = touchEvent->getTouch(0)->getPos()._y; //_height/2;
 
-    double z = _gl->readPixelAsDouble(x,y, _width, _height);
+    getScenePositionForPixel(x, y);
 
-
-    if (!ISNAN(z)){
-      ILogger::instance()->logInfo("Z = %f\n", z);
-      Vector3D pixel3D(x,y,z);
-      MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
-      Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-      //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
-      ILogger::instance()->logInfo("DIST: %f\n", _currentCamera->getCartesianPosition().sub(pos).length());
-      //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
-    } else{
-      ILogger::instance()->logInfo("NO Z");
-    }
   }
 
 }

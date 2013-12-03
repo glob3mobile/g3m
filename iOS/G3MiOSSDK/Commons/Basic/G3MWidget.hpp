@@ -46,6 +46,7 @@ class GLState;
 class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
+class Vector3D;
 
 #include <vector>
 #include <string>
@@ -216,6 +217,8 @@ public:
   void setForceBusyRenderer(bool forceBusyRenderer) {
     _forceBusyRenderer = forceBusyRenderer;
   }
+
+  Vector3D getScenePositionForPixel(int x, int y);
   
 private:
   IStorage*                _storage;
