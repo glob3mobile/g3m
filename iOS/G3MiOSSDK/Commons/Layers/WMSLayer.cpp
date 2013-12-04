@@ -446,3 +446,21 @@ WMSLayer* WMSLayer::copy() const {
                       _readExpired,
                       (_parameters == NULL) ? NULL : _parameters->copy());
 }
+
+RenderState WMSLayer::getRenderState() {
+  _errors.clear();
+  if (_mapLayer.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapLayer");
+  }
+  if (_mapServerURL.getPath().compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapServerURL");
+  }
+  if (_format.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: format");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
+}

@@ -908,12 +908,11 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                   LayerSet* layerSet) {
 }
 
-bool MultiLayerTileTexturizer::isReady(const G3MRenderContext* rc,
-                                       LayerSet* layerSet) {
+RenderState MultiLayerTileTexturizer::getRenderState(LayerSet* layerSet) {
   if (layerSet != NULL) {
-    return layerSet->isReady();
+    return layerSet->getRenderState();
   }
-  return true;
+  return RenderState::ready();
 }
 
 bool MultiLayerTileTexturizer::onTerrainTouchEvent(const G3MEventContext* ec,

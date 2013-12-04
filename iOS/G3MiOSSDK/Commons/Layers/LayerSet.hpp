@@ -59,7 +59,7 @@ public:
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
   
-  RenderState getRenderState(const G3MRenderContext* rc);
+  RenderState getRenderState();
   
   void initialize(const G3MContext* context)const;
   

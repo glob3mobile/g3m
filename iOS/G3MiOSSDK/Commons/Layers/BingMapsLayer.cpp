@@ -312,3 +312,15 @@ BingMapsLayer* BingMapsLayer::copy() const {
                            _initialLevel,
                            (_condition == NULL) ? NULL : _condition->copy());
 }
+
+RenderState BingMapsLayer::getRenderState() {
+  _errors.clear();
+  //  if (_userName.compare("") == 0) {
+  //    _errors.push_back("Missing layer parameter: userName");
+  //  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
+}
