@@ -27,6 +27,7 @@
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
+#import <G3MiOSSDK/SectorTileCondition.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
 #import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #import <G3MiOSSDK/MarkTouchListener.hpp>
@@ -1260,7 +1261,10 @@ public:
                                                               8,
                                                               TimeInterval::zero(),
                                                               false,
-                                                              new LevelTileCondition(3, 500));
+                                                              //new LevelTileCondition(3, 500)
+                                                              new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+                                                                                                          42.50166666666667, 3.0016666666666665))
+                                                              );
     layerSet->addLayer(tilerLayer);
   }
 
