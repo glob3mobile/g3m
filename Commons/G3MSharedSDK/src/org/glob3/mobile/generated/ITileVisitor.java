@@ -16,5 +16,8 @@ public interface ITileVisitor
 
   void visitTile(java.util.ArrayList<Layer> layers, Tile tile);
 
-  int getNumVisits();
+  long getNumVisits();
+
+  long getNumPetitions();
+
 }
