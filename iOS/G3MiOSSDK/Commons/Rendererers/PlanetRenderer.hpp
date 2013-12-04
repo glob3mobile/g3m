@@ -259,15 +259,16 @@ private:
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
   
-  void visitTilesTouchesWith(const Sector& sector,
-                             const int topLevel,
+  void visitTilesTouchesWith(std::vector<Layer*> layers,
+                             const Sector& sector,
+                             const int firstLevelToVisit,
                              const int maxLevel);
   
-  void visitSubTilesTouchesWith(std::vector<Layer*> layers,
+  long long visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                 Tile* tile,
                                 const Sector& sectorToVisit,
                                 const int topLevel,
-                                const int maxLevel);
+                                const int maxLevelToVisit);
 
   long long _texturePriority;
 
@@ -324,12 +325,11 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  void acceptTileVisitor(ITileVisitor* tileVisitor, const Sector sector,
-                         const int topLevel,
-                         const int maxLevel) {
-    _tileVisitor = tileVisitor;
-    visitTilesTouchesWith(sector, topLevel, maxLevel);
-  }
+  void acceptTileVisitor(ITileVisitor* tileVisitor,//
+                         const Sector sector,//
+                         const int firstLevel,//
+                         const int maxLevel,//
+                         const bool forlevels);
 
   void start(const G3MRenderContext* rc) {
     _firstRender = true;
