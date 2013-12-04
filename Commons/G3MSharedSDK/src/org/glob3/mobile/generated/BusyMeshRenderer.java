@@ -179,7 +179,11 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     final int halfWidth = width / 2;
     final int halfHeight = height / 2;
     _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-      }
+
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  }
 
   public void dispose()
   {
