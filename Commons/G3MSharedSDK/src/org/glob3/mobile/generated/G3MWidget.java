@@ -230,22 +230,27 @@ public class G3MWidget
       _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
     }
   
-    if (_selectedRenderer.isEnable())
+//    if (_selectedRenderer.isEnable())
+//    {
+//      _selectedRenderer.render(_renderContext, _rootState);
+//    }
+//  
+//    java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
+//    if (orderedRenderables != null)
+//    {
+//      final int orderedRenderablesCount = orderedRenderables.size();
+//      for (int i = 0; i < orderedRenderablesCount; i++)
+//      {
+//        OrderedRenderable orderedRenderable = orderedRenderables.get(i);
+//        orderedRenderable.render(_renderContext);
+//        if (orderedRenderable != null)
+//           orderedRenderable.dispose();
+//      }
+//    }
+    
+    if (renderStateType == RenderState_Type.RENDER_READY)
     {
-      _selectedRenderer.render(_renderContext, _rootState);
-    }
-  
-    java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
-    if (orderedRenderables != null)
-    {
-      final int orderedRenderablesCount = orderedRenderables.size();
-      for (int i = 0; i < orderedRenderablesCount; i++)
-      {
-        OrderedRenderable orderedRenderable = orderedRenderables.get(i);
-        orderedRenderable.render(_renderContext);
-        if (orderedRenderable != null)
-           orderedRenderable.dispose();
-      }
+    zRender();
     }
   
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
@@ -307,6 +312,8 @@ public class G3MWidget
     }
   
   }
+  
+  public static Vector3D _lastTouchedScenePoint = null;
 
   public final void onTouchEvent(TouchEvent touchEvent)
   {
@@ -366,12 +373,14 @@ public class G3MWidget
       if (!(z != z))
       {
         ILogger.instance().logInfo("Z = %f\n", z);
-        Vector3D pixel3D = new Vector3D(x,y,z);
+        Vector3D pixel3D = new Vector3D(x,_height - y,z);
         MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
         Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
         ILogger.instance().logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description(), pos.description());
         ILogger.instance().logInfo("DIST: %f\n", _currentCamera.getCartesianPosition().sub(pos).length());
         ILogger.instance().logInfo("GEO: %s\n", _planet.toGeodetic2D(pos).description());
+        
+        _lastTouchedScenePoint = pos;
       }
       else
       {

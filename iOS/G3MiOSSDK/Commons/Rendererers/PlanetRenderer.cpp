@@ -811,6 +811,8 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
 
     const int firstLevelTilesCount = _firstLevelTiles.size();
 
+    _lastCamera = rc->getCurrentCamera();
+
     const Planet* planet = rc->getPlanet();
     const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
     double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();

@@ -95,10 +95,10 @@ public class MapBooBuilder_Android
       gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
                GL2Shaders._noColorMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight",
+      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh_DirectionLight",
                GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
+      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh_DirectionLight",
                GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
       
       

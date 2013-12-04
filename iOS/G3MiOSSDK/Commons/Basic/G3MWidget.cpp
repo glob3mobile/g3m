@@ -305,7 +305,7 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
   const double z = _gl->readPixelAsDouble(x,y, _width, _height);
 
   if (!ISNAN(z)){
-    Vector3D pixel3D(x,y,z);
+    Vector3D pixel3D(x,_height - y,z);
     MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
     Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
     //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
@@ -317,6 +317,8 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
     return Vector3D::nan();
   }
 }
+
+Vector3D* G3MWidget::_lastTouchedScenePoint = NULL;
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
@@ -370,7 +372,8 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
     int x = touchEvent->getTouch(0)->getPos()._x; //_width/2;
     int y = touchEvent->getTouch(0)->getPos()._y; //_height/2;
 
-    getScenePositionForPixel(x, y);
+    delete _lastTouchedScenePoint;
+    _lastTouchedScenePoint = new Vector3D(getScenePositionForPixel(x, y));
 
   }
 
@@ -537,7 +540,7 @@ void G3MWidget::render(int width, int height) {
 
     _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
   }
-
+/*
   if (_selectedRenderer->isEnable()) {
     _selectedRenderer->render(_renderContext, _rootState);
   }
@@ -551,11 +554,15 @@ void G3MWidget::render(int width, int height) {
       delete orderedRenderable;
     }
   }
-
+*/
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {
   //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
   //  }
+#warning REMOVE
+  if (RENDER_READY == renderStateType){
+    zRender();
+  }
 
   if (_logFPS) {
     _totalRenderTime += elapsedTimeMS;

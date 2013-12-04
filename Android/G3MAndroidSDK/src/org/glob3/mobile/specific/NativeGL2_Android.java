@@ -768,13 +768,20 @@ public final class NativeGL2_Android extends INativeGL {
 		if (a != 0) { // ZRENDER Shader sets all pixels with 0 alpha
 			return Double.NaN;
 		}
-
+/*
 		double winZ = r * 65536.0;
 		winZ += g * 256.0;
 		winZ += b;
 		winZ /= 16777215.0;
+		*/
+		
+		double winZ = (r * 256.0 + g) / 65535.0;
 		
 		ILogger.instance().logInfo("DIST %f, %f, %f -> Z = %f", r,g,b, winZ);
+
+		
+		
+		
 
 		return winZ;
 	}

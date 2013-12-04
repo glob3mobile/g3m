@@ -4,21 +4,27 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import java.util.Random;
 
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -52,6 +58,9 @@ public class MainActivity
 
       final MeshRenderer meshRenderer = new MeshRenderer();
       builder.addRenderer(meshRenderer);
+      
+      final ShapesRenderer shapesRenderer = new ShapesRenderer();
+      builder.addRenderer(shapesRenderer);
       
       if (false){
           meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
@@ -315,7 +324,7 @@ public class MainActivity
 
       }
       
-      if (true) {
+      if (false) {
 
           final int time = 10; // SECS
 
@@ -332,6 +341,46 @@ public class MainActivity
           builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
 
        }
+     
+      if (true){
+        class ZRenderTask extends GTask {
+          ShapesRenderer _sr;
+          Planet _planet;
+          public ZRenderTask(ShapesRenderer sr, Planet planet)
+          {
+        	  _sr = sr;
+        	  _planet = planet;
+          }
+
+          public void run(G3MContext context) {
+
+            Vector3D v = G3MWidget._lastTouchedScenePoint; //HACK
+            if (v == null){
+              return;
+            }
+            Geodetic3D g = _planet.toGeodetic3D(v);
+
+            Shape sphere = new EllipsoidShape(g,
+                                               AltitudeMode.ABSOLUTE,
+                                               new Vector3D(500000, 500000, 500000),
+                                               (short) 16,
+                                               0,
+                                               false,
+                                               false,
+                                               Color.fromRGBA(0, 1, 1, 1));
+
+
+            _sr.addShape(sphere);
+          }
+        };
+
+        PeriodicalTask periodicalTask = new PeriodicalTask(TimeInterval.fromSeconds(5),
+                                                            new ZRenderTask(shapesRenderer, builder.getPlanet()));
+
+        builder.addPeriodicalTask(periodicalTask);
+
+      }
+
 
       _g3mWidget = builder.createWidget();
       

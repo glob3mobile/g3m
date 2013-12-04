@@ -4,7 +4,7 @@
 //  Created by José Miguel Santana Núñez
 //
 
-/*
+
 
 attribute vec4 aPosition;
 
@@ -16,7 +16,7 @@ void main() {
   gl_PointSize = uPointSize;
 }
  
- */
+/*
 
 attribute vec4 aPosition;
 
@@ -45,3 +45,5 @@ void main() {
   B /= 255.0;
   
 }
+ 
+ */

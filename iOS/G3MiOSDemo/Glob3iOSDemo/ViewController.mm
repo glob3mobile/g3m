@@ -781,6 +781,47 @@ public:
   PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
   builder.addPeriodicalTask(periodicalTask);
 
+
+  if (true){
+    class ZRenderTask : public GTask {
+    private:
+      ShapesRenderer* _sr;
+      const Planet* _planet;
+    public:
+      ZRenderTask(ShapesRenderer* sr, const Planet* planet): _sr(sr), _planet(planet)
+      {
+      }
+
+      void run(const G3MContext* context) {
+
+        Vector3D* v = G3MWidget::_lastTouchedScenePoint; //HACK
+        if (v == NULL){
+          return;
+        }
+        Geodetic3D g = _planet->toGeodetic3D(*v);
+
+        Shape* sphere = new EllipsoidShape(new Geodetic3D(g),
+                                           ABSOLUTE,
+                                           Vector3D(5000, 5000, 5000),
+                                           16,
+                                           0,
+                                           false,
+                                           false,
+                                           Color::fromRGBA(0, 1, 1, 1));
+
+        printf("SPHERE IN %s\n", g.description().c_str());
+
+        _sr->addShape(sphere);
+      }
+    };
+
+    PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(5),
+                                                        new ZRenderTask(shapesRenderer, planet));
+
+    builder.addPeriodicalTask(periodicalTask);
+
+  }
+
   const bool logFPS = false;
   builder.setLogFPS(logFPS);
 
@@ -2730,6 +2771,10 @@ public:
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time), new RenderedSectorTask(_iosWidget));
       }
 
+      if (false){
+
+      }
+
       if (false) { //Adding and deleting marks
 
         int time = 1; //SECS
@@ -2978,6 +3023,7 @@ public:
           }
         }
       }
+
 
       if (false) {
 
