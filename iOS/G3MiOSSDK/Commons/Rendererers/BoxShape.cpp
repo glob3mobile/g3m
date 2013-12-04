@@ -250,7 +250,7 @@ Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc) {
                                 true,
                                 vertices->getCenter(),
                                 vertices->create(),
-                                _borderWidth,
+                                (_borderWidth>1)? _borderWidth : 1,
                                 1,
                                 surfaceColor,
                                 NULL,
