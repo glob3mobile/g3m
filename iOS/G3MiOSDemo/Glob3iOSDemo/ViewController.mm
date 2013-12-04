@@ -1249,6 +1249,10 @@ public:
                                   true);
     layerSet->addLayer(bing);
 
+//    Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+//                        42.50166666666667, 3.0016666666666665)
+
+
     URLTemplateLayer* tilerLayer = URLTemplateLayer::newWGS84("http://192.168.1.2/120m/{level}/{x}/{y}.png",
                                                               Sector::fullSphere(),
                                                               true,
