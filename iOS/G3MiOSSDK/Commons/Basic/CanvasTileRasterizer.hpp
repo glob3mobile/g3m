@@ -28,7 +28,7 @@ protected:
 
   ~CanvasTileRasterizer();
 
-  ICanvas* getCanvas(int width, int height) const;
+  virtual ICanvas* getCanvas(int width, int height) const;
 
 };
 

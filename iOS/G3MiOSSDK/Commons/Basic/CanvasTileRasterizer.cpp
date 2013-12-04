@@ -30,7 +30,6 @@ CanvasTileRasterizer::~CanvasTileRasterizer() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 ICanvas* CanvasTileRasterizer::getCanvas(int width, int height) const {

@@ -74,29 +74,30 @@ enum {
   }
 
   G3MWidget* widget = (G3MWidget*) widgetV;
+  @autoreleasepool {
+    if (_firstRender) {
+      // This application only creates a single context which is already set current at this point.
+      // This call is redundant, but needed if dealing with multiple contexts.
+      [EAGLContext setCurrentContext:context];
 
-  if (_firstRender) {
-    // This application only creates a single context which is already set current at this point.
-    // This call is redundant, but needed if dealing with multiple contexts.
-    [EAGLContext setCurrentContext:context];
+      // This application only creates a single default framebuffer which is already bound at this point.
+      // This call is redundant, but needed if dealing with multiple framebuffers.
+      glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
+      glViewport(0, 0, _width, _height);
+    }
 
-    // This application only creates a single default framebuffer which is already bound at this point.
-    // This call is redundant, but needed if dealing with multiple framebuffers.
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-    glViewport(0, 0, _width, _height);
+    // Use shader program
+    widget->render(_width, _height);
+
+    if (_firstRender) {
+      // This application only creates a single color renderbuffer which is already bound at this point.
+      // This call is redundant, but needed if dealing with multiple renderbuffers.
+      glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+      _firstRender = false;
+
+    }
+    [context presentRenderbuffer:GL_RENDERBUFFER];
   }
-
-  // Use shader program
-  widget->render(_width, _height);
-
-  if (_firstRender) {
-    // This application only creates a single color renderbuffer which is already bound at this point.
-    // This call is redundant, but needed if dealing with multiple renderbuffers.
-    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-    _firstRender = false;
-    
-  }
-  [context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (BOOL)validateProgram:(GLuint)prog {

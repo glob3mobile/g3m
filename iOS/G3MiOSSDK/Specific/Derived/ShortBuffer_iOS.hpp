@@ -15,6 +15,13 @@
 
 class ShortBuffer_iOS : public IShortBuffer {
 private:
+//  static long long _newCounter;
+//  static long long _deleteCounter;
+//  static long long _genBufferCounter;
+//  static long long _deleteBufferCounter;
+//
+//  static void showStatistics();
+
   const int _size;
   short*    _values;
   int       _timestamp;
@@ -43,6 +50,9 @@ public:
     if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
+
+//    _newCounter++;
+//    showStatistics();
   }
 
   long long getID() const{
