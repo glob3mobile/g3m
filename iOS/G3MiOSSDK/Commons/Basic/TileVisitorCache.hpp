@@ -24,9 +24,6 @@ private:
   
 public:
   virtual ~TileVisitorCache(){
-    #ifdef JAVA_CODE
-    super.dispose();
-    #endif
   }
   
   TileVisitorCache(G3MContext*    context):_context(context){
