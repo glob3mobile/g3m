@@ -1078,7 +1078,7 @@ public:
   //  int initialLevel = 1,
   //  int maxLevel = 19,
   //  LayerCondition* condition = NULL
-  if (true) {
+  if (false) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
   }
@@ -1216,7 +1216,7 @@ public:
     layerSet->addLayer(ortoAyto);
   }
 
-  bool useWMSBing = false;
+  bool useWMSBing = true;
   if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -1246,6 +1246,26 @@ public:
                                   TimeInterval::fromDays(30),
                                   true);
     layerSet->addLayer(bing);
+
+//    static URLTemplateLayer* newWGS84(const std::string&  urlTemplate,
+//                                      const Sector&       sector,
+//                                      bool                isTransparent,
+//                                      const int           firstLevel,
+//                                      const int           maxLevel,
+//                                      const TimeInterval& timeToCache,
+//                                      bool                readExpired = true,
+//                                      LayerCondition*     condition = NULL);
+
+    URLTemplateLayer* tilerLayer = URLTemplateLayer::newWGS84("http://192.168.1.2/120m/{level}/{x}/{row}.png",
+                                                              //"http://192.168.1.2/120m/{level}/{x}/{y}.png",
+                                                              Sector::fullSphere(),
+                                                              true,
+                                                              0,
+                                                              8,
+                                                              TimeInterval::zero(),
+                                                              false,
+                                                              new LevelTileCondition(3, 500));
+    layerSet->addLayer(tilerLayer);
   }
 
   if (false) {
@@ -2570,6 +2590,9 @@ public:
 
       testCanvas(context->getFactory());
 
+      // Read image, sector [lower=[lat=39.99833333333333, lon=-0.0016666666666663962], upper=[lat=42.50166666666667, lon=3.0016666666666665]]
+
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, 1.5, 5000));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
