@@ -10,6 +10,7 @@
 #define G3MiOSSDK_IImageDownloadListener_h
 
 #include "IImage.hpp"
+#include "URL.hpp"
 
 class IImageDownloadListener {
 public:

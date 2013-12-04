@@ -92,11 +92,11 @@ public class GeoBSONConverter {
             }
             else if (inputFileName.endsWith(".gtm") || inputFileName.endsWith(".gtz")) {
                _logger.logInfo("GPSTrackMaker file -- Pending to test --");
-               gpsTrackMakerToBson(inputFile, outputDir, outputFileName);
+               gpsTrackMakerToBson(inputFile, outputDir, outputFileName, overwrite);
             }
             else if (inputFileName.endsWith(".kml")) {
-               final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName);
-               _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")));
+               final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
+               _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
             }
             else if (inputFileName.endsWith(".xml")) {
                geoRSSToBson(inputFile, outputDir, outputFileName, overwrite);
@@ -143,9 +143,10 @@ public class GeoBSONConverter {
 
    private void gpsTrackMakerToBson(final File inputFile,
                                     final File outputDir,
-                                    final String outputFileName) throws GDALException, JBson2BJsonException {
-      final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName);
-      _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")));
+                                    final String outputFileName,
+                                    final boolean overwrite) throws GDALException, JBson2BJsonException {
+      final File geoJson = _gdalConverter.vector2GeoJSON(inputFile, outputDir, outputFileName, overwrite);
+      _jsonParser.json2bson(geoJson, new File(outputDir, geoJson.getName().replace(".geojson", ".bson")), overwrite);
    }
 
 
