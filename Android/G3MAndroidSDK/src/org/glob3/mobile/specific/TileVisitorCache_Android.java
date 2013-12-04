@@ -64,13 +64,14 @@ public class TileVisitorCache_Android
    }
 
 
-   public long getDebugCounter() {
+   @Override
+   public long getNumPetitions() {
       return _debugCounter;
    }
 
 
    @Override
-   public int getNumVisits() {
+   public long getNumVisits() {
       // TODO Auto-generated method stub
       return 0;
    }

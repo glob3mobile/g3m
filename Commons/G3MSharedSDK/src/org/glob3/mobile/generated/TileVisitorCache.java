@@ -53,7 +53,6 @@ public class TileVisitorCache
 
             final IImageDownloadListenerTileCache listener = new IImageDownloadListenerTileCache(_numVisits, tile,
                      layer.getTitle());
-            //IImageDownloadListenerTileCache(_numVisits, tile, layer->getTitle());
             final IDownloader downloader = _context.getDownloader();
 
             final long requestId = downloader.requestImage(new URL(petition.getURL()), 1, petition.getTimeToCache(), true,
@@ -72,8 +71,13 @@ public class TileVisitorCache
 
 
    @Override
-   public int getNumVisits() {
-      // TODO Auto-generated method stub
-      return 0;
+   public final long getNumVisits() {
+      return _numVisits;
+   }
+
+
+   @Override
+   public final long getNumPetitions() {
+      return _numPetitions;
    }
 }
