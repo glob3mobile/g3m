@@ -36,4 +36,12 @@ public:
   
   void visitTile(std::vector<Layer*>& layers,
                  const Tile* tile);
+  
+  long long getNumVisits(){
+    return _numVisits;
+  }
+  
+  long long getNumPetitions(){
+    return _numPetitions;
+  }
 };

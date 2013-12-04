@@ -25,7 +25,10 @@ public:
   virtual void visitTile(std::vector<Layer*>& layers,
                          const Tile* tile) const = 0;
   
-  virtual int getNumVisits() const = 0;
+  virtual long long getNumVisits() const = 0;
+  
+  virtual long long getNumPetitions() const = 0;
+
 };
 
 #endif
