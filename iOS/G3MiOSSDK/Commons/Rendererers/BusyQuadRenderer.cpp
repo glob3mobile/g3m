@@ -37,6 +37,9 @@ void BusyQuadRenderer::stop(const G3MRenderContext* rc) {
   if (_animated) {
     rc->getEffectsScheduler()->cancelAllEffectsFor(this);
   }
+
+  delete _quadMesh;
+  _quadMesh = NULL;
 }
 
 
