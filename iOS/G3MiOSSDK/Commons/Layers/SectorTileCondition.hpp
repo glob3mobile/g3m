@@ -14,7 +14,7 @@
 
 class SectorTileCondition : public LayerCondition {
 private:
-  Sector _sector;
+  const Sector _sector;
 
 public:
   SectorTileCondition(const Sector& sector) :
