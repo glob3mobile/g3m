@@ -158,17 +158,30 @@ public class GLState extends RCObject
   
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
-      final int uniformsCode = _valuesSet.getUniformsCode();
-      final int attributesCode = _valuesSet.getAttributesCode();
+  
+  
   
       switch (renderType)
       {
         case Z_BUFFER_RENDER: //Z_BUFFER
+        {
+  
+          Vector2F depthRange = gl.getDepthRange();
+  
+          _valuesSet.addUniformValue(GPUUniformKey.DEPTH_NEAR, new GPUUniformValueFloat(depthRange._x), false);
+          _valuesSet.addUniformValue(GPUUniformKey.DEPTH_FAR, new GPUUniformValueFloat(depthRange._y), false);
           _lastGPUProgramUsed = progManager.getProgram(gl, "ZRender");
           break;
+        }
         default:
+        {
+  
+          final int uniformsCode = _valuesSet.getUniformsCode();
+          final int attributesCode = _valuesSet.getAttributesCode();
+  
           _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
           break;
+        }
       }
   
       //_lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);

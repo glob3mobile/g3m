@@ -421,6 +421,11 @@ public class GL
     return d;
   }
 
+  public final Vector2F getDepthRange()
+  {
+    return _nativeGL.getDepthRange();
+  }
+
 
 }
 //void GL::applyGLGlobalStateAndGPUProgramState(const GLGlobalState& state, GPUProgramManager& progManager, const GPUProgramState& progState) {

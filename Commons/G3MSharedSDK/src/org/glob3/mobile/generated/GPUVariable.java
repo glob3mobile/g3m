@@ -75,6 +75,16 @@ public class GPUVariable
       return GPUUniformKey.BILLBOARD_POSITION;
     }
   
+    if (name.compareTo("uDepthFar") == 0)
+    {
+      return GPUUniformKey.DEPTH_FAR;
+    }
+  
+    if (name.compareTo("uDepthNear") == 0)
+    {
+      return GPUUniformKey.DEPTH_NEAR;
+    }
+  
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)

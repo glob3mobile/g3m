@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //class IGLTextureId;
 //class Matrix44D;
 //class Color;
+//class Vector2F;
 
 
 
@@ -169,5 +170,7 @@ public abstract class INativeGL
   public abstract double read1PixelAsDouble(int x, int y);
 
   public abstract void depthMask(boolean v);
+
+  public abstract Vector2F getDepthRange();
 
 }

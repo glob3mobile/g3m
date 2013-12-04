@@ -229,31 +229,33 @@ public class G3MWidget
   
       _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
     }
-  /*
-    if (_selectedRenderer->isEnable()) {
-      _selectedRenderer->render(_renderContext, _rootState);
+  
+    if (_selectedRenderer.isEnable())
+    {
+      _selectedRenderer.render(_renderContext, _rootState);
     }
   
-    std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
-    if (orderedRenderables != NULL) {
-      const int orderedRenderablesCount = orderedRenderables->size();
-      for (int i = 0; i < orderedRenderablesCount; i++) {
-        OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
-        orderedRenderable->render(_renderContext);
-        delete orderedRenderable;
+    java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
+    if (orderedRenderables != null)
+    {
+      final int orderedRenderablesCount = orderedRenderables.size();
+      for (int i = 0; i < orderedRenderablesCount; i++)
+      {
+        OrderedRenderable orderedRenderable = orderedRenderables.get(i);
+        orderedRenderable.render(_renderContext);
+        if (orderedRenderable != null)
+           orderedRenderable.dispose();
       }
     }
-  */
+  
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
     //  if (elapsedTimeMS > 100) {
     //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
     //  }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning REMOVE
-    if (RenderState_Type.RENDER_READY == renderStateType)
-    {
-      zRender();
-    }
+  ///#warning REMOVE
+  //  if (RENDER_READY == renderStateType){
+  //    zRender();
+  //  }
   
     if (_logFPS)
     {
