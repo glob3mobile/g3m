@@ -191,7 +191,6 @@ public class PlanetRenderer
    private void visitTilesTouchesWith(final Sector sector,
                                       final int firstLevel,
                                       final int maxLevel) {
-      long requestCounter = 0;
       if (_tileVisitor != null) {
          final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
          if (parameters == null) {
@@ -227,55 +226,23 @@ public class PlanetRenderer
 
          final int firstLevelTilesCount = _firstLevelTiles.size();
 
-
          if (firstLevelToVisit == parameters._firstLevel) {
-            ILogger.instance().logInfo("Begin to generate request for precaching top level only");
             for (int i = 0; i < firstLevelTilesCount; i++) {
                final Tile tile = _firstLevelTiles.get(i);
                if (tile._sector.touchesWith(sector)) {
-                  requestCounter++;
                   _tileVisitor.visitTile(layers, tile);
                }
             }
-            ILogger.instance().logInfo(
-                     "Request for precaching top level only han been sent. Wayiting " + requestCounter + " responses...");
-
-            ILogger.instance().logInfo(
-                     "Begin to generate request for precaching rest of levels. From level " + firstLevelToVisit + " to level "
-                              + maxLevelToVisit);
-
-            requestCounter = 0;
-            for (int i = 0; i < firstLevelTilesCount; i++) {
-               final Tile tile = _firstLevelTiles.get(i);
-               if (tile._sector.touchesWith(sector)) {
-                  requestCounter++;
-                  visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
-               }
-            }
-            ILogger.instance().logInfo(
-                     "Request for precaching has been sent. Waiting " + (_tileVisitor).getCounter() + " responses...");
-
-
-         }
-         else {
-            ILogger.instance().logInfo(
-                     "Begin to generate request for precaching from level " + firstLevelToVisit + " to level " + maxLevelToVisit);
-
-            for (int i = 0; i < firstLevelTilesCount; i++) {
-               final Tile tile = _firstLevelTiles.get(i);
-               if (tile._sector.touchesWith(sector)) {
-
-                  _tileVisitor.visitTile(layers, tile);
-                  visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
-               }
-            }
-            ILogger.instance().logInfo("Request for precaching has been sent. Waiting " + requestCounter + " responses...");
-
          }
 
 
-         ILogger.instance().logInfo("Request for precaching has been sent. Waiting responses...");
-
+         for (int i = 0; i < firstLevelTilesCount; i++) {
+            final Tile tile = _firstLevelTiles.get(i);
+            if (tile._sector.touchesWith(sector)) {
+               _tileVisitor.visitTile(layers, tile);
+               visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
+            }
+         }
       }
       else {
          ILogger.instance().logError("TileVisitor is NULL");
