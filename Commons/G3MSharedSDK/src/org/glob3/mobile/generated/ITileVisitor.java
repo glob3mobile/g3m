@@ -9,9 +9,12 @@ package org.glob3.mobile.generated;
 
 
 
+
 public interface ITileVisitor
 {
   void dispose();
 
   void visitTile(java.util.ArrayList<Layer> layers, Tile tile);
+
+  int getNumVisits();
 }
