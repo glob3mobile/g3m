@@ -212,6 +212,10 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   public final void stop(G3MRenderContext rc)
   {
     rc.getEffectsScheduler().cancelAllEffectsFor(this);
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
   }
 
   public final void onResume(G3MContext context)
