@@ -598,6 +598,8 @@ public:
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
+  
+  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -1247,17 +1249,7 @@ public:
                                   true);
     layerSet->addLayer(bing);
 
-//    static URLTemplateLayer* newWGS84(const std::string&  urlTemplate,
-//                                      const Sector&       sector,
-//                                      bool                isTransparent,
-//                                      const int           firstLevel,
-//                                      const int           maxLevel,
-//                                      const TimeInterval& timeToCache,
-//                                      bool                readExpired = true,
-//                                      LayerCondition*     condition = NULL);
-
-    URLTemplateLayer* tilerLayer = URLTemplateLayer::newWGS84("http://192.168.1.2/120m/{level}/{x}/{row}.png",
-                                                              //"http://192.168.1.2/120m/{level}/{x}/{y}.png",
+    URLTemplateLayer* tilerLayer = URLTemplateLayer::newWGS84("http://192.168.1.2/120m/{level}/{x}/{y}.png",
                                                               Sector::fullSphere(),
                                                               true,
                                                               0,
@@ -2590,9 +2582,8 @@ public:
 
       testCanvas(context->getFactory());
 
-      // Read image, sector [lower=[lat=39.99833333333333, lon=-0.0016666666666663962], upper=[lat=42.50166666666667, lon=3.0016666666666665]]
-
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, 1.5, 5000));
+      // sector [lower=[lat=39.99833333333333, lon=-0.0016666666666663962], upper=[lat=42.50166666666667, lon=3.0016666666666665]]
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, 1.5, 700000));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),

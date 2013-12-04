@@ -59,6 +59,7 @@ URL MercatorTiledLayer::getFeatureInfoURL(const Geodetic2D& position,
 }
 
 std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                                  const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                   const Tile* tile) const {
   const IMathUtils* mu = IMathUtils::instance();
 

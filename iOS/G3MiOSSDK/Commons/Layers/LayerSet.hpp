@@ -52,6 +52,7 @@ public:
   void addLayer(Layer* layer);
   
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
   
   bool onTerrainTouchEvent(const G3MEventContext* ec,

@@ -108,7 +108,8 @@ URL URLTemplateLayer::getFeatureInfoURL(const Geodetic2D& position,
   return URL();
 }
 
-const std::string URLTemplateLayer::getPath(const Tile* tile,
+const std::string URLTemplateLayer::getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                            const Tile* tile,
                                             const Sector& sector) const {
 
   if (_mu == NULL) {
@@ -123,13 +124,8 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
 
   const int level   = tile->_level;
   const int column  = tile->_column;
-  const int numRows = (int) _mu->pow(2.0, level);
+  const int numRows = (int) (layerTilesRenderParameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int row     = numRows - tile->_row - 1;
-  const int row2    = numRows - tile->_row + 1;
-
-  if (row2 < 0) {
-    printf("break point on me\n");
-  }
 
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
   const double south = MercatorUtils::latitudeToMeters( sector._lower._latitude );
@@ -141,7 +137,6 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
   path = _su->replaceSubstring(path, "{height}",         _su->toString( tileTextureResolution._y          ) );
   path = _su->replaceSubstring(path, "{x}",              _su->toString( column                            ) );
   path = _su->replaceSubstring(path, "{y}",              _su->toString( row                               ) );
-  path = _su->replaceSubstring(path, "{row}",            _su->toString( row2 /*tile->_row*/               ) );
   path = _su->replaceSubstring(path, "{level}",          _su->toString( level                             ) );
   path = _su->replaceSubstring(path, "{lowerLatitude}",  _su->toString( sector._lower._latitude._degrees  ) );
   path = _su->replaceSubstring(path, "{lowerLongitude}", _su->toString( sector._lower._longitude._degrees ) );
@@ -156,6 +151,7 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
 }
 
 std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                 const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -170,7 +166,7 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
     return petitions;
   }
 
-  const std::string path = getPath(tile, sector);
+  const std::string path = getPath(layerTilesRenderParameters, tile, sector);
 
   petitions.push_back( new Petition(sector,
                                     URL(path, false),
