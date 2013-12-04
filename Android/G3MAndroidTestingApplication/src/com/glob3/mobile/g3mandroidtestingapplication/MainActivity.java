@@ -362,7 +362,7 @@ public class MainActivity
 
             Shape sphere = new EllipsoidShape(g,
                                                AltitudeMode.ABSOLUTE,
-                                               new Vector3D(500000, 500000, 500000),
+                                               new Vector3D(50000, 50000, 50000),
                                                (short) 16,
                                                0,
                                                false,

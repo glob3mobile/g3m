@@ -28,6 +28,7 @@ import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.Matrix44D;
 import org.glob3.mobile.generated.ShaderType;
+import org.glob3.mobile.generated.Vector2F;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
@@ -789,6 +790,13 @@ public final class NativeGL2_Android extends INativeGL {
 	@Override
 	public void depthMask(boolean v) {
 		GLES20.glDepthMask(v);
+	}
+
+	@Override
+	public Vector2F getDepthRange() {
+		float[] range = new float[2];
+		GLES20.glGetFloatv(GLES20.GL_DEPTH_RANGE, range	, 0);
+		return new Vector2F(range[0], range[1]);
 	}
 
 }
