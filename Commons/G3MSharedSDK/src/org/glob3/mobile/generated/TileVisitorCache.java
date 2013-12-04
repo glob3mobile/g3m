@@ -29,7 +29,6 @@ public class TileVisitorCache
 
    @Override
    public void dispose() {
-      super.dispose();
    }
 
 
