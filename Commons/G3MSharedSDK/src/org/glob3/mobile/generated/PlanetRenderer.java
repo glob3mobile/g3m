@@ -339,6 +339,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
   
+      _lastCamera = rc.getCurrentCamera();
+  
       final Planet planet = rc.getPlanet();
       final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
       double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();

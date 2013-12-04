@@ -229,34 +229,31 @@ public class G3MWidget
   
       _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
     }
-  
-//    if (_selectedRenderer.isEnable())
-//    {
-//      _selectedRenderer.render(_renderContext, _rootState);
-//    }
-//  
-//    java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
-//    if (orderedRenderables != null)
-//    {
-//      final int orderedRenderablesCount = orderedRenderables.size();
-//      for (int i = 0; i < orderedRenderablesCount; i++)
-//      {
-//        OrderedRenderable orderedRenderable = orderedRenderables.get(i);
-//        orderedRenderable.render(_renderContext);
-//        if (orderedRenderable != null)
-//           orderedRenderable.dispose();
-//      }
-//    }
-    
-    if (renderStateType == RenderState_Type.RENDER_READY)
-    {
-    zRender();
+  /*
+    if (_selectedRenderer->isEnable()) {
+      _selectedRenderer->render(_renderContext, _rootState);
     }
   
+    std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
+    if (orderedRenderables != NULL) {
+      const int orderedRenderablesCount = orderedRenderables->size();
+      for (int i = 0; i < orderedRenderablesCount; i++) {
+        OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
+        orderedRenderable->render(_renderContext);
+        delete orderedRenderable;
+      }
+    }
+  */
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
     //  if (elapsedTimeMS > 100) {
     //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
     //  }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning REMOVE
+    if (RenderState_Type.RENDER_READY == renderStateType)
+    {
+      zRender();
+    }
   
     if (_logFPS)
     {
@@ -312,8 +309,6 @@ public class G3MWidget
     }
   
   }
-  
-  public static Vector3D _lastTouchedScenePoint = null;
 
   public final void onTouchEvent(TouchEvent touchEvent)
   {
@@ -362,30 +357,13 @@ public class G3MWidget
   
     if (touchEvent.getType() == TouchEventType.Down)
     {
-      zRender();
-  
       int x = touchEvent.getTouch(0).getPos()._x; //_width/2;
       int y = touchEvent.getTouch(0).getPos()._y; //_height/2;
   
-      double z = _gl.readPixelAsDouble(x, y, _width, _height);
+      if (_lastTouchedScenePoint != null)
+         _lastTouchedScenePoint.dispose();
+      _lastTouchedScenePoint = new Vector3D(getScenePositionForPixel(x, y));
   
-  
-      if (!(z != z))
-      {
-        ILogger.instance().logInfo("Z = %f\n", z);
-        Vector3D pixel3D = new Vector3D(x,_height - y,z);
-        MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
-        Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
-        ILogger.instance().logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description(), pos.description());
-        ILogger.instance().logInfo("DIST: %f\n", _currentCamera.getCartesianPosition().sub(pos).length());
-        ILogger.instance().logInfo("GEO: %s\n", _planet.toGeodetic2D(pos).description());
-        
-        _lastTouchedScenePoint = pos;
-      }
-      else
-      {
-        ILogger.instance().logInfo("NO Z");
-      }
     }
   
   }
@@ -656,6 +634,33 @@ public class G3MWidget
   {
     _forceBusyRenderer = forceBusyRenderer;
   }
+
+  public final Vector3D getScenePositionForPixel(int x, int y)
+  {
+    zRender();
+  
+    final double z = _gl.readPixelAsDouble(x, y, _width, _height);
+  
+    if (!(z != z))
+    {
+      Vector3D pixel3D = new Vector3D(x,_height - y,z);
+      MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
+      Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+      //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+      ILogger.instance().logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera.getCartesianPosition().sub(pos).length());
+      //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+      return pos;
+    }
+    else
+    {
+      ILogger.instance().logInfo("NO Z");
+      return Vector3D.nan();
+    }
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning remove
+  public static Vector3D _lastTouchedScenePoint = null;
 
   private IStorage _storage;
   private IDownloader _downloader;

@@ -31,8 +31,4 @@ public class BusyEffect extends EffectWithForce
     // do nothing, just leave the effect in the intermediate state
   }
 
-  public final void zRender(G3MRenderContext rc, GLState glState)
-  {
-  }
-
 }

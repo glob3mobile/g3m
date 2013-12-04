@@ -203,8 +203,8 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
   }
 
-
-@Override
-public void zRender(G3MRenderContext rc, GLState glState) {}
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
 
 }
