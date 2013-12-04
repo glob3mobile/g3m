@@ -23,7 +23,7 @@ void main() {
 
  */
 
-/*
+
 varying highp float R;
 varying highp float G;
 varying highp float B;
@@ -33,10 +33,8 @@ void main() {
   gl_FragColor = vec4(R, G, B, 0.0);
 }
 
- */
 
-
-
+/*
 void main() {
 
   highp float z = gl_FragCoord.z;
@@ -45,4 +43,4 @@ void main() {
 
   // writes zvalue
   gl_FragColor = vec4(z,z,z, 0.0);
-}
+}*/

@@ -540,7 +540,7 @@ void G3MWidget::render(int width, int height) {
 
     _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
   }
-/*
+
   if (_selectedRenderer->isEnable()) {
     _selectedRenderer->render(_renderContext, _rootState);
   }
@@ -554,15 +554,15 @@ void G3MWidget::render(int width, int height) {
       delete orderedRenderable;
     }
   }
-*/
+
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {
   //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
   //  }
-#warning REMOVE
-  if (RENDER_READY == renderStateType){
-    zRender();
-  }
+//#warning REMOVE
+//  if (RENDER_READY == renderStateType){
+//    zRender();
+//  }
 
   if (_logFPS) {
     _totalRenderTime += elapsedTimeMS;

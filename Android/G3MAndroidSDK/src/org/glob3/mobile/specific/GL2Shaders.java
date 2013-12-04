@@ -337,11 +337,9 @@ public final class GL2Shaders {
 	public final static String _zRenderFragmentShader = "void main() {\n" + 
 			"\n" + 
 			"  highp float z = gl_FragCoord.z;\n" + 
-			"  z -= 0.999;\n" + 
-			"  z *= 1000.0;\n" + 
-			"\n" + 
+			"  z = 1.0 - z; z *= 100000.0;" +
 			"  // writes zvalue\n" + 
-			"  gl_FragColor = vec4(z,z,z, 0.0);\n" + 
+			"  gl_FragColor = vec4(z,z,z, 1.0);\n" + 
 			"}";
 
 	public final static String _zRenderVertexShader = "attribute vec4 aPosition;\n" + 

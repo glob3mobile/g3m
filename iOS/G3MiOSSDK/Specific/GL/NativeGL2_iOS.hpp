@@ -21,6 +21,7 @@
 #include "GPUProgram.hpp"
 #include "GPUAttribute.hpp"
 #include "GPUUniform.hpp"
+#include "Vector2F.hpp"
 
 
 class NativeGL2_iOS: public INativeGL {
@@ -605,6 +606,12 @@ public:
 
   void depthMask(bool v) const{
     glDepthMask(v);
+  }
+
+  Vector2F getDepthRange() const{
+    float r[2];
+    glGetFloatv(GL_DEPTH_RANGE, r);
+    return Vector2F(r[0], r[1]);
   }
 
 };

@@ -17,6 +17,7 @@ class IGLUniformID;
 class IGLTextureId;
 class Matrix44D;
 class Color;
+class Vector2F;
 
 #include <vector>
 #include <string>
@@ -202,6 +203,8 @@ public:
   virtual double read1PixelAsDouble(int x, int y) const = 0;
 
   virtual void depthMask(bool v) const = 0;
+
+  virtual Vector2F getDepthRange() const = 0;
   
 };
 

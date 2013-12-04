@@ -29,6 +29,7 @@ class IGLUniformID;
 class GPUProgramManager;
 class GPUProgramState;
 class GLState;
+#include "Vector2F.hpp"
 
 #include "GPUProgram.hpp"
 
@@ -254,6 +255,10 @@ public:
       ILogger::instance()->logError("Problem at read1PixelAsDouble");
     }
     return d;
+  }
+
+  Vector2F getDepthRange() const{
+    return _nativeGL->getDepthRange();
   }
   
   

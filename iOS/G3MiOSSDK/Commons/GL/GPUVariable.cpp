@@ -134,6 +134,14 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return  BILLBOARD_POSITION;
   }
 
+  if (name.compare("uDepthFar") == 0) {
+    return DEPTH_FAR;
+  }
+
+  if (name.compare("uDepthNear") == 0) {
+    return DEPTH_NEAR;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 

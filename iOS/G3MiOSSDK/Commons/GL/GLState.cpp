@@ -100,16 +100,29 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager, RenderType rend
 
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
-    const int uniformsCode   = _valuesSet->getUniformsCode();
-    const int attributesCode = _valuesSet->getAttributesCode();
+
+
 
     switch (renderType) {
       case Z_BUFFER_RENDER: //Z_BUFFER
+      {
+
+        Vector2F depthRange = gl->getDepthRange();
+
+        _valuesSet->addUniformValue(DEPTH_NEAR, new GPUUniformValueFloat(depthRange._x), false);
+        _valuesSet->addUniformValue(DEPTH_FAR, new GPUUniformValueFloat(depthRange._y), false);
         _lastGPUProgramUsed = progManager.getProgram(gl, "ZRender");
         break;
+      }
       default:
+      {
+
+        const int uniformsCode   = _valuesSet->getUniformsCode();
+        const int attributesCode = _valuesSet->getAttributesCode();
+
         _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
         break;
+      }
     }
 
     //_lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
