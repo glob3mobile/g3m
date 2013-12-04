@@ -1219,7 +1219,7 @@ public:
     layerSet->addLayer(ortoAyto);
   }
 
-  bool useWMSBing = true;
+  bool useWMSBing = false;
   if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -1250,22 +1250,42 @@ public:
                                   true);
     layerSet->addLayer(bing);
 
-//    Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
-//                        42.50166666666667, 3.0016666666666665)
+  }
+
+  if (true) {
+//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
+//                                                  Sector::fullSphere(),
+//                                                  false,
+//                                                  0,
+//                                                  4,
+//                                                  TimeInterval::zero(),
+//                                                  false));
+
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 8),
+                                        TimeInterval::fromDays(30),
+                                        true);
+    layerSet->addLayer(blueMarble);
 
 
-    URLTemplateLayer* tilerLayer = URLTemplateLayer::newWGS84("http://192.168.1.2/120m/{level}/{x}/{y}.png",
-                                                              Sector::fullSphere(),
-                                                              true,
-                                                              0,
-                                                              8,
-                                                              TimeInterval::zero(),
-                                                              false,
-                                                              //new LevelTileCondition(3, 500)
-                                                              new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
-                                                                                                          42.50166666666667, 3.0016666666666665))
-                                                              );
-    layerSet->addLayer(tilerLayer);
+    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/120m/{level}/{x}/{y}.png",
+                                                  Sector::fullSphere(),
+                                                  true,
+                                                  0,
+                                                  8,
+                                                  TimeInterval::zero(),
+                                                  false,
+                                                  //new LevelTileCondition(3, 500)
+                                                  new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+                                                                                              42.50166666666667, 3.0016666666666665))
+                                                  ));
   }
 
   if (false) {
