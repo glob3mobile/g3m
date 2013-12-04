@@ -370,32 +370,26 @@ public class MainActivity
 
       final LayerSet layerset = new LayerSet();
       final WMSLayer img2011 = new WMSLayer("redearthmapping:srhoj_satImg2011", new URL(
-               "http://redearthmesh.com:8080/geoserver/redearthmapping/wms?", false), WMSServerVersion.WMS_1_3_0,
-               Sector.fullSphere(), "image/jpeg", "EPSG:4326", "raster", false, null, TimeInterval.fromDays(30), true,
-               LayerTilesRenderParameters.createDefaultWGS84(sectorFarm, 0, 0));//   reateDefaultMercator(0, 20));
+               "http://redearthmesh.com:8080/geoserver/redearthmapping/wms?", false), WMSServerVersion.WMS_1_3_0, sectorFarm,
+               "image/jpeg", "EPSG:4326", "raster", false, null, TimeInterval.fromDays(30), true,
+               LayerTilesRenderParameters.createDefaultWGS84(sectorFarm, 0, 3));//   reateDefaultMercator(0, 20));
       layerset.addLayer(img2011);
-      planetRendererBuilder.setLayerSet(layerset);
 
+      planetRendererBuilder.setLayerSet(layerset);
       //  planetRendererBuilder.setLayerSet(MiningLayerBuilder.createMiningLayerSet());
       planetRendererBuilder.setRenderDebug(true);
 
       _g3mWidget = builder.createWidget();
+
+
+      _g3mWidget.getG3MWidget().getPlanetRenderer().acceptTileVisitor(new TileVisitorCache_Android(_g3mWidget.getG3MContext()),
+               sectorFarm, 0, 3);
+
+
+      _g3mWidget.getG3MContext().getLogger().logInfo("Request for Precaching has been sent. Waiting responses...");
+
       _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(Double.valueOf(-17.14)),
-               Angle.fromDegrees(Double.valueOf(144.96)), 3000));
-      final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_g3mWidget.getG3MContext());
-      //  _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, demSector, 0, 20);
-
-      //      _g3mWidget.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, sectorFarm, 0, 0);
-
-
-      //
-      //      pr.acceptTileVisitor(new TileVisitorCache_Android(widget.getG3MContext(), MiningLayerBuilder.createMiningLayerSet(), 256,
-      //               256));
-      //
-
-
-      _g3mWidget.getG3MContext().getLogger().logInfo("Precaching has been completed");
-
+               Angle.fromDegrees(Double.valueOf(144.96)), 10000));
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
    }

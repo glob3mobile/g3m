@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  ITileVisitor.hpp
 //  G3MiOSSDK
@@ -8,10 +11,14 @@ package org.glob3.mobile.generated;
 //
 
 
+public interface ITileVisitor {
 
-public interface ITileVisitor
-{
-  void dispose();
+   void dispose();
 
-  void visitTile(java.util.ArrayList<Layer> layers, Tile tile);
+
+   void visitTile(java.util.ArrayList<Layer> layers,
+                  Tile tile);
+
+
+   long getCounter();
 }

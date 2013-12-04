@@ -44,9 +44,20 @@ public class TileVisitorCache_Android
          // Storing petitions
          for (int j = 0; j < pet.size(); j++) {
             final Petition petition = pet.get(j);
+            _context.getLogger().logInfo(petition.getSector().description());
             _context.getLogger().logInfo(pet.get(j).getURL().description());
-            _context.getDownloader().requestImage(new URL(petition.getURL()), 1, petition.getTimeToCache(), true,
-                     new IImageDownloadListenerTileCache(_debugCounter), true);
+            final long requestId = _context.getDownloader().requestImage(new URL(petition.getURL()), 1,
+                     petition.getTimeToCache(), true, new IImageDownloadListenerTileCache(_debugCounter), true);
+            if (requestId == -1) {
+               _context.getLogger().logInfo(
+                        "This request is cached (z:" + tile._level + ", x:" + tile._column + ", y:" + tile._row, requestId);
+            }
+            else {
+               _context.getLogger().logInfo(
+                        "RequestId " + requestId + " is waiting (z:" + tile._level + ", x:" + tile._column + ", y:" + tile._row,
+                        requestId + ")");
+            }
+
             _debugCounter++;
          }
       }

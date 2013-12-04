@@ -21,32 +21,37 @@ public class IImageDownloadListenerTileCache
 
 
    @Override
-   public void onError(final URL pUrl) {
+   public void onError(final URL url) {
       ILogger.instance().logError("FAIL Downloaded id: " + _requestId);
    }
 
 
    @Override
-   public void onCancel(final URL pUrl) {
+   public void onCancel(final URL url) {
       // TODO Auto-generated method stub
 
    }
 
 
    @Override
-   public void onCanceledDownload(final URL arg0,
-                                  final IImage arg1,
-                                  final boolean arg2) {
+   public void onCanceledDownload(final URL url,
+                                  final IImage image,
+                                  final boolean expired) {
       ILogger.instance().logError("CANCELED Downloaded id: " + _requestId);
+      if (image != null) {
+         image.dispose();
+      }
 
    }
 
 
    @Override
-   public void onDownload(final URL arg0,
-                          final IImage arg1,
-                          final boolean arg2) {
+   public void onDownload(final URL url,
+                          final IImage image,
+                          final boolean expired) {
       ILogger.instance().logInfo("Downloaded id: " + _requestId);
+      if (image != null) {
+         image.dispose();
+      }
    }
-
 }
