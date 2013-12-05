@@ -26,7 +26,7 @@ public class Main {
       final File firstFile = new File(args[0]);
       final File secondFile = new File(args[1]);
       try {
-         JBson2BJson.instance().transform(firstFile, secondFile);
+         JBson2BJson.instance().transform(firstFile, secondFile, true);
       }
       catch (final JBson2BJsonException e) {
          ILogger.instance().logError(e.getMessage());

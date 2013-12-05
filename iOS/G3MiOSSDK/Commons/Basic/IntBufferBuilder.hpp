@@ -16,7 +16,9 @@ class IIntBuffer;
 class IntBufferBuilder {
 private:
   std::vector<int> _values;
-  
+
+  IntBufferBuilder(const IntBufferBuilder& that);
+
 public:
   
   void add(int value) {

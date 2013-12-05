@@ -7,23 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <vector>
 
-#import "G3MUIDropDownMenu.h"
+#import <string>
 
 @class G3MWidget_iOS;
-@class G3MToolbar;
+class G3MDemoModel;
+class G3MDemoScene;
 
-@interface G3MViewController : UIViewController <UIAlertViewDelegate, G3MUIDropDownMenuDelegate> {
-  NSString* urlMarkString;
-  std::vector<std::string> satelliteLayersNames;
+@interface G3MViewController : UIViewController <UIAlertViewDelegate> {
+  G3MDemoModel* _demoModel;
 }
 
 @property (retain, nonatomic) IBOutlet G3MWidget_iOS* g3mWidget;
-@property (strong, nonatomic) IBOutlet UIButton*      demoSelector;
-@property (strong, nonatomic) G3MUIDropDownMenu*      demoMenu;
-@property (strong, nonatomic) G3MToolbar*             toolbar;
-@property (strong, nonatomic) UIButton*               layerSwitcher;
-@property (strong, nonatomic) UIButton*               playButton;
+@property (weak, nonatomic)   IBOutlet UIButton*      demoSelector;
+@property (weak, nonatomic)   IBOutlet UIView*        secondaryToolbar;
+@property (weak, nonatomic)   IBOutlet UIButton*      optionSelector;
+
+-(void) onChangedScene:(const G3MDemoScene*) scene;
+
+-(void) onChangedOption:(const std::string&) option
+                inScene:(const G3MDemoScene*) scene;
 
 @end

@@ -20,6 +20,14 @@ package org.glob3.mobile.generated;
 
 public class Matrix44D extends RCObject
 {
+  public void dispose()
+  {
+    _columnMajorFloatArray = null;
+    if (_columnMajorFloatBuffer != null)
+       _columnMajorFloatBuffer.dispose();
+  
+    super.dispose();
+  }
 
 
   //_m23 -> row 2, column 3
@@ -42,7 +50,6 @@ public class Matrix44D extends RCObject
 
   public float[] _columnMajorFloatArray;
   public IFloatBuffer _columnMajorFloatBuffer;
-
 
   public Matrix44D(Matrix44D m)
   {
@@ -88,15 +95,6 @@ public class Matrix44D extends RCObject
     _columnMajorFloatBuffer = null;
   }
 
-  public void dispose()
-  {
-    _columnMajorFloatArray = null;
-    if (_columnMajorFloatBuffer != null)
-       _columnMajorFloatBuffer.dispose();
-  
-    super.dispose();
-  
-  }
 
   public final Matrix44D createMultiplication(Matrix44D that)
   {

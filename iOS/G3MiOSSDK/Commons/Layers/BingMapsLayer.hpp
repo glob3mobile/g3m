@@ -69,8 +69,15 @@ protected:
     return "BingMaps";
   }
 
-  bool rawIsEquals(const Layer* that) const;
+  std::string getBrandLogoUri() const {
+    return _brandLogoUri;
+  }
 
+  std::string getCopyright() const {
+    return _copyright;
+  }
+
+  bool rawIsEquals(const Layer* that) const;
 
 public:
 

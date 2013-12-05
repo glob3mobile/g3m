@@ -115,8 +115,12 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     indices.add((short) 0);
     indices.add((short) 1);
   
-    // create mesh
-    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+  
+    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
   private Mesh getMesh(G3MRenderContext rc)
   {

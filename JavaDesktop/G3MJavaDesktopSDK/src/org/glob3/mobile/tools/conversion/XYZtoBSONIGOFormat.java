@@ -30,7 +30,6 @@ import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
 public class XYZtoBSONIGOFormat {
 
-   @SuppressWarnings("unused")
    private static int i;
 
 

@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class SingleBillElevationDataProvider_BufferDownloadListener;
+
 
 public class SingleBillElevationDataProvider_Request
 {

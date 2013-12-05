@@ -179,9 +179,9 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-//    ILogger::instance()->logInfo("Downloaded GEOObject buffer from \"%s\" (%db)",
-//                                 url.getPath().c_str(),
-//                                 buffer->size());
+    ILogger::instance()->logInfo("Downloaded GEOObject buffer from \"%s\" (%db)",
+                                 url.getPath().c_str(),
+                                 buffer->size());
 
     _threadUtils->invokeAsyncTask(new GEORenderer_GEOObjectParserAsyncTask(url,
                                                                            buffer,

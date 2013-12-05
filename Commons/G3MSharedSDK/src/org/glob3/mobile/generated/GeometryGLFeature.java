@@ -12,6 +12,13 @@ public class GeometryGLFeature extends GLFeature
   private final float _polygonOffsetUnits;
   private final float _lineWidth;
 
+  public void dispose()
+  {
+    //  _position->_release();
+  
+    super.dispose();
+  }
+
 
   public GeometryGLFeature(IFloatBuffer buffer, int arrayElementSize, int index, boolean normalized, int stride, boolean depthTestEnabled, boolean cullFace, int culledFace, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, float lineWidth, boolean needsPointSize, float pointSize)
   {
@@ -33,13 +40,6 @@ public class GeometryGLFeature extends GLFeature
     }
   }
 
-  public void dispose()
-  {
-    //  _position->_release();
-  
-    super.dispose();
-  
-  }
 
   public final void applyOnGlobalGLState(GLGlobalState state)
   {

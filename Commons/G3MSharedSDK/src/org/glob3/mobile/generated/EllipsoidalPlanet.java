@@ -631,8 +631,8 @@ public class EllipsoidalPlanet extends Planet
 
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
   {
-  
-    int __ASK_JM;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning __ASK_JM
   
     //  Vector3D pos = nextCamera->getCartesianPosition();
     //  Vector3D origin = _origin.asVector3D();

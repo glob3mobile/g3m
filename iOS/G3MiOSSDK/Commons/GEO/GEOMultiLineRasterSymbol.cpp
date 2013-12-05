@@ -18,8 +18,6 @@ GEOMultiLineRasterSymbol::GEOMultiLineRasterSymbol(const std::vector<std::vector
 GEORasterSymbol( calculateSectorFromCoordinatesArray(coordinatesArray), minTileLevel, maxTileLevel ),
 _coordinatesArray( copyCoordinatesArray(coordinatesArray) ),
 _style(style)
-//_lineColor( style.getColor() ),
-//_lineWidth( style.getWidth() )
 {
 }
 

@@ -191,8 +191,10 @@ public:
                                  const bool linearTiming  = false,
                                  const bool linearHeight  = false);
   
-  void stopCameraAnimation();
-  
+  void cancelCameraAnimation();
+
+  void cancelAllEffects();
+
   //  void resetCameraPosition();
   
   CameraRenderer* getCameraRenderer() const {
@@ -208,6 +210,10 @@ public:
   PlanetRenderer* getPlanetRenderer();
 
   void setShownSector(const Sector& sector);
+
+  void setForceBusyRenderer(bool forceBusyRenderer) {
+    _forceBusyRenderer = forceBusyRenderer;
+  }
   
 private:
   IStorage*                _storage;
@@ -275,6 +281,8 @@ private:
   bool _initialCameraPositionHasBeenSet;
 
   G3MRenderContext* _renderContext;
+
+  bool _forceBusyRenderer;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

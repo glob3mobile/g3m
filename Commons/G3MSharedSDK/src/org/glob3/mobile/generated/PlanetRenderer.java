@@ -3,6 +3,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
+  private boolean _ownsElevationDataProvider;
   private TileTexturizer _texturizer;
   private TileRasterizer _tileRasterizer;
   private LayerSet _layerSet;
@@ -184,57 +185,62 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<VisibleSectorListenerEntry> _visibleSectorListeners = new java.util.ArrayList<VisibleSectorListenerEntry>();
 
-  private void visitTilesTouchesWith(Sector sector, int firstLevel, int maxLevel)
+  private void visitTilesTouchesWith(java.util.ArrayList<Layer> layers, Sector sector, int firstLevelToVisit, int maxLevelToVisit)
   {
+    ILogger logger = ILogger.instance();
+  
     if (_tileVisitor != null)
     {
       final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
-      if (parameters == null)
-      {
-        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
-        return;
-      }
-  
-      final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
-      if (firstLevel < firstLevelToVisit)
-      {
-        ILogger.instance().logError("Can only visit from level %", firstLevelToVisit);
-        return;
-      }
-  
-      final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
-      if (maxLevel > maxLevelToVisit)
-      {
-        ILogger.instance().logError("Can only visit to level %", maxLevelToVisit);
-        return;
-      }
-  
-      if (firstLevelToVisit > maxLevelToVisit)
-      {
-        ILogger.instance().logError("Can't visit, first level is gratter than max level");
-        return;
-      }
-  
-      java.util.ArrayList<Layer> layers = new java.util.ArrayList<Layer>();
-      final int layersCount = _layerSet.size();
-      for (int i = 0; i < layersCount; i++)
-      {
-        Layer layer = _layerSet.getLayer(i);
-        if (layer.isEnable() && layer.isReady())
-        {
-          layers.add(layer);
-        }
-      }
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
-      for (int i = 0; i < firstLevelTilesCount; i++)
+  
+      long numVisits = 0;
+  
+      if (firstLevelToVisit == parameters._firstLevel)
       {
-        Tile tile = _firstLevelTiles.get(i);
-        if (tile._sector.touchesWith(sector))
+  
+        logger.logInfo("Precaching top level: %d", firstLevelToVisit);
+        for (int i = 0; i < firstLevelTilesCount; i++)
         {
-          _tileVisitor.visitTile(layers, tile);
-          visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
+          Tile tile = _firstLevelTiles.get(i);
+          if (tile._sector.touchesWith(sector))
+          {
+            numVisits++;
+            _tileVisitor.visitTile(layers, tile);
+          }
         }
+        logger.logInfo("%d request for precaching top level has been sent. Waiting responses...", numVisits);
+  
+  
+        logger.logInfo("Precaching rests of levels");
+        numVisits = 0;
+        for (int i = 0; i < firstLevelTilesCount; i++)
+        {
+          Tile tile = _firstLevelTiles.get(i);
+          if (tile._sector.touchesWith(sector))
+          {
+            numVisits+=visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
+          }
+        }
+        logger.logInfo("%d request for precaching rests of levels has been sent. Waiting responses...", numVisits);
+  
+      }
+      else
+      {
+        logger.logInfo("Precaching from %d to %d levels", firstLevelToVisit, maxLevelToVisit);
+        for (int i = 0; i < firstLevelTilesCount; i++)
+        {
+          Tile tile = _firstLevelTiles.get(i);
+          if (tile._sector.touchesWith(sector))
+          {
+            _tileVisitor.visitTile(layers, tile);
+            numVisits++;
+            numVisits+=visitSubTilesTouchesWith(layers, tile, sector, firstLevelToVisit, maxLevelToVisit);
+          }
+        }
+        logger.logInfo("%d request for precaching from %d to %d levels has been sent. Waiting responses...",numVisits, firstLevelToVisit, maxLevelToVisit);
+  
       }
     }
     else
@@ -243,8 +249,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   }
 
-  private void visitSubTilesTouchesWith(java.util.ArrayList<Layer> layers, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
+  private long visitSubTilesTouchesWith(java.util.ArrayList<Layer> layers, Tile tile, Sector sectorToVisit, int topLevel, int maxLevel)
   {
+    long numVisits = 0;
     if (tile._level < maxLevel)
     {
       java.util.ArrayList<Tile> subTiles = tile.getSubTiles(getLayerTilesRenderParameters()._mercator);
@@ -257,12 +264,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         {
           if ((tile._level >= topLevel))
           {
+            numVisits++;
             _tileVisitor.visitTile(layers, tl);
           }
-          visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);
+          numVisits += visitSubTilesTouchesWith(layers, tl, sectorToVisit, topLevel, maxLevel);
         }
       }
     }
+    return numVisits;
   }
 
   private long _texturePriority;
@@ -314,10 +323,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
+     _ownsElevationDataProvider = ownsElevationDataProvider;
      _verticalExaggeration = verticalExaggeration;
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
@@ -413,6 +423,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     updateGLState(rc);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Testing_Terrain_Normals;
+    _glState.setParent(glState);
   
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
@@ -567,7 +580,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     if (!_layerSet.isReady())
     {
-      int __TODO_Layer_error;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning __TODO_Layer_error;
       return RenderState.busy();
     }
   
@@ -643,10 +657,71 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return RenderState.ready();
   }
 
-  public final void acceptTileVisitor(ITileVisitor tileVisitor, Sector sector, int topLevel, int maxLevel)
+  public final void acceptTileVisitor(ITileVisitor tileVisitor, Sector sector, int firstLevel, int maxLevel, boolean forlevels)
   {
-    _tileVisitor = tileVisitor;
-    visitTilesTouchesWith(sector, topLevel, maxLevel);
+    ILogger logger = ILogger.instance();
+    if (tileVisitor != null)
+    {
+      _tileVisitor = tileVisitor;
+      final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
+      if (parameters == null)
+      {
+        logger.logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+        return;
+      }
+  
+      final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
+      if (firstLevel < firstLevelToVisit)
+      {
+        logger.logError("Can only visit from level %", firstLevelToVisit);
+        return;
+      }
+  
+      final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
+  
+      if (maxLevel > maxLevelToVisit)
+      {
+        logger.logError("Can only visit to level %", maxLevelToVisit);
+        return;
+      }
+  
+      if (firstLevelToVisit > maxLevelToVisit)
+      {
+        logger.logError("Can't visit, first level is gratter than max level");
+        return;
+      }
+  
+      java.util.ArrayList<Layer> layers = new java.util.ArrayList<Layer>();
+      final int layersCount = _layerSet.size();
+      for (int i = 0; i < layersCount; i++)
+      {
+        Layer layer = _layerSet.getLayer(i);
+        if (layer.isEnable() && layer.isReady())
+        {
+          layers.add(layer);
+        }
+      }
+  
+      if(forlevels)
+      {
+        final int numlevels = maxLevelToVisit - firstLevelToVisit;
+        for (int i = 0; i < numlevels; i++)
+        {
+          final int level = firstLevelToVisit+i;
+          logger.logInfo("Precaching level %d.", level);
+          visitTilesTouchesWith(layers, sector, level, level+1);
+        }
+      }
+      else
+      {
+        visitTilesTouchesWith(layers, sector, firstLevelToVisit, maxLevelToVisit);
+      }
+  
+    }
+    else
+    {
+      logger.logError("TileVisitor is NULL");
+    }
   }
 
   public final void start(G3MRenderContext rc)
@@ -691,7 +766,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       _recreateTilesPending = true;
       // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
       //   so it has to be executed in the OpenGL thread
-      _context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
+      if (_context == null)
+      {
+        ILogger.instance().logError("_context if not initialized");
+      }
+      else
+      {
+        _context.getThreadUtils().invokeInRendererThread(new RecreateTilesTask(this), true);
+      }
     }
   }
 
@@ -833,6 +915,45 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       _terrainTouchListeners.add(listener);
     }
+  }
+
+  public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
+  {
+    if (_elevationDataProvider != elevationDataProvider)
+    {
+      if (_ownsElevationDataProvider)
+      {
+        if (_elevationDataProvider != null)
+           _elevationDataProvider.dispose();
+      }
+  
+      _ownsElevationDataProvider = owned;
+      _elevationDataProvider = elevationDataProvider;
+  
+      if (_elevationDataProvider != null)
+      {
+        _elevationDataProvider.setChangedListener(this);
+        if (_context != null)
+        {
+          _elevationDataProvider.initialize(_context); //Initializing EDP in case it wasn't
+        }
+      }
+  
+      changed();
+    }
+  }
+  public final void setVerticalExaggeration(float verticalExaggeration)
+  {
+    if (_verticalExaggeration != verticalExaggeration)
+    {
+      _verticalExaggeration = verticalExaggeration;
+      changed();
+    }
+  }
+
+  public final ElevationDataProvider getElevationDataProvider()
+  {
+    return _elevationDataProvider;
   }
 
 }

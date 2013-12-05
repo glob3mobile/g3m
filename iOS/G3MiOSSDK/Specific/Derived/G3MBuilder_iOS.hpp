@@ -24,11 +24,14 @@ protected:
 
   GPUProgramSources loadGPUProgramSources(const std::string& name);
 
-
 public:
   G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);
 
   void initializeWidget();
+
+  G3MWidget_iOS* getNativeWidget() const {
+    return _nativeWidget;
+  }
 
 };
 

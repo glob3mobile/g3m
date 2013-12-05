@@ -24,11 +24,8 @@ public class TMSLayer extends Layer
   private final URL _mapServerURL;
 
   private final String _mapLayer;
-
   private Sector _sector ;
-
   private final String _format;
-  private final String _srs;
   private final boolean _isTransparent;
 
 
@@ -61,11 +58,6 @@ public class TMSLayer extends Layer
       return false;
     }
   
-    if (!_srs.equals(t._srs))
-    {
-      return false;
-    }
-  
     if (_isTransparent != t._isTransparent)
     {
       return false;
@@ -75,18 +67,17 @@ public class TMSLayer extends Layer
   }
 
 
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, String srs, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapLayer, mapServerURL, sector, format, srs, isTransparent, condition, timeToCache, readExpired, null);
+     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, null);
   }
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, String srs, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
      super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector) : parameters);
      _mapServerURL = mapServerURL;
      _mapLayer = mapLayer;
      _sector = new Sector(sector);
      _format = format;
-     _srs = srs;
      _isTransparent = isTransparent;
   }
 
@@ -135,7 +126,7 @@ public class TMSLayer extends Layer
 
   public final TMSLayer copy()
   {
-    return new TMSLayer(_mapLayer, _mapServerURL, _sector, _format, _srs, _isTransparent, (_condition == null) ? null : _condition.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_parameters == null) ? null : _parameters.copy());
+    return new TMSLayer(_mapLayer, _mapServerURL, _sector, _format, _isTransparent, (_condition == null) ? null : _condition.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_parameters == null) ? null : _parameters.copy());
   }
 
 }

@@ -23,6 +23,9 @@ public class IntBufferBuilder
 {
   private java.util.ArrayList<Integer> _values = new java.util.ArrayList<Integer>();
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  IntBufferBuilder(IntBufferBuilder that);
+
 
   public final void add(int value)
   {

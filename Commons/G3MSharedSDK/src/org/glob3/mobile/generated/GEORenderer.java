@@ -236,7 +236,7 @@ public class GEORenderer extends LeafRenderer
     return _shapesRenderer;
   }
 
-  public final GEOTileRasterizer getGeoTileRasterizer()
+  public final GEOTileRasterizer getGEOTileRasterizer()
   {
     return _geoTileRasterizer;
   }

@@ -3,6 +3,11 @@ package org.glob3.mobile.generated;
 
 public class GPUAttributeValueDisabled extends GPUAttributeValue
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public GPUAttributeValueDisabled()
   {
      super(false);
@@ -29,19 +34,16 @@ public class GPUAttributeValueDisabled extends GPUAttributeValue
 
   public final GPUAttributeValue copyOrCreate(GPUAttributeValue oldAtt)
   {
-
     if (oldAtt == null)
     {
       return new GPUAttributeValueDisabled();
     }
     if (oldAtt._enabled)
     {
-      if (oldAtt != null)
-         oldAtt.dispose();
+      oldAtt._release();
       return new GPUAttributeValueDisabled();
     }
     return oldAtt;
-
   }
 
 }

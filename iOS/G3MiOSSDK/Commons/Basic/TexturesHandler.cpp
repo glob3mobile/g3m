@@ -207,7 +207,7 @@ TexturesHandler::~TexturesHandler() {
 }
 
 
-TextureIDReference::~TextureIDReference(){
+TextureIDReference::~TextureIDReference() {
   _texHandler->releaseGLTextureId(_id);
 }
 

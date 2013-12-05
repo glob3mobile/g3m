@@ -23,24 +23,59 @@ IndexedGeometryMesh::~IndexedGeometryMesh() {
 
 }
 
-IndexedGeometryMesh::IndexedGeometryMesh(const int primitive,
-                         const Vector3D& center,
-                         IFloatBuffer* vertices, bool ownsVertices,
-                         IShortBuffer* indices, bool ownsIndices,
-                         float lineWidth,
-                         float pointSize,
-                         bool depthTest) :
+IndexedGeometryMesh::IndexedGeometryMesh(const int       primitive,
+                                         const Vector3D& center,
+                                         IFloatBuffer*   vertices,
+                                         bool            ownsVertices,
+                                         IFloatBuffer*   normals,
+                                         bool            ownsNormals,
+                                         IShortBuffer*   indices,
+                                         bool            ownsIndices,
+                                         float           lineWidth,
+                                         float           pointSize,
+                                         bool            depthTest) :
 AbstractGeometryMesh(primitive,
-             ownsVertices,
-             center,
-             vertices,
-             lineWidth,
-             pointSize,
-             depthTest),
+                     center,
+                     vertices,
+                     ownsVertices,
+                     normals,
+                     ownsNormals,
+                     lineWidth,
+                     pointSize,
+                     depthTest),
 _indices(indices),
 _ownsIndices(ownsIndices)
 {
-  
+//  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices, %d normals",
+//                               vertices->size(),
+//                               indices->size(),
+//                               normals->size());
+}
+
+IndexedGeometryMesh::IndexedGeometryMesh(const int primitive,
+                                         const Vector3D& center,
+                                         IFloatBuffer* vertices,
+                                         bool ownsVertices,
+                                         IShortBuffer* indices,
+                                         bool ownsIndices,
+                                         float lineWidth,
+                                         float pointSize,
+                                         bool depthTest) :
+AbstractGeometryMesh(primitive,
+                     center,
+                     vertices,
+                     ownsVertices,
+                     NULL, // normals
+                     false, // ownsNormals
+                     lineWidth,
+                     pointSize,
+                     depthTest),
+_indices(indices),
+_ownsIndices(ownsIndices)
+{
+//  ILogger::instance()->logInfo("Created an IndexedGeometryMesh with %d vertices, %d indices",
+//                               vertices->size(),
+//                               indices->size());
 }
 
 void IndexedGeometryMesh::rawRender(const G3MRenderContext* rc) const{

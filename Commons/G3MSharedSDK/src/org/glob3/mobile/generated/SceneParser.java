@@ -203,7 +203,7 @@ public class SceneParser
     if (layersName != null)
        layersName.dispose();
   
-    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, format, "EPSG:4326", transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
+    TMSLayer tmsLayer = new TMSLayer(URL.escape(layersSecuence), new URL(jsonURL, false), sector, format, transparent, levelTileCondition, TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(),jsonSplitsLat,jsonSplitsLon,0,19,LayerTilesRenderParameters.defaultTileTextureResolution(),LayerTilesRenderParameters.defaultTileMeshResolution(),false));
     if (!enabled)
     {
       tmsLayer.setEnable(enabled);

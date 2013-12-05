@@ -85,17 +85,23 @@ public class QuadShape extends AbstractMeshShape
     if (_withNormals)
     {
       FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-      normals.add((double)0.0, (double)0.0, (double)1.0);
-      normals.add((double)0.0, (double)0.0, (double)1.0);
-      normals.add((double)0.0, (double)0.0, (double)1.0);
-      normals.add((double)0.0, (double)0.0, (double)1.0);
+      normals.add(0.0, 0.0, 1.0);
+      normals.add(0.0, 0.0, 1.0);
+      normals.add(0.0, 0.0, 1.0);
+      normals.add(0.0, 0.0, 1.0);
   
       im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, (float)1.0, true, normals.create());
+  
+      if (normals != null)
+         normals.dispose();
     }
     else
     {
       im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color);
     }
+  
+    if (vertices != null)
+       vertices.dispose();
   
     final TextureIDReference texId = getTextureId(rc);
     if (texId == null)

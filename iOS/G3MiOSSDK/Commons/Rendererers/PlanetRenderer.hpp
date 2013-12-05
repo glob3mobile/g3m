@@ -217,6 +217,7 @@ class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProv
 private:
   TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
+  bool                         _ownsElevationDataProvider;
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
@@ -258,15 +259,16 @@ private:
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
   
-  void visitTilesTouchesWith(const Sector& sector,
-                             const int topLevel,
+  void visitTilesTouchesWith(std::vector<Layer*> layers,
+                             const Sector& sector,
+                             const int firstLevelToVisit,
                              const int maxLevel);
   
-  void visitSubTilesTouchesWith(std::vector<Layer*> layers,
+  long long visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                 Tile* tile,
                                 const Sector& sectorToVisit,
                                 const int topLevel,
-                                const int maxLevel);
+                                const int maxLevelToVisit);
 
   long long _texturePriority;
 
@@ -297,6 +299,7 @@ private:
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
+                 bool                         ownsElevationDataProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
                  TileRasterizer*              tileRasterizer,
@@ -322,12 +325,11 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  void acceptTileVisitor(ITileVisitor* tileVisitor, const Sector sector,
-                         const int topLevel,
-                         const int maxLevel) {
-    _tileVisitor = tileVisitor;
-    visitTilesTouchesWith(sector, topLevel, maxLevel);
-  }
+  void acceptTileVisitor(ITileVisitor* tileVisitor,//
+                         const Sector sector,//
+                         const int firstLevel,//
+                         const int maxLevel,//
+                         const bool forlevels);
 
   void start(const G3MRenderContext* rc) {
     _firstRender = true;
@@ -441,6 +443,14 @@ public:
   void setRenderedSector(const Sector& sector);
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
+
+  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
+                                bool owned);
+  void setVerticalExaggeration(float verticalExaggeration);
+
+  ElevationDataProvider* getElevationDataProvider() const{
+    return _elevationDataProvider;
+  }
 
 };
 
