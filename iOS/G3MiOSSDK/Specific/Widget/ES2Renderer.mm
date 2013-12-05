@@ -29,7 +29,7 @@ enum {
 };
 
 @interface ES2Renderer (PrivateMethods)
-- (BOOL)loadShaders;
+//- (BOOL)loadShaders;
 
 - (BOOL)validateProgram:(GLuint)prog;
 @end
@@ -46,7 +46,9 @@ enum {
     _firstRender = true;
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
-    if (!context || ![EAGLContext setCurrentContext:context] || ![self loadShaders]) {
+    if (!context || ![EAGLContext setCurrentContext:context]
+        //|| ![self loadShaders]
+        ) {
       return nil;
     }
     
@@ -119,44 +121,44 @@ enum {
   return TRUE;
 }
 
-- (BOOL)loadShaders {
-  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-                                                                 ofType: @"vsh"];
-  if (!vertShaderPathname) {
-    NSLog(@"Can't load Shader.vsh");
-    return FALSE;
-  }
-  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
-                                                             encoding: NSUTF8StringEncoding
-                                                                error: nil] UTF8String]);
-
-  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-                                                                 ofType: @"fsh"];
-  if (!fragShaderPathname) {
-    NSLog(@"Can't load Shader.fsh");
-    return FALSE;
-  }
-
-  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
-                                                               encoding: NSUTF8StringEncoding
-                                                                  error: nil] UTF8String]);
-//  
-//  try {
-//    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
-//    if (_gpuProgram != NULL) {
-//      NSLog(@"GPU Program Loaded");
-//      try {
-//        _gpuProgram->setUniform(_gl, "Modelview", MutableMatrix44D::identity());
-//      } catch (G3MError* e) {
-//        NSLog(@"%s", e->getMessage().c_str());
-//      }
-//    }
-//  } catch (G3MError* e) {
-//    NSLog(@"%s", e->getMessage().c_str());
+//- (BOOL)loadShaders {
+//  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+//                                                                 ofType: @"vsh"];
+//  if (!vertShaderPathname) {
+//    NSLog(@"Can't load Shader.vsh");
+//    return FALSE;
 //  }
-
-  return TRUE;
-}
+//  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
+//                                                             encoding: NSUTF8StringEncoding
+//                                                                error: nil] UTF8String]);
+//
+//  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+//                                                                 ofType: @"fsh"];
+//  if (!fragShaderPathname) {
+//    NSLog(@"Can't load Shader.fsh");
+//    return FALSE;
+//  }
+//
+//  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
+//                                                               encoding: NSUTF8StringEncoding
+//                                                                  error: nil] UTF8String]);
+////  
+////  try {
+////    _gpuProgram = GPUProgram::createProgram(_gl->getNative(), "", vertexSource, fragmentSource);
+////    if (_gpuProgram != NULL) {
+////      NSLog(@"GPU Program Loaded");
+////      try {
+////        _gpuProgram->setUniform(_gl, "Modelview", MutableMatrix44D::identity());
+////      } catch (G3MError* e) {
+////        NSLog(@"%s", e->getMessage().c_str());
+////      }
+////    }
+////  } catch (G3MError* e) {
+////    NSLog(@"%s", e->getMessage().c_str());
+////  }
+//
+//  return TRUE;
+//}
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer {
   _firstRender = true;

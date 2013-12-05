@@ -110,7 +110,7 @@ public abstract class Layer
     _parameters = null;
   }
 
-  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);
+  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
 
   public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {

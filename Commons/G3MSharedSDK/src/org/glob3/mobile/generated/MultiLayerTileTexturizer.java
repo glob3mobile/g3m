@@ -66,7 +66,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, layerTilesRenderParameters, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority));
       tile.setTexturizerData(builderHolder);
     }
   

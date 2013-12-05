@@ -31,7 +31,11 @@ package org.glob3.mobile.generated;
 public class GEOTileRasterizer_QuadTreeVisitor extends QuadTreeVisitor
 {
   private final GEOTileRasterizer _geoTileRasterizer;
+<<<<<<< HEAD
   private final IImage _originalImage;
+=======
+  private IImage _originalImage;
+>>>>>>> purgatory
   private final TileRasterizerContext _trc;
   private IImageListener _listener;
   private boolean _autodelete;
@@ -92,8 +96,12 @@ public class GEOTileRasterizer_QuadTreeVisitor extends QuadTreeVisitor
     {
       _canvas.createImage(_listener, _autodelete);
 
+<<<<<<< HEAD
       if (_originalImage != null)
          _originalImage.dispose();
+=======
+      _originalImage = null;
+>>>>>>> purgatory
       _originalImage = null;
 
       if (_projection != null)

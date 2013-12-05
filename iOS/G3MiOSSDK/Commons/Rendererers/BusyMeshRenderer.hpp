@@ -69,7 +69,10 @@ public:
     _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,   halfWidth,
                                                                               -halfHeight, halfHeight,
                                                                               -halfWidth,  halfWidth);
-      }
+
+    delete _mesh;
+    _mesh = NULL;
+  }
   
   virtual ~BusyMeshRenderer() {
     delete _mesh;

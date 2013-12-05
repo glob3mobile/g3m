@@ -212,13 +212,21 @@ public class GDAL {
    public File vector2GeoJSON(final File inputFile,
                               final File outputDir,
                               final String outputFileName,
+                              final boolean overwrite,
                               final String... options) throws GDALException {
       if (FileUtils.checkFile(inputFile) && FileUtils.checkDir(outputDir)) {
          File outputFile = new File(outputDir, outputFileName + ".geojson");
-         int i = 1;
-         while (outputFile.exists()) {
-            outputFile = new File(outputDir, outputFileName + "(" + i + ").geojson");
-            i++;
+         if (overwrite && outputFile.exists()) {
+            if (!outputFile.delete()) {
+               throw new GDALException("Output file exist and can't to delete it", null);
+            }
+         }
+         else {
+            int i = 1;
+            while (outputFile.exists()) {
+               outputFile = new File(outputDir, outputFileName + "(" + i + ").geojson");
+               i++;
+            }
          }
 
 

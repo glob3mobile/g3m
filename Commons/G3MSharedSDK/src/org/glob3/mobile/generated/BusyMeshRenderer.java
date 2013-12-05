@@ -181,7 +181,11 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     final int halfWidth = width / 2;
     final int halfHeight = height / 2;
     _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-      }
+
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  }
 
   public void dispose()
   {
@@ -214,6 +218,10 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   public final void stop(G3MRenderContext rc)
   {
     rc.getEffectsScheduler().cancelAllEffectsFor(this);
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
   }
 
   public final void onResume(G3MContext context)

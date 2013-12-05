@@ -36,6 +36,9 @@ void BusyMeshRenderer::start(const G3MRenderContext* rc) {
 
 void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
   rc->getEffectsScheduler()->cancelAllEffectsFor(this);
+
+  delete _mesh;
+  _mesh = NULL;
 }
 
 void BusyMeshRenderer::createGLState() {
