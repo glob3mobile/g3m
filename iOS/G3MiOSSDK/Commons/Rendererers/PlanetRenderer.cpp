@@ -425,14 +425,10 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     return RenderState::error(_errors);
   }
 
-  #warning __TODO_Layer_error;
   const RenderState layerSetRenderState = _layerSet->getRenderState();
   if (layerSetRenderState._type != RENDER_READY) {
     return layerSetRenderState;
   }
-//  if (!_layerSet->isReady()) {
-//    return RenderState::busy();
-//  }
 
   if (_elevationDataProvider != NULL) {
     if (!_elevationDataProvider->isReadyToRender(rc)) {
@@ -489,9 +485,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
       }
 
       if (_texturizer != NULL) {
-//        if (!_texturizer->isReady(rc, _layerSet)) {
-//          return RenderState::busy();
-//        }
         const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
         if (texturizerRenderState._type != RENDER_READY) {
           return texturizerRenderState;

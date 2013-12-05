@@ -127,9 +127,7 @@ RenderState LayerSet::getRenderState() {
   else if (busyFlag) {
     return RenderState::busy();
   }
-  else {
-    return RenderState::ready();
-  }
+  return RenderState::ready();
 }
 
 Layer* LayerSet::getLayer(int index) const {
@@ -250,6 +248,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
   int     tileMeshHeight             = 0;
   bool    mercator                   = false;
 
+  bool layerSetNotReadyFlag = false;
   bool first = true;
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
@@ -258,20 +257,19 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
     if (layer->isEnable()) {
       const RenderState layerRenderState = layer->getRenderState();
       const RenderState_Type layerRenderStateType = layerRenderState._type;
-      if (layerRenderStateType == RENDER_ERROR) {
-        const std::vector<std::string> layerErrors = layerRenderState.getErrors();
+      if (layerRenderStateType != RENDER_READY) {
+        if (layerRenderStateType == RENDER_ERROR) {
+          const std::vector<std::string> layerErrors = layerRenderState.getErrors();
 #ifdef C_CODE
-        errors.insert(errors.end(),
+          errors.insert(errors.end(),
                       layerErrors.begin(),
                       layerErrors.end());
 #endif
 #ifdef JAVA_CODE
-        errors.addAll(childErrors);
+          errors.addAll(childErrors);
 #endif
-        return NULL;
-      }
-      else if (layerRenderStateType == RENDER_BUSY) {
-        int warning_TODO_busy_state;
+        }
+        layerSetNotReadyFlag = true;
       }
       else {
         const LayerTilesRenderParameters* layerParam = layer->getLayerTilesRenderParameters();
@@ -348,11 +346,13 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
           }
 
         }
-    
       }
     }
   }
 
+  if (layerSetNotReadyFlag) {
+    return NULL;
+  }
   if (first) {
     errors.push_back("Can't find any enabled Layer");
     return NULL;
