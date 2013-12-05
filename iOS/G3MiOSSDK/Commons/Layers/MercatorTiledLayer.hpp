@@ -50,6 +50,7 @@ public:
                         const Sector& sector) const;
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
 
   virtual const std::string description() const;

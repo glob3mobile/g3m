@@ -97,6 +97,7 @@ double WMSLayer::toBBOXLatitude(const Angle& latitude) const {
 }
 
 std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
 

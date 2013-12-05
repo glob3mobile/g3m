@@ -324,7 +324,8 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  void acceptTileVisitor(ITileVisitor* tileVisitor, const Sector sector,
+  void acceptTileVisitor(ITileVisitor* tileVisitor,
+                         const Sector& sector,
                          const int topLevel,
                          const int maxLevel) {
     _tileVisitor = tileVisitor;

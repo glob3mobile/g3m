@@ -24,6 +24,7 @@ void GEOTileRasterizer::initialize(const G3MContext* context) {
 
 void GEOTileRasterizer::clear() {
   _quadTree.clear();
+  notifyChanges();
 }
 
 void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {

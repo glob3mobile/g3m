@@ -248,6 +248,7 @@ const std::string BingMapsLayer::getQuadkey(const int zoom,
 }
 
 std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                             const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                              const Tile* tile) const {
   std::vector<Petition*> petitions;
 

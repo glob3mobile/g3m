@@ -88,6 +88,7 @@ public:
 
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
 
   URL getFeatureInfoURL(const Geodetic2D& g,
