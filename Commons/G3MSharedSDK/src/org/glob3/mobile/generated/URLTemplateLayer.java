@@ -169,9 +169,10 @@ public class URLTemplateLayer extends Layer
   public final RenderState getRenderState()
   {
     _errors.clear();
-  //  if (_userName.compare("") == 0) {
-  //    _errors.push_back("Missing layer parameter: userName");
-  //  }
+    if (_urlTemplate.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: urlTemplate");
+    }
   
     if (_errors.size() > 0)
     {

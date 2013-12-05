@@ -93,7 +93,8 @@ public abstract class TMSLayer extends Layer
     {
       _errors.add("Missing layer parameter: mapLayer");
     }
-    if (_mapServerURL.getPath().compare("") == 0)
+    final String mapServerUrl = _mapServerURL.getPath();
+    if (mapServerUrl.compareTo("") == 0)
     {
       _errors.add("Missing layer parameter: mapServerURL");
     }

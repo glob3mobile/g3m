@@ -293,7 +293,7 @@ public class LayerSet
           if (layerRenderStateType == RenderState_Type.RENDER_ERROR)
           {
             final java.util.ArrayList<String> layerErrors = layerRenderState.getErrors();
-            errors.addAll(childErrors);
+            errors.addAll(layerErrors);
           }
           layerSetNotReadyFlag = true;
         }
