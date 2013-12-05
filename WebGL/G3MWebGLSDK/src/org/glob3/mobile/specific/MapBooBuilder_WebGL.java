@@ -98,6 +98,10 @@ public class MapBooBuilder_WebGL
       gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
                Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader, Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
 
+      gpuProgramFactory.add(new GPUProgramSources("ZRender", 
+				Shaders_WebGL._zRenderVertexShader,
+				Shaders_WebGL._zRenderFragmentShader));
+      
       return new GPUProgramManager(gpuProgramFactory);
    }
 

@@ -450,6 +450,10 @@ public class G3MWidget_WebGL
 
       factory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
                Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
+      
+      factory.add(new GPUProgramSources("ZRender", 
+				Shaders_WebGL._zRenderVertexShader,
+				Shaders_WebGL._zRenderFragmentShader));
 
       return new GPUProgramManager(factory);
    }

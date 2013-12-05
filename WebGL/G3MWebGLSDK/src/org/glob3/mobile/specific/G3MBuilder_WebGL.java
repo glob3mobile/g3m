@@ -51,13 +51,17 @@ public class G3MBuilder_WebGL extends IG3MBuilder {
 					Shaders_WebGL._noColorMeshVertexShader,
 					Shaders_WebGL._noColorMeshFragmentShader));
 			
-			addGPUProgramSources(new GPUProgramSources("TexturedMesh+DirectionLight", 
+			addGPUProgramSources(new GPUProgramSources("TexturedMesh_DirectionLight", 
 					Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
 					Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
 			
-			addGPUProgramSources(new GPUProgramSources("FlatColorMesh+DirectionLight", 
+			addGPUProgramSources(new GPUProgramSources("FlatColorMesh_DirectionLight", 
 					Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
 					Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
+			
+			addGPUProgramSources(new GPUProgramSources("ZRender", 
+					Shaders_WebGL._zRenderVertexShader,
+					Shaders_WebGL._zRenderFragmentShader));
 		    
 
 			setGL(_nativeWidget.getGL());

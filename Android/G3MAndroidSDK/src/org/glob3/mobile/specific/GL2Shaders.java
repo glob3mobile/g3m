@@ -296,44 +296,7 @@ public final class GL2Shaders {
 			"\n" + 
 			"  gl_PointSize = uPointSize;\n" + 
 			"}";
-	/*
-	public final static String _zRenderFragmentShader = "void main() {\n" + 
-			"\n" + 
-			"  // convert float z value to 24bits integer (32bits causes precision error)\n" + 
-			"  highp float zFar = 16777215.0; // 2^24-1\n" + 
-			"  highp float z = gl_FragCoord.z * zFar;\n" + 
-			"  highp float Z = floor(z+0.5);\n" + 
-			"  highp float R = floor(Z/65536.0);\n" + 
-			"  Z -= R * 65536.0;\n" + 
-			"  highp float G = floor(Z/256.0);\n" + 
-			"  highp float B = Z - G * 256.0;\n" + 
-			"\n" + 
-			"  // writes zvalue\n" + 
-			"  mediump float KKM = 64.0;" +
-			"  highp float KKH = 128.0;"+
-			"  lowp float KKL = 192.0;" +
-			"  gl_FragColor = vec4(KKM/255.0, KKH/255.0, KKL/255.0, 0.0);\n" + 
-			"}";
-			*/
-	/*
-	public final static String _zRenderFragmentShader = "void main() {\n" + 
-			"\n" + 
-			"  // convert float z value to 16bits integer (32bits causes precision error)\n" + 
-			"  highp float zFar = 65535.0; // 2^16-1\n" + 
-			"  highp float z = 0.953 * zFar;\n" + 
-			"  z *= gl_FragCoord.z; " +
-			"  z /= gl_FragCoord.z; " +
-			"  highp float Z = floor(z+0.5);\n" + 
-			"  highp float R = floor(Z/256.0);\n" + 
-			"  Z -= R * 256.0;\n" + 
-			"  highp float G = floor(Z);\n" + 
-			"  //highp float B = Z - G * 256.0;\n" + 
-			"\n" + 
-			"  // writes zvalue\n" + 
-			"  gl_FragColor = vec4(R/255.0, G/255.0, 0.0, 0.0);\n" + 
-			"}";
-			
-			*/
+
 	public final static String _zRenderFragmentShader = "varying highp float R;\n" + 
 			"varying highp float G;\n" + 
 			"varying highp float B;\n" + 

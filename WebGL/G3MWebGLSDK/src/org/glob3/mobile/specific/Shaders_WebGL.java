@@ -288,6 +288,50 @@ public final class Shaders_WebGL {
 			"\n" + 
 			"  gl_PointSize = uPointSize;\n" + 
 			"}";
+	
+	public final static String _zRenderFragmentShader = "varying highp float R;\n" + 
+			"varying highp float G;\n" + 
+			"varying highp float B;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  // writes zvalue\n" + 
+			"  gl_FragColor = vec4(R, G, B, 0.0);\n" + 
+			"}";
+
+	public final static String _zRenderVertexShader = "attribute vec4 aPosition;\n" + 
+			"\n" + 
+			"uniform mat4 uModelview;\n" + 
+			"uniform float uPointSize;\n" + 
+			"\n" + 
+			"uniform float uDepthFar;\n" + 
+			"uniform float uDepthNear;\n" + 
+			"\n" + 
+			"varying highp float R;\n" + 
+			"varying highp float G;\n" + 
+			"varying highp float B;\n" + 
+			"\n" + 
+			"void main() {\n" + 
+			"  gl_Position = uModelview * aPosition;\n" + 
+			"  gl_PointSize = uPointSize;\n" + 
+			"\n" + 
+			"  highp float NDCz = (gl_Position.z / gl_Position.w); //GL_POSITION IS CLIP COORDINATES (AFTER PROJECTION)\n" + 
+			"\n" + 
+			"  highp float winZ = ((uDepthFar-uDepthNear)/2.0) * NDCz + (uDepthFar+uDepthNear)/2.0; // = gl_FragCoord.z\n" + 
+			"\n" + 
+			"  // convert float z value to 24bits integer (32bits causes precision error)\n" + 
+			"  highp float zFar = 16777215.0; // 2^24-1\n" + 
+			"  highp float z = winZ * zFar;\n" + 
+			"  highp float Z = floor(z+0.5);\n" + 
+			"  R = floor(Z/65536.0);\n" + 
+			"  Z -= R * 65536.0;\n" + 
+			"  G = floor(Z/256.0);\n" + 
+			"  B = Z - G * 256.0;\n" + 
+			"\n" + 
+			"  R /= 255.0;\n" + 
+			"  G /= 255.0;\n" + 
+			"  B /= 255.0;\n" + 
+			"  \n" + 
+			"}";
 
 
    ////////////////////////////////////////////////////////////////////////////////////////
