@@ -1152,7 +1152,7 @@ public:
     layerSet->addLayer(osmEditMapLayer);
   }
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -1252,7 +1252,7 @@ public:
 
   }
 
-  if (false) {
+  if (true) {
 //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
 //                                                  Sector::fullSphere(),
 //                                                  false,
