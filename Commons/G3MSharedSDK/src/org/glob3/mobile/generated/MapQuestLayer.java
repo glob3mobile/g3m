@@ -99,4 +99,8 @@ public class MapQuestLayer extends MercatorTiledLayer
     return new MapQuestLayer(_name, _domain, _subdomains, _initialLevel, _maxLevel, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy());
   }
 
+  public final RenderState getRenderState()
+  {
+    return RenderState.ready();
+  }
 }
