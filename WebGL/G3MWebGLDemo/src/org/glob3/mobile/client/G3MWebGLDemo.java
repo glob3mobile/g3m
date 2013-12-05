@@ -18,12 +18,14 @@ import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.FixedFocusSceneLighting;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
 import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MEventContext;
+import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GEO2DLineRasterStyle;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
 import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
@@ -42,6 +44,7 @@ import org.glob3.mobile.generated.GEOSymbolizer;
 import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GLPrimitive;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.HUDErrorRenderer;
@@ -164,7 +167,7 @@ public class G3MWebGLDemo
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
       builder.addRenderer(meshRenderer);
 
-      if (true) {
+      if (false) {
          final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
          builder.setShownSector(spain);
       }
@@ -621,7 +624,7 @@ public class G3MWebGLDemo
 
          final LayerSet layerSet = new LayerSet();
 
-         final boolean blueMarble = true;
+         final boolean blueMarble = false;
          if (blueMarble) {
             final WMSLayer blueMarbleL = new WMSLayer( //
                      "bmng200405", //
@@ -679,7 +682,7 @@ public class G3MWebGLDemo
                      true);
             layerSet.addLayer(bing);
          }
-         final boolean useOSMLatLon = false;
+         final boolean useOSMLatLon = true;
          if (useOSMLatLon) {
             // final WMSLayer osm = new WMSLayer( //
             // "osm", //
@@ -1185,7 +1188,7 @@ public class G3MWebGLDemo
          layerSet.addLayer(latlon);
       }
 
-      final boolean useBing = false;
+      final boolean useBing = true;
       if (useBing) {
          final WMSLayer bing = new WMSLayer( //
                   "ve", //
@@ -1364,7 +1367,7 @@ public class G3MWebGLDemo
 
 
       // camera constrainer
-      if (true) {
+      if (false) {
          final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
             private boolean firstTime = true;
 
@@ -1402,7 +1405,51 @@ public class G3MWebGLDemo
          builder.addCameraConstraint(myCameraConstrainer);
          builder.setPlanet(Planet.createFlatEarth());
       }
+      
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      
+      if (true){
+          class ZRenderTask extends GTask {
+            ShapesRenderer _sr;
+            Planet _planet;
+            public ZRenderTask(ShapesRenderer sr, Planet planet)
+            {
+          	  _sr = sr;
+          	  _planet = planet;
+            }
 
+            public void run(G3MContext context) {
+
+              Vector3D v = G3MWidget._lastTouchedScenePoint; //HACK
+              if (v == null){
+                return;
+              }
+              Geodetic3D g = _planet.toGeodetic3D(v);
+
+              Shape sphere = new EllipsoidShape(g,
+                                                 AltitudeMode.ABSOLUTE,
+                                                 new Vector3D(50000, 50000, 50000),
+                                                 (short) 16,
+                                                 0,
+                                                 false,
+                                                 false,
+                                                 Color.fromRGBA(0, 1, 1, 1));
+
+
+              _sr.addShape(sphere);
+            }
+          };
+
+
+          builder.addRenderer(_shapesRenderer);
+          
+          PeriodicalTask periodicalTask = new PeriodicalTask(TimeInterval.fromSeconds(5),
+                                                              new ZRenderTask(_shapesRenderer, builder.getPlanet()));
+
+          builder.addPeriodicalTask(periodicalTask);
+
+        }
+      
 
       _widget = builder.createWidget();
 
