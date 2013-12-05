@@ -75,6 +75,8 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
                                     _isTransparent);
   petitions.push_back(petition);
 
+  delete isb;
+  
 	return petitions;
 
 }
