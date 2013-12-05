@@ -59,7 +59,7 @@ GPUProgramSources G3MBuilder_iOS::loadGPUProgramSources(const std::string& name)
   NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: nsName
                                                                  ofType: @"vsh"];
   if (!vertShaderPathname) {
-    NSLog(@"Can't load Shader.vsh");
+    NSLog(@"Can't load %s", name.c_str());
   }
   const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
                                                              encoding: NSUTF8StringEncoding
@@ -68,7 +68,7 @@ GPUProgramSources G3MBuilder_iOS::loadGPUProgramSources(const std::string& name)
   NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: nsName
                                                                  ofType: @"fsh"];
   if (!fragShaderPathname) {
-    NSLog(@"Can't load Shader.fsh");
+    NSLog(@"Can't load %s", name.c_str());
   }
 
   const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
