@@ -80,10 +80,6 @@ void BingMapsLayer::onDownloadErrorMetadata() {
   ILogger::instance()->logError("BingMapsLayer: Error while downloading metadata.");
 }
 
-bool BingMapsLayer::isReady() const {
-  return _isInitialized;
-}
-
 void BingMapsLayer::onDowloadMetadata(IByteBuffer* buffer) {
   IJSONParser* parser = IJSONParser::instance();
 
@@ -312,4 +308,22 @@ BingMapsLayer* BingMapsLayer::copy() const {
                            _readExpired,
                            _initialLevel,
                            (_condition == NULL) ? NULL : _condition->copy());
+}
+
+RenderState BingMapsLayer::getRenderState() {
+  _errors.clear();
+  if (_imagerySet.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: imagerySet");
+  }
+  if (_key.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: key");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  if (!_isInitialized) {
+    return RenderState::busy();
+  }
+  return RenderState::ready();
 }

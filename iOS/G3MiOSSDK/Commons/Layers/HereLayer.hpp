@@ -47,6 +47,7 @@ public:
 
   HereLayer* copy() const;
 
+  RenderState getRenderState();
 };
 
 #endif

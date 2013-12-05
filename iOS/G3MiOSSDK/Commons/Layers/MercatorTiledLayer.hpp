@@ -58,6 +58,7 @@ public:
 
   virtual MercatorTiledLayer* copy() const;
 
+  virtual RenderState getRenderState();
 };
 
 #endif

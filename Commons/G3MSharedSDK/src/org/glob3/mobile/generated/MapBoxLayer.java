@@ -81,4 +81,18 @@ public class MapBoxLayer extends MercatorTiledLayer
     return new MapBoxLayer(_mapKey, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_mapKey.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: mapKey");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
 }

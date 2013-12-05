@@ -109,7 +109,8 @@ public:
   const std::string description() const;
 
   BingMapsLayer* copy() const;
-
+  
+  RenderState getRenderState();
 };
 
 #endif

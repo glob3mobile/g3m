@@ -53,7 +53,8 @@ public:
   const std::string description() const;
 
   OSMLayer* copy() const;
-
+  
+  RenderState getRenderState();
 };
 
 #endif
