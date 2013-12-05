@@ -453,7 +453,8 @@ RenderState WMSLayer::getRenderState() {
   if (_mapLayer.compare("") == 0) {
     _errors.push_back("Missing layer parameter: mapLayer");
   }
-  if (_mapServerURL.getPath().compare("") == 0) {
+  const std::string mapServerUrl = _mapServerURL.getPath();
+  if (mapServerUrl.compare("") == 0) {
     _errors.push_back("Missing layer parameter: mapServerURL");
   }
   if (_format.compare("") == 0) {

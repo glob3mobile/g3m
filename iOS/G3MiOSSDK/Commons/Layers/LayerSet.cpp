@@ -266,7 +266,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
                       layerErrors.end());
 #endif
 #ifdef JAVA_CODE
-          errors.addAll(childErrors);
+          errors.addAll(layerErrors);
 #endif
         }
         layerSetNotReadyFlag = true;
