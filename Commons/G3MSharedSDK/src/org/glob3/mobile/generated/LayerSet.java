@@ -97,7 +97,7 @@ public class LayerSet
     layersChanged();
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -120,7 +120,7 @@ public class LayerSet
           ILogger.instance().logError("Can't find a valid tile for petitions");
         }
   
-        java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, petitionTile);
+        java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, layerTilesRenderParameters, petitionTile);
   
         final int tilePetitionsSize = tilePetitions.size();
         for (int j = 0; j < tilePetitionsSize; j++)

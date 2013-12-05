@@ -20,13 +20,13 @@ long long FloatBuffer_iOS::_genBufferCounter  = 0;
 long long FloatBuffer_iOS::_deleteBufferCounter = 0;
 
 void FloatBuffer_iOS::showStatistics() {
-  /*printf("FloatBuffer_iOS: new=%lld delete=%lld (delta=%lld)   genBuffer=%lld deleteBuffer=%lld (delta=%lld) \n",
-         _newCounter,
-         _deleteCounter,
-         _newCounter - _deleteCounter,
-         _genBufferCounter,
-         _deleteBufferCounter,
-         _genBufferCounter - _deleteBufferCounter);*/
+//  printf("FloatBuffer_iOS: new=%lld delete=%lld (delta=%lld)   genBuffer=%lld deleteBuffer=%lld (delta=%lld) \n",
+//         _newCounter,
+//         _deleteCounter,
+//         _newCounter - _deleteCounter,
+//         _genBufferCounter,
+//         _deleteBufferCounter,
+//         _genBufferCounter - _deleteBufferCounter);
 }
 
 const std::string FloatBuffer_iOS::description() const {

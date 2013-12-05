@@ -316,6 +316,8 @@
 		CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */; };
 		CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */; };
 		CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */; };
+		CFD8E770184FB71D00228031 /* SectorTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD8E76E184FB71D00228031 /* SectorTileCondition.cpp */; };
+		CFD8E771184FB74800228031 /* SectorTileCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD8E76F184FB71D00228031 /* SectorTileCondition.hpp */; };
 		CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */; };
 		CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835B16D6758200295F96 /* BilinearInterpolator.cpp */; };
 		CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA836016D6776B00295F96 /* SubviewElevationData.cpp */; };
@@ -641,6 +643,7 @@
 				FB2FD50E1844C79A002D2E78 /* LineShape.hpp in CopyFiles */,
 				CCAD3260183FE7F9008F500D /* PointShape.hpp in CopyFiles */,
 				CF6920BE18392F83007409D8 /* ErrorHandling.hpp in CopyFiles */,
+				CFD8E771184FB74800228031 /* SectorTileCondition.hpp in CopyFiles */,
 				CF7FF503184CE434003A7E76 /* ErrorHandling.hpp in CopyFiles */,
 				CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */,
 				D87F4D78183BBF1500C57835 /* SingleBillElevationDataProvider.hpp in CopyFiles */,
@@ -1394,6 +1397,8 @@
 		CFD3D8B016D1729A00CE9242 /* WMSBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WMSBillElevationDataProvider.hpp; path = Commons/Basic/WMSBillElevationDataProvider.hpp; sourceTree = "<group>"; };
 		CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayerTilesRenderParameters.cpp; path = Commons/Rendererers/LayerTilesRenderParameters.cpp; sourceTree = "<group>"; };
 		CFD42ABB16DBFE8600B03961 /* LayerTilesRenderParameters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LayerTilesRenderParameters.hpp; path = Commons/Rendererers/LayerTilesRenderParameters.hpp; sourceTree = "<group>"; };
+		CFD8E76E184FB71D00228031 /* SectorTileCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SectorTileCondition.cpp; sourceTree = "<group>"; };
+		CFD8E76F184FB71D00228031 /* SectorTileCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SectorTileCondition.hpp; sourceTree = "<group>"; };
 		CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferElevationData.cpp; path = Commons/Basic/FloatBufferElevationData.cpp; sourceTree = "<group>"; };
 		CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferElevationData.hpp; path = Commons/Basic/FloatBufferElevationData.hpp; sourceTree = "<group>"; };
 		CFDA835B16D6758200295F96 /* BilinearInterpolator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BilinearInterpolator.cpp; path = Commons/Math/BilinearInterpolator.cpp; sourceTree = "<group>"; };
@@ -2331,6 +2336,8 @@
 				CF2D85E11753B4B600F4BEC9 /* CartoDBLayer.hpp */,
 				CFDDDF9A17F8C9E100DD3499 /* URLTemplateLayer.cpp */,
 				CFDDDF9B17F8C9E100DD3499 /* URLTemplateLayer.hpp */,
+				CFD8E76E184FB71D00228031 /* SectorTileCondition.cpp */,
+				CFD8E76F184FB71D00228031 /* SectorTileCondition.hpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -2704,6 +2711,7 @@
 				CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */,
 				CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */,
 				E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */,
+				CFD8E770184FB71D00228031 /* SectorTileCondition.cpp in Sources */,
 				CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */,
 				CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */,
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,

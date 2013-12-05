@@ -47,6 +47,7 @@ URL GoogleMapsLayer::getFeatureInfoURL(const Geodetic2D& position,
 
 
 std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                const Tile* tile) const {
   std::vector<Petition*> petitions;
 
