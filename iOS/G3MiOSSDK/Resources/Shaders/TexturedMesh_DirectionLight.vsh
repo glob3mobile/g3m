@@ -15,7 +15,7 @@ uniform float uPointSize;
 
 varying vec2 TextureCoordOut;
 
-uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED
+uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED IN SHADER
 varying float diffuseLightIntensity;
 
 uniform vec3 uAmbientLightColor;
