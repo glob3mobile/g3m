@@ -875,11 +875,13 @@ public abstract class MapBooBuilder
     {
       ILogger.instance().logError("LOGIC ERROR: _gl already initialized");
       return;
+      //ERROR("LOGIC ERROR: _gl already initialized");
     }
     if (gl == null)
     {
       ILogger.instance().logError("LOGIC ERROR: _gl cannot be NULL");
       return;
+      //ERROR("LOGIC ERROR: _gl cannot be NULL");
     }
     _gl = gl;
   }

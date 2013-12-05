@@ -29,7 +29,7 @@ public class MainGdal2Bson {
 
       try {
          GDAL.initialize(gdalHome);
-         GeoBSONConverter.instance().convert(inputFile, inputFile.getParentFile(), outputFileName);
+         GeoBSONConverter.instance().convert(inputFile, inputFile.getParentFile(), outputFileName, true);
       }
       catch (final GDALException e) {
          ILogger.instance().logError(e.getMessage(), e.getCause());

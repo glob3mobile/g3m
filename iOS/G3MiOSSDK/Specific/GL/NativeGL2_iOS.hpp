@@ -100,32 +100,11 @@ public:
 
     buffer_iOS->bindAsVBOToGPU();
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+//#warning uncoment for no VBO
 //    const float* pointer = buffer_iOS->getPointer();
 //    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
-
-//    FloatBuffer_iOS* buffer_iOS = (FloatBuffer_iOS*) buffer;
-//
-//    GLuint glBuffer = buffer_iOS->getGLBuffer(size);
-//    glBindBuffer(GL_ARRAY_BUFFER, glBuffer);
-//    
-//    glBufferData(GL_ARRAY_BUFFER, size, buffer_iOS->getPointer(), GL_STATIC_DRAW);
-//
-//    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
-//
-//    /*
-//		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-//
-//		// var webGLBuffer = gl.createBuffer();
-//		var webGLBuffer = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
-//		gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
-//
-//		var array = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
-//		gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
-//
-//		gl.vertexAttribPointer(index, size, gl.FLOAT, normalized, stride, 0);
-//     */
   }
 
 //  void drawElements(int mode,

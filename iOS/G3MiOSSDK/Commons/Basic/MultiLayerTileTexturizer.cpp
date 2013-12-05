@@ -482,10 +482,10 @@ public:
         const bool isMipmap = false;
 
         const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
-                                                                           GLFormat::rgba(),
-                                                                           textureId,
-                                                                           isMipmap);
-
+                                                                                        GLFormat::rgba(),
+                                                                                        textureId,
+                                                                                        isMipmap);
+        
         if (glTextureId != NULL) {
           if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
             delete glTextureId;
@@ -796,7 +796,9 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                                                         tileRasterizer,
                                                                         rc,
                                                                         layerTilesRenderParameters,
-                                                                        layerSet->createTileMapPetitions(rc, tile),
+                                                                        layerSet->createTileMapPetitions(rc,
+                                                                                                         layerTilesRenderParameters,
+                                                                                                         tile),
                                                                         rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,

@@ -20,6 +20,7 @@ LayerSet::~LayerSet() {
 }
 
 std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -42,7 +43,9 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
         ILogger::instance()->logError("Can't find a valid tile for petitions");
       }
 
-      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc, petitionTile);
+      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc,
+                                                                           layerTilesRenderParameters,
+                                                                           petitionTile);
 
       const int tilePetitionsSize = tilePetitions.size();
       for (int j = 0; j < tilePetitionsSize; j++) {

@@ -186,6 +186,10 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     {
       rc.getEffectsScheduler().cancelAllEffectsFor(this);
     }
+  
+    if (_quadMesh != null)
+       _quadMesh.dispose();
+    _quadMesh = null;
   }
 
   public final void onResume(G3MContext context)

@@ -44,8 +44,9 @@ _isTransparent(isTransparent)
 
 
 std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                 const Tile* tile) const {
-  
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                        const Tile* tile) const {
+
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->_sector;
@@ -81,7 +82,7 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
 URL TMSLayer::getFeatureInfoURL(const Geodetic2D& g,
                                 const Sector& sector) const {
   return URL::nullURL();
-  
+
 }
 
 const std::string TMSLayer::description() const {

@@ -240,8 +240,21 @@ public class HUDImageRenderer extends LeafRenderer
   {
   }
 
+  public final void recreateImage()
+  {
+    _creatingMesh = false;
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  
+    _image = null;
+    _image = null;
+  }
+
   public final void stop(G3MRenderContext rc)
   {
+    recreateImage();
   }
 
   public final void onResume(G3MContext context)
@@ -254,18 +267,6 @@ public class HUDImageRenderer extends LeafRenderer
 
   public final void onDestroy(G3MContext context)
   {
-  }
-
-  public final void recreateImage()
-  {
-    _creatingMesh = false;
-  
-    if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
-  
-    _image = null;
-    _image = null;
   }
 
   public final HUDImageRenderer.ImageFactory getImageFactory()
