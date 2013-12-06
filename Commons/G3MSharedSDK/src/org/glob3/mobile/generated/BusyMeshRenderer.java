@@ -140,8 +140,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
      _modelFeature = null;
      _glState = new GLState();
      _mesh = null;
-    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-    _projectionMatrix = MutableMatrix44D.invalid();
+
   }
 
   public final void initialize(G3MContext context)
@@ -156,6 +155,9 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
+  
+    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
+    _projectionMatrix = MutableMatrix44D.invalid();
   
     createGLState();
   

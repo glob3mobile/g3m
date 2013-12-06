@@ -55,6 +55,8 @@ public:
     }
   }
 
+  virtual void showNormals(bool v) const = 0;
+
 };
 
 

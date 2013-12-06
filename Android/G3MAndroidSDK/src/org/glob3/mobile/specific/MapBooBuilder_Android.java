@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.GPUProgramFactory;
 import org.glob3.mobile.generated.GPUProgramManager;
@@ -73,8 +74,9 @@ public class MapBooBuilder_Android
 
    @Override
    protected GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
-
+      final GPUProgramFactory gpuProgramFactory = new BasicShadersGL2();
+      
+/*
       gpuProgramFactory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
                GL2Shaders._billboardFragmentShader));
 
@@ -100,7 +102,7 @@ public class MapBooBuilder_Android
 
       gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
                GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-
+*/
 
       return new GPUProgramManager(gpuProgramFactory);
    }

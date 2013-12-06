@@ -1585,7 +1585,8 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {
-  return new CameraFocusSceneLighting();
+  return new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
+                                      Color::yellow());
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {

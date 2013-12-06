@@ -221,7 +221,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < layersCount; i++)
       {
         Layer layer = _layerSet.getLayer(i);
-        if (layer.isEnable() && layer.isReady())
+        if (layer.isEnable() && layer.getRenderState()._type == RenderState_Type.RENDER_READY)
         {
           layers.add(layer);
         }
@@ -570,11 +570,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       return RenderState.error(_errors);
     }
   
-    if (!_layerSet.isReady())
+    final RenderState layerSetRenderState = _layerSet.getRenderState();
+    if (layerSetRenderState._type != RenderState_Type.RENDER_READY)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning __TODO_Layer_error;
-      return RenderState.busy();
+      return layerSetRenderState;
     }
   
     if (_elevationDataProvider != null)
@@ -636,9 +635,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
         if (_texturizer != null)
         {
-          if (!_texturizer.isReady(rc, _layerSet))
+          final RenderState texturizerRenderState = _texturizer.getRenderState(_layerSet);
+          if (texturizerRenderState._type != RenderState_Type.RENDER_READY)
           {
-            return RenderState.busy();
+            return texturizerRenderState;
           }
         }
   

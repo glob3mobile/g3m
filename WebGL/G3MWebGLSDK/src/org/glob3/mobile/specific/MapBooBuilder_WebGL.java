@@ -2,6 +2,9 @@
 
 package org.glob3.mobile.specific;
 
+import javax.swing.plaf.basic.BasicArrowButton;
+
+import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.GPUProgramFactory;
 import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.GPUProgramSources;
@@ -68,8 +71,8 @@ public class MapBooBuilder_WebGL
 
    @Override
    protected GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
-
+      final GPUProgramFactory gpuProgramFactory = new BasicShadersGL2();
+/*
       gpuProgramFactory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader,
                Shaders_WebGL._billboardFragmentShader));
 
@@ -97,7 +100,7 @@ public class MapBooBuilder_WebGL
 
       gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
                Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader, Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
-
+*/
       return new GPUProgramManager(gpuProgramFactory);
    }
 

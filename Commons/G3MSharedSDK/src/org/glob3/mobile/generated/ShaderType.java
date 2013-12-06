@@ -1,23 +1,39 @@
 package org.glob3.mobile.generated; 
 //
-//  ShaderProgram.cpp
+//  GPUProgram.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustin Trujillo Pino on 24/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//  Created by Jose Miguel SN on 27/03/13.
+//
 //
 
 //
-//  ShaderProgram.hpp
+//  GPUProgram.hpp
 //  G3MiOSSDK
 //
-//  Created by Agustin Trujillo Pino on 24/10/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//  Created by Jose Miguel SN on 27/03/13.
+//
 //
 
 
 
+//class GPUAttribute;
+//class GPUUniform;
+
+//class GPUUniformBool;
+//class GPUUniformVec2Float;
+//class GPUUniformVec4Float;
+//class GPUUniformFloat;
+//class GPUUniformMatrix4Float;
+//class GPUAttributeVec1Float;
+//class GPUAttributeVec2Float;
+//class GPUAttributeVec3Float;
+//class GPUAttributeVec4Float;
+//class GPUUniformValue;
+//class GPUAttributeValue;
+//class IFloatBuffer;
 //class GL;
+//class GPUProgramManager;
 
 public enum ShaderType
 {

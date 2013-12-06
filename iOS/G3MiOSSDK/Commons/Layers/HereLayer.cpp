@@ -180,3 +180,18 @@ bool HereLayer::rawIsEquals(const Layer* that) const {
 
   return true;
 }
+
+RenderState HereLayer::getRenderState() {
+  _errors.clear();
+  if (_appId.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: appId");
+  }
+  if (_appCode.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: appCode");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
+}

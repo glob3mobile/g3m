@@ -75,6 +75,7 @@ public:
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
   
+  RenderState getRenderState();
 };
 
 #endif

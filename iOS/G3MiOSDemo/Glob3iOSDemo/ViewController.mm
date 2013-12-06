@@ -140,6 +140,8 @@
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
 
+#import <G3MiOSSDK/SceneLighting.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -495,29 +497,29 @@ public:
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
 
-- (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
-  //GPU Program Sources
-  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-                                                                 ofType: @"vsh"];
-  if (!vertShaderPathname) {
-    NSLog(@"Can't load Shader.vsh");
-  }
-  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
-                                                             encoding: NSUTF8StringEncoding
-                                                                error: nil] UTF8String]);
-
-  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-                                                                 ofType: @"fsh"];
-  if (!fragShaderPathname) {
-    NSLog(@"Can't load Shader.fsh");
-  }
-
-  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
-                                                               encoding: NSUTF8StringEncoding
-                                                                  error: nil] UTF8String]);
-
-  return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
-}
+//- (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
+//  //GPU Program Sources
+//  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+//                                                                 ofType: @"vsh"];
+//  if (!vertShaderPathname) {
+//    NSLog(@"Can't load Shader.vsh");
+//  }
+//  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
+//                                                             encoding: NSUTF8StringEncoding
+//                                                                error: nil] UTF8String]);
+//
+//  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+//                                                                 ofType: @"fsh"];
+//  if (!fragShaderPathname) {
+//    NSLog(@"Can't load Shader.fsh");
+//  }
+//
+//  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
+//                                                               encoding: NSUTF8StringEncoding
+//                                                                  error: nil] UTF8String]);
+//
+//  return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
+//}
 
 - (GPUProgramSources) loadDefaultGPUProgramSourcesWithName: (NSString*) name{
   //GPU Program Sources
@@ -635,6 +637,8 @@ public:
   meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
                              Color::newFromRGBA(1, 1, 0, 1));
 
+  meshRenderer->showNormals(true); //SHOWING NORMALS
+
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
 
@@ -645,6 +649,13 @@ public:
                                                           planet: builder.getPlanet()];
   builder.addRenderer(geoRenderer);
 
+  //Showing light directions
+  if (false){
+    CameraFocusSceneLighting* light = new CameraFocusSceneLighting(Color::fromRGBA(0.3, 0.3, 0.3, 1.0),
+                                                                   Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
+    light->setLightDirectionsMeshRenderer(meshRenderer);
+    builder.setSceneLighting(light);
+  }
 
   if (true) { //HUD
     //    HUDRenderer* hudRenderer = new HUDRenderer();
@@ -978,10 +989,9 @@ public:
                               pointSize,
                               flatColor,
                               colors.create());
+  delete vertices;
 
   meshRenderer->addMesh( mesh );
-
-  delete vertices;
 
   delete planet;
 }
@@ -1153,7 +1163,7 @@ public:
     layerSet->addLayer(osmEditMapLayer);
   }
 
-  const bool blueMarble = false;
+  const bool blueMarble = true;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -1993,13 +2003,16 @@ private:
     _colorIndex = (_colorIndex + 1) % wheelSize;
 
 
-    return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
+    BoxShape* box = new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
                         Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                         Color::newFromRGBA(0.2, 0.2, 0, 1));
+
+    //box->setPitch(Angle::fromDegrees(45));
+    return box;
 
   }
 
@@ -2512,7 +2525,6 @@ public:
                                     2,
                                     1,
                                     color);
-
       delete vertices;
 
       return result;
@@ -2919,7 +2931,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         //      NSString* geojsonName = @"geojson/countries";
         //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2976,7 +2988,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {

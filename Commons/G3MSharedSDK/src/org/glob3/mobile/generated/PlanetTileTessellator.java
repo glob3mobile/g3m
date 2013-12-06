@@ -400,19 +400,14 @@ public class PlanetTileTessellator extends TileTessellator
     tile.setTessellatorData(new PlanetTileTessellatorData(textCoords));
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Testing Terrain Normals
-  //  IFloatBuffer* verticesB = vertices->create();
-  //  IShortBuffer* indicesB  = indices.create();
-  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-  //  //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
-  //
-  //  Mesh* result = new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
-  //                                         vertices->getCenter(),
-  //                                         verticesB, true,
-  //                                         normals,   true,
-  //                                         indicesB,  true);
+//#warning Testing_Terrain_Normals;
+    IFloatBuffer verticesB = vertices.create();
+    IShortBuffer indicesB = indices.create();
+    //IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+    //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
+    IFloatBuffer normals = null;
   
-    Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true);
+    Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), verticesB, true, normals, true, indicesB, true);
   
     if (vertices != null)
        vertices.dispose();

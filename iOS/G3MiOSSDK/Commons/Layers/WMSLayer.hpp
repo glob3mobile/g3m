@@ -103,7 +103,8 @@ public:
   const std::string description() const;
 
   WMSLayer* copy() const;
-
+  
+  RenderState getRenderState();
 };
 
 #endif

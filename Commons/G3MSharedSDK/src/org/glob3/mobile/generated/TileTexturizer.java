@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class Mesh;
 //class G3MRenderContext;
 //class Tile;
@@ -34,7 +35,7 @@ public abstract class TileTexturizer
   {
   }
 
-  public abstract boolean isReady(G3MRenderContext rc, LayerSet layerSet);
+  public abstract RenderState getRenderState(LayerSet layerSet);
 
   public abstract void initialize(G3MContext context, TilesRenderParameters parameters);
 
