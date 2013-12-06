@@ -28,6 +28,7 @@
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
 #import <G3MiOSSDK/SectorTileCondition.hpp>
+#import <G3MiOSSDK/AndTileCondition.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
 #import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #import <G3MiOSSDK/MarkTouchListener.hpp>
@@ -1253,29 +1254,37 @@ public:
   }
 
   if (true) {
-//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
-//                                                  Sector::fullSphere(),
-//                                                  false,
-//                                                  0,
-//                                                  4,
-//                                                  TimeInterval::zero(),
-//                                                  false));
+    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
+                                                  Sector::fullSphere(),
+                                                  false,
+                                                  0,
+                                                  4,
+                                                  TimeInterval::zero(),
+                                                  false));
 
-    WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                        URL("http://www.nasa.network.com/wms?", false),
-                                        WMS_1_1_0,
-                                        Sector::fullSphere(),
-                                        "image/jpeg",
-                                        "EPSG:4326",
-                                        "",
-                                        false,
-                                        new LevelTileCondition(0, 8),
-                                        TimeInterval::fromDays(30),
-                                        true);
-    layerSet->addLayer(blueMarble);
+//    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                        URL("http://www.nasa.network.com/wms?", false),
+//                                        WMS_1_1_0,
+//                                        Sector::fullSphere(),
+//                                        "image/jpeg",
+//                                        "EPSG:4326",
+//                                        "",
+//                                        false,
+//                                        //new LevelTileCondition(0, 8),
+//                                        NULL,
+//                                        TimeInterval::fromDays(30),
+//                                        true);
+//    layerSet->addLayer(blueMarble);
 
 
-    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/120m/{level}/{x}/{y}.png",
+    // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
+    // [lower=[lat=48.302366666666664, lon=11.65903888888889], upper=[lat=48.40372222222222, lon=11.788533333333335]]
+
+    AndTileCondition* condition = new AndTileCondition(new LevelTileCondition(0, 500),
+                                                       new SectorTileCondition(Sector::fromDegrees(39.99854166666677, -72.00145833333336,
+                                                                                                   42.50145833333343, -68.9985416666667)));
+
+    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/2-N40-W072_ll_tif.tiles/{level}/{x}/{y}.png",
                                                   Sector::fullSphere(),
                                                   true,
                                                   0,
@@ -1283,8 +1292,9 @@ public:
                                                   TimeInterval::zero(),
                                                   false,
                                                   //new LevelTileCondition(3, 500)
-                                                  new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
-                                                                                              42.50166666666667, 3.0016666666666665))
+                                                  //new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+                                                  //                                            42.50166666666667, 3.0016666666666665))
+                                                  condition
                                                   ));
   }
 
@@ -2610,8 +2620,9 @@ public:
 
       testCanvas(context->getFactory());
 
-      // sector [lower=[lat=39.99833333333333, lon=-0.0016666666666663962], upper=[lat=42.50166666666667, lon=3.0016666666666665]]
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, 1.5, 700000));
+      // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
+
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),

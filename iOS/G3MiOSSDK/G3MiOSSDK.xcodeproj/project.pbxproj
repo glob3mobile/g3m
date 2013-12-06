@@ -120,6 +120,8 @@
 		CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2B17F8874E00F50525 /* RenderState.cpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
+		CF485F8918511C250013795B /* AndTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF485F8718511C250013795B /* AndTileCondition.cpp */; };
+		CF485F8A18511C460013795B /* AndTileCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF485F8818511C250013795B /* AndTileCondition.hpp */; };
 		CF494C9A17FF0A1400D16D33 /* TerrainTouchListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF494C9817FF0A1400D16D33 /* TerrainTouchListener.cpp */; };
 		CF494C9B17FF0A5D00D16D33 /* TerrainTouchListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF494C9917FF0A1400D16D33 /* TerrainTouchListener.hpp */; };
 		CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4CA475164C669D009BB7EB /* SGNode.cpp */; };
@@ -629,6 +631,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF485F8A18511C460013795B /* AndTileCondition.hpp in CopyFiles */,
 				CFD8E771184FB74800228031 /* SectorTileCondition.hpp in CopyFiles */,
 				CF7FF503184CE434003A7E76 /* ErrorHandling.hpp in CopyFiles */,
 				CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */,
@@ -1134,6 +1137,8 @@
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
+		CF485F8718511C250013795B /* AndTileCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndTileCondition.cpp; sourceTree = "<group>"; };
+		CF485F8818511C250013795B /* AndTileCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AndTileCondition.hpp; sourceTree = "<group>"; };
 		CF494C9817FF0A1400D16D33 /* TerrainTouchListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainTouchListener.cpp; path = Commons/Rendererers/TerrainTouchListener.cpp; sourceTree = "<group>"; };
 		CF494C9917FF0A1400D16D33 /* TerrainTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchListener.hpp; path = Commons/Rendererers/TerrainTouchListener.hpp; sourceTree = "<group>"; };
 		CF4CA475164C669D009BB7EB /* SGNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGNode.cpp; path = Commons/Rendererers/SGNode.cpp; sourceTree = "<group>"; };
@@ -2302,6 +2307,8 @@
 				CFDDDF9B17F8C9E100DD3499 /* URLTemplateLayer.hpp */,
 				CFD8E76E184FB71D00228031 /* SectorTileCondition.cpp */,
 				CFD8E76F184FB71D00228031 /* SectorTileCondition.hpp */,
+				CF485F8718511C250013795B /* AndTileCondition.cpp */,
+				CF485F8818511C250013795B /* AndTileCondition.hpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -2637,6 +2644,7 @@
 				CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */,
 				CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */,
 				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
+				CF485F8918511C250013795B /* AndTileCondition.cpp in Sources */,
 				CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */,
 				CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */,
 				CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */,
