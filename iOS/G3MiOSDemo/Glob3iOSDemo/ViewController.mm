@@ -563,7 +563,7 @@ public:
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
-  //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
 
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
@@ -1163,7 +1163,7 @@ public:
     layerSet->addLayer(osmEditMapLayer);
   }
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
