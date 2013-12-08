@@ -14,7 +14,6 @@ import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GPUProgramFactory;
 import org.glob3.mobile.generated.GPUProgramManager;
-import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -251,7 +250,7 @@ public final class G3MWidget_Android
 
    private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
-      
+
       /*
       factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
       factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
@@ -274,7 +273,7 @@ public final class G3MWidget_Android
 
       factory.add(new GPUProgramSources("FlatColor+DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
                GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-*/
+      */
 
       return new GPUProgramManager(factory);
    }

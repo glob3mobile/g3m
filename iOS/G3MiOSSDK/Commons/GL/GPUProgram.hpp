@@ -63,9 +63,7 @@ class GPUProgram{
   
   void getVariables(GL* gl);
 
-  GPUProgramManager* _manager;
-  
-  GPUProgram(GPUProgramManager* manager):
+  GPUProgram():
   _createdAttributes(NULL),
   _createdUniforms(NULL),
   _nUniforms(0),
@@ -73,8 +71,9 @@ class GPUProgram{
   _uniformsCode(0),
   _attributesCode(0),
   _gl(NULL),
-  _manager(manager),
-  _nReferences(0){}
+  _nReferences(0)
+  {
+  }
 
   GPUProgram(const GPUProgram& that);
 
@@ -83,10 +82,10 @@ public:
 
   ~GPUProgram();
   
-  static GPUProgram* createProgram(GL* gl, const std::string name,
+  static GPUProgram* createProgram(GL* gl,
+                                   const std::string& name,
                                    const std::string& vertexSource,
-                                   const std::string& fragmentSource,
-                                   GPUProgramManager* manager);
+                                   const std::string& fragmentSource);
 
   std::string getName() const { return _name;}
   

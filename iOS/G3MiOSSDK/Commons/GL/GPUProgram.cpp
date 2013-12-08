@@ -13,12 +13,12 @@
 #include "GPUUniform.hpp"
 #include "GPUProgramManager.hpp"
 
-GPUProgram* GPUProgram::createProgram(GL* gl, const std::string name,
+GPUProgram* GPUProgram::createProgram(GL* gl,
+                                      const std::string& name,
                                       const std::string& vertexSource,
-                                      const std::string& fragmentSource,
-                                      GPUProgramManager* manager) {
+                                      const std::string& fragmentSource){
 
-  GPUProgram* p = new GPUProgram(manager);
+  GPUProgram* p = new GPUProgram();
 
   p->_name = name;
   p->_programID = gl->createProgram();
