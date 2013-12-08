@@ -41,7 +41,7 @@ public class GPUProgramManager
       //Compile new Program
       if (ps != null)
       {
-        prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource, this);
+        prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource);
         if (prog == null)
         {
           ILogger.instance().logError("Problem at creating program named %s.", name);

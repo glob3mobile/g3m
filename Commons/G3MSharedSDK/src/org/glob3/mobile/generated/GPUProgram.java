@@ -116,9 +116,7 @@ public class GPUProgram
     //ILogger::instance()->logInfo("Program with Uniforms Bitcode: %d and Attributes Bitcode: %d", _uniformsCode, _attributesCode);
   }
 
-  private GPUProgramManager _manager;
-
-  private GPUProgram(GPUProgramManager manager)
+  private GPUProgram()
   {
      _createdAttributes = null;
      _createdUniforms = null;
@@ -127,7 +125,6 @@ public class GPUProgram
      _uniformsCode = 0;
      _attributesCode = 0;
      _gl = null;
-     _manager = manager;
      _nReferences = 0;
   }
 
@@ -166,10 +163,10 @@ public class GPUProgram
     }
   }
 
-  public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource, GPUProgramManager manager)
+  public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
   {
   
-    GPUProgram p = new GPUProgram(manager);
+    GPUProgram p = new GPUProgram();
   
     p._name = name;
     p._programID = gl.createProgram();
