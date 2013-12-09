@@ -66,7 +66,7 @@ public class Main {
 
 		String[] lines = source.split(System.getProperty("line.separator"));
 
-		String result = "emptyString +  \n";
+		String result = "emptyString";
 
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
@@ -81,12 +81,7 @@ public class Main {
 				continue;
 			}
 
-			boolean firstLine = (result == "");
-			result += "\"" + StringEscapeUtils.escapeJava(line) + " \\n \"";
-
-			if (i < lines.length - 1) {
-				result += " + \n";
-			}
+			result += "\n + \"" + StringEscapeUtils.escapeJava(line) + " \\n \"";
 
 		}
 

@@ -524,7 +524,12 @@ public:
   GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
     GLint maxLength;
     glGetProgramiv(program->getProgramID(), GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLength);
-    
+
+    GLenum x = glGetError();
+    if (x != GL_NO_ERROR){
+      printf("ok");
+    }
+
     GLsizei bufsize = maxLength;
     
     GLchar name[maxLength];
@@ -539,9 +544,19 @@ public:
                        &size,
                        &type,
                        name);
+
+     x = glGetError();
+    if (x != GL_NO_ERROR){
+      printf("ok");
+    }
     
     const int id = glGetUniformLocation(program->getProgramID(), name);
-    
+
+     x = glGetError();
+    if (x != GL_NO_ERROR){
+      printf("ok");
+    }
+
     //NSLog(@"Uniform Name: %s - %d, BitCode: %d", name, id, GPUVariable::getUniformCode(GPUVariable::getUniformKey(name))  );
     switch (type) {
       case GL_FLOAT_MAT4:

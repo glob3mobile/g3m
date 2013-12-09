@@ -225,11 +225,24 @@ public:
   }
   
   GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
-    return _nativeGL->getActiveUniform(program, i);
+    GPUUniform* u = _nativeGL->getActiveUniform(program, i);
+
+    if (_nativeGL->getError() != GLError::noError()){
+      ILogger::instance()->logError("Problem at getting uniform %d in program %s", i, program->getName().c_str());
+    }
+
+    return u;
   }
   
   GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const{
-    return _nativeGL->getActiveAttribute(program, i);
+
+    GPUAttribute* a = _nativeGL->getActiveAttribute(program, i);
+
+    if (_nativeGL->getError() != GLError::noError()){
+      ILogger::instance()->logError("Problem at getting attribute %d in program %s", i, program->getName().c_str());
+    }
+
+    return a;
   }
   
   //  GLGlobalState* getCurrentState() const{ return _currentState;}

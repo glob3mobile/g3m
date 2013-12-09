@@ -1,5 +1,5 @@
 //
-//  Default.vsh
+//  TexturedMesh_DirectionLight
 //
 //  Created by José Miguel Santana Núñez
 //
@@ -13,23 +13,32 @@ uniform mat4 uModel;
 
 uniform float uPointSize;
 
-varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
-uniform vec3 uLightDirection; //MUST BE NORMALIZED
+uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED IN SHADER
 varying float diffuseLightIntensity;
 
+uniform vec3 uAmbientLightColor;
+uniform vec3 uDiffuseLightColor;
+
+varying vec3 lightColor;
 
 void main() {
 
-  vec3 normal = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
-  vec3 lightDir = normalize( uLightDirection );
-  
-  diffuseLightIntensity = max(dot(normal, lightDir), 0.0);
+  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
+  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );
+
+  float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);
 
   gl_Position = uModelview * aPosition;
-  
+
   TextureCoordOut = aTextureCoord;
 
   gl_PointSize = uPointSize;
+
+  //Computing Total Light in Vertex
+  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;
+  lightColor.x = min(lightColor.x, 1.0);
+  lightColor.y = min(lightColor.y, 1.0);
+  lightColor.z = min(lightColor.z, 1.0);
 }

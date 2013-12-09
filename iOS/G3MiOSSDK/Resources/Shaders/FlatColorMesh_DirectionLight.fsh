@@ -6,18 +6,12 @@
 
 precision highp float;
 
-uniform sampler2D Sampler;
-uniform float uAmbientLight;
-
-uniform vec4 uLightColor;
-
-varying float diffuseLightIntensity;
-
 uniform lowp vec4 uFlatColor;
+varying vec3 lightColor;
 
 void main() {
-  gl_FragColor = uFlatColor;
-  
-  vec4 lightColor = vec4(uAmbientLight, uAmbientLight, uAmbientLight, 1.0) + uLightColor * diffuseLightIntensity;
-  gl_FragColor *= lightColor;
+  gl_FragColor.r = uFlatColor.r * lightColor.r;
+  gl_FragColor.g = uFlatColor.g * lightColor.r;
+  gl_FragColor.b = uFlatColor.b * lightColor.r;
+  gl_FragColor.a = uFlatColor.a;
 }
