@@ -138,10 +138,6 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
                               GLState* glState)
 {
   GL* gl = rc->getGL();
-
-  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-  _projectionMatrix = MutableMatrix44D::invalid();
-
   createGLState();
   
   gl->clearScreen(*_backgroundColor);
@@ -150,5 +146,4 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   if (mesh != NULL) {
     mesh->render(rc, _glState);
   }
-//  _mesh->render(rc, _glState);
 }
