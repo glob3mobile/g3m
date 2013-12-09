@@ -155,10 +155,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
-  
-    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-    _projectionMatrix = MutableMatrix44D.invalid();
-  
     createGLState();
   
     gl.clearScreen(_backgroundColor);
@@ -168,7 +164,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     {
       mesh.render(rc, _glState);
     }
-  //  _mesh->render(rc, _glState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
