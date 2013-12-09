@@ -334,7 +334,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       }
   
       final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-      final float dpiFactor = deviceInfo.getPixelsInMM(0.1f);
       final float deviceQualityFactor = deviceInfo.getQualityFactor();
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
@@ -348,9 +347,24 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       _renderedTiles.clear();
   
+      //Texture Size for every tile
+      int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
+      int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
+  
+      final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+      final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+  
+      texWidth *= correctionFactor;
+      texHeight *= correctionFactor;
+  
+      final double texWidthSquared = texWidth * texWidth;
+      final double texHeightSquared = texHeight * texHeight;
+  
+      final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
+  
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        _firstLevelTiles.get(i).actualizeQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, dpiFactor, deviceQualityFactor); // if first render, force full render
+        _firstLevelTiles.get(i).actualizeQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS); // if first render, force full render
       }
     }
     else
@@ -471,50 +485,17 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     _statistics.clear();
   
-<<<<<<< HEAD
-    //  const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
-    //  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
-    //  const float deviceQualityFactor = deviceInfo->getQualityFactor();
-=======
-    final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-  //  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
-    final float deviceQualityFactor = deviceInfo.getQualityFactor();
->>>>>>> purgatory
-  
-    final int firstLevelTilesCount = _firstLevelTiles.size();
-  
-    _renderedTiles.clear();
-  
-    //Texture Size for every tile
-    int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
-    int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
-  
-    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
-  
-    texWidth *= correctionFactor;
-    texHeight *= correctionFactor;
-  
-    final double texWidthSquared = texWidth * texWidth;
-    final double texHeightSquared = texHeight * texHeight;
-  
-    final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
-  
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
       // loaded as they will be used as last-chance fallback texture for any tile.
       _firstRender = false;
   
+      final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-<<<<<<< HEAD
-  
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics);
-=======
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS); // if first render, force full render
->>>>>>> purgatory
       }
     }
     else
@@ -522,18 +503,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
   
-<<<<<<< HEAD
       for (java.util.Iterator<Tile> iter = renderedTiles.iterator(); iter.hasNext();)
       {
         Tile tile = iter.next();
-=======
-        for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
-        {
-          Tile tile = iter.next();
-  
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS); //SENDING SQUARED TEX SIZE -  if first render, force full render
-        }
->>>>>>> purgatory
   
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics);
       }

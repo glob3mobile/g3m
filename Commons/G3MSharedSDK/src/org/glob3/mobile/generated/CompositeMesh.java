@@ -131,21 +131,23 @@ public class CompositeMesh extends Mesh
     }
   }
 
-<<<<<<< HEAD
   public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
-=======
-  public final void showNormals(boolean v)
->>>>>>> purgatory
   {
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       Mesh child = _children.get(i);
-<<<<<<< HEAD
       child.zRender(rc, parentGLState);
-=======
+    }
+  }
+
+  public final void showNormals(boolean v)
+  {
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
       child.showNormals(v);
->>>>>>> purgatory
     }
   }
 

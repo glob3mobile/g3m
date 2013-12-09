@@ -163,7 +163,6 @@ public abstract class AbstractGeometryMesh extends Mesh
     compositeMesh.addMesh(normalsMesh);
   
     return normalsMesh;
-  
   }
 
   public void dispose()
@@ -220,10 +219,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     _glState.setParent(parentGLState);
-<<<<<<< HEAD
     rawRender(rc, _glState, RenderType.REGULAR_RENDER);
-=======
-    rawRender(rc);
   
     //RENDERING NORMALS
     if (_normals != null)
@@ -251,12 +247,6 @@ public abstract class AbstractGeometryMesh extends Mesh
     }
   }
 
-  public final void showNormals(boolean v)
-  {
-    _showNormals = v;
->>>>>>> purgatory
-  }
-
   public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
   {
   
@@ -273,6 +263,11 @@ public abstract class AbstractGeometryMesh extends Mesh
     rawRender(rc, zRenderGLState, RenderType.Z_BUFFER_RENDER);
   
     zRenderGLState._release();
-  
   }
+
+  public final void showNormals(boolean v)
+  {
+    _showNormals = v;
+  }
+
 }

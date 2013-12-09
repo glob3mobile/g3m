@@ -153,12 +153,6 @@ public class GL
 
   public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager, RenderType renderType)
   {
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-    //                                 mode,
-    //                                 first,
-    //                                 count);
-    //  }
   
     state.applyOnGPU(this, progManager, renderType);
   
@@ -167,9 +161,9 @@ public class GL
 
   public final int getError()
   {
-    //  if (_verbose) {
-    //    ILogger::instance()->logInfo("GL::getError()");
-    //  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getError()");
+  //  }
   
     return _nativeGL.getError();
   }
@@ -370,12 +364,27 @@ public class GL
 
   public final GPUUniform getActiveUniform(GPUProgram program, int i)
   {
-    return _nativeGL.getActiveUniform(program, i);
+    GPUUniform u = _nativeGL.getActiveUniform(program, i);
+
+    if (_nativeGL.getError() != GLError.noError())
+    {
+      ILogger.instance().logError("Problem at getting uniform %d in program %s", i, program.getName());
+    }
+
+    return u;
   }
 
   public final GPUAttribute getActiveAttribute(GPUProgram program, int i)
   {
-    return _nativeGL.getActiveAttribute(program, i);
+
+    GPUAttribute a = _nativeGL.getActiveAttribute(program, i);
+
+    if (_nativeGL.getError() != GLError.noError())
+    {
+      ILogger.instance().logError("Problem at getting attribute %d in program %s", i, program.getName());
+    }
+
+    return a;
   }
 
   //  GLGlobalState* getCurrentState() const{ return _currentState;}

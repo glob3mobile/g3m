@@ -90,6 +90,7 @@ public class FlatColorMesh extends Mesh
     _mesh.zRender(rc, parentState);
   }
 
+
   public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
     _glState.setParent(parentState);

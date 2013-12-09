@@ -63,7 +63,6 @@ public abstract class Mesh
     }
   }
 
-<<<<<<< HEAD
   public final void zRender(G3MRenderContext rc, GLState parentGLState)
   {
     if (_enable)
@@ -71,8 +70,7 @@ public abstract class Mesh
       zRawRender(rc, parentGLState);
     }
   }
-=======
+
   public abstract void showNormals(boolean v);
->>>>>>> purgatory
 
 }

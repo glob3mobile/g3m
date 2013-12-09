@@ -168,38 +168,22 @@ public class GLState extends RCObject
   
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
-  
-<<<<<<< HEAD
-  
-  
-      switch (renderType)
+      //Adding depth range info for Z Rendering
+      if (renderType == RenderType.Z_BUFFER_RENDER)
       {
-        case Z_BUFFER_RENDER: //Z_BUFFER
-        {
-  
-          Vector2F depthRange = gl.getDepthRange();
-  
-          _valuesSet.addUniformValue(GPUUniformKey.DEPTH_NEAR, new GPUUniformValueFloat(depthRange._x), false);
-          _valuesSet.addUniformValue(GPUUniformKey.DEPTH_FAR, new GPUUniformValueFloat(depthRange._y), false);
-          _lastGPUProgramUsed = progManager.getProgram(gl, "ZRender");
-          break;
-        }
-        default:
-        {
-  
-          final int uniformsCode = _valuesSet.getUniformsCode();
-          final int attributesCode = _valuesSet.getAttributesCode();
-  
-          _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
-          break;
-        }
+        Vector2F depthRange = gl.getDepthRange();
+        _valuesSet.addUniformValue(GPUUniformKey.DEPTH_NEAR, new GPUUniformValueFloat(depthRange._x), false);
+        _valuesSet.addUniformValue(GPUUniformKey.DEPTH_FAR, new GPUUniformValueFloat(depthRange._y), false);
       }
   
-      //_lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
-=======
-      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
->>>>>>> purgatory
+      final int uniformsCode = _valuesSet.getUniformsCode();
+      final int attributesCode = _valuesSet.getAttributesCode();
+  
+      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode, renderType);
+  
     }
+  
+  
   
     if (_valuesSet == null || _globalState == null)
     {

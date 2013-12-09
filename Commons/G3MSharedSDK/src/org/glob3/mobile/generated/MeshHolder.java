@@ -72,15 +72,13 @@ public class MeshHolder extends Mesh
     _mesh.render(rc, parentGLState);
   }
 
-<<<<<<< HEAD
   public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
   {
     _mesh.zRender(rc, parentGLState);
-=======
+  }
+
   public final void showNormals(boolean v)
   {
     _mesh.showNormals(v);
->>>>>>> purgatory
   }
-
 }

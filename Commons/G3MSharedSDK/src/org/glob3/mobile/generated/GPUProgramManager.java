@@ -75,11 +75,7 @@ public class GPUProgramManager
   
       if (hasLight)
       {
-<<<<<<< HEAD
-        return getProgram(gl, "FlatColorMesh_DirectionLight");
-=======
         return compileProgramWithName(gl, "FlatColorMesh_DirectionLight");
->>>>>>> purgatory
       }
   
       return compileProgramWithName(gl, "FlatColorMesh");
@@ -135,8 +131,21 @@ public class GPUProgramManager
   {
   }
 
-  public final GPUProgram getProgram(GL gl, int uniformsCode, int attributesCode)
+  public final GPUProgram getProgram(GL gl, int uniformsCode, int attributesCode, RenderType renderType)
   {
+  
+    //ZRENDER
+    if (renderType == RenderType.Z_BUFFER_RENDER)
+    {
+      GPUProgram prog = getCompiledProgram("ZRender");
+      if (prog == null)
+      {
+        prog = compileProgramWithName(gl, "ZRender");
+      }
+      return prog;
+    }
+  
+    //REGULAR RENDERING
     GPUProgram p = getCompiledProgram(uniformsCode, attributesCode);
     if (p == null)
     {
