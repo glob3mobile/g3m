@@ -348,40 +348,6 @@ public class G3MWidget_WebGL
 
    private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
-
-      /*
-      factory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
-      factory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
-
-      factory.add(new GPUProgramSources("ColorMesh", Shaders_WebGL._colorMeshVertexShader, Shaders_WebGL._colorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TexturedMesh", Shaders_WebGL._texturedMeshVertexShader,
-               Shaders_WebGL._texturedMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh",
-               Shaders_WebGL._transformedTexCoortexturedMeshVertexShader,
-               Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("FlatColorMesh", Shaders_WebGL._flatColorMeshVertexShader,
-               Shaders_WebGL._flatColorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("NoColorMesh", Shaders_WebGL._noColorMeshVertexShader,
-               Shaders_WebGL._noColorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", Shaders_WebGL._TexturedMesh_DirectionLightVertexShader,
-               Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
-
-      factory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
-               Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
-<<<<<<< HEAD
-      
-      factory.add(new GPUProgramSources("ZRender", 
-				Shaders_WebGL._zRenderVertexShader,
-				Shaders_WebGL._zRenderFragmentShader));
-=======
-               */
->>>>>>> purgatory
-
       return new GPUProgramManager(factory);
    }
 

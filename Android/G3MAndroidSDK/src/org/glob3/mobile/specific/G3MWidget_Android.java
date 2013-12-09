@@ -250,38 +250,6 @@ public final class G3MWidget_Android
 
    private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
-
-      /*
-      factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
-      factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
-
-      factory.add(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader, GL2Shaders._colorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
-               GL2Shaders._texturedMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", GL2Shaders._transformedTexCoortexturedMeshVertexShader,
-               GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
-               GL2Shaders._flatColorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TexturedMesh_DirectionLight", GL2Shaders._TexturedMesh_DirectionLightVertexShader,
-               GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
-
-      factory.add(new GPUProgramSources("FlatColor_DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
-               GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-<<<<<<< HEAD
-      
-      factory.add(new GPUProgramSources("ZRender", GL2Shaders._zRenderVertexShader,
-              GL2Shaders._zRenderFragmentShader));
-
-=======
-      */
->>>>>>> purgatory
-
       return new GPUProgramManager(factory);
    }
 

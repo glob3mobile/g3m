@@ -29,67 +29,10 @@ public class G3MBuilder_Android
 
    public G3MWidget_Android createWidget() {
       //Adding Default Program Sources
-<<<<<<< HEAD
-      addGPUProgramSources(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
-               GL2Shaders._billboardFragmentShader));
-      addGPUProgramSources(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
-
-      addGPUProgramSources(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader,
-               GL2Shaders._colorMeshFragmentShader));
-
-      addGPUProgramSources(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
-               GL2Shaders._texturedMeshFragmentShader));
-
-      addGPUProgramSources(new GPUProgramSources("TransformedTexCoorTexturedMesh",
-               GL2Shaders._transformedTexCoortexturedMeshVertexShader, GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
-
-      addGPUProgramSources(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
-               GL2Shaders._flatColorMeshFragmentShader));
-
-      addGPUProgramSources(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
-               GL2Shaders._noColorMeshFragmentShader));
-
-      addGPUProgramSources(new GPUProgramSources("TexturedMesh_DirectionLight",
-               GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
-
-      addGPUProgramSources(new GPUProgramSources("FlatColorMesh_DirectionLight",
-               GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-      
-      addGPUProgramSources(new GPUProgramSources("ZRender", GL2Shaders._zRenderVertexShader,
-              GL2Shaders._zRenderFragmentShader));
-=======
->>>>>>> purgatory
-
       final BasicShadersGL2 shaders = new BasicShadersGL2();
       for (int i = 0; i < shaders.size(); i++) {
          addGPUProgramSources(shaders.get(i));
       }
-
-      //      addGPUProgramSources(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
-      //               GL2Shaders._billboardFragmentShader));
-      //      addGPUProgramSources(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader,
-      //               GL2Shaders._colorMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
-      //               GL2Shaders._texturedMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("TransformedTexCoorTexturedMesh",
-      //               GL2Shaders._transformedTexCoortexturedMeshVertexShader, GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
-      //               GL2Shaders._flatColorMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
-      //               GL2Shaders._noColorMeshFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("TexturedMesh+DirectionLight",
-      //               GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
-      //
-      //      addGPUProgramSources(new GPUProgramSources("FlatColorMesh+DirectionLight",
-      //               GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-      //
 
       setGL(_nativeWidget.getGL());
 
