@@ -84,12 +84,15 @@ public class MeshRenderer extends LeafRenderer
   
   }
 
+  private boolean _showNormals;
+
 
 
   public MeshRenderer()
   {
      _glState = new GLState();
      _context = null;
+     _showNormals = false;
   }
 
   public void dispose()
@@ -110,6 +113,7 @@ public class MeshRenderer extends LeafRenderer
   public final void addMesh(Mesh mesh)
   {
     _meshes.add(mesh);
+    mesh.showNormals(_showNormals);
   }
 
   public final void clearMeshes()
@@ -383,6 +387,17 @@ public class MeshRenderer extends LeafRenderer
   public final void loadBSONMesh(URL url, Color color, MeshLoadListener listener, boolean deleteListener)
   {
     loadBSONMesh(url, color, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, listener, deleteListener);
+  }
+
+  public final void showNormals(boolean v)
+  {
+    _showNormals = v;
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      mesh.showNormals(v);
+    }
   }
 
 

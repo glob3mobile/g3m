@@ -98,6 +98,11 @@ public class Vector3D
     return ((_x != _x) || (_y != _y) || (_z != _z));
   }
 
+  public final boolean isEquals(Vector3D v)
+  {
+    return (v._x == _x && v._y == _y && v._z == _z);
+  }
+
   public final boolean isZero()
   {
     return (_x == 0) && (_y == 0) && (_z == 0);

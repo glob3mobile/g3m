@@ -40,31 +40,11 @@
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
-		D8024491177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D802448F177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh */; };
-		D8024492177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8024490177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh */; };
-		D84625DB1777292B00FC4862 /* TexturedMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625D91777292B00FC4862 /* TexturedMesh.fsh */; };
-		D84625DC1777292B00FC4862 /* TexturedMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625DA1777292B00FC4862 /* TexturedMesh.vsh */; };
-		D84625E3177732B500FC4862 /* ColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625E1177732B500FC4862 /* ColorMesh.fsh */; };
-		D84625E4177732B500FC4862 /* ColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D84625E2177732B500FC4862 /* ColorMesh.vsh */; };
-		D86F9350182BCAD700C1E904 /* ZRender.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D86F934E182BCAD700C1E904 /* ZRender.fsh */; };
-		D86F9351182BCAD700C1E904 /* ZRender.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D86F934F182BCAD700C1E904 /* ZRender.vsh */; };
-		D8769D9117C3951500CEF074 /* NoColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8769D8F17C3951500CEF074 /* NoColorMesh.fsh */; };
-		D8769D9217C3951500CEF074 /* NoColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8769D9017C3951500CEF074 /* NoColorMesh.vsh */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
-		D8CE5D52173BB9AF00C7AAE6 /* Billboard.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D4A173BB9A200C7AAE6 /* Billboard.fsh */; };
-		D8CE5D53173BB9AF00C7AAE6 /* Billboard.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D4B173BB9A200C7AAE6 /* Billboard.vsh */; };
-		D8CE5D54173BB9AF00C7AAE6 /* Default.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D4C173BB9A200C7AAE6 /* Default.vsh */; };
-		D8CE5D55173BB9AF00C7AAE6 /* Default.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8CE5D4D173BB9A200C7AAE6 /* Default.fsh */; };
-		D8D0CDBB1771C93700D25CB6 /* FlatColorMesh.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D0CDB91771C93700D25CB6 /* FlatColorMesh.fsh */; };
-		D8D0CDBC1771C93700D25CB6 /* FlatColorMesh.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D0CDBA1771C93700D25CB6 /* FlatColorMesh.vsh */; };
 		D8D3A26318363C58007A784A /* FlatColorMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */; };
 		D8D3A26418363C58007A784A /* FlatColorMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */; };
 		D8D3A26518363C58007A784A /* TexturedMesh_DirectionLight.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */; };
 		D8D3A26618363C58007A784A /* TexturedMesh_DirectionLight.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8D3A26218363C58007A784A /* TexturedMesh_DirectionLight.vsh */; };
-		D8D3A26718363F83007A784A /* FlatColorMesh_DirectionLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */; };
-		D8D3A26818363F83007A784A /* FlatColorMesh_DirectionLight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */; };
-		D8D3A26918363F83007A784A /* TexturedMesh_DirectionLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */; };
-		D8D3A26A18363F83007A784A /* TexturedMesh_DirectionLight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8D3A26218363C58007A784A /* TexturedMesh_DirectionLight.vsh */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
@@ -78,10 +58,6 @@
 		D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */; };
 		D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */; };
 		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
-		D8FFA4C9183D042F004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8FFA4C5183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh */; };
-		D8FFA4CA183D042F004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8FFA4C6183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh */; };
-		D8FFA6A217A14DA8006EE310 /* TexturedMesh+DirectionLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = D8FFA6A017A14DA8006EE310 /* TexturedMesh+DirectionLight.fsh */; };
-		D8FFA6A317A14DA8006EE310 /* TexturedMesh+DirectionLight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = D8FFA6A117A14DA8006EE310 /* TexturedMesh+DirectionLight.vsh */; };
 		E70B224D1700DBA300172DF3 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = E70B224C1700DBA300172DF3 /* A320.bson */; };
 		E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152C1626D27F003D1013 /* Default-Landscape.png */; };
 		E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */; };
@@ -96,8 +72,6 @@
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
 		E728385516E914D80037AA5C /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = E728385416E914D80037AA5C /* g3m-marker.png */; };
 		E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */ = {isa = PBXBuildFile; fileRef = E736067C16F8D7BE000E32AD /* horizontal-gears.png */; };
-		E7A1A99016F0E51A00D138D8 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A98D16F0E51A00D138D8 /* Shader.fsh */; };
-		E7A1A99116F0E51A00D138D8 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A98E16F0E51A00D138D8 /* Shader.vsh */; };
 		E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */ = {isa = PBXBuildFile; fileRef = E7A1A99316F202B700D138D8 /* sand-clock.png */; };
 /* End PBXBuildFile section */
 
@@ -153,23 +127,7 @@
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
-		D802448F177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
-		D8024490177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
-		D84625D91777292B00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
-		D84625DA1777292B00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
-		D84625E1177732B500FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
-		D84625E2177732B500FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
-		D86F934E182BCAD700C1E904 /* ZRender.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ZRender.fsh; sourceTree = "<group>"; };
-		D86F934F182BCAD700C1E904 /* ZRender.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ZRender.vsh; sourceTree = "<group>"; };
-		D8769D8F17C3951500CEF074 /* NoColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.fsh; sourceTree = "<group>"; };
-		D8769D9017C3951500CEF074 /* NoColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.vsh; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
-		D8CE5D4A173BB9A200C7AAE6 /* Billboard.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.fsh; sourceTree = "<group>"; };
-		D8CE5D4B173BB9A200C7AAE6 /* Billboard.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.vsh; sourceTree = "<group>"; };
-		D8CE5D4C173BB9A200C7AAE6 /* Default.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.vsh; sourceTree = "<group>"; };
-		D8CE5D4D173BB9A200C7AAE6 /* Default.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.fsh; sourceTree = "<group>"; };
-		D8D0CDB91771C93700D25CB6 /* FlatColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.fsh; sourceTree = "<group>"; };
-		D8D0CDBA1771C93700D25CB6 /* FlatColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.vsh; sourceTree = "<group>"; };
 		D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -192,10 +150,6 @@
 		D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = G3MiOSSDK.xcodeproj; path = ../G3MiOSSDK/G3MiOSSDK.xcodeproj; sourceTree = "<group>"; };
-		D8FFA4C5183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TransformedTexCoorTexturedMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
-		D8FFA4C6183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TransformedTexCoorTexturedMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
-		D8FFA6A017A14DA8006EE310 /* TexturedMesh+DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+DirectionLight.fsh"; sourceTree = "<group>"; };
-		D8FFA6A117A14DA8006EE310 /* TexturedMesh+DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "TexturedMesh+DirectionLight.vsh"; sourceTree = "<group>"; };
 		E70B224C1700DBA300172DF3 /* A320.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = A320.bson; sourceTree = "<group>"; };
 		E71B152C1626D27F003D1013 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Default-Landscape.png"; sourceTree = "<group>"; };
 		E71B152D1626D27F003D1013 /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x.png"; path = "Resources/Default-Landscape@2x.png"; sourceTree = "<group>"; };
@@ -210,8 +164,6 @@
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		E728385416E914D80037AA5C /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		E736067C16F8D7BE000E32AD /* horizontal-gears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "horizontal-gears.png"; sourceTree = "<group>"; };
-		E7A1A98D16F0E51A00D138D8 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
-		E7A1A98E16F0E51A00D138D8 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		E7A1A99316F202B700D138D8 /* sand-clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sand-clock.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -351,7 +303,6 @@
 				CF35A20A16D3D70100D795D8 /* sample_bil16_150x150.bil */,
 				E7A1A99316F202B700D138D8 /* sand-clock.png */,
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
-				E7A1A98F16F0E51A00D138D8 /* Shaders */,
 				CFC39A8816FB9DB7004992C2 /* small-caceres.bil */,
 				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF186B0516B857DE00A39478 /* textures-A320 */,
@@ -359,38 +310,6 @@
 				D8E93BDF1588A171009D497C /* world.jpg */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		E7A1A98F16F0E51A00D138D8 /* Shaders */ = {
-			isa = PBXGroup;
-			children = (
-				D8D3A25F18363C58007A784A /* FlatColorMesh_DirectionLight.fsh */,
-				D8D3A26018363C58007A784A /* FlatColorMesh_DirectionLight.vsh */,
-				D8D3A26118363C58007A784A /* TexturedMesh_DirectionLight.fsh */,
-				D8D3A26218363C58007A784A /* TexturedMesh_DirectionLight.vsh */,
-				D86F934E182BCAD700C1E904 /* ZRender.fsh */,
-				D86F934F182BCAD700C1E904 /* ZRender.vsh */,
-				D8FFA4C5183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh */,
-				D8FFA4C6183D03E3004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh */,
-				D8769D8F17C3951500CEF074 /* NoColorMesh.fsh */,
-				D8769D9017C3951500CEF074 /* NoColorMesh.vsh */,
-				D802448F177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh */,
-				D8024490177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh */,
-				D84625E1177732B500FC4862 /* ColorMesh.fsh */,
-				D84625E2177732B500FC4862 /* ColorMesh.vsh */,
-				D84625D91777292B00FC4862 /* TexturedMesh.fsh */,
-				D84625DA1777292B00FC4862 /* TexturedMesh.vsh */,
-				D8D0CDB91771C93700D25CB6 /* FlatColorMesh.fsh */,
-				D8D0CDBA1771C93700D25CB6 /* FlatColorMesh.vsh */,
-				D8CE5D4A173BB9A200C7AAE6 /* Billboard.fsh */,
-				D8CE5D4B173BB9A200C7AAE6 /* Billboard.vsh */,
-				D8CE5D4C173BB9A200C7AAE6 /* Default.vsh */,
-				D8CE5D4D173BB9A200C7AAE6 /* Default.fsh */,
-				E7A1A98D16F0E51A00D138D8 /* Shader.fsh */,
-				E7A1A98E16F0E51A00D138D8 /* Shader.vsh */,
-			);
-			name = Shaders;
-			path = ../../G3MiOSSDK/Resources/Shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -465,23 +384,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8D3A26718363F83007A784A /* FlatColorMesh_DirectionLight.fsh in Resources */,
-				D8D3A26818363F83007A784A /* FlatColorMesh_DirectionLight.vsh in Resources */,
-				D8D3A26918363F83007A784A /* TexturedMesh_DirectionLight.fsh in Resources */,
-				D8D3A26A18363F83007A784A /* TexturedMesh_DirectionLight.vsh in Resources */,
-				D8FFA4C9183D042F004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.fsh in Resources */,
-				D8FFA4CA183D042F004E4AF3 /* TransformedTexCoorTexturedMesh+DirectionLight.vsh in Resources */,
-				D8CE5D52173BB9AF00C7AAE6 /* Billboard.fsh in Resources */,
-				D8CE5D53173BB9AF00C7AAE6 /* Billboard.vsh in Resources */,
-				D8CE5D54173BB9AF00C7AAE6 /* Default.vsh in Resources */,
-				D8CE5D55173BB9AF00C7AAE6 /* Default.fsh in Resources */,
 				D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */,
 				CF09A94E16A0A0F500E72811 /* test.bson in Resources */,
 				D8EEF3951577920B003FEB5E /* InfoPlist.strings in Resources */,
 				D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */,
 				D8EEF3A11577920B003FEB5E /* MainStoryboard_iPad.storyboard in Resources */,
 				D8E93BE01588A171009D497C /* world.jpg in Resources */,
-				D86F9351182BCAD700C1E904 /* ZRender.vsh in Resources */,
 				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
 				CF883B841591053100AEE39C /* mark.png in Resources */,
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
@@ -504,7 +412,6 @@
 				CF0223831668318600024B73 /* geojson in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
-				D86F9350182BCAD700C1E904 /* ZRender.fsh in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
 				CF3CA9DB182D99D500483977 /* isosurface-mesh.json in Resources */,
@@ -515,8 +422,6 @@
 				CF91C53016D7C03C00E25C24 /* full-earth-4096x2048.bil in Resources */,
 				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
 				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
-				E7A1A99016F0E51A00D138D8 /* Shader.fsh in Resources */,
-				E7A1A99116F0E51A00D138D8 /* Shader.vsh in Resources */,
 				E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */,
 				E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */,
 				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
@@ -525,16 +430,6 @@
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
 				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
 				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,
-				D8D0CDBB1771C93700D25CB6 /* FlatColorMesh.fsh in Resources */,
-				D8D0CDBC1771C93700D25CB6 /* FlatColorMesh.vsh in Resources */,
-				D84625DB1777292B00FC4862 /* TexturedMesh.fsh in Resources */,
-				D84625DC1777292B00FC4862 /* TexturedMesh.vsh in Resources */,
-				D84625E3177732B500FC4862 /* ColorMesh.fsh in Resources */,
-				D84625E4177732B500FC4862 /* ColorMesh.vsh in Resources */,
-				D8024491177B315500F58D0D /* TransformedTexCoorTexturedMesh.fsh in Resources */,
-				D8024492177B315500F58D0D /* TransformedTexCoorTexturedMesh.vsh in Resources */,
-				D8769D9117C3951500CEF074 /* NoColorMesh.fsh in Resources */,
-				D8769D9217C3951500CEF074 /* NoColorMesh.vsh in Resources */,
 				CFA245431800708D00921325 /* washington-memorial.json in Resources */,
 				CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */,
 			);

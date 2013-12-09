@@ -2,10 +2,10 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.GPUProgramFactory;
 import org.glob3.mobile.generated.GPUProgramManager;
-import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -73,28 +73,30 @@ public class MapBooBuilder_Android
 
    @Override
    protected GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
+      final GPUProgramFactory gpuProgramFactory = new BasicShadersGL2();
 
-      gpuProgramFactory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
-               GL2Shaders._billboardFragmentShader));
+      /*
+            gpuProgramFactory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
+                     GL2Shaders._billboardFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader,
-               GL2Shaders._colorMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader,
+                     GL2Shaders._colorMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
-               GL2Shaders._texturedMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
+                     GL2Shaders._texturedMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh",
-               GL2Shaders._transformedTexCoortexturedMeshVertexShader, GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh",
+                     GL2Shaders._transformedTexCoortexturedMeshVertexShader, GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
-               GL2Shaders._flatColorMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
+                     GL2Shaders._flatColorMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
-               GL2Shaders._noColorMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader,
+                     GL2Shaders._noColorMeshFragmentShader));
 
+<<<<<<< HEAD
       gpuProgramFactory.add(new GPUProgramSources("TexturedMesh_DirectionLight",
                GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
 
@@ -105,7 +107,14 @@ public class MapBooBuilder_Android
       gpuProgramFactory.add(new GPUProgramSources("ZRender", GL2Shaders._zRenderVertexShader,
               GL2Shaders._zRenderFragmentShader));
 
+=======
+            gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight",
+                     GL2Shaders._TexturedMesh_DirectionLightVertexShader, GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
+>>>>>>> purgatory
 
+            gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
+                     GL2Shaders._FlatColorMesh_DirectionLightVertexShader, GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
+      */
 
       return new GPUProgramManager(gpuProgramFactory);
    }

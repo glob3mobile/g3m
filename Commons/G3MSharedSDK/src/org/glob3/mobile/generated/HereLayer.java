@@ -190,4 +190,22 @@ public class HereLayer extends Layer
     return new HereLayer(_appId, _appCode, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_appId.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: appId");
+    }
+    if (_appCode.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: appCode");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
 }

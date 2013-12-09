@@ -131,7 +131,8 @@ _sceneLighting(sceneLighting),
 _rootState(NULL),
 _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
-_forceBusyRenderer(false)
+_forceBusyRenderer(false),
+_nFramesBeetweenProgramsCleanUp(500)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -553,6 +554,11 @@ void G3MWidget::render(int width, int height) {
       orderedRenderable->render(_renderContext);
       delete orderedRenderable;
     }
+  }
+
+  //Removing unused programs
+  if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0){
+    _gpuProgramManager->removeUnused();
   }
 
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();

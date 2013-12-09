@@ -166,4 +166,18 @@ public class URLTemplateLayer extends Layer
     return petitions;
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_urlTemplate.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: urlTemplate");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
 }

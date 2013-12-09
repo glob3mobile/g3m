@@ -47,7 +47,8 @@ public:
                         const Sector& sector) const;
 
   const std::string description() const;
-  
+
+  RenderState getRenderState();
 };
 
 #endif

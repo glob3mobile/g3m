@@ -56,6 +56,10 @@ protected:
   
   void createGLState();
 
+  mutable bool _showNormals;
+  mutable Mesh* _normalsMesh;
+  Mesh* createNormalsMesh() const;
+
 public:
   ~AbstractMesh();
   
@@ -72,6 +76,10 @@ public:
 
   void zRawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
+  
+  void showNormals(bool v) const{
+    _showNormals = v;
+  }
   
 };
 

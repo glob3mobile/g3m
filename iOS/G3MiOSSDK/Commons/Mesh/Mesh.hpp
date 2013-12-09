@@ -63,6 +63,8 @@ public:
       zRawRender(rc, parentGLState);
     }
   }
+  
+  virtual void showNormals(bool v) const = 0;
 
 };
 

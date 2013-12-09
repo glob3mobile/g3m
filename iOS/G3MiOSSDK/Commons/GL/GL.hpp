@@ -47,17 +47,11 @@ private:
   std::list<const IGLTextureId*> _texturesIdBag;
   long                           _texturesIdAllocationCounter;
   
-  //  GLGlobalState *_currentState;
-  //  GPUProgram* _currentGPUProgram;
-  
   inline void loadModelView();
   
   const IGLTextureId* getGLTextureId();
 
   //Get Locations warning of errors
-//  bool _errorGettingLocationOcurred;
-//  int checkedGetAttribLocation(GPUProgram* program,
-//                               const std::string& name);
   IGLUniformID* checkedGetUniformLocation(GPUProgram* program,
                                           const std::string& name);
 //  const bool _verbose;
@@ -170,8 +164,18 @@ public:
     _nativeGL->linkProgram(program);
   }
   
-  bool deleteProgram(int program) const  {
-    return _nativeGL->deleteProgram(program);
+  bool deleteProgram(const GPUProgram* program) {
+
+    if (program == NULL){
+      return false;
+    }
+
+    if (_currentGPUProgram == program){ //In case of deleting active program
+      _currentGPUProgram->removeReference();
+      _currentGPUProgram = NULL;
+    }
+
+    return _nativeGL->deleteProgram(program->getProgramID());
   }
   
   INativeGL* getNative() const{

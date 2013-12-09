@@ -11,6 +11,7 @@
 
 #include <string>
 #include <map>
+#include <list>
 
 class GPUAttribute;
 class GPUUniform;
@@ -28,12 +29,12 @@ class GPUUniformValue;
 class GPUAttributeValue;
 class IFloatBuffer;
 class GL;
+class GPUProgramManager;
 
 enum ShaderType {
   VERTEX_SHADER,
   FRAGMENT_SHADER
 };
-
 
 enum RenderType{
   REGULAR_RENDER,
@@ -42,7 +43,6 @@ enum RenderType{
 
 class GPUProgram {
   int _programID;
-  bool _programCreated;
 
   GPUUniform* _uniforms[32];
   GPUAttribute* _attributes[32];
@@ -56,35 +56,45 @@ class GPUProgram {
   int _attributesCode;
 
   std::string _name;
+
+  GL* _gl;
+
+  int _nReferences; //Number of items that reference this Program
   
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
   void deleteShader(GL* gl, int shader) const;
+  void deleteProgram(GL* gl, const GPUProgram* p);
   
   void getVariables(GL* gl);
-  
+
   GPUProgram():
   _createdAttributes(NULL),
   _createdUniforms(NULL),
   _nUniforms(0),
   _nAttributes(0),
   _uniformsCode(0),
-  _attributesCode(0) {}
+  _attributesCode(0),
+  _gl(NULL),
+  _nReferences(0)
+  {
+  }
 
   GPUProgram(const GPUProgram& that);
-  
+
 public:
-  
-  static GPUProgram* createProgram(GL* gl, const std::string name, const std::string& vertexSource,
-                                   const std::string& fragmentSource);
-  
+
+
   ~GPUProgram();
   
+  static GPUProgram* createProgram(GL* gl,
+                                   const std::string& name,
+                                   const std::string& vertexSource,
+                                   const std::string& fragmentSource);
+
   std::string getName() const { return _name;}
   
   int getProgramID() const{ return _programID;}
-  bool isCreated() const{ return _programCreated;}
-  void deleteProgram(GL* gl, int p);
   
   int getGPUAttributesNumber() const { return _nAttributes;}
   int getGPUUniformsNumber() const { return _nUniforms;}
@@ -119,6 +129,11 @@ public:
 
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);
+
+  void addReference(){ ++_nReferences;}
+  void removeReference() { --_nReferences;}
+  int getNReferences() const { return _nReferences;}
+
 };
 
 #endif

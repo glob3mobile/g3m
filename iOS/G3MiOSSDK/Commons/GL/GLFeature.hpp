@@ -438,9 +438,9 @@ private:
   }
 
 public:
-  DirectionLightGLFeature(const Vector3D& dir,
-                          const Color& lightColor,
-                          float ambientLight);
+  DirectionLightGLFeature(const Vector3D& diffuseLightDirection,
+                          const Color& diffuseLightColor,
+                          const Color& ambientLightColor);
 
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 

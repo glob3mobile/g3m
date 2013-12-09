@@ -257,6 +257,7 @@ private:
   const bool       _logFPS;
   const bool       _logDownloaderStatistics;
   std::string      _lastCacheStatistics;
+  const int        _nFramesBeetweenProgramsCleanUp;
   
   ITimer* _renderStatisticsTimer;
   

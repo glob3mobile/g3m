@@ -19,6 +19,8 @@ private:
 protected:
   void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const;
 
+  Mesh* createNormalsMesh() const;
+
 public:
   IndexedMesh(const int primitive,
               bool owner,

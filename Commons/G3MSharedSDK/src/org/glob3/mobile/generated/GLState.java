@@ -32,7 +32,7 @@ public class GLState extends RCObject
   private GPUVariableValueSet _valuesSet;
   private GLGlobalState _globalState;
 
-  private GPUProgram _lastGPUProgramUsed;
+  private GPUProgram _linkedProgram;
 
   private GLState _parentGLState;
 
@@ -48,7 +48,12 @@ public class GLState extends RCObject
     if (_globalState != null)
        _globalState.dispose();
     _globalState = null;
-    _lastGPUProgramUsed = null;
+  
+    if (_linkedProgram != null)
+    {
+      _linkedProgram.removeReference();
+      _linkedProgram = null;
+    }
   
     if (_accumulatedFeatures != null)
        _accumulatedFeatures.dispose();
@@ -69,13 +74,18 @@ public class GLState extends RCObject
     {
       _parentGLState._release();
     }
+  
+    if (_linkedProgram != null)
+    {
+      _linkedProgram.removeReference();
+    }
   }
 
 
   public GLState()
   {
      _parentGLState = null;
-     _lastGPUProgramUsed = null;
+     _linkedProgram = null;
      _parentsTimeStamp = -1;
      _timeStamp = 0;
      _valuesSet = null;
@@ -159,6 +169,7 @@ public class GLState extends RCObject
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
   
+<<<<<<< HEAD
   
   
       switch (renderType)
@@ -185,6 +196,9 @@ public class GLState extends RCObject
       }
   
       //_lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+=======
+      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
+>>>>>>> purgatory
     }
   
     if (_valuesSet == null || _globalState == null)
@@ -193,14 +207,14 @@ public class GLState extends RCObject
       return;
     }
   
-    if (_lastGPUProgramUsed != null)
+    if (_linkedProgram != null)
     {
-      gl.useProgram(_lastGPUProgramUsed);
+      gl.useProgram(_linkedProgram);
   
-      _valuesSet.applyValuesToProgram(_lastGPUProgramUsed);
+      _valuesSet.applyValuesToProgram(_linkedProgram);
       _globalState.applyChanges(gl, gl.getCurrentGLGlobalState());
   
-      _lastGPUProgramUsed.applyChanges(gl);
+      _linkedProgram.applyChanges(gl);
   
       //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
     }

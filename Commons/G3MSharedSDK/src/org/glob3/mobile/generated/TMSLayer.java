@@ -86,4 +86,27 @@ public abstract class TMSLayer extends Layer
     return "[TMSLayer]";
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_mapLayer.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: mapLayer");
+    }
+    final String mapServerUrl = _mapServerURL.getPath();
+    if (mapServerUrl.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: mapServerURL");
+    }
+    if (_format.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: format");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
 }

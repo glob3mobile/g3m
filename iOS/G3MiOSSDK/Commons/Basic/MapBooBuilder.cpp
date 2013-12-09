@@ -684,7 +684,7 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
                                         maxLevel,
                                         TimeInterval::fromDays(30));
   }
-  
+
   return result;
 }
 
@@ -854,9 +854,9 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
 
   const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
 
-//  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-//    return NULL;
-//  }
+  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+  //    return NULL;
+  //  }
 
   return new MapBoo_Scene(jsonObject->getAsString("id", ""),
                           jsonObject->getAsString("name", ""),
@@ -1585,7 +1585,8 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {
-  return new CameraFocusSceneLighting();
+  return new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
+                                      Color::yellow());
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {

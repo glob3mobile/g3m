@@ -13,7 +13,11 @@
 #include "GL.hpp"
 #include "Box.hpp"
 
-//#include "GPUProgramState.hpp"
+#include "DirectMesh.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "CompositeMesh.hpp"
+#include "Sphere.hpp"
+
 #include "Camera.hpp"
 
 #include "GLFeature.hpp"
@@ -30,6 +34,8 @@ AbstractMesh::~AbstractMesh() {
   delete _translationMatrix;
 
   _glState->_release();
+
+  delete _normalsMesh;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -63,7 +69,9 @@ _lineWidth(lineWidth),
 _pointSize(pointSize),
 _depthTest(depthTest),
 _glState(new GLState()),
-_normals(normals)
+_normals(normals),
+_normalsMesh(NULL),
+_showNormals(false)
 {
   createGLState();
 }
@@ -132,17 +140,17 @@ bool AbstractMesh::isTransparent(const G3MRenderContext* rc) const {
 void AbstractMesh::createGLState() {
 
   _glState->addGLFeature(new GeometryGLFeature(_vertices,   // The attribute is a float vector of 4 elements
-                                              3,            // Our buffer contains elements of 3
-                                              0,            // Index 0
-                                              false,        // Not normalized
-                                              0,            // Stride 0
-                                              _depthTest,   // Depth test
-                                              false, 0,
-                                              false, 0.0f, 0.0f,
-                                              _lineWidth,
-                                              true,
+                                               3,            // Our buffer contains elements of 3
+                                               0,            // Index 0
+                                               false,        // Not normalized
+                                               0,            // Stride 0
+                                               _depthTest,   // Depth test
+                                               false, 0,
+                                               false, 0.0f, 0.0f,
+                                               _lineWidth,
+                                               true,
                                                _pointSize),
-                        false);   //POINT SIZE
+                         false);   //POINT SIZE
 
   if (_normals != NULL) {
     _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
@@ -156,9 +164,9 @@ void AbstractMesh::createGLState() {
   if (_flatColor != NULL && _colors == NULL) {  //FlatColorMesh Shader
 
     _glState->addGLFeature(new FlatColorGLFeature(*_flatColor,
-                                                 _flatColor->isTransparent(),
-                                                 GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
-                          false);
+                                                  _flatColor->isTransparent(),
+                                                  GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()),
+                           false);
 
 
 
@@ -168,11 +176,11 @@ void AbstractMesh::createGLState() {
 
   if (_colors != NULL) {
     _glState->addGLFeature(new ColorGLFeature(_colors,   //The attribute is a float vector of 4 elements RGBA
-                                             4,            //Our buffer contains elements of 4
-                                             0,            //Index 0
-                                             false,        //Not normalized
-                                             0,            //Stride 0
-                                             true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+                                              4,            //Our buffer contains elements of 4
+                                              0,            //Index 0
+                                              false,        //Not normalized
+                                              0,            //Stride 0
+                                              true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
 
   }
 
@@ -182,6 +190,24 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
                              const GLState* parentGLState) const{
   _glState->setParent(parentGLState);
   rawRender(rc, _glState, REGULAR_RENDER);
+
+  //RENDERING NORMALS
+  if (_normals != NULL){
+    if (_showNormals){
+      if (_normalsMesh == NULL){
+        //_normalsMesh = createNormalsMesh();
+      }
+      if (_normalsMesh != NULL){
+        //_normalsMesh->render(rc, parentGLState);
+      }
+    } else{
+      if (_normalsMesh != NULL){
+        delete _normalsMesh;
+        _normalsMesh = NULL;
+      }
+    }
+  }
+
 }
 
 void AbstractMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
@@ -207,5 +233,59 @@ void AbstractMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentG
   rawRender(rc, zRenderGLState, Z_BUFFER_RENDER);
   
   zRenderGLState->_release();
-  
 }
+
+
+Mesh* AbstractMesh::createNormalsMesh() const{
+
+  DirectMesh* verticesMesh = new DirectMesh(GLPrimitive::points(),
+                                            false,
+                                            _center,
+                                            _vertices,
+                                            (float)1.0,
+                                            (float)2.0,
+                                            new Color(Color::red()),
+                                            NULL,
+                                            (float)1.0,
+                                            false,
+                                            NULL);
+
+  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  BoundingVolume* volume = getBoundingVolume();
+  Sphere* sphere = volume->createSphere();
+  double normalsSize = sphere->getRadius() / 100.0;
+  delete sphere;
+
+  const int size = _vertices->size();
+  for (int i = 0; i < size; i+=3) {
+
+    Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));
+    Vector3D n(_normals->get(i), _normals->get(i+1), _normals->get(i+2));
+
+    Vector3D v_n = v.add(n.normalized().times(normalsSize));
+
+    fbb->add(v);
+    fbb->add(v_n);
+  }
+
+  DirectMesh* normalsMesh = new DirectMesh(GLPrimitive::lines(),
+                                           true,
+                                           _center,
+                                           fbb->create(),
+                                           (float)2.0,
+                                           (float)1.0,
+                                           new Color(Color::blue()));
+
+  delete fbb;
+
+  CompositeMesh* compositeMesh = new CompositeMesh();
+  compositeMesh->addMesh(verticesMesh);
+  compositeMesh->addMesh(normalsMesh);
+
+  return compositeMesh;
+}
+
+
+
+

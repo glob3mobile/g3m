@@ -28,3 +28,15 @@ MapBoxLayer* MapBoxLayer::copy() const {
                          _maxLevel,
                          (_condition == NULL) ? NULL : _condition->copy());
 }
+
+RenderState MapBoxLayer::getRenderState() {
+  _errors.clear();
+  if (_mapKey.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapKey");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
+}

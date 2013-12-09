@@ -20,6 +20,10 @@ GLState::~GLState() {
   if (_parentGLState != NULL) {
     _parentGLState->_release();
   }
+
+  if (_linkedProgram != NULL){
+    _linkedProgram->removeReference();
+  }
 }
 
 void GLState::hasChangedStructure() const {
@@ -28,7 +32,11 @@ void GLState::hasChangedStructure() const {
   _valuesSet = NULL;
   delete _globalState;
   _globalState = NULL;
-  _lastGPUProgramUsed = NULL;
+
+  if (_linkedProgram != NULL){
+    _linkedProgram->removeReference();
+    _linkedProgram = NULL;
+  }
 
   delete _accumulatedFeatures;
   _accumulatedFeatures = NULL;
@@ -100,46 +108,34 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager, RenderType rend
 
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
-
-
-
-    switch (renderType) {
-      case Z_BUFFER_RENDER: //Z_BUFFER
-      {
-
-        Vector2F depthRange = gl->getDepthRange();
-
-        _valuesSet->addUniformValue(DEPTH_NEAR, new GPUUniformValueFloat(depthRange._x), false);
-        _valuesSet->addUniformValue(DEPTH_FAR, new GPUUniformValueFloat(depthRange._y), false);
-        _lastGPUProgramUsed = progManager.getProgram(gl, "ZRender");
-        break;
-      }
-      default:
-      {
-
-        const int uniformsCode   = _valuesSet->getUniformsCode();
-        const int attributesCode = _valuesSet->getAttributesCode();
-
-        _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
-        break;
-      }
+    //Adding depth range info for Z Rendering
+    if (renderType == Z_BUFFER_RENDER){
+      Vector2F depthRange = gl->getDepthRange();
+      _valuesSet->addUniformValue(DEPTH_NEAR, new GPUUniformValueFloat(depthRange._x), false);
+      _valuesSet->addUniformValue(DEPTH_FAR, new GPUUniformValueFloat(depthRange._y), false);
     }
 
-    //_lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+    const int uniformsCode   = _valuesSet->getUniformsCode();
+    const int attributesCode = _valuesSet->getAttributesCode();
+
+    _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode, renderType);
+
   }
+
+
 
   if (_valuesSet == NULL || _globalState == NULL) {
     ILogger::instance()->logError("GLState logic error.");
     return;
   }
 
-  if (_lastGPUProgramUsed != NULL) {
-    gl->useProgram(_lastGPUProgramUsed);
+  if (_linkedProgram != NULL) {
+    gl->useProgram(_linkedProgram);
 
-    _valuesSet->applyValuesToProgram(_lastGPUProgramUsed);
+    _valuesSet->applyValuesToProgram(_linkedProgram);
     _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 
-    _lastGPUProgramUsed->applyChanges(gl);
+    _linkedProgram->applyChanges(gl);
 
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
   }

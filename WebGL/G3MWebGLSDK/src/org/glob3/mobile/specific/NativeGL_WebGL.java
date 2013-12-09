@@ -739,6 +739,7 @@ public final class NativeGL_WebGL extends INativeGL {
 			return null;
 			break;
 		}
+<<<<<<< HEAD
 	}-*/;
 
 	@Override
@@ -1107,4 +1108,322 @@ public final class NativeGL_WebGL extends INativeGL {
 	// public void printProgramInfoLog(final int program) {
 	// jsPrintProgramInfoLog(_shaderList.get(program));
 	// }
+=======
+   }-*/;
+
+
+@Override
+public native void uniform3f(IGLUniformID location, float x, float y, float z) /*-{
+	var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+	this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform3f(locId, x, y, z);
+}-*/;
+
+
+@Override
+public native int Type_Vec3Float() /*-{
+	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC3;
+}-*/;
+
+   // @Override
+   //   public void uniform2f(final IGLUniformID loc,
+   //                         final float x,
+   //                         final float y) {
+   //      final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
+   //      jsUniform2f(l, x, y);
+   //   }
+   //
+   //   private native void jsUniform2f(final JavaScriptObject loc,
+   //                                   final float x,
+   //                                   final float y) /*-{
+   //           this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //                           .uniform2f(loc, x, y);
+   //   }-*/;
+
+
+   // @Override
+   //   public void uniform1f(final IGLUniformID loc,
+   //                         final float x) {
+   //      final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
+   //      jsUniform1f(l, x);
+   //   }
+   //
+   //   private native void jsUniform1f(final JavaScriptObject loc,
+   //                                   final float x) /*-{
+   //           this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform1f(loc, x);
+   //   }-*/;
+
+
+   //   @Override
+   //   public void uniform1i(final IGLUniformID loc,
+   //                         final int v) {
+   //      final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
+   //      jsUniform1i(l, v);
+   //   }
+   //
+   //   private native void jsUniform1i(final JavaScriptObject loc,
+   //                                   final int x) /*-{
+   //                this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform1i(loc, x);
+   //   }-*/;
+
+
+   //   @Override
+   //   public IGLUniformID getUniformLocation(final ShaderProgram program,
+   //                                          final String name) {
+   //      final JavaScriptObject id = jsGetUniformLocation(_shaderList.get(program.getProgram() - 1), name);
+   //      final IGLUniformID result = new GLUniformID_WebGL(id);
+   //      return result;
+   //   }
+   //   
+   //   private native JavaScriptObject jsGetUniformLocation(final JavaScriptObject program,
+   //                                                        final String name) /*-{
+   //                return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //                                .getUniformLocation(program, name);
+   //   }-*/;
+
+
+   //   @Override
+   //   public void uniform4f(final IGLUniformID location,
+   //                         final float v0,
+   //                         final float v1,
+   //                         final float v2,
+   //                         final float v3) {
+   //      final JavaScriptObject l = ((GLUniformID_WebGL) location).getId();
+   //      jsUniform4f(l, v0, v1, v2, v3);
+   //   }
+   //
+   //   private native void jsUniform4f(final JavaScriptObject loc,
+   //                                   final float v0,
+   //                                   final float v1,
+   //                                   final float v2,
+   //                                   final float v3) /*-{
+   //                this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(loc, v0,
+   //                                v1, v2, v3);
+   //   }-*/;
+
+
+   //   @Override
+   //   public boolean deleteTexture(final IGLTextureId texture) {
+   //      //      for (int i = 0; i < n; i++) {
+   //      //         final JavaScriptObject id = ((GLTextureId_WebGL) textures[i]).getWebGLTexture();
+   //      //         jsDeleteTexture(id);
+   //      //      }
+   //
+   //      jsDeleteTexture(((GLTextureId_WebGL) texture).getWebGLTexture());
+   //      return false;
+   //   }
+   //
+   //   private native void jsDeleteTexture(final JavaScriptObject id) /*-{
+   //                this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteTexture(id);
+   //   }-*/;
+
+
+   //   @Override
+   //   public ArrayList<IGLTextureId> genTextures(final int n) {
+   //      final ArrayList<IGLTextureId> array = new ArrayList<IGLTextureId>();
+   //
+   //      for (int i = 0; i < n; i++) {
+   //         final JavaScriptObject webGLTexture = jsCreateTexture(i); //WebGLTexture
+   //         array.add(new GLTextureId_WebGL(webGLTexture));
+   //      }
+   //      return array;
+   //   }
+   //
+   //   private native JavaScriptObject jsCreateTexture(final int i) /*-{
+   //                var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //                                .createTexture();
+   //                texture.id = i;
+   //                return texture;
+   //   }-*/;
+
+
+   //   @Override
+   //   public void texImage2D(final IImage image,
+   //                          final int format) {
+   //      final JavaScriptObject im = ((Image_WebGL) image).getImage(); //IMAGE JS
+   //      jsTexImage2D(im, format);
+   //   }
+   //
+   //   private native void jsTexImage2D(final JavaScriptObject image,
+   //                                    final int format) /*-{
+   //                var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //                var TEXTURE_2D = gl.TEXTURE_2D;
+   //                var UNSIGNED_BYTE = gl.UNSIGNED_BYTE;
+   //
+   //                gl.texImage2D(TEXTURE_2D, 0, format, format, UNSIGNED_BYTE, image);
+   //   }-*/;
+
+
+   // @Override
+   //   public void getIntegerv(final int v,
+   //                           final int[] i) {
+   //      // TODO getIntegerv is not implemented in WebGL. Check with v!=viewport
+   //
+   //      final JsArrayInteger aux = jsGetIntegerv(v);
+   //      for (int j = 0; j < aux.length(); j++) {
+   //         i[j] = aux.get(j);
+   //      }
+   //   }
+   //
+   //   private native JsArrayInteger jsGetIntegerv(final int v) /*-{
+   //           var result = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //                           .getParameter(v);
+   //           var intArray = new Array();
+   //           for (i = 0; i < result.length; i++) {
+   //                   intArray.push(result[i]);
+   //           }
+   //           return intArray;
+   //   }-*/;
+
+
+   //   private native void jsUseProgram(final JavaScriptObject program) /*-{
+   //           this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(program);
+   //   }-*/;
+   //
+   //   @Override
+   //   public void useProgram(final ShaderProgram program) {
+   //      jsUseProgram(_shaderList.get(program.getProgram() - 1));
+   //   }
+
+
+   //   private native int jsGetAttribLocation(final JavaScriptObject program,
+   //                                          final String name) /*-{
+   //           return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //                           .getAttribLocation(program, name);
+   //   }-*/;
+   //
+   //   @Override
+   //   public int getAttribLocation(final ShaderProgram program,
+   //                                final String name) {
+   //      return jsGetAttribLocation(_shaderList.get(program.getProgram() - 1), name);
+   //   }
+
+
+   //   private native JavaScriptObject jsCreateProgram() /*-{
+   //           return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //                           .createProgram();
+   //   }-*/;
+   //
+   //   @Override
+   //   public int createProgram() {
+   //      _shaderList.add(jsCreateProgram());
+   //      return _shaderList.size();
+   //   }
+
+
+   //   private native void jsDeleteProgram(final JavaScriptObject program) /*-{
+   //           this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //                           .deleteProgram(program);
+   //   }-*/;
+   //
+   //   @Override
+   //   public void deleteProgram(final int program) {
+   //      jsDeleteProgram(_shaderList.get(program - 1));
+   //   }
+
+
+   //   private native void jsAttachShader(final JavaScriptObject program,
+   //                                      final JavaScriptObject shader) /*-{
+   //           this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.attachShader(
+   //                           program, shader);
+   //   }-*/;
+   //
+   //   @Override
+   //   public void attachShader(final int program,
+   //                            final int shader) {
+   //            jsAttachShader(_shaderList.get(program - 1), _shaderList.get(shader - 1));
+   //   }
+
+
+   //   private native JavaScriptObject jsCreateVertexShader() /*-{
+   //           var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //           return gl.createShader(gl.VERTEX_SHADER);
+   //   }-*/;
+   //
+   //   private native JavaScriptObject jsCreateFragmentShader() /*-{
+   //           var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //           return gl.createShader(gl.FRAGMENT_SHADER);
+   //   }-*/;
+   //
+   //   @Override
+   //   public int createShader(final ShaderType type) {
+   //      switch (type) {
+   //         case VERTEX_SHADER:
+   //            _shaderList.add(jsCreateVertexShader());
+   //            return (_shaderList.size() - 1);
+   //         case FRAGMENT_SHADER:
+   //            _shaderList.add(jsCreateFragmentShader());
+   //            return (_shaderList.size() - 1);
+   //         default:
+   //            return 0;
+   //      }
+   //   }
+
+
+   //   private native boolean jsCompileShader(final JavaScriptObject shader,
+   //                                          final String source) /*-{
+   //           var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //           gl.shaderSource(shader, source);
+   //           gl.compileShader(shader);
+   //           if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+   //                   return false;
+   //           else
+   //                   return true;
+   //   }-*/;
+   //
+   //   @Override
+   //   public boolean compileShader(final int shader,
+   //                                final String source) {
+   //      return jsCompileShader(_shaderList.get(shader), source);
+   //   }
+
+
+   //   private native void jsDeleteShader(final JavaScriptObject shader) /*-{
+   //           this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   //                           .deleteShader(shader);
+   //   }-*/;
+   //
+   //   @Override
+   //   public void deleteShader(final int shader) {
+   //      jsDeleteShader(_shaderList.get(shader));
+   //   }
+
+
+   //   private native void jsPrintShaderInfoLog(final JavaScriptObject shader) /*-{
+   //		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+   //			alert("Error compiling shaders: " + gl.getShaderInfoLog(shader));
+   //   }-*/;
+   //
+   //   @Override
+   //   public void printShaderInfoLog(final int shader) {
+   //      jsPrintShaderInfoLog(_shaderList.get(shader));
+   //   }
+
+
+   //   private native boolean jsLinkProgram(final JavaScriptObject program) /*-{
+   //           var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //           gl.linkProgram(program);
+   //           if (!gl.getProgramParameter(program, gl.LINK_STATUS))
+   //                   return false;
+   //           else
+   //                   return true;
+   //   }-*/;
+   //
+   //   @Override
+   //   public boolean linkProgram(final int program) {
+   //      return jsLinkProgram(_shaderList.get(program));
+   //   }
+
+
+   //   private native void jsPrintProgramInfoLog(final JavaScriptObject program) /*-{
+   //           var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //           if (!gl.getProgramParameter(program, gl.LINK_STATUS))
+   //                   alert("Error linking program: ");
+   //   }-*/;
+   //
+   //   @Override
+   //   public void printProgramInfoLog(final int program) {
+   //      jsPrintProgramInfoLog(_shaderList.get(program));
+   //   }
+>>>>>>> purgatory
 }

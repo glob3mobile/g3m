@@ -15,6 +15,8 @@ class DirectMesh : public AbstractMesh {
 protected:
   void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const;
 
+  Mesh* createNormalsMesh() const;
+
 
 public:
   DirectMesh(const int primitive,

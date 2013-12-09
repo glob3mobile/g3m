@@ -35,7 +35,7 @@ private:
 
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
-  
+
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
   TileRasterizer* getTileRasterizer();
@@ -92,7 +92,7 @@ public:
 
   Quality getQuality() const;
   void setQuality(Quality quality);
-
+  
 };
 
 #endif

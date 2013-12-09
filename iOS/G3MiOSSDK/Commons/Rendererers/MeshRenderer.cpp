@@ -716,3 +716,17 @@ void MeshRenderer::zRender(const G3MRenderContext* rc, GLState* glState){
   state->_release();
 
 }
+
+void MeshRenderer::showNormals(bool v) const{
+  _showNormals = v;
+  const int meshesCount = _meshes.size();
+  for (int i = 0; i < meshesCount; i++) {
+    Mesh* mesh = _meshes[i];
+    mesh->showNormals(v);
+  }
+}
+
+void MeshRenderer::addMesh(Mesh* mesh) {
+  _meshes.push_back(mesh);
+  mesh->showNormals(_showNormals);
+}

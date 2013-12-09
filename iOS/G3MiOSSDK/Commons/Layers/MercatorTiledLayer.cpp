@@ -194,3 +194,7 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
 
   return true;
 }
+
+RenderState MercatorTiledLayer::getRenderState() {
+  return RenderState::ready();
+}

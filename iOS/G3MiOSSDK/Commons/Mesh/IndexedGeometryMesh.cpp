@@ -8,7 +8,6 @@
 
 #include "IndexedGeometryMesh.hpp"
 
-#include "IndexedMesh.hpp"
 #include "GL.hpp"
 #include "IShortBuffer.hpp"
 

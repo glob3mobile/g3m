@@ -98,6 +98,8 @@ public abstract class AbstractMesh extends Mesh
      _depthTest = depthTest;
      _glState = new GLState();
      _normals = normals;
+     _normalsMesh = null;
+     _showNormals = false;
     createGLState();
   }
 
@@ -141,10 +143,47 @@ public abstract class AbstractMesh extends Mesh
   
   }
 
+  protected boolean _showNormals;
+  protected Mesh _normalsMesh;
+  protected final Mesh createNormalsMesh()
+  {
+  
+    DirectMesh verticesMesh = new DirectMesh(GLPrimitive.points(), false, _center, _vertices, (float)1.0, (float)2.0, new Color(Color.red()), null, (float)1.0, false, null);
+  
+    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+  
+    BoundingVolume volume = getBoundingVolume();
+    Sphere sphere = volume.createSphere();
+    double normalsSize = sphere.getRadius() / 100.0;
+    if (sphere != null)
+       sphere.dispose();
+  
+    final int size = _vertices.size();
+    for (int i = 0; i < size; i+=3)
+    {
+  
+      Vector3D v = new Vector3D(_vertices.get(i), _vertices.get(i+1), _vertices.get(i+2));
+      Vector3D n = new Vector3D(_normals.get(i), _normals.get(i+1), _normals.get(i+2));
+  
+      Vector3D v_n = v.add(n.normalized().times(normalsSize));
+  
+      fbb.add(v);
+      fbb.add(v_n);
+    }
+  
+    DirectMesh normalsMesh = new DirectMesh(GLPrimitive.lines(), true, _center, fbb.create(), (float)2.0, (float)1.0, new Color(Color.blue()));
+  
+    if (fbb != null)
+       fbb.dispose();
+  
+    CompositeMesh compositeMesh = new CompositeMesh();
+    compositeMesh.addMesh(verticesMesh);
+    compositeMesh.addMesh(normalsMesh);
+  
+    return compositeMesh;
+  
+  }
 
-  ///#include "GPUProgramState.hpp"
-  
-  
   public void dispose()
   {
     if (_owner)
@@ -165,6 +204,9 @@ public abstract class AbstractMesh extends Mesh
        _translationMatrix.dispose();
   
     _glState._release();
+  
+    if (_normalsMesh != null)
+       _normalsMesh.dispose();
   
     super.dispose();
   
@@ -202,6 +244,7 @@ public abstract class AbstractMesh extends Mesh
   public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     _glState.setParent(parentGLState);
+<<<<<<< HEAD
     rawRender(rc, _glState, RenderType.REGULAR_RENDER);
   }
 
@@ -222,6 +265,39 @@ public abstract class AbstractMesh extends Mesh
   
     zRenderGLState._release();
   
+=======
+    rawRender(rc);
+  
+    //RENDERING NORMALS
+    if (_normals != null)
+    {
+      if (_showNormals)
+      {
+        if (_normalsMesh == null)
+        {
+          //_normalsMesh = createNormalsMesh();
+        }
+        if (_normalsMesh != null)
+        {
+          //_normalsMesh->render(rc, parentGLState);
+        }
+      }
+      else
+      {
+        if (_normalsMesh != null)
+        {
+          if (_normalsMesh != null)
+             _normalsMesh.dispose();
+          _normalsMesh = null;
+        }
+      }
+    }
+  }
+
+  public final void showNormals(boolean v)
+  {
+    _showNormals = v;
+>>>>>>> purgatory
   }
 
 }

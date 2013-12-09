@@ -2,9 +2,9 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.GPUProgramFactory;
 import org.glob3.mobile.generated.GPUProgramManager;
-import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -68,40 +68,43 @@ public class MapBooBuilder_WebGL
 
    @Override
    protected GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
+      final GPUProgramFactory gpuProgramFactory = new BasicShadersGL2();
+      /*
+            gpuProgramFactory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader,
+                     Shaders_WebGL._billboardFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader,
-               Shaders_WebGL._billboardFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader,
+                     Shaders_WebGL._defaultFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader,
-               Shaders_WebGL._defaultFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("ColorMesh", Shaders_WebGL._colorMeshVertexShader,
+                     Shaders_WebGL._colorMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("ColorMesh", Shaders_WebGL._colorMeshVertexShader,
-               Shaders_WebGL._colorMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("TexturedMesh", Shaders_WebGL._texturedMeshVertexShader,
+                     Shaders_WebGL._texturedMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh", Shaders_WebGL._texturedMeshVertexShader,
-               Shaders_WebGL._texturedMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh",
+                     Shaders_WebGL._transformedTexCoortexturedMeshVertexShader,
+                     Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh",
-               Shaders_WebGL._transformedTexCoortexturedMeshVertexShader,
-               Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", Shaders_WebGL._flatColorMeshVertexShader,
+                     Shaders_WebGL._flatColorMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", Shaders_WebGL._flatColorMeshVertexShader,
-               Shaders_WebGL._flatColorMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", Shaders_WebGL._noColorMeshVertexShader,
+                     Shaders_WebGL._noColorMeshFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", Shaders_WebGL._noColorMeshVertexShader,
-               Shaders_WebGL._noColorMeshFragmentShader));
+            gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight",
+                     Shaders_WebGL._TexturedMesh_DirectionLightVertexShader, Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
 
-      gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight",
-               Shaders_WebGL._TexturedMesh_DirectionLightVertexShader, Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
-
-      gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
-               Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader, Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
-
+<<<<<<< HEAD
       gpuProgramFactory.add(new GPUProgramSources("ZRender", 
 				Shaders_WebGL._zRenderVertexShader,
 				Shaders_WebGL._zRenderFragmentShader));
       
+=======
+            gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
+                     Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader, Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
+      */
+>>>>>>> purgatory
       return new GPUProgramManager(gpuProgramFactory);
    }
 

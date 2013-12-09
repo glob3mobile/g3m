@@ -12,6 +12,8 @@
 #include "Sector.hpp"
 #include <list>
 
+#include "TileTessellator.hpp"
+
 class G3MRenderContext;
 class Mesh;
 class TileTessellator;
@@ -50,7 +52,7 @@ private:
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
-  
+
   Mesh* _flatColorMesh;
 
   bool _textureSolved;
@@ -60,10 +62,23 @@ private:
   bool _texturizerDirty;    //Texturizer needs to be called
 
   float _verticalExaggeration;
-  double _minHeight;
-  double _maxHeight;
+  TileTessellatorMeshData _tileTessellatorMeshData;
 
   BoundingVolume* _boundingVolume;
+
+  //LOD TEST DATA
+  Vector3D* _middleNorthPoint;
+  Vector3D* _middleSouthPoint;
+  Vector3D* _middleEastPoint;
+  Vector3D* _middleWestPoint;
+  void computeTileCorners(const Planet* planet);
+
+  double _latitudeArcSegmentRatioSquared;
+  double _longitudeArcSegmentRatioSquared;
+
+
+  void prepareTestLODData(const Planet* planet);
+  //////////////////////////////////////////
 
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   ElevationDataProvider* elevationDataProvider,
@@ -86,16 +101,18 @@ private:
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const TilesRenderParameters* tilesRenderParameters);
 
-  ITimer* _lodTimer;
   bool _lastLodTest;
+  double _lastLodTimeInMS;
+
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const LayerTilesRenderParameters* layerTilesRenderParameters,
                                   TileTexturizer* texturizer,
                                   const TilesRenderParameters* tilesRenderParameters,
                                   const TilesStatistics* tilesStatistics,
                                   const ITimer* lastSplitTimer,
-                                  const float dpiFactor,
-                                  const float deviceQualityFactor);
+                                  double texWidthSquared,
+                                  double texHeightSquared,
+                                  double nowInMS);
 
 
   void debugRender(const G3MRenderContext* rc,
@@ -127,9 +144,6 @@ private:
   ITexturizerData* _texturizerData;
   PlanetTileTessellatorData* _tessellatorData;
 
-  Box* _tileBoundingVolume;
-  Box* getTileBoundingVolume(const G3MRenderContext* rc);
-
   int                    _elevationDataLevel;
   ElevationData*         _elevationData;
   bool                   _mustActualizeMeshDueToNewElevationData;
@@ -144,8 +158,6 @@ private:
                                           const TileTessellator* tessellator,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
-
-//  const Vector2D getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const;
 
   inline void rawRender(const G3MRenderContext* rc,
                         const GLState* glState,
@@ -174,25 +186,9 @@ public:
        const PlanetRenderer* planetRenderer);
 
   ~Tile();
-  
+
   //Change to public for TileCache
   std::vector<Tile*>* getSubTiles(const bool mercator);
-
-//  const Sector getSector() const {
-//    return _sector;
-//  }
-//
-//  int getLevel() const {
-//    return _level;
-//  }
-//
-//  int getRow() const {
-//    return _row;
-//  }
-//
-//  int getColumn() const {
-//    return _column;
-//  }
 
   Mesh* getTexturizedMesh() const {
     return _texturizedMesh;
@@ -235,30 +231,32 @@ public:
               const Sector* renderedSector,
               bool isForcedFullRender,
               long long texturePriority,
-              const float dpiFactor,
-              const float deviceQualityFactor);
+              double texWidth,
+              double texHeight,
+              double nowInMS);
 
   void actualizeQuadTree(const G3MRenderContext* rc,
-                               std::list<Tile*>& renderedTiles,
-                               const Planet* planet,
-                               const Vector3D& cameraNormalizedPosition,
-                               double cameraAngle2HorizonInRadians,
-                               const Frustum* cameraFrustumInModelCoordinates,
-                               TilesStatistics* tilesStatistics,
-                               const float verticalExaggeration,
-                               const LayerTilesRenderParameters* layerTilesRenderParameters,
-                               TileTexturizer* texturizer,
-                               const TilesRenderParameters* tilesRenderParameters,
-                               ITimer* lastSplitTimer,
-                               ElevationDataProvider* elevationDataProvider,
-                               const TileTessellator* tessellator,
-                               TileRasterizer* tileRasterizer,
-                               const LayerSet* layerSet,
-                               const Sector* renderedSector,
-                               bool isForcedFullRender,
-                               long long texturePriority,
-                               const float dpiFactor,
-                               const float deviceQualityFactor);
+                         std::list<Tile*>& renderedTiles,
+                         const Planet* planet,
+                         const Vector3D& cameraNormalizedPosition,
+                         double cameraAngle2HorizonInRadians,
+                         const Frustum* cameraFrustumInModelCoordinates,
+                         TilesStatistics* tilesStatistics,
+                         const float verticalExaggeration,
+                         const LayerTilesRenderParameters* layerTilesRenderParameters,
+                         TileTexturizer* texturizer,
+                         const TilesRenderParameters* tilesRenderParameters,
+                         ITimer* lastSplitTimer,
+                         ElevationDataProvider* elevationDataProvider,
+                         const TileTessellator* tessellator,
+                         TileRasterizer* tileRasterizer,
+                         const LayerSet* layerSet,
+                         const Sector* renderedSector,
+                         bool isForcedFullRender,
+                         long long texturePriority,
+                         double texWidthSquared,
+                         double texHeightSquared,
+                         double nowInMS);
 
 
   void performRawRender(const G3MRenderContext* rc,
@@ -275,7 +273,7 @@ public:
                         TilesStatistics* tilesStatistics);
 
   void zRender(const G3MRenderContext* rc,
-              const GLState& parentState);
+               const GLState& parentState);
 
   const TileKey getKey() const;
 
@@ -322,38 +320,34 @@ public:
   void toBeDeleted(TileTexturizer*        texturizer,
                    ElevationDataProvider* elevationDataProvider);
 
-  
-  double getMinHeight() const;
-  double getMaxHeight() const;
-
   const std::string description() const;
 
   inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
                                             const Angle& splitLongitude,
                                             bool setParent);
-  
+
   bool isElevationDataSolved() const {
     return (_elevationDataLevel == _level);
   }
-  
+
   ElevationData* getElevationData() const {
     return _elevationData;
   }
-  
+
   void setElevationData(ElevationData* ed, int level);
-  
+
   void getElevationDataFromAncestor(const Vector2I& extent);
-  
+
   void initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                const TileTessellator* tesselator,
                                const Vector2I& tileMeshResolution,
                                const Planet* planet,
                                bool renderDebug);
-  
+
   void ancestorChangedElevationData(Tile* ancestor);
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
-
+  
 };
 
 #endif

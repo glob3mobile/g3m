@@ -63,7 +63,10 @@ public:
   void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
     _mesh->zRender(rc, parentGLState);
   }
-  
+
+  void showNormals(bool v) const{
+    _mesh->showNormals(v);
+  }
 };
 
 #endif
