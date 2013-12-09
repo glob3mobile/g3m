@@ -129,10 +129,14 @@ public class Tile
      */
   
     Angle latitudeAngle = nN.angleBetween(nS);
-    double latitudeArcSegmentRatio = latitudeAngle.isZero()? 1 : latitudeAngle._radians / (2 * java.lang.Math.sin(latitudeAngle._radians/2));
+    double latRad = latitudeAngle._radians;
+    final double sin_lat_2 = java.lang.Math.sin(latRad / 2);
+    final double latitudeArcSegmentRatio = sin_lat_2 == 0? 1 : latRad / (2 * sin_lat_2);
   
     Angle longitudeAngle = nE.angleBetween(nW);
-    double longitudeArcSegmentRatio = longitudeAngle.isZero()? 1 : longitudeAngle._radians / (2 * java.lang.Math.sin(longitudeAngle._radians/2));
+    final double lonRad = longitudeAngle._radians;
+    final double sin_lon_2 = java.lang.Math.sin(lonRad / 2);
+    final double longitudeArcSegmentRatio = sin_lon_2 == 0? 1 : lonRad / (2 * sin_lon_2);
   
     _latitudeArcSegmentRatioSquared = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
     _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
@@ -310,6 +314,7 @@ public class Tile
   
     //Testing Area
     _lastLodTest = ((latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared *texWidthSquared));
+  
   
     return _lastLodTest;
   }

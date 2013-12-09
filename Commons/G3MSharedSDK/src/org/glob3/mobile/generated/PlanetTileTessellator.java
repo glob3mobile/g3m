@@ -394,11 +394,7 @@ public class PlanetTileTessellator extends TileTessellator
     ShortBufferBuilder indices = new ShortBufferBuilder();
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
-<<<<<<< HEAD
     double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, mercator, vertices, indices, textCoords, data);
-=======
-    final double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, mercator, vertices, indices, textCoords);
->>>>>>> purgatory
   
     if (_skirted)
     {
