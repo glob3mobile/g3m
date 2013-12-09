@@ -63,6 +63,7 @@ public:
 
   CartoDBLayer* copy() const;
 
+  RenderState getRenderState();
 };
 
 #endif

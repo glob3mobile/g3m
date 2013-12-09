@@ -247,6 +247,12 @@ public class G3MWidget
       }
     }
   
+    //Removing unused programs
+    if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0)
+    {
+      _gpuProgramManager.removeUnused();
+    }
+  
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
     //  if (elapsedTimeMS > 100) {
     //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
@@ -638,6 +644,7 @@ public class G3MWidget
   private final boolean _logFPS;
   private final boolean _logDownloaderStatistics;
   private String _lastCacheStatistics;
+  private final int _nFramesBeetweenProgramsCleanUp;
 
   private ITimer _renderStatisticsTimer;
 
@@ -717,6 +724,7 @@ public class G3MWidget
      _initialCameraPositionProvider = initialCameraPositionProvider;
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
+     _nFramesBeetweenProgramsCleanUp = 500;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

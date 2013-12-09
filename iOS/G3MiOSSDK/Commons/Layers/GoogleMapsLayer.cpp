@@ -47,6 +47,7 @@ URL GoogleMapsLayer::getFeatureInfoURL(const Geodetic2D& position,
 
 
 std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -131,4 +132,16 @@ bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {
   }
 
   return true;
+}
+
+RenderState GoogleMapsLayer::getRenderState() {
+  _errors.clear();
+  if (_key.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: key");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

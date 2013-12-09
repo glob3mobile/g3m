@@ -40,19 +40,19 @@ public class GPUVariable
       return GPUUniformKey.POINT_SIZE;
     }
   
-    if (name.compareTo("uAmbientLight") == 0)
+    if (name.compareTo("uAmbientLightColor") == 0)
     {
-      return GPUUniformKey.AMBIENT_LIGHT;
+      return GPUUniformKey.AMBIENT_LIGHT_COLOR;
     }
   
-    if (name.compareTo("uLightDirection") == 0)
+    if (name.compareTo("uDiffuseLightDirection") == 0)
     {
-      return GPUUniformKey.LIGHT_DIRECTION;
+      return GPUUniformKey.DIFFUSE_LIGHT_DIRECTION;
     }
   
-    if (name.compareTo("uLightColor") == 0)
+    if (name.compareTo("uDiffuseLightColor") == 0)
     {
-      return GPUUniformKey.LIGHT_COLOR;
+      return GPUUniformKey.DIFFUSE_LIGHT_COLOR;
     }
   
     if (name.compareTo("uProjection") == 0)

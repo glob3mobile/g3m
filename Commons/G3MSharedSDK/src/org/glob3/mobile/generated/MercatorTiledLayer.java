@@ -111,7 +111,7 @@ public class MercatorTiledLayer extends Layer
     return new URL();
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
     final IMathUtils mu = IMathUtils.instance();
   
@@ -183,4 +183,8 @@ public class MercatorTiledLayer extends Layer
     return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
   }
 
+  public RenderState getRenderState()
+  {
+    return RenderState.ready();
+  }
 }

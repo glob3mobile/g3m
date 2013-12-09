@@ -241,14 +241,14 @@ IThreadUtils* MapBooBuilder::getThreadUtils() {
 
 void MapBooBuilder::setGL(GL *gl) {
   if (_gl != NULL) {
-    //ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
-    //return;
-    ERROR("LOGIC ERROR: _gl already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
+    return;
+    //ERROR("LOGIC ERROR: _gl already initialized");
   }
   if (gl == NULL) {
-    //ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
-    //return;
-    ERROR("LOGIC ERROR: _gl cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+    return;
+    //ERROR("LOGIC ERROR: _gl cannot be NULL");
   }
   _gl = gl;
 }
@@ -1585,7 +1585,8 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {
-  return new CameraFocusSceneLighting();
+  return new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
+                                      Color::yellow());
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {

@@ -36,6 +36,9 @@ void BusyMeshRenderer::start(const G3MRenderContext* rc) {
 
 void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
   rc->getEffectsScheduler()->cancelAllEffectsFor(this);
+
+  delete _mesh;
+  _mesh = NULL;
 }
 
 void BusyMeshRenderer::createGLState() {
@@ -135,6 +138,9 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
                               GLState* glState)
 {
   GL* gl = rc->getGL();
+
+  _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+  _projectionMatrix = MutableMatrix44D::invalid();
 
   createGLState();
   

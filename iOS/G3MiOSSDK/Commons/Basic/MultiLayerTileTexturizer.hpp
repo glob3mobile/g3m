@@ -32,8 +32,7 @@ public:
   
   virtual ~MultiLayerTileTexturizer();
   
-  bool isReady(const G3MRenderContext* rc,
-               LayerSet* layerSet);
+  RenderState getRenderState(LayerSet* layerSet);
   
   void initialize(const G3MContext* context,
                   const TilesRenderParameters* parameters);

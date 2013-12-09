@@ -400,12 +400,16 @@ public:
   }
   
   bool deleteProgram(int program) const {
+    //ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
-    return true;
-//    int NOT_WORKING_APPARENTLY;
-//    int ps;
-//    glGetProgramiv(program, GL_DELETE_STATUS, &ps);
-//    return (ps == GL_TRUE);
+
+    if (glIsProgram(program) == GL_FALSE){
+      return true;
+    } else{
+      int markedToBeDeleted;
+      glGetProgramiv(program, GL_DELETE_STATUS, &markedToBeDeleted);
+      return (markedToBeDeleted == GL_TRUE);
+    }
   }
   
   void attachShader(int program, int shader) const {

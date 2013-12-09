@@ -182,6 +182,8 @@ public class Tile
       _planetRenderer.sectorElevationChanged(_elevationData);
     }
   
+    //_tessellatorMesh->showNormals(true);
+  
     return _tessellatorMesh;
   }
 

@@ -27,6 +27,8 @@
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
+#import <G3MiOSSDK/SectorTileCondition.hpp>
+#import <G3MiOSSDK/AndTileCondition.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
 #import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #import <G3MiOSSDK/MarkTouchListener.hpp>
@@ -137,6 +139,8 @@
 #import <G3MiOSSDK/TextCanvasElement.hpp>
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
+
+#import <G3MiOSSDK/SceneLighting.hpp>
 
 
 
@@ -497,29 +501,29 @@ public:
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
 
-- (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
-  //GPU Program Sources
-  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-                                                                 ofType: @"vsh"];
-  if (!vertShaderPathname) {
-    NSLog(@"Can't load Shader.vsh");
-  }
-  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
-                                                             encoding: NSUTF8StringEncoding
-                                                                error: nil] UTF8String]);
-
-  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-                                                                 ofType: @"fsh"];
-  if (!fragShaderPathname) {
-    NSLog(@"Can't load Shader.fsh");
-  }
-
-  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
-                                                               encoding: NSUTF8StringEncoding
-                                                                  error: nil] UTF8String]);
-
-  return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
-}
+//- (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
+//  //GPU Program Sources
+//  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+//                                                                 ofType: @"vsh"];
+//  if (!vertShaderPathname) {
+//    NSLog(@"Can't load Shader.vsh");
+//  }
+//  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
+//                                                             encoding: NSUTF8StringEncoding
+//                                                                error: nil] UTF8String]);
+//
+//  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+//                                                                 ofType: @"fsh"];
+//  if (!fragShaderPathname) {
+//    NSLog(@"Can't load Shader.fsh");
+//  }
+//
+//  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
+//                                                               encoding: NSUTF8StringEncoding
+//                                                                  error: nil] UTF8String]);
+//
+//  return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
+//}
 
 - (GPUProgramSources) loadDefaultGPUProgramSourcesWithName: (NSString*) name{
   //GPU Program Sources
@@ -603,6 +607,8 @@ public:
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
+  
+  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -636,6 +642,8 @@ public:
   meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
                              Color::newFromRGBA(1, 1, 0, 1));
 
+  meshRenderer->showNormals(true); //SHOWING NORMALS
+
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
 
@@ -646,6 +654,13 @@ public:
                                                           planet: builder.getPlanet()];
   builder.addRenderer(geoRenderer);
 
+  //Showing light directions
+  if (false){
+    CameraFocusSceneLighting* light = new CameraFocusSceneLighting(Color::fromRGBA(0.3, 0.3, 0.3, 1.0),
+                                                                   Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
+    light->setLightDirectionsMeshRenderer(meshRenderer);
+    builder.setSceneLighting(light);
+  }
 
   if (true) { //HUD
     //    HUDRenderer* hudRenderer = new HUDRenderer();
@@ -981,10 +996,9 @@ public:
                               pointSize,
                               flatColor,
                               colors.create());
+  delete vertices;
 
   meshRenderer->addMesh( mesh );
-
-  delete vertices;
 
   delete planet;
 }
@@ -1079,6 +1093,12 @@ public:
     //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
+  //  const std::string& mapKey,
+  //  const TimeInterval& timeToCache,
+  //  bool readExpired = true,
+  //  int initialLevel = 1,
+  //  int maxLevel = 19,
+  //  LayerCondition* condition = NULL
   if (false) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
@@ -1247,6 +1267,63 @@ public:
                                   TimeInterval::fromDays(30),
                                   true);
     layerSet->addLayer(bing);
+
+  }
+
+  if (true) {
+//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
+//                                                  Sector::fullSphere(),
+//                                                  false,
+//                                                  0,
+//                                                  4,
+//                                                  TimeInterval::zero(),
+//                                                  false));
+
+//    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                        URL("http://www.nasa.network.com/wms?", false),
+//                                        WMS_1_1_0,
+//                                        Sector::fullSphere(),
+//                                        "image/jpeg",
+//                                        "EPSG:4326",
+//                                        "",
+//                                        false,
+//                                        //new LevelTileCondition(0, 8),
+//                                        NULL,
+//                                        TimeInterval::fromDays(30),
+//                                        true);
+//    layerSet->addLayer(blueMarble);
+
+
+    // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
+    // [lower=[lat=48.302366666666664, lon=11.65903888888889], upper=[lat=48.40372222222222, lon=11.788533333333335]]
+
+//    AndTileCondition* condition = new AndTileCondition(new LevelTileCondition(0, 500),
+//                                                       new SectorTileCondition(Sector::fromDegrees(39.99854166666677, -72.00145833333336,
+//                                                                                                   42.50145833333343, -68.9985416666667)));
+//
+//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/2-N40-W072_ll_tif.tiles/{level}/{x}/{y}.png",
+//                                                  Sector::fullSphere(),
+//                                                  true,
+//                                                  0,
+//                                                  8,
+//                                                  TimeInterval::zero(),
+//                                                  false,
+//                                                  //new LevelTileCondition(3, 500)
+//                                                  //new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+//                                                  //                                            42.50166666666667, 3.0016666666666665))
+//                                                  condition
+//                                                  ));
+
+    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/_merged/{level}/{x}/{y}.jpg",
+                                                  Sector::fullSphere(),
+                                                  true,
+                                                  0,
+                                                  15,
+                                                  TimeInterval::zero(),
+                                                  false,
+                                                  NULL
+                                                  ));
+
   }
 
   if (false) {
@@ -1944,13 +2021,16 @@ private:
     _colorIndex = (_colorIndex + 1) % wheelSize;
 
 
-    return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
+    BoxShape* box = new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
                         Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                         Color::newFromRGBA(0.2, 0.2, 0, 1));
+
+    //box->setPitch(Angle::fromDegrees(45));
+    return box;
 
   }
 
@@ -2463,7 +2543,6 @@ public:
                                     2,
                                     1,
                                     color);
-
       delete vertices;
 
       return result;
@@ -2571,6 +2650,9 @@ public:
 
       testCanvas(context->getFactory());
 
+      // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
+
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -2869,7 +2951,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         //      NSString* geojsonName = @"geojson/countries";
         //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2926,7 +3008,7 @@ public:
         }
       }
 
-      if (false) {
+      if (true) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
