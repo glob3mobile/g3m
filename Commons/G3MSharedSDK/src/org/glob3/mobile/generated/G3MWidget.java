@@ -606,6 +606,11 @@ public class G3MWidget
     _initialCameraPositionHasBeenSet = false;
   }
 
+  public final G3MRenderContext getRenderContext()
+  {
+    return _renderContext;
+  }
+
   public final void setForceBusyRenderer(boolean forceBusyRenderer)
   {
     _forceBusyRenderer = forceBusyRenderer;
