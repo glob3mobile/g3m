@@ -11,32 +11,48 @@
 
 #include "Sector.hpp"
 
+class QuadTree_Content;
+
 class QuadTreeVisitor {
 public:
   virtual ~QuadTreeVisitor() {
   }
 
-  virtual bool visitElement(const Sector& sector,
-                            const void*   element) const = 0;
+  virtual bool visitElement(const Sector&           sector,
+                            const QuadTree_Content* content) const = 0;
 
   virtual void endVisit(bool aborted) const = 0;
 
 };
 
+class QuadTree_Content {
+public:
+#ifdef C_CODE
+  virtual ~QuadTree_Content() {
+  }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
+
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  virtual void unusedMethod() const = 0;
+};
 
 class QuadTree_Element {
 public:
-  const Sector _sector;
-  const void*  _element;
+  const Sector            _sector;
+  const QuadTree_Content* _content;
 
-  QuadTree_Element(const Sector& sector,
-                   const void*   element) :
+  QuadTree_Element(const Sector&           sector,
+                   const QuadTree_Content* content) :
   _sector(sector),
-  _element(element)
+  _content(content)
   {
   }
 
   ~QuadTree_Element() {
+    delete _content;
   }
 
 };
@@ -44,8 +60,6 @@ public:
 
 class QuadTree_Node {
 private:
-  const int     _depth;
-  const Sector  _sector;
   std::vector<QuadTree_Element*> _elements;
 
   QuadTree_Node** _children;
@@ -59,6 +73,9 @@ private:
   }
 
 public:
+  const int     _depth;
+  const Sector  _sector;
+
   QuadTree_Node(const Sector& sector) :
   _sector(sector),
   _depth(1),
@@ -69,12 +86,14 @@ public:
   ~QuadTree_Node();
 
   bool add(const Sector& sector,
-           const void* element,
+           const QuadTree_Content* content,
            int maxElementsPerNode,
            int maxDepth);
 
   bool acceptVisitor(const Sector& sector,
                      const QuadTreeVisitor& visitor) const;
+
+  bool isEmpty() const;
 
 };
 
@@ -107,11 +126,15 @@ public:
   ~QuadTree();
 
   bool add(const Sector& sector,
-           const void* element);
+           const QuadTree_Content* content);
 
   bool acceptVisitor(const Sector& sector,
                      const QuadTreeVisitor& visitor) const;
-  
+
+  void clear();
+
+  bool isEmpty() const;
+
 };
 
 #endif

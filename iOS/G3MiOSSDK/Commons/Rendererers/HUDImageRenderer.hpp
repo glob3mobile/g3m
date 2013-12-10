@@ -117,7 +117,10 @@ public:
   void start(const G3MRenderContext* rc) {
   }
 
+  void recreateImage();
+
   void stop(const G3MRenderContext* rc) {
+    recreateImage();
   }
 
   void onResume(const G3MContext* context) {
@@ -128,8 +131,6 @@ public:
 
   void onDestroy(const G3MContext* context) {
   }
-
-  void recreateImage();
 
   HUDImageRenderer::ImageFactory* getImageFactory() const {
     return _imageFactory;

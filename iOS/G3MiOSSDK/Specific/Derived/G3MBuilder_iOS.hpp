@@ -30,6 +30,10 @@ public:
 
   void initializeWidget();
 
+  G3MWidget_iOS* getNativeWidget() const {
+    return _nativeWidget;
+  }
+
 };
 
 #endif

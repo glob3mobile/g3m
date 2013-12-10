@@ -93,7 +93,8 @@ public:
   const std::string description() const;
 
   MapQuestLayer* copy() const;
-
+  
+  RenderState getRenderState();
 };
 
 

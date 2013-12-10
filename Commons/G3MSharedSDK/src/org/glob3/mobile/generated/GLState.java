@@ -23,7 +23,6 @@ package org.glob3.mobile.generated;
 
 public class GLState extends RCObject
 {
-
   private GLFeatureSet _features = new GLFeatureSet();
   private GLFeatureSet _accumulatedFeatures;
 
@@ -33,7 +32,7 @@ public class GLState extends RCObject
   private GPUVariableValueSet _valuesSet;
   private GLGlobalState _globalState;
 
-  private GPUProgram _lastGPUProgramUsed;
+  private GPUProgram _linkedProgram;
 
   private GLState _parentGLState;
 
@@ -49,18 +48,44 @@ public class GLState extends RCObject
     if (_globalState != null)
        _globalState.dispose();
     _globalState = null;
-    _lastGPUProgramUsed = null;
+  
+    if (_linkedProgram != null)
+    {
+      _linkedProgram.removeReference();
+      _linkedProgram = null;
+    }
   
     if (_accumulatedFeatures != null)
        _accumulatedFeatures.dispose();
     _accumulatedFeatures = null;
   }
 
+  public void dispose()
+  {
+    if (_accumulatedFeatures != null)
+       _accumulatedFeatures.dispose();
+  
+    if (_valuesSet != null)
+       _valuesSet.dispose();
+    if (_globalState != null)
+       _globalState.dispose();
+  
+    if (_parentGLState != null)
+    {
+      _parentGLState._release();
+    }
+  
+    if (_linkedProgram != null)
+    {
+      _linkedProgram.removeReference();
+    }
+  }
+
 
   public GLState()
   {
      _parentGLState = null;
-     _lastGPUProgramUsed = null;
+     _linkedProgram = null;
      _parentsTimeStamp = -1;
      _timeStamp = 0;
      _valuesSet = null;
@@ -95,21 +120,6 @@ public class GLState extends RCObject
   }
 //  GLFeatureSet* createAccumulatedFeatures() const;
 
-  public void dispose()
-  {
-    if (_accumulatedFeatures != null)
-       _accumulatedFeatures.dispose();
-  
-    if (_valuesSet != null)
-       _valuesSet.dispose();
-    if (_globalState != null)
-       _globalState.dispose();
-  
-    if (_parentGLState != null)
-    {
-      _parentGLState._release();
-    }
-  }
 
   public final void setParent(GLState parent)
   {
@@ -157,30 +167,12 @@ public class GLState extends RCObject
   
       GLFeatureSet accumulatedFeatures = getAccumulatedFeatures();
   
-      //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-      //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
-      //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
-      //
-      ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
-      ////        const GLFeature* f = accumulatedFeatures->get(j);
-      ////        if (f->getGroup() == groupName) {
-      ////          group->add(f);
-      ////        }
-      ////      }
-      ////      group->addToGPUVariableSet(_valuesSet);
-      ////      group->applyOnGlobalGLState(_globalState);
-      //
-      //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
-      //
-      //      delete group;
-      //    }
-  
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
       final int uniformsCode = _valuesSet.getUniformsCode();
       final int attributesCode = _valuesSet.getAttributesCode();
   
-      _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+      _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
     }
   
     if (_valuesSet == null || _globalState == null)
@@ -189,14 +181,14 @@ public class GLState extends RCObject
       return;
     }
   
-    if (_lastGPUProgramUsed != null)
+    if (_linkedProgram != null)
     {
-      gl.useProgram(_lastGPUProgramUsed);
+      gl.useProgram(_linkedProgram);
   
-      _valuesSet.applyValuesToProgram(_lastGPUProgramUsed);
+      _valuesSet.applyValuesToProgram(_linkedProgram);
       _globalState.applyChanges(gl, gl.getCurrentGLGlobalState());
   
-      _lastGPUProgramUsed.applyChanges(gl);
+      _linkedProgram.applyChanges(gl);
   
       //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
     }

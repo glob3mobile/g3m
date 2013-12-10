@@ -63,7 +63,8 @@ public:
   const std::string description() const;
 
   MapBoxLayer* copy() const;
-
+  
+  RenderState getRenderState();
 };
 
 #endif

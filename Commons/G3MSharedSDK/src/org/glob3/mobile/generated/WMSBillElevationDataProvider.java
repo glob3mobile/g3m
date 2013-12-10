@@ -85,7 +85,8 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
     isb.addString(",");
     isb.addDouble(sector._upper._longitude._degrees);
   
-  int TODO_WMS_1_1_1;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO_WMS_1_1_1;
   //  isb->addDouble(sector._lower._longitude._degrees);
   //  isb->addString(",");
   //  isb->addDouble(sector._lower._latitude._degrees);

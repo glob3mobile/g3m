@@ -27,6 +27,9 @@ public class DirectMesh extends AbstractMesh
     gl.drawArrays(_primitive, 0, verticesCount, _glState, rc.getGPUProgramManager());
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Mesh createNormalsMesh();
+
 
   public DirectMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, float lineWidth, float pointSize, Color flatColor, IFloatBuffer colors, float colorsIntensity, boolean depthTest)
   {

@@ -45,12 +45,12 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
   };
 
 //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   ShortBufferBuilder indices;
 
   const unsigned int numVertices = 8;
   for (unsigned int n=0; n<numVertices; n++) {
-    vertices.add(v[n*3], v[n*3+1], v[n*3+2]);
+    vertices->add(v[n*3], v[n*3+1], v[n*3+2]);
   }
 
   for (unsigned int n=0; n<numIndices; n++) {
@@ -59,14 +59,18 @@ Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
 
   Color* borderColor = (_borderColor != NULL) ? new Color(*_borderColor) : new Color(*_surfaceColor);
 
-  return new IndexedMesh(GLPrimitive::lines(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         _borderWidth,
-                         1,
-                         borderColor);
+  Mesh* result = new IndexedMesh(GLPrimitive::lines(),
+                                 true,
+                                 vertices->getCenter(),
+                                 vertices->create(),
+                                 indices.create(),
+                                 (_borderWidth>1)? _borderWidth : 1,
+                                 1,
+                                 borderColor);
+
+  delete vertices;
+
+  return result;
 }
 
 Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
@@ -95,13 +99,12 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
     5, 5, 4, 1, 0, 0
   };
 
-//  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   ShortBufferBuilder indices;
 
   const unsigned int numVertices = 8;
   for (unsigned int n=0; n<numVertices; n++) {
-    vertices.add(v[n*3], v[n*3+1], v[n*3+2]);
+    vertices->add(v[n*3], v[n*3+1], v[n*3+2]);
   }
 
   for (unsigned int n=0; n<numIndices; n++) {
@@ -110,14 +113,18 @@ Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
   
   Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
 
-  return new IndexedMesh(GLPrimitive::triangleStrip(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         _borderWidth,
-                         1,
-                         surfaceColor);
+  Mesh* result = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                 true,
+                                 vertices->getCenter(),
+                                 vertices->create(),
+                                 indices.create(),
+                                 (_borderWidth>1)? _borderWidth : 1,
+                                 1,
+                                 surfaceColor);
+
+  delete vertices;
+
+  return result;
 }
 
 Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc) {
@@ -128,8 +135,8 @@ Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc) {
   const float lowerZ = (float) -(_extentZ / 2);
   const float upperZ = (float) +(_extentZ / 2);
 
-  FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  FloatBufferBuilderFromCartesian3D* normals  = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
   const float v[] = {
     //FACE 1
@@ -207,31 +214,36 @@ Mesh* BoxShape::createSurfaceMeshWithNormals(const G3MRenderContext* rc) {
   const unsigned int numVertices = 6 * numFaces;
   
   for (unsigned int i=0; i<numVertices; i++) {
-    vertices.add(v[i*3], v[i*3+1], v[i*3+2]);
+    vertices->add(v[i*3], v[i*3+1], v[i*3+2]);
   }
 
   for (unsigned int i=0; i<numFaces; i++) {
-    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
-    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
-    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
-    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
-    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
-    normals.add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals->add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals->add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals->add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals->add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals->add(n[i*3], n[i*3+1], n[i*3+2]);
+    normals->add(n[i*3], n[i*3+1], n[i*3+2]);
   }
 
   Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
 
-  return new DirectMesh(GLPrimitive::triangles(),
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         _borderWidth,
-                         1,
-                         surfaceColor,
-                        NULL,
-                        1,
-                        true,
-                        normals.create());
+  Mesh* result = new DirectMesh(GLPrimitive::triangles(),
+                                true,
+                                vertices->getCenter(),
+                                vertices->create(),
+                                (_borderWidth>1)? _borderWidth : 1,
+                                1,
+                                surfaceColor,
+                                NULL,
+                                1,
+                                true,
+                                normals->create());
+
+  delete vertices;
+  delete normals;
+
+  return result;
 }
 
 

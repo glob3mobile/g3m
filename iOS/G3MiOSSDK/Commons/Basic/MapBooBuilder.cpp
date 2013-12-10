@@ -49,7 +49,7 @@
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
 #include "URLTemplateLayer.hpp"
-
+#include "ErrorHandling.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -243,10 +243,12 @@ void MapBooBuilder::setGL(GL *gl) {
   if (_gl != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
     return;
+    //ERROR("LOGIC ERROR: _gl already initialized");
   }
   if (gl == NULL) {
     ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
     return;
+    //ERROR("LOGIC ERROR: _gl cannot be NULL");
   }
   _gl = gl;
 }
@@ -480,7 +482,8 @@ bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
 }
 
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
-  TileTessellator* tessellator = new PlanetTileTessellator(true, Sector::fullSphere());
+  const bool skirted = true;
+  TileTessellator* tessellator = new PlanetTileTessellator(skirted, Sector::fullSphere());
 
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
@@ -506,6 +509,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
+                                              true,
                                               verticalExaggeration,
                                               texturizer,
                                               tileRasterizer,
@@ -680,7 +684,7 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
                                         maxLevel,
                                         TimeInterval::fromDays(30));
   }
-  
+
   return result;
 }
 
@@ -850,9 +854,9 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
 
   const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
 
-//  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-//    return NULL;
-//  }
+  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+  //    return NULL;
+  //  }
 
   return new MapBoo_Scene(jsonObject->getAsString("id", ""),
                           jsonObject->getAsString("name", ""),
@@ -1381,7 +1385,7 @@ void MapBooBuilder::saveApplicationData() const {
   //  std::vector<MapBoo_Scene*> _applicationScenes;
   //  int                        _applicationCurrentSceneIndex;
   //  int                        _lastApplicationCurrentSceneIndex;
-  int __DGD_at_work;
+#warning Diego at work!
 }
 
 void MapBooBuilder::setHasParsedApplication() {
@@ -1581,7 +1585,8 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {
-  return new CameraFocusSceneLighting();
+  return new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
+                                      Color::yellow());
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {

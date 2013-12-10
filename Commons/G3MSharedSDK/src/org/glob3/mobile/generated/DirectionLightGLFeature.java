@@ -1,20 +1,24 @@
 package org.glob3.mobile.generated; 
 public class DirectionLightGLFeature extends GLFeature
 {
-
   private GPUUniformValueVec3FloatMutable _lightDirectionUniformValue;
 
-  public DirectionLightGLFeature(Vector3D dir, Color lightColor, float ambientLight)
+  public void dispose()
+  {
+    super.dispose();
+  }
+
+  public DirectionLightGLFeature(Vector3D diffuseLightDirection, Color diffuseLightColor, Color ambientLightColor)
   {
      super(GLFeatureGroupName.LIGHTING_GROUP, GLFeatureID.GLF_DIRECTION_LIGTH);
-    _values.addUniformValue(GPUUniformKey.AMBIENT_LIGHT, new GPUUniformValueFloat(ambientLight), false);
+    _values.addUniformValue(GPUUniformKey.AMBIENT_LIGHT_COLOR, new GPUUniformValueVec3Float(ambientLightColor), false);
   
-    Vector3D dirN = dir.normalized();
+    Vector3D dirN = diffuseLightDirection.normalized();
   
     _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float) dirN._x, (float) dirN._y, (float) dirN._z);
   
-    _values.addUniformValue(GPUUniformKey.LIGHT_DIRECTION, _lightDirectionUniformValue, false);
-    _values.addUniformValue(GPUUniformKey.LIGHT_COLOR, new GPUUniformValueVec4Float(lightColor), false);
+    _values.addUniformValue(GPUUniformKey.DIFFUSE_LIGHT_DIRECTION, _lightDirectionUniformValue, false);
+    _values.addUniformValue(GPUUniformKey.DIFFUSE_LIGHT_COLOR, new GPUUniformValueVec3Float(diffuseLightColor), false);
   
   }
 

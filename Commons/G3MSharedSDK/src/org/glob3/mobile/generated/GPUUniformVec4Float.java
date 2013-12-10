@@ -5,4 +5,9 @@ public class GPUUniformVec4Float extends GPUUniform
   {
      super(name,id, GLType.glVec4Float());
   }
+
+  public void dispose()
+  {
+    super.dispose();
+  }
 }

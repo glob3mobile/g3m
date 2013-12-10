@@ -205,7 +205,7 @@ bool GenericQuadTree_Node::remove(const void* element) {
 
   for (int i = 0; i < _elements.size(); i++) {
     GenericQuadTree_Element* item = _elements[i];
-    if (item->_element == element){
+    if (item->_element == element) {
       _elements.erase(_elements.begin() + i);
       delete item;
       wasRemoved = true;
@@ -226,14 +226,14 @@ bool GenericQuadTree_Node::remove(const void* element) {
   }
 #endif
 
-  if (wasRemoved){
+  if (wasRemoved) {
     return true;
   }
   
   if (_children != NULL) {
 
     for (int i = 0; i < 4; i++) {
-      if (_children[i]->remove(element)){
+      if (_children[i]->remove(element)) {
         //The item was removed from one of my children
 
         //Removing all children if none has an item

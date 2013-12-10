@@ -31,8 +31,6 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
      this(coordinatesArray, style, -1, -1);
   }
   public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style, int minTileLevel, int maxTileLevel)
-  //_lineColor( style.getColor() ),
-  //_lineWidth( style.getWidth() )
   {
      super(calculateSectorFromCoordinatesArray(coordinatesArray), minTileLevel, maxTileLevel);
      _coordinatesArray = copyCoordinatesArray(coordinatesArray);

@@ -18,6 +18,8 @@ class G3MRenderContext;
 #include <vector>
 #include "Vector2I.hpp"
 
+#include "ChangedListener.hpp"
+
 class IElevationDataListener {
 public:
 #ifdef C_CODE
@@ -44,7 +46,15 @@ public:
 
 
 class ElevationDataProvider {
+protected:
+
+  ChangedListener* _changedListener;
+
+  bool _enabled;
+
 public:
+
+  ElevationDataProvider():_changedListener(NULL), _enabled(true) {}
 
   virtual ~ElevationDataProvider() {
 
@@ -64,6 +74,25 @@ public:
   virtual std::vector<const Sector*> getSectors() const = 0;
 
   virtual const Vector2I getMinResolution() const = 0;
+
+  void setChangedListener(ChangedListener* changedListener) {
+    _changedListener = changedListener;
+  }
+
+  void onChanged() const{
+    _changedListener->changed();
+  }
+
+  void setEnabled(bool enabled) {
+    if (_enabled != enabled) {
+      _enabled = enabled;
+      onChanged();
+    }
+  }
+
+  bool isEnabled() const{
+    return _enabled;
+  }
   
 };
 

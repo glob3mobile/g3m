@@ -337,7 +337,7 @@ private:
           ILogger::instance()->logError("Invalid points for PointCloud");
         }
         else {
-          FloatBufferBuilderFromGeodetic verticesBuilder = (averagePoint == NULL)
+          FloatBufferBuilderFromGeodetic* verticesBuilder = (averagePoint == NULL)
           /*                 */ ? FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet())
           /*                 */ : FloatBufferBuilderFromGeodetic::builderWithGivenCenter(_context->getPlanet(), *averagePoint);
 
@@ -349,9 +349,9 @@ private:
             const double latInDegrees = jsonPoints->getAsNumber(i + 1, 0);
             const double height       = jsonPoints->getAsNumber(i + 2, 0);
 
-            verticesBuilder.add(Angle::fromDegrees(latInDegrees),
-                                Angle::fromDegrees(lonInDegrees),
-                                height + _deltaHeight);
+            verticesBuilder->add(Angle::fromDegrees(latInDegrees),
+                                 Angle::fromDegrees(lonInDegrees),
+                                 height + _deltaHeight);
 
             if (height < minHeight) {
               minHeight = height;
@@ -396,14 +396,16 @@ private:
 
           _mesh = new DirectMesh(GLPrimitive::points(),
                                  true,
-                                 verticesBuilder.getCenter(),
-                                 verticesBuilder.create(),
+                                 verticesBuilder->getCenter(),
+                                 verticesBuilder->create(),
                                  1, // lineWidth
                                  _pointSize,
                                  NULL, // flatColor,
                                  colors,
                                  1,
                                  true);
+
+          delete verticesBuilder;
         }
 
         delete averagePoint;
@@ -419,7 +421,7 @@ private:
     else {
       const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
 
-      FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet());
+      FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet());
 
       const int coordinatesSize = jsonCoordinates->size();
       for (int i = 0; i < coordinatesSize; i += 3) {
@@ -427,9 +429,9 @@ private:
         const double lonInDegrees = jsonCoordinates->getAsNumber(i + 1, 0);
         const double height       = jsonCoordinates->getAsNumber(i + 2, 0);
 
-        vertices.add(Angle::fromDegrees(latInDegrees),
-                     Angle::fromDegrees(lonInDegrees),
-                     height);
+        vertices->add(Angle::fromDegrees(latInDegrees),
+                      Angle::fromDegrees(lonInDegrees),
+                      height);
       }
 
       const JSONArray* jsonNormals = jsonObject->getAsArray("normals");
@@ -448,8 +450,8 @@ private:
 
       _mesh = new IndexedMesh(GLPrimitive::triangles(),
                               true,
-                              vertices.getCenter(),
-                              vertices.create(),
+                              vertices->getCenter(),
+                              vertices->create(),
                               indices,
                               1, // lineWidth
                               1, // pointSize
@@ -459,6 +461,9 @@ private:
                               true, // depthTest,
                               normals
                               );
+
+      delete vertices;
+
       _color = NULL;
     }
 
@@ -689,4 +694,18 @@ void MeshRenderer::disableAll() {
     Mesh* mesh = _meshes[i];
     mesh->setEnable(false);
   }
+}
+
+void MeshRenderer::showNormals(bool v) const{
+  _showNormals = v;
+  const int meshesCount = _meshes.size();
+  for (int i = 0; i < meshesCount; i++) {
+    Mesh* mesh = _meshes[i];
+    mesh->showNormals(v);
+  }
+}
+
+void MeshRenderer::addMesh(Mesh* mesh) {
+  _meshes.push_back(mesh);
+  mesh->showNormals(_showNormals);
 }

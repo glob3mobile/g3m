@@ -69,7 +69,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
 
-  SceneLighting* sceneLighting = new CameraFocusSceneLighting();
+  SceneLighting* sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, 1.0),
+                                                              Color::yellow());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
   
@@ -446,8 +447,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   [self widget]->setCameraPitch(angle);
 }
 
-- (void)stopCameraAnimation {
-  [self widget]->stopCameraAnimation();
+- (void)cancelCameraAnimation {
+  [self widget]->cancelCameraAnimation();
 }
 
 //- (void)resetCameraPosition {

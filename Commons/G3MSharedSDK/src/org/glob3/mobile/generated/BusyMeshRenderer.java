@@ -115,8 +115,12 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     indices.add((short) 0);
     indices.add((short) 1);
   
-    // create mesh
-    return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+  
+    Mesh result = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, null, colors.create());
+    if (vertices != null)
+       vertices.dispose();
+  
+    return result;
   }
   private Mesh getMesh(G3MRenderContext rc)
   {
@@ -136,8 +140,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
      _modelFeature = null;
      _glState = new GLState();
      _mesh = null;
-    _modelviewMatrix = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, -1));
-    _projectionMatrix = MutableMatrix44D.invalid();
+
   }
 
   public final void initialize(G3MContext context)
@@ -152,7 +155,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
-  
     createGLState();
   
     gl.clearScreen(_backgroundColor);
@@ -162,7 +164,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     {
       mesh.render(rc, _glState);
     }
-  //  _mesh->render(rc, _glState);
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -175,7 +176,11 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     final int halfWidth = width / 2;
     final int halfHeight = height / 2;
     _projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
-      }
+
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  }
 
   public void dispose()
   {
@@ -208,6 +213,10 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   public final void stop(G3MRenderContext rc)
   {
     rc.getEffectsScheduler().cancelAllEffectsFor(this);
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
   }
 
   public final void onResume(G3MContext context)

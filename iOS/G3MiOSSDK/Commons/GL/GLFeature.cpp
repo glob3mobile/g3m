@@ -104,7 +104,6 @@ GeometryGLFeature::~GeometryGLFeature() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
@@ -180,7 +179,7 @@ void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
 }
 
 BlendingModeGLFeature::BlendingModeGLFeature(bool blend, int sFactor, int dFactor):
-GLColorGroupFeature(GLF_BLENDING_MODE, 4, blend, sFactor, dFactor){
+GLColorGroupFeature(GLF_BLENDING_MODE, 4, blend, sFactor, dFactor) {
 }
 
 void BlendingModeGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
@@ -217,27 +216,29 @@ GLCameraGroupFeature(cam->getModelMatrix44D(), GLF_MODEL) {}
 ModelViewGLFeature::ModelViewGLFeature(const Camera* cam):
 GLCameraGroupFeature(cam->getModelViewMatrix44D(), GLF_MODEL_VIEW) {}
 
-DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight):
+DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& diffuseLightDirection,
+                                                 const Color& diffuseLightColor,
+                                                 const Color& ambientLightColor):
 GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
-  _values.addUniformValue(AMBIENT_LIGHT,
-                          new GPUUniformValueFloat(ambientLight), false);
+  _values.addUniformValue(AMBIENT_LIGHT_COLOR,
+                          new GPUUniformValueVec3Float(ambientLightColor), false);
 
-  Vector3D dirN = dir.normalized();
+  Vector3D dirN = diffuseLightDirection.normalized();
 
   _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float) dirN._x,
                                                                     (float) dirN._y,
                                                                     (float) dirN._z);
 
-  _values.addUniformValue(LIGHT_DIRECTION,
+  _values.addUniformValue(DIFFUSE_LIGHT_DIRECTION,
                           _lightDirectionUniformValue,
                           false);
-  _values.addUniformValue(LIGHT_COLOR,
-                          new GPUUniformValueVec4Float(lightColor),
+  _values.addUniformValue(DIFFUSE_LIGHT_COLOR,
+                          new GPUUniformValueVec3Float(diffuseLightColor),
                           false);
 
 }
 
-void DirectionLightGLFeature::setLightDirection(const Vector3D& lightDir){
+void DirectionLightGLFeature::setLightDirection(const Vector3D& lightDir) {
   Vector3D dirN = lightDir.normalized();
   _lightDirectionUniformValue->changeValue((float)dirN._x,
                                            (float)dirN._y,

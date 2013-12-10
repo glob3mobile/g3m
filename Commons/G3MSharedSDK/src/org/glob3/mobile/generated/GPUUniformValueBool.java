@@ -1,6 +1,11 @@
 package org.glob3.mobile.generated; 
 public class GPUUniformValueBool extends GPUUniformValue
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public final boolean _value;
 
   public GPUUniformValueBool(boolean b)

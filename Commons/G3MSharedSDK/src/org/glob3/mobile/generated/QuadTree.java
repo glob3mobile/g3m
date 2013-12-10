@@ -27,9 +27,9 @@ public class QuadTree
        _root.dispose();
   }
 
-  public final boolean add(Sector sector, Object element)
+  public final boolean add(Sector sector, QuadTree_Content content)
   {
-    return _root.add(sector, element, _maxElementsPerNode, _maxDepth);
+    return _root.add(sector, content, _maxElementsPerNode, _maxDepth);
   }
 
   public final boolean acceptVisitor(Sector sector, QuadTreeVisitor visitor)
@@ -37,6 +37,20 @@ public class QuadTree
     final boolean aborted = _root.acceptVisitor(sector, visitor);
     visitor.endVisit(aborted);
     return aborted;
+  }
+
+  public final void clear()
+  {
+    Sector sector = _root._sector;
+  
+    if (_root != null)
+       _root.dispose();
+    _root = new QuadTree_Node(sector);
+  }
+
+  public final boolean isEmpty()
+  {
+    return _root.isEmpty();
   }
 
 }

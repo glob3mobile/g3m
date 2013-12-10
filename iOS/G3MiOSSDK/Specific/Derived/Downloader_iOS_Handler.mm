@@ -171,89 +171,92 @@
 
 - (void) runWithDownloader:(void*)downloaderV
 {
+  @autoreleasepool {
 
-  Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
-  __block NSData* data;
-  __block NSInteger statusCode;
-  __block NSError *error;
+    Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
+    __block NSData* data = nil;
+    __block NSInteger statusCode;
+    __block NSError *error = nil;
 
-  const IStringUtils* su = IStringUtils::instance();
+    if (_url->isFileProtocol()) {
+      const IStringUtils* su = IStringUtils::instance();
 
-  if (_url->isFileProtocol()) {
-    const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->getPath(),
-                                                                                URL::FILE_PROTOCOL,
-                                                                                "");
-    const int dotPos = su->indexOf(fileFullName, ".");
+      const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->getPath(),
+                                                                                  URL::FILE_PROTOCOL,
+                                                                                  "");
+      const int dotPos = su->indexOf(fileFullName, ".");
 
-    NSString* fileName = [ NSString stringWithCppString: su->left(fileFullName, dotPos) ];
+      NSString* fileName = [ NSString stringWithCppString: su->left(fileFullName, dotPos) ];
 
-    NSString* fileExt = [ NSString stringWithCppString: su->substring(fileFullName, dotPos + 1, fileFullName.size()) ];
+      NSString* fileExt = [ NSString stringWithCppString: su->substring(fileFullName, dotPos + 1, fileFullName.size()) ];
 
-    NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
-                                                         ofType: fileExt];
-    data = [NSData dataWithContentsOfFile:filePath];
-    statusCode = (data) ? 200 : 404;
-  }
-  else {
-    NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
-                                             cachePolicy: NSURLRequestReturnCacheDataElseLoad
-                                         timeoutInterval: 60.0];
-
-    NSURLResponse *urlResponse;
-
-    data = [NSURLConnection sendSynchronousRequest: request
-                                 returningResponse: &urlResponse
-                                             error: &error];
-
-    statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
-  }
-
-  // inform downloader to remove myself, to avoid adding new Listeners
-  downloader->removeDownloadingHandlerForNSURL(_nsURL);
-
-
-  dispatch_async( dispatch_get_main_queue(), ^{
-    [_lock lock];
-
-    const bool dataIsValid = data && (statusCode == 200);
-    if (!dataIsValid) {
-      ILogger::instance()->logError("Error %s, StatusCode=%d, URL=%s\n",
-                                    [[error localizedDescription] UTF8String],
-                                    statusCode,
-                                    [[_nsURL absoluteString] UTF8String]);
-    }
-
-    const int listenersCount = [_listeners count];
-
-    const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
-
-    if (dataIsValid) {
-      for (int i = 0; i < listenersCount; i++) {
-        ListenerEntry* entry = [_listeners objectAtIndex: i];
-        Downloader_iOS_Listener* listener = [entry listener];
-
-        if ([entry isCanceled]) {
-          [listener onCanceledDownloadURL: url
-                                     data: data];
-
-          [listener onCancel: url];
-        }
-        else {
-          [listener onDownloadURL: url
-                             data: data];
-        }
-      }
+      NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
+                                                           ofType: fileExt];
+      data = [NSData dataWithContentsOfFile:filePath];
+      statusCode = (data) ? 200 : 404;
     }
     else {
-      for (int i = 0; i < listenersCount; i++) {
-        ListenerEntry* entry = [_listeners objectAtIndex: i];
+      NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
+                                               cachePolicy: NSURLRequestReturnCacheDataElseLoad
+                                           timeoutInterval: 60.0];
 
-        [[entry listener] onErrorURL: url];
-      }
+      NSURLResponse *urlResponse = nil;
+
+      data = [NSURLConnection sendSynchronousRequest: request
+                                   returningResponse: &urlResponse
+                                               error: &error];
+
+      statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
     }
 
-    [_lock unlock];
-  });
+    // inform downloader to remove myself, to avoid adding new Listeners
+    downloader->removeDownloadingHandlerForNSURL(_nsURL);
+
+
+    dispatch_async( dispatch_get_main_queue(), ^{
+      [_lock lock];
+
+      const bool dataIsValid = data && (statusCode == 200);
+      if (!dataIsValid) {
+        ILogger::instance()->logError("Error %s, StatusCode=%d, URL=%s\n",
+                                      [[error localizedDescription] UTF8String],
+                                      statusCode,
+                                      [[_nsURL absoluteString] UTF8String]);
+      }
+
+      const int listenersCount = [_listeners count];
+
+      const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
+
+      if (dataIsValid) {
+        for (int i = 0; i < listenersCount; i++) {
+          ListenerEntry* entry = [_listeners objectAtIndex: i];
+          Downloader_iOS_Listener* listener = [entry listener];
+
+          if ([entry isCanceled]) {
+            [listener onCanceledDownloadURL: url
+                                       data: data];
+
+            [listener onCancel: url];
+          }
+          else {
+            [listener onDownloadURL: url
+                               data: data];
+          }
+        }
+      }
+      else {
+        for (int i = 0; i < listenersCount; i++) {
+          ListenerEntry* entry = [_listeners objectAtIndex: i];
+          
+          [[entry listener] onErrorURL: url];
+        }
+      }
+      
+      [_lock unlock];
+    });
+    
+  }
 }
 
 - (void)dealloc

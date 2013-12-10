@@ -69,8 +69,15 @@ protected:
     return "BingMaps";
   }
 
-  bool rawIsEquals(const Layer* that) const;
+  std::string getBrandLogoUri() const {
+    return _brandLogoUri;
+  }
 
+  std::string getCopyright() const {
+    return _copyright;
+  }
+
+  bool rawIsEquals(const Layer* that) const;
 
 public:
 
@@ -89,6 +96,7 @@ public:
                         const Sector& sector) const;
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
 
   bool isReady() const;
@@ -101,7 +109,8 @@ public:
   const std::string description() const;
 
   BingMapsLayer* copy() const;
-
+  
+  RenderState getRenderState();
 };
 
 #endif

@@ -24,6 +24,8 @@ public abstract class Matrix44DProvider extends RCObject
 {
   public void dispose()
   {
+    super.dispose();
   }
+
   public abstract Matrix44D getMatrix();
 }

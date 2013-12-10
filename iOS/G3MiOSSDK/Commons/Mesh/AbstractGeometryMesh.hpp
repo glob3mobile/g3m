@@ -22,10 +22,12 @@ class AbstractGeometryMesh : public Mesh {
   
 protected:
   const int               _primitive;
-  const bool              _owner;
   Vector3D                _center;
   const MutableMatrix44D* _translationMatrix;
   IFloatBuffer*           _vertices;
+  const bool              _ownsVertices;
+  IFloatBuffer*           _normals;
+  const bool              _ownsNormals;
   const float             _lineWidth;
   const float             _pointSize;
   const bool              _depthTest;
@@ -33,19 +35,25 @@ protected:
   mutable BoundingVolume* _extent;
   BoundingVolume* computeBoundingVolume() const;
   
-  AbstractGeometryMesh(const int primitive,
-                       bool owner,
+  AbstractGeometryMesh(const int       primitive,
                        const Vector3D& center,
-                       IFloatBuffer* vertices,
-                       float lineWidth,
-                       float pointSize,
-                       bool depthTest);
+                       IFloatBuffer*   vertices,
+                       bool            ownsVertices,
+                       IFloatBuffer*   normals,
+                       bool            ownsNormals,
+                       float           lineWidth,
+                       float           pointSize,
+                       bool            depthTest);
   
   GLState* _glState;
   
   void createGLState();
   
   virtual void rawRender(const G3MRenderContext* rc) const = 0;
+
+  mutable bool _showNormals;
+  mutable Mesh* _normalsMesh;
+  Mesh* createNormalsMesh() const;
   
 public:
   ~AbstractGeometryMesh();
@@ -62,6 +70,10 @@ public:
   
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
+
+  void showNormals(bool v) const{
+    _showNormals = v;
+  }
   
 };
 

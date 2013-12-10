@@ -96,7 +96,7 @@ public class Mark implements SurfaceElevationListener
     }
   }
 
-  private IFloatBuffer getBillboardTexCoords()
+  private static IFloatBuffer getBillboardTexCoords()
   {
     if (_billboardTexCoord == null)
     {
@@ -585,6 +585,8 @@ public class Mark implements SurfaceElevationListener
         else
         {
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ASK JM - Is ! easier to delete the state?
           if (_glState.getNumberOfGLFeatures() == 0)
           {
             createGLState(planet); //GLState was disposed due to elevation change
@@ -604,7 +606,15 @@ public class Mark implements SurfaceElevationListener
   public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
   {
   
-    _currentSurfaceElevation = rawElevation * verticalExaggeration;
+    if ((rawElevation != rawElevation))
+    {
+      _currentSurfaceElevation = 0; //USING 0 WHEN NO ELEVATION DATA
+    }
+    else
+    {
+      _currentSurfaceElevation = rawElevation * verticalExaggeration;
+    }
+  
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();
     _cartesianPosition = null;

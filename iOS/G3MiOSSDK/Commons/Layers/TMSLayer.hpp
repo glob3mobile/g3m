@@ -22,12 +22,9 @@ private:
   private final URL _mapServerURL;
 #endif
 
-  const std::string      _mapLayer;
-
+  const std::string   _mapLayer;
   Sector              _sector;
-
   const std::string   _format;
-  const std::string   _srs;
   const bool          _isTransparent;
 
 public:
@@ -36,7 +33,6 @@ public:
            const URL& mapServerURL,
            const Sector& sector,
            const std::string& format,
-           const std::string srs,
            const bool isTransparent,
            LayerCondition* condition,
            const TimeInterval& timeToCache,
@@ -44,13 +40,15 @@ public:
            const LayerTilesRenderParameters* parameters = NULL);
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                         const Tile* tile) const;
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                const Tile* tile) const;
 
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
-  
+
   const std::string description() const;
-  
+
+  RenderState getRenderState();
 };
 
 #endif

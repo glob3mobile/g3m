@@ -191,8 +191,10 @@ public:
                                  const bool linearTiming  = false,
                                  const bool linearHeight  = false);
   
-  void stopCameraAnimation();
-  
+  void cancelCameraAnimation();
+
+  void cancelAllEffects();
+
   //  void resetCameraPosition();
   
   CameraRenderer* getCameraRenderer() const {
@@ -211,6 +213,10 @@ public:
 
   G3MRenderContext* getRenderContext() const{
     return _renderContext;
+  }
+  
+  void setForceBusyRenderer(bool forceBusyRenderer) {
+    _forceBusyRenderer = forceBusyRenderer;
   }
   
 private:
@@ -247,6 +253,7 @@ private:
   const bool       _logFPS;
   const bool       _logDownloaderStatistics;
   std::string      _lastCacheStatistics;
+  const int        _nFramesBeetweenProgramsCleanUp;
   
   ITimer* _renderStatisticsTimer;
   
@@ -279,6 +286,8 @@ private:
   bool _initialCameraPositionHasBeenSet;
 
   G3MRenderContext* _renderContext;
+
+  bool _forceBusyRenderer;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,

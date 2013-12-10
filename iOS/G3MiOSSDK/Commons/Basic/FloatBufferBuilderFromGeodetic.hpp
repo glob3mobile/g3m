@@ -19,6 +19,8 @@
 class FloatBufferBuilderFromGeodetic: public FloatBufferBuilder {
 private:
 
+  FloatBufferBuilderFromGeodetic(const FloatBufferBuilderFromGeodetic& that);
+
   const CenterStrategy _centerStrategy;
   float _cx;
   float _cy;
@@ -61,54 +63,57 @@ private:
 
 public:
 
-  static FloatBufferBuilderFromGeodetic builderWithoutCenter(const Planet* planet) {
-    return FloatBufferBuilderFromGeodetic(
+  static FloatBufferBuilderFromGeodetic* builderWithoutCenter(const Planet* planet) {
+    return new FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
-                                          NO_CENTER,
+                                              NO_CENTER,
 #else
-                                          CenterStrategy.NO_CENTER,
+                                              CenterStrategy.NO_CENTER,
 #endif
-                                          planet, Vector3D::zero);
+                                              planet, Vector3D::zero);
   }
 
-  static FloatBufferBuilderFromGeodetic builderWithFirstVertexAsCenter(const Planet* planet) {
-    return FloatBufferBuilderFromGeodetic(
+  static FloatBufferBuilderFromGeodetic* builderWithFirstVertexAsCenter(const Planet* planet) {
+    return new FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
-                                          FIRST_VERTEX,
+                                              FIRST_VERTEX,
 #else
-                                          CenterStrategy.FIRST_VERTEX,
+                                              CenterStrategy.FIRST_VERTEX,
 #endif
-                                          planet, Vector3D::zero);
+                                              planet, Vector3D::zero);
   }
 
-  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Vector3D& center) {
-    return FloatBufferBuilderFromGeodetic(
+  static FloatBufferBuilderFromGeodetic* builderWithGivenCenter(const Planet* planet,
+                                                                const Vector3D& center) {
+    return new FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
-                                          GIVEN_CENTER,
+                                              GIVEN_CENTER,
 #else
-                                          CenterStrategy.GIVEN_CENTER,
+                                              CenterStrategy.GIVEN_CENTER,
 #endif
-                                          planet, center);
+                                              planet, center);
   }
 
-  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic2D& center) {
-    return FloatBufferBuilderFromGeodetic(
+  static FloatBufferBuilderFromGeodetic* builderWithGivenCenter(const Planet* planet,
+                                                                const Geodetic2D& center) {
+    return new FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
-                                          GIVEN_CENTER,
+                                              GIVEN_CENTER,
 #else
-                                          CenterStrategy.GIVEN_CENTER,
+                                              CenterStrategy.GIVEN_CENTER,
 #endif
-                                          planet, center);
+                                              planet, center);
   }
 
-  static FloatBufferBuilderFromGeodetic builderWithGivenCenter(const Planet* planet, const Geodetic3D& center) {
-    return FloatBufferBuilderFromGeodetic(
+  static FloatBufferBuilderFromGeodetic* builderWithGivenCenter(const Planet* planet,
+                                                                const Geodetic3D& center) {
+    return new FloatBufferBuilderFromGeodetic(
 #ifdef C_CODE
-                                          GIVEN_CENTER,
+                                              GIVEN_CENTER,
 #else
-                                          CenterStrategy.GIVEN_CENTER,
+                                              CenterStrategy.GIVEN_CENTER,
 #endif
-                                          planet, center);
+                                              planet, center);
   }
 
   void add(const Angle& latitude,
@@ -133,7 +138,7 @@ public:
         position._longitude,
         height);
   }
-
+  
   Vector3D getCenter() {
     return Vector3D(_cx, _cy, _cz);
   }

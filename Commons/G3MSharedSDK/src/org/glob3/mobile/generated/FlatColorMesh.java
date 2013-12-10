@@ -90,4 +90,9 @@ public class FlatColorMesh extends Mesh
     _glState.setParent(parentState);
     _mesh.render(rc, _glState);
   }
+
+  public final void showNormals(boolean v)
+  {
+    _mesh.showNormals(v);
+  }
 }

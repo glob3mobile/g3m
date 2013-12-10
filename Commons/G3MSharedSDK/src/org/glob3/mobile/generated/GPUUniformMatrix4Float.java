@@ -5,4 +5,9 @@ public class GPUUniformMatrix4Float extends GPUUniform
   {
      super(name,id, GLType.glMatrix4Float());
   }
+
+  public void dispose()
+  {
+    super.dispose();
+  }
 }

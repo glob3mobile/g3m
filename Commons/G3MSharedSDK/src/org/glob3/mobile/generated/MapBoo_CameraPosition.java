@@ -42,7 +42,6 @@ public class MapBoo_CameraPosition
 
   ///#include "SimpleCameraConstrainer.hpp"
   
-  
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

@@ -34,7 +34,8 @@ public abstract class MapBooBuilder
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
   {
-    TileTessellator tessellator = new PlanetTileTessellator(true, Sector.fullSphere());
+    final boolean skirted = true;
+    TileTessellator tessellator = new PlanetTileTessellator(skirted, Sector.fullSphere());
   
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
@@ -54,7 +55,7 @@ public abstract class MapBooBuilder
   
     final Sector renderedSector = Sector.fullSphere();
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
   
     if (_enableNotifications)
     {
@@ -358,9 +359,9 @@ public abstract class MapBooBuilder
   
     final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
   
-  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-  //    return NULL;
-  //  }
+    //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+    //    return NULL;
+    //  }
   
     return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
@@ -874,11 +875,13 @@ public abstract class MapBooBuilder
     {
       ILogger.instance().logError("LOGIC ERROR: _gl already initialized");
       return;
+      //ERROR("LOGIC ERROR: _gl already initialized");
     }
     if (gl == null)
     {
       ILogger.instance().logError("LOGIC ERROR: _gl cannot be NULL");
       return;
+      //ERROR("LOGIC ERROR: _gl cannot be NULL");
     }
     _gl = gl;
   }
@@ -952,7 +955,7 @@ public abstract class MapBooBuilder
 
   protected final SceneLighting createSceneLighting()
   {
-    return new CameraFocusSceneLighting();
+    return new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0), Color.yellow());
   }
 
   protected final URL createApplicationRestURL()
@@ -1074,7 +1077,8 @@ public abstract class MapBooBuilder
     //  std::vector<MapBoo_Scene*> _applicationScenes;
     //  int                        _applicationCurrentSceneIndex;
     //  int                        _lastApplicationCurrentSceneIndex;
-    int __DGD_at_work;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
   }
 
   /** Private to MapbooBuilder, don't call it */

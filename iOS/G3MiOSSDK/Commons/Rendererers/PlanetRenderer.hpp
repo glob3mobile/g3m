@@ -217,6 +217,7 @@ class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProv
 private:
   TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
+  bool                         _ownsElevationDataProvider;
   TileTexturizer*              _texturizer;
   TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
@@ -299,6 +300,7 @@ private:
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
+                 bool                         ownsElevationDataProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
                  TileRasterizer*              tileRasterizer,
@@ -324,7 +326,8 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  void acceptTileVisitor(ITileVisitor* tileVisitor, const Sector sector,
+  void acceptTileVisitor(ITileVisitor* tileVisitor,
+                         const Sector& sector,
                          const int topLevel,
                          const int maxLevel) {
     _tileVisitor = tileVisitor;
@@ -445,6 +448,13 @@ public:
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
   std::list<std::string> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD);
+
+  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider, bool owned);
+  void setVerticalExaggeration(float verticalExaggeration);
+
+  ElevationDataProvider* getElevationDataProvider() const{
+    return _elevationDataProvider;
+  }
 
 };
 

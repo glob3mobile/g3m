@@ -21,8 +21,8 @@
 
 #include "RCObject.hpp"
 
-class GLState: public RCObject {
-
+class GLState: public RCObject{
+private:
   GLFeatureSet _features;
   mutable GLFeatureSet* _accumulatedFeatures;
 
@@ -32,7 +32,7 @@ class GLState: public RCObject {
   mutable GPUVariableValueSet* _valuesSet;
   mutable GLGlobalState*   _globalState;
 
-  mutable GPUProgram* _lastGPUProgramUsed;
+  mutable GPUProgram* _linkedProgram;
 
 #ifdef C_CODE
   mutable const GLState* _parentGLState;
@@ -45,11 +45,13 @@ class GLState: public RCObject {
 
   void hasChangedStructure() const;
 
+  ~GLState();
+
 public:
 
   GLState():
   _parentGLState(NULL),
-  _lastGPUProgramUsed(NULL),
+  _linkedProgram(NULL),
   _parentsTimeStamp(-1),
   _timeStamp(0),
   _valuesSet(NULL),
@@ -63,7 +65,6 @@ public:
   GLFeatureSet* getAccumulatedFeatures() const;
 //  GLFeatureSet* createAccumulatedFeatures() const;
 
-  ~GLState();
 
   void setParent(const GLState* p) const;
 

@@ -5,9 +5,22 @@ public class GPUUniform extends GPUVariable
   private boolean _dirty;
   private GPUUniformValue _value;
 
+
+
   public final IGLUniformID _id;
   public final int _type;
   public final GPUUniformKey _key;
+
+
+  public GPUUniform(String name, IGLUniformID id, int type)
+  {
+     super(name, GPUVariableType.UNIFORM);
+     _id = id;
+     _dirty = false;
+     _value = null;
+     _type = type;
+     _key = getUniformKey(name);
+  }
 
   public void dispose()
   {
@@ -19,17 +32,6 @@ public class GPUUniform extends GPUVariable
     }
 
     super.dispose();
-
-  }
-
-  public GPUUniform(String name, IGLUniformID id, int type)
-  {
-     super(name, GPUVariableType.UNIFORM);
-     _id = id;
-     _dirty = false;
-     _value = null;
-     _type = type;
-     _key = getUniformKey(name);
   }
 
 //  const std::string getName() const { return _name; }

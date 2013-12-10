@@ -53,7 +53,6 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
     final double halfWidth = _size._x / 2;
     final double hadfHeight = _size._y / 2;
-  //  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero);
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     vertices.add(-halfWidth, +hadfHeight, 0);
     vertices.add(-halfWidth, -hadfHeight, 0);
@@ -67,6 +66,9 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     texCoords.add(1, 1);
   
     DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
+  
+    if (vertices != null)
+       vertices.dispose();
   
     TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
   
@@ -184,6 +186,10 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
     {
       rc.getEffectsScheduler().cancelAllEffectsFor(this);
     }
+  
+    if (_quadMesh != null)
+       _quadMesh.dispose();
+    _quadMesh = null;
   }
 
   public final void onResume(G3MContext context)

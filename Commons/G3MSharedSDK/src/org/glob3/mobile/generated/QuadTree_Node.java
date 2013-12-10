@@ -1,8 +1,6 @@
 package org.glob3.mobile.generated; 
 public class QuadTree_Node
 {
-  private final int _depth;
-  private final Sector _sector ;
   private java.util.ArrayList<QuadTree_Element> _elements = new java.util.ArrayList<QuadTree_Element>();
 
   private QuadTree_Node[] _children;
@@ -13,6 +11,9 @@ public class QuadTree_Node
      _depth = parent._depth + 1;
      _children = null;
   }
+
+  public final int _depth;
+  public final Sector _sector ;
 
   public QuadTree_Node(Sector sector)
   {
@@ -42,7 +43,7 @@ public class QuadTree_Node
     }
   }
 
-  public final boolean add(Sector sector, Object element, int maxElementsPerNode, int maxDepth)
+  public final boolean add(Sector sector, QuadTree_Content content, int maxElementsPerNode, int maxDepth)
   {
     if (!_sector.fullContains(sector))
     {
@@ -55,7 +56,7 @@ public class QuadTree_Node
   
     if ((_elements.size() < maxElementsPerNode) || (_depth >= maxDepth))
     {
-      _elements.add(new QuadTree_Element(sector, element));
+      _elements.add(new QuadTree_Element(sector, content));
       return true;
     }
   
@@ -104,13 +105,13 @@ public class QuadTree_Node
   
     if (keepHere)
     {
-      _elements.add(new QuadTree_Element(sector, element));
+      _elements.add(new QuadTree_Element(sector, content));
       return true;
     }
   
     if (selectedChildrenIndex >= 0)
     {
-      return _children[selectedChildrenIndex].add(sector, element, maxElementsPerNode, maxDepth);
+      return _children[selectedChildrenIndex].add(sector, content, maxElementsPerNode, maxDepth);
     }
   
     ILogger.instance().logError("Logic error in QuadTree");
@@ -130,7 +131,7 @@ public class QuadTree_Node
       QuadTree_Element element = _elements.get(i);
       if (element._sector.touchesWith(sector))
       {
-        final boolean abort = visitor.visitElement(element._sector, element._element);
+        final boolean abort = visitor.visitElement(element._sector, element._content);
         if (abort)
         {
           return true;
@@ -152,6 +153,28 @@ public class QuadTree_Node
     }
   
     return false;
+  }
+
+  public final boolean isEmpty()
+  {
+    if (!_elements.isEmpty())
+    {
+      return false;
+    }
+  
+    if (_children != null)
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        QuadTree_Node child = _children[i];
+        if (!child.isEmpty())
+        {
+          return false;
+        }
+      }
+    }
+  
+    return true;
   }
 
 }

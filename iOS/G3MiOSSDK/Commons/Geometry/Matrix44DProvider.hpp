@@ -18,28 +18,40 @@
 
 
 class Matrix44DProvider: public RCObject{
+protected:
+  virtual ~Matrix44DProvider() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
-  virtual ~Matrix44DProvider() {}
   virtual const Matrix44D* getMatrix() const = 0;
 };
 
-class Matrix44DHolder: public Matrix44DProvider{
+class Matrix44DHolder: public Matrix44DProvider {
+private:
 #ifdef C_CODE
   const Matrix44D* _matrix;
 #endif
 #ifdef JAVA_CODE
   private Matrix44D _matrix;
 #endif
+
+  ~Matrix44DHolder() {
+    _matrix->_release();
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix) {
     if (matrix == NULL) {
       ILogger::instance()->logError("Setting NULL in Matrix44D Holder");
     }
     _matrix->_retain();
-  }
-
-  ~Matrix44DHolder() {
-    _matrix->_release();
   }
 
   void setMatrix(const Matrix44D* matrix) {
@@ -61,7 +73,8 @@ public:
   }
 };
 
-class Matrix44DMultiplicationHolder : public Matrix44DProvider{
+class Matrix44DMultiplicationHolder : public Matrix44DProvider {
+private:
   const Matrix44D** _matrix;
   const Matrix44DProvider** _providers;
   int _nMatrix;
@@ -69,10 +82,10 @@ class Matrix44DMultiplicationHolder : public Matrix44DProvider{
 
   void pullMatrixes() const;
 
+  ~Matrix44DMultiplicationHolder();
+
 public:
   Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[], int nMatrix);
-
-  ~Matrix44DMultiplicationHolder();
 
   Matrix44D* getMatrix() const;
   

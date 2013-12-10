@@ -81,7 +81,13 @@ public:
             ISNAN(_y) ||
             ISNAN(_z));
   }
-  
+
+  bool isEquals(const Vector3D& v) const {
+    return (v._x == _x &&
+            v._y == _y &&
+            v._z == _z);
+  }
+
   bool isZero() const {
     return (_x == 0) && (_y == 0) && (_z == 0);
   }

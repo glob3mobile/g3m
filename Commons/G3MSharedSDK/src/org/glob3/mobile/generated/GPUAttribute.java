@@ -15,10 +15,12 @@ public class GPUAttribute extends GPUVariable
 
   public void dispose()
   {
-    _value = null;
+    if (_value != null)
+    {
+      _value._release();
+    }
 
     super.dispose();
-
   }
 
   public GPUAttribute(String name, int id, int type, int size)
@@ -33,10 +35,10 @@ public class GPUAttribute extends GPUVariable
      _key = getAttributeKey(name);
   }
 
-//  const std::string getName() const{ return _name;}
-//  const int getID() const{ return _id;}
-//  int getType() const{ return _type;}
-//  int getSize() const{ return _size;}
+  //  const std::string getName() const{ return _name;}
+  //  const int getID() const{ return _id;}
+  //  int getType() const{ return _type;}
+  //  int getSize() const{ return _size;}
   public final boolean wasSet()
   {
      return _value != null;
@@ -45,7 +47,7 @@ public class GPUAttribute extends GPUVariable
   {
      return _enabled;
   }
-//  GPUAttributeKey getKey() const { return _key;}
+  //  GPUAttributeKey getKey() const { return _key;}
 
 
   public final int getIndex()

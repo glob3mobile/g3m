@@ -50,6 +50,16 @@ public class BingMapsLayer extends Layer
     return "BingMaps";
   }
 
+  protected final String getBrandLogoUri()
+  {
+    return _brandLogoUri;
+  }
+
+  protected final String getCopyright()
+  {
+    return _copyright;
+  }
+
   protected final boolean rawIsEquals(Layer that)
   {
     BingMapsLayer t = (BingMapsLayer) that;
@@ -71,7 +81,6 @@ public class BingMapsLayer extends Layer
   
     return true;
   }
-
 
 
   /**
@@ -105,7 +114,7 @@ public class BingMapsLayer extends Layer
     return new URL();
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -137,10 +146,8 @@ public class BingMapsLayer extends Layer
     return petitions;
   }
 
-  public final boolean isReady()
-  {
-    return _isInitialized;
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  boolean isReady();
 
   public final void initialize(G3MContext context)
   {
@@ -273,4 +280,26 @@ public class BingMapsLayer extends Layer
     return new BingMapsLayer(_imagerySet, _key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_imagerySet.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: imagerySet");
+    }
+    if (_key.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: key");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    if (!_isInitialized)
+    {
+      return RenderState.busy();
+    }
+    return RenderState.ready();
+  }
 }

@@ -305,6 +305,7 @@ float PlanetRendererBuilder::getVerticalExaggeration() {
 PlanetRenderer* PlanetRendererBuilder::create() {
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
                                                       getElevationDataProvider(),
+                                                      true,
                                                       getVerticalExaggeration(),
                                                       getTexturizer(),
                                                       getTileRasterizer(),
@@ -347,7 +348,9 @@ TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-  return new PlanetTileTessellator(true, getRenderedSector());
+#warning Testing Terrain Normals
+  const bool skirted = true;
+  return new PlanetTileTessellator(skirted, getRenderedSector());
 }
 
 LayerSet* PlanetRendererBuilder::createLayerSet() {
