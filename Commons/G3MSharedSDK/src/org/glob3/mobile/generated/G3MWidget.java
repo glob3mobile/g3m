@@ -254,6 +254,8 @@ public class G3MWidget
       _gpuProgramManager.removeUnused();
     }
   
+    _zRenderCounter = -1; //Frame buffer does not contain Z anymore
+  
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
     //  if (elapsedTimeMS > 100) {
     //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
@@ -307,6 +309,16 @@ public class G3MWidget
 
   public final void zRender()
   {
+  
+    if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter)
+    {
+      _zRenderCounter = _renderCounter;
+    }
+    else
+    {
+      ILogger.instance().logInfo("Recycling Z Render");
+      return; //NO NEED OF RENDERING AGAIN
+    }
   
     if (_mainRenderer.isEnable())
     {
@@ -739,6 +751,8 @@ public class G3MWidget
 
   private boolean _forceBusyRenderer;
 
+  private int _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -784,6 +798,7 @@ public class G3MWidget
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
+     _zRenderCounter = -1;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
