@@ -666,7 +666,8 @@ void Tile::render(const G3MRenderContext* rc,
                   long long texturePriority,
                   double texWidthSquared,
                   double texHeightSquared,
-                  double nowInMS) {
+                  double nowInMS,
+                  const bool renderTileMeshes) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -705,17 +706,19 @@ void Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
-      rawRender(rc,
-                &parentState,
-                texturizer,
-                elevationDataProvider,
-                tessellator,
-                tileRasterizer,
-                layerTilesRenderParameters,
-                layerSet,
-                tilesRenderParameters,
-                isForcedFullRender,
-                texturePriority);
+      if (renderTileMeshes) {
+        rawRender(rc,
+                  &parentState,
+                  texturizer,
+                  elevationDataProvider,
+                  tessellator,
+                  tileRasterizer,
+                  layerTilesRenderParameters,
+                  layerSet,
+                  tilesRenderParameters,
+                  isForcedFullRender,
+                  texturePriority);
+      }
       if (tilesRenderParameters->_renderDebug) {
         debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
       }

@@ -55,7 +55,9 @@ void G3MDemoBuilder::build() {
 
   IG3MBuilder* builder = getG3MBuilder();
 
-//  builder->getPlanetRendererBuilder()->setRenderDebug(true);
+#warning Diego at work
+  builder->getPlanetRendererBuilder()->setRenderDebug(true);
+  builder->getPlanetRendererBuilder()->setRenderTileMeshes(false);
 //  const float verticalExaggeration = 10.0f;
 //  builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 

@@ -506,6 +506,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   long long texturePriority = DownloadPriority::HIGHER;
 
   const Sector renderedSector = Sector::fullSphere();
+  const bool renderTileMeshes = true;
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
@@ -517,7 +518,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               parameters,
                                               showStatistics,
                                               texturePriority,
-                                              renderedSector);
+                                              renderedSector,
+                                              renderTileMeshes);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));

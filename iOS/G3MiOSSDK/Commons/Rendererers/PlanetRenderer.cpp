@@ -119,7 +119,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const TilesRenderParameters* tilesRenderParameters,
                                bool                         showStatistics,
                                long long                    texturePriority,
-                               const Sector&                renderedSector) :
+                               const Sector&                renderedSector,
+                               const bool                   renderTileMeshes) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -141,7 +142,8 @@ _recreateTilesPending(false),
 _glState(new GLState()),
 _renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector(renderedSector)),
 _layerTilesRenderParameters(NULL),
-_layerTilesRenderParametersDirty(true)
+_layerTilesRenderParametersDirty(true),
+_renderTileMeshes(renderTileMeshes)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -657,7 +659,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _texturePriority,
                    texWidthSquared,
                    texHeightSquared,
-                   nowInMS);
+                   nowInMS,
+                   _renderTileMeshes);
     }
   }
   else {
@@ -696,7 +699,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _texturePriority,
                      texWidthSquared,     //SENDING SQUARED TEX SIZE
                      texHeightSquared,
-                     nowInMS);
+                     nowInMS,
+                     _renderTileMeshes);
       }
 
       toVisit = toVisitInNextIteration;

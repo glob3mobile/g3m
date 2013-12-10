@@ -279,7 +279,9 @@ private:
   void updateGLState(const G3MRenderContext* rc);
 
   SurfaceElevationProvider_Tree _elevationListenersTree;
-  
+
+  bool _renderTileMeshes;
+
   Sector* _renderedSector;
 //  bool _validLayerTilesRenderParameters;
   bool _layerTilesRenderParametersDirty;
@@ -306,7 +308,8 @@ public:
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
                  long long                    texturePriority,
-                 const Sector&                renderedSector);
+                 const Sector&                renderedSector,
+                 const bool                   renderTileMeshes);
 
   ~PlanetRenderer();
 

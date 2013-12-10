@@ -61,6 +61,10 @@ private:
   Sector* _renderedSector;
   Sector getRenderedSector();
 
+  bool _renderTileMeshes;
+  bool getRenderTileMeshes();
+
+
 public:
   PlanetRendererBuilder();
   ~PlanetRendererBuilder();
@@ -92,7 +96,9 @@ public:
 
   Quality getQuality() const;
   void setQuality(Quality quality);
-  
+
+  void setRenderTileMeshes(bool renderTileMeshes);
+
 };
 
 #endif

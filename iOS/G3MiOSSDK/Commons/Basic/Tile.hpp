@@ -247,7 +247,8 @@ public:
               long long texturePriority,
               double texWidth,
               double texHeight,
-              double nowInMS);
+              double nowInMS,
+              const bool renderTileMeshes);
 
   const TileKey getKey() const;
 
