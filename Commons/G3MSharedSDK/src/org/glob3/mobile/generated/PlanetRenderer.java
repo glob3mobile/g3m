@@ -315,6 +315,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
+  private final G3MRenderContext _renderContext;
+
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
   {
      _tessellator = tessellator;
@@ -339,6 +341,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
      _layerTilesRenderParameters = null;
      _layerTilesRenderParametersDirty = true;
+     _renderContext = null;
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -407,6 +410,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
+  
+    _renderContext = rc;
   
     final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
     if (layerTilesRenderParameters == null)
@@ -861,6 +866,22 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       _terrainTouchListeners.add(listener);
     }
+  }
+
+  public final java.util.LinkedList<String> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD)
+  {
+  
+    Sector sector = new Sector(lower, upper);
+    final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
+    GetTilesURLVisitor visitor = new GetTilesURLVisitor(_renderContext, _layerTilesRenderParameters);
+  
+    acceptTileVisitor(visitor, sector, parameters._firstLevel, maxLOD);
+  
+    java.util.LinkedList<String> urls = visitor._urls;
+  
+    if (visitor != null)
+       visitor.dispose();
+    return urls;
   }
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
