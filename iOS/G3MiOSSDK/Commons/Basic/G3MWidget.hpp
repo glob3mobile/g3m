@@ -293,6 +293,8 @@ private:
 
   bool _forceBusyRenderer;
 
+  long _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
+
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,

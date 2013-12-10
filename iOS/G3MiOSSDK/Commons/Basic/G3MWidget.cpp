@@ -132,7 +132,8 @@ _rootState(NULL),
 _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
-_nFramesBeetweenProgramsCleanUp(500)
+_nFramesBeetweenProgramsCleanUp(500),
+_zRenderCounter(-1)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -384,6 +385,13 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
 void G3MWidget::zRender(){
 
+  if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter){
+    _zRenderCounter = _renderCounter;
+  } else{
+    ILogger::instance()->logInfo("Recycling Z Render");
+    return; //NO NEED OF RENDERING AGAIN
+  }
+
   if (_mainRenderer->isEnable()){
     GLState* zRenderGLState = new GLState();
     _gl->clearScreen(Color::black());
@@ -560,6 +568,8 @@ void G3MWidget::render(int width, int height) {
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0){
     _gpuProgramManager->removeUnused();
   }
+
+  _zRenderCounter = -1; //Frame buffer does not contain Z anymore
 
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {
