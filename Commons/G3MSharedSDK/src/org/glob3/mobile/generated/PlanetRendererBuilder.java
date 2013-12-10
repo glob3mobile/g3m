@@ -248,6 +248,13 @@ public class PlanetRendererBuilder
     return _renderedSector;
   }
 
+  private boolean _renderTileMeshes;
+  private boolean getRenderTileMeshes()
+  {
+    return _renderTileMeshes;
+  }
+
+
   public PlanetRendererBuilder()
   {
      _showStatistics = false;
@@ -266,6 +273,7 @@ public class PlanetRendererBuilder
      _elevationDataProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
+     _renderTileMeshes = true;
   }
   public void dispose()
   {
@@ -294,7 +302,7 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector(), getRenderTileMeshes());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -438,6 +446,11 @@ public class PlanetRendererBuilder
   public final void setQuality(Quality quality)
   {
     _quality = quality;
+  }
+
+  public final void setRenderTileMeshes(boolean renderTileMeshes)
+  {
+    _renderTileMeshes = renderTileMeshes;
   }
 
 }
