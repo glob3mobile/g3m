@@ -322,6 +322,10 @@ public:
     std::vector<Geodetic2D*> emptyList;
     return emptyList;
   }
+  
+  virtual bool isRaster() const {
+    return false;
+  }
 
 };
 

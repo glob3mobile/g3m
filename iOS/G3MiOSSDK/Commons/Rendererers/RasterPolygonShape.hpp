@@ -124,6 +124,9 @@ public:
     return coordinates;
   }
   
+  bool isRaster() const {
+    return true;
+  }
 
 };
 
