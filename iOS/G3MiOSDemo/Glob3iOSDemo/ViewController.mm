@@ -144,6 +144,8 @@
 
 #import <G3MiOSSDK/IImageDownloadListener.hpp>
 #import <G3MiOSSDK/Petition.hpp>
+#import <G3MiOSSDK/SQLiteStorage_iOS.hpp>
+
 
 
 
@@ -343,7 +345,6 @@ public:
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-
 
   //  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer(builder.getPlanet()) );
   //
@@ -567,6 +568,27 @@ public:
 
 
   G3MBuilder_iOS builder([self G3MWidget]);
+
+#warning BEGINNING OF CODE FOR LOADING STORAGE
+
+  NSString* cacheLocation = [[NSBundle mainBundle] pathForResource: @"g3m" ofType: @"cache"];
+
+  if (cacheLocation != nil){
+
+    NSFileManager* fsm = [[NSFileManager alloc] init];
+    NSArray*  paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    NSString* dbPath = [documentsDirectory stringByAppendingPathComponent: @"g3m.cache" ];
+
+    [fsm copyItemAtPath:cacheLocation toPath:dbPath error:nil];
+
+    SQLiteStorage_iOS* storage= new SQLiteStorage_iOS("g3m.cache");
+
+    builder.setStorage(storage);
+  }
+
+#warning END OF CODE FOR LOADING STORAGE
+
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
@@ -2459,7 +2481,7 @@ public:
 {
 
 #warning BEGINNING OF CODE FOR PRECACHING AREA
-  bool precachingArea = true;
+  bool precachingArea = false;
   if (precachingArea){
 
     class PrecacherInitializationTask : public GInitializationTask {
