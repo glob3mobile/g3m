@@ -7,6 +7,7 @@
 //
 
 #include "ShapesEditorRenderer.hpp"
+#include "PointShape.hpp"
 
 
 class MyShapeTouchListener : public ShapeTouchListener {
@@ -43,8 +44,10 @@ public:
 
 
 
-ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer):
-ShapesRenderer(geoTileRasterizer)
+ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer,
+                                           ShapesRenderer* vertexRenderer):
+ShapesRenderer(geoTileRasterizer),
+_vertexRenderer(vertexRenderer)
 {
   setShapeTouchListener(new MyShapeTouchListener(this), true);
 }
@@ -56,7 +59,12 @@ void ShapesEditorRenderer::selectShape(Shape* shape)
   std::vector<Geodetic2D*> coordinates = shape->getCopyRasterCoordinates();
   if (coordinates.empty()) return;
   
-  for (int n=0; n<coordinates.size(); n++)
-    printf ("    %d: (%f %f)\n", n, coordinates[n]->_latitude._degrees,
-            coordinates[n]->_longitude._degrees);
+  for (int n=0; n<coordinates.size(); n++) {
+    Geodetic3D* position = new Geodetic3D(*coordinates[n], 1);
+    Shape* vertex = new PointShape(position,
+                                   RELATIVE_TO_GROUND,
+                                   20,
+                                   Color::fromRGBA(0.6, 0.4, 0.4, 1));
+    _vertexRenderer->addShape(vertex);
+  }
 }

@@ -875,9 +875,16 @@ GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
 
 ShapesEditorRenderer* IG3MBuilder::createShapesEditorRenderer()
 {
+  // Tile rasterizer to create raster shapes
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
   getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
-  ShapesEditorRenderer* shapesRenderer = new ShapesEditorRenderer(geoTileRasterizer);
-  addRenderer(shapesRenderer);
-  return shapesRenderer;
+  
+  // shapesRenderer to render pointshapes whwen modifying shape vertices
+  ShapesRenderer* vertexRenderer = new ShapesRenderer;
+  addRenderer(vertexRenderer);
+  
+  // creating shape Editor Renderer
+  ShapesEditorRenderer* shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer, vertexRenderer);
+  addRenderer(shapesEditorRenderer);
+  return shapesEditorRenderer;
 }

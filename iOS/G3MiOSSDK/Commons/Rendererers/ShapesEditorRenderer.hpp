@@ -17,9 +17,12 @@ class GEOTileRasterizer;
 
 
 class ShapesEditorRenderer: public ShapesRenderer {
+private:
+  ShapesRenderer* _vertexRenderer;
   
 public:
-  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
+  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer,
+                       ShapesRenderer* vertexRenderer);
   
   void addShape(Shape* shape)
   {
