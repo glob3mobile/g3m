@@ -1,10 +1,14 @@
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MRenderContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -18,8 +22,10 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
+import org.glob3.mobile.specific.SQLiteStorage_Android;
 
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.RelativeLayout;
@@ -309,20 +315,68 @@ Activity {
 		//
 		//    }
 
+		//BEGINNING OF CODE FOR LOADING STORAGE
+		if (true){
+
+			AssetManager am = getAssets();
+
+			try {
+				//LEYENDO FICHERO DE ASSETS
+				InputStream in = am.open("g3m.cache");
+
+				//OBTENIENDO STREAM DE SALIDA
+				File f = getExternalCacheDir();
+				if ((f == null) || !f.exists()) {
+					f = getCacheDir();
+				}
+				final String documentsDirectory = f.getAbsolutePath();
+				final File f2 = new File(new File(documentsDirectory), "g3m.cache");
+				final String path = f2.getAbsolutePath();
+				OutputStream out = new FileOutputStream(path);
+
+				//COPIANDO FICHERO
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+				in.close();
+				out.close();
+
+
+				SQLiteStorage_Android storage = new SQLiteStorage_Android("g3m.cache", this.getApplicationContext());
+
+				builder.setStorage(storage);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//END OF CODE FOR LOADING STORAGE
+
+
 		//BEGINNING OF CODE FOR PRECACHING AREA
+		boolean precaching = false;
+		PrecacherInitializationTask pit = null;
+		if (precaching){
+			//Las Palmas de GC
+			Geodetic2D upper = Geodetic2D.fromDegrees(28.20760859532738, -15.3314208984375);
+			Geodetic2D lower = Geodetic2D.fromDegrees(28.084096949164735, -15.4852294921875);
 
-		//Las Palmas de GC
-		Geodetic2D upper = Geodetic2D.fromDegrees(28.20760859532738, -15.3314208984375);
-		Geodetic2D lower = Geodetic2D.fromDegrees(28.084096949164735, -15.4852294921875);
+			pit = new PrecacherInitializationTask(null, upper, lower, 6);
+			builder.setInitializationTask(pit);
+		}
 
-		PrecacherInitializationTask pit = new PrecacherInitializationTask(null, upper, lower, 6);
-		builder.setInitializationTask(pit);
 		_g3mWidget = builder.createWidget();  
-		pit.setWidget(_g3mWidget);
+
+		if (precaching){
+			pit.setWidget(_g3mWidget);
+		}
 
 		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 		_placeHolder.addView(_g3mWidget);
-		
+
 		//END OF CODE FOR PRECACHING AREA
 
 	}
