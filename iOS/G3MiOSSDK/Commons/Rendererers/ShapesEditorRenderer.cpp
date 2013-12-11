@@ -16,6 +16,7 @@
 class MyShapeSelectionListener : public SimpleShapeSelectionListener {
 private:
   ShapesEditorRenderer* _renderer;
+  Shape* _selectedShape;
   
 public:
   
@@ -25,9 +26,16 @@ public:
   
   bool touchedShape(Shape* shape) {
     SimpleShapeSelectionListener::touchedShape(shape);
-    _renderer->removeVertexShapes();
-    if (getSelectedShape() != NULL)
-      _renderer->selectShape(shape);
+    _selectedShape = getSelectedShape();
+    if (_selectedShape == NULL) {
+      _renderer->clearVertexShapes();
+      return true;
+    }
+    int id = _renderer->getRasterShapeId(_selectedShape);
+    if (id >= 0) {
+      _renderer->selectRasterShape(id);
+      return true;
+    }
     return true;
   }
 };
@@ -41,25 +49,20 @@ ShapesRenderer(geoTileRasterizer)
 }
 
 
-void ShapesEditorRenderer::selectShape(Shape* shape)
+void ShapesEditorRenderer::clearVertexShapes()
 {
-  /*// if shape is not a raster shape, return
-  std::vector<Geodetic2D*> coordinates = shape->getCopyRasterCoordinates();
-  if (coordinates.empty()) return;*/
-  
-  // if shape is not a raster shape, return
-  int pos = -1;
-  const int size = _rasterShapes.size();
-  for (int i = 0; i < size; i++) {
-    if (_rasterShapes[i]._shape == shape) {
-      pos = i;
-      break;
-    }
+  int size = _vertexShapes.size();
+  for (int n=0; n<size; n++) {
+    removeShape(_vertexShapes[n]);
   }
-  if (pos<0) return;
+  _vertexShapes.clear();
+}
 
+void ShapesEditorRenderer::selectRasterShape(int id)
+{
   // creamos nuevos points para el vertexRenderer
-  std::vector<Geodetic2D*> coordinates = _rasterShapes[pos]._coordinates;
+  std::vector<Geodetic2D*> coordinates = _rasterShapes[id]._coordinates;
+  clearVertexShapes();
   for (int n=0; n<coordinates.size(); n++) {
     Geodetic3D* position = new Geodetic3D(*coordinates[n], 1);
     PointShape* vertex = new PointShape(position,
@@ -83,10 +86,30 @@ void ShapesEditorRenderer::addShape(Shape* shape)
 }
 
 
-void ShapesEditorRenderer::removeVertexShapes()
+int ShapesEditorRenderer::getVertexShapeId(Shape* shape)
 {
-  int size = _vertexShapes.size();
-  for (int n=0; n<size; n++)
-    removeShape(_vertexShapes[n]);
-  printf("falta eliminar lista\n");
+  int pos = -1;
+  const int size = _vertexShapes.size();
+  for (int i = 0; i < size; i++) {
+    if (_vertexShapes[i] == shape) {
+      pos = i;
+      break;
+    }
+  }
+  return pos;
 }
+
+
+int ShapesEditorRenderer::getRasterShapeId(Shape* shape)
+{
+  int pos = -1;
+  const int size = _rasterShapes.size();
+  for (int i = 0; i < size; i++) {
+    if (_rasterShapes[i]._shape == shape) {
+      pos = i;
+      break;
+    }
+  }
+  return pos;
+}
+

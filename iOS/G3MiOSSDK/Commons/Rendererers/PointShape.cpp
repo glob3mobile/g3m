@@ -76,7 +76,7 @@ OrientedBox* PointShape::computeOrientedBox(const Planet* planet,
     _cartesianPosition = new Vector3D(planet->toCartesian(getPosition()));
   double distanceToCamera = camera->getCartesianPosition().distanceTo(*_cartesianPosition);
   FrustumData frustum = camera->getFrustumData();
-  const int pixelWidth = 10;
+  const int pixelWidth = 11;
   double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getHeight() / frustum._znear;
   const Vector3D upper = Vector3D(scale, scale, scale);
   const Vector3D lower = upper.times(-1);

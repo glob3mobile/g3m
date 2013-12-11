@@ -32,16 +32,16 @@ class ShapesEditorRenderer: public ShapesRenderer {
 private:
   std::vector<RasterShapes> _rasterShapes;
   std::vector<PointShape*> _vertexShapes;
-  
+    
 public:
   ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
   
   void addShape(Shape* shape);
   
-  void selectShape(Shape* shape);
-  
-  void removeVertexShapes();
-  
+  int getVertexShapeId(Shape* shape);
+  int getRasterShapeId(Shape* shape);
+  void selectRasterShape(int id);
+  void clearVertexShapes();
 };
 
 
