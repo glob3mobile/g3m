@@ -43,6 +43,7 @@ public:
 
   GoogleMapsLayer* copy() const;
 
+  RenderState getRenderState();
 };
 
 #endif

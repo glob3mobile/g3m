@@ -10,6 +10,8 @@
 
 #import <UIKit/UIKit.h>
 
+#include <sys/sysctl.h>
+
 
 DeviceInfo_iOS::DeviceInfo_iOS() {
   UIScreen* mainScreen = [UIScreen mainScreen];
@@ -19,7 +21,24 @@ DeviceInfo_iOS::DeviceInfo_iOS() {
   /*                          */ : 1;
 
   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-    _dpi = 132 * scale;
+
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char* machine = new char[size+1];// malloc(size + 1);
+    sysctlbyname("hw.machine", machine, &size, NULL, 0);
+    machine[size] = 0;
+
+    //TODO: NEW MODELS OF IPAD MINI MAY HAVE NEW IDENTIFIERS
+
+    bool iPadMini = strcmp(machine, "iPad2,5") == 0;
+    delete [] machine;
+
+    if (iPadMini){
+      _dpi = 163 * scale;
+    }
+    else{ //REGULAR IPAD
+      _dpi = 132 * scale;
+    }
   }
   else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
     _dpi = 163 * scale;

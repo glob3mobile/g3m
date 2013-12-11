@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 //class GLState;
 //class G3MRenderContext;
+//class Vector3D;
+//class MeshRenderer;
 
 public abstract class SceneLighting
 {

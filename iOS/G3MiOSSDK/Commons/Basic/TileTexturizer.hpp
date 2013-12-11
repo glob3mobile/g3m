@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_TileTexturizer_hpp
 #define G3MiOSSDK_TileTexturizer_hpp
 
+#include "Renderer.hpp"
+
 class Mesh;
 class G3MRenderContext;
 class Tile;
@@ -26,8 +28,7 @@ public:
   virtual ~TileTexturizer() {
   }
 
-  virtual bool isReady(const G3MRenderContext* rc,
-                       LayerSet* layerSet) = 0;
+  virtual RenderState getRenderState(LayerSet* layerSet) = 0;
 
   virtual void initialize(const G3MContext* context,
                           const TilesRenderParameters* parameters) = 0;

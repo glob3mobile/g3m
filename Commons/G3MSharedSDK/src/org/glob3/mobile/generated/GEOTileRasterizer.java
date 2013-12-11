@@ -102,6 +102,7 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
   public final void clear()
   {
     _quadTree.clear();
+    notifyChanges();
   }
 
   public final ICanvas getCanvas(int width, int height)

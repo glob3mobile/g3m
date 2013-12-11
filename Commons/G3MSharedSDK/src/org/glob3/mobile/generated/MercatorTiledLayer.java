@@ -183,4 +183,8 @@ public class MercatorTiledLayer extends Layer
     return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
   }
 
+  public RenderState getRenderState()
+  {
+    return RenderState.ready();
+  }
 }

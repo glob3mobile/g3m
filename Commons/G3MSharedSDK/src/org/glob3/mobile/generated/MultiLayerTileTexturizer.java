@@ -46,13 +46,13 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
   }
 
-  public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
+  public final RenderState getRenderState(LayerSet layerSet)
   {
     if (layerSet != null)
     {
-      return layerSet.isReady();
+      return layerSet.getRenderState();
     }
-    return true;
+    return RenderState.ready();
   }
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)

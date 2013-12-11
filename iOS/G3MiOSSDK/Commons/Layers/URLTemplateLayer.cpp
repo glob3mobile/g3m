@@ -176,3 +176,16 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
   
   return petitions;
 }
+
+
+RenderState URLTemplateLayer::getRenderState() {
+  _errors.clear();
+  if (_urlTemplate.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: urlTemplate");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
+}

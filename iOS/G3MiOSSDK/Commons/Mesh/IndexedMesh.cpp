@@ -12,6 +12,7 @@
 #include "GL.hpp"
 #include "IShortBuffer.hpp"
 
+
 IndexedMesh::~IndexedMesh() {
   if (_owner) {
     delete _indices;

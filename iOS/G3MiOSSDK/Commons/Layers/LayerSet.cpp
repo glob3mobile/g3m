@@ -89,18 +89,45 @@ void LayerSet::initialize(const G3MContext* context) const {
   }
 }
 
-bool LayerSet::isReady() const {
+RenderState LayerSet::getRenderState() {
+  _errors.clear();
+  bool busyFlag  = false;
+  bool errorFlag = false;
   const int layersCount = _layers.size();
-  if (layersCount < 1) {
-    return false;
-  }
-
+  
   for (int i = 0; i < layersCount; i++) {
-    if (!(_layers[i]->isReady())) {
-      return false;
+    Layer* child = _layers[i];
+    if (child->isEnable()) {
+      const RenderState childRenderState = child->getRenderState();
+      
+      const RenderState_Type childRenderStateType = childRenderState._type;
+      
+      if (childRenderStateType == RENDER_ERROR) {
+        errorFlag = true;
+        
+        const std::vector<std::string> childErrors = childRenderState.getErrors();
+#ifdef C_CODE
+        _errors.insert(_errors.end(),
+        childErrors.begin(),
+        childErrors.end());
+#endif
+#ifdef JAVA_CODE
+        _errors.addAll(childErrors);
+#endif
+      }
+      else if (childRenderStateType == RENDER_BUSY) {
+        busyFlag = true;
+      }
     }
   }
-  return true;
+  
+  if (errorFlag) {
+    return RenderState::error(_errors);
+  }
+  else if (busyFlag) {
+    return RenderState::busy();
+  }
+  return RenderState::ready();
 }
 
 Layer* LayerSet::getLayer(int index) const {
@@ -221,89 +248,111 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
   int     tileMeshHeight             = 0;
   bool    mercator                   = false;
 
+  bool layerSetNotReadyFlag = false;
   bool first = true;
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
 
-    if (layer->isEnable() && layer->isReady()) {
-      const LayerTilesRenderParameters* layerParam = layer->getLayerTilesRenderParameters();
-
-      if (layerParam == NULL) {
-        continue;
-      }
-
-      if (first) {
-        first = false;
-
-        topSector                  = new Sector( layerParam->_topSector );
-        topSectorSplitsByLatitude  = layerParam->_topSectorSplitsByLatitude;
-        topSectorSplitsByLongitude = layerParam->_topSectorSplitsByLongitude;
-        firstLevel                 = layerParam->_firstLevel;
-        maxLevel                   = layerParam->_maxLevel;
-        tileTextureWidth           = layerParam->_tileTextureResolution._x;
-        tileTextureHeight          = layerParam->_tileTextureResolution._y;
-        tileMeshWidth              = layerParam->_tileMeshResolution._x;
-        tileMeshHeight             = layerParam->_tileMeshResolution._y;
-        mercator                   = layerParam->_mercator;
+    if (layer->isEnable()) {
+      const RenderState layerRenderState = layer->getRenderState();
+      const RenderState_Type layerRenderStateType = layerRenderState._type;
+      if (layerRenderStateType != RENDER_READY) {
+        if (layerRenderStateType == RENDER_ERROR) {
+          const std::vector<std::string> layerErrors = layerRenderState.getErrors();
+#ifdef C_CODE
+          errors.insert(errors.end(),
+                      layerErrors.begin(),
+                      layerErrors.end());
+#endif
+#ifdef JAVA_CODE
+          errors.addAll(layerErrors);
+#endif
+        }
+        layerSetNotReadyFlag = true;
       }
       else {
-        if ( mercator != layerParam->_mercator ) {
-          errors.push_back("Inconsistency in Layer's Parameters: mercator");
-          delete topSector;
-          return NULL;
+        const LayerTilesRenderParameters* layerParam = layer->getLayerTilesRenderParameters();
+
+        if (layerParam == NULL) {
+          continue;
         }
 
-        if (!topSector->isEquals(layerParam->_topSector) ) {
-          errors.push_back("Inconsistency in Layer's Parameters: topSector");
-          delete topSector;
-          return NULL;
-        }
+        if (first) {
+          first = false;
 
-        if ( topSectorSplitsByLatitude != layerParam->_topSectorSplitsByLatitude ) {
-          errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
-          delete topSector;
-          return NULL;
+          topSector                  = new Sector( layerParam->_topSector );
+          topSectorSplitsByLatitude  = layerParam->_topSectorSplitsByLatitude;
+          topSectorSplitsByLongitude = layerParam->_topSectorSplitsByLongitude;
+          firstLevel                 = layerParam->_firstLevel;
+          maxLevel                   = layerParam->_maxLevel;
+          tileTextureWidth           = layerParam->_tileTextureResolution._x;
+          tileTextureHeight          = layerParam->_tileTextureResolution._y;
+          tileMeshWidth              = layerParam->_tileMeshResolution._x;
+          tileMeshHeight             = layerParam->_tileMeshResolution._y;
+          mercator                   = layerParam->_mercator;
         }
+        else {
+          if ( mercator != layerParam->_mercator ) {
+            errors.push_back("Inconsistency in Layer's Parameters: mercator");
+            delete topSector;
+            return NULL;
+          }
 
-        if ( topSectorSplitsByLongitude != layerParam->_topSectorSplitsByLongitude ) {
-          errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
-          delete topSector;
-          return NULL;
+          if (!topSector->isEquals(layerParam->_topSector) ) {
+            errors.push_back("Inconsistency in Layer's Parameters: topSector");
+            delete topSector;
+            return NULL;
+          }
+
+          if ( topSectorSplitsByLatitude != layerParam->_topSectorSplitsByLatitude ) {
+            errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLatitude");
+            delete topSector;
+            return NULL;
+          }
+
+          if ( topSectorSplitsByLongitude != layerParam->_topSectorSplitsByLongitude ) {
+            errors.push_back("Inconsistency in Layer's Parameters: topSectorSplitsByLongitude");
+            delete topSector;
+            return NULL;
+          }
+
+          if (( tileTextureWidth  != layerParam->_tileTextureResolution._x ) ||
+              ( tileTextureHeight != layerParam->_tileTextureResolution._y ) ) {
+            errors.push_back("Inconsistency in Layer's Parameters: tileTextureResolution");
+            delete topSector;
+            return NULL;
+          }
+
+          if (( tileMeshWidth  != layerParam->_tileMeshResolution._x ) ||
+              ( tileMeshHeight != layerParam->_tileMeshResolution._y ) ) {
+            errors.push_back("Inconsistency in Layer's Parameters: tileMeshResolution");
+            delete topSector;
+            return NULL;
+          }
+
+          if ( maxLevel < layerParam->_maxLevel ) {
+            ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)",
+                                            maxLevel,
+                                            layerParam->_maxLevel);
+            maxLevel = layerParam->_maxLevel;
+          }
+
+          if ( firstLevel < layerParam->_firstLevel ) {
+            ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)",
+                                            firstLevel,
+                                            layerParam->_firstLevel);
+            firstLevel = layerParam->_firstLevel;
+          }
+
         }
-
-        if (( tileTextureWidth  != layerParam->_tileTextureResolution._x ) ||
-            ( tileTextureHeight != layerParam->_tileTextureResolution._y ) ) {
-          errors.push_back("Inconsistency in Layer's Parameters: tileTextureResolution");
-          delete topSector;
-          return NULL;
-        }
-
-        if (( tileMeshWidth  != layerParam->_tileMeshResolution._x ) ||
-            ( tileMeshHeight != layerParam->_tileMeshResolution._y ) ) {
-          errors.push_back("Inconsistency in Layer's Parameters: tileMeshResolution");
-          delete topSector;
-          return NULL;
-        }
-
-        if ( maxLevel < layerParam->_maxLevel ) {
-          ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: maxLevel (upgrading from %d to %d)",
-                                          maxLevel,
-                                          layerParam->_maxLevel);
-          maxLevel = layerParam->_maxLevel;
-        }
-
-        if ( firstLevel < layerParam->_firstLevel ) {
-          ILogger::instance()->logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)",
-                                          firstLevel,
-                                          layerParam->_firstLevel);
-          firstLevel = layerParam->_firstLevel;
-        }
-
       }
     }
   }
 
+  if (layerSetNotReadyFlag) {
+    return NULL;
+  }
   if (first) {
     errors.push_back("Can't find any enabled Layer");
     return NULL;

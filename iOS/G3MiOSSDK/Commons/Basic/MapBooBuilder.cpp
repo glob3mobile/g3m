@@ -506,6 +506,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   long long texturePriority = DownloadPriority::HIGHER;
 
   const Sector renderedSector = Sector::fullSphere();
+  const bool renderTileMeshes = true;
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
@@ -517,7 +518,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               parameters,
                                               showStatistics,
                                               texturePriority,
-                                              renderedSector);
+                                              renderedSector,
+                                              renderTileMeshes);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
@@ -684,7 +686,7 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
                                         maxLevel,
                                         TimeInterval::fromDays(30));
   }
-  
+
   return result;
 }
 
@@ -854,9 +856,9 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
 
   const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
 
-//  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-//    return NULL;
-//  }
+  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+  //    return NULL;
+  //  }
 
   return new MapBoo_Scene(jsonObject->getAsString("id", ""),
                           jsonObject->getAsString("name", ""),
@@ -1585,7 +1587,8 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {
-  return new CameraFocusSceneLighting();
+  return new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0),
+                                      Color::yellow());
 }
 
 void MapBooBuilder::setApplicationTubeOpened(bool open) {

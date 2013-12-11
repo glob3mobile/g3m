@@ -17,6 +17,7 @@
 #include "URL.hpp"
 #include "LayerTouchEventListener.hpp"
 #include "TimeInterval.hpp"
+#include "Renderer.hpp"
 
 class Petition;
 class Tile;
@@ -29,6 +30,7 @@ class Layer {
 protected:
   LayerCondition*                       _condition;
   std::vector<LayerTouchEventListener*> _listeners;
+  std::vector<std::string>              _errors;
 
   LayerSet* _layerSet;
 
@@ -111,10 +113,8 @@ public:
   virtual URL getFeatureInfoURL(const Geodetic2D& position,
                                 const Sector& sector) const = 0;
 
-  virtual bool isReady() const {
-    return true;
-  }
-
+  virtual RenderState getRenderState() = 0;
+  
   virtual void initialize(const G3MContext* context) {
   }
 
