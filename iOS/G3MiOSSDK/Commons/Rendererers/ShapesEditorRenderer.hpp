@@ -19,10 +19,12 @@ class GEOTileRasterizer;
 class ShapesEditorRenderer: public ShapesRenderer {
   
 public:
-  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer):
-  ShapesRenderer(geoTileRasterizer)
-  {}
+  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
   
+  void addShape(Shape* shape)
+  {
+    ShapesRenderer::addShape(shape);
+  }
 };
 
 

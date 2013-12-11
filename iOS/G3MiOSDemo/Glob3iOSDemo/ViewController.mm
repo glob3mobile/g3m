@@ -1886,31 +1886,6 @@ public:
   }
 
   
-  // adding touch listener
-  class TestShapeTouchListener : public ShapeTouchListener {
-  private:
-    Shape* _selectedShape = NULL;
-  public:
-    bool touchedShape(Shape* shape) {
-      if (_selectedShape == NULL) {
-        shape->select();
-        _selectedShape = shape;
-      } else {
-        if (_selectedShape==shape) {
-          shape->unselect();
-          _selectedShape = NULL;
-        } else {
-          _selectedShape->unselect();
-          _selectedShape = shape;
-          shape->select();
-        }
-      }
-      return true;
-    }
-  };
-
-  shapesRenderer->setShapeTouchListener(new TestShapeTouchListener, true);
-  
 
   //  Shape* mercator2 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(41),
   //                                                       Angle::fromDegrees(-117),
