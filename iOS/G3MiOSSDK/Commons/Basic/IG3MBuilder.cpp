@@ -879,13 +879,13 @@ ShapesEditorRenderer* IG3MBuilder::createShapesEditorRenderer()
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
   getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
   
-  // shapesRenderer to render pointshapes whwen modifying shape vertices
+  /*// shapesRenderer to render pointshapes whwen modifying shape vertices
   ShapesRenderer* vertexRenderer = new ShapesRenderer;
   vertexRenderer->setShapeTouchListener(new SimpleShapeSelectionListener, true);
-  addRenderer(vertexRenderer);
+  addRenderer(vertexRenderer);*/
   
   // creating shape Editor Renderer
-  ShapesEditorRenderer* shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer, vertexRenderer);
+  ShapesEditorRenderer* shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
   addRenderer(shapesEditorRenderer);
   return shapesEditorRenderer;
 }

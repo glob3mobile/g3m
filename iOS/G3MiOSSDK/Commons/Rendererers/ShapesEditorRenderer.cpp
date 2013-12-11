@@ -25,7 +25,7 @@ public:
   
   bool touchedShape(Shape* shape) {
     SimpleShapeSelectionListener::touchedShape(shape);
-    _renderer->cleanVertexRenderer();
+    _renderer->removeVertexShapes();
     if (getSelectedShape() != NULL)
       _renderer->selectShape(shape);
     return true;
@@ -34,10 +34,8 @@ public:
 
 
 
-ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer,
-                                           ShapesRenderer* vertexRenderer):
-ShapesRenderer(geoTileRasterizer),
-_vertexRenderer(vertexRenderer)
+ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer):
+ShapesRenderer(geoTileRasterizer)
 {
   setShapeTouchListener(new MyShapeSelectionListener(this), true);
 }
@@ -64,11 +62,12 @@ void ShapesEditorRenderer::selectShape(Shape* shape)
   std::vector<Geodetic2D*> coordinates = _rasterShapes[pos]._coordinates;
   for (int n=0; n<coordinates.size(); n++) {
     Geodetic3D* position = new Geodetic3D(*coordinates[n], 1);
-    Shape* vertex = new PointShape(position,
-                                   RELATIVE_TO_GROUND,
-                                   20,
-                                   Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
-    _vertexRenderer->addShape(vertex);
+    PointShape* vertex = new PointShape(position,
+                                        RELATIVE_TO_GROUND,
+                                        20,
+                                        Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
+    addShape(vertex);
+    _vertexShapes.push_back(vertex);
   }
 }
 
@@ -83,3 +82,11 @@ void ShapesEditorRenderer::addShape(Shape* shape)
     _rasterShapes.push_back(RasterShapes(shape, coordinates));
 }
 
+
+void ShapesEditorRenderer::removeVertexShapes()
+{
+  int size = _vertexShapes.size();
+  for (int n=0; n<size; n++)
+    removeShape(_vertexShapes[n]);
+  printf("falta eliminar lista\n");
+}

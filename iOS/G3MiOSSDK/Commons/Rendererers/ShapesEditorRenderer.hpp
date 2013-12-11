@@ -14,6 +14,7 @@
 
 
 class GEOTileRasterizer;
+class PointShape;
 
 
 struct RasterShapes {
@@ -29,20 +30,18 @@ struct RasterShapes {
 
 class ShapesEditorRenderer: public ShapesRenderer {
 private:
-  ShapesRenderer* _vertexRenderer;
   std::vector<RasterShapes> _rasterShapes;
+  std::vector<PointShape*> _vertexShapes;
   
 public:
-  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer,
-                       ShapesRenderer* vertexRenderer);
+  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
   
   void addShape(Shape* shape);
   
   void selectShape(Shape* shape);
   
-  void cleanVertexRenderer() const {
-    _vertexRenderer->removeAllShapes();
-  }
+  void removeVertexShapes();
+  
 };
 
 

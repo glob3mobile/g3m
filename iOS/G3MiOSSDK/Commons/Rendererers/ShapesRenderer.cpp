@@ -577,3 +577,23 @@ void ShapesRenderer::addShape(Shape* shape) {
   }
 }
 
+
+void ShapesRenderer::removeShape(Shape* shape)
+{
+  int pos = -1;
+  const int size = _shapes.size();
+  for (int i = 0; i < size; i++) {
+    if (_shapes[i] == shape) {
+      pos = i;
+      break;
+    }
+  }
+  if (pos != -1) {
+#ifdef C_CODE
+    _shapes.erase(_shapes.begin() + pos);
+#endif
+#ifdef JAVA_CODE
+    _shapes.remove(pos);
+#endif
+  }
+}
