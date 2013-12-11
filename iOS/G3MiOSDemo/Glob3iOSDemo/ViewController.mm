@@ -14,6 +14,7 @@
 #import <G3MiOSSDK/VisibleSectorListener.hpp>
 #import <G3MiOSSDK/MarksRenderer.hpp>
 #import <G3MiOSSDK/ShapesRenderer.hpp>
+#import <G3MiOSSDK/ShapesEditorRenderer.hpp>
 #import <G3MiOSSDK/GEORenderer.hpp>
 #import <G3MiOSSDK/BusyMeshRenderer.hpp>
 #import <G3MiOSSDK/MeshRenderer.hpp>
@@ -580,10 +581,11 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
-//  const Planet* planet = Planet::createFlatEarth();
+  const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
+  
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
 
@@ -806,11 +808,11 @@ public:
   if (true) {
     //Geodetic3D position(Geodetic3D(Angle::fromDegrees(-12.0875), Angle::fromDegrees(15.2036), 2328992));
     //Geodetic3D position(Geodetic3D(Angle::fromDegrees(-17.56), Angle::fromDegrees(19.20), 4390000));
-    Geodetic3D position(Geodetic3D(Angle::fromDegrees(39.08), Angle::fromDegrees(2.90), 113000));
+    Geodetic3D position(Geodetic3D(Angle::fromDegrees(39.50), Angle::fromDegrees(2.90), 113000));
     //[self G3MWidget].widget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
     [self G3MWidget].widget->setCameraPosition(position);
-    [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(5));
-    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24));
+    //[self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(5));
+    //[self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24));
   }
 
 }
@@ -1650,7 +1652,7 @@ public:
 
 - (ShapesRenderer*) createShapesRenderer: (GEOTileRasterizer*) geoTileRasterizer
 {
-  ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
+  ShapesEditorRenderer* shapesRenderer = new ShapesEditorRenderer(geoTileRasterizer);
 /*  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-122),
                                               8000),

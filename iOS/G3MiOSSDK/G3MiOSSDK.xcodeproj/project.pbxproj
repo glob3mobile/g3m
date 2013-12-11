@@ -39,6 +39,8 @@
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
 		CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */; };
 		CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */; };
+		CC786E871858698F00369669 /* ShapesEditorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC786E851858698F00369669 /* ShapesEditorRenderer.cpp */; };
+		CC786E8818586A1B00369669 /* ShapesEditorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC786E861858698F00369669 /* ShapesEditorRenderer.hpp */; };
 		CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC96079115AF23F600D438D4 /* TextureMapping.cpp */; };
 		CCAD325F183FE063008F500D /* PointShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCAD325D183FE063008F500D /* PointShape.cpp */; };
 		CCAD3260183FE7F9008F500D /* PointShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCAD325E183FE063008F500D /* PointShape.hpp */; };
@@ -640,11 +642,11 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CC786E8818586A1B00369669 /* ShapesEditorRenderer.hpp in CopyFiles */,
 				FB2FD5161847C5C3002D2E78 /* RasterPolygonShape.hpp in CopyFiles */,
 				FB2FD51218460AA9002D2E78 /* RasterLineShape.hpp in CopyFiles */,
 				FB2FD50E1844C79A002D2E78 /* LineShape.hpp in CopyFiles */,
 				CCAD3260183FE7F9008F500D /* PointShape.hpp in CopyFiles */,
-				CF6920BE18392F83007409D8 /* ErrorHandling.hpp in CopyFiles */,
 				CF485F8A18511C460013795B /* AndTileCondition.hpp in CopyFiles */,
 				CFD8E771184FB74800228031 /* SectorTileCondition.hpp in CopyFiles */,
 				CF7FF503184CE434003A7E76 /* ErrorHandling.hpp in CopyFiles */,
@@ -1041,6 +1043,8 @@
 		CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CameraSingleDragHandler.cpp; path = Commons/Cameras/CameraSingleDragHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraRotationHandler.hpp; path = Commons/Cameras/CameraRotationHandler.hpp; sourceTree = "<group>"; };
 		CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CameraRotationHandler.cpp; path = Commons/Cameras/CameraRotationHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CC786E851858698F00369669 /* ShapesEditorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapesEditorRenderer.cpp; path = Commons/Rendererers/ShapesEditorRenderer.cpp; sourceTree = "<group>"; };
+		CC786E861858698F00369669 /* ShapesEditorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapesEditorRenderer.hpp; path = Commons/Rendererers/ShapesEditorRenderer.hpp; sourceTree = "<group>"; };
 		CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraEventHandler.hpp; path = Commons/Cameras/CameraEventHandler.hpp; sourceTree = "<group>"; };
 		CC96079115AF23F600D438D4 /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
 		CCAD325D183FE063008F500D /* PointShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointShape.cpp; path = Commons/Rendererers/PointShape.cpp; sourceTree = "<group>"; };
@@ -1582,7 +1586,6 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GenericQuadTree.hpp; path = Commons/Basic/GenericQuadTree.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GenericQuadTree.cpp; path = Commons/Basic/GenericQuadTree.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D8F2C5B8184CB3C700A8D6FC /* ErrorHandling.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ErrorHandling.hpp; path = Commons/Basic/ErrorHandling.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLGlobalState.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
@@ -1750,7 +1753,6 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				D8F2C5BA184CB51600A8D6FC /* ErrorHandling.hpp */,
 				D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */,
 				D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */,
 				D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */,
@@ -2338,6 +2340,8 @@
 				CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */,
 				CFD1A47316602B050039EFA9 /* ShapeScaleEffect.cpp */,
 				CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */,
+				CC786E851858698F00369669 /* ShapesEditorRenderer.cpp */,
+				CC786E861858698F00369669 /* ShapesEditorRenderer.hpp */,
 				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
 				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
 				CCAD325D183FE063008F500D /* PointShape.cpp */,
@@ -2862,6 +2866,7 @@
 				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */,
 				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
+				CC786E871858698F00369669 /* ShapesEditorRenderer.cpp in Sources */,
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
