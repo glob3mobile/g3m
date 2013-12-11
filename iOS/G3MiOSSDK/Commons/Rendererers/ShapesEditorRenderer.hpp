@@ -16,7 +16,7 @@
 class GEOTileRasterizer;
 
 
-class ShapesEditorRenderer: public ShapesRenderer, ShapeTouchListener {
+class ShapesEditorRenderer: public ShapesRenderer {
   
 public:
   ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
@@ -26,10 +26,7 @@ public:
     ShapesRenderer::addShape(shape);
   }
   
-  
-  bool touchedShape(Shape* shape) {}
-
-  
+  void selectShape(Shape* shape);
 };
 
 

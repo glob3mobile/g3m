@@ -11,16 +11,17 @@
 
 class MyShapeTouchListener : public ShapeTouchListener {
 private:
-  Shape* _selectedShape = NULL;
+  Shape* _selectedShape;
+  ShapesEditorRenderer* _renderer;
+  
 public:
+  
+  MyShapeTouchListener(ShapesEditorRenderer* renderer):
+  _renderer(renderer),
+  _selectedShape(NULL)
+  {}
+  
   bool touchedShape(Shape* shape) {
-    
-    std::vector<Geodetic2D*> coordinates = shape->getCopyRasterCoordinates();
-    for (int n=0; n<coordinates.size(); n++)
-      printf ("    %d: (%f %f)\n", n, coordinates[n]->_latitude._degrees,
-              coordinates[n]->_longitude._degrees);
-    
-    
     if (_selectedShape == NULL) {
       shape->select();
       _selectedShape = shape;
@@ -34,6 +35,8 @@ public:
         shape->select();
       }
     }
+    if (_selectedShape != NULL)
+      _renderer->selectShape(shape);
     return true;
   }
 };
@@ -43,5 +46,17 @@ public:
 ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer):
 ShapesRenderer(geoTileRasterizer)
 {
-  setShapeTouchListener(new MyShapeTouchListener, true);
+  setShapeTouchListener(new MyShapeTouchListener(this), true);
+}
+
+
+void ShapesEditorRenderer::selectShape(Shape* shape)
+{
+  // if shape is not a raster shape, return
+  std::vector<Geodetic2D*> coordinates = shape->getCopyRasterCoordinates();
+  if (coordinates.empty()) return;
+  
+  for (int n=0; n<coordinates.size(); n++)
+    printf ("    %d: (%f %f)\n", n, coordinates[n]->_latitude._degrees,
+            coordinates[n]->_longitude._degrees);
 }
