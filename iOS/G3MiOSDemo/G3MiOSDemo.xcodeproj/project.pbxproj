@@ -40,7 +40,6 @@
 		CFE3DBB1164B0E7D00910037 /* seymour-plane.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3DBB0164B0E7D00910037 /* seymour-plane.json */; };
 		CFEA76681666DCB000E89BC7 /* images in Resources */ = {isa = PBXBuildFile; fileRef = CFEA76671666DCB000E89BC7 /* images */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
-		D8140EE41858926B00D2E539 /* g3m.cache in Resources */ = {isa = PBXBuildFile; fileRef = D8140EE31858926B00D2E539 /* g3m.cache */; };
 		D882B1CD171D77C000C2AD9C /* full-earth-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
@@ -124,7 +123,6 @@
 		CFE3DBB0164B0E7D00910037 /* seymour-plane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "seymour-plane.json"; sourceTree = "<group>"; };
 		CFEA76671666DCB000E89BC7 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
-		D8140EE31858926B00D2E539 /* g3m.cache */ = {isa = PBXFileReference; lastKnownFileType = file; path = g3m.cache; sourceTree = "<group>"; };
 		D882B1CC171D76AD00C2AD9C /* full-earth-256x256.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full-earth-256x256.bil"; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -257,7 +255,6 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D8140EE31858926B00D2E539 /* g3m.cache */,
 				CF3CA9DA182D99D500483977 /* isosurface-mesh.json */,
 				CF8E9886180D98DC00A08208 /* pointcloud */,
 				CFA245421800708D00921325 /* washington-memorial.json */,
@@ -418,7 +415,6 @@
 				CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */,
 				E728385516E914D80037AA5C /* g3m-marker.png in Resources */,
 				E7A1A99416F202B700D138D8 /* sand-clock.png in Resources */,
-				D8140EE41858926B00D2E539 /* g3m.cache in Resources */,
 				E736067D16F8D7BE000E32AD /* horizontal-gears.png in Resources */,
 				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
 				CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */,
