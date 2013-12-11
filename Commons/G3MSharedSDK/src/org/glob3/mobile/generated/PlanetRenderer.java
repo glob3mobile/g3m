@@ -315,7 +315,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-  private final G3MRenderContext _renderContext;
+  private G3MRenderContext _renderContext;
 
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
   {

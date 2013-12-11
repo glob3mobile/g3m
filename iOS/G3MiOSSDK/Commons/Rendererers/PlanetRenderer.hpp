@@ -295,7 +295,12 @@ private:
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
+#ifdef C_CODE
   const G3MRenderContext* _renderContext;
+#endif
+#ifdef JAVA_CODE
+  final G3MRenderContext _renderContext;
+#endif
 
 public:
   PlanetRenderer(TileTessellator*             tessellator,

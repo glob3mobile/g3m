@@ -857,6 +857,8 @@ public:
   _renderContext(renderContext),
   _ltrp(ltrp){}
 
+  ~GetTilesURLVisitor(){}
+
   void visitTile(std::vector<Layer*>& layers, const Tile* tile) const{
 
 

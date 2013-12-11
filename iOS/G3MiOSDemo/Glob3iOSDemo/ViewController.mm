@@ -143,6 +143,7 @@
 #import <G3MiOSSDK/SceneLighting.hpp>
 
 #import <G3MiOSSDK/IImageDownloadListener.hpp>
+#import <G3MiOSSDK/Petition.hpp>
 
 
 
@@ -2457,6 +2458,7 @@ public:
                                                  planet: (const Planet*) planet
 {
 
+#warning BEGINNING OF CODE FOR PRECACHING AREA
   bool precachingArea = true;
   if (precachingArea){
 
@@ -2470,17 +2472,23 @@ public:
 
       bool _done;
 
+      Geodetic2D _lower;
+      Geodetic2D _upper;
+      int _level;
+
     public:
 
 
-      PrecacherInitializationTask(G3MWidget_iOS*  iosWidget):
-      _iosWidget(iosWidget), _nImagesDownloaded(0), _done(false){}
+      PrecacherInitializationTask(G3MWidget_iOS*  iosWidget,
+                                  const Geodetic2D& lower, const Geodetic2D& upper, int level):
+      _iosWidget(iosWidget), _nImagesDownloaded(0), _done(false),
+      _lower(lower), _upper(upper), _level(level){}
 
       void imageDownloaded(){
         _nImagesDownloaded++;
-        //if (_nImagesDownloaded % 50 == 0){
+        if (_nImagesDownloaded % 10 == 0){
           printf("IMAGE DOWNLOADED %d\n", _nImagesDownloaded);
-        //}
+        }
         int size = _urls.size() ;
         if (_nImagesDownloaded == size ){
           printf("ALL IMAGES DOWNLOADED \n");
@@ -2495,34 +2503,30 @@ public:
       public:
         DownloadListener(PrecacherInitializationTask* task):_task(task){}
 
-        virtual void onDownload(const URL& url,
+        void onDownload(const URL& url,
                                 IImage* image,
                                 bool expired){
           _task->imageDownloaded();
         }
 
-        virtual void onError(const URL& url){
+        void onError(const URL& url){
           printf("ERROR");
         }
 
-        virtual void onCancel(const URL& url){
+        void onCancel(const URL& url){
           printf("CANCEL");
         }
 
-        virtual void onCanceledDownload(const URL& url,
+        void onCanceledDownload(const URL& url,
                                         IImage* image,
                                         bool expired){}
 
 
       };
 
-
       void run(const G3MContext* context) {
 
-        Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
-        Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
-
-        _urls = [_iosWidget widget]->getPlanetRenderer()->getTilesURL(lower, upper, 4);
+        _urls = [_iosWidget widget]->getPlanetRenderer()->getTilesURL(_lower, _upper, _level);
 
 
         IDownloader* downloader = context->getDownloader();
@@ -2542,11 +2546,18 @@ public:
       }
 
     };
-    PrecacherInitializationTask* initializationTask = new PrecacherInitializationTask([self G3MWidget]);
+
+    //Las Palmas de GC
+    Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
+    Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
+    int level = 12;
+
+    PrecacherInitializationTask* initializationTask = new PrecacherInitializationTask([self G3MWidget],
+                                                                                      lower, upper, level);
     return initializationTask;
 
   }
-
+#warning END OF CODE FOR PRECACHING AREA
 
 
   class SampleInitializationTask : public GInitializationTask {

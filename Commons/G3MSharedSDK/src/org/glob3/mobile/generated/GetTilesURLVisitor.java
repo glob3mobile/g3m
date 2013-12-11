@@ -30,4 +30,10 @@ public class GetTilesURLVisitor implements ITileVisitor
 
   }
 
+@Override
+public void dispose() {
+	// TODO Auto-generated method stub
+	
+}
+
 }
