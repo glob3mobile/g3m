@@ -570,10 +570,10 @@ public:
 {
   G3MBuilder_iOS builder([self G3MWidget]);
 
-  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  //GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
-  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  //builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
   builder.getPlanetRendererBuilder()->setShowStatistics(false);
 
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
@@ -619,8 +619,12 @@ public:
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);*/
 
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer: geoTileRasterizer];
-  builder.addRenderer(shapesRenderer);
+  
+  //ShapesRenderer* shapesRenderer = [self createShapesRenderer: geoTileRasterizer];
+  //builder.addRenderer(shapesRenderer);
+  ShapesEditorRenderer* shapesRenderer = builder.createShapesEditorRenderer();
+  [self createShapesRenderer:shapesRenderer];
+
   
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
@@ -1650,9 +1654,9 @@ public:
 
 }
 
-- (ShapesRenderer*) createShapesRenderer: (GEOTileRasterizer*) geoTileRasterizer
+- (void) createShapesRenderer: (ShapesEditorRenderer*) shapesRenderer
 {
-  ShapesEditorRenderer* shapesRenderer = new ShapesEditorRenderer(geoTileRasterizer);
+  //ShapesEditorRenderer* shapesRenderer = new ShapesEditorRenderer(geoTileRasterizer);
 /*  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
                                               Angle::fromDegrees(-122),
                                               8000),
@@ -2010,7 +2014,7 @@ public:
     delete destRs[i];
   }
 
-  return shapesRenderer;
+  //return shapesRenderer;
 }
 
 

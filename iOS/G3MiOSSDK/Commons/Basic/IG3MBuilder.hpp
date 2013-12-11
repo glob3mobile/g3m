@@ -35,6 +35,7 @@ class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
 class ErrorRenderer;
+class ShapesEditorRenderer;
 
 
 class IG3MBuilder {
@@ -194,6 +195,8 @@ public:
   ShapesRenderer* createShapesRenderer();
 
   MarksRenderer* createMarksRenderer();
+  
+  ShapesEditorRenderer* createShapesEditorRenderer();
   
 };
 

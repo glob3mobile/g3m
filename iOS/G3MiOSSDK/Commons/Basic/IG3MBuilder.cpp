@@ -33,6 +33,7 @@
 #include "ShapesRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "HUDErrorRenderer.hpp"
+#include "ShapesEditorRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() :
 _gl(NULL),
@@ -869,4 +870,14 @@ GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
   addRenderer(geoRenderer);
 
   return geoRenderer;
+}
+
+
+ShapesEditorRenderer* IG3MBuilder::createShapesEditorRenderer()
+{
+  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  ShapesEditorRenderer* shapesRenderer = new ShapesEditorRenderer(geoTileRasterizer);
+  addRenderer(shapesRenderer);
+  return shapesRenderer;
 }
