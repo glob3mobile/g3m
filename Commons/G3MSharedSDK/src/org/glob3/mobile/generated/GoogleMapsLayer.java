@@ -71,7 +71,7 @@ public class GoogleMapsLayer extends Layer
   }
 
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -139,4 +139,18 @@ public class GoogleMapsLayer extends Layer
     return new GoogleMapsLayer(_key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_key.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: key");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
 }

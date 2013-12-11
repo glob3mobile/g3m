@@ -46,8 +46,7 @@ public:
   _glState(new GLState()),
   _mesh(NULL)
   {
-    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
-    _projectionMatrix = MutableMatrix44D::invalid();
+
   }
   
   void initialize(const G3MContext* context);
@@ -70,7 +69,10 @@ public:
     _projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,   halfWidth,
                                                                               -halfHeight, halfHeight,
                                                                               -halfWidth,  halfWidth);
-      }
+
+    delete _mesh;
+    _mesh = NULL;
+  }
   
   virtual ~BusyMeshRenderer() {
     delete _mesh;

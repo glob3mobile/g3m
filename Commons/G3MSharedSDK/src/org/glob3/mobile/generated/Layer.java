@@ -29,6 +29,7 @@ public abstract class Layer
 {
   protected LayerCondition _condition;
   protected java.util.ArrayList<LayerTouchEventListener> _listeners = new java.util.ArrayList<LayerTouchEventListener>();
+  protected java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   protected LayerSet _layerSet;
 
@@ -110,7 +111,7 @@ public abstract class Layer
     _parameters = null;
   }
 
-  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile);
+  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
 
   public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {
@@ -142,10 +143,7 @@ public abstract class Layer
 
   public abstract URL getFeatureInfoURL(Geodetic2D position, Sector sector);
 
-  public boolean isReady()
-  {
-    return true;
-  }
+  public abstract RenderState getRenderState();
 
   public void initialize(G3MContext context)
   {

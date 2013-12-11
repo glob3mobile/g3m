@@ -119,7 +119,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const TilesRenderParameters* tilesRenderParameters,
                                bool                         showStatistics,
                                long long                    texturePriority,
-                               const Sector&                renderedSector) :
+                               const Sector&                renderedSector,
+                               const bool                   renderTileMeshes) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -141,7 +142,8 @@ _recreateTilesPending(false),
 _glState(new GLState()),
 _renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector(renderedSector)),
 _layerTilesRenderParameters(NULL),
-_layerTilesRenderParametersDirty(true)
+_layerTilesRenderParametersDirty(true),
+_renderTileMeshes(renderTileMeshes)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -425,9 +427,9 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     return RenderState::error(_errors);
   }
 
-  if (!_layerSet->isReady()) {
-#warning __TODO_Layer_error;
-    return RenderState::busy();
+  const RenderState layerSetRenderState = _layerSet->getRenderState();
+  if (layerSetRenderState._type != RENDER_READY) {
+    return layerSetRenderState;
   }
 
   if (_elevationDataProvider != NULL) {
@@ -485,8 +487,9 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
       }
 
       if (_texturizer != NULL) {
-        if (!_texturizer->isReady(rc, _layerSet)) {
-          return RenderState::busy();
+        const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
+        if (texturizerRenderState._type != RENDER_READY) {
+          return texturizerRenderState;
         }
       }
 
@@ -528,7 +531,7 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
     const int layersCount = _layerSet->size();
     for (int i = 0; i < layersCount; i++) {
       Layer* layer = _layerSet->getLayer(i);
-      if (layer->isEnable() && layer->isReady()) {
+      if (layer->isEnable() && layer->getRenderState()._type == RENDER_READY) {
         layers.push_back(layer);
       }
     }
@@ -602,7 +605,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   _statistics.clear();
 
   const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
-  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
+//  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
   const float deviceQualityFactor = deviceInfo->getQualityFactor();
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
@@ -611,6 +614,21 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
   double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+
+  //Texture Size for every tile
+  int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
+  int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
+
+  const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+  const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
+
+  texWidth *= correctionFactor;
+  texHeight *= correctionFactor;
+
+  const double texWidthSquared = texWidth * texWidth;
+  const double texHeightSquared = texHeight * texHeight;
+
+  const double nowInMS = _lastSplitTimer->now().milliseconds(); //Getting now from _lastSplitTimer
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
@@ -639,8 +657,10 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _renderedSector,
                    _firstRender, /* if first render, force full render */
                    _texturePriority,
-                   dpiFactor,
-                   deviceQualityFactor);
+                   texWidthSquared,
+                   texHeightSquared,
+                   nowInMS,
+                   _renderTileMeshes);
     }
   }
   else {
@@ -677,8 +697,10 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _renderedSector,
                      _firstRender, /* if first render, force full render */
                      _texturePriority,
-                     dpiFactor,
-                     deviceQualityFactor);
+                     texWidthSquared,     //SENDING SQUARED TEX SIZE
+                     texHeightSquared,
+                     nowInMS,
+                     _renderTileMeshes);
       }
 
       toVisit = toVisitInNextIteration;

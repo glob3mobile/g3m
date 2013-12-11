@@ -108,7 +108,8 @@ URL URLTemplateLayer::getFeatureInfoURL(const Geodetic2D& position,
   return URL();
 }
 
-const std::string URLTemplateLayer::getPath(const Tile* tile,
+const std::string URLTemplateLayer::getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                            const Tile* tile,
                                             const Sector& sector) const {
 
   if (_mu == NULL) {
@@ -123,7 +124,7 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
 
   const int level   = tile->_level;
   const int column  = tile->_column;
-  const int numRows = (int) _mu->pow(2.0, level);
+  const int numRows = (int) (layerTilesRenderParameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int row     = numRows - tile->_row - 1;
 
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
@@ -150,6 +151,7 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
 }
 
 std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                 const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -164,7 +166,7 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
     return petitions;
   }
 
-  const std::string path = getPath(tile, sector);
+  const std::string path = getPath(layerTilesRenderParameters, tile, sector);
 
   petitions.push_back( new Petition(sector,
                                     URL(path, false),
@@ -173,4 +175,17 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
                                     _isTransparent) );
   
   return petitions;
+}
+
+
+RenderState URLTemplateLayer::getRenderState() {
+  _errors.clear();
+  if (_urlTemplate.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: urlTemplate");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

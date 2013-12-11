@@ -61,4 +61,6 @@ public abstract class Mesh
     }
   }
 
+  public abstract void showNormals(boolean v);
+
 }

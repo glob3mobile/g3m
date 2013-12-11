@@ -35,7 +35,7 @@ private:
 
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
-  
+
   TileTessellator* getTileTessellator();
   TileTexturizer* getTexturizer();
   TileRasterizer* getTileRasterizer();
@@ -60,6 +60,10 @@ private:
 
   Sector* _renderedSector;
   Sector getRenderedSector();
+
+  bool _renderTileMeshes;
+  bool getRenderTileMeshes();
+
 
 public:
   PlanetRendererBuilder();
@@ -92,6 +96,8 @@ public:
 
   Quality getQuality() const;
   void setQuality(Quality quality);
+
+  void setRenderTileMeshes(bool renderTileMeshes);
 
 };
 

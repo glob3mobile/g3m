@@ -37,7 +37,7 @@ public class URLTemplateLayer extends Layer
   
   }
 
-  private String getPath(Tile tile, Sector sector)
+  private String getPath(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, Sector sector)
   {
   
     if (_mu == null)
@@ -54,7 +54,7 @@ public class URLTemplateLayer extends Layer
   
     final int level = tile._level;
     final int column = tile._column;
-    final int numRows = (int) _mu.pow(2.0, level);
+    final int numRows = (int)(layerTilesRenderParameters._topSectorSplitsByLatitude * _mu.pow(2.0, level));
     final int row = numRows - tile._row - 1;
   
     final double north = MercatorUtils.latitudeToMeters(sector._upper._latitude);
@@ -143,7 +143,7 @@ public class URLTemplateLayer extends Layer
     return new URL();
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -159,11 +159,25 @@ public class URLTemplateLayer extends Layer
       return petitions;
     }
   
-    final String path = getPath(tile, sector);
+    final String path = getPath(layerTilesRenderParameters, tile, sector);
   
     petitions.add(new Petition(sector, new URL(path, false), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _isTransparent));
   
     return petitions;
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_urlTemplate.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: urlTemplate");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
 }

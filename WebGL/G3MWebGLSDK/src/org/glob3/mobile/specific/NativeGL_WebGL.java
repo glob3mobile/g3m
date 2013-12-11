@@ -871,7 +871,6 @@ public native int Type_Vec3Float() /*-{
 	return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC3;
 }-*/;
 
-
    // @Override
    //   public void uniform2f(final IGLUniformID loc,
    //                         final float x,

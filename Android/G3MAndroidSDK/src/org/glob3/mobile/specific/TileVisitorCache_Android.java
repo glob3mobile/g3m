@@ -40,7 +40,7 @@ public class TileVisitorCache_Android
                                final Tile tile) {
       for (int i = 0; i < layers.size(); i++) {
          final Layer layer = layers.get(i);
-         final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, tile);
+         final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, null, tile);
          // Storing petitions
          for (int j = 0; j < pet.size(); j++) {
             final Petition petition = pet.get(j);

@@ -97,6 +97,7 @@ double WMSLayer::toBBOXLatitude(const Angle& latitude) const {
 }
 
 std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -445,4 +446,23 @@ WMSLayer* WMSLayer::copy() const {
                       TimeInterval::fromMilliseconds(_timeToCacheMS),
                       _readExpired,
                       (_parameters == NULL) ? NULL : _parameters->copy());
+}
+
+RenderState WMSLayer::getRenderState() {
+  _errors.clear();
+  if (_mapLayer.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapLayer");
+  }
+  const std::string mapServerUrl = _mapServerURL.getPath();
+  if (mapServerUrl.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapServerURL");
+  }
+  if (_format.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: format");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

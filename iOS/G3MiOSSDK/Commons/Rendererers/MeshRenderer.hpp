@@ -121,20 +121,21 @@ private:
                          bool                isBSON,
                          const MeshType      meshType);
 
+  mutable bool _showNormals;
+
 
 public:
 
   MeshRenderer():
   _glState(new GLState()),
-  _context(NULL)
+  _context(NULL),
+  _showNormals(false)
   {
   }
   
   ~MeshRenderer();
 
-  void addMesh(Mesh* mesh) {
-    _meshes.push_back(mesh);
-  }
+  void addMesh(Mesh* mesh);
 
   void clearMeshes();
 
@@ -269,6 +270,8 @@ public:
                  listener,
                  deleteListener);
   }
+
+  void showNormals(bool v) const;
 
 
 };
