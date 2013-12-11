@@ -116,6 +116,15 @@ public:
   
   GEORasterSymbol* createRasterSymbolIfNeeded() const;
   
+  std::vector<Geodetic2D*> getCopyRasterCoordinates() const {
+    std::vector<Geodetic2D*> coordinates;
+    int size = _coordinates->size();
+    for (int n=0; n<size; n++)
+      coordinates.push_back(new Geodetic2D(*_coordinates->at(n)));
+    return coordinates;
+  }
+  
+
 };
 
 

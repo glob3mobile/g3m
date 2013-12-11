@@ -317,6 +317,11 @@ public:
   bool isSelected() { return _selected; }
   
   virtual GEORasterSymbol* createRasterSymbolIfNeeded() const = 0;
+  
+  virtual std::vector<Geodetic2D*> getCopyRasterCoordinates() const {
+    std::vector<Geodetic2D*> emptyList;
+    return emptyList;
+  }
 
 };
 

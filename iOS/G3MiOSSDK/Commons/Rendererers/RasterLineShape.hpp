@@ -97,6 +97,13 @@ public:
   {}
 
   GEORasterSymbol* createRasterSymbolIfNeeded() const;
+  
+  std::vector<Geodetic2D*> getCopyRasterCoordinates() const {
+    std::vector<Geodetic2D*> coordinates;
+    coordinates.push_back(new Geodetic2D(*_geodeticStartPos));
+    coordinates.push_back(new Geodetic2D(*_geodeticEndPos));
+    return coordinates;
+  }
 
 };
 
