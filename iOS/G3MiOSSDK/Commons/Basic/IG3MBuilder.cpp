@@ -881,6 +881,7 @@ ShapesEditorRenderer* IG3MBuilder::createShapesEditorRenderer()
   
   // shapesRenderer to render pointshapes whwen modifying shape vertices
   ShapesRenderer* vertexRenderer = new ShapesRenderer;
+  vertexRenderer->setShapeTouchListener(new SimpleShapeSelectionListener, true);
   addRenderer(vertexRenderer);
   
   // creating shape Editor Renderer
