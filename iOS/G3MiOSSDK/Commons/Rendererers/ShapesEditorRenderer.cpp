@@ -10,33 +10,19 @@
 #include "PointShape.hpp"
 
 
-class MyShapeTouchListener : public ShapeTouchListener {
+class MyShapeSelectionListener : public SimpleShapeSelectionListener {
 private:
-  Shape* _selectedShape;
   ShapesEditorRenderer* _renderer;
   
 public:
   
-  MyShapeTouchListener(ShapesEditorRenderer* renderer):
-  _renderer(renderer),
-  _selectedShape(NULL)
+  MyShapeSelectionListener(ShapesEditorRenderer* renderer):
+  _renderer(renderer)
   {}
   
   bool touchedShape(Shape* shape) {
-    if (_selectedShape == NULL) {
-      shape->select();
-      _selectedShape = shape;
-    } else {
-      if (_selectedShape==shape) {
-        shape->unselect();
-        _selectedShape = NULL;
-      } else {
-        _selectedShape->unselect();
-        _selectedShape = shape;
-        shape->select();
-      }
-    }
-    if (_selectedShape != NULL)
+    SimpleShapeSelectionListener::touchedShape(shape);
+    if (getSelectedShape() != NULL)
       _renderer->selectShape(shape);
     return true;
   }
@@ -49,7 +35,7 @@ ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer,
 ShapesRenderer(geoTileRasterizer),
 _vertexRenderer(vertexRenderer)
 {
-  setShapeTouchListener(new MyShapeTouchListener(this), true);
+  setShapeTouchListener(new MyShapeSelectionListener(this), true);
 }
 
 
@@ -64,7 +50,7 @@ void ShapesEditorRenderer::selectShape(Shape* shape)
     Shape* vertex = new PointShape(position,
                                    RELATIVE_TO_GROUND,
                                    20,
-                                   Color::fromRGBA(0.6, 0.4, 0.4, 1));
+                                   Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
     _vertexRenderer->addShape(vertex);
   }
 }
