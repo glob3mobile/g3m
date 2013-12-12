@@ -110,7 +110,8 @@ _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
 _surfaceElevationProvider( mainRenderer->getSurfaceElevationProvider() ),
-_context(new G3MContext(IFactory::instance(),
+_context(new G3MContext(this,
+                        IFactory::instance(),
                         IStringUtils::instance(),
                         threadUtils,
                         ILogger::instance(),
@@ -160,7 +161,8 @@ _zRenderCounter(-1)
     addPeriodicalTask(periodicalTasks[i]);
   }
 
-  _renderContext = new G3MRenderContext(_frameTasksExecutor,
+  _renderContext = new G3MRenderContext(this,
+                                        _frameTasksExecutor,
                                         IFactory::instance(),
                                         IStringUtils::instance(),
                                         _threadUtils,
@@ -320,11 +322,10 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
   }
 }
 
-Vector3D* G3MWidget::_lastTouchedScenePoint = NULL;
-
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
-  G3MEventContext ec(IFactory::instance(),
+  G3MEventContext ec(this,
+                     IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
                      ILogger::instance(),
@@ -367,18 +368,6 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
     _clickOnProcess = false;
   }
 
-  ///////////////////////////////////////////////////
-
-
-  if (touchEvent->getType() == Down) {
-    int x = touchEvent->getTouch(0)->getPos()._x; //_width/2;
-    int y = touchEvent->getTouch(0)->getPos()._y; //_height/2;
-
-    delete _lastTouchedScenePoint;
-    _lastTouchedScenePoint = new Vector3D(getScenePositionForPixel(x, y));
-
-  }
-
 }
 
 
@@ -402,7 +391,8 @@ void G3MWidget::zRender(){
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
-  G3MEventContext ec(IFactory::instance(),
+  G3MEventContext ec(this,
+                     IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
                      ILogger::instance(),
@@ -579,7 +569,7 @@ void G3MWidget::render(int width, int height) {
 //  if (RENDER_READY == renderStateType){
 //    zRender();
 //  }
-
+  
   if (_logFPS) {
     _totalRenderTime += elapsedTimeMS;
 

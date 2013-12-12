@@ -141,6 +141,7 @@
 #import <G3MiOSSDK/JSONArray.hpp>
 
 #import <G3MiOSSDK/SceneLighting.hpp>
+#import <G3MiOSSDK/TerrainTouchListener.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -785,24 +786,62 @@ public:
 
 
   if (true){
-    class ZRenderTask : public GTask {
-    private:
+//    class ZRenderTask : public GTask {
+//    private:
+//      ShapesRenderer* _sr;
+//      const Planet* _planet;
+//    public:
+//      ZRenderTask(ShapesRenderer* sr, const Planet* planet): _sr(sr), _planet(planet)
+//      {
+//      }
+//
+//      void run(const G3MContext* context) {
+//
+//        Vector3D* v = G3MWidget::_lastTouchedScenePoint; //HACK
+//        if (v == NULL){
+//          return;
+//        }
+//        Geodetic3D g = _planet->toGeodetic3D(*v);
+//
+//        Shape* sphere = new EllipsoidShape(new Geodetic3D(g),
+//                                           ABSOLUTE,
+//                                           Vector3D(5000, 5000, 5000),
+//                                           16,
+//                                           0,
+//                                           false,
+//                                           false,
+//                                           Color::fromRGBA(0, 1, 1, 1));
+//
+//        printf("SPHERE IN %s\n", g.description().c_str());
+//
+//        _sr->addShape(sphere);
+//      }
+//    };
+
+   // PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(5),
+     //                                                   new ZRenderTask(shapesRenderer, planet));
+
+    //builder.addPeriodicalTask(periodicalTask);
+
+
+    class ZRenderTerrainTouchListener: public TerrainTouchListener{
+
       ShapesRenderer* _sr;
-      const Planet* _planet;
+
     public:
-      ZRenderTask(ShapesRenderer* sr, const Planet* planet): _sr(sr), _planet(planet)
+
+      ZRenderTerrainTouchListener(ShapesRenderer* sr): _sr(sr)
       {
       }
 
-      void run(const G3MContext* context) {
+      bool onTerrainTouch(const G3MEventContext* ec,
+                          const Vector2I&        pixel,
+                          const Camera*          camera,
+                          const Geodetic3D&      position,
+                          const Tile*            tile){
 
-        Vector3D* v = G3MWidget::_lastTouchedScenePoint; //HACK
-        if (v == NULL){
-          return;
-        }
-        Geodetic3D g = _planet->toGeodetic3D(*v);
 
-        Shape* sphere = new EllipsoidShape(new Geodetic3D(g),
+        Shape* sphere = new EllipsoidShape(new Geodetic3D(position),
                                            ABSOLUTE,
                                            Vector3D(5000, 5000, 5000),
                                            16,
@@ -811,16 +850,16 @@ public:
                                            false,
                                            Color::fromRGBA(0, 1, 1, 1));
 
-        printf("SPHERE IN %s\n", g.description().c_str());
+        printf("SPHERE IN %s\n", position.description().c_str());
 
         _sr->addShape(sphere);
+
+        return true;
       }
+
     };
 
-    PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(5),
-                                                        new ZRenderTask(shapesRenderer, planet));
-
-    builder.addPeriodicalTask(periodicalTask);
+    builder.getPlanetRendererBuilder()->addTerrainTouchListener(new ZRenderTerrainTouchListener(shapesRenderer));
 
   }
 
@@ -3102,11 +3141,11 @@ public:
 - (PeriodicalTask*) createSamplePeriodicalTask: (G3MBuilder_iOS*) builder
 {
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
-
+  
   Trail* trail = new Trail(Color::fromRGBA(0, 1, 1, 0.6f),
                            5000,
                            0);
-
+  
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
                       25000);

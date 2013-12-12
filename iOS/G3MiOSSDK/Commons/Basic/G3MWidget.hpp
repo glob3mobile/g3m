@@ -219,10 +219,7 @@ public:
   }
 
   Vector3D getScenePositionForPixel(int x, int y);
-  
-#warning remove
-  static Vector3D* _lastTouchedScenePoint;
-  
+
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;

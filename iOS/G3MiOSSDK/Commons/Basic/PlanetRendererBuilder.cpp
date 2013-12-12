@@ -33,7 +33,8 @@ _stabilizationMilliSeconds(NULL),
 _texturePriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
-_renderedSector(NULL)
+_renderedSector(NULL),
+_terrainTouchListeners(NULL)
 {
 }
 
@@ -188,6 +189,16 @@ std::vector<VisibleSectorListener*>* PlanetRendererBuilder::getVisibleSectorList
 }
 
 /**
+ * Returns the array of TerrainTouchListeners.
+ */
+std::vector<TerrainTouchListener*>* PlanetRendererBuilder::getTerrainTouchListeners() {
+  if (!_terrainTouchListeners) {
+    _terrainTouchListeners = new std::vector<TerrainTouchListener*>;
+  }
+  return _terrainTouchListeners;
+}
+
+/**
  * Returns the array of stabilization milliseconds related to visible-sector listeners.
  *
  * @return _stabilizationMilliSeconds: std::vector<long long>
@@ -270,6 +281,10 @@ void PlanetRendererBuilder::addVisibleSectorListener(VisibleSectorListener* list
   getStabilizationMilliSeconds()->push_back(stabilizationInterval._milliseconds);
 }
 
+void PlanetRendererBuilder::addTerrainTouchListener(TerrainTouchListener* listener) {
+  getTerrainTouchListeners()->push_back(listener);
+}
+
 void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
   _texturePriority = texturePriority;
 }
@@ -320,12 +335,19 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                              TimeInterval::fromMilliseconds(getStabilizationMilliSeconds()->at(i)));
   }
 
+  for (int i = 0; i < getTerrainTouchListeners()->size(); i++) {
+    planetRenderer->addTerrainTouchListener(getTerrainTouchListeners()->at(i));
+  }
+
   _parameters = NULL;
   _layerSet = NULL;
   _texturizer = NULL;
   _tileTessellator = NULL;
   delete _visibleSectorListeners;
   _visibleSectorListeners = NULL;
+
+  delete _terrainTouchListeners;
+  _terrainTouchListeners= NULL;
   delete _stabilizationMilliSeconds;
   _stabilizationMilliSeconds = NULL;
 

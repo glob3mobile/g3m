@@ -30,6 +30,7 @@ private:
   bool _incrementalTileQuality;
   Quality _quality;
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
+  std::vector<TerrainTouchListener*>* _terrainTouchListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
   long long _texturePriority;
 
@@ -48,6 +49,7 @@ private:
   bool getForceFirstLevelTilesRenderOnStart();
   bool getIncrementalTileQuality();
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
+  std::vector<TerrainTouchListener*>* getTerrainTouchListeners();
   std::vector<long long>* getStabilizationMilliSeconds();
   long long getTexturePriority();
 
@@ -80,6 +82,7 @@ public:
   void addVisibleSectorListener(VisibleSectorListener* listener) {
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
+  void addTerrainTouchListener(TerrainTouchListener* listener);
   void setTexturePriority(long long texturePriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);

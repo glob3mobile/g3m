@@ -29,6 +29,8 @@
 #include "IDeviceInfo.hpp"
 #include "Sector.hpp"
 
+#include "G3MWidget.hpp"
+
 #include <algorithm>
 
 class VisibleSectorListenerEntry {
@@ -663,18 +665,26 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
   }
 
   if (touchEvent->getType() == LongPress) {
+
     const Vector2I pixel = touchEvent->getTouch(0)->getPos();
-    const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-    const Vector3D origin = _lastCamera->getCartesianPosition();
+
+    Vector3D* positionCartesian = NULL;
 
     const Planet* planet = ec->getPlanet();
 
-    const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-    if (positionCartesian.isNan()) {
+//    if (ec->getWidget() != NULL){
+      positionCartesian = new Vector3D(ec->getWidget()->getScenePositionForPixel(pixel._x, pixel._y));
+//    } else{
+//      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+//      const Vector3D origin = _lastCamera->getCartesianPosition();
+//      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
+//    }
+
+    if (positionCartesian == NULL || positionCartesian->isNan()) {
       return false;
     }
 
-    const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
+    Geodetic3D position = planet->toGeodetic3D(*positionCartesian);
 
     const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
