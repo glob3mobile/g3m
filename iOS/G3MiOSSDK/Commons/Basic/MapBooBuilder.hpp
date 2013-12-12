@@ -76,11 +76,15 @@ public:
 
   virtual void onIconChanged(const G3MContext* context,
                              const std::string& icon) = 0;
-
+  
+  virtual void onSceneChanged(const G3MContext* context,
+                              MapBoo_Scene* scene,
+                              int sceneIndex) = 0;
+  
   virtual void onScenesChanged(const G3MContext* context,
                                const std::vector<MapBoo_Scene*>& scenes) = 0;
 
-  virtual void onSceneChanged(const G3MContext* context,
+  virtual void onCurrentSceneChanged(const G3MContext* context,
                               int sceneIndex,
                               const MapBoo_Scene* scene) = 0;
 
@@ -533,6 +537,9 @@ public:
   /** Private to MapbooBuilder, don't call it */
   void setApplicationAbout(const std::string& about);
 
+  /** Private to MapbooBuilder, don't call it */
+  void setApplicationScene(MapBoo_Scene* scene);
+  
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
 
