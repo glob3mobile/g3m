@@ -37,7 +37,10 @@ public abstract class ElevationDataProvider
 
   public final void onChanged()
   {
-    _changedListener.changed();
+    if (_changedListener != null)
+    {
+      _changedListener.changed();
+    }
   }
 
   public final void setEnabled(boolean enabled)
