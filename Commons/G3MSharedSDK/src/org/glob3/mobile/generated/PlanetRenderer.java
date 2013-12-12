@@ -550,19 +550,27 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     if (touchEvent.getType() == TouchEventType.LongPress)
     {
+  
       final Vector2I pixel = touchEvent.getTouch(0).getPos();
-      final Vector3D ray = _lastCamera.pixel2Ray(pixel);
-      final Vector3D origin = _lastCamera.getCartesianPosition();
+  
+      Vector3D positionCartesian = null;
   
       final Planet planet = ec.getPlanet();
   
-      final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
-      if (positionCartesian.isNan())
+  //    if (ec->getWidget() != NULL){
+        positionCartesian = new Vector3D(ec.getWidget().getScenePositionForPixel(pixel._x, pixel._y));
+  //    } else{
+  //      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+  //      const Vector3D origin = _lastCamera->getCartesianPosition();
+  //      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
+  //    }
+  
+      if (positionCartesian == null || positionCartesian.isNan())
       {
         return false;
       }
   
-      final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
+      Geodetic3D position = planet.toGeodetic3D(positionCartesian);
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)

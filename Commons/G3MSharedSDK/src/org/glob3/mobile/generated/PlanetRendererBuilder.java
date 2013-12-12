@@ -34,6 +34,7 @@ public class PlanetRendererBuilder
   private boolean _incrementalTileQuality;
   private Quality _quality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
+  private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
   private long _texturePriority;
 
@@ -186,6 +187,18 @@ public class PlanetRendererBuilder
   }
 
   /**
+   * Returns the array of TerrainTouchListeners.
+   */
+  private java.util.ArrayList<TerrainTouchListener> getTerrainTouchListeners()
+  {
+    if (_terrainTouchListeners == null)
+    {
+      _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
+    }
+    return _terrainTouchListeners;
+  }
+
+  /**
    * Returns the array of stabilization milliseconds related to visible-sector listeners.
    *
    * @return _stabilizationMilliSeconds: std::vector<long long>
@@ -266,6 +279,7 @@ public class PlanetRendererBuilder
      _elevationDataProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
+     _terrainTouchListeners = null;
   }
   public void dispose()
   {
@@ -301,12 +315,20 @@ public class PlanetRendererBuilder
       planetRenderer.addVisibleSectorListener(getVisibleSectorListeners().get(i), TimeInterval.fromMilliseconds(getStabilizationMilliSeconds().get(i)));
     }
   
+    for (int i = 0; i < getTerrainTouchListeners().size(); i++)
+    {
+      planetRenderer.addTerrainTouchListener(getTerrainTouchListeners().get(i));
+    }
+  
     _parameters = null;
     _layerSet = null;
     _texturizer = null;
     _tileTessellator = null;
     _visibleSectorListeners = null;
     _visibleSectorListeners = null;
+  
+    _terrainTouchListeners = null;
+    _terrainTouchListeners = null;
     _stabilizationMilliSeconds = null;
     _stabilizationMilliSeconds = null;
   
@@ -388,6 +410,10 @@ public class PlanetRendererBuilder
   public final void addVisibleSectorListener(VisibleSectorListener listener)
   {
     addVisibleSectorListener(listener, TimeInterval.zero());
+  }
+  public final void addTerrainTouchListener(TerrainTouchListener listener)
+  {
+    getTerrainTouchListeners().add(listener);
   }
   public final void setTexturePriority(long texturePriority)
   {
