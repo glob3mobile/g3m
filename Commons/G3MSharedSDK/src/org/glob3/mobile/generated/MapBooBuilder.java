@@ -534,7 +534,7 @@ public abstract class MapBooBuilder
   
     if (_applicationListener != null)
     {
-      _applicationListener.onSceneChanged(_context, getApplicationCurrentSceneIndex(), currentScene);
+      _applicationListener.onCurrentSceneChanged(_context, getApplicationCurrentSceneIndex(), currentScene);
     }
   
     if (_viewType == MapBoo_ViewType.VIEW_PRESENTATION)
@@ -1043,6 +1043,33 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
+  public final void setApplicationScene(MapBoo_Scene scene)
+  {
+    final int scenesCount = _applicationScenes.size();
+    for (int i = 0; i < scenesCount; i++)
+    {
+      final String sceneID = _applicationScenes.get(i).getId();
+      final String sceneToBeUpdatedID = scene.getId();
+      if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
+      {
+        _applicationScenes.set(i, scene);
+  
+        if (_applicationListener != null)
+        {
+          _applicationListener.onSceneChanged(_context, scene, i);
+        }
+  
+        if (_applicationCurrentSceneIndex == i)
+        {
+          changedCurrentScene();
+        }
+  
+        break;
+      }
+    }
+  }
+
+  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationScenes(java.util.ArrayList<MapBoo_Scene> applicationScenes)
   {
     final int currentScenesCount = _applicationScenes.size();
@@ -1150,6 +1177,16 @@ public abstract class MapBooBuilder
             if (jsonAbout != null)
             {
               setApplicationAbout(jsonAbout.value());
+            }
+  
+            final JSONObject jsonScene = jsonObject.getAsObject("scene");
+            if (jsonScene != null)
+            {
+              MapBoo_Scene scene = parseScene(jsonScene);
+              if (scene != null)
+              {
+                setApplicationScene(scene);
+              }
             }
   
             final JSONArray jsonScenes = jsonObject.getAsArray("scenes");
