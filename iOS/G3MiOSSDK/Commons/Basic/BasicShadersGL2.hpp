@@ -32,6 +32,18 @@ public:
 "varying vec2 TextureCoordOut; \n " + 
 "void main() { \n " + 
 "gl_Position = uModelview * uBillboardPosition; \n " + 
+"if (gl_Position.x < 0.0){ \n " + 
+"gl_Position.x = 0.0; \n " + 
+"} \n " + 
+"if (gl_Position.x > uViewPortExtent.x){ \n " + 
+"gl_Position.x = uViewPortExtent.x; \n " + 
+"} \n " + 
+"if (gl_Position.y < 0.0){ \n " + 
+"gl_Position.y = 0.0; \n " + 
+"} \n " + 
+"if (gl_Position.y > uViewPortExtent.y){ \n " + 
+"gl_Position.y = uViewPortExtent.y; \n " + 
+"} \n " + 
 "gl_Position.x += ((aTextureCoord.x - 0.5) * 2.0 * uTextureExtent.x / uViewPortExtent.x) * gl_Position.w; \n " + 
 "gl_Position.y -= ((aTextureCoord.y - 0.5) * 2.0 * uTextureExtent.y / uViewPortExtent.y) * gl_Position.w; \n " + 
 "TextureCoordOut = aTextureCoord; \n " + 

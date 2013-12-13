@@ -20,6 +20,8 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "GLFeature.hpp"
 #include "Vector2D.hpp"
+#include "Vector3D.hpp"
+#include "Vector2F.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -472,6 +474,14 @@ void Mark::render(const G3MRenderContext* rc,
   }
 
   _renderedMark = false;
+
+  Vector3D pos = rc->getPlanet()->toCartesian(*_position);
+  const Vector2F pixel = rc->getCurrentCamera()->point2Pixel(pos);
+  if (pixel._x < 0 || pixel._y < 0 ||
+      pixel._x > rc->getCurrentCamera()->getWidth() || pixel._x > rc->getCurrentCamera()->getHeight()){
+    ILogger::instance()->logInfo("MARK OUT");
+  }
+
 
   if (renderableByDistance) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);

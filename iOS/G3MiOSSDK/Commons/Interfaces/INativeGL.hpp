@@ -156,6 +156,7 @@ public:
   virtual int BlendFactor_One() const = 0;
   virtual int BlendFactor_Zero() const = 0;
   virtual int BlendFactor_SrcAlpha() const = 0;
+  virtual int BlendFactor_SrcColor() const = 0;
   virtual int BlendFactor_OneMinusSrcAlpha() const = 0;
 
   virtual int TextureType_Texture2D() const = 0;
@@ -195,6 +196,8 @@ public:
   
   virtual GPUUniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
   virtual GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
+
+  virtual void depthMask(bool v) const = 0;
   
 };
 

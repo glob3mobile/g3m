@@ -38,6 +38,8 @@
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
 
+BLENDING_MODE G3MWidget::_blendingMode = ORDERED;
+
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
@@ -499,6 +501,10 @@ void G3MWidget::render(int width, int height) {
     _selectedRenderer->render(_renderContext, _rootState);
   }
 
+  if (_blendingMode != ORDERED){
+    _gl->depthMask(false);
+  }
+
   std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
     const int orderedRenderablesCount = orderedRenderables->size();
@@ -508,6 +514,8 @@ void G3MWidget::render(int width, int height) {
       delete orderedRenderable;
     }
   }
+
+  _gl->depthMask(true);
 
   //Removing unused programs
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0){

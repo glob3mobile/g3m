@@ -1270,7 +1270,7 @@ public:
 
   }
 
-  if (true) {
+  if (false) {
 //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
 //                                                  Sector::fullSphere(),
 //                                                  false,
@@ -1681,12 +1681,56 @@ public:
                                            Angle::fromDegrees(-122),
                                            45000),
                             ABSOLUTE,
-                            Vector3D(20000, 30000, 50000),
+                            Vector3D(40000, 60000, 50000),
                             2,
                             Color::fromRGBA(0,    1, 0, 0.5),
                             Color::newFromRGBA(0, 0.75, 0, 0.75));
   box->setAnimatedScale(1, 1, 20);
   shapesRenderer->addShape(box);
+
+  Shape* box2 = new BoxShape(new Geodetic3D(Angle::fromDegrees(40.78333333),
+                                           Angle::fromDegrees(-122),
+                                           45000),
+                            ABSOLUTE,
+                            Vector3D(40000, 60000, 50000),
+                            2,
+                            Color::fromRGBA(1, 0, 0, 0.5),
+                            Color::newFromRGBA(0.75, 0, 0, 0.75));
+  box2->setAnimatedScale(1, 1, 20);
+  shapesRenderer->addShape(box2);
+
+  Shape* box3 = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
+                                            Angle::fromDegrees(-121),
+                                            45000),
+                             ABSOLUTE,
+                             Vector3D(40000, 60000, 50000),
+                             2,
+                             Color::fromRGBA(0, 0, 1, 0.5),
+                             Color::newFromRGBA(0, 0, 0.75, 0.75));
+  box3->setAnimatedScale(1, 1, 20);
+  shapesRenderer->addShape(box3);
+
+  Shape* box4 = new BoxShape(new Geodetic3D(Angle::fromDegrees(26.074286879545102),
+                                            Angle::fromDegrees(4.237541016773321),
+                                            45000),
+                             ABSOLUTE,
+                             Vector3D(40000, 60000, 50000),
+                             2,
+                             Color::fromRGBA(1, 1, 0, 0.5),
+                            Color::newFromRGBA(1, 0, 0, 1), false);
+  shapesRenderer->addShape(box4);
+
+  Shape* box5 = new BoxShape(new Geodetic3D(Angle::fromDegrees(26.074286879545102),
+                                            Angle::fromDegrees(4.237541016773321),
+                                            45000),
+                             ABSOLUTE,
+                             Vector3D(4000, 6000, 5000),
+                             2,
+                             Color::fromRGBA(1, 0, 0, 0.5),
+                             Color::newFromRGBA(1, 0, 0, 1), false);
+  shapesRenderer->addShape(box5);
+
+
 
   //    const URL textureURL("file:///world.jpg", false);
   //
@@ -2951,7 +2995,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         //      NSString* geojsonName = @"geojson/countries";
         //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";

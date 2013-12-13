@@ -335,6 +335,10 @@ public:
     return GL_SRC_ALPHA;
   }
 
+  int BlendFactor_SrcColor() const {
+    return GL_SRC_COLOR;
+  }
+
   int BlendFactor_OneMinusSrcAlpha() const {
     return GL_ONE_MINUS_SRC_ALPHA;
   }
@@ -558,6 +562,10 @@ public:
         return NULL;
         break;
     }
+  }
+
+  void depthMask(bool v) const{
+    glDepthMask(v);
   }
   
 };

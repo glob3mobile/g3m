@@ -12,6 +12,7 @@
 #include "IFactory.hpp"
 
 #include "OrderedRenderable.hpp"
+#include "G3MWidget.hpp"
 
 G3MRenderContext::~G3MRenderContext() {
   //  delete _frameStartTimer;
@@ -41,9 +42,12 @@ bool MyDataSortPredicate(const OrderedRenderable* or1,
 std::vector<OrderedRenderable*>* G3MRenderContext::getSortedOrderedRenderables() const {
   if (_orderedRenderables != NULL) {
 #ifdef C_CODE
-    std::sort(_orderedRenderables->begin(),
-              _orderedRenderables->end(),
-              MyDataSortPredicate);
+
+    if (G3MWidget::_blendingMode == ORDERED){
+      std::sort(_orderedRenderables->begin(),
+                _orderedRenderables->end(),
+                MyDataSortPredicate);
+    }
 #endif
 #ifdef JAVA_CODE
     java.util.Collections.sort(

@@ -166,9 +166,11 @@ class GLBlendFactor {
   static int _oneMinusSrcAlpha;
   static int _one;
   static int _zero;
+  static int _srcColor;
   
   
 public:
+  static int srcColor() { return _srcColor;}
   static int srcAlpha() { return _srcAlpha;}
   static int oneMinusSrcAlpha() { return _oneMinusSrcAlpha;}
   static int one() { return _one;}
@@ -179,6 +181,7 @@ public:
     _oneMinusSrcAlpha = ngl->BlendFactor_OneMinusSrcAlpha();
     _one = ngl->BlendFactor_One();
     _zero = ngl->BlendFactor_Zero();
+    _srcColor = ngl->BlendFactor_SrcColor();
   }
 };
 

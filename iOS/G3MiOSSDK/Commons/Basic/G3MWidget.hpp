@@ -85,9 +85,18 @@ public:
   }
 };
 
+#warning REMOVE
+enum BLENDING_MODE{
+  ORDERED,
+  ADDITIVE,
+  MULTIPLICATIVE
+};
+
 
 class G3MWidget {
 public:
+
+  static BLENDING_MODE _blendingMode;
   
   static void initSingletons(ILogger*            logger,
                              IFactory*           factory,

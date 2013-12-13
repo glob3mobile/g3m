@@ -255,6 +255,10 @@ public:
   GLGlobalState* getCurrentGLGlobalState() {
     return _currentGLGlobalState;
   }
+
+  void depthMask(bool v) const{
+    _nativeGL->depthMask(v);
+  }
   
   
 };

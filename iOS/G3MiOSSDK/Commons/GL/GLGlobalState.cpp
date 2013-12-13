@@ -15,6 +15,8 @@
 #include "INativeGL.hpp"
 #include "GL.hpp"
 
+#include "G3MWidget.hpp"
+
 bool GLGlobalState::_initializationAvailable = false;
 
 
@@ -84,10 +86,23 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   }
 
   //Blending Factors
+
+  switch (G3MWidget::_blendingMode) {
+    case MULTIPLICATIVE:
+      nativeGL->blendFunc(GLBlendFactor::zero(), GLBlendFactor::srcColor());
+      break;
+
+    case ADDITIVE:
+      nativeGL->blendFunc(GLBlendFactor::one(), GLBlendFactor::one());
+      break;
+
+    default:
   if (_blendDFactor != currentState._blendDFactor || _blendSFactor != currentState._blendSFactor) {
-    nativeGL->blendFunc(_blendSFactor, _blendDFactor);
-    currentState._blendDFactor = _blendDFactor;
-    currentState._blendSFactor = _blendSFactor;
+        nativeGL->blendFunc(_blendSFactor, _blendDFactor);
+        currentState._blendDFactor = _blendDFactor;
+        currentState._blendSFactor = _blendSFactor;
+    }
+      break;
   }
 
   //Texture (After blending factors)
