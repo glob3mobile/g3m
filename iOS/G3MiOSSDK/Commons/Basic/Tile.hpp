@@ -347,6 +347,10 @@ public:
   void ancestorChangedElevationData(Tile* ancestor);
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
+
+  BoundingVolume* getBoundingVolumeIfCreated() const{
+    return _boundingVolume;
+  }
   
 };
 

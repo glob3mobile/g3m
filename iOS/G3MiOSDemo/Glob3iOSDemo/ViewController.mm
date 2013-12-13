@@ -2901,7 +2901,7 @@ public:
           }
         };
 
-        if (false) {
+        if (true) {
           NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                     ofType: @"bson"];
           if (planeFilePath) {

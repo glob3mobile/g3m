@@ -461,6 +461,10 @@ public:
     return _elevationDataProvider;
   }
 
+  Vector2D getDepthRange(const G3MRenderContext *rc);
+#warning REMOVE
+  static Vector2D* _lastDEPTHRANGE;
+
 };
 
 

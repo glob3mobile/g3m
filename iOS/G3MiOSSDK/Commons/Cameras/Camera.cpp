@@ -18,6 +18,8 @@
 #include "Sphere.hpp"
 #include "Sector.hpp"
 
+#include "PlanetRenderer.hpp"
+
 //#include "GPUProgramState.hpp"
 
 void Camera::initialize(const G3MContext* context)
@@ -388,12 +390,25 @@ FrustumData Camera::calculateFrustumData() const {
     zNear = zFar / goalRatio;
   }
 
+#warning REMOVE
+  if (PlanetRenderer::_lastDEPTHRANGE != NULL &&
+      !PlanetRenderer::_lastDEPTHRANGE->isNan()){
+
+    printf("zNear : %f -> %f\n zFar: %f -> %f\n", zNear, PlanetRenderer::_lastDEPTHRANGE->_x,
+                                                  zFar, PlanetRenderer::_lastDEPTHRANGE->_y);
+
+    zNear = PlanetRenderer::_lastDEPTHRANGE->_x * 0.9;
+    zFar = PlanetRenderer::_lastDEPTHRANGE->_y;
+  }
+
+
 //  int __TODO_remove_debug_code;
-//  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+//  printf(">>> height=%f zNear=%f zFar=%f ratio=%f, dist=%f\n",
 //         height,
 //         zNear,
 //         zFar,
-//         ratio);
+//         ratio,
+//         zFar-zNear);
 
   // compute rest of frustum numbers
   const double _tanHalfFieldOfView = 0.3; // aprox tan(34 degrees / 2)

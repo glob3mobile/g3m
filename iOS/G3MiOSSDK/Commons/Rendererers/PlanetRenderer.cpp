@@ -28,6 +28,8 @@
 #include "TerrainTouchListener.hpp"
 #include "IDeviceInfo.hpp"
 #include "Sector.hpp"
+#include "Box.hpp"
+#include "Camera.hpp"
 
 #include <algorithm>
 
@@ -648,6 +650,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     }
   }
 
+#warning REMOVE
+  getDepthRange(rc);
+
 }
 
 void PlanetRenderer::addTerrainTouchListener(TerrainTouchListener* listener) {
@@ -883,4 +888,69 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
     _verticalExaggeration = verticalExaggeration;
     changed();
   }
+}
+
+#warning REMOVE
+
+Vector2D* PlanetRenderer::_lastDEPTHRANGE = NULL;
+
+#warning REMOVE
+
+Vector2D PlanetRenderer::getDepthRange(const G3MRenderContext *rc){
+
+
+  std::list<Tile*>* renderedTiles = getRenderedTilesList(rc);
+
+  const Camera* cam = rc->getCurrentCamera();
+  Vector3D pos = cam->getCartesianPosition();
+
+  double squaredZNear = NAND;
+  double squaredZFar = NAND;
+
+  const Planet* planet = rc->getPlanet();
+
+  for (std::list<Tile*>::iterator iter = renderedTiles->begin();
+       iter != renderedTiles->end();
+       iter++) {
+    Tile* tile = *iter;
+
+    for (int i = 0; i < 4; i++) {
+
+      const Geodetic2D g = tile->_sector.getNE();
+      const Vector3D v = planet->toCartesian(g);
+
+      const double d = v.squaredDistanceTo(pos);
+
+      if (ISNAN(squaredZNear) || d < squaredZNear){
+        squaredZNear = d;
+      }
+
+      if (ISNAN(squaredZFar) || d > squaredZFar){
+        squaredZFar = d;
+      }
+
+    }
+
+  }
+
+  double dh = planet->distanceToHorizon(pos);
+  dh *= dh;
+  if (squaredZFar > dh){
+    squaredZFar = dh;
+  } else{
+    ILogger::instance()->logInfo("Improving zFar");
+  }
+
+  IMathUtils* mu = IMathUtils::instance();
+  Vector2D depthRange(mu->sqrt(squaredZNear), mu->sqrt(squaredZFar));
+
+//  printf("DEPTH RANGE = %f - %f : DIST = %f\n", depthRange._x, depthRange._y, depthRange.length());
+
+  delete _lastDEPTHRANGE;
+  _lastDEPTHRANGE = new Vector2D(depthRange);
+
+
+  return depthRange;
+
+
 }
