@@ -791,7 +791,7 @@ public:
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-  builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
 
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
@@ -1536,11 +1536,12 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  const Quality quality = QUALITY_MEDIUM;
+  //const Quality quality = QUALITY_MEDIUM;
+  const Quality quality = QUALITY_LOW;
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
