@@ -456,6 +456,14 @@ public:
     return _elevationDataProvider;
   }
 
+  void setRenderTileMeshes(bool renderTileMeshes) {
+    _renderTileMeshes = renderTileMeshes;
+  }
+
+  bool getRenderTileMeshes() const {
+    return _renderTileMeshes;
+  }
+
 };
 
 
