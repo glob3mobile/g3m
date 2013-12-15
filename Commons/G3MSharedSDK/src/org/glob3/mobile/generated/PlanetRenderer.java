@@ -905,4 +905,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return _elevationDataProvider;
   }
 
+  public final void setRenderTileMeshes(boolean renderTileMeshes)
+  {
+    _renderTileMeshes = renderTileMeshes;
+  }
+
+  public final boolean getRenderTileMeshes()
+  {
+    return _renderTileMeshes;
+  }
+
 }
