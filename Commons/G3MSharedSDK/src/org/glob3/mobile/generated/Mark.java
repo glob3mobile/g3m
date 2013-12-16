@@ -552,7 +552,7 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState, Planet planet, GL gl)
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl)
   {
   
     final Vector3D markPosition = getCartesianPosition(planet);
@@ -577,7 +577,7 @@ public class Mark implements SurfaceElevationListener
     {
       boolean occludedByHorizon = false;
   
-      if (_position._height > rc.getCurrentCamera().getHeight())
+      if (_position._height > cameraHeight)
       {
         //Computing horizon culling
         final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition, markCameraVector);
