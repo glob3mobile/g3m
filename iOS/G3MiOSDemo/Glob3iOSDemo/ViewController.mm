@@ -1640,12 +1640,22 @@ public:
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
   Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-122),
-                                              8000),
+                                              Angle::fromDegrees(-122 - 2),
+                                              824000 / 2),
                                RELATIVE_TO_GROUND,
-                               URL("file:///g3m-marker.png", false),
-                               50000, 50000,
+                               URL("file:///hud.png", false),
+                               //50000, 50000,
+                               663000, 824000,
                                false);
+//  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                              Angle::fromDegrees(-122 - 2),
+//                                              50000 / 2),
+//                               RELATIVE_TO_GROUND,
+//                               URL("file:///hud2.png", false),
+//                               //50000, 50000,
+//                               50000, 50000,
+//                               false);
+  quad1->setPitch(Angle::fromDegrees(90));
   shapesRenderer->addShape(quad1);
 
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),

@@ -34,6 +34,8 @@
 		CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */; };
 		CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */; };
 		CFA245431800708D00921325 /* washington-memorial.json in Resources */ = {isa = PBXBuildFile; fileRef = CFA245421800708D00921325 /* washington-memorial.json */; };
+		CFC04FC2185F7F3900E7494A /* hud.png in Resources */ = {isa = PBXBuildFile; fileRef = CFC04FC1185F7F3900E7494A /* hud.png */; };
+		CFC04FC4185FA00400E7494A /* hud2.png in Resources */ = {isa = PBXBuildFile; fileRef = CFC04FC3185FA00400E7494A /* hud2.png */; };
 		CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC39A8816FB9DB7004992C2 /* small-caceres.bil */; };
 		CFCC53F316D50D8900671DC4 /* full-earth-512x512.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */; };
 		CFD42AB816DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFD42AB716DBAEFD00B03961 /* elev-35.0_-6.0_38.0_-2.0_4096x2048.bil */; };
@@ -115,6 +117,8 @@
 		CF945F861768D59300215A4F /* MDT200-A_CORUNIA.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MDT200-A_CORUNIA.bil"; sourceTree = "<group>"; };
 		CF9B5AD6175FC167002FB1B3 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFA245421800708D00921325 /* washington-memorial.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "washington-memorial.json"; sourceTree = "<group>"; };
+		CFC04FC1185F7F3900E7494A /* hud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud.png; sourceTree = "<group>"; };
+		CFC04FC3185FA00400E7494A /* hud2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hud2.png; sourceTree = "<group>"; };
 		CFC39A8816FB9DB7004992C2 /* small-caceres.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "small-caceres.bil"; sourceTree = "<group>"; };
 		CFCC53F216D50D8900671DC4 /* full-earth-512x512.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-512x512.bil"; sourceTree = "<group>"; };
 		CFCCFE0C16F506C20082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -252,6 +256,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFC04FC3185FA00400E7494A /* hud2.png */,
+				CFC04FC1185F7F3900E7494A /* hud.png */,
 				CF3CA9DA182D99D500483977 /* isosurface-mesh.json */,
 				CF8E9886180D98DC00A08208 /* pointcloud */,
 				CFA245421800708D00921325 /* washington-memorial.json */,
@@ -400,6 +406,7 @@
 				CF0223831668318600024B73 /* geojson in Resources */,
 				CF186B0416B8572400A39478 /* A320.json in Resources */,
 				CF186B0616B857DE00A39478 /* textures-A320 in Resources */,
+				CFC04FC2185F7F3900E7494A /* hud.png in Resources */,
 				CF186B0816B85A3600A39478 /* citation.json in Resources */,
 				CF186B0A16B85A5F00A39478 /* textures-citation in Resources */,
 				CF3CA9DB182D99D500483977 /* isosurface-mesh.json in Resources */,
@@ -415,6 +422,7 @@
 				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
 				CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
+				CFC04FC4185FA00400E7494A /* hud2.png in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
 				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
 				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,
