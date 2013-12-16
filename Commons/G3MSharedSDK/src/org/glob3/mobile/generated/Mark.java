@@ -584,7 +584,7 @@ public class Mark implements SurfaceElevationListener
         if (dists.size() > 0)
         {
           final double dist = dists.get(0);
-          if (dist < 1.0)
+          if (dist > 0.0 && dist < 1.0)
           {
             occludedByHorizon = true;
           }

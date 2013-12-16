@@ -489,7 +489,7 @@ void Mark::render(const G3MRenderContext* rc,
       const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
       if (dists.size() > 0){
         const double dist = dists[0];
-        if (dist < 1.0){
+        if (dist > 0.0 && dist < 1.0){
           occludedByHorizon = true;
         }
       }
