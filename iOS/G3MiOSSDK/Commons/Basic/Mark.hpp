@@ -141,6 +141,8 @@ private:
   double _currentSurfaceElevation;
   AltitudeMode _altitudeMode;
 
+  Vector3D* _normalAtMarkPosition;
+
 public:
   /**
    * Creates a marker with icon and label
