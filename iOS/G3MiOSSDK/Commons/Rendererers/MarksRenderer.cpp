@@ -201,6 +201,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
     if (mark->isReady()) {
       mark->render(rc,
                    cameraPosition,
+                   camera->getHeight(),
                    _glState,
                    planet,
                    gl);

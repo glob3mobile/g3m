@@ -460,6 +460,7 @@ IFloatBuffer* Mark::getBillboardTexCoords() {
 
 void Mark::render(const G3MRenderContext* rc,
                   const Vector3D& cameraPosition,
+                  double cameraHeight,
                   const GLState* parentGLState,
                   const Planet* planet,
                   GL* gl) {
@@ -483,7 +484,7 @@ void Mark::render(const G3MRenderContext* rc,
   if (renderableByDistance) {
     bool occludedByHorizon = false;
 
-    if (_position->_height > rc->getCurrentCamera()->getHeight()){
+    if (_position->_height > cameraHeight){
       //Computing horizon culling
       const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
       if (dists.size() > 0){
