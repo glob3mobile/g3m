@@ -114,6 +114,8 @@ public class Mark implements SurfaceElevationListener
   private double _currentSurfaceElevation;
   private AltitudeMode _altitudeMode;
 
+  private Vector3D _normalAtMarkPosition;
+
   /**
    * Creates a marker with icon and label
    */
@@ -184,6 +186,7 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = new GLState();
+     _normalAtMarkPosition = null;
   
   }
 
@@ -249,6 +252,7 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = new GLState();
+     _normalAtMarkPosition = null;
   
   }
 
@@ -302,6 +306,7 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = new GLState();
+     _normalAtMarkPosition = null;
   
   }
 
@@ -355,6 +360,7 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = new GLState();
+     _normalAtMarkPosition = null;
   
   }
 
@@ -363,6 +369,9 @@ public class Mark implements SurfaceElevationListener
   
     if (_position != null)
        _position.dispose();
+  
+    if (_normalAtMarkPosition != null)
+       _normalAtMarkPosition.dispose();
   
     if (_surfaceElevationProvider != null)
     {
@@ -566,9 +575,34 @@ public class Mark implements SurfaceElevationListener
   
     if (renderableByDistance)
     {
-      final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
+      boolean occludedByHorizon = false;
   
-      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > DefineConstants.HALF_PI)
+      if (_position._height > rc.getCurrentCamera().getHeight())
+      {
+        //Computing horizon culling
+        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition, markCameraVector);
+        if (dists.size() > 0)
+        {
+          final double dist = dists.get(0);
+          if (dist < 1.0)
+          {
+            occludedByHorizon = true;
+          }
+        }
+  
+      }
+      else
+      {
+        //if camera position is upper than mark we can compute horizon culling in a much simpler way
+        if (_normalAtMarkPosition == null)
+        {
+          _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
+        }
+        occludedByHorizon = (_normalAtMarkPosition.angleBetween(markCameraVector)._radians <= DefineConstants.HALF_PI);
+      }
+  
+  
+      if (!occludedByHorizon)
       {
   
         if (_textureId == null)
