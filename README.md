@@ -266,7 +266,7 @@ There are another different projects developed that are used for demo purpose an
 + <a href="http://milanuncios3d.glob3mobile.com" frameborder="0" allowfullscreen>Mil Anuncios 3D</a>
 + <a href="http://meteorite.glob3mobile.com">Meteorite</a>
 + <a href="http://xeovisor3d.glob3mobile.com/example.html">Xeovisor3D</a>
-
++ <a href="http://wb.glob3mobile.com/">World Bank GFDRR Demo</a>
 
 Videos
 ======

@@ -27,18 +27,36 @@ NSString* SQLiteStorage_iOS::getDBPath() const {
   return dbPath;
 }
 
+bool SQLiteStorage_iOS::addSkipBackupAttributeToItemAtPath(NSString* path) {
+  assert([[NSFileManager defaultManager] fileExistsAtPath: path]);
+
+  NSURL* url = [NSURL URLWithString:path];
+
+  NSError *error = nil;
+  BOOL success = [url setResourceValue: [NSNumber numberWithBool: YES]
+                                forKey: NSURLIsExcludedFromBackupKey
+                                 error: &error];
+  if (!success) {
+    NSLog(@"Error excluding %@ from backup %@", url, error);
+  }
+  return success;
+}
 
 SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string &databaseName) :
 _databaseName(databaseName)
 {
   _lock = [[NSLock alloc] init];
 
-  _writeDB = [SQDatabase databaseWithPath:getDBPath()];
+  NSString* dbPath = getDBPath();
+
+  _writeDB = [SQDatabase databaseWithPath:dbPath];
   if (!_writeDB) {
     printf("Can't open write-database \"%s\"\n", databaseName.c_str());
   }
   else {
     [_writeDB openReadWrite];
+
+    addSkipBackupAttributeToItemAtPath(dbPath);
 
     if (![_writeDB executeNonQuery:@"DROP TABLE IF EXISTS buffer;"]) {
       printf("Can't drop table \"buffer\" from database \"%s\"\n",
@@ -76,7 +94,7 @@ _databaseName(databaseName)
       return;
     }
 
-    _readDB = [SQDatabase databaseWithPath:getDBPath()];
+    _readDB = [SQDatabase databaseWithPath:dbPath];
     if (!_readDB) {
       printf("Can't open read-database \"%s\"\n", databaseName.c_str());
     }

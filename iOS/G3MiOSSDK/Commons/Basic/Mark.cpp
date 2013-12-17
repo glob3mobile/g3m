@@ -20,6 +20,7 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "GLFeature.hpp"
 #include "Vector2D.hpp"
+#include "Geodetic3D.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -168,7 +169,8 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState())
+_glState(new GLState()),
+_normalAtMarkPosition(NULL)
 {
 
 }
@@ -208,7 +210,8 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState())
+_glState(new GLState()),
+_normalAtMarkPosition(NULL)
 {
 
 }
@@ -245,7 +248,8 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState())
+_glState(new GLState()),
+_normalAtMarkPosition(NULL)
 {
 
 }
@@ -283,7 +287,8 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( imageID ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState())
+_glState(new GLState()),
+_normalAtMarkPosition(NULL)
 {
 
 }
@@ -363,6 +368,8 @@ bool Mark::isReady() const {
 Mark::~Mark() {
 
   delete _position;
+
+  delete _normalAtMarkPosition;
 
   if (_surfaceElevationProvider != NULL) {
     if (!_surfaceElevationProvider->removeListener(this)) {
@@ -453,6 +460,7 @@ IFloatBuffer* Mark::getBillboardTexCoords() {
 
 void Mark::render(const G3MRenderContext* rc,
                   const Vector3D& cameraPosition,
+                  double cameraHeight,
                   const GLState* parentGLState,
                   const Planet* planet,
                   GL* gl) {
@@ -474,9 +482,28 @@ void Mark::render(const G3MRenderContext* rc,
   _renderedMark = false;
 
   if (renderableByDistance) {
-    const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
+    bool occludedByHorizon = false;
 
-    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > HALF_PI) {
+    if (_position->_height > cameraHeight){
+      //Computing horizon culling
+      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
+      if (dists.size() > 0){
+        const double dist = dists[0];
+        if (dist > 0.0 && dist < 1.0){
+          occludedByHorizon = true;
+        }
+      }
+
+    } else{
+      //if camera position is upper than mark we can compute horizon culling in a much simpler way
+      if (_normalAtMarkPosition == NULL){
+        _normalAtMarkPosition = new Vector3D(planet->geodeticSurfaceNormal(*markPosition));
+      }
+      occludedByHorizon = (_normalAtMarkPosition->angleBetween(markCameraVector)._radians <= HALF_PI);
+    }
+
+
+    if (!occludedByHorizon) {
 
       if (_textureId == NULL) {
         if (_textureImage != NULL) {

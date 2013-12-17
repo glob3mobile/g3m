@@ -21,14 +21,16 @@ class GL;
 
 @interface ES2Renderer :NSObject  {
 @private
-  EAGLContext *context;
+  EAGLContext* _context;
   
   // The pixel dimensions of the CAEAGLLayer
   GLint _width;
   GLint _height;
   
   // The OpenGL ES names for the framebuffer and renderbuffer used to render to this view
-  GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
+  GLuint _defaultFramebuffer;
+  GLuint _colorRenderbuffer;
+  GLuint _depthRenderbuffer;
 
   BOOL _firstRender;
   

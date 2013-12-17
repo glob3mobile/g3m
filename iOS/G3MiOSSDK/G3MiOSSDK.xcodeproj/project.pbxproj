@@ -1283,7 +1283,7 @@
 		CF8AE0041702049F00FE9F56 /* GEOSymbolizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOSymbolizer.cpp; path = Commons/GEO/GEOSymbolizer.cpp; sourceTree = "<group>"; };
 		CF8AE0051702049F00FE9F56 /* GEOSymbolizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOSymbolizer.hpp; path = Commons/GEO/GEOSymbolizer.hpp; sourceTree = "<group>"; };
 		CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = SQLiteStorage_iOS.mm; path = Specific/Derived/SQLiteStorage_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SQLiteStorage_iOS.hpp; path = Specific/Derived/SQLiteStorage_iOS.hpp; sourceTree = "<group>"; };
+		CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = SQLiteStorage_iOS.hpp; path = Specific/Derived/SQLiteStorage_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF8B21BD15DD345D0068601A /* SQDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQDatabase.h; path = Specific/SQDatabase.h; sourceTree = "<group>"; };
 		CF8B21BE15DD345D0068601A /* SQDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQDatabase.m; path = Specific/SQDatabase.m; sourceTree = "<group>"; };
 		CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTexturizer.hpp; path = Commons/Basic/TileTexturizer.hpp; sourceTree = "<group>"; };
@@ -1582,7 +1582,6 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GenericQuadTree.hpp; path = Commons/Basic/GenericQuadTree.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GenericQuadTree.cpp; path = Commons/Basic/GenericQuadTree.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D8F2C5B8184CB3C700A8D6FC /* ErrorHandling.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ErrorHandling.hpp; path = Commons/Basic/ErrorHandling.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLGlobalState.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
@@ -1750,7 +1749,6 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				D8F2C5BA184CB51600A8D6FC /* ErrorHandling.hpp */,
 				D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */,
 				D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */,
 				D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */,

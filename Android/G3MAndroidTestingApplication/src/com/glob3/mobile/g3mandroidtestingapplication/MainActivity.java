@@ -2,8 +2,7 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
-import java.util.Random;
-
+import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
@@ -28,7 +27,6 @@ import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.generated.Vector3D;
