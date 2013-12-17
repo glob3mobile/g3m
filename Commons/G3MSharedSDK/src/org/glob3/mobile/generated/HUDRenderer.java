@@ -1,160 +1,155 @@
 package org.glob3.mobile.generated; 
 //
-//  HUDRendererer.cpp
+//  HUDRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 10/09/13.
+//  Created by Diego Gomez Deck on 12/17/13.
 //
 //
 
 //
-//  HUDRendererer.hpp
+//  HUDRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 10/09/13.
+//  Created by Diego Gomez Deck on 12/17/13.
 //
 //
 
 
 
-//class IImage;
-//class Mesh;
-//class IFactory;
+
+//class HUDWidget;
 
 public class HUDRenderer extends LeafRenderer
 {
+  private G3MContext _context;
 
-  private static class ShownImage
-  {
-    private final String _name;
-    private IImage _image;
-    private final Vector2D _size ;
-    private final Vector2D _position ;
-
-    private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
-    private Mesh _mesh;
-    private Mesh createMesh(G3MRenderContext rc)
-    {
-      //TEXTURED
-      TextureIDReference texId = null;
-    
-      _factory = rc.getFactory();
-    
-      texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _name, false);
-    
-      if (texId == null)
-      {
-        rc.getLogger().logError("Can't upload texture to GPU");
-        return null;
-      }
-    
-      final int viewportWidth = rc.getCurrentCamera().getWidth();
-      final int viewportHeight = rc.getCurrentCamera().getHeight();
-    
-      final Vector3D halfViewportAndPosition = new Vector3D(viewportWidth / 2 - _position._x, viewportHeight / 2 - _position._y, 0);
-    
-      final double w = _size._x;
-      final double h = _size._y;
-    
-      FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-      vertices.add(new Vector3D(0, h, 0).sub(halfViewportAndPosition));
-      vertices.add(new Vector3D(0, 0, 0).sub(halfViewportAndPosition));
-      vertices.add(new Vector3D(w, h, 0).sub(halfViewportAndPosition));
-      vertices.add(new Vector3D(w, 0, 0).sub(halfViewportAndPosition));
-    
-      FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-      texCoords.add(0, 0);
-      texCoords.add(0, 1);
-      texCoords.add(1, 0);
-      texCoords.add(1, 1);
-    
-      DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
-    
-      if (vertices != null)
-         vertices.dispose();
-    
-      TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
-    
-      return new TexturedMesh(im, true, texMap, true, true);
-    }
-
-    public ShownImage(String name, IImage image, Vector2D size, Vector2D position)
-    {
-       _name = name;
-       _image = image;
-       _size = new Vector2D(size);
-       _position = new Vector2D(position);
-       _mesh = null;
-       _factory = null;
-    }
-
-    public final Mesh getMesh(G3MRenderContext rc)
-    {
-      if (_mesh == null)
-      {
-        _mesh = createMesh(rc);
-      }
-      return _mesh;
-    }
-
-    public void dispose()
-    {
-      _factory.deleteImage(_image);
-    //  delete _image;
-      if (_mesh != null)
-         _mesh.dispose();
-    }
-
-    public final void clearMesh()
-    {
-      if (_mesh != null)
-         _mesh.dispose();
-      _mesh = null;
-    }
-
-  }
-
+  private java.util.ArrayList<HUDWidget> _widgets = new java.util.ArrayList<HUDWidget>();
 
   private GLState _glState;
-  private java.util.ArrayList<ShownImage> _images = new java.util.ArrayList<ShownImage>();
+
+  private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private final boolean _readyWhenWidgetsReady;
 
   public HUDRenderer()
   {
+     this(true);
+  }
+  public HUDRenderer(boolean readyWhenWidgetsReady)
+  {
      _glState = new GLState();
+     _readyWhenWidgetsReady = readyWhenWidgetsReady;
+     _context = null;
   }
 
-  public final void addImage(String name, IImage image, Vector2D size, Vector2D position)
+  public void dispose()
   {
-    _images.add(new ShownImage(name, image, size, position));
+    final int size = _widgets.size();
+    for (int i = 0; i < size; i++)
+    {
+      HUDWidget widget = _widgets.get(i);
+      if (widget != null)
+         widget.dispose();
+    }
+  
+    _glState._release();
+  
+    super.dispose();
+  }
+
+  public final void addWidget(HUDWidget widget)
+  {
+    _widgets.add(widget);
+  
+    if (_context != null)
+    {
+      widget.initialize(_context);
+    }
   }
 
   public final void initialize(G3MContext context)
   {
+    _context = context;
+  
+    final int size = _widgets.size();
+    for (int i = 0; i < size; i++)
+    {
+      HUDWidget widget = _widgets.get(i);
+      widget.initialize(context);
+    }
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    return RenderState.ready();
-  }
-
-  public final void render(G3MRenderContext rc, GLState glState)
-  {
-    final int size = _images.size();
+  ///#warning todo ask widgets for ready
+  //  return RenderState::ready();
+    _errors.clear();
+    boolean busyFlag = false;
+    boolean errorFlag = false;
+  
+    final int size = _widgets.size();
     for (int i = 0; i < size; i++)
     {
-      ShownImage image = _images.get(i);
-      Mesh mesh = image.getMesh(rc);
-      if (mesh != null)
+      HUDWidget widget = _widgets.get(i);
+      if (widget.isEnable())
       {
-        mesh.render(rc, _glState);
+        final RenderState childRenderState = widget.getRenderState(rc);
+  
+        final RenderState_Type childRenderStateType = childRenderState._type;
+  
+        if (childRenderStateType == RenderState_Type.RENDER_ERROR)
+        {
+          errorFlag = true;
+  
+          final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
+          _errors.addAll(childErrors);
+        }
+        else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
+        {
+          busyFlag = true;
+        }
       }
     }
+  
+    if (errorFlag)
+    {
+      return RenderState.error(_errors);
+    }
+    else if (busyFlag && _readyWhenWidgetsReady)
+    {
+      return RenderState.busy();
+    }
+    else
+    {
+      return RenderState.ready();
+    }
+  
   }
 
+  public final void onResume(G3MContext context)
+  {
+  }
+
+  public final void onPause(G3MContext context)
+  {
+  }
+
+  public final void onDestroy(G3MContext context)
+  {
+  }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
+  ///#warning todo hud events
     return false;
+  }
+
+  public final void start(G3MRenderContext rc)
+  {
+  }
+
+  public final void stop(G3MRenderContext rc)
+  {
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -173,45 +168,22 @@ public class HUDRenderer extends LeafRenderer
       pr.setMatrix(projectionMatrix.asMatrix44D());
     }
   
-    final int size = _images.size();
+    final int size = _widgets.size();
     for (int i = 0; i < size; i++)
     {
-      _images.get(i).clearMesh();
+      HUDWidget widget = _widgets.get(i);
+      widget.onResizeViewportEvent(ec, width, height);
     }
   }
 
-  public void dispose()
+  public final void render(G3MRenderContext rc, GLState glState)
   {
-    _glState._release();
-  
-    final int size = _images.size();
+    final int size = _widgets.size();
     for (int i = 0; i < size; i++)
     {
-      if (_images.get(i) != null)
-         _images.get(i).dispose();
+      HUDWidget widget = _widgets.get(i);
+      widget.render(rc, _glState);
     }
-  
-    super.dispose();
-  }
-
-  public final void start(G3MRenderContext rc)
-  {
-  }
-
-  public final void stop(G3MRenderContext rc)
-  {
-  }
-
-  public final void onResume(G3MContext context)
-  {
-  }
-
-  public final void onPause(G3MContext context)
-  {
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
   }
 
 }
