@@ -288,57 +288,57 @@ public class MainActivity
       //
       // }
 
-      if (false) {
-
-         final int time = 10; // SECS
-
-         final GTask elevationTask = new GTask() {
-
-            ElevationDataProvider _elevationDataProvider1 = new SingleBillElevationDataProvider(new URL(
-                                                                   "file:///full-earth-2048x1024.bil", false),
-                                                                   Sector.fullSphere(), new Vector2I(2048, 1024));
-
-
-            @Override
-            public void run(final G3MContext context) {
-               final PlanetRenderer pr = _g3mWidget.getG3MWidget().getPlanetRenderer();
-
-               final Random r = new Random();
-
-               final int i = r.nextInt() % 4;
-               switch (i) {
-                  case 0:
-                     pr.setElevationDataProvider(_elevationDataProvider1, false);
-                     break;
-                  case 1:
-
-                     final ElevationDataProvider _elevationDataProvider2 = new SingleBillElevationDataProvider(new URL(
-                              "file:///caceres-2008x2032.bil", false), Sector.fromDegrees(39.4642996294239623,
-                              -6.3829977122432933, 39.4829891936013553, -6.3645288909498845), new Vector2I(2008, 2032), 0);
-
-
-                     pr.setElevationDataProvider(_elevationDataProvider2, true);
-                     break;
-                  case 2:
-                     pr.setVerticalExaggeration(r.nextInt() % 5);
-                     break;
-                  case 3:
-                     pr.setElevationDataProvider(null, false);
-                     break;
-
-                  default:
-                     break;
-               }
-
-               final ElevationDataProvider edp = pr.getElevationDataProvider();
-               if (edp != null) {
-                  edp.setEnabled((r.nextInt() % 2) == 0);
-               }
-            }
-         };
-
-         builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
-      }
+//      if (false) {
+//
+//         final int time = 10; // SECS
+//
+//         final GTask elevationTask = new GTask() {
+//
+//            ElevationDataProvider _elevationDataProvider1 = new SingleBillElevationDataProvider(new URL(
+//                                                                   "file:///full-earth-2048x1024.bil", false),
+//                                                                   Sector.fullSphere(), new Vector2I(2048, 1024));
+//
+//
+//            @Override
+//            public void run(final G3MContext context) {
+//               final PlanetRenderer pr = _g3mWidget.getG3MWidget().getPlanetRenderer();
+//
+//               final Random r = new Random();
+//
+//               final int i = r.nextInt() % 4;
+//               switch (i) {
+//                  case 0:
+//                     pr.setElevationDataProvider(_elevationDataProvider1, false);
+//                     break;
+//                  case 1:
+//
+//                     final ElevationDataProvider _elevationDataProvider2 = new SingleBillElevationDataProvider(new URL(
+//                              "file:///caceres-2008x2032.bil", false), Sector.fromDegrees(39.4642996294239623,
+//                              -6.3829977122432933, 39.4829891936013553, -6.3645288909498845), new Vector2I(2008, 2032), 0);
+//
+//
+//                     pr.setElevationDataProvider(_elevationDataProvider2, true);
+//                     break;
+//                  case 2:
+//                     pr.setVerticalExaggeration(r.nextInt() % 5);
+//                     break;
+//                  case 3:
+//                     pr.setElevationDataProvider(null, false);
+//                     break;
+//
+//                  default:
+//                     break;
+//               }
+//
+//               final ElevationDataProvider edp = pr.getElevationDataProvider();
+//               if (edp != null) {
+//                  edp.setEnabled((r.nextInt() % 2) == 0);
+//               }
+//            }
+//         };
+//
+//         builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
+//      }
 
       if (true) {      
     	  // testing selecting shapes
