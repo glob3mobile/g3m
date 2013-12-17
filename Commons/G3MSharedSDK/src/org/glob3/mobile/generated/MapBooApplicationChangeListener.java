@@ -74,7 +74,7 @@ public abstract class MapBooApplicationChangeListener
 
   public abstract void onIconChanged(G3MContext context, String icon);
 
-  public abstract void onSceneChanged(G3MContext context, MapBoo_Scene scene, int sceneIndex);
+  public abstract void onSceneChanged(G3MContext context, MapBoo_Scene scene);
 
   public abstract void onScenesChanged(G3MContext context, java.util.ArrayList<MapBoo_Scene> scenes);
 

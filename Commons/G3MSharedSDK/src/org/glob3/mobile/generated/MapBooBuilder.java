@@ -557,6 +557,33 @@ public abstract class MapBooBuilder
     }
   }
 
+  private void updateVisibleScene()
+  {
+    recreateLayerSet();
+    final MapBoo_Scene currentScene = getApplicationCurrentScene();
+  
+    if (_g3mWidget != null)
+    {
+      _g3mWidget.setBackgroundColor(getCurrentBackgroundColor());
+  
+      // force immediate execution of PeriodicalTasks
+      _g3mWidget.resetPeriodicalTasksTimeouts();
+  
+      if (currentScene != null)
+      {
+        final Sector sector = currentScene.getSector();
+        if (sector == null)
+        {
+          _g3mWidget.setShownSector(Sector.fullSphere());
+        }
+        else
+        {
+          _g3mWidget.setShownSector(sector);
+        }
+      }
+    }
+  }
+
   private String getApplicationCurrentSceneCommand()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
@@ -1046,22 +1073,25 @@ public abstract class MapBooBuilder
   public final void setApplicationScene(MapBoo_Scene scene)
   {
     final int scenesCount = _applicationScenes.size();
+    final String sceneToBeUpdatedID = scene.getId();
     for (int i = 0; i < scenesCount; i++)
     {
       final String sceneID = _applicationScenes.get(i).getId();
-      final String sceneToBeUpdatedID = scene.getId();
       if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
       {
         _applicationScenes.set(i, scene);
   
-        if (_applicationListener != null)
+        if (i == _applicationCurrentSceneIndex)
         {
-          _applicationListener.onSceneChanged(_context, scene, i);
+          updateVisibleScene();
         }
   
-        if (_applicationCurrentSceneIndex == i)
+        if (_applicationListener != null)
         {
-          changedCurrentScene();
+          _applicationListener.onSceneChanged(_context, scene);
+  
+          _applicationListener.onScenesChanged(_context,
+                                               new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
         }
   
         break;
@@ -1089,8 +1119,6 @@ public abstract class MapBooBuilder
       _applicationListener.onScenesChanged(_context,
                                            new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
     }
-  
-    changedCurrentScene();
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1120,9 +1148,9 @@ public abstract class MapBooBuilder
       case VIEW_PRESENTATION:
         view = "presentation";
         break;
-        //    case VIEW_RUNTIME:
-        //      view = "runtime";
-        //      break;
+      case VIEW_EDITION_PREVIEW:
+        view = "edition-preview";
+        break;
       default:
         view = "runtime";
     }
