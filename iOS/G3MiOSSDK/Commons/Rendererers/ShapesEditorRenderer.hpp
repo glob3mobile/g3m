@@ -38,6 +38,7 @@ private:
   
 public:
   int _selectedVertex;
+  int _selectedRasterShape;
 
   ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
   

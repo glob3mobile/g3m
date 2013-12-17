@@ -49,6 +49,7 @@ public:
     _selectedShape = getSelectedShape();
     _renderer->_selectedVertex = -1;
     if (_selectedShape == NULL) {
+      _renderer->_selectedRasterShape = -1;
       _renderer->clearVertexShapes();
       return true;
     }
@@ -68,7 +69,8 @@ public:
 ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer):
 ShapesRenderer(geoTileRasterizer),
 _activatedEdition(false),
-_selectedVertex(-1)
+_selectedVertex(-1),
+_selectedRasterShape(-1)
 {
   setShapeTouchListener(new MyShapeSelectionListener(this), true);
 }
@@ -85,6 +87,8 @@ void ShapesEditorRenderer::clearVertexShapes()
 
 void ShapesEditorRenderer::selectRasterShape(int id)
 {
+  _selectedRasterShape = id;
+
   // creamos nuevos points para el vertexRenderer
   std::vector<Geodetic2D*> coordinates = _rasterShapes[id]._coordinates;
   clearVertexShapes();
@@ -148,5 +152,17 @@ void ShapesEditorRenderer::activateEdition(PlanetRenderer* planetRenderer)
 
 void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
 {
-  printf ("----- click on with selectedvertex=%d\n", _selectedVertex);
+  if (_selectedVertex < 0) return;
+  
+  // modify vertex coordinates
+ /* std::vector<Geodetic2D*> coordinates = _rasterShapes[id]._coordinates;
+  clearVertexShapes();*/
+/*  Geodetic3D* newPosition = new Geodetic3D(position.asGeodetic2D(), 1);
+  PointShape* vertex = new PointShape(newPosition,
+                                      RELATIVE_TO_GROUND,
+                                      20,
+                                      Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
+  addShape(vertex);*/
+  printf ("\n-----modifico vertices %d del raster %d\n", _selectedVertex, _selectedRasterShape);
+
 }
