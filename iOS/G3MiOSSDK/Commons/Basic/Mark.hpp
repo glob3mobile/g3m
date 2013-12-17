@@ -134,11 +134,13 @@ private:
   GLState* _glState;
   void createGLState(const Planet* planet);
 
-  IFloatBuffer* getBillboardTexCoords();
+  static IFloatBuffer* getBillboardTexCoords();
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _currentSurfaceElevation;
   AltitudeMode _altitudeMode;
+
+  Vector3D* _normalAtMarkPosition;
 
 public:
   /**
@@ -257,6 +259,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition,
+              double cameraHeight,
               const GLState* parentGLState,
               const Planet* planet,
               GL* gl);

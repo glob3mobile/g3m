@@ -54,8 +54,9 @@ public abstract class MapBooBuilder
     long texturePriority = DownloadPriority.HIGHER;
   
     final Sector renderedSector = Sector.fullSphere();
+    final boolean renderTileMeshes = true;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes);
   
     if (_enableNotifications)
     {
@@ -359,9 +360,9 @@ public abstract class MapBooBuilder
   
     final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
   
-  //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
-  //    return NULL;
-  //  }
+    //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
+    //    return NULL;
+    //  }
   
     return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
   }
@@ -875,11 +876,13 @@ public abstract class MapBooBuilder
     {
       ILogger.instance().logError("LOGIC ERROR: _gl already initialized");
       return;
+      //ERROR("LOGIC ERROR: _gl already initialized");
     }
     if (gl == null)
     {
       ILogger.instance().logError("LOGIC ERROR: _gl cannot be NULL");
       return;
+      //ERROR("LOGIC ERROR: _gl cannot be NULL");
     }
     _gl = gl;
   }
@@ -953,7 +956,7 @@ public abstract class MapBooBuilder
 
   protected final SceneLighting createSceneLighting()
   {
-    return new CameraFocusSceneLighting();
+    return new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0), Color.yellow());
   }
 
   protected final URL createApplicationRestURL()

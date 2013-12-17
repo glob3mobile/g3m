@@ -48,15 +48,17 @@ public:
            const LayerTilesRenderParameters* parameters = NULL);
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                         const Tile* tile) const;
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                const Tile* tile) const;
 
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const Sector& sector) const;
-  
+
   const std::string description() const;
   
   TMSLayer* copy() const;
-  
+
+  RenderState getRenderState();
 };
 
 #endif

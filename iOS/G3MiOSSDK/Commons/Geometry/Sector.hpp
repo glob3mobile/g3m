@@ -206,7 +206,23 @@ public:
   bool touchesSouthPole() const {
     return (_lower._latitude._degrees <= -89.9);
   }
-  
+
+  Angle getNorth() const{
+    return _upper._latitude;
+  }
+
+  Angle getSouth() const{
+    return _lower._latitude;
+  }
+
+  Angle getEast() const{
+    return _upper._longitude;
+  }
+
+  Angle getWest() const{
+    return _lower._longitude;
+  }
+
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection) const;
 

@@ -11,6 +11,9 @@
 
 class GLState;
 class G3MRenderContext;
+class Vector3D;
+class MeshRenderer;
+#include "Color.hpp"
 
 class SceneLighting{
 public:
@@ -25,10 +28,28 @@ public:
   
 };
 
+
 class CameraFocusSceneLighting: public SceneLighting {
+
+  Color _ambientColor;
+  Color _diffuseColor;
+
+  MeshRenderer* _meshRenderer;
+
+  double _cameraDirX, _cameraDirY, _cameraDirZ;
+  double _upX, _upY, _upZ;
+
 public:
 
+  CameraFocusSceneLighting(const Color& ambient, const Color& diffuse);
+
+  ~CameraFocusSceneLighting(){}
+
   void modifyGLState(GLState* glState, const G3MRenderContext* rc);
+
+  void setLightDirectionsMeshRenderer(MeshRenderer* meshRenderer){
+    _meshRenderer = meshRenderer;
+  }
 
 };
 

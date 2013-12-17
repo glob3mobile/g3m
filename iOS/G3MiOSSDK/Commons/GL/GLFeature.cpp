@@ -216,22 +216,24 @@ GLCameraGroupFeature(cam->getModelMatrix44D(), GLF_MODEL) {}
 ModelViewGLFeature::ModelViewGLFeature(const Camera* cam):
 GLCameraGroupFeature(cam->getModelViewMatrix44D(), GLF_MODEL_VIEW) {}
 
-DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& dir, const Color& lightColor, float ambientLight):
+DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& diffuseLightDirection,
+                                                 const Color& diffuseLightColor,
+                                                 const Color& ambientLightColor):
 GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
-  _values.addUniformValue(AMBIENT_LIGHT,
-                          new GPUUniformValueFloat(ambientLight), false);
+  _values.addUniformValue(AMBIENT_LIGHT_COLOR,
+                          new GPUUniformValueVec3Float(ambientLightColor), false);
 
-  Vector3D dirN = dir.normalized();
+  Vector3D dirN = diffuseLightDirection.normalized();
 
   _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float) dirN._x,
                                                                     (float) dirN._y,
                                                                     (float) dirN._z);
 
-  _values.addUniformValue(LIGHT_DIRECTION,
+  _values.addUniformValue(DIFFUSE_LIGHT_DIRECTION,
                           _lightDirectionUniformValue,
                           false);
-  _values.addUniformValue(LIGHT_COLOR,
-                          new GPUUniformValueVec4Float(lightColor),
+  _values.addUniformValue(DIFFUSE_LIGHT_COLOR,
+                          new GPUUniformValueVec3Float(diffuseLightColor),
                           false);
 
 }

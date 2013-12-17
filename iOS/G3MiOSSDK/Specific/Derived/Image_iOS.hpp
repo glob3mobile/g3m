@@ -36,10 +36,7 @@ public:
   _image(image),
   _sourceBuffer(sourceBuffer)
   {
-    
   }
-  
-//  Image_iOS(int width, int height);
 
   UIImage* getUIImage() const {
     return _image;

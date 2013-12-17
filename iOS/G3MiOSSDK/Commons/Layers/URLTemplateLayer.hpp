@@ -34,7 +34,8 @@ private:
                    LayerCondition*                   condition,
                    const LayerTilesRenderParameters* parameters);
 
-  const std::string getPath(const Tile* tile,
+  const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                            const Tile* tile,
                             const Sector& sector) const;
 
 protected:
@@ -71,8 +72,10 @@ public:
                         const Sector& sector) const;
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
   
+  RenderState getRenderState();
 };
 
 #endif

@@ -36,6 +36,9 @@ void BusyMeshRenderer::start(const G3MRenderContext* rc) {
 
 void BusyMeshRenderer::stop(const G3MRenderContext* rc) {
   rc->getEffectsScheduler()->cancelAllEffectsFor(this);
+
+  delete _mesh;
+  _mesh = NULL;
 }
 
 void BusyMeshRenderer::createGLState() {
@@ -135,7 +138,6 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
                               GLState* glState)
 {
   GL* gl = rc->getGL();
-
   createGLState();
   
   gl->clearScreen(*_backgroundColor);
@@ -144,5 +146,4 @@ void BusyMeshRenderer::render(const G3MRenderContext* rc,
   if (mesh != NULL) {
     mesh->render(rc, _glState);
   }
-//  _mesh->render(rc, _glState);
 }

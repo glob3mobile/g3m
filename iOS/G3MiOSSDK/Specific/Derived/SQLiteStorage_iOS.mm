@@ -27,18 +27,36 @@ NSString* SQLiteStorage_iOS::getDBPath() const {
   return dbPath;
 }
 
+bool SQLiteStorage_iOS::addSkipBackupAttributeToItemAtPath(NSString* path) {
+  assert([[NSFileManager defaultManager] fileExistsAtPath: path]);
+
+  NSURL* url = [NSURL URLWithString:path];
+
+  NSError *error = nil;
+  BOOL success = [url setResourceValue: [NSNumber numberWithBool: YES]
+                                forKey: NSURLIsExcludedFromBackupKey
+                                 error: &error];
+  if (!success) {
+    NSLog(@"Error excluding %@ from backup %@", url, error);
+  }
+  return success;
+}
 
 SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string &databaseName) :
 _databaseName(databaseName)
 {
   _lock = [[NSLock alloc] init];
 
-  _writeDB = [SQDatabase databaseWithPath:getDBPath()];
+  NSString* dbPath = getDBPath();
+
+  _writeDB = [SQDatabase databaseWithPath:dbPath];
   if (!_writeDB) {
     printf("Can't open write-database \"%s\"\n", databaseName.c_str());
   }
   else {
     [_writeDB openReadWrite];
+
+    addSkipBackupAttributeToItemAtPath(dbPath);
 
     if (![_writeDB executeNonQuery:@"DROP TABLE IF EXISTS buffer;"]) {
       printf("Can't drop table \"buffer\" from database \"%s\"\n",
@@ -76,7 +94,7 @@ _databaseName(databaseName)
       return;
     }
 
-    _readDB = [SQDatabase databaseWithPath:getDBPath()];
+    _readDB = [SQDatabase databaseWithPath:dbPath];
     if (!_readDB) {
       printf("Can't open read-database \"%s\"\n", databaseName.c_str());
     }
@@ -213,72 +231,76 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
 
 IImageResult SQLiteStorage_iOS::readImage(const URL& url,
                                           bool readExpired) {
-//  NSDate* startAll = [NSDate date];
+//  @autoreleasepool {
+    //  NSDate* startAll = [NSDate date];
 
-  IImage* image = NULL;
-  bool expired = false;
+    IImage* image = NULL;
+    bool expired = false;
 
-//  double parsedTime = 0;
+    //  double parsedTime = 0;
 
-  NSString* name = [NSString stringWithCppString: url.getPath()];
-  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
-  if ([rs next]) {
-    NSData* data = [rs dataColumnByIndex: 0];
-    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
-    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+    NSString* name = [NSString stringWithCppString: url.getPath()];
+    SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
+    if ([rs next]) {
+      NSData* data = [rs dataColumnByIndex: 0];
+      const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
+      NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-    expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
+      expired = ( [expiration compare:[NSDate date]] != NSOrderedDescending );
 
-    if (readExpired || !expired) {
-//      NSDate* startParse = [NSDate date];
-      UIImage* uiImage = [UIImage imageWithData:data];
-//      parsedTime = ([startParse timeIntervalSinceNow] * -1000.0);
+      if (readExpired || !expired) {
+        //      NSDate* startParse = [NSDate date];
+        UIImage* uiImage = [UIImage imageWithData:data];
+        //      parsedTime = ([startParse timeIntervalSinceNow] * -1000.0);
 
-      if (uiImage) {
-        image = new Image_iOS(uiImage,
-                              NULL /* data is not needed */);
-      }
-      else {
-        ILogger::instance()->logError("Can't create image with contents of storage.");
+        if (uiImage) {
+          image = new Image_iOS(uiImage,
+                                NULL /* data is not needed */);
+        }
+        else {
+          ILogger::instance()->logError("Can't create image with contents of storage.");
+        }
       }
     }
-  }
 
-  [rs close];
+    [rs close];
 
-//  NSLog(@"STORAGE: read image in %f (parse=%f)",
-//        ([startAll timeIntervalSinceNow] * -1000.0),
-//        parsedTime);
-
-  return IImageResult(image, expired);
+    //  NSLog(@"STORAGE: read image in %f (parse=%f)",
+    //        ([startAll timeIntervalSinceNow] * -1000.0),
+    //        parsedTime);
+    
+    return IImageResult(image, expired);
+//  }
 }
 
 
 IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
                                                 bool readExpired) {
-  IByteBuffer* buffer = NULL;
-  bool expired = false;
+//  @autoreleasepool {
+    IByteBuffer* buffer = NULL;
+    bool expired = false;
 
-  NSString* name = [NSString stringWithCppString: url.getPath()];
-  SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
-  if ([rs next]) {
-    NSData* nsData = [rs dataColumnByIndex: 0];
-    const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
-    NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
+    NSString* name = [NSString stringWithCppString: url.getPath()];
+    SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
+    if ([rs next]) {
+      NSData* nsData = [rs dataColumnByIndex: 0];
+      const double expirationInterval = [[rs stringColumnByIndex:1] doubleValue];
+      NSDate* expiration = [NSDate dateWithTimeIntervalSince1970:expirationInterval];
 
-    expired = [expiration compare:[NSDate date]] != NSOrderedDescending;
+      expired = [expiration compare:[NSDate date]] != NSOrderedDescending;
 
-    if (readExpired || !expired) {
-      NSUInteger length = [nsData length];
-      unsigned char* bytes = new unsigned char[length];
-      [nsData getBytes: bytes
-                length: length];
+      if (readExpired || !expired) {
+        NSUInteger length = [nsData length];
+        unsigned char* bytes = new unsigned char[length];
+        [nsData getBytes: bytes
+                  length: length];
 
-      buffer = IFactory::instance()->createByteBuffer(bytes, length);
+        buffer = IFactory::instance()->createByteBuffer(bytes, length);
+      }
     }
-  }
 
-  [rs close];
-
-  return IByteBufferResult(buffer, expired);
+    [rs close];
+    
+    return IByteBufferResult(buffer, expired);
+//  }
 }

@@ -12,6 +12,7 @@ import org.glob3.mobile.generated.Layer;
 import org.glob3.mobile.generated.LayerCondition;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.Petition;
+import org.glob3.mobile.generated.RenderState;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Tile;
 import org.glob3.mobile.generated.TimeInterval;
@@ -86,7 +87,31 @@ public class GoogleLayer
 
 
    @Override
+   public URL getFeatureInfoURL(final Geodetic2D position,
+                                final Sector sector) {
+      // TODO Auto-generated method stub
+      return new URL();
+   }
+
+
+   @Override
+   public String description() {
+      return "[GoogleOadlLayer]";
+
+   }
+
+
+   @Override
+   public Layer copy() {
+      return new GoogleLayer(_url, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel,
+               (_condition == null) ? null : _condition.copy());
+
+   }
+
+
+   @Override
    public ArrayList<Petition> createTileMapPetitions(final G3MRenderContext rc,
+                                                     final LayerTilesRenderParameters layerTilesRenderParameters,
                                                      final Tile tile) {
       final IMathUtils mu = IMathUtils.instance();
 
@@ -137,25 +162,9 @@ public class GoogleLayer
 
 
    @Override
-   public URL getFeatureInfoURL(final Geodetic2D position,
-                                final Sector sector) {
+   public RenderState getRenderState() {
       // TODO Auto-generated method stub
-      return new URL();
-   }
-
-
-   @Override
-   public String description() {
-      return "[GoogleOadlLayer]";
-
-   }
-
-
-   @Override
-   public Layer copy() {
-      return new GoogleLayer(_url, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel,
-               (_condition == null) ? null : _condition.copy());
-
+      return null;
    }
 
 }

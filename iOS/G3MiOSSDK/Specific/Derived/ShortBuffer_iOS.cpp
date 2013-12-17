@@ -15,6 +15,21 @@ GLuint ShortBuffer_iOS::_boundIBO = -1;
 
 long long ShortBuffer_iOS::_nextID = 0;
 
+//long long ShortBuffer_iOS::_newCounter    = 0;
+//long long ShortBuffer_iOS::_deleteCounter = 0;
+//long long ShortBuffer_iOS::_genBufferCounter  = 0;
+//long long ShortBuffer_iOS::_deleteBufferCounter = 0;
+//
+//void ShortBuffer_iOS::showStatistics() {
+//  printf("ShortBuffer_iOS: new=%lld delete=%lld (delta=%lld)   genBuffer=%lld deleteBuffer=%lld (delta=%lld) \n",
+//         _newCounter,
+//         _deleteCounter,
+//         _newCounter - _deleteCounter,
+//         _genBufferCounter,
+//         _deleteBufferCounter,
+//         _genBufferCounter - _deleteBufferCounter);
+//}
+
 const std::string ShortBuffer_iOS::description() const {
   std::ostringstream oss;
 
@@ -31,17 +46,22 @@ const std::string ShortBuffer_iOS::description() const {
 }
 
 ShortBuffer_iOS::~ShortBuffer_iOS() {
+//  _deleteCounter++;
   if (_indexBufferCreated) {
+//    _deleteBufferCounter++;
     glDeleteBuffers(1, &_indexBuffer);
     if (GL_NO_ERROR != glGetError()) {
       ILogger::instance()->logError("Problem deleting IBO");
     }
   }
   delete [] _values;
+//  showStatistics();
 }
 
 void ShortBuffer_iOS::bindAsIBOToGPU() {
   if (!_indexBufferCreated) {
+//    _genBufferCounter++;
+//    showStatistics();
     glGenBuffers(1, &_indexBuffer);
     _indexBufferCreated = true;
   }

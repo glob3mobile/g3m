@@ -45,8 +45,9 @@ _isTransparent(isTransparent)
 
 
 std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
-                                                 const Tile* tile) const {
-  
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                        const Tile* tile) const {
+
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->_sector;
@@ -84,7 +85,7 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
 URL TMSLayer::getFeatureInfoURL(const Geodetic2D& g,
                                 const Sector& sector) const {
   return URL::nullURL();
-  
+
 }
 
 const std::string TMSLayer::description() const {
@@ -127,4 +128,23 @@ TMSLayer* TMSLayer::copy() const {
                      TimeInterval::fromMilliseconds(_timeToCacheMS),
                      _readExpired,
                       (_parameters == NULL) ? NULL : _parameters->copy());
+}
+
+RenderState TMSLayer::getRenderState() {
+  _errors.clear();
+  if (_mapLayer.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapLayer");
+  }
+  const std::string mapServerUrl = _mapServerURL.getPath();
+  if (mapServerUrl.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapServerURL");
+  }
+  if (_format.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: format");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

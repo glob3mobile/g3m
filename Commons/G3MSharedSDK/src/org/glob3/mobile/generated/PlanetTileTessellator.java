@@ -95,7 +95,7 @@ public class PlanetTileTessellator extends TileTessellator
     return tile._sector.intersection(_renderedSector);
   }
 
-  private double createSurface(Sector tileSector, Sector meshSector, Vector2I meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords)
+  private double createSurface(Sector tileSector, Sector meshSector, Vector2I meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords, TileTessellatorMeshData data)
   {
   
     final int rx = meshResolution._x;
@@ -106,7 +106,10 @@ public class PlanetTileTessellator extends TileTessellator
     final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
   
     //VERTICES///////////////////////////////////////////////////////////////
-    double minElevation = 0;
+    IMathUtils mu = IMathUtils.instance();
+    double minElevation = mu.maxDouble();
+    double maxElevation = mu.minDouble();
+    double averageElevation = 0;
     for (int j = 0; j < ry; j++)
     {
       final double v = (double) j / (ry - 1);
@@ -124,10 +127,20 @@ public class PlanetTileTessellator extends TileTessellator
           {
             elevation = rawElevation * verticalExaggeration;
   
+            //MIN
             if (elevation < minElevation)
             {
               minElevation = elevation;
             }
+  
+            //MAX
+            if (elevation > maxElevation)
+            {
+              maxElevation = elevation;
+            }
+  
+            //AVERAGE
+            averageElevation += elevation;
           }
         }
         vertices.add(position, elevation);
@@ -146,12 +159,24 @@ public class PlanetTileTessellator extends TileTessellator
         }
         else
         {
-  
           Vector2D uv = tileSector.getUVCoordinates(position);
           textCoords.add(uv);
         }
       }
     }
+  
+    if (minElevation == mu.maxDouble())
+    {
+      minElevation = 0;
+    }
+    if (maxElevation == mu.minDouble())
+    {
+      maxElevation = 0;
+    }
+  
+    data._minHeight = minElevation;
+    data._maxHeight = maxElevation;
+    data._averageHeight = averageElevation / (rx * ry);
   
     //INDEX///////////////////////////////////////////////////////////////
     for (short j = 0; j < (ry-1); j++)
@@ -358,7 +383,7 @@ public class PlanetTileTessellator extends TileTessellator
   }
 
 
-  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug)
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug, TileTessellatorMeshData data)
   {
   
     final Sector tileSector = tile._sector;
@@ -369,7 +394,7 @@ public class PlanetTileTessellator extends TileTessellator
     ShortBufferBuilder indices = new ShortBufferBuilder();
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
-    double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, mercator, vertices, indices, textCoords);
+    double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, mercator, vertices, indices, textCoords, data);
   
     if (_skirted)
     {
@@ -402,18 +427,13 @@ public class PlanetTileTessellator extends TileTessellator
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Testing_Terrain_Normals;
-  //  IFloatBuffer* verticesB = vertices->create();
-  //  IShortBuffer* indicesB  = indices.create();
-  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-  //  //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
-  //
-  //  Mesh* result = new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
-  //                                         vertices->getCenter(),
-  //                                         verticesB, true,
-  //                                         normals,   true,
-  //                                         indicesB,  true);
+    IFloatBuffer verticesB = vertices.create();
+    IShortBuffer indicesB = indices.create();
+    //IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+    //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
+    IFloatBuffer normals = null;
   
-    Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true);
+    Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), verticesB, true, normals, true, indicesB, true);
   
     if (vertices != null)
        vertices.dispose();

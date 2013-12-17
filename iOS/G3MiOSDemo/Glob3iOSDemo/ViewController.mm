@@ -26,6 +26,8 @@
 #import <G3MiOSSDK/CameraRotationHandler.hpp>
 #import <G3MiOSSDK/CameraDoubleTapHandler.hpp>
 #import <G3MiOSSDK/LevelTileCondition.hpp>
+#import <G3MiOSSDK/SectorTileCondition.hpp>
+#import <G3MiOSSDK/AndTileCondition.hpp>
 #import <G3MiOSSDK/LayerBuilder.hpp>
 #import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 #import <G3MiOSSDK/MarkTouchListener.hpp>
@@ -136,6 +138,8 @@
 #import <G3MiOSSDK/TextCanvasElement.hpp>
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
+
+#import <G3MiOSSDK/SceneLighting.hpp>
 
 
 
@@ -484,138 +488,42 @@ public:
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
   //ElevationDataProvider* elevationDataProvider = NULL;
-  //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-  
-  //  ElevationDataProvider* elevationDataProviderACorunia;
-  //  elevationDataProviderACorunia = new SingleBillElevationDataProvider(URL("file:///MDT200-A_CORUNIA.bil", false),
-  //                                                                      Sector::fromDegrees(42.4785417976084858, -9.3819593635107914,
-  //                                                                                          43.8317114006282011, -7.6284544428640784),
-  //                                                                      Vector2I(968, 747));
-  //
-  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProviderACorunia);
-  
-  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                                                     Sector::fullSphere(),
-  //                                                                                     Vector2I(2048, 1024));
-  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-  
-  
-  //  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev", false),
-  //                                                           Sector::fullSphere());
-  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-  
-  //  elevationDataProvider = new WMSBillElevationDataProvider(URL("http://igosoftware.dyndns.org:8080/geoserver/wms", false),
-  //                                                           "igo:corunia",
-  //                                                           Sector::fromDegrees(42.4785417976085213, -9.3819593635107914,
-  //                                                                               43.8317114006282011, -7.6284544428641370));
-  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-  
-  
-  ElevationDataProvider* elevationDataProvider;
-  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-                                                              Sector::fullSphere(),
-                                                              Vector2I(2048, 1024));
-  
-  //  elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(4096, 2048));
-  
-  //  ElevationDataProvider* elevationDataProvider1;
-  //  elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-  //                                                               Sector::fromDegrees(35, -6, 38, -2),
-  //                                                               Vector2I(4096, 2048),
-  //                                                               0);
-  
-  //  ElevationDataProvider* elevationDataProvider2;
-  //  elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///full-earth-4096x2048.bil", false),
-  //                                                              Sector::fullSphere(),
-  //                                                              Vector2I(4096, 2048),
-  //                                                              0);
-  
-  ElevationDataProvider* elevationDataProvider3;
-  elevationDataProvider3 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),Sector::fromDegrees(39.4642996294239623,-6.3829977122432933,39.4829891936013553,-6.3645288909498845),Vector2I(2008, 2032));
-  
-  //  ElevationDataProvider* elevationDataProvider4;
-  //  elevationDataProvider4 = new SingleBillElevationDataProvider(URL("file:///small-caceres.bil", false),
-  //                                                               Sector::fromDegrees(
-  //                                                                                   39.4642994358225678,
-  //                                                                                   -6.3829980000000042,
-  //                                                                                   39.4829889999999608,
-  //                                                                                   -6.3645291787065954
-  //                                                                                   ),
-  //                                                               Vector2I(251, 254));
-  
-  //  ElevationDataProvider* elevationDataProvider5;
-  //  elevationDataProvider5 = new SingleBillElevationDataProvider(URL("file:///elev-35.0_-6.0_38.0_-2.0_4096x2048.bil", false),
-  //                                                               Sector::fromDegrees(35, -6, 38, -2),
-  //                                                               Vector2I(4096, 2048));
-  
-  //  ElevationDataProvider* elevationDataProvider6;
-  //  elevationDataProvider6 = new SingleBillElevationDataProvider(URL("file:///full-earth-512x512.bil", false),
-  //                                                               Sector::fullSphere(),
-  //                                                               Vector2I(512, 512),
-  //                                                               0);
-  
-  //  ElevationDataProvider* elevationDataProvider7;
-  //  elevationDataProvider7 = new SingleBillElevationDataProvider(URL("file:///full-earth-256x256.bil", false),
-  //                                                               Sector::fullSphere(),
-  //                                                               Vector2I(256, 256),
-  //                                                               0);
-  
-  //    ElevationDataProvider* elevationDataProvider8;
-  //    elevationDataProvider8 = new WMSBillElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=10&HEIGHT=10", false),
-  //                                                              Sector::fullSphere());
-  
-  
-  
-  
-  CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider);
-  //CompositeElevationDataProvider* compElevationDataProvider = new CompositeElevationDataProvider();
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider1);
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider2);
-  compElevationDataProvider->addElevationDataProvider(elevationDataProvider3);
-  //  compElevationDataProvider->addElevationDataProvider(elevationDataProvider4);
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider5);
-  //elevationDataProvider = compElevationDataProvider;
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider6);
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider7);
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProvider8);
-  
-  //compElevationDataProvider->addElevationDataProvider(elevationDataProviderACorunia);
-  
-  builder.getPlanetRendererBuilder()->setElevationDataProvider(compElevationDataProvider);
-  
-  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                                                     Sector::fullSphere(),
-  //                                                                                     Vector2I(2048, 1024));
-  //  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider)
+
+
+//  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+//                                                                                     Sector::fullSphere(),
+//                                                                                     Vector2I(2048, 1024));
+
+  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+                                                              Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
+
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
 
-- (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
-  //GPU Program Sources
-  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-                                                                 ofType: @"vsh"];
-  if (!vertShaderPathname) {
-    NSLog(@"Can't load Shader.vsh");
-  }
-  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
-                                                             encoding: NSUTF8StringEncoding
-                                                                error: nil] UTF8String]);
-  
-  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
-                                                                 ofType: @"fsh"];
-  if (!fragShaderPathname) {
-    NSLog(@"Can't load Shader.fsh");
-  }
-  
-  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
-                                                               encoding: NSUTF8StringEncoding
-                                                                  error: nil] UTF8String]);
-  
-  return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
-}
+//- (GPUProgramSources) loadDefaultGPUProgramSourcesFromDisk{
+//  //GPU Program Sources
+//  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+//                                                                 ofType: @"vsh"];
+//  if (!vertShaderPathname) {
+//    NSLog(@"Can't load Shader.vsh");
+//  }
+//  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
+//                                                             encoding: NSUTF8StringEncoding
+//                                                                error: nil] UTF8String]);
+//
+//  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: @"Shader"
+//                                                                 ofType: @"fsh"];
+//  if (!fragShaderPathname) {
+//    NSLog(@"Can't load Shader.fsh");
+//  }
+//
+//  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
+//                                                               encoding: NSUTF8StringEncoding
+//                                                                  error: nil] UTF8String]);
+//
+//  return GPUProgramSources("DefaultProgram", vertexSource, fragmentSource);
+//}
 
 - (GPUProgramSources) loadDefaultGPUProgramSourcesWithName: (NSString*) name{
   //GPU Program Sources
@@ -661,7 +569,9 @@ public:
   
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
-  
+
+  builder.getPlanetRendererBuilder()->setShowStatistics(false);
+
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
   
@@ -669,7 +579,7 @@ public:
   
   const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
-  //const Planet* planet = Planet::createFlatEarth();
+//  const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
   
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -699,6 +609,8 @@ public:
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
   
+  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
   
@@ -727,7 +639,9 @@ public:
   //  }
   meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
                              Color::newFromRGBA(1, 1, 0, 1));
-  
+
+  meshRenderer->showNormals(true); //SHOWING NORMALS
+
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
   
@@ -737,8 +651,15 @@ public:
                                                geoTileRasterizer: geoTileRasterizer
                                                           planet: builder.getPlanet()];
   builder.addRenderer(geoRenderer);
-  
-  
+
+  //Showing light directions
+  if (false){
+    CameraFocusSceneLighting* light = new CameraFocusSceneLighting(Color::fromRGBA(0.3, 0.3, 0.3, 1.0),
+                                                                   Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
+    light->setLightDirectionsMeshRenderer(meshRenderer);
+    builder.setSceneLighting(light);
+  }
+
   if (true) { //HUD
     //    HUDRenderer* hudRenderer = new HUDRenderer();
     //
@@ -857,7 +778,9 @@ public:
   
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
-  
+
+  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
   
@@ -1059,10 +982,9 @@ public:
                               pointSize,
                               flatColor,
                               colors.create());
-  
-  meshRenderer->addMesh( mesh );
-
   delete vertices;
+
+  meshRenderer->addMesh( mesh );
 
   delete planet;
 }
@@ -1151,7 +1073,7 @@ public:
   }
   
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
     //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -1163,7 +1085,7 @@ public:
   //  int initialLevel = 1,
   //  int maxLevel = 19,
   //  LayerCondition* condition = NULL
-  if (true) {
+  if (false) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
   }
@@ -1331,6 +1253,63 @@ public:
                                   TimeInterval::fromDays(30),
                                   true);
     layerSet->addLayer(bing);
+
+  }
+
+  if (false) {
+//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
+//                                                  Sector::fullSphere(),
+//                                                  false,
+//                                                  0,
+//                                                  4,
+//                                                  TimeInterval::zero(),
+//                                                  false));
+
+//    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                        URL("http://www.nasa.network.com/wms?", false),
+//                                        WMS_1_1_0,
+//                                        Sector::fullSphere(),
+//                                        "image/jpeg",
+//                                        "EPSG:4326",
+//                                        "",
+//                                        false,
+//                                        //new LevelTileCondition(0, 8),
+//                                        NULL,
+//                                        TimeInterval::fromDays(30),
+//                                        true);
+//    layerSet->addLayer(blueMarble);
+
+
+    // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
+    // [lower=[lat=48.302366666666664, lon=11.65903888888889], upper=[lat=48.40372222222222, lon=11.788533333333335]]
+
+//    AndTileCondition* condition = new AndTileCondition(new LevelTileCondition(0, 500),
+//                                                       new SectorTileCondition(Sector::fromDegrees(39.99854166666677, -72.00145833333336,
+//                                                                                                   42.50145833333343, -68.9985416666667)));
+//
+//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/2-N40-W072_ll_tif.tiles/{level}/{x}/{y}.png",
+//                                                  Sector::fullSphere(),
+//                                                  true,
+//                                                  0,
+//                                                  8,
+//                                                  TimeInterval::zero(),
+//                                                  false,
+//                                                  //new LevelTileCondition(3, 500)
+//                                                  //new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+//                                                  //                                            42.50166666666667, 3.0016666666666665))
+//                                                  condition
+//                                                  ));
+
+    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/_merged/{level}/{x}/{y}.jpg",
+                                                  Sector::fullSphere(),
+                                                  true,
+                                                  0,
+                                                  15,
+                                                  TimeInterval::zero(),
+                                                  false,
+                                                  NULL
+                                                  ));
+
   }
   
   if (false) {
@@ -1547,6 +1526,7 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
+  //const Quality quality = QUALITY_MEDIUM;
   const Quality quality = QUALITY_LOW;
   
   return new TilesRenderParameters(renderDebug,
@@ -1646,12 +1626,22 @@ public:
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
   Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-122),
-                                              8000),
+                                              Angle::fromDegrees(-122 - 2),
+                                              824000 / 2),
                                RELATIVE_TO_GROUND,
-                               URL("file:///g3m-marker.png", false),
-                               50000, 50000,
+                               URL("file:///hud.png", false),
+                               //50000, 50000,
+                               663000, 824000,
                                false);
+//  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                              Angle::fromDegrees(-122 - 2),
+//                                              50000 / 2),
+//                               RELATIVE_TO_GROUND,
+//                               URL("file:///hud2.png", false),
+//                               //50000, 50000,
+//                               50000, 50000,
+//                               false);
+  quad1->setPitch(Angle::fromDegrees(90));
   shapesRenderer->addShape(quad1);
   
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
@@ -2021,16 +2011,17 @@ private:
     
     const int wheelSize = 7;
     _colorIndex = (_colorIndex + 1) % wheelSize;
-    
-    
-    return new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
+
+    BoxShape* box = new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
                         RELATIVE_TO_GROUND,
                         Vector3D(boxExtent, boxExtent, height),
                         1,
                         //Color::newFromRGBA(1, 1, 0, 0.6),
                         Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
                         Color::newFromRGBA(0.2, 0.2, 0, 1));
-    
+
+    //box->setPitch(Angle::fromDegrees(45));
+    return box;
   }
   
   Mark* createMark(const GEO2DPointGeometry* geometry) const {
@@ -2542,7 +2533,6 @@ public:
                                     2,
                                     1,
                                     color);
-
       delete vertices;
 
       return result;
@@ -2649,6 +2639,9 @@ public:
       
       testCanvas(context->getFactory());
 
+      // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
+
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -2838,23 +2831,24 @@ public:
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time),
                                                new MarksTask(_iosWidget, _marksRenderer));
       }
-      
-      class PlaneShapeLoadListener : public ShapeLoadListener {
-      public:
-        void onBeforeAddShape(SGShape* shape) {
-          const double scale = 200;
-          shape->setScale(scale, scale, scale);
-          shape->setPitch(Angle::fromDegrees(90));
-          //shape->setRoll(Angle::fromDegrees(45));
-        }
-        
-        void onAfterAddShape(SGShape* shape) {
-          shape->setAnimatedPosition(TimeInterval::fromSeconds(26),
-                                     Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                                Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
-                                                10000),
-                                     true);
-          
+
+      if (true){
+
+        class PlaneShapeLoadListener : public ShapeLoadListener {
+        public:
+          void onBeforeAddShape(SGShape* shape) {
+            const double scale = 200;
+            shape->setScale(scale, scale, scale);
+            shape->setPitch(Angle::fromDegrees(90));
+            //shape->setRoll(Angle::fromDegrees(45));
+          }
+
+          void onAfterAddShape(SGShape* shape) {
+            shape->setAnimatedPosition(TimeInterval::fromSeconds(26),
+                                       Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                  Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
+                                                  10000),
+                                       true);
           /*
            const double fromDistance = 75000;
            const double toDistance   = 18750;
@@ -2872,16 +2866,18 @@ public:
            */
         }
       };
-      
-      _shapesRenderer->loadBSONSceneJS(URL("file:///A320.bson"),
-                                       URL::FILE_PROTOCOL + "textures-A320/",
-                                       false,
-                                       new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-                                                      Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-                                                      10000),
-                                       ABSOLUTE,
-                                       new PlaneShapeLoadListener(),
-                                       true);
+
+        _shapesRenderer->loadBSONSceneJS(URL("file:///A320.bson"),
+                                         URL::FILE_PROTOCOL + "textures-A320/",
+                                         false,
+                                         new Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+                                                        Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+                                                        10000),
+                                         ABSOLUTE,
+                                         new PlaneShapeLoadListener(),
+                                         true);
+        
+      }
       
       if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
@@ -2938,8 +2934,8 @@ public:
           }
         }
       }
-      
-      if (false) {
+
+      if (true) {
         //      NSString* geojsonName = @"geojson/countries";
         //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -2995,8 +2991,9 @@ public:
           }
         }
       }
-      
-      if (false) {
+
+
+      if (true) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
@@ -3033,7 +3030,6 @@ public:
           }
         }
       }
-      
       if (false) {
         
         Shape* plane = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.127222),
@@ -3060,8 +3056,6 @@ public:
                                    Angle::fromDegrees(720),
                                    Angle::zero());
       }
-      
-      
     }
     
     bool isDone(const G3MContext* context) {

@@ -79,8 +79,10 @@ public:
     _changedListener = changedListener;
   }
 
-  void onChanged() const{
-    _changedListener->changed();
+  void onChanged() const {
+    if (_changedListener != NULL) {
+      _changedListener->changed();
+    }
   }
 
   void setEnabled(bool enabled) {

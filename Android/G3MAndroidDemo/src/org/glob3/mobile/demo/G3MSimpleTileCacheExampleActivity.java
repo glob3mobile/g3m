@@ -72,13 +72,13 @@ public class G3MSimpleTileCacheExampleActivity
 
       final TileVisitorCache_Android tvc = new TileVisitorCache_Android(_widgetAndroid.getG3MContext());
       // Are cached the first two levels of the world
-      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2);
+      _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(tvc, Sector.fullSphere(), 0, 2, false);
       // Sector specified cached at the indicated levels
 
       _widgetAndroid.getG3MWidget().getPlanetRenderer().acceptTileVisitor(
                tvc,
                new Sector(new Geodetic2D(Angle.fromDegrees(39.31), Angle.fromDegrees(-6.72)), new Geodetic2D(
-                        Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14);
+                        Angle.fromDegrees(39.38), Angle.fromDegrees(-6.64))), 2, 14, false);
 
 
       _widgetAndroid.getG3MContext().getLogger().logInfo("Precaching has been completed");

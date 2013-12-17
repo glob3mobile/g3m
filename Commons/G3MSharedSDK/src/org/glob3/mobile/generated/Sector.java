@@ -353,6 +353,26 @@ public class Sector
     return (_lower._latitude._degrees <= -89.9);
   }
 
+  public final Angle getNorth()
+  {
+    return _upper._latitude;
+  }
+
+  public final Angle getSouth()
+  {
+    return _lower._latitude;
+  }
+
+  public final Angle getEast()
+  {
+    return _upper._longitude;
+  }
+
+  public final Angle getWest()
+  {
+    return _lower._longitude;
+  }
+
   public final void rasterize(ICanvas canvas, GEORasterProjection projection)
   {
   

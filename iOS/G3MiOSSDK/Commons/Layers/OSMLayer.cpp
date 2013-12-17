@@ -25,3 +25,7 @@ OSMLayer* OSMLayer::copy() const {
                       _initialLevel,
                       (_condition == NULL) ? NULL : _condition->copy());
 }
+
+RenderState OSMLayer::getRenderState() {
+  return RenderState::ready();
+}
