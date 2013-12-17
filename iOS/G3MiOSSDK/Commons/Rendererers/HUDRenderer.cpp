@@ -132,6 +132,8 @@ void HUDRenderer::render(const G3MRenderContext* rc,
   const int size = _widgets.size();
   for (int i = 0; i < size; i++) {
     HUDWidget* widget = _widgets[i];
-    widget->render(rc, _glState);
+    if (widget->isEnable()) {
+      widget->render(rc, _glState);
+    }
   }
 }
