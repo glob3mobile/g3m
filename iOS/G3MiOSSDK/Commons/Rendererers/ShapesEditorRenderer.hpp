@@ -15,6 +15,7 @@
 
 class GEOTileRasterizer;
 class PointShape;
+class PlanetRenderer;
 
 
 struct RasterShapes {
@@ -32,8 +33,12 @@ class ShapesEditorRenderer: public ShapesRenderer {
 private:
   std::vector<RasterShapes> _rasterShapes;
   std::vector<PointShape*> _vertexShapes;
-    
+  
+  bool _activatedEdition;
+  
 public:
+  int _selectedVertex;
+
   ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
   
   void addShape(Shape* shape);
@@ -42,6 +47,10 @@ public:
   int getRasterShapeId(Shape* shape);
   void selectRasterShape(int id);
   void clearVertexShapes();
+  
+  void activateEdition(PlanetRenderer* planetRenderer);
+  
+  void onTouch(const Geodetic3D& position);
 };
 
 

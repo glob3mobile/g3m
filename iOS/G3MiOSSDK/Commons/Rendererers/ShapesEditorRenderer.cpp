@@ -8,9 +8,29 @@
 
 #include "ShapesEditorRenderer.hpp"
 #include "PointShape.hpp"
+#include "PlanetRenderer.hpp"
+#include "TerrainTouchListener.hpp"
 
 
 
+class MyTerrainTouchListener : public TerrainTouchListener {
+private:
+  ShapesEditorRenderer* _renderer;
+
+public:
+  MyTerrainTouchListener(ShapesEditorRenderer* renderer):
+  _renderer(renderer)
+  {}
+
+  bool onTerrainTouch(const G3MEventContext* ec,
+                      const Vector2I&        pixel,
+                      const Camera*          camera,
+                      const Geodetic3D&      position,
+                      const Tile*            tile) {
+    _renderer->onTouch(position);
+    return true;
+  }
+};
 
 
 class MyShapeSelectionListener : public SimpleShapeSelectionListener {
@@ -27,15 +47,18 @@ public:
   bool touchedShape(Shape* shape) {
     SimpleShapeSelectionListener::touchedShape(shape);
     _selectedShape = getSelectedShape();
+    _renderer->_selectedVertex = -1;
     if (_selectedShape == NULL) {
       _renderer->clearVertexShapes();
       return true;
     }
     int id = _renderer->getRasterShapeId(_selectedShape);
-    if (id >= 0) {
+    if (id>=0) {
       _renderer->selectRasterShape(id);
       return true;
     }
+    
+    _renderer->_selectedVertex = _renderer->getVertexShapeId(_selectedShape);
     return true;
   }
 };
@@ -43,7 +66,9 @@ public:
 
 
 ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer):
-ShapesRenderer(geoTileRasterizer)
+ShapesRenderer(geoTileRasterizer),
+_activatedEdition(false),
+_selectedVertex(-1)
 {
   setShapeTouchListener(new MyShapeSelectionListener(this), true);
 }
@@ -113,3 +138,15 @@ int ShapesEditorRenderer::getRasterShapeId(Shape* shape)
   return pos;
 }
 
+
+void ShapesEditorRenderer::activateEdition(PlanetRenderer* planetRenderer)
+{
+  planetRenderer->addTerrainTouchListener(new MyTerrainTouchListener(this));
+  _activatedEdition = true;
+}
+
+
+void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
+{
+  printf ("----- click on with selectedvertex=%d\n", _selectedVertex);
+}
