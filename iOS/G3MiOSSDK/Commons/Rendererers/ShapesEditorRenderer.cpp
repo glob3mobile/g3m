@@ -59,9 +59,12 @@ public:
       return true;
     }
     
-    _renderer->_selectedVertex = _renderer->getVertexShapeId(_selectedShape);
-    if (_renderer->_selectedVertex<0)
+    id = _renderer->getVertexShapeId(_selectedShape);
+    if (id<0) {
       _renderer->clearVertexShapes();
+    } else {
+      _renderer->_selectedVertex = id;
+    }
     return true;
   }
 };
@@ -168,6 +171,9 @@ void ShapesEditorRenderer::activateEdition(PlanetRenderer* planetRenderer)
 
 void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
 {
+  
+  printf ("---- _selectedVertex = %d   _selectedRasterShape = %d\n", _selectedVertex, _selectedRasterShape);
+  
   if (_selectedVertex<0 || _selectedRasterShape<0) return;
   
   // clean vertex and raster shapes
@@ -212,8 +218,4 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
     ShapesRenderer::addShape(shape);
     _rasterShapes[n]._shape = shape;
   }
-
-
-  printf ("\n-----modifico vertices %d del raster %d\n", _selectedVertex, _selectedRasterShape);
-
 }
