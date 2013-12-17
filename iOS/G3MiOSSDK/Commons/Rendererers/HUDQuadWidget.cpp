@@ -120,8 +120,9 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
     return NULL;
   }
 
-  const int viewportWidth  = rc->getCurrentCamera()->getWidth();
-  const int viewportHeight = rc->getCurrentCamera()->getHeight();
+  const Camera* camera = rc->getCurrentCamera();
+  const int viewportWidth  = camera->getWidth();
+  const int viewportHeight = camera->getHeight();
 
   const Vector3D halfViewportAndPosition(viewportWidth  / 2 - _x,
                                          viewportHeight / 2 - _y,
@@ -131,10 +132,10 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
   const double h = _height;
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  vertices->add(Vector3D(0, h, 0).sub(halfViewportAndPosition));
-  vertices->add(Vector3D(0, 0, 0).sub(halfViewportAndPosition));
-  vertices->add(Vector3D(w, h, 0).sub(halfViewportAndPosition));
-  vertices->add(Vector3D(w, 0, 0).sub(halfViewportAndPosition));
+  vertices->add( Vector3D(0, h, 0).sub(halfViewportAndPosition) );
+  vertices->add( Vector3D(0, 0, 0).sub(halfViewportAndPosition) );
+  vertices->add( Vector3D(w, h, 0).sub(halfViewportAndPosition) );
+  vertices->add( Vector3D(w, 0, 0).sub(halfViewportAndPosition) );
 
   FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
