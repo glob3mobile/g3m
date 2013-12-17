@@ -39,9 +39,7 @@ public class HUDQuadWidget extends HUDWidget
     {
       return null;
     }
-    TextureIDReference texId = null;
-  
-    //  _factory = rc->getFactory();
+    TextureIDReference texId;
   
     texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageURL.getPath(), false);
   
@@ -51,8 +49,9 @@ public class HUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final int viewportWidth = rc.getCurrentCamera().getWidth();
-    final int viewportHeight = rc.getCurrentCamera().getHeight();
+    final Camera camera = rc.getCurrentCamera();
+    final int viewportWidth = camera.getWidth();
+    final int viewportHeight = camera.getHeight();
   
     final Vector3D halfViewportAndPosition = new Vector3D(viewportWidth / 2 - _x, viewportHeight / 2 - _y, 0);
   
@@ -71,14 +70,14 @@ public class HUDQuadWidget extends HUDWidget
     texCoords.add(1, 0);
     texCoords.add(1, 1);
   
-    DirectMesh im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
+    DirectMesh dm = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1);
   
     if (vertices != null)
        vertices.dispose();
   
     TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
   
-    return new TexturedMesh(im, true, texMap, true, true);
+    return new TexturedMesh(dm, true, texMap, true, true);
   }
   private Mesh getMesh(G3MRenderContext rc)
   {
