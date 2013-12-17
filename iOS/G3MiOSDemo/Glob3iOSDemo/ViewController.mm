@@ -130,7 +130,7 @@
 
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
 
-#import <G3MiOSSDK/HUDRenderer.hpp>
+#import <G3MiOSSDK/OLDHUDRenderer.hpp>
 #import <G3MiOSSDK/HUDImageRenderer.hpp>
 
 #import <G3MiOSSDK/CartoCSSParser.hpp>
@@ -141,6 +141,7 @@
 #import <G3MiOSSDK/JSONArray.hpp>
 
 #import <G3MiOSSDK/SceneLighting.hpp>
+#import <G3MiOSSDK/HUDRenderer.hpp>
 
 
 
@@ -663,20 +664,21 @@ public:
   }
 
   if (true) { //HUD
-    //    HUDRenderer* hudRenderer = new HUDRenderer();
-    //
-    //    NSBundle* mainBundle = [NSBundle mainBundle];
-    //    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Icon-72"
-    //                                                                                                   ofType: @"png"]],
-    //                                     NULL);
-    //    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
-    //
-    //    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"horizontal-gears"
-    //                                                                                                    ofType: @"png"]],
-    //                                      NULL);
-    //    hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
-    //
-    //    builder.addRenderer(hudRenderer);
+    HUDRenderer* hudRenderer = new HUDRenderer();
+
+    NSBundle* mainBundle = [NSBundle mainBundle];
+
+    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Compass_rose_browns_00_transparent"
+                                                                                                   ofType:
+                                                                               @"png"]],
+                                     NULL);
+
+//    hudRenderer->addImage("IMAGE", image, Vector2D(300, 300), Vector2D(150, 150));
+#warning Diego at work!
+//    hudRenderer->addImage("IMAGE", image, Vector2D(300, 300), Vector2D(0, 0));
+
+
+    builder.addRenderer(hudRenderer);
 
 
     class TestImageFactory : public HUDImageRenderer::CanvasImageFactory {
