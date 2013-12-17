@@ -13,6 +13,7 @@
 
 #include "URL.hpp"
 class IImage;
+class Mesh;
 
 class HUDQuadWidget : public HUDWidget {
 private:
@@ -21,6 +22,14 @@ private:
   const float _y;
   const float _width;
   const float _height;
+
+  IImage* _image;
+  bool _downloadingImage;
+  std::vector<std::string> _errors;
+
+  Mesh* _mesh;
+  Mesh* createMesh(const G3MRenderContext* rc) const;
+  Mesh* getMesh(const G3MRenderContext* rc);
 
 public:
   HUDQuadWidget(const URL& imageURL,
@@ -32,16 +41,22 @@ public:
   _x(x),
   _y(y),
   _width(width),
-  _height(height)
+  _height(height),
+  _mesh(NULL),
+  _image(NULL),
+  _downloadingImage(false)
   {
   }
 
+  ~HUDQuadWidget();
 
   void initialize(const G3MContext* context);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width,
                              int height);
+
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   void render(const G3MRenderContext* rc,
               GLState* glState);
@@ -52,7 +67,7 @@ public:
 
   /** private, do not call */
   void onImageDownloadError(const URL& url);
-
+  
 };
 
 #endif

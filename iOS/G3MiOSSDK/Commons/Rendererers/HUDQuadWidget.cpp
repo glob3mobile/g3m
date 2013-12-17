@@ -11,6 +11,13 @@
 #include "Context.hpp"
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
+#include "TexturesHandler.hpp"
+#include "Camera.hpp"
+#include "Vector3D.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "DirectMesh.hpp"
+#include "TexturedMesh.hpp"
 
 class HUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
   HUDQuadWidget* _quadWidget;
@@ -44,31 +51,125 @@ public:
 };
 
 
+HUDQuadWidget::~HUDQuadWidget() {
+  delete _image;
+  delete _mesh;
+}
+
 void HUDQuadWidget::initialize(const G3MContext* context) {
-  IDownloader* downloader = context->getDownloader();
-  downloader->requestImage(_imageURL,
-                           1000000, // priority
-                           TimeInterval::fromDays(30),
-                           true, // readExpired
-                           new HUDQuadWidget_ImageDownloadListener(this),
-                           true);
+  if (!_downloadingImage && (_image == NULL)) {
+    _downloadingImage = true;
+    IDownloader* downloader = context->getDownloader();
+    downloader->requestImage(_imageURL,
+                             1000000, // priority
+                             TimeInterval::fromDays(30),
+                             true, // readExpired
+                             new HUDQuadWidget_ImageDownloadListener(this),
+                             true);
+  }
 }
 
 void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
                                           int width,
                                           int height) {
-  aa;
+  delete _mesh;
+  _mesh = NULL;
 }
 
 void HUDQuadWidget::onImageDownload(IImage* image) {
-  aa;
+  _downloadingImage = false;
+  _image = image;
 }
 
 void HUDQuadWidget::onImageDownloadError(const URL& url) {
-  aa;
+  _errors.push_back("Error downloading " + url.getPath());
+}
+
+RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
+  if (!_errors.empty()) {
+    return RenderState::error(_errors);
+  }
+
+  if (_downloadingImage) {
+    return RenderState::busy();
+  }
+
+  return RenderState::ready();
+}
+
+Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
+  if (_image == NULL) {
+    return NULL;
+  }
+#ifdef C_CODE
+  const TextureIDReference* texId = NULL;
+#endif
+#ifdef JAVA_CODE
+  TextureIDReference texId = null;
+#endif
+
+  //  _factory = rc->getFactory();
+
+  texId = rc->getTexturesHandler()->getTextureIDReference(_image,
+                                                          GLFormat::rgba(),
+                                                          _imageURL.getPath(),
+                                                          false);
+
+  if (texId == NULL) {
+    rc->getLogger()->logError("Can't upload texture to GPU");
+    return NULL;
+  }
+
+  const int viewportWidth  = rc->getCurrentCamera()->getWidth();
+  const int viewportHeight = rc->getCurrentCamera()->getHeight();
+
+  const Vector3D halfViewportAndPosition(viewportWidth  / 2 - _x,
+                                         viewportHeight / 2 - _y,
+                                         0);
+
+  const double w = _width;
+  const double h = _height;
+
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  vertices->add(Vector3D(0, h, 0).sub(halfViewportAndPosition));
+  vertices->add(Vector3D(0, 0, 0).sub(halfViewportAndPosition));
+  vertices->add(Vector3D(w, h, 0).sub(halfViewportAndPosition));
+  vertices->add(Vector3D(w, 0, 0).sub(halfViewportAndPosition));
+
+  FloatBufferBuilderFromCartesian2D texCoords;
+  texCoords.add(0, 0);
+  texCoords.add(0, 1);
+  texCoords.add(1, 0);
+  texCoords.add(1, 1);
+
+  DirectMesh *im = new DirectMesh(GLPrimitive::triangleStrip(),
+                                  true,
+                                  vertices->getCenter(),
+                                  vertices->create(),
+                                  1,
+                                  1);
+
+  delete vertices;
+
+  TextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                    texCoords.create(),
+                                                    true,
+                                                    true);
+
+  return new TexturedMesh(im, true, texMap, true, true);
+}
+
+Mesh* HUDQuadWidget::getMesh(const G3MRenderContext* rc) {
+  if (_mesh == NULL) {
+    _mesh = createMesh(rc);
+  }
+  return _mesh;
 }
 
 void HUDQuadWidget::render(const G3MRenderContext* rc,
                            GLState* glState) {
-  aa;
+  Mesh* mesh = getMesh(rc);
+  if (mesh != NULL) {
+    mesh->render(rc, glState);
+  }
 }

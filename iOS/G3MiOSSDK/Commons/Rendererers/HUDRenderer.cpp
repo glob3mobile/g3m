@@ -14,8 +14,10 @@
 #include "GLFeature.hpp"
 #include "GLState.hpp"
 
-HUDRenderer::HUDRenderer() :
-_glState(new GLState())
+HUDRenderer::HUDRenderer(bool readyWhenWidgetsReady) :
+_glState(new GLState()),
+_readyWhenWidgetsReady(readyWhenWidgetsReady),
+_context(NULL)
 {
 }
 
@@ -53,7 +55,48 @@ void HUDRenderer::addWidget(HUDWidget* widget) {
 
 RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
 //#warning todo ask widgets for ready
-  return RenderState::ready();
+//  return RenderState::ready();
+  _errors.clear();
+  bool busyFlag  = false;
+  bool errorFlag = false;
+
+  const int size = _widgets.size();
+  for (int i = 0; i < size; i++) {
+    HUDWidget* widget = _widgets[i];
+    if (widget->isEnable()) {
+      const RenderState childRenderState = widget->getRenderState(rc);
+
+      const RenderState_Type childRenderStateType = childRenderState._type;
+
+      if (childRenderStateType == RENDER_ERROR) {
+        errorFlag = true;
+
+        const std::vector<std::string> childErrors = childRenderState.getErrors();
+#ifdef C_CODE
+        _errors.insert(_errors.end(),
+                       childErrors.begin(),
+                       childErrors.end());
+#endif
+#ifdef JAVA_CODE
+        _errors.addAll(childErrors);
+#endif
+      }
+      else if (childRenderStateType == RENDER_BUSY) {
+        busyFlag = true;
+      }
+    }
+  }
+
+  if (errorFlag) {
+    return RenderState::error(_errors);
+  }
+  else if (busyFlag && _readyWhenWidgetsReady) {
+    return RenderState::busy();
+  }
+  else {
+    return RenderState::ready();
+  }
+
 }
 
 bool HUDRenderer::onTouchEvent(const G3MEventContext* ec,
@@ -93,6 +136,6 @@ void HUDRenderer::render(const G3MRenderContext* rc,
   const int size = _widgets.size();
   for (int i = 0; i < size; i++) {
     HUDWidget* widget = _widgets[i];
-    widget->render(rc, glState);
+    widget->render(rc, _glState);
   }
 }

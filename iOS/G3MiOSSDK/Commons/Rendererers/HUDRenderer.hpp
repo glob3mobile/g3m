@@ -28,8 +28,11 @@ private:
 
   GLState*                _glState;
 
+  std::vector<std::string> _errors;
+  const bool _readyWhenWidgetsReady;
+
 public:
-  HUDRenderer();
+  HUDRenderer(bool readyWhenWidgetsReady=true);
 
   ~HUDRenderer();
 

@@ -14,8 +14,27 @@ class G3MEventContext;
 class G3MRenderContext;
 class GLState;
 
+#include "RenderState.hpp"
+
+
 class HUDWidget {
+private:
+  bool _enable;
+
 public:
+  HUDWidget() :
+  _enable(true)
+  {
+  }
+
+  void setEnable(bool enable) {
+    _enable = enable;
+  }
+
+  bool isEnable() const {
+    return _enable;
+  }
+
   virtual ~HUDWidget() {
 
   }
@@ -25,6 +44,8 @@ public:
   virtual void onResizeViewportEvent(const G3MEventContext* ec,
                                      int width,
                                      int height) = 0;
+
+  virtual RenderState getRenderState(const G3MRenderContext* rc) = 0;
 
   virtual void render(const G3MRenderContext* rc,
                       GLState* glState) = 0;
