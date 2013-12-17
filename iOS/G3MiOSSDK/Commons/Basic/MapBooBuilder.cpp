@@ -1117,9 +1117,9 @@ const URL MapBooBuilder::createApplicationTubeURL() const {
     case VIEW_PRESENTATION:
       view = "presentation";
       break;
-      //    case VIEW_RUNTIME:
-      //      view = "runtime";
-      //      break;
+    case VIEW_EDITION_PREVIEW:
+      view = "edition-preview";
+      break;
     default:
       view = "runtime";
   }
@@ -1565,20 +1565,50 @@ const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
   return s;
 }
 
+void MapBooBuilder::updateVisibleScene() {
+  recreateLayerSet();
+  const MapBoo_Scene* currentScene = getApplicationCurrentScene();
+  
+  if (_g3mWidget != NULL) {
+    _g3mWidget->setBackgroundColor(getCurrentBackgroundColor());
+    
+    // force immediate execution of PeriodicalTasks
+    _g3mWidget->resetPeriodicalTasksTimeouts();
+    
+    if (currentScene != NULL) {
+      const Sector* sector = currentScene->getSector();
+      if (sector == NULL) {
+        _g3mWidget->setShownSector( Sector::fullSphere() );
+      }
+      else {
+        _g3mWidget->setShownSector( *sector );
+      }
+    }
+  }
+}
+
 void MapBooBuilder::setApplicationScene(MapBoo_Scene* scene) {
   const int scenesCount = _applicationScenes.size();
+  const std::string sceneToBeUpdatedID = scene->getId();
   for (int i = 0; i < scenesCount; i++) {
     const std::string sceneID = _applicationScenes[i]->getId();
-    const std::string sceneToBeUpdatedID = scene->getId();
     if (sceneID.compare(sceneToBeUpdatedID) == 0) {
       _applicationScenes[i] = scene;
       
-      if (_applicationListener != NULL) {
-        _applicationListener->onSceneChanged(_context, scene, i);
+      if (i == _applicationCurrentSceneIndex) {
+        updateVisibleScene();
       }
       
-      if (_applicationCurrentSceneIndex == i) {
-        changedCurrentScene();
+      if (_applicationListener != NULL) {
+        _applicationListener->onSceneChanged(_context, scene);
+        
+#ifdef C_CODE
+        _applicationListener->onScenesChanged(_context, _applicationScenes);
+#endif
+#ifdef JAVA_CODE
+        _applicationListener.onScenesChanged(_context,
+                                             new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
+#endif
       }
       
       break;
@@ -1611,8 +1641,6 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
                                          new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
 #endif
   }
-
-  changedCurrentScene();
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {

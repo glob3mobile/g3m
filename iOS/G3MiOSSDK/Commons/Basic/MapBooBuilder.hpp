@@ -78,8 +78,7 @@ public:
                              const std::string& icon) = 0;
   
   virtual void onSceneChanged(const G3MContext* context,
-                              MapBoo_Scene* scene,
-                              int sceneIndex) = 0;
+                              MapBoo_Scene* scene) = 0;
   
   virtual void onScenesChanged(const G3MContext* context,
                                const std::vector<MapBoo_Scene*>& scenes) = 0;
@@ -104,6 +103,7 @@ public:
 
 enum MapBoo_ViewType {
   VIEW_RUNTIME,
+  VIEW_EDITION_PREVIEW,
   VIEW_PRESENTATION
 };
 
@@ -455,6 +455,8 @@ private:
   const MapBoo_CameraPosition* parseCameraPosition(const JSONObject* jsonObject) const;
 
   void changedCurrentScene();
+  
+  void updateVisibleScene();
 
   const std::string getApplicationCurrentSceneCommand() const;
 
