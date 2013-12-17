@@ -81,8 +81,6 @@ public class HUDRenderer extends LeafRenderer
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-  ///#warning todo ask widgets for ready
-  //  return RenderState::ready();
     _errors.clear();
     boolean busyFlag = false;
     boolean errorFlag = false;
@@ -123,7 +121,6 @@ public class HUDRenderer extends LeafRenderer
     {
       return RenderState.ready();
     }
-  
   }
 
   public final void onResume(G3MContext context)
@@ -140,7 +137,6 @@ public class HUDRenderer extends LeafRenderer
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-  ///#warning todo hud events
     return false;
   }
 

@@ -131,13 +131,14 @@ public class HUDQuadWidget extends HUDWidget
     {
       return RenderState.error(_errors);
     }
-  
-    if (_downloadingImage)
+    else if (_downloadingImage)
     {
       return RenderState.busy();
     }
-  
-    return RenderState.ready();
+    else
+    {
+      return RenderState.ready();
+    }
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -160,7 +161,7 @@ public class HUDQuadWidget extends HUDWidget
   /** private, do not call */
   public final void onImageDownloadError(URL url)
   {
-    _errors.add("Error downloading " + url.getPath());
+    _errors.add("HUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
   }
 
 }
