@@ -269,6 +269,9 @@ void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& in
 {
   _origin = origin.asMutableVector3D();
   _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+
+  printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+
   _validSingleDrag = false;
 }
 

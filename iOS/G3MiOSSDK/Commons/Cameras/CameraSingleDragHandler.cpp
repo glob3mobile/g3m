@@ -14,6 +14,8 @@
 #include "GL.hpp"
 #include "IDeviceInfo.hpp"
 
+#include "G3MWidget.hpp"
+
 bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
                                            CameraContext *cameraContext) 
@@ -48,6 +50,10 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
 
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+
+  Vector3D v = eventContext->getWidget()->getScenePositionForPixel(pixel._x, pixel._y);
+  printf("PICASTE EN %f, %f, %f\n ", v._x, v._y, v._z);
+
   eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
                                              _camera0.pixel2Ray(pixel));
 }

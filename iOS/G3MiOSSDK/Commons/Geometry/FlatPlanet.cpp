@@ -115,7 +115,13 @@ MutableMatrix44D FlatPlanet::createGeodeticTransformMatrix(const Geodetic3D& pos
 void FlatPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
 {
   _origin = origin.asMutableVector3D();
+
+  
+
   _initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+
+  printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+
   _lastFinalPoint = _initialPoint;
   _validSingleDrag = false;
 }
