@@ -10,7 +10,6 @@
 
 
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
-
 #import <G3MiOSSDK/VisibleSectorListener.hpp>
 #import <G3MiOSSDK/MarksRenderer.hpp>
 #import <G3MiOSSDK/ShapesRenderer.hpp>
@@ -40,12 +39,10 @@
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
 #import <G3MiOSSDK/LayoutUtils.hpp>
-
 #import <G3MiOSSDK/IJSONParser.hpp>
 #import <G3MiOSSDK/JSONGenerator.hpp>
 #import <G3MiOSSDK/BSONParser.hpp>
 #import <G3MiOSSDK/BSONGenerator.hpp>
-
 #import <G3MiOSSDK/MeshShape.hpp>
 #import <G3MiOSSDK/IShortBuffer.hpp>
 #import <G3MiOSSDK/SimpleCameraConstrainer.hpp>
@@ -66,17 +63,13 @@
 #import <G3MiOSSDK/MapBoxLayer.hpp>
 #import <G3MiOSSDK/GoogleMapsLayer.hpp>
 #import <G3MiOSSDK/BingMapsLayer.hpp>
-
 #import <G3MiOSSDK/BusyQuadRenderer.hpp>
 #import <G3MiOSSDK/Factory_iOS.hpp>
-
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/GEOJSONParser.hpp>
-
 //import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/FloatBufferElevationData.hpp>
-
 #import <G3MiOSSDK/GEOSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DMultiLineStringGeometry.hpp>
 #import <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
@@ -89,7 +82,6 @@
 #import <G3MiOSSDK/GEOShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 #import <G3MiOSSDK/GFont.hpp>
-
 #import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 #import <G3MiOSSDK/RectangleI.hpp>
@@ -101,48 +93,37 @@
 #import <G3MiOSSDK/SGShape.hpp>
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
-
 #import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
-
-#include <G3MiOSSDK/GPUProgramFactory.hpp>
+#import <G3MiOSSDK/GPUProgramFactory.hpp>
 #import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
 #import <G3MiOSSDK/Color.hpp>
-
 #import <G3MiOSSDK/TileRasterizer.hpp>
 #import <G3MiOSSDK/DebugTileRasterizer.hpp>
 #import <G3MiOSSDK/GEOTileRasterizer.hpp>
-
 #import <G3MiOSSDK/GEORasterLineSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
-
 #import <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
 #import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
 #import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
-
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
-
 #import <G3MiOSSDK/GenericQuadTree.hpp>
 #import <G3MiOSSDK/GEOFeatureCollection.hpp>
 #import <G3MiOSSDK/Angle.hpp>
-
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
-
 #import <G3MiOSSDK/OLDHUDRenderer.hpp>
 #import <G3MiOSSDK/HUDImageRenderer.hpp>
-
 #import <G3MiOSSDK/CartoCSSParser.hpp>
-
 #import <G3MiOSSDK/ColumnCanvasElement.hpp>
 #import <G3MiOSSDK/TextCanvasElement.hpp>
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
-
 #import <G3MiOSSDK/SceneLighting.hpp>
-#import <G3MiOSSDK/HUDRenderer.hpp>
 
+#import <G3MiOSSDK/HUDRenderer.hpp>
+#import <G3MiOSSDK/HUDQuadWidget.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -666,17 +647,19 @@ public:
   if (true) { //HUD
     HUDRenderer* hudRenderer = new HUDRenderer();
 
-    NSBundle* mainBundle = [NSBundle mainBundle];
-
-    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Compass_rose_browns_00_transparent"
-                                                                                                   ofType:
-                                                                               @"png"]],
-                                     NULL);
+//    NSBundle* mainBundle = [NSBundle mainBundle];
+//
+//    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Compass_rose_browns_00_transparent"
+//                                                                                                   ofType:
+//                                                                               @"png"]],
+//                                     NULL);
 
 //    hudRenderer->addImage("IMAGE", image, Vector2D(300, 300), Vector2D(150, 150));
 #warning Diego at work!
 //    hudRenderer->addImage("IMAGE", image, Vector2D(300, 300), Vector2D(0, 0));
-
+    hudRenderer->addWidget(new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+                                             0, 0,
+                                             300, 300));
 
     builder.addRenderer(hudRenderer);
 

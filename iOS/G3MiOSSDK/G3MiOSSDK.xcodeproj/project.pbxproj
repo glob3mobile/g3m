@@ -264,6 +264,9 @@
 		CFB57DA61860E4EF00D5B094 /* HUDRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB57DA41860E4EF00D5B094 /* HUDRenderer.cpp */; };
 		CFB57DA71860E55500D5B094 /* HUDRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB57DA51860E4EF00D5B094 /* HUDRenderer.hpp */; };
 		CFB57DAA1860E6D800D5B094 /* HUDWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB57DA81860E6D800D5B094 /* HUDWidget.cpp */; };
+		CFB57DAD1860EB9600D5B094 /* HUDQuadWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB57DAB1860EB9600D5B094 /* HUDQuadWidget.cpp */; };
+		CFB57DAE1860EBD000D5B094 /* HUDWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB57DA91860E6D800D5B094 /* HUDWidget.hpp */; };
+		CFB57DAF1860EBD000D5B094 /* HUDQuadWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB57DAC1860EB9600D5B094 /* HUDQuadWidget.hpp */; };
 		CFB72A3515E65B1F00A5BAF4 /* LayerCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3315E65B1F00A5BAF4 /* LayerCondition.cpp */; };
 		CFB72A3915E65BAC00A5BAF4 /* Layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */; };
 		CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3B15E65DBB00A5BAF4 /* LevelTileCondition.cpp */; };
@@ -634,6 +637,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFB57DAE1860EBD000D5B094 /* HUDWidget.hpp in CopyFiles */,
+				CFB57DAF1860EBD000D5B094 /* HUDQuadWidget.hpp in CopyFiles */,
 				CFB57DA71860E55500D5B094 /* HUDRenderer.hpp in CopyFiles */,
 				CF485F8A18511C460013795B /* AndTileCondition.hpp in CopyFiles */,
 				CFD8E771184FB74800228031 /* SectorTileCondition.hpp in CopyFiles */,
@@ -1328,6 +1333,8 @@
 		CFB57DA51860E4EF00D5B094 /* HUDRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDRenderer.hpp; path = Commons/Rendererers/HUDRenderer.hpp; sourceTree = "<group>"; };
 		CFB57DA81860E6D800D5B094 /* HUDWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDWidget.cpp; path = Commons/Rendererers/HUDWidget.cpp; sourceTree = "<group>"; };
 		CFB57DA91860E6D800D5B094 /* HUDWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDWidget.hpp; path = Commons/Rendererers/HUDWidget.hpp; sourceTree = "<group>"; };
+		CFB57DAB1860EB9600D5B094 /* HUDQuadWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDQuadWidget.cpp; path = Commons/Rendererers/HUDQuadWidget.cpp; sourceTree = "<group>"; };
+		CFB57DAC1860EB9600D5B094 /* HUDQuadWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDQuadWidget.hpp; path = Commons/Rendererers/HUDQuadWidget.hpp; sourceTree = "<group>"; };
 		CFB72A3315E65B1F00A5BAF4 /* LayerCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerCondition.cpp; sourceTree = "<group>"; };
 		CFB72A3415E65B1F00A5BAF4 /* LayerCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LayerCondition.hpp; sourceTree = "<group>"; };
 		CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Layer.cpp; sourceTree = "<group>"; };
@@ -2189,6 +2196,8 @@
 				CFB57DA51860E4EF00D5B094 /* HUDRenderer.hpp */,
 				CFB57DA81860E6D800D5B094 /* HUDWidget.cpp */,
 				CFB57DA91860E6D800D5B094 /* HUDWidget.hpp */,
+				CFB57DAB1860EB9600D5B094 /* HUDQuadWidget.cpp */,
+				CFB57DAC1860EB9600D5B094 /* HUDQuadWidget.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2659,6 +2668,7 @@
 				CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */,
 				CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */,
 				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
+				CFB57DAD1860EB9600D5B094 /* HUDQuadWidget.cpp in Sources */,
 				D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */,
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
