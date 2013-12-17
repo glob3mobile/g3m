@@ -45,7 +45,9 @@ public class TileVisitorCache
       for (int i = 0; i < layers.size(); i++) {
          _numVisits++;
          final Layer layer = layers.get(i);
-         final java.util.ArrayList<Petition> petitions = layer.createTileMapPetitions(null, tile);
+
+         final java.util.ArrayList<Petition> petitions = layer.createTileMapPetitions(null,
+                  layer.getLayerTilesRenderParameters(), tile);
          for (int j = 0; j < petitions.size(); j++) {
             _numPetitions++;
 
@@ -58,8 +60,8 @@ public class TileVisitorCache
             final long requestId = downloader.requestImage(new URL(petition.getURL()), 1, petition.getTimeToCache(), true,
                      listener, true);
             if (requestId == -1) {
-               _context.getLogger().logInfo("This request has been cached (z: %d, x: %d, y: %d)", tile._level, tile._column,
-                        tile._row);
+               _context.getLogger().logInfo("This request has been cached early (z: %d, x: %d, y: %d)", tile._level,
+                        tile._column, tile._row);
             }
             else {
                _context.getLogger().logInfo("Petition %d has been request (z: %d, x: %d, y: %d)", requestId, tile._level,

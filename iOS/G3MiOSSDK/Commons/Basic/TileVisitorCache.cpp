@@ -17,7 +17,7 @@ void TileVisitorCache::visitTile(std::vector<Layer*>& layers,
   for (int i = 0; i < layers.size(); i++) {
     _numVisits++;
     const Layer* layer = layers[i];
-    std::vector<Petition*> petitions = layer->createTileMapPetitions(NULL, tile);
+    std::vector<Petition*> petitions = layer->createTileMapPetitions(NULL, layer->getLayerTilesRenderParameters(), tile);
     for (int j = 0; j < petitions.size(); j++) {
       _numPetitions++;
 
