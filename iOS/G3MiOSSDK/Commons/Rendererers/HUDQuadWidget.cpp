@@ -102,13 +102,11 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
     return NULL;
   }
 #ifdef C_CODE
-  const TextureIDReference* texId = NULL;
+  const TextureIDReference* texId;
 #endif
 #ifdef JAVA_CODE
-  TextureIDReference texId = null;
+  TextureIDReference texId;
 #endif
-
-  //  _factory = rc->getFactory();
 
   texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                           GLFormat::rgba(),
@@ -143,7 +141,7 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
   texCoords.add(1, 0);
   texCoords.add(1, 1);
 
-  DirectMesh *im = new DirectMesh(GLPrimitive::triangleStrip(),
+  DirectMesh* dm = new DirectMesh(GLPrimitive::triangleStrip(),
                                   true,
                                   vertices->getCenter(),
                                   vertices->create(),
@@ -157,7 +155,7 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
                                                     true,
                                                     true);
 
-  return new TexturedMesh(im, true, texMap, true, true);
+  return new TexturedMesh(dm, true, texMap, true, true);
 }
 
 Mesh* HUDQuadWidget::getMesh(const G3MRenderContext* rc) {
