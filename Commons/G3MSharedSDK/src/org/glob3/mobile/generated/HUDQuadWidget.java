@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 
 public class HUDQuadWidget extends HUDWidget
 {
-  private final URL _imageURL = new URL();
+  private final URL _imageURL;
   private final float _x;
   private final float _y;
   private final float _width;
@@ -91,7 +91,7 @@ public class HUDQuadWidget extends HUDWidget
 
   public HUDQuadWidget(URL imageURL, float x, float y, float width, float height)
   {
-     _imageURL = new URL(imageURL);
+     _imageURL = imageURL;
      _x = x;
      _y = y;
      _width = width;
