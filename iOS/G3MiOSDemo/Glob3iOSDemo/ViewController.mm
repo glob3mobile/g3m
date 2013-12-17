@@ -1106,7 +1106,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
     //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -1555,11 +1555,12 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  const Quality quality = QUALITY_MEDIUM;
+  //const Quality quality = QUALITY_MEDIUM;
+  const Quality quality = QUALITY_LOW;
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
@@ -1658,12 +1659,22 @@ public:
 {
   //ShapesEditorRenderer* shapesRenderer = new ShapesEditorRenderer(geoTileRasterizer);
 /*  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-122),
-                                              8000),
+                                              Angle::fromDegrees(-122 - 2),
+                                              824000 / 2),
                                RELATIVE_TO_GROUND,
-                               URL("file:///g3m-marker.png", false),
-                               50000, 50000,
+                               URL("file:///hud.png", false),
+                               //50000, 50000,
+                               663000, 824000,
                                false);
+//  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                              Angle::fromDegrees(-122 - 2),
+//                                              50000 / 2),
+//                               RELATIVE_TO_GROUND,
+//                               URL("file:///hud2.png", false),
+//                               //50000, 50000,
+//                               50000, 50000,
+//                               false);
+  quad1->setPitch(Angle::fromDegrees(90));
   shapesRenderer->addShape(quad1);
 
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
