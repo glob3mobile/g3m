@@ -11,8 +11,8 @@ import javax.swing.JFileChooser;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class Main {
-	
-	
+
+
 
 	static String _classSource = "//\n" + "//  BasicShadersGL2.hpp\n"
 			+ "//  G3MiOSSDK\n" + "//\n"
@@ -33,7 +33,7 @@ public class Main {
 
 	static String _addProgramSource = 
 			"    GPUProgramSources sourcesShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n"
-			+ "    this->add(sourcesShader_Name);\n\n";
+					+ "    this->add(sourcesShader_Name);\n\n";
 
 	static class Shader {
 		public String _name;
@@ -145,12 +145,24 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Choose location of G3MiOSSDK project");
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.showOpenDialog(null);
-		String pwd = chooser.getSelectedFile().getAbsolutePath();
-		
+		String pwd = "";
+
+		File pwdFile = new File(System.getProperty("user.dir"));
+
+		pwdFile = pwdFile.getParentFile().getParentFile();
+
+		pwdFile = new File(pwdFile, "iOS/G3MiOSSDK");
+		if (pwdFile.exists() && pwdFile.isDirectory()){
+			pwd = pwdFile.getAbsolutePath();
+		} else{
+			//GETTING PWD
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Choose location of G3MiOSSDK project");
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			chooser.showOpenDialog(null);
+			pwd = chooser.getSelectedFile().getAbsolutePath();
+		}
+
 		String sdkProjectPath = pwd;
 		String shadersFolder = sdkProjectPath + "/Resources/Shaders";
 		String filePath = sdkProjectPath + "/Commons/Basic/BasicShadersGL2.hpp";
@@ -170,7 +182,7 @@ public class Main {
 			source = source.replace("Shader_Fragment",
 					processSourceString(shader._fragment));
 
-			System.out.println(source);
+			//System.out.println(source);
 
 			addingShadersString += source;
 
@@ -189,12 +201,12 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 		//THIS SAVES TO CLIPBOARD
-//		StringSelection stringSelection = new StringSelection(classSource);
-//		Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
-//		clpbrd.setContents (stringSelection, null);
+		//		StringSelection stringSelection = new StringSelection(classSource);
+		//		Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
+		//		clpbrd.setContents (stringSelection, null);
 	}
 
 }

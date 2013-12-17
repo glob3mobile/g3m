@@ -275,8 +275,13 @@ public:
 "varying mediump vec2 TextureCoordOut; \n " + 
 "varying mediump vec4 VertexColor; \n " + 
 "uniform sampler2D Sampler; \n " + 
+"#define FOG_THRESHOLD 0.999 \n " + 
 "void main() { \n " + 
 "gl_FragColor = texture2D(Sampler, TextureCoordOut); \n " + 
+"if (gl_FragCoord.z > FOG_THRESHOLD){ \n " + 
+"highp float fog = 1.0 - gl_FragCoord.z / (1.0 - FOG_THRESHOLD); \n " + 
+"gl_FragColor *= fog; \n " + 
+"} \n " + 
 "} \n ");
     this->add(sourcesTexturedMesh);
 
