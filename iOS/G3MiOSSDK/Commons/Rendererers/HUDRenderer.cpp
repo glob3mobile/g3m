@@ -54,8 +54,6 @@ void HUDRenderer::addWidget(HUDWidget* widget) {
 }
 
 RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
-//#warning todo ask widgets for ready
-//  return RenderState::ready();
   _errors.clear();
   bool busyFlag  = false;
   bool errorFlag = false;
@@ -96,12 +94,10 @@ RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
   else {
     return RenderState::ready();
   }
-
 }
 
 bool HUDRenderer::onTouchEvent(const G3MEventContext* ec,
                                const TouchEvent* touchEvent) {
-//#warning todo hud events
   return false;
 }
 

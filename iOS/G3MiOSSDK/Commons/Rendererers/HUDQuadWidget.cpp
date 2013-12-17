@@ -82,19 +82,19 @@ void HUDQuadWidget::onImageDownload(IImage* image) {
 }
 
 void HUDQuadWidget::onImageDownloadError(const URL& url) {
-  _errors.push_back("Error downloading " + url.getPath());
+  _errors.push_back("HUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
 }
 
 RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
   if (!_errors.empty()) {
     return RenderState::error(_errors);
   }
-
-  if (_downloadingImage) {
+  else if (_downloadingImage) {
     return RenderState::busy();
   }
-
-  return RenderState::ready();
+  else {
+    return RenderState::ready();
+  }
 }
 
 Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
