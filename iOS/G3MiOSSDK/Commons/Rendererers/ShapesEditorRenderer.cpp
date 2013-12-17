@@ -10,8 +10,8 @@
 #include "PointShape.hpp"
 #include "PlanetRenderer.hpp"
 #include "TerrainTouchListener.hpp"
-
-
+#include "RasterPolygonShape.hpp"
+#include "RasterLineShape.hpp"
 
 class MyTerrainTouchListener : public TerrainTouchListener {
 private:
@@ -60,6 +60,8 @@ public:
     }
     
     _renderer->_selectedVertex = _renderer->getVertexShapeId(_selectedShape);
+    if (_renderer->_selectedVertex<0)
+      _renderer->clearVertexShapes();
     return true;
   }
 };
@@ -84,6 +86,20 @@ void ShapesEditorRenderer::clearVertexShapes()
   }
   _vertexShapes.clear();
 }
+
+
+void ShapesEditorRenderer::removeRasterShapes()
+{
+  // remove raster shapes from shapeRenderer
+  int size = _rasterShapes.size();
+  for (int n=0; n<size; n++) {
+    removeShape(_rasterShapes[n]._shape);
+  }
+  
+  // remove symbols from geotilerasterizer
+  ShapesRenderer::_geoTileRasterizer->clear();
+}
+
 
 void ShapesEditorRenderer::selectRasterShape(int id)
 {
@@ -152,17 +168,52 @@ void ShapesEditorRenderer::activateEdition(PlanetRenderer* planetRenderer)
 
 void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
 {
-  if (_selectedVertex < 0) return;
+  if (_selectedVertex<0 || _selectedRasterShape<0) return;
   
-  // modify vertex coordinates
- /* std::vector<Geodetic2D*> coordinates = _rasterShapes[id]._coordinates;
-  clearVertexShapes();*/
-/*  Geodetic3D* newPosition = new Geodetic3D(position.asGeodetic2D(), 1);
-  PointShape* vertex = new PointShape(newPosition,
-                                      RELATIVE_TO_GROUND,
-                                      20,
-                                      Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
-  addShape(vertex);*/
+  // clean vertex and raster shapes
+  removeRasterShapes();
+
+  // modify vertex
+  delete _rasterShapes[_selectedRasterShape]._coordinates[_selectedVertex];
+  _rasterShapes[_selectedRasterShape]._coordinates[_selectedVertex] = new Geodetic2D(position.asGeodetic2D());
+  
+  // create new points for vertex render
+  clearVertexShapes();
+  std::vector<Geodetic2D*> coordinates = _rasterShapes[_selectedRasterShape]._coordinates;
+  for (int n=0; n<coordinates.size(); n++) {
+    Geodetic3D* position = new Geodetic3D(*coordinates[n], 1);
+    PointShape* vertex = new PointShape(position,
+                                        RELATIVE_TO_GROUND,
+                                        20,
+                                        Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
+    addShape(vertex);
+    _vertexShapes.push_back(vertex);
+  }
+  
+  // create again new raster shapes
+  Shape *shape;
+  for (int n=0; n<_rasterShapes.size(); n++) {
+    std::vector<Geodetic2D*> coordinates = _rasterShapes[n]._coordinates;
+    if (coordinates.size() > 2) {
+      // it's a polygon
+      std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
+      for (int n=0; n<coordinates.size(); n++)
+        vertices->push_back(new Geodetic2D(*coordinates[n]));
+      shape = new RasterPolygonShape(vertices,
+                                           2,
+                                           Color::green(),
+                                           Color::fromRGBA(1.0, 1.0, 1, 0.6));
+    } else {
+      shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
+                                              new Geodetic2D(*coordinates[1]),
+                                              2,
+                                              Color::fromRGBA(0, 0, 1, 1));
+    }
+    ShapesRenderer::addShape(shape);
+    _rasterShapes[n]._shape = shape;
+  }
+
+
   printf ("\n-----modifico vertices %d del raster %d\n", _selectedVertex, _selectedRasterShape);
 
 }

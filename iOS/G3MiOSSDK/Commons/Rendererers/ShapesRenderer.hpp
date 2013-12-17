@@ -156,8 +156,6 @@ private:
 
   std::vector<LoadQueueItem*> _loadQueue;
   
-  GEOTileRasterizer* _geoTileRasterizer;
-
   void drainLoadQueue();
 
 
@@ -172,6 +170,11 @@ private:
                      ShapeLoadListener*  listener,
                      bool                deleteListener,
                      bool                isBSON);
+  
+  
+protected:
+  GEOTileRasterizer* _geoTileRasterizer;
+
 
 public:
 

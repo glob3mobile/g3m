@@ -48,6 +48,7 @@ public:
   int getRasterShapeId(Shape* shape);
   void selectRasterShape(int id);
   void clearVertexShapes();
+  void removeRasterShapes();
   
   void activateEdition(PlanetRenderer* planetRenderer);
   
