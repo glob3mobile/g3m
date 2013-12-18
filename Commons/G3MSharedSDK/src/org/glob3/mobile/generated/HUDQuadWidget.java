@@ -40,12 +40,12 @@ public class HUDQuadWidget extends HUDWidget
       return null;
     }
   
-  ///#ifdef C_CODE
-  //  const TextureIDReference* texId;
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  TextureIDReference texId;
-  ///#endif
+    ///#ifdef C_CODE
+    //  const TextureIDReference* texId;
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //  TextureIDReference texId;
+    ///#endif
   
     final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageURL.getPath(), false);
   
@@ -92,6 +92,15 @@ public class HUDQuadWidget extends HUDWidget
       _mesh = createMesh(rc);
     }
     return _mesh;
+  }
+
+  protected final void rawRender(G3MRenderContext rc, GLState glState)
+  {
+    Mesh mesh = getMesh(rc);
+    if (mesh != null)
+    {
+      mesh.render(rc, glState);
+    }
   }
 
   public HUDQuadWidget(URL imageURL, float x, float y, float width, float height)
@@ -146,16 +155,6 @@ public class HUDQuadWidget extends HUDWidget
       return RenderState.ready();
     }
   }
-
-  public final void render(G3MRenderContext rc, GLState glState)
-  {
-    Mesh mesh = getMesh(rc);
-    if (mesh != null)
-    {
-      mesh.render(rc, glState);
-    }
-  }
-
 
   /** private, do not call */
   public final void onImageDownload(IImage image)
