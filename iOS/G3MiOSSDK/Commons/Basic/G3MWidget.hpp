@@ -108,6 +108,7 @@ public:
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
                            ErrorRenderer*                   errorRenderer,
+                           Renderer*                        hudRenderer,
                            const Color&                     backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
@@ -204,6 +205,10 @@ public:
   CameraRenderer* getCameraRenderer() const {
     return _cameraRenderer;
   }
+
+  Renderer* getHUDRenderer() const {
+    return _hudRenderer;
+  }
   
   const G3MContext* getG3MContext() const {
     return _context;
@@ -233,6 +238,7 @@ private:
   Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
   ErrorRenderer*      _errorRenderer;
+  Renderer*           _hudRenderer;
 //  bool                _mainRendererReady;
   RenderState*        _mainRendererState;
   Renderer*           _selectedRenderer;
@@ -300,6 +306,7 @@ private:
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
             ErrorRenderer*                   errorRenderer,
+            Renderer*                        hudRenderer,
             const Color&                     backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,

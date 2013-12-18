@@ -47,6 +47,7 @@ _backgroundColor(NULL),
 _planetRendererBuilder(NULL),
 _busyRenderer(NULL),
 _errorRenderer(NULL),
+_hudRenderer(NULL),
 _renderers(NULL),
 _initializationTask(NULL),
 _autoDeleteInitializationTask(true),
@@ -81,6 +82,7 @@ IG3MBuilder::~IG3MBuilder() {
   }
   delete _busyRenderer;
   delete _errorRenderer;
+  delete _hudRenderer;
   delete _backgroundColor;
   delete _initializationTask;
   if (_periodicalTasks) {
@@ -101,7 +103,7 @@ IG3MBuilder::~IG3MBuilder() {
  */
 GL* IG3MBuilder::getGL() {
   if (!_gl) {
-    ILogger::instance()->logError("Logic Error: _gl not initialized");
+    ILogger::instance()->logError("LOGIC ERROR: gl not initialized");
   }
   
   return _gl;
@@ -217,6 +219,10 @@ ErrorRenderer* IG3MBuilder::getErrorRenderer() {
   return _errorRenderer;
 }
 
+Renderer* IG3MBuilder::getHUDRenderer() const {
+  return _hudRenderer;
+}
+
 /**
  * Returns the _backgroundColor. If it does not exist, it will be default initializated.
  *
@@ -321,11 +327,11 @@ WidgetUserData* IG3MBuilder::getUserData() {
  */
 void IG3MBuilder::setGL(GL *gl) {
   if (_gl) {
-    ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: gl already initialized");
     return;
   }
   if (!gl) {
-    ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: gl cannot be NULL");
     return;
   }
   _gl = gl;
@@ -338,7 +344,7 @@ void IG3MBuilder::setGL(GL *gl) {
  */
 void IG3MBuilder::setStorage(IStorage *storage) {
   if (_storage) {
-    ILogger::instance()->logError("LOGIC ERROR: _storage already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: storage already initialized");
     return;
   }
   _storage = storage;
@@ -351,11 +357,11 @@ void IG3MBuilder::setStorage(IStorage *storage) {
  */
 void IG3MBuilder::setDownloader(IDownloader *downloader) {
   if (_downloader) {
-    ILogger::instance()->logError("LOGIC ERROR: _downloader already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: downloader already initialized");
     return;
   }
   if (!downloader) {
-    ILogger::instance()->logError("LOGIC ERROR: _downloader cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: downloader cannot be NULL");
     return;
   }
   _downloader = downloader;
@@ -368,11 +374,11 @@ void IG3MBuilder::setDownloader(IDownloader *downloader) {
  */
 void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
   if (_threadUtils) {
-    ILogger::instance()->logError("LOGIC ERROR: _threadUtils already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: threadUtils already initialized");
     return;
   }
   if (!threadUtils) {
-    ILogger::instance()->logError("LOGIC ERROR: _threadUtils cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: threadUtils cannot be NULL");
     return;
   }
   _threadUtils = threadUtils;
@@ -385,7 +391,7 @@ void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
  */
 void IG3MBuilder::setCameraActivityListener(ICameraActivityListener *cameraActivityListener) {
   if (_cameraActivityListener) {
-    ILogger::instance()->logError("LOGIC ERROR: _cameraActivityListener already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: cameraActivityListener already initialized");
     return;
   }
   if (!cameraActivityListener) {
@@ -403,11 +409,11 @@ void IG3MBuilder::setCameraActivityListener(ICameraActivityListener *cameraActiv
  */
 void IG3MBuilder::setPlanet(const Planet *planet) {
   if (_planet) {
-    ILogger::instance()->logError("LOGIC ERROR: _planet already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: planet already initialized");
     return;
   }
   if (!planet) {
-    ILogger::instance()->logError("LOGIC ERROR: _planet cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: planet cannot be NULL");
     return;
   }
   _planet = planet;
@@ -457,11 +463,11 @@ void IG3MBuilder::setCameraConstrainsts(std::vector<ICameraConstrainer*> cameraC
  */
 void IG3MBuilder::setCameraRenderer(CameraRenderer *cameraRenderer) {
   if (_cameraRenderer) {
-    ILogger::instance()->logError("LOGIC ERROR: _cameraRenderer already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: cameraRenderer already initialized");
     return;
   }
   if (!cameraRenderer) {
-    ILogger::instance()->logError("LOGIC ERROR: _cameraRenderer cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: cameraRenderer cannot be NULL");
     return;
   }
   _cameraRenderer = cameraRenderer;
@@ -474,11 +480,11 @@ void IG3MBuilder::setCameraRenderer(CameraRenderer *cameraRenderer) {
  */
 void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
   if (_backgroundColor) {
-    ILogger::instance()->logError("LOGIC ERROR: _backgroundColor already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: backgroundColor already initialized");
     return;
   }
   if (!backgroundColor) {
-    ILogger::instance()->logError("LOGIC ERROR: _backgroundColor cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: backgroundColor cannot be NULL");
     return;
   }
   _backgroundColor = backgroundColor;
@@ -491,11 +497,11 @@ void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
  */
 void IG3MBuilder::setBusyRenderer(Renderer* busyRenderer) {
   if (_busyRenderer) {
-    ILogger::instance()->logError("LOGIC ERROR: _busyRenderer already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: busyRenderer already initialized");
     return;
   }
   if (!busyRenderer) {
-    ILogger::instance()->logError("LOGIC ERROR: _busyRenderer cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: busyRenderer cannot be NULL");
     return;
   }
   _busyRenderer = busyRenderer;
@@ -503,14 +509,26 @@ void IG3MBuilder::setBusyRenderer(Renderer* busyRenderer) {
 
 void IG3MBuilder::setErrorRenderer(ErrorRenderer* errorRenderer) {
   if (_errorRenderer) {
-    ILogger::instance()->logError("LOGIC ERROR: _errorRenderer already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: errorRenderer already initialized");
     return;
   }
   if (!errorRenderer) {
-    ILogger::instance()->logError("LOGIC ERROR: _errorRenderer cannot be NULL");
+    ILogger::instance()->logError("LOGIC ERROR: errorRenderer cannot be NULL");
     return;
   }
   _errorRenderer = errorRenderer;
+}
+
+void IG3MBuilder::setHUDRenderer(Renderer* hudRenderer) {
+  if (_hudRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: hudRenderer already initialized");
+    return;
+  }
+  if (!hudRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: hudRenderer cannot be NULL");
+    return;
+  }
+  _hudRenderer = hudRenderer;
 }
 
 /**
@@ -561,7 +579,7 @@ void IG3MBuilder::setRenderers(std::vector<Renderer*> renderers) {
 void IG3MBuilder::pvtSetInitializationTask(GInitializationTask *initializationTask,
                                            const bool autoDeleteInitializationTask) {
   if (_initializationTask) {
-    ILogger::instance()->logError("LOGIC ERROR: _initializationTask already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: initializationTask already initialized");
     return;
   }
   if (!initializationTask) {
@@ -633,7 +651,7 @@ void IG3MBuilder::setLogDownloaderStatistics(const bool logDownloaderStatistics)
  */
 void IG3MBuilder::setUserData(WidgetUserData *userData) {
   if (_userData) {
-    ILogger::instance()->logError("LOGIC ERROR: _userData already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: userData already initialized");
     return;
   }
   if (!userData) {
@@ -675,25 +693,8 @@ G3MWidget* IG3MBuilder::create() {
   }
 
   const Geodetic3D initialCameraPosition = getPlanet()->getDefaultCameraPosition(shownSector);
-//  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
-
-  //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
-//  if (!shownSector.isEquals(Sector::fullSphere())) {
-//    const double margin = 0.2;
-//    const double height = 1e5;
-//
-//    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
-//    const double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
-//
-//    Sector sector = Sector::fromDegrees(shownSector._lower._latitude._degrees - latMargin,
-//                                        shownSector._lower._longitude._degrees - lonMargin,
-//                                        shownSector._upper._latitude._degrees + latMargin,
-//                                        shownSector._upper._longitude._degrees + lonMargin);
-//    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
-    
-    addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
-                                                            initialCameraPosition._height * 1.2));
-//  }
+  addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer->getPlanetRenderer(),
+                                                          initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
@@ -708,6 +709,7 @@ G3MWidget* IG3MBuilder::create() {
                                             mainRenderer,
                                             getBusyRenderer(),
                                             getErrorRenderer(),
+                                            getHUDRenderer(),
                                             *getBackgroundColor(),
                                             getLogFPS(),
                                             getLogDownloaderStatistics(),
@@ -733,6 +735,7 @@ G3MWidget* IG3MBuilder::create() {
   _renderers = NULL;
   _busyRenderer = NULL;
   _errorRenderer = NULL;
+  _hudRenderer = NULL;
   _initializationTask = NULL;
   delete _periodicalTasks;
   _periodicalTasks = NULL;
@@ -819,7 +822,7 @@ SceneLighting* IG3MBuilder::getSceneLighting() {
 
 void IG3MBuilder::setShownSector(const Sector& sector) {
   if (_shownSector != NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _shownSector already initialized");
+    ILogger::instance()->logError("LOGIC ERROR: shownSector already initialized");
     return;
   }
   _shownSector = new Sector(sector);

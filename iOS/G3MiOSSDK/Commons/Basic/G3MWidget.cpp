@@ -59,25 +59,26 @@ void G3MWidget::initSingletons(ILogger*            logger,
   }
 }
 
-G3MWidget::G3MWidget(GL*                              gl,
-                     IStorage*                        storage,
-                     IDownloader*                     downloader,
-                     IThreadUtils*                    threadUtils,
-                     ICameraActivityListener*         cameraActivityListener,
-                     const Planet*                    planet,
-                     std::vector<ICameraConstrainer*> cameraConstrainers,
-                     CameraRenderer*                  cameraRenderer,
-                     Renderer*                        mainRenderer,
-                     Renderer*                        busyRenderer,
-                     ErrorRenderer*                   errorRenderer,
-                     const Color&                     backgroundColor,
-                     const bool                       logFPS,
-                     const bool                       logDownloaderStatistics,
-                     GInitializationTask*             initializationTask,
-                     bool                             autoDeleteInitializationTask,
-                     std::vector<PeriodicalTask*>     periodicalTasks,
-                     GPUProgramManager*               gpuProgramManager,
-                     SceneLighting*                   sceneLighting,
+G3MWidget::G3MWidget(GL*                                  gl,
+                     IStorage*                            storage,
+                     IDownloader*                         downloader,
+                     IThreadUtils*                        threadUtils,
+                     ICameraActivityListener*             cameraActivityListener,
+                     const Planet*                        planet,
+                     std::vector<ICameraConstrainer*>     cameraConstrainers,
+                     CameraRenderer*                      cameraRenderer,
+                     Renderer*                            mainRenderer,
+                     Renderer*                            busyRenderer,
+                     ErrorRenderer*                       errorRenderer,
+                     Renderer*                            hudRenderer,
+                     const Color&                         backgroundColor,
+                     const bool                           logFPS,
+                     const bool                           logDownloaderStatistics,
+                     GInitializationTask*                 initializationTask,
+                     bool                                 autoDeleteInitializationTask,
+                     std::vector<PeriodicalTask*>         periodicalTasks,
+                     GPUProgramManager*                   gpuProgramManager,
+                     SceneLighting*                       sceneLighting,
                      const InitialCameraPositionProvider* initialCameraPositionProvider):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
@@ -93,6 +94,7 @@ _cameraRenderer(cameraRenderer),
 _mainRenderer(mainRenderer),
 _busyRenderer(busyRenderer),
 _errorRenderer(errorRenderer),
+_hudRenderer(hudRenderer),
 _width(1),
 _height(1),
 _currentCamera(new Camera(_width, _height)),
@@ -139,6 +141,9 @@ _nFramesBeetweenProgramsCleanUp(500)
   _mainRenderer->initialize(_context);
   _busyRenderer->initialize(_context);
   _errorRenderer->initialize(_context);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->initialize(_context);
+  }
   _currentCamera->initialize(_context);
   _nextCamera->initialize(_context);
 
@@ -192,6 +197,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              Renderer*                        mainRenderer,
                              Renderer*                        busyRenderer,
                              ErrorRenderer*                   errorRenderer,
+                             Renderer*                        hudRenderer,
                              const Color&                     backgroundColor,
                              const bool                       logFPS,
                              const bool                       logDownloaderStatistics,
@@ -213,6 +219,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        mainRenderer,
                        busyRenderer,
                        errorRenderer,
+                       hudRenderer,
                        backgroundColor,
                        logFPS,
                        logDownloaderStatistics,
@@ -235,6 +242,7 @@ G3MWidget::~G3MWidget() {
   delete _mainRenderer;
   delete _busyRenderer;
   delete _errorRenderer;
+  delete _hudRenderer;
   delete _gl;
   delete _effectsScheduler;
   delete _currentCamera;
@@ -275,7 +283,14 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   switch (renderStateType) {
     case RENDER_READY: {
       bool handled = false;
-      if (_mainRenderer->isEnable()) {
+
+      if (_hudRenderer != NULL) {
+        if (_hudRenderer->isEnable()) {
+          handled = _hudRenderer->onTouchEvent(&ec, touchEvent);
+        }
+      }
+
+      if (!handled && _mainRenderer->isEnable()) {
         handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
       }
 
@@ -366,6 +381,9 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   _mainRenderer->onResizeViewportEvent(&ec, width, height);
   _busyRenderer->onResizeViewportEvent(&ec, width, height);
   _errorRenderer->onResizeViewportEvent(&ec, width, height);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->onResizeViewportEvent(&ec, width, height);
+  }
 }
 
 
@@ -506,6 +524,12 @@ void G3MWidget::render(int width, int height) {
       OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
       orderedRenderable->render(_renderContext);
       delete orderedRenderable;
+    }
+  }
+
+  if (_hudRenderer != NULL) {
+    if (_hudRenderer->isEnable()) {
+      _hudRenderer->render(_renderContext, _rootState);
     }
   }
 
