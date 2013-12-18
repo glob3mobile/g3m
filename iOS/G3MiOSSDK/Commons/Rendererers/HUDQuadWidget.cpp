@@ -101,17 +101,18 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
   if (_image == NULL) {
     return NULL;
   }
-#ifdef C_CODE
-  const TextureIDReference* texId;
-#endif
-#ifdef JAVA_CODE
-  TextureIDReference texId;
-#endif
 
-  texId = rc->getTexturesHandler()->getTextureIDReference(_image,
-                                                          GLFormat::rgba(),
-                                                          _imageURL.getPath(),
-                                                          false);
+//#ifdef C_CODE
+//  const TextureIDReference* texId;
+//#endif
+//#ifdef JAVA_CODE
+//  TextureIDReference texId;
+//#endif
+
+  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
+                                                                                    GLFormat::rgba(),
+                                                                                    _imageURL.getPath(),
+                                                                                    false);
 
   if (texId == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
