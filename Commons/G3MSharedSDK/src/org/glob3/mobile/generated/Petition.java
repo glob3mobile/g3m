@@ -29,7 +29,7 @@ public class Petition
 {
   private final Sector _sector;
   private IImage _image;
-  private final double _layerTransparency;
+  private final float _layerTransparency;
 
   final private URL _url; //Conversor creates class "Url"
 
@@ -45,7 +45,7 @@ public class Petition
 //  void operator =(Petition that);
 
 
-  public Petition(Sector sector, URL url, TimeInterval timeToCache, boolean readExpired, boolean isTransparent, double layerTransparency)
+  public Petition(Sector sector, URL url, TimeInterval timeToCache, boolean readExpired, boolean isTransparent, float layerTransparency)
   {
      _sector = new Sector(sector);
      _url = url;
@@ -134,7 +134,7 @@ public class Petition
     return s;
   }
 
-  public final double getLayerTransparency()
+  public final float getLayerTransparency()
   {
     return _layerTransparency;
   }

@@ -88,7 +88,7 @@ public class IImageUtils
   }
 
 
-  public static void combine(int width, int height, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, java.util.ArrayList<Double> transparencies, IImageListener listener, boolean autodelete)
+  public static void combine(int width, int height, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, java.util.ArrayList<Float> transparencies, IImageListener listener, boolean autodelete)
   {
   
     final int imagesSize = images.size();
@@ -121,7 +121,7 @@ public class IImageUtils
       IImage image = images.get(i);
       final RectangleF srcRect = sourceRects.get(i);
       final RectangleF dstRect = destRects.get(i);
-      final double transparency = transparencies.get(i);
+      final float transparency = transparencies.get(i);
   
       if (transparency == 1.0)
       {
@@ -138,7 +138,7 @@ public class IImageUtils
        canvas.dispose();
   }
 
-  public static void combine(Vector2I extent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, java.util.ArrayList<Double> transparencies, IImageListener listener, boolean autodelete)
+  public static void combine(Vector2I extent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, java.util.ArrayList<Float> transparencies, IImageListener listener, boolean autodelete)
   {
     combine(extent._x, extent._y, images, sourceRects, destRects, transparencies, listener, autodelete);
   }

@@ -97,7 +97,7 @@ public class MercatorTiledLayer extends Layer
   {
      this(name, protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, condition, 1.0);
   }
-  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition, double transparency)
+  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition, float transparency)
   {
      super(condition, name, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
      _protocol = protocol;

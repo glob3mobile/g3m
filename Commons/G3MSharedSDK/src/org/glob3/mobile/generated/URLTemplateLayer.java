@@ -30,7 +30,7 @@ public class URLTemplateLayer extends Layer
   {
      this(urlTemplate, sector, isTransparent, timeToCache, readExpired, condition, parameters, 1.0);
   }
-  private URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, double transparency)
+  private URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
   {
      super(condition, "URLTemplate", timeToCache, readExpired, parameters, transparency);
      _urlTemplate = urlTemplate;
@@ -118,7 +118,7 @@ public class URLTemplateLayer extends Layer
   {
      return newMercator(urlTemplate, sector, isTransparent, firstLevel, maxLevel, timeToCache, true, null, 1.0);
   }
-  public static URLTemplateLayer newMercator(String urlTemplate, Sector sector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, double transparency)
+  public static URLTemplateLayer newMercator(String urlTemplate, Sector sector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, float transparency)
   {
     return new URLTemplateLayer(urlTemplate, sector, isTransparent, timeToCache, readExpired, (condition == null) ? new LevelTileCondition(firstLevel, maxLevel) : condition, LayerTilesRenderParameters.createDefaultMercator(2, maxLevel), transparency);
   }
@@ -135,7 +135,7 @@ public class URLTemplateLayer extends Layer
   {
      return newWGS84(urlTemplate, sector, isTransparent, firstLevel, maxLevel, timeToCache, true, null, 1.0);
   }
-  public static URLTemplateLayer newWGS84(String urlTemplate, Sector sector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, double transparency)
+  public static URLTemplateLayer newWGS84(String urlTemplate, Sector sector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, float transparency)
   {
     return new URLTemplateLayer(urlTemplate, sector, isTransparent, timeToCache, readExpired, (condition == null) ? new LevelTileCondition(firstLevel, maxLevel) : condition, LayerTilesRenderParameters.createDefaultWGS84(sector, firstLevel, maxLevel), transparency);
   }

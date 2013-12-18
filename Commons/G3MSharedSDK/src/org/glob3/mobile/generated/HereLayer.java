@@ -69,7 +69,7 @@ public class HereLayer extends Layer
   {
      this(appId, appCode, timeToCache, true, 2, null, 1.0);
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, double transparency)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
   {
      super(condition, "here", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
      _appId = appId;

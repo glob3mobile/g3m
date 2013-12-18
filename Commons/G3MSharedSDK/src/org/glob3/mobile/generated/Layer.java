@@ -52,9 +52,9 @@ public abstract class Layer
 
   protected String _title;
 
-  protected final double _transparency;
+  protected final float _transparency;
 
-  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, double transparency)
+  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
      _condition = condition;
      _name = name;

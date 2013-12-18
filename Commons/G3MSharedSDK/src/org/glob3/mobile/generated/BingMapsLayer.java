@@ -103,7 +103,7 @@ public class BingMapsLayer extends Layer
   {
      this(imagerySet, key, timeToCache, true, 2, null, 1.0);
   }
-  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, double transparency)
+  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
   {
      super(condition, "BingMaps", timeToCache, readExpired, null, transparency);
      _imagerySet = imagerySet;
