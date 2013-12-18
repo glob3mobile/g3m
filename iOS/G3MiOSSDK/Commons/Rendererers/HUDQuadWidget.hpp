@@ -18,7 +18,7 @@ class Mesh;
 class HUDQuadWidget : public HUDWidget {
 private:
 #ifdef C_CODE
-  const URL   _imageURL;
+  const URL _imageURL;
 #endif
 #ifdef JAVA_CODE
   private final URL _imageURL;
