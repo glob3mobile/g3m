@@ -824,4 +824,10 @@ public final class NativeGL2_Android
    }
 
 
+   @Override
+   public void depthMask(final boolean depthMask) {
+      GLES20.glDepthMask(depthMask);
+   }
+
+
 }
