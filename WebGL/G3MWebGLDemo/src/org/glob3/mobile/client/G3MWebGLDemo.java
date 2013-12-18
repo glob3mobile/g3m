@@ -77,6 +77,7 @@ import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PlanetRendererBuilder;
 import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.RectangleF;
+import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
@@ -900,30 +901,9 @@ public class G3MWebGLDemo
 
          final InitialCameraPositionProvider initialCameraPositionProvider = new SimpleInitialCameraPositionProvider();
 
-
-         //            public static final G3MWidget create(final GL gl,
-         //                                                 final IStorage storage,
-         //                                                 final IDownloader downloader,
-         //                                                 final IThreadUtils threadUtils,
-         //                                                 final ICameraActivityListener cameraActivityListener,
-         //                                                 final Planet planet,
-         //                                                 final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
-         //                                                 final CameraRenderer cameraRenderer,
-         //                                                 final Renderer mainRenderer,
-         //                                                 final Renderer busyRenderer,
-         //                                                 final ErrorRenderer errorRenderer,
-         //                                                 final Color backgroundColor,
-         //                                                 final boolean logFPS,
-         //                                                 final boolean logDownloaderStatistics,
-         //                                                 final GInitializationTask initializationTask,
-         //                                                 final boolean autoDeleteInitializationTask,
-         //                                                 final java.util.ArrayList<PeriodicalTask> periodicalTasks,
-         //                                                 final GPUProgramManager gpuProgramManager,
-         //                                                 final SceneLighting sceneLighting,
-         //                                                 final InitialCameraPositionProvider initialCameraPositionProvider);
-
-
          final ErrorRenderer errorRenderer = new HUDErrorRenderer();
+         final Renderer hudRenderer = null;
+
          _widget.initWidget(//
                   storage, //
                   downloader, //
@@ -935,6 +915,7 @@ public class G3MWebGLDemo
                   mainRenderer, //
                   busyRenderer, //
                   errorRenderer, //
+                  hudRenderer, //
                   backgroundColor, //
                   logFPS, //
                   logDownloaderStatistics, //
