@@ -37,6 +37,7 @@ private:
   bool _activatedEdition;
   int _selectedVertex;
   
+  ShapeTouchListener* _shapeTouchListener;
   
   void removeRasterShapesFromShapesRenderer();
   void addRasterShapes();

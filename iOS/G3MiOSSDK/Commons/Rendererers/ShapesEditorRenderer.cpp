@@ -73,11 +73,12 @@ public:
 
 ShapesEditorRenderer::ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer):
 ShapesRenderer(geoTileRasterizer),
+_shapeTouchListener(new MyShapeSelectionListener(this)),
 _activatedEdition(false),
 _selectedVertex(-1),
 _selectedRasterShape(-1)
 {
-  setShapeTouchListener(new MyShapeSelectionListener(this), true);
+  setShapeTouchListener(_shapeTouchListener, true);
 }
 
 
@@ -169,15 +170,11 @@ void ShapesEditorRenderer::activateEdition(PlanetRenderer* planetRenderer)
 
 void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
 {
-  
-  printf ("---- _selectedVertex = %d   _selectedRasterShape = %d\n", _selectedVertex, _selectedRasterShape);
-  
   if (_selectedVertex<0 || _selectedRasterShape<0) return;
   
   // clean vertex and raster shapes
   removeRasterShapesFromShapesRenderer();
   ShapesRenderer::_geoTileRasterizer->clear();
-
 
   // modify vertex
   delete _rasterShapes[_selectedRasterShape]._coordinates[_selectedVertex];
@@ -198,6 +195,9 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   
   // create again new raster shapes
   addRasterShapes();
+  
+  // select again the vertex
+  _shapeTouchListener->touchedShape(_vertexShapes[_selectedVertex]);
 }
 
 
