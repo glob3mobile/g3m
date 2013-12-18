@@ -174,12 +174,20 @@ public class HUDRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
+  
+    rc.getGL().getNative().depthMask(false);
+  
     final int size = _widgets.size();
     for (int i = 0; i < size; i++)
     {
       HUDWidget widget = _widgets.get(i);
-      widget.render(rc, _glState);
+      if (widget.isEnable())
+      {
+        widget.render(rc, _glState);
+      }
     }
+  
+    rc.getGL().getNative().depthMask(true);
   }
 
 }

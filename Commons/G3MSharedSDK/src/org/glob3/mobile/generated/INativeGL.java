@@ -163,4 +163,6 @@ public abstract class INativeGL
   public abstract GPUUniform getActiveUniform(GPUProgram program, int i);
   public abstract GPUAttribute getActiveAttribute(GPUProgram program, int i);
 
+  public abstract void depthMask(boolean v);
+
 }
