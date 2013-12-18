@@ -33,7 +33,7 @@ private:
                    bool                              readExpired,
                    LayerCondition*                   condition,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency = 1.0);
+                   float transparency = (float)1.0);
 
   const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
                             const Tile* tile,
@@ -55,7 +55,7 @@ public:
                                        const TimeInterval& timeToCache,
                                        bool                readExpired = true,
                                        LayerCondition*     condition = NULL,
-                                       float transparency = 1.0);
+                                       float transparency = (float)1.0);
 
   static URLTemplateLayer* newWGS84(const std::string&  urlTemplate,
                                     const Sector&       sector,
@@ -65,7 +65,7 @@ public:
                                     const TimeInterval& timeToCache,
                                     bool                readExpired = true,
                                     LayerCondition*     condition = NULL,
-                                    float transparency = 1.0);
+                                    float transparency = (float)1.0);
 
   const std::string description() const;
 

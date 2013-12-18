@@ -365,7 +365,7 @@ Activity {
 		                                  TimeInterval.fromDays(30),
 		                                  true,
 		                                  null,
-		                                  0.5);
+		                                  (float) 0.5);
 		    layerSet.addLayer(pnoa);
 		    
 		    builder.getPlanetRendererBuilder().setLayerSet(layerSet);

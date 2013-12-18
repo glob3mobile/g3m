@@ -45,7 +45,7 @@ public:
                      int                             initialLevel,
                      int                             maxLevel,
                      LayerCondition*                 condition,
-                     float transparency = 1.0);
+                     float transparency = (float)1.0);
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
