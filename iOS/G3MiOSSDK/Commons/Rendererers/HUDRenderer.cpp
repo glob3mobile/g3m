@@ -21,11 +21,11 @@ _glState(new GLState()),
 _readyWhenWidgetsReady(readyWhenWidgetsReady),
 _context(NULL)
 {
+  _widgetsSize = _widgets.size();
 }
 
 HUDRenderer::~HUDRenderer() {
-  const int size = _widgets.size();
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     delete widget;
   }
@@ -40,8 +40,7 @@ HUDRenderer::~HUDRenderer() {
 void HUDRenderer::initialize(const G3MContext* context) {
   _context = context;
 
-  const int size = _widgets.size();
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     widget->initialize(context);
   }
@@ -49,6 +48,7 @@ void HUDRenderer::initialize(const G3MContext* context) {
 
 void HUDRenderer::addWidget(HUDWidget* widget) {
   _widgets.push_back(widget);
+  _widgetsSize = _widgets.size();
 
   if (_context != NULL) {
     widget->initialize(_context);
@@ -56,12 +56,15 @@ void HUDRenderer::addWidget(HUDWidget* widget) {
 }
 
 RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
+  if (_widgetsSize == 0) {
+    return RenderState::ready();
+  }
+
   _errors.clear();
   bool busyFlag  = false;
   bool errorFlag = false;
 
-  const int size = _widgets.size();
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     if (widget->isEnable()) {
       const RenderState childRenderState = widget->getRenderState(rc);
@@ -122,8 +125,7 @@ void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
     pr->setMatrix(projectionMatrix.asMatrix44D());
   }
 
-  const int size = _widgets.size();
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     widget->onResizeViewportEvent(ec, width, height);
   }
@@ -134,8 +136,7 @@ void HUDRenderer::render(const G3MRenderContext* rc,
 
   rc->getGL()->getNative()->depthMask(false);
 
-  const int size = _widgets.size();
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     if (widget->isEnable()) {
       widget->render(rc, _glState);

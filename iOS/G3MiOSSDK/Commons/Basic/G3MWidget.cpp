@@ -104,7 +104,7 @@ _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
 _totalRenderTime(0),
 _logFPS(logFPS),
-_mainRendererState(new RenderState(RenderState::busy())),
+_rendererState( new RenderState( RenderState::busy() ) ),
 _selectedRenderer(NULL),
 _renderStatisticsTimer(NULL),
 _logDownloaderStatistics(logDownloaderStatistics),
@@ -232,7 +232,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
 }
 
 G3MWidget::~G3MWidget() {
-  delete _mainRendererState;
+  delete _rendererState;
   delete _renderContext;
 
   delete _userData;
@@ -279,7 +279,7 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                                  const TouchEvent* touchEvent) const {
-  RenderState_Type renderStateType = _mainRendererState->_type;
+  const RenderState_Type renderStateType = _rendererState->_type;
   switch (renderStateType) {
     case RENDER_READY: {
       bool handled = false;
@@ -395,6 +395,46 @@ void G3MWidget::resetPeriodicalTasksTimeouts() {
   }
 }
 
+RenderState G3MWidget::calculateRendererState() {
+  if (_forceBusyRenderer) {
+    return RenderState::busy();
+  }
+
+  if (!_initializationTaskReady) {
+    return RenderState::busy();
+  }
+
+  bool busyFlag = false;
+
+  RenderState cameraRendererRenderState = _cameraRenderer->getRenderState(_renderContext);
+  if (cameraRendererRenderState._type == RENDER_ERROR) {
+    return cameraRendererRenderState;
+  }
+  else if (cameraRendererRenderState._type == RENDER_BUSY) {
+    busyFlag = true;
+  }
+
+  if (_hudRenderer != NULL) {
+    RenderState hudRendererRenderState = _hudRenderer->getRenderState(_renderContext);
+    if (hudRendererRenderState._type == RENDER_ERROR) {
+      return hudRendererRenderState;
+    }
+    else if (hudRendererRenderState._type == RENDER_BUSY) {
+      busyFlag = true;
+    }
+  }
+
+  RenderState mainRendererRenderState = _mainRenderer->getRenderState(_renderContext);
+  if (mainRendererRenderState._type == RENDER_ERROR) {
+    return mainRendererRenderState;
+  }
+  else if (mainRendererRenderState._type == RENDER_BUSY) {
+    busyFlag = true;
+  }
+
+  return busyFlag ? RenderState::busy() : RenderState::ready();
+}
+
 void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;
@@ -462,11 +502,12 @@ void G3MWidget::render(int width, int height) {
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
 
-  delete _mainRendererState;
-  _mainRendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer)
-                                       ? _mainRenderer->getRenderState(_renderContext)
-                                       : RenderState::busy());
-  RenderState_Type renderStateType = _mainRendererState->_type;
+  delete _rendererState;
+//  _rendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer)
+//                                   ? (_mainRenderer->getRenderState(_renderContext) )
+//                                   : RenderState::busy());
+  _rendererState = new RenderState( calculateRendererState() );
+  const RenderState_Type renderStateType = _rendererState->_type;
 
   _renderContext->clear();
 
@@ -486,7 +527,7 @@ void G3MWidget::render(int width, int height) {
       break;
 
     default:
-      _errorRenderer->setErrors( _mainRendererState->getErrors() );
+      _errorRenderer->setErrors( _rendererState->getErrors() );
       selectedRenderer = _errorRenderer;
       break;
   }
@@ -528,8 +569,10 @@ void G3MWidget::render(int width, int height) {
   }
 
   if (_hudRenderer != NULL) {
-    if (_hudRenderer->isEnable()) {
-      _hudRenderer->render(_renderContext, _rootState);
+    if (renderStateType == RENDER_READY) {
+      if (_hudRenderer->isEnable()) {
+        _hudRenderer->render(_renderContext, _rootState);
+      }
     }
   }
 

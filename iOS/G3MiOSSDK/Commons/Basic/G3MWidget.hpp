@@ -239,8 +239,7 @@ private:
   Renderer*           _busyRenderer;
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
-//  bool                _mainRendererReady;
-  RenderState*        _mainRendererState;
+  RenderState*        _rendererState;
   Renderer*           _selectedRenderer;
   
   EffectsScheduler*   _effectsScheduler;
@@ -319,6 +318,8 @@ private:
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
+
+  RenderState calculateRendererState();
   
 };
 

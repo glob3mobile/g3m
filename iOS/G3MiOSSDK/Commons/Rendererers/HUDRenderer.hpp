@@ -25,6 +25,7 @@ private:
 #endif
 
   std::vector<HUDWidget*> _widgets;
+  int                     _widgetsSize;
 
   GLState*                _glState;
 

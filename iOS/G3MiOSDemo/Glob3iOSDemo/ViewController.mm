@@ -646,89 +646,15 @@ public:
 
   if (true) { //HUD
     HUDRenderer* hudRenderer = new HUDRenderer();
+    builder.setHUDRenderer(hudRenderer);
 
-//    NSBundle* mainBundle = [NSBundle mainBundle];
-//
-//    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Compass_rose_browns_00_transparent"
-//                                                                                                   ofType:
-//                                                                               @"png"]],
-//                                     NULL);
-
-//    hudRenderer->addImage("IMAGE", image, Vector2D(300, 300), Vector2D(150, 150));
 #warning Diego at work!
-//    hudRenderer->addImage("IMAGE", image, Vector2D(300, 300), Vector2D(0, 0));
     hudRenderer->addWidget(new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
                                              0, 0,
                                              300, 300));
     hudRenderer->addWidget(new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
                                              50, 50,
                                              300, 300));
-
-    //builder.addRenderer(hudRenderer);
-    builder.setHUDRenderer(hudRenderer);
-
-    class TestImageFactory : public HUDImageRenderer::CanvasImageFactory {
-    protected:
-      void drawOn(ICanvas* canvas,
-                  int width,
-                  int height) {
-        //        canvas->setFillColor(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f));
-        //        canvas->fillRectangle(0, 0,
-        //                              width, height);
-
-        //        canvas->setLineColor(Color::yellow());
-        //        canvas->setLineWidth(5);
-        //        canvas->strokeRectangle(0, 0,
-        //                                width, height);
-
-        //        canvas->setFont(GFont::sansSerif(30));
-
-        //        const std::string text = "Hello World from HUD!";
-        //        canvas->setFont(GFont::sansSerif(30));
-        //        const Vector2F extent = canvas->textExtent(text);
-        //
-        //        canvas->setFillColor(Color::white());
-        //        canvas->setShadow(Color::black(), 10, 2, -2);
-        //
-        //        canvas->fillText(text,
-        //                         (width  - extent._x) / 2,
-        //                         (height - extent._y) / 2);
-
-        const std::string text = "glob3mobile.com";
-        canvas->setFont(GFont::sansSerif(25));
-        const Vector2F extent = canvas->textExtent(text);
-
-        canvas->setFillColor(Color::white());
-        canvas->setShadow(Color::black(), 1, 0, 0);
-
-        canvas->fillText(text,
-                         (width  - extent._x) / 2,
-                         (height - extent._y) - extent._y/2);
-
-
-        //        canvas->setFillColor(Color::black());
-        //        canvas->fillRectangle(0, 0,
-        //                              width, height);
-        //
-        //        ColumnCanvasElement column(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
-        //                                   0,  /* margin */
-        //                                   16,  /* padding */
-        //                                   8   /* cornerRadius */);
-        //        const GFont labelFont  = GFont::sansSerif(22);
-        //        const Color labelColor = Color::white();
-        //        column.add( new TextCanvasElement("Error message #1", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("Another error message", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("And another error message", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("And just another error message", labelFont, labelColor) );
-        //
-        //        column.drawCentered(canvas);
-      }
-    };
-
-    /*
-     HUDImageRenderer* hudRenderer = new HUDImageRenderer(new TestImageFactory());
-     builder.addRenderer(hudRenderer);
-     */
   }
 
 
