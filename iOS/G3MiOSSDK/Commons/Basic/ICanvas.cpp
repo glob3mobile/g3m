@@ -211,15 +211,17 @@ void ICanvas::drawImage(const IImage* image,
     return;
   }
 
-  if (transparency > 1.0){
-    transparency = 1.0;
-    ILogger::instance()->logWarning("Transparency has an invalid value. Casting.");
+  if (transparency >= 1.0){
+    _drawImage(image,
+               srcLeft, srcTop, srcWidth, srcHeight,
+               destLeft, destTop, destWidth, destHeight);
+  } else{
+    _drawImage(image,
+               srcLeft, srcTop, srcWidth, srcHeight,
+               destLeft, destTop, destWidth, destHeight,
+               transparency);
   }
 
-  _drawImage(image,
-             srcLeft, srcTop, srcWidth, srcHeight,
-             destLeft, destTop, destWidth, destHeight,
-             transparency);
 }
 
 void ICanvas::beginPath() {

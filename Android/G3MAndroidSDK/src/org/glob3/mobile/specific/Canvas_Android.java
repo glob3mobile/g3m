@@ -402,4 +402,32 @@ public class Canvas_Android
       _path.lineTo(x, y);
    }
 
+
+@Override
+protected void _drawImage(IImage image, float srcLeft, float srcTop,
+		float srcWidth, float srcHeight, float destLeft, float destTop,
+		float destWidth, float destHeight, double transparency) {
+	// TODO Auto-generated method stub
+	
+    final Bitmap bitmap = ((Image_Android) image).getBitmap();
+
+    final RectF dst = _rectF;
+    dst.set(destLeft, //
+             destTop, //
+             destLeft + destWidth, // Right
+             destTop + destHeight); // Bottom
+
+    final Rect src = _rect;
+    src.set(Math.round(srcLeft), //
+             Math.round(srcTop), //
+             Math.round(srcLeft + srcWidth), // Right
+             Math.round(srcTop + srcHeight)); // Bottom
+    
+    Paint paint = new Paint();
+    paint.setAlpha((int)(255 * transparency));
+
+    _canvas.drawBitmap(bitmap, src, dst, paint);
+	
+}
+
 }
