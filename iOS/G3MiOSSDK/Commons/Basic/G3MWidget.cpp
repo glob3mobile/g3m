@@ -548,7 +548,6 @@ void G3MWidget::render(int width, int height) {
     _rootState = new GLState();
   }
 
-
   if (renderStateType == RENDER_READY) {
     _cameraRenderer->render(_renderContext, _rootState);
 
