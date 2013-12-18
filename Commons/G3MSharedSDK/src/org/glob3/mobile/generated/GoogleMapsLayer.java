@@ -47,19 +47,19 @@ public class GoogleMapsLayer extends Layer
 
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
-     this(key, timeToCache, readExpired, initialLevel, condition, 1.0);
+     this(key, timeToCache, readExpired, initialLevel, condition, (float)1.0);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(key, timeToCache, readExpired, initialLevel, null, 1.0);
+     this(key, timeToCache, readExpired, initialLevel, null, (float)1.0);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired)
   {
-     this(key, timeToCache, readExpired, 2, null, 1.0);
+     this(key, timeToCache, readExpired, 2, null, (float)1.0);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache)
   {
-     this(key, timeToCache, true, 2, null, 1.0);
+     this(key, timeToCache, true, 2, null, (float)1.0);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
   {

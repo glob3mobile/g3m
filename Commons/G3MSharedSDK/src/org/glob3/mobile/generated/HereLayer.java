@@ -55,19 +55,19 @@ public class HereLayer extends Layer
 
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, condition, 1.0);
+     this(appId, appCode, timeToCache, readExpired, initialLevel, condition, (float)1.0);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, null, 1.0);
+     this(appId, appCode, timeToCache, readExpired, initialLevel, null, (float)1.0);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired)
   {
-     this(appId, appCode, timeToCache, readExpired, 2, null, 1.0);
+     this(appId, appCode, timeToCache, readExpired, 2, null, (float)1.0);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, true, 2, null, 1.0);
+     this(appId, appCode, timeToCache, true, 2, null, (float)1.0);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
   {
