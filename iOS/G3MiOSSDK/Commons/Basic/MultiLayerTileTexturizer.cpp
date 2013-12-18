@@ -412,9 +412,7 @@ public:
           const Sector imageSector = petition->getSector();
           //Finding intersection image sector - tile sector = srcReq
           const Sector intersectionSector = tileSector.intersection(imageSector);
-
-          transparencies.push_back(petition->getLayerTransparency());
-
+          
           RectangleF* sourceRect = NULL;
           if (!intersectionSector.isEquals(imageSector)) {
             sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
@@ -452,6 +450,10 @@ public:
         if (_tileRasterizer != NULL) {
           textureId += "_";
           textureId += _tileRasterizer->getId();
+        }
+
+        if (images.size() != transparencies.size()){
+          ILogger::instance()->logError("Wrong number of transparencies");
         }
 
         IImageUtils::combine(_tileTextureResolution,
