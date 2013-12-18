@@ -27,6 +27,8 @@ public abstract class HUDWidget
 {
   private boolean _enable;
 
+  protected abstract void rawRender(G3MRenderContext rc, GLState glState);
+
   public HUDWidget()
   {
      _enable = true;
@@ -53,6 +55,12 @@ public abstract class HUDWidget
 
   public abstract RenderState getRenderState(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc, GLState glState);
+  public final void render(G3MRenderContext rc, GLState glState)
+  {
+    if (_enable)
+    {
+      rawRender(rc, glState);
+    }
+  }
 
 }
