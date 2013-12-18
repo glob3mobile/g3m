@@ -37,29 +37,31 @@ private:
   bool _activatedEdition;
   int _selectedVertex;
   
-public:
-  int _selectedRasterShape;
-
-  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
   
-  void addShape(Shape* shape);
-  
-  int getVertexShapeId(Shape* shape);
-  int getRasterShapeId(Shape* shape);
-  void selectRasterShape(int id);
-  void clearVertexShapes();
   void removeRasterShapesFromShapesRenderer();
-  
-  void activateEdition(PlanetRenderer* planetRenderer);
-  
-  void onTouch(const Geodetic3D& position);
+  void addRasterShapes();
   
   int getSelectedVertex() {
     return _selectedVertex;
   }
-  void setSelectedVertex(int value) {
-    _selectedVertex = value;
-  }
+  
+public:
+  int _selectedRasterShape;
+
+  ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
+
+  void addShape(Shape* shape);
+  
+  void onTouch(const Geodetic3D& position);
+  void setSelectedVertex(int value);
+  void clearVertexShapes();
+  
+  int getRasterShapeId(Shape* shape);
+  void selectRasterShape(int id);
+  int getVertexShapeId(Shape* shape);
+
+  void activateEdition(PlanetRenderer* planetRenderer);
+
 };
 
 

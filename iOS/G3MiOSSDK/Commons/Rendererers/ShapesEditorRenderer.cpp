@@ -197,6 +197,27 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   }
   
   // create again new raster shapes
+  addRasterShapes();
+}
+
+
+void ShapesEditorRenderer::setSelectedVertex(int value)
+{
+  // if value is valid, remove raster shapes from shapesrenderer to allow clicking inside
+  if (value>=0 && _rasterShapes[0]._shape!=NULL)
+    removeRasterShapesFromShapesRenderer();
+  
+  // if value is null and raster shapes were removed, must be recovered
+  if (value<0 && _rasterShapes[0]._shape==NULL)
+    addRasterShapes();
+  
+  // set value
+  _selectedVertex = value;
+}
+
+
+void ShapesEditorRenderer::addRasterShapes()
+{
   Shape *shape;
   for (int n=0; n<_rasterShapes.size(); n++) {
     std::vector<Geodetic2D*> coordinates = _rasterShapes[n]._coordinates;
@@ -206,14 +227,14 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
       for (int n=0; n<coordinates.size(); n++)
         vertices->push_back(new Geodetic2D(*coordinates[n]));
       shape = new RasterPolygonShape(vertices,
-                                           2,
-                                           Color::green(),
-                                           Color::fromRGBA(1.0, 1.0, 1, 0.6f));
+                                     2,
+                                     Color::green(),
+                                     Color::fromRGBA(1.0, 1.0, 1, 0.6f));
     } else {
       shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
-                                              new Geodetic2D(*coordinates[1]),
-                                              2,
-                                              Color::fromRGBA(0, 0, 1, 1));
+                                  new Geodetic2D(*coordinates[1]),
+                                  2,
+                                  Color::fromRGBA(0, 0, 1, 1));
     }
     ShapesRenderer::addShape(shape);
     _rasterShapes[n]._shape = shape;
