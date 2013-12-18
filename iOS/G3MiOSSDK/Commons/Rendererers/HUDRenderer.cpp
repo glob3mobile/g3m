@@ -110,11 +110,20 @@ bool HUDRenderer::onTouchEvent(const G3MEventContext* ec,
 void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                         int width,
                                         int height) {
-  const int halfWidth  = width  / 2;
-  const int halfHeight = height / 2;
-  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
-                                                                                           -halfHeight, halfHeight,
-                                                                                           -halfWidth,  halfWidth);
+//  const int halfWidth  = width  / 2;
+//  const int halfHeight = height / 2;
+//  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
+//                                                                                           -halfHeight, halfHeight,
+//                                                                                           -halfWidth,  halfWidth);
+//  double left, double right,
+//  double bottom, double top,
+//  double znear, double zfar
+//  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
+//                                                                                           0, height,
+//                                                                                           -halfWidth, halfWidth);
+  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
+                                                                                           0, height,
+                                                                                           -1, +1);
 
   ProjectionGLFeature* pr = (ProjectionGLFeature*) _glState->getGLFeature(GLF_PROJECTION);
   if (pr == NULL) {

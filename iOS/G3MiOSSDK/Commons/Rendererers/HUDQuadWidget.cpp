@@ -104,13 +104,6 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
     return NULL;
   }
 
-  //#ifdef C_CODE
-  //  const TextureIDReference* texId;
-  //#endif
-  //#ifdef JAVA_CODE
-  //  TextureIDReference texId;
-  //#endif
-
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
                                                                                     _imageURL.getPath(),
@@ -121,28 +114,34 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
     return NULL;
   }
 
-  const Camera* camera = rc->getCurrentCamera();
-  const int viewportWidth  = camera->getWidth();
-  const int viewportHeight = camera->getHeight();
+//  const Camera* camera = rc->getCurrentCamera();
+//  const int viewportWidth  = camera->getWidth();
+//  const int viewportHeight = camera->getHeight();
+//
+//  const Vector3D halfViewportAndPosition(viewportWidth  / 2 - _x,
+//                                         viewportHeight / 2 - _y,
+//                                         0);
 
-  const Vector3D halfViewportAndPosition(viewportWidth  / 2 - _x,
-                                         viewportHeight / 2 - _y,
-                                         0);
-
-  const double w = _width;
-  const double h = _height;
+  const double x = _x;
+  const double y = _y;
+  const double width = _width;
+  const double height = _height;
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-  vertices->add( Vector3D(0, h, 0).sub(halfViewportAndPosition) );
-  vertices->add( Vector3D(0, 0, 0).sub(halfViewportAndPosition) );
-  vertices->add( Vector3D(w, h, 0).sub(halfViewportAndPosition) );
-  vertices->add( Vector3D(w, 0, 0).sub(halfViewportAndPosition) );
+//  vertices->add( Vector3D(0, h, 0).sub(halfViewportAndPosition) );
+//  vertices->add( Vector3D(0, 0, 0).sub(halfViewportAndPosition) );
+//  vertices->add( Vector3D(w, h, 0).sub(halfViewportAndPosition) );
+//  vertices->add( Vector3D(w, 0, 0).sub(halfViewportAndPosition) );
+  vertices->add( x,       height+y, 0 );
+  vertices->add( x,       y,        0 );
+  vertices->add( width+x, height+y, 0 );
+  vertices->add( width+x, y,        0 );
 
   FloatBufferBuilderFromCartesian2D texCoords;
-  texCoords.add(0, 0);
-  texCoords.add(0, 1);
-  texCoords.add(1, 0);
-  texCoords.add(1, 1);
+  texCoords.add( 0, 0 );
+  texCoords.add( 0, 1 );
+  texCoords.add( 1, 0 );
+  texCoords.add( 1, 1 );
 
   DirectMesh* dm = new DirectMesh(GLPrimitive::triangleStrip(),
                                   true,
