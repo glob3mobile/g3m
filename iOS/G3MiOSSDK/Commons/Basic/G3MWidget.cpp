@@ -501,12 +501,13 @@ void G3MWidget::render(int width, int height) {
 
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
-
+#ifdef C_CODE
   delete _rendererState;
-//  _rendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer)
-//                                   ? (_mainRenderer->getRenderState(_renderContext) )
-//                                   : RenderState::busy());
   _rendererState = new RenderState( calculateRendererState() );
+#endif
+#ifdef JAVA_CODE
+  _rendererState = calculateRendererState();
+#endif
   const RenderState_Type renderStateType = _rendererState->_type;
 
   _renderContext->clear();
