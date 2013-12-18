@@ -207,6 +207,15 @@ void ICanvas::drawImage(const IImage* image,
     ILogger::instance()->logError("Invalid source rectangle in drawImage");
   }
 
+  if (transparency <= 0.0){
+    return;
+  }
+
+  if (transparency > 1.0){
+    transparency = 1.0;
+    ILogger::instance()->logWarning("Transparency has an invalid value. Casting.");
+  }
+
   _drawImage(image,
              srcLeft, srcTop, srcWidth, srcHeight,
              destLeft, destTop, destWidth, destHeight,
