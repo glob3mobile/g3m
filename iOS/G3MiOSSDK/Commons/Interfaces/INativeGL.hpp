@@ -195,6 +195,8 @@ public:
   
   virtual GPUUniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
   virtual GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
+
+  virtual void depthMask(bool v) const = 0;
   
 };
 

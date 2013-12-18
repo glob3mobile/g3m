@@ -559,6 +559,10 @@ public:
         break;
     }
   }
+
+  void depthMask(bool v) const{
+    glDepthMask(v);
+  }
   
 };
 
