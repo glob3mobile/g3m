@@ -13,6 +13,8 @@
 #include "MutableMatrix44D.hpp"
 #include "GLFeature.hpp"
 #include "GLState.hpp"
+#include "GL.hpp"
+#include "Context.hpp"
 
 HUDRenderer::HUDRenderer(bool readyWhenWidgetsReady) :
 _glState(new GLState()),
@@ -129,6 +131,9 @@ void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 
 void HUDRenderer::render(const G3MRenderContext* rc,
                          GLState* glState) {
+
+  rc->getGL()->getNative()->depthMask(false);
+
   const int size = _widgets.size();
   for (int i = 0; i < size; i++) {
     HUDWidget* widget = _widgets[i];
@@ -136,4 +141,6 @@ void HUDRenderer::render(const G3MRenderContext* rc,
       widget->render(rc, _glState);
     }
   }
+
+  rc->getGL()->getNative()->depthMask(true);
 }
