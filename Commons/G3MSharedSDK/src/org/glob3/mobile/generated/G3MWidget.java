@@ -28,8 +28,8 @@ public class G3MWidget
 
   public void dispose()
   {
-    if (_mainRendererState != null)
-       _mainRendererState.dispose();
+    if (_rendererState != null)
+       _rendererState.dispose();
     if (_renderContext != null)
        _renderContext.dispose();
   
@@ -175,11 +175,8 @@ public class G3MWidget
   
     _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
-  
-    if (_mainRendererState != null)
-       _mainRendererState.dispose();
-    _mainRendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer) ? _mainRenderer.getRenderState(_renderContext) : RenderState.busy());
-    RenderState_Type renderStateType = _mainRendererState._type;
+    _rendererState = calculateRendererState();
+    final RenderState_Type renderStateType = _rendererState._type;
   
     _renderContext.clear();
   
@@ -200,7 +197,7 @@ public class G3MWidget
         break;
   
       default:
-        _errorRenderer.setErrors(_mainRendererState.getErrors());
+        _errorRenderer.setErrors(_rendererState.getErrors());
         selectedRenderer = _errorRenderer;
         break;
     }
@@ -251,9 +248,12 @@ public class G3MWidget
   
     if (_hudRenderer != null)
     {
-      if (_hudRenderer.isEnable())
+      if (renderStateType == RenderState_Type.RENDER_READY)
       {
-        _hudRenderer.render(_renderContext, _rootState);
+        if (_hudRenderer.isEnable())
+        {
+          _hudRenderer.render(_renderContext, _rootState);
+        }
       }
     }
   
@@ -649,8 +649,7 @@ public class G3MWidget
   private Renderer _busyRenderer;
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
-//  bool                _mainRendererReady;
-  private RenderState _mainRendererState;
+  private RenderState _rendererState;
   private Renderer _selectedRenderer;
 
   private EffectsScheduler _effectsScheduler;
@@ -731,7 +730,7 @@ public class G3MWidget
      _renderCounter = 0;
      _totalRenderTime = 0;
      _logFPS = logFPS;
-     _mainRendererState = new RenderState(RenderState.busy());
+     _rendererState = new RenderState(RenderState.busy());
      _selectedRenderer = null;
      _renderStatisticsTimer = null;
      _logDownloaderStatistics = logDownloaderStatistics;
@@ -790,7 +789,7 @@ public class G3MWidget
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    RenderState_Type renderStateType = _mainRendererState._type;
+    final RenderState_Type renderStateType = _rendererState._type;
     switch (renderStateType)
     {
       case RENDER_READY:
@@ -834,6 +833,56 @@ public class G3MWidget
         break;
       }
     }
+  }
+
+  private RenderState calculateRendererState()
+  {
+    if (_forceBusyRenderer)
+    {
+      return RenderState.busy();
+    }
+  
+    if (!_initializationTaskReady)
+    {
+      return RenderState.busy();
+    }
+  
+    boolean busyFlag = false;
+  
+    RenderState cameraRendererRenderState = _cameraRenderer.getRenderState(_renderContext);
+    if (cameraRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+    {
+      return cameraRendererRenderState;
+    }
+    else if (cameraRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+    {
+      busyFlag = true;
+    }
+  
+    if (_hudRenderer != null)
+    {
+      RenderState hudRendererRenderState = _hudRenderer.getRenderState(_renderContext);
+      if (hudRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+      {
+        return hudRendererRenderState;
+      }
+      else if (hudRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+      {
+        busyFlag = true;
+      }
+    }
+  
+    RenderState mainRendererRenderState = _mainRenderer.getRenderState(_renderContext);
+    if (mainRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+    {
+      return mainRendererRenderState;
+    }
+    else if (mainRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+    {
+      busyFlag = true;
+    }
+  
+    return busyFlag ? RenderState.busy() : RenderState.ready();
   }
 
 }

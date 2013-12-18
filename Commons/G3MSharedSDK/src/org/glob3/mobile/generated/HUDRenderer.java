@@ -25,6 +25,7 @@ public class HUDRenderer extends LeafRenderer
   private G3MContext _context;
 
   private java.util.ArrayList<HUDWidget> _widgets = new java.util.ArrayList<HUDWidget>();
+  private int _widgetsSize;
 
   private GLState _glState;
 
@@ -40,12 +41,12 @@ public class HUDRenderer extends LeafRenderer
      _glState = new GLState();
      _readyWhenWidgetsReady = readyWhenWidgetsReady;
      _context = null;
+    _widgetsSize = _widgets.size();
   }
 
   public void dispose()
   {
-    final int size = _widgets.size();
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
       if (widget != null)
@@ -60,6 +61,7 @@ public class HUDRenderer extends LeafRenderer
   public final void addWidget(HUDWidget widget)
   {
     _widgets.add(widget);
+    _widgetsSize = _widgets.size();
   
     if (_context != null)
     {
@@ -71,8 +73,7 @@ public class HUDRenderer extends LeafRenderer
   {
     _context = context;
   
-    final int size = _widgets.size();
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
       widget.initialize(context);
@@ -81,12 +82,16 @@ public class HUDRenderer extends LeafRenderer
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
+    if (_widgetsSize == 0)
+    {
+      return RenderState.ready();
+    }
+  
     _errors.clear();
     boolean busyFlag = false;
     boolean errorFlag = false;
   
-    final int size = _widgets.size();
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
       if (widget.isEnable())
@@ -164,8 +169,7 @@ public class HUDRenderer extends LeafRenderer
       pr.setMatrix(projectionMatrix.asMatrix44D());
     }
   
-    final int size = _widgets.size();
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
       widget.onResizeViewportEvent(ec, width, height);
@@ -177,8 +181,7 @@ public class HUDRenderer extends LeafRenderer
   
     rc.getGL().getNative().depthMask(false);
   
-    final int size = _widgets.size();
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
       if (widget.isEnable())
