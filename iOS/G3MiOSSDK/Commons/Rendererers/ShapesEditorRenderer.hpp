@@ -35,9 +35,9 @@ private:
   std::vector<PointShape*> _vertexShapes;
   
   bool _activatedEdition;
+  int _selectedVertex;
   
 public:
-  int _selectedVertex;
   int _selectedRasterShape;
 
   ShapesEditorRenderer(GEOTileRasterizer* geoTileRasterizer);
@@ -48,11 +48,18 @@ public:
   int getRasterShapeId(Shape* shape);
   void selectRasterShape(int id);
   void clearVertexShapes();
-  void removeRasterShapes();
+  void removeRasterShapesFromShapesRenderer();
   
   void activateEdition(PlanetRenderer* planetRenderer);
   
   void onTouch(const Geodetic3D& position);
+  
+  int getSelectedVertex() {
+    return _selectedVertex;
+  }
+  void setSelectedVertex(int value) {
+    _selectedVertex = value;
+  }
 };
 
 

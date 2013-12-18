@@ -47,23 +47,23 @@ public:
   bool touchedShape(Shape* shape) {
     SimpleShapeSelectionListener::touchedShape(shape);
     _selectedShape = getSelectedShape();
-    _renderer->_selectedVertex = -1;
     if (_selectedShape == NULL) {
+      _renderer->setSelectedVertex(-1);
       _renderer->_selectedRasterShape = -1;
       _renderer->clearVertexShapes();
       return true;
     }
     int id = _renderer->getRasterShapeId(_selectedShape);
     if (id>=0) {
+      _renderer->setSelectedVertex(-1);
       _renderer->selectRasterShape(id);
       return true;
     }
     
     id = _renderer->getVertexShapeId(_selectedShape);
+    _renderer->setSelectedVertex(id);
     if (id<0) {
       _renderer->clearVertexShapes();
-    } else {
-      _renderer->_selectedVertex = id;
     }
     return true;
   }
@@ -91,16 +91,14 @@ void ShapesEditorRenderer::clearVertexShapes()
 }
 
 
-void ShapesEditorRenderer::removeRasterShapes()
+void ShapesEditorRenderer::removeRasterShapesFromShapesRenderer()
 {
   // remove raster shapes from shapeRenderer
   int size = _rasterShapes.size();
   for (int n=0; n<size; n++) {
     removeShape(_rasterShapes[n]._shape);
+    _rasterShapes[n]._shape = NULL;
   }
-  
-  // remove symbols from geotilerasterizer
-  ShapesRenderer::_geoTileRasterizer->clear();
 }
 
 
@@ -177,7 +175,9 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   if (_selectedVertex<0 || _selectedRasterShape<0) return;
   
   // clean vertex and raster shapes
-  removeRasterShapes();
+  removeRasterShapesFromShapesRenderer();
+  ShapesRenderer::_geoTileRasterizer->clear();
+
 
   // modify vertex
   delete _rasterShapes[_selectedRasterShape]._coordinates[_selectedVertex];
@@ -208,7 +208,7 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
       shape = new RasterPolygonShape(vertices,
                                            2,
                                            Color::green(),
-                                           Color::fromRGBA(1.0, 1.0, 1, 0.6));
+                                           Color::fromRGBA(1.0, 1.0, 1, 0.6f));
     } else {
       shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
                                               new Geodetic2D(*coordinates[1]),
