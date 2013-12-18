@@ -72,6 +72,8 @@ public abstract class ICanvas
 
   protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight);
 
+  protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight, double transparency);
+
 
   protected abstract void _beginPath();
 
@@ -280,6 +282,18 @@ public abstract class ICanvas
     }
   
     _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
+  }
+
+  public final void drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight, double transparency)
+  {
+    checkInitialized();
+  
+    if (!RectangleF.fullContains(0, 0, image.getWidth(), image.getHeight(), srcLeft, srcTop, srcWidth, srcHeight))
+    {
+      ILogger.instance().logError("Invalid source rectangle in drawImage");
+    }
+  
+    _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
   }
 
   public final int getWidth()
