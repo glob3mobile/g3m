@@ -133,6 +133,9 @@ void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 
 void HUDRenderer::render(const G3MRenderContext* rc,
                          GLState* glState) {
+  if (_widgetsSize == 0) {
+    return;
+  }
 
   INativeGL* nativeGL = rc->getGL()->getNative();
 
