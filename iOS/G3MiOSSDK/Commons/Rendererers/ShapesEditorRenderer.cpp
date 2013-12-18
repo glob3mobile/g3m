@@ -36,12 +36,14 @@ public:
 class MyShapeSelectionListener : public SimpleShapeSelectionListener {
 private:
   ShapesEditorRenderer* _renderer;
-  Shape* _selectedShape;
+  
   
 public:
+  Shape* _selectedShape;
   
   MyShapeSelectionListener(ShapesEditorRenderer* renderer):
-  _renderer(renderer)
+  _renderer(renderer),
+  _selectedShape(NULL)
   {}
   
   bool touchedShape(Shape* shape) {
@@ -67,6 +69,7 @@ public:
     }
     return true;
   }
+  
 };
 
 
@@ -76,7 +79,8 @@ ShapesRenderer(geoTileRasterizer),
 _shapeTouchListener(new MyShapeSelectionListener(this)),
 _activatedEdition(false),
 _selectedVertex(-1),
-_selectedRasterShape(-1)
+_selectedRasterShape(-1),
+_creatingShape(false)
 {
   setShapeTouchListener(_shapeTouchListener, true);
 }
@@ -186,6 +190,36 @@ void ShapesEditorRenderer::activateEdition(PlanetRenderer* planetRenderer)
 
 void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
 {
+  
+  // ***************************
+  // ***************************
+  // ***************************
+  if (position._longitude._degrees<2.2784) {
+    printf ("\n---------- starting polygon\n");
+    startPolygon(3, Color::fromRGBA255(20, 30, 50, 255), Color::fromRGBA255(20, 30, 40, 60));
+    return;
+  }
+  if (position._longitude._degrees>3.5303) {
+    printf ("\n---------- finishing polygon\n");
+    endPolygon();
+  }
+  // ***************************
+  // ***************************
+  // ***************************
+  // ***************************
+  // ***************************
+  
+  if (_creatingShape) {
+    Geodetic3D* vertexPosition = new Geodetic3D(position.asGeodetic2D(), 1);
+    PointShape* vertex = new PointShape(vertexPosition,
+                                        RELATIVE_TO_GROUND,
+                                        20,
+                                        Color::fromRGBA(0.7f, 0.7f, 0.4f, 1));
+    addShape(vertex);
+    _vertexShapes.push_back(vertex);
+    return;
+  }
+  
   if (_selectedVertex<0 || _selectedRasterShape<0) return;
   
   // clean vertex and raster shapes
@@ -255,4 +289,24 @@ void ShapesEditorRenderer::addRasterShapes()
     ShapesRenderer::addShape(shape);
     _rasterShapes[n]._shape = shape;
   }
+}
+
+
+void ShapesEditorRenderer::startPolygon(float borderWidth,
+                                        const Color& borderColor,
+                                        const Color& surfaceColor)
+{
+  // if there is something selected, unselect
+  Shape* selectedShape = _shapeTouchListener->_selectedShape;
+  if (selectedShape != NULL)
+    _shapeTouchListener->touchedShape(selectedShape);
+  
+  _creatingShape = true;
+  removeRasterShapesFromShapesRenderer();
+}
+
+
+void ShapesEditorRenderer::endPolygon()
+{
+  
 }

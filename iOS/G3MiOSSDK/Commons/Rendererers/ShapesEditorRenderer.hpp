@@ -16,6 +16,7 @@
 class GEOTileRasterizer;
 class PointShape;
 class PlanetRenderer;
+class MyShapeSelectionListener;
 
 
 struct RasterShapes {
@@ -50,7 +51,9 @@ private:
   bool _activatedEdition;
   int _selectedVertex;
   
-  ShapeTouchListener* _shapeTouchListener;
+  MyShapeSelectionListener* _shapeTouchListener;
+  
+  bool _creatingShape;
   
   void removeRasterShapesFromShapesRenderer();
   void addRasterShapes();
@@ -76,6 +79,10 @@ public:
 
   void activateEdition(PlanetRenderer* planetRenderer);
   
+  void startPolygon(float borderWidth,
+                    const Color& borderColor,
+                    const Color& surfaceColor);
+  void endPolygon();
 
 };
 
