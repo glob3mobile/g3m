@@ -30,7 +30,7 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
                                        int                             initialLevel,
                                        int                             maxLevel,
                                        LayerCondition*                 condition,
-                                       double transparency) :
+                                       float transparency) :
 Layer(condition,
       name,
       timeToCache,

@@ -112,7 +112,7 @@ protected:
   virtual void _drawImage(const IImage* image,
                           float srcLeft, float srcTop, float srcWidth, float srcHeight,
                           float destLeft, float destTop, float destWidth, float destHeight,
-                          double transparency) = 0;
+                          float transparency) = 0;
 
 
   virtual void _beginPath() = 0;
@@ -232,7 +232,7 @@ public:
   void drawImage(const IImage* image,
                  float srcLeft, float srcTop, float srcWidth, float srcHeight,
                  float destLeft, float destTop, float destWidth, float destHeight,
-                 double transparency);
+                 float transparency);
 
   int getWidth() const {
     return _canvasWidth;

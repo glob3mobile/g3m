@@ -199,7 +199,7 @@ void ICanvas::drawImage(const IImage* image,
 void ICanvas::drawImage(const IImage* image,
                         float srcLeft, float srcTop, float srcWidth, float srcHeight,
                         float destLeft, float destTop, float destWidth, float destHeight,
-                        double transparency) {
+                        float transparency) {
   checkInitialized();
 
   if (!RectangleF::fullContains(0, 0, image->getWidth(), image->getHeight(),

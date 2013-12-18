@@ -81,7 +81,7 @@ void IImageUtils::combine(int width,
                           const std::vector<const IImage*>& images,
                           const std::vector<RectangleF*>& sourceRects,
                           const std::vector<RectangleF*>& destRects,
-                          const std::vector<double>& transparencies,
+                          const std::vector<float>& transparencies,
                           IImageListener* listener,
                           bool autodelete) {
 
@@ -122,7 +122,7 @@ void IImageUtils::combine(int width,
     const IImage* image = images[i];
     const RectangleF* srcRect = sourceRects[i];
     const RectangleF* dstRect = destRects[i];
-    const double transparency = transparencies[i];
+    const float transparency = transparencies[i];
 
     if (transparency == 1.0){
       canvas->drawImage(image,

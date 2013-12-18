@@ -408,7 +408,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
 void Canvas_iOS::_drawImage(const IImage* image,
                 float srcLeft, float srcTop, float srcWidth, float srcHeight,
                 float destLeft, float destTop, float destWidth, float destHeight,
-                double transparency){
+                float transparency){
 
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
@@ -440,7 +440,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
     CGImage* cgCropImage = CGImageCreateWithImageInRect(cgImage, cropRect);
 
-    CGContextSetAlpha(_context, (float)transparency);
+    CGContextSetAlpha(_context, transparency);
 
     CGContextDrawImage(_context,
                        destRect,

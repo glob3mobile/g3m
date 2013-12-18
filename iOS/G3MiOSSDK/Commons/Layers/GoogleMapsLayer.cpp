@@ -20,7 +20,7 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  bool readExpired,
                                  int initialLevel,
                                  LayerCondition* condition,
-                                 double transparency) :
+                                 float transparency) :
 Layer(condition,
       "GoogleMaps",
       timeToCache,

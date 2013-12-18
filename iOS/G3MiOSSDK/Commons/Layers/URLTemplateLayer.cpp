@@ -24,7 +24,7 @@ URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate
                                    bool                              readExpired,
                                    LayerCondition*                   condition,
                                    const LayerTilesRenderParameters* parameters,
-                                   double transparency) :
+                                   float transparency) :
 Layer(condition,
       "URLTemplate",
       timeToCache,
@@ -49,7 +49,7 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                                                 const TimeInterval& timeToCache,
                                                 bool                readExpired,
                                                 LayerCondition*     condition,
-                                                double transparency) {
+                                                float transparency) {
   return new URLTemplateLayer(urlTemplate,
                               sector,
                               isTransparent,
@@ -69,7 +69,7 @@ URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
                                              const TimeInterval& timeToCache,
                                              bool                readExpired,
                                              LayerCondition*     condition,
-                                             double transparency) {
+                                             float transparency) {
   return new URLTemplateLayer(urlTemplate,
                               sector,
                               isTransparent,

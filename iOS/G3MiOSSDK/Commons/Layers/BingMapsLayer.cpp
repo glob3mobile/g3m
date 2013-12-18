@@ -29,7 +29,7 @@ BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              bool readExpired,
                              int initialLevel,
                              LayerCondition* condition,
-                             double transparency) :
+                             float transparency) :
 Layer(condition,
       "BingMaps",
       timeToCache,

@@ -35,7 +35,7 @@ public:
             bool readExpired = true,
             int initialLevel = 2,
             LayerCondition* condition = NULL,
-            double transparency = 1.0);
+            float transparency = 1.0);
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,

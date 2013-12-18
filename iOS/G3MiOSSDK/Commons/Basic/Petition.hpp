@@ -28,7 +28,7 @@ class Petition {
 private:
   const Sector* _sector;
   IImage* _image;
-  const double _layerTransparency;
+  const float _layerTransparency;
 
 #ifdef C_CODE
   const URL     _url;
@@ -53,7 +53,7 @@ public:
            const TimeInterval& timeToCache,
            bool readExpired,
            bool isTransparent,
-           double layerTransparency):
+           float layerTransparency):
   _sector(new Sector(sector)),
   _url(url),
   _timeToCacheInMS(timeToCache._milliseconds),
@@ -107,7 +107,7 @@ public:
 
   const std::string description() const;
 
-  double getLayerTransparency() const{
+  float getLayerTransparency() const{
     return _layerTransparency;
   }
   

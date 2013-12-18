@@ -91,7 +91,7 @@ public:
                 bool readExpired = true,
                 int initialLevel = 2,
                 LayerCondition* condition = NULL,
-                double transparency = 1.0);
+                float transparency = 1.0);
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

@@ -21,7 +21,7 @@ HereLayer::HereLayer(const std::string& appId,
                      bool readExpired,
                      int initialLevel,
                      LayerCondition* condition,
-                     double transparency) :
+                     float transparency) :
 Layer(condition,
       "here",
       timeToCache,

@@ -1899,7 +1899,7 @@ public:
   destRs.push_back(new RectangleF(0,0,256,256));
   destRs.push_back(new RectangleF(0, 128, 64, 64));
 
-  std::vector<double> transparencies;
+  std::vector<float> transparencies;
   transparencies.push_back(1.0);
   transparencies.push_back(0.5);
 
