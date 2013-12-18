@@ -516,7 +516,6 @@ void G3MWidget::render(int width, int height) {
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
 
-
   Renderer* selectedRenderer;
   switch (renderStateType) {
     case RENDER_READY:
@@ -533,7 +532,6 @@ void G3MWidget::render(int width, int height) {
       break;
   }
 
-//  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {
     if (_selectedRenderer != NULL) {
       _selectedRenderer->stop(_renderContext);
