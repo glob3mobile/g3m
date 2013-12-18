@@ -196,6 +196,23 @@ void ICanvas::drawImage(const IImage* image,
              destLeft, destTop, destWidth, destHeight);
 }
 
+void ICanvas::drawImage(const IImage* image,
+                        float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                        float destLeft, float destTop, float destWidth, float destHeight,
+                        double transparency) {
+  checkInitialized();
+
+  if (!RectangleF::fullContains(0, 0, image->getWidth(), image->getHeight(),
+                                srcLeft, srcTop, srcWidth, srcHeight)) {
+    ILogger::instance()->logError("Invalid source rectangle in drawImage");
+  }
+
+  _drawImage(image,
+             srcLeft, srcTop, srcWidth, srcHeight,
+             destLeft, destTop, destWidth, destHeight,
+             transparency);
+}
+
 void ICanvas::beginPath() {
   checkInitialized();
   _beginPath();

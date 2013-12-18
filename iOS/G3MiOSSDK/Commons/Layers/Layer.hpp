@@ -52,11 +52,14 @@ protected:
 
   std::string _title;
 
+  const double _transparency;
+
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
         bool readExpired,
-        const LayerTilesRenderParameters* parameters) :
+        const LayerTilesRenderParameters* parameters,
+        double transparency) :
   _condition(condition),
   _name(name),
   _layerSet(NULL),
@@ -64,7 +67,8 @@ protected:
   _readExpired(readExpired),
   _enable(true),
   _parameters(parameters),
-  _title("")
+  _title(""),
+  _transparency(transparency)
   {
 
   }

@@ -71,7 +71,8 @@ public:
            LayerCondition* condition,
            const TimeInterval& timeToCache,
            bool readExpired,
-           const LayerTilesRenderParameters* parameters = NULL);
+           const LayerTilesRenderParameters* parameters = NULL,
+           double transparency = 1.0);
 
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
@@ -84,7 +85,8 @@ public:
            LayerCondition* condition,
            const TimeInterval& timeToCache,
            bool readExpired,
-           const LayerTilesRenderParameters* parameters = NULL);
+           const LayerTilesRenderParameters* parameters = NULL,
+           double transparency = 1.0);
 
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,

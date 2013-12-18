@@ -1840,6 +1840,10 @@ public:
   destRs.push_back(new RectangleF(0,0,256,256));
   destRs.push_back(new RectangleF(0, 128, 64, 64));
 
+  std::vector<double> transparencies;
+  transparencies.push_back(1.0);
+  transparencies.push_back(0.5);
+
   class QuadListener: public IImageListener {
     ShapesRenderer* _sr;
   public:
@@ -1867,6 +1871,7 @@ public:
                        images,
                        srcRs,
                        destRs,
+                       transparencies,
                        new QuadListener(shapesRenderer), true);
 
   for (int i = 0; i < 2; i++) {

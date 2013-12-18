@@ -405,6 +405,54 @@ void Canvas_iOS::_drawImage(const IImage* image,
   }
 }
 
+void Canvas_iOS::_drawImage(const IImage* image,
+                float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                float destLeft, float destTop, float destWidth, float destHeight,
+                double transparency){
+
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
+
+  CGRect destRect = CGRectMake(destLeft,
+                               _canvasHeight - (destTop + destHeight), // Bottom
+                               destWidth,
+                               destHeight);
+
+  if ((srcLeft == 0) &&
+      (srcTop == 0) &&
+      (srcWidth == image->getWidth()) &&
+      (srcHeight == image->getHeight())) {
+
+    CGContextSetAlpha(_context, (float)transparency);
+
+    CGContextDrawImage(_context,
+                       destRect,
+                       cgImage);
+
+    CGContextSetAlpha(_context, 1.0);
+  }
+  else {
+    // Cropping image
+    CGRect cropRect = CGRectMake(srcLeft,
+                                 srcTop,
+                                 srcWidth,
+                                 srcHeight);
+
+    CGImage* cgCropImage = CGImageCreateWithImageInRect(cgImage, cropRect);
+
+    CGContextSetAlpha(_context, (float)transparency);
+
+    CGContextDrawImage(_context,
+                       destRect,
+                       cgCropImage);
+
+    CGContextSetAlpha(_context, 1.0);
+
+    CGImageRelease(cgCropImage);
+  }
+
+}
+
 void Canvas_iOS::_beginPath() {
   if (_path != NULL) {
     CGPathRelease(_path);

@@ -399,6 +399,7 @@ public:
       std::vector<const IImage*>     images;
       std::vector<RectangleF*> sourceRects;
       std::vector<RectangleF*> destRects;
+      std::vector<double> transparencies;
       std::string textureId = _tile->getKey().tinyDescription();
 
       const Sector tileSector = _tile->_sector;
@@ -411,6 +412,8 @@ public:
           const Sector imageSector = petition->getSector();
           //Finding intersection image sector - tile sector = srcReq
           const Sector intersectionSector = tileSector.intersection(imageSector);
+
+          transparencies.push_back(petition->getLayerTransparency());
 
           RectangleF* sourceRect = NULL;
           if (!intersectionSector.isEquals(imageSector)) {
@@ -435,6 +438,9 @@ public:
                                                 intersectionSector));
           textureId += petition->getURL().getPath();
           textureId += "_";
+
+          //Layer transparency set by user
+          transparencies.push_back(petition->getLayerTransparency());
         }
         else{
           return false;
@@ -452,6 +458,7 @@ public:
                              images,
                              sourceRects,
                              destRects,
+                             transparencies,
                              new TextureUploader(this,
                                                  _tile,
                                                  _mercator,
