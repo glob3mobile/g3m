@@ -19,7 +19,9 @@
 #include "DirectMesh.hpp"
 #include "TexturedMesh.hpp"
 
+
 class HUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
+private:
   HUDQuadWidget* _quadWidget;
 
 public:
