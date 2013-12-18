@@ -634,6 +634,15 @@ public class Tile
   
     if (_tessellatorData != null)
        _tessellatorData.dispose();
+  
+    if (_middleEastPoint != null)
+       _middleEastPoint.dispose();
+    if (_middleNorthPoint != null)
+       _middleNorthPoint.dispose();
+    if (_middleSouthPoint != null)
+       _middleSouthPoint.dispose();
+    if (_middleWestPoint != null)
+       _middleWestPoint.dispose();
   }
 
   //Change to public for TileCache
