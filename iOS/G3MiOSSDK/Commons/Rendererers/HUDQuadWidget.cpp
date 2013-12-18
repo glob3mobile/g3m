@@ -104,12 +104,12 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
     return NULL;
   }
 
-//#ifdef C_CODE
-//  const TextureIDReference* texId;
-//#endif
-//#ifdef JAVA_CODE
-//  TextureIDReference texId;
-//#endif
+  //#ifdef C_CODE
+  //  const TextureIDReference* texId;
+  //#endif
+  //#ifdef JAVA_CODE
+  //  TextureIDReference texId;
+  //#endif
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
@@ -168,8 +168,8 @@ Mesh* HUDQuadWidget::getMesh(const G3MRenderContext* rc) {
   return _mesh;
 }
 
-void HUDQuadWidget::render(const G3MRenderContext* rc,
-                           GLState* glState) {
+void HUDQuadWidget::rawRender(const G3MRenderContext* rc,
+                              GLState* glState) {
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
     mesh->render(rc, glState);

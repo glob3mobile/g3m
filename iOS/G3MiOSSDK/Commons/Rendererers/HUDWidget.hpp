@@ -21,6 +21,10 @@ class HUDWidget {
 private:
   bool _enable;
 
+protected:
+  virtual void rawRender(const G3MRenderContext* rc,
+                         GLState* glState) = 0;
+
 public:
   HUDWidget() :
   _enable(true)
@@ -47,8 +51,8 @@ public:
 
   virtual RenderState getRenderState(const G3MRenderContext* rc) = 0;
 
-  virtual void render(const G3MRenderContext* rc,
-                      GLState* glState) = 0;
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
 
 };
 

@@ -36,6 +36,10 @@ private:
   Mesh* createMesh(const G3MRenderContext* rc) const;
   Mesh* getMesh(const G3MRenderContext* rc);
 
+protected:
+  void rawRender(const G3MRenderContext* rc,
+                 GLState* glState);
+
 public:
   HUDQuadWidget(const URL& imageURL,
                 float x,
@@ -62,10 +66,6 @@ public:
                              int height);
 
   RenderState getRenderState(const G3MRenderContext* rc);
-
-  void render(const G3MRenderContext* rc,
-              GLState* glState);
-
 
   /** private, do not call */
   void onImageDownload(IImage* image);

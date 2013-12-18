@@ -7,3 +7,10 @@
 //
 
 #include "HUDWidget.hpp"
+
+void HUDWidget::render(const G3MRenderContext* rc,
+                       GLState* glState) {
+  if (_enable) {
+    rawRender(rc, glState);
+  }
+}

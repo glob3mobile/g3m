@@ -134,14 +134,14 @@ void HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 void HUDRenderer::render(const G3MRenderContext* rc,
                          GLState* glState) {
 
-  rc->getGL()->getNative()->depthMask(false);
+  INativeGL* nativeGL = rc->getGL()->getNative();
+
+  nativeGL->depthMask(false);
 
   for (int i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
-    if (widget->isEnable()) {
-      widget->render(rc, _glState);
-    }
+    widget->render(rc, _glState);
   }
 
-  rc->getGL()->getNative()->depthMask(true);
+  nativeGL->depthMask(true);
 }
