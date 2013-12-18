@@ -109,6 +109,13 @@ public:
     return true;
   }
 
+  float getWidth() {
+    return _width;
+  }
+  
+  Color* getColor() {
+    return _color;
+  }
 };
 
 

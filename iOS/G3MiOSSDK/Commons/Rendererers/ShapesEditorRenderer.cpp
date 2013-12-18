@@ -128,8 +128,15 @@ void ShapesEditorRenderer::addShape(Shape* shape)
   
   // if shape is raster, it is saved in the class
   std::vector<Geodetic2D*> coordinates = shape->getCopyRasterCoordinates();
-  if (!coordinates.empty())
-    _rasterShapes.push_back(RasterShapes(shape, coordinates));
+  int size = coordinates.size();
+  if (size == 2) {
+    RasterLineShape* lineShape = (RasterLineShape*) shape;
+    _rasterShapes.push_back(RasterShapes(shape,
+                                         coordinates,
+                                         lineShape->getWidth(),
+                                         lineShape->getColor(),
+                                         lineShape->getColor()));
+  }
 }
 
 
@@ -233,8 +240,8 @@ void ShapesEditorRenderer::addRasterShapes()
     } else {
       shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
                                   new Geodetic2D(*coordinates[1]),
-                                  2,
-                                  Color::fromRGBA(0, 0, 1, 1));
+                                  _rasterShapes[n]._borderWidth,
+                                  *_rasterShapes[n]._borderColor);
     }
     ShapesRenderer::addShape(shape);
     _rasterShapes[n]._shape = shape;

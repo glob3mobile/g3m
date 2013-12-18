@@ -1804,7 +1804,7 @@ public:
     shapesRenderer->addShape(rasterLine);
   }
   
-  {
+ /* {
     std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
     vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.10)));
     vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.38), Angle::fromDegrees(3.20)));
@@ -1816,7 +1816,7 @@ public:
                                          Color::green(),
                                          Color::fromRGBA(1.0, 1.0, 1, 0.6));
     shapesRenderer->addShape(pol1);
-  }
+  }*/
   
   
   

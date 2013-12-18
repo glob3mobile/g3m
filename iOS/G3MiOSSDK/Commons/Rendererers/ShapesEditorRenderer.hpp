@@ -21,11 +21,24 @@ class PlanetRenderer;
 struct RasterShapes {
   Shape* _shape;
   std::vector<Geodetic2D*> _coordinates;
+  float _borderWidth;
+  Color* _borderColor;
+  Color* _surfaceColor;
   
-  RasterShapes(Shape* shape, std::vector<Geodetic2D*> coordinates):
+  RasterShapes(Shape* shape,
+               std::vector<Geodetic2D*> coordinates,
+               float borderWidth,
+               Color* borderColor,
+               Color* surfaceColor):
   _shape(shape),
-  _coordinates(coordinates)
-  {}
+  _coordinates(coordinates),
+  _borderWidth(borderWidth),
+  _borderColor(new Color(*borderColor)),
+  _surfaceColor(new Color(*surfaceColor))
+  {
+    printf ("boderColor=%f, %f, %f\n", borderColor->_red, borderColor->_green, borderColor->_blue);
+    printf ("_boderColor=%f, %f, %f\n", _borderColor->_red, _borderColor->_green, _borderColor->_blue);
+  }
 };
 
 
@@ -62,6 +75,7 @@ public:
   int getVertexShapeId(Shape* shape);
 
   void activateEdition(PlanetRenderer* planetRenderer);
+  
 
 };
 
