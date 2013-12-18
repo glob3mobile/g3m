@@ -155,9 +155,18 @@ public class HUDRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    final int halfWidth = width / 2;
-    final int halfHeight = height / 2;
-    MutableMatrix44D projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
+  //  const int halfWidth  = width  / 2;
+  //  const int halfHeight = height / 2;
+  //  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,  halfWidth,
+  //                                                                                           -halfHeight, halfHeight,
+  //                                                                                           -halfWidth,  halfWidth);
+  //  double left, double right,
+  //  double bottom, double top,
+  //  double znear, double zfar
+  //  MutableMatrix44D projectionMatrix = MutableMatrix44D::createOrthographicProjectionMatrix(0, width,
+  //                                                                                           0, height,
+  //                                                                                           -halfWidth, halfWidth);
+    MutableMatrix44D projectionMatrix = MutableMatrix44D.createOrthographicProjectionMatrix(0, width, 0, height, -1, +1);
   
     ProjectionGLFeature pr = (ProjectionGLFeature) _glState.getGLFeature(GLFeatureID.GLF_PROJECTION);
     if (pr == null)
@@ -178,6 +187,10 @@ public class HUDRenderer extends LeafRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
+    if (_widgetsSize == 0)
+    {
+      return;
+    }
   
     INativeGL nativeGL = rc.getGL().getNative();
   

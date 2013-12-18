@@ -40,13 +40,6 @@ public class HUDQuadWidget extends HUDWidget
       return null;
     }
   
-    ///#ifdef C_CODE
-    //  const TextureIDReference* texId;
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //  TextureIDReference texId;
-    ///#endif
-  
     final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageURL.getPath(), false);
   
     if (texId == null)
@@ -55,20 +48,28 @@ public class HUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final Camera camera = rc.getCurrentCamera();
-    final int viewportWidth = camera.getWidth();
-    final int viewportHeight = camera.getHeight();
+  //  const Camera* camera = rc->getCurrentCamera();
+  //  const int viewportWidth  = camera->getWidth();
+  //  const int viewportHeight = camera->getHeight();
+  //
+  //  const Vector3D halfViewportAndPosition(viewportWidth  / 2 - _x,
+  //                                         viewportHeight / 2 - _y,
+  //                                         0);
   
-    final Vector3D halfViewportAndPosition = new Vector3D(viewportWidth / 2 - _x, viewportHeight / 2 - _y, 0);
-  
-    final double w = _width;
-    final double h = _height;
+    final double x = _x;
+    final double y = _y;
+    final double width = _width;
+    final double height = _height;
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-    vertices.add(new Vector3D(0, h, 0).sub(halfViewportAndPosition));
-    vertices.add(new Vector3D(0, 0, 0).sub(halfViewportAndPosition));
-    vertices.add(new Vector3D(w, h, 0).sub(halfViewportAndPosition));
-    vertices.add(new Vector3D(w, 0, 0).sub(halfViewportAndPosition));
+  //  vertices->add( Vector3D(0, h, 0).sub(halfViewportAndPosition) );
+  //  vertices->add( Vector3D(0, 0, 0).sub(halfViewportAndPosition) );
+  //  vertices->add( Vector3D(w, h, 0).sub(halfViewportAndPosition) );
+  //  vertices->add( Vector3D(w, 0, 0).sub(halfViewportAndPosition) );
+    vertices.add(x, height+y, 0);
+    vertices.add(x, y, 0);
+    vertices.add(width+x, height+y, 0);
+    vertices.add(width+x, y, 0);
   
     FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
     texCoords.add(0, 0);
