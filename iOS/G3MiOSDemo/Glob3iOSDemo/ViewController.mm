@@ -660,6 +660,9 @@ public:
     hudRenderer->addWidget(new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
                                              0, 0,
                                              300, 300));
+    hudRenderer->addWidget(new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+                                             50, 50,
+                                             300, 300));
 
     builder.addRenderer(hudRenderer);
 
