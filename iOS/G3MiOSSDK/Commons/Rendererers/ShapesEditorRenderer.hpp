@@ -36,10 +36,19 @@ struct RasterShapes {
   _borderWidth(borderWidth),
   _borderColor(new Color(*borderColor)),
   _surfaceColor(new Color(*surfaceColor))
+  { }
+  
+  RasterShapes(float borderWidth,
+               const Color& borderColor,
+               const Color& surfaceColor):
+  _borderWidth(borderWidth),
+  _borderColor(new Color(borderColor)),
+  _surfaceColor(new Color(surfaceColor))
   {
-    printf ("boderColor=%f, %f, %f\n", borderColor->_red, borderColor->_green, borderColor->_blue);
-    printf ("_boderColor=%f, %f, %f\n", _borderColor->_red, _borderColor->_green, _borderColor->_blue);
+    _coordinates.clear();
   }
+
+  RasterShapes() {}
 };
 
 
@@ -54,6 +63,7 @@ private:
   MyShapeSelectionListener* _shapeTouchListener;
   
   bool _creatingShape;
+  RasterShapes _shapeInCreation;
   
   void removeRasterShapesFromShapesRenderer();
   void addRasterShapes();

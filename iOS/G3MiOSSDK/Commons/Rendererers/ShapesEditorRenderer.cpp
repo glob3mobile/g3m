@@ -202,6 +202,7 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   if (position._longitude._degrees>3.5303) {
     printf ("\n---------- finishing polygon\n");
     endPolygon();
+    return;
   }
   // ***************************
   // ***************************
@@ -210,13 +211,15 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   // ***************************
   
   if (_creatingShape) {
-    Geodetic3D* vertexPosition = new Geodetic3D(position.asGeodetic2D(), 1);
+    Geodetic2D pos2D = position.asGeodetic2D();
+    Geodetic3D* vertexPosition = new Geodetic3D(pos2D, 1);
     PointShape* vertex = new PointShape(vertexPosition,
                                         RELATIVE_TO_GROUND,
                                         20,
-                                        Color::fromRGBA(0.7f, 0.7f, 0.4f, 1));
+                                        Color::fromRGBA(0.3f, 0.3f, 0.0f, 1));
     addShape(vertex);
     _vertexShapes.push_back(vertex);
+    _shapeInCreation._coordinates.push_back(new Geodetic2D(pos2D));
     return;
   }
   
@@ -272,7 +275,6 @@ void ShapesEditorRenderer::addRasterShapes()
   for (int n=0; n<_rasterShapes.size(); n++) {
     std::vector<Geodetic2D*> coordinates = _rasterShapes[n]._coordinates;
     if (coordinates.size() > 2) {
-      // it's a polygon
       std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
       for (int n=0; n<coordinates.size(); n++)
         vertices->push_back(new Geodetic2D(*coordinates[n]));
@@ -303,10 +305,35 @@ void ShapesEditorRenderer::startPolygon(float borderWidth,
   
   _creatingShape = true;
   removeRasterShapesFromShapesRenderer();
+  _shapeInCreation = RasterShapes(borderWidth, borderColor, surfaceColor);
 }
 
 
 void ShapesEditorRenderer::endPolygon()
 {
+  _creatingShape = false;
+  clearVertexShapes();
+  ShapesRenderer::_geoTileRasterizer->clear();
+  addRasterShapes();
+
+  std::vector<Geodetic2D*> coordinates = _shapeInCreation._coordinates;
+  if (coordinates.size() > 2) {
+    std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
+    for (int n=0; n<coordinates.size(); n++)
+      vertices->push_back(new Geodetic2D(*coordinates[n]));
+    Shape* shape = new RasterPolygonShape(vertices,
+                                          _shapeInCreation._borderWidth,
+                                          *_shapeInCreation._borderColor,
+                                          *_shapeInCreation._surfaceColor);
+    addShape(shape);
+  }
+  if (coordinates.size()==2) {
+    Shape *shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
+                                       new Geodetic2D(*coordinates[1]),
+                                       _shapeInCreation._borderWidth,
+                                       *_shapeInCreation._borderColor);
+    addShape(shape);
+  }
   
+  _shapeInCreation._coordinates.clear();
 }
