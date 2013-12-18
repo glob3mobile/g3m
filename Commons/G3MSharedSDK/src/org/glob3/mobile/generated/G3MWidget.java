@@ -184,7 +184,6 @@ public class G3MWidget
   
     _frameTasksExecutor.doPreRenderCycle(_renderContext);
   
-  
     Renderer selectedRenderer;
     switch (renderStateType)
     {
@@ -202,7 +201,6 @@ public class G3MWidget
         break;
     }
   
-  //  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
     if (selectedRenderer != _selectedRenderer)
     {
       if (_selectedRenderer != null)
@@ -219,7 +217,6 @@ public class G3MWidget
     {
       _rootState = new GLState();
     }
-  
   
     if (renderStateType == RenderState_Type.RENDER_READY)
     {

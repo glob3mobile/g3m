@@ -39,9 +39,15 @@ public class HUDQuadWidget extends HUDWidget
     {
       return null;
     }
-    TextureIDReference texId;
   
-    texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageURL.getPath(), false);
+  ///#ifdef C_CODE
+  //  const TextureIDReference* texId;
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  TextureIDReference texId;
+  ///#endif
+  
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageURL.getPath(), false);
   
     if (texId == null)
     {
