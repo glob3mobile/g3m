@@ -137,6 +137,15 @@ void ShapesEditorRenderer::addShape(Shape* shape)
                                          lineShape->getColor(),
                                          lineShape->getColor()));
   }
+  
+  if (size > 2) {
+    RasterPolygonShape* polygonShape = (RasterPolygonShape*) shape;
+    _rasterShapes.push_back(RasterShapes(shape,
+                                         coordinates,
+                                         polygonShape->getBorderWidth(),
+                                         polygonShape->getBorderColor(),
+                                         polygonShape->getSurfaceColor()));
+  }
 }
 
 
@@ -234,9 +243,9 @@ void ShapesEditorRenderer::addRasterShapes()
       for (int n=0; n<coordinates.size(); n++)
         vertices->push_back(new Geodetic2D(*coordinates[n]));
       shape = new RasterPolygonShape(vertices,
-                                     2,
-                                     Color::green(),
-                                     Color::fromRGBA(1.0, 1.0, 1, 0.6f));
+                                     _rasterShapes[n]._borderWidth,
+                                     *_rasterShapes[n]._borderColor,
+                                     *_rasterShapes[n]._surfaceColor);
     } else {
       shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
                                   new Geodetic2D(*coordinates[1]),

@@ -128,6 +128,18 @@ public:
     return true;
   }
 
+  float getBorderWidth() {
+    return _borderWidth;
+  }
+  
+  Color* getBorderColor() {
+    return _borderColor;
+  }
+  
+  Color* getSurfaceColor() {
+    return _surfaceColor;
+  }
+  
 };
 
 
