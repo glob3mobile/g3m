@@ -23,6 +23,11 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
   GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
   if (p == NULL) {
     p = getNewProgram(gl, uniformsCode, attributesCode);
+    if (p == NULL){
+      ILogger::instance()->logError("Problem at compiling program.");
+      return NULL;
+    }
+
 #warning AVOID getAttributesCode and getUniformsCode calls
     if (p->getAttributesCode() != attributesCode ||
         p->getUniformsCode() != uniformsCode){

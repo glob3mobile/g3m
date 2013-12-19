@@ -81,7 +81,6 @@ public class Main {
 				continue;
 			}
 
-			boolean firstLine = (result == "");
 			result += "\"" + StringEscapeUtils.escapeJava(line) + " \\n \"";
 
 			if (i < lines.length - 1) {
