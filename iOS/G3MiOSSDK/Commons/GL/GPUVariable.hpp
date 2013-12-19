@@ -58,11 +58,11 @@ public:
   static int getUniformCode(int u);
   static int getAttributeCode(int a);
 
-  static bool codeContainsUniform(int code, int u);
-  static bool codeContainsAttribute(int code, int a);
+  static bool hasUniform(int code, int u);
+  static bool hasAttribute(int code, int a);
 
-  static bool codeContainsUniform(int code, GPUUniformKey u);
-  static bool codeContainsAttribute(int code, GPUAttributeKey a);
+  static bool hasUniform(int code, GPUUniformKey u);
+  static bool hasAttribute(int code, GPUAttributeKey a);
 
   virtual ~GPUVariable() {}
 
