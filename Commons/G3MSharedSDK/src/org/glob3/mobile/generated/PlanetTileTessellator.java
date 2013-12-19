@@ -512,11 +512,11 @@ public class PlanetTileTessellator extends TileTessellator
     return data._textCoords.create();
   }
 
-  public final Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
+  public final Vector2F getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
   {
     final Sector sector = tile._sector;
   
-    final Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+    final Vector2F linearUV = sector.getUVCoordinatesF(latitude, longitude);
     if (!mercator)
     {
       return linearUV;
@@ -529,7 +529,7 @@ public class PlanetTileTessellator extends TileTessellator
     final double globalV = MercatorUtils.getMercatorV(latitude);
     final double localV = (globalV - upperGlobalV) / deltaGlobalV;
   
-    return new Vector2D(linearUV._x, localV);
+    return new Vector2F(linearUV._x, (float) localV);
   }
 
   public final void setRenderedSector(Sector sector)

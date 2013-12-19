@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 ///#include <vector>
+///#include "MutableVector2D.hpp"
 
 //class IGLTextureId;
 

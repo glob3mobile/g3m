@@ -28,13 +28,13 @@ public class HUDQuadWidget extends HUDWidget
   private final float _width;
   private final float _height;
 
-  private float _texCoordsTranslationX;
-  private float _texCoordsTranslationY;
-  private float _texCoordsScaleX;
-  private float _texCoordsScaleY;
+  private float _texCoordsTranslationU;
+  private float _texCoordsTranslationV;
+  private float _texCoordsScaleU;
+  private float _texCoordsScaleV;
   private float _texCoordsRotationInRadians;
-  private float _texCoordsRotationCenterX;
-  private float _texCoordsRotationCenterY;
+  private float _texCoordsRotationCenterU;
+  private float _texCoordsRotationCenterV;
 
   private IImage _image;
   private boolean _downloadingImage;
@@ -79,8 +79,9 @@ public class HUDQuadWidget extends HUDWidget
        vertices.dispose();
   
     SimpleTextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
-    texMap.setTranslationAndScale(new Vector2D(_texCoordsTranslationX, _texCoordsTranslationY), new Vector2D(_texCoordsScaleX, _texCoordsScaleY));
-    texMap.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterX, _texCoordsRotationCenterY);
+    texMap.setTranslation(_texCoordsTranslationU, _texCoordsTranslationV);
+    texMap.setScale(_texCoordsScaleU, _texCoordsScaleV);
+    texMap.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
     return new TexturedMesh(dm, true, texMap, true, true);
   }
   private Mesh getMesh(G3MRenderContext rc)
@@ -111,47 +112,54 @@ public class HUDQuadWidget extends HUDWidget
      _mesh = null;
      _image = null;
      _downloadingImage = false;
-     _texCoordsTranslationX = 0F;
-     _texCoordsTranslationY = 0F;
-     _texCoordsScaleX = 1F;
-     _texCoordsScaleY = 1F;
+     _texCoordsTranslationU = 0F;
+     _texCoordsTranslationV = 0F;
+     _texCoordsScaleU = 1F;
+     _texCoordsScaleV = 1F;
      _texCoordsRotationInRadians = 0F;
-     _texCoordsRotationCenterX = 0F;
-     _texCoordsRotationCenterY = 0F;
+     _texCoordsRotationCenterU = 0F;
+     _texCoordsRotationCenterV = 0F;
   }
 
-  public final void setTexCoordsTranslation(Vector2D translation)
+  public final void setTexCoordsTranslation(float u, float v)
   {
-    _texCoordsTranslationX = translation._x;
-    _texCoordsTranslationY = translation._y;
+    _texCoordsTranslationU = u;
+    _texCoordsTranslationV = v;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning update mesh
     if (_mesh != null)
        _mesh.dispose();
     _mesh = null;
   }
-  public final void setTexCoordsScale(Vector2D scale)
+
+  public final void setTexCoordsScale(float u, float v)
   {
-    _texCoordsScaleX = scale._x;
-    _texCoordsScaleY = scale._y;
+    _texCoordsScaleU = u;
+    _texCoordsScaleV = v;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning update mesh
     if (_mesh != null)
        _mesh.dispose();
     _mesh = null;
   }
-  public final void setTexCoordsRotation(Angle rotation, Vector2D center)
+
+  public final void setTexCoordsRotation(float angleInRadians, float centerU, float centerV)
   {
-    _texCoordsRotationInRadians = rotation._radians;
+    _texCoordsRotationInRadians = angleInRadians;
   
-    _texCoordsRotationCenterX = center._x;
-    _texCoordsRotationCenterY = center._y;
+    _texCoordsRotationCenterU = centerU;
+    _texCoordsRotationCenterV = centerV;
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning update mesh
     if (_mesh != null)
        _mesh.dispose();
     _mesh = null;
+  }
+
+  public final void setTexCoordsRotation(Angle angle, float centerU, float centerV)
+  {
+    setTexCoordsRotation((float) angle._radians, centerU, centerV);
   }
 
   public void dispose()
