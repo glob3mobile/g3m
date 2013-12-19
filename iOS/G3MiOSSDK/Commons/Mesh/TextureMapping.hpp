@@ -45,6 +45,7 @@ private:
   IFloatBuffer* _texCoords;
   const bool    _ownedTexCoords;
 
+#warning replace MutableVector2D with pair of floats
   MutableVector2D _translation;
   MutableVector2D _scale;
 
