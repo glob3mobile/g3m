@@ -72,6 +72,12 @@ private:
     return _selectedVertex;
   }
   
+  void startRasterShape(float borderWidth,
+                        const Color& borderColor,
+                        const Color& surfaceColor);
+  void endRasterShape(bool cancelVertices=false);
+
+  
 public:
   int _selectedRasterShape;
 
@@ -91,8 +97,13 @@ public:
   
   void startPolygon(float borderWidth,
                     const Color& borderColor,
-                    const Color& surfaceColor);
-  void endPolygon(bool cancelVertices=false);
+                    const Color& surfaceColor) {
+    startRasterShape(borderWidth, borderColor, surfaceColor);
+  }
+  
+  void endPolygon(bool cancelVertices=false) {
+    endRasterShape(cancelVertices);
+  }
   
   void startLine(float width,
                  const Color& color);

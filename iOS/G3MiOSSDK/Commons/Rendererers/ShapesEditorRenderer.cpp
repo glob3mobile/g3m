@@ -298,9 +298,9 @@ void ShapesEditorRenderer::addRasterShapes()
 }
 
 
-void ShapesEditorRenderer::startPolygon(float borderWidth,
-                                        const Color& borderColor,
-                                        const Color& surfaceColor)
+void ShapesEditorRenderer::startRasterShape(float borderWidth,
+                                            const Color& borderColor,
+                                            const Color& surfaceColor)
 {
   if (_creatingShape)
     endPolygon(true);
@@ -316,7 +316,7 @@ void ShapesEditorRenderer::startPolygon(float borderWidth,
 }
 
 
-void ShapesEditorRenderer::endPolygon(bool cancelVertices)
+void ShapesEditorRenderer::endRasterShape(bool cancelVertices)
 {
   if (!_creatingShape)
     return;
@@ -328,7 +328,7 @@ void ShapesEditorRenderer::endPolygon(bool cancelVertices)
   clearVertexShapes();
   ShapesRenderer::_geoTileRasterizer->clear();
   addRasterShapes();
-
+  
   std::vector<Geodetic2D*> coordinates = _shapeInCreation._coordinates;
   if (coordinates.size() > 2) {
     std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
