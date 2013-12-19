@@ -62,16 +62,17 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
 
   }
   const Geodetic2D center = Geodetic2D::fromDegrees((minLat + maxLat) / 2, (minLon + maxLon)/2);
-
+  const Vector3D cartesianCenter = _planet->toCartesian(center);
 
   double accumulatedArea = 0.0;
 
-  double previousVertexDistToCenter = getDistance(*polygon[0], center);
+  const Geodetic2D* previousVertex = polygon[0];
+  const Vector3D* previousVertexNormal =
+  double previousVertexDistToCenter = getDistance(*previousVertex, center);
   IMathUtils* mu = IMathUtils::instance();
   for (int i = 1; i < size; i++) {
 
     const Geodetic2D* vertex = polygon[i];
-    const Geodetic2D* previousVertex = polygon[i-1];
 
     const double distToPreviousVertex = getDistance(*vertex, *previousVertex);
     const double vertexDistToCenter = getDistance(*vertex, center);
@@ -120,8 +121,9 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
 
     accumulatedArea += T;
 
-    //Storing last distance
+    //Storing last vertex
     previousVertexDistToCenter = vertexDistToCenter;
+    previousVertex = vertex;
 
   }
 
