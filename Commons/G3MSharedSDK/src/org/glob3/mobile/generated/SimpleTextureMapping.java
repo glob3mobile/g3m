@@ -50,12 +50,16 @@ public class SimpleTextureMapping extends TextureMapping
   {
     _translationU = u;
     _translationV = v;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning updateState();
   }
 
   public final void setScale(float u, float v)
   {
     _scaleU = u;
     _scaleV = v;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning updateState();
   }
 
   public final void setRotation(float angleInRadians, float centerU, float centerV)
@@ -63,6 +67,8 @@ public class SimpleTextureMapping extends TextureMapping
     _rotationInRadians = angleInRadians;
     _rotationCenterU = centerU;
     _rotationCenterV = centerV;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning updateState();
   }
 
   public void dispose()
@@ -100,7 +106,7 @@ public class SimpleTextureMapping extends TextureMapping
   
       if ((_scaleU != 1) || (_scaleV != 1) || (_translationU != 0) || (_translationV != 0) || (_rotationInRadians != 0))
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
       }
       else
       {
