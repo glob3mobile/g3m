@@ -74,8 +74,13 @@ void HUDQuadWidget::setTexCoordsScale(const Vector2D& scale) {
   _mesh = NULL;
 }
 
-void HUDQuadWidget::setTexCoordsRotation(const Angle& rotation) {
+void HUDQuadWidget::setTexCoordsRotation(const Angle& rotation,
+                                         const Vector2D& center) {
   _texCoordsRotationInRadians = rotation._radians;
+
+  _texCoordsRotationCenterX = center._x;
+  _texCoordsRotationCenterY = center._y;
+
 #warning update mesh
   delete _mesh;
   _mesh = NULL;

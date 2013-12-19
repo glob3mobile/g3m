@@ -656,7 +656,8 @@ public:
     HUDQuadWidget* compass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
                                                150, 50,
                                                300, 150);
-    compass->setTexCoordsRotation(Angle::fromDegrees(30));
+    compass->setTexCoordsRotation(Angle::fromDegrees(30),
+                                  Vector2D(0.5, 0.5));
     compass->setTexCoordsTranslation(Vector2D(0, 0.5));
     compass->setTexCoordsScale(Vector2D(1, 0.5));
     hudRenderer->addWidget(compass);

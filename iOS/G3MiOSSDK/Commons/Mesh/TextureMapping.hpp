@@ -48,6 +48,10 @@ private:
   MutableVector2D _translation;
   MutableVector2D _scale;
 
+  float _rotationInRadians;
+  float _rotationCenterX;
+  float _rotationCenterY;
+
   const bool _transparent;
 
   void releaseGLTextureId();
@@ -63,15 +67,25 @@ public:
   _translation(0, 0),
   _scale(1, 1),
   _ownedTexCoords(ownedTexCoords),
-  _transparent(transparent)
+  _transparent(transparent),
+  _rotationInRadians(0),
+  _rotationCenterX(0),
+  _rotationCenterY(0)
   {
-    
   }
   
   void setTranslationAndScale(const Vector2D& translation,
                               const Vector2D& scale) {
     _translation = translation.asMutableVector2D();
     _scale       = scale.asMutableVector2D();
+  }
+
+  void setRotation(float angleInRadians,
+                   float centerX,
+                   float centerY) {
+    _rotationInRadians = angleInRadians;
+    _rotationCenterX = centerX;
+    _rotationCenterY = centerY;
   }
   
   virtual ~SimpleTextureMapping();

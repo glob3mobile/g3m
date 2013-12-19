@@ -35,6 +35,8 @@ private:
   double _texCoordsScaleX;
   double _texCoordsScaleY;
   double _texCoordsRotationInRadians;
+  double _texCoordsRotationCenterX;
+  double _texCoordsRotationCenterY;
 
   IImage* _image;
   bool _downloadingImage;
@@ -66,13 +68,16 @@ public:
   _texCoordsTranslationY(0),
   _texCoordsScaleX(1),
   _texCoordsScaleY(1),
-  _texCoordsRotationInRadians(0)
+  _texCoordsRotationInRadians(0),
+  _texCoordsRotationCenterX(0),
+  _texCoordsRotationCenterY(0)
   {
   }
 
   void setTexCoordsTranslation(const Vector2D& translation);
   void setTexCoordsScale(const Vector2D& scale);
-  void setTexCoordsRotation(const Angle& rotation);
+  void setTexCoordsRotation(const Angle& rotation,
+                            const Vector2D& center);
 
   ~HUDQuadWidget();
 
