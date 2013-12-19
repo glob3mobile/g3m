@@ -78,7 +78,7 @@ public abstract class MapBooApplicationChangeListener
 
   public abstract void onScenesChanged(G3MContext context, java.util.ArrayList<MapBoo_Scene> scenes);
 
-  public abstract void onCurrentSceneChanged(G3MContext context, int sceneIndex, MapBoo_Scene scene);
+  public abstract void onCurrentSceneChanged(G3MContext context, String sceneId, MapBoo_Scene scene);
 
   public abstract void onWebSocketOpen(G3MContext context);
 
