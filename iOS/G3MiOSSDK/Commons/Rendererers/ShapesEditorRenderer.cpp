@@ -200,12 +200,14 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   // ***************************
   if (position._longitude._degrees<2.4) {
     printf ("\n---------- starting polygon\n");
-    startPolygon(3, Color::fromRGBA255(20, 30, 50, 255), Color::fromRGBA255(20, 30, 40, 60));
+    //startPolygon(3, Color::fromRGBA255(20, 30, 50, 255), Color::fromRGBA255(20, 30, 40, 60));
+    startLine(7, Color::fromRGBA255(180, 30, 50, 255));
     return;
   }
   if (position._longitude._degrees>3.4) {
     printf ("\n---------- finishing polygon\n");
-    endPolygon();
+    //endPolygon();
+    endLine();
     return;
   }
   // ***************************
@@ -224,6 +226,9 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
     addShape(vertex);
     _vertexShapes.push_back(vertex);
     _shapeInCreation._coordinates.push_back(new Geodetic2D(pos2D));
+    
+    if (_rasterShapeKind==LINE_SHAPE && _shapeInCreation._coordinates.size()==2)
+      endRasterShape();
     return;
   }
   
