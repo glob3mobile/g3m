@@ -50,25 +50,20 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              true,
                                               _translationU,
                                               _translationV,
                                               _scaleU,
                                               _scaleV,
                                               0, 0, 0),
-                         false); //TRANSFORM
+                         false);
     }
     else {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              false,
-                                              0, 0,
-                                              0, 0,
-                                              0, 0, 0),
-                         false); //TRANSFORM
+                                              GLBlendFactor::oneMinusSrcAlpha()),
+                         false);
     }
 
   }

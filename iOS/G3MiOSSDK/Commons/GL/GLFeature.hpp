@@ -317,9 +317,6 @@ private:
   }
 
 public:
-
-#warning OVERLOAD
-
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords,
                    int arrayElementSize,
@@ -329,7 +326,6 @@ public:
                    bool blend,
                    int sFactor,
                    int dFactor,
-                   bool coordsTransformed,
                    float translateU,
                    float translateV,
                    float scaleU,
@@ -337,6 +333,16 @@ public:
                    float rotationAngleInRadians,
                    float rotationCenterU,
                    float rotationCenterV);
+
+  TextureGLFeature(const IGLTextureId* texID,
+                   IFloatBuffer* texCoords,
+                   int arrayElementSize,
+                   int index,
+                   bool normalized,
+                   int stride,
+                   bool blend,
+                   int sFactor,
+                   int dFactor);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };

@@ -442,11 +442,7 @@ void Mark::createGLState(const Planet* planet) {
                                                 0,
                                                 true,
                                                 GLBlendFactor::srcAlpha(),
-                                                GLBlendFactor::oneMinusSrcAlpha(),
-                                                false,
-                                                0, 0,
-                                                0, 0,
-                                                0, 0, 0),
+                                                GLBlendFactor::oneMinusSrcAlpha()),
                            false);
   }
 }

@@ -60,7 +60,6 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              true,
                                               _translationU,
                                               _translationV,
                                               _scaleU,
@@ -75,13 +74,7 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              false,
-                                              0, 0,
-                                              0, 0,
-                                              0,
-                                              0,
-                                              0), //TRANSFORM
+                                              GLBlendFactor::oneMinusSrcAlpha()),
                          false);
     }
   }
