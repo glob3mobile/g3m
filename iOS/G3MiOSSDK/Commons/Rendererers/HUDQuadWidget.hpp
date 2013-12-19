@@ -16,6 +16,7 @@
 #include "Angle.hpp"
 class IImage;
 class Mesh;
+class SimpleTextureMapping;
 
 class HUDQuadWidget : public HUDWidget {
 private:
@@ -43,8 +44,11 @@ private:
   std::vector<std::string> _errors;
 
   Mesh* _mesh;
-  Mesh* createMesh(const G3MRenderContext* rc) const;
+  SimpleTextureMapping* _simpleTextureMapping;
+  Mesh* createMesh(const G3MRenderContext* rc);
   Mesh* getMesh(const G3MRenderContext* rc);
+
+  void cleanMesh();
 
 protected:
   void rawRender(const G3MRenderContext* rc,
@@ -62,6 +66,7 @@ public:
   _width(width),
   _height(height),
   _mesh(NULL),
+  _simpleTextureMapping(NULL),
   _image(NULL),
   _downloadingImage(false),
   _texCoordsTranslationU(0),
