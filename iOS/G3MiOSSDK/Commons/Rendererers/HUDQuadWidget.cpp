@@ -137,7 +137,8 @@ void HUDQuadWidget::setTexCoordsScale(float u, float v) {
 }
 
 void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
-                                         float centerU, float centerV) {
+                                         float centerU,
+                                         float centerV) {
   _texCoordsRotationInRadians = angleInRadians;
   _texCoordsRotationCenterU = centerU;
   _texCoordsRotationCenterV = centerV;
