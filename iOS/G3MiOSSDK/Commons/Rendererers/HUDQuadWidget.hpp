@@ -30,13 +30,13 @@ private:
   const float _width;
   const float _height;
 
-  double _texCoordsTranslationX;
-  double _texCoordsTranslationY;
-  double _texCoordsScaleX;
-  double _texCoordsScaleY;
-  double _texCoordsRotationInRadians;
-  double _texCoordsRotationCenterX;
-  double _texCoordsRotationCenterY;
+  float _texCoordsTranslationX;
+  float _texCoordsTranslationY;
+  float _texCoordsScaleX;
+  float _texCoordsScaleY;
+  float _texCoordsRotationInRadians;
+  float _texCoordsRotationCenterX;
+  float _texCoordsRotationCenterY;
 
   IImage* _image;
   bool _downloadingImage;

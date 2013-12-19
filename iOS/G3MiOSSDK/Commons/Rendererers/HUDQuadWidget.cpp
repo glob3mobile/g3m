@@ -175,6 +175,9 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
                                                           true);
   texMap->setTranslationAndScale(Vector2D(_texCoordsTranslationX, _texCoordsTranslationY),
                                  Vector2D(_texCoordsScaleX, _texCoordsScaleY));
+  texMap->setRotation(_texCoordsRotationInRadians,
+                      _texCoordsRotationCenterX,
+                      _texCoordsRotationCenterY);
   return new TexturedMesh(dm, true, texMap, true, true);
 }
 
