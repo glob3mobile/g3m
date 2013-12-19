@@ -146,10 +146,14 @@ _texID(texID)
                             false);
 
     if (angleInRadians != 0.0){
-      _values.addUniformValue(ROTATION_POINT_TEXTURE_COORDS, new GPUUniformValueVec2Float(rotationPointX,
-                                                                         rotationPointY), false);
+      _values.addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
+                              new GPUUniformValueVec2Float(rotationPointX,
+                                                           rotationPointY),
+                              false);
 
-      _values.addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS, new GPUUniformValueFloat(angleInRadians), false);
+      _values.addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS,
+                              new GPUUniformValueFloat(angleInRadians),
+                              false);
     }
   }
 }

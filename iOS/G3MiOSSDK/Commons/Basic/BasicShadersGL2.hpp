@@ -182,10 +182,14 @@ public:
 "uniform mediump vec2 uScaleTexCoord; \n " + 
 "uniform mat4 uModelview; \n " + 
 "uniform float uPointSize; \n " + 
+"uniform float uRotationAngleTexCoord; \n " + 
+"uniform vec2 uRotationCenterTexCoord; \n " + 
 "varying vec4 VertexColor; \n " + 
 "varying vec2 TextureCoordOut; \n " + 
 "void main() { \n " + 
 "gl_Position = uModelview * aPosition; \n " + 
+"float dummy1 = uRotationAngleTexCoord; \n " + 
+"vec2 dummy2 = uRotationCenterTexCoord; \n " + 
 "TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
 "gl_PointSize = uPointSize; \n " + 
 "} \n ",
