@@ -44,6 +44,8 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   const bool color       = GPUVariable::codeContainsAttribute(attributesCode, COLOR);
   const bool transformTC = (GPUVariable::codeContainsUniform(uniformsCode, TRANSLATION_TEXTURE_COORDS) ||
                             GPUVariable::codeContainsUniform(uniformsCode, SCALE_TEXTURE_COORDS));
+
+  const bool rotationTC = GPUVariable::codeContainsUniform(uniformsCode, TRANSLATION_TEXTURE_COORDS);
   const bool hasLight    = GPUVariable::codeContainsUniform(uniformsCode, AMBIENT_LIGHT_COLOR);
 
   if (billboard) {
@@ -61,13 +63,21 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   if (!flatColor && texture && !color) {
     if (hasLight) {
       if (transformTC) {
-        return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_DirectionLight");
+//        if (rotationTC){
+//          return compileProgramWithName(gl, "TransformedTexCoorWithRotationTexturedMesh_DirectionLight");
+//        }else{
+          return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_DirectionLight");
+//        }
       }
       return compileProgramWithName(gl, "TexturedMesh_DirectionLight");
     }
 
     if (transformTC) {
-      return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
+//      if (rotationTC){
+//        return compileProgramWithName(gl, "TransformedTexCoorWithRotationTexturedMesh");
+//      }else{
+        return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
+//      }
     }
     return compileProgramWithName(gl, "TexturedMesh");
   }
