@@ -1655,8 +1655,13 @@ void MapBooBuilder::deleteApplicationScene(const std::string &sceneId) {
   }
   if (sceneIndex != -1) {
     MapBoo_Scene* scene = _applicationScenes[sceneIndex];
-    delete scene;
+#ifdef C_CODE
     _applicationScenes.erase(_applicationScenes.begin() + sceneIndex);
+#endif
+#ifdef JAVA_CODE
+    _applicationScenes.remove(sceneIndex);
+#endif
+    delete scene;
     
     triggerOnScenesChanged();
   }
