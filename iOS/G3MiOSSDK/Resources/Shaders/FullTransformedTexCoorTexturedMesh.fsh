@@ -1,9 +1,3 @@
-//
-//  Default.vsh
-//
-//  Created by José Miguel Santana Núñez
-//
-
 varying mediump vec2 TextureCoordOut;
 varying mediump vec4 VertexColor;
 

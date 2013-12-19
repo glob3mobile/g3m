@@ -10,10 +10,12 @@
 
 void TexturedMesh::createGLState() {
   _textureMapping->modifyGLState(*_glState);
+#warning Diego at work!
 }
 
 void TexturedMesh::rawRender(const G3MRenderContext* rc,
                              const GLState* parentState) const{
+#warning Diego at work!
   _glState->setParent(parentState);
   _mesh->render(rc, _glState);
 }

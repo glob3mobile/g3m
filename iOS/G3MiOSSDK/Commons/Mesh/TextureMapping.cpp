@@ -56,22 +56,30 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
         (_translationV != 0) ||
         (_rotationInRadians != 0)) {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
-                                              _texCoords, 2, 0, false, 0,
+                                              _texCoords,
+                                              2,
+                                              0,
+                                              false,
+                                              0,
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
+                                              GLBlendFactor::oneMinusSrcAlpha(),
                                               _translationU,
                                               _translationV,
                                               _scaleU,
                                               _scaleV,
                                               _rotationInRadians,
                                               _rotationCenterU,
-                                              _rotationCenterV), //TRANSFORM
+                                              _rotationCenterV),
                          false);
     }
     else {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
-                                              _texCoords, 2, 0, false, 0,
+                                              _texCoords,
+                                              2,
+                                              0,
+                                              false,
+                                              0,
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha()),

@@ -1,9 +1,3 @@
-//
-//  Default.vsh
-//
-//  Created by José Miguel Santana Núñez
-//
-
 attribute vec4 aPosition;
 attribute vec2 aTextureCoord;
 
@@ -22,10 +16,23 @@ varying vec2 TextureCoordOut;
 void main() {
   gl_Position = uModelview * aPosition;
 
-  float dummy1 = uRotationAngleTexCoord;
-  vec2 dummy2 = uRotationCenterTexCoord;
+  float s = sin( uRotationAngleTexCoord );
+  float c = cos( uRotationAngleTexCoord );
 
-  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
-  
+  vec2 textureCoord = aTextureCoord - uRotationCenterTexCoord;
+
+  vec2 newTextureCoord = vec2((textureCoord.x * c) - (textureCoord.y * s),
+                              (textureCoord.x * s) + (textureCoord.y * c));
+
+  newTextureCoord += uRotationCenterTexCoord;
+
+  TextureCoordOut = (newTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
+//  TextureCoordOut = (newTextureCoord + uTranslationTexCoord) * uScaleTexCoord;
+
+//  float dummy1 = uRotationAngleTexCoord;
+//  vec2 dummy2 = uRotationCenterTexCoord;
+
+//  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
+
   gl_PointSize = uPointSize;
 }

@@ -80,11 +80,13 @@ public:
   void setTranslation(float u, float v) {
     _translationU = u;
     _translationV = v;
+#warning    updateState();
   }
 
   void setScale(float u, float v) {
     _scaleU = u;
     _scaleV = v;
+#warning    updateState();
   }
   
   void setRotation(float angleInRadians,
@@ -93,6 +95,7 @@ public:
     _rotationInRadians = angleInRadians;
     _rotationCenterU = centerU;
     _rotationCenterV = centerV;
+#warning    updateState();
   }
   
   virtual ~SimpleTextureMapping();

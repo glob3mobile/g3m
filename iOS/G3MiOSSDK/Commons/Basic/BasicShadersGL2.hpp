@@ -188,9 +188,13 @@ public:
 "varying vec2 TextureCoordOut; \n " + 
 "void main() { \n " + 
 "gl_Position = uModelview * aPosition; \n " + 
-"float dummy1 = uRotationAngleTexCoord; \n " + 
-"vec2 dummy2 = uRotationCenterTexCoord; \n " + 
-"TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
+"float s = sin( uRotationAngleTexCoord ); \n " + 
+"float c = cos( uRotationAngleTexCoord ); \n " + 
+"vec2 textureCoord = aTextureCoord - uRotationCenterTexCoord; \n " + 
+"vec2 newTextureCoord = vec2((textureCoord.x * c) - (textureCoord.y * s), \n " + 
+"(textureCoord.x * s) + (textureCoord.y * c)); \n " + 
+"newTextureCoord += uRotationCenterTexCoord; \n " + 
+"TextureCoordOut = (newTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
 "gl_PointSize = uPointSize; \n " + 
 "} \n ",
  emptyString +  

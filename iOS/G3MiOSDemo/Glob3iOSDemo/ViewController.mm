@@ -649,19 +649,55 @@ public:
     builder.setHUDRenderer(hudRenderer);
 
 #warning Diego at work!
-    hudRenderer->addWidget(new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
-                                             0, 0,
-                                             300, 300));
-
-    HUDQuadWidget* compass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
-                                               150, 50,
-                                               300, 150);
-    compass->setTexCoordsRotation(Angle::fromDegrees(30),
-                                  0.5f, 0.5f);
-    compass->setTexCoordsTranslation(0, 0.5f);
-    compass->setTexCoordsScale(1, 0.5f);
+    HUDQuadWidget* compass = new HUDQuadWidget(//URL("file:///Compass_rose_browns_00_transparent.png"),
+                                               URL("file:///debug-compass.png"),
+                                               10, 10,
+                                               300, 300);
+//    compass->setTexCoordsRotation(Angle::fromDegrees(45),
+//                                   0.5f, 0.5f);
     hudRenderer->addWidget(compass);
+
+    HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
+                                                //URL("file:///Compass_rose_browns_00_transparent.png"),
+                                                URL("file:///debug-compass.png"),
+                                                320, 10,
+                                                300, 150);
+    compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
+                                   Angle::fromDegrees(30),
+                                   0.5f, 0.5f);
+    compass2->setTexCoordsTranslation(0, 0.5f);
+    compass2->setTexCoordsScale(1, 0.5f);
+    hudRenderer->addWidget(compass2);
+
+    class RotateCompass : public GTask {
+    private:
+      HUDQuadWidget* _compass1;
+      HUDQuadWidget* _compass2;
+      double _angle;
+
+    public:
+      RotateCompass(HUDQuadWidget* compass1,
+                    HUDQuadWidget* compass2) :
+      _compass1(compass1),
+      _compass2(compass2),
+      _angle(0)
+      {
+      }
+
+      void run(const G3MContext* context) {
+        _angle += Angle::fromDegrees(1)._radians;
+
+        _compass1->setTexCoordsRotation(Angle::fromRadians(_angle),
+                                        0.5f, 0.5f);
+        _compass2->setTexCoordsRotation(Angle::fromRadians(_angle),
+                                        0.5f, 0.5f);
+      }
+    };
+
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(100),
+                                                 new RotateCompass(compass, compass2)));
   }
+
 
 
   //  [self createInterpolationTest: meshRenderer];
