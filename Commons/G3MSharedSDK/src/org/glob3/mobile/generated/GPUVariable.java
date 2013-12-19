@@ -75,9 +75,9 @@ public class GPUVariable
       return GPUUniformKey.BILLBOARD_POSITION;
     }
   
-    if (name.compareTo("uRotationPointTexCoord") == 0)
+    if (name.compareTo("uRotationCenterTexCoord") == 0)
     {
-      return GPUUniformKey.ROTATION_POINT_TEXTURE_COORDS;
+      return GPUUniformKey.ROTATION_CENTER_TEXTURE_COORDS;
     }
   
     if (name.compareTo("uRotationAngleTexCoord") == 0)

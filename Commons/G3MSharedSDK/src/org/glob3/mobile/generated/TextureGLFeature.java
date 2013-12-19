@@ -28,7 +28,7 @@ public class TextureGLFeature extends GLColorGroupFeature
   
       if (angleInRadians != 0.0)
       {
-        _values.addUniformValue(GPUUniformKey.ROTATION_POINT_TEXTURE_COORDS, new GPUUniformValueVec2Float(rotationPointX, rotationPointY), false);
+        _values.addUniformValue(GPUUniformKey.ROTATION_CENTER_TEXTURE_COORDS, new GPUUniformValueVec2Float(rotationPointX, rotationPointY), false);
   
         _values.addUniformValue(GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS, new GPUUniformValueFloat(angleInRadians), false);
       }
