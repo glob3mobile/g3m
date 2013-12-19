@@ -42,8 +42,7 @@ public class GPUProgramManager
       if (ps != null)
       {
         prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DETECT COLISSION WITH COLLECTION OF GPUPROGRAM
+        ///#warning DETECT COLISSION WITH COLLECTION OF GPUPROGRAM
         if (prog == null)
         {
           ILogger.instance().logError("Problem at creating program named %s.", name);
@@ -89,11 +88,10 @@ public class GPUProgramManager
       {
         if (transformTC)
         {
-  //        if (rotationTC){
+  //        if (rotationTC) {
   //          return compileProgramWithName(gl, "TransformedTexCoorWithRotationTexturedMesh_DirectionLight");
-  //        }else{
-            return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_DirectionLight");
   //        }
+          return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_DirectionLight");
         }
         return compileProgramWithName(gl, "TexturedMesh_DirectionLight");
       }
@@ -104,10 +102,7 @@ public class GPUProgramManager
         {
           return compileProgramWithName(gl, "FullTransformedTexCoorTexturedMesh");
         }
-        else
-        {
-          return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
-        }
+        return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
       }
       return compileProgramWithName(gl, "TexturedMesh");
     }
@@ -156,12 +151,10 @@ public class GPUProgramManager
         return null;
       }
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning AVOID getAttributesCode && getUniformsCode calls
+      ///#warning AVOID getAttributesCode and getUniformsCode calls
       if (p.getAttributesCode() != attributesCode || p.getUniformsCode() != uniformsCode)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning GIVE MORE DETAIL
+        ///#warning GIVE MORE DETAIL
         ILogger.instance().logError("New compiled program does not match GL state.");
       }
     }
@@ -177,7 +170,7 @@ public class GPUProgramManager
     while (it.hasNext()) {
       java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
       GPUProgram program = (GPUProgram) pairs.getValue();
-      if (program.getNReferences() == 0){
+      if (program.getNReferences() == 0) {
         ILogger.instance().logInfo("Deleting program %s", program.getName() );
         it.remove();
       }
