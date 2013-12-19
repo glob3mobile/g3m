@@ -75,6 +75,16 @@ public class GPUVariable
       return GPUUniformKey.BILLBOARD_POSITION;
     }
   
+    if (name.compareTo("uRotationCenterTexCoord") == 0)
+    {
+      return GPUUniformKey.ROTATION_CENTER_TEXTURE_COORDS;
+    }
+  
+    if (name.compareTo("uRotationAngleTexCoord") == 0)
+    {
+      return GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS;
+    }
+  
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)
@@ -131,32 +141,32 @@ public class GPUVariable
     return 0x00000001 << a;
   }
 
-  public static boolean codeContainsUniform(int code, int u)
+  public static boolean hasUniform(int code, int u)
   {
     return ((code >> u) & 0x00000001) != 0;
   }
-  public static boolean codeContainsAttribute(int code, int a)
+  public static boolean hasAttribute(int code, int a)
   {
     return ((code >> a) & 0x00000001) != 0;
   }
 
-  public static boolean codeContainsUniform(int code, GPUUniformKey u)
+  public static boolean hasUniform(int code, GPUUniformKey u)
   {
     if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
     {
       return false;
     }
     final int index = u.getValue();
-    return codeContainsUniform(code, index);
+    return hasUniform(code, index);
   }
-  public static boolean codeContainsAttribute(int code, GPUAttributeKey a)
+  public static boolean hasAttribute(int code, GPUAttributeKey a)
   {
     if (a == GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE)
     {
       return false;
     }
     final int index = a.getValue();
-    return codeContainsAttribute(code, index);
+    return hasAttribute(code, index);
   }
 
   public void dispose()
