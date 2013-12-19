@@ -1111,10 +1111,9 @@ public abstract class MapBooBuilder
     if (sceneIndex != -1)
     {
       MapBoo_Scene scene = _applicationScenes.get(sceneIndex);
+      _applicationScenes.remove(sceneIndex);
       if (scene != null)
          scene.dispose();
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-      _applicationScenes.erase(_applicationScenes.iterator() + sceneIndex);
   
       triggerOnScenesChanged();
     }
