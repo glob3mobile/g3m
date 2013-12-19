@@ -36,14 +36,13 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
 
 GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
 
-  bool texture = GPUVariable::codeContainsAttribute(attributesCode, TEXTURE_COORDS);
-  bool flatColor = GPUVariable::codeContainsUniform(uniformsCode, FLAT_COLOR);
-  bool billboard = GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT);
-  bool color = GPUVariable::codeContainsAttribute(attributesCode, COLOR);
-  bool transformTC = GPUVariable::codeContainsUniform(uniformsCode, TRANSLATION_TEXTURE_COORDS) ||
-  GPUVariable::codeContainsUniform(uniformsCode, SCALE_TEXTURE_COORDS);
-
-  bool hasLight = GPUVariable::codeContainsUniform(uniformsCode, AMBIENT_LIGHT_COLOR);
+  const bool texture     = GPUVariable::codeContainsAttribute(attributesCode, TEXTURE_COORDS);
+  const bool flatColor   = GPUVariable::codeContainsUniform(uniformsCode, FLAT_COLOR);
+  const bool billboard   = GPUVariable::codeContainsUniform(uniformsCode, VIEWPORT_EXTENT);
+  const bool color       = GPUVariable::codeContainsAttribute(attributesCode, COLOR);
+  const bool transformTC = (GPUVariable::codeContainsUniform(uniformsCode, TRANSLATION_TEXTURE_COORDS) ||
+                            GPUVariable::codeContainsUniform(uniformsCode, SCALE_TEXTURE_COORDS));
+  const bool hasLight    = GPUVariable::codeContainsUniform(uniformsCode, AMBIENT_LIGHT_COLOR);
 
   if (billboard) {
     return compileProgramWithName(gl, "Billboard");
