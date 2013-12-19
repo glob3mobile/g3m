@@ -30,13 +30,13 @@ private:
   const float _width;
   const float _height;
 
-  float _texCoordsTranslationX;
-  float _texCoordsTranslationY;
-  float _texCoordsScaleX;
-  float _texCoordsScaleY;
+  float _texCoordsTranslationU;
+  float _texCoordsTranslationV;
+  float _texCoordsScaleU;
+  float _texCoordsScaleV;
   float _texCoordsRotationInRadians;
-  float _texCoordsRotationCenterX;
-  float _texCoordsRotationCenterY;
+  float _texCoordsRotationCenterU;
+  float _texCoordsRotationCenterV;
 
   IImage* _image;
   bool _downloadingImage;
@@ -64,20 +64,28 @@ public:
   _mesh(NULL),
   _image(NULL),
   _downloadingImage(false),
-  _texCoordsTranslationX(0),
-  _texCoordsTranslationY(0),
-  _texCoordsScaleX(1),
-  _texCoordsScaleY(1),
+  _texCoordsTranslationU(0),
+  _texCoordsTranslationV(0),
+  _texCoordsScaleU(1),
+  _texCoordsScaleV(1),
   _texCoordsRotationInRadians(0),
-  _texCoordsRotationCenterX(0),
-  _texCoordsRotationCenterY(0)
+  _texCoordsRotationCenterU(0),
+  _texCoordsRotationCenterV(0)
   {
   }
 
-  void setTexCoordsTranslation(const Vector2D& translation);
-  void setTexCoordsScale(const Vector2D& scale);
-  void setTexCoordsRotation(const Angle& rotation,
-                            const Vector2D& center);
+  void setTexCoordsTranslation(float u, float v);
+
+  void setTexCoordsScale(float u, float v);
+
+  void setTexCoordsRotation(float angleInRadians,
+                            float centerU, float centerV);
+
+  void setTexCoordsRotation(const Angle& angle,
+                            float centerU, float centerV) {
+    setTexCoordsRotation((float) angle._radians,
+                         centerU, centerV);
+  }
 
   ~HUDQuadWidget();
 

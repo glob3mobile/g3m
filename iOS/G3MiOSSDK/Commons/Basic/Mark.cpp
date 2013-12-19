@@ -435,15 +435,19 @@ void Mark::createGLState(const Planet* planet) {
 
   if (_textureId != NULL) {
     _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
-                                               getBillboardTexCoords(),
-                                               2,
-                                               0,
-                                               false,
-                                               0,
-                                               true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
-                                               false, Vector2D::zero(), Vector2D::zero(),
-                                               0,0,0),
-                          false);
+                                                getBillboardTexCoords(),
+                                                2,
+                                                0,
+                                                false,
+                                                0,
+                                                true,
+                                                GLBlendFactor::srcAlpha(),
+                                                GLBlendFactor::oneMinusSrcAlpha(),
+                                                false,
+                                                0, 0,
+                                                0, 0,
+                                                0, 0, 0),
+                           false);
   }
 }
 

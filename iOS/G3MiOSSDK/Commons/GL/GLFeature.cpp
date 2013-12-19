@@ -118,11 +118,13 @@ TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    int sFactor,
                                    int dFactor,
                                    bool coordsTransformed,
-                                   const Vector2D& translate,
-                                   const Vector2D& scale,
-                                   float rotationPointX,
-                                   float rotationPointY,
-                                   float angleInRadians) :
+                                   float translateU,
+                                   float translateV,
+                                   float scaleU,
+                                   float scaleV,
+                                   float rotationAngleInRadians,
+                                   float rotationCenterU,
+                                   float rotationCenterV) :
 GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
 _texID(texID)
 {
@@ -136,23 +138,20 @@ _texID(texID)
 
   if (coordsTransformed) {
     _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float((float) translate._x,
-                                                         (float) translate._y),
+                            new GPUUniformValueVec2Float(translateU, translateV),
                             false);
 
     _values.addUniformValue(SCALE_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float((float) scale._x,
-                                                         (float) scale._y),
+                            new GPUUniformValueVec2Float(scaleU, scaleV),
                             false);
 
-    if (angleInRadians != 0.0){
+    if (rotationAngleInRadians != 0.0) {
       _values.addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
-                              new GPUUniformValueVec2Float(rotationPointX,
-                                                           rotationPointY),
+                              new GPUUniformValueVec2Float(rotationCenterU, rotationCenterV),
                               false);
 
       _values.addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS,
-                              new GPUUniformValueFloat(angleInRadians),
+                              new GPUUniformValueFloat(rotationAngleInRadians),
                               false);
     }
   }

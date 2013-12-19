@@ -72,8 +72,10 @@ private:
   const Tile* _tile;
   const Tile* _ancestor;
 
-  MutableVector2D _scale;
-  MutableVector2D _translation;
+  float _translationU;
+  float _translationV;
+  float _scaleU;
+  float _scaleV;
 
   const TileTessellator* _tessellator;
 #ifdef C_CODE
@@ -95,8 +97,10 @@ public:
   _tile(tile),
   _ancestor(ancestor),
   _tessellator(tessellator),
-  _scale(1,1),
-  _translation(0,0),
+  _translationU(0),
+  _translationV(0),
+  _scaleU(1),
+  _scaleV(1),
   _mercator(mercator)
   {
 
@@ -114,28 +118,34 @@ public:
     if (_tile != _ancestor) {
       const Sector tileSector = _tile->_sector;
 
-      const Vector2D lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
+      const Vector2F lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
                                                                    tileSector._lower,
                                                                    _mercator);
 
-      const Vector2D upperTextCoordUV = _tessellator->getTextCoord(_ancestor,
+      const Vector2F upperTextCoordUV = _tessellator->getTextCoord(_ancestor,
                                                                    tileSector._upper,
                                                                    _mercator);
 
-      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
-                                     lowerTextCoordUV._y - upperTextCoordUV._y);
+//      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
+//                                     lowerTextCoordUV._y - upperTextCoordUV._y);
+//
+//      _translation = MutableVector2D(lowerTextCoordUV._x,
+//                                     upperTextCoordUV._y);
 
-      _translation = MutableVector2D(lowerTextCoordUV._x,
-                                     upperTextCoordUV._y);
+      _translationU = lowerTextCoordUV._x;
+      _translationV = upperTextCoordUV._y;
+
+      _scaleU = upperTextCoordUV._x - lowerTextCoordUV._x;
+      _scaleV = lowerTextCoordUV._y - upperTextCoordUV._y;
     }
   }
 
-  const MutableVector2D getScale() const {
-    return _scale;
+  const Vector2F getTranslation() const {
+    return Vector2F(_translationU, _translationV);
   }
 
-  const MutableVector2D getTranslation() const {
-    return _translation;
+  const Vector2F getScale() const {
+    return Vector2F(_scaleU, _scaleV);
   }
 
   IFloatBuffer* createTextCoords() const {

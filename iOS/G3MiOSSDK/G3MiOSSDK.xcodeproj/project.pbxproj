@@ -322,8 +322,6 @@
 		CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AB16D1686700CE9242 /* ElevationData.cpp */; };
 		CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3D8AF16D1729900CE9242 /* WMSBillElevationDataProvider.cpp */; };
 		CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD42ABA16DBFE8600B03961 /* LayerTilesRenderParameters.cpp */; };
-		CFD66B4A1863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */; };
-		CFD66B4B1863505B008EC15B /* FullTransformedTexCoorTexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = CFD66B491863505B008EC15B /* FullTransformedTexCoorTexturedMesh.vsh */; };
 		CFD8E770184FB71D00228031 /* SectorTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD8E76E184FB71D00228031 /* SectorTileCondition.cpp */; };
 		CFD8E771184FB74800228031 /* SectorTileCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD8E76F184FB71D00228031 /* SectorTileCondition.hpp */; };
 		CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDA835716D6698700295F96 /* FloatBufferElevationData.cpp */; };
@@ -2761,7 +2759,6 @@
 				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
 				CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */,
-				CFD66B4A1863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh in Sources */,
 				CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */,
 				CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */,
 				CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */,
@@ -2798,7 +2795,6 @@
 				CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */,
 				D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */,
 				FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */,
-				CFD66B4B1863505B008EC15B /* FullTransformedTexCoorTexturedMesh.vsh in Sources */,
 				CF8AE0061702049F00FE9F56 /* GEOLine2DStyle.cpp in Sources */,
 				CF8AE0071702049F00FE9F56 /* GEOLine2DMeshSymbol.cpp in Sources */,
 				CF8AE0081702049F00FE9F56 /* GEOMultiLine2DMeshSymbol.cpp in Sources */,

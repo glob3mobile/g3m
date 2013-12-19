@@ -330,11 +330,13 @@ public:
                    int sFactor,
                    int dFactor,
                    bool coordsTransformed,
-                   const Vector2D& translate,
-                   const Vector2D& scale,
-                   float rotationPointX,
-                   float rotationPointY,
-                   float angleInRadians);
+                   float translateU,
+                   float translateV,
+                   float scaleU,
+                   float scaleV,
+                   float rotationAngleInRadians,
+                   float rotationCenterU,
+                   float rotationCenterV);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };

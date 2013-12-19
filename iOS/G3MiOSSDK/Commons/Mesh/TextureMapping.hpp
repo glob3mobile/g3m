@@ -10,7 +10,7 @@
 #define G3MiOSSDK_TextureMapping_hpp
 
 //#include <vector>
-#include "MutableVector2D.hpp"
+//#include "MutableVector2D.hpp"
 #include "TexturesHandler.hpp"
 
 class IGLTextureId;
@@ -46,12 +46,16 @@ private:
   const bool    _ownedTexCoords;
 
 #warning replace MutableVector2D with pair of floats
-  MutableVector2D _translation;
-  MutableVector2D _scale;
+//  MutableVector2D _translation;
+//  MutableVector2D _scale;
 
+  float _translationU;
+  float _translationV;
+  float _scaleU;
+  float _scaleV;
   float _rotationInRadians;
-  float _rotationCenterX;
-  float _rotationCenterY;
+  float _rotationCenterU;
+  float _rotationCenterV;
 
   const bool _transparent;
 
@@ -65,28 +69,34 @@ public:
                        bool transparent) :
   _glTextureId(glTextureId),
   _texCoords(texCoords),
-  _translation(0, 0),
-  _scale(1, 1),
+  _translationU(0),
+  _translationV(0),
+  _scaleU(1),
+  _scaleV(1),
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent),
   _rotationInRadians(0),
-  _rotationCenterX(0),
-  _rotationCenterY(0)
+  _rotationCenterU(0),
+  _rotationCenterV(0)
   {
   }
-  
-  void setTranslationAndScale(const Vector2D& translation,
-                              const Vector2D& scale) {
-    _translation = translation.asMutableVector2D();
-    _scale       = scale.asMutableVector2D();
+
+  void setTranslation(float u, float v) {
+    _translationU = u;
+    _translationV = v;
   }
 
+  void setScale(float u, float v) {
+    _scaleU = u;
+    _scaleV = v;
+  }
+  
   void setRotation(float angleInRadians,
-                   float centerX,
-                   float centerY) {
+                   float centerU,
+                   float centerV) {
     _rotationInRadians = angleInRadians;
-    _rotationCenterX = centerX;
-    _rotationCenterY = centerY;
+    _rotationCenterU = centerU;
+    _rotationCenterV = centerV;
   }
   
   virtual ~SimpleTextureMapping();

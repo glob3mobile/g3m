@@ -34,15 +34,7 @@ public:
 
   ~Vector2F() {
   }
-
-  float x() const {
-    return _x;
-  }
-
-  float y() const {
-    return _y;
-  }
-
+  
   static Vector2F nan() {
     return Vector2F(NANF, NANF);
   }

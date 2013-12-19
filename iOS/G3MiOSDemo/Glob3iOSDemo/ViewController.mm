@@ -657,9 +657,9 @@ public:
                                                150, 50,
                                                300, 150);
     compass->setTexCoordsRotation(Angle::fromDegrees(30),
-                                  Vector2D(0.5, 0.5));
-    compass->setTexCoordsTranslation(Vector2D(0, 0.5));
-    compass->setTexCoordsScale(Vector2D(1, 0.5));
+                                  0.5f, 0.5f);
+    compass->setTexCoordsTranslation(0, 0.5f);
+    compass->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass);
   }
 

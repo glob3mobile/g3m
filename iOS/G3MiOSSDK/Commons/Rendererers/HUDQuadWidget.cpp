@@ -58,28 +58,28 @@ HUDQuadWidget::~HUDQuadWidget() {
   delete _mesh;
 }
 
-void HUDQuadWidget::setTexCoordsTranslation(const Vector2D& translation) {
-  _texCoordsTranslationX = translation._x;
-  _texCoordsTranslationY = translation._y;
+void HUDQuadWidget::setTexCoordsTranslation(float u, float v) {
+  _texCoordsTranslationU = u;
+  _texCoordsTranslationV = v;
 #warning update mesh
   delete _mesh;
   _mesh = NULL;
 }
 
-void HUDQuadWidget::setTexCoordsScale(const Vector2D& scale) {
-  _texCoordsScaleX = scale._x;
-  _texCoordsScaleY = scale._y;
+void HUDQuadWidget::setTexCoordsScale(float u, float v) {
+  _texCoordsScaleU = u;
+  _texCoordsScaleV = v;
 #warning update mesh
   delete _mesh;
   _mesh = NULL;
 }
 
-void HUDQuadWidget::setTexCoordsRotation(const Angle& rotation,
-                                         const Vector2D& center) {
-  _texCoordsRotationInRadians = rotation._radians;
+void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
+                                         float centerU, float centerV) {
+  _texCoordsRotationInRadians = angleInRadians;
 
-  _texCoordsRotationCenterX = center._x;
-  _texCoordsRotationCenterY = center._y;
+  _texCoordsRotationCenterU = centerU;
+  _texCoordsRotationCenterV = centerV;
 
 #warning update mesh
   delete _mesh;
@@ -173,11 +173,13 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
                                                           texCoords.create(),
                                                           true,
                                                           true);
-  texMap->setTranslationAndScale(Vector2D(_texCoordsTranslationX, _texCoordsTranslationY),
-                                 Vector2D(_texCoordsScaleX, _texCoordsScaleY));
+  texMap->setTranslation(_texCoordsTranslationU,
+                         _texCoordsTranslationV);
+  texMap->setScale(_texCoordsScaleU,
+                   _texCoordsScaleV);
   texMap->setRotation(_texCoordsRotationInRadians,
-                      _texCoordsRotationCenterX,
-                      _texCoordsRotationCenterY);
+                      _texCoordsRotationCenterU,
+                      _texCoordsRotationCenterV);
   return new TexturedMesh(dm, true, texMap, true, true);
 }
 
