@@ -21,20 +21,17 @@ void main() {
 
   vec2 textureCoord = aTextureCoord - uRotationCenterTexCoord;
 
-//  vec2 newTextureCoord = vec2((textureCoord.x * c) - (textureCoord.y * s),
-//                              (textureCoord.x * s) + (textureCoord.y * c));
-
   vec2 newTextureCoord = vec2((textureCoord.x * c) + (textureCoord.y * s),
                               (-textureCoord.x * s) + (textureCoord.y * c));
 
   newTextureCoord += uRotationCenterTexCoord;
 
-  TextureCoordOut = (newTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
-//  TextureCoordOut = (newTextureCoord + uTranslationTexCoord) * uScaleTexCoord;
+//  TextureCoordOut = (newTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
+  TextureCoordOut = (newTextureCoord + uTranslationTexCoord) * uScaleTexCoord;
 
 //  float dummy1 = uRotationAngleTexCoord;
 //  vec2 dummy2 = uRotationCenterTexCoord;
-
+//  
 //  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
 
   gl_PointSize = uPointSize;

@@ -665,7 +665,7 @@ public:
     compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
                                    Angle::fromDegrees(30),
                                    0.5f, 0.5f);
-    compass2->setTexCoordsTranslation(0, 0.5f);
+//    compass2->setTexCoordsTranslation(0, 0.5f);
     compass2->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass2);
 
@@ -685,7 +685,7 @@ public:
       }
 
       void run(const G3MContext* context) {
-        _angle += Angle::fromDegrees(1)._radians;
+        _angle += Angle::fromDegrees(2)._radians;
 
         _compass1->setTexCoordsRotation(Angle::fromRadians(_angle),
                                         0.5f, 0.5f);
@@ -694,7 +694,7 @@ public:
       }
     };
 
-    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(100),
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(20),
                                                  new RotateCompass(compass, compass2)));
   }
 

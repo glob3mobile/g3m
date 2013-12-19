@@ -194,7 +194,7 @@ public:
 "vec2 newTextureCoord = vec2((textureCoord.x * c) + (textureCoord.y * s), \n " + 
 "(-textureCoord.x * s) + (textureCoord.y * c)); \n " + 
 "newTextureCoord += uRotationCenterTexCoord; \n " + 
-"TextureCoordOut = (newTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
+"TextureCoordOut = (newTextureCoord + uTranslationTexCoord) * uScaleTexCoord; \n " + 
 "gl_PointSize = uPointSize; \n " + 
 "} \n ",
  emptyString +  
