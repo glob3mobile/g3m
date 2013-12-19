@@ -191,8 +191,8 @@ public:
 "float s = sin( uRotationAngleTexCoord ); \n " + 
 "float c = cos( uRotationAngleTexCoord ); \n " + 
 "vec2 textureCoord = aTextureCoord - uRotationCenterTexCoord; \n " + 
-"vec2 newTextureCoord = vec2((textureCoord.x * c) - (textureCoord.y * s), \n " + 
-"(textureCoord.x * s) + (textureCoord.y * c)); \n " + 
+"vec2 newTextureCoord = vec2((textureCoord.x * c) + (textureCoord.y * s), \n " + 
+"(-textureCoord.x * s) + (textureCoord.y * c)); \n " + 
 "newTextureCoord += uRotationCenterTexCoord; \n " + 
 "TextureCoordOut = (newTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
 "gl_PointSize = uPointSize; \n " + 

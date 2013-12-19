@@ -21,8 +21,11 @@ void main() {
 
   vec2 textureCoord = aTextureCoord - uRotationCenterTexCoord;
 
-  vec2 newTextureCoord = vec2((textureCoord.x * c) - (textureCoord.y * s),
-                              (textureCoord.x * s) + (textureCoord.y * c));
+//  vec2 newTextureCoord = vec2((textureCoord.x * c) - (textureCoord.y * s),
+//                              (textureCoord.x * s) + (textureCoord.y * c));
+
+  vec2 newTextureCoord = vec2((textureCoord.x * c) + (textureCoord.y * s),
+                              (-textureCoord.x * s) + (textureCoord.y * c));
 
   newTextureCoord += uRotationCenterTexCoord;
 
