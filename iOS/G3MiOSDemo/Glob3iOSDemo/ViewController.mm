@@ -141,6 +141,7 @@
 #import <G3MiOSSDK/JSONArray.hpp>
 
 #import <G3MiOSSDK/SceneLighting.hpp>
+#import <G3MiOSSDK/GeoMeter.hpp>
 
 
 
@@ -491,12 +492,12 @@ public:
   //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
-//  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-//                                                                                     Sector::fullSphere(),
-//                                                                                     Vector2I(2048, 1024));
+  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                                                     Sector::fullSphere(),
+  //                                                                                     Vector2I(2048, 1024));
 
   ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                              Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
+                                                                                     Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -571,6 +572,48 @@ public:
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
   builder.getPlanetRendererBuilder()->setShowStatistics(false);
 
+  if (true){
+
+    Geodetic2D g1 = Geodetic2D::fromDegrees(28.129064150616994, -15.423265639110468); //LP
+    Geodetic2D g2 = Geodetic2D::fromDegrees(40.41677540051771, -3.7037901976145804); //MADRID
+
+    double dist = GeoMeter::getDistance(g1, g2);
+
+    printf("DIST: %f m\n", dist);
+
+    //GRAN CANARIA
+    std::vector<Geodetic2D*> polygon;
+    //    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.184954786361, -15.40326708869543) )); //NE
+    //    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.77990038725407, -15.43622607307043) ));    //SE
+    //    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.770179859222775, -15.81250781135168) ));    //SW
+    //    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.175270696066402, -15.71637744025793) ));    //NW
+
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.1801128508277, -15.401893797679804 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.0468737992174, -15.412880125804804 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.993531872334557, -15.368934813304804 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.864917930859935, -15.38404101447668 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.80419790643659, -15.43347949103918 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.743443929681458, -15.569435301586054 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.75559743885222, -15.687538328929804 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.835776559501845, -15.791908446117304 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.91468298115362, -15.83722704963293 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.021418448958062, -15.81525439338293 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.088074450524935, -15.71363085822668 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.17406012312459, -15.70264453010168 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.172849536482957, -15.629860106273554 ) ));
+    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.149845787838487, -15.47193163947668 ) ));
+
+
+    double area = GeoMeter::getArea(polygon);
+    printf("AREA: %f m^2 -> %f km^2\n", area, area / 1e6);
+
+    const int size = polygon.size();
+    for (int i = 0; i < size; i++) {
+      delete polygon[i];
+    }
+
+  }
+
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
 
@@ -578,7 +621,7 @@ public:
 
   const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
-//  const Planet* planet = Planet::createFlatEarth();
+  //  const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -607,7 +650,7 @@ public:
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
-  
+
   // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
@@ -1271,48 +1314,48 @@ public:
   }
 
   if (false) {
-//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
-//                                                  Sector::fullSphere(),
-//                                                  false,
-//                                                  0,
-//                                                  4,
-//                                                  TimeInterval::zero(),
-//                                                  false));
+    //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
+    //                                                  Sector::fullSphere(),
+    //                                                  false,
+    //                                                  0,
+    //                                                  4,
+    //                                                  TimeInterval::zero(),
+    //                                                  false));
 
-//    WMSLayer* blueMarble = new WMSLayer("bmng200405",
-//                                        URL("http://www.nasa.network.com/wms?", false),
-//                                        WMS_1_1_0,
-//                                        Sector::fullSphere(),
-//                                        "image/jpeg",
-//                                        "EPSG:4326",
-//                                        "",
-//                                        false,
-//                                        //new LevelTileCondition(0, 8),
-//                                        NULL,
-//                                        TimeInterval::fromDays(30),
-//                                        true);
-//    layerSet->addLayer(blueMarble);
+    //    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+    //                                        URL("http://www.nasa.network.com/wms?", false),
+    //                                        WMS_1_1_0,
+    //                                        Sector::fullSphere(),
+    //                                        "image/jpeg",
+    //                                        "EPSG:4326",
+    //                                        "",
+    //                                        false,
+    //                                        //new LevelTileCondition(0, 8),
+    //                                        NULL,
+    //                                        TimeInterval::fromDays(30),
+    //                                        true);
+    //    layerSet->addLayer(blueMarble);
 
 
     // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
     // [lower=[lat=48.302366666666664, lon=11.65903888888889], upper=[lat=48.40372222222222, lon=11.788533333333335]]
 
-//    AndTileCondition* condition = new AndTileCondition(new LevelTileCondition(0, 500),
-//                                                       new SectorTileCondition(Sector::fromDegrees(39.99854166666677, -72.00145833333336,
-//                                                                                                   42.50145833333343, -68.9985416666667)));
-//
-//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/2-N40-W072_ll_tif.tiles/{level}/{x}/{y}.png",
-//                                                  Sector::fullSphere(),
-//                                                  true,
-//                                                  0,
-//                                                  8,
-//                                                  TimeInterval::zero(),
-//                                                  false,
-//                                                  //new LevelTileCondition(3, 500)
-//                                                  //new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
-//                                                  //                                            42.50166666666667, 3.0016666666666665))
-//                                                  condition
-//                                                  ));
+    //    AndTileCondition* condition = new AndTileCondition(new LevelTileCondition(0, 500),
+    //                                                       new SectorTileCondition(Sector::fromDegrees(39.99854166666677, -72.00145833333336,
+    //                                                                                                   42.50145833333343, -68.9985416666667)));
+    //
+    //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/2-N40-W072_ll_tif.tiles/{level}/{x}/{y}.png",
+    //                                                  Sector::fullSphere(),
+    //                                                  true,
+    //                                                  0,
+    //                                                  8,
+    //                                                  TimeInterval::zero(),
+    //                                                  false,
+    //                                                  //new LevelTileCondition(3, 500)
+    //                                                  //new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+    //                                                  //                                            42.50166666666667, 3.0016666666666665))
+    //                                                  condition
+    //                                                  ));
 
     layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/_merged/{level}/{x}/{y}.jpg",
                                                   Sector::fullSphere(),
@@ -1647,14 +1690,14 @@ public:
                                //50000, 50000,
                                663000, 824000,
                                false);
-//  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-//                                              Angle::fromDegrees(-122 - 2),
-//                                              50000 / 2),
-//                               RELATIVE_TO_GROUND,
-//                               URL("file:///hud2.png", false),
-//                               //50000, 50000,
-//                               50000, 50000,
-//                               false);
+  //  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+  //                                              Angle::fromDegrees(-122 - 2),
+  //                                              50000 / 2),
+  //                               RELATIVE_TO_GROUND,
+  //                               URL("file:///hud2.png", false),
+  //                               //50000, 50000,
+  //                               50000, 50000,
+  //                               false);
   quad1->setPitch(Angle::fromDegrees(90));
   shapesRenderer->addShape(quad1);
 
@@ -2033,12 +2076,12 @@ private:
 
 
     BoxShape* box = new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
-                        RELATIVE_TO_GROUND,
-                        Vector3D(boxExtent, boxExtent, height),
-                        1,
-                        //Color::newFromRGBA(1, 1, 0, 0.6),
-                        Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
-                        Color::newFromRGBA(0.2, 0.2, 0, 1));
+                                 RELATIVE_TO_GROUND,
+                                 Vector3D(boxExtent, boxExtent, height),
+                                 1,
+                                 //Color::newFromRGBA(1, 1, 0, 0.6),
+                                 Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
+                                 Color::newFromRGBA(0.2, 0.2, 0, 1));
 
     //box->setPitch(Angle::fromDegrees(45));
     return box;
@@ -2544,7 +2587,7 @@ public:
         const double height = mu->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, alpha);
 
         vertices->add(Geodetic2D::linearInterpolation(fromPosition, toPosition, alpha),
-                     height);
+                      height);
       }
 
       Mesh* result = new DirectMesh(GLPrimitive::lineStrip(),
@@ -2873,23 +2916,23 @@ public:
                                                   Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
                                                   10000),
                                        true);
-          /*
-           const double fromDistance = 75000;
-           const double toDistance   = 18750;
+            /*
+             const double fromDistance = 75000;
+             const double toDistance   = 18750;
 
-           const Angle fromAzimuth = Angle::fromDegrees(-90);
-           const Angle toAzimuth   = Angle::fromDegrees(270);
+             const Angle fromAzimuth = Angle::fromDegrees(-90);
+             const Angle toAzimuth   = Angle::fromDegrees(270);
 
-           const Angle fromAltitude = Angle::fromDegrees(90);
-           const Angle toAltitude   = Angle::fromDegrees(15);
+             const Angle fromAltitude = Angle::fromDegrees(90);
+             const Angle toAltitude   = Angle::fromDegrees(15);
 
-           shape->orbitCamera(TimeInterval::fromSeconds(20),
-           fromDistance, toDistance,
-           fromAzimuth,  toAzimuth,
-           fromAltitude, toAltitude);
-           */
-        }
-      };
+             shape->orbitCamera(TimeInterval::fromSeconds(20),
+             fromDistance, toDistance,
+             fromAzimuth,  toAzimuth,
+             fromAltitude, toAltitude);
+             */
+          }
+        };
 
         _shapesRenderer->loadBSONSceneJS(URL("file:///A320.bson"),
                                          URL::FILE_PROTOCOL + "textures-A320/",
@@ -2900,9 +2943,9 @@ public:
                                          ABSOLUTE,
                                          new PlaneShapeLoadListener(),
                                          true);
-        
+
       }
-      
+
       if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"bson"];
@@ -3063,7 +3106,7 @@ public:
       return true;
     }
   };
-  
+
   GInitializationTask* initializationTask = new SampleInitializationTask([self G3MWidget],
                                                                          shapesRenderer,
                                                                          geoRenderer,
