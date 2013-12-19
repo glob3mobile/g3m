@@ -49,7 +49,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   const bool color       = GPUVariable::hasAttribute(attributesCode, COLOR);
   const bool transformTC = (GPUVariable::hasUniform(uniformsCode,    TRANSLATION_TEXTURE_COORDS) ||
                             GPUVariable::hasUniform(uniformsCode,    SCALE_TEXTURE_COORDS));
-  const bool rotationTC  = GPUVariable::hasUniform(uniformsCode,     TRANSLATION_TEXTURE_COORDS);
+  const bool rotationTC  = GPUVariable::hasUniform(uniformsCode,     ROTATION_ANGLE_TEXTURE_COORDS);
   const bool hasLight    = GPUVariable::hasUniform(uniformsCode,     AMBIENT_LIGHT_COLOR);
 
   if (billboard) {
