@@ -58,6 +58,30 @@ HUDQuadWidget::~HUDQuadWidget() {
   delete _mesh;
 }
 
+void HUDQuadWidget::setTexCoordsTranslation(const Vector2D& translation) {
+  _texCoordsTranslationX = translation._x;
+  _texCoordsTranslationY = translation._y;
+#warning update mesh
+  delete _mesh;
+  _mesh = NULL;
+}
+
+void HUDQuadWidget::setTexCoordsScale(const Vector2D& scale) {
+  _texCoordsScaleX = scale._x;
+  _texCoordsScaleY = scale._y;
+#warning update mesh
+  delete _mesh;
+  _mesh = NULL;
+}
+
+void HUDQuadWidget::setTexCoordsRotation(const Angle& rotation) {
+  _texCoordsRotationInRadians = rotation._radians;
+#warning update mesh
+  delete _mesh;
+  _mesh = NULL;
+}
+
+
 void HUDQuadWidget::initialize(const G3MContext* context) {
   if (!_downloadingImage && (_image == NULL)) {
     _downloadingImage = true;
@@ -114,24 +138,12 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
     return NULL;
   }
 
-//  const Camera* camera = rc->getCurrentCamera();
-//  const int viewportWidth  = camera->getWidth();
-//  const int viewportHeight = camera->getHeight();
-//
-//  const Vector3D halfViewportAndPosition(viewportWidth  / 2 - _x,
-//                                         viewportHeight / 2 - _y,
-//                                         0);
-
   const double x = _x;
   const double y = _y;
   const double width = _width;
   const double height = _height;
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
-//  vertices->add( Vector3D(0, h, 0).sub(halfViewportAndPosition) );
-//  vertices->add( Vector3D(0, 0, 0).sub(halfViewportAndPosition) );
-//  vertices->add( Vector3D(w, h, 0).sub(halfViewportAndPosition) );
-//  vertices->add( Vector3D(w, 0, 0).sub(halfViewportAndPosition) );
   vertices->add( x,       height+y, 0 );
   vertices->add( x,       y,        0 );
   vertices->add( width+x, height+y, 0 );
@@ -152,11 +164,12 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) const {
 
   delete vertices;
 
-  TextureMapping* texMap = new SimpleTextureMapping(texId,
-                                                    texCoords.create(),
-                                                    true,
-                                                    true);
-
+  SimpleTextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                          texCoords.create(),
+                                                          true,
+                                                          true);
+  texMap->setTranslationAndScale(Vector2D(_texCoordsTranslationX, _texCoordsTranslationY),
+                                 Vector2D(_texCoordsScaleX, _texCoordsScaleY));
   return new TexturedMesh(dm, true, texMap, true, true);
 }
 

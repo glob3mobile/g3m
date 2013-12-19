@@ -12,6 +12,8 @@
 #include "HUDWidget.hpp"
 
 #include "URL.hpp"
+#include "Vector2D.hpp"
+#include "Angle.hpp"
 class IImage;
 class Mesh;
 
@@ -27,6 +29,12 @@ private:
   const float _y;
   const float _width;
   const float _height;
+
+  double _texCoordsTranslationX;
+  double _texCoordsTranslationY;
+  double _texCoordsScaleX;
+  double _texCoordsScaleY;
+  double _texCoordsRotationInRadians;
 
   IImage* _image;
   bool _downloadingImage;
@@ -53,9 +61,18 @@ public:
   _height(height),
   _mesh(NULL),
   _image(NULL),
-  _downloadingImage(false)
+  _downloadingImage(false),
+  _texCoordsTranslationX(0),
+  _texCoordsTranslationY(0),
+  _texCoordsScaleX(1),
+  _texCoordsScaleY(1),
+  _texCoordsRotationInRadians(0)
   {
   }
+
+  void setTexCoordsTranslation(const Vector2D& translation);
+  void setTexCoordsScale(const Vector2D& scale);
+  void setTexCoordsRotation(const Angle& rotation);
 
   ~HUDQuadWidget();
 
