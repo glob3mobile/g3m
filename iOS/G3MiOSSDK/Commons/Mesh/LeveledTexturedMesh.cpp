@@ -41,7 +41,8 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              true, _translation.asVector2D(), _scale.asVector2D()),
+                                              true, _translation.asVector2D(), _scale.asVector2D(),
+                                              0,0,0),
                          false); //TRANSFORM
     }
     else {
@@ -50,7 +51,8 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              false, Vector2D::zero(), Vector2D::zero() ),
+                                              false, Vector2D::zero(), Vector2D::zero(),
+                                              0,0,0),
                          false); //TRANSFORM
     }
 

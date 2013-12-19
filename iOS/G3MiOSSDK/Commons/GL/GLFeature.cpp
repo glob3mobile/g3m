@@ -106,6 +106,8 @@ GeometryGLFeature::~GeometryGLFeature() {
 #endif
 }
 
+
+
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    IFloatBuffer* texCoords,
                                    int arrayElementSize,
@@ -117,7 +119,10 @@ TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    int dFactor,
                                    bool coordsTransformed,
                                    const Vector2D& translate,
-                                   const Vector2D& scale) :
+                                   const Vector2D& scale,
+                                   float rotationPointX,
+                                   float rotationPointY,
+                                   float angleInRadians) :
 GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
 _texID(texID)
 {
@@ -139,6 +144,11 @@ _texID(texID)
                             new GPUUniformValueVec2Float((float) scale._x,
                                                          (float) scale._y),
                             false);
+
+    _values.addUniformValue(ROTATION_POINT_TEXTURE_COORDS, new GPUUniformValueVec2Float(rotationPointX,
+                                                                         rotationPointY), false);
+
+    _values.addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS, new GPUUniformValueFloat(angleInRadians), false);
   }
 }
 
