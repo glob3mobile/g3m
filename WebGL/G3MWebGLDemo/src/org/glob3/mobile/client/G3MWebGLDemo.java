@@ -164,10 +164,10 @@ EntryPoint {
 		meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
 		builder.addRenderer(meshRenderer);
 
-		if (true) {
-			final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
-			builder.setShownSector(spain);
-		}
+//		if (true) {
+//			final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
+//			builder.setShownSector(spain);
+//		}
 
 		final boolean useMarkers = true;
 		if (useMarkers) {
@@ -1262,6 +1262,66 @@ EntryPoint {
 					true);
 			layerSet.addLayer(bing);
 		}
+		
+
+		boolean testingTransparencies = true;
+		if (testingTransparencies){
+			WMSLayer blueMarble = new WMSLayer("bmng200405",
+					new URL("http://www.nasa.network.com/wms?", false),
+					WMSServerVersion.WMS_1_1_0,
+					Sector.fullSphere(),
+					"image/jpeg",
+					"EPSG:4326",
+					"",
+					false,
+					new LevelTileCondition(0, 6),
+					TimeInterval.fromDays(30),
+					true,
+					new LayerTilesRenderParameters(Sector.fullSphere(),
+							2, 4,
+							0, 6,
+							LayerTilesRenderParameters.defaultTileTextureResolution(),
+							LayerTilesRenderParameters.defaultTileMeshResolution(),
+							false)
+					);
+			layerSet.addLayer(blueMarble);
+
+			WMSLayer i3Landsat = new WMSLayer("esat",
+					new URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+					WMSServerVersion.WMS_1_1_0,
+					Sector.fullSphere(),
+					"image/jpeg",
+					"EPSG:4326",
+					"",
+					false,
+					new LevelTileCondition(7, 100),
+					TimeInterval.fromDays(30),
+					true,
+					new LayerTilesRenderParameters(Sector.fullSphere(),
+							2, 4,
+							0, 12,
+							LayerTilesRenderParameters.defaultTileTextureResolution(),
+							LayerTilesRenderParameters.defaultTileMeshResolution(),
+							false));
+			layerSet.addLayer(i3Landsat);
+
+			WMSLayer pnoa = new WMSLayer("PNOA",
+					new URL("http://www.idee.es/wms/PNOA/PNOA", false),
+					WMSServerVersion.WMS_1_1_0,
+					Sector.fromDegrees(21, -18, 45, 6),
+					"image/png",
+					"EPSG:4326",
+					"",
+					true,
+					null,
+					TimeInterval.fromDays(30),
+					true,
+					null,
+					(float) 0.5);
+			layerSet.addLayer(pnoa);
+		}
+		
+		builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 		/*
 		 * final WMSLayer political = new WMSLayer("topp:cia", new
@@ -1425,7 +1485,7 @@ EntryPoint {
 
 
 		// camera constrainer
-		if (true) {
+		if (false) {
 			final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
 				private boolean firstTime = true;
 
