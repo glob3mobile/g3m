@@ -317,6 +317,9 @@ private:
   }
 
 public:
+
+#warning OVERLOAD
+
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords,
                    int arrayElementSize,
@@ -328,7 +331,10 @@ public:
                    int dFactor,
                    bool coordsTransformed,
                    const Vector2D& translate,
-                   const Vector2D& scale);
+                   const Vector2D& scale,
+                   float rotationPointX,
+                   float rotationPointY,
+                   float angleInRadians);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };

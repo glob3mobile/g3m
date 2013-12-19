@@ -134,6 +134,14 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return  BILLBOARD_POSITION;
   }
 
+  if (name.compare("uRotationPointTexCoord") == 0){
+    return ROTATION_POINT_TEXTURE_COORDS;
+  }
+
+  if (name.compare("uRotationAngleTexCoord") == 0){
+    return ROTATION_ANGLE_TEXTURE_COORDS;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 
