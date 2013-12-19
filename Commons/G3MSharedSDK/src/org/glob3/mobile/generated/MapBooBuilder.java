@@ -1089,8 +1089,7 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void addApplicationScene(MapBoo_Scene scene, int position)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'insert' method in Java:
-    _applicationScenes.insert(_applicationScenes.iterator() + position, scene);
+    _applicationScenes.add(position, scene);
   
     triggerOnScenesChanged();
   }
@@ -1098,7 +1097,27 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void deleteApplicationScene(String sceneId)
   {
+    final int scenesCount = _applicationScenes.size();
+    int sceneIndex = -1;
+    for (int i = 0; i < scenesCount; i++)
+    {
+      final String iSceneId = _applicationScenes.get(i).getId();
+      if (iSceneId.compareTo(sceneId) == 0)
+      {
+        sceneIndex = i;
+        break;
+      }
+    }
+    if (sceneIndex != -1)
+    {
+      MapBoo_Scene scene = _applicationScenes.get(sceneIndex);
+      if (scene != null)
+         scene.dispose();
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+      _applicationScenes.erase(_applicationScenes.iterator() + sceneIndex);
   
+      triggerOnScenesChanged();
+    }
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1111,6 +1130,10 @@ public abstract class MapBooBuilder
       final String sceneID = _applicationScenes.get(i).getId();
       if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
       {
+        MapBoo_Scene oldScene = _applicationScenes.get(i);
+        if (oldScene != null)
+           oldScene.dispose();
+  
         _applicationScenes.set(i, scene);
   
         if (sceneID.compareTo(_applicationCurrentSceneId) == 0)
@@ -1269,10 +1292,10 @@ public abstract class MapBooBuilder
               {
                 final JSONNumber jsonPosition = jsonPutScene.getAsNumber("position");
                 int position = (jsonPosition != null) ? (int) jsonPosition.value() : 0;
-                final JSONObject jsonScene = jsonPutScene.getAsObject("scene");
-                if (jsonScene != null)
+                final JSONObject jsonNewScene = jsonPutScene.getAsObject("scene");
+                if (jsonNewScene != null)
                 {
-                  MapBoo_Scene scene = parseScene(jsonScene);
+                  MapBoo_Scene scene = parseScene(jsonNewScene);
                   if (scene != null)
                   {
                     addApplicationScene(scene, position);
@@ -1283,8 +1306,11 @@ public abstract class MapBooBuilder
               final JSONObject jsonDeleteScene = jsonScenes.getAsObject("deleteScene");
               if (jsonDeleteScene != null)
               {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO remove scene with given sceneId
+                final JSONString jsonSceneId = jsonDeleteScene.getAsString("sceneId");
+                if (jsonSceneId != null)
+                {
+                  deleteApplicationScene(jsonSceneId.value());
+                }
               }
             }
   
@@ -1343,8 +1369,24 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void setApplicationCurrentSceneId(String currentSceneId);
+  public final void setApplicationCurrentSceneId(String currentSceneId)
+  {
+    if (_applicationCurrentSceneId.compareTo(currentSceneId) != 0)
+    {
+      final int scenesCount = _applicationScenes.size();
+      for (int i = 0; i < scenesCount; i++)
+      {
+        final String sceneId = _applicationScenes.get(i).getId();
+        if (sceneId.compareTo(currentSceneId) == 0)
+        {
+          _applicationCurrentSceneId = currentSceneId;
+          changedCurrentScene();
+  
+          break;
+        }
+      }
+    }
+  }
 
   /** Private to MapbooBuilder, don't call it */
   public final void rawChangeScene(String sceneId)
