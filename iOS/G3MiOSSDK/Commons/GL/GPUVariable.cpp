@@ -9,7 +9,7 @@
 #include "GPUVariable.hpp"
 #include "ILogger.hpp"
 
-bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u) {
+bool GPUVariable::hasUniform(int code, GPUUniformKey u) {
   if (u == UNRECOGNIZED_UNIFORM) {
     return false;
   }
@@ -19,10 +19,10 @@ bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u) {
 #ifdef JAVA_CODE
   final int index = u.getValue();
 #endif
-  return codeContainsUniform(code, index);
+  return hasUniform(code, index);
 }
 
-bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a) {
+bool GPUVariable::hasAttribute(int code, GPUAttributeKey a) {
   if (a == UNRECOGNIZED_ATTRIBUTE) {
     return false;
   }
@@ -32,14 +32,14 @@ bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a) {
 #ifdef JAVA_CODE
   final int index = a.getValue();
 #endif
-  return codeContainsAttribute(code, index);
+  return hasAttribute(code, index);
 }
 
-bool GPUVariable::codeContainsUniform(int code, int u) {
+bool GPUVariable::hasUniform(int code, int u) {
   return ((code >> u) & 0x00000001) != 0;
 }
 
-bool GPUVariable::codeContainsAttribute(int code, int a) {
+bool GPUVariable::hasAttribute(int code, int a) {
   return ((code >> a) & 0x00000001) != 0;
 }
 
