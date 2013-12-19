@@ -91,19 +91,19 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   }
 
   if (name.compare("uViewPortExtent") == 0) {
-    return  VIEWPORT_EXTENT;
+    return VIEWPORT_EXTENT;
   }
 
   if (name.compare("uTranslationTexCoord") == 0) {
-    return  TRANSLATION_TEXTURE_COORDS;
+    return TRANSLATION_TEXTURE_COORDS;
   }
 
   if (name.compare("uScaleTexCoord") == 0) {
-    return  SCALE_TEXTURE_COORDS;
+    return SCALE_TEXTURE_COORDS;
   }
 
   if (name.compare("uPointSize") == 0) {
-    return  POINT_SIZE;
+    return POINT_SIZE;
   }
 
   if (name.compare("uAmbientLightColor") == 0) {
@@ -131,7 +131,7 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   }
 
   if (name.compare("uBillboardPosition") == 0) {
-    return  BILLBOARD_POSITION;
+    return BILLBOARD_POSITION;
   }
 
   if (name.compare("uRotationCenterTexCoord") == 0){
@@ -152,15 +152,15 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
   }
 
   if (name.compare("aColor") == 0) {
-    return  COLOR;
+    return COLOR;
   }
 
   if (name.compare("aTextureCoord") == 0) {
-    return  TEXTURE_COORDS;
+    return TEXTURE_COORDS;
   }
 
   if (name.compare("aNormal") == 0) {
-    return  NORMAL;
+    return NORMAL;
   }
 
   return UNRECOGNIZED_ATTRIBUTE;
