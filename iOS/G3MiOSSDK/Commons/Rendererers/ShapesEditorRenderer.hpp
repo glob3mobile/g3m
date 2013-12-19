@@ -92,8 +92,17 @@ public:
   void startPolygon(float borderWidth,
                     const Color& borderColor,
                     const Color& surfaceColor);
-  void endPolygon();
+  void endPolygon(bool cancelVertices=false);
+  
+  void startLine(float width,
+                 const Color& color);
+  void endLine(bool cancelVertices=false);
+  
+  
 
+  bool creatingShape() {
+    return _creatingShape;
+  }
 };
 
 

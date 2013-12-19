@@ -47,6 +47,9 @@ public:
   {}
   
   bool touchedShape(Shape* shape) {
+    if (_renderer->creatingShape())
+      return true;
+    
     SimpleShapeSelectionListener::touchedShape(shape);
     _selectedShape = getSelectedShape();
     if (_selectedShape == NULL) {
@@ -55,6 +58,7 @@ public:
       _renderer->clearVertexShapes();
       return true;
     }
+    
     int id = _renderer->getRasterShapeId(_selectedShape);
     if (id>=0) {
       _renderer->setSelectedVertex(-1);
@@ -194,12 +198,12 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   // ***************************
   // ***************************
   // ***************************
-  if (position._longitude._degrees<2.2784) {
+  if (position._longitude._degrees<2.4) {
     printf ("\n---------- starting polygon\n");
     startPolygon(3, Color::fromRGBA255(20, 30, 50, 255), Color::fromRGBA255(20, 30, 40, 60));
     return;
   }
-  if (position._longitude._degrees>3.5303) {
+  if (position._longitude._degrees>3.4) {
     printf ("\n---------- finishing polygon\n");
     endPolygon();
     return;
@@ -298,6 +302,9 @@ void ShapesEditorRenderer::startPolygon(float borderWidth,
                                         const Color& borderColor,
                                         const Color& surfaceColor)
 {
+  if (_creatingShape)
+    endPolygon(true);
+  
   // if there is something selected, unselect
   Shape* selectedShape = _shapeTouchListener->_selectedShape;
   if (selectedShape != NULL)
@@ -309,8 +316,14 @@ void ShapesEditorRenderer::startPolygon(float borderWidth,
 }
 
 
-void ShapesEditorRenderer::endPolygon()
+void ShapesEditorRenderer::endPolygon(bool cancelVertices)
 {
+  if (!_creatingShape)
+    return;
+  
+  if (cancelVertices)
+    _shapeInCreation._coordinates.clear();
+  
   _creatingShape = false;
   clearVertexShapes();
   ShapesRenderer::_geoTileRasterizer->clear();
