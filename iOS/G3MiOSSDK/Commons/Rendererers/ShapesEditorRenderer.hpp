@@ -13,6 +13,7 @@
 #include "ShapesRenderer.hpp"
 
 
+
 class GEOTileRasterizer;
 class PointShape;
 class PlanetRenderer;
@@ -65,6 +66,12 @@ private:
   bool _creatingShape;
   RasterShapes _shapeInCreation;
   
+  enum {
+    LINE_SHAPE,
+    POLYGON_SHAPE
+  } _rasterShapeKind;
+
+  
   void removeRasterShapesFromShapesRenderer();
   void addRasterShapes();
   
@@ -98,6 +105,7 @@ public:
   void startPolygon(float borderWidth,
                     const Color& borderColor,
                     const Color& surfaceColor) {
+    _rasterShapeKind = POLYGON_SHAPE;
     startRasterShape(borderWidth, borderColor, surfaceColor);
   }
   
@@ -106,8 +114,14 @@ public:
   }
   
   void startLine(float width,
-                 const Color& color);
-  void endLine(bool cancelVertices=false);
+                 const Color& color) {
+    _rasterShapeKind = LINE_SHAPE;
+    startRasterShape(width, color, color);
+  }
+  
+  void endLine(bool cancelVertices=false) {
+    endRasterShape(cancelVertices);
+  }
   
   
 

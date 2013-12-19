@@ -340,7 +340,7 @@ void ShapesEditorRenderer::endRasterShape(bool cancelVertices)
                                           *_shapeInCreation._surfaceColor);
     addShape(shape);
   }
-  if (coordinates.size()==2) {
+  if (coordinates.size()==2 && _rasterShapeKind==LINE_SHAPE) {
     Shape *shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
                                        new Geodetic2D(*coordinates[1]),
                                        _shapeInCreation._borderWidth,
