@@ -23,8 +23,10 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
   GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
   if (p == NULL) {
     p = getNewProgram(gl, uniformsCode, attributesCode);
+#warning AVOID getAttributesCode and getUniformsCode calls
     if (p->getAttributesCode() != attributesCode ||
         p->getUniformsCode() != uniformsCode){
+#warning GIVE MORE DETAIL
       ILogger::instance()->logError("New compiled program does not match GL state.");
     }
   }
@@ -85,6 +87,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode) {
 #ifdef C_CODE
   for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+#warning GPUProgram getUniformsCode avoid call
     GPUProgram* p = it->second;
     if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
       return p;
@@ -114,6 +117,7 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
                                        ps->_name,
                                        ps->_vertexSource,
                                        ps->_fragmentSource);
+#warning DETECT COLISSION WITH COLLECTION OF GPUPROGRAM
       if (prog == NULL) {
         ILogger::instance()->logError("Problem at creating program named %s.", name.c_str());
         return NULL;
