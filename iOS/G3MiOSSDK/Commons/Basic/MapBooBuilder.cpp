@@ -208,8 +208,8 @@ _applicationListener(applicationListener),
 _enableNotifications(enableNotifications),
 _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
-_applicationCurrentSceneIndex(-1),
-_lastApplicationCurrentSceneIndex(-1),
+_applicationCurrentSceneId("-1"),
+_lastApplicationCurrentSceneId("-1"),
 _context(NULL),
 _webSocket(NULL),
 _marksRenderer(NULL),
@@ -955,13 +955,13 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
             }
           }
 
-          const JSONArray* jsonScenes = jsonObject->getAsArray("scenes");
-          if (jsonScenes != NULL) {
+          const JSONArray* jsonAllScenes = jsonObject->getAsArray("scenes");
+          if (jsonAllScenes != NULL) {
             std::vector<MapBoo_Scene*> scenes;
 
-            const int scenesCount = jsonScenes->size();
+            const int scenesCount = jsonAllScenes->size();
             for (int i = 0; i < scenesCount; i++) {
-              MapBoo_Scene* scene = parseScene( jsonScenes->getAsObject(i) );
+              MapBoo_Scene* scene = parseScene( jsonAllScenes->getAsObject(i) );
               if (scene != NULL) {
                 scenes.push_back(scene);
               }
@@ -969,15 +969,36 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
             setApplicationScenes(scenes);
           }
+          
+          const JSONObject* jsonScenes = jsonObject->getAsObject("scenes");
+          if (jsonScenes != NULL) {
+            const JSONObject* jsonPutScene = jsonScenes->getAsObject("putScene");
+            if (jsonPutScene != NULL) {
+              const JSONNumber* jsonPosition = jsonPutScene->getAsNumber("position");
+              int position = (jsonPosition != NULL) ? (int) jsonPosition->value() : 0;
+              const JSONObject* jsonScene = jsonPutScene->getAsObject("scene");
+              if (jsonScene != NULL) {
+                MapBoo_Scene* scene = parseScene(jsonScene);
+                if (scene != NULL) {
+                  addApplicationScene(scene, position);
+                }
+              }
+            }
+            
+            const JSONObject* jsonDeleteScene = jsonScenes->getAsObject("deleteScene");
+            if (jsonDeleteScene != NULL) {
+#warning TODO remove scene with given sceneId
+            }
+          }
 
           setApplicationTimestamp(timestamp);
           saveApplicationData();
           setHasParsedApplication();
         }
 
-        const JSONNumber* jsonCurrentSceneIndex = jsonObject->getAsNumber("currentSceneIndex");
-        if (jsonCurrentSceneIndex != NULL) {
-          setApplicationCurrentSceneIndex( (int) jsonCurrentSceneIndex->value() );
+        const JSONString* jsonCurrentSceneId = jsonObject->getAsString("currentSceneId");
+        if (jsonCurrentSceneId != NULL) {
+          setApplicationCurrentSceneId( jsonCurrentSceneId->value() );
         }
 
         if (_enableNotifications) {
@@ -1070,14 +1091,17 @@ void MapBooBuilder::addApplicationNotification(MapBoo_Notification* notification
   delete notification;
 }
 
-void MapBooBuilder::setApplicationCurrentSceneIndex(int sceneIndex) {
-  if (sceneIndex != _applicationCurrentSceneIndex) {
-    const bool validSceneIndex = ((sceneIndex >= 0) &&
-                                  (sceneIndex < _applicationScenes.size()));
-
-    if (validSceneIndex) {
-      _applicationCurrentSceneIndex = sceneIndex;
-      changedCurrentScene();
+void MapBooBuilder::setApplicationCurrentSceneId(std::string currentSceneId) {
+  if (_applicationCurrentSceneId.compare(currentSceneId) != 0) {
+    const int scenesCount = _applicationScenes.size();
+    for (int i = 0; i < scenesCount; i++) {
+      const std::string sceneId = _applicationScenes[i]->getId();
+      if (sceneId.compare(currentSceneId) == 0) {
+        _applicationCurrentSceneId = currentSceneId;
+        changedCurrentScene();
+        
+        break;
+      }
     }
   }
 }
@@ -1301,20 +1325,24 @@ void MapBooBuilder::openApplicationTube(const G3MContext* context) {
                                         true /* autodeleteWebSocket */);
 }
 
-const int MapBooBuilder::getApplicationCurrentSceneIndex() {
-  if (_applicationCurrentSceneIndex < 0) {
-    _applicationCurrentSceneIndex = 0;
+const std::string MapBooBuilder::getApplicationCurrentSceneId() {
+  if (_applicationCurrentSceneId.compare("-1") == 0) {
+    _applicationCurrentSceneId = _applicationScenes.at(0)->getId() ;
   }
-  return _applicationCurrentSceneIndex;
+  return _applicationCurrentSceneId;
 }
 
 const MapBoo_Scene* MapBooBuilder::getApplicationCurrentScene() {
-  const int sceneIndex = getApplicationCurrentSceneIndex();
-
-  const bool validSceneIndex = ((sceneIndex >= 0) &&
-                                (sceneIndex < _applicationScenes.size()));
-
-  return validSceneIndex ? _applicationScenes[sceneIndex] : NULL;
+  const std::string currentSceneId = getApplicationCurrentSceneId();
+  
+  const int scenesCount = _applicationScenes.size();
+  for (int i = 0; i < scenesCount; i++) {
+    const std::string sceneId = _applicationScenes[i]->getId();
+    if (sceneId.compare(currentSceneId) == 0) {
+      return _applicationScenes[i];
+    }
+  }
+  return NULL;
 }
 
 Color MapBooBuilder::getCurrentBackgroundColor() {
@@ -1454,36 +1482,38 @@ void MapBooBuilder::setApplicationAbout(const std::string& about) {
 class MapBooBuilder_ChangeSceneTask : public GTask {
 private:
   MapBooBuilder* _builder;
-  const int      _sceneIndex;
+  const std::string _sceneId;
 
 public:
   MapBooBuilder_ChangeSceneTask(MapBooBuilder* builder,
-                                int sceneIndex) :
+                                const std::string& sceneId) :
   _builder(builder),
-  _sceneIndex(sceneIndex)
+  _sceneId(sceneId)
   {
   }
 
   void run(const G3MContext* context) {
-    _builder->rawChangeScene(_sceneIndex);
+    _builder->rawChangeScene(_sceneId);
   }
 };
 
-void MapBooBuilder::rawChangeScene(int sceneIndex) {
-  _applicationCurrentSceneIndex = sceneIndex;
+void MapBooBuilder::rawChangeScene(const std::string& sceneId) {
+  _applicationCurrentSceneId = sceneId;
 
   changedCurrentScene();
 }
 
-void MapBooBuilder::changeScene(int sceneIndex) {
-  const int currentSceneIndex = getApplicationCurrentSceneIndex();
-  if (currentSceneIndex != sceneIndex) {
-    const bool validSceneIndex = ((sceneIndex >= 0) &&
-                                  (sceneIndex < _applicationScenes.size()));
-
-    if (validSceneIndex) {
-      getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneTask(this, sceneIndex),
-                                               true);
+void MapBooBuilder::changeScene(const std::string& sceneId) {
+  const std::string currentSceneId = getApplicationCurrentSceneId();
+  if (currentSceneId.compare(sceneId) != 0) {
+    const int scenesCount = _applicationScenes.size();
+    for (int i = 0; i < scenesCount; i++) {
+      const std::string iSceneId = _applicationScenes[i]->getId();
+      if (sceneId.compare(iSceneId) == 0) {
+        getThreadUtils()->invokeInRendererThread(new MapBooBuilder_ChangeSceneTask(this, sceneId),
+                                                 true);
+        break;
+      }
     }
   }
 }
@@ -1492,7 +1522,7 @@ void MapBooBuilder::changeScene(const MapBoo_Scene* scene) {
   const int size = _applicationScenes.size();
   for (int i = 0; i < size; i++) {
     if (_applicationScenes[i] == scene) {
-      changeScene(i);
+      changeScene(scene->getId());
       break;
     }
   }
@@ -1537,17 +1567,17 @@ void MapBooBuilder::changedCurrentScene() {
 
   if (_applicationListener != NULL) {
     _applicationListener->onCurrentSceneChanged(_context,
-                                         getApplicationCurrentSceneIndex(),
+                                         getApplicationCurrentSceneId(),
                                          currentScene);
   }
 
-  if (_viewType == VIEW_PRESENTATION) {
+  if (_viewType == VIEW_EDITION_PREVIEW) {
     if ((_webSocket != NULL) && _isApplicationTubeOpen) {
-      if (_applicationCurrentSceneIndex != _lastApplicationCurrentSceneIndex) {
-        if (_lastApplicationCurrentSceneIndex >= 0) {
+      if (_applicationCurrentSceneId.compare(_lastApplicationCurrentSceneId) != 0) {
+        if (_lastApplicationCurrentSceneId.compare("-1") != 0) {
           _webSocket->send( getApplicationCurrentSceneCommand() );
         }
-        _lastApplicationCurrentSceneIndex = _applicationCurrentSceneIndex;
+        _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
       }
     }
     else {
@@ -1558,8 +1588,8 @@ void MapBooBuilder::changedCurrentScene() {
 
 const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString("currentSceneIndex=");
-  isb->addInt(_applicationCurrentSceneIndex);
+  isb->addString("currentSceneId=");
+  isb->addString(_applicationCurrentSceneId);
   const std::string s = isb->getString();
   delete isb;
   return s;
@@ -1587,6 +1617,28 @@ void MapBooBuilder::updateVisibleScene() {
   }
 }
 
+void MapBooBuilder::triggerOnScenesChanged() {
+  if (_applicationListener != NULL) {
+#ifdef C_CODE
+    _applicationListener->onScenesChanged(_context, _applicationScenes);
+#endif
+#ifdef JAVA_CODE
+    _applicationListener.onScenesChanged(_context,
+                                         new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
+#endif
+  }
+}
+
+void MapBooBuilder::addApplicationScene(MapBoo_Scene* scene, const int position) {
+  _applicationScenes.insert(_applicationScenes.begin() + position, scene);
+  
+  triggerOnScenesChanged();
+}
+
+void MapBooBuilder::deleteApplicationScene(const std::string &sceneId) {
+  
+}
+
 void MapBooBuilder::setApplicationScene(MapBoo_Scene* scene) {
   const int scenesCount = _applicationScenes.size();
   const std::string sceneToBeUpdatedID = scene->getId();
@@ -1595,21 +1647,14 @@ void MapBooBuilder::setApplicationScene(MapBoo_Scene* scene) {
     if (sceneID.compare(sceneToBeUpdatedID) == 0) {
       _applicationScenes[i] = scene;
       
-      if (i == _applicationCurrentSceneIndex) {
+      if (sceneID.compare(_applicationCurrentSceneId) == 0) {
         updateVisibleScene();
       }
       
       if (_applicationListener != NULL) {
         _applicationListener->onSceneChanged(_context, scene);
-        
-#ifdef C_CODE
-        _applicationListener->onScenesChanged(_context, _applicationScenes);
-#endif
-#ifdef JAVA_CODE
-        _applicationListener.onScenesChanged(_context,
-                                             new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
-#endif
       }
+      triggerOnScenesChanged();
       
       break;
     }
@@ -1632,15 +1677,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
   _applicationScenes = new java.util.ArrayList<MapBoo_Scene>(applicationScenes);
 #endif
 
-  if (_applicationListener != NULL) {
-#ifdef C_CODE
-    _applicationListener->onScenesChanged(_context, _applicationScenes);
-#endif
-#ifdef JAVA_CODE
-    _applicationListener.onScenesChanged(_context,
-                                         new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
-#endif
-  }
+  triggerOnScenesChanged();
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {

@@ -84,7 +84,7 @@ public:
                                const std::vector<MapBoo_Scene*>& scenes) = 0;
 
   virtual void onCurrentSceneChanged(const G3MContext* context,
-                              int sceneIndex,
+                              const std::string& sceneId,
                               const MapBoo_Scene* scene) = 0;
 
   virtual void onWebSocketOpen(const G3MContext* context) = 0;
@@ -376,8 +376,8 @@ private:
   std::string                _applicationAbout;
   int                        _applicationTimestamp;
   std::vector<MapBoo_Scene*> _applicationScenes;
-  int                        _applicationCurrentSceneIndex;
-  int                        _lastApplicationCurrentSceneIndex;
+  std::string                _applicationCurrentSceneId;
+  std::string                _lastApplicationCurrentSceneId;
 
   GL* _gl;
   G3MWidget* _g3mWidget;
@@ -439,7 +439,7 @@ private:
 
   URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer) const;
 
-  const int getApplicationCurrentSceneIndex();
+  const std::string getApplicationCurrentSceneId();
   const MapBoo_Scene* getApplicationCurrentScene();
 
   Color getCurrentBackgroundColor();
@@ -487,6 +487,9 @@ private:
   MarksRenderer* getMarksRenderer();
 
   bool _hasParsedApplication;
+  
+  
+  void triggerOnScenesChanged();
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -538,6 +541,12 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationAbout(const std::string& about);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void addApplicationScene(MapBoo_Scene* scene, const int position);
+
+  /** Private to MapbooBuilder, don't call it */
+  void deleteApplicationScene(const std::string& sceneId);
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScene(MapBoo_Scene* scene);
@@ -559,10 +568,10 @@ public:
   void openApplicationTube(const G3MContext* context);
 
   /** Private to MapbooBuilder, don't call it */
-  void setApplicationCurrentSceneIndex(int currentSceneIndex);
+  void setApplicationCurrentSceneId(const std::string currentSceneId);
 
   /** Private to MapbooBuilder, don't call it */
-  void rawChangeScene(int sceneIndex);
+  void rawChangeScene(const std::string& sceneId);
 
   /** Private to MapbooBuilder, don't call it */
   void setContext(const G3MContext* context);
@@ -604,7 +613,7 @@ public:
                         const std::string&           message,
                         const URL*                   iconURL) const;
 
-  void changeScene(int sceneIndex);
+  void changeScene(const std::string& sceneId);
   
   void changeScene(const MapBoo_Scene* scene);
 
