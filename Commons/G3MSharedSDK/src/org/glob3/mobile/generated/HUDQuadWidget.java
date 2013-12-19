@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 //class Mesh;
+//class SimpleTextureMapping;
 
 public class HUDQuadWidget extends HUDWidget
 {
@@ -41,6 +42,7 @@ public class HUDQuadWidget extends HUDWidget
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private Mesh _mesh;
+  private SimpleTextureMapping _simpleTextureMapping;
   private Mesh createMesh(G3MRenderContext rc)
   {
     if (_image == null)
@@ -78,11 +80,14 @@ public class HUDQuadWidget extends HUDWidget
     if (vertices != null)
        vertices.dispose();
   
-    SimpleTextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
-    texMap.setTranslation(_texCoordsTranslationU, _texCoordsTranslationV);
-    texMap.setScale(_texCoordsScaleU, _texCoordsScaleV);
-    texMap.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
-    return new TexturedMesh(dm, true, texMap, true, true);
+    _simpleTextureMapping = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    _simpleTextureMapping.setTranslation(_texCoordsTranslationU, _texCoordsTranslationV);
+  
+    _simpleTextureMapping.setScale(_texCoordsScaleU, _texCoordsScaleV);
+  
+    _simpleTextureMapping.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
+  
+    return new TexturedMesh(dm, true, _simpleTextureMapping, true, true);
   }
   private Mesh getMesh(G3MRenderContext rc)
   {
@@ -91,6 +96,15 @@ public class HUDQuadWidget extends HUDWidget
       _mesh = createMesh(rc);
     }
     return _mesh;
+  }
+
+  private void cleanMesh()
+  {
+    _simpleTextureMapping = null;
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
   }
 
   protected final void rawRender(G3MRenderContext rc, GLState glState)
@@ -110,6 +124,7 @@ public class HUDQuadWidget extends HUDWidget
      _width = width;
      _height = height;
      _mesh = null;
+     _simpleTextureMapping = null;
      _image = null;
      _downloadingImage = false;
      _texCoordsTranslationU = 0F;
@@ -125,36 +140,34 @@ public class HUDQuadWidget extends HUDWidget
   {
     _texCoordsTranslationU = u;
     _texCoordsTranslationV = v;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning update mesh
-    if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
+  
+    if (_simpleTextureMapping != null)
+    {
+      _simpleTextureMapping.setTranslation(_texCoordsTranslationU, _texCoordsTranslationV);
+    }
   }
 
   public final void setTexCoordsScale(float u, float v)
   {
     _texCoordsScaleU = u;
     _texCoordsScaleV = v;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning update mesh
-    if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
+  
+    if (_simpleTextureMapping != null)
+    {
+      _simpleTextureMapping.setScale(_texCoordsScaleU, _texCoordsScaleV);
+    }
   }
 
   public final void setTexCoordsRotation(float angleInRadians, float centerU, float centerV)
   {
     _texCoordsRotationInRadians = angleInRadians;
-  
     _texCoordsRotationCenterU = centerU;
     _texCoordsRotationCenterV = centerV;
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning update mesh
-    if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
+    if (_simpleTextureMapping != null)
+    {
+      _simpleTextureMapping.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
+    }
   }
 
   public final void setTexCoordsRotation(Angle angle, float centerU, float centerV)
@@ -182,9 +195,7 @@ public class HUDQuadWidget extends HUDWidget
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    if (_mesh != null)
-       _mesh.dispose();
-    _mesh = null;
+    cleanMesh();
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
