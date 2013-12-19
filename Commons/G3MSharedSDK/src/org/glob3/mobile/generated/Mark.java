@@ -92,7 +92,7 @@ public class Mark implements SurfaceElevationListener
   
     if (_textureId != null)
     {
-      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero(), 0,0,0), false);
+      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
     }
   }
 

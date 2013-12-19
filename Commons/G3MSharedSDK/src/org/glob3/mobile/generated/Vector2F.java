@@ -47,16 +47,6 @@ public class Vector2F
   {
   }
 
-  public final float x()
-  {
-    return _x;
-  }
-
-  public final float y()
-  {
-    return _y;
-  }
-
   public static Vector2F nan()
   {
     return new Vector2F(java.lang.Float.NaN, java.lang.Float.NaN);
