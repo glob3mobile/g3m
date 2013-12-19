@@ -28,6 +28,14 @@ public class HUDQuadWidget extends HUDWidget
   private final float _width;
   private final float _height;
 
+  private float _texCoordsTranslationX;
+  private float _texCoordsTranslationY;
+  private float _texCoordsScaleX;
+  private float _texCoordsScaleY;
+  private float _texCoordsRotationInRadians;
+  private float _texCoordsRotationCenterX;
+  private float _texCoordsRotationCenterY;
+
   private IImage _image;
   private boolean _downloadingImage;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
@@ -48,24 +56,12 @@ public class HUDQuadWidget extends HUDWidget
       return null;
     }
   
-  //  const Camera* camera = rc->getCurrentCamera();
-  //  const int viewportWidth  = camera->getWidth();
-  //  const int viewportHeight = camera->getHeight();
-  //
-  //  const Vector3D halfViewportAndPosition(viewportWidth  / 2 - _x,
-  //                                         viewportHeight / 2 - _y,
-  //                                         0);
-  
     final double x = _x;
     final double y = _y;
     final double width = _width;
     final double height = _height;
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-  //  vertices->add( Vector3D(0, h, 0).sub(halfViewportAndPosition) );
-  //  vertices->add( Vector3D(0, 0, 0).sub(halfViewportAndPosition) );
-  //  vertices->add( Vector3D(w, h, 0).sub(halfViewportAndPosition) );
-  //  vertices->add( Vector3D(w, 0, 0).sub(halfViewportAndPosition) );
     vertices.add(x, height+y, 0);
     vertices.add(x, y, 0);
     vertices.add(width+x, height+y, 0);
@@ -82,8 +78,9 @@ public class HUDQuadWidget extends HUDWidget
     if (vertices != null)
        vertices.dispose();
   
-    TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
-  
+    SimpleTextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, true);
+    texMap.setTranslationAndScale(new Vector2D(_texCoordsTranslationX, _texCoordsTranslationY), new Vector2D(_texCoordsScaleX, _texCoordsScaleY));
+    texMap.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterX, _texCoordsRotationCenterY);
     return new TexturedMesh(dm, true, texMap, true, true);
   }
   private Mesh getMesh(G3MRenderContext rc)
@@ -114,6 +111,47 @@ public class HUDQuadWidget extends HUDWidget
      _mesh = null;
      _image = null;
      _downloadingImage = false;
+     _texCoordsTranslationX = 0F;
+     _texCoordsTranslationY = 0F;
+     _texCoordsScaleX = 1F;
+     _texCoordsScaleY = 1F;
+     _texCoordsRotationInRadians = 0F;
+     _texCoordsRotationCenterX = 0F;
+     _texCoordsRotationCenterY = 0F;
+  }
+
+  public final void setTexCoordsTranslation(Vector2D translation)
+  {
+    _texCoordsTranslationX = translation._x;
+    _texCoordsTranslationY = translation._y;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning update mesh
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  }
+  public final void setTexCoordsScale(Vector2D scale)
+  {
+    _texCoordsScaleX = scale._x;
+    _texCoordsScaleY = scale._y;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning update mesh
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  }
+  public final void setTexCoordsRotation(Angle rotation, Vector2D center)
+  {
+    _texCoordsRotationInRadians = rotation._radians;
+  
+    _texCoordsRotationCenterX = center._x;
+    _texCoordsRotationCenterY = center._y;
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning update mesh
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
   }
 
   public void dispose()
