@@ -568,7 +568,7 @@ public:
   void openApplicationTube(const G3MContext* context);
 
   /** Private to MapbooBuilder, don't call it */
-  void setApplicationCurrentSceneId(const std::string currentSceneId);
+  void setApplicationCurrentSceneId(const std::string& currentSceneId);
 
   /** Private to MapbooBuilder, don't call it */
   void rawChangeScene(const std::string& sceneId);

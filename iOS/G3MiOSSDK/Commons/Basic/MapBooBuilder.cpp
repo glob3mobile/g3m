@@ -976,9 +976,9 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
             if (jsonPutScene != NULL) {
               const JSONNumber* jsonPosition = jsonPutScene->getAsNumber("position");
               int position = (jsonPosition != NULL) ? (int) jsonPosition->value() : 0;
-              const JSONObject* jsonScene = jsonPutScene->getAsObject("scene");
-              if (jsonScene != NULL) {
-                MapBoo_Scene* scene = parseScene(jsonScene);
+              const JSONObject* jsonNewScene = jsonPutScene->getAsObject("scene");
+              if (jsonNewScene != NULL) {
+                MapBoo_Scene* scene = parseScene(jsonNewScene);
                 if (scene != NULL) {
                   addApplicationScene(scene, position);
                 }
@@ -987,7 +987,10 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
             
             const JSONObject* jsonDeleteScene = jsonScenes->getAsObject("deleteScene");
             if (jsonDeleteScene != NULL) {
-#warning TODO remove scene with given sceneId
+              const JSONString* jsonSceneId = jsonDeleteScene->getAsString("sceneId");
+              if (jsonSceneId != NULL) {
+                deleteApplicationScene(jsonSceneId->value());
+              }
             }
           }
 
@@ -1091,7 +1094,7 @@ void MapBooBuilder::addApplicationNotification(MapBoo_Notification* notification
   delete notification;
 }
 
-void MapBooBuilder::setApplicationCurrentSceneId(std::string currentSceneId) {
+void MapBooBuilder::setApplicationCurrentSceneId(const std::string& currentSceneId) {
   if (_applicationCurrentSceneId.compare(currentSceneId) != 0) {
     const int scenesCount = _applicationScenes.size();
     for (int i = 0; i < scenesCount; i++) {
@@ -1630,13 +1633,33 @@ void MapBooBuilder::triggerOnScenesChanged() {
 }
 
 void MapBooBuilder::addApplicationScene(MapBoo_Scene* scene, const int position) {
+#ifdef C_CODE
   _applicationScenes.insert(_applicationScenes.begin() + position, scene);
+#endif
+#ifdef JAVA_CODE
+  _applicationScenes.add(position, scene);
+#endif
   
   triggerOnScenesChanged();
 }
 
 void MapBooBuilder::deleteApplicationScene(const std::string &sceneId) {
-  
+  const int scenesCount = _applicationScenes.size();
+  int sceneIndex = -1;
+  for (int i = 0; i < scenesCount; i++) {
+    const std::string iSceneId = _applicationScenes[i]->getId();
+    if (iSceneId.compare(sceneId) == 0) {
+      sceneIndex = i;
+      break;
+    }
+  }
+  if (sceneIndex != -1) {
+    MapBoo_Scene* scene = _applicationScenes[sceneIndex];
+    delete scene;
+    _applicationScenes.erase(_applicationScenes.begin() + sceneIndex);
+    
+    triggerOnScenesChanged();
+  }
 }
 
 void MapBooBuilder::setApplicationScene(MapBoo_Scene* scene) {
@@ -1645,6 +1668,9 @@ void MapBooBuilder::setApplicationScene(MapBoo_Scene* scene) {
   for (int i = 0; i < scenesCount; i++) {
     const std::string sceneID = _applicationScenes[i]->getId();
     if (sceneID.compare(sceneToBeUpdatedID) == 0) {
+      MapBoo_Scene* oldScene = _applicationScenes[i];
+      delete oldScene;
+      
       _applicationScenes[i] = scene;
       
       if (sceneID.compare(_applicationCurrentSceneId) == 0) {
