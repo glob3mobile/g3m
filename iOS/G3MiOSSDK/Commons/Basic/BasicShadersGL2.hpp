@@ -190,11 +190,11 @@ public:
 "gl_Position = uModelview * aPosition; \n " + 
 "float s = sin( uRotationAngleTexCoord ); \n " + 
 "float c = cos( uRotationAngleTexCoord ); \n " + 
-"vec2 textureCoord = aTextureCoord - uRotationCenterTexCoord; \n " + 
-"vec2 newTextureCoord = vec2((textureCoord.x * c) + (textureCoord.y * s), \n " + 
-"(-textureCoord.x * s) + (textureCoord.y * c)); \n " + 
-"newTextureCoord += uRotationCenterTexCoord; \n " + 
-"TextureCoordOut = (newTextureCoord + uTranslationTexCoord) * uScaleTexCoord; \n " + 
+"TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
+"TextureCoordOut = TextureCoordOut - uRotationCenterTexCoord; \n " + 
+"TextureCoordOut = vec2((TextureCoordOut.x * c) + (TextureCoordOut.y * s), \n " + 
+"(-TextureCoordOut.x * s) + (TextureCoordOut.y * c)); \n " + 
+"TextureCoordOut += uRotationCenterTexCoord; \n " + 
 "gl_PointSize = uPointSize; \n " + 
 "} \n ",
  emptyString +  
