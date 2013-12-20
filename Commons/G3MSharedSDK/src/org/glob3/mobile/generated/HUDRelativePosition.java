@@ -80,7 +80,7 @@ public class HUDRelativePosition extends HUDPosition
   public final float getPosition(int viewPortWidth, int viewPortHeight, float widgetWidth, float widgetHeight)
   {
   
-    float position;
+    float position = 0F;
     switch (_relativeTo)
     {
       case VIEWPORT_WIDTH:
