@@ -6,6 +6,6 @@ if [ $# != 2 ]; then
     echo ''
     exit 1
 else
-    java -cp BSONJSONConverter.jar org.glob3.mobile.demo.BatchJsonParser $1 $2
+    java -Xmx8g -cp BSONJSONConverter.jar org.glob3.mobile.demo.BatchJsonParser $1 $2
 fi
 
