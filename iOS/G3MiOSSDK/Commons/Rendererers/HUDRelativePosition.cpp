@@ -14,7 +14,7 @@ float HUDRelativePosition::getPosition(int viewPortWidth,
                                        float widgetWidth,
                                        float widgetHeight) const {
 
-  float position;
+  float position = 0;
   switch (_relativeTo) {
     case VIEWPORT_WIDTH:
       position = viewPortWidth * _factor;
