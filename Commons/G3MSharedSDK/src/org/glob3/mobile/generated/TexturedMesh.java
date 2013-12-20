@@ -31,7 +31,7 @@ public class TexturedMesh extends Mesh
 
   private void createGLState()
   {
-    _textureMapping.modifyGLState(_glState);
+  //  _textureMapping->modifyGLState(*_glState);
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
   }
@@ -96,6 +96,8 @@ public class TexturedMesh extends Mesh
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
+    _textureMapping.modifyGLState(_glState);
+  
     _glState.setParent(parentState);
     _mesh.render(rc, _glState);
   }
