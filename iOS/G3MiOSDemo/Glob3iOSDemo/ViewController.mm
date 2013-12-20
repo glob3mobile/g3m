@@ -123,6 +123,8 @@
 
 #import <G3MiOSSDK/HUDRenderer.hpp>
 #import <G3MiOSSDK/HUDQuadWidget.hpp>
+#import <G3MiOSSDK/HUDAbsolutePosition.hpp>
+#import <G3MiOSSDK/HUDRelativePosition.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -650,7 +652,8 @@ public:
 #warning Diego at work!
     HUDQuadWidget* compass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
                                                //URL("file:///debug-compass.png"),
-                                               10, 10,
+                                               new HUDAbsolutePosition(10),
+                                               new HUDAbsolutePosition(10),
                                                300, 300);
 //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
 //                                   0.5f, 0.5f);
@@ -659,7 +662,14 @@ public:
     HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
                                                 URL("file:///Compass_rose_browns_00_transparent.png"),
                                                 //URL("file:///debug-compass.png"),
-                                                320, 150+10,
+                                                //new HUDAbsolutePosition(320),
+                                                //new HUDAbsolutePosition(150+10),
+                                                new HUDRelativePosition(0.5,
+                                                                        HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                        HUDRelativePosition::CENTER),
+                                                new HUDRelativePosition(0.5,
+                                                                        HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                        HUDRelativePosition::MIDDLE),
                                                 300, 150);
     compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
                                    Angle::fromDegrees(30),
@@ -669,10 +679,22 @@ public:
     hudRenderer->addWidget(compass2);
 
     float visibleFactor = 4;
+//    HUDQuadWidget* ruler = new HUDQuadWidget(//URL("file:///debug-texture.png"),
+//                                             URL("file:///altimeter-ruler-1536x113.png"),
+//                                             //URL("file:///debug-compass.png"),
+//                                             new HUDAbsolutePosition(320*2),
+//                                             new HUDAbsolutePosition(10),
+//                                             113, 1536 / visibleFactor);
     HUDQuadWidget* ruler = new HUDQuadWidget(//URL("file:///debug-texture.png"),
                                              URL("file:///altimeter-ruler-1536x113.png"),
                                              //URL("file:///debug-compass.png"),
-                                             320*2, 10,
+                                             new HUDRelativePosition(1,
+                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                     HUDRelativePosition::LEFT,
+                                                                     10),
+                                             new HUDRelativePosition(0.5,
+                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                     HUDRelativePosition::MIDDLE),
                                              113, 1536 / visibleFactor);
     ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);

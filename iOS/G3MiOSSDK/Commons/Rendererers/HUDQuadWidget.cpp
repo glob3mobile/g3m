@@ -18,7 +18,7 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "DirectMesh.hpp"
 #include "TexturedMesh.hpp"
-
+#include "HUDPosition.hpp"
 
 class HUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
 private:
@@ -56,6 +56,9 @@ public:
 HUDQuadWidget::~HUDQuadWidget() {
   delete _image;
   delete _mesh;
+
+  delete _x;
+  delete _y;
 }
 
 Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
@@ -72,11 +75,13 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
+  const int viewPortWidth  = rc->getCurrentCamera()->getWidth();
+  const int viewPortHeight = rc->getCurrentCamera()->getHeight();
 
-  const double x = _x;
-  const double y = _y;
-  const double width = _width;
-  const double height = _height;
+  const float width = _width;
+  const float height = _height;
+  const float x = _x->getPosition(viewPortWidth, viewPortHeight, width, height);
+  const float y = _y->getPosition(viewPortWidth, viewPortHeight, width, height);
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices->add( x,       height+y, 0 );

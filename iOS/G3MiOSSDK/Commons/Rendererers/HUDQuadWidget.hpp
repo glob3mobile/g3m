@@ -14,6 +14,7 @@
 #include "URL.hpp"
 #include "Vector2D.hpp"
 #include "Angle.hpp"
+class HUDPosition;
 class IImage;
 class Mesh;
 class SimpleTextureMapping;
@@ -26,8 +27,10 @@ private:
 #ifdef JAVA_CODE
   private final URL _imageURL;
 #endif
-  const float _x;
-  const float _y;
+//  const float _x;
+//  const float _y;
+  const HUDPosition* _x;
+  const HUDPosition* _y;
   const float _width;
   const float _height;
 
@@ -56,8 +59,8 @@ protected:
 
 public:
   HUDQuadWidget(const URL& imageURL,
-                float x,
-                float y,
+                HUDPosition* x,
+                HUDPosition* y,
                 float width,
                 float height) :
   _imageURL(imageURL),

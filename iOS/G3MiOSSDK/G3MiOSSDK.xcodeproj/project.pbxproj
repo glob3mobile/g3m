@@ -59,6 +59,12 @@
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
 		CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF11E8C4164D653000935052 /* SGLayerNode.cpp */; };
+		CF1575961864B5620059312A /* HUDPosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1575941864B5620059312A /* HUDPosition.cpp */; };
+		CF1575971864B8C70059312A /* HUDPosition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1575951864B5620059312A /* HUDPosition.hpp */; };
+		CF15759A1864C0E10059312A /* HUDAbsolutePosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1575981864C0E10059312A /* HUDAbsolutePosition.cpp */; };
+		CF15759B1864C13B0059312A /* HUDAbsolutePosition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1575991864C0E10059312A /* HUDAbsolutePosition.hpp */; };
+		CF15759E1864C1570059312A /* HUDRelativePosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF15759C1864C1570059312A /* HUDRelativePosition.cpp */; };
+		CF15759F1864C18A0059312A /* HUDRelativePosition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF15759D1864C1570059312A /* HUDRelativePosition.hpp */; };
 		CF1871B71703534200092888 /* GEO2DPointGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871B51703534200092888 /* GEO2DPointGeometry.cpp */; };
 		CF1871B81703536B00092888 /* GEO2DPointGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871B61703534200092888 /* GEO2DPointGeometry.hpp */; };
 		CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871BD17036DD700092888 /* GEOMeshSymbol.cpp */; };
@@ -635,6 +641,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF15759F1864C18A0059312A /* HUDRelativePosition.hpp in CopyFiles */,
+				CF15759B1864C13B0059312A /* HUDAbsolutePosition.hpp in CopyFiles */,
+				CF1575971864B8C70059312A /* HUDPosition.hpp in CopyFiles */,
 				CFB57DAE1860EBD000D5B094 /* HUDWidget.hpp in CopyFiles */,
 				CFB57DAF1860EBD000D5B094 /* HUDQuadWidget.hpp in CopyFiles */,
 				CFB57DA71860E55500D5B094 /* HUDRenderer.hpp in CopyFiles */,
@@ -1069,6 +1078,12 @@
 		CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ByteBuffer_iOS.cpp; path = Specific/Derived/ByteBuffer_iOS.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF11E8C4164D653000935052 /* SGLayerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGLayerNode.cpp; path = Commons/Rendererers/SGLayerNode.cpp; sourceTree = "<group>"; };
 		CF11E8C5164D653000935052 /* SGLayerNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGLayerNode.hpp; path = Commons/Rendererers/SGLayerNode.hpp; sourceTree = "<group>"; };
+		CF1575941864B5620059312A /* HUDPosition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDPosition.cpp; path = Commons/Rendererers/HUDPosition.cpp; sourceTree = "<group>"; };
+		CF1575951864B5620059312A /* HUDPosition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDPosition.hpp; path = Commons/Rendererers/HUDPosition.hpp; sourceTree = "<group>"; };
+		CF1575981864C0E10059312A /* HUDAbsolutePosition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDAbsolutePosition.cpp; path = Commons/Rendererers/HUDAbsolutePosition.cpp; sourceTree = "<group>"; };
+		CF1575991864C0E10059312A /* HUDAbsolutePosition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDAbsolutePosition.hpp; path = Commons/Rendererers/HUDAbsolutePosition.hpp; sourceTree = "<group>"; };
+		CF15759C1864C1570059312A /* HUDRelativePosition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDRelativePosition.cpp; path = Commons/Rendererers/HUDRelativePosition.cpp; sourceTree = "<group>"; };
+		CF15759D1864C1570059312A /* HUDRelativePosition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDRelativePosition.hpp; path = Commons/Rendererers/HUDRelativePosition.hpp; sourceTree = "<group>"; };
 		CF1871B51703534200092888 /* GEO2DPointGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DPointGeometry.cpp; path = Commons/GEO/GEO2DPointGeometry.cpp; sourceTree = "<group>"; };
 		CF1871B61703534200092888 /* GEO2DPointGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DPointGeometry.hpp; path = Commons/GEO/GEO2DPointGeometry.hpp; sourceTree = "<group>"; };
 		CF1871BD17036DD700092888 /* GEOMeshSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMeshSymbol.cpp; path = Commons/GEO/GEOMeshSymbol.cpp; sourceTree = "<group>"; };
@@ -2193,6 +2208,12 @@
 				CFB57DA91860E6D800D5B094 /* HUDWidget.hpp */,
 				CFB57DAB1860EB9600D5B094 /* HUDQuadWidget.cpp */,
 				CFB57DAC1860EB9600D5B094 /* HUDQuadWidget.hpp */,
+				CF1575941864B5620059312A /* HUDPosition.cpp */,
+				CF1575951864B5620059312A /* HUDPosition.hpp */,
+				CF1575981864C0E10059312A /* HUDAbsolutePosition.cpp */,
+				CF1575991864C0E10059312A /* HUDAbsolutePosition.hpp */,
+				CF15759C1864C1570059312A /* HUDRelativePosition.cpp */,
+				CF15759D1864C1570059312A /* HUDRelativePosition.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2614,6 +2635,7 @@
 				CF9AEBC2159B3FEB004C3558 /* PlanetTileTessellator.cpp in Sources */,
 				CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */,
 				CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */,
+				CF1575961864B5620059312A /* HUDPosition.cpp in Sources */,
 				D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */,
 				D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */,
 				CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */,
@@ -2703,6 +2725,7 @@
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
 				CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */,
 				CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */,
+				CF15759A1864C0E10059312A /* HUDAbsolutePosition.cpp in Sources */,
 				CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */,
 				CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */,
 				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
@@ -2808,6 +2831,7 @@
 				CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */,
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
 				CF6D723817184BE40043C74B /* ImageBuilder.cpp in Sources */,
+				CF15759E1864C1570059312A /* HUDRelativePosition.cpp in Sources */,
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
 				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
 				CF6D7244171859C40043C74B /* BalloonCanvasElement.cpp in Sources */,
