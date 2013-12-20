@@ -669,18 +669,35 @@ public:
     compass2->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass2);
 
+    float visibleFactor = 4;
+    HUDQuadWidget* ruler = new HUDQuadWidget(//URL("file:///debug-texture.png"),
+                                             URL("file:///altimeter-ruler-1536x113.png"),
+                                             //URL("file:///debug-compass.png"),
+                                             320*2, 10,
+                                             113, 1536 / visibleFactor);
+    ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
+    hudRenderer->addWidget(ruler);
+
     class RotateCompass : public GTask {
     private:
       HUDQuadWidget* _compass1;
       HUDQuadWidget* _compass2;
+      HUDQuadWidget* _ruler;
       double _angle;
+
+      float _translationV;
+      float _translationStep;
 
     public:
       RotateCompass(HUDQuadWidget* compass1,
-                    HUDQuadWidget* compass2) :
+                    HUDQuadWidget* compass2,
+                    HUDQuadWidget* ruler) :
       _compass1(compass1),
       _compass2(compass2),
-      _angle(0)
+      _ruler(ruler),
+      _angle(0),
+      _translationV(0),
+      _translationStep(0.002)
       {
       }
 
@@ -691,11 +708,17 @@ public:
                                         0.5f, 0.5f);
         _compass2->setTexCoordsRotation(Angle::fromRadians(_angle),
                                         0.5f, 0.5f);
+
+        if (_translationV > 0.5 || _translationV < 0) {
+          _translationStep *= -1;
+        }
+        _translationV += _translationStep;
+        _ruler->setTexCoordsTranslation(0, _translationV);
       }
     };
 
     builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(20),
-                                                 new RotateCompass(compass, compass2)));
+                                                 new RotateCompass(compass, compass2, ruler)));
   }
 
 
