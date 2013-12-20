@@ -14,36 +14,22 @@ float HUDRelativePosition::getPosition(int viewPortWidth,
                                        float widgetWidth,
                                        float widgetHeight) const {
 
-  float position = 0;
-  switch (_relativeTo) {
-    case VIEWPORT_WIDTH:
-      position = viewPortWidth * _factor;
-      break;
-    case VIEWPORT_HEIGTH:
-      position = viewPortHeight * _factor;
-      break;
-  }
+  const float position = _factor * ( (_relativeTo == VIEWPORT_WIDTH) ? viewPortWidth : viewPortHeight );
 
   switch (_align) {
     case LEFT:
-      position = position - widgetWidth - _margin;
-      break;
+      return position - widgetWidth - _margin;
     case RIGHT:
-      position = position + _margin;
-      break;
+      return position + _margin;
     case CENTER:
-      position = position - (widgetWidth / 2) - _margin;
-      break;
+      return position - (widgetWidth / 2) - _margin;
 
     case ABOVE:
-      position = position + _margin;
-      break;
+      return position + _margin;
     case BELOW:
-      position = position - widgetHeight - _margin;
-      break;
+      return position - widgetHeight - _margin;
     case MIDDLE:
-      position = position - (widgetHeight / 2) - _margin;
-      break;
+      return position - (widgetHeight / 2) - _margin;
   }
 
   return position;
