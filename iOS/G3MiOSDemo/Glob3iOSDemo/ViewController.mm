@@ -649,8 +649,8 @@ public:
     builder.setHUDRenderer(hudRenderer);
 
 #warning Diego at work!
-    HUDQuadWidget* compass = new HUDQuadWidget(//URL("file:///Compass_rose_browns_00_transparent.png"),
-                                               URL("file:///debug-compass.png"),
+    HUDQuadWidget* compass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+                                               //URL("file:///debug-compass.png"),
                                                10, 10,
                                                300, 300);
 //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
@@ -658,14 +658,14 @@ public:
     hudRenderer->addWidget(compass);
 
     HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
-                                                //URL("file:///Compass_rose_browns_00_transparent.png"),
-                                                URL("file:///debug-compass.png"),
-                                                320, 10,
+                                                URL("file:///Compass_rose_browns_00_transparent.png"),
+                                                //URL("file:///debug-compass.png"),
+                                                320, 150+10,
                                                 300, 150);
     compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
                                    Angle::fromDegrees(30),
                                    0.5f, 0.5f);
-//    compass2->setTexCoordsTranslation(0, 0.5f);
+    //compass2->setTexCoordsTranslation(0, 0.5f);
     compass2->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass2);
 
