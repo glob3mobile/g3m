@@ -113,7 +113,6 @@
 #import <G3MiOSSDK/GEOFeatureCollection.hpp>
 #import <G3MiOSSDK/Angle.hpp>
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
-#import <G3MiOSSDK/OLDHUDRenderer.hpp>
 #import <G3MiOSSDK/HUDImageRenderer.hpp>
 #import <G3MiOSSDK/CartoCSSParser.hpp>
 #import <G3MiOSSDK/ColumnCanvasElement.hpp>
