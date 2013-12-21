@@ -274,8 +274,10 @@ void ShapesEditorRenderer::setSelectedVertex(int value)
     removeRasterShapesFromShapesRenderer();
   
   // if value is null and raster shapes were removed, must be recovered
-  if (value<0 && _rasterShapes[0]._shape==NULL)
+  if (value<0 && _rasterShapes[0]._shape==NULL) {
+    ShapesRenderer::_geoTileRasterizer->clear();
     addRasterShapes();
+  }
   
   // set value
   _selectedVertex = value;
