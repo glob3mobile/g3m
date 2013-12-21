@@ -8,7 +8,7 @@ public class MyTerrainTouchListener implements TerrainTouchListener
      _renderer = renderer;
   }
 
-  public MyTerrainTouchListener()
+  public void dispose()
   {
   }
 
