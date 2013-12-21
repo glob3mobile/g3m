@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.PointShape;
 import org.glob3.mobile.generated.LineShape;
@@ -23,6 +24,7 @@ import org.glob3.mobile.generated.RasterPolygonShape;
 import org.glob3.mobile.generated.SGShape;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapeLoadListener;
+import org.glob3.mobile.generated.ShapesEditorRenderer;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
@@ -64,16 +66,21 @@ public class MainActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
       
+      /*
       // GeoTileRasterizer is needed to draw RasterShapes
       GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
       builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
-
-
       final ShapesRenderer shapesRenderer = new ShapesRenderer(geoTileRasterizer);
-      builder.addRenderer(shapesRenderer);
+      builder.addRenderer(shapesRenderer);*/
+      
+      ShapesEditorRenderer shapesRenderer = builder.createShapesEditorRenderer();
+      Planet planet = Planet.createFlatEarth();
+      builder.setPlanet(planet);
 
-      final MarksRenderer marksRenderer = new MarksRenderer(true);
-      builder.addRenderer(marksRenderer);
+
+
+      /*final MarksRenderer marksRenderer = new MarksRenderer(true);
+      builder.addRenderer(marksRenderer);*/
 
       /*final MeshRenderer meshRenderer = new MeshRenderer();
       meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
@@ -518,7 +525,7 @@ public class MainActivity
 
 
 
-    	  // adding touch listener
+ /*   	  // adding touch listener
     	  ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
     		  Shape _selectedShape = null;
     		  
@@ -541,7 +548,7 @@ public class MainActivity
     		  }
     	  };
       
-    	  shapesRenderer.setShapeTouchListener(myShapeTouchListener, true);
+    	  shapesRenderer.setShapeTouchListener(myShapeTouchListener, true);*/
       }
 
       _g3mWidget = builder.createWidget();
@@ -551,13 +558,14 @@ public class MainActivity
       _placeHolder.addView(_g3mWidget);
       
       if (true) {
-    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.08), Angle.fromDegrees(2.90), 113000);
+    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.50), Angle.fromDegrees(2.90), 113000);
     	  _g3mWidget.setCameraPosition(position);
-    	  _g3mWidget.setCameraHeading(Angle.fromDegrees(5.0));
-    	  _g3mWidget.setCameraPitch(Angle.fromDegrees(24.0));
+    	  //_g3mWidget.setCameraHeading(Angle.fromDegrees(5.0));
+    	  //_g3mWidget.setCameraPitch(Angle.fromDegrees(24.0));
       }
 
-
+      // activate edition of shapesEditorRenderer
+      shapesRenderer.activateEdition(_g3mWidget.getG3MWidget().getPlanetRenderer());
    }
 
 
