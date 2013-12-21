@@ -22,7 +22,7 @@ public:
   _renderer(renderer)
   {}
   
-  MyTerrainTouchListener() {}
+  ~MyTerrainTouchListener() {}
 
   bool onTerrainTouch(const G3MEventContext* ec,
                       const Vector2I&        pixel,
