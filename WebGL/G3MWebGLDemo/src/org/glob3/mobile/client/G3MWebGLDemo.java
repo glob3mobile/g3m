@@ -1284,20 +1284,27 @@ public class G3MWebGLDemo
       //      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
 
       
+	     ShapesEditorRenderer shapesRenderer = builder.createShapesEditorRenderer();
+	      Planet planet = Planet.createFlatEarth();
+	      builder.setPlanet(planet);
+
+	      
       if (true) {      
     	  // testing selecting shapes
-          // GeoTileRasterizer is needed to draw RasterShapes
+          
+    	  /*// GeoTileRasterizer is needed to draw RasterShapes
           GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
           builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
           final ShapesRenderer shapesRenderer = new ShapesRenderer(geoTileRasterizer);
-          builder.addRenderer(shapesRenderer);
+          builder.addRenderer(shapesRenderer);*/
+    	 
     	  
     	  final double factor = 3000;
     	  final Vector3D radius1 = new Vector3D(factor, factor, factor);
     	  final Vector3D radius2 = new Vector3D(factor*1.5, factor*1.5, factor*1.5);
     	  final Vector3D radiusBox = new Vector3D(factor, factor*1.5, factor*2);
 
-    	  Shape box1 = new BoxShape(new Geodetic3D(Angle.fromDegrees(39.70),
+/*    	  Shape box1 = new BoxShape(new Geodetic3D(Angle.fromDegrees(39.70),
     			  Angle.fromDegrees(2.80),
     			  radiusBox._z/2),
     			  AltitudeMode.ABSOLUTE,
@@ -1395,7 +1402,7 @@ public class G3MWebGLDemo
     						  5,
     						  Color.fromRGBA(1, 0.5f, 0, 1));
     		  shapesRenderer.addShape(line);
-    	  }
+    	  }*/
 
     	  // DRAWING RASTER LINES
     	  {
@@ -1423,7 +1430,7 @@ public class G3MWebGLDemo
     		  shapesRenderer.addShape(pol1);
     	  }
 
-    	  // DRAWING JSON
+/*    	  // DRAWING JSON
     	  shapesRenderer.loadJSONSceneJS(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/seymour-plane.json", false), 
     			  "http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/", 
     			  false, 
@@ -1441,7 +1448,7 @@ public class G3MWebGLDemo
     		  public void dispose() {}
     		  @Override
     		  public void onAfterAddShape(SGShape shape) {}
-    	  });
+    	  });*/
  
     	  /*
     	  Shape plane = SceneJSShapesParser.parseFromJSON("file:///seymour-plane.json", 
@@ -1458,7 +1465,7 @@ public class G3MWebGLDemo
     	  shapesRenderer.addShape(plane);*/
 
 
-
+/*
     	  // adding touch listener
     	  ShapeTouchListener myShapeTouchListener = new ShapeTouchListener() {
     		  Shape _selectedShape = null;
@@ -1482,7 +1489,7 @@ public class G3MWebGLDemo
     		  }
     	  };
       
-    	  shapesRenderer.setShapeTouchListener(myShapeTouchListener, true);
+    	  shapesRenderer.setShapeTouchListener(myShapeTouchListener, true);*/
       }
 
       // camera constrainer
@@ -1529,12 +1536,14 @@ public class G3MWebGLDemo
       _widget = builder.createWidget();
       
       if (true) {
-    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.00), Angle.fromDegrees(2.90), 150000);
+    	  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(39.50), Angle.fromDegrees(2.90), 113000);
     	  _widget.setCameraPosition(position);
-    	  _widget.setCameraHeading(Angle.fromDegrees(5.0));
-    	  _widget.setCameraPitch(Angle.fromDegrees(24.0));
+    	  //_widget.setCameraHeading(Angle.fromDegrees(5.0));
+    	  //_widget.setCameraPitch(Angle.fromDegrees(24.0));
       }
 
+      // activate edition of shapesEditorRenderer
+      shapesRenderer.activateEdition(_widget.getG3MWidget().getPlanetRenderer());
 
       /*
       // set the camera looking at

@@ -162,9 +162,9 @@ public class ShapesEditorRenderer extends ShapesRenderer
 
   public final void onTouch(Geodetic3D position)
   {
-  
+  /*
     // ***************************
-    // ***************************
+    // *************************** TO TEST STARTPOLYGON AND ENDPOLYGON
     // ***************************
     if (position._longitude._degrees<2.4)
     {
@@ -184,7 +184,7 @@ public class ShapesEditorRenderer extends ShapesRenderer
     // ***************************
     // ***************************
     // ***************************
-    // ***************************
+    // ****************************/
   
     if (_creatingShape)
     {

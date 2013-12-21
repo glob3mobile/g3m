@@ -197,9 +197,9 @@ void ShapesEditorRenderer::activateEdition(PlanetRenderer* planetRenderer)
 
 void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
 {
-  
+ /*
   // ***************************
-  // ***************************
+  // *************************** TO TEST STARTPOLYGON AND ENDPOLYGON
   // ***************************
   if (position._longitude._degrees<2.4) {
     printf ("\n---------- starting polygon\n");
@@ -217,7 +217,7 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   // ***************************
   // ***************************
   // ***************************
-  // ***************************
+  // ****************************/
   
   if (_creatingShape) {
     Geodetic2D pos2D = position.asGeodetic2D();
