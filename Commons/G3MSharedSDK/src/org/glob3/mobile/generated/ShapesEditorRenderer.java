@@ -49,13 +49,18 @@ public class ShapesEditorRenderer extends ShapesRenderer
       if (coordinates.size() > 2)
       {
         java.util.ArrayList<Geodetic2D> vertices = new java.util.ArrayList<Geodetic2D>();
-        for (int n = 0; n<coordinates.size(); n++)
-          vertices.add(new Geodetic2D(*coordinates.get(n)));
+        for (int k = 0; k<coordinates.size(); k++)
+        {
+          Geodetic2D pos2D = coordinates.get(k);
+          vertices.add(new Geodetic2D(pos2D));
+        }
         shape = new RasterPolygonShape(vertices, _rasterShapes.get(n)._borderWidth, _rasterShapes.get(n)._borderColor, _rasterShapes.get(n)._surfaceColor);
       }
       else
       {
-        shape = new RasterLineShape(new Geodetic2D(*coordinates.get(0)), new Geodetic2D(*coordinates.get(1)), _rasterShapes.get(n)._borderWidth, _rasterShapes.get(n)._borderColor);
+        Geodetic2D pos0 = coordinates.get(0);
+        Geodetic2D pos1 = coordinates.get(1);
+        shape = new RasterLineShape(new Geodetic2D(pos0), new Geodetic2D(pos1), _rasterShapes.get(n)._borderWidth, _rasterShapes.get(n)._borderColor);
       }
       super.addShape(shape);
       _rasterShapes.get(n)._shape = shape;
@@ -103,13 +108,18 @@ public class ShapesEditorRenderer extends ShapesRenderer
     {
       java.util.ArrayList<Geodetic2D> vertices = new java.util.ArrayList<Geodetic2D>();
       for (int n = 0; n<coordinates.size(); n++)
-        vertices.add(new Geodetic2D(*coordinates.get(n)));
+      {
+        Geodetic2D pos2D = coordinates.get(n);
+        vertices.add(new Geodetic2D(pos2D));
+      }
       Shape shape = new RasterPolygonShape(vertices, _shapeInCreation._borderWidth, _shapeInCreation._borderColor, _shapeInCreation._surfaceColor);
       addShape(shape);
     }
     if (coordinates.size()==2 && _rasterShapeKind==AnonymousEnum.LINE_SHAPE)
     {
-      Shape shape = new RasterLineShape(new Geodetic2D(*coordinates.get(0)), new Geodetic2D(*coordinates.get(1)), _shapeInCreation._borderWidth, _shapeInCreation._borderColor);
+      Geodetic2D pos0 = coordinates.get(0);
+      Geodetic2D pos1 = coordinates.get(1);
+      Shape shape = new RasterLineShape(new Geodetic2D(pos0), new Geodetic2D(pos1), _shapeInCreation._borderWidth, _shapeInCreation._borderColor);
       addShape(shape);
     }
   
@@ -207,8 +217,9 @@ public class ShapesEditorRenderer extends ShapesRenderer
     java.util.ArrayList<Geodetic2D> coordinates = _rasterShapes.get(_selectedRasterShape)._coordinates;
     for (int n = 0; n<coordinates.size(); n++)
     {
-      Geodetic3D position = new Geodetic3D(*coordinates.get(n), 1);
-      PointShape vertex = new PointShape(position, AltitudeMode.RELATIVE_TO_GROUND, 20, Color.fromRGBA(0.6f, 0.4f, 0.4f, 1));
+      Geodetic2D pos2D = coordinates.get(n);
+      Geodetic3D posVertex = new Geodetic3D(pos2D, 1);
+      PointShape vertex = new PointShape(posVertex, AltitudeMode.RELATIVE_TO_GROUND, 20, Color.fromRGBA(0.6f, 0.4f, 0.4f, 1));
       addShape(vertex);
       _vertexShapes.add(vertex);
     }
@@ -265,7 +276,8 @@ public class ShapesEditorRenderer extends ShapesRenderer
     clearVertexShapes();
     for (int n = 0; n<coordinates.size(); n++)
     {
-      Geodetic3D position = new Geodetic3D(*coordinates.get(n), 1);
+      Geodetic2D pos2D = coordinates.get(n);
+      Geodetic3D position = new Geodetic3D(pos2D, 1);
       PointShape vertex = new PointShape(position, AltitudeMode.RELATIVE_TO_GROUND, 20, Color.fromRGBA(0.6f, 0.4f, 0.4f, 1));
       addShape(vertex);
       _vertexShapes.add(vertex);

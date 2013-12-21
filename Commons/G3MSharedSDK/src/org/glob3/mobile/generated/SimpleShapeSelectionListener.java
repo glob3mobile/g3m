@@ -4,7 +4,7 @@ public class SimpleShapeSelectionListener extends ShapeTouchListener
   private Shape _selectedShape = null;
 
 
-  public final boolean touchedShape(Shape shape)
+  public boolean touchedShape(Shape shape)
   {
     if (_selectedShape == null)
     {

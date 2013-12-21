@@ -8,6 +8,10 @@ public class MyTerrainTouchListener implements TerrainTouchListener
      _renderer = renderer;
   }
 
+  public MyTerrainTouchListener()
+  {
+  }
+
   public final boolean onTerrainTouch(G3MEventContext ec, Vector2I pixel, Camera camera, Geodetic3D position, Tile tile)
   {
     _renderer.onTouch(position);

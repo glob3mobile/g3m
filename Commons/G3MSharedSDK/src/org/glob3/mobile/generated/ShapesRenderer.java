@@ -181,7 +181,7 @@ public class ShapesRenderer extends LeafRenderer
 
   }
 
-  public final void addShape(Shape shape)
+  public void addShape(Shape shape)
   {
     _shapes.add(shape);
     if (_context != null)

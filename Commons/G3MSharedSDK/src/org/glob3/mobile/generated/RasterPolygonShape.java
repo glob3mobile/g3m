@@ -207,7 +207,10 @@ public class RasterPolygonShape extends Shape
     java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
     int size = _coordinates.size();
     for (int n = 0; n<size; n++)
-      coordinates.add(new Geodetic2D(*_coordinates.get(n)));
+    {
+      Geodetic2D pos2D = _coordinates.get(n);
+      coordinates.add(new Geodetic2D(pos2D));
+    }
     return coordinates;
   }
 
