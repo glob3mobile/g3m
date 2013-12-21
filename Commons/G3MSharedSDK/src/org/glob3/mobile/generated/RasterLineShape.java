@@ -167,4 +167,26 @@ public class RasterLineShape extends Shape
     return new GEORasterLineSymbol(coordinates, lineStyle);
   }
 
+  public final java.util.ArrayList<Geodetic2D> getCopyRasterCoordinates()
+  {
+    java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
+    coordinates.add(new Geodetic2D(_geodeticStartPos));
+    coordinates.add(new Geodetic2D(_geodeticEndPos));
+    return coordinates;
+  }
+
+  public final boolean isRaster()
+  {
+    return true;
+  }
+
+  public final float getWidth()
+  {
+    return _width;
+  }
+
+  public final Color getColor()
+  {
+    return _color;
+  }
 }

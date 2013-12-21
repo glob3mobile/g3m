@@ -97,8 +97,6 @@ public class ShapesRenderer extends LeafRenderer
 
   private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
 
-  private GEOTileRasterizer _geoTileRasterizer;
-
   private void drainLoadQueue()
   {
   
@@ -123,6 +121,10 @@ public class ShapesRenderer extends LeafRenderer
     downloader.requestBuffer(url, priority, timeToCache, readExpired, new ShapesRenderer_SceneJSBufferDownloadListener(this, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener, _context.getThreadUtils(), isBSON), true);
   
   }
+
+
+  protected GEOTileRasterizer _geoTileRasterizer;
+
 
 
   public ShapesRenderer()
@@ -191,6 +193,24 @@ public class ShapesRenderer extends LeafRenderer
       GEORasterSymbol geoRasterSymbol = shape.createRasterSymbolIfNeeded();
       if (geoRasterSymbol != null)
         _geoTileRasterizer.addSymbol(geoRasterSymbol);
+    }
+  }
+
+  public final void removeShape(Shape shape)
+  {
+    int pos = -1;
+    final int size = _shapes.size();
+    for (int i = 0; i < size; i++)
+    {
+      if (_shapes.get(i) == shape)
+      {
+        pos = i;
+        break;
+      }
+    }
+    if (pos != -1)
+    {
+      _shapes.remove(pos);
     }
   }
 

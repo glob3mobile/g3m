@@ -41,6 +41,7 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MarksRenderer;
 //class ErrorRenderer;
+//class ShapesEditorRenderer;
 
 
 public abstract class IG3MBuilder
@@ -1056,6 +1057,23 @@ public abstract class IG3MBuilder
     MarksRenderer marksRenderer = new MarksRenderer(false);
     addRenderer(marksRenderer);
     return marksRenderer;
+  }
+
+  public final ShapesEditorRenderer createShapesEditorRenderer()
+  {
+    // Tile rasterizer to create raster shapes
+    GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
+    getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+  
+    /* // shapesRenderer to render pointshapes whwen modifying shape vertices
+    ShapesRenderer* vertexRenderer = new ShapesRenderer;
+    vertexRenderer->setShapeTouchListener(new SimpleShapeSelectionListener, true);
+    addRenderer(vertexRenderer);*/
+  
+    // creating shape Editor Renderer
+    ShapesEditorRenderer shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
+    addRenderer(shapesEditorRenderer);
+    return shapesEditorRenderer;
   }
 
 }

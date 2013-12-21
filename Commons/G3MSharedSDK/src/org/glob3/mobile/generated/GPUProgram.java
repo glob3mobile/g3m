@@ -165,6 +165,7 @@ public class GPUProgram
 
   public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
   {
+  
     GPUProgram p = new GPUProgram();
   
     p._name = name;

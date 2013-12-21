@@ -202,4 +202,33 @@ public class RasterPolygonShape extends Shape
     return new GEORasterPolygonSymbol(polygonData, lineStyle, surfaceStyle);
   }
 
+  public final java.util.ArrayList<Geodetic2D> getCopyRasterCoordinates()
+  {
+    java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
+    int size = _coordinates.size();
+    for (int n = 0; n<size; n++)
+      coordinates.add(new Geodetic2D(*_coordinates.get(n)));
+    return coordinates;
+  }
+
+  public final boolean isRaster()
+  {
+    return true;
+  }
+
+  public final float getBorderWidth()
+  {
+    return _borderWidth;
+  }
+
+  public final Color getBorderColor()
+  {
+    return _borderColor;
+  }
+
+  public final Color getSurfaceColor()
+  {
+    return _surfaceColor;
+  }
+
 }
