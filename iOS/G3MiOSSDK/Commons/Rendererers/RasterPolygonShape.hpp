@@ -119,8 +119,10 @@ public:
   std::vector<Geodetic2D*> getCopyRasterCoordinates() const {
     std::vector<Geodetic2D*> coordinates;
     int size = _coordinates->size();
-    for (int n=0; n<size; n++)
-      coordinates.push_back(new Geodetic2D(*_coordinates->at(n)));
+    for (int n=0; n<size; n++) {
+      Geodetic2D* pos2D = _coordinates->at(n);
+      coordinates.push_back(new Geodetic2D(*pos2D));
+    }
     return coordinates;
   }
   

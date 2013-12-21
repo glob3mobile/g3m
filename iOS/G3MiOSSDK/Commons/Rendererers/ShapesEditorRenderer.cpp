@@ -21,6 +21,8 @@ public:
   MyTerrainTouchListener(ShapesEditorRenderer* renderer):
   _renderer(renderer)
   {}
+  
+  MyTerrainTouchListener() {}
 
   bool onTerrainTouch(const G3MEventContext* ec,
                       const Vector2I&        pixel,
@@ -119,7 +121,8 @@ void ShapesEditorRenderer::selectRasterShape(int id)
   std::vector<Geodetic2D*> coordinates = _rasterShapes[id]._coordinates;
   clearVertexShapes();
   for (int n=0; n<coordinates.size(); n++) {
-    Geodetic3D* position = new Geodetic3D(*coordinates[n], 1);
+    Geodetic2D* pos2D = coordinates[n];
+    Geodetic3D* position = new Geodetic3D(*pos2D, 1);
     PointShape* vertex = new PointShape(position,
                                         RELATIVE_TO_GROUND,
                                         20,
@@ -246,8 +249,9 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
   clearVertexShapes();
   std::vector<Geodetic2D*> coordinates = _rasterShapes[_selectedRasterShape]._coordinates;
   for (int n=0; n<coordinates.size(); n++) {
-    Geodetic3D* position = new Geodetic3D(*coordinates[n], 1);
-    PointShape* vertex = new PointShape(position,
+    Geodetic2D* pos2D = coordinates[n];
+    Geodetic3D* posVertex = new Geodetic3D(*pos2D, 1);
+    PointShape* vertex = new PointShape(posVertex,
                                         RELATIVE_TO_GROUND,
                                         20,
                                         Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
@@ -285,15 +289,19 @@ void ShapesEditorRenderer::addRasterShapes()
     std::vector<Geodetic2D*> coordinates = _rasterShapes[n]._coordinates;
     if (coordinates.size() > 2) {
       std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
-      for (int n=0; n<coordinates.size(); n++)
-        vertices->push_back(new Geodetic2D(*coordinates[n]));
+      for (int k=0; k<coordinates.size(); k++) {
+        Geodetic2D* pos2D = coordinates[k];
+        vertices->push_back(new Geodetic2D(*pos2D));
+      }
       shape = new RasterPolygonShape(vertices,
                                      _rasterShapes[n]._borderWidth,
                                      *_rasterShapes[n]._borderColor,
                                      *_rasterShapes[n]._surfaceColor);
     } else {
-      shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
-                                  new Geodetic2D(*coordinates[1]),
+      Geodetic2D* pos0 = coordinates[0];
+      Geodetic2D* pos1 = coordinates[1];
+      shape = new RasterLineShape(new Geodetic2D(*pos0),
+                                  new Geodetic2D(*pos1),
                                   _rasterShapes[n]._borderWidth,
                                   *_rasterShapes[n]._borderColor);
     }
@@ -337,8 +345,10 @@ void ShapesEditorRenderer::endRasterShape(bool cancelVertices)
   std::vector<Geodetic2D*> coordinates = _shapeInCreation._coordinates;
   if (coordinates.size() > 2) {
     std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
-    for (int n=0; n<coordinates.size(); n++)
-      vertices->push_back(new Geodetic2D(*coordinates[n]));
+    for (int n=0; n<coordinates.size(); n++) {
+      Geodetic2D* pos2D = coordinates[n];
+      vertices->push_back(new Geodetic2D(*pos2D));
+    }
     Shape* shape = new RasterPolygonShape(vertices,
                                           _shapeInCreation._borderWidth,
                                           *_shapeInCreation._borderColor,
@@ -346,8 +356,10 @@ void ShapesEditorRenderer::endRasterShape(bool cancelVertices)
     addShape(shape);
   }
   if (coordinates.size()==2 && _rasterShapeKind==LINE_SHAPE) {
-    Shape *shape = new RasterLineShape(new Geodetic2D(*coordinates[0]),
-                                       new Geodetic2D(*coordinates[1]),
+    Geodetic2D* pos0 = coordinates[0];
+    Geodetic2D* pos1 = coordinates[1];
+    Shape *shape = new RasterLineShape(new Geodetic2D(*pos0),
+                                       new Geodetic2D(*pos1),
                                        _shapeInCreation._borderWidth,
                                        *_shapeInCreation._borderColor);
     addShape(shape);

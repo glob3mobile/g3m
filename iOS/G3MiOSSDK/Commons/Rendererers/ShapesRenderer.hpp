@@ -56,7 +56,7 @@ private:
   
 public:
   
-  bool touchedShape(Shape* shape) {
+  virtual bool touchedShape(Shape* shape) {
     if (_selectedShape == NULL) {
       shape->select();
       _selectedShape = shape;
@@ -225,7 +225,7 @@ public:
 
   }
 
-  void addShape(Shape* shape);
+  virtual void addShape(Shape* shape);
   
   void removeShape(Shape* shape);
   
