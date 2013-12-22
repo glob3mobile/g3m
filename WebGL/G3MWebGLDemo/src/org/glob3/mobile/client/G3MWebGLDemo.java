@@ -1403,7 +1403,7 @@ public class G3MWebGLDemo
     						  Color.fromRGBA(1, 0.5f, 0, 1));
     		  shapesRenderer.addShape(line);
     	  }*/
-
+/*
     	  // DRAWING RASTER LINES
     	  {
     		  Shape rasterLine = new RasterLineShape(new Geodetic2D(Angle.fromDegrees(39.40),
@@ -1428,7 +1428,7 @@ public class G3MWebGLDemo
     				  Color.green(),
     				  Color.fromRGBA(1, 1, 1, 0.6f));
     		  shapesRenderer.addShape(pol1);
-    	  }
+    	  }*/
 
 /*    	  // DRAWING JSON
     	  shapesRenderer.loadJSONSceneJS(new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/SelectingShapes/seymour-plane.json", false), 
@@ -1543,7 +1543,7 @@ public class G3MWebGLDemo
       }
 
       // activate edition of shapesEditorRenderer
-      shapesRenderer.activateEdition(_widget.getG3MWidget().getPlanetRenderer());
+      //shapesRenderer.activateEdition(_widget.getG3MWidget().getPlanetRenderer());
 
       /*
       // set the camera looking at

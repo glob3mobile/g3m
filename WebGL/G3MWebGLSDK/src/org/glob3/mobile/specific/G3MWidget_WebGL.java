@@ -133,13 +133,42 @@ public class G3MWidget_WebGL
 			//return that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(DDD)(latitude, longitude, height);
 			that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
 		});
+		$wnd.G3M.newColor = $entry(function(red, green, blue, alpha) {
+			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::newColor(FFFF)(red, green, blue, alpha);
+		});		
+		$wnd.G3M.startLineCreation = $entry(function(width, color) {
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::startLineCreation(FLorg/glob3/mobile/generated/Color;)(width, color);
+		});		
+		$wnd.G3M.startPolygonCreation = $entry(function() {
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::startPolygonCreation()();
+		});		
+		$wnd.G3M.endPolygonCreation = $entry(function() {
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::endPolygonCreation()();
+		});		
    }-*/;
 
 
-   public void moveCameraTo(final Geodetic3D position) {
-      _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
+   public Color newColor(float red, float green, float blue, float alpha) {
+	   return Color.fromRGBA(red, green, blue, alpha);
    }
 
+   public void startLineCreation(float width, Color color) {
+	   _g3mWidget.getShapesEditorRenderer().startLine(width, color);
+   }
+
+   public void startPolygonCreation() {
+	   _g3mWidget.getShapesEditorRenderer().startPolygon(3, 
+			   Color.fromRGBA255(20, 30, 50, 255), 
+			   Color.fromRGBA255(20, 30, 40, 60));	   
+   }
+
+   public void endPolygonCreation() {
+	   _g3mWidget.getShapesEditorRenderer().endPolygon();   
+   }
+
+   public void moveCameraTo(final Geodetic3D position) {
+	      _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
+	   }
 
    public Geodetic3D newGeodetic3D(final double latitude,
                                    final double longitude,
