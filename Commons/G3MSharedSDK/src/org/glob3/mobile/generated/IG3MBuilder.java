@@ -68,6 +68,8 @@ public abstract class IG3MBuilder
   private SceneLighting _sceneLighting;
   private Sector _shownSector;
 
+  private ShapesEditorRenderer _shapesEditorRenderer;
+
 
   /**
    * Returns the _gl.
@@ -464,6 +466,8 @@ public abstract class IG3MBuilder
        _shownSector.dispose();
     _shownSector = null;
   
+    g3mWidget.setShapesEditorRenderer(_shapesEditorRenderer);
+  
     return g3mWidget;
   }
 
@@ -495,6 +499,7 @@ public abstract class IG3MBuilder
      _userData = null;
      _sceneLighting = null;
      _shownSector = null;
+     _shapesEditorRenderer = null;
   }
 
   public void dispose()
@@ -1071,9 +1076,9 @@ public abstract class IG3MBuilder
     addRenderer(vertexRenderer);*/
   
     // creating shape Editor Renderer
-    ShapesEditorRenderer shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
-    addRenderer(shapesEditorRenderer);
-    return shapesEditorRenderer;
+    _shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
+    addRenderer(_shapesEditorRenderer);
+    return _shapesEditorRenderer;
   }
 
 }

@@ -443,6 +443,8 @@ public class G3MWidget
   public final void setShapesEditorRenderer(ShapesEditorRenderer shapesEditorRenderer)
   {
     _shapesEditorRenderer = shapesEditorRenderer;
+    _shapesEditorRenderer.activateEdition(getPlanetRenderer());
+  
   }
 
   public final ShapesEditorRenderer getShapesEditorRenderer()
