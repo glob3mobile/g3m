@@ -13,6 +13,10 @@
 #include "RasterPolygonShape.hpp"
 #include "RasterLineShape.hpp"
 
+
+const float vertexWidth = 20;
+
+
 class MyTerrainTouchListener : public TerrainTouchListener {
 private:
   ShapesEditorRenderer* _renderer;
@@ -125,7 +129,7 @@ void ShapesEditorRenderer::selectRasterShape(int id)
     Geodetic3D* position = new Geodetic3D(*pos2D, 1);
     PointShape* vertex = new PointShape(position,
                                         RELATIVE_TO_GROUND,
-                                        20,
+                                        vertexWidth,
                                         Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
     addShape(vertex);
     _vertexShapes.push_back(vertex);
@@ -224,7 +228,7 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
     Geodetic3D* vertexPosition = new Geodetic3D(pos2D, 1);
     PointShape* vertex = new PointShape(vertexPosition,
                                         RELATIVE_TO_GROUND,
-                                        20,
+                                        vertexWidth,
                                         Color::fromRGBA(0.3f, 0.3f, 0.0f, 1));
     addShape(vertex);
     _vertexShapes.push_back(vertex);
@@ -253,7 +257,7 @@ void ShapesEditorRenderer::onTouch(const Geodetic3D& position)
     Geodetic3D* posVertex = new Geodetic3D(*pos2D, 1);
     PointShape* vertex = new PointShape(posVertex,
                                         RELATIVE_TO_GROUND,
-                                        20,
+                                        vertexWidth,
                                         Color::fromRGBA(0.6f, 0.4f, 0.4f, 1));
     addShape(vertex);
     _vertexShapes.push_back(vertex);

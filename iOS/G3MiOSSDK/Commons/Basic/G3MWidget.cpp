@@ -132,7 +132,8 @@ _rootState(NULL),
 _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
-_nFramesBeetweenProgramsCleanUp(500)
+_nFramesBeetweenProgramsCleanUp(500),
+_shapesEditorRenderer(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);

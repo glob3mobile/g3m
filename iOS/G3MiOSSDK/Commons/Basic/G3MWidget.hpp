@@ -47,6 +47,8 @@ class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
 
+class ShapesEditorRenderer;
+
 #include <vector>
 #include <string>
 
@@ -161,6 +163,14 @@ public:
     return _userData;
   }
   
+  void setShapesEditorRenderer(ShapesEditorRenderer* shapesEditorRenderer) {
+    _shapesEditorRenderer = shapesEditorRenderer;
+  }
+  
+  ShapesEditorRenderer* getShapesEditorRenderer() {
+    return _shapesEditorRenderer;
+  }
+  
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
   
   void addPeriodicalTask(const TimeInterval& interval,
@@ -236,6 +246,8 @@ private:
 //  bool                _mainRendererReady;
   RenderState*        _mainRendererState;
   Renderer*           _selectedRenderer;
+  
+  ShapesEditorRenderer* _shapesEditorRenderer;
   
   EffectsScheduler*   _effectsScheduler;
   
