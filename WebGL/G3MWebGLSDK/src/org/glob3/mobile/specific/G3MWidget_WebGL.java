@@ -139,8 +139,8 @@ public class G3MWidget_WebGL
 		$wnd.G3M.startLineCreation = $entry(function(width, color) {
 			that.@org.glob3.mobile.specific.G3MWidget_WebGL::startLineCreation(FLorg/glob3/mobile/generated/Color;)(width, color);
 		});		
-		$wnd.G3M.startPolygonCreation = $entry(function() {
-			that.@org.glob3.mobile.specific.G3MWidget_WebGL::startPolygonCreation()();
+		$wnd.G3M.startPolygonCreation = $entry(function(width, borderColor, surfaceColor) {
+			that.@org.glob3.mobile.specific.G3MWidget_WebGL::startPolygonCreation(FLorg/glob3/mobile/generated/Color;Lorg/glob3/mobile/generated/Color;)(width, borderColor, surfaceColor);
 		});		
 		$wnd.G3M.endPolygonCreation = $entry(function() {
 			that.@org.glob3.mobile.specific.G3MWidget_WebGL::endPolygonCreation()();
@@ -156,10 +156,8 @@ public class G3MWidget_WebGL
 	   _g3mWidget.getShapesEditorRenderer().startLine(width, color);
    }
 
-   public void startPolygonCreation() {
-	   _g3mWidget.getShapesEditorRenderer().startPolygon(3, 
-			   Color.fromRGBA255(20, 30, 50, 255), 
-			   Color.fromRGBA255(20, 30, 40, 60));	   
+   public void startPolygonCreation(float borderWidth, Color borderColor, Color surfaceColor) {
+	   _g3mWidget.getShapesEditorRenderer().startPolygon(borderWidth, borderColor, surfaceColor);
    }
 
    public void endPolygonCreation() {
