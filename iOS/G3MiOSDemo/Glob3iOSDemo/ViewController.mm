@@ -818,10 +818,12 @@ public:
     //[self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(5));
     //[self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24));
   }
-
+  
+/*
   // activate edition of shapesEditorRenderer
   shapesRenderer->activateEdition([self G3MWidget].widget->getPlanetRenderer());
   [self G3MWidget].widget->setShapesEditorRenderer(shapesRenderer);
+ */
 }
 
 - (void) testGenericQuadTree: (GEOTileRasterizer*) geoTileRasterizer{

@@ -163,9 +163,7 @@ public:
     return _userData;
   }
   
-  void setShapesEditorRenderer(ShapesEditorRenderer* shapesEditorRenderer) {
-    _shapesEditorRenderer = shapesEditorRenderer;
-  }
+  void setShapesEditorRenderer(ShapesEditorRenderer* shapesEditorRenderer);
   
   ShapesEditorRenderer* getShapesEditorRenderer() {
     return _shapesEditorRenderer;

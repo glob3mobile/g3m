@@ -37,6 +37,8 @@
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
 #include "ErrorRenderer.hpp"
+#include "ShapesEditorRenderer.hpp"
+
 
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
@@ -726,3 +728,12 @@ void G3MWidget::setShownSector(const Sector& sector) {
   getPlanetRenderer()->setRenderedSector(sector);
   _initialCameraPositionHasBeenSet = false;
 }
+
+void G3MWidget::setShapesEditorRenderer(ShapesEditorRenderer* shapesEditorRenderer)
+{
+  _shapesEditorRenderer = shapesEditorRenderer;
+  _shapesEditorRenderer->activateEdition(getPlanetRenderer());
+
+}
+
+

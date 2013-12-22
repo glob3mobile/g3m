@@ -56,7 +56,8 @@ _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
-_shownSector(NULL)
+_shownSector(NULL),
+_shapesEditorRenderer(NULL)
 {
 }
 
@@ -742,6 +743,8 @@ G3MWidget* IG3MBuilder::create() {
   delete _shownSector;
   _shownSector = NULL;
   
+  g3mWidget->setShapesEditorRenderer(_shapesEditorRenderer);
+  
   return g3mWidget;
 }
 
@@ -885,7 +888,7 @@ ShapesEditorRenderer* IG3MBuilder::createShapesEditorRenderer()
   addRenderer(vertexRenderer);*/
   
   // creating shape Editor Renderer
-  ShapesEditorRenderer* shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
-  addRenderer(shapesEditorRenderer);
-  return shapesEditorRenderer;
+  _shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
+  addRenderer(_shapesEditorRenderer);
+  return _shapesEditorRenderer;
 }

@@ -61,6 +61,8 @@ private:
   std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
+  
+  ShapesEditorRenderer*             _shapesEditorRenderer;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
