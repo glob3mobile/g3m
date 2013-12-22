@@ -54,6 +54,8 @@ package org.glob3.mobile.generated;
 //class ErrorRenderer;
 //class G3MRenderContext;
 
+//class ShapesEditorRenderer;
+
 
 
 //class G3MContext;

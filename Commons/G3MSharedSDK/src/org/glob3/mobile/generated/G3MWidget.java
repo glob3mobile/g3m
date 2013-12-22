@@ -440,6 +440,16 @@ public class G3MWidget
     return _userData;
   }
 
+  public final void setShapesEditorRenderer(ShapesEditorRenderer shapesEditorRenderer)
+  {
+    _shapesEditorRenderer = shapesEditorRenderer;
+  }
+
+  public final ShapesEditorRenderer getShapesEditorRenderer()
+  {
+    return _shapesEditorRenderer;
+  }
+
   public final void addPeriodicalTask(PeriodicalTask periodicalTask)
   {
     _periodicalTasks.add(periodicalTask);
@@ -633,6 +643,8 @@ public class G3MWidget
   private RenderState _mainRendererState;
   private Renderer _selectedRenderer;
 
+  private ShapesEditorRenderer _shapesEditorRenderer;
+
   private EffectsScheduler _effectsScheduler;
 
   private java.util.ArrayList<ICameraConstrainer> _cameraConstrainers = new java.util.ArrayList<ICameraConstrainer>();
@@ -730,6 +742,7 @@ public class G3MWidget
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
+     _shapesEditorRenderer = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
