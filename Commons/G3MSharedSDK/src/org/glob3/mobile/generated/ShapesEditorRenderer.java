@@ -190,7 +190,7 @@ public class ShapesEditorRenderer extends ShapesRenderer
     {
       Geodetic2D pos2D = position.asGeodetic2D();
       Geodetic3D vertexPosition = new Geodetic3D(pos2D, 1);
-      PointShape vertex = new PointShape(vertexPosition, AltitudeMode.RELATIVE_TO_GROUND, 20, Color.fromRGBA(0.3f, 0.3f, 0.0f, 1));
+      PointShape vertex = new PointShape(vertexPosition, AltitudeMode.RELATIVE_TO_GROUND, 10, Color.fromRGBA(0.3f, 0.3f, 0.0f, 1));
       addShape(vertex);
       _vertexShapes.add(vertex);
       _shapeInCreation._coordinates.add(new Geodetic2D(pos2D));
@@ -219,7 +219,7 @@ public class ShapesEditorRenderer extends ShapesRenderer
     {
       Geodetic2D pos2D = coordinates.get(n);
       Geodetic3D posVertex = new Geodetic3D(pos2D, 1);
-      PointShape vertex = new PointShape(posVertex, AltitudeMode.RELATIVE_TO_GROUND, 20, Color.fromRGBA(0.6f, 0.4f, 0.4f, 1));
+      PointShape vertex = new PointShape(posVertex, AltitudeMode.RELATIVE_TO_GROUND, 10, Color.fromRGBA(0.6f, 0.4f, 0.4f, 1));
       addShape(vertex);
       _vertexShapes.add(vertex);
     }
@@ -237,8 +237,10 @@ public class ShapesEditorRenderer extends ShapesRenderer
       removeRasterShapesFromShapesRenderer();
   
     // if value is null and raster shapes were removed, must be recovered
-    if (value<0 && _rasterShapes.get(0)._shape == null)
+    if (value<0 && _rasterShapes.get(0)._shape == null) {
+      super._geoTileRasterizer.clear();
       addRasterShapes();
+    }
   
     // set value
     _selectedVertex = value;
@@ -278,7 +280,7 @@ public class ShapesEditorRenderer extends ShapesRenderer
     {
       Geodetic2D pos2D = coordinates.get(n);
       Geodetic3D position = new Geodetic3D(pos2D, 1);
-      PointShape vertex = new PointShape(position, AltitudeMode.RELATIVE_TO_GROUND, 20, Color.fromRGBA(0.6f, 0.4f, 0.4f, 1));
+      PointShape vertex = new PointShape(position, AltitudeMode.RELATIVE_TO_GROUND, 10, Color.fromRGBA(0.6f, 0.4f, 0.4f, 1));
       addShape(vertex);
       _vertexShapes.add(vertex);
     }
