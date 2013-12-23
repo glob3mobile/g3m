@@ -101,8 +101,8 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
     _nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(), linear);
 
     const int clampToEdge = GLTextureParameterValue::clampToEdge();
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),     clampToEdge);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),     clampToEdge);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(), clampToEdge);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(), clampToEdge);
 
     _nativeGL->texImage2D(image, format);
 
