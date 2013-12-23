@@ -80,7 +80,6 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
-    const int texture2D = GLTextureType::texture2D();
 
     GLGlobalState newState;
 
@@ -89,12 +88,16 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 
     newState.applyChanges(this, *_currentGLGlobalState);
 
+    const int texture2D = GLTextureType::texture2D();
+
     const int linear = GLTextureParameterValue::linear();
-    const int clampToEdge = GLTextureParameterValue::clampToEdge();
     _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), linear);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),linear);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),clampToEdge);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),clampToEdge);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(), linear);
+
+    const int clampToEdge = GLTextureParameterValue::clampToEdge();
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),     clampToEdge);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),     clampToEdge);
+
     _nativeGL->texImage2D(image, format);
 
     if (generateMipmap) {
