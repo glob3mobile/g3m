@@ -359,9 +359,12 @@ public:
     return GL_TEXTURE_WRAP_T;
   }
 
-  int TextureParameterValue_Linear() const {
-    return GL_LINEAR;
-  }
+  int TextureParameterValue_Nearest()              const { return GL_NEAREST;                }
+  int TextureParameterValue_Linear()               const { return GL_LINEAR;                 }
+  int TextureParameterValue_NearestMipmapNearest() const { return GL_NEAREST_MIPMAP_NEAREST; }
+  int TextureParameterValue_NearestMipmapLinear()  const { return GL_NEAREST_MIPMAP_LINEAR;  }
+  int TextureParameterValue_LinearMipmapNearest()  const { return GL_LINEAR_MIPMAP_NEAREST;  }
+  int TextureParameterValue_LinearMipmapLinear()   const { return GL_LINEAR_MIPMAP_LINEAR;   }
 
   int TextureParameterValue_ClampToEdge() const {
     return GL_CLAMP_TO_EDGE;
