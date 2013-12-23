@@ -723,7 +723,7 @@ public:
 
         _compass1->setTexCoordsRotation(Angle::fromRadians(_angle),
                                         0.5f, 0.5f);
-        _compass2->setTexCoordsRotation(Angle::fromRadians(_angle),
+        _compass2->setTexCoordsRotation(Angle::fromRadians(-_angle),
                                         0.5f, 0.5f);
 
         if (_translationV > 0.5 || _translationV < 0) {
