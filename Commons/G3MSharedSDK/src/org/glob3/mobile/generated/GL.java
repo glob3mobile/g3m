@@ -195,7 +195,6 @@ public class GL
     final IGLTextureId texId = getGLTextureId();
     if (texId != null)
     {
-  
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
@@ -204,9 +203,18 @@ public class GL
       newState.applyChanges(this, _currentGLGlobalState);
   
       final int texture2D = GLTextureType.texture2D();
-  
       final int linear = GLTextureParameterValue.linear();
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
+  
+      if (generateMipmap)
+      {
+  //      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::linearMipmapLinear());
+  //      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::nearestMipmapLinear());
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), GLTextureParameterValue.linearMipmapNearest());
+      }
+      else
+      {
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
+      }
       _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(), linear);
   
       final int clampToEdge = GLTextureParameterValue.clampToEdge();
