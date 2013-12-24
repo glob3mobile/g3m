@@ -869,7 +869,7 @@ public:
   const bool logDownloaderStatistics = false;
   builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-  builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
 
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
@@ -1614,7 +1614,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1891,55 +1891,56 @@ public:
   //    shapesRenderer->addShape(sphere);
   //  }
 
-  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
-
-  Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
-
-  std::vector<const IImage*> images;
-  images.push_back(image2);
-  images.push_back(image1);
-
-  std::vector<RectangleF *> srcRs;
-  srcRs.push_back(new RectangleF(0,0,1024,748));
-  srcRs.push_back(new RectangleF(0, 0, 72, 72));
-
-  std::vector<RectangleF *> destRs;
-  destRs.push_back(new RectangleF(0,0,256,256));
-  destRs.push_back(new RectangleF(0, 128, 64, 64));
-
-  class QuadListener: public IImageListener {
-    ShapesRenderer* _sr;
-  public:
-
-    QuadListener(ShapesRenderer* sr):_sr(sr) {
-
+  if (false) {
+    Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+    
+    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
+    
+    std::vector<const IImage*> images;
+    images.push_back(image2);
+    images.push_back(image1);
+    
+    std::vector<RectangleF *> srcRs;
+    srcRs.push_back(new RectangleF(0,0,1024,748));
+    srcRs.push_back(new RectangleF(0, 0, 72, 72));
+    
+    std::vector<RectangleF *> destRs;
+    destRs.push_back(new RectangleF(0,0,256,256));
+    destRs.push_back(new RectangleF(0, 128, 64, 64));
+    
+    class QuadListener: public IImageListener {
+      ShapesRenderer* _sr;
+    public:
+      
+      QuadListener(ShapesRenderer* sr):_sr(sr) {
+        
+      }
+      
+      void imageCreated(const IImage* image) {
+        
+        Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
+                                                         Angle::fromDegrees(-16.339417),
+                                                         8000),
+                                          RELATIVE_TO_GROUND,
+                                          image,
+                                          49000, 38000,
+                                          false);
+        
+        _sr->addShape(quadImages);
+      }
+    };
+    
+    IImageUtils::combine(Vector2I(256,256),
+                         images,
+                         srcRs,
+                         destRs,
+                         new QuadListener(shapesRenderer), true);
+    
+    for (int i = 0; i < 2; i++) {
+      delete images[i];
+      delete srcRs[i];
+      delete destRs[i];
     }
-
-    void imageCreated(const IImage* image) {
-
-      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
-                                                       Angle::fromDegrees(-16.339417),
-                                                       8000),
-                                        RELATIVE_TO_GROUND,
-                                        image,
-                                        49000, 38000,
-                                        false);
-
-      _sr->addShape(quadImages);
-    }
-  };
-
-
-  IImageUtils::combine(Vector2I(256,256),
-                       images,
-                       srcRs,
-                       destRs,
-                       new QuadListener(shapesRenderer), true);
-
-  for (int i = 0; i < 2; i++) {
-    delete images[i];
-    delete srcRs[i];
-    delete destRs[i];
   }
 
   return shapesRenderer;
@@ -2729,7 +2730,11 @@ public:
 
       // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
+      //[_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
+      
+      Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.50), Angle::fromDegrees(-16.58), 25000);
+      [_iosWidget widget]->setCameraPosition(position);
+      [_iosWidget widget]->setCameraPitch(Angle::fromDegrees(75));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -2920,7 +2925,7 @@ public:
                                                new MarksTask(_iosWidget, _marksRenderer));
       }
 
-      if (true){
+      if (false){
 
         class PlaneShapeLoadListener : public ShapeLoadListener {
         public:
@@ -3057,7 +3062,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
