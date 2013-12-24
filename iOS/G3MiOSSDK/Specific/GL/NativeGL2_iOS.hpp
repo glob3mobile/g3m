@@ -209,6 +209,27 @@ public:
     delete [] data;
   }
 
+  void setActiveTexture(int i) const{
+    switch (i) {
+      case 0:
+        glActiveTexture(GL_TEXTURE0);
+        break;
+      case 1:
+        glActiveTexture(GL_TEXTURE1);
+        break;
+      case 2:
+        glActiveTexture(GL_TEXTURE2);
+        break;
+      case 3:
+        glActiveTexture(GL_TEXTURE3);
+        break;
+
+      default:
+        glActiveTexture(GL_TEXTURE4);
+        break;
+    }
+  }
+
   void generateMipmap(int target) const {
     glGenerateMipmap(target);
   }

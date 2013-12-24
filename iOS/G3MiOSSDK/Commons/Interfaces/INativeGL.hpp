@@ -203,6 +203,8 @@ public:
   virtual GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
 
   virtual void depthMask(bool v) const = 0;
+
+  virtual void setActiveTexture(int i) const = 0;
   
 };
 
