@@ -472,6 +472,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
   }
 }
 
+int MAX_LOD = -1;
+
 void Tile::rawRender(const G3MRenderContext* rc,
                      const GLState* glState,
                      TileTexturizer* texturizer,
@@ -525,6 +527,11 @@ void Tile::rawRender(const G3MRenderContext* rc,
 
       //tessellatorMesh->render(rc, glState);
     }
+  }
+
+  if (_level > MAX_LOD){
+    MAX_LOD = _level;
+    printf("MAXLOD = %d\n", _level);
   }
 
 

@@ -570,21 +570,24 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
 
 #warning BEGINNING OF CODE FOR LOADING STORAGE
+  const bool downloadingStorage = false;
+  if (downloadingStorage){
 
-  NSString* cacheLocation = [[NSBundle mainBundle] pathForResource: @"g3m" ofType: @"cache"];
+    NSString* cacheLocation = [[NSBundle mainBundle] pathForResource: @"g3m" ofType: @"cache"];
 
-  if (cacheLocation != nil){
+    if (cacheLocation != nil){
 
-    NSFileManager* fsm = [[NSFileManager alloc] init];
-    NSArray*  paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* documentsDirectory = [paths objectAtIndex:0];
-    NSString* dbPath = [documentsDirectory stringByAppendingPathComponent: @"g3m.cache" ];
+      NSFileManager* fsm = [[NSFileManager alloc] init];
+      NSArray*  paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+      NSString* documentsDirectory = [paths objectAtIndex:0];
+      NSString* dbPath = [documentsDirectory stringByAppendingPathComponent: @"g3m.cache" ];
 
-    [fsm copyItemAtPath:cacheLocation toPath:dbPath error:nil];
+      [fsm copyItemAtPath:cacheLocation toPath:dbPath error:nil];
 
-    SQLiteStorage_iOS* storage= new SQLiteStorage_iOS("g3m.cache");
+      SQLiteStorage_iOS* storage= new SQLiteStorage_iOS("g3m.cache");
 
-    builder.setStorage(storage);
+      builder.setStorage(storage);
+    }
   }
 
 #warning END OF CODE FOR LOADING STORAGE
@@ -1195,7 +1198,7 @@ public:
     layerSet->addLayer(osmEditMapLayer);
   }
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -1231,38 +1234,14 @@ public:
                                        true,
                                        new LayerTilesRenderParameters(Sector::fullSphere(),
                                                                       2, 4,
-                                                                      0, 12,
+                                                                      0, 16,
                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                       false));
     layerSet->addLayer(i3Landsat);
   }
 
-  const bool useOrtoAyto = false;
-  if (useOrtoAyto) {
-    WMSLayer* ortoAyto = new WMSLayer("orto_refundida,etiquetas_50k,Numeros%20de%20Gobierno,etiquetas%20inicial,etiquetas%2020k,Nombres%20de%20Via,etiquetas%2015k,etiquetas%202k,etiquetas%2010k",
-                                      URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
-                                      WMS_1_1_0,
-                                      Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
-                                             Geodetic2D(Angle::fromDegrees(39.536351), Angle::fromDegrees(-6.25946))),
-                                      "image/jpeg",
-                                      "EPSG:4326",
-                                      "",
-                                      false,
-                                      new LevelTileCondition(3, 20),
-                                      //NULL,
-                                      TimeInterval::fromDays(30),
-                                      false,
-                                      new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                     2, 4,
-                                                                     0, 20,
-                                                                     LayerTilesRenderParameters::defaultTileTextureResolution(),
-                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                                                     false));
-    layerSet->addLayer(ortoAyto);
-  }
-
-  bool useWMSBing = false;
+  bool useWMSBing = true;
   if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -1295,6 +1274,80 @@ public:
 
   }
 
+  bool useOrtoGo7=true;
+  if (useOrtoGo7) {
+    WMSLayer* Go7Layer = new WMSLayer("Go7:peru_final_geo",
+                                      URL("http://193.145.155.8:8080/geoserver/wms", false), //
+                                      WMS_1_1_0, //
+                                      //Sector::fromDegrees(39.645,3.283,39.729,3.45), //
+                                      Sector::fromDegrees(-12.065,-77.038,-12.060,-77.034), //
+                                      "image/png", //
+                                      "EPSG:4326", //
+                                      "", //
+                                      true, //
+                                      NULL,
+                                      TimeInterval::fromDays(30),
+                                      true);
+    layerSet->addLayer(Go7Layer);
+  }
+
+  const bool useOrtoAyto = false;
+  if (useOrtoAyto) {
+    WMSLayer* ortoAyto = new WMSLayer("orto_refundida,etiquetas_50k,Numeros%20de%20Gobierno,etiquetas%20inicial,etiquetas%2020k,Nombres%20de%20Via,etiquetas%2015k,etiquetas%202k,etiquetas%2010k",
+                                      URL("http://195.57.27.86/wms_etiquetas_con_orto.mapdef?", false),
+                                      WMS_1_1_0,
+                                      Sector(Geodetic2D(Angle::fromDegrees(39.350228), Angle::fromDegrees(-6.508713)),
+                                             Geodetic2D(Angle::fromDegrees(39.536351), Angle::fromDegrees(-6.25946))),
+                                      "image/jpeg",
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      new LevelTileCondition(3, 20),
+                                      //NULL,
+                                      TimeInterval::fromDays(30),
+                                      false,
+                                      new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                     2, 4,
+                                                                     0, 20,
+                                                                     LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                     false));
+    layerSet->addLayer(ortoAyto);
+  }
+
+//  bool useWMSBing = false;
+//  if (useWMSBing) {
+//    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                        URL("http://www.nasa.network.com/wms?", false),
+//                                        WMS_1_1_0,
+//                                        Sector::fullSphere(),
+//                                        "image/jpeg",
+//                                        "EPSG:4326",
+//                                        "",
+//                                        false,
+//                                        new LevelTileCondition(0, 5),
+//                                        TimeInterval::fromDays(30),
+//                                        true);
+//    layerSet->addLayer(blueMarble);
+//
+//
+//    //    bool enabled = true;
+//    //    WMSLayer* bing = LayerBuilder::createBingLayer(enabled);
+//    WMSLayer* bing = new WMSLayer("ve",
+//                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+//                                  WMS_1_1_0,
+//                                  Sector::fullSphere(),
+//                                  "image/jpeg",
+//                                  "EPSG:4326",
+//                                  "",
+//                                  false,
+//                                  new LevelTileCondition(6, 500),
+//                                  TimeInterval::fromDays(30),
+//                                  true);
+//    layerSet->addLayer(bing);
+//
+//  }
+//
   if (false) {
     //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
     //                                                  Sector::fullSphere(),
@@ -2514,6 +2567,11 @@ public:
         int size = _urls.size() ;
         if (_nImagesDownloaded == size ){
           printf("ALL IMAGES DOWNLOADED \n");
+
+          Geodetic3D position(Geodetic3D(Angle::fromDegrees(-12.062), Angle::fromDegrees(-77.0355), 1000));
+
+          [_iosWidget widget]->setCameraPosition(position);
+
           _done = true;
         }
 
@@ -2526,22 +2584,24 @@ public:
         DownloadListener(PrecacherInitializationTask* task):_task(task){}
 
         void onDownload(const URL& url,
-                                IImage* image,
-                                bool expired){
+                        IImage* image,
+                        bool expired){
           _task->imageDownloaded();
         }
 
         void onError(const URL& url){
-          printf("ERROR");
+          ILogger::instance()->logError("Image %s could not be retrieved.", url.getPath().c_str());
+          _task->imageDownloaded();
         }
 
         void onCancel(const URL& url){
-          printf("CANCEL");
+          ILogger::instance()->logError("Image %s could not be retrieved because it was canceled.", url.getPath().c_str());
+          _task->imageDownloaded();
         }
 
         void onCanceledDownload(const URL& url,
-                                        IImage* image,
-                                        bool expired){}
+                                IImage* image,
+                                bool expired){}
 
 
       };
@@ -2550,6 +2610,12 @@ public:
 
         _urls = [_iosWidget widget]->getPlanetRenderer()->getTilesURL(_lower, _upper, _level);
 
+        ILogger::instance()->logInfo("Retrieving %d images.", _urls.size());
+
+        if (_urls.size() == 0){
+          _done = true;
+        }
+
 
         IDownloader* downloader = context->getDownloader();
         int n = 1;
@@ -2557,9 +2623,11 @@ public:
           std::string url = *it;
           printf("PETITION %d - %s \n ", n++, url.c_str());
 
-          downloader->requestImage(URL(url), 1000, TimeInterval::fromSeconds(0), false,
+          downloader->requestImage(URL(url), 1000, TimeInterval::forever(), true,
                                    new DownloadListener(this), true);
         }
+
+
 
       }
 
@@ -2569,10 +2637,20 @@ public:
 
     };
 
+
+    //PERU (MAYORCA)
+//    Geodetic2D lower = Geodetic2D::fromDegrees(39.645, 3.283);
+//    Geodetic2D upper = Geodetic2D::fromDegrees(39.729, 3.45);
+
+
+    //LIMA
+    Geodetic2D lower = Geodetic2D::fromDegrees(-12.065, -77.038);
+    Geodetic2D upper = Geodetic2D::fromDegrees(-12.060, -77.034);
+
     //Las Palmas de GC
-    Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
-    Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
-    int level = 12;
+    //Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
+    //Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
+    int level = 17;
 
     PrecacherInitializationTask* initializationTask = new PrecacherInitializationTask([self G3MWidget],
                                                                                       lower, upper, level);
@@ -2780,7 +2858,12 @@ public:
 
       // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
+      //[_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
+
+
+      Geodetic3D position(Geodetic3D(Angle::fromDegrees(-12.062), Angle::fromDegrees(-77.0355), 1000));
+
+      [_iosWidget widget]->setCameraPosition(position);
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -2973,7 +3056,7 @@ public:
                                                new MarksTask(_iosWidget, _marksRenderer));
       }
 
-      if (true){
+      if (false){
 
         class PlaneShapeLoadListener : public ShapeLoadListener {
         public:
@@ -3079,7 +3162,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         //      NSString* geojsonName = @"geojson/countries";
         //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -3136,7 +3219,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                                   ofType: @"json"];
         if (planeFilePath) {
