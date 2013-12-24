@@ -80,7 +80,8 @@ public:
                                const Vector3D& direction) const;
   
   static Vector3D intersectionXYPlaneWithRay(const Vector3D& origin,
-                                             const Vector3D& direction);
+                                             const Vector3D& direction,
+                                             double planeHeight=0);
 
   
 };

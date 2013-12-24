@@ -265,14 +265,14 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D
 }
 
 
-void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
+void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const
 {
-  _origin = origin.asMutableVector3D();
+/*  _origin = origin.asMutableVector3D();
   _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
 
   printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 
-  _validSingleDrag = false;
+  _validSingleDrag = false;*/
 }
 
 

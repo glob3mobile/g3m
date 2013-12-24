@@ -141,7 +141,8 @@ public:
   
   bool isFlat() const { return false; }
 
-  void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
     

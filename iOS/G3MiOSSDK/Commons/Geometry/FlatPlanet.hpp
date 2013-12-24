@@ -22,6 +22,7 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable double          _initialHeight;
   mutable MutableVector3D _lastFinalPoint;
   mutable bool            _validSingleDrag;
   mutable MutableVector3D _lastDirection;
@@ -122,7 +123,8 @@ public:
   
   bool isFlat() const { return true; }
   
-  void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
   

@@ -43,10 +43,11 @@ Vector3D Plane::intersectionWithRay(const Vector3D& origin,
 
 
 Vector3D Plane::intersectionXYPlaneWithRay(const Vector3D& origin,
-                                           const Vector3D& direction)
+                                           const Vector3D& direction,
+                                           double planeHeight)
 {
   if (direction._z == 0) return Vector3D::nan();
-  const double t = -origin._z / direction._z;
+  const double t = (planeHeight - origin._z) / direction._z;
   if (t<0) return Vector3D::nan();
   Vector3D point = origin.add(direction.times(t));
   return point;

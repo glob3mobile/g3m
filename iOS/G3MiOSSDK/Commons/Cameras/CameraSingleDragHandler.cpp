@@ -51,13 +51,17 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
 
-  Vector3D v = eventContext->getWidget()->getScenePositionForPixel(pixel._x, pixel._y);
-  Geodetic3D geoPos = eventContext->getPlanet()->toGeodetic3D(v);
-  printf("ZBUFFER EN %f, %f, %f\n ", geoPos._latitude._degrees, geoPos._longitude._degrees, geoPos._height);
-
-
+  Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel(pixel._x, pixel._y);
+  
+  //Geodetic3D geoPos = eventContext->getPlanet()->toGeodetic3D(v);
+  //printf("ZBUFFER EN %f, %f, %f\n ", geoPos._latitude._degrees, geoPos._longitude._degrees, geoPos._height);
+/*
   eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
-                                             _camera0.pixel2Ray(pixel));
+                                             _camera0.pixel2Ray(pixel));*/
+  
+  eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
+  
+  
 }
 
 
