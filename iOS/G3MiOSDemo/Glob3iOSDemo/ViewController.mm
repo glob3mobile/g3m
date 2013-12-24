@@ -1774,18 +1774,31 @@ public:
                                      false,
                                      Color::fromRGBA(0, 1, 1, 1));
   shapesRenderer->addShape(sphere);
-
-
-  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.78333333),
-                                           Angle::fromDegrees(-122),
-                                           45000),
-                            ABSOLUTE,
-                            Vector3D(20000, 30000, 50000),
-                            2,
-                            Color::fromRGBA(0,    1, 0, 0.5),
-                            Color::newFromRGBA(0, 0.75, 0, 0.75));
-  box->setAnimatedScale(1, 1, 20);
-  shapesRenderer->addShape(box);*/
+*/
+  {
+    Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.4),
+                                             Angle::fromDegrees(-16.4),
+                                             0),
+                              ABSOLUTE,
+                              Vector3D(3000, 3000, 20000),
+                              2,
+                              Color::fromRGBA(0,    1, 0, 0.5),
+                              Color::newFromRGBA(0, 0.75, 0, 0.75));
+    //box->setAnimatedScale(1, 1, 20);
+    shapesRenderer->addShape(box);
+  }
+  {
+    Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(26),
+                                             Angle::fromDegrees(0),
+                                             0),
+                              ABSOLUTE,
+                              Vector3D(200000, 200000, 5000000),
+                              2,
+                              Color::fromRGBA(1,    0, 0, 0.5),
+                              Color::newFromRGBA(0, 0.75, 0, 0.75));
+    //box->setAnimatedScale(1, 1, 20);
+    shapesRenderer->addShape(box);
+  }
 
   //    const URL textureURL("file:///world.jpg", false);
   //
