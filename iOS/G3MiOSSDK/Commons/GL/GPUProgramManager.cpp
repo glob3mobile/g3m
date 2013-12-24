@@ -52,6 +52,8 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   const bool rotationTC  = GPUVariable::hasUniform(uniformsCode,     ROTATION_ANGLE_TEXTURE_COORDS);
   const bool hasLight    = GPUVariable::hasUniform(uniformsCode,     AMBIENT_LIGHT_COLOR);
 
+  const bool hasTexture2 = GPUVariable::hasAttribute(attributesCode, TEXTURE_COORDS_2);
+
   if (billboard) {
     return compileProgramWithName(gl, "Billboard");
   }
@@ -81,6 +83,11 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
       }
       return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
     }
+
+    if (hasTexture2){
+      return compileProgramWithName(gl, "MultiTexturedMesh");
+    }
+
     return compileProgramWithName(gl, "TexturedMesh");
   }
 

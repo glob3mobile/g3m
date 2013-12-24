@@ -43,7 +43,8 @@ enum GPUAttributeKey{
   POSITION = 0,
   TEXTURE_COORDS = 1,
   COLOR = 2,
-  NORMAL = 3
+  NORMAL = 3,
+  TEXTURE_COORDS_2 = 4
 };
 
 class GPUVariable {
