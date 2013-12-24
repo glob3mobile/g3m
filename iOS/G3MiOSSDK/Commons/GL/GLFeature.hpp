@@ -316,6 +316,8 @@ private:
 #endif
   }
 
+  const int _target;
+
 public:
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords,
@@ -332,7 +334,8 @@ public:
                    float scaleV,
                    float rotationAngleInRadians,
                    float rotationCenterU,
-                   float rotationCenterV);
+                   float rotationCenterV,
+                   int target = 0);
 
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords,
@@ -342,7 +345,8 @@ public:
                    int stride,
                    bool blend,
                    int sFactor,
-                   int dFactor);
+                   int dFactor,
+                   int target = 0);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };

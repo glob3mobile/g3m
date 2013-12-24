@@ -395,6 +395,7 @@
 		D88CC14517CF86E80001BF4D /* FlatPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */; };
 		D88EE1B71869A1D800AED85A /* MultiTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1B51869A1D800AED85A /* MultiTexturedMesh.fsh */; };
 		D88EE1B81869A1D800AED85A /* MultiTexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1B61869A1D800AED85A /* MultiTexturedMesh.vsh */; };
+		D88EE1BE1869A44900AED85A /* MultiTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */; };
 		D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */; };
 		D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */; };
 		D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */; };
@@ -1529,6 +1530,8 @@
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D88EE1B51869A1D800AED85A /* MultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MultiTexturedMesh.fsh; sourceTree = "<group>"; };
 		D88EE1B61869A1D800AED85A /* MultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MultiTexturedMesh.vsh; sourceTree = "<group>"; };
+		D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiTextureMapping.hpp; path = Commons/Mesh/MultiTextureMapping.hpp; sourceTree = "<group>"; };
+		D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiTextureMapping.cpp; path = Commons/Mesh/MultiTextureMapping.cpp; sourceTree = "<group>"; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileElevationDataRequest.cpp; path = Commons/Basic/TileElevationDataRequest.cpp; sourceTree = "<group>"; };
 		D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileElevationDataRequest.hpp; path = Commons/Basic/TileElevationDataRequest.hpp; sourceTree = "<group>"; };
@@ -2434,6 +2437,8 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */,
+				D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */,
 				D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */,
 				D8765CFD1779C3AE004B62F4 /* AbstractGeometryMesh.hpp */,
 				D8765CFE1779C3AE004B62F4 /* IndexedGeometryMesh.cpp */,
@@ -2852,6 +2857,7 @@
 				D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */,
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
 				D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */,
+				D88EE1BE1869A44900AED85A /* MultiTextureMapping.cpp in Sources */,
 				D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */,
 				D80A28711746572E0058CEC3 /* GLState.cpp in Sources */,
 				D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */,

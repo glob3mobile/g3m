@@ -123,17 +123,33 @@ TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    float scaleV,
                                    float rotationAngleInRadians,
                                    float rotationCenterU,
-                                   float rotationCenterV) :
+                                   float rotationCenterV,
+                                   int target) :
 GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
-_texID(texID)
+_texID(texID),
+_target(target)
 {
   GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
                                                                      arrayElementSize,
                                                                      index,
                                                                      stride,
                                                                      normalized);
-  _values.addAttributeValue(TEXTURE_COORDS, value, false);
+  switch (target) {
+    case 0:
+      _values.addAttributeValue(TEXTURE_COORDS, value, false);
+      break;
 
+    case 1:
+      _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
+      break;
+
+    default:
+      ILogger::instance()->logError("Wrong texture target.");
+
+      break;
+  }
+
+#warning TRANFORMATIONS IF TARGET != 0
   _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
                           new GPUUniformValueVec2Float(translateU, translateV),
                           false);
@@ -161,22 +177,54 @@ TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    int stride,
                                    bool blend,
                                    int sFactor,
-                                   int dFactor) :
+                                   int dFactor,
+                                   int target) :
 GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
-_texID(texID)
+_texID(texID),
+_target(target)
 {
+
 
   GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
                                                                      arrayElementSize,
                                                                      index,
                                                                      stride,
                                                                      normalized);
-  _values.addAttributeValue(TEXTURE_COORDS, value, false);
+  switch (target) {
+    case 0:
+      _values.addAttributeValue(TEXTURE_COORDS, value, false);
+      break;
+
+    case 1:
+      _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
+      break;
+
+    default:
+      ILogger::instance()->logError("Wrong texture target.");
+
+      break;
+  }
+
 }
 
 void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
   blendingOnGlobalGLState(state);
   state->bindTexture(_texID);
+
+  switch (_target) {
+    case 0:
+      //_values.addAttributeValue(TEXTURE_COORDS, value, false);
+      break;
+
+    case 1:
+      //_values.addAttributeValue(TEXTURE_COORDS_2, value, false);
+      break;
+
+    default:
+      ILogger::instance()->logError("Wrong texture target.");
+
+      break;
+  }
 }
 
 ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,

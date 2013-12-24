@@ -26,6 +26,8 @@ struct AttributesStruct;
 class UniformsStruct;
 class GPUProgram;
 
+#define MAX_N_TEXTURES 4
+
 class GLGlobalState {
 private:
 
