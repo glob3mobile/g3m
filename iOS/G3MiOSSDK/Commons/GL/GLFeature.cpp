@@ -209,22 +209,7 @@ _target(target)
 
 void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
   blendingOnGlobalGLState(state);
-  state->bindTexture(_texID);
-
-  switch (_target) {
-    case 0:
-      //_values.addAttributeValue(TEXTURE_COORDS, value, false);
-      break;
-
-    case 1:
-      //_values.addAttributeValue(TEXTURE_COORDS_2, value, false);
-      break;
-
-    default:
-      ILogger::instance()->logError("Wrong texture target.");
-
-      break;
-  }
+  state->bindTexture(_target, _texID);
 }
 
 ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int index, bool normalized, int stride,

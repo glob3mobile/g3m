@@ -206,6 +206,33 @@ public:
 "} \n ");
     this->add(sourcesFullTransformedTexCoorTexturedMesh);
 
+    GPUProgramSources sourcesMultiTexturedMesh("MultiTexturedMesh",
+ emptyString +  
+"attribute vec4 aPosition; \n " + 
+"attribute vec2 aTextureCoord; \n " + 
+"attribute vec2 aTextureCoord2; \n " + 
+"uniform mat4 uModelview; \n " + 
+"uniform float uPointSize; \n " + 
+"varying vec2 TextureCoordOut; \n " + 
+"varying vec2 TextureCoordOut2; \n " + 
+"void main() { \n " + 
+"gl_Position = uModelview * aPosition; \n " + 
+"TextureCoordOut = aTextureCoord; \n " + 
+"TextureCoordOut2 = aTextureCoord2; \n " + 
+"gl_PointSize = uPointSize; \n " + 
+"} \n ",
+ emptyString +  
+"varying mediump vec2 TextureCoordOut; \n " + 
+"varying mediump vec2 TextureCoordOut2; \n " + 
+"uniform sampler2D Sampler; \n " + 
+"uniform sampler2D Sampler2; \n " + 
+"void main() { \n " + 
+"mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut); \n " + 
+"mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2); \n " + 
+"gl_FragColor = tex1 * tex2; \n " + 
+"} \n ");
+    this->add(sourcesMultiTexturedMesh);
+
     GPUProgramSources sourcesNoColorMesh("NoColorMesh",
  emptyString +  
 "attribute vec4 aPosition; \n " + 

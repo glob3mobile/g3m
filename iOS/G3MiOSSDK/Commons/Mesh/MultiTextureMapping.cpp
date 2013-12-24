@@ -58,6 +58,7 @@ MultiTextureMapping::~MultiTextureMapping() {
 }
 
 void MultiTextureMapping::modifyGLState(GLState& state) const{
+  //TARGET 0
   if (_texCoords == NULL) {
     ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords == NULL");
   }
@@ -99,5 +100,24 @@ void MultiTextureMapping::modifyGLState(GLState& state) const{
                                               GLBlendFactor::oneMinusSrcAlpha()),
                          false);
     }
+  }
+
+  //TAGET 1
+  if (_texCoords2 == NULL) {
+    ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
+  }
+  else {
+
+    state.addGLFeature(new TextureGLFeature(_glTextureId2->getID(),
+                                            _texCoords2,
+                                            2,
+                                            0,
+                                            false,
+                                            0,
+                                            _transparent2,
+                                            GLBlendFactor::srcAlpha(),
+                                            GLBlendFactor::oneMinusSrcAlpha(),
+                                            1), //TARGET
+                       false);
   }
 }

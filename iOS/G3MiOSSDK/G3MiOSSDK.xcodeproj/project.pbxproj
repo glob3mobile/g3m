@@ -396,6 +396,9 @@
 		D88EE1B71869A1D800AED85A /* MultiTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1B51869A1D800AED85A /* MultiTexturedMesh.fsh */; };
 		D88EE1B81869A1D800AED85A /* MultiTexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1B61869A1D800AED85A /* MultiTexturedMesh.vsh */; };
 		D88EE1BE1869A44900AED85A /* MultiTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */; };
+		D88EE1C71869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1C51869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp */; };
+		D88EE1C81869BA4300AED85A /* MultiTextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */; };
+		D88EE1C91869BA4B00AED85A /* MultiTexturedHUDQuadWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D88EE1C61869B70C00AED85A /* MultiTexturedHUDQuadWidget.hpp */; };
 		D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */; };
 		D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */; };
 		D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */; };
@@ -644,6 +647,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D88EE1C91869BA4B00AED85A /* MultiTexturedHUDQuadWidget.hpp in CopyFiles */,
+				D88EE1C81869BA4300AED85A /* MultiTextureMapping.hpp in CopyFiles */,
 				CF15759F1864C18A0059312A /* HUDRelativePosition.hpp in CopyFiles */,
 				CF15759B1864C13B0059312A /* HUDAbsolutePosition.hpp in CopyFiles */,
 				CF1575971864B8C70059312A /* HUDPosition.hpp in CopyFiles */,
@@ -1532,6 +1537,8 @@
 		D88EE1B61869A1D800AED85A /* MultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiTextureMapping.hpp; path = Commons/Mesh/MultiTextureMapping.hpp; sourceTree = "<group>"; };
 		D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiTextureMapping.cpp; path = Commons/Mesh/MultiTextureMapping.cpp; sourceTree = "<group>"; };
+		D88EE1C51869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiTexturedHUDQuadWidget.cpp; path = Commons/Rendererers/MultiTexturedHUDQuadWidget.cpp; sourceTree = "<group>"; };
+		D88EE1C61869B70C00AED85A /* MultiTexturedHUDQuadWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MultiTexturedHUDQuadWidget.hpp; path = Commons/Rendererers/MultiTexturedHUDQuadWidget.hpp; sourceTree = "<group>"; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileElevationDataRequest.cpp; path = Commons/Basic/TileElevationDataRequest.cpp; sourceTree = "<group>"; };
 		D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileElevationDataRequest.hpp; path = Commons/Basic/TileElevationDataRequest.hpp; sourceTree = "<group>"; };
@@ -2175,6 +2182,8 @@
 		CCC2A01A15CA6B8200923850 /* Renderers */ = {
 			isa = PBXGroup;
 			children = (
+				D88EE1C51869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp */,
+				D88EE1C61869B70C00AED85A /* MultiTexturedHUDQuadWidget.hpp */,
 				CCC2A01B15CA6C7D00923850 /* BusyMeshRenderer.cpp */,
 				CCC2A01C15CA6C7D00923850 /* BusyMeshRenderer.hpp */,
 				CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */,
@@ -2632,6 +2641,7 @@
 				383BD39C1577EE500012AC53 /* TouchEvent.cpp in Sources */,
 				383BD3AB1577EE5A0012AC53 /* Angle.cpp in Sources */,
 				383BD3AF1577EE5A0012AC53 /* Geodetic2D.cpp in Sources */,
+				D88EE1C71869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp in Sources */,
 				383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */,
 				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,
 				383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */,

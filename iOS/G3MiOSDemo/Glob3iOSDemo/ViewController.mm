@@ -125,6 +125,7 @@
 #import <G3MiOSSDK/HUDQuadWidget.hpp>
 #import <G3MiOSSDK/HUDAbsolutePosition.hpp>
 #import <G3MiOSSDK/HUDRelativePosition.hpp>
+#import <G3MiOSSDK/MultiTexturedHUDQuadWidget.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -658,6 +659,24 @@ public:
 //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
 //                                   0.5f, 0.5f);
     hudRenderer->addWidget(compass);
+
+
+//    HUDQuadWidget* multiTexturecompass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+//                                               //URL("file:///debug-compass.png"),
+//                                               new HUDAbsolutePosition(10),
+//                                               new HUDAbsolutePosition(400),
+//                                               300, 300);
+
+    MultiTexturedHUDQuadWidget* multiTexturecompass = NULL;
+    multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///g3m-marker.png"),
+                                                         URL("file:///Compass_rose_browns_00_transparent.png"),
+                                                           //URL("file:///debug-compass.png"),
+                                                           new HUDAbsolutePosition(10),
+                                                           new HUDAbsolutePosition(400),
+                                                           300, 300);
+    //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
+    //                                   0.5f, 0.5f);
+    hudRenderer->addWidget(multiTexturecompass);
 
     HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
                                                 URL("file:///Compass_rose_browns_00_transparent.png"),
@@ -2851,6 +2870,92 @@ public:
         [_iosWidget widget]->addPeriodicalTask(TimeInterval::fromSeconds(time),
                                                new MarksTask(_iosWidget, _marksRenderer));
       }
+
+//      bool testingMultitexture = true;
+//      if (testingMultitexture){
+//
+//        class MyImageListener : public IImageDownloadListener {
+//
+//          MeshRenderer* _meshRenderer;
+//          const Planet* _planet;
+//        public:
+//
+//          MyImageListener(MeshRenderer* meshRenderer, const Planet* planet) :
+//          _meshRenderer(meshRenderer),
+//          _planet(planet)
+//          {
+//
+//          }
+//
+//
+//          /**
+//           Callback method invoked on a successful download.  The image has to be deleted in C++ / .disposed() in Java
+//           */
+//          void onDownload(const URL& url,
+//                                  IImage* image,
+//                                  bool expired){
+//
+//            FloatBufferBuilderFromCartesian2D texCoor;
+//            texCoor.add(1,1);
+//            texCoor.add(1,0);
+//            texCoor.add(0,1);
+//            texCoor.add(0,0);
+//            _billboardTexCoord = texCoor.create();
+//
+//            SimpleTextureMapping* stm = new SimpleTextureMapping(
+//
+//
+//
+//            FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithoutCenter(_planet);
+//            fbb->add(Geodetic3D::fromDegrees(0,0, 100000));
+//            fbb->add(Geodetic3D::fromDegrees(0,10, 100000));
+//
+//            fbb->add(Geodetic3D::fromDegrees(10,0, 100000));
+//            fbb->add(Geodetic3D::fromDegrees(10,10, 100000));
+//
+//            DirectMesh* dm = new DirectMesh(GLPrimitive::triangleStrip(),
+//                                            true,
+//                                            Vector3D::zero,
+//                                            fbb->create(),
+//                                            1.0,
+//                                            1.0);
+//
+//            _meshRenderer->addMesh(dm);
+//          }
+//
+//          /**
+//           Callback method invoke after an error trying to download url
+//           */
+//          void onError(const URL& url){}
+//
+//          /**
+//           Callback method invoke after canceled request
+//           */
+//          void onCancel(const URL& url){}
+//
+//          /**
+//           This method will be call, before onCancel, when the data arrived before the cancelation.
+//
+//           The image WILL be deleted/disposed after the method finishs.  If you need to keep the image, use shallowCopy() to store a copy of the image.
+//           */
+//          void onCanceledDownload(const URL& url,
+//                                          IImage* image,
+//                                          bool expired){}
+//          
+//        };
+//        
+//
+//        const G3MContext* context = [_iosWidget widget]-
+//
+//
+//
+//        context->getDownloader()->requestImage(URL("file:///Compass_rose_browns_00_transparent.png"), 1000,
+//                                               TimeInterval::forever(), true,
+//                                               new MyImageListener(_meshRenderer, context->getPlanet()), true);
+//
+//
+//
+//      }
 
       if (true){
 

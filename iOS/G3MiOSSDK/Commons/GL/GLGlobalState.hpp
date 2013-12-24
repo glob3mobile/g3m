@@ -192,7 +192,14 @@ public:
   }
 
   void bindTexture(int target, const IGLTextureId* textureId) {
-    _boundTextureId[0] = textureId;
+
+
+    if (target > MAX_N_TEXTURES){
+      ILogger::instance()->logError("WRONG TARGET FOR TEXTURE");
+      return;
+    }
+
+    _boundTextureId[target] = textureId;
   }
 
   const IGLTextureId* getBoundTexture(int target) const{

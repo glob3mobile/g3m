@@ -11,7 +11,6 @@ attribute vec2 aTextureCoord2;
 uniform mat4 uModelview;
 uniform float uPointSize;
 
-varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 varying vec2 TextureCoordOut2;
 
@@ -19,6 +18,7 @@ void main() {
   gl_Position = uModelview * aPosition;
 
   TextureCoordOut = aTextureCoord;
+  TextureCoordOut2 = aTextureCoord2;
   
   gl_PointSize = uPointSize;
 }
