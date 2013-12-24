@@ -303,7 +303,8 @@ void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& 
   _origin = origin.asMutableVector3D();
   _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
 
-  printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+  Geodetic3D geoPos = toGeodetic3D(_initialPoint.asVector3D());
+  printf("INiTIAL POINT EN %f, %f, %f\n ", geoPos._latitude._degrees, geoPos._longitude._degrees, geoPos._height);
 
   _validSingleDrag = false;
 }
