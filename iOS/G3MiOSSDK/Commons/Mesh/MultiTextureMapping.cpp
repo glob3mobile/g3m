@@ -26,11 +26,28 @@ void MultiTextureMapping::releaseGLTextureId() {
   } else{
     ILogger::instance()->logError("Releasing invalid Multi texture mapping");
   }
+
+
+  if (_glTextureId2 != NULL) {
+#ifdef C_CODE
+    delete _glTextureId2;
+#endif
+#ifdef JAVA_CODE
+    _glTextureId2.dispose();
+#endif
+    _glTextureId2 = NULL;
+  } else{
+    ILogger::instance()->logError("Releasing invalid Multi texture mapping");
+  }
 }
 
 MultiTextureMapping::~MultiTextureMapping() {
   if (_ownedTexCoords) {
     delete _texCoords;
+  }
+
+  if (_ownedTexCoords2){
+    delete _texCoords2;
   }
 
   releaseGLTextureId();
