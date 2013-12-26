@@ -19,6 +19,8 @@
 #include "DirectMesh.hpp"
 #include "TexturedMesh.hpp"
 #include "HUDPosition.hpp"
+#include "HUDSize.hpp"
+#include "RenderState.hpp"
 
 class HUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
 private:
@@ -59,6 +61,9 @@ HUDQuadWidget::~HUDQuadWidget() {
 
   delete _xPosition;
   delete _yPosition;
+
+  delete _widthSize;
+  delete _heightSize;
 }
 
 Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
@@ -75,11 +80,12 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
-  const int viewPortWidth  = rc->getCurrentCamera()->getWidth();
-  const int viewPortHeight = rc->getCurrentCamera()->getHeight();
+  const Camera* camera = rc->getCurrentCamera();
+  const int viewPortWidth  = camera->getWidth();
+  const int viewPortHeight = camera->getHeight();
 
-  const float width = _width;
-  const float height = _height;
+  const float width  = _widthSize->getSize();
+  const float height = _heightSize->getSize();
   const float x = _xPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
   const float y = _yPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
 

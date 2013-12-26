@@ -15,6 +15,7 @@
 #include "Vector2D.hpp"
 #include "Angle.hpp"
 class HUDPosition;
+class HUDSize;
 class IImage;
 class Mesh;
 class SimpleTextureMapping;
@@ -29,8 +30,8 @@ private:
 #endif
   const HUDPosition* _xPosition;
   const HUDPosition* _yPosition;
-  const float _width;
-  const float _height;
+  const HUDSize*     _widthSize;
+  const HUDSize*     _heightSize;
 
   float _texCoordsTranslationU;
   float _texCoordsTranslationV;
@@ -59,13 +60,13 @@ public:
   HUDQuadWidget(const URL& imageURL,
                 HUDPosition* xPosition,
                 HUDPosition* yPosition,
-                float width,
-                float height) :
+                HUDSize* widthSize,
+                HUDSize* heightSize) :
   _imageURL(imageURL),
   _xPosition(xPosition),
   _yPosition(yPosition),
-  _width(width),
-  _height(height),
+  _widthSize(widthSize),
+  _heightSize(heightSize),
   _mesh(NULL),
   _simpleTextureMapping(NULL),
   _image(NULL),

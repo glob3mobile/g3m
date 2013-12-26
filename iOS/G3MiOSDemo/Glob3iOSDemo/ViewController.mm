@@ -125,6 +125,7 @@
 #import <G3MiOSSDK/HUDQuadWidget.hpp>
 #import <G3MiOSSDK/HUDAbsolutePosition.hpp>
 #import <G3MiOSSDK/HUDRelativePosition.hpp>
+#import <G3MiOSSDK/HUDAbsoluteSize.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -654,7 +655,8 @@ public:
                                                //URL("file:///debug-compass.png"),
                                                new HUDAbsolutePosition(10),
                                                new HUDAbsolutePosition(10),
-                                               300, 300);
+                                               new HUDAbsoluteSize(300),
+                                               new HUDAbsoluteSize(300));
 //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
 //                                   0.5f, 0.5f);
     hudRenderer->addWidget(compass);
@@ -670,7 +672,8 @@ public:
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                         HUDRelativePosition::MIDDLE),
-                                                300, 150);
+                                                new HUDAbsoluteSize(300),
+                                                new HUDAbsoluteSize(150));
     compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
                                    Angle::fromDegrees(30),
                                    0.5f, 0.5f);
@@ -691,7 +694,8 @@ public:
                                              new HUDRelativePosition(0.5,
                                                                      HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                      HUDRelativePosition::MIDDLE),
-                                             113, 1536 / visibleFactor);
+                                             new HUDAbsoluteSize(113),
+                                             new HUDAbsoluteSize(1536 / visibleFactor));
     ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
 

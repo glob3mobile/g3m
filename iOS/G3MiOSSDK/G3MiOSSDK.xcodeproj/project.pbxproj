@@ -71,6 +71,10 @@
 		CF1871C017036EC600092888 /* GEOMeshSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871BE17036DD700092888 /* GEOMeshSymbol.hpp */; };
 		CF1871CA1703983C00092888 /* GEOShapeSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1871C81703983B00092888 /* GEOShapeSymbol.cpp */; };
 		CF1871CC170398BC00092888 /* GEOShapeSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1871C91703983C00092888 /* GEOShapeSymbol.hpp */; };
+		CF1E62F8186CB7BB00EB1B6C /* HUDSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1E62F6186CB7BB00EB1B6C /* HUDSize.cpp */; };
+		CF1E62FB186CB8D200EB1B6C /* HUDAbsoluteSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1E62F9186CB8D200EB1B6C /* HUDAbsoluteSize.cpp */; };
+		CF1E62FC186CB90800EB1B6C /* HUDSize.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1E62F7186CB7BB00EB1B6C /* HUDSize.hpp */; };
+		CF1E62FD186CB90800EB1B6C /* HUDAbsoluteSize.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1E62FA186CB8D200EB1B6C /* HUDAbsoluteSize.hpp */; };
 		CF1E85B817E797BC005BDE80 /* CartoCSSParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1E85B617E797BC005BDE80 /* CartoCSSParser.cpp */; };
 		CF1E85BB17E799F8005BDE80 /* CartoCSSSymbolizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1E85B917E799F8005BDE80 /* CartoCSSSymbolizer.cpp */; };
 		CF1E85BC17E7A0A0005BDE80 /* CartoCSSParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1E85B717E797BC005BDE80 /* CartoCSSParser.hpp */; };
@@ -638,6 +642,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF1E62FC186CB90800EB1B6C /* HUDSize.hpp in CopyFiles */,
+				CF1E62FD186CB90800EB1B6C /* HUDAbsoluteSize.hpp in CopyFiles */,
 				CF15759F1864C18A0059312A /* HUDRelativePosition.hpp in CopyFiles */,
 				CF15759B1864C13B0059312A /* HUDAbsolutePosition.hpp in CopyFiles */,
 				CF1575971864B8C70059312A /* HUDPosition.hpp in CopyFiles */,
@@ -1086,6 +1092,10 @@
 		CF1871BE17036DD700092888 /* GEOMeshSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMeshSymbol.hpp; path = Commons/GEO/GEOMeshSymbol.hpp; sourceTree = "<group>"; };
 		CF1871C81703983B00092888 /* GEOShapeSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOShapeSymbol.cpp; path = Commons/GEO/GEOShapeSymbol.cpp; sourceTree = "<group>"; };
 		CF1871C91703983C00092888 /* GEOShapeSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOShapeSymbol.hpp; path = Commons/GEO/GEOShapeSymbol.hpp; sourceTree = "<group>"; };
+		CF1E62F6186CB7BB00EB1B6C /* HUDSize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDSize.cpp; path = Commons/Rendererers/HUDSize.cpp; sourceTree = "<group>"; };
+		CF1E62F7186CB7BB00EB1B6C /* HUDSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDSize.hpp; path = Commons/Rendererers/HUDSize.hpp; sourceTree = "<group>"; };
+		CF1E62F9186CB8D200EB1B6C /* HUDAbsoluteSize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDAbsoluteSize.cpp; path = Commons/Rendererers/HUDAbsoluteSize.cpp; sourceTree = "<group>"; };
+		CF1E62FA186CB8D200EB1B6C /* HUDAbsoluteSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDAbsoluteSize.hpp; path = Commons/Rendererers/HUDAbsoluteSize.hpp; sourceTree = "<group>"; };
 		CF1E85B617E797BC005BDE80 /* CartoCSSParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CartoCSSParser.cpp; path = Commons/Basic/CartoCSSParser.cpp; sourceTree = "<group>"; };
 		CF1E85B717E797BC005BDE80 /* CartoCSSParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CartoCSSParser.hpp; path = Commons/Basic/CartoCSSParser.hpp; sourceTree = "<group>"; };
 		CF1E85B917E799F8005BDE80 /* CartoCSSSymbolizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CartoCSSSymbolizer.cpp; path = Commons/Basic/CartoCSSSymbolizer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2202,6 +2212,10 @@
 				CF1575991864C0E10059312A /* HUDAbsolutePosition.hpp */,
 				CF15759C1864C1570059312A /* HUDRelativePosition.cpp */,
 				CF15759D1864C1570059312A /* HUDRelativePosition.hpp */,
+				CF1E62F6186CB7BB00EB1B6C /* HUDSize.cpp */,
+				CF1E62F7186CB7BB00EB1B6C /* HUDSize.hpp */,
+				CF1E62F9186CB8D200EB1B6C /* HUDAbsoluteSize.cpp */,
+				CF1E62FA186CB8D200EB1B6C /* HUDAbsoluteSize.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2608,6 +2622,7 @@
 				383BD3991577EE500012AC53 /* G3MWidget.cpp in Sources */,
 				383BD39C1577EE500012AC53 /* TouchEvent.cpp in Sources */,
 				383BD3AB1577EE5A0012AC53 /* Angle.cpp in Sources */,
+				CF1E62F8186CB7BB00EB1B6C /* HUDSize.cpp in Sources */,
 				383BD3AF1577EE5A0012AC53 /* Geodetic2D.cpp in Sources */,
 				383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */,
 				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,
@@ -2681,6 +2696,7 @@
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,
+				CF1E62FB186CB8D200EB1B6C /* HUDAbsoluteSize.cpp in Sources */,
 				CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */,
 				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
 				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
