@@ -126,6 +126,7 @@
 #import <G3MiOSSDK/HUDAbsolutePosition.hpp>
 #import <G3MiOSSDK/HUDRelativePosition.hpp>
 #import <G3MiOSSDK/MultiTexturedHUDQuadWidget.hpp>
+#import <G3MiOSSDK/StenciledMultiTexturedHUDQuadWidget.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -669,9 +670,10 @@ public:
                                                          300, 300);
     hudRenderer->addWidget(multiTexturecompass);
 
-    MultiTexturedHUDQuadWidget* stenciledMultiTexturecompass = NULL;
-    stenciledMultiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+    StenciledMultiTexturedHUDQuadWidget* stenciledMultiTexturecompass = NULL;
+    stenciledMultiTexturecompass = new StenciledMultiTexturedHUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
                                                          URL("file:///g3m-marker.png"),
+                                                         URL("file:///simpleStencil.png"),
                                                          new HUDAbsolutePosition(10),
                                                          new HUDAbsolutePosition(600),
                                                          300, 300);

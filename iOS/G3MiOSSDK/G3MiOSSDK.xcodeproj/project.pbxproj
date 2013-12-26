@@ -379,6 +379,8 @@
 		D83171F0186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83171EE186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp */; };
 		D83171F5186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */; };
 		D83171F6186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */; };
+		D83171F7186C54B000522E1B /* StenciledMultiTextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83171EC186C4CFF00522E1B /* StenciledMultiTextureMapping.hpp */; };
+		D83171F8186C54C400522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83171EF186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
@@ -651,6 +653,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D83171F8186C54C400522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp in CopyFiles */,
+				D83171F7186C54B000522E1B /* StenciledMultiTextureMapping.hpp in CopyFiles */,
 				D88EE1C91869BA4B00AED85A /* MultiTexturedHUDQuadWidget.hpp in CopyFiles */,
 				D88EE1C81869BA4300AED85A /* MultiTextureMapping.hpp in CopyFiles */,
 				CF15759F1864C18A0059312A /* HUDRelativePosition.hpp in CopyFiles */,

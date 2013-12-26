@@ -228,7 +228,7 @@ void StenciledMultiTexturedHUDQuadWidget::onImageDownload(IImage* image,const UR
     _stencilImage = image;
   }
 
-  if (_image != NULL && _image2 != NULL){
+  if (_image != NULL && _image2 != NULL && _stencilImage != NULL){
     _downloadingImages = false;
   }
 }
