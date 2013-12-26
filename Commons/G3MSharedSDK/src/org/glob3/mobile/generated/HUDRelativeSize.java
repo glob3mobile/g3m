@@ -73,6 +73,8 @@ public class HUDRelativeSize extends HUDSize
       case BITMAP_MAX_AXIS:
         return _factor * ((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight);
     }
+  
+    return 0;
   }
 
 }
