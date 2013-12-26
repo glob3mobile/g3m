@@ -95,20 +95,20 @@ public:
   {
   }
 
-//  void setTexCoordsTranslation(float u, float v);
-//
-//  void setTexCoordsScale(float u, float v);
-//
-//  void setTexCoordsRotation(float angleInRadians,
-//                            float centerU,
-//                            float centerV);
-//
-//  void setTexCoordsRotation(const Angle& angle,
-//                            float centerU,
-//                            float centerV) {
-//    setTexCoordsRotation((float) angle._radians,
-//                         centerU, centerV);
-//  }
+  void setTexCoordsTranslation(float u, float v);
+
+  void setTexCoordsScale(float u, float v);
+
+  void setTexCoordsRotation(float angleInRadians,
+                            float centerU,
+                            float centerV);
+
+  void setTexCoordsRotation(const Angle& angle,
+                            float centerU,
+                            float centerV) {
+    setTexCoordsRotation((float) angle._radians,
+                         centerU, centerV);
+  }
 
   ~MultiTexturedHUDQuadWidget();
 

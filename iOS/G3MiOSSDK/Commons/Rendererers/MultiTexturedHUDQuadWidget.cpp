@@ -76,9 +76,9 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   }
 
   const TextureIDReference* texId2 = rc->getTexturesHandler()->getTextureIDReference(_image2,
-                                                                                    GLFormat::rgba(),
-                                                                                    _imageURL2.getPath(),
-                                                                                    false);
+                                                                                     GLFormat::rgba(),
+                                                                                     _imageURL2.getPath(),
+                                                                                     false);
 
   if (texId2 == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
@@ -126,58 +126,60 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   /*
 
-  _simpleTextureMapping = new SimpleTextureMapping(texId,
-                                                   texCoords.create(),
-                                                   true,
-                                                   true);
-  _simpleTextureMapping->setTranslation(_texCoordsTranslationU,
-                                        _texCoordsTranslationV);
+   _simpleTextureMapping = new SimpleTextureMapping(texId,
+   texCoords.create(),
+   true,
+   true);
 
-  _simpleTextureMapping->setScale(_texCoordsScaleU,
-                                  _texCoordsScaleV);
 
-  _simpleTextureMapping->setRotation(_texCoordsRotationInRadians,
-                                     _texCoordsRotationCenterU,
-                                     _texCoordsRotationCenterV);
-   
    */
+  _mtMapping->setTranslation(_texCoordsTranslationU,
+                             _texCoordsTranslationV);
+
+  _mtMapping->setScale(_texCoordsScaleU,
+                       _texCoordsScaleV);
+
+  _mtMapping->setRotation(_texCoordsRotationInRadians,
+                          _texCoordsRotationCenterU,
+                          _texCoordsRotationCenterV);
+
 
   return new TexturedMesh(dm, true, _mtMapping, true, true);
 }
 
-//void MultiTexturedHUDQuadWidget::setTexCoordsTranslation(float u, float v) {
-//  _texCoordsTranslationU = u;
-//  _texCoordsTranslationV = v;
-//
-//  if (_simpleTextureMapping != NULL) {
-//    _simpleTextureMapping->setTranslation(_texCoordsTranslationU,
-//                                          _texCoordsTranslationV);
-//  }
-//}
-//
-//void MultiTexturedHUDQuadWidget::setTexCoordsScale(float u, float v) {
-//  _texCoordsScaleU = u;
-//  _texCoordsScaleV = v;
-//
-//  if (_simpleTextureMapping != NULL) {
-//    _simpleTextureMapping->setScale(_texCoordsScaleU,
-//                                    _texCoordsScaleV);
-//  }
-//}
-//
-//void MultiTexturedHUDQuadWidget::setTexCoordsRotation(float angleInRadians,
-//                                         float centerU,
-//                                         float centerV) {
-//  _texCoordsRotationInRadians = angleInRadians;
-//  _texCoordsRotationCenterU = centerU;
-//  _texCoordsRotationCenterV = centerV;
-//
-//  if (_simpleTextureMapping != NULL) {
-//    _simpleTextureMapping->setRotation(_texCoordsRotationInRadians,
-//                                       _texCoordsRotationCenterU,
-//                                       _texCoordsRotationCenterV);
-//  }
-//}
+void MultiTexturedHUDQuadWidget::setTexCoordsTranslation(float u, float v) {
+  _texCoordsTranslationU = u;
+  _texCoordsTranslationV = v;
+
+  if (_mtMapping != NULL) {
+    _mtMapping->setTranslation(_texCoordsTranslationU,
+                               _texCoordsTranslationV);
+  }
+}
+
+void MultiTexturedHUDQuadWidget::setTexCoordsScale(float u, float v) {
+  _texCoordsScaleU = u;
+  _texCoordsScaleV = v;
+
+  if (_mtMapping != NULL) {
+    _mtMapping->setScale(_texCoordsScaleU,
+                         _texCoordsScaleV);
+  }
+}
+
+void MultiTexturedHUDQuadWidget::setTexCoordsRotation(float angleInRadians,
+                                                      float centerU,
+                                                      float centerV) {
+  _texCoordsRotationInRadians = angleInRadians;
+  _texCoordsRotationCenterU = centerU;
+  _texCoordsRotationCenterV = centerV;
+
+  if (_mtMapping != NULL) {
+    _mtMapping->setRotation(_texCoordsRotationInRadians,
+                            _texCoordsRotationCenterU,
+                            _texCoordsRotationCenterV);
+  }
+}
 
 
 void MultiTexturedHUDQuadWidget::initialize(const G3MContext* context) {
@@ -209,8 +211,8 @@ void MultiTexturedHUDQuadWidget::cleanMesh() {
 }
 
 void MultiTexturedHUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
-                                          int width,
-                                          int height) {
+                                                       int width,
+                                                       int height) {
   cleanMesh();
 }
 
@@ -252,7 +254,7 @@ Mesh* MultiTexturedHUDQuadWidget::getMesh(const G3MRenderContext* rc) {
 }
 
 void MultiTexturedHUDQuadWidget::rawRender(const G3MRenderContext* rc,
-                              GLState* glState) {
+                                           GLState* glState) {
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
     mesh->render(rc, glState);
