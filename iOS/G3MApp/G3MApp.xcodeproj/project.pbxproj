@@ -454,6 +454,11 @@
 				CLASSPREFIX = G3M;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Igo Software SL";
+				TargetAttributes = {
+					E7D1B60416D2436700AF47C1 = {
+						DevelopmentTeam = N847RXR927;
+					};
+				};
 			};
 			buildConfigurationList = E7D1B60016D2436700AF47C1 /* Build configuration list for PBXProject "G3MApp" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -604,7 +609,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -636,7 +642,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -667,8 +674,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "B07334AF-4AE4-452D-88B3-AAFB05B355EB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B07334AF-4AE4-452D-88B3-AAFB05B355EB";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -687,8 +694,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "B07334AF-4AE4-452D-88B3-AAFB05B355EB";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B07334AF-4AE4-452D-88B3-AAFB05B355EB";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

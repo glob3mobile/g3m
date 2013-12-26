@@ -1083,7 +1083,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
     //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -1098,6 +1098,65 @@ public:
   if (false) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
+  }
+
+  bool testingTransparencies = true;
+  if (testingTransparencies){
+
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 6),
+                                        //NULL,
+                                        TimeInterval::fromDays(30),
+                                        true,
+                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                       2, 4,
+                                                                       0, 6,
+                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                       false)
+                                        );
+    layerSet->addLayer(blueMarble);
+
+    WMSLayer* i3Landsat = new WMSLayer("esat",
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/jpeg",
+                                       "EPSG:4326",
+                                       "",
+                                       false,
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                      2, 4,
+                                                                      0, 12,
+                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                      false));
+    layerSet->addLayer(i3Landsat);
+
+    WMSLayer *pnoa = new WMSLayer("PNOA",
+                                  URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                  WMS_1_1_0,
+                                  Sector::fromDegrees(21, -18, 45, 6),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::fromDays(30),
+                                  true,
+                                  NULL,
+                                  0.5);
+    layerSet->addLayer(pnoa);
   }
 
 
@@ -1836,6 +1895,10 @@ public:
   destRs.push_back(new RectangleF(0,0,256,256));
   destRs.push_back(new RectangleF(0, 128, 64, 64));
 
+  std::vector<float> transparencies;
+  transparencies.push_back(1.0);
+  transparencies.push_back(0.5);
+
   class QuadListener: public IImageListener {
     ShapesRenderer* _sr;
   public:
@@ -1863,6 +1926,7 @@ public:
                        images,
                        srcRs,
                        destRs,
+                       transparencies,
                        new QuadListener(shapesRenderer), true);
 
   for (int i = 0; i < 2; i++) {

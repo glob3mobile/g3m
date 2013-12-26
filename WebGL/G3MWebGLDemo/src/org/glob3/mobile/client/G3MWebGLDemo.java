@@ -8,7 +8,6 @@ import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
@@ -165,10 +164,10 @@ public class G3MWebGLDemo
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
       builder.addRenderer(meshRenderer);
 
-      if (true) {
-         final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
-         builder.setShownSector(spain);
-      }
+      //		if (true) {
+      //			final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
+      //			builder.setShownSector(spain);
+      //		}
 
       final boolean useMarkers = true;
       if (useMarkers) {
@@ -622,7 +621,29 @@ public class G3MWebGLDemo
 
          final LayerSet layerSet = new LayerSet();
 
-         final boolean blueMarble = true;
+         final boolean testingTransparencies = true;
+         if (testingTransparencies) {
+            final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
+                     WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false,
+                     new LevelTileCondition(0, 6), TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(
+                              Sector.fullSphere(), 2, 4, 0, 6, LayerTilesRenderParameters.defaultTileTextureResolution(),
+                              LayerTilesRenderParameters.defaultTileMeshResolution(), false));
+            layerSet.addLayer(blueMarble);
+
+            final WMSLayer i3Landsat = new WMSLayer("esat", new URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                     WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false,
+                     new LevelTileCondition(7, 100), TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(
+                              Sector.fullSphere(), 2, 4, 0, 12, LayerTilesRenderParameters.defaultTileTextureResolution(),
+                              LayerTilesRenderParameters.defaultTileMeshResolution(), false));
+            layerSet.addLayer(i3Landsat);
+
+            final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                     WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null,
+                     TimeInterval.fromDays(30), true, null, (float) 0.5);
+            layerSet.addLayer(pnoa);
+         }
+
+         final boolean blueMarble = false;
          if (blueMarble) {
             final WMSLayer blueMarbleL = new WMSLayer( //
                      "bmng200405", //
@@ -821,6 +842,10 @@ public class G3MWebGLDemo
                      destRs.add(new RectangleF(0, 0, 256, 256));
                      destRs.add(new RectangleF(50, 20, 256, 70));
 
+                     final java.util.ArrayList<Float> transparencies = new ArrayList<Float>();
+                     transparencies.add((float) 1.0);
+                     transparencies.add((float) 0.5);
+
                      class QuadListener
                               extends
                                  IImageListener {
@@ -842,7 +867,8 @@ public class G3MWebGLDemo
                         }
                      }
 
-                     IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
+                     IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, transparencies, new QuadListener(
+                              shapesRenderer), true);
 
                   }
 
@@ -901,9 +927,31 @@ public class G3MWebGLDemo
 
          final InitialCameraPositionProvider initialCameraPositionProvider = new SimpleInitialCameraPositionProvider();
 
+
+         //            public static final G3MWidget create(final GL gl,
+         //                                                 final IStorage storage,
+         //                                                 final IDownloader downloader,
+         //                                                 final IThreadUtils threadUtils,
+         //                                                 final ICameraActivityListener cameraActivityListener,
+         //                                                 final Planet planet,
+         //                                                 final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
+         //                                                 final CameraRenderer cameraRenderer,
+         //                                                 final Renderer mainRenderer,
+         //                                                 final Renderer busyRenderer,
+         //                                                 final ErrorRenderer errorRenderer,
+         //                                                 final Color backgroundColor,
+         //                                                 final boolean logFPS,
+         //                                                 final boolean logDownloaderStatistics,
+         //                                                 final GInitializationTask initializationTask,
+         //                                                 final boolean autoDeleteInitializationTask,
+         //                                                 final java.util.ArrayList<PeriodicalTask> periodicalTasks,
+         //                                                 final GPUProgramManager gpuProgramManager,
+         //                                                 final SceneLighting sceneLighting,
+         //                                                 final InitialCameraPositionProvider initialCameraPositionProvider);
+
+
          final ErrorRenderer errorRenderer = new HUDErrorRenderer();
          final Renderer hudRenderer = null;
-
          _widget.initWidget(//
                   storage, //
                   downloader, //
@@ -1075,7 +1123,7 @@ public class G3MWebGLDemo
       /*
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
-      */
+       */
 
       // builder.setInitializationTask(createMarkersInitializationTask());
 
@@ -1183,6 +1231,31 @@ public class G3MWebGLDemo
          layerSet.addLayer(bing);
       }
 
+
+      final boolean testingTransparencies = true;
+      if (testingTransparencies) {
+         final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
+                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(
+                           0, 6), TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0,
+                           6, LayerTilesRenderParameters.defaultTileTextureResolution(),
+                           LayerTilesRenderParameters.defaultTileMeshResolution(), false));
+         layerSet.addLayer(blueMarble);
+
+         final WMSLayer i3Landsat = new WMSLayer("esat", new URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(
+                           7, 100), TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0,
+                           12, LayerTilesRenderParameters.defaultTileTextureResolution(),
+                           LayerTilesRenderParameters.defaultTileMeshResolution(), false));
+         layerSet.addLayer(i3Landsat);
+
+         final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                  WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null,
+                  TimeInterval.fromDays(30), true, null, (float) 0.5);
+         layerSet.addLayer(pnoa);
+      }
+
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
       /*
        * final WMSLayer political = new WMSLayer("topp:cia", new
        * URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
@@ -1243,7 +1316,7 @@ public class G3MWebGLDemo
       };
 
       builder.getPlanetRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
-      */
+       */
 
 
       /*
@@ -1331,7 +1404,7 @@ public class G3MWebGLDemo
        };
 
       builder.setInitializationTask(initializationTask);
-      */
+       */
 
       //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
@@ -1345,44 +1418,44 @@ public class G3MWebGLDemo
 
 
       // camera constrainer
-      if (true) {
-         final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
-            private boolean firstTime = true;
-
-
-            @Override
-            public void dispose() {
-            }
-
-
-            @Override
-            public boolean onCameraChange(final Planet planet,
-                                          final Camera previousCamera,
-                                          final Camera nextCamera) {
-               if (firstTime) {
-                  final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 4e5);
-                  nextCamera.setGeodeticPosition(position);
-                  firstTime = false;
-               }
-               else {
-                  final double maxHeight = 5e5;
-                  final double minLat = 26.5, maxLat = 30.5, minLon = -19.5, maxLon = -12.5;
-                  final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
-                  final double lat = cameraPosition._latitude._degrees;
-                  final double lon = cameraPosition._longitude._degrees;
-                  final double pitch = nextCamera.getPitch()._degrees;
-                  final double heading = nextCamera.getHeading()._degrees;
-                  if ((cameraPosition._height > maxHeight) || (lon < minLon) || (lon > maxLon) || (lat < minLat)
-                      || (lat > maxLat) || (pitch > 0.01) || (Math.abs(heading) > 0.01)) {
-                     nextCamera.copyFrom(previousCamera);
-                  }
-               }
-               return true;
-            }
-         };
-         builder.addCameraConstraint(myCameraConstrainer);
-         builder.setPlanet(Planet.createFlatEarth());
-      }
+      //      if (false) {
+      //         final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
+      //            private boolean firstTime = true;
+      //
+      //
+      //            @Override
+      //            public void dispose() {
+      //            }
+      //
+      //
+      //            @Override
+      //            public boolean onCameraChange(final Planet planet,
+      //                                          final Camera previousCamera,
+      //                                          final Camera nextCamera) {
+      //               if (firstTime) {
+      //                  final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 4e5);
+      //                  nextCamera.setGeodeticPosition(position);
+      //                  firstTime = false;
+      //               }
+      //               else {
+      //                  final double maxHeight = 5e5;
+      //                  final double minLat = 26.5, maxLat = 30.5, minLon = -19.5, maxLon = -12.5;
+      //                  final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
+      //                  final double lat = cameraPosition._latitude._degrees;
+      //                  final double lon = cameraPosition._longitude._degrees;
+      //                  final double pitch = nextCamera.getPitch()._degrees;
+      //                  final double heading = nextCamera.getHeading()._degrees;
+      //                  if ((cameraPosition._height > maxHeight) || (lon < minLon) || (lon > maxLon) || (lat < minLat)
+      //                      || (lat > maxLat) || (pitch > 0.01) || (Math.abs(heading) > 0.01)) {
+      //                     nextCamera.copyFrom(previousCamera);
+      //                  }
+      //               }
+      //               return true;
+      //            }
+      //         };
+      //         builder.addCameraConstraint(myCameraConstrainer);
+      //         builder.setPlanet(Planet.createFlatEarth());
+      //      }
 
 
       _widget = builder.createWidget();
@@ -1425,5 +1498,4 @@ public class G3MWebGLDemo
        */
 
    }
-
 }

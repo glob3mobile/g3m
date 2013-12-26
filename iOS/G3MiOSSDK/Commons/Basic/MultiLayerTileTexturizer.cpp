@@ -409,6 +409,7 @@ public:
       std::vector<const IImage*>     images;
       std::vector<RectangleF*> sourceRects;
       std::vector<RectangleF*> destRects;
+      std::vector<float> transparencies;
       std::string textureId = _tile->getKey().tinyDescription();
 
       const Sector tileSector = _tile->_sector;
@@ -421,7 +422,7 @@ public:
           const Sector imageSector = petition->getSector();
           //Finding intersection image sector - tile sector = srcReq
           const Sector intersectionSector = tileSector.intersection(imageSector);
-
+          
           RectangleF* sourceRect = NULL;
           if (!intersectionSector.isEquals(imageSector)) {
             sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
@@ -445,6 +446,9 @@ public:
                                                 intersectionSector));
           textureId += petition->getURL().getPath();
           textureId += "_";
+
+          //Layer transparency set by user
+          transparencies.push_back(petition->getLayerTransparency());
         }
         else{
           return false;
@@ -458,10 +462,15 @@ public:
           textureId += _tileRasterizer->getId();
         }
 
+        if (images.size() != transparencies.size()){
+          ILogger::instance()->logError("Wrong number of transparencies");
+        }
+
         IImageUtils::combine(_tileTextureResolution,
                              images,
                              sourceRects,
                              destRects,
+                             transparencies,
                              new TextureUploader(this,
                                                  _tile,
                                                  _mercator,
