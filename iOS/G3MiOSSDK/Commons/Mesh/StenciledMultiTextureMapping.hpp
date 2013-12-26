@@ -1,19 +1,19 @@
 //
-//  MultiTextureMapping.h
+//  StenciledMultiTextureMapping.h
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 24/12/13.
 //
 //
 
-#ifndef __G3MiOSSDK__MultiTextureMapping__
-#define __G3MiOSSDK__MultiTextureMapping__
+#ifndef __G3MiOSSDK__StenciledMultiTextureMapping__
+#define __G3MiOSSDK__StenciledMultiTextureMapping__
 
 #include "TextureMapping.hpp"
 
 
 
-class MultiTextureMapping : public TextureMapping {
+class StenciledMultiTextureMapping : public TextureMapping {
 private:
 #ifdef C_CODE
   const TextureIDReference* _glTextureId;
@@ -29,11 +29,21 @@ private:
   private TextureIDReference _glTextureId2;
 #endif
 
+#ifdef C_CODE
+  const TextureIDReference* _stencilID;    //STENCIL TEXTURE
+#endif
+#ifdef JAVA_CODE
+  private TextureIDReference _stencilID;
+#endif
+
   IFloatBuffer* _texCoords;
   const bool    _ownedTexCoords;
 
   IFloatBuffer* _texCoords2;
   const bool    _ownedTexCoords2;
+
+  IFloatBuffer* _texCoordsStencil;
+  const bool    _ownedTexCoordsStencil;
 
   //TRANSFORMS FOR TEX 0
   float _translationU;
@@ -51,14 +61,17 @@ private:
 
 public:
 
-  MultiTextureMapping(const TextureIDReference* glTextureId,
+  StenciledMultiTextureMapping(const TextureIDReference* glTextureId,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords,
                        bool transparent,
                       const TextureIDReference* glTextureId2,
                       IFloatBuffer* texCoords2,
                       bool ownedTexCoords2,
-                      bool transparent2) :
+                      bool transparent2,
+                      const TextureIDReference* stencilID,
+                      IFloatBuffer* texCoordsStencil,
+                      bool ownedTexCoordsStencil) :
   _glTextureId(glTextureId),
   _texCoords(texCoords),
   _translationU(0),
@@ -73,7 +86,10 @@ public:
   _glTextureId2(glTextureId2),
   _texCoords2(texCoords2),
   _ownedTexCoords2(ownedTexCoords2),
-  _transparent2(transparent2)
+  _transparent2(transparent2),
+  _stencilID(stencilID),
+  _texCoordsStencil(texCoordsStencil),
+  _ownedTexCoordsStencil(ownedTexCoordsStencil)
   {
   }
 
@@ -98,7 +114,7 @@ public:
 #warning    updateState();
   }
 
-  virtual ~MultiTextureMapping();
+  virtual ~StenciledMultiTextureMapping();
 
   const IGLTextureId* getGLTextureId() const {
     return _glTextureId->getID();
@@ -113,4 +129,4 @@ public:
 };
 
 
-#endif /* defined(__G3MiOSSDK__MultiTextureMapping__) */
+#endif /* defined(__G3MiOSSDK__StenciledMultiTextureMapping__) */

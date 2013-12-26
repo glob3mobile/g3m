@@ -661,12 +661,6 @@ public:
     hudRenderer->addWidget(compass);
 
 
-    //    HUDQuadWidget* multiTexturecompass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
-    //                                               //URL("file:///debug-compass.png"),
-    //                                               new HUDAbsolutePosition(10),
-    //                                               new HUDAbsolutePosition(400),
-    //                                               300, 300);
-
     MultiTexturedHUDQuadWidget* multiTexturecompass = NULL;
     multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
                                                          URL("file:///g3m-marker.png"),
@@ -674,6 +668,14 @@ public:
                                                          new HUDAbsolutePosition(400),
                                                          300, 300);
     hudRenderer->addWidget(multiTexturecompass);
+
+    MultiTexturedHUDQuadWidget* stenciledMultiTexturecompass = NULL;
+    stenciledMultiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+                                                         URL("file:///g3m-marker.png"),
+                                                         new HUDAbsolutePosition(10),
+                                                         new HUDAbsolutePosition(600),
+                                                         300, 300);
+    hudRenderer->addWidget(stenciledMultiTexturecompass);
 
     HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
                                                 URL("file:///Compass_rose_browns_00_transparent.png"),

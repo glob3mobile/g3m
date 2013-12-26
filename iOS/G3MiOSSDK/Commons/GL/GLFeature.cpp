@@ -130,6 +130,11 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
     _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
     break;
 
+    case 3:
+    _values.addUniformValue(SAMPLER3, texUnit, false);
+    _values.addAttributeValue(TEXTURE_COORDS_3, value, false);
+    break;
+
     default:
     ILogger::instance()->logError("Wrong texture target.");
 

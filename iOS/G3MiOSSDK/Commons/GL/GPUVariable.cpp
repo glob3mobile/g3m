@@ -175,6 +175,10 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
     return TEXTURE_COORDS_2;
   }
 
+  if (name.compare("aTextureCoord3") == 0) {
+    return TEXTURE_COORDS_3;
+  }
+
   if (name.compare("aNormal") == 0) {
     return NORMAL;
   }

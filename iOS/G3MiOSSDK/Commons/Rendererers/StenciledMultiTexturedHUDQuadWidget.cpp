@@ -1,12 +1,12 @@
 //
-//  MultiTexturedHUDQuadWidget.cpp
+//  StenciledMultiTexturedHUDQuadWidget.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/17/13.
 //
 //
 
-#include "MultiTexturedHUDQuadWidget.hpp"
+#include "StenciledMultiTexturedHUDQuadWidget.hpp"
 
 #include "Context.hpp"
 #include "IDownloader.hpp"
@@ -20,11 +20,11 @@
 #include "TexturedMesh.hpp"
 #include "HUDPosition.hpp"
 
-class MultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
+class StenciledMultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
 private:
-  MultiTexturedHUDQuadWidget* _quadWidget;
+  StenciledMultiTexturedHUDQuadWidget* _quadWidget;
 public:
-  MultiTexturedHUDQuadWidget_ImageDownloadListener(MultiTexturedHUDQuadWidget* quadWidget) :
+  StenciledMultiTexturedHUDQuadWidget_ImageDownloadListener(StenciledMultiTexturedHUDQuadWidget* quadWidget) :
   _quadWidget(quadWidget)
   {
   }
@@ -52,7 +52,7 @@ public:
 };
 
 
-MultiTexturedHUDQuadWidget::~MultiTexturedHUDQuadWidget() {
+StenciledMultiTexturedHUDQuadWidget::~StenciledMultiTexturedHUDQuadWidget() {
   delete _image;
   delete _mesh;
 
@@ -60,7 +60,7 @@ MultiTexturedHUDQuadWidget::~MultiTexturedHUDQuadWidget() {
   delete _y;
 }
 
-Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
+Mesh* StenciledMultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   if (_image == NULL) {
     return NULL;
   }
@@ -139,7 +139,7 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   return new TexturedMesh(dm, true, _mtMapping, true, true);
 }
 
-void MultiTexturedHUDQuadWidget::setTexCoordsTranslation(float u, float v) {
+void StenciledMultiTexturedHUDQuadWidget::setTexCoordsTranslation(float u, float v) {
   _texCoordsTranslationU = u;
   _texCoordsTranslationV = v;
 
@@ -149,7 +149,7 @@ void MultiTexturedHUDQuadWidget::setTexCoordsTranslation(float u, float v) {
   }
 }
 
-void MultiTexturedHUDQuadWidget::setTexCoordsScale(float u, float v) {
+void StenciledMultiTexturedHUDQuadWidget::setTexCoordsScale(float u, float v) {
   _texCoordsScaleU = u;
   _texCoordsScaleV = v;
 
@@ -159,7 +159,7 @@ void MultiTexturedHUDQuadWidget::setTexCoordsScale(float u, float v) {
   }
 }
 
-void MultiTexturedHUDQuadWidget::setTexCoordsRotation(float angleInRadians,
+void StenciledMultiTexturedHUDQuadWidget::setTexCoordsRotation(float angleInRadians,
                                                       float centerU,
                                                       float centerV) {
   _texCoordsRotationInRadians = angleInRadians;
@@ -174,27 +174,34 @@ void MultiTexturedHUDQuadWidget::setTexCoordsRotation(float angleInRadians,
 }
 
 
-void MultiTexturedHUDQuadWidget::initialize(const G3MContext* context) {
-  if (!_downloadingImage && (_image == NULL) && (_image2 == NULL)) {
-    _downloadingImage = true;
+void StenciledMultiTexturedHUDQuadWidget::initialize(const G3MContext* context) {
+  if (!_downloadingImages && (_image == NULL)  && (_image2 == NULL)  && (_stencilImage == NULL)) {
+    _downloadingImages = true;
     IDownloader* downloader = context->getDownloader();
     downloader->requestImage(_imageURL,
                              1000000, // priority
                              TimeInterval::fromDays(30),
                              true, // readExpired
-                             new MultiTexturedHUDQuadWidget_ImageDownloadListener(this),
+                             new StenciledMultiTexturedHUDQuadWidget_ImageDownloadListener(this),
                              true);
 
     downloader->requestImage(_imageURL2,
                              1000000, // priority
                              TimeInterval::fromDays(30),
                              true, // readExpired
-                             new MultiTexturedHUDQuadWidget_ImageDownloadListener(this),
+                             new StenciledMultiTexturedHUDQuadWidget_ImageDownloadListener(this),
+                             true);
+
+    downloader->requestImage(_stencilURL,
+                             1000000, // priority
+                             TimeInterval::fromDays(30),
+                             true, // readExpired
+                             new StenciledMultiTexturedHUDQuadWidget_ImageDownloadListener(this),
                              true);
   }
 }
 
-void MultiTexturedHUDQuadWidget::cleanMesh() {
+void StenciledMultiTexturedHUDQuadWidget::cleanMesh() {
 #warning TO DIEGO : ONLY = NULL ??? -> check in all widgets
   _mtMapping = NULL;
 
@@ -202,13 +209,13 @@ void MultiTexturedHUDQuadWidget::cleanMesh() {
   _mesh = NULL;
 }
 
-void MultiTexturedHUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
+void StenciledMultiTexturedHUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
                                                        int width,
                                                        int height) {
   cleanMesh();
 }
 
-void MultiTexturedHUDQuadWidget::onImageDownload(IImage* image,const URL& url) {
+void StenciledMultiTexturedHUDQuadWidget::onImageDownload(IImage* image,const URL& url) {
 
   if (url.isEquals(_imageURL)){
     _image = image;
@@ -217,20 +224,24 @@ void MultiTexturedHUDQuadWidget::onImageDownload(IImage* image,const URL& url) {
     _image2 = image;
   }
 
+  if (url.isEquals(_stencilURL)){
+    _stencilImage = image;
+  }
+
   if (_image != NULL && _image2 != NULL){
-    _downloadingImage = false;
+    _downloadingImages = false;
   }
 }
 
-void MultiTexturedHUDQuadWidget::onImageDownloadError(const URL& url) {
-  _errors.push_back("MultiTexturedHUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
+void StenciledMultiTexturedHUDQuadWidget::onImageDownloadError(const URL& url) {
+  _errors.push_back("StenciledMultiTexturedHUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
 }
 
-RenderState MultiTexturedHUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
+RenderState StenciledMultiTexturedHUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
   if (!_errors.empty()) {
     return RenderState::error(_errors);
   }
-  else if (_downloadingImage) {
+  else if (_downloadingImages) {
     return RenderState::busy();
   }
   else {
@@ -238,14 +249,14 @@ RenderState MultiTexturedHUDQuadWidget::getRenderState(const G3MRenderContext* r
   }
 }
 
-Mesh* MultiTexturedHUDQuadWidget::getMesh(const G3MRenderContext* rc) {
+Mesh* StenciledMultiTexturedHUDQuadWidget::getMesh(const G3MRenderContext* rc) {
   if (_mesh == NULL) {
     _mesh = createMesh(rc);
   }
   return _mesh;
 }
 
-void MultiTexturedHUDQuadWidget::rawRender(const G3MRenderContext* rc,
+void StenciledMultiTexturedHUDQuadWidget::rawRender(const G3MRenderContext* rc,
                                            GLState* glState) {
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {

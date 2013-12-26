@@ -1,13 +1,13 @@
 //
-//  MultiTexturedHUDQuadWidget.hpp
+//  StenciledMultiTexturedHUDQuadWidget.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/17/13.
 //
 //
 
-#ifndef __G3MiOSSDK__MultiTexturedHUDQuadWidget__
-#define __G3MiOSSDK__MultiTexturedHUDQuadWidget__
+#ifndef __G3MiOSSDK__StenciledMultiTexturedHUDQuadWidget__
+#define __G3MiOSSDK__StenciledMultiTexturedHUDQuadWidget__
 
 #include "HUDWidget.hpp"
 
@@ -20,7 +20,7 @@ class IImage;
 class Mesh;
 class SimpleTextureMapping;
 
-class MultiTexturedHUDQuadWidget : public HUDWidget {
+class StenciledMultiTexturedHUDQuadWidget : public HUDWidget {
 private:
 #ifdef C_CODE
   const URL _imageURL;
@@ -35,6 +35,15 @@ private:
 #ifdef JAVA_CODE
   private final URL _imageURL2;
 #endif
+
+#ifdef C_CODE
+  const URL _stencilURL;
+#endif
+#ifdef JAVA_CODE
+  private final URL _stencilURL;
+#endif
+
+
 //  const float _x;
 //  const float _y;
   const HUDPosition* _x;
@@ -51,9 +60,9 @@ private:
   float _texCoordsRotationCenterV;
 
   IImage* _image;
-  bool _downloadingImage;
+  bool _downloadingImages;
   IImage* _image2;
-  bool _downloadingImage2;
+  IImage* _stencilImage;
   std::vector<std::string> _errors;
 
   Mesh* _mesh;
@@ -69,14 +78,16 @@ protected:
                  GLState* glState);
 
 public:
-  MultiTexturedHUDQuadWidget(const URL& imageURL,
+  StenciledMultiTexturedHUDQuadWidget(const URL& imageURL,
                              const URL& imageURL2,
+                             const URL& stencilURL,
                 HUDPosition* x,
                 HUDPosition* y,
                 float width,
                 float height) :
   _imageURL(imageURL),
   _imageURL2(imageURL2),
+  _stencilURL(stencilURL),
   _x(x),
   _y(y),
   _width(width),
@@ -85,7 +96,8 @@ public:
   _mtMapping(NULL),
   _image(NULL),
   _image2(NULL),
-  _downloadingImage(false),
+  _stencilImage(NULL),
+  _downloadingImages(false),
   _texCoordsTranslationU(0),
   _texCoordsTranslationV(0),
   _texCoordsScaleU(1),
@@ -111,7 +123,7 @@ public:
                          centerU, centerV);
   }
 
-  ~MultiTexturedHUDQuadWidget();
+  ~StenciledMultiTexturedHUDQuadWidget();
 
   void initialize(const G3MContext* context);
 

@@ -69,6 +69,11 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   if (!flatColor && texture && !color) {
 
     if (hasTexture2){
+
+      if (transformTC && rotationTC){
+        return compileProgramWithName(gl, "TransformedTexCoorMultiTexturedMesh");
+      }
+
       return compileProgramWithName(gl, "MultiTexturedMesh");
     }
 
@@ -143,6 +148,8 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
       }
 
       _programs[name] = prog;
+    } else{
+      ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());
     }
 
   }

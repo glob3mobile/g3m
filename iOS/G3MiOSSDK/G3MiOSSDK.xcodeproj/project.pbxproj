@@ -375,6 +375,10 @@
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
+		D83171ED186C4CFF00522E1B /* StenciledMultiTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83171EB186C4CFF00522E1B /* StenciledMultiTextureMapping.cpp */; };
+		D83171F0186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83171EE186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp */; };
+		D83171F5186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */; };
+		D83171F6186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
@@ -1503,6 +1507,12 @@
 		D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PeriodicalTask.hpp; path = Commons/Basic/PeriodicalTask.hpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D83171EB186C4CFF00522E1B /* StenciledMultiTextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StenciledMultiTextureMapping.cpp; path = Commons/Mesh/StenciledMultiTextureMapping.cpp; sourceTree = "<group>"; };
+		D83171EC186C4CFF00522E1B /* StenciledMultiTextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StenciledMultiTextureMapping.hpp; path = Commons/Mesh/StenciledMultiTextureMapping.hpp; sourceTree = "<group>"; };
+		D83171EE186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StenciledMultiTexturedHUDQuadWidget.cpp; path = Commons/Rendererers/StenciledMultiTexturedHUDQuadWidget.cpp; sourceTree = "<group>"; };
+		D83171EF186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StenciledMultiTexturedHUDQuadWidget.hpp; path = Commons/Rendererers/StenciledMultiTexturedHUDQuadWidget.hpp; sourceTree = "<group>"; };
+		D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
+		D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
 		D84625D51777291F00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
 		D84625D61777291F00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625DD177732A900FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
@@ -2182,6 +2192,8 @@
 		CCC2A01A15CA6B8200923850 /* Renderers */ = {
 			isa = PBXGroup;
 			children = (
+				D83171EE186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp */,
+				D83171EF186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp */,
 				D88EE1C51869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp */,
 				D88EE1C61869B70C00AED85A /* MultiTexturedHUDQuadWidget.hpp */,
 				CCC2A01B15CA6C7D00923850 /* BusyMeshRenderer.cpp */,
@@ -2446,6 +2458,8 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				D83171EB186C4CFF00522E1B /* StenciledMultiTextureMapping.cpp */,
+				D83171EC186C4CFF00522E1B /* StenciledMultiTextureMapping.hpp */,
 				D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */,
 				D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */,
 				D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */,
@@ -2552,6 +2566,8 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */,
+				D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */,
 				D88EE1B51869A1D800AED85A /* MultiTexturedMesh.fsh */,
 				D88EE1B61869A1D800AED85A /* MultiTexturedMesh.vsh */,
 				CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */,
@@ -2667,6 +2683,7 @@
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
 				CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */,
+				D83171F5186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
 				CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */,
 				CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */,
@@ -2677,6 +2694,7 @@
 				CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */,
 				CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */,
 				CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */,
+				D83171F6186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh in Sources */,
 				CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */,
 				385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */,
 				CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */,
@@ -2785,6 +2803,7 @@
 				CF7EDA0516948302002C760A /* ByteBufferIterator.cpp in Sources */,
 				CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */,
 				CF4FAAC31695C66F009734CA /* ByteBufferBuilder.cpp in Sources */,
+				D83171F0186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp in Sources */,
 				CF4FAAC81695D010009734CA /* JSONVisitor.cpp in Sources */,
 				CF4FAACC1695E4A8009734CA /* JSONGenerator.cpp in Sources */,
 				CF4FAAD51695F344009734CA /* BSONGenerator.cpp in Sources */,
@@ -2896,6 +2915,7 @@
 				D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */,
 				D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */,
 				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
+				D83171ED186C4CFF00522E1B /* StenciledMultiTextureMapping.cpp in Sources */,
 				FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */,
 				FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */,
 				CF5363DF178B3D1A00EE3D49 /* TileRasterizer.cpp in Sources */,
