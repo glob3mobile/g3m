@@ -663,16 +663,18 @@ public:
 
 
     MultiTexturedHUDQuadWidget* multiTexturecompass = NULL;
-    multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
-                                                         URL("file:///g3m-marker.png"),
+    multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///debug-compass.png"),
+                                                         //URL("file:///g3m-marker.png"),
+                                                         URL("file:///simpleStencil.png"),
                                                          new HUDAbsolutePosition(10),
                                                          new HUDAbsolutePosition(350),
                                                          300, 300);
+//    multiTexturecompass->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(multiTexturecompass);
 
     StenciledMultiTexturedHUDQuadWidget* stenciledMultiTexturecompass = NULL;
     stenciledMultiTexturecompass = new StenciledMultiTexturedHUDQuadWidget(
-                                                         URL("file:///Compass_rose_browns_00_transparent.png"),
+                                                         URL("file:///debug-compass.png"),
                                                          URL("file:///g3m-marker.png"),
                                                          URL("file:///simpleStencil.png"),
                                                          new HUDAbsolutePosition(10),
@@ -704,16 +706,28 @@ public:
     //                                             new HUDAbsolutePosition(320*2),
     //                                             new HUDAbsolutePosition(10),
     //                                             113, 1536 / visibleFactor);
-    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
-                                             new HUDRelativePosition(1,
-                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
-                                                                     HUDRelativePosition::LEFT,
-                                                                     10),
-                                             new HUDRelativePosition(0.5,
-                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
-                                                                     HUDRelativePosition::MIDDLE),
-                                             113, 1536 / visibleFactor);
-    ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
+//    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
+//                                             new HUDRelativePosition(1,
+//                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+//                                                                     HUDRelativePosition::LEFT,
+//                                                                     10),
+//                                             new HUDRelativePosition(0.5,
+//                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+//                                                                     HUDRelativePosition::MIDDLE),
+//                                             113, 1536 / visibleFactor);
+    MultiTexturedHUDQuadWidget* ruler = new MultiTexturedHUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
+                                                                       URL("file:///widget-background.png"),
+                                                                       new HUDRelativePosition(1,
+                                                                                               HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                                               HUDRelativePosition::LEFT,
+                                                                                               10),
+                                                                       new HUDRelativePosition(0.5,
+                                                                                               HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                                               HUDRelativePosition::MIDDLE),
+                                                                       //113, 1536 / visibleFactor);
+                                                                       113 / 2, 1536 / 2);
+
+    //ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
 
     class RotateCompass : public GTask {
@@ -722,7 +736,7 @@ public:
       HUDQuadWidget* _compass2;
       MultiTexturedHUDQuadWidget* _compass3;
       StenciledMultiTexturedHUDQuadWidget* _compass4;
-      HUDQuadWidget* _ruler;
+      MultiTexturedHUDQuadWidget* _ruler;
       double _angle;
 
       float _translationV;
@@ -733,7 +747,7 @@ public:
                     HUDQuadWidget* compass2,
                     MultiTexturedHUDQuadWidget* compass3,
                     StenciledMultiTexturedHUDQuadWidget* compass4,
-                    HUDQuadWidget* ruler) :
+                    MultiTexturedHUDQuadWidget* ruler) :
       _compass1(compass1),
       _compass2(compass2),
       _compass3(compass3),
@@ -763,7 +777,7 @@ public:
           _translationStep *= -1;
         }
         _translationV += _translationStep;
-        _ruler->setTexCoordsTranslation(0, _translationV);
+        //_ruler->setTexCoordsTranslation(0, _translationV);
       }
     };
 

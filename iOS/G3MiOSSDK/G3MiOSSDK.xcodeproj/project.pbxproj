@@ -377,14 +377,8 @@
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D83171ED186C4CFF00522E1B /* StenciledMultiTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83171EB186C4CFF00522E1B /* StenciledMultiTextureMapping.cpp */; };
 		D83171F0186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83171EE186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.cpp */; };
-		D83171F5186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */; };
-		D83171F6186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */; };
 		D83171F7186C54B000522E1B /* StenciledMultiTextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83171EC186C4CFF00522E1B /* StenciledMultiTextureMapping.hpp */; };
 		D83171F8186C54C400522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83171EF186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp */; };
-		D83171FB186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F9186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.vsh */; };
-		D83171FC186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171FA186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.fsh */; };
-		D83171FF186C579D00522E1B /* MultiTexturedMesh_Stencil.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171FD186C579D00522E1B /* MultiTexturedMesh_Stencil.fsh */; };
-		D8317200186C579D00522E1B /* MultiTexturedMesh_Stencil.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171FE186C579D00522E1B /* MultiTexturedMesh_Stencil.vsh */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
@@ -403,8 +397,6 @@
 		D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAAD917CB81B600ACD249 /* Extent.hpp */; };
 		D88CC14417CF86E80001BF4D /* Matrix44DProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */; };
 		D88CC14517CF86E80001BF4D /* FlatPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */; };
-		D88EE1B71869A1D800AED85A /* MultiTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1B51869A1D800AED85A /* MultiTexturedMesh.fsh */; };
-		D88EE1B81869A1D800AED85A /* MultiTexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1B61869A1D800AED85A /* MultiTexturedMesh.vsh */; };
 		D88EE1BE1869A44900AED85A /* MultiTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1BD1869A44900AED85A /* MultiTextureMapping.cpp */; };
 		D88EE1C71869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88EE1C51869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp */; };
 		D88EE1C81869BA4300AED85A /* MultiTextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D88EE1BC1869A44900AED85A /* MultiTextureMapping.hpp */; };
@@ -2699,9 +2691,7 @@
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
 				CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */,
-				D83171F5186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
-				D83171FB186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.vsh in Sources */,
 				CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */,
 				CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */,
 				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
@@ -2711,7 +2701,6 @@
 				CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */,
 				CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */,
 				CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */,
-				D83171F6186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh in Sources */,
 				CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */,
 				385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */,
 				CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */,
@@ -2724,7 +2713,6 @@
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */,
-				D83171FF186C579D00522E1B /* MultiTexturedMesh_Stencil.fsh in Sources */,
 				CFA71BEA15D2F6D200F8C78D /* TilesRenderParameters.cpp in Sources */,
 				CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */,
 				CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */,
@@ -2751,7 +2739,6 @@
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,
 				CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */,
 				CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */,
-				D88EE1B81869A1D800AED85A /* MultiTexturedMesh.vsh in Sources */,
 				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
 				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
 				CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */,
@@ -2807,7 +2794,6 @@
 				CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */,
 				CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */,
 				CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */,
-				D88EE1B71869A1D800AED85A /* MultiTexturedMesh.fsh in Sources */,
 				CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */,
 				CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */,
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
@@ -2850,11 +2836,9 @@
 				CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */,
 				CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */,
 				CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */,
-				D83171FC186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.fsh in Sources */,
 				CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */,
 				CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */,
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
-				D8317200186C579D00522E1B /* MultiTexturedMesh_Stencil.vsh in Sources */,
 				CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */,
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
 				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,

@@ -29,6 +29,7 @@
 		CF61A6451863880500DDC0DC /* debug-texture.png in Resources */ = {isa = PBXBuildFile; fileRef = CF61A6441863880500DDC0DC /* debug-texture.png */; };
 		CF61A647186388B200DDC0DC /* debug-compass.png in Resources */ = {isa = PBXBuildFile; fileRef = CF61A646186388B200DDC0DC /* debug-compass.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
+		CF88E728186C8A78003112BF /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF88E727186C8A78003112BF /* widget-background.png */; };
 		CF8BE69317E0D22D0072273A /* aus4326.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF8BE69217E0D22D0072273A /* aus4326.bil */; };
 		CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */ = {isa = PBXBuildFile; fileRef = CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */; };
 		CF8E9887180D98DC00A08208 /* pointcloud in Resources */ = {isa = PBXBuildFile; fileRef = CF8E9886180D98DC00A08208 /* pointcloud */; };
@@ -120,6 +121,7 @@
 		CF61A6441863880500DDC0DC /* debug-texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "debug-texture.png"; sourceTree = "<group>"; };
 		CF61A646186388B200DDC0DC /* debug-compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "debug-compass.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
+		CF88E727186C8A78003112BF /* widget-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget-background.png"; sourceTree = "<group>"; };
 		CF8BE69217E0D22D0072273A /* aus4326.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = aus4326.bil; sourceTree = "<group>"; };
 		CF8C0EBA16FC99C400DBEDE4 /* cc3d4326.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cc3d4326.json; sourceTree = "<group>"; };
 		CF8E9886180D98DC00A08208 /* pointcloud */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pointcloud; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF88E727186C8A78003112BF /* widget-background.png */,
 				D8317202186C5BAD00522E1B /* simpleStencil.png */,
 				CF15759218649D410059312A /* altimeter-ruler-1536x113.png */,
 				CF61A646186388B200DDC0DC /* debug-compass.png */,
@@ -452,6 +455,7 @@
 				CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */,
 				CF15759318649D410059312A /* altimeter-ruler-1536x113.png in Resources */,
 				CF61A647186388B200DDC0DC /* debug-compass.png in Resources */,
+				CF88E728186C8A78003112BF /* widget-background.png in Resources */,
 				CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				CFC04FC4185FA00400E7494A /* hud2.png in Resources */,
