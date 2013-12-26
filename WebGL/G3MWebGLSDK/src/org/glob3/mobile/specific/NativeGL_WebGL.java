@@ -832,4 +832,11 @@ public final class NativeGL_WebGL
    }-*/;
 
 
+   @Override
+   public native void setActiveTexture(final int i) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.activeTexture(gl.TEXTURE0 + i);
+   }-*/;
+
+
 }

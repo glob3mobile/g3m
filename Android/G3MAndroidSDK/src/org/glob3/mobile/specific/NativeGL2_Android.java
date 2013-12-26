@@ -860,4 +860,10 @@ public final class NativeGL2_Android
    }
 
 
+   @Override
+   public void setActiveTexture(final int i) {
+      GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
+   }
+
+
 }
