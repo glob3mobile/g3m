@@ -124,15 +124,7 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
                                        true,
                                        true);
 
-  /*
-
-   _simpleTextureMapping = new SimpleTextureMapping(texId,
-   texCoords.create(),
-   true,
-   true);
-
-
-   */
+  //Transforms only for Texture 0
   _mtMapping->setTranslation(_texCoordsTranslationU,
                              _texCoordsTranslationV);
 
