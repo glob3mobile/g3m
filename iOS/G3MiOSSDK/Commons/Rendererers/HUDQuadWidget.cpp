@@ -57,8 +57,8 @@ HUDQuadWidget::~HUDQuadWidget() {
   delete _image;
   delete _mesh;
 
-  delete _x;
-  delete _y;
+  delete _xPosition;
+  delete _yPosition;
 }
 
 Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
@@ -80,8 +80,8 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   const float width = _width;
   const float height = _height;
-  const float x = _x->getPosition(viewPortWidth, viewPortHeight, width, height);
-  const float y = _y->getPosition(viewPortWidth, viewPortHeight, width, height);
+  const float x = _xPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
+  const float y = _yPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices->add( x,       height+y, 0 );

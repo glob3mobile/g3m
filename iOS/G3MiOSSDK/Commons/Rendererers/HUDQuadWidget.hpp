@@ -27,10 +27,8 @@ private:
 #ifdef JAVA_CODE
   private final URL _imageURL;
 #endif
-//  const float _x;
-//  const float _y;
-  const HUDPosition* _x;
-  const HUDPosition* _y;
+  const HUDPosition* _xPosition;
+  const HUDPosition* _yPosition;
   const float _width;
   const float _height;
 
@@ -59,13 +57,13 @@ protected:
 
 public:
   HUDQuadWidget(const URL& imageURL,
-                HUDPosition* x,
-                HUDPosition* y,
+                HUDPosition* xPosition,
+                HUDPosition* yPosition,
                 float width,
                 float height) :
   _imageURL(imageURL),
-  _x(x),
-  _y(y),
+  _xPosition(xPosition),
+  _yPosition(yPosition),
   _width(width),
   _height(height),
   _mesh(NULL),
