@@ -318,6 +318,12 @@ private:
 
   const int _target;
 
+  void createBasicValues(IFloatBuffer* texCoords,
+                         int arrayElementSize,
+                         int index,
+                         bool normalized,
+                         int stride);
+
 public:
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords,

@@ -106,6 +106,36 @@ GeometryGLFeature::~GeometryGLFeature() {
 #endif
 }
 
+void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
+                                         int arrayElementSize,
+                                         int index,
+                                         bool normalized,
+                                         int stride){
+  GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
+                                                                     arrayElementSize,
+                                                                     index,
+                                                                     stride,
+                                                                     normalized);
+
+  GPUUniformValueInt* texUnit = new GPUUniformValueInt(_target);
+
+  switch (_target) {
+    case 0:
+    _values.addUniformValue(SAMPLER, texUnit, false);
+    _values.addAttributeValue(TEXTURE_COORDS, value, false);
+    break;
+
+    case 1:
+    _values.addUniformValue(SAMPLER2, texUnit, false);
+    _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
+    break;
+
+    default:
+    ILogger::instance()->logError("Wrong texture target.");
+
+    break;
+  }
+}
 
 
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
@@ -129,25 +159,8 @@ GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
 _texID(texID),
 _target(target)
 {
-  GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
-                                                                     arrayElementSize,
-                                                                     index,
-                                                                     stride,
-                                                                     normalized);
-  switch (target) {
-    case 0:
-      _values.addAttributeValue(TEXTURE_COORDS, value, false);
-      break;
 
-    case 1:
-      _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
-      break;
-
-    default:
-      ILogger::instance()->logError("Wrong texture target.");
-
-      break;
-  }
+  createBasicValues(texCoords, arrayElementSize, index, normalized, stride);
 
 #warning TRANFORMATIONS IF TARGET != 0
   _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
@@ -184,26 +197,7 @@ _texID(texID),
 _target(target)
 {
 
-
-  GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
-                                                                     arrayElementSize,
-                                                                     index,
-                                                                     stride,
-                                                                     normalized);
-  switch (target) {
-    case 0:
-      _values.addAttributeValue(TEXTURE_COORDS, value, false);
-      break;
-
-    case 1:
-      _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
-      break;
-
-    default:
-      ILogger::instance()->logError("Wrong texture target.");
-
-      break;
-  }
+  createBasicValues(texCoords, arrayElementSize, index, normalized, stride);
 
 }
 
@@ -259,6 +253,10 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
 
   GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords, arrayElementSize, index, stride, normalized);
   _values.addAttributeValue(TEXTURE_COORDS, value, false);
+
+#warning ONLY TARGET 0 FOR SGNODES
+  GPUUniformValueInt* texUnit = new GPUUniformValueInt(0);
+  _values.addUniformValue(SAMPLER, texUnit, false);
 
   if (coordsTransformed) {
     _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
