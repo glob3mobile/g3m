@@ -62,10 +62,13 @@ public:
     return (_radii._x + _radii._y + _radii._y) /3;
   }
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                                        const Vector3D& direction) const;
-
+  static std::vector<double> intersectionCenteredEllipsoidWithRay(const Vector3D& origin,
+                                                                  const Vector3D& direction,
+                                                                  const Vector3D& oneOverRadiiSquared);
   
+  static Vector3D closestIntersectionCenteredEllipsoidWithRay(const Vector3D& origin,
+                                                              const Vector3D& direction,
+                                                              const Vector3D& oneOverRadiiSquared);
 };
 
 #endif

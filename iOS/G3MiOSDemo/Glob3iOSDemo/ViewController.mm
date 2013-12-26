@@ -585,8 +585,8 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  //const Planet* planet = Planet::createEarth();
-  const Planet* planet = Planet::createSphericalEarth();
+  const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
 //const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
 

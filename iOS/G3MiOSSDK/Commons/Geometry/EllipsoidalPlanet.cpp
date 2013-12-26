@@ -238,16 +238,6 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
 }
 
 
-Vector3D EllipsoidalPlanet::closestIntersection(const Vector3D& pos,
-                                                const Vector3D& ray) const {
-  std::vector<double> distances = intersectionsDistances(pos , ray);
-  if (distances.empty()) {
-    return Vector3D::nan();
-  }
-  return pos.add(ray.times(distances[0]));
-}
-
-
 Vector3D EllipsoidalPlanet::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -298,13 +288,18 @@ MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic
 }
 
 
-void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
+void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const
 {
   _origin = origin.asMutableVector3D();
-  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
-
-  Geodetic3D geoPos = toGeodetic3D(_initialPoint.asVector3D());
-  printf("INiTIAL POINT EN %f, %f, %f\n ", geoPos._latitude._degrees, geoPos._longitude._degrees, geoPos._height);
+  //_initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  _initialPoint = touchedPosition.asMutableVector3D();
+  Vector3D _originalRadiusSquared = _ellipsoid.getRadiiSquared();
+  double _dragRadiusFactorSquared = touchedPosition._x * touchedPosition._x / _originalRadiusSquared._x +
+                                    touchedPosition._y * touchedPosition._y / _originalRadiusSquared._y +
+                                    touchedPosition._z * touchedPosition._z / _originalRadiusSquared._z;
+  _oneOverDragRadiiSquared = MutableVector3D(1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._x,
+                                             1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._y,
+                                             1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._z);
 
   _validSingleDrag = false;
 }
@@ -317,7 +312,9 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
 
   // compute final point
   const Vector3D origin = _origin.asVector3D();
-  MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
+  MutableVector3D finalPoint = Ellipsoid::closestIntersectionCenteredEllipsoidWithRay(origin,
+                                                                                      finalRay,
+                                                                                      _oneOverDragRadiiSquared.asVector3D()).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
     finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
