@@ -142,6 +142,18 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
     return ROTATION_ANGLE_TEXTURE_COORDS;
   }
 
+  if (name.compare("Sampler") == 0){
+    return SAMPLER;
+  }
+
+  if (name.compare("Sampler2") == 0){
+    return SAMPLER2;
+  }
+
+  if (name.compare("Sampler3") == 0){
+    return SAMPLER3;
+  }
+
   return UNRECOGNIZED_UNIFORM;
 }
 

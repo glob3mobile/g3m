@@ -575,9 +575,8 @@ public:
         return new GPUUniformVec3Float(name, new GLUniformID_iOS(id));
       case GL_BOOL:
         return new GPUUniformBool(name, new GLUniformID_iOS(id));
-//      case GL_SAMPLER_2D:
-//        int NOT_IMPLEMENTED_YET;
-//        return NULL;
+      case GL_SAMPLER_2D:
+        //return new GPUUniformSampler2D(name, new GLUniformID_iOS(id));
       default:
         return NULL;
         break;

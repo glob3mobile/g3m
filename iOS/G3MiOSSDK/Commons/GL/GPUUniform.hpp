@@ -504,4 +504,46 @@ public:
 
 };
 
+class GPUUniformSampler2D: public GPUUniform {
+public:
+  GPUUniformSampler2D(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glInt()) {}
+
+  ~GPUUniformSampler2D() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+};
+
+class GPUUniformValueInt : public GPUUniformValue {
+private:
+  ~GPUUniformValueInt() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  const int _value;
+
+  GPUUniformValueInt(int b):GPUUniformValue(GLType::glInt()),_value(b) {}
+
+  void setUniform(GL* gl, const IGLUniformID* id) const{
+    gl->uniform1i(id, _value);
+  }
+  bool isEquals(const GPUUniformValue* v) const{
+    return _value == ((GPUUniformValueInt*)v)->_value;
+  }
+
+  std::string description() const{
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Integer: ");
+    isb->addInt(_value);
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
+};
+
 #endif
