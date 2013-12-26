@@ -382,7 +382,7 @@ FrustumData Camera::calculateFrustumData() const {
   
   double zNear = heightFromGround * 0.1;
 
-  printf ("calculando nuevo znear=%.3f.  Altura desde el suelo=%.2f\n", zNear, heightFromGround);
+  //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
 

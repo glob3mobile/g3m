@@ -500,22 +500,32 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
 
 Effect* EllipsoidalPlanet::createDoubleTapEffect(const Vector3D& origin,
                                                  const Vector3D& centerRay,
-                                                 const Vector3D& tapRay) const
+                                                 const Vector3D& touchedPosition) const
 {
-  const Vector3D initialPoint = closestIntersection(origin, tapRay);
-  if (initialPoint.isNan()) return NULL;
+  //const Vector3D initialPoint = closestIntersection(origin, tapRay);
+  if (touchedPosition.isNan()) return NULL;
 
   // compute central point of view
-  const Vector3D centerPoint = closestIntersection(origin, centerRay);
+  //const Vector3D centerPoint = closestIntersection(origin, centerRay);
+  Vector3D originalRadiusSquared = _ellipsoid.getRadiiSquared();
+  double dragRadiusFactorSquared = touchedPosition._x * touchedPosition._x / originalRadiusSquared._x +
+                                    touchedPosition._y * touchedPosition._y / originalRadiusSquared._y +
+                                    touchedPosition._z * touchedPosition._z / originalRadiusSquared._z;
+  Vector3D oneOverDragRadiiSquared = Vector3D(1.0 / dragRadiusFactorSquared / originalRadiusSquared._x,
+                                              1.0 / dragRadiusFactorSquared / originalRadiusSquared._y,
+                                              1.0 / dragRadiusFactorSquared / originalRadiusSquared._z);
+  Vector3D centerPoint = Ellipsoid::closestIntersectionCenteredEllipsoidWithRay(origin,
+                                                                                centerRay,
+                                                                                oneOverDragRadiiSquared);
 
   // compute drag parameters
   const IMathUtils* mu = IMathUtils::instance();
-  const Vector3D axis = initialPoint.cross(centerPoint);
-  const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/initialPoint.length()/centerPoint.length()));
+  const Vector3D axis = touchedPosition.cross(centerPoint);
+  const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/touchedPosition.length()/centerPoint.length()));
 
   // compute zoom factor
-  const double height   = toGeodetic3D(origin)._height;
-  const double distance = height * 0.6;
+  const double distanceToGround   = toGeodetic3D(origin)._height - toGeodetic3D(touchedPosition)._height;
+  const double distance = distanceToGround * 0.6;
 
   // create effect
   return new DoubleTapRotationEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);

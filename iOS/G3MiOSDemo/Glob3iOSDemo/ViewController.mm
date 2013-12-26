@@ -585,8 +585,8 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  //const Planet* planet = Planet::createEarth();
-  const Planet* planet = Planet::createSphericalEarth();
+  const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
   //const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
 
@@ -892,9 +892,9 @@ public:
   builder.initializeWidget();
   //  [self testGenericQuadTree:geoTileRasterizer];
   
-  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.50), Angle::fromDegrees(-16.58), 25000);
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.50), Angle::fromDegrees(-16.58), 250000);
   [self G3MWidget].widget->setCameraPosition(position);
-  //[self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(75));
+  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(25));
 
 
 }
