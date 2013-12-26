@@ -130,7 +130,7 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
     _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
     break;
 
-    case 3:
+    case 2:
     _values.addUniformValue(SAMPLER3, texUnit, false);
     _values.addAttributeValue(TEXTURE_COORDS_3, value, false);
     break;

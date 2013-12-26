@@ -381,6 +381,10 @@
 		D83171F6186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */; };
 		D83171F7186C54B000522E1B /* StenciledMultiTextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83171EC186C4CFF00522E1B /* StenciledMultiTextureMapping.hpp */; };
 		D83171F8186C54C400522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83171EF186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp */; };
+		D83171FB186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171F9186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.vsh */; };
+		D83171FC186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171FA186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.fsh */; };
+		D83171FF186C579D00522E1B /* MultiTexturedMesh_Stencil.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171FD186C579D00522E1B /* MultiTexturedMesh_Stencil.fsh */; };
+		D8317200186C579D00522E1B /* MultiTexturedMesh_Stencil.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D83171FE186C579D00522E1B /* MultiTexturedMesh_Stencil.vsh */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */; };
@@ -1517,6 +1521,10 @@
 		D83171EF186C4EE900522E1B /* StenciledMultiTexturedHUDQuadWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StenciledMultiTexturedHUDQuadWidget.hpp; path = Commons/Rendererers/StenciledMultiTexturedHUDQuadWidget.hpp; sourceTree = "<group>"; };
 		D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh.fsh; sourceTree = "<group>"; };
+		D83171F9186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh_Stencil.vsh; sourceTree = "<group>"; };
+		D83171FA186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorMultiTexturedMesh_Stencil.fsh; sourceTree = "<group>"; };
+		D83171FD186C579D00522E1B /* MultiTexturedMesh_Stencil.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MultiTexturedMesh_Stencil.fsh; sourceTree = "<group>"; };
+		D83171FE186C579D00522E1B /* MultiTexturedMesh_Stencil.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MultiTexturedMesh_Stencil.vsh; sourceTree = "<group>"; };
 		D84625D51777291F00FC4862 /* TexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.fsh; sourceTree = "<group>"; };
 		D84625D61777291F00FC4862 /* TexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TexturedMesh.vsh; sourceTree = "<group>"; };
 		D84625DD177732A900FC4862 /* ColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.fsh; sourceTree = "<group>"; };
@@ -2570,6 +2578,10 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				D83171FD186C579D00522E1B /* MultiTexturedMesh_Stencil.fsh */,
+				D83171FE186C579D00522E1B /* MultiTexturedMesh_Stencil.vsh */,
+				D83171F9186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.vsh */,
+				D83171FA186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.fsh */,
 				D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */,
 				D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */,
 				D88EE1B51869A1D800AED85A /* MultiTexturedMesh.fsh */,
@@ -2689,6 +2701,7 @@
 				CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */,
 				D83171F5186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
+				D83171FB186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.vsh in Sources */,
 				CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */,
 				CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */,
 				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
@@ -2711,6 +2724,7 @@
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */,
+				D83171FF186C579D00522E1B /* MultiTexturedMesh_Stencil.fsh in Sources */,
 				CFA71BEA15D2F6D200F8C78D /* TilesRenderParameters.cpp in Sources */,
 				CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */,
 				CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */,
@@ -2836,9 +2850,11 @@
 				CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */,
 				CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */,
 				CFD3D8B116D1729A00CE9242 /* WMSBillElevationDataProvider.cpp in Sources */,
+				D83171FC186C564A00522E1B /* TransformedTexCoorMultiTexturedMesh_Stencil.fsh in Sources */,
 				CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */,
 				CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */,
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
+				D8317200186C579D00522E1B /* MultiTexturedMesh_Stencil.vsh in Sources */,
 				CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */,
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
 				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,

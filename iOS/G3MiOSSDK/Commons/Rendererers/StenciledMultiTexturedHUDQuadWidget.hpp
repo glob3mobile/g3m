@@ -14,7 +14,7 @@
 #include "URL.hpp"
 #include "Vector2D.hpp"
 #include "Angle.hpp"
-#include "MultiTextureMapping.hpp"
+#include "StenciledMultiTextureMapping.hpp"
 class HUDPosition;
 class IImage;
 class Mesh;
@@ -66,7 +66,7 @@ private:
   std::vector<std::string> _errors;
 
   Mesh* _mesh;
-  MultiTextureMapping* _mtMapping;
+  StenciledMultiTextureMapping* _mtMapping;
 
   Mesh* createMesh(const G3MRenderContext* rc);
   Mesh* getMesh(const G3MRenderContext* rc);

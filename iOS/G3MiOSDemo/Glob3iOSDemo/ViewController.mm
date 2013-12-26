@@ -666,16 +666,17 @@ public:
     multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
                                                          URL("file:///g3m-marker.png"),
                                                          new HUDAbsolutePosition(10),
-                                                         new HUDAbsolutePosition(400),
+                                                         new HUDAbsolutePosition(350),
                                                          300, 300);
     hudRenderer->addWidget(multiTexturecompass);
 
     StenciledMultiTexturedHUDQuadWidget* stenciledMultiTexturecompass = NULL;
-    stenciledMultiTexturecompass = new StenciledMultiTexturedHUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+    stenciledMultiTexturecompass = new StenciledMultiTexturedHUDQuadWidget(
+                                                         URL("file:///Compass_rose_browns_00_transparent.png"),
                                                          URL("file:///g3m-marker.png"),
                                                          URL("file:///simpleStencil.png"),
                                                          new HUDAbsolutePosition(10),
-                                                         new HUDAbsolutePosition(600),
+                                                         new HUDAbsolutePosition(650),
                                                          300, 300);
     hudRenderer->addWidget(stenciledMultiTexturecompass);
 
@@ -720,6 +721,7 @@ public:
       HUDQuadWidget* _compass1;
       HUDQuadWidget* _compass2;
       MultiTexturedHUDQuadWidget* _compass3;
+      StenciledMultiTexturedHUDQuadWidget* _compass4;
       HUDQuadWidget* _ruler;
       double _angle;
 
@@ -730,10 +732,12 @@ public:
       RotateCompass(HUDQuadWidget* compass1,
                     HUDQuadWidget* compass2,
                     MultiTexturedHUDQuadWidget* compass3,
+                    StenciledMultiTexturedHUDQuadWidget* compass4,
                     HUDQuadWidget* ruler) :
       _compass1(compass1),
       _compass2(compass2),
       _compass3(compass3),
+      _compass4(compass4),
       _ruler(ruler),
       _angle(0),
       _translationV(0),
@@ -752,6 +756,9 @@ public:
         _compass3->setTexCoordsRotation(Angle::fromRadians(_angle),
                                         0.5f, 0.5f);
 
+        _compass4->setTexCoordsRotation(Angle::fromRadians(_angle),
+                                        0.5f, 0.5f);
+
         if (_translationV > 0.5 || _translationV < 0) {
           _translationStep *= -1;
         }
@@ -761,7 +768,11 @@ public:
     };
 
     builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(20),
-                                                 new RotateCompass(compass, compass2, multiTexturecompass, ruler)));
+                                                 new RotateCompass(compass,
+                                                                   compass2,
+                                                                   multiTexturecompass,
+                                                                   stenciledMultiTexturecompass,
+                                                                   ruler)));
   }
 
 

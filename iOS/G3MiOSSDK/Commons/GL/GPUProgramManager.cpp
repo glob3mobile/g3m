@@ -53,6 +53,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   const bool hasLight    = GPUVariable::hasUniform(uniformsCode,     AMBIENT_LIGHT_COLOR);
 
   const bool hasTexture2 = GPUVariable::hasUniform(uniformsCode, SAMPLER2);
+  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
 
   if (billboard) {
     return compileProgramWithName(gl, "Billboard");
@@ -67,6 +68,15 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   }
 
   if (!flatColor && texture && !color) {
+
+    if (hasTexture3){
+
+      if (transformTC && rotationTC){
+        return compileProgramWithName(gl, "TransformedTexCoorMultiTexturedMesh_Stencil");
+      }
+
+      return compileProgramWithName(gl, "MultiTexturedMesh_Stencil");
+    }
 
     if (hasTexture2){
 

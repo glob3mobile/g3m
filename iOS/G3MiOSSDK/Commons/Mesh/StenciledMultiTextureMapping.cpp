@@ -149,10 +149,10 @@ void StenciledMultiTextureMapping::modifyGLState(GLState& state) const{
                                             0,
                                             false,
                                             0,
-                                            false,
+                                            true,
                                             GLBlendFactor::srcAlpha(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
-                                            3), //TARGET
+                                            2), //TARGET
                        false);
   }
 }

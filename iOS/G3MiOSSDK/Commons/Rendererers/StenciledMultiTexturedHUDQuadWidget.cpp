@@ -85,6 +85,16 @@ Mesh* StenciledMultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc
     return NULL;
   }
 
+  const TextureIDReference* stencilTexId = rc->getTexturesHandler()->getTextureIDReference(_stencilImage,
+                                                                                     GLFormat::rgba(),
+                                                                                     _imageURL2.getPath(),
+                                                                                     false);
+
+  if (stencilTexId == NULL) {
+    rc->getLogger()->logError("Can't upload texture to GPU");
+    return NULL;
+  }
+
 
   const int viewPortWidth  = rc->getCurrentCamera()->getWidth();
   const int viewPortHeight = rc->getCurrentCamera()->getHeight();
@@ -115,13 +125,25 @@ Mesh* StenciledMultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc
 
   delete vertices;
 
-  _mtMapping = new MultiTextureMapping(texId,
+//  _mtMapping = new MultiTextureMapping(texId,
+//                                       texCoords.create(),
+//                                       true,
+//                                       true,
+//                                       texId2,
+//                                       texCoords.create(),
+//                                       true,
+//                                       true);
+
+  _mtMapping = new StenciledMultiTextureMapping(texId,
                                        texCoords.create(),
                                        true,
                                        true,
                                        texId2,
                                        texCoords.create(),
                                        true,
+                                       true,
+                                       stencilTexId,
+                                       texCoords.create(),
                                        true);
 
   //Transforms only for Texture 0
