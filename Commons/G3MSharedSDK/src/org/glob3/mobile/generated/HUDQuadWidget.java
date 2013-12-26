@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class HUDPosition;
+//class HUDSize;
 //class IImage;
 //class Mesh;
 //class SimpleTextureMapping;
@@ -25,12 +26,10 @@ package org.glob3.mobile.generated;
 public class HUDQuadWidget extends HUDWidget
 {
   private final URL _imageURL;
-//  const float _x;
-//  const float _y;
-  private final HUDPosition _x;
-  private final HUDPosition _y;
-  private final float _width;
-  private final float _height;
+  private final HUDPosition _xPosition;
+  private final HUDPosition _yPosition;
+  private final HUDSize _widthSize;
+  private final HUDSize _heightSize;
 
   private float _texCoordsTranslationU;
   private float _texCoordsTranslationV;
@@ -41,6 +40,9 @@ public class HUDQuadWidget extends HUDWidget
   private float _texCoordsRotationCenterV;
 
   private IImage _image;
+  private int _imageWidth;
+  private int _imageHeight;
+
   private boolean _downloadingImage;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
@@ -60,13 +62,15 @@ public class HUDQuadWidget extends HUDWidget
       rc.getLogger().logError("Can't upload texture to GPU");
       return null;
     }
-    final int viewPortWidth = rc.getCurrentCamera().getWidth();
-    final int viewPortHeight = rc.getCurrentCamera().getHeight();
+    final Camera camera = rc.getCurrentCamera();
+    final int viewPortWidth = camera.getWidth();
+    final int viewPortHeight = camera.getHeight();
   
-    final float width = _width;
-    final float height = _height;
-    final float x = _x.getPosition(viewPortWidth, viewPortHeight, width, height);
-    final float y = _y.getPosition(viewPortWidth, viewPortHeight, width, height);
+    final float width = _widthSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+    final float height = _heightSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+  
+    final float x = _xPosition.getPosition(viewPortWidth, viewPortHeight, width, height);
+    final float y = _yPosition.getPosition(viewPortWidth, viewPortHeight, width, height);
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     vertices.add(x, height+y, 0);
@@ -121,16 +125,18 @@ public class HUDQuadWidget extends HUDWidget
     }
   }
 
-  public HUDQuadWidget(URL imageURL, HUDPosition x, HUDPosition y, float width, float height)
+  public HUDQuadWidget(URL imageURL, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
   {
      _imageURL = imageURL;
-     _x = x;
-     _y = y;
-     _width = width;
-     _height = height;
+     _xPosition = xPosition;
+     _yPosition = yPosition;
+     _widthSize = widthSize;
+     _heightSize = heightSize;
      _mesh = null;
      _simpleTextureMapping = null;
      _image = null;
+     _imageWidth = 0;
+     _imageHeight = 0;
      _downloadingImage = false;
      _texCoordsTranslationU = 0F;
      _texCoordsTranslationV = 0F;
@@ -187,10 +193,15 @@ public class HUDQuadWidget extends HUDWidget
     if (_mesh != null)
        _mesh.dispose();
   
-    if (_x != null)
-       _x.dispose();
-    if (_y != null)
-       _y.dispose();
+    if (_xPosition != null)
+       _xPosition.dispose();
+    if (_yPosition != null)
+       _yPosition.dispose();
+  
+    if (_widthSize != null)
+       _widthSize.dispose();
+    if (_heightSize != null)
+       _heightSize.dispose();
   }
 
   public final void initialize(G3MContext context)
@@ -229,6 +240,8 @@ public class HUDQuadWidget extends HUDWidget
   {
     _downloadingImage = false;
     _image = image;
+    _imageWidth = _image.getWidth();
+    _imageHeight = _image.getHeight();
   }
 
   /** private, do not call */
