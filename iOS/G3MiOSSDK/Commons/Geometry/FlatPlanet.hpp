@@ -140,7 +140,7 @@ public:
   
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                 const Vector3D& centerRay,
-                                const Vector3D& tapRay) const;
+                                const Vector3D& touchedPosition) const;
 
   double distanceToHorizon(const Vector3D& position) const;
 

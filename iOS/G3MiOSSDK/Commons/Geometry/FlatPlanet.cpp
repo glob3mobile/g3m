@@ -242,16 +242,19 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
 
 Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
                                           const Vector3D& centerRay,
-                                          const Vector3D& tapRay) const
+                                          const Vector3D& touchedPosition) const
 {
-  const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
-  if (initialPoint.isNan()) return NULL;
-  const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+  //const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
+  if (touchedPosition.isNan()) return NULL;
+  //const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+  double dragHeight = toGeodetic3D(touchedPosition)._height;
+  const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay, dragHeight);
 
   // create effect
+  double distanceToGround = toGeodetic3D(origin)._height - dragHeight;
   return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(0.75),
-                                        initialPoint.sub(centerPoint),
-                                        toGeodetic3D(origin)._height*0.6);
+                                        touchedPosition.sub(centerPoint),
+                                        distanceToGround*0.6);
 }
 
 
