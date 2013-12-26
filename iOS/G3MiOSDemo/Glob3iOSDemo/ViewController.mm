@@ -676,9 +676,9 @@ public:
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                         HUDRelativePosition::MIDDLE),
-                                                new HUDRelativeSize(0.7,
+                                                new HUDRelativeSize(0.6,
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                                new HUDRelativeSize(0.35,
+                                                new HUDRelativeSize(0.3,
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS));
     compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
                                    Angle::fromDegrees(30),
@@ -687,7 +687,8 @@ public:
     compass2->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass2);
 
-    float visibleFactor = 4;
+//    float visibleFactor = 4;
+    float visibleFactor = 3;
 //    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
 //                                             new HUDAbsolutePosition(320*2),
 //                                             new HUDAbsolutePosition(10),
@@ -702,10 +703,10 @@ public:
                                                                      HUDRelativePosition::MIDDLE),
 //                                             new HUDAbsoluteSize(113),
 //                                             new HUDAbsoluteSize(1536 / visibleFactor)
-                                             new HUDRelativeSize(1.5 * (113.0 / 1536.0),
-                                                                 HUDRelativeSize::VIEWPORT_HEIGTH),
-                                             new HUDRelativeSize(1.5 / visibleFactor,
-                                                                 HUDRelativeSize::VIEWPORT_HEIGTH)
+                                             new HUDRelativeSize(2 * (113.0 / 1536.0),
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                             new HUDRelativeSize(2 / visibleFactor,
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS)
                                              );
     ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
