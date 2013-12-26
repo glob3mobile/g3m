@@ -126,6 +126,7 @@
 #import <G3MiOSSDK/HUDAbsolutePosition.hpp>
 #import <G3MiOSSDK/HUDRelativePosition.hpp>
 #import <G3MiOSSDK/HUDAbsoluteSize.hpp>
+#import <G3MiOSSDK/HUDRelativeSize.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -651,12 +652,15 @@ public:
     builder.setHUDRenderer(hudRenderer);
 
 #warning Diego at work!
-    HUDQuadWidget* compass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+    HUDQuadWidget* compass = new HUDQuadWidget(//URL("file:///Compass_rose_browns_00_transparent.png"),
                                                //URL("file:///debug-compass.png"),
+                                               URL("file:///g3m-marker.png"),
                                                new HUDAbsolutePosition(10),
                                                new HUDAbsolutePosition(10),
-                                               new HUDAbsoluteSize(300),
-                                               new HUDAbsoluteSize(300));
+                                               new HUDRelativeSize(0.33,
+                                                                   HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                               new HUDRelativeSize(0.33,
+                                                                   HUDRelativeSize::VIEWPORT_MIN_AXIS));
 //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
 //                                   0.5f, 0.5f);
     hudRenderer->addWidget(compass);
@@ -672,8 +676,10 @@ public:
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                         HUDRelativePosition::MIDDLE),
-                                                new HUDAbsoluteSize(300),
-                                                new HUDAbsoluteSize(150));
+                                                new HUDRelativeSize(0.7,
+                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                                new HUDRelativeSize(0.35,
+                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS));
     compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
                                    Angle::fromDegrees(30),
                                    0.5f, 0.5f);
@@ -694,8 +700,13 @@ public:
                                              new HUDRelativePosition(0.5,
                                                                      HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                      HUDRelativePosition::MIDDLE),
-                                             new HUDAbsoluteSize(113),
-                                             new HUDAbsoluteSize(1536 / visibleFactor));
+//                                             new HUDAbsoluteSize(113),
+//                                             new HUDAbsoluteSize(1536 / visibleFactor)
+                                             new HUDRelativeSize(1.5 * (113.0 / 1536.0),
+                                                                 HUDRelativeSize::VIEWPORT_HEIGTH),
+                                             new HUDRelativeSize(1.5 / visibleFactor,
+                                                                 HUDRelativeSize::VIEWPORT_HEIGTH)
+                                             );
     ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
 
@@ -704,7 +715,7 @@ public:
       HUDQuadWidget* _compass1;
       HUDQuadWidget* _compass2;
       HUDQuadWidget* _ruler;
-      double _angle;
+      double _angleInRadians;
 
       float _translationV;
       float _translationStep;
@@ -716,18 +727,18 @@ public:
       _compass1(compass1),
       _compass2(compass2),
       _ruler(ruler),
-      _angle(0),
+      _angleInRadians(0),
       _translationV(0),
       _translationStep(0.002)
       {
       }
 
       void run(const G3MContext* context) {
-        _angle += Angle::fromDegrees(2)._radians;
+        _angleInRadians += Angle::fromDegrees(2)._radians;
 
-        _compass1->setTexCoordsRotation(Angle::fromRadians(_angle),
+        _compass1->setTexCoordsRotation(_angleInRadians,
                                         0.5f, 0.5f);
-        _compass2->setTexCoordsRotation(Angle::fromRadians(-_angle),
+        _compass2->setTexCoordsRotation(-_angleInRadians,
                                         0.5f, 0.5f);
 
         if (_translationV > 0.5 || _translationV < 0) {

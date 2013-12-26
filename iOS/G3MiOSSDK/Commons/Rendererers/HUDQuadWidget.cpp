@@ -84,8 +84,9 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   const int viewPortWidth  = camera->getWidth();
   const int viewPortHeight = camera->getHeight();
 
-  const float width  = _widthSize->getSize();
-  const float height = _heightSize->getSize();
+  const float width  = _widthSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+  const float height = _heightSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+
   const float x = _xPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
   const float y = _yPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
 
@@ -191,6 +192,8 @@ void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
 void HUDQuadWidget::onImageDownload(IImage* image) {
   _downloadingImage = false;
   _image = image;
+  _imageWidth  = _image->getWidth();
+  _imageHeight = _image->getHeight();
 }
 
 void HUDQuadWidget::onImageDownloadError(const URL& url) {

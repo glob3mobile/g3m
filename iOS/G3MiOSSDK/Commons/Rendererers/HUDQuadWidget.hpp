@@ -42,6 +42,9 @@ private:
   float _texCoordsRotationCenterV;
 
   IImage* _image;
+  int _imageWidth;
+  int _imageHeight;
+
   bool _downloadingImage;
   std::vector<std::string> _errors;
 
@@ -70,6 +73,8 @@ public:
   _mesh(NULL),
   _simpleTextureMapping(NULL),
   _image(NULL),
+  _imageWidth(0),
+  _imageHeight(0),
   _downloadingImage(false),
   _texCoordsTranslationU(0),
   _texCoordsTranslationV(0),

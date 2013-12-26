@@ -280,6 +280,8 @@
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
 		CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53EC16B9B76500256453 /* ICameraConstrainer.cpp */; };
 		CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */; };
+		CFBA88EB186CCA89003A4473 /* HUDRelativeSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBA88E9186CCA89003A4473 /* HUDRelativeSize.cpp */; };
+		CFBA88EC186CCAD0003A4473 /* HUDRelativeSize.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBA88EA186CCA89003A4473 /* HUDRelativeSize.hpp */; };
 		CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42D916AA151100663F21 /* IShortBuffer.cpp */; };
 		CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */; };
 		CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67AB179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp */; };
@@ -642,6 +644,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFBA88EC186CCAD0003A4473 /* HUDRelativeSize.hpp in CopyFiles */,
 				CF1E62FC186CB90800EB1B6C /* HUDSize.hpp in CopyFiles */,
 				CF1E62FD186CB90800EB1B6C /* HUDAbsoluteSize.hpp in CopyFiles */,
 				CF15759F1864C18A0059312A /* HUDRelativePosition.hpp in CopyFiles */,
@@ -1364,6 +1367,8 @@
 		CFBA53ED16B9B76500256453 /* ICameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICameraConstrainer.hpp; path = Commons/Cameras/ICameraConstrainer.hpp; sourceTree = "<group>"; };
 		CFBA53F016B9B7CC00256453 /* SimpleCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleCameraConstrainer.cpp; path = Commons/Cameras/SimpleCameraConstrainer.cpp; sourceTree = "<group>"; };
 		CFBA53F116B9B7CC00256453 /* SimpleCameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimpleCameraConstrainer.hpp; path = Commons/Cameras/SimpleCameraConstrainer.hpp; sourceTree = "<group>"; };
+		CFBA88E9186CCA89003A4473 /* HUDRelativeSize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDRelativeSize.cpp; path = Commons/Rendererers/HUDRelativeSize.cpp; sourceTree = "<group>"; };
+		CFBA88EA186CCA89003A4473 /* HUDRelativeSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HUDRelativeSize.hpp; path = Commons/Rendererers/HUDRelativeSize.hpp; sourceTree = "<group>"; };
 		CFBD42D916AA151100663F21 /* IShortBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IShortBuffer.cpp; path = Commons/Basic/IShortBuffer.cpp; sourceTree = "<group>"; };
 		CFBD42DA16AA151100663F21 /* IShortBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IShortBuffer.hpp; path = Commons/Basic/IShortBuffer.hpp; sourceTree = "<group>"; };
 		CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBuffer_iOS.cpp; path = Specific/Derived/ShortBuffer_iOS.cpp; sourceTree = "<group>"; };
@@ -2216,6 +2221,8 @@
 				CF1E62F7186CB7BB00EB1B6C /* HUDSize.hpp */,
 				CF1E62F9186CB8D200EB1B6C /* HUDAbsoluteSize.cpp */,
 				CF1E62FA186CB8D200EB1B6C /* HUDAbsoluteSize.hpp */,
+				CFBA88E9186CCA89003A4473 /* HUDRelativeSize.cpp */,
+				CFBA88EA186CCA89003A4473 /* HUDRelativeSize.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2698,6 +2705,7 @@
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,
 				CF1E62FB186CB8D200EB1B6C /* HUDAbsoluteSize.cpp in Sources */,
 				CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */,
+				CFBA88EB186CCA89003A4473 /* HUDRelativeSize.cpp in Sources */,
 				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
 				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
 				CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */,

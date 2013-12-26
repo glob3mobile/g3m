@@ -16,7 +16,10 @@ protected:
   }
 
 public:
-  virtual float getSize() const = 0;
+  virtual float getSize(int viewPortWidth,
+                        int viewPortHeight,
+                        int bitmapWidth,
+                        int bitmapHeight) const = 0;
 
   virtual ~HUDSize() {
   }

@@ -21,7 +21,10 @@ public:
   {
   }
 
-  float getSize() const {
+  float getSize(int viewPortWidth,
+                int viewPortHeight,
+                int bitmapWidth,
+                int bitmapHeight) const {
     return _size;
   }
 
