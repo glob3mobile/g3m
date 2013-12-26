@@ -112,6 +112,11 @@ Tile::~Tile() {
   }
 
   delete _tessellatorData;
+
+  delete _middleEastPoint;
+  delete _middleNorthPoint;
+  delete _middleSouthPoint;
+  delete _middleWestPoint;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -665,7 +670,8 @@ bool Tile::render(const G3MRenderContext* rc,
                   long long texturePriority,
                   double texWidthSquared,
                   double texHeightSquared,
-                  double nowInMS) {
+                  double nowInMS,
+                  const bool renderTileMeshes) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -704,18 +710,20 @@ bool Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
-      rawRender(rc,
-                &parentState,
-                texturizer,
-                elevationDataProvider,
-                tessellator,
-                tileRasterizer,
-                layerTilesRenderParameters,
-                layerSet,
-                tilesRenderParameters,
-                isForcedFullRender,
-                texturePriority);
-      if (tilesRenderParameters->_renderDebug) { //TO RAW RENDER
+      if (renderTileMeshes) {
+        rawRender(rc,
+                  &parentState,
+                  texturizer,
+                  elevationDataProvider,
+                  tessellator,
+                  tileRasterizer,
+                  layerTilesRenderParameters,
+                  layerSet,
+                  tilesRenderParameters,
+                  isForcedFullRender,
+                  texturePriority);
+      }
+      if (tilesRenderParameters->_renderDebug) {
         debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
       }
 

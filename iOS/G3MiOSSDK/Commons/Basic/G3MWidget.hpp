@@ -139,6 +139,10 @@ public:
     return _gl;
   }
 
+  EffectsScheduler* getEffectsScheduler() const {
+    return _effectsScheduler;
+  }
+
   const Camera* getCurrentCamera() const {
     return _currentCamera;
   }

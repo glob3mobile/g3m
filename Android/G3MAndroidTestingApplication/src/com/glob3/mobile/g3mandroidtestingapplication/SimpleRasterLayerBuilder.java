@@ -50,14 +50,14 @@ public class SimpleRasterLayerBuilder
 
       final MapBoxLayer mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2);
       mboxOSMLayer.setTitle("Map Box OSM");
-      mboxOSMLayer.setEnable(true);
+      mboxOSMLayer.setEnable(false);
       layerSet.addLayer(mboxOSMLayer);
 
       final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
                WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0,
                         18), TimeInterval.fromDays(30), true);
       blueMarble.setTitle("WMS Nasa Blue Marble");
-      blueMarble.setEnable(false);
+      blueMarble.setEnable(true);
       layerSet.addLayer(blueMarble);
 
 
@@ -103,6 +103,13 @@ public class SimpleRasterLayerBuilder
       arcGISOverlayLayerTest.setTitle("ESRI ArcGis Online");
       arcGISOverlayLayerTest.setEnable(false);
       layerSet.addLayer(arcGISOverlayLayerTest);
+
+
+      final URLTemplateLayer testTemplateLayer = URLTemplateLayer.newWGS84("file:///120m/{level}/{x}/{y}.png",
+               Sector.fullSphere(), true, 0, 8, TimeInterval.fromDays(30), true, new LevelTileCondition(4, 8));
+      testTemplateLayer.setTitle("Test ");
+      testTemplateLayer.setEnable(true);
+      layerSet.addLayer(testTemplateLayer);
 
 
       return layerSet;

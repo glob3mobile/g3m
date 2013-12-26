@@ -233,7 +233,8 @@ public:
               long long texturePriority,
               double texWidth,
               double texHeight,
-              double nowInMS);
+              double nowInMS,
+              const bool renderTileMeshes);
 
   void actualizeQuadTree(const G3MRenderContext* rc,
                          std::list<Tile*>& renderedTiles,

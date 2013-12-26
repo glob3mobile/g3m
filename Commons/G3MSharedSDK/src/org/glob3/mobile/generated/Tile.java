@@ -634,6 +634,15 @@ public class Tile
   
     if (_tessellatorData != null)
        _tessellatorData.dispose();
+  
+    if (_middleEastPoint != null)
+       _middleEastPoint.dispose();
+    if (_middleNorthPoint != null)
+       _middleNorthPoint.dispose();
+    if (_middleSouthPoint != null)
+       _middleSouthPoint.dispose();
+    if (_middleWestPoint != null)
+       _middleWestPoint.dispose();
   }
 
   //Change to public for TileCache
@@ -691,8 +700,12 @@ public class Tile
     }
   }
 
+<<<<<<< HEAD
   //RETURN ISRAWRENDER
   public final boolean render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS)
+=======
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes)
+>>>>>>> purgatory
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -714,8 +727,16 @@ public class Tile
   
       if (isRawRender)
       {
+<<<<<<< HEAD
         rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority);
         if (tilesRenderParameters._renderDebug) //TO RAW RENDER
+=======
+        if (renderTileMeshes)
+        {
+          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority);
+        }
+        if (tilesRenderParameters._renderDebug)
+>>>>>>> purgatory
         {
           debugRender(rc, parentState, tessellator, layerTilesRenderParameters);
         }

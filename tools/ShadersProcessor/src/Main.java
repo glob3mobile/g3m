@@ -140,11 +140,21 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle("Choose location of G3MiOSSDK project");
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.showOpenDialog(null);
-		String pwd = chooser.getSelectedFile().getAbsolutePath();
+		String pwd = "";
+		File pwdFile = new File(System.getProperty("user.dir"));
+		pwdFile = pwdFile.getParentFile().getParentFile();
+
+		pwdFile = new File(pwdFile, "iOS/G3MiOSSDK"); //TRYING DEFAULT PWD
+		if (pwdFile.exists() && pwdFile.isDirectory()){
+			pwd = pwdFile.getAbsolutePath();
+		} else{
+			//GETTING PWD
+			JFileChooser chooser = new JFileChooser();
+			chooser.setDialogTitle("Choose location of G3MiOSSDK project");
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			chooser.showOpenDialog(null);
+			pwd = chooser.getSelectedFile().getAbsolutePath();
+		}
 		
 		String sdkProjectPath = pwd;
 		String shadersFolder = sdkProjectPath + "/Resources/Shaders";

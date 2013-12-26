@@ -1201,6 +1201,65 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
+  bool testingTransparencies = true;
+  if (testingTransparencies){
+
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 6),
+                                        //NULL,
+                                        TimeInterval::fromDays(30),
+                                        true,
+                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                       2, 4,
+                                                                       0, 6,
+                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                       false)
+                                        );
+    layerSet->addLayer(blueMarble);
+
+    WMSLayer* i3Landsat = new WMSLayer("esat",
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/jpeg",
+                                       "EPSG:4326",
+                                       "",
+                                       false,
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                      2, 4,
+                                                                      0, 12,
+                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                      false));
+    layerSet->addLayer(i3Landsat);
+
+    WMSLayer *pnoa = new WMSLayer("PNOA",
+                                  URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                  WMS_1_1_0,
+                                  Sector::fromDegrees(21, -18, 45, 6),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::fromDays(30),
+                                  true,
+                                  NULL,
+                                  0.5);
+    layerSet->addLayer(pnoa);
+  }
+
 
   const bool useCartoDB = false;
   if (useCartoDB) {
@@ -1267,7 +1326,7 @@ public:
     layerSet->addLayer(osmEditMapLayer);
   }
 
-  const bool blueMarble = true;
+  const bool blueMarble = false;
   if (blueMarble) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -1368,27 +1427,28 @@ public:
   }
 
   if (false) {
-    //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
-    //                                                  Sector::fullSphere(),
-    //                                                  false,
-    //                                                  0,
-    //                                                  4,
-    //                                                  TimeInterval::zero(),
-    //                                                  false));
 
-    //    WMSLayer* blueMarble = new WMSLayer("bmng200405",
-    //                                        URL("http://www.nasa.network.com/wms?", false),
-    //                                        WMS_1_1_0,
-    //                                        Sector::fullSphere(),
-    //                                        "image/jpeg",
-    //                                        "EPSG:4326",
-    //                                        "",
-    //                                        false,
-    //                                        //new LevelTileCondition(0, 8),
-    //                                        NULL,
-    //                                        TimeInterval::fromDays(30),
-    //                                        true);
-    //    layerSet->addLayer(blueMarble);
+//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
+//                                                  Sector::fullSphere(),
+//                                                  false,
+//                                                  0,
+//                                                  4,
+//                                                  TimeInterval::zero(),
+//                                                  false));
+
+//    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                        URL("http://www.nasa.network.com/wms?", false),
+//                                        WMS_1_1_0,
+//                                        Sector::fullSphere(),
+//                                        "image/jpeg",
+//                                        "EPSG:4326",
+//                                        "",
+//                                        false,
+//                                        //new LevelTileCondition(0, 8),
+//                                        NULL,
+//                                        TimeInterval::fromDays(30),
+//                                        true);
+//    layerSet->addLayer(blueMarble);
 
 
     // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
@@ -1637,7 +1697,8 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  const Quality quality = QUALITY_MEDIUM;
+  //const Quality quality = QUALITY_MEDIUM;
+  const Quality quality = QUALITY_LOW;
 
   return new TilesRenderParameters(renderDebug,
                                    useTilesSplitBudget,
@@ -1735,15 +1796,24 @@ public:
 - (ShapesRenderer*) createShapesRenderer: (const Planet*) planet
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
-
   /*
-   Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-122),
-                                              8000),
+  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-122 - 2),
+                                              824000 / 2),
                                RELATIVE_TO_GROUND,
-                               URL("file:///g3m-marker.png", false),
-                               50000, 50000,
+                               URL("file:///hud.png", false),
+                               //50000, 50000,
+                               663000, 824000,
                                false);
+//  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                              Angle::fromDegrees(-122 - 2),
+//                                              50000 / 2),
+//                               RELATIVE_TO_GROUND,
+//                               URL("file:///hud2.png", false),
+//                               //50000, 50000,
+//                               50000, 50000,
+//                               false);
+  quad1->setPitch(Angle::fromDegrees(90));
   shapesRenderer->addShape(quad1);
 
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
@@ -1925,56 +1995,60 @@ public:
   //    shapesRenderer->addShape(sphere);
   //  }
 
-  if (false) {
-    Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
-    
-    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
-    
-    std::vector<const IImage*> images;
-    images.push_back(image2);
-    images.push_back(image1);
-    
-    std::vector<RectangleF *> srcRs;
-    srcRs.push_back(new RectangleF(0,0,1024,748));
-    srcRs.push_back(new RectangleF(0, 0, 72, 72));
-    
-    std::vector<RectangleF *> destRs;
-    destRs.push_back(new RectangleF(0,0,256,256));
-    destRs.push_back(new RectangleF(0, 128, 64, 64));
-    
-    class QuadListener: public IImageListener {
-      ShapesRenderer* _sr;
-    public:
-      
-      QuadListener(ShapesRenderer* sr):_sr(sr) {
-        
-      }
-      
-      void imageCreated(const IImage* image) {
-        
-        Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
-                                                         Angle::fromDegrees(-16.339417),
-                                                         8000),
-                                          RELATIVE_TO_GROUND,
-                                          image,
-                                          49000, 38000,
-                                          false);
-        
-        _sr->addShape(quadImages);
-      }
-    };
-    
-    IImageUtils::combine(Vector2I(256,256),
-                         images,
-                         srcRs,
-                         destRs,
-                         new QuadListener(shapesRenderer), true);
-    
-    for (int i = 0; i < 2; i++) {
-      delete images[i];
-      delete srcRs[i];
-      delete destRs[i];
+  Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
+
+  Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
+
+  std::vector<const IImage*> images;
+  images.push_back(image2);
+  images.push_back(image1);
+
+  std::vector<RectangleF *> srcRs;
+  srcRs.push_back(new RectangleF(0,0,1024,748));
+  srcRs.push_back(new RectangleF(0, 0, 72, 72));
+
+  std::vector<RectangleF *> destRs;
+  destRs.push_back(new RectangleF(0,0,256,256));
+  destRs.push_back(new RectangleF(0, 128, 64, 64));
+
+  std::vector<float> transparencies;
+  transparencies.push_back(1.0);
+  transparencies.push_back(0.5);
+
+  class QuadListener: public IImageListener {
+    ShapesRenderer* _sr;
+  public:
+
+    QuadListener(ShapesRenderer* sr):_sr(sr) {
+
     }
+
+    void imageCreated(const IImage* image) {
+
+      Shape* quadImages = new QuadShape(new Geodetic3D(Angle::fromDegrees(28.410728),
+                                                       Angle::fromDegrees(-16.339417),
+                                                       8000),
+                                        RELATIVE_TO_GROUND,
+                                        image,
+                                        49000, 38000,
+                                        false);
+
+      _sr->addShape(quadImages);
+    }
+  };
+
+
+  IImageUtils::combine(Vector2I(256,256),
+                       images,
+                       srcRs,
+                       destRs,
+                       transparencies,
+                       new QuadListener(shapesRenderer), true);
+
+  for (int i = 0; i < 2; i++) {
+    delete images[i];
+    delete srcRs[i];
+    delete destRs[i];
   }
 
   return shapesRenderer;

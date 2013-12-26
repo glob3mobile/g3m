@@ -438,6 +438,11 @@ public class G3MWidget
     return _gl;
   }
 
+  public final EffectsScheduler getEffectsScheduler()
+  {
+    return _effectsScheduler;
+  }
+
   public final Camera getCurrentCamera()
   {
     return _currentCamera;

@@ -19,7 +19,8 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  const TimeInterval& timeToCache,
                                  bool readExpired,
                                  int initialLevel,
-                                 LayerCondition* condition) :
+                                 LayerCondition* condition,
+                                 float transparency) :
 Layer(condition,
       "GoogleMaps",
       timeToCache,
@@ -31,7 +32,8 @@ Layer(condition,
                                      20,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                     true) ),
+                                     true),
+      transparency),
 _key(key),
 _initialLevel(initialLevel)
 {
@@ -103,7 +105,8 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    true) );
+                                    true,
+                                    _transparency) );
   
   return petitions;
 }

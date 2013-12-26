@@ -121,7 +121,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const TilesRenderParameters* tilesRenderParameters,
                                bool                         showStatistics,
                                long long                    texturePriority,
-                               const Sector&                renderedSector) :
+                               const Sector&                renderedSector,
+                               const bool                   renderTileMeshes) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -144,7 +145,8 @@ _glState(new GLState()),
 _renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector(renderedSector)),
 _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
-_renderedTilesListFrame(-1)
+_renderedTilesListFrame(-1),
+_renderTileMeshes(renderTileMeshes)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -623,7 +625,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
          iter != renderedTiles->end();
          iter++) {
       Tile* tile = *iter;
-
       tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
     }
   }
