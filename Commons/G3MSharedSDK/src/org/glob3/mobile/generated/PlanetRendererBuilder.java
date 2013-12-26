@@ -286,11 +286,8 @@ public class PlanetRendererBuilder
      _elevationDataProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
-<<<<<<< HEAD
      _terrainTouchListeners = null;
-=======
      _renderTileMeshes = true;
->>>>>>> purgatory
   }
   public void dispose()
   {

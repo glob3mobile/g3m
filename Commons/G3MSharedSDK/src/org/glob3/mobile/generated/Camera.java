@@ -10,6 +10,7 @@ public class Camera
      _height = that._height;
      _planet = that._planet;
      _position = new MutableVector3D(that._position);
+     _groundHeight = that._groundHeight;
      _center = new MutableVector3D(that._center);
      _up = new MutableVector3D(that._up);
      _dirtyFlags = new CameraDirtyFlags(that._dirtyFlags);
@@ -35,6 +36,7 @@ public class Camera
      _height = 0;
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
+     _groundHeight = 0;
      _center = new MutableVector3D(0, 0, 0);
      _up = new MutableVector3D(0, 0, 1);
      _dirtyFlags = new CameraDirtyFlags();
@@ -597,6 +599,16 @@ public class Camera
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
+  public final void setGroundHeightFromCartesianPoint(Vector3D point)
+  {
+    _groundHeight = _planet.toGeodetic3D(point)._height;
+  }
+
+  public final double getHeightFromGround()
+  {
+    return getGeodeticPosition()._height - _groundHeight;
+  }
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
@@ -621,6 +633,8 @@ public class Camera
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
 
   private Geodetic3D _geodeticPosition; //Must be updated when changing position
+
+  private double _groundHeight;
 
   // this value is only used in the method Sector::isBackOriented
   // it's stored in double instead of Angle class to optimize performance in android
@@ -755,8 +769,11 @@ public class Camera
 
   private FrustumData calculateFrustumData()
   {
-    final double height = getGeodeticPosition()._height;
-    double zNear = height * 0.1;
+    final double heightFromGround = getHeightFromGround();
+  
+    double zNear = heightFromGround * 0.1;
+  
+    //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
   

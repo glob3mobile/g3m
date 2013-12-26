@@ -28,6 +28,7 @@ public class EllipsoidalPlanet extends Planet
 
   private MutableVector3D _origin = new MutableVector3D();
   private MutableVector3D _initialPoint = new MutableVector3D();
+  private MutableVector3D _oneOverDragRadiiSquared = new MutableVector3D();
   private MutableVector3D _centerPoint = new MutableVector3D();
   private MutableVector3D _centerRay = new MutableVector3D();
   private MutableVector3D _initialPoint0 = new MutableVector3D();
@@ -98,7 +99,7 @@ public class EllipsoidalPlanet extends Planet
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
-    return _ellipsoid.intersectionsDistances(origin, direction);
+    return Ellipsoid.intersectionCenteredEllipsoidWithRay(origin, direction, _ellipsoid.getOneOverRadiiSquared());
   }
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
@@ -352,14 +353,8 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
-    if (distances.isEmpty())
-    {
-      return Vector3D.nan();
-    }
-    return pos.add(ray.times(distances.get(0)));
+    return Ellipsoid.closestIntersectionCenteredEllipsoidWithRay(pos, ray, _ellipsoid.getOneOverRadiiSquared());
   }
-
 
   public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
@@ -374,10 +369,16 @@ public class EllipsoidalPlanet extends Planet
      return false;
   }
 
-  public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
+  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  public final void beginSingleDrag(Vector3D origin, Vector3D touchedPosition)
   {
     _origin = origin.asMutableVector3D();
-    _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+    //_initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+    _initialPoint = touchedPosition.asMutableVector3D();
+    Vector3D _originalRadiusSquared = _ellipsoid.getRadiiSquared();
+    double _dragRadiusFactorSquared = touchedPosition._x * touchedPosition._x / _originalRadiusSquared._x + touchedPosition._y * touchedPosition._y / _originalRadiusSquared._y + touchedPosition._z * touchedPosition._z / _originalRadiusSquared._z;
+    _oneOverDragRadiiSquared = new MutableVector3D(1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._x, 1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._y, 1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._z);
+  
     _validSingleDrag = false;
   }
 
@@ -389,7 +390,7 @@ public class EllipsoidalPlanet extends Planet
   
     // compute final point
     final Vector3D origin = _origin.asVector3D();
-    MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
+    MutableVector3D finalPoint = Ellipsoid.closestIntersectionCenteredEllipsoidWithRay(origin, finalRay, _oneOverDragRadiiSquared.asVector3D()).asMutableVector3D();
     if (finalPoint.isNan())
     {
       //printf ("--invalid final point in drag!!\n");
@@ -580,23 +581,27 @@ public class EllipsoidalPlanet extends Planet
     return matrix;
   }
 
-  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D tapRay)
+  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D touchedPosition)
   {
-    final Vector3D initialPoint = closestIntersection(origin, tapRay);
-    if (initialPoint.isNan())
+    //const Vector3D initialPoint = closestIntersection(origin, tapRay);
+    if (touchedPosition.isNan())
        return null;
   
     // compute central point of view
-    final Vector3D centerPoint = closestIntersection(origin, centerRay);
+    //const Vector3D centerPoint = closestIntersection(origin, centerRay);
+    Vector3D originalRadiusSquared = _ellipsoid.getRadiiSquared();
+    double dragRadiusFactorSquared = touchedPosition._x * touchedPosition._x / originalRadiusSquared._x + touchedPosition._y * touchedPosition._y / originalRadiusSquared._y + touchedPosition._z * touchedPosition._z / originalRadiusSquared._z;
+    Vector3D oneOverDragRadiiSquared = new Vector3D(1.0 / dragRadiusFactorSquared / originalRadiusSquared._x, 1.0 / dragRadiusFactorSquared / originalRadiusSquared._y, 1.0 / dragRadiusFactorSquared / originalRadiusSquared._z);
+    Vector3D centerPoint = Ellipsoid.closestIntersectionCenteredEllipsoidWithRay(origin, centerRay, oneOverDragRadiiSquared);
   
     // compute drag parameters
     final IMathUtils mu = IMathUtils.instance();
-    final Vector3D axis = initialPoint.cross(centerPoint);
-    final Angle angle = Angle.fromRadians(- mu.asin(axis.length()/initialPoint.length()/centerPoint.length()));
+    final Vector3D axis = touchedPosition.cross(centerPoint);
+    final Angle angle = Angle.fromRadians(- mu.asin(axis.length()/touchedPosition.length()/centerPoint.length()));
   
     // compute zoom factor
-    final double height = toGeodetic3D(origin)._height;
-    final double distance = height * 0.6;
+    final double distanceToGround = toGeodetic3D(origin)._height - toGeodetic3D(touchedPosition)._height;
+    final double distance = distanceToGround * 0.6;
   
     // create effect
     return new DoubleTapRotationEffect(TimeInterval.fromSeconds(0.75), axis, angle, distance);

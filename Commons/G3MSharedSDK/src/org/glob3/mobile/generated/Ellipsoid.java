@@ -68,11 +68,9 @@ public class Ellipsoid
     return (_radii._x + _radii._y + _radii._y) /3;
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public static java.util.ArrayList<Double> intersectionCenteredEllipsoidWithRay(Vector3D origin, Vector3D direction, Vector3D oneOverRadiiSquared)
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
-  
-    Vector3D oneOverRadiiSquared = getOneOverRadiiSquared();
   
     // By laborious algebraic manipulation....
     final double a = (direction._x * direction._x * oneOverRadiiSquared._x + direction._y * direction._y * oneOverRadiiSquared._y + direction._z * direction._z * oneOverRadiiSquared._z);
@@ -116,5 +114,13 @@ public class Ellipsoid
     return intersections;
   }
 
-
+  public static Vector3D closestIntersectionCenteredEllipsoidWithRay(Vector3D origin, Vector3D direction, Vector3D oneOverRadiiSquared)
+  {
+    java.util.ArrayList<Double> distances = Ellipsoid.intersectionCenteredEllipsoidWithRay(origin, direction, oneOverRadiiSquared);
+    if (distances.isEmpty())
+    {
+      return Vector3D.nan();
+    }
+    return origin.add(direction.times(distances.get(0)));
+  }
 }
