@@ -171,4 +171,6 @@ public abstract class INativeGL
 
   public abstract void depthMask(boolean v);
 
+  public abstract void setActiveTexture(int i);
+
 }

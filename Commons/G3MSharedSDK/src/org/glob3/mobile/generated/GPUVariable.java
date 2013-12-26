@@ -85,6 +85,21 @@ public class GPUVariable
       return GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS;
     }
   
+    if (name.compareTo("Sampler") == 0)
+    {
+      return GPUUniformKey.SAMPLER;
+    }
+  
+    if (name.compareTo("Sampler2") == 0)
+    {
+      return GPUUniformKey.SAMPLER2;
+    }
+  
+    if (name.compareTo("Sampler3") == 0)
+    {
+      return GPUUniformKey.SAMPLER3;
+    }
+  
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
   public static GPUAttributeKey getAttributeKey(String name)
@@ -103,6 +118,16 @@ public class GPUVariable
     if (name.compareTo("aTextureCoord") == 0)
     {
       return GPUAttributeKey.TEXTURE_COORDS;
+    }
+  
+    if (name.compareTo("aTextureCoord2") == 0)
+    {
+      return GPUAttributeKey.TEXTURE_COORDS_2;
+    }
+  
+    if (name.compareTo("aTextureCoord3") == 0)
+    {
+      return GPUAttributeKey.TEXTURE_COORDS_3;
     }
   
     if (name.compareTo("aNormal") == 0)

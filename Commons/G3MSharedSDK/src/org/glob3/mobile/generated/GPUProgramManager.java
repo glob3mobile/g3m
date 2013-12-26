@@ -51,6 +51,10 @@ public class GPUProgramManager
   
         _programs.put(name, prog);
       }
+      else
+      {
+        ILogger.instance().logError("No shader sources for program named %s.", name);
+      }
   
     }
     return prog;
@@ -66,6 +70,9 @@ public class GPUProgramManager
     final boolean transformTC = (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS));
     final boolean rotationTC = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS);
     final boolean hasLight = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT_COLOR);
+  
+    final boolean hasTexture2 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER2);
+    final boolean hasTexture3 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER3);
   
     if (billboard)
     {
@@ -84,6 +91,29 @@ public class GPUProgramManager
   
     if (!flatColor && texture && !color)
     {
+  
+      if (hasTexture3)
+      {
+  
+        if (transformTC && rotationTC)
+        {
+          return compileProgramWithName(gl, "TransformedTexCoorMultiTexturedMesh_Stencil");
+        }
+  
+        return compileProgramWithName(gl, "MultiTexturedMesh_Stencil");
+      }
+  
+      if (hasTexture2)
+      {
+  
+        if (transformTC && rotationTC)
+        {
+          return compileProgramWithName(gl, "TransformedTexCoorMultiTexturedMesh");
+        }
+  
+        return compileProgramWithName(gl, "MultiTexturedMesh");
+      }
+  
       if (hasLight)
       {
         if (transformTC)
@@ -104,6 +134,7 @@ public class GPUProgramManager
         }
         return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
       }
+  
       return compileProgramWithName(gl, "TexturedMesh");
     }
   

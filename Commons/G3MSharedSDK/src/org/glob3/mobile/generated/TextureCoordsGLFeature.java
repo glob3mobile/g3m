@@ -13,6 +13,11 @@ public class TextureCoordsGLFeature extends PriorityGLFeature
     GPUAttributeValueVec2Float value = new GPUAttributeValueVec2Float(texCoords, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.TEXTURE_COORDS, value, false);
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ONLY TARGET 0 FOR SGNODES
+    GPUUniformValueInt texUnit = new GPUUniformValueInt(0);
+    _values.addUniformValue(GPUUniformKey.SAMPLER, texUnit, false);
+  
     if (coordsTransformed)
     {
       _values.addUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS, new GPUUniformValueVec2Float((float)translate._x, (float)translate._y), false);
