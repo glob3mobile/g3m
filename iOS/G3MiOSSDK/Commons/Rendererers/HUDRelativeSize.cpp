@@ -31,4 +31,6 @@ float HUDRelativeSize::getSize(int viewPortWidth,
     case BITMAP_MAX_AXIS:
       return _factor * ((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight);
   }
+
+  return 0;
 }
