@@ -894,7 +894,7 @@ public:
   
   Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.50), Angle::fromDegrees(-16.58), 25000);
   [self G3MWidget].widget->setCameraPosition(position);
-  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(75));
+  //[self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(75));
 
 
 }

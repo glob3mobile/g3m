@@ -123,6 +123,7 @@ public:
   _height(that._height),
   _planet(that._planet),
   _position(that._position),
+  _groundHeight(that._groundHeight),
   _center(that._center),
   _up(that._up),
   _dirtyFlags(that._dirtyFlags),
@@ -334,6 +335,14 @@ public:
 
   bool isPositionWithin(const Sector& sector, double height) const;
   bool isCenterOfViewWithin(const Sector& sector, double height) const;
+  
+  void setGroundHeightFromCartesianPoint(const Vector3D& point) {
+    _groundHeight = _planet->toGeodetic3D(point)._height;
+  }
+  
+  double getHeightFromGround() const {
+    return getGeodeticPosition()._height - _groundHeight;
+  }
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -349,6 +358,8 @@ private:
   MutableVector3D _up;                  // vertical vector
 
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
+  
+  double _groundHeight;
 
   // this value is only used in the method Sector::isBackOriented
   // it's stored in double instead of Angle class to optimize performance in android

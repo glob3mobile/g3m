@@ -85,6 +85,7 @@ _width(0),
 _height(0),
 _planet(NULL),
 _position(0, 0, 0),
+_groundHeight(0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _dirtyFlags(),
@@ -377,11 +378,11 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 FrustumData Camera::calculateFrustumData() const {
-  const double height = getGeodeticPosition()._height;
+  const double heightFromGround = getHeightFromGround();
   
-  double zNear = height * 0.1;
+  double zNear = heightFromGround * 0.1;
 
-  printf ("calculando nuevo znear=%.3f.  Altura camera=%.2f\n", zNear, height);
+  printf ("calculando nuevo znear=%.3f.  Altura desde el suelo=%.2f\n", zNear, heightFromGround);
   
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
 
