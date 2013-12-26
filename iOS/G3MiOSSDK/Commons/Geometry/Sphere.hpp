@@ -45,6 +45,11 @@ public:
   _mesh(NULL)
   {
   }
+  
+  ~Sphere() {
+    if (_mesh != NULL)
+      delete _mesh;
+  }
 
   Vector3D getCenter() const{
     return _center;
@@ -95,7 +100,15 @@ public:
   bool fullContainedInSphere(const Sphere* that) const;
 
   Sphere* createSphere() const;
-
+  
+  static std::vector<double> intersectionCenteredSphereWithRay(const Vector3D& origin,
+                                                               const Vector3D& direction,
+                                                               double radius);
+  
+  static Vector3D closestIntersectionCenteredSphereWithRay(const Vector3D& origin,
+                                                           const Vector3D& direction,
+                                                           double radius);
+  
 };
 
 #endif

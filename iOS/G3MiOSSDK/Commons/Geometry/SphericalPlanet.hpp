@@ -24,9 +24,10 @@ private:
 #ifdef JAVA_CODE
   private Sphere _sphere;
 #endif
-
+  
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable double          _dragRadius;
   mutable MutableVector3D _centerPoint;
   mutable MutableVector3D _centerRay;
   mutable MutableVector3D _initialPoint0;
@@ -79,7 +80,11 @@ public:
   }
 
   std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const;
+                                             const Vector3D& direction) const {
+    return Sphere::intersectionCenteredSphereWithRay(origin,
+                                                     direction,
+                                                     _sphere._radius);
+  }
 
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
@@ -127,7 +132,11 @@ public:
 
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
 
-  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
+  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const {
+    return Sphere::closestIntersectionCenteredSphereWithRay(pos,
+                                                            ray,
+                                                            _sphere._radius);
+  }
 
 
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;

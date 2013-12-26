@@ -117,7 +117,7 @@ void FlatPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& touched
   _origin = origin.asMutableVector3D();
   //_initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
   _initialPoint = touchedPosition.asMutableVector3D();
-  _initialHeight = toGeodetic3D(touchedPosition)._height;
+  _dragHeight = toGeodetic3D(touchedPosition)._height;
 
   //printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 
@@ -133,7 +133,7 @@ MutableMatrix44D FlatPlanet::singleDrag(const Vector3D& finalRay) const
 
   // compute final point
   const Vector3D origin = _origin.asVector3D();
-  MutableVector3D finalPoint = Plane::intersectionXYPlaneWithRay(origin, finalRay, _initialHeight).asMutableVector3D();
+  MutableVector3D finalPoint = Plane::intersectionXYPlaneWithRay(origin, finalRay, _dragHeight).asMutableVector3D();
   if (finalPoint.isNan()) return MutableMatrix44D::invalid();
 
   // save params for possible inertial animations

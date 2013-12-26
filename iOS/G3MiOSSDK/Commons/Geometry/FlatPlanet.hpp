@@ -22,7 +22,7 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
-  mutable double          _initialHeight;
+  mutable double          _dragHeight;
   mutable MutableVector3D _lastFinalPoint;
   mutable bool            _validSingleDrag;
   mutable MutableVector3D _lastDirection;

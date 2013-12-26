@@ -33,48 +33,6 @@ Vector3D SphericalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                   SIN(latitude._radians));
 }
 
-std::vector<double> SphericalPlanet::intersectionsDistances(const Vector3D& origin,
-                                                            const Vector3D& direction) const {
-  std::vector<double> intersections;
-
-  // By laborious algebraic manipulation....
-  const double a = direction._x * direction._x  + direction._y * direction._y + direction._z * direction._z;
-
-  const double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
-
-  const double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _sphere._radiusSquared;
-
-  // Solve the quadratic equation: ax^2 + bx + c = 0.
-  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
-  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-  const double discriminant = b * b - 4 * a * c;
-  if (discriminant < 0.0) {
-    // no intersections
-    return intersections;
-  }
-  else if (discriminant == 0.0) {
-    // one intersection at a tangent point
-    //return new double[1] { -0.5 * b / a };
-    intersections.push_back(-0.5 * b / a);
-    return intersections;
-  }
-
-  const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
-  const double root1 = (-b + rootDiscriminant) / (2*a);
-  const double root2 = (-b - rootDiscriminant) / (2*a);
-
-  // Two intersections - return the smallest first.
-  if (root1 < root2) {
-    intersections.push_back(root1);
-    intersections.push_back(root2);
-  }
-  else {
-    intersections.push_back(root2);
-    intersections.push_back(root1);
-  }
-  return intersections;
-}
-
 Vector3D SphericalPlanet::toCartesian(const Angle& latitude,
                                       const Angle& longitude,
                                       const double height) const {
@@ -206,14 +164,6 @@ double SphericalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   return dist * PI / 180 * R;
 }
 
-Vector3D SphericalPlanet::closestIntersection(const Vector3D& pos,
-                                              const Vector3D& ray) const {
-  std::vector<double> distances = intersectionsDistances(pos , ray);
-  if (distances.empty()) {
-    return Vector3D::nan();
-  }
-  return pos.add(ray.times(distances[0]));
-}
 
 Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
   const IMathUtils* mu = IMathUtils::instance();
@@ -267,12 +217,12 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D
 
 void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const
 {
-/*  _origin = origin.asMutableVector3D();
-  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  _origin = origin.asMutableVector3D();
+  //_initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  _initialPoint = touchedPosition.asMutableVector3D();
+  _dragRadius = _sphere._radius + toGeodetic3D(touchedPosition)._height;
 
-  printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
-
-  _validSingleDrag = false;*/
+  _validSingleDrag = false;
 }
 
 
@@ -283,7 +233,9 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
 
   // compute final point
   const Vector3D origin = _origin.asVector3D();
-  MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
+  MutableVector3D finalPoint = Sphere::closestIntersectionCenteredSphereWithRay(origin,
+                                                                                finalRay,
+                                                                                _dragRadius).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
     finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
