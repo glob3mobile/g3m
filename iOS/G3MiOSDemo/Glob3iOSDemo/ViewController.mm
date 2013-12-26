@@ -578,7 +578,7 @@ public:
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
-  builder.getPlanetRendererBuilder()->setShowStatistics(false);
+  //builder.getPlanetRendererBuilder()->setShowStatistics(false);
 
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);

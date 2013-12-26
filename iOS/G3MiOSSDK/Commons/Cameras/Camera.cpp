@@ -378,8 +378,11 @@ void Camera::setPointOfView(const Geodetic3D& center,
 
 FrustumData Camera::calculateFrustumData() const {
   const double height = getGeodeticPosition()._height;
+  
   double zNear = height * 0.1;
 
+  printf ("calculando nuevo znear=%.3f.  Altura camera=%.2f\n", zNear, height);
+  
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
 
   const double goalRatio = 1000;

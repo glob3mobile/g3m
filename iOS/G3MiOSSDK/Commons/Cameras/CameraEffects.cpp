@@ -125,6 +125,8 @@ void DoubleTapTranslationEffect::stop(const G3MRenderContext* rc,
   const double step = 1.0 - _lastAlpha;
   camera->translateCamera(_translation.times(step));
   camera->moveForward(_distance * step);
+  
+  printf("acabo double tap en altura %.2f\n", camera->getGeodeticPosition()._height);
 }
 
 

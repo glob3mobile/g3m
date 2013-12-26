@@ -252,6 +252,9 @@ Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
 
   // create effect
   double distanceToGround = toGeodetic3D(origin)._height - dragHeight;
+  
+  printf("\n-- double tap to height %.2f, desde mi altura=%.2f\n", dragHeight, toGeodetic3D(origin)._height);
+  
   return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(0.75),
                                         touchedPosition.sub(centerPoint),
                                         distanceToGround*0.6);
