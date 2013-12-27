@@ -374,7 +374,7 @@
 		D87F26F517130C020048AD70 /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */; };
 		D87F4D77183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */; };
 		D87F4D78183BBF1500C57835 /* SingleBillElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */; };
-		D87FAE201863108900BB0854 /* GeoMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87FAE1E1863108900BB0854 /* GeoMeter.cpp */; };
+		D8881466186DB5DF00CE549F /* GeoMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8881464186DB5DE00CE549F /* GeoMeter.cpp */; };
 		D88CC14117CF86E80001BF4D /* SceneLighting.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */; };
 		D88CC14217CF86E80001BF4D /* CameraEffects.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBC2309817972F4F009343FC /* CameraEffects.hpp */; };
 		D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAAD917CB81B600ACD249 /* Extent.hpp */; };
@@ -413,7 +413,6 @@
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D894EB17731870007E41A5 /* GPUVariable.cpp */; };
 		D8D894EE17731B6A007E41A5 /* GPUVariable.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D894EC17731870007E41A5 /* GPUVariable.hpp */; };
-		D8E54EDD186315E00040D80E /* GeoMeter.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87FAE1F1863108900BB0854 /* GeoMeter.hpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
@@ -630,7 +629,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				D8E54EDD186315E00040D80E /* GeoMeter.hpp in CopyFiles */,
 				D895CA1F1861C79200AE8291 /* IImageUtils.hpp in CopyFiles */,
 				CF485F8A18511C460013795B /* AndTileCondition.hpp in CopyFiles */,
 				CFD8E771184FB74800228031 /* SectorTileCondition.hpp in CopyFiles */,
@@ -1492,8 +1490,8 @@
 		D87EC5D215BEC73400E38C36 /* Rectangle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Rectangle.hpp; path = Commons/Geometry/Rectangle.hpp; sourceTree = "<group>"; };
 		D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleBillElevationDataProvider.cpp; path = Commons/Basic/SingleBillElevationDataProvider.cpp; sourceTree = "<group>"; };
 		D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBillElevationDataProvider.hpp; path = Commons/Basic/SingleBillElevationDataProvider.hpp; sourceTree = "<group>"; };
-		D87FAE1E1863108900BB0854 /* GeoMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeoMeter.cpp; sourceTree = "<group>"; };
-		D87FAE1F1863108900BB0854 /* GeoMeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GeoMeter.hpp; sourceTree = "<group>"; };
+		D8881464186DB5DE00CE549F /* GeoMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GeoMeter.cpp; path = Commons/Basic/GeoMeter.cpp; sourceTree = "<group>"; };
+		D8881465186DB5DF00CE549F /* GeoMeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GeoMeter.hpp; path = Commons/Basic/GeoMeter.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D895CA1C1861C32300AE8291 /* IImageUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageUtils.hpp; path = Commons/Basic/IImageUtils.hpp; sourceTree = "<group>"; };
@@ -1724,6 +1722,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D8881464186DB5DE00CE549F /* GeoMeter.cpp */,
+				D8881465186DB5DF00CE549F /* GeoMeter.hpp */,
 				D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */,
 				D895CA1C1861C32300AE8291 /* IImageUtils.hpp */,
 				D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */,
@@ -1933,8 +1933,6 @@
 				CFA2EEED17EA0B1100EB4526 /* CartoCSSLexer.hpp */,
 				CF423A2B17F8874E00F50525 /* RenderState.cpp */,
 				CF423A2C17F8874E00F50525 /* RenderState.hpp */,
-				D87FAE1E1863108900BB0854 /* GeoMeter.cpp */,
-				D87FAE1F1863108900BB0854 /* GeoMeter.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2603,7 +2601,6 @@
 				CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
 				CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */,
-				D87FAE201863108900BB0854 /* GeoMeter.cpp in Sources */,
 				CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */,
 				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
 				CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */,
@@ -2790,6 +2787,7 @@
 				D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */,
 				D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */,
 				D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */,
+				D8881466186DB5DF00CE549F /* GeoMeter.cpp in Sources */,
 				D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */,
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
 				D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */,
