@@ -24,22 +24,19 @@ package org.glob3.mobile.generated;
 
 public class GeoMeter
 {
-  private static Planet _planet = null;
+
+  private static final Planet _planet = Planet.createSphericalEarth();
+
 
   public static double getDistance(Geodetic2D g1, Geodetic2D g2)
   {
   
-    if (GlobalMembersGeoMeter._planet == null)
-    {
-      GlobalMembersGeoMeter._planet = Planet.createSphericalEarth(); //Considering world as sphere
-    }
-  
-    final Vector3D g1n = GlobalMembersGeoMeter._planet.centricSurfaceNormal(GlobalMembersGeoMeter._planet.toCartesian(g1));
-    final Vector3D g2n = GlobalMembersGeoMeter._planet.centricSurfaceNormal(GlobalMembersGeoMeter._planet.toCartesian(g2));
+    final Vector3D g1n = _planet.centricSurfaceNormal(_planet.toCartesian(g1));
+    final Vector3D g2n = _planet.centricSurfaceNormal(_planet.toCartesian(g2));
   
     final Angle angle = g1n.angleBetween(g2n);
   
-    final double dist = angle._radians * GlobalMembersGeoMeter._planet.getRadii()._x;
+    final double dist = angle._radians * _planet.getRadii()._x;
   
     return dist;
   }
@@ -82,14 +79,8 @@ public class GeoMeter
   
     }
   
-  
-    if (GlobalMembersGeoMeter._planet == null)
-    {
-      GlobalMembersGeoMeter._planet = Planet.createSphericalEarth(); //Considering world as sphere
-    }
-  
     final Geodetic2D center = Geodetic2D.fromDegrees((minLat + maxLat) / 2, (minLon + maxLon)/2);
-    final Vector3D cartesianCenter = GlobalMembersGeoMeter._planet.toCartesian(center);
+    final Vector3D cartesianCenter = _planet.toCartesian(center);
   
     double accumulatedArea = 0.0;
   
