@@ -1360,7 +1360,6 @@ EntryPoint {
 		 */
 
 		/*
->>>>>>> purgatory
       final WMSLayer blueMarble = LayerBuilder.createBlueMarbleLayer(true);
       layerSet.addLayer(blueMarble);*/
 
