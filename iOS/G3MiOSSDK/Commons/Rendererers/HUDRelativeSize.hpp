@@ -13,7 +13,7 @@
 
 class HUDRelativeSize : public HUDSize {
 public:
-  enum Anchor {
+  enum Reference {
     VIEWPORT_WIDTH,
     VIEWPORT_HEIGTH,
     VIEWPORT_MIN_AXIS,
@@ -25,12 +25,12 @@ public:
   };
 
 private:
-  const float                   _factor;
-  const HUDRelativeSize::Anchor _relativeTo;
+  const float                      _factor;
+  const HUDRelativeSize::Reference _relativeTo;
 
 public:
-  HUDRelativeSize(float                         factor,
-                  const HUDRelativeSize::Anchor relativeTo) :
+  HUDRelativeSize(float                            factor,
+                  const HUDRelativeSize::Reference relativeTo) :
   _factor(factor),
   _relativeTo(relativeTo)
   {
