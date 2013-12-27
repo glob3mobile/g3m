@@ -1995,6 +1995,7 @@ public:
   //    shapesRenderer->addShape(sphere);
   //  }
 
+  /*
   Image_iOS *image1 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Icon-72" ofType:@"png"]], NULL);
 
   Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Default-Landscape" ofType:@"png"]], NULL);
@@ -2049,7 +2050,7 @@ public:
     delete images[i];
     delete srcRs[i];
     delete destRs[i];
-  }
+  }*/
 
   return shapesRenderer;
 }

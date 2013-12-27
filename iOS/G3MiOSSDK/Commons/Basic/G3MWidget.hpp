@@ -223,7 +223,10 @@ public:
   }
 
   Vector3D getScenePositionForPixel(int x, int y);
-
+  
+  Vector3D getFirstValidScenePositionForCentralColumn();
+  
+  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;

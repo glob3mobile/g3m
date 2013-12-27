@@ -672,6 +672,19 @@ public class G3MWidget
     }
   }
 
+  public final Vector3D getFirstValidScenePositionForCentralColumn()
+  {
+    int row = _height / 2;
+    MutableVector3D position = MutableVector3D.nan();
+    while (position.isNan() && row<_height-1)
+    {
+      row++;
+      position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
+    }
+    return position.asVector3D();
+  }
+
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;

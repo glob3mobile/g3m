@@ -18,6 +18,7 @@ import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.EllipsoidShape;
 import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.FixedFocusSceneLighting;
@@ -86,6 +87,7 @@ import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
+import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TimeInterval;
@@ -1265,7 +1267,7 @@ EntryPoint {
 		}
 		
 
-		boolean testingTransparencies = true;
+		boolean testingTransparencies = false;
 		if (testingTransparencies){
 			WMSLayer blueMarble = new WMSLayer("bmng200405",
 					new URL("http://www.nasa.network.com/wms?", false),
@@ -1322,7 +1324,7 @@ EntryPoint {
 			layerSet.addLayer(pnoa);
 		}
 		
-		builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+		//builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 		/*
 		 * final WMSLayer political = new WMSLayer("topp:cia", new
@@ -1526,8 +1528,72 @@ EntryPoint {
 			builder.setPlanet(Planet.createFlatEarth());
 		}
 
+		if (true) {
+			ShapesRenderer shapesRenderer = new ShapesRenderer();
+		
+		  {
+			    Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
+			                                             Angle.fromDegrees(-16.4),
+			                                             0),
+			                              AltitudeMode.ABSOLUTE,
+			                              new Vector3D(3000.0, 3000.0, 20000.0),
+			                              2,
+			                              Color.fromRGBA(0.0f,    1.0f, 0.0f, 0.5f),
+			                              Color.newFromRGBA(0f, 0.75f, 0f, 0.75f));
+			    shapesRenderer.addShape(box);
+			  }
+			  {
+			    Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(26),
+			                                             Angle.fromDegrees(0),
+			                                             0),
+			                                             AltitudeMode.ABSOLUTE,
+			                              new Vector3D(200000, 200000, 5000000),
+			                              2,
+			                              Color.fromRGBA(1f,    0f, 0f, 0.5f),
+			                              Color.newFromRGBA(0f, 0.75f, 0f, 0.75f));
+			    //box->setAnimatedScale(1, 1, 20);
+			    shapesRenderer.addShape(box);
+			  }
+			  
+			  builder.addRenderer(shapesRenderer);
+
+		}
+		
+		if (true) {
+			  float verticalExaggeration = 4.0f;
+			  builder.getPlanetRendererBuilder().setVerticalExaggeration(verticalExaggeration);
+
+			  //ElevationDataProvider* elevationDataProvider = NULL;
+			  //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+			  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+			  //                                                                                     Sector::fullSphere(),
+			  //                                                                                     Vector2I(2048, 1024));
+			/*
+			  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+			                                                                                     Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);*/
+			  // obtaining valid elevation data url
+			  Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
+			                                      -17.0232177085356,                // min longitude
+			                                      28.6103464294992,                 // max latitude
+			                                      -16.0019401695656);               // max longitude
+			  Vector2I extent = new Vector2I(256, 256);                             // image resolution
+			  
+			  URL url = new URL("http://128.102.22.115/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm3&STYLES=&FORMAT=image/bil&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&BBOX=-17.0232177085356,27.967811065876,-16.0019401695656,28.6103464294992&WIDTH=256&HEIGHT=256", false);
+			  
+			  // add this image to the builder
+			  ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
+			  builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+
+		}
+
 
 		_widget = builder.createWidget();
+
+
+		  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 25000);
+		  _widget.setCameraPosition(position);
+		  _widget.setCameraPitch(Angle.fromDegrees(75));
 
 
 		/*
