@@ -68,6 +68,9 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
 
   const Geodetic2D* previousVertex = polygon[0];
   const Vector3D* previousVertexNormal =
+                  new Vector3D(previousVertex->_longitude._degrees - center._longitude._degrees,
+                               previousVertex->_latitude._degrees - center._latitude._degrees,
+                               0);
   double previousVertexDistToCenter = getDistance(*previousVertex, center);
   IMathUtils* mu = IMathUtils::instance();
   for (int i = 1; i < size; i++) {
@@ -76,6 +79,11 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
 
     const double distToPreviousVertex = getDistance(*vertex, *previousVertex);
     const double vertexDistToCenter = getDistance(*vertex, center);
+
+    const Vector3D* vertexNormal =
+                    new Vector3D(vertex->_longitude._degrees - center._longitude._degrees,
+                                 vertex->_latitude._degrees - center._latitude._degrees,
+                                 0);
 
     //Heron's Formule [ http://en.wikipedia.org/wiki/Heron%27s_formula ]
 
@@ -113,19 +121,31 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
       b = aux;
     }
 
+
     const double T = mu->sqrt( (a + (b+c)) * (c - (a-b)) * (c + (a-b)) * (a + (b-c)) ) / 4.0;
 
     if (ISNAN(T)){
-      ILogger::instance()->logError("AREA NAN");
-    }
+      ILogger::instance()->logError("NaN sub-area.");
+    } else{
 
-    accumulatedArea += T;
+      const bool outerFace = vertexNormal->times(*previousVertexNormal)._z >= 0;
+      if (outerFace){
+        accumulatedArea += T;
+      } else{
+        accumulatedArea -= T;
+      }
+
+    }
 
     //Storing last vertex
     previousVertexDistToCenter = vertexDistToCenter;
     previousVertex = vertex;
 
+    delete previousVertexNormal;
+    previousVertexNormal = vertexNormal;
   }
+
+  delete previousVertexNormal;
 
   return accumulatedArea;
 
