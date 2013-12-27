@@ -5,6 +5,7 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 import java.util.Random;
 
 import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.EllipsoidShape;
@@ -41,6 +42,9 @@ import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
+import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.Vector3D;
+import org.glob3.mobile.generated.Vector2I;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -70,9 +74,11 @@ Activity {
 		final MarksRenderer marksRenderer = new MarksRenderer(true);
 		builder.addRenderer(marksRenderer);
 
-		final MeshRenderer meshRenderer = new MeshRenderer();
-		meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
-		builder.addRenderer(meshRenderer);
+		if (false) {
+			final MeshRenderer meshRenderer = new MeshRenderer();
+			meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
+			builder.addRenderer(meshRenderer);
+		}
 
 		// final ShapeLoadListener Plistener = new ShapeLoadListener() {
 		// @Override
@@ -332,81 +338,148 @@ Activity {
 		//
 		//      }
 		
-		  boolean testingTransparencies = true;
-		  
-		  if (testingTransparencies){
-			  LayerSet layerSet = new LayerSet();
+		boolean testingTransparencies = false;
 
-		    WMSLayer blueMarble = new WMSLayer("bmng200405",
-		                                        new URL("http://www.nasa.network.com/wms?", false),
-		                                        WMSServerVersion.WMS_1_1_0,
-		                                        Sector.fullSphere(),
-		                                        "image/jpeg",
-		                                        "EPSG:4326",
-		                                        "",
-		                                        false,
-		                                        new LevelTileCondition(0, 6),
-		                                        TimeInterval.fromDays(30),
-		                                        true,
-		                                        new LayerTilesRenderParameters(Sector.fullSphere(),
-		                                                                       2, 4,
-		                                                                       0, 6,
-		                                                                       LayerTilesRenderParameters.defaultTileTextureResolution(),
-		                                                                       LayerTilesRenderParameters.defaultTileMeshResolution(),
-		                                                                       false)
-		                                        );
-		    layerSet.addLayer(blueMarble);
+		if (testingTransparencies){
+			LayerSet layerSet = new LayerSet();
 
-		    WMSLayer i3Landsat = new WMSLayer("esat",
-		                                       new URL("http://data.worldwind.arc.nasa.gov/wms?", false),
-		                                       WMSServerVersion.WMS_1_1_0,
-		                                       Sector.fullSphere(),
-		                                       "image/jpeg",
-		                                       "EPSG:4326",
-		                                       "",
-		                                       false,
-		                                       new LevelTileCondition(7, 100),
-		                                       TimeInterval.fromDays(30),
-		                                       true,
-		                                       new LayerTilesRenderParameters(Sector.fullSphere(),
-		                                                                      2, 4,
-		                                                                      0, 12,
-		                                                                      LayerTilesRenderParameters.defaultTileTextureResolution(),
-		                                                                      LayerTilesRenderParameters.defaultTileMeshResolution(),
-		                                                                      false));
-		    layerSet.addLayer(i3Landsat);
+			WMSLayer blueMarble = new WMSLayer("bmng200405",
+					new URL("http://www.nasa.network.com/wms?", false),
+					WMSServerVersion.WMS_1_1_0,
+					Sector.fullSphere(),
+					"image/jpeg",
+					"EPSG:4326",
+					"",
+					false,
+					new LevelTileCondition(0, 6),
+					TimeInterval.fromDays(30),
+					true,
+					new LayerTilesRenderParameters(Sector.fullSphere(),
+							2, 4,
+							0, 6,
+							LayerTilesRenderParameters.defaultTileTextureResolution(),
+							LayerTilesRenderParameters.defaultTileMeshResolution(),
+							false)
+					);
+			layerSet.addLayer(blueMarble);
 
-		    WMSLayer pnoa = new WMSLayer("PNOA",
-		                                  new URL("http://www.idee.es/wms/PNOA/PNOA", false),
-		                                  WMSServerVersion.WMS_1_1_0,
-		                                  Sector.fromDegrees(21, -18, 45, 6),
-		                                  "image/png",
-		                                  "EPSG:4326",
-		                                  "",
-		                                  true,
-		                                  null,
-		                                  TimeInterval.fromDays(30),
-		                                  true,
-		                                  null,
-		                                  (float) 0.5);
-		    layerSet.addLayer(pnoa);
-		    
-		    builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-		  }
+			WMSLayer i3Landsat = new WMSLayer("esat",
+					new URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+					WMSServerVersion.WMS_1_1_0,
+					Sector.fullSphere(),
+					"image/jpeg",
+					"EPSG:4326",
+					"",
+					false,
+					new LevelTileCondition(7, 100),
+					TimeInterval.fromDays(30),
+					true,
+					new LayerTilesRenderParameters(Sector.fullSphere(),
+							2, 4,
+							0, 12,
+							LayerTilesRenderParameters.defaultTileTextureResolution(),
+							LayerTilesRenderParameters.defaultTileMeshResolution(),
+							false));
+			layerSet.addLayer(i3Landsat);
 
-		marksRenderer.addMark(new Mark("HIGH MARK",
-				Geodetic3D.fromDegrees(0, 0, 100000),
-				AltitudeMode.RELATIVE_TO_GROUND
-				));
+			WMSLayer pnoa = new WMSLayer("PNOA",
+					new URL("http://www.idee.es/wms/PNOA/PNOA", false),
+					WMSServerVersion.WMS_1_1_0,
+					Sector.fromDegrees(21, -18, 45, 6),
+					"image/png",
+					"EPSG:4326",
+					"",
+					true,
+					null,
+					TimeInterval.fromDays(30),
+					true,
+					null,
+					(float) 0.5);
+			layerSet.addLayer(pnoa);
+
+			builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+		}
+
+		if (false) {
+			marksRenderer.addMark(new Mark("HIGH MARK",
+					Geodetic3D.fromDegrees(0, 0, 100000),
+					AltitudeMode.RELATIVE_TO_GROUND
+					));
+
+			marksRenderer.addMark(new Mark("LOW MARK",
+					Geodetic3D.fromDegrees(0, 0, 100),
+					AltitudeMode.RELATIVE_TO_GROUND
+					));
+		}
+
 		
-		marksRenderer.addMark(new Mark("LOW MARK",
-				Geodetic3D.fromDegrees(0, 0, 100),
-				AltitudeMode.RELATIVE_TO_GROUND
-				));
+		if (true) {
+			ShapesRenderer shapesRenderer = new ShapesRenderer();
+		
+		  {
+			    Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
+			                                             Angle.fromDegrees(-16.4),
+			                                             0),
+			                              AltitudeMode.ABSOLUTE,
+			                              new Vector3D(3000.0, 3000.0, 20000.0),
+			                              2,
+			                              Color.fromRGBA(0.0f,    1.0f, 0.0f, 0.5f),
+			                              Color.newFromRGBA(0f, 0.75f, 0f, 0.75f));
+			    shapesRenderer.addShape(box);
+			  }
+			  {
+			    Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(26),
+			                                             Angle.fromDegrees(0),
+			                                             0),
+			                                             AltitudeMode.ABSOLUTE,
+			                              new Vector3D(200000, 200000, 5000000),
+			                              2,
+			                              Color.fromRGBA(1f,    0f, 0f, 0.5f),
+			                              Color.newFromRGBA(0f, 0.75f, 0f, 0.75f));
+			    //box->setAnimatedScale(1, 1, 20);
+			    shapesRenderer.addShape(box);
+			  }
+			  
+			  builder.addRenderer(shapesRenderer);
+
+		}
+		
+		if (true) {
+			  float verticalExaggeration = 4.0f;
+			  builder.getPlanetRendererBuilder().setVerticalExaggeration(verticalExaggeration);
+
+			  //ElevationDataProvider* elevationDataProvider = NULL;
+			  //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+			  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+			  //                                                                                     Sector::fullSphere(),
+			  //                                                                                     Vector2I(2048, 1024));
+			/*
+			  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+			                                                                                     Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);*/
+			  // obtaining valid elevation data url
+			  Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
+			                                      -17.0232177085356,                // min longitude
+			                                      28.6103464294992,                 // max latitude
+			                                      -16.0019401695656);               // max longitude
+			  Vector2I extent = new Vector2I(256, 256);                             // image resolution
+			  
+			  URL url = new URL("http://128.102.22.115/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm3&STYLES=&FORMAT=image/bil&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&BBOX=-17.0232177085356,27.967811065876,-16.0019401695656,28.6103464294992&WIDTH=256&HEIGHT=256", false);
+			  
+			  // add this image to the builder
+			  ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
+			  builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+
+		}
 
 		_g3mWidget = builder.createWidget();
 		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
 		_placeHolder.addView(_g3mWidget);
+
+		  Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.50), Angle.fromDegrees(-16.58), 250000);
+		  _g3mWidget.setCameraPosition(position);
+		  _g3mWidget.setCameraPitch(Angle.fromDegrees(25));
+
 
 	}
 
