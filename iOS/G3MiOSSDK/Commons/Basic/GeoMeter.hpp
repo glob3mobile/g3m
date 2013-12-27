@@ -18,12 +18,9 @@ class Geodetic2D;
 class Sector;
 
 class GeoMeter{
-#ifdef C_CODE
+  
   static const Planet* _planet;
-#endif
-#ifdef JAVA_CODE
-  private static Planet _planet = null;
-#endif
+
 public:
 
   static double getDistance(const Geodetic2D& g1, const Geodetic2D& g2); //Meters

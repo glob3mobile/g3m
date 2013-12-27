@@ -13,13 +13,9 @@
 #include "Sector.hpp"
 #include "ILogger.hpp"
 
-const Planet* GeoMeter::_planet = NULL;
+const Planet* GeoMeter::_planet = Planet::createSphericalEarth(); //Considering world as sphere;
 
 double GeoMeter::getDistance(const Geodetic2D& g1, const Geodetic2D& g2){
-
-  if (_planet == NULL){
-    _planet = Planet::createSphericalEarth(); //Considering world as sphere
-  }
 
   const Vector3D g1n = _planet->centricSurfaceNormal(_planet->toCartesian(g1));
   const Vector3D g2n = _planet->centricSurfaceNormal(_planet->toCartesian(g2));
@@ -60,11 +56,6 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
       maxLon = lon;
     }
 
-  }
-
-
-  if (_planet == NULL){
-    _planet = Planet::createSphericalEarth(); //Considering world as sphere
   }
 
   const Geodetic2D center = Geodetic2D::fromDegrees((minLat + maxLat) / 2, (minLon + maxLon)/2);
