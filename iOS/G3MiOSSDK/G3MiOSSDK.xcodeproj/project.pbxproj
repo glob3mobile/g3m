@@ -111,7 +111,6 @@
 		CF4027E11770E84700D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E01770E84700D5A80C /* libicucore.dylib */; };
 		CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E21770E84E00D5A80C /* CFNetwork.framework */; };
 		CF4027E51770E85500D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E41770E85500D5A80C /* Security.framework */; };
-		CF41B7DB1726BFDC007DECD8 /* IImageUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */; };
 		CF41B7DC1726BFDC007DECD8 /* RectangleF.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7A172543D100FFA541 /* RectangleF.hpp */; };
 		CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2317F799DD00F50525 /* ErrorRenderer.cpp */; };
 		CF423A2817F7A0A000F50525 /* HUDErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2617F7A0A000F50525 /* HUDErrorRenderer.cpp */; };
@@ -153,7 +152,6 @@
 		CF605004177376A600EB48A6 /* JSONNull.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF60500217724C5C00EB48A6 /* JSONNull.hpp */; };
 		CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF65361116BC41B2001F9139 /* ShapePositionEffect.cpp */; };
 		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
-		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
 		CF6920BF18392F83007409D8 /* NormalsUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */; };
 		CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */; };
 		CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */; };
@@ -165,7 +163,6 @@
 		CF6D723D17184D920043C74B /* CanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723A17184D620043C74B /* CanvasElement.hpp */; };
 		CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723E171854F50043C74B /* TextCanvasElement.cpp */; };
 		CF6D72411718554D0043C74B /* TextCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723F171854F50043C74B /* TextCanvasElement.hpp */; };
-		CF6D7244171859C40043C74B /* BalloonCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */; };
 		CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724517185CF20043C74B /* GroupCanvasElement.cpp */; };
 		CF6D724817185F370043C74B /* BalloonCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */; };
 		CF6D724917185F370043C74B /* GroupCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */; };
@@ -383,13 +380,13 @@
 		D88CC14317CF86E80001BF4D /* Extent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAAD917CB81B600ACD249 /* Extent.hpp */; };
 		D88CC14417CF86E80001BF4D /* Matrix44DProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80FAADA17CB81B600ACD249 /* Matrix44DProvider.hpp */; };
 		D88CC14517CF86E80001BF4D /* FlatPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FBBDBCDB17AB940C00077004 /* FlatPlanet.hpp */; };
+		D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */; };
+		D895CA1F1861C79200AE8291 /* IImageUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D895CA1C1861C32300AE8291 /* IImageUtils.hpp */; };
 		D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */; };
 		D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */; };
 		D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */; };
 		D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */; };
 		D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7B1725444800FFA541 /* MeshShape.cpp */; };
-		D89FBD801725446C00FFA541 /* IImageUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */; };
-		D8A1BF541729369600B103E3 /* IImageUtils.cpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */; };
 		D8A1CB6F1737B364004EF534 /* GPUProgramManager.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80E59B4170B155C00E7C799 /* GPUProgramManager.hpp */; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
@@ -634,6 +631,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				D8E54EDD186315E00040D80E /* GeoMeter.hpp in CopyFiles */,
+				D895CA1F1861C79200AE8291 /* IImageUtils.hpp in CopyFiles */,
 				CF485F8A18511C460013795B /* AndTileCondition.hpp in CopyFiles */,
 				CFD8E771184FB74800228031 /* SectorTileCondition.hpp in CopyFiles */,
 				CF7FF503184CE434003A7E76 /* ErrorHandling.hpp in CopyFiles */,
@@ -719,13 +717,11 @@
 				CF9AB329172E9E210014547A /* TileElevationDataRequest.hpp in CopyFiles */,
 				CF9AB32A172E9E210014547A /* CompositeElevationData.hpp in CopyFiles */,
 				CF9AB32B172E9E210014547A /* CompositeElevationDataProvider.hpp in CopyFiles */,
-				D8A1BF541729369600B103E3 /* IImageUtils.cpp in CopyFiles */,
 				44A0049417550C7300C6686D /* ICameraActivityListener.hpp in CopyFiles */,
 				CF2D85E31753B4F200F4BEC9 /* CartoDBLayer.hpp in CopyFiles */,
 				CFC3F8FF1751114800986630 /* MapBooBuilder_iOS.hpp in CopyFiles */,
 				CFC3F8FB17510F7100986630 /* MapBooBuilder.hpp in CopyFiles */,
 				441C28BE1733DA3D007DC83F /* ShapeFullPositionEffect.hpp in CopyFiles */,
-				CF41B7DB1726BFDC007DECD8 /* IImageUtils.hpp in CopyFiles */,
 				CF41B7DC1726BFDC007DECD8 /* RectangleF.hpp in CopyFiles */,
 				CF6D724E17186C090043C74B /* ImageBuilder.hpp in CopyFiles */,
 				CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */,
@@ -1185,7 +1181,6 @@
 		CF65361216BC41B2001F9139 /* ShapePositionEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapePositionEffect.hpp; path = Commons/Rendererers/ShapePositionEffect.hpp; sourceTree = "<group>"; };
 		CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFloatBuffer.cpp; path = Commons/Basic/IFloatBuffer.cpp; sourceTree = "<group>"; };
 		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
-		CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IIntBuffer.cpp; path = Commons/Basic/IIntBuffer.cpp; sourceTree = "<group>"; };
 		CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IIntBuffer.hpp; path = Commons/Basic/IIntBuffer.hpp; sourceTree = "<group>"; };
 		CF6B5F5B16C1910500C590C1 /* JSONDouble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONDouble.cpp; sourceTree = "<group>"; };
 		CF6B5F5C16C1910500C590C1 /* JSONDouble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONDouble.hpp; sourceTree = "<group>"; };
@@ -1203,7 +1198,6 @@
 		CF6D723A17184D620043C74B /* CanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CanvasElement.hpp; path = Commons/Basic/CanvasElement.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF6D723E171854F50043C74B /* TextCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextCanvasElement.cpp; path = Commons/Basic/TextCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D723F171854F50043C74B /* TextCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextCanvasElement.hpp; path = Commons/Basic/TextCanvasElement.hpp; sourceTree = "<group>"; };
-		CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = BalloonCanvasElement.cpp; path = Commons/Basic/BalloonCanvasElement.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = BalloonCanvasElement.hpp; path = Commons/Basic/BalloonCanvasElement.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF6D724517185CF20043C74B /* GroupCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GroupCanvasElement.cpp; path = Commons/Basic/GroupCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GroupCanvasElement.hpp; path = Commons/Basic/GroupCanvasElement.hpp; sourceTree = "<group>"; };
@@ -1502,6 +1496,8 @@
 		D87FAE1F1863108900BB0854 /* GeoMeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GeoMeter.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
+		D895CA1C1861C32300AE8291 /* IImageUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageUtils.hpp; path = Commons/Basic/IImageUtils.hpp; sourceTree = "<group>"; };
+		D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageUtils.cpp; path = Commons/Basic/IImageUtils.cpp; sourceTree = "<group>"; };
 		D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileElevationDataRequest.cpp; path = Commons/Basic/TileElevationDataRequest.cpp; sourceTree = "<group>"; };
 		D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileElevationDataRequest.hpp; path = Commons/Basic/TileElevationDataRequest.hpp; sourceTree = "<group>"; };
 		D89D9CC8172E95370058CA9D /* CompositeElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CompositeElevationData.cpp; path = Commons/Basic/CompositeElevationData.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -1513,8 +1509,6 @@
 		D89FBD7A172543D100FFA541 /* RectangleF.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleF.hpp; path = Commons/Geometry/RectangleF.hpp; sourceTree = "<group>"; };
 		D89FBD7B1725444800FFA541 /* MeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshShape.cpp; path = Commons/Rendererers/MeshShape.cpp; sourceTree = "<group>"; };
 		D89FBD7C1725444800FFA541 /* MeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshShape.hpp; path = Commons/Rendererers/MeshShape.hpp; sourceTree = "<group>"; };
-		D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageUtils.cpp; path = Commons/Basic/IImageUtils.cpp; sourceTree = "<group>"; };
-		D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageUtils.hpp; path = Commons/Basic/IImageUtils.hpp; sourceTree = "<group>"; };
 		D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedMesh.cpp; path = Commons/Mesh/IndexedMesh.cpp; sourceTree = "<group>"; };
 		D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndexedMesh.hpp; path = Commons/Mesh/IndexedMesh.hpp; sourceTree = "<group>"; };
 		D8A5601D15AEF64E00035086 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mesh.cpp; path = Commons/Mesh/Mesh.cpp; sourceTree = "<group>"; };
@@ -1730,6 +1724,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */,
+				D895CA1C1861C32300AE8291 /* IImageUtils.hpp */,
 				D87D3A2B183B96930014C96D /* BasicShadersGL2.hpp */,
 				D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */,
 				D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */,
@@ -1743,9 +1739,6 @@
 				D89D9CC9172E95370058CA9D /* CompositeElevationData.hpp */,
 				D89D9CCA172E95370058CA9D /* CompositeElevationDataProvider.cpp */,
 				D89D9CCB172E95370058CA9D /* CompositeElevationDataProvider.hpp */,
-				D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */,
-				D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */,
-				CF6D7242171859C40043C74B /* BalloonCanvasElement.cpp */,
 				CF6D7243171859C40043C74B /* BalloonCanvasElement.hpp */,
 				CF35A20516D3D44E00D795D8 /* BilParser.cpp */,
 				CF35A20616D3D44E00D795D8 /* BilParser.hpp */,
@@ -1824,9 +1817,6 @@
 				CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */,
 				E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */,
 				E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */,
-				D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */,
-				D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */,
-				CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */,
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
 				CF6D723617184BE40043C74B /* ImageBuilder.cpp */,
 				CF6D723717184BE40043C74B /* ImageBuilder.hpp */,
@@ -1872,9 +1862,7 @@
 				CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */,
 				CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */,
 				CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */,
-				D89FBD7E1725446C00FFA541 /* IImageUtils.cpp */,
 				CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */,
-				D89FBD7F1725446C00FFA541 /* IImageUtils.hpp */,
 				D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */,
 				D87F4D75183BBEEF00C57835 /* SingleBillElevationDataProvider.cpp */,
 				D87F4D76183BBEEF00C57835 /* SingleBillElevationDataProvider.hpp */,
@@ -2609,6 +2597,7 @@
 				CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */,
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
+				D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */,
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
 				CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */,
@@ -2659,7 +2648,6 @@
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,
 				CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */,
-				CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */,
 				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
 				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
 				CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */,
@@ -2797,11 +2785,9 @@
 				CF6D723817184BE40043C74B /* ImageBuilder.cpp in Sources */,
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
 				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
-				CF6D7244171859C40043C74B /* BalloonCanvasElement.cpp in Sources */,
 				CF6D724717185CF20043C74B /* GroupCanvasElement.cpp in Sources */,
 				CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */,
 				D89FBD7D1725444800FFA541 /* MeshShape.cpp in Sources */,
-				D89FBD801725446C00FFA541 /* IImageUtils.cpp in Sources */,
 				D89D9CCC172E95370058CA9D /* TileElevationDataRequest.cpp in Sources */,
 				D89D9CCD172E95370058CA9D /* CompositeElevationData.cpp in Sources */,
 				D89D9CCE172E95370058CA9D /* CompositeElevationDataProvider.cpp in Sources */,

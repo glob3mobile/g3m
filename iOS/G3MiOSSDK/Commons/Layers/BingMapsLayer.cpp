@@ -28,12 +28,14 @@ BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              const TimeInterval& timeToCache,
                              bool readExpired,
                              int initialLevel,
-                             LayerCondition* condition) :
+                             LayerCondition* condition,
+                             float transparency) :
 Layer(condition,
       "BingMaps",
       timeToCache,
       readExpired,
-      NULL),
+      NULL,
+      transparency),
 _imagerySet(imagerySet),
 _key(key),
 _initialLevel(initialLevel),
@@ -274,7 +276,8 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    true) );
+                                    true,
+                                    _transparency) );
   
   return petitions;
 }
