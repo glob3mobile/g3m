@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class HUDRelativeSize extends HUDSize
 {
-  public enum Anchor
+  public enum Reference
   {
     VIEWPORT_WIDTH,
     VIEWPORT_HEIGTH,
@@ -35,16 +35,16 @@ public class HUDRelativeSize extends HUDSize
         return this.ordinal();
      }
 
-     public static Anchor forValue(int value)
+     public static Reference forValue(int value)
      {
         return values()[value];
      }
   }
 
   private final float _factor;
-  private final HUDRelativeSize.Anchor _relativeTo;
+  private final HUDRelativeSize.Reference _relativeTo;
 
-  public HUDRelativeSize(float factor, HUDRelativeSize.Anchor relativeTo)
+  public HUDRelativeSize(float factor, HUDRelativeSize.Reference relativeTo)
   {
      _factor = factor;
      _relativeTo = relativeTo;
@@ -57,19 +57,26 @@ public class HUDRelativeSize extends HUDSize
     {
       case VIEWPORT_WIDTH:
         return _factor * viewPortWidth;
+  
       case VIEWPORT_HEIGTH:
         return _factor * viewPortHeight;
+  
       case VIEWPORT_MIN_AXIS:
         return _factor * ((viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight);
+  
       case VIEWPORT_MAX_AXIS:
         return _factor * ((viewPortWidth > viewPortHeight) ? viewPortWidth : viewPortHeight);
   
+  
       case BITMAP_WIDTH:
         return _factor * bitmapWidth;
+  
       case BITMAP_HEIGTH:
         return _factor * bitmapHeight;
+  
       case BITMAP_MIN_AXIS:
         return _factor * ((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight);
+  
       case BITMAP_MAX_AXIS:
         return _factor * ((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight);
     }
