@@ -325,6 +325,12 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
   }
 }
 
+
+Vector3D G3MWidget::getScenePositionForCentralPixel() {
+  return getScenePositionForPixel(_width/2, _height/2);
+}
+
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
   G3MEventContext ec(this,
