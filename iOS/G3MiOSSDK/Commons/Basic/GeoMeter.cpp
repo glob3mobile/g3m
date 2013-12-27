@@ -61,6 +61,12 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
     }
 
   }
+
+
+  if (_planet == NULL){
+    _planet = Planet::createSphericalEarth(); //Considering world as sphere
+  }
+
   const Geodetic2D center = Geodetic2D::fromDegrees((minLat + maxLat) / 2, (minLon + maxLon)/2);
   const Vector3D cartesianCenter = _planet->toCartesian(center);
 
@@ -128,7 +134,7 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
       ILogger::instance()->logError("NaN sub-area.");
     } else{
 
-      const bool outerFace = vertexNormal->times(*previousVertexNormal)._z >= 0;
+      const bool outerFace = vertexNormal->cross(*previousVertexNormal)._z >= 0;
       if (outerFace){
         accumulatedArea += T;
       } else{
