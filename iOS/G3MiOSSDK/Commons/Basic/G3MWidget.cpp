@@ -326,8 +326,14 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
 }
 
 
-Vector3D G3MWidget::getScenePositionForCentralPixel() {
-  return getScenePositionForPixel(_width/2, _height/2);
+Vector3D G3MWidget::getFirstValidScenePositionForCentralColumn() {
+  int row = _height / 2;
+  MutableVector3D position = MutableVector3D::nan();
+  while (position.isNan() && row<_height-1) {
+    row++;
+    position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
+  }
+  return position.asVector3D();
 }
 
 
