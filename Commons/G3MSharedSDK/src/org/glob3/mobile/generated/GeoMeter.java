@@ -80,12 +80,11 @@ public class GeoMeter
     }
   
     final Geodetic2D center = Geodetic2D.fromDegrees((minLat + maxLat) / 2, (minLon + maxLon)/2);
-    final Vector3D cartesianCenter = _planet.toCartesian(center);
-  
+
     double accumulatedArea = 0.0;
   
-    final Geodetic2D previousVertex = polygon.get(0);
-    final Vector3D previousVertexNormal = new Vector3D(previousVertex._longitude._degrees - center._longitude._degrees, previousVertex._latitude._degrees - center._latitude._degrees, 0);
+    Geodetic2D previousVertex = polygon.get(0);
+    Vector3D previousVertexNormal = new Vector3D(previousVertex._longitude._degrees - center._longitude._degrees, previousVertex._latitude._degrees - center._latitude._degrees, 0);
     double previousVertexDistToCenter = getDistance(previousVertex, center);
     IMathUtils mu = IMathUtils.instance();
     for (int i = 1; i < size; i++)
@@ -147,7 +146,7 @@ public class GeoMeter
       else
       {
   
-        final boolean outerFace = vertexNormal.crosspreviousVertexNormal._z >= 0;
+        final boolean outerFace = vertexNormal.cross(previousVertexNormal)._z >= 0;
         if (outerFace)
         {
           accumulatedArea += T;

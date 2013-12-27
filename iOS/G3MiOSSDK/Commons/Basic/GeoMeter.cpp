@@ -59,15 +59,21 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
   }
 
   const Geodetic2D center = Geodetic2D::fromDegrees((minLat + maxLat) / 2, (minLon + maxLon)/2);
-  const Vector3D cartesianCenter = _planet->toCartesian(center);
 
   double accumulatedArea = 0.0;
-
+#ifdef C_CODE
   const Geodetic2D* previousVertex = polygon[0];
+
   const Vector3D* previousVertexNormal =
-                  new Vector3D(previousVertex->_longitude._degrees - center._longitude._degrees,
-                               previousVertex->_latitude._degrees - center._latitude._degrees,
-                               0);
+  new Vector3D(previousVertex->_longitude._degrees - center._longitude._degrees,
+               previousVertex->_latitude._degrees - center._latitude._degrees,
+               0);
+#endif
+#ifdef JAVA_CODE
+  Geodetic2D previousVertex = polygon.get(0);
+  Vector3D previousVertexNormal = new Vector3D(previousVertex._longitude._degrees - center._longitude._degrees, previousVertex._latitude._degrees - center._latitude._degrees, 0);
+#endif
+
   double previousVertexDistToCenter = getDistance(*previousVertex, center);
   IMathUtils* mu = IMathUtils::instance();
   for (int i = 1; i < size; i++) {
@@ -125,7 +131,7 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
       ILogger::instance()->logError("NaN sub-area.");
     } else{
 
-      const bool outerFace = vertexNormal->cross(*previousVertexNormal)._z >= 0;
+      const bool outerFace = vertexNormal->cross( *previousVertexNormal)._z >= 0;
       if (outerFace){
         accumulatedArea += T;
       } else{
