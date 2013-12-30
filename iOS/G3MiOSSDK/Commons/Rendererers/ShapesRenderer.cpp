@@ -129,6 +129,25 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
+void ShapesRenderer::removeShape(Shape* shape) {
+  int pos = -1;
+  const int shapesSize = _shapes.size();
+  for (int i = 0; i < shapesSize; i++) {
+    if (_shapes[i] == shape) {
+      pos = i;
+      break;
+    }
+  }
+  if (pos != -1) {
+#ifdef C_CODE
+    _shapes.erase(_shapes.begin() + pos);
+#endif
+#ifdef JAVA_CODE
+    _shapes.remove(pos);
+#endif
+  }
+}
+
 void ShapesRenderer::removeAllShapes(bool deleteShapes) {
   if (deleteShapes) {
     const int shapesCount = _shapes.size();
