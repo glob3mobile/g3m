@@ -10,29 +10,60 @@
 #define __G3MiOSSDK__Future__
 
 #include <stddef.h>
+#include <string>
 
 template <class T>
 class Future {
 private:
-  T* _value;
+  T*   _value;
+  bool _isDone;
+
+  bool        _isDoneWithError;
+  std::string _error;
+
+  Future(const Future<T>& that);
 
 protected:
   Future() :
-  _value(NULL)
+  _value(NULL),
+  _isDone(false),
+  _isDoneWithError(false)
   {
   }
 
-  void set(T* value) {
-    _value = value;
+  void done(T* value) {
+    _value  = value;
+    _isDone = true;
+    _isDoneWithError = false;
+  }
+
+  void error(const std::string& error) {
+    _error = error;
+    _isDone = true;
+    _isDoneWithError = true;
   }
 
 public:
-  virtual T* get() const = 0;
-
-  virtual ~Future() {
+  ~Future() {
     delete _value;
   }
 
+  T* get() const {
+    return _value;
+  }
+
+  bool isDone() const {
+    return _isDone;
+  }
+
+  bool isDoneWithError() const {
+    return _isDoneWithError;
+  }
+
+  const std::string getError() const {
+    return _error;
+  }
+  
 };
 
 #endif
