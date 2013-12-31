@@ -66,4 +66,10 @@ public:
   
 };
 
+
+class IImage;
+class FutureImage : public Future<IImage> {
+
+};
+
 #endif
