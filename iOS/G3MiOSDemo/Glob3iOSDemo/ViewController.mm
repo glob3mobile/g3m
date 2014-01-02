@@ -127,6 +127,8 @@
 #import <G3MiOSSDK/HUDRelativePosition.hpp>
 #import <G3MiOSSDK/HUDAbsoluteSize.hpp>
 #import <G3MiOSSDK/HUDRelativeSize.hpp>
+#import <G3MiOSSDK/DownloaderImageBuilder.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -648,6 +650,10 @@ public:
   }
 
   if (true) { //HUD
+
+//    DownloaderImageBuilder* xxxx = new DownloaderImageBuilder(URL("file:///debug-compass.png"));
+//    aaa;
+
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
