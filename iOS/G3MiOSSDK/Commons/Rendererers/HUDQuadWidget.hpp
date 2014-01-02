@@ -45,7 +45,12 @@ private:
   float _texCoordsRotationCenterU;
   float _texCoordsRotationCenterV;
 
+#ifdef C_CODE
   const IImage* _image;
+#endif
+#ifdef JAVA_CODE
+  private IImage _image;
+#endif
   std::string   _imageName;
   int _imageWidth;
   int _imageHeight;

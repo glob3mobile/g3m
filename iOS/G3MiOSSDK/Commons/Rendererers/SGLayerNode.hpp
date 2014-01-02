@@ -33,7 +33,12 @@ private:
 
   const TextureIDReference* getTextureId(const G3MRenderContext* rc);
 
+#ifdef C_CODE
   const IImage* _downloadedImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _downloadedImage;
+#endif
   void requestImage(const G3MRenderContext* rc);
 
 #ifdef C_CODE
