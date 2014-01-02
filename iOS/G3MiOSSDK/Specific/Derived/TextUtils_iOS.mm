@@ -104,11 +104,11 @@ void TextUtils_iOS::labelImage(const IImage* image,
     float resultWidth;
     float resultHeight;
     if (labelPosition == Bottom) {
-      resultWidth = fmaxf(labelSize.width, image->getWidth());
+      resultWidth  = fmaxf(labelSize.width, image->getWidth());
       resultHeight = labelSize.height + separation + image->getHeight();
     }
     else if (labelPosition == Right) {
-      resultWidth = labelSize.width + separation + image->getWidth();
+      resultWidth  = labelSize.width + separation + image->getWidth();
       resultHeight = fmaxf(labelSize.height, image->getHeight());
     }
     else {
