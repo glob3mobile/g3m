@@ -32,6 +32,9 @@ public:
   {
   }
 
+  ~HUDQuadWidget_ImageBuilderListener() {
+  }
+
   void imageCreated(const IImage* image,
                     const std::string& imageName) {
     _quadWidget->onImageDownload(image,
