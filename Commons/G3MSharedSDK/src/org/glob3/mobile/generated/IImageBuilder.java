@@ -21,10 +21,6 @@ package org.glob3.mobile.generated;
 
 public abstract class IImageBuilder
 {
-  protected IImageBuilder()
-  {
-  }
-
 
   public void dispose()
   {

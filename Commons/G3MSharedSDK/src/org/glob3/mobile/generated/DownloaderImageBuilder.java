@@ -19,15 +19,30 @@ package org.glob3.mobile.generated;
 
 public class DownloaderImageBuilder implements IImageBuilder
 {
-  private final URL _url;
+  private final URL          _url;
+  private final TimeInterval _timeToCache;
   private final long _priority;
-  private final TimeInterval _timeToCache = new TimeInterval();
   private final boolean _readExpired;
 
 
-//C++ TO JAVA CONVERTER TODO TASK: The following method format was not recognized, possibly due to an unrecognized macro:
-  DownloaderImageBuilder(const URL& url, long priority = DownloadPriority.MEDIUM, const TimeInterval& timeToCache = TimeInterval.fromDays(30), const boolean readExpired = true) : _url(url), _priority(priority), _timeToCache(timeToCache), _readExpired(readExpired)
+  public DownloaderImageBuilder(URL url)
   {
+     _url = url;
+     _priority = DownloadPriority.MEDIUM;
+     _timeToCache = TimeInterval.fromDays(30);
+     _readExpired = true;
+  }
+
+  public DownloaderImageBuilder(URL url, long priority, TimeInterval timeToCache)
+  {
+     this(url, priority, timeToCache, true);
+  }
+  public DownloaderImageBuilder(URL url, long priority, TimeInterval timeToCache, boolean readExpired)
+  {
+     _url = url;
+     _priority = priority;
+     _timeToCache = timeToCache;
+     _readExpired = readExpired;
   }
 
   public void dispose()
