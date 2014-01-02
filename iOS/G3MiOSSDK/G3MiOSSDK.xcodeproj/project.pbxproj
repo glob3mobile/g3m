@@ -169,7 +169,6 @@
 		CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6316C194D200C590C1 /* JSONInteger.cpp */; };
 		CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
-		CF6D723817184BE40043C74B /* ImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723617184BE40043C74B /* ImageBuilder.cpp */; };
 		CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723917184D620043C74B /* CanvasElement.cpp */; };
 		CF6D723D17184D920043C74B /* CanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723A17184D620043C74B /* CanvasElement.hpp */; };
 		CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723E171854F50043C74B /* TextCanvasElement.cpp */; };
@@ -179,7 +178,6 @@
 		CF6D724917185F370043C74B /* GroupCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */; };
 		CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */; };
 		CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */; };
-		CF6D724E17186C090043C74B /* ImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723717184BE40043C74B /* ImageBuilder.hpp */; };
 		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
@@ -745,7 +743,6 @@
 				CFC3F8FB17510F7100986630 /* MapBooBuilder.hpp in CopyFiles */,
 				441C28BE1733DA3D007DC83F /* ShapeFullPositionEffect.hpp in CopyFiles */,
 				CF41B7DC1726BFDC007DECD8 /* RectangleF.hpp in CopyFiles */,
-				CF6D724E17186C090043C74B /* ImageBuilder.hpp in CopyFiles */,
 				CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */,
 				CF6D724817185F370043C74B /* BalloonCanvasElement.hpp in CopyFiles */,
 				CF6D724917185F370043C74B /* GroupCanvasElement.hpp in CopyFiles */,
@@ -1226,8 +1223,6 @@
 		CF6B5F6816C1956B00C590C1 /* JSONLong.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONLong.hpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
-		CF6D723617184BE40043C74B /* ImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ImageBuilder.cpp; path = Commons/Basic/ImageBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CF6D723717184BE40043C74B /* ImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ImageBuilder.hpp; path = Commons/Basic/ImageBuilder.hpp; sourceTree = "<group>"; };
 		CF6D723917184D620043C74B /* CanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CanvasElement.cpp; path = Commons/Basic/CanvasElement.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF6D723A17184D620043C74B /* CanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CanvasElement.hpp; path = Commons/Basic/CanvasElement.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF6D723E171854F50043C74B /* TextCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextCanvasElement.cpp; path = Commons/Basic/TextCanvasElement.cpp; sourceTree = "<group>"; };
@@ -1858,8 +1853,6 @@
 				E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */,
 				E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */,
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
-				CF6D723617184BE40043C74B /* ImageBuilder.cpp */,
-				CF6D723717184BE40043C74B /* ImageBuilder.hpp */,
 				CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */,
 				CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */,
 				CFAA530317AAFE3C002A9204 /* InterpolatedSubviewElevationData.cpp */,
@@ -2848,7 +2841,6 @@
 				CFA59ECE171482560095E2EF /* Canvas_iOS.mm in Sources */,
 				CF7B07B117F5D8D400FE363D /* HUDImageRenderer.cpp in Sources */,
 				CF0755961715B9120084CC14 /* GFont.cpp in Sources */,
-				CF6D723817184BE40043C74B /* ImageBuilder.cpp in Sources */,
 				CF15759E1864C1570059312A /* HUDRelativePosition.cpp in Sources */,
 				CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */,
 				CF6D7240171854F50043C74B /* TextCanvasElement.cpp in Sources */,
