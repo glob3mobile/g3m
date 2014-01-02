@@ -13,10 +13,6 @@ class G3MContext;
 class IImageBuilderListener;
 
 class IImageBuilder {
-protected:
-  IImageBuilder() {
-  }
-
 public:
 
   virtual ~IImageBuilder() {

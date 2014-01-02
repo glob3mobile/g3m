@@ -28,9 +28,17 @@ private:
 
 
 public:
+  DownloaderImageBuilder(const URL& url) :
+  _url(url),
+  _priority(DownloadPriority::MEDIUM),
+  _timeToCache(TimeInterval::fromDays(30)),
+  _readExpired(true)
+  {
+  }
+
   DownloaderImageBuilder(const URL& url,
-                         long long priority = DownloadPriority::MEDIUM,
-                         const TimeInterval& timeToCache = TimeInterval::fromDays(30),
+                         long long priority,
+                         const TimeInterval& timeToCache,
                          const bool readExpired = true) :
   _url(url),
   _priority(priority),
