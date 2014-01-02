@@ -15,8 +15,13 @@ class IImage;
 
 class IImageBuilderListener {
 public:
+#ifdef C_CODE
   virtual ~IImageBuilderListener() {
   }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
 
   virtual void imageCreated(const IImage*      image,
                             const std::string& imageName) = 0;
