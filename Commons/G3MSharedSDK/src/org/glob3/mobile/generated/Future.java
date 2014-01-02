@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //C++ TO JAVA CONVERTER TODO TASK: The original C++ template specifier was replaced with a Java generic specifier, which may not produce the same behavior:
 public class Future<T>
 {
