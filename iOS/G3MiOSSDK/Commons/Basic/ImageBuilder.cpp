@@ -8,10 +8,9 @@
 
 #include "ImageBuilder.hpp"
 
+#include "ICanvas.hpp"
 #include "IFactory.hpp"
 #include "CanvasElement.hpp"
-#include "ICanvas.hpp"
-#include "IMathUtils.hpp"
 
 void ImageBuilder::build(CanvasElement* element,
                          IImageListener* listener,

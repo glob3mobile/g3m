@@ -11,12 +11,10 @@
 
 class CanvasElement;
 class IImageListener;
-class Color;
 
 class ImageBuilder {
 private:
   ImageBuilder() {
-
   }
 
 public:
