@@ -33,10 +33,6 @@ public class DownloaderImageBuilder implements IImageBuilder
      _readExpired = true;
   }
 
-  public DownloaderImageBuilder(URL url, long priority, TimeInterval timeToCache)
-  {
-     this(url, priority, timeToCache, true);
-  }
   public DownloaderImageBuilder(URL url, long priority, TimeInterval timeToCache, boolean readExpired)
   {
      _url = url;
