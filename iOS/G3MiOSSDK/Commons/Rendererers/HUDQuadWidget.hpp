@@ -11,7 +11,8 @@
 
 #include "HUDWidget.hpp"
 
-#include "URL.hpp"
+#include <vector>
+//#include "URL.hpp"
 #include "Vector2D.hpp"
 #include "Angle.hpp"
 class HUDPosition;
@@ -19,15 +20,18 @@ class HUDSize;
 class IImage;
 class Mesh;
 class SimpleTextureMapping;
+class IImageBuilder;
 
 class HUDQuadWidget : public HUDWidget {
 private:
-#ifdef C_CODE
-  const URL _imageURL;
-#endif
-#ifdef JAVA_CODE
-  private final URL _imageURL;
-#endif
+//#ifdef C_CODE
+//  const URL _imageURL;
+//#endif
+//#ifdef JAVA_CODE
+//  private final URL _imageURL;
+//#endif
+  IImageBuilder* _imageBuilder;
+
   const HUDPosition* _xPosition;
   const HUDPosition* _yPosition;
   const HUDSize*     _widthSize;
@@ -41,7 +45,8 @@ private:
   float _texCoordsRotationCenterU;
   float _texCoordsRotationCenterV;
 
-  IImage* _image;
+  const IImage* _image;
+  std::string   _imageName;
   int _imageWidth;
   int _imageHeight;
 
@@ -60,12 +65,14 @@ protected:
                  GLState* glState);
 
 public:
-  HUDQuadWidget(const URL& imageURL,
+  HUDQuadWidget(//const URL& imageURL,
+                IImageBuilder* imageBuilder,
                 HUDPosition* xPosition,
                 HUDPosition* yPosition,
                 HUDSize* widthSize,
                 HUDSize* heightSize) :
-  _imageURL(imageURL),
+//  _imageURL(imageURL),
+  _imageBuilder(imageBuilder),
   _xPosition(xPosition),
   _yPosition(yPosition),
   _widthSize(widthSize),
@@ -112,10 +119,11 @@ public:
   RenderState getRenderState(const G3MRenderContext* rc);
 
   /** private, do not call */
-  void onImageDownload(IImage* image);
+  void onImageDownload(const IImage*      image,
+                       const std::string& imageName);
 
   /** private, do not call */
-  void onImageDownloadError(const URL& url);
+  void onImageDownloadError(const std::string& error);
   
 };
 

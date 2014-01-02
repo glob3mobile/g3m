@@ -660,7 +660,7 @@ public:
 #warning Diego at work!
     HUDQuadWidget* compass = new HUDQuadWidget(//URL("file:///Compass_rose_browns_00_transparent.png"),
                                                //URL("file:///debug-compass.png"),
-                                               URL("file:///g3m-marker.png"),
+                                               new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
                                                new HUDAbsolutePosition(10),
                                                new HUDAbsolutePosition(10),
                                                new HUDRelativeSize(0.33,
@@ -672,7 +672,7 @@ public:
     hudRenderer->addWidget(compass);
 
     HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
-                                                URL("file:///Compass_rose_browns_00_transparent.png"),
+                                                new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
                                                 //URL("file:///debug-compass.png"),
                                                 //new HUDAbsolutePosition(320),
                                                 //new HUDAbsolutePosition(150+10),
@@ -699,7 +699,7 @@ public:
 //                                             new HUDAbsolutePosition(320*2),
 //                                             new HUDAbsolutePosition(10),
 //                                             113, 1536 / visibleFactor);
-    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
+    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
                                              new HUDRelativePosition(1,
                                                                      HUDRelativePosition::VIEWPORT_WIDTH,
                                                                      HUDRelativePosition::LEFT,

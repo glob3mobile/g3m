@@ -12,6 +12,8 @@
 class G3MContext;
 class IImageBuilderListener;
 
+#include <string>
+
 class IImageBuilder {
 public:
 
@@ -25,6 +27,8 @@ public:
   virtual void build(const G3MContext* context,
                      IImageBuilderListener* listener,
                      bool deleteListener) = 0;
+
+  virtual const std::string getImageName() = 0;
 
 };
 

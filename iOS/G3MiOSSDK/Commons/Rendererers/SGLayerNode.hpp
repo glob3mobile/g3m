@@ -33,7 +33,7 @@ private:
 
   const TextureIDReference* getTextureId(const G3MRenderContext* rc);
 
-  IImage* _downloadedImage;
+  const IImage* _downloadedImage;
   void requestImage(const G3MRenderContext* rc);
 
 #ifdef C_CODE
@@ -69,7 +69,7 @@ public:
   
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void onImageDownload(IImage* image);
+  void onImageDownload(const IImage* image);
   
   GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
   

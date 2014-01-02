@@ -36,7 +36,8 @@ public:
   void onDownload(const URL& url,
                   IImage* image,
                   bool expired) {
-    _listener->imageCreated(image);
+    _listener->imageCreated(image,
+                            url.getPath());
     if (_deleteListener) {
       delete _listener;
       _listener = NULL;

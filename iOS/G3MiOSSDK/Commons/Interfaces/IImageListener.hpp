@@ -11,7 +11,7 @@
 
 class IImage;
 
-//#include <string>
+#include <string>
 
 class IImageListener {
 public:
@@ -23,8 +23,6 @@ public:
    */
   virtual void imageCreated(const IImage* image) = 0;
 
-
-//  virtual void onError(const std::string& error) = 0;
 
 };
 

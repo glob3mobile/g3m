@@ -11,15 +11,15 @@
 
 class IImage;
 
-#include "IImageListener.hpp"
 #include <string>
 
-class IImageBuilderListener : public IImageListener {
+class IImageBuilderListener {
 public:
   virtual ~IImageBuilderListener() {
   }
 
-  virtual void imageCreated(const IImage* image) = 0;
+  virtual void imageCreated(const IImage*      image,
+                            const std::string& imageName) = 0;
 
   virtual void onError(const std::string& error) = 0;
 

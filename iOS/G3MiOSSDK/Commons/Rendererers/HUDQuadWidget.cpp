@@ -9,8 +9,6 @@
 #include "HUDQuadWidget.hpp"
 
 #include "Context.hpp"
-#include "IDownloader.hpp"
-#include "IImageDownloadListener.hpp"
 #include "TexturesHandler.hpp"
 #include "Camera.hpp"
 #include "Vector3D.hpp"
@@ -21,41 +19,35 @@
 #include "HUDPosition.hpp"
 #include "HUDSize.hpp"
 #include "RenderState.hpp"
+#include "IImageBuilder.hpp"
+#include "IImageBuilderListener.hpp"
 
-class HUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
+class HUDQuadWidget_ImageBuilderListener : public IImageBuilderListener {
 private:
   HUDQuadWidget* _quadWidget;
 
 public:
-  HUDQuadWidget_ImageDownloadListener(HUDQuadWidget* quadWidget) :
+  HUDQuadWidget_ImageBuilderListener(HUDQuadWidget* quadWidget) :
   _quadWidget(quadWidget)
   {
   }
 
-  void onDownload(const URL& url,
-                  IImage* image,
-                  bool expired)  {
-    _quadWidget->onImageDownload(image);
+  void imageCreated(const IImage* image,
+                    const std::string& imageName) {
+    _quadWidget->onImageDownload(image,
+                                 imageName);
   }
 
-  void onError(const URL& url) {
-    _quadWidget->onImageDownloadError(url);
-  }
-
-  void onCancel(const URL& url) {
-    // do nothing
-  }
-
-  void onCanceledDownload(const URL& url,
-                          IImage* image,
-                          bool expired) {
-    // do nothing
+  void onError(const std::string& error) {
+    _quadWidget->onImageDownloadError(error);
   }
 
 };
 
 
 HUDQuadWidget::~HUDQuadWidget() {
+  delete _imageBuilder;
+
   delete _image;
   delete _mesh;
 
@@ -73,7 +65,9 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
-                                                                                    _imageURL.getPath(),
+                                                                                    //_imageURL.getPath(),
+                                                                                    //_imageBuilder->getImageName(),
+                                                                                    _imageName,
                                                                                     false);
 
   if (texId == NULL) {
@@ -166,13 +160,16 @@ void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
 void HUDQuadWidget::initialize(const G3MContext* context) {
   if (!_downloadingImage && (_image == NULL)) {
     _downloadingImage = true;
-    IDownloader* downloader = context->getDownloader();
-    downloader->requestImage(_imageURL,
-                             1000000, // priority
-                             TimeInterval::fromDays(30),
-                             true, // readExpired
-                             new HUDQuadWidget_ImageDownloadListener(this),
-                             true);
+//    IDownloader* downloader = context->getDownloader();
+//    downloader->requestImage(_imageURL,
+//                             1000000, // priority
+//                             TimeInterval::fromDays(30),
+//                             true, // readExpired
+//                             new HUDQuadWidget_ImageDownloadListener(this),
+//                             true);
+    _imageBuilder->build(context,
+                         new HUDQuadWidget_ImageBuilderListener(this),
+                         true);
   }
 }
 
@@ -189,15 +186,21 @@ void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
   cleanMesh();
 }
 
-void HUDQuadWidget::onImageDownload(IImage* image) {
+void HUDQuadWidget::onImageDownload(const IImage*      image,
+                                    const std::string& imageName) {
   _downloadingImage = false;
   _image = image;
+  _imageName = imageName;
   _imageWidth  = _image->getWidth();
   _imageHeight = _image->getHeight();
+  delete _imageBuilder;
+  _imageBuilder = NULL;
 }
 
-void HUDQuadWidget::onImageDownloadError(const URL& url) {
-  _errors.push_back("HUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
+void HUDQuadWidget::onImageDownloadError(const std::string& error) {
+  _errors.push_back("HUDQuadWidget: Error downloading \"" + error + "\"");
+  delete _imageBuilder;
+  _imageBuilder = NULL;
 }
 
 RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
