@@ -52,7 +52,7 @@ public class SGLayerNode extends SGNode
     return _textureId;
   }
 
-  private IImage _downloadedImage;
+  private final IImage _downloadedImage;
   private void requestImage(G3MRenderContext rc)
   {
     if (_uri.compareTo("") == 0)

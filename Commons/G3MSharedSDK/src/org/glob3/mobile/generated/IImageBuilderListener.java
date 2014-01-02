@@ -19,13 +19,13 @@ package org.glob3.mobile.generated;
 //class IImage;
 
 
-public abstract class IImageBuilderListener extends IImageListener
+public abstract class IImageBuilderListener
 {
   public void dispose()
   {
   }
 
-  public abstract void imageCreated(IImage image);
+  public abstract void imageCreated(IImage image, String imageName);
 
   public abstract void onError(String error);
 

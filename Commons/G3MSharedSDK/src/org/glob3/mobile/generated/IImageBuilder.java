@@ -19,11 +19,14 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class IImageBuilderListener;
 
+
 public interface IImageBuilder
 {
 
   void dispose();
 
   void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener);
+
+  String getImageName();
 
 }

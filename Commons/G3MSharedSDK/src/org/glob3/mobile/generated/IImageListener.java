@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 
-///#include <string>
 
 public abstract class IImageListener
 {
@@ -31,7 +30,5 @@ public abstract class IImageListener
    */
   public abstract void imageCreated(IImage image);
 
-
-//  virtual void onError(const std::string& error) = 0;
 
 }

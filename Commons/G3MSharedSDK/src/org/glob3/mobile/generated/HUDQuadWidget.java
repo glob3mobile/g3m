@@ -17,15 +17,24 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "URL.hpp"
 //class HUDPosition;
 //class HUDSize;
 //class IImage;
 //class Mesh;
 //class SimpleTextureMapping;
+//class IImageBuilder;
 
 public class HUDQuadWidget extends HUDWidget
 {
-  private final URL _imageURL;
+///#ifdef C_CODE
+//  const URL _imageURL;
+///#endif
+///#ifdef JAVA_CODE
+//  private final URL _imageURL;
+///#endif
+  private IImageBuilder _imageBuilder;
+
   private final HUDPosition _xPosition;
   private final HUDPosition _yPosition;
   private final HUDSize _widthSize;
@@ -39,7 +48,8 @@ public class HUDQuadWidget extends HUDWidget
   private float _texCoordsRotationCenterU;
   private float _texCoordsRotationCenterV;
 
-  private IImage _image;
+  private final IImage _image;
+  private String _imageName;
   private int _imageWidth;
   private int _imageHeight;
 
@@ -55,7 +65,9 @@ public class HUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageURL.getPath(), false);
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
+                                                                                      //_imageURL.getPath(),
+                                                                                      //_imageBuilder->getImageName(),
   
     if (texId == null)
     {
@@ -125,9 +137,10 @@ public class HUDQuadWidget extends HUDWidget
     }
   }
 
-  public HUDQuadWidget(URL imageURL, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
+  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize) //const URL& imageURL,
+//  _imageURL(imageURL),
   {
-     _imageURL = imageURL;
+     _imageBuilder = imageBuilder;
      _xPosition = xPosition;
      _yPosition = yPosition;
      _widthSize = widthSize;
@@ -188,6 +201,9 @@ public class HUDQuadWidget extends HUDWidget
 
   public void dispose()
   {
+    if (_imageBuilder != null)
+       _imageBuilder.dispose();
+  
     if (_image != null)
        _image.dispose();
     if (_mesh != null)
@@ -209,8 +225,14 @@ public class HUDQuadWidget extends HUDWidget
     if (!_downloadingImage && (_image == null))
     {
       _downloadingImage = true;
-      IDownloader downloader = context.getDownloader();
-      downloader.requestImage(_imageURL, 1000000, TimeInterval.fromDays(30), true, new HUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
+  //    IDownloader* downloader = context->getDownloader();
+  //    downloader->requestImage(_imageURL,
+  //                             1000000, // priority
+  //                             TimeInterval::fromDays(30),
+  //                             true, // readExpired
+  //                             new HUDQuadWidget_ImageDownloadListener(this),
+  //                             true);
+      _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this), true);
     }
   }
 
@@ -236,18 +258,25 @@ public class HUDQuadWidget extends HUDWidget
   }
 
   /** private, do not call */
-  public final void onImageDownload(IImage image)
+  public final void onImageDownload(IImage image, String imageName)
   {
     _downloadingImage = false;
     _image = image;
+    _imageName = imageName;
     _imageWidth = _image.getWidth();
     _imageHeight = _image.getHeight();
+    if (_imageBuilder != null)
+       _imageBuilder.dispose();
+    _imageBuilder = null;
   }
 
   /** private, do not call */
-  public final void onImageDownloadError(URL url)
+  public final void onImageDownloadError(String error)
   {
-    _errors.add("HUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
+    _errors.add("HUDQuadWidget: Error downloading \"" + error + "\"");
+    if (_imageBuilder != null)
+       _imageBuilder.dispose();
+    _imageBuilder = null;
   }
 
 }

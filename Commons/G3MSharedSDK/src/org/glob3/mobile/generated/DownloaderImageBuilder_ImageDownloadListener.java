@@ -21,7 +21,7 @@ public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownload
 
   public final void onDownload(URL url, IImage image, boolean expired)
   {
-    _listener.imageCreated(image);
+    _listener.imageCreated(image, url.getPath());
     if (_deleteListener)
     {
       if (_listener != null)

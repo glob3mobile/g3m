@@ -52,4 +52,10 @@ public class DownloaderImageBuilder implements IImageBuilder
     downloader.requestImage(_url, _priority, _timeToCache, _readExpired, new DownloaderImageBuilder_ImageDownloadListener(listener, deleteListener), true);
   }
 
+  public final String getImageName()
+  {
+    return _url.getPath();
+  }
+
+
 }
