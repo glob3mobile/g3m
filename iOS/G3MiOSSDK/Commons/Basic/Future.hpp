@@ -12,6 +12,8 @@
 #include <stddef.h>
 #include <string>
 
+#include "ErrorHandling.hpp"
+
 template <class T>
 class Future {
 private:
