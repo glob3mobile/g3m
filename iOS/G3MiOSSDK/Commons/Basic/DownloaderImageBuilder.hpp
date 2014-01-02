@@ -49,9 +49,6 @@ public:
   }
 
   virtual ~DownloaderImageBuilder() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
   }
 
   void build(const G3MContext* context,
