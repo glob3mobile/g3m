@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 
+///#include <string>
 
 public abstract class IImageListener
 {
@@ -29,5 +30,8 @@ public abstract class IImageListener
    Callback method for image-creation.  The image has to be deleted in C++ / and disposed() en Java
    */
   public abstract void imageCreated(IImage image);
+
+
+//  virtual void onError(const std::string& error) = 0;
 
 }
