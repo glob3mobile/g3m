@@ -8,6 +8,10 @@ public class HUDQuadWidget_ImageBuilderListener implements IImageBuilderListener
      _quadWidget = quadWidget;
   }
 
+  public void dispose()
+  {
+  }
+
   public final void imageCreated(IImage image, String imageName)
   {
     _quadWidget.onImageDownload(image, imageName);
