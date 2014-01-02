@@ -48,7 +48,7 @@ public class HUDQuadWidget extends HUDWidget
   private float _texCoordsRotationCenterU;
   private float _texCoordsRotationCenterV;
 
-  private final IImage _image;
+  private IImage _image;
   private String _imageName;
   private int _imageWidth;
   private int _imageHeight;
@@ -204,8 +204,7 @@ public class HUDQuadWidget extends HUDWidget
     if (_imageBuilder != null)
        _imageBuilder.dispose();
   
-    if (_image != null)
-       _image.dispose();
+    _image = null;
     if (_mesh != null)
        _mesh.dispose();
   
