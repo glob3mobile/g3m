@@ -40,7 +40,7 @@ public:
   DownloaderImageBuilder(const URL& url,
                          long long priority,
                          const TimeInterval& timeToCache,
-                         const bool readExpired = true) :
+                         const bool readExpired) :
   _url(url),
   _priority(priority),
   _timeToCache(timeToCache),

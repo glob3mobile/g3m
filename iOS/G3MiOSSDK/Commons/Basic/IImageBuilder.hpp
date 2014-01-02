@@ -15,8 +15,12 @@ class IImageBuilderListener;
 class IImageBuilder {
 public:
 
-  virtual ~IImageBuilder() {
-  }
+#ifdef C_CODE
+  virtual ~IImageBuilder() { }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
 
   virtual void build(const G3MContext* context,
                      IImageBuilderListener* listener,
