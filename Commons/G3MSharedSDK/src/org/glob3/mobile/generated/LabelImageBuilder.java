@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 public class LabelImageBuilder implements IImageBuilder
 {
   private final String _text;
-  private final GFont _font = new GFont();
+  private final GFont _font;
   private final Color _color ;
   private final float _margin;
 
@@ -41,7 +41,7 @@ public class LabelImageBuilder implements IImageBuilder
   public LabelImageBuilder(String text, GFont font, Color color, float margin)
   {
      _text = text;
-     _font = new GFont(font);
+     _font = font;
      _color = new Color(color);
      _margin = margin;
 //    const float fontSize = 20;
@@ -50,6 +50,10 @@ public class LabelImageBuilder implements IImageBuilder
 //    const Color shadowColor = Color::black();
 //
 //    const int separation = 2;
+  }
+
+  public void dispose()
+  {
   }
 
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
