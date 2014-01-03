@@ -38,9 +38,7 @@ public abstract class IImageBuilder
      _listener = null;
   }
 
-  public void dispose()
-  {
-  }
+  void dispose();
 
   public abstract boolean isMutable();
 
