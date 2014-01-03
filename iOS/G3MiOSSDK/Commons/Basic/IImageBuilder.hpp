@@ -28,8 +28,13 @@ public:
   {
   }
 
+#ifdef C_CODE
   virtual ~IImageBuilder() {
   }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
 
   virtual bool isMutable() const = 0;
 
@@ -40,7 +45,7 @@ public:
   virtual const std::string getImageName() = 0;
 
   void setChangeListener(ChangedListener* listener);
-
+  
 };
 
 #endif
