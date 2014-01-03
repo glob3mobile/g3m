@@ -18,15 +18,41 @@ package org.glob3.mobile.generated;
 
 //class G3MContext;
 //class IImageBuilderListener;
+//class ChangedListener;
 
 
-public interface IImageBuilder
+public abstract class IImageBuilder
 {
+  private ChangedListener _listener;
 
-  void dispose();
+  protected final void changed()
+  {
+    if (_listener != null)
+    {
+      _listener.changed();
+    }
+  }
 
-  void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener);
+  public IImageBuilder()
+  {
+     _listener = null;
+  }
 
-  String getImageName();
+  public void dispose()
+  {
+  }
+
+  public abstract void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener);
+
+  public abstract String getImageName();
+
+  public final void setChangeListener(ChangedListener listener)
+  {
+    if (_listener != null)
+    {
+      ILogger.instance().logError("listener already set!");
+    }
+    _listener = listener;
+  }
 
 }
