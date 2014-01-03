@@ -23,9 +23,6 @@ package org.glob3.mobile.generated;
 
 public interface IImageBuilder
 {
-  void changed();
-
-
   void dispose();
 
   boolean isMutable();
@@ -33,6 +30,8 @@ public interface IImageBuilder
   void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener);
 
   String getImageName();
+
+  void changed();
 
   void setChangeListener(ChangedListener listener);
 
