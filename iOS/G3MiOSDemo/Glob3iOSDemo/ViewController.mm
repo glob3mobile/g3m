@@ -658,12 +658,17 @@ public:
     builder.setHUDRenderer(hudRenderer);
 
 
-    LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",
-                                                            GFont::monospaced(32),
-                                                            6,
-                                                            Color::yellow(),
-                                                            Color::red(),
-                                                            4);
+    LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
+                                                            GFont::monospaced(38), // font
+                                                            6,                     // margin
+                                                            Color::yellow(),       // color
+                                                            Color::black(),        // shadowColor
+                                                            5,                     // shadowBlur
+                                                            2,                     // shadowOffsetX
+                                                            -2,                    // shadowOffsetY
+                                                            Color::red(),          // backgroundColor
+                                                            4                      // cornerRadius
+                                                            );
 
 #warning Diego at work!
     HUDQuadWidget* compass = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///g3m-marker.png")),

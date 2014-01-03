@@ -78,7 +78,14 @@ void LabelImageBuilder::build(const G3MContext* context,
   const int height = mu->round(textExtent._y + margin2);
   canvas->initialize(width, height);
 
-  if (!_backgroundColor.isTransparent()) {
+  if (!_shadowColor.isFullTransparent()) {
+    canvas->setShadow(_shadowColor,
+                      _shadowBlur,
+                      _shadowOffsetX,
+                      _shadowOffsetY);
+  }
+
+  if (!_backgroundColor.isFullTransparent()) {
     canvas->setFillColor(_backgroundColor);
     if (_cornerRadius > 0) {
       canvas->fillRoundedRectangle(0, 0,
