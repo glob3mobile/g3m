@@ -128,7 +128,7 @@
 #import <G3MiOSSDK/HUDAbsoluteSize.hpp>
 #import <G3MiOSSDK/HUDRelativeSize.hpp>
 #import <G3MiOSSDK/DownloaderImageBuilder.hpp>
-
+#import <G3MiOSSDK/LabelImageBuilder.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -658,14 +658,22 @@ public:
     builder.setHUDRenderer(hudRenderer);
 
 #warning Diego at work!
-    HUDQuadWidget* compass = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+    HUDQuadWidget* compass = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                               new LabelImageBuilder("glob3",
+                                                                     //GFont::monospaced(50, true, true)
+                                                                     GFont::monospaced(120)
+                                                                     ),
                                                //new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
                                                new HUDAbsolutePosition(10),
                                                new HUDAbsolutePosition(10),
-                                               new HUDRelativeSize(0.15,
-                                                                   HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                               new HUDRelativeSize(0.15,
-                                                                   HUDRelativeSize::VIEWPORT_MIN_AXIS));
+//                                               new HUDRelativeSize(0.15,
+//                                                                   HUDRelativeSize::VIEWPORT_MIN_AXIS),
+//                                               new HUDRelativeSize(0.15,
+//                                                                   HUDRelativeSize::VIEWPORT_MIN_AXIS)
+                                               new HUDRelativeSize(1,
+                                                                   HUDRelativeSize::BITMAP_WIDTH),
+                                               new HUDRelativeSize(1,
+                                                                   HUDRelativeSize::BITMAP_HEIGTH) );
 //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
 //                                   0.5f, 0.5f);
     hudRenderer->addWidget(compass);
@@ -742,7 +750,7 @@ public:
       void run(const G3MContext* context) {
         _angleInRadians += Angle::fromDegrees(2)._radians;
 
-        _compass1->setTexCoordsRotation(_angleInRadians * 2,
+        _compass1->setTexCoordsRotation(_angleInRadians,
                                         0.5f, 0.5f);
         _compass2->setTexCoordsRotation(-_angleInRadians,
                                         0.5f, 0.5f);
