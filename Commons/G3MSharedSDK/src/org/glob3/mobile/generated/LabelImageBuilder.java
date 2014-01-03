@@ -46,6 +46,11 @@ public class LabelImageBuilder implements IImageBuilder
      _margin = margin;
   }
 
+  public final boolean isMutable()
+  {
+    return true;
+  }
+
   public final void setText(String text)
   {
     if (!_text.equals(text))

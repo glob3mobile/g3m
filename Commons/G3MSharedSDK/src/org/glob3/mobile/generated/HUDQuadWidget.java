@@ -121,7 +121,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     _mesh = null;
   }
 
-  private final G3MContext _context;
+  private G3MContext _context;
 
   protected final void rawRender(G3MRenderContext rc, GLState glState)
   {
@@ -221,7 +221,16 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     {
       _buildingImage = true;
       _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this), true);
-      _imageBuilder.setChangeListener(this);
+      if (_imageBuilder.isMutable())
+      {
+        _imageBuilder.setChangeListener(this);
+      }
+      else
+      {
+        if (_imageBuilder != null)
+           _imageBuilder.dispose();
+        _imageBuilder = null;
+      }
     }
   }
 

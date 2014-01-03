@@ -42,6 +42,8 @@ public abstract class IImageBuilder
   {
   }
 
+  public abstract boolean isMutable();
+
   public abstract void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener);
 
   public abstract String getImageName();

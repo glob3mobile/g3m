@@ -41,6 +41,11 @@ public class DownloaderImageBuilder implements IImageBuilder
      _readExpired = readExpired;
   }
 
+  public final boolean isMutable()
+  {
+    return false;
+  }
+
   public void dispose()
   {
   }
