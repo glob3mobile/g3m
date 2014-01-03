@@ -657,23 +657,18 @@ public:
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
+
+    LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3", GFont::monospaced(120));
 #warning Diego at work!
     HUDQuadWidget* compass = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                               new LabelImageBuilder("glob3",
-                                                                     //GFont::monospaced(50, true, true)
-                                                                     GFont::monospaced(120)
-                                                                     ),
+                                               labelBuilder,
                                                //new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
                                                new HUDAbsolutePosition(10),
                                                new HUDAbsolutePosition(10),
-//                                               new HUDRelativeSize(0.15,
-//                                                                   HUDRelativeSize::VIEWPORT_MIN_AXIS),
-//                                               new HUDRelativeSize(0.15,
-//                                                                   HUDRelativeSize::VIEWPORT_MIN_AXIS)
-                                               new HUDRelativeSize(1,
-                                                                   HUDRelativeSize::BITMAP_WIDTH),
-                                               new HUDRelativeSize(1,
-                                                                   HUDRelativeSize::BITMAP_HEIGTH) );
+                                               // new HUDRelativeSize(0.15, HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                               // new HUDRelativeSize(0.15, HUDRelativeSize::VIEWPORT_MIN_AXIS)
+                                               new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+                                               new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
 //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
 //                                   0.5f, 0.5f);
     hudRenderer->addWidget(compass);
@@ -724,23 +719,26 @@ public:
     ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
 
-    class RotateCompass : public GTask {
+    class AnimateHUDWidgetsTask : public GTask {
     private:
-      HUDQuadWidget* _compass1;
-      HUDQuadWidget* _compass2;
-      HUDQuadWidget* _ruler;
+      HUDQuadWidget*     _compass1;
+      HUDQuadWidget*     _compass2;
+      HUDQuadWidget*     _ruler;
+      LabelImageBuilder* _labelBuilder;
       double _angleInRadians;
 
       float _translationV;
       float _translationStep;
 
     public:
-      RotateCompass(HUDQuadWidget* compass1,
-                    HUDQuadWidget* compass2,
-                    HUDQuadWidget* ruler) :
+      AnimateHUDWidgetsTask(HUDQuadWidget* compass1,
+                            HUDQuadWidget* compass2,
+                            HUDQuadWidget* ruler,
+                            LabelImageBuilder* labelBuilder) :
       _compass1(compass1),
       _compass2(compass2),
       _ruler(ruler),
+      _labelBuilder(labelBuilder),
       _angleInRadians(0),
       _translationV(0),
       _translationStep(0.002)
@@ -749,9 +747,16 @@ public:
 
       void run(const G3MContext* context) {
         _angleInRadians += Angle::fromDegrees(2)._radians;
+//        _labelBuilder->setText( Angle::fromRadians(_angleInRadians).description() );
+        double degrees = Angle::fromRadians(_angleInRadians)._degrees;
+        while (degrees > 360) {
+          degrees -= 360;
+        }
+        const std::string degreesText = IStringUtils::instance()->toString( IMathUtils::instance()->round( degrees )  );
+        _labelBuilder->setText( degreesText );
 
-        _compass1->setTexCoordsRotation(_angleInRadians,
-                                        0.5f, 0.5f);
+        //        _compass1->setTexCoordsRotation(_angleInRadians,
+        //                                        0.5f, 0.5f);
         _compass2->setTexCoordsRotation(-_angleInRadians,
                                         0.5f, 0.5f);
 
@@ -763,8 +768,8 @@ public:
       }
     };
 
-    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(20),
-                                                 new RotateCompass(compass, compass2, ruler)));
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(50),
+                                                 new AnimateHUDWidgetsTask(compass, compass2, ruler, labelBuilder)));
   }
 
 

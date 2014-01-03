@@ -37,14 +37,12 @@ public:
 
   void imageCreated(const IImage* image,
                     const std::string& imageName) {
-    _quadWidget->onImageDownload(image,
-                                 imageName);
+    _quadWidget->imageCreated(image, imageName);
   }
 
   void onError(const std::string& error) {
-    _quadWidget->onImageDownloadError(error);
+    _quadWidget->onImageBuildError(error);
   }
-
 };
 
 
@@ -68,8 +66,6 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
-                                                                                    //_imageURL.getPath(),
-                                                                                    //_imageBuilder->getImageName(),
                                                                                     _imageName,
                                                                                     false);
 
@@ -161,11 +157,13 @@ void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
 
 
 void HUDQuadWidget::initialize(const G3MContext* context) {
-  if (!_downloadingImage && (_image == NULL)) {
-    _downloadingImage = true;
+  _context = context;
+  if (!_buildingImage && (_image == NULL)) {
+    _buildingImage = true;
     _imageBuilder->build(context,
                          new HUDQuadWidget_ImageBuilderListener(this),
                          true);
+    _imageBuilder->setChangeListener( this );
   }
 }
 
@@ -176,34 +174,50 @@ void HUDQuadWidget::cleanMesh() {
   _mesh = NULL;
 }
 
+void HUDQuadWidget::changed() {
+#warning Diego at work!
+  cleanMesh();
+
+  delete _image;
+  _image = NULL;
+  _imageName = "";
+  _imageWidth = 0;
+  _imageHeight = 0;
+
+  _buildingImage = true;
+  _imageBuilder->build(_context,
+                       new HUDQuadWidget_ImageBuilderListener(this),
+                       true);
+}
+
 void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
                                           int width,
                                           int height) {
   cleanMesh();
 }
 
-void HUDQuadWidget::onImageDownload(const IImage*      image,
-                                    const std::string& imageName) {
-  _downloadingImage = false;
+void HUDQuadWidget::imageCreated(const IImage*      image,
+                                 const std::string& imageName) {
+  _buildingImage = false;
   _image = image;
   _imageName = imageName;
   _imageWidth  = _image->getWidth();
   _imageHeight = _image->getHeight();
-  delete _imageBuilder;
-  _imageBuilder = NULL;
+//  delete _imageBuilder;
+//  _imageBuilder = NULL;
 }
 
-void HUDQuadWidget::onImageDownloadError(const std::string& error) {
+void HUDQuadWidget::onImageBuildError(const std::string& error) {
   _errors.push_back("HUDQuadWidget: \"" + error + "\"");
-  delete _imageBuilder;
-  _imageBuilder = NULL;
+//  delete _imageBuilder;
+//  _imageBuilder = NULL;
 }
 
 RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
   if (!_errors.empty()) {
     return RenderState::error(_errors);
   }
-  else if (_downloadingImage) {
+  else if (_buildingImage) {
     return RenderState::busy();
   }
   else {

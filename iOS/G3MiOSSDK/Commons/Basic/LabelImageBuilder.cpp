@@ -54,6 +54,13 @@ public:
   }
 };
 
+void LabelImageBuilder::setText(const std::string& text) {
+  if (_text != text) {
+    _text = text;
+    changed();
+  }
+}
+
 void LabelImageBuilder::build(const G3MContext* context,
                               IImageBuilderListener* listener,
                               bool deleteListener) {

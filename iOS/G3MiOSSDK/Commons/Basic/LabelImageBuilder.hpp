@@ -16,7 +16,7 @@
 
 class LabelImageBuilder : public IImageBuilder {
 private:
-  const std::string _text;
+  std::string _text;
 #ifdef C_CODE
   const GFont       _font;
 #endif
@@ -38,6 +38,8 @@ public:
   _margin(margin)
   {
   }
+
+  void setText(const std::string& text);
 
   ~LabelImageBuilder() {
   }

@@ -22,7 +22,9 @@ class Mesh;
 class SimpleTextureMapping;
 class IImageBuilder;
 
-class HUDQuadWidget : public HUDWidget {
+#include "ChangedListener.hpp"
+
+class HUDQuadWidget : public HUDWidget, public ChangedListener {
 private:
   IImageBuilder* _imageBuilder;
 
@@ -49,7 +51,7 @@ private:
   int _imageWidth;
   int _imageHeight;
 
-  bool _downloadingImage;
+  bool _buildingImage;
   std::vector<std::string> _errors;
 
   Mesh* _mesh;
@@ -58,6 +60,8 @@ private:
   Mesh* getMesh(const G3MRenderContext* rc);
 
   void cleanMesh();
+
+  const G3MContext* _context;
 
 protected:
   void rawRender(const G3MRenderContext* rc,
@@ -79,14 +83,15 @@ public:
   _image(NULL),
   _imageWidth(0),
   _imageHeight(0),
-  _downloadingImage(false),
+  _buildingImage(false),
   _texCoordsTranslationU(0),
   _texCoordsTranslationV(0),
   _texCoordsScaleU(1),
   _texCoordsScaleV(1),
   _texCoordsRotationInRadians(0),
   _texCoordsRotationCenterU(0),
-  _texCoordsRotationCenterV(0)
+  _texCoordsRotationCenterV(0),
+  _context(NULL)
   {
   }
 
@@ -116,12 +121,14 @@ public:
   RenderState getRenderState(const G3MRenderContext* rc);
 
   /** private, do not call */
-  void onImageDownload(const IImage*      image,
-                       const std::string& imageName);
+  void imageCreated(const IImage*      image,
+                    const std::string& imageName);
 
   /** private, do not call */
-  void onImageDownloadError(const std::string& error);
-  
+  void onImageBuildError(const std::string& error);
+
+  void changed();
+
 };
 
 #endif

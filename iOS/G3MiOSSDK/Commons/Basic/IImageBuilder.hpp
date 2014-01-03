@@ -11,24 +11,33 @@
 
 class G3MContext;
 class IImageBuilderListener;
+class ChangedListener;
 
 #include <string>
 
 class IImageBuilder {
-public:
+private:
+  ChangedListener* _listener;
 
-#ifdef C_CODE
-  virtual ~IImageBuilder() { }
-#endif
-#ifdef JAVA_CODE
-  void dispose();
-#endif
+protected:
+  void changed();
+
+public:
+  IImageBuilder() :
+  _listener(NULL)
+  {
+  }
+
+  virtual ~IImageBuilder() {
+  }
 
   virtual void build(const G3MContext* context,
                      IImageBuilderListener* listener,
                      bool deleteListener) = 0;
 
   virtual const std::string getImageName() = 0;
+
+  void setChangeListener(ChangedListener* listener);
 
 };
 
