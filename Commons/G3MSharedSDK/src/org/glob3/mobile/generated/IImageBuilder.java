@@ -38,7 +38,14 @@ public abstract class IImageBuilder
      _listener = null;
   }
 
-  void dispose();
+///#ifdef C_CODE
+  public void dispose()
+  {
+  }
+///#endif
+///#ifdef JAVA_CODE
+//  void dispose();
+///#endif
 
   public abstract boolean isMutable();
 
