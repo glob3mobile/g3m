@@ -29,20 +29,14 @@ private:
 public:
 
   LabelImageBuilder(const std::string& text,
-                    const GFont&       font = GFont::sansSerif(),
-                    const Color&       color = Color::white(),
-                    const float        margin = 1) :
+                    const GFont&       font   = GFont::sansSerif(),
+                    const Color&       color  = Color::white(),
+                    const float        margin = 0) :
   _text(text),
   _font(font),
   _color(color),
   _margin(margin)
   {
-//    const float fontSize = 20;
-//
-//    const Color color       = Color::white();
-//    const Color shadowColor = Color::black();
-//
-//    const int separation = 2;
   }
 
   ~LabelImageBuilder() {
@@ -53,7 +47,7 @@ public:
              bool deleteListener);
 
   const std::string getImageName();
-  
+
 };
 
 #endif

@@ -58,9 +58,7 @@ void LabelImageBuilder::build(const G3MContext* context,
                               IImageBuilderListener* listener,
                               bool deleteListener) {
 
-  const IFactory* factory = context->getFactory();
-
-  ICanvas* canvas = factory->createCanvas();
+  ICanvas* canvas = context->getFactory()->createCanvas();
 
   canvas->setFont(_font);
 
@@ -68,13 +66,15 @@ void LabelImageBuilder::build(const G3MContext* context,
 
   const IMathUtils* mu = context->getMathUtils();
 
-  canvas->initialize(mu->round(textExtent._x + _margin*2),
-                     mu->round(textExtent._y + _margin*2));
+  const float margin2 = _margin*2;
+  canvas->initialize(mu->round(textExtent._x + margin2),
+                     mu->round(textExtent._y + margin2));
 
   canvas->setFillColor(_color);
   canvas->fillText(_text, _margin, _margin);
 
-  canvas->createImage(new LabelImageBuilder_ImageListener(listener, deleteListener,
+  canvas->createImage(new LabelImageBuilder_ImageListener(listener,
+                                                          deleteListener,
                                                           getImageName()),
                       true);
   
