@@ -163,13 +163,6 @@ void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
 void HUDQuadWidget::initialize(const G3MContext* context) {
   if (!_downloadingImage && (_image == NULL)) {
     _downloadingImage = true;
-//    IDownloader* downloader = context->getDownloader();
-//    downloader->requestImage(_imageURL,
-//                             1000000, // priority
-//                             TimeInterval::fromDays(30),
-//                             true, // readExpired
-//                             new HUDQuadWidget_ImageDownloadListener(this),
-//                             true);
     _imageBuilder->build(context,
                          new HUDQuadWidget_ImageBuilderListener(this),
                          true);
@@ -201,7 +194,7 @@ void HUDQuadWidget::onImageDownload(const IImage*      image,
 }
 
 void HUDQuadWidget::onImageDownloadError(const std::string& error) {
-  _errors.push_back("HUDQuadWidget: Error downloading \"" + error + "\"");
+  _errors.push_back("HUDQuadWidget: \"" + error + "\"");
   delete _imageBuilder;
   _imageBuilder = NULL;
 }

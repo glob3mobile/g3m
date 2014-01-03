@@ -24,12 +24,6 @@ class IImageBuilder;
 
 class HUDQuadWidget : public HUDWidget {
 private:
-//#ifdef C_CODE
-//  const URL _imageURL;
-//#endif
-//#ifdef JAVA_CODE
-//  private final URL _imageURL;
-//#endif
   IImageBuilder* _imageBuilder;
 
   const HUDPosition* _xPosition;
@@ -70,13 +64,11 @@ protected:
                  GLState* glState);
 
 public:
-  HUDQuadWidget(//const URL& imageURL,
-                IImageBuilder* imageBuilder,
+  HUDQuadWidget(IImageBuilder* imageBuilder,
                 HUDPosition* xPosition,
                 HUDPosition* yPosition,
                 HUDSize* widthSize,
                 HUDSize* heightSize) :
-//  _imageURL(imageURL),
   _imageBuilder(imageBuilder),
   _xPosition(xPosition),
   _yPosition(yPosition),

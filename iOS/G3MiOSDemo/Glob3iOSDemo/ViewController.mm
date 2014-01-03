@@ -658,14 +658,13 @@ public:
     builder.setHUDRenderer(hudRenderer);
 
 #warning Diego at work!
-    HUDQuadWidget* compass = new HUDQuadWidget(//URL("file:///Compass_rose_browns_00_transparent.png"),
-                                               //URL("file:///debug-compass.png"),
-                                               new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+    HUDQuadWidget* compass = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                               //new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
                                                new HUDAbsolutePosition(10),
                                                new HUDAbsolutePosition(10),
-                                               new HUDRelativeSize(0.33,
+                                               new HUDRelativeSize(0.15,
                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                               new HUDRelativeSize(0.33,
+                                               new HUDRelativeSize(0.15,
                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS));
 //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
 //                                   0.5f, 0.5f);
@@ -682,9 +681,9 @@ public:
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                         HUDRelativePosition::MIDDLE),
-                                                new HUDRelativeSize(0.6,
+                                                new HUDRelativeSize(0.5,
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                                new HUDRelativeSize(0.3,
+                                                new HUDRelativeSize(0.25,
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS));
     compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
                                    Angle::fromDegrees(30),
@@ -743,7 +742,7 @@ public:
       void run(const G3MContext* context) {
         _angleInRadians += Angle::fromDegrees(2)._radians;
 
-        _compass1->setTexCoordsRotation(_angleInRadians,
+        _compass1->setTexCoordsRotation(_angleInRadians * 2,
                                         0.5f, 0.5f);
         _compass2->setTexCoordsRotation(-_angleInRadians,
                                         0.5f, 0.5f);
