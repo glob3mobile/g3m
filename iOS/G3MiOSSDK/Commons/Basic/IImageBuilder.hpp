@@ -16,11 +16,7 @@ class ChangedListener;
 #include <string>
 
 class IImageBuilder {
-protected:
-  virtual void changed() = 0;
-
 public:
-
 #ifdef C_CODE
   virtual ~IImageBuilder() {
   }
@@ -36,6 +32,8 @@ public:
                      bool deleteListener) = 0;
 
   virtual const std::string getImageName() = 0;
+
+  virtual void changed() = 0;
 
   virtual void setChangeListener(ChangedListener* listener) = 0;
   
