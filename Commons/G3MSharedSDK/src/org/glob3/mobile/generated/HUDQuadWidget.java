@@ -27,12 +27,6 @@ package org.glob3.mobile.generated;
 
 public class HUDQuadWidget extends HUDWidget
 {
-///#ifdef C_CODE
-//  const URL _imageURL;
-///#endif
-///#ifdef JAVA_CODE
-//  private final URL _imageURL;
-///#endif
   private IImageBuilder _imageBuilder;
 
   private final HUDPosition _xPosition;
@@ -137,8 +131,7 @@ public class HUDQuadWidget extends HUDWidget
     }
   }
 
-  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize) //const URL& imageURL,
-//  _imageURL(imageURL),
+  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
   {
      _imageBuilder = imageBuilder;
      _xPosition = xPosition;
@@ -224,13 +217,6 @@ public class HUDQuadWidget extends HUDWidget
     if (!_downloadingImage && (_image == null))
     {
       _downloadingImage = true;
-  //    IDownloader* downloader = context->getDownloader();
-  //    downloader->requestImage(_imageURL,
-  //                             1000000, // priority
-  //                             TimeInterval::fromDays(30),
-  //                             true, // readExpired
-  //                             new HUDQuadWidget_ImageDownloadListener(this),
-  //                             true);
       _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this), true);
     }
   }
@@ -272,7 +258,7 @@ public class HUDQuadWidget extends HUDWidget
   /** private, do not call */
   public final void onImageDownloadError(String error)
   {
-    _errors.add("HUDQuadWidget: Error downloading \"" + error + "\"");
+    _errors.add("HUDQuadWidget: \"" + error + "\"");
     if (_imageBuilder != null)
        _imageBuilder.dispose();
     _imageBuilder = null;
