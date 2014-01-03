@@ -24,36 +24,62 @@ public class LabelImageBuilder extends AbstractImageBuilder
   private final GFont _font;
   private final float _margin;
   private final Color _color ;
+
+  private final Color _shadowColor ;
+  private final float _shadowBlur;
+  private final float _shadowOffsetX;
+  private final float _shadowOffsetY;
+
   private final Color _backgroundColor ;
   private final float _cornerRadius;
 
 
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color backgroundColor)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor)
   {
-     this(text, font, margin, color, backgroundColor, 0);
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, 0);
+  }
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY)
+  {
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, Color.transparent(), 0);
+  }
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX)
+  {
+     this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, 0, Color.transparent(), 0);
+  }
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur)
+  {
+     this(text, font, margin, color, shadowColor, shadowBlur, 0, 0, Color.transparent(), 0);
+  }
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor)
+  {
+     this(text, font, margin, color, shadowColor, 0, 0, 0, Color.transparent(), 0);
   }
   public LabelImageBuilder(String text, GFont font, float margin, Color color)
   {
-     this(text, font, margin, color, Color.transparent(), 0);
+     this(text, font, margin, color, Color.transparent(), 0, 0, 0, Color.transparent(), 0);
   }
   public LabelImageBuilder(String text, GFont font, float margin)
   {
-     this(text, font, margin, Color.white(), Color.transparent(), 0);
+     this(text, font, margin, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0);
   }
   public LabelImageBuilder(String text, GFont font)
   {
-     this(text, font, 0, Color.white(), Color.transparent(), 0);
+     this(text, font, 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0);
   }
   public LabelImageBuilder(String text)
   {
-     this(text, GFont.sansSerif(), 0, Color.white(), Color.transparent(), 0);
+     this(text, GFont.sansSerif(), 0, Color.white(), Color.transparent(), 0, 0, 0, Color.transparent(), 0);
   }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color backgroundColor, float cornerRadius)
+  public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius)
   {
      _text = text;
      _font = font;
      _margin = margin;
      _color = new Color(color);
+     _shadowColor = new Color(shadowColor);
+     _shadowBlur = shadowBlur;
+     _shadowOffsetX = shadowOffsetX;
+     _shadowOffsetY = shadowOffsetY;
      _backgroundColor = new Color(backgroundColor);
      _cornerRadius = cornerRadius;
   }
@@ -93,7 +119,12 @@ public class LabelImageBuilder extends AbstractImageBuilder
     final int height = mu.round(textExtent._y + margin2);
     canvas.initialize(width, height);
   
-    if (!_backgroundColor.isTransparent())
+    if (!_shadowColor.isFullTransparent())
+    {
+      canvas.setShadow(_shadowColor, _shadowBlur, _shadowOffsetX, _shadowOffsetY);
+    }
+  
+    if (!_backgroundColor.isFullTransparent())
     {
       canvas.setFillColor(_backgroundColor);
       if (_cornerRadius > 0)
