@@ -28,13 +28,13 @@ public:
   {
   }
 
-#ifdef C_CODE
+//#ifdef C_CODE
   virtual ~IImageBuilder() {
   }
-#endif
-#ifdef JAVA_CODE
-  void dispose();
-#endif
+//#endif
+//#ifdef JAVA_CODE
+//  void dispose();
+//#endif
 
   virtual bool isMutable() const = 0;
 
