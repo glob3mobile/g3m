@@ -39,6 +39,10 @@ public:
   {
   }
 
+  bool isMutable() const {
+    return true;
+  }
+
   void setText(const std::string& text);
 
   ~LabelImageBuilder() {

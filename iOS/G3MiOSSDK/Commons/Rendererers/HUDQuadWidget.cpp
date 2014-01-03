@@ -163,7 +163,13 @@ void HUDQuadWidget::initialize(const G3MContext* context) {
     _imageBuilder->build(context,
                          new HUDQuadWidget_ImageBuilderListener(this),
                          true);
-    _imageBuilder->setChangeListener( this );
+    if (_imageBuilder->isMutable()) {
+      _imageBuilder->setChangeListener( this );
+    }
+    else {
+      delete _imageBuilder;
+      _imageBuilder = NULL;
+    }
   }
 }
 

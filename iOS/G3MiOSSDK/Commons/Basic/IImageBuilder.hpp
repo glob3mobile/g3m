@@ -31,6 +31,8 @@ public:
   virtual ~IImageBuilder() {
   }
 
+  virtual bool isMutable() const = 0;
+
   virtual void build(const G3MContext* context,
                      IImageBuilderListener* listener,
                      bool deleteListener) = 0;

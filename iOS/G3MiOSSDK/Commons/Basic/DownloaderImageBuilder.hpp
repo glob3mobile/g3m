@@ -48,6 +48,10 @@ public:
   {
   }
 
+  bool isMutable() const {
+    return false;
+  }
+
   virtual ~DownloaderImageBuilder() {
   }
 
