@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class LabelImageBuilder implements IImageBuilder
+public class LabelImageBuilder extends AbstractImageBuilder
 {
   private String _text;
   private final GFont _font;

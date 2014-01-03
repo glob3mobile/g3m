@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class DownloaderImageBuilder implements IImageBuilder
+public class DownloaderImageBuilder extends AbstractImageBuilder
 {
   private final URL          _url;
   private final TimeInterval _timeToCache;
