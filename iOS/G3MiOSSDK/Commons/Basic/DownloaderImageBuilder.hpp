@@ -9,12 +9,12 @@
 #ifndef __G3MiOSSDK__DownloaderImageBuilder__
 #define __G3MiOSSDK__DownloaderImageBuilder__
 
-#include "IImageBuilder.hpp"
+#include "AbstractImageBuilder.hpp"
 #include "URL.hpp"
 #include "TimeInterval.hpp"
 #include "DownloadPriority.hpp"
 
-class DownloaderImageBuilder : public IImageBuilder {
+class DownloaderImageBuilder : public AbstractImageBuilder {
 private:
 #ifdef C_CODE
   const URL          _url;

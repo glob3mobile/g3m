@@ -16,25 +16,18 @@ class ChangedListener;
 #include <string>
 
 class IImageBuilder {
-private:
-  ChangedListener* _listener;
-
 protected:
-  void changed();
+  virtual void changed() = 0;
 
 public:
-  IImageBuilder() :
-  _listener(NULL)
-  {
-  }
 
-//#ifdef C_CODE
+#ifdef C_CODE
   virtual ~IImageBuilder() {
   }
-//#endif
-//#ifdef JAVA_CODE
-//  void dispose();
-//#endif
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
 
   virtual bool isMutable() const = 0;
 
@@ -44,7 +37,7 @@ public:
 
   virtual const std::string getImageName() = 0;
 
-  void setChangeListener(ChangedListener* listener);
+  virtual void setChangeListener(ChangedListener* listener) = 0;
   
 };
 

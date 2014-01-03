@@ -82,6 +82,8 @@
 		CF1E85BD17E7A0A0005BDE80 /* CartoCSSSymbolizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1E85BA17E799F8005BDE80 /* CartoCSSSymbolizer.hpp */; };
 		CF1F55DF1876F5E70019E8A5 /* LabelImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1F55DD1876F5E70019E8A5 /* LabelImageBuilder.cpp */; };
 		CF1F55E01876F63D0019E8A5 /* LabelImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1F55DE1876F5E70019E8A5 /* LabelImageBuilder.hpp */; };
+		CF1F55E318772FC80019E8A5 /* AbstractImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1F55E118772FC80019E8A5 /* AbstractImageBuilder.cpp */; };
+		CF1F55E41877302D0019E8A5 /* AbstractImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */; };
 		CF22263C17E8F47000280C66 /* CartoCSSTokens.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF22263A17E8F46F00280C66 /* CartoCSSTokens.cpp */; };
 		CF26127517F9CBFD003C2006 /* RenderState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF423A2C17F8874E00F50525 /* RenderState.hpp */; };
 		CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */; };
@@ -651,6 +653,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF1F55E41877302D0019E8A5 /* AbstractImageBuilder.hpp in CopyFiles */,
 				CF1F55E01876F63D0019E8A5 /* LabelImageBuilder.hpp in CopyFiles */,
 				CFD41F611875E66200889B7C /* IImageBuilder.hpp in CopyFiles */,
 				CFD41F621875E66200889B7C /* IImageBuilderListener.hpp in CopyFiles */,
@@ -1117,6 +1120,8 @@
 		CF1E85BA17E799F8005BDE80 /* CartoCSSSymbolizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CartoCSSSymbolizer.hpp; path = Commons/Basic/CartoCSSSymbolizer.hpp; sourceTree = "<group>"; };
 		CF1F55DD1876F5E70019E8A5 /* LabelImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LabelImageBuilder.cpp; path = Commons/Basic/LabelImageBuilder.cpp; sourceTree = "<group>"; };
 		CF1F55DE1876F5E70019E8A5 /* LabelImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LabelImageBuilder.hpp; path = Commons/Basic/LabelImageBuilder.hpp; sourceTree = "<group>"; };
+		CF1F55E118772FC80019E8A5 /* AbstractImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstractImageBuilder.cpp; path = Commons/Basic/AbstractImageBuilder.cpp; sourceTree = "<group>"; };
+		CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractImageBuilder.hpp; path = Commons/Basic/AbstractImageBuilder.hpp; sourceTree = "<group>"; };
 		CF22263A17E8F46F00280C66 /* CartoCSSTokens.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CartoCSSTokens.cpp; path = Commons/Basic/CartoCSSTokens.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF22263B17E8F47000280C66 /* CartoCSSTokens.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CartoCSSTokens.hpp; path = Commons/Basic/CartoCSSTokens.hpp; sourceTree = "<group>"; };
 		CF27B15E16D93DC90000A415 /* BufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BufferElevationData.cpp; path = Commons/Basic/BufferElevationData.cpp; sourceTree = "<group>"; };
@@ -1996,6 +2001,8 @@
 				CFD41F5F1875E59800889B7C /* DownloaderImageBuilder.hpp */,
 				CF1F55DD1876F5E70019E8A5 /* LabelImageBuilder.cpp */,
 				CF1F55DE1876F5E70019E8A5 /* LabelImageBuilder.hpp */,
+				CF1F55E118772FC80019E8A5 /* AbstractImageBuilder.cpp */,
+				CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2743,6 +2750,7 @@
 				A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */,
 				A7EE001C161B245600C77604 /* JSONBaseObject.cpp in Sources */,
 				CF4F784A1804ADFC00550409 /* DeviceInfo_iOS.mm in Sources */,
+				CF1F55E318772FC80019E8A5 /* AbstractImageBuilder.cpp in Sources */,
 				A7EE0020161B274300C77604 /* JSONArray.cpp in Sources */,
 				A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */,
 				A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */,

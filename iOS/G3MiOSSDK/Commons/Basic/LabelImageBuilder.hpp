@@ -9,12 +9,12 @@
 #ifndef __G3MiOSSDK__LabelImageBuilder__
 #define __G3MiOSSDK__LabelImageBuilder__
 
-#include "IImageBuilder.hpp"
+#include "AbstractImageBuilder.hpp"
 
 #include "GFont.hpp"
 #include "Color.hpp"
 
-class LabelImageBuilder : public IImageBuilder {
+class LabelImageBuilder : public AbstractImageBuilder {
 private:
   std::string _text;
 #ifdef C_CODE
