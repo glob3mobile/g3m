@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 public class LabelImageBuilder implements IImageBuilder
 {
-  private final String _text;
+  private String _text;
   private final GFont _font;
   private final Color _color ;
   private final float _margin;
@@ -44,6 +44,15 @@ public class LabelImageBuilder implements IImageBuilder
      _font = font;
      _color = new Color(color);
      _margin = margin;
+  }
+
+  public final void setText(String text)
+  {
+    if (!_text.equals(text))
+    {
+      _text = text;
+      changed();
+    }
   }
 
   public void dispose()

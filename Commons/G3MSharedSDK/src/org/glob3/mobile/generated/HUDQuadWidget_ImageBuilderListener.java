@@ -14,12 +14,11 @@ public class HUDQuadWidget_ImageBuilderListener implements IImageBuilderListener
 
   public final void imageCreated(IImage image, String imageName)
   {
-    _quadWidget.onImageDownload(image, imageName);
+    _quadWidget.imageCreated(image, imageName);
   }
 
   public final void onError(String error)
   {
-    _quadWidget.onImageDownloadError(error);
+    _quadWidget.onImageBuildError(error);
   }
-
 }

@@ -25,7 +25,8 @@ package org.glob3.mobile.generated;
 //class SimpleTextureMapping;
 //class IImageBuilder;
 
-public class HUDQuadWidget extends HUDWidget
+
+public class HUDQuadWidget extends HUDWidget implements ChangedListener
 {
   private IImageBuilder _imageBuilder;
 
@@ -47,7 +48,7 @@ public class HUDQuadWidget extends HUDWidget
   private int _imageWidth;
   private int _imageHeight;
 
-  private boolean _downloadingImage;
+  private boolean _buildingImage;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private Mesh _mesh;
@@ -60,8 +61,6 @@ public class HUDQuadWidget extends HUDWidget
     }
   
     final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
-                                                                                      //_imageURL.getPath(),
-                                                                                      //_imageBuilder->getImageName(),
   
     if (texId == null)
     {
@@ -122,6 +121,8 @@ public class HUDQuadWidget extends HUDWidget
     _mesh = null;
   }
 
+  private final G3MContext _context;
+
   protected final void rawRender(G3MRenderContext rc, GLState glState)
   {
     Mesh mesh = getMesh(rc);
@@ -143,7 +144,7 @@ public class HUDQuadWidget extends HUDWidget
      _image = null;
      _imageWidth = 0;
      _imageHeight = 0;
-     _downloadingImage = false;
+     _buildingImage = false;
      _texCoordsTranslationU = 0F;
      _texCoordsTranslationV = 0F;
      _texCoordsScaleU = 1F;
@@ -151,6 +152,7 @@ public class HUDQuadWidget extends HUDWidget
      _texCoordsRotationInRadians = 0F;
      _texCoordsRotationCenterU = 0F;
      _texCoordsRotationCenterV = 0F;
+     _context = null;
   }
 
   public final void setTexCoordsTranslation(float u, float v)
@@ -214,10 +216,12 @@ public class HUDQuadWidget extends HUDWidget
 
   public final void initialize(G3MContext context)
   {
-    if (!_downloadingImage && (_image == null))
+    _context = context;
+    if (!_buildingImage && (_image == null))
     {
-      _downloadingImage = true;
+      _buildingImage = true;
       _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this), true);
+      _imageBuilder.setChangeListener(this);
     }
   }
 
@@ -232,7 +236,7 @@ public class HUDQuadWidget extends HUDWidget
     {
       return RenderState.error(_errors);
     }
-    else if (_downloadingImage)
+    else if (_buildingImage)
     {
       return RenderState.busy();
     }
@@ -243,25 +247,39 @@ public class HUDQuadWidget extends HUDWidget
   }
 
   /** private, do not call */
-  public final void onImageDownload(IImage image, String imageName)
+  public final void imageCreated(IImage image, String imageName)
   {
-    _downloadingImage = false;
+    _buildingImage = false;
     _image = image;
     _imageName = imageName;
     _imageWidth = _image.getWidth();
     _imageHeight = _image.getHeight();
-    if (_imageBuilder != null)
-       _imageBuilder.dispose();
-    _imageBuilder = null;
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
   }
 
   /** private, do not call */
-  public final void onImageDownloadError(String error)
+  public final void onImageBuildError(String error)
   {
     _errors.add("HUDQuadWidget: \"" + error + "\"");
-    if (_imageBuilder != null)
-       _imageBuilder.dispose();
-    _imageBuilder = null;
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
+  }
+
+  public final void changed()
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+    cleanMesh();
+  
+    _image = null;
+    _image = null;
+    _imageName = "";
+    _imageWidth = 0;
+    _imageHeight = 0;
+  
+    _buildingImage = true;
+    _imageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this), true);
   }
 
 }
