@@ -17,7 +17,12 @@
 class LabelImageBuilder : public IImageBuilder {
 private:
   const std::string _text;
+#ifdef C_CODE
   const GFont       _font;
+#endif
+#ifdef JAVA_CODE
+  private final GFont _font;
+#endif
   const Color       _color;
   const float       _margin;
 
@@ -38,6 +43,9 @@ public:
 //    const Color shadowColor = Color::black();
 //
 //    const int separation = 2;
+  }
+
+  ~LabelImageBuilder() {
   }
 
   void build(const G3MContext* context,
