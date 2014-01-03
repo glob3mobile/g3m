@@ -28,7 +28,6 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 
   public void dispose()
   {
-
   }
 
   public final void changed()
