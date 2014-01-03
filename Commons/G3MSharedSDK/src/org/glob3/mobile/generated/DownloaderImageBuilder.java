@@ -48,6 +48,7 @@ public class DownloaderImageBuilder extends AbstractImageBuilder
 
   public void dispose()
   {
+    super.dispose();
   }
 
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
