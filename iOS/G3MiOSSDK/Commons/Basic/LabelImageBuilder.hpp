@@ -18,24 +18,30 @@ class LabelImageBuilder : public AbstractImageBuilder {
 private:
   std::string _text;
 #ifdef C_CODE
-  const GFont       _font;
+  const GFont _font;
 #endif
 #ifdef JAVA_CODE
   private final GFont _font;
 #endif
-  const Color       _color;
-  const float       _margin;
+  const float _margin;
+  const Color _color;
+  const Color _backgroundColor;
+  const float _cornerRadius;
 
 public:
 
   LabelImageBuilder(const std::string& text,
-                    const GFont&       font   = GFont::sansSerif(),
-                    const Color&       color  = Color::white(),
-                    const float        margin = 0) :
+                    const GFont&       font            = GFont::sansSerif(),
+                    const float        margin          = 0,
+                    const Color&       color           = Color::white(),
+                    const Color&       backgroundColor = Color::transparent(),
+                    const float        cornerRadius    = 0) :
   _text(text),
   _font(font),
+  _margin(margin),
   _color(color),
-  _margin(margin)
+  _backgroundColor(backgroundColor),
+  _cornerRadius(cornerRadius)
   {
   }
 
@@ -46,6 +52,9 @@ public:
   void setText(const std::string& text);
 
   ~LabelImageBuilder() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void build(const G3MContext* context,

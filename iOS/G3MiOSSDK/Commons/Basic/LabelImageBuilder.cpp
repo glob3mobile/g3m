@@ -74,8 +74,22 @@ void LabelImageBuilder::build(const G3MContext* context,
   const IMathUtils* mu = context->getMathUtils();
 
   const float margin2 = _margin*2;
-  canvas->initialize(mu->round(textExtent._x + margin2),
-                     mu->round(textExtent._y + margin2));
+  const int width  = mu->round(textExtent._x + margin2);
+  const int height = mu->round(textExtent._y + margin2);
+  canvas->initialize(width, height);
+
+  if (!_backgroundColor.isTransparent()) {
+    canvas->setFillColor(_backgroundColor);
+    if (_cornerRadius > 0) {
+      canvas->fillRoundedRectangle(0, 0,
+                                   width, height,
+                                   _cornerRadius);
+    }
+    else {
+      canvas->fillRectangle(0, 0,
+                            width, height);
+    }
+  }
 
   canvas->setFillColor(_color);
   canvas->fillText(_text, _margin, _margin);

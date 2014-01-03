@@ -22,7 +22,6 @@ public:
   }
 
   virtual ~AbstractImageBuilder() {
-
   }
   
   void changed();
