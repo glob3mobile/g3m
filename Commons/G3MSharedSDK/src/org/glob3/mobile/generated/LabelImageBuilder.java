@@ -28,15 +28,15 @@ public class LabelImageBuilder implements IImageBuilder
 
   public LabelImageBuilder(String text, GFont font, Color color)
   {
-     this(text, font, color, 1);
+     this(text, font, color, 0);
   }
   public LabelImageBuilder(String text, GFont font)
   {
-     this(text, font, Color.white(), 1);
+     this(text, font, Color.white(), 0);
   }
   public LabelImageBuilder(String text)
   {
-     this(text, GFont.sansSerif(), Color.white(), 1);
+     this(text, GFont.sansSerif(), Color.white(), 0);
   }
   public LabelImageBuilder(String text, GFont font, Color color, float margin)
   {
@@ -44,12 +44,6 @@ public class LabelImageBuilder implements IImageBuilder
      _font = font;
      _color = new Color(color);
      _margin = margin;
-//    const float fontSize = 20;
-//
-//    const Color color       = Color::white();
-//    const Color shadowColor = Color::black();
-//
-//    const int separation = 2;
   }
 
   public void dispose()
@@ -59,9 +53,7 @@ public class LabelImageBuilder implements IImageBuilder
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
   
-    final IFactory factory = context.getFactory();
-  
-    ICanvas canvas = factory.createCanvas();
+    ICanvas canvas = context.getFactory().createCanvas();
   
     canvas.setFont(_font);
   
@@ -69,7 +61,8 @@ public class LabelImageBuilder implements IImageBuilder
   
     final IMathUtils mu = context.getMathUtils();
   
-    canvas.initialize(mu.round(textExtent._x + _margin *2), mu.round(textExtent._y + _margin *2));
+    final float margin2 = _margin *2;
+    canvas.initialize(mu.round(textExtent._x + margin2), mu.round(textExtent._y + margin2));
   
     canvas.setFillColor(_color);
     canvas.fillText(_text, _margin, _margin);
