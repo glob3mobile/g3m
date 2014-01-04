@@ -36,37 +36,6 @@ public class LabelImageBuilder extends AbstractImageBuilder
   private final boolean _isMutable;
 
 
-  public LabelImageBuilder(String text, GFont font, float margin, Color color)
-  {
-     this(text, font, margin, color, false);
-  }
-  public LabelImageBuilder(String text, GFont font, float margin)
-  {
-     this(text, font, margin, Color.white(), false);
-  }
-  public LabelImageBuilder(String text, GFont font)
-  {
-     this(text, font, 0, Color.white(), false);
-  }
-  public LabelImageBuilder(String text)
-  {
-     this(text, GFont.sansSerif(), 0, Color.white(), false);
-  }
-  public LabelImageBuilder(String text, GFont font, float margin, Color color, boolean isMutable)
-  {
-     _text = text;
-     _font = font;
-     _margin = margin;
-     _color = new Color(color);
-     _shadowColor = new Color(Color.transparent());
-     _shadowBlur = 0F;
-     _shadowOffsetX = 0F;
-     _shadowOffsetY = 0F;
-     _backgroundColor = new Color(Color.transparent());
-     _cornerRadius = 0F;
-     _isMutable = isMutable;
-  }
-
   public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius)
   {
      this(text, font, margin, color, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, backgroundColor, cornerRadius, false);
