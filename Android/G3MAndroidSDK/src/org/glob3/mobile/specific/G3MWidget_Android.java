@@ -180,25 +180,11 @@ public final class G3MWidget_Android
          return false;
       }
       
-
-	  ILogger.instance().logInfo("TOUCHEVENT " + te.getType() + " " + te.getTapCount());
       if (_processingDoubleTap){
-
-		  ILogger.instance().logInfo("TOUCHEVENT DISMISSED");
-    	  //if (te.getType() == TouchEventType.Up && te.getTapCount() == 0){
-    		  _processingDoubleTap = false;
-    		  return false;
-    	//  } else{
-    		//  return false; //Events will be dismissed until double tap is finished
-    	 // }
+    	  _processingDoubleTap = false; //Dismissing next event after double tap
+    	  return false;
       }
       
-//      if (_motionEventProcessor.isProcessingDoubleTap()){
-//    	  if (te.getType() != TouchEventType.Up){
-//    		  return false;
-//    	  }
-//      }
-
       queueEvent(new Runnable() {
          @Override
          public void run() {
