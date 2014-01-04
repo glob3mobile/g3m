@@ -60,6 +60,8 @@ public final class G3MWidget_Android
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
+   
+   private boolean _processingDoubleTap = false;
 
 
    public G3MWidget_Android(final android.content.Context context) {
@@ -118,6 +120,8 @@ public final class G3MWidget_Android
             public boolean onDoubleTap(final MotionEvent event) {
 
                final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+               
+               _processingDoubleTap = true;
 
                queueEvent(new Runnable() {
                   @Override
@@ -175,6 +179,25 @@ public final class G3MWidget_Android
       if (te == null) {
          return false;
       }
+      
+
+	  ILogger.instance().logInfo("TOUCHEVENT " + te.getType() + " " + te.getTapCount());
+      if (_processingDoubleTap){
+
+		  ILogger.instance().logInfo("TOUCHEVENT DISMISSED");
+    	  //if (te.getType() == TouchEventType.Up && te.getTapCount() == 0){
+    		  _processingDoubleTap = false;
+    		  return false;
+    	//  } else{
+    		//  return false; //Events will be dismissed until double tap is finished
+    	 // }
+      }
+      
+//      if (_motionEventProcessor.isProcessingDoubleTap()){
+//    	  if (te.getType() != TouchEventType.Up){
+//    		  return false;
+//    	  }
+//      }
 
       queueEvent(new Runnable() {
          @Override
