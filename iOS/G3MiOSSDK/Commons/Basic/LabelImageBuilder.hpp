@@ -42,25 +42,6 @@ public:
                     const GFont&       font            = GFont::sansSerif(),
                     const float        margin          = 0,
                     const Color&       color           = Color::white(),
-                    const bool         isMutable       = false) :
-  _text(text),
-  _font(font),
-  _margin(margin),
-  _color(color),
-  _shadowColor(Color::transparent()),
-  _shadowBlur(0),
-  _shadowOffsetX(0),
-  _shadowOffsetY(0),
-  _backgroundColor(Color::transparent()),
-  _cornerRadius(0),
-  _isMutable(isMutable)
-  {
-  }
-
-  LabelImageBuilder(const std::string& text,
-                    const GFont&       font            = GFont::sansSerif(),
-                    const float        margin          = 0,
-                    const Color&       color           = Color::white(),
                     const Color&       shadowColor     = Color::transparent(),
                     const float        shadowBlur      = 0,
                     const float        shadowOffsetX   = 0,
@@ -99,7 +80,7 @@ public:
              bool deleteListener);
 
   const std::string getImageName();
-
+  
 };
 
 #endif
