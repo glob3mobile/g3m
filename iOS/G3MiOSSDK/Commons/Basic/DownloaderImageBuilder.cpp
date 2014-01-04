@@ -78,6 +78,7 @@ void DownloaderImageBuilder::build(const G3MContext* context,
                            _priority,
                            _timeToCache,
                            _readExpired,
-                           new DownloaderImageBuilder_ImageDownloadListener(listener, deleteListener),
+                           new DownloaderImageBuilder_ImageDownloadListener(listener,
+                                                                            deleteListener),
                            true);
 }
