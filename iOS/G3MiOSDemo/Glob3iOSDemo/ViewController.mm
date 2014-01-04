@@ -667,7 +667,8 @@ public:
                                                             2,                     // shadowOffsetX
                                                             -2,                    // shadowOffsetY
                                                             Color::red(),          // backgroundColor
-                                                            4                      // cornerRadius
+                                                            4,                     // cornerRadius
+                                                            true                   // mutable
                                                             );
 
 #warning Diego at work!

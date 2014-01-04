@@ -34,7 +34,28 @@ private:
   const Color _backgroundColor;
   const float _cornerRadius;
 
+  const bool  _isMutable;
+
 public:
+
+  LabelImageBuilder(const std::string& text,
+                    const GFont&       font            = GFont::sansSerif(),
+                    const float        margin          = 0,
+                    const Color&       color           = Color::white(),
+                    const bool         isMutable       = false) :
+  _text(text),
+  _font(font),
+  _margin(margin),
+  _color(color),
+  _shadowColor(Color::transparent()),
+  _shadowBlur(0),
+  _shadowOffsetX(0),
+  _shadowOffsetY(0),
+  _backgroundColor(Color::transparent()),
+  _cornerRadius(0),
+  _isMutable(isMutable)
+  {
+  }
 
   LabelImageBuilder(const std::string& text,
                     const GFont&       font            = GFont::sansSerif(),
@@ -45,7 +66,8 @@ public:
                     const float        shadowOffsetX   = 0,
                     const float        shadowOffsetY   = 0,
                     const Color&       backgroundColor = Color::transparent(),
-                    const float        cornerRadius    = 0) :
+                    const float        cornerRadius    = 0,
+                    const bool         isMutable       = false) :
   _text(text),
   _font(font),
   _margin(margin),
@@ -55,12 +77,13 @@ public:
   _shadowOffsetX(shadowOffsetX),
   _shadowOffsetY(shadowOffsetY),
   _backgroundColor(backgroundColor),
-  _cornerRadius(cornerRadius)
+  _cornerRadius(cornerRadius),
+  _isMutable(isMutable)
   {
   }
 
   bool isMutable() const {
-    return true;
+    return _isMutable;
   }
 
   void setText(const std::string& text);

@@ -63,9 +63,14 @@ public:
 };
 
 void LabelImageBuilder::setText(const std::string& text) {
-  if (_text != text) {
-    _text = text;
-    changed();
+  if (_isMutable) {
+    if (_text != text) {
+      _text = text;
+      changed();
+    }
+  }
+  else {
+    ILogger::instance()->logError("Can't change text on an inmutable LabelImageBuilder");
   }
 }
 
