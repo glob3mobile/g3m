@@ -33,8 +33,6 @@ public:
 
   virtual const std::string getImageName() = 0;
 
-  virtual void changed() = 0;
-
   virtual void setChangeListener(ChangedListener* listener) = 0;
   
 };

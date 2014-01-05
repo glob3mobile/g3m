@@ -15,6 +15,9 @@ class AbstractImageBuilder : public IImageBuilder {
 private:
   ChangedListener* _listener;
 
+protected:
+  void changed();
+
 public:
   AbstractImageBuilder() :
   _listener(NULL)
@@ -24,8 +27,6 @@ public:
   virtual ~AbstractImageBuilder() {
   }
   
-  void changed();
-
   void setChangeListener(ChangedListener* listener);
 
 };
