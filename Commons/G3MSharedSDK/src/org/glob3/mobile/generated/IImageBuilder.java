@@ -31,8 +31,6 @@ public interface IImageBuilder
 
   String getImageName();
 
-  void changed();
-
   void setChangeListener(ChangedListener listener);
 
 }

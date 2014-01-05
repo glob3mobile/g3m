@@ -21,6 +21,14 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 {
   private ChangedListener _listener;
 
+  protected final void changed()
+  {
+    if (_listener != null)
+    {
+      _listener.changed();
+    }
+  }
+
   public AbstractImageBuilder()
   {
      _listener = null;
@@ -28,14 +36,6 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 
   public void dispose()
   {
-  }
-
-  public final void changed()
-  {
-    if (_listener != null)
-    {
-      _listener.changed();
-    }
   }
 
   public final void setChangeListener(ChangedListener listener)
