@@ -38,12 +38,12 @@ private:
   bool _cullFace;
   int  _culledFace;
   
-//#ifdef C_CODE
+#ifdef C_CODE
   const IGLTextureId* _boundTextureId[MAX_N_TEXTURES];
-//#endif
-//#ifdef JAVA_CODE
-//  private IGLTextureId[] _boundTextureId = new IGLTextureId[MAX_N_TEXTURES];
-//#endif
+#endif
+#ifdef JAVA_CODE
+  private final IGLTextureId[] _boundTextureId = new IGLTextureId[DefineConstants.MAX_N_TEXTURES];
+#endif
 
   float _lineWidth;
   
