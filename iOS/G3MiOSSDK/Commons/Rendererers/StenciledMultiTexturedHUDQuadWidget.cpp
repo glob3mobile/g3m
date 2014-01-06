@@ -237,7 +237,7 @@ void StenciledMultiTexturedHUDQuadWidget::onResizeViewportEvent(const G3MEventCo
   cleanMesh();
 }
 
-void StenciledMultiTexturedHUDQuadWidget::onImageDownload(IImage* image,const URL& url) {
+void StenciledMultiTexturedHUDQuadWidget::onImageDownload(IImage* image, const URL& url) {
 
   if (url.isEquals(_imageURL)){
     _image = image;
