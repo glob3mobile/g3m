@@ -51,9 +51,8 @@ private:
   float _texCoordsRotationCenterV;
 
   IImage* _image;
-  bool _downloadingImage;
   IImage* _image2;
-  bool _downloadingImage2;
+  bool _downloadingImage;
   std::vector<std::string> _errors;
 
   Mesh* _mesh;
