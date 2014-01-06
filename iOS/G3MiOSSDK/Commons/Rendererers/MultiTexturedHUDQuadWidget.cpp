@@ -208,16 +208,16 @@ void MultiTexturedHUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec
   cleanMesh();
 }
 
-void MultiTexturedHUDQuadWidget::onImageDownload(IImage* image,const URL& url) {
-
-  if (url.isEquals(_imageURL)){
+void MultiTexturedHUDQuadWidget::onImageDownload(IImage* image, const URL& url) {
+  if (url.isEquals(_imageURL)) {
     _image = image;
   }
-  if (url.isEquals(_imageURL2)){
+  if (url.isEquals(_imageURL2)) {
     _image2 = image;
   }
 
-  if (_image != NULL && _image2 != NULL){
+  if ((_image  != NULL) &&
+      (_image2 != NULL)) {
     _downloadingImage = false;
   }
 }
