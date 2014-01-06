@@ -249,8 +249,22 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
   }
 
   /** private, do not call */
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void onImageDownload(IImage image, URL url);
+  public final void onImageDownload(IImage image, URL url)
+  {
+    if (url.isEquals(_imageURL))
+    {
+      _image = image;
+    }
+    if (url.isEquals(_imageURL2))
+    {
+      _image2 = image;
+    }
+  
+    if ((_image != null) && (_image2 != null))
+    {
+      _downloadingImage = false;
+    }
+  }
 
   /** private, do not call */
   public final void onImageDownloadError(URL url)
