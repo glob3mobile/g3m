@@ -38,12 +38,7 @@ public class GLGlobalState
   private boolean _cullFace;
   private int _culledFace;
 
-///#ifdef C_CODE
-  private static final IGLTextureId[] _boundTextureId = new IGLTextureId[DefineConstants.MAX_N_TEXTURES];
-///#endif
-///#ifdef JAVA_CODE
-//  private IGLTextureId[] _boundTextureId = new IGLTextureId[MAX_N_TEXTURES];
-///#endif
+  private final IGLTextureId[] _boundTextureId = new IGLTextureId[DefineConstants.MAX_N_TEXTURES];
 
   private float _lineWidth;
 
