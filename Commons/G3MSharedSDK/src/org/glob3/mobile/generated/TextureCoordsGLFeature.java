@@ -6,7 +6,7 @@ public class TextureCoordsGLFeature extends PriorityGLFeature
     super.dispose();
   }
 
-  public TextureCoordsGLFeature(IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean coordsTransformed, Vector2D translate, Vector2D scale)
+  public TextureCoordsGLFeature(IFloatBuffer texCoords, int arrayElementSize, int index, boolean normalized, int stride, boolean coordsTransformed, Vector2F translate, Vector2F scale)
   {
      super(GLFeatureGroupName.COLOR_GROUP, GLFeatureID.GLF_TEXTURE_COORDS, 4);
   
@@ -20,8 +20,8 @@ public class TextureCoordsGLFeature extends PriorityGLFeature
   
     if (coordsTransformed)
     {
-      _values.addUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS, new GPUUniformValueVec2Float((float)translate._x, (float)translate._y), false);
-      _values.addUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS, new GPUUniformValueVec2Float((float)scale._x, (float)scale._y), false);
+      _values.addUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS, new GPUUniformValueVec2Float(translate._x, translate._y), false);
+      _values.addUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS, new GPUUniformValueVec2Float(scale._x, scale._y), false);
     }
   
   }

@@ -19,24 +19,24 @@ public class TextureGLFeature extends GLColorGroupFeature
     switch (_target)
     {
       case 0:
-      _values.addUniformValue(GPUUniformKey.SAMPLER, texUnit, false);
-      _values.addAttributeValue(GPUAttributeKey.TEXTURE_COORDS, value, false);
-      break;
+        _values.addUniformValue(GPUUniformKey.SAMPLER, texUnit, false);
+        _values.addAttributeValue(GPUAttributeKey.TEXTURE_COORDS, value, false);
+        break;
   
       case 1:
-      _values.addUniformValue(GPUUniformKey.SAMPLER2, texUnit, false);
-      _values.addAttributeValue(GPUAttributeKey.TEXTURE_COORDS_2, value, false);
-      break;
+        _values.addUniformValue(GPUUniformKey.SAMPLER2, texUnit, false);
+        _values.addAttributeValue(GPUAttributeKey.TEXTURE_COORDS_2, value, false);
+        break;
   
       case 2:
-      _values.addUniformValue(GPUUniformKey.SAMPLER3, texUnit, false);
-      _values.addAttributeValue(GPUAttributeKey.TEXTURE_COORDS_3, value, false);
-      break;
+        _values.addUniformValue(GPUUniformKey.SAMPLER3, texUnit, false);
+        _values.addAttributeValue(GPUAttributeKey.TEXTURE_COORDS_3, value, false);
+        break;
   
       default:
-      ILogger.instance().logError("Wrong texture target.");
+        ILogger.instance().logError("Wrong texture target.");
   
-      break;
+        break;
     }
   }
 

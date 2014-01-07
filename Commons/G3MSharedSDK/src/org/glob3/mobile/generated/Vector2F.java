@@ -20,10 +20,19 @@ package org.glob3.mobile.generated;
 
 public class Vector2F
 {
-
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector2F operator =(Vector2F v);
+
+
+  public static Vector2F zero()
+  {
+    return new Vector2F(0, 0);
+  }
+
+  public static Vector2F nan()
+  {
+    return new Vector2F(java.lang.Float.NaN, java.lang.Float.NaN);
+  }
 
   public final float _x;
   public final float _y;
@@ -33,23 +42,16 @@ public class Vector2F
   {
      _x = x;
      _y = y;
-
   }
 
   public Vector2F(Vector2F v)
   {
      _x = v._x;
      _y = v._y;
-
   }
 
   public void dispose()
   {
-  }
-
-  public static Vector2F nan()
-  {
-    return new Vector2F(java.lang.Float.NaN, java.lang.Float.NaN);
   }
 
   public final double squaredDistanceTo(Vector2I that)
