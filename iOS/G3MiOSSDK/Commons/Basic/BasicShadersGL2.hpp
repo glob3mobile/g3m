@@ -233,40 +233,6 @@ public:
 "} \n ");
     this->add(sourcesMultiTexturedMesh);
 
-    GPUProgramSources sourcesMultiTexturedMesh_Stencil("MultiTexturedMesh_Stencil",
- emptyString +  
-"attribute vec4 aPosition; \n " + 
-"attribute vec2 aTextureCoord; \n " + 
-"attribute vec2 aTextureCoord2; \n " + 
-"attribute vec2 aTextureCoord3; \n " + 
-"uniform mat4 uModelview; \n " + 
-"uniform float uPointSize; \n " + 
-"varying vec2 TextureCoordOut; \n " + 
-"varying vec2 TextureCoordOut2; \n " + 
-"varying vec2 TextureCoordOut3; \n " + 
-"void main() { \n " + 
-"gl_Position = uModelview * aPosition; \n " + 
-"TextureCoordOut = aTextureCoord; \n " + 
-"TextureCoordOut2 = aTextureCoord2; \n " + 
-"TextureCoordOut3 = aTextureCoord3; \n " + 
-"gl_PointSize = uPointSize; \n " + 
-"} \n ",
- emptyString +  
-"varying mediump vec2 TextureCoordOut; \n " + 
-"varying mediump vec2 TextureCoordOut2; \n " + 
-"varying mediump vec2 TextureCoordOut3; \n " + 
-"uniform sampler2D Sampler; \n " + 
-"uniform sampler2D Sampler2; \n " + 
-"uniform sampler2D Sampler3; \n " + 
-"void main() { \n " + 
-"mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut); \n " + 
-"mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2); \n " + 
-"mediump vec4 tex3 = texture2D(Sampler3, TextureCoordOut3); \n " + 
-"gl_FragColor = tex1 * tex2; \n " + 
-"gl_FragColor.w *= tex3.w; \n " + 
-"} \n ");
-    this->add(sourcesMultiTexturedMesh_Stencil);
-
     GPUProgramSources sourcesNoColorMesh("NoColorMesh",
  emptyString +  
 "attribute vec4 aPosition; \n " + 
@@ -449,50 +415,6 @@ public:
 "gl_FragColor = tex1 * tex2; \n " + 
 "} \n ");
     this->add(sourcesTransformedTexCoorMultiTexturedMesh);
-
-    GPUProgramSources sourcesTransformedTexCoorMultiTexturedMesh_Stencil("TransformedTexCoorMultiTexturedMesh_Stencil",
- emptyString +  
-"attribute vec4 aPosition; \n " + 
-"attribute vec2 aTextureCoord; \n " + 
-"attribute vec2 aTextureCoord2; \n " + 
-"attribute vec2 aTextureCoord3; \n " + 
-"uniform mat4 uModelview; \n " + 
-"uniform float uPointSize; \n " + 
-"varying vec2 TextureCoordOut; \n " + 
-"varying vec2 TextureCoordOut2; \n " + 
-"varying vec2 TextureCoordOut3; \n " + 
-"uniform mediump vec2 uTranslationTexCoord; \n " + 
-"uniform mediump vec2 uScaleTexCoord; \n " + 
-"uniform float uRotationAngleTexCoord; \n " + 
-"uniform vec2 uRotationCenterTexCoord; \n " + 
-"void main() { \n " + 
-"gl_Position = uModelview * aPosition; \n " + 
-"float s = sin( uRotationAngleTexCoord ); \n " + 
-"float c = cos( uRotationAngleTexCoord ); \n " + 
-"TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
-"TextureCoordOut = TextureCoordOut - uRotationCenterTexCoord; \n " + 
-"TextureCoordOut = vec2((TextureCoordOut.x * c) + (TextureCoordOut.y * s), \n " + 
-"(-TextureCoordOut.x * s) + (TextureCoordOut.y * c)); \n " + 
-"TextureCoordOut += uRotationCenterTexCoord; \n " + 
-"TextureCoordOut2 = aTextureCoord2; \n " + 
-"TextureCoordOut3 = aTextureCoord3; \n " + 
-"gl_PointSize = uPointSize; \n " + 
-"} \n ",
- emptyString +  
-"varying mediump vec2 TextureCoordOut; \n " + 
-"varying mediump vec2 TextureCoordOut2; \n " + 
-"varying mediump vec2 TextureCoordOut3; \n " + 
-"uniform sampler2D Sampler; \n " + 
-"uniform sampler2D Sampler2; \n " + 
-"uniform sampler2D Sampler3; \n " + 
-"void main() { \n " + 
-"mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut); \n " + 
-"mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2); \n " + 
-"mediump vec4 tex3 = texture2D(Sampler3, TextureCoordOut3); \n " + 
-"gl_FragColor = tex1 * tex2; \n " + 
-"gl_FragColor.w *= tex3.w; \n " + 
-"} \n ");
-    this->add(sourcesTransformedTexCoorMultiTexturedMesh_Stencil);
 
     GPUProgramSources sourcesTransformedTexCoorTexturedMesh("TransformedTexCoorTexturedMesh",
  emptyString +  

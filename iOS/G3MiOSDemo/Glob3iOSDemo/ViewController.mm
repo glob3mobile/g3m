@@ -126,7 +126,6 @@
 #import <G3MiOSSDK/HUDAbsolutePosition.hpp>
 #import <G3MiOSSDK/HUDRelativePosition.hpp>
 #import <G3MiOSSDK/MultiTexturedHUDQuadWidget.hpp>
-#import <G3MiOSSDK/StenciledMultiTexturedHUDQuadWidget.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -672,16 +671,6 @@ public:
 //    multiTexturecompass->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(multiTexturecompass);
 
-    StenciledMultiTexturedHUDQuadWidget* stenciledMultiTexturecompass = NULL;
-    stenciledMultiTexturecompass = new StenciledMultiTexturedHUDQuadWidget(
-                                                         URL("file:///debug-compass.png"),
-                                                         URL("file:///g3m-marker.png"),
-                                                         URL("file:///simpleStencil.png"),
-                                                         new HUDAbsolutePosition(10),
-                                                         new HUDAbsolutePosition(650),
-                                                         300, 300);
-    hudRenderer->addWidget(stenciledMultiTexturecompass);
-
     HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
                                                 URL("file:///Compass_rose_browns_00_transparent.png"),
                                                 //URL("file:///debug-compass.png"),
@@ -735,7 +724,6 @@ public:
       HUDQuadWidget* _compass1;
       HUDQuadWidget* _compass2;
       MultiTexturedHUDQuadWidget* _compass3;
-      StenciledMultiTexturedHUDQuadWidget* _compass4;
       MultiTexturedHUDQuadWidget* _ruler;
       double _angle;
 
@@ -746,12 +734,10 @@ public:
       RotateCompass(HUDQuadWidget* compass1,
                     HUDQuadWidget* compass2,
                     MultiTexturedHUDQuadWidget* compass3,
-                    StenciledMultiTexturedHUDQuadWidget* compass4,
                     MultiTexturedHUDQuadWidget* ruler) :
       _compass1(compass1),
       _compass2(compass2),
       _compass3(compass3),
-      _compass4(compass4),
       _ruler(ruler),
       _angle(0),
       _translationV(0),
@@ -770,9 +756,6 @@ public:
         _compass3->setTexCoordsRotation(Angle::fromRadians(_angle),
                                         0.5f, 0.5f);
 
-        _compass4->setTexCoordsRotation(Angle::fromRadians(_angle),
-                                        0.5f, 0.5f);
-
         if (_translationV > 0.5 || _translationV < 0) {
           _translationStep *= -1;
         }
@@ -785,7 +768,6 @@ public:
                                                  new RotateCompass(compass,
                                                                    compass2,
                                                                    multiTexturecompass,
-                                                                   stenciledMultiTexturecompass,
                                                                    ruler)));
   }
 
