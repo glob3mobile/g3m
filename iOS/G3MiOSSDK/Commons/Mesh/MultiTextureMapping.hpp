@@ -1,5 +1,5 @@
 //
-//  MultiTextureMapping.h
+//  MultiTextureMapping.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 24/12/13.
@@ -11,21 +11,14 @@
 
 #include "TextureMapping.hpp"
 
-
-
 class MultiTextureMapping : public TextureMapping {
 private:
 #ifdef C_CODE
   const TextureIDReference* _glTextureId;
-#endif
-#ifdef JAVA_CODE
-  private TextureIDReference _glTextureId;
-#endif
-
-#ifdef C_CODE
   const TextureIDReference* _glTextureId2;
 #endif
 #ifdef JAVA_CODE
+  private TextureIDReference _glTextureId;
   private TextureIDReference _glTextureId2;
 #endif
 
@@ -52,51 +45,73 @@ private:
 public:
 
   MultiTextureMapping(const TextureIDReference* glTextureId,
-                       IFloatBuffer* texCoords,
-                       bool ownedTexCoords,
-                       bool transparent,
+                      IFloatBuffer* texCoords,
+                      bool ownedTexCoords,
+                      bool transparent,
                       const TextureIDReference* glTextureId2,
                       IFloatBuffer* texCoords2,
                       bool ownedTexCoords2,
                       bool transparent2) :
   _glTextureId(glTextureId),
   _texCoords(texCoords),
+  _ownedTexCoords(ownedTexCoords),
+  _transparent(transparent),
+  _glTextureId2(glTextureId2),
+  _texCoords2(texCoords2),
+  _ownedTexCoords2(ownedTexCoords2),
+  _transparent2(transparent2),
   _translationU(0),
   _translationV(0),
   _scaleU(1),
   _scaleV(1),
-  _ownedTexCoords(ownedTexCoords),
-  _transparent(transparent),
   _rotationInRadians(0),
   _rotationCenterU(0),
-  _rotationCenterV(0),
-  _glTextureId2(glTextureId2),
-  _texCoords2(texCoords2),
-  _ownedTexCoords2(ownedTexCoords2),
-  _transparent2(transparent2)
+  _rotationCenterV(0)
   {
   }
 
-  void setTranslation(float u, float v) {
-    _translationU = u;
-    _translationV = v;
-#warning    updateState();
+  MultiTextureMapping(const TextureIDReference* glTextureId,
+                      IFloatBuffer* texCoords,
+                      bool ownedTexCoords,
+                      bool transparent,
+                      const TextureIDReference* glTextureId2,
+                      IFloatBuffer* texCoords2,
+                      bool ownedTexCoords2,
+                      bool transparent2,
+                      float translationU,
+                      float translationV,
+                      float scaleU,
+                      float scaleV,
+                      float rotationAngleInRadians,
+                      float rotationCenterU,
+                      float rotationCenterV) :
+  _glTextureId(glTextureId),
+  _texCoords(texCoords),
+  _ownedTexCoords(ownedTexCoords),
+  _transparent(transparent),
+  _glTextureId2(glTextureId2),
+  _texCoords2(texCoords2),
+  _ownedTexCoords2(ownedTexCoords2),
+  _transparent2(transparent2),
+  _translationU(translationU),
+  _translationV(translationV),
+  _scaleU(scaleU),
+  _scaleV(scaleV),
+  _rotationInRadians(rotationAngleInRadians),
+  _rotationCenterU(rotationCenterU),
+  _rotationCenterV(rotationCenterV)
+  {
   }
 
-  void setScale(float u, float v) {
-    _scaleU = u;
-    _scaleV = v;
-#warning    updateState();
-  }
+  void setTranslation(float translationU,
+                      float translationV);
 
-  void setRotation(float angleInRadians,
-                   float centerU,
-                   float centerV) {
-    _rotationInRadians = angleInRadians;
-    _rotationCenterU = centerU;
-    _rotationCenterV = centerV;
-#warning    updateState();
-  }
+  void setScale(float scaleU,
+                float scaleV);
+
+  void setRotation(float rotationAngleInRadians,
+                   float rotationCenterU,
+                   float rotationCenterV);
 
   virtual ~MultiTextureMapping();
 
@@ -112,5 +127,4 @@ public:
   
 };
 
-
-#endif /* defined(__G3MiOSSDK__MultiTextureMapping__) */
+#endif

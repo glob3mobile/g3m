@@ -107,16 +107,14 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   _simpleTextureMapping = new SimpleTextureMapping(texId,
                                                    texCoords.create(),
                                                    true,
-                                                   true);
-  _simpleTextureMapping->setTranslation(_texCoordsTranslationU,
-                                        _texCoordsTranslationV);
-
-  _simpleTextureMapping->setScale(_texCoordsScaleU,
-                                  _texCoordsScaleV);
-
-  _simpleTextureMapping->setRotation(_texCoordsRotationInRadians,
-                                     _texCoordsRotationCenterU,
-                                     _texCoordsRotationCenterV);
+                                                   true,
+                                                   _texCoordsTranslationU,
+                                                   _texCoordsTranslationV,
+                                                   _texCoordsScaleU,
+                                                   _texCoordsScaleV,
+                                                   _texCoordsRotationInRadians,
+                                                   _texCoordsRotationCenterU,
+                                                   _texCoordsRotationCenterV);
 
   return new TexturedMesh(dm, true, _simpleTextureMapping, true, true);
 }

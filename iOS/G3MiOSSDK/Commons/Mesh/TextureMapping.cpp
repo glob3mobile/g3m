@@ -10,11 +10,34 @@
 
 #include "Context.hpp"
 #include "GL.hpp"
-
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
 #include "TexturesHandler.hpp"
 #include "GLState.hpp"
+
+
+void SimpleTextureMapping::setTranslation(float translationU,
+                                          float translationV) {
+  _translationU = translationU;
+  _translationV = translationV;
+#warning    updateState();
+}
+
+void SimpleTextureMapping::setScale(float scaleU,
+                                    float scaleV) {
+  _scaleU = scaleU;
+  _scaleV = scaleV;
+#warning    updateState();
+}
+
+void SimpleTextureMapping::setRotation(float rotationAngleInRadians,
+                                       float rotationCenterU,
+                                       float rotationCenterV) {
+  _rotationInRadians = rotationAngleInRadians;
+  _rotationCenterU = rotationCenterU;
+  _rotationCenterV = rotationCenterV;
+#warning    updateState();
+}
 
 void SimpleTextureMapping::releaseGLTextureId() {
 

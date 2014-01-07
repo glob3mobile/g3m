@@ -123,18 +123,25 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
                                        texId2,
                                        texCoords.create(),
                                        true,
-                                       true);
+                                       true,
+                                       _texCoordsTranslationU,
+                                       _texCoordsTranslationV,
+                                       _texCoordsScaleU,
+                                       _texCoordsScaleV,
+                                       _texCoordsRotationInRadians,
+                                       _texCoordsRotationCenterU,
+                                       _texCoordsRotationCenterV);
 
-  //Transforms only for Texture 0
-  _mtMapping->setTranslation(_texCoordsTranslationU,
-                             _texCoordsTranslationV);
-
-  _mtMapping->setScale(_texCoordsScaleU,
-                       _texCoordsScaleV);
-
-  _mtMapping->setRotation(_texCoordsRotationInRadians,
-                          _texCoordsRotationCenterU,
-                          _texCoordsRotationCenterV);
+//  //Transforms only for Texture 0
+//  _mtMapping->setTranslation(_texCoordsTranslationU,
+//                             _texCoordsTranslationV);
+//
+//  _mtMapping->setScale(_texCoordsScaleU,
+//                       _texCoordsScaleV);
+//
+//  _mtMapping->setRotation(_texCoordsRotationInRadians,
+//                          _texCoordsRotationCenterU,
+//                          _texCoordsRotationCenterV);
 
 
   return new TexturedMesh(dm, true, _mtMapping, true, true);
@@ -196,7 +203,6 @@ void MultiTexturedHUDQuadWidget::initialize(const G3MContext* context) {
 }
 
 void MultiTexturedHUDQuadWidget::cleanMesh() {
-#warning TO DIEGO : ONLY = NULL ??? -> check in all widgets
   _mtMapping = NULL;
 
   delete _mesh;

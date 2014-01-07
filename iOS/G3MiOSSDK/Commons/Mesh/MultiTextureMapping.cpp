@@ -12,6 +12,29 @@
 #include "IFloatBuffer.hpp"
 #include "GLState.hpp"
 
+void MultiTextureMapping::setTranslation(float translationU,
+                                         float translationV) {
+  _translationU = translationU;
+  _translationV = translationV;
+#warning    updateState();
+}
+
+void MultiTextureMapping::setScale(float scaleU,
+                                   float scaleV) {
+  _scaleU = scaleU;
+  _scaleV = scaleV;
+#warning    updateState();
+}
+
+void MultiTextureMapping::setRotation(float rotationAngleInRadians,
+                                      float rotationCenterU,
+                                      float rotationCenterV) {
+  _rotationInRadians = rotationAngleInRadians;
+  _rotationCenterU = rotationCenterU;
+  _rotationCenterV = rotationCenterV;
+#warning    updateState();
+}
+
 
 void MultiTextureMapping::releaseGLTextureId() {
 
@@ -23,10 +46,10 @@ void MultiTextureMapping::releaseGLTextureId() {
     _glTextureId.dispose();
 #endif
     _glTextureId = NULL;
-  } else{
+  }
+  else {
     ILogger::instance()->logError("Releasing invalid Multi texture mapping");
   }
-
 
   if (_glTextureId2 != NULL) {
 #ifdef C_CODE
@@ -36,7 +59,8 @@ void MultiTextureMapping::releaseGLTextureId() {
     _glTextureId2.dispose();
 #endif
     _glTextureId2 = NULL;
-  } else{
+  }
+  else {
     ILogger::instance()->logError("Releasing invalid Multi texture mapping");
   }
 }
@@ -58,7 +82,7 @@ MultiTextureMapping::~MultiTextureMapping() {
 }
 
 void MultiTextureMapping::modifyGLState(GLState& state) const{
-  //TARGET 0
+  // TARGET 0
   if (_texCoords == NULL) {
     ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords == NULL");
   }
@@ -102,12 +126,11 @@ void MultiTextureMapping::modifyGLState(GLState& state) const{
     }
   }
 
-  //TAGET 1
+  // TARGET 1
   if (_texCoords2 == NULL) {
     ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
   }
   else {
-
     state.addGLFeature(new TextureGLFeature(_glTextureId2->getID(),
                                             _texCoords2,
                                             2,

@@ -65,39 +65,53 @@ public:
                        bool transparent) :
   _glTextureId(glTextureId),
   _texCoords(texCoords),
+  _ownedTexCoords(ownedTexCoords),
+  _transparent(transparent),
   _translationU(0),
   _translationV(0),
   _scaleU(1),
   _scaleV(1),
-  _ownedTexCoords(ownedTexCoords),
-  _transparent(transparent),
   _rotationInRadians(0),
   _rotationCenterU(0),
   _rotationCenterV(0)
   {
   }
 
-  void setTranslation(float u, float v) {
-    _translationU = u;
-    _translationV = v;
-#warning    updateState();
+  SimpleTextureMapping(const TextureIDReference* glTextureId,
+                       IFloatBuffer* texCoords,
+                       bool ownedTexCoords,
+                       bool transparent,
+                       float translationU,
+                       float translationV,
+                       float scaleU,
+                       float scaleV,
+                       float rotationAngleInRadians,
+                       float rotationCenterU,
+                       float rotationCenterV) :
+  _glTextureId(glTextureId),
+  _texCoords(texCoords),
+  _ownedTexCoords(ownedTexCoords),
+  _transparent(transparent),
+  _translationU(translationU),
+  _translationV(translationV),
+  _scaleU(scaleU),
+  _scaleV(scaleV),
+  _rotationInRadians(rotationAngleInRadians),
+  _rotationCenterU(rotationCenterU),
+  _rotationCenterV(rotationCenterV)
+  {
   }
 
-  void setScale(float u, float v) {
-    _scaleU = u;
-    _scaleV = v;
-#warning    updateState();
-  }
+  void setTranslation(float translationU,
+                      float translationV);
+
+  void setScale(float scaleU,
+                float scaleV);
   
-  void setRotation(float angleInRadians,
-                   float centerU,
-                   float centerV) {
-    _rotationInRadians = angleInRadians;
-    _rotationCenterU = centerU;
-    _rotationCenterV = centerV;
-#warning    updateState();
-  }
-  
+  void setRotation(float rotationAngleInRadians,
+                   float rotationCenterU,
+                   float rotationCenterV);
+
   virtual ~SimpleTextureMapping();
   
   const IGLTextureId* getGLTextureId() const {
