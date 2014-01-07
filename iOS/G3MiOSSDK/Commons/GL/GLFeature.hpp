@@ -444,8 +444,8 @@ public:
                          bool normalized,
                          int stride,
                          bool coordsTransformed,
-                         const Vector2D& translate,
-                         const Vector2D& scale);
+                         const Vector2F& translate,
+                         const Vector2F& scale);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };

@@ -8,6 +8,7 @@
 
 #include "GLFeature.hpp"
 #include "Camera.hpp"
+#include "Vector2F.hpp"
 
 ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth,
                                                  int viewportHeight) :
@@ -121,24 +122,24 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
 
   switch (_target) {
     case 0:
-    _values.addUniformValue(SAMPLER, texUnit, false);
-    _values.addAttributeValue(TEXTURE_COORDS, value, false);
-    break;
+      _values.addUniformValue(SAMPLER, texUnit, false);
+      _values.addAttributeValue(TEXTURE_COORDS, value, false);
+      break;
 
     case 1:
-    _values.addUniformValue(SAMPLER2, texUnit, false);
-    _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
-    break;
+      _values.addUniformValue(SAMPLER2, texUnit, false);
+      _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
+      break;
 
     case 2:
-    _values.addUniformValue(SAMPLER3, texUnit, false);
-    _values.addAttributeValue(TEXTURE_COORDS_3, value, false);
-    break;
+      _values.addUniformValue(SAMPLER3, texUnit, false);
+      _values.addAttributeValue(TEXTURE_COORDS_3, value, false);
+      break;
 
     default:
-    ILogger::instance()->logError("Wrong texture target.");
+      ILogger::instance()->logError("Wrong texture target.");
 
-    break;
+      break;
   }
 }
 
@@ -250,13 +251,22 @@ void BlendingModeGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
   blendingOnGlobalGLState(state);
 }
 
-TextureCoordsGLFeature::TextureCoordsGLFeature(IFloatBuffer* texCoords, int arrayElementSize, int index, bool normalized,
+TextureCoordsGLFeature::TextureCoordsGLFeature(IFloatBuffer* texCoords,
+                                               int arrayElementSize,
+                                               int index,
+                                               bool normalized,
                                                int stride,
-                                               bool coordsTransformed, const Vector2D& translate, const Vector2D& scale):
+                                               bool coordsTransformed,
+                                               const Vector2F& translate,
+                                               const Vector2F& scale):
 PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
 {
 
-  GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords, arrayElementSize, index, stride, normalized);
+  GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
+                                                                     arrayElementSize,
+                                                                     index,
+                                                                     stride,
+                                                                     normalized);
   _values.addAttributeValue(TEXTURE_COORDS, value, false);
 
 #warning ONLY TARGET 0 FOR SGNODES
@@ -265,9 +275,13 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
 
   if (coordsTransformed) {
     _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float((float)translate._x, (float)translate._y), false);
+                            new GPUUniformValueVec2Float(translate._x,
+                                                         translate._y),
+                            false);
     _values.addUniformValue(SCALE_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float((float)scale._x, (float)scale._y), false);
+                            new GPUUniformValueVec2Float(scale._x,
+                                                         scale._y),
+                            false);
   }
 
 }
@@ -319,5 +333,5 @@ GLFeature(LIGHTING_GROUP, GLF_VERTEX_NORMAL)
   _values.addAttributeValue(NORMAL,
                             new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized),
                             false);
-
+  
 }
