@@ -671,25 +671,14 @@ public:
                                                             true                   // mutable
                                                             );
 
-#warning Diego at work!
-    HUDQuadWidget* compass = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                               labelBuilder,
-                                               //new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
-                                               new HUDAbsolutePosition(10),
-                                               new HUDAbsolutePosition(10),
-                                               // new HUDRelativeSize(0.15, HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                               // new HUDRelativeSize(0.15, HUDRelativeSize::VIEWPORT_MIN_AXIS)
-                                               new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
-                                               new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
-//    compass->setTexCoordsRotation(Angle::fromDegrees(45),
-//                                   0.5f, 0.5f);
-    hudRenderer->addWidget(compass);
+    HUDQuadWidget* label = new HUDQuadWidget(labelBuilder,
+                                             new HUDAbsolutePosition(10),
+                                             new HUDAbsolutePosition(10),
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
+    hudRenderer->addWidget(label);
 
-    HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
-                                                new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
-                                                //URL("file:///debug-compass.png"),
-                                                //new HUDAbsolutePosition(320),
-                                                //new HUDAbsolutePosition(150+10),
+    HUDQuadWidget* compass2 = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_WIDTH,
                                                                         HUDRelativePosition::CENTER),
@@ -700,19 +689,12 @@ public:
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS),
                                                 new HUDRelativeSize(0.25,
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS));
-    compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
-                                   Angle::fromDegrees(30),
+    compass2->setTexCoordsRotation(Angle::fromDegrees(30),
                                    0.5f, 0.5f);
-    //compass2->setTexCoordsTranslation(0, 0.5f);
     compass2->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass2);
 
-//    float visibleFactor = 4;
     float visibleFactor = 3;
-//    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
-//                                             new HUDAbsolutePosition(320*2),
-//                                             new HUDAbsolutePosition(10),
-//                                             113, 1536 / visibleFactor);
     HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
                                              new HUDRelativePosition(1,
                                                                      HUDRelativePosition::VIEWPORT_WIDTH,
@@ -721,8 +703,6 @@ public:
                                              new HUDRelativePosition(0.5,
                                                                      HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                      HUDRelativePosition::MIDDLE),
-//                                             new HUDAbsoluteSize(113),
-//                                             new HUDAbsoluteSize(1536 / visibleFactor)
                                              new HUDRelativeSize(2 * (113.0 / 1536.0),
                                                                  HUDRelativeSize::VIEWPORT_MIN_AXIS),
                                              new HUDRelativeSize(2 / visibleFactor,
@@ -781,7 +761,7 @@ public:
     };
 
     builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(50),
-                                                 new AnimateHUDWidgetsTask(compass, compass2, ruler, labelBuilder)));
+                                                 new AnimateHUDWidgetsTask(label, compass2, ruler, labelBuilder)));
   }
 
 
