@@ -72,7 +72,7 @@ public class GPUProgramManager
     final boolean hasLight = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT_COLOR);
   
     final boolean hasTexture2 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER2);
-    final boolean hasTexture3 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER3);
+  //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
   
     if (billboard)
     {
@@ -91,17 +91,6 @@ public class GPUProgramManager
   
     if (!flatColor && texture && !color)
     {
-  
-      if (hasTexture3)
-      {
-  
-        if (transformTC && rotationTC)
-        {
-          return compileProgramWithName(gl, "TransformedTexCoorMultiTexturedMesh_Stencil");
-        }
-  
-        return compileProgramWithName(gl, "MultiTexturedMesh_Stencil");
-      }
   
       if (hasTexture2)
       {

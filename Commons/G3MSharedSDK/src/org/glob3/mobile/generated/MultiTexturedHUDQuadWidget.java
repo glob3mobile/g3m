@@ -43,9 +43,8 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
   private float _texCoordsRotationCenterV;
 
   private IImage _image;
-  private boolean _downloadingImage;
   private IImage _image2;
-  private boolean _downloadingImage2;
+  private boolean _downloadingImage;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private Mesh _mesh;
