@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  MultiTextureMapping.h
+//  MultiTextureMapping.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 24/12/13.
@@ -17,12 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
-
-
 public class MultiTextureMapping extends TextureMapping
 {
   private TextureIDReference _glTextureId;
-
   private TextureIDReference _glTextureId2;
 
   private IFloatBuffer _texCoords;
@@ -56,7 +53,6 @@ public class MultiTextureMapping extends TextureMapping
       ILogger.instance().logError("Releasing invalid Multi texture mapping");
     }
   
-  
     if (_glTextureId2 != null)
     {
       _glTextureId2.dispose();
@@ -73,42 +69,61 @@ public class MultiTextureMapping extends TextureMapping
   {
      _glTextureId = glTextureId;
      _texCoords = texCoords;
-     _translationU = 0F;
-     _translationV = 0F;
-     _scaleU = 1F;
-     _scaleV = 1F;
      _ownedTexCoords = ownedTexCoords;
      _transparent = transparent;
-     _rotationInRadians = 0F;
-     _rotationCenterU = 0F;
-     _rotationCenterV = 0F;
      _glTextureId2 = glTextureId2;
      _texCoords2 = texCoords2;
      _ownedTexCoords2 = ownedTexCoords2;
      _transparent2 = transparent2;
+     _translationU = 0F;
+     _translationV = 0F;
+     _scaleU = 1F;
+     _scaleV = 1F;
+     _rotationInRadians = 0F;
+     _rotationCenterU = 0F;
+     _rotationCenterV = 0F;
   }
 
-  public final void setTranslation(float u, float v)
+  public MultiTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureId2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2, float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
-    _translationU = u;
-    _translationV = v;
+     _glTextureId = glTextureId;
+     _texCoords = texCoords;
+     _ownedTexCoords = ownedTexCoords;
+     _transparent = transparent;
+     _glTextureId2 = glTextureId2;
+     _texCoords2 = texCoords2;
+     _ownedTexCoords2 = ownedTexCoords2;
+     _transparent2 = transparent2;
+     _translationU = translationU;
+     _translationV = translationV;
+     _scaleU = scaleU;
+     _scaleV = scaleV;
+     _rotationInRadians = rotationAngleInRadians;
+     _rotationCenterU = rotationCenterU;
+     _rotationCenterV = rotationCenterV;
+  }
+
+  public final void setTranslation(float translationU, float translationV)
+  {
+    _translationU = translationU;
+    _translationV = translationV;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning updateState();
   }
 
-  public final void setScale(float u, float v)
+  public final void setScale(float scaleU, float scaleV)
   {
-    _scaleU = u;
-    _scaleV = v;
+    _scaleU = scaleU;
+    _scaleV = scaleV;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning updateState();
   }
 
-  public final void setRotation(float angleInRadians, float centerU, float centerV)
+  public final void setRotation(float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
-    _rotationInRadians = angleInRadians;
-    _rotationCenterU = centerU;
-    _rotationCenterV = centerV;
+    _rotationInRadians = rotationAngleInRadians;
+    _rotationCenterU = rotationCenterU;
+    _rotationCenterV = rotationCenterV;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning updateState();
   }
@@ -144,7 +159,7 @@ public class MultiTextureMapping extends TextureMapping
 
   public final void modifyGLState(GLState state)
   {
-    //TARGET 0
+    // TARGET 0
     if (_texCoords == null)
     {
       ILogger.instance().logError("MultiTextureMapping::bind() with _texCoords == NULL");
@@ -163,14 +178,13 @@ public class MultiTextureMapping extends TextureMapping
       }
     }
   
-    //TAGET 1
+    // TARGET 1
     if (_texCoords2 == null)
     {
       ILogger.instance().logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
     }
     else
     {
-  
       state.addGLFeature(new TextureGLFeature(_glTextureId2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
     }
   }

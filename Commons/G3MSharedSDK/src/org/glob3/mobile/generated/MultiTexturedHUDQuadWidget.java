@@ -99,14 +99,18 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
     if (vertices != null)
        vertices.dispose();
   
-    _mtMapping = new MultiTextureMapping(texId, texCoords.create(), true, true, texId2, texCoords.create(), true, true);
+    _mtMapping = new MultiTextureMapping(texId, texCoords.create(), true, true, texId2, texCoords.create(), true, true, _texCoordsTranslationU, _texCoordsTranslationV, _texCoordsScaleU, _texCoordsScaleV, _texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
   
-    //Transforms only for Texture 0
-    _mtMapping.setTranslation(_texCoordsTranslationU, _texCoordsTranslationV);
-  
-    _mtMapping.setScale(_texCoordsScaleU, _texCoordsScaleV);
-  
-    _mtMapping.setRotation(_texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
+  //  //Transforms only for Texture 0
+  //  _mtMapping->setTranslation(_texCoordsTranslationU,
+  //                             _texCoordsTranslationV);
+  //
+  //  _mtMapping->setScale(_texCoordsScaleU,
+  //                       _texCoordsScaleV);
+  //
+  //  _mtMapping->setRotation(_texCoordsRotationInRadians,
+  //                          _texCoordsRotationCenterU,
+  //                          _texCoordsRotationCenterV);
   
   
     return new TexturedMesh(dm, true, _mtMapping, true, true);
@@ -122,8 +126,6 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
 
   private void cleanMesh()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TO DIEGO : ONLY = NULL ???->check in all widgets
     _mtMapping = null;
   
     if (_mesh != null)

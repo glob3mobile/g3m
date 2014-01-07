@@ -35,38 +35,53 @@ public class SimpleTextureMapping extends TextureMapping
   {
      _glTextureId = glTextureId;
      _texCoords = texCoords;
+     _ownedTexCoords = ownedTexCoords;
+     _transparent = transparent;
      _translationU = 0F;
      _translationV = 0F;
      _scaleU = 1F;
      _scaleV = 1F;
-     _ownedTexCoords = ownedTexCoords;
-     _transparent = transparent;
      _rotationInRadians = 0F;
      _rotationCenterU = 0F;
      _rotationCenterV = 0F;
   }
 
-  public final void setTranslation(float u, float v)
+  public SimpleTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
-    _translationU = u;
-    _translationV = v;
+     _glTextureId = glTextureId;
+     _texCoords = texCoords;
+     _ownedTexCoords = ownedTexCoords;
+     _transparent = transparent;
+     _translationU = translationU;
+     _translationV = translationV;
+     _scaleU = scaleU;
+     _scaleV = scaleV;
+     _rotationInRadians = rotationAngleInRadians;
+     _rotationCenterU = rotationCenterU;
+     _rotationCenterV = rotationCenterV;
+  }
+
+  public final void setTranslation(float translationU, float translationV)
+  {
+    _translationU = translationU;
+    _translationV = translationV;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning updateState();
   }
 
-  public final void setScale(float u, float v)
+  public final void setScale(float scaleU, float scaleV)
   {
-    _scaleU = u;
-    _scaleV = v;
+    _scaleU = scaleU;
+    _scaleV = scaleV;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning updateState();
   }
 
-  public final void setRotation(float angleInRadians, float centerU, float centerV)
+  public final void setRotation(float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
-    _rotationInRadians = angleInRadians;
-    _rotationCenterU = centerU;
-    _rotationCenterV = centerV;
+    _rotationInRadians = rotationAngleInRadians;
+    _rotationCenterU = rotationCenterU;
+    _rotationCenterV = rotationCenterV;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning updateState();
   }
