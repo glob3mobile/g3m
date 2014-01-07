@@ -9,8 +9,6 @@
 #include "HUDQuadWidget.hpp"
 
 #include "Context.hpp"
-#include "IDownloader.hpp"
-#include "IImageDownloadListener.hpp"
 #include "TexturesHandler.hpp"
 #include "Camera.hpp"
 #include "Vector3D.hpp"
@@ -19,46 +17,46 @@
 #include "DirectMesh.hpp"
 #include "TexturedMesh.hpp"
 #include "HUDPosition.hpp"
+#include "HUDSize.hpp"
+#include "RenderState.hpp"
+#include "IImageBuilder.hpp"
+#include "IImageBuilderListener.hpp"
 
-class HUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
+class HUDQuadWidget_ImageBuilderListener : public IImageBuilderListener {
 private:
   HUDQuadWidget* _quadWidget;
 
 public:
-  HUDQuadWidget_ImageDownloadListener(HUDQuadWidget* quadWidget) :
+  HUDQuadWidget_ImageBuilderListener(HUDQuadWidget* quadWidget) :
   _quadWidget(quadWidget)
   {
   }
 
-  void onDownload(const URL& url,
-                  IImage* image,
-                  bool expired)  {
-    _quadWidget->onImageDownload(image);
+  ~HUDQuadWidget_ImageBuilderListener() {
   }
 
-  void onError(const URL& url) {
-    _quadWidget->onImageDownloadError(url);
+  void imageCreated(const IImage* image,
+                    const std::string& imageName) {
+    _quadWidget->imageCreated(image, imageName);
   }
 
-  void onCancel(const URL& url) {
-    // do nothing
+  void onError(const std::string& error) {
+    _quadWidget->onImageBuildError(error);
   }
-
-  void onCanceledDownload(const URL& url,
-                          IImage* image,
-                          bool expired) {
-    // do nothing
-  }
-
 };
 
 
 HUDQuadWidget::~HUDQuadWidget() {
+  delete _imageBuilder;
+
   delete _image;
   delete _mesh;
 
-  delete _x;
-  delete _y;
+  delete _xPosition;
+  delete _yPosition;
+
+  delete _widthSize;
+  delete _heightSize;
 }
 
 Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
@@ -68,20 +66,22 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                                                     GLFormat::rgba(),
-                                                                                    _imageURL.getPath(),
+                                                                                    _imageName,
                                                                                     false);
 
   if (texId == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
-  const int viewPortWidth  = rc->getCurrentCamera()->getWidth();
-  const int viewPortHeight = rc->getCurrentCamera()->getHeight();
+  const Camera* camera = rc->getCurrentCamera();
+  const int viewPortWidth  = camera->getWidth();
+  const int viewPortHeight = camera->getHeight();
 
-  const float width = _width;
-  const float height = _height;
-  const float x = _x->getPosition(viewPortWidth, viewPortHeight, width, height);
-  const float y = _y->getPosition(viewPortWidth, viewPortHeight, width, height);
+  const float width  = _widthSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+  const float height = _heightSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+
+  const float x = _xPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
+  const float y = _yPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices->add( x,       height+y, 0 );
@@ -157,15 +157,19 @@ void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
 
 
 void HUDQuadWidget::initialize(const G3MContext* context) {
-  if (!_downloadingImage && (_image == NULL)) {
-    _downloadingImage = true;
-    IDownloader* downloader = context->getDownloader();
-    downloader->requestImage(_imageURL,
-                             1000000, // priority
-                             TimeInterval::fromDays(30),
-                             true, // readExpired
-                             new HUDQuadWidget_ImageDownloadListener(this),
-                             true);
+  _context = context;
+  if (!_buildingImage && (_image == NULL)) {
+    _buildingImage = true;
+    _imageBuilder->build(context,
+                         new HUDQuadWidget_ImageBuilderListener(this),
+                         true);
+    if (_imageBuilder->isMutable()) {
+      _imageBuilder->setChangeListener( this );
+    }
+    else {
+      delete _imageBuilder;
+      _imageBuilder = NULL;
+    }
   }
 }
 
@@ -176,26 +180,50 @@ void HUDQuadWidget::cleanMesh() {
   _mesh = NULL;
 }
 
+void HUDQuadWidget::changed() {
+#warning Diego at work!
+  cleanMesh();
+
+  delete _image;
+  _image = NULL;
+  _imageName = "";
+  _imageWidth = 0;
+  _imageHeight = 0;
+
+  _buildingImage = true;
+  _imageBuilder->build(_context,
+                       new HUDQuadWidget_ImageBuilderListener(this),
+                       true);
+}
+
 void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
                                           int width,
                                           int height) {
   cleanMesh();
 }
 
-void HUDQuadWidget::onImageDownload(IImage* image) {
-  _downloadingImage = false;
+void HUDQuadWidget::imageCreated(const IImage*      image,
+                                 const std::string& imageName) {
+  _buildingImage = false;
   _image = image;
+  _imageName = imageName;
+  _imageWidth  = _image->getWidth();
+  _imageHeight = _image->getHeight();
+//  delete _imageBuilder;
+//  _imageBuilder = NULL;
 }
 
-void HUDQuadWidget::onImageDownloadError(const URL& url) {
-  _errors.push_back("HUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
+void HUDQuadWidget::onImageBuildError(const std::string& error) {
+  _errors.push_back("HUDQuadWidget: \"" + error + "\"");
+//  delete _imageBuilder;
+//  _imageBuilder = NULL;
 }
 
 RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
   if (!_errors.empty()) {
     return RenderState::error(_errors);
   }
-  else if (_downloadingImage) {
+  else if (_buildingImage) {
     return RenderState::busy();
   }
   else {

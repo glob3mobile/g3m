@@ -13,8 +13,7 @@ class G3MContext;
 class G3MEventContext;
 class G3MRenderContext;
 class GLState;
-
-#include "RenderState.hpp"
+class RenderState;
 
 
 class HUDWidget {

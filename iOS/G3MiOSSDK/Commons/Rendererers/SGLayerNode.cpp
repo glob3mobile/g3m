@@ -75,7 +75,7 @@ bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
   return (textureId != NULL);
 }
 
-void SGLayerNode::onImageDownload(IImage* image) {
+void SGLayerNode::onImageDownload(const IImage* image) {
   if (_downloadedImage != NULL) {
     IFactory::instance()->deleteImage(_downloadedImage);
   }

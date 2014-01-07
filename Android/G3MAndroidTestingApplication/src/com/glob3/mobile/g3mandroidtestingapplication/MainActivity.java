@@ -5,10 +5,17 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -301,6 +308,68 @@ Activity {
 		//         builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
 		//
 		//      }
+		
+		  boolean testingTransparencies = true;
+		  
+		  if (testingTransparencies){
+			  LayerSet layerSet = new LayerSet();
+
+		    WMSLayer blueMarble = new WMSLayer("bmng200405",
+		                                        new URL("http://www.nasa.network.com/wms?", false),
+		                                        WMSServerVersion.WMS_1_1_0,
+		                                        Sector.fullSphere(),
+		                                        "image/jpeg",
+		                                        "EPSG:4326",
+		                                        "",
+		                                        false,
+		                                        new LevelTileCondition(0, 6),
+		                                        TimeInterval.fromDays(30),
+		                                        true,
+		                                        new LayerTilesRenderParameters(Sector.fullSphere(),
+		                                                                       2, 4,
+		                                                                       0, 6,
+		                                                                       LayerTilesRenderParameters.defaultTileTextureResolution(),
+		                                                                       LayerTilesRenderParameters.defaultTileMeshResolution(),
+		                                                                       false)
+		                                        );
+		    layerSet.addLayer(blueMarble);
+
+		    WMSLayer i3Landsat = new WMSLayer("esat",
+		                                       new URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+		                                       WMSServerVersion.WMS_1_1_0,
+		                                       Sector.fullSphere(),
+		                                       "image/jpeg",
+		                                       "EPSG:4326",
+		                                       "",
+		                                       false,
+		                                       new LevelTileCondition(7, 100),
+		                                       TimeInterval.fromDays(30),
+		                                       true,
+		                                       new LayerTilesRenderParameters(Sector.fullSphere(),
+		                                                                      2, 4,
+		                                                                      0, 12,
+		                                                                      LayerTilesRenderParameters.defaultTileTextureResolution(),
+		                                                                      LayerTilesRenderParameters.defaultTileMeshResolution(),
+		                                                                      false));
+		    layerSet.addLayer(i3Landsat);
+
+		    WMSLayer pnoa = new WMSLayer("PNOA",
+		                                  new URL("http://www.idee.es/wms/PNOA/PNOA", false),
+		                                  WMSServerVersion.WMS_1_1_0,
+		                                  Sector.fromDegrees(21, -18, 45, 6),
+		                                  "image/png",
+		                                  "EPSG:4326",
+		                                  "",
+		                                  true,
+		                                  null,
+		                                  TimeInterval.fromDays(30),
+		                                  true,
+		                                  null,
+		                                  (float) 0.5);
+		    layerSet.addLayer(pnoa);
+		    
+		    builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+		  }
 
 		marksRenderer.addMark(new Mark("HIGH MARK",
 				Geodetic3D.fromDegrees(0, 0, 100000),

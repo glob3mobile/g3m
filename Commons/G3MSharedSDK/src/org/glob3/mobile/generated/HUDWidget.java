@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class G3MEventContext;
 //class G3MRenderContext;
 //class GLState;
-
+//class RenderState;
 
 
 public abstract class HUDWidget

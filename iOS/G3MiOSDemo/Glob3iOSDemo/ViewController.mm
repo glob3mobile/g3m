@@ -126,6 +126,10 @@
 #import <G3MiOSSDK/HUDAbsolutePosition.hpp>
 #import <G3MiOSSDK/HUDRelativePosition.hpp>
 #import <G3MiOSSDK/MultiTexturedHUDQuadWidget.hpp>
+#import <G3MiOSSDK/HUDAbsoluteSize.hpp>
+#import <G3MiOSSDK/HUDRelativeSize.hpp>
+#import <G3MiOSSDK/DownloaderImageBuilder.hpp>
+#import <G3MiOSSDK/LabelImageBuilder.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -647,114 +651,184 @@ public:
   }
 
   if (true) { //HUD
+
+//    DownloaderImageBuilder* xxxx = new DownloaderImageBuilder(URL("file:///debug-compass.png"));
+//    aaa;
+
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
-#warning Diego at work!
-    HUDQuadWidget* compass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
-                                               //URL("file:///debug-compass.png"),
-                                               new HUDAbsolutePosition(10),
-                                               new HUDAbsolutePosition(10),
-                                               300, 300);
-    //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
-    //                                   0.5f, 0.5f);
-    hudRenderer->addWidget(compass);
+//<<<<<<< HEAD
+//#warning Diego at work!
+//    HUDQuadWidget* compass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
+//                                               //URL("file:///debug-compass.png"),
+//                                               new HUDAbsolutePosition(10),
+//                                               new HUDAbsolutePosition(10),
+//                                               300, 300);
+//    //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
+//    //                                   0.5f, 0.5f);
+//    hudRenderer->addWidget(compass);
+//
+//
+//    MultiTexturedHUDQuadWidget* multiTexturecompass = NULL;
+//    multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///debug-compass.png"),
+//                                                         //URL("file:///g3m-marker.png"),
+//                                                         URL("file:///simpleStencil.png"),
+//                                                         new HUDAbsolutePosition(10),
+//                                                         new HUDAbsolutePosition(350),
+//                                                         300, 300);
+////    multiTexturecompass->setTexCoordsScale(1, 0.5f);
+//    hudRenderer->addWidget(multiTexturecompass);
+//
+//    HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
+//                                                URL("file:///Compass_rose_browns_00_transparent.png"),
+//                                                //URL("file:///debug-compass.png"),
+//                                                //new HUDAbsolutePosition(320),
+//                                                //new HUDAbsolutePosition(150+10),
+//=======
 
+    LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
+                                                            GFont::monospaced(38), // font
+                                                            6,                     // margin
+                                                            Color::yellow(),       // color
+                                                            Color::black(),        // shadowColor
+                                                            5,                     // shadowBlur
+                                                            2,                     // shadowOffsetX
+                                                            -2,                    // shadowOffsetY
+                                                            Color::red(),          // backgroundColor
+                                                            4,                     // cornerRadius
+                                                            true                   // mutable
+                                                            );
 
-    MultiTexturedHUDQuadWidget* multiTexturecompass = NULL;
-    multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///debug-compass.png"),
-                                                         //URL("file:///g3m-marker.png"),
-                                                         URL("file:///simpleStencil.png"),
-                                                         new HUDAbsolutePosition(10),
-                                                         new HUDAbsolutePosition(350),
-                                                         300, 300);
-//    multiTexturecompass->setTexCoordsScale(1, 0.5f);
-    hudRenderer->addWidget(multiTexturecompass);
+    HUDQuadWidget* label = new HUDQuadWidget(labelBuilder,
+                                             new HUDAbsolutePosition(10),
+                                             new HUDAbsolutePosition(10),
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
+    hudRenderer->addWidget(label);
 
-    HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
-                                                URL("file:///Compass_rose_browns_00_transparent.png"),
-                                                //URL("file:///debug-compass.png"),
-                                                //new HUDAbsolutePosition(320),
-                                                //new HUDAbsolutePosition(150+10),
+    HUDQuadWidget* compass2 = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
+//>>>>>>> hud-renderer
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_WIDTH,
                                                                         HUDRelativePosition::CENTER),
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                         HUDRelativePosition::MIDDLE),
-                                                300, 150);
-    compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
-                                   Angle::fromDegrees(30),
+                                                new HUDRelativeSize(0.5,
+                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                                new HUDRelativeSize(0.25,
+                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS));
+    compass2->setTexCoordsRotation(Angle::fromDegrees(30),
                                    0.5f, 0.5f);
-    //compass2->setTexCoordsTranslation(0, 0.5f);
     compass2->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass2);
 
-    float visibleFactor = 4;
-    //    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
-    //                                             new HUDAbsolutePosition(320*2),
-    //                                             new HUDAbsolutePosition(10),
-    //                                             113, 1536 / visibleFactor);
-//    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
-//                                             new HUDRelativePosition(1,
-//                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
-//                                                                     HUDRelativePosition::LEFT,
-//                                                                     10),
-//                                             new HUDRelativePosition(0.5,
-//                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
-//                                                                     HUDRelativePosition::MIDDLE),
-//                                             113, 1536 / visibleFactor);
-    MultiTexturedHUDQuadWidget* ruler = new MultiTexturedHUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
-                                                                       URL("file:///widget-background.png"),
-                                                                       new HUDRelativePosition(1,
-                                                                                               HUDRelativePosition::VIEWPORT_WIDTH,
-                                                                                               HUDRelativePosition::LEFT,
-                                                                                               10),
-                                                                       new HUDRelativePosition(0.5,
-                                                                                               HUDRelativePosition::VIEWPORT_HEIGTH,
-                                                                                               HUDRelativePosition::MIDDLE),
-                                                                       //113, 1536 / visibleFactor);
-                                                                       113 / 2, 1536 / 2);
-
-    //ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
+//<<<<<<< HEAD
+//    float visibleFactor = 4;
+//    //    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
+//    //                                             new HUDAbsolutePosition(320*2),
+//    //                                             new HUDAbsolutePosition(10),
+//    //                                             113, 1536 / visibleFactor);
+////    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
+////                                             new HUDRelativePosition(1,
+////                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+////                                                                     HUDRelativePosition::LEFT,
+////                                                                     10),
+////                                             new HUDRelativePosition(0.5,
+////                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+////                                                                     HUDRelativePosition::MIDDLE),
+////                                             113, 1536 / visibleFactor);
+//    MultiTexturedHUDQuadWidget* ruler = new MultiTexturedHUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
+//                                                                       URL("file:///widget-background.png"),
+//                                                                       new HUDRelativePosition(1,
+//                                                                                               HUDRelativePosition::VIEWPORT_WIDTH,
+//                                                                                               HUDRelativePosition::LEFT,
+//                                                                                               10),
+//                                                                       new HUDRelativePosition(0.5,
+//                                                                                               HUDRelativePosition::VIEWPORT_HEIGTH,
+//                                                                                               HUDRelativePosition::MIDDLE),
+//                                                                       //113, 1536 / visibleFactor);
+//                                                                       113 / 2, 1536 / 2);
+//
+//    //ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
+//=======
+    float visibleFactor = 3;
+    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
+                                             new HUDRelativePosition(1,
+                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                     HUDRelativePosition::LEFT,
+                                                                     10),
+                                             new HUDRelativePosition(0.5,
+                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                     HUDRelativePosition::MIDDLE),
+                                             new HUDRelativeSize(2 * (113.0 / 1536.0),
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                             new HUDRelativeSize(2 / visibleFactor,
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS)
+                                             );
+    ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
+//>>>>>>> hud-renderer
     hudRenderer->addWidget(ruler);
 
-    class RotateCompass : public GTask {
+    class AnimateHUDWidgetsTask : public GTask {
     private:
-      HUDQuadWidget* _compass1;
-      HUDQuadWidget* _compass2;
-      MultiTexturedHUDQuadWidget* _compass3;
-      MultiTexturedHUDQuadWidget* _ruler;
-      double _angle;
+//<<<<<<< HEAD
+//      HUDQuadWidget* _compass1;
+//      HUDQuadWidget* _compass2;
+//      MultiTexturedHUDQuadWidget* _compass3;
+//      MultiTexturedHUDQuadWidget* _ruler;
+//      double _angle;
+//=======
+      HUDQuadWidget*     _compass1;
+      HUDQuadWidget*     _compass2;
+      HUDQuadWidget*     _ruler;
+      LabelImageBuilder* _labelBuilder;
+      double _angleInRadians;
+//>>>>>>> hud-renderer
 
       float _translationV;
       float _translationStep;
 
     public:
-      RotateCompass(HUDQuadWidget* compass1,
-                    HUDQuadWidget* compass2,
-                    MultiTexturedHUDQuadWidget* compass3,
-                    MultiTexturedHUDQuadWidget* ruler) :
+//<<<<<<< HEAD
+//      RotateCompass(HUDQuadWidget* compass1,
+//                    HUDQuadWidget* compass2,
+//                    MultiTexturedHUDQuadWidget* compass3,
+//                    MultiTexturedHUDQuadWidget* ruler) :
+//=======
+      AnimateHUDWidgetsTask(HUDQuadWidget* compass1,
+                            HUDQuadWidget* compass2,
+                            HUDQuadWidget* ruler,
+                            LabelImageBuilder* labelBuilder) :
+//>>>>>>> hud-renderer
       _compass1(compass1),
       _compass2(compass2),
-      _compass3(compass3),
       _ruler(ruler),
-      _angle(0),
+      _labelBuilder(labelBuilder),
+      _angleInRadians(0),
       _translationV(0),
       _translationStep(0.002)
       {
       }
 
       void run(const G3MContext* context) {
-        _angle += Angle::fromDegrees(2)._radians;
+        _angleInRadians += Angle::fromDegrees(2)._radians;
+//        _labelBuilder->setText( Angle::fromRadians(_angleInRadians).description() );
+        double degrees = Angle::fromRadians(_angleInRadians)._degrees;
+        while (degrees > 360) {
+          degrees -= 360;
+        }
+        const std::string degreesText = IStringUtils::instance()->toString( IMathUtils::instance()->round( degrees )  );
+        _labelBuilder->setText( degreesText );
 
-        _compass1->setTexCoordsRotation(Angle::fromRadians(_angle),
-                                        0.5f, 0.5f);
-        _compass2->setTexCoordsRotation(Angle::fromRadians(-_angle),
+        //        _compass1->setTexCoordsRotation(_angleInRadians,
+        //                                        0.5f, 0.5f);
+        _compass2->setTexCoordsRotation(-_angleInRadians,
                                         0.5f, 0.5f);
 
-        _compass3->setTexCoordsRotation(Angle::fromRadians(_angle),
-                                        0.5f, 0.5f);
+//        _compass3->setTexCoordsRotation(Angle::fromRadians(_angle),
+//                                        0.5f, 0.5f);
 
         if (_translationV > 0.5 || _translationV < 0) {
           _translationStep *= -1;
@@ -764,11 +838,16 @@ public:
       }
     };
 
-    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(20),
-                                                 new RotateCompass(compass,
-                                                                   compass2,
-                                                                   multiTexturecompass,
-                                                                   ruler)));
+//<<<<<<< HEAD
+//    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(20),
+//                                                 new RotateCompass(compass,
+//                                                                   compass2,
+//                                                                   multiTexturecompass,
+//                                                                   ruler)));
+//=======
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(50),
+                                                 new AnimateHUDWidgetsTask(label, compass2, ruler, labelBuilder)));
+//>>>>>>> hud-renderer
   }
 
 
@@ -1116,7 +1195,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
     //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -1131,6 +1210,65 @@ public:
   if (false) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
+  }
+
+  bool testingTransparencies = true;
+  if (testingTransparencies){
+
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 6),
+                                        //NULL,
+                                        TimeInterval::fromDays(30),
+                                        true,
+                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                       2, 4,
+                                                                       0, 6,
+                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                       false)
+                                        );
+    layerSet->addLayer(blueMarble);
+
+    WMSLayer* i3Landsat = new WMSLayer("esat",
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/jpeg",
+                                       "EPSG:4326",
+                                       "",
+                                       false,
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                      2, 4,
+                                                                      0, 12,
+                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                      false));
+    layerSet->addLayer(i3Landsat);
+
+    WMSLayer *pnoa = new WMSLayer("PNOA",
+                                  URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                  WMS_1_1_0,
+                                  Sector::fromDegrees(21, -18, 45, 6),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::fromDays(30),
+                                  true,
+                                  NULL,
+                                  0.5);
+    layerSet->addLayer(pnoa);
   }
 
 
@@ -1869,6 +2007,10 @@ public:
   destRs.push_back(new RectangleF(0,0,256,256));
   destRs.push_back(new RectangleF(0, 128, 64, 64));
 
+  std::vector<float> transparencies;
+  transparencies.push_back(1.0);
+  transparencies.push_back(0.5);
+
   class QuadListener: public IImageListener {
     ShapesRenderer* _sr;
   public:
@@ -1896,6 +2038,7 @@ public:
                        images,
                        srcRs,
                        destRs,
+                       transparencies,
                        new QuadListener(shapesRenderer), true);
 
   for (int i = 0; i < 2; i++) {

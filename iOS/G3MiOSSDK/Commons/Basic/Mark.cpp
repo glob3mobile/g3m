@@ -304,9 +304,7 @@ void Mark::initialize(const G3MContext* context,
   }
 
   if (!_textureSolved) {
-    const bool hasLabel   = ( _label.length()             != 0 );
     const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
-
     if (hasIconURL) {
       IDownloader* downloader = context->getDownloader();
 
@@ -324,6 +322,7 @@ void Mark::initialize(const G3MContext* context,
                                true);
     }
     else {
+      const bool hasLabel = ( _label.length() != 0 );
       if (hasLabel) {
         ITextUtils::instance()->createLabelImage(_label,
                                                  _labelFontSize,

@@ -428,9 +428,7 @@ public class Mark implements SurfaceElevationListener
   
     if (!_textureSolved)
     {
-      final boolean hasLabel = (_label.length() != 0);
       final boolean hasIconURL = (_iconURL.getPath().length() != 0);
-  
       if (hasIconURL)
       {
         IDownloader downloader = context.getDownloader();
@@ -439,6 +437,7 @@ public class Mark implements SurfaceElevationListener
       }
       else
       {
+        final boolean hasLabel = (_label.length() != 0);
         if (hasLabel)
         {
           ITextUtils.instance().createLabelImage(_label, _labelFontSize, _labelFontColor, _labelShadowColor, new MarkLabelImageListener(null, this), true);

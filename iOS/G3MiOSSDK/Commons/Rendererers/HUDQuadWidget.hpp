@@ -11,28 +11,27 @@
 
 #include "HUDWidget.hpp"
 
-#include "URL.hpp"
+#include <vector>
+//#include "URL.hpp"
 #include "Vector2D.hpp"
 #include "Angle.hpp"
 class HUDPosition;
+class HUDSize;
 class IImage;
 class Mesh;
 class SimpleTextureMapping;
+class IImageBuilder;
 
-class HUDQuadWidget : public HUDWidget {
+#include "ChangedListener.hpp"
+
+class HUDQuadWidget : public HUDWidget, public ChangedListener {
 private:
-#ifdef C_CODE
-  const URL _imageURL;
-#endif
-#ifdef JAVA_CODE
-  private final URL _imageURL;
-#endif
-//  const float _x;
-//  const float _y;
-  const HUDPosition* _x;
-  const HUDPosition* _y;
-  const float _width;
-  const float _height;
+  IImageBuilder* _imageBuilder;
+
+  const HUDPosition* _xPosition;
+  const HUDPosition* _yPosition;
+  const HUDSize*     _widthSize;
+  const HUDSize*     _heightSize;
 
   float _texCoordsTranslationU;
   float _texCoordsTranslationV;
@@ -42,8 +41,17 @@ private:
   float _texCoordsRotationCenterU;
   float _texCoordsRotationCenterV;
 
-  IImage* _image;
-  bool _downloadingImage;
+#ifdef C_CODE
+  const IImage* _image;
+#endif
+#ifdef JAVA_CODE
+  private IImage _image;
+#endif
+  std::string   _imageName;
+  int _imageWidth;
+  int _imageHeight;
+
+  bool _buildingImage;
   std::vector<std::string> _errors;
 
   Mesh* _mesh;
@@ -53,32 +61,42 @@ private:
 
   void cleanMesh();
 
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+
 protected:
   void rawRender(const G3MRenderContext* rc,
                  GLState* glState);
 
 public:
-  HUDQuadWidget(const URL& imageURL,
-                HUDPosition* x,
-                HUDPosition* y,
-                float width,
-                float height) :
-  _imageURL(imageURL),
-  _x(x),
-  _y(y),
-  _width(width),
-  _height(height),
+  HUDQuadWidget(IImageBuilder* imageBuilder,
+                HUDPosition* xPosition,
+                HUDPosition* yPosition,
+                HUDSize* widthSize,
+                HUDSize* heightSize) :
+  _imageBuilder(imageBuilder),
+  _xPosition(xPosition),
+  _yPosition(yPosition),
+  _widthSize(widthSize),
+  _heightSize(heightSize),
   _mesh(NULL),
   _simpleTextureMapping(NULL),
   _image(NULL),
-  _downloadingImage(false),
+  _imageWidth(0),
+  _imageHeight(0),
+  _buildingImage(false),
   _texCoordsTranslationU(0),
   _texCoordsTranslationV(0),
   _texCoordsScaleU(1),
   _texCoordsScaleV(1),
   _texCoordsRotationInRadians(0),
   _texCoordsRotationCenterU(0),
-  _texCoordsRotationCenterV(0)
+  _texCoordsRotationCenterV(0),
+  _context(NULL)
   {
   }
 
@@ -108,11 +126,14 @@ public:
   RenderState getRenderState(const G3MRenderContext* rc);
 
   /** private, do not call */
-  void onImageDownload(IImage* image);
+  void imageCreated(const IImage*      image,
+                    const std::string& imageName);
 
   /** private, do not call */
-  void onImageDownloadError(const URL& url);
-  
+  void onImageBuildError(const std::string& error);
+
+  void changed();
+
 };
 
 #endif

@@ -19,6 +19,7 @@
 #include "DirectMesh.hpp"
 #include "TexturedMesh.hpp"
 #include "HUDPosition.hpp"
+#include "RenderState.hpp"
 
 class MultiTexturedHUDQuadWidget_ImageDownloadListener : public IImageDownloadListener {
 private:

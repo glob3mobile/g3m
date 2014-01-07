@@ -17,20 +17,23 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "URL.hpp"
 //class HUDPosition;
+//class HUDSize;
 //class IImage;
 //class Mesh;
 //class SimpleTextureMapping;
+//class IImageBuilder;
 
-public class HUDQuadWidget extends HUDWidget
+
+public class HUDQuadWidget extends HUDWidget implements ChangedListener
 {
-  private final URL _imageURL;
-//  const float _x;
-//  const float _y;
-  private final HUDPosition _x;
-  private final HUDPosition _y;
-  private final float _width;
-  private final float _height;
+  private IImageBuilder _imageBuilder;
+
+  private final HUDPosition _xPosition;
+  private final HUDPosition _yPosition;
+  private final HUDSize _widthSize;
+  private final HUDSize _heightSize;
 
   private float _texCoordsTranslationU;
   private float _texCoordsTranslationV;
@@ -41,7 +44,11 @@ public class HUDQuadWidget extends HUDWidget
   private float _texCoordsRotationCenterV;
 
   private IImage _image;
-  private boolean _downloadingImage;
+  private String _imageName;
+  private int _imageWidth;
+  private int _imageHeight;
+
+  private boolean _buildingImage;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private Mesh _mesh;
@@ -53,20 +60,22 @@ public class HUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageURL.getPath(), false);
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageName, false);
   
     if (texId == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
       return null;
     }
-    final int viewPortWidth = rc.getCurrentCamera().getWidth();
-    final int viewPortHeight = rc.getCurrentCamera().getHeight();
+    final Camera camera = rc.getCurrentCamera();
+    final int viewPortWidth = camera.getWidth();
+    final int viewPortHeight = camera.getHeight();
   
-    final float width = _width;
-    final float height = _height;
-    final float x = _x.getPosition(viewPortWidth, viewPortHeight, width, height);
-    final float y = _y.getPosition(viewPortWidth, viewPortHeight, width, height);
+    final float width = _widthSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+    final float height = _heightSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+  
+    final float x = _xPosition.getPosition(viewPortWidth, viewPortHeight, width, height);
+    final float y = _yPosition.getPosition(viewPortWidth, viewPortHeight, width, height);
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     vertices.add(x, height+y, 0);
@@ -112,6 +121,8 @@ public class HUDQuadWidget extends HUDWidget
     _mesh = null;
   }
 
+  private G3MContext _context;
+
   protected final void rawRender(G3MRenderContext rc, GLState glState)
   {
     Mesh mesh = getMesh(rc);
@@ -121,17 +132,19 @@ public class HUDQuadWidget extends HUDWidget
     }
   }
 
-  public HUDQuadWidget(URL imageURL, HUDPosition x, HUDPosition y, float width, float height)
+  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
   {
-     _imageURL = imageURL;
-     _x = x;
-     _y = y;
-     _width = width;
-     _height = height;
+     _imageBuilder = imageBuilder;
+     _xPosition = xPosition;
+     _yPosition = yPosition;
+     _widthSize = widthSize;
+     _heightSize = heightSize;
      _mesh = null;
      _simpleTextureMapping = null;
      _image = null;
-     _downloadingImage = false;
+     _imageWidth = 0;
+     _imageHeight = 0;
+     _buildingImage = false;
      _texCoordsTranslationU = 0F;
      _texCoordsTranslationV = 0F;
      _texCoordsScaleU = 1F;
@@ -139,6 +152,7 @@ public class HUDQuadWidget extends HUDWidget
      _texCoordsRotationInRadians = 0F;
      _texCoordsRotationCenterU = 0F;
      _texCoordsRotationCenterV = 0F;
+     _context = null;
   }
 
   public final void setTexCoordsTranslation(float u, float v)
@@ -182,24 +196,41 @@ public class HUDQuadWidget extends HUDWidget
 
   public void dispose()
   {
-    if (_image != null)
-       _image.dispose();
+    if (_imageBuilder != null)
+       _imageBuilder.dispose();
+  
+    _image = null;
     if (_mesh != null)
        _mesh.dispose();
   
-    if (_x != null)
-       _x.dispose();
-    if (_y != null)
-       _y.dispose();
+    if (_xPosition != null)
+       _xPosition.dispose();
+    if (_yPosition != null)
+       _yPosition.dispose();
+  
+    if (_widthSize != null)
+       _widthSize.dispose();
+    if (_heightSize != null)
+       _heightSize.dispose();
   }
 
   public final void initialize(G3MContext context)
   {
-    if (!_downloadingImage && (_image == null))
+    _context = context;
+    if (!_buildingImage && (_image == null))
     {
-      _downloadingImage = true;
-      IDownloader downloader = context.getDownloader();
-      downloader.requestImage(_imageURL, 1000000, TimeInterval.fromDays(30), true, new HUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
+      _buildingImage = true;
+      _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this), true);
+      if (_imageBuilder.isMutable())
+      {
+        _imageBuilder.setChangeListener(this);
+      }
+      else
+      {
+        if (_imageBuilder != null)
+           _imageBuilder.dispose();
+        _imageBuilder = null;
+      }
     }
   }
 
@@ -214,7 +245,7 @@ public class HUDQuadWidget extends HUDWidget
     {
       return RenderState.error(_errors);
     }
-    else if (_downloadingImage)
+    else if (_buildingImage)
     {
       return RenderState.busy();
     }
@@ -225,16 +256,39 @@ public class HUDQuadWidget extends HUDWidget
   }
 
   /** private, do not call */
-  public final void onImageDownload(IImage image)
+  public final void imageCreated(IImage image, String imageName)
   {
-    _downloadingImage = false;
+    _buildingImage = false;
     _image = image;
+    _imageName = imageName;
+    _imageWidth = _image.getWidth();
+    _imageHeight = _image.getHeight();
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
   }
 
   /** private, do not call */
-  public final void onImageDownloadError(URL url)
+  public final void onImageBuildError(String error)
   {
-    _errors.add("HUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
+    _errors.add("HUDQuadWidget: \"" + error + "\"");
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
+  }
+
+  public final void changed()
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+    cleanMesh();
+  
+    _image = null;
+    _image = null;
+    _imageName = "";
+    _imageWidth = 0;
+    _imageHeight = 0;
+  
+    _buildingImage = true;
+    _imageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this), true);
   }
 
 }
