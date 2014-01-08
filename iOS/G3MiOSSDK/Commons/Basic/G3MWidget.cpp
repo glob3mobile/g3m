@@ -313,14 +313,14 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
     MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
     Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
     //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
-    ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
+    //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
     //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
     
     // update ground height in camera class
     _nextCamera->setGroundHeightFromCartesianPoint(pos);
     return pos;
   } else{
-    ILogger::instance()->logInfo("NO Z");
+    //ILogger::instance()->logInfo("NO Z");
     return Vector3D::nan();
   }
 }
@@ -340,6 +340,7 @@ Vector3D G3MWidget::getFirstValidScenePositionForFrameBufferColumn(int column){
       _nextCamera->setGroundHeightFromCartesianPoint(pos);
       return pos;
     }
+    row++;
   }
   return Vector3D::nan();
 }
@@ -349,9 +350,6 @@ Vector3D G3MWidget::getFirstValidScenePositionForCentralColumn() {
   int row = _height / 2;
   MutableVector3D position = MutableVector3D::nan();
   while (position.isNan() && row<_height-1) {
-    
-    printf ("pivot point in pixel (%d,%d)\n", _width/2, row);
-    
     row++;
     position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
   }
@@ -414,7 +412,7 @@ void G3MWidget::zRender(){
   if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter){
     _zRenderCounter = _renderCounter;
   } else{
-    ILogger::instance()->logInfo("Recycling Z Render");
+    //ILogger::instance()->logInfo("Recycling Z Render");
     return; //NO NEED OF RENDERING AGAIN
   }
 
