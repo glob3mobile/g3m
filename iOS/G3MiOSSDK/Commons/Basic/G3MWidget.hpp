@@ -225,6 +225,8 @@ public:
   Vector3D getScenePositionForPixel(int x, int y);
   
   Vector3D getFirstValidScenePositionForCentralColumn();
+
+  Vector3D getFirstValidScenePositionForFrameBufferColumn(int column);
   
   
 private:

@@ -325,6 +325,25 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
   }
 }
 
+Vector3D G3MWidget::getFirstValidScenePositionForFrameBufferColumn(int column){
+  zRender();
+
+  int row = _height / 2;
+  while (row<_height-1){
+
+    const double z = _gl->readPixelAsDouble(column, row, _width, _height);
+
+    if (!ISNAN(z)){
+      Vector3D pixel3D(column, _height - row,z);
+      MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
+      Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+      _nextCamera->setGroundHeightFromCartesianPoint(pos);
+      return pos;
+    }
+  }
+  return Vector3D::nan();
+}
+
 
 Vector3D G3MWidget::getFirstValidScenePositionForCentralColumn() {
   int row = _height / 2;
