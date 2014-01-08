@@ -329,10 +329,9 @@ public abstract class MapBooBuilder
 
   private String getApplicationCurrentSceneId()
   {
-    if (_applicationCurrentSceneId.compareTo("-1") == 0)
-    {
-      _applicationCurrentSceneId = _applicationScenes.get(0).getId();
-    }
+  //  if (_applicationCurrentSceneId.compare("-1") == 0) {
+  //    _applicationCurrentSceneId = _applicationScenes.at(0)->getId() ;
+  //  }
     return _applicationCurrentSceneId;
   }
   private MapBoo_Scene getApplicationCurrentScene()
@@ -562,6 +561,7 @@ public abstract class MapBooBuilder
         ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
       }
     }
+  
   }
 
   private void updateVisibleScene()
@@ -870,7 +870,7 @@ public abstract class MapBooBuilder
   private boolean _hasParsedApplication;
 
 
-  private void triggerOnScenesChanged()
+  private void fireOnScenesChanged()
   {
     if (_applicationListener != null)
     {
@@ -1091,7 +1091,7 @@ public abstract class MapBooBuilder
   {
     _applicationScenes.add(position, scene);
   
-    triggerOnScenesChanged();
+    fireOnScenesChanged();
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1115,7 +1115,7 @@ public abstract class MapBooBuilder
       if (scene != null)
          scene.dispose();
   
-      triggerOnScenesChanged();
+      fireOnScenesChanged();
     }
   }
 
@@ -1130,9 +1130,6 @@ public abstract class MapBooBuilder
       if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
       {
         MapBoo_Scene oldScene = _applicationScenes.get(i);
-        if (oldScene != null)
-           oldScene.dispose();
-  
         _applicationScenes.set(i, scene);
   
         if (sceneID.compareTo(_applicationCurrentSceneId) == 0)
@@ -1144,7 +1141,10 @@ public abstract class MapBooBuilder
         {
           _applicationListener.onSceneChanged(_context, scene);
         }
-        triggerOnScenesChanged();
+        fireOnScenesChanged();
+  
+        if (oldScene != null)
+           oldScene.dispose();
   
         break;
       }
@@ -1166,7 +1166,7 @@ public abstract class MapBooBuilder
   
     _applicationScenes = new java.util.ArrayList<MapBoo_Scene>(applicationScenes);
   
-    triggerOnScenesChanged();
+    fireOnScenesChanged();
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1210,6 +1210,8 @@ public abstract class MapBooBuilder
   public final void parseApplicationJSON(String json, URL url)
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
+  
+    ILogger.instance().logInfo(json);
   
     if (jsonBaseObject == null)
     {
