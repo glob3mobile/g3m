@@ -79,8 +79,6 @@ public class MainActivity
 
       altRuler.setTexCoordsScale(1, vertVis);
       hudRenderer.addWidget(altRuler);
-
-      altRuler.setTexCoordsTranslation(0, 2000);
    }
 
 
