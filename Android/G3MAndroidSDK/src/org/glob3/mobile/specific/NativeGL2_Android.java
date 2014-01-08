@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.GPUUniform;
 import org.glob3.mobile.generated.GPUUniformBool;
 import org.glob3.mobile.generated.GPUUniformFloat;
 import org.glob3.mobile.generated.GPUUniformMatrix4Float;
+import org.glob3.mobile.generated.GPUUniformSampler2D;
 import org.glob3.mobile.generated.GPUUniformVec2Float;
 import org.glob3.mobile.generated.GPUUniformVec3Float;
 import org.glob3.mobile.generated.GPUUniformVec4Float;
@@ -750,9 +751,8 @@ public final class NativeGL2_Android
             return new GPUUniformVec3Float(nameStr, new GLUniformID_Android(id));
          case GLES20.GL_BOOL:
             return new GPUUniformBool(nameStr, new GLUniformID_Android(id));
-            //         case GLES20.GL_SAMPLER_2D:
-            //            final int NOT_IMPLEMENTED_YET;
-            //            return null;
+         case GLES20.GL_SAMPLER_2D:
+            return new GPUUniformSampler2D(nameStr, new GLUniformID_Android(id));
          default:
             return null;
       }
