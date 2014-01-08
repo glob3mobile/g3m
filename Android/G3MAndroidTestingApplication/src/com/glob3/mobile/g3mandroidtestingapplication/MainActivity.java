@@ -17,6 +17,8 @@ import org.glob3.mobile.specific.G3MWidget_Android;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 
@@ -31,6 +33,9 @@ public class MainActivity
    @Override
    protected void onCreate(final Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
+
+      requestWindowFeature(Window.FEATURE_NO_TITLE);
+      getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
       setContentView(R.layout.activity_main);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
