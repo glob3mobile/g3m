@@ -330,6 +330,9 @@ Vector3D G3MWidget::getFirstValidScenePositionForCentralColumn() {
   int row = _height / 2;
   MutableVector3D position = MutableVector3D::nan();
   while (position.isNan() && row<_height-1) {
+    
+    printf ("pivot point in pixel (%d,%d)\n", _width/2, row);
+    
     row++;
     position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
   }
