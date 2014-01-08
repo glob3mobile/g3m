@@ -489,7 +489,7 @@ private:
   bool _hasParsedApplication;
   
   
-  void triggerOnScenesChanged();
+  void fireOnScenesChanged();
 
 protected:
   MapBooBuilder(const URL& serverURL,

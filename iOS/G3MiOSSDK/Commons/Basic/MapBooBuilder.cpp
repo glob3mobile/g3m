@@ -911,6 +911,8 @@ std::vector<MapBoo_Notification*>* MapBooBuilder::parseNotifications(const JSONA
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
+  
+  ILogger::instance()->logInfo(json);
 
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
@@ -1329,9 +1331,9 @@ void MapBooBuilder::openApplicationTube(const G3MContext* context) {
 }
 
 const std::string MapBooBuilder::getApplicationCurrentSceneId() {
-  if (_applicationCurrentSceneId.compare("-1") == 0) {
-    _applicationCurrentSceneId = _applicationScenes.at(0)->getId() ;
-  }
+//  if (_applicationCurrentSceneId.compare("-1") == 0) {
+//    _applicationCurrentSceneId = _applicationScenes.at(0)->getId() ;
+//  }
   return _applicationCurrentSceneId;
 }
 
@@ -1587,6 +1589,7 @@ void MapBooBuilder::changedCurrentScene() {
       ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
     }
   }
+  
 }
 
 const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
@@ -1620,7 +1623,7 @@ void MapBooBuilder::updateVisibleScene() {
   }
 }
 
-void MapBooBuilder::triggerOnScenesChanged() {
+void MapBooBuilder::fireOnScenesChanged() {
   if (_applicationListener != NULL) {
 #ifdef C_CODE
     _applicationListener->onScenesChanged(_context, _applicationScenes);
@@ -1640,7 +1643,7 @@ void MapBooBuilder::addApplicationScene(MapBoo_Scene* scene, const int position)
   _applicationScenes.add(position, scene);
 #endif
   
-  triggerOnScenesChanged();
+  fireOnScenesChanged();
 }
 
 void MapBooBuilder::deleteApplicationScene(const std::string &sceneId) {
@@ -1663,7 +1666,7 @@ void MapBooBuilder::deleteApplicationScene(const std::string &sceneId) {
 #endif
     delete scene;
     
-    triggerOnScenesChanged();
+    fireOnScenesChanged();
   }
 }
 
@@ -1674,8 +1677,6 @@ void MapBooBuilder::setApplicationScene(MapBoo_Scene* scene) {
     const std::string sceneID = _applicationScenes[i]->getId();
     if (sceneID.compare(sceneToBeUpdatedID) == 0) {
       MapBoo_Scene* oldScene = _applicationScenes[i];
-      delete oldScene;
-      
       _applicationScenes[i] = scene;
       
       if (sceneID.compare(_applicationCurrentSceneId) == 0) {
@@ -1685,7 +1686,9 @@ void MapBooBuilder::setApplicationScene(MapBoo_Scene* scene) {
       if (_applicationListener != NULL) {
         _applicationListener->onSceneChanged(_context, scene);
       }
-      triggerOnScenesChanged();
+      fireOnScenesChanged();
+      
+      delete oldScene;
       
       break;
     }
@@ -1708,7 +1711,7 @@ void MapBooBuilder::setApplicationScenes(const std::vector<MapBoo_Scene*>& appli
   _applicationScenes = new java.util.ArrayList<MapBoo_Scene>(applicationScenes);
 #endif
 
-  triggerOnScenesChanged();
+  fireOnScenesChanged();
 }
 
 SceneLighting* MapBooBuilder::createSceneLighting() {
