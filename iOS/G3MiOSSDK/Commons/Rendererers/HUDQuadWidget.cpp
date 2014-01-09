@@ -57,6 +57,8 @@ HUDQuadWidget::~HUDQuadWidget() {
 
   delete _widthSize;
   delete _heightSize;
+
+  delete _backgroundImageBuilder;
 }
 
 Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
@@ -164,10 +166,10 @@ void HUDQuadWidget::initialize(const G3MContext* context) {
     if (_imageBuilder->isMutable()) {
       _imageBuilder->setChangeListener( this );
     }
-//    else {
-//      delete _imageBuilder;
-//      _imageBuilder = NULL;
-//    }
+    //    else {
+    //      delete _imageBuilder;
+    //      _imageBuilder = NULL;
+    //    }
   }
 }
 
@@ -208,14 +210,14 @@ void HUDQuadWidget::imageCreated(const IImage*      image,
   _imageWidth  = _image->getWidth();
   _imageHeight = _image->getHeight();
 
-//  delete _imageBuilder;
-//  _imageBuilder = NULL;
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
 }
 
 void HUDQuadWidget::onImageBuildError(const std::string& error) {
   _errors.push_back("HUDQuadWidget: \"" + error + "\"");
-//  delete _imageBuilder;
-//  _imageBuilder = NULL;
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
 }
 
 RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {

@@ -27,11 +27,13 @@ class IImageBuilder;
 class HUDQuadWidget : public HUDWidget, public ChangedListener {
 private:
   IImageBuilder* _imageBuilder;
+  IImageBuilder* _backgroundImageBuilder;
 
   const HUDPosition* _xPosition;
   const HUDPosition* _yPosition;
-  const HUDSize*     _widthSize;
-  const HUDSize*     _heightSize;
+
+  const HUDSize* _widthSize;
+  const HUDSize* _heightSize;
 
   float _texCoordsTranslationU;
   float _texCoordsTranslationV;
@@ -78,12 +80,14 @@ public:
                 HUDPosition* xPosition,
                 HUDPosition* yPosition,
                 HUDSize* widthSize,
-                HUDSize* heightSize) :
+                HUDSize* heightSize,
+                IImageBuilder* backgroundImageBuilder = NULL) :
   _imageBuilder(imageBuilder),
   _xPosition(xPosition),
   _yPosition(yPosition),
   _widthSize(widthSize),
   _heightSize(heightSize),
+  _backgroundImageBuilder(backgroundImageBuilder),
   _mesh(NULL),
   _simpleTextureMapping(NULL),
   _image(NULL),
@@ -132,9 +136,9 @@ public:
 
   /** private, do not call */
   void onImageBuildError(const std::string& error);
-
+  
   void changed();
-
+  
 };
 
 #endif
