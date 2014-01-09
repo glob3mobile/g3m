@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//class TextureIDReference;
+
 public abstract class LazyTextureMappingInitializer
 {
   public void dispose()
