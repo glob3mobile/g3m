@@ -52,9 +52,9 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 #endif
 
   texId = rc->getTexturesHandler()->getTextureIDReference(_image,
-                                                   GLFormat::rgba(),
-                                                   "BusyQuadRenderer-Texture",
-                                                   false);
+                                                          GLFormat::rgba(),
+                                                          "BusyQuadRenderer-Texture",
+                                                          false);
 
   rc->getFactory()->deleteImage(_image);
   _image = NULL;
@@ -86,7 +86,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
                                   1);
 
   delete vertices;
-  
+
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
                                                     true,
@@ -109,7 +109,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
   }
 
   createGLState();
-  
+
   // clear screen
   gl->clearScreen(*_backgroundColor);
 
@@ -118,7 +118,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
 }
 
 void BusyQuadRenderer::createGLState() {
-  
+
   //Modelview and projection
   _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
   _glState->clearGLFeatureGroup(CAMERA_GROUP);

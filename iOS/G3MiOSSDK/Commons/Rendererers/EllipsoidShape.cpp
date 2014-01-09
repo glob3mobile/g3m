@@ -46,9 +46,9 @@ const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* r
     }
 
     _texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                      GLFormat::rgba(),
-                                                      _textureURL.getPath(),
-                                                      false);
+                                                             GLFormat::rgba(),
+                                                             _textureURL.getPath(),
+                                                             false);
 
     rc->getFactory()->deleteImage(_textureImage);
     _textureImage = NULL;

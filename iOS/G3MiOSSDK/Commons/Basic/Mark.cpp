@@ -430,8 +430,8 @@ double Mark::getMinDistanceToCamera() {
 void Mark::createGLState(const Planet* planet) {
 
   _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
-                                               _textureWidth, _textureHeight),
-                        false);
+                                                _textureWidth, _textureHeight),
+                         false);
 
   if (_textureId != NULL) {
     _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
@@ -509,9 +509,9 @@ void Mark::render(const G3MRenderContext* rc,
       if (_textureId == NULL) {
         if (_textureImage != NULL) {
           _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                GLFormat::rgba(),
-                                                                _imageID,
-                                                                false);
+                                                                       GLFormat::rgba(),
+                                                                       _imageID,
+                                                                       false);
 
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
@@ -548,9 +548,9 @@ void Mark::elevationChanged(const Geodetic2D& position,
   } else{
     _currentSurfaceElevation = rawElevation * verticalExaggeration;
   }
-
+  
   delete _cartesianPosition;
   _cartesianPosition = NULL;
-
+  
   _glState->clearAllGLFeatures();
 }
