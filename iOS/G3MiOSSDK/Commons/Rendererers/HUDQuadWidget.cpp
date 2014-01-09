@@ -25,10 +25,13 @@
 class HUDQuadWidget_ImageBuilderListener : public IImageBuilderListener {
 private:
   HUDQuadWidget* _quadWidget;
+  const int      _imageRole;
 
 public:
-  HUDQuadWidget_ImageBuilderListener(HUDQuadWidget* quadWidget) :
-  _quadWidget(quadWidget)
+  HUDQuadWidget_ImageBuilderListener(HUDQuadWidget* quadWidget,
+                                     int            imageRole) :
+  _quadWidget(quadWidget),
+  _imageRole(imageRole)
   {
   }
 
@@ -37,11 +40,11 @@ public:
 
   void imageCreated(const IImage* image,
                     const std::string& imageName) {
-    _quadWidget->imageCreated(image, imageName);
+    _quadWidget->imageCreated(image, imageName, _imageRole);
   }
 
   void onError(const std::string& error) {
-    _quadWidget->onImageBuildError(error);
+    _quadWidget->onImageBuildError(error, _imageRole);
   }
 };
 
@@ -161,11 +164,21 @@ void HUDQuadWidget::initialize(const G3MContext* context) {
   if (!_buildingImage && (_image == NULL)) {
     _buildingImage = true;
     _imageBuilder->build(context,
-                         new HUDQuadWidget_ImageBuilderListener(this),
+                         new HUDQuadWidget_ImageBuilderListener(this, 0),
                          true);
     if (_imageBuilder->isMutable()) {
       _imageBuilder->setChangeListener( this );
     }
+
+    if (_backgroundImageBuilder != NULL) {
+      _backgroundImageBuilder->build(context,
+                                     new HUDQuadWidget_ImageBuilderListener(this, 1),
+                                     true);
+      if (_backgroundImageBuilder->isMutable()) {
+        _backgroundImageBuilder->setChangeListener( this );
+      }
+    }
+
     //    else {
     //      delete _imageBuilder;
     //      _imageBuilder = NULL;
@@ -192,8 +205,13 @@ void HUDQuadWidget::changed() {
 
   _buildingImage = true;
   _imageBuilder->build(_context,
-                       new HUDQuadWidget_ImageBuilderListener(this),
+                       new HUDQuadWidget_ImageBuilderListener(this, 0),
                        true);
+  if (_backgroundImageBuilder != NULL) {
+    _backgroundImageBuilder->build(_context,
+                                   new HUDQuadWidget_ImageBuilderListener(this, 1),
+                                   true);
+  }
 }
 
 void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
@@ -203,18 +221,26 @@ void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
 }
 
 void HUDQuadWidget::imageCreated(const IImage*      image,
-                                 const std::string& imageName) {
+                                 const std::string& imageName,
+                                 int                imageRole) {
   _buildingImage = false;
-  _image = image;
-  _imageName = imageName;
-  _imageWidth  = _image->getWidth();
-  _imageHeight = _image->getHeight();
+
+  if (imageRole == 0) {
+    _image = image;
+    _imageName = imageName;
+    _imageWidth  = _image->getWidth();
+    _imageHeight = _image->getHeight();
+  }
+  else if (imageRole == 0) {
+#warning Diego at work!
+  }
 
   //  delete _imageBuilder;
   //  _imageBuilder = NULL;
 }
 
-void HUDQuadWidget::onImageBuildError(const std::string& error) {
+void HUDQuadWidget::onImageBuildError(const std::string& error,
+                                      int                imageRole) {
   _errors.push_back("HUDQuadWidget: \"" + error + "\"");
   //  delete _imageBuilder;
   //  _imageBuilder = NULL;

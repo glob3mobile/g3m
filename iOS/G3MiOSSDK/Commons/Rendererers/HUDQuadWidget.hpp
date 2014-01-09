@@ -132,10 +132,12 @@ public:
 
   /** private, do not call */
   void imageCreated(const IImage*      image,
-                    const std::string& imageName);
+                    const std::string& imageName,
+                    int                imageRole);
 
   /** private, do not call */
-  void onImageBuildError(const std::string& error);
+  void onImageBuildError(const std::string& error,
+                         int                imageRole);
   
   void changed();
   
