@@ -21,6 +21,7 @@
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "Color.hpp"
+#include "SimpleTextureMapping.hpp"
 
 const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
   if (_textureImage == NULL) {

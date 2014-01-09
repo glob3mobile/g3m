@@ -16,6 +16,8 @@
 #include <vector>
 #include "Vector2F.hpp"
 
+class TextureIDReference;
+
 class LazyTextureMappingInitializer {
 public:
   virtual ~LazyTextureMappingInitializer() {

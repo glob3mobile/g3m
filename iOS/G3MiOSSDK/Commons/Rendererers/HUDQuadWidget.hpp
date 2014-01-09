@@ -19,7 +19,7 @@ class HUDPosition;
 class HUDSize;
 class IImage;
 class Mesh;
-class SimpleTextureMapping;
+class TransformableTextureMapping;
 class IImageBuilder;
 
 #include "ChangedListener.hpp"
@@ -45,20 +45,25 @@ private:
 
 #ifdef C_CODE
   const IImage* _image;
+  const IImage* _backgroundImage;
 #endif
 #ifdef JAVA_CODE
   private IImage _image;
+  private IImage _backgroundImage;
 #endif
 
   std::string _imageName;
   int _imageWidth;
   int _imageHeight;
 
+  std::string _backgroundImageName;
+
   bool _buildingImage;
+  bool _buildingBackgroundImage;
   std::vector<std::string> _errors;
 
   Mesh* _mesh;
-  SimpleTextureMapping* _simpleTextureMapping;
+  TransformableTextureMapping* _textureMapping;
   Mesh* createMesh(const G3MRenderContext* rc);
   Mesh* getMesh(const G3MRenderContext* rc);
 
@@ -89,11 +94,13 @@ public:
   _heightSize(heightSize),
   _backgroundImageBuilder(backgroundImageBuilder),
   _mesh(NULL),
-  _simpleTextureMapping(NULL),
+  _textureMapping(NULL),
   _image(NULL),
   _imageWidth(0),
   _imageHeight(0),
   _buildingImage(false),
+  _backgroundImage(NULL),
+  _buildingBackgroundImage(false),
   _texCoordsTranslationU(0),
   _texCoordsTranslationV(0),
   _texCoordsScaleU(1),

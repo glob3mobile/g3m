@@ -21,6 +21,7 @@
 #include "GLFeature.hpp"
 #include "Vector2D.hpp"
 #include "Geodetic3D.hpp"
+#include "TextureIDReference.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:

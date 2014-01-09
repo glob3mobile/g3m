@@ -22,6 +22,9 @@
 #include "TexturedMesh.hpp"
 #include "Sector.hpp"
 #include "MercatorUtils.hpp"
+#include "TextureIDReference.hpp"
+#include "SimpleTextureMapping.hpp"
+
 
 EllipsoidShape::~EllipsoidShape() {
   delete _ellipsoid;
@@ -33,7 +36,6 @@ EllipsoidShape::~EllipsoidShape() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {

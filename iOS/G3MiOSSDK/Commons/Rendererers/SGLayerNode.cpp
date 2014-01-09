@@ -15,8 +15,8 @@
 #include "SGShape.hpp"
 #include "IImageDownloadListener.hpp"
 #include "TexturesHandler.hpp"
+#include "TextureIDReference.hpp"
 #include "IStringBuilder.hpp"
-
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
 

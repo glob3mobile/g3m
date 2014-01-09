@@ -23,7 +23,7 @@
 #include "DirectMesh.hpp"
 #include "ICanvas.hpp"
 #include "IStringUtils.hpp"
-
+#include "SimpleTextureMapping.hpp"
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 

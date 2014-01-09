@@ -90,6 +90,12 @@
 		CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */; };
 		CF28589417A6F508004CFFCA /* Rectangle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D87EC5D215BEC73400E38C36 /* Rectangle.hpp */; };
 		CF28589517A6F508004CFFCA /* SceneJSParserStatistics.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E720E8C516EE470300103F20 /* SceneJSParserStatistics.hpp */; };
+		CF290D4D187F149D000BE644 /* SimpleTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF290D4B187F149D000BE644 /* SimpleTextureMapping.cpp */; };
+		CF290D50187F1543000BE644 /* TransformableTextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF290D4E187F1543000BE644 /* TransformableTextureMapping.cpp */; };
+		CF290D51187F1584000BE644 /* SimpleTextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF290D4C187F149D000BE644 /* SimpleTextureMapping.hpp */; };
+		CF290D52187F1584000BE644 /* TransformableTextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF290D4F187F1543000BE644 /* TransformableTextureMapping.hpp */; };
+		CF290D55187F1695000BE644 /* TextureIDReference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF290D53187F1695000BE644 /* TextureIDReference.cpp */; };
+		CF290D56187F1A4C000BE644 /* TextureIDReference.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF290D54187F1695000BE644 /* TextureIDReference.hpp */; };
 		CF2A47C1178EF92C00901857 /* CanvasTileRasterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2A47BF178EF92B00901857 /* CanvasTileRasterizer.cpp */; };
 		CF2A47C2178EF97D00901857 /* CanvasTileRasterizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2A47C0178EF92B00901857 /* CanvasTileRasterizer.hpp */; };
 		CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2A47C3178F211200901857 /* GEORasterProjection.cpp */; };
@@ -657,6 +663,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF290D56187F1A4C000BE644 /* TextureIDReference.hpp in CopyFiles */,
+				CF290D51187F1584000BE644 /* SimpleTextureMapping.hpp in CopyFiles */,
+				CF290D52187F1584000BE644 /* TransformableTextureMapping.hpp in CopyFiles */,
 				D88EE1C91869BA4B00AED85A /* MultiTexturedHUDQuadWidget.hpp in CopyFiles */,
 				D88EE1C81869BA4300AED85A /* MultiTextureMapping.hpp in CopyFiles */,
 				CF1F55E41877302D0019E8A5 /* AbstractImageBuilder.hpp in CopyFiles */,
@@ -1134,6 +1143,12 @@
 		CF27B15F16D93DC90000A415 /* BufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BufferElevationData.hpp; path = Commons/Basic/BufferElevationData.hpp; sourceTree = "<group>"; };
 		CF27B16216D93F2B0000A415 /* ShortBufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBufferElevationData.cpp; path = Commons/Basic/ShortBufferElevationData.cpp; sourceTree = "<group>"; };
 		CF27B16316D93F2C0000A415 /* ShortBufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferElevationData.hpp; path = Commons/Basic/ShortBufferElevationData.hpp; sourceTree = "<group>"; };
+		CF290D4B187F149D000BE644 /* SimpleTextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleTextureMapping.cpp; path = Commons/Mesh/SimpleTextureMapping.cpp; sourceTree = "<group>"; };
+		CF290D4C187F149D000BE644 /* SimpleTextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimpleTextureMapping.hpp; path = Commons/Mesh/SimpleTextureMapping.hpp; sourceTree = "<group>"; };
+		CF290D4E187F1543000BE644 /* TransformableTextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TransformableTextureMapping.cpp; path = Commons/Mesh/TransformableTextureMapping.cpp; sourceTree = "<group>"; };
+		CF290D4F187F1543000BE644 /* TransformableTextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TransformableTextureMapping.hpp; path = Commons/Mesh/TransformableTextureMapping.hpp; sourceTree = "<group>"; };
+		CF290D53187F1695000BE644 /* TextureIDReference.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureIDReference.cpp; path = Commons/Basic/TextureIDReference.cpp; sourceTree = "<group>"; };
+		CF290D54187F1695000BE644 /* TextureIDReference.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureIDReference.hpp; path = Commons/Basic/TextureIDReference.hpp; sourceTree = "<group>"; };
 		CF2A47BF178EF92B00901857 /* CanvasTileRasterizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CanvasTileRasterizer.cpp; path = Commons/Basic/CanvasTileRasterizer.cpp; sourceTree = "<group>"; };
 		CF2A47C0178EF92B00901857 /* CanvasTileRasterizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CanvasTileRasterizer.hpp; path = Commons/Basic/CanvasTileRasterizer.hpp; sourceTree = "<group>"; };
 		CF2A47C3178F211200901857 /* GEORasterProjection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterProjection.cpp; path = Commons/GEO/GEORasterProjection.cpp; sourceTree = "<group>"; };
@@ -2017,6 +2032,8 @@
 				CF1F55DE1876F5E70019E8A5 /* LabelImageBuilder.hpp */,
 				CF1F55E118772FC80019E8A5 /* AbstractImageBuilder.cpp */,
 				CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */,
+				CF290D53187F1695000BE644 /* TextureIDReference.cpp */,
+				CF290D54187F1695000BE644 /* TextureIDReference.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2516,6 +2533,10 @@
 				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
 				CFD3D8A316D15BC800CE9242 /* MeshHolder.cpp */,
 				CFD3D8A416D15BC900CE9242 /* MeshHolder.hpp */,
+				CF290D4B187F149D000BE644 /* SimpleTextureMapping.cpp */,
+				CF290D4C187F149D000BE644 /* SimpleTextureMapping.hpp */,
+				CF290D4E187F1543000BE644 /* TransformableTextureMapping.cpp */,
+				CF290D4F187F1543000BE644 /* TransformableTextureMapping.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -2743,6 +2764,7 @@
 				CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */,
 				CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */,
 				CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */,
+				CF290D50187F1543000BE644 /* TransformableTextureMapping.cpp in Sources */,
 				CF494C9A17FF0A1400D16D33 /* TerrainTouchListener.cpp in Sources */,
 				CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */,
 				CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */,
@@ -2836,6 +2858,7 @@
 				CF4FAACC1695E4A8009734CA /* JSONGenerator.cpp in Sources */,
 				CF4FAAD51695F344009734CA /* BSONGenerator.cpp in Sources */,
 				CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */,
+				CF290D4D187F149D000BE644 /* SimpleTextureMapping.cpp in Sources */,
 				CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */,
 				E7B9964E16A94EC400753FC3 /* LayerBuilder.cpp in Sources */,
 				CFD8E770184FB71D00228031 /* SectorTileCondition.cpp in Sources */,
@@ -2964,6 +2987,7 @@
 				CFA1FDA017A1966D00DAEAB2 /* GEO2DPolygonData.cpp in Sources */,
 				CFA1FDA417A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp in Sources */,
 				CFADEB6D17A42C75001914B2 /* ChangedListener.cpp in Sources */,
+				CF290D55187F1695000BE644 /* TextureIDReference.cpp in Sources */,
 				CFDDDF9C17F8C9E100DD3499 /* URLTemplateLayer.cpp in Sources */,
 				CFAA530217AAFDCF002A9204 /* DecimatedSubviewElevationData.cpp in Sources */,
 				CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */,

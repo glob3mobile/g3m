@@ -10,11 +10,9 @@
 
 #include "Vector3D.hpp"
 #include "GL.hpp"
-#include "TexturesHandler.hpp"
-
+#include "TextureIDReference.hpp"
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
-//#include "GPUProgramState.hpp"
 #include "Camera.hpp"
 #include "GLState.hpp"
 

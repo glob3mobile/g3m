@@ -702,21 +702,6 @@ public:
     compass2->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass2);
 
-//    float visibleFactor = 4;
-//    MultiTexturedHUDQuadWidget* ruler = new MultiTexturedHUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
-//                                                                       URL("file:///widget-background.png"),
-//                                                                       new HUDRelativePosition(1,
-//                                                                                               HUDRelativePosition::VIEWPORT_WIDTH,
-//                                                                                               HUDRelativePosition::LEFT,
-//                                                                                               10),
-//                                                                       new HUDRelativePosition(0.5,
-//                                                                                               HUDRelativePosition::VIEWPORT_HEIGTH,
-//                                                                                               HUDRelativePosition::MIDDLE),
-//                                                                       //113, 1536 / visibleFactor);
-//                                                                       113 / 2, 1536 / 2);
-//
-//    //ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
-
     float visibleFactor = 3;
     HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
                                              new HUDRelativePosition(1,
@@ -729,10 +714,9 @@ public:
                                              new HUDRelativeSize(2 * (113.0 / 1536.0),
                                                                  HUDRelativeSize::VIEWPORT_MIN_AXIS),
                                              new HUDRelativeSize(2 / visibleFactor,
-                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS)
-                                             );
-    ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
-//>>>>>>> hud-renderer
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                             new DownloaderImageBuilder(URL("file:///widget-background.png")));
+    ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
 
     class AnimateHUDWidgetsTask : public GTask {

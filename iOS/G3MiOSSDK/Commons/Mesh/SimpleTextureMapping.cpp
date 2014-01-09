@@ -1,23 +1,26 @@
 //
-//  MultiTextureMapping.cpp
+//  SimpleTextureMapping.cpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 24/12/13.
+//  Created by Diego Gomez Deck on 1/9/14.
 //
 //
 
-#include "MultiTextureMapping.hpp"
+#include "SimpleTextureMapping.hpp"
 
-#include "ILogger.hpp"
-#include "IFloatBuffer.hpp"
+
+#include "Context.hpp"
+#include "GL.hpp"
+#include "GPUProgramManager.hpp"
+#include "GPUProgram.hpp"
 #include "GLState.hpp"
 #include "TextureIDReference.hpp"
 
-const IGLTextureId* MultiTextureMapping::getGLTextureId() const {
+const IGLTextureId* SimpleTextureMapping::getGLTextureId() const {
   return _glTextureId->getID();
 }
 
-void MultiTextureMapping::releaseGLTextureId() {
+void SimpleTextureMapping::releaseGLTextureId() {
 
   if (_glTextureId != NULL) {
 #ifdef C_CODE
@@ -27,32 +30,14 @@ void MultiTextureMapping::releaseGLTextureId() {
     _glTextureId.dispose();
 #endif
     _glTextureId = NULL;
-  }
-  else {
-    ILogger::instance()->logError("Releasing invalid Multi texture mapping");
-  }
-
-  if (_glTextureId2 != NULL) {
-#ifdef C_CODE
-    delete _glTextureId2;
-#endif
-#ifdef JAVA_CODE
-    _glTextureId2.dispose();
-#endif
-    _glTextureId2 = NULL;
-  }
-  else {
-    ILogger::instance()->logError("Releasing invalid Multi texture mapping");
+  } else{
+    ILogger::instance()->logError("Releasing invalid simple texture mapping");
   }
 }
 
-MultiTextureMapping::~MultiTextureMapping() {
+SimpleTextureMapping::~SimpleTextureMapping() {
   if (_ownedTexCoords) {
     delete _texCoords;
-  }
-
-  if (_ownedTexCoords2){
-    delete _texCoords2;
   }
 
   releaseGLTextureId();
@@ -62,10 +47,9 @@ MultiTextureMapping::~MultiTextureMapping() {
 #endif
 }
 
-void MultiTextureMapping::modifyGLState(GLState& state) const{
-  // TARGET 0
+void SimpleTextureMapping::modifyGLState(GLState& state) const{
   if (_texCoords == NULL) {
-    ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords == NULL");
+    ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");
   }
   else {
     state.clearGLFeatureGroup(COLOR_GROUP);
@@ -105,23 +89,5 @@ void MultiTextureMapping::modifyGLState(GLState& state) const{
                                               GLBlendFactor::oneMinusSrcAlpha()),
                          false);
     }
-  }
-
-  // TARGET 1
-  if (_texCoords2 == NULL) {
-    ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
-  }
-  else {
-    state.addGLFeature(new TextureGLFeature(_glTextureId2->getID(),
-                                            _texCoords2,
-                                            2,
-                                            0,
-                                            false,
-                                            0,
-                                            _transparent2,
-                                            GLBlendFactor::srcAlpha(),
-                                            GLBlendFactor::oneMinusSrcAlpha(),
-                                            1), //TARGET
-                       false);
   }
 }

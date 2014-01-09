@@ -15,7 +15,7 @@
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
 #include "TexturesHandler.hpp"
-#include "TextureMapping.hpp"
+#include "SimpleTextureMapping.hpp"
 #include "TexturedMesh.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
