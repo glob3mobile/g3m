@@ -662,9 +662,9 @@ public:
                                                             6,                     // margin
                                                             Color::yellow(),       // color
                                                             Color::black(),        // shadowColor
-                                                            5,                     // shadowBlur
-                                                            2,                     // shadowOffsetX
-                                                            -2,                    // shadowOffsetY
+                                                            3,                     // shadowBlur
+                                                            1,                     // shadowOffsetX
+                                                            -1,                    // shadowOffsetY
                                                             Color::red(),          // backgroundColor
                                                             4,                     // cornerRadius
                                                             true                   // mutable
@@ -710,6 +710,24 @@ public:
     ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
 
+//    float visibleFactor = 10; // 85x5100
+//    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altitude_ladder.png")),
+//                                             new HUDRelativePosition(1,
+//                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+//                                                                     HUDRelativePosition::LEFT,
+//                                                                     10),
+//                                             new HUDRelativePosition(0.5,
+//                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+//                                                                     HUDRelativePosition::MIDDLE),
+//                                             new HUDRelativeSize(8.0f * (85.0f / 5100.0f),
+//                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+//                                             new HUDRelativeSize(8.0f / visibleFactor,
+//                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+//                                             new DownloaderImageBuilder(URL("file:///widget-background.png")));
+//    ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
+//    hudRenderer->addWidget(ruler);
+
+
     class AnimateHUDWidgetsTask : public GTask {
     private:
       HUDQuadWidget*     _compass1;
@@ -744,7 +762,7 @@ public:
           degrees -= 360;
         }
         const std::string degreesText = IStringUtils::instance()->toString( IMathUtils::instance()->round( degrees )  );
-        _labelBuilder->setText( degreesText );
+        //_labelBuilder->setText( degreesText );
 
         //        _compass1->setTexCoordsRotation(_angleInRadians,
         //                                        0.5f, 0.5f);
