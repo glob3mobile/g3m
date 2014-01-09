@@ -54,7 +54,9 @@ public:
 
 
 MultiTexturedHUDQuadWidget::~MultiTexturedHUDQuadWidget() {
-  delete _image;
+  delete _image1;
+  delete _image2;
+
   delete _mesh;
 
   delete _x;
@@ -62,13 +64,14 @@ MultiTexturedHUDQuadWidget::~MultiTexturedHUDQuadWidget() {
 }
 
 Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
-  if (_image == NULL) {
+  if ((_image1 == NULL) ||
+      (_image2 == NULL)) {
     return NULL;
   }
 
-  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
+  const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image1,
                                                                                     GLFormat::rgba(),
-                                                                                    _imageURL.getPath(),
+                                                                                    _imageURL1.getPath(),
                                                                                     false);
 
   if (texId == NULL) {
@@ -86,11 +89,11 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
     return NULL;
   }
 
+  const Camera* camera = rc->getCurrentCamera();
+  const int viewPortWidth  = camera->getWidth();
+  const int viewPortHeight = camera->getHeight();
 
-  const int viewPortWidth  = rc->getCurrentCamera()->getWidth();
-  const int viewPortHeight = rc->getCurrentCamera()->getHeight();
-
-  const float width = _width;
+  const float width  = _width;
   const float height = _height;
   const float x = _x->getPosition(viewPortWidth, viewPortHeight, width, height);
   const float y = _y->getPosition(viewPortWidth, viewPortHeight, width, height);
@@ -132,18 +135,6 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
                                        _texCoordsRotationCenterU,
                                        _texCoordsRotationCenterV);
 
-//  //Transforms only for Texture 0
-//  _mtMapping->setTranslation(_texCoordsTranslationU,
-//                             _texCoordsTranslationV);
-//
-//  _mtMapping->setScale(_texCoordsScaleU,
-//                       _texCoordsScaleV);
-//
-//  _mtMapping->setRotation(_texCoordsRotationInRadians,
-//                          _texCoordsRotationCenterU,
-//                          _texCoordsRotationCenterV);
-
-
   return new TexturedMesh(dm, true, _mtMapping, true, true);
 }
 
@@ -183,10 +174,10 @@ void MultiTexturedHUDQuadWidget::setTexCoordsRotation(float angleInRadians,
 
 
 void MultiTexturedHUDQuadWidget::initialize(const G3MContext* context) {
-  if (!_downloadingImage && (_image == NULL) && (_image2 == NULL)) {
+  if (!_downloadingImage && (_image1 == NULL) && (_image2 == NULL)) {
     _downloadingImage = true;
     IDownloader* downloader = context->getDownloader();
-    downloader->requestImage(_imageURL,
+    downloader->requestImage(_imageURL1,
                              1000000, // priority
                              TimeInterval::fromDays(30),
                              true, // readExpired
@@ -216,14 +207,14 @@ void MultiTexturedHUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec
 }
 
 void MultiTexturedHUDQuadWidget::onImageDownload(IImage* image, const URL& url) {
-  if (url.isEquals(_imageURL)) {
-    _image = image;
+  if (url.isEquals(_imageURL1)) {
+    _image1 = image;
   }
   if (url.isEquals(_imageURL2)) {
     _image2 = image;
   }
 
-  if ((_image  != NULL) &&
+  if ((_image1 != NULL) &&
       (_image2 != NULL)) {
     _downloadingImage = false;
   }

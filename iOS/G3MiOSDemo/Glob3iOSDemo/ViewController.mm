@@ -652,24 +652,11 @@ public:
 
   if (true) { //HUD
 
-//    DownloaderImageBuilder* xxxx = new DownloaderImageBuilder(URL("file:///debug-compass.png"));
-//    aaa;
+#warning Diego at work!
 
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
-//<<<<<<< HEAD
-//#warning Diego at work!
-//    HUDQuadWidget* compass = new HUDQuadWidget(URL("file:///Compass_rose_browns_00_transparent.png"),
-//                                               //URL("file:///debug-compass.png"),
-//                                               new HUDAbsolutePosition(10),
-//                                               new HUDAbsolutePosition(10),
-//                                               300, 300);
-//    //    compass->setTexCoordsRotation(Angle::fromDegrees(45),
-//    //                                   0.5f, 0.5f);
-//    hudRenderer->addWidget(compass);
-//
-//
 //    MultiTexturedHUDQuadWidget* multiTexturecompass = NULL;
 //    multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///debug-compass.png"),
 //                                                         //URL("file:///g3m-marker.png"),
@@ -678,14 +665,6 @@ public:
 //                                                         new HUDAbsolutePosition(350),
 //                                                         300, 300);
 ////    multiTexturecompass->setTexCoordsScale(1, 0.5f);
-//    hudRenderer->addWidget(multiTexturecompass);
-//
-//    HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
-//                                                URL("file:///Compass_rose_browns_00_transparent.png"),
-//                                                //URL("file:///debug-compass.png"),
-//                                                //new HUDAbsolutePosition(320),
-//                                                //new HUDAbsolutePosition(150+10),
-//=======
 
     LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
                                                             GFont::monospaced(38), // font
@@ -708,7 +687,6 @@ public:
     hudRenderer->addWidget(label);
 
     HUDQuadWidget* compass2 = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
-//>>>>>>> hud-renderer
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_WIDTH,
                                                                         HUDRelativePosition::CENTER),
@@ -724,21 +702,7 @@ public:
     compass2->setTexCoordsScale(1, 0.5f);
     hudRenderer->addWidget(compass2);
 
-//<<<<<<< HEAD
 //    float visibleFactor = 4;
-//    //    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
-//    //                                             new HUDAbsolutePosition(320*2),
-//    //                                             new HUDAbsolutePosition(10),
-//    //                                             113, 1536 / visibleFactor);
-////    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
-////                                             new HUDRelativePosition(1,
-////                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
-////                                                                     HUDRelativePosition::LEFT,
-////                                                                     10),
-////                                             new HUDRelativePosition(0.5,
-////                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
-////                                                                     HUDRelativePosition::MIDDLE),
-////                                             113, 1536 / visibleFactor);
 //    MultiTexturedHUDQuadWidget* ruler = new MultiTexturedHUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
 //                                                                       URL("file:///widget-background.png"),
 //                                                                       new HUDRelativePosition(1,
@@ -752,7 +716,7 @@ public:
 //                                                                       113 / 2, 1536 / 2);
 //
 //    //ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
-//=======
+
     float visibleFactor = 3;
     HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
                                              new HUDRelativePosition(1,
@@ -773,35 +737,20 @@ public:
 
     class AnimateHUDWidgetsTask : public GTask {
     private:
-//<<<<<<< HEAD
-//      HUDQuadWidget* _compass1;
-//      HUDQuadWidget* _compass2;
-//      MultiTexturedHUDQuadWidget* _compass3;
-//      MultiTexturedHUDQuadWidget* _ruler;
-//      double _angle;
-//=======
       HUDQuadWidget*     _compass1;
       HUDQuadWidget*     _compass2;
       HUDQuadWidget*     _ruler;
       LabelImageBuilder* _labelBuilder;
       double _angleInRadians;
-//>>>>>>> hud-renderer
 
       float _translationV;
       float _translationStep;
 
     public:
-//<<<<<<< HEAD
-//      RotateCompass(HUDQuadWidget* compass1,
-//                    HUDQuadWidget* compass2,
-//                    MultiTexturedHUDQuadWidget* compass3,
-//                    MultiTexturedHUDQuadWidget* ruler) :
-//=======
       AnimateHUDWidgetsTask(HUDQuadWidget* compass1,
                             HUDQuadWidget* compass2,
                             HUDQuadWidget* ruler,
                             LabelImageBuilder* labelBuilder) :
-//>>>>>>> hud-renderer
       _compass1(compass1),
       _compass2(compass2),
       _ruler(ruler),
@@ -838,18 +787,9 @@ public:
       }
     };
 
-//<<<<<<< HEAD
-//    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(20),
-//                                                 new RotateCompass(compass,
-//                                                                   compass2,
-//                                                                   multiTexturecompass,
-//                                                                   ruler)));
-//=======
     builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(50),
                                                  new AnimateHUDWidgetsTask(label, compass2, ruler, labelBuilder)));
-//>>>>>>> hud-renderer
   }
-
 
 
   //  [self createInterpolationTest: meshRenderer];

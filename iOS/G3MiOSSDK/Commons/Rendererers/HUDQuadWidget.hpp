@@ -47,7 +47,8 @@ private:
 #ifdef JAVA_CODE
   private IImage _image;
 #endif
-  std::string   _imageName;
+
+  std::string _imageName;
   int _imageWidth;
   int _imageHeight;
 
