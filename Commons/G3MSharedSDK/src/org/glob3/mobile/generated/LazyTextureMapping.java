@@ -82,9 +82,6 @@ public class LazyTextureMapping extends TextureMapping
     return _glTextureId;
   }
 
-
-  ///#include "GPUProgramState.hpp"
-  
   public final void modifyGLState(GLState state)
   {
     if (!_initialized)

@@ -17,7 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-public class MultiTextureMapping extends TextureMapping
+//class TextureIDReference;
+//class IFloatBuffer;
+//class IGLTextureId;
+
+public class MultiTextureMapping extends TransformableTextureMapping
 {
   private TextureIDReference _glTextureId;
   private TextureIDReference _glTextureId2;
@@ -27,15 +31,6 @@ public class MultiTextureMapping extends TextureMapping
 
   private IFloatBuffer _texCoords2;
   private final boolean _ownedTexCoords2;
-
-  //TRANSFORMS FOR TEX 0
-  private float _translationU;
-  private float _translationV;
-  private float _scaleU;
-  private float _scaleV;
-  private float _rotationInRadians;
-  private float _rotationCenterU;
-  private float _rotationCenterV;
 
   private final boolean _transparent;
   private final boolean _transparent2;
@@ -67,6 +62,7 @@ public class MultiTextureMapping extends TextureMapping
 
   public MultiTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureId2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2)
   {
+     super(0, 0, 1, 1, 0, 0, 0);
      _glTextureId = glTextureId;
      _texCoords = texCoords;
      _ownedTexCoords = ownedTexCoords;
@@ -75,17 +71,11 @@ public class MultiTextureMapping extends TextureMapping
      _texCoords2 = texCoords2;
      _ownedTexCoords2 = ownedTexCoords2;
      _transparent2 = transparent2;
-     _translationU = 0F;
-     _translationV = 0F;
-     _scaleU = 1F;
-     _scaleV = 1F;
-     _rotationInRadians = 0F;
-     _rotationCenterU = 0F;
-     _rotationCenterV = 0F;
   }
 
   public MultiTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureId2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2, float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
   {
+     super(translationU, translationV, scaleU, scaleV, rotationAngleInRadians, rotationCenterU, rotationCenterV);
      _glTextureId = glTextureId;
      _texCoords = texCoords;
      _ownedTexCoords = ownedTexCoords;
@@ -94,38 +84,6 @@ public class MultiTextureMapping extends TextureMapping
      _texCoords2 = texCoords2;
      _ownedTexCoords2 = ownedTexCoords2;
      _transparent2 = transparent2;
-     _translationU = translationU;
-     _translationV = translationV;
-     _scaleU = scaleU;
-     _scaleV = scaleV;
-     _rotationInRadians = rotationAngleInRadians;
-     _rotationCenterU = rotationCenterU;
-     _rotationCenterV = rotationCenterV;
-  }
-
-  public final void setTranslation(float translationU, float translationV)
-  {
-    _translationU = translationU;
-    _translationV = translationV;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning updateState();
-  }
-
-  public final void setScale(float scaleU, float scaleV)
-  {
-    _scaleU = scaleU;
-    _scaleV = scaleV;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning updateState();
-  }
-
-  public final void setRotation(float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
-  {
-    _rotationInRadians = rotationAngleInRadians;
-    _rotationCenterU = rotationCenterU;
-    _rotationCenterV = rotationCenterV;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning updateState();
   }
 
   public void dispose()
