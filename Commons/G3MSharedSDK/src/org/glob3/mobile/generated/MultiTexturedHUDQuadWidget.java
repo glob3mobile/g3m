@@ -24,11 +24,9 @@ package org.glob3.mobile.generated;
 
 public class MultiTexturedHUDQuadWidget extends HUDWidget
 {
-  private final URL _imageURL;
-
+  private final URL _imageURL1;
   private final URL _imageURL2;
-//  const float _x;
-//  const float _y;
+
   private final HUDPosition _x;
   private final HUDPosition _y;
   private final float _width;
@@ -42,7 +40,7 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
   private float _texCoordsRotationCenterU;
   private float _texCoordsRotationCenterV;
 
-  private IImage _image;
+  private IImage _image1;
   private IImage _image2;
   private boolean _downloadingImage;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
@@ -52,12 +50,12 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
 
   private Mesh createMesh(G3MRenderContext rc)
   {
-    if (_image == null)
+    if ((_image1 == null) || (_image2 == null))
     {
       return null;
     }
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), _imageURL.getPath(), false);
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1.getPath(), false);
   
     if (texId == null)
     {
@@ -73,9 +71,9 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
       return null;
     }
   
-  
-    final int viewPortWidth = rc.getCurrentCamera().getWidth();
-    final int viewPortHeight = rc.getCurrentCamera().getHeight();
+    final Camera camera = rc.getCurrentCamera();
+    final int viewPortWidth = camera.getWidth();
+    final int viewPortHeight = camera.getHeight();
   
     final float width = _width;
     final float height = _height;
@@ -100,18 +98,6 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
        vertices.dispose();
   
     _mtMapping = new MultiTextureMapping(texId, texCoords.create(), true, true, texId2, texCoords.create(), true, true, _texCoordsTranslationU, _texCoordsTranslationV, _texCoordsScaleU, _texCoordsScaleV, _texCoordsRotationInRadians, _texCoordsRotationCenterU, _texCoordsRotationCenterV);
-  
-  //  //Transforms only for Texture 0
-  //  _mtMapping->setTranslation(_texCoordsTranslationU,
-  //                             _texCoordsTranslationV);
-  //
-  //  _mtMapping->setScale(_texCoordsScaleU,
-  //                       _texCoordsScaleV);
-  //
-  //  _mtMapping->setRotation(_texCoordsRotationInRadians,
-  //                          _texCoordsRotationCenterU,
-  //                          _texCoordsRotationCenterV);
-  
   
     return new TexturedMesh(dm, true, _mtMapping, true, true);
   }
@@ -142,9 +128,9 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
     }
   }
 
-  public MultiTexturedHUDQuadWidget(URL imageURL, URL imageURL2, HUDPosition x, HUDPosition y, float width, float height)
+  public MultiTexturedHUDQuadWidget(URL imageURL1, URL imageURL2, HUDPosition x, HUDPosition y, float width, float height)
   {
-     _imageURL = imageURL;
+     _imageURL1 = imageURL1;
      _imageURL2 = imageURL2;
      _x = x;
      _y = y;
@@ -152,7 +138,7 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
      _height = height;
      _mesh = null;
      _mtMapping = null;
-     _image = null;
+     _image1 = null;
      _image2 = null;
      _downloadingImage = false;
      _texCoordsTranslationU = 0F;
@@ -205,8 +191,11 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
 
   public void dispose()
   {
-    if (_image != null)
-       _image.dispose();
+    if (_image1 != null)
+       _image1.dispose();
+    if (_image2 != null)
+       _image2.dispose();
+  
     if (_mesh != null)
        _mesh.dispose();
   
@@ -218,11 +207,11 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
 
   public final void initialize(G3MContext context)
   {
-    if (!_downloadingImage && (_image == null) && (_image2 == null))
+    if (!_downloadingImage && (_image1 == null) && (_image2 == null))
     {
       _downloadingImage = true;
       IDownloader downloader = context.getDownloader();
-      downloader.requestImage(_imageURL, 1000000, TimeInterval.fromDays(30), true, new MultiTexturedHUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
+      downloader.requestImage(_imageURL1, 1000000, TimeInterval.fromDays(30), true, new MultiTexturedHUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
   
       downloader.requestImage(_imageURL2, 1000000, TimeInterval.fromDays(30), true, new MultiTexturedHUDQuadWidget_ImageDownloadListener(this), true); // readExpired -  priority
     }
@@ -252,16 +241,16 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
   /** private, do not call */
   public final void onImageDownload(IImage image, URL url)
   {
-    if (url.isEquals(_imageURL))
+    if (url.isEquals(_imageURL1))
     {
-      _image = image;
+      _image1 = image;
     }
     if (url.isEquals(_imageURL2))
     {
       _image2 = image;
     }
   
-    if ((_image != null) && (_image2 != null))
+    if ((_image1 != null) && (_image2 != null))
     {
       _downloadingImage = false;
     }

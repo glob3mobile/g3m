@@ -29,9 +29,11 @@ package org.glob3.mobile.generated;
 public class HUDQuadWidget extends HUDWidget implements ChangedListener
 {
   private IImageBuilder _imageBuilder;
+  private IImageBuilder _backgroundImageBuilder;
 
   private final HUDPosition _xPosition;
   private final HUDPosition _yPosition;
+
   private final HUDSize _widthSize;
   private final HUDSize _heightSize;
 
@@ -44,6 +46,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
   private float _texCoordsRotationCenterV;
 
   private IImage _image;
+
   private String _imageName;
   private int _imageWidth;
   private int _imageHeight;
@@ -129,11 +132,16 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
 
   public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
   {
+     this(imageBuilder, xPosition, yPosition, widthSize, heightSize, null);
+  }
+  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize, IImageBuilder backgroundImageBuilder)
+  {
      _imageBuilder = imageBuilder;
      _xPosition = xPosition;
      _yPosition = yPosition;
      _widthSize = widthSize;
      _heightSize = heightSize;
+     _backgroundImageBuilder = backgroundImageBuilder;
      _mesh = null;
      _simpleTextureMapping = null;
      _image = null;
@@ -207,6 +215,9 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
        _widthSize.dispose();
     if (_heightSize != null)
        _heightSize.dispose();
+  
+    if (_backgroundImageBuilder != null)
+       _backgroundImageBuilder.dispose();
   }
 
   public final void initialize(G3MContext context)
@@ -215,17 +226,25 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     if (!_buildingImage && (_image == null))
     {
       _buildingImage = true;
-      _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this), true);
+      _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this, 0), true);
       if (_imageBuilder.isMutable())
       {
         _imageBuilder.setChangeListener(this);
       }
-      else
+  
+      if (_backgroundImageBuilder != null)
       {
-        if (_imageBuilder != null)
-           _imageBuilder.dispose();
-        _imageBuilder = null;
+        _backgroundImageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this, 1), true);
+        if (_backgroundImageBuilder.isMutable())
+        {
+          _backgroundImageBuilder.setChangeListener(this);
+        }
       }
+  
+      //    else {
+      //      delete _imageBuilder;
+      //      _imageBuilder = NULL;
+      //    }
     }
   }
 
@@ -251,23 +270,33 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
   }
 
   /** private, do not call */
-  public final void imageCreated(IImage image, String imageName)
+  public final void imageCreated(IImage image, String imageName, int imageRole)
   {
     _buildingImage = false;
-    _image = image;
-    _imageName = imageName;
-    _imageWidth = _image.getWidth();
-    _imageHeight = _image.getHeight();
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
+  
+    if (imageRole == 0)
+    {
+      _image = image;
+      _imageName = imageName;
+      _imageWidth = _image.getWidth();
+      _imageHeight = _image.getHeight();
+    }
+    else if (imageRole == 0)
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+    }
+  
+    //  delete _imageBuilder;
+    //  _imageBuilder = NULL;
   }
 
   /** private, do not call */
-  public final void onImageBuildError(String error)
+  public final void onImageBuildError(String error, int imageRole)
   {
     _errors.add("HUDQuadWidget: \"" + error + "\"");
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
+    //  delete _imageBuilder;
+    //  _imageBuilder = NULL;
   }
 
   public final void changed()
@@ -283,7 +312,11 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     _imageHeight = 0;
   
     _buildingImage = true;
-    _imageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this), true);
+    _imageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this, 0), true);
+    if (_backgroundImageBuilder != null)
+    {
+      _backgroundImageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this, 1), true);
+    }
   }
 
 }
