@@ -90,7 +90,12 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
     return NULL;
   }
 
+#ifdef C_CODE
   const TextureIDReference* backgroundTextureID = NULL;
+#endif
+#ifdef JAVA_CODE
+  TextureIDReference backgroundTextureID = null;
+#endif
   if (hasBackground) {
     backgroundTextureID = texturesHandler->getTextureIDReference(_backgroundImage,
                                                                  GLFormat::rgba(),
