@@ -83,7 +83,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
       return null;
     }
   
-    final TextureIDReference backgroundTextureID = null;
+    TextureIDReference backgroundTextureID = null;
     if (hasBackground)
     {
       backgroundTextureID = texturesHandler.getTextureIDReference(_backgroundImage, GLFormat.rgba(), _backgroundImageName, false);
