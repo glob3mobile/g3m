@@ -113,31 +113,6 @@ public class SGLayerNode extends SGNode
     _downloadedImage = image;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  GPUProgramState createGPUProgramState(G3MRenderContext rc, GPUProgramState parentState);
-
-//  const GLState* createGLState(const G3MRenderContext* rc, const GLState* parentGLState);
-
-
-  //const GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, const GLState* parentGLState) {
-  //  if (!_initialized) {
-  //    _initialized = true;
-  //    requestImage(rc);
-  //  }
-  //
-  //  const IGLTextureId* textureId = getTextureId(rc);
-  //  if (textureId == NULL) {
-  //    return NULL;
-  //  }
-  //  _glState.setParent(parentGLState);
-  //  _glState.clearGLFeatureGroup(COLOR_GROUP);
-  //
-  //  _glState.addGLFeature(new TextureIDGLFeature(textureId,
-  //                                               false, 0,0), false);
-  //
-  //  return &_glState;
-  //}
-  
   public final boolean modifyGLState(G3MRenderContext rc, GLState state)
   {
   
