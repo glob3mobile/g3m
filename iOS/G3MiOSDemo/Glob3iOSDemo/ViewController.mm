@@ -657,15 +657,6 @@ public:
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
-//    MultiTexturedHUDQuadWidget* multiTexturecompass = NULL;
-//    multiTexturecompass = new MultiTexturedHUDQuadWidget(URL("file:///debug-compass.png"),
-//                                                         //URL("file:///g3m-marker.png"),
-//                                                         URL("file:///simpleStencil.png"),
-//                                                         new HUDAbsolutePosition(10),
-//                                                         new HUDAbsolutePosition(350),
-//                                                         300, 300);
-////    multiTexturecompass->setTexCoordsScale(1, 0.5f);
-
     LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
                                                             GFont::monospaced(38), // font
                                                             6,                     // margin
@@ -767,7 +758,7 @@ public:
           _translationStep *= -1;
         }
         _translationV += _translationStep;
-        //_ruler->setTexCoordsTranslation(0, _translationV);
+        _ruler->setTexCoordsTranslation(0, _translationV);
       }
     };
 

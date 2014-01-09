@@ -71,7 +71,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
     if (hasTexture2){
 
-      if (transformTC && rotationTC){
+      if (transformTC || rotationTC){
         return compileProgramWithName(gl, "TransformedTexCoorMultiTexturedMesh");
       }
 
