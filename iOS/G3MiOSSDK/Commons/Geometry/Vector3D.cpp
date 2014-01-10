@@ -9,6 +9,7 @@
 #include "Vector3D.hpp"
 #include "MutableVector3D.hpp"
 #include "Angle.hpp"
+#include "Vector3F.hpp"
 
 #include "IStringBuilder.hpp"
 
@@ -159,3 +160,8 @@ const double Vector3D::squaredDistanceTo(const Vector3D& that) const {
   const double dz = _z - that._z;
   return (dx * dx) + (dy * dy) + (dz * dz);
 }
+
+Vector3F Vector3D::asVector3F() const{
+  return Vector3F((float)_x, (float)_y, (float)_z);
+}
+
