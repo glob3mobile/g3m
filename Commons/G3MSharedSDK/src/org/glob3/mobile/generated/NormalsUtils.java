@@ -19,17 +19,6 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class IShortBuffer;
 
-//
-//  Vector3F.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 2/9/13.
-//
-//
-
-
-
-
 
 public class NormalsUtils
 {

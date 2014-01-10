@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class MutableVector3D;
+//class Vector3F;
 
 public class Vector3D
 {
