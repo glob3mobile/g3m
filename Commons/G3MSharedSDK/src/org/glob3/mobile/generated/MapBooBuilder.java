@@ -1115,6 +1115,14 @@ public abstract class MapBooBuilder
       if (scene != null)
          scene.dispose();
   
+      if (_viewType == MapBoo_ViewType.VIEW_RUNTIME)
+      {
+        if (_applicationCurrentSceneId.compareTo(sceneId) == 0)
+        {
+          setApplicationCurrentSceneId(_applicationScenes.get(0).getId());
+        }
+      }
+  
       fireOnScenesChanged();
     }
   }
@@ -1211,7 +1219,7 @@ public abstract class MapBooBuilder
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
   
-    ILogger.instance().logInfo(json);
+    //ILogger::instance()->logInfo(json);
   
     if (jsonBaseObject == null)
     {
@@ -1303,14 +1311,16 @@ public abstract class MapBooBuilder
                   }
                 }
               }
-  
-              final JSONObject jsonDeleteScene = jsonScenes.getAsObject("deleteScene");
-              if (jsonDeleteScene != null)
+              else
               {
-                final JSONString jsonSceneId = jsonDeleteScene.getAsString("sceneId");
-                if (jsonSceneId != null)
+                final JSONObject jsonDeleteScene = jsonScenes.getAsObject("deleteScene");
+                if (jsonDeleteScene != null)
                 {
-                  deleteApplicationScene(jsonSceneId.value());
+                  final JSONString jsonSceneId = jsonDeleteScene.getAsString("sceneId");
+                  if (jsonSceneId != null)
+                  {
+                    deleteApplicationScene(jsonSceneId.value());
+                  }
                 }
               }
             }
