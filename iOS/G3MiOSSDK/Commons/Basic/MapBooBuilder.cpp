@@ -912,7 +912,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
   
-  ILogger::instance()->logInfo(json);
+  //ILogger::instance()->logInfo(json);
 
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
@@ -986,12 +986,13 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
                 }
               }
             }
-            
-            const JSONObject* jsonDeleteScene = jsonScenes->getAsObject("deleteScene");
-            if (jsonDeleteScene != NULL) {
-              const JSONString* jsonSceneId = jsonDeleteScene->getAsString("sceneId");
-              if (jsonSceneId != NULL) {
-                deleteApplicationScene(jsonSceneId->value());
+            else {
+              const JSONObject* jsonDeleteScene = jsonScenes->getAsObject("deleteScene");
+              if (jsonDeleteScene != NULL) {
+                const JSONString* jsonSceneId = jsonDeleteScene->getAsString("sceneId");
+                if (jsonSceneId != NULL) {
+                  deleteApplicationScene(jsonSceneId->value());
+                }
               }
             }
           }
@@ -1665,6 +1666,12 @@ void MapBooBuilder::deleteApplicationScene(const std::string &sceneId) {
     _applicationScenes.remove(sceneIndex);
 #endif
     delete scene;
+    
+    if (_viewType == VIEW_RUNTIME) {
+      if (_applicationCurrentSceneId.compare(sceneId) == 0) {
+        setApplicationCurrentSceneId(_applicationScenes[0]->getId());
+      }
+    }
     
     fireOnScenesChanged();
   }
