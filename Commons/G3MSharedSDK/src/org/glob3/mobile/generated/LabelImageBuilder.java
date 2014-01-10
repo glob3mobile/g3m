@@ -35,6 +35,12 @@ public class LabelImageBuilder extends AbstractImageBuilder
 
   private final boolean _isMutable;
 
+  private String getImageName()
+  {
+    final IStringUtils su = IStringUtils.instance();
+    return (_text + "/" + _font.description() + "/" + su.toString(_margin) + "/" + _color.description() + "/" + _shadowColor.description() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.description() + "/" + su.toString(_cornerRadius));
+  }
+
 
   public LabelImageBuilder(String text, GFont font, float margin, Color color, Color shadowColor, float shadowBlur, float shadowOffsetX, float shadowOffsetY, Color backgroundColor, float cornerRadius)
   {
@@ -160,10 +166,5 @@ public class LabelImageBuilder extends AbstractImageBuilder
        canvas.dispose();
   }
 
-  public final String getImageName()
-  {
-    final IStringUtils su = IStringUtils.instance();
-    return (_text + "/" + _font.description() + "/" + su.toString(_margin) + "/" + _color.description() + "/" + _shadowColor.description() + "/" + su.toString(_shadowBlur) + "/" + su.toString(_shadowOffsetX) + "/" + su.toString(_shadowOffsetY) + "/" + _backgroundColor.description() + "/" + su.toString(_cornerRadius));
-  }
 
 }
