@@ -62,11 +62,6 @@ public:
              IImageBuilderListener* listener,
              bool deleteListener);
 
-  const std::string getImageName() {
-    return _url.getPath();
-  }
-
-
 };
 
 #endif

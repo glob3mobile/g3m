@@ -130,6 +130,7 @@
 #import <G3MiOSSDK/HUDRelativeSize.hpp>
 #import <G3MiOSSDK/DownloaderImageBuilder.hpp>
 #import <G3MiOSSDK/LabelImageBuilder.hpp>
+#import <G3MiOSSDK/CanvasImageBuilder.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -654,8 +655,60 @@ public:
 
 #warning Diego at work!
 
+
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
+
+
+    class TestCanvasImageBuilder : public CanvasImageBuilder {
+    protected:
+      void buildOnCanvas(const G3MContext* context,
+                         ICanvas* canvas) {
+        const int width  = canvas->getWidth();
+        const int height = canvas->getHeight();
+
+//        canvas->setFillColor(Color::fromRGBA(1, 1, 1, 0.25));
+        canvas->setFillColor(Color::fromRGBA(0, 1, 0, 0.4));
+        canvas->fillRectangle(0, 0, width, height);
+
+        canvas->setFillColor(Color::green());
+        for (int y = 0; y <= height; y += 16) {
+          canvas->fillRectangle(0, y-1, width/8.0f, 2);
+        }
+        for (int y = 0; y <= height; y += 64) {
+          canvas->fillRectangle(0, y-2, width/4.0f, 4);
+        }
+      }
+
+      // std::string getImageName(const G3MContext* context) const;
+
+    public:
+      TestCanvasImageBuilder() :
+      CanvasImageBuilder(768, 384)
+      {
+      }
+
+      bool isMutable() const {
+        return true;
+      }
+    };
+    
+
+    HUDQuadWidget* test = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
+                                            new TestCanvasImageBuilder(),
+                                            new HUDRelativePosition(0,
+                                                                    HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                    HUDRelativePosition::RIGHT,
+                                                                    10),
+                                            new HUDRelativePosition(0.5,
+                                                                    HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                    HUDRelativePosition::MIDDLE),
+                                            new HUDRelativeSize(0.25,
+                                                                HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                            new HUDRelativeSize(0.5,
+                                                                HUDRelativeSize::VIEWPORT_MIN_AXIS));
+    hudRenderer->addWidget(test);
+
 
     LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
                                                             GFont::monospaced(38), // font

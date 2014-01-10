@@ -17,7 +17,7 @@
 #include "IImageBuilderListener.hpp"
 
 
-const std::string LabelImageBuilder::getImageName() {
+const std::string LabelImageBuilder::getImageName() const {
   const IStringUtils* su = IStringUtils::instance();
   return (_text                          + "/" +
           _font.description()            + "/" +

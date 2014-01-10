@@ -251,6 +251,8 @@
 		CF9AEBC2159B3FEB004C3558 /* PlanetTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* PlanetTileTessellator.cpp */; };
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
+		CF9F74DF18805470008D65F7 /* CanvasImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9F74DD18805470008D65F7 /* CanvasImageBuilder.cpp */; };
+		CF9F74E0188054B0008D65F7 /* CanvasImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9F74DE18805470008D65F7 /* CanvasImageBuilder.hpp */; };
 		CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */; };
 		CFA1899A15F8D7CA0048BF46 /* FloatBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1899815F8D7CA0048BF46 /* FloatBuffer_iOS.cpp */; };
 		CFA1899F15F8D9F80048BF46 /* IntBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */; };
@@ -665,6 +667,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF9F74E0188054B0008D65F7 /* CanvasImageBuilder.hpp in CopyFiles */,
 				CF290D56187F1A4C000BE644 /* TextureIDReference.hpp in CopyFiles */,
 				CF290D51187F1584000BE644 /* SimpleTextureMapping.hpp in CopyFiles */,
 				CF290D52187F1584000BE644 /* TransformableTextureMapping.hpp in CopyFiles */,
@@ -1357,6 +1360,8 @@
 		CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CachedDownloader.hpp; path = Commons/Interfaces/CachedDownloader.hpp; sourceTree = "<group>"; };
 		CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IBuffer.cpp; path = Commons/Basic/IBuffer.cpp; sourceTree = "<group>"; };
 		CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBuffer.hpp; path = Commons/Basic/IBuffer.hpp; sourceTree = "<group>"; };
+		CF9F74DD18805470008D65F7 /* CanvasImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CanvasImageBuilder.cpp; path = Commons/Basic/CanvasImageBuilder.cpp; sourceTree = "<group>"; };
+		CF9F74DE18805470008D65F7 /* CanvasImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CanvasImageBuilder.hpp; path = Commons/Basic/CanvasImageBuilder.hpp; sourceTree = "<group>"; };
 		CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ShapesRenderer.cpp; path = Commons/Rendererers/ShapesRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapesRenderer.hpp; path = Commons/Rendererers/ShapesRenderer.hpp; sourceTree = "<group>"; };
 		CFA1899815F8D7CA0048BF46 /* FloatBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBuffer_iOS.cpp; path = Specific/Derived/FloatBuffer_iOS.cpp; sourceTree = "<group>"; };
@@ -2038,6 +2043,8 @@
 				CF1F55E218772FC80019E8A5 /* AbstractImageBuilder.hpp */,
 				CF290D53187F1695000BE644 /* TextureIDReference.cpp */,
 				CF290D54187F1695000BE644 /* TextureIDReference.hpp */,
+				CF9F74DD18805470008D65F7 /* CanvasImageBuilder.cpp */,
+				CF9F74DE18805470008D65F7 /* CanvasImageBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2802,6 +2809,7 @@
 				A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */,
 				A7EE001C161B245600C77604 /* JSONBaseObject.cpp in Sources */,
 				CF4F784A1804ADFC00550409 /* DeviceInfo_iOS.mm in Sources */,
+				CF9F74DF18805470008D65F7 /* CanvasImageBuilder.cpp in Sources */,
 				CF1F55E318772FC80019E8A5 /* AbstractImageBuilder.cpp in Sources */,
 				A7EE0020161B274300C77604 /* JSONArray.cpp in Sources */,
 				A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */,

@@ -11,6 +11,8 @@
 
 #include "IImageBuilder.hpp"
 
+#include <stddef.h>
+
 class AbstractImageBuilder : public IImageBuilder {
 private:
   ChangedListener* _listener;

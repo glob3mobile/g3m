@@ -36,6 +36,8 @@ private:
 
   const bool  _isMutable;
 
+  const std::string getImageName() const;
+
 public:
 
   LabelImageBuilder(const std::string& text,
@@ -79,8 +81,7 @@ public:
              IImageBuilderListener* listener,
              bool deleteListener);
 
-  const std::string getImageName();
-  
+
 };
 
 #endif
