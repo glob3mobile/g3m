@@ -316,7 +316,7 @@ public class G3MWidget
     }
     else
     {
-      ILogger.instance().logInfo("Recycling Z Render");
+      //ILogger::instance()->logInfo("Recycling Z Render");
       return; //NO NEED OF RENDERING AGAIN
     }
   
@@ -658,7 +658,7 @@ public class G3MWidget
       MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
       Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
       //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
-      ILogger.instance().logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera.getCartesianPosition().sub(pos).length());
+      //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
       //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
   
       // update ground height in camera class
@@ -667,7 +667,7 @@ public class G3MWidget
     }
     else
     {
-      ILogger.instance().logInfo("NO Z");
+      //ILogger::instance()->logInfo("NO Z");
       return Vector3D.nan();
     }
   }
@@ -682,6 +682,29 @@ public class G3MWidget
       position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
     }
     return position.asVector3D();
+  }
+
+  public final Vector3D getFirstValidScenePositionForFrameBufferColumn(int column)
+  {
+    zRender();
+  
+    int row = _height / 2;
+    while (row<_height-1)
+    {
+  
+      final double z = _gl.readPixelAsDouble(column, row, _width, _height);
+  
+      if (!(z != z))
+      {
+        Vector3D pixel3D = new Vector3D(column, _height - row,z);
+        MutableMatrix44D mmv = new MutableMatrix44D(_currentCamera.getModelViewMatrix44D());
+        Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+        _nextCamera.setGroundHeightFromCartesianPoint(pos);
+        return pos;
+      }
+      row++;
+    }
+    return Vector3D.nan();
   }
 
 

@@ -119,6 +119,9 @@ public class CameraRotationHandler extends CameraEventHandler
     //_pivotPoint = camera->getXYZCenterOfView().asMutableVector3D();
     _pivotPoint = eventContext.getWidget().getFirstValidScenePositionForCentralColumn().asMutableVector3D();
   
+    //const int centralPixelColumn = camera->getWidth() / 2;
+    //_pivotPoint = eventContext->getWidget()->getFirstValidScenePositionForFrameBufferColumn(centralPixelColumn).asMutableVector3D();
+  
     if (_pivotPoint.isNan())
     {
       ILogger.instance().logError("CAMERA ERROR: center point does not intersect globe!!\n");

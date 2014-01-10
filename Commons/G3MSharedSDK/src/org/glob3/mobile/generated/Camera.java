@@ -223,11 +223,25 @@ public class Camera
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
+    Vector3D direction = point.sub(getCartesianPosition());
+    double angle = direction.angleBetween(getViewDirection())._degrees;
+    if (angle > 90) //Projecting point behind the camera
+    {
+      return new Vector2F((float)-p._x, (float)-(_height - p._y));
+    }
+  
     return new Vector2F((float) p._x, (float)(_height - p._y));
   }
   public final Vector2F point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
+  
+    Vector3D direction = point.asVector3D().sub(getCartesianPosition());
+    double angle = direction.angleBetween(getViewDirection())._degrees;
+    if (angle > 90) //Projecting point behind the camera
+    {
+      return new Vector2F((float)-p._x, (float)-(_height - p._y));
+    }
   
     return new Vector2F(p._x, (_height - p._y));
   }

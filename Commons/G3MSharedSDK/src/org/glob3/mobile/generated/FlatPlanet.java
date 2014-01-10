@@ -262,6 +262,7 @@ public class FlatPlanet extends Planet
     final IMathUtils mu = IMathUtils.instance();
     MutableVector3D positionCamera = _origin;
   
+    // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
     // compute distance to translate camera
     double d0 = _distanceBetweenInitialPoints;
     final Vector3D r1 = finalRay0;
