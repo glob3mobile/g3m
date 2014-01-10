@@ -12,6 +12,7 @@
 #include "IMathUtils.hpp"
 
 #include "MutableMatrix44D.hpp"
+#include "Vector3F.hpp"
 
 class MutableVector3D;
 
@@ -185,6 +186,10 @@ public:
   const double squaredDistanceTo(const Vector3D& that) const;
 
   const double distanceTo(const Vector3D& that) const;
+
+  Vector3F asVector3F() const{
+    return Vector3F((float)_x, (float)_y, (float)_z);
+  }
 
 };
 

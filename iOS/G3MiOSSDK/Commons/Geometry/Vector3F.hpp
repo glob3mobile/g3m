@@ -11,6 +11,7 @@
 
 #include "IMathUtils.hpp"
 
+class Vector3D;
 
 class Vector3F {
 private:
@@ -75,6 +76,8 @@ public:
                     _z * that._x - _x * that._z,
                     _x * that._y - _y * that._x);
   }
+
+  Vector3D asVector3D() const;
 
 };
 

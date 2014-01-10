@@ -244,12 +244,24 @@ const Vector2F Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
+  Vector3D direction = point.sub(getCartesianPosition());
+  double angle = direction.angleBetween(getViewDirection())._degrees;
+  if (angle > 90){    //Projecting point behind the camera
+    return Vector2F((float)-p._x, (float)-(_height - p._y));
+  }
+
   return Vector2F((float) p._x, (float) (_height - p._y) );
 }
 
 const Vector2F Camera::point2Pixel(const Vector3F& point) const {
   const Vector2F p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
+
+  Vector3D direction = point.asVector3D().sub(getCartesianPosition());
+  double angle = direction.angleBetween(getViewDirection())._degrees;
+  if (angle > 90){    //Projecting point behind the camera
+    return Vector2F((float)-p._x, (float)-(_height - p._y));
+  }
 
   return Vector2F(p._x, (_height - p._y) );
 }
