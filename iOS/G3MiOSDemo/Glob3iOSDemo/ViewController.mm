@@ -660,42 +660,79 @@ public:
     builder.setHUDRenderer(hudRenderer);
 
 
-    class TestCanvasImageBuilder : public CanvasImageBuilder {
+    class AltimeterCanvasImageBuilder : public CanvasImageBuilder {
+    private:
+      float _altitude = 38500;
+      float _step     = 100;
+
     protected:
       void buildOnCanvas(const G3MContext* context,
                          ICanvas* canvas) {
-        const int width  = canvas->getWidth();
-        const int height = canvas->getHeight();
+        const float width  = canvas->getWidth();
+        const float height = canvas->getHeight();
 
-//        canvas->setFillColor(Color::fromRGBA(1, 1, 1, 0.25));
-        canvas->setFillColor(Color::fromRGBA(0, 1, 0, 0.4));
+        canvas->setFillColor(Color::fromRGBA(0, 0, 0, 0.5));
         canvas->fillRectangle(0, 0, width, height);
 
-        canvas->setFillColor(Color::green());
+        canvas->setFillColor(Color::white());
+
+
+        const IStringUtils* su = context->getStringUtils();
+
+        int altitude = _altitude;
+
+        canvas->setFont(GFont::monospaced(32));
         for (int y = 0; y <= height; y += 16) {
-          canvas->fillRectangle(0, y-1, width/8.0f, 2);
+          if ((y % 80) == 0) {
+            canvas->fillRectangle(0, y-1.5f, width/6.0f, 3);
+
+            const std::string label = su->toString(altitude);
+            const Vector2F labelExtent = canvas->textExtent(label);
+            canvas->fillText(label,
+                             width/6.0f * 1.25f,
+                             y - labelExtent._y/2);
+
+            altitude -= 100;
+          }
+          else {
+            canvas->fillRectangle(0, y-0.5f, width/8.0f, 1);
+          }
         }
-        for (int y = 0; y <= height; y += 64) {
-          canvas->fillRectangle(0, y-2, width/4.0f, 4);
-        }
+
+        canvas->setLineColor(Color::white());
+        canvas->setLineWidth(8);
+        canvas->strokeRectangle(0, 0, width, height);
       }
 
-      // std::string getImageName(const G3MContext* context) const;
-
     public:
-      TestCanvasImageBuilder() :
-      CanvasImageBuilder(768, 384)
+      AltimeterCanvasImageBuilder() :
+      CanvasImageBuilder(256, 256*3)
       {
       }
 
       bool isMutable() const {
         return true;
       }
-    };
-    
 
-    HUDQuadWidget* test = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
-                                            new TestCanvasImageBuilder(),
+      void step() {
+        _altitude += _step;
+        if (_altitude > 40000) {
+          _altitude = 40000;
+          _step *= -1;
+        }
+        if (_altitude < 0) {
+          _altitude = 0;
+          _step *= -1;
+        }
+
+        changed();
+      }
+
+    };
+
+
+    AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder = new AltimeterCanvasImageBuilder();
+    HUDQuadWidget* test = new HUDQuadWidget(altimeterCanvasImageBuilder,
                                             new HUDRelativePosition(0,
                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
                                                                     HUDRelativePosition::RIGHT,
@@ -703,10 +740,11 @@ public:
                                             new HUDRelativePosition(0.5,
                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                     HUDRelativePosition::MIDDLE),
-                                            new HUDRelativeSize(0.25,
+                                            new HUDRelativeSize(0.22,
                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                            new HUDRelativeSize(0.5,
-                                                                HUDRelativeSize::VIEWPORT_MIN_AXIS));
+                                            new HUDRelativeSize(0.66,
+                                                                HUDRelativeSize::VIEWPORT_MIN_AXIS)
+                                            );
     hudRenderer->addWidget(test);
 
 
@@ -787,6 +825,8 @@ public:
       HUDQuadWidget*     _compass2;
       HUDQuadWidget*     _ruler;
       LabelImageBuilder* _labelBuilder;
+      AltimeterCanvasImageBuilder* _altimeterCanvasImageBuilder;
+
       double _angleInRadians;
 
       float _translationV;
@@ -796,11 +836,13 @@ public:
       AnimateHUDWidgetsTask(HUDQuadWidget* compass1,
                             HUDQuadWidget* compass2,
                             HUDQuadWidget* ruler,
-                            LabelImageBuilder* labelBuilder) :
+                            LabelImageBuilder* labelBuilder,
+                            AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder) :
       _compass1(compass1),
       _compass2(compass2),
       _ruler(ruler),
       _labelBuilder(labelBuilder),
+      _altimeterCanvasImageBuilder(altimeterCanvasImageBuilder),
       _angleInRadians(0),
       _translationV(0),
       _translationStep(0.002)
@@ -830,11 +872,17 @@ public:
         }
         _translationV += _translationStep;
         _ruler->setTexCoordsTranslation(0, _translationV);
+
+        _altimeterCanvasImageBuilder->step();
       }
     };
 
     builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(50),
-                                                 new AnimateHUDWidgetsTask(label, compass2, ruler, labelBuilder)));
+                                                 new AnimateHUDWidgetsTask(label,
+                                                                           compass2,
+                                                                           ruler,
+                                                                           labelBuilder,
+                                                                           altimeterCanvasImageBuilder)));
   }
 
 
