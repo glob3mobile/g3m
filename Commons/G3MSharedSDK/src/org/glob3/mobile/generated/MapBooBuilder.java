@@ -869,6 +869,7 @@ public abstract class MapBooBuilder
 
   private boolean _hasParsedApplication;
 
+  private boolean _initialParse;
 
   private void fireOnScenesChanged()
   {
@@ -900,6 +901,7 @@ public abstract class MapBooBuilder
      _enableNotifications = enableNotifications;
      _gpuProgramManager = null;
      _isApplicationTubeOpen = false;
+     _initialParse = true;
      _applicationCurrentSceneId = "-1";
      _lastApplicationCurrentSceneId = "-1";
      _context = null;
@@ -1348,6 +1350,18 @@ public abstract class MapBooBuilder
             if (jsonNotification != null)
             {
               addApplicationNotification(parseNotification(jsonNotification));
+            }
+          }
+  
+          if (_initialParse)
+          {
+            _initialParse = false;
+            if (_applicationCurrentSceneId.compareTo("-1") == 0)
+            {
+              if (_applicationScenes.size() > 0)
+              {
+                setApplicationCurrentSceneId(_applicationScenes.get(0).getId());
+              }
             }
           }
         }
