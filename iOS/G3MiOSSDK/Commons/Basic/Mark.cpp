@@ -170,7 +170,7 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState()),
+_glState(NULL),
 _normalAtMarkPosition(NULL)
 {
 
@@ -211,7 +211,7 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState()),
+_glState(NULL),
 _normalAtMarkPosition(NULL)
 {
 
@@ -249,7 +249,7 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState()),
+_glState(NULL),
 _normalAtMarkPosition(NULL)
 {
 
@@ -288,7 +288,7 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( imageID ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState()),
+_glState(NULL),
 _normalAtMarkPosition(NULL)
 {
 
@@ -429,6 +429,8 @@ double Mark::getMinDistanceToCamera() {
 
 void Mark::createGLState(const Planet* planet) {
 
+  _glState = new GLState();
+
   _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
                                                 _textureWidth, _textureHeight),
                          false);
@@ -519,9 +521,8 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
 
-#warning ASK JM - Is not easier to delete the state?
-        if (_glState->getNumberOfGLFeatures() == 0) {
-          createGLState(planet);    //GLState was disposed due to elevation change
+        if (_glState == NULL) {
+          createGLState(planet);    //If GLState was disposed due to elevation change
         }
 
         _glState->setParent(parentGLState); //Linking with parent
@@ -551,6 +552,9 @@ void Mark::elevationChanged(const Geodetic2D& position,
   
   delete _cartesianPosition;
   _cartesianPosition = NULL;
-  
-  _glState->clearAllGLFeatures();
+
+  if (_glState != NULL){
+    _glState->_release();
+    _glState = NULL;
+  }
 }
