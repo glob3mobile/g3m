@@ -488,6 +488,7 @@ private:
 
   bool _hasParsedApplication;
   
+  bool _initialParse;
   
   void fireOnScenesChanged();
 

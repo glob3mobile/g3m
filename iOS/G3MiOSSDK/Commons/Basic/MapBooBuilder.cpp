@@ -208,6 +208,7 @@ _applicationListener(applicationListener),
 _enableNotifications(enableNotifications),
 _gpuProgramManager(NULL),
 _isApplicationTubeOpen(false),
+_initialParse(true),
 _applicationCurrentSceneId("-1"),
 _lastApplicationCurrentSceneId("-1"),
 _context(NULL),
@@ -1016,6 +1017,15 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
           const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
           if (jsonNotification != NULL) {
             addApplicationNotification( parseNotification(jsonNotification) );
+          }
+        }
+        
+        if (_initialParse) {
+          _initialParse = false;
+          if (_applicationCurrentSceneId.compare("-1") == 0) {
+            if (_applicationScenes.size() > 0) {
+              setApplicationCurrentSceneId(_applicationScenes.at(0)->getId());
+            }
           }
         }
       }
