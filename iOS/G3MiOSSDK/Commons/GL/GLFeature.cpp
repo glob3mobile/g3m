@@ -208,7 +208,12 @@ void TextureGLFeature::setTranslation(float u, float v){
                             _translation,
                             false);
   } else{
-    _translation->changeValue(u, v);
+    if (u == 0.0 && v == 0.0){
+      _values.removeUniformValue(TRANSLATION_TEXTURE_COORDS);
+    }
+    else{
+      _translation->changeValue(u, v);
+    }
   }
 }
 void TextureGLFeature::setScale(float u, float v){
@@ -219,7 +224,13 @@ void TextureGLFeature::setScale(float u, float v){
                             _scale,
                             false);
   } else{
-    _scale->changeValue(u, v);
+
+    if (u == 1.0 && v == 1.0){
+      _values.removeUniformValue(SCALE_TEXTURE_COORDS);
+    }
+    else{
+      _scale->changeValue(u, v);
+    }
   }
 
 }
@@ -241,8 +252,13 @@ void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, f
                               false);
     }
   } else{
-    _rotationCenter->changeValue(u, v);
-    _rotationAngle->changeValue(angle);
+    if (angle == 0.0){
+      _values.removeUniformValue(ROTATION_CENTER_TEXTURE_COORDS);
+      _values.removeUniformValue(ROTATION_ANGLE_TEXTURE_COORDS);
+    } else{
+      _rotationCenter->changeValue(u, v);
+      _rotationAngle->changeValue(angle);
+    }
   }
 }
 
