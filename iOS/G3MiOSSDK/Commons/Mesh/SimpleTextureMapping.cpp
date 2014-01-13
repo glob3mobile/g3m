@@ -52,7 +52,16 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
     ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");
   }
   else {
+    TextureGLFeature* tglf = (TextureGLFeature*) state.getGLFeature(GLF_TEXTURE);
+    if (tglf != NULL){
+      ILogger::instance()->logInfo("Reusing TextureGLFeature");
+    }
+
+
+
     state.clearGLFeatureGroup(COLOR_GROUP);
+
+
 
     if ((_scaleU != 1) ||
         (_scaleV != 1) ||

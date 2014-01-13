@@ -324,6 +324,11 @@ private:
                          bool normalized,
                          int stride);
 
+  GPUUniformValueVec2FloatMutable* _translation;
+  GPUUniformValueVec2FloatMutable* _scale;
+  GPUUniformValueVec2FloatMutable* _rotationCenter;
+  GPUUniformValueFloatMutable* _rotationAngle;
+
 public:
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords,
@@ -353,6 +358,10 @@ public:
                    int sFactor,
                    int dFactor,
                    int target = 0);
+
+  void setTranslation(float u, float v);
+  void setScale(float u, float v);
+  void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };

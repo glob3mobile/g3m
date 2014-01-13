@@ -177,7 +177,7 @@ public:
 
 
 class GPUUniformValueVec2Float:public GPUUniformValue {
-private:
+protected:
   ~GPUUniformValueVec2Float() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -185,7 +185,7 @@ private:
   }
 
 public:
-  const float _x, _y;
+  float _x, _y;
 
   GPUUniformValueVec2Float(float x, float y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y) {}
 
@@ -206,6 +206,25 @@ public:
     std::string s = isb->getString();
     delete isb;
     return s;
+  }
+};
+
+class GPUUniformValueVec2FloatMutable : public GPUUniformValueVec2Float {
+private:
+  ~GPUUniformValueVec2FloatMutable() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+
+  GPUUniformValueVec2FloatMutable(float x, float y):
+  GPUUniformValueVec2Float(x,y) {}
+
+  void changeValue(float x, float y) {
+    _x = x;
+    _y = y;
   }
 };
 
@@ -461,7 +480,7 @@ public:
 
 
 class GPUUniformValueFloat : public GPUUniformValue {
-private:
+protected:
   ~GPUUniformValueFloat() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -469,7 +488,7 @@ private:
   }
 
 public:
-  const float _value;
+  float _value;
 
   GPUUniformValueFloat(float d):GPUUniformValue(GLType::glFloat()),_value(d) {}
 
@@ -488,6 +507,24 @@ public:
     std::string s = isb->getString();
     delete isb;
     return s;
+  }
+};
+
+class GPUUniformValueFloatMutable : public GPUUniformValueFloat {
+private:
+  ~GPUUniformValueFloatMutable() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+
+  GPUUniformValueFloatMutable(float x):
+  GPUUniformValueFloat(x) {}
+
+  void changeValue(float x) {
+    _value = x;
   }
 };
 
