@@ -34,6 +34,8 @@ ICanvas* CanvasImageBuilder::getCanvas(const G3MContext* context) {
 
     _canvas = factory->createCanvas();
     _canvas->initialize(_width, _height);
+    _canvasWidth = _width;
+    _canvasHeight = _height;
   }
   else {
     _canvas->setFillColor(Color::transparent());
