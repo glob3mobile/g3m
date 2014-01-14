@@ -363,6 +363,10 @@ public:
   void setScale(float u, float v);
   void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v);
 
+  int getTarget() const{
+    return _target;
+  }
+
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 

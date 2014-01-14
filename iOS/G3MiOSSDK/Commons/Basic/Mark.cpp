@@ -388,7 +388,9 @@ Mark::~Mark() {
     IFactory::instance()->deleteImage(_textureImage);
   }
 
-  _glState->_release();
+  if (_glState != NULL){
+    _glState->_release();
+  }
 
   if (_textureId != NULL) {
 #ifdef JAVA_CODE

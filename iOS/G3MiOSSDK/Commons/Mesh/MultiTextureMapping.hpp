@@ -37,6 +37,9 @@ private:
 
   void releaseGLTextureId();
 
+
+  void updateGLState(){}
+
 public:
 
   MultiTextureMapping(const TextureIDReference* glTextureId,

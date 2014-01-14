@@ -63,18 +63,33 @@ MultiTextureMapping::~MultiTextureMapping() {
 }
 
 void MultiTextureMapping::modifyGLState(GLState& state) const{
-  // TARGET 0
-  if (_texCoords == NULL) {
-    ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords == NULL");
-  }
-  else {
+
+
+  GLFeatureSet tglfs = state.getGLFeatures(GLF_TEXTURE);
+  if (tglfs.size() > 0){ //If we have two textures already
+    //ILogger::instance()->logInfo("Reusing TextureGLFeature");
+
+    for (int i = 0; i < tglfs.size(); i++) {
+      TextureGLFeature* tglf =  (TextureGLFeature*) tglfs.get(0);
+      if (tglf->getTarget() == 0){
+        tglf->setScale(_scaleU, _scaleV);
+        tglf->setTranslation(_translationU, _translationV);
+        tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
+        break;
+      }
+    }
+
+  } else{
+
+    //CREATING TWO TEXTURES GLFEATURE
+
     state.clearGLFeatureGroup(COLOR_GROUP);
 
-//    if ((_scaleU != 1) ||
-//        (_scaleV != 1) ||
-//        (_translationU != 0) ||
-//        (_translationV != 0) ||
-//        (_rotationInRadians != 0)) {
+    // TARGET 0
+    if (_texCoords == NULL) {
+      ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords == NULL");
+    }
+    else {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords,
                                               2,
@@ -92,36 +107,26 @@ void MultiTextureMapping::modifyGLState(GLState& state) const{
                                               _rotationCenterU,
                                               _rotationCenterV),
                          false);
-//    }
-//    else {
-//      state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
-//                                              _texCoords,
-//                                              2,
-//                                              0,
-//                                              false,
-//                                              0,
-//                                              _transparent,
-//                                              GLBlendFactor::srcAlpha(),
-//                                              GLBlendFactor::oneMinusSrcAlpha()),
-//                         false);
-//    }
-  }
 
-  // TARGET 1
-  if (_texCoords2 == NULL) {
-    ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
-  }
-  else {
-    state.addGLFeature(new TextureGLFeature(_glTextureId2->getID(),
-                                            _texCoords2,
-                                            2,
-                                            0,
-                                            false,
-                                            0,
-                                            _transparent2,
-                                            GLBlendFactor::srcAlpha(),
-                                            GLBlendFactor::oneMinusSrcAlpha(),
-                                            1), //TARGET
-                       false);
+    }
+
+    // TARGET 1
+    if (_texCoords2 == NULL) {
+      ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
+    }
+    else {
+      state.addGLFeature(new TextureGLFeature(_glTextureId2->getID(),
+                                              _texCoords2,
+                                              2,
+                                              0,
+                                              false,
+                                              0,
+                                              _transparent2,
+                                              GLBlendFactor::srcAlpha(),
+                                              GLBlendFactor::oneMinusSrcAlpha(),
+                                              1), //TARGET
+                         false);
+    }
+    
   }
 }

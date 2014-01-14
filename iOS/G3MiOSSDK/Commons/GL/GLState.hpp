@@ -79,6 +79,8 @@ public:
   int getNumberOfGLFeatures() const;
 
   GLFeature* getGLFeature(GLFeatureID id) const;
+
+  GLFeatureSet getGLFeatures(GLFeatureID id) const;
 };
 
 #endif
