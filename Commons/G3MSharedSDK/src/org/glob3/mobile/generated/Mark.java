@@ -88,6 +88,8 @@ public class Mark implements SurfaceElevationListener
   private void createGLState(Planet planet)
   {
   
+    _glState = new GLState();
+  
     _glState.addGLFeature(new BillboardGLFeature(getCartesianPosition(planet), _textureWidth, _textureHeight), false);
   
     if (_textureId != null)
@@ -185,7 +187,7 @@ public class Mark implements SurfaceElevationListener
      _imageID = iconURL.getPath() + "_" + label;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
-     _glState = new GLState();
+     _glState = null;
      _normalAtMarkPosition = null;
   
   }
@@ -251,7 +253,7 @@ public class Mark implements SurfaceElevationListener
      _imageID = "_" + label;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
-     _glState = new GLState();
+     _glState = null;
      _normalAtMarkPosition = null;
   
   }
@@ -305,7 +307,7 @@ public class Mark implements SurfaceElevationListener
      _imageID = iconURL.getPath() + "_";
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
-     _glState = new GLState();
+     _glState = null;
      _normalAtMarkPosition = null;
   
   }
@@ -359,7 +361,7 @@ public class Mark implements SurfaceElevationListener
      _imageID = imageID;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
-     _glState = new GLState();
+     _glState = null;
      _normalAtMarkPosition = null;
   
   }
@@ -398,7 +400,10 @@ public class Mark implements SurfaceElevationListener
       IFactory.instance().deleteImage(_textureImage);
     }
   
-    _glState._release();
+    if (_glState != null)
+    {
+      _glState._release();
+    }
   
     if (_textureId != null)
     {
@@ -618,11 +623,9 @@ public class Mark implements SurfaceElevationListener
         else
         {
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ASK JM - Is ! easier to delete the state?
-          if (_glState.getNumberOfGLFeatures() == 0)
+          if (_glState == null)
           {
-            createGLState(planet); //GLState was disposed due to elevation change
+            createGLState(planet); //If GLState was disposed due to elevation change
           }
   
           _glState.setParent(parentGLState); //Linking with parent
@@ -652,7 +655,11 @@ public class Mark implements SurfaceElevationListener
        _cartesianPosition.dispose();
     _cartesianPosition = null;
   
-    _glState.clearAllGLFeatures();
+    if (_glState != null)
+    {
+      _glState._release();
+      _glState = null;
+    }
   }
 
   public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration

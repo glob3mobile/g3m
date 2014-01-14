@@ -38,6 +38,8 @@ public abstract class TransformableTextureMapping extends TextureMapping
      _rotationCenterV = rotationCenterV;
   }
 
+  protected abstract void updateGLState();
+
   public final void setTranslation(float translationU, float translationV)
   {
     _translationU = translationU;

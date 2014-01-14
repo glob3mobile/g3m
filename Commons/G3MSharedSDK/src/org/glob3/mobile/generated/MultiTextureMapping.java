@@ -60,6 +60,11 @@ public class MultiTextureMapping extends TransformableTextureMapping
   }
 
 
+  private void updateGLState()
+  {
+  }
+
+
   public MultiTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureId2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2)
   {
      super(0, 0, 1, 1, 0, 0, 0);
@@ -117,44 +122,54 @@ public class MultiTextureMapping extends TransformableTextureMapping
 
   public final void modifyGLState(GLState state)
   {
-    // TARGET 0
-    if (_texCoords == null)
+  
+  
+    GLFeatureSet tglfs = state.getGLFeatures(GLFeatureID.GLF_TEXTURE);
+    if (tglfs.size() > 0) //If we have two textures already
     {
-      ILogger.instance().logError("MultiTextureMapping::bind() with _texCoords == NULL");
+      //ILogger::instance()->logInfo("Reusing TextureGLFeature");
+  
+      for (int i = 0; i < tglfs.size(); i++)
+      {
+        TextureGLFeature tglf = (TextureGLFeature) tglfs.get(0);
+        if (tglf.getTarget() == 0)
+        {
+          tglf.setScale(_scaleU, _scaleV);
+          tglf.setTranslation(_translationU, _translationV);
+          tglf.setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
+          break;
+        }
+      }
+  
     }
     else
     {
+  
+      //CREATING TWO TEXTURES GLFEATURE
+  
       state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
-  //    if ((_scaleU != 1) ||
-  //        (_scaleV != 1) ||
-  //        (_translationU != 0) ||
-  //        (_translationV != 0) ||
-  //        (_rotationInRadians != 0)) {
+      // TARGET 0
+      if (_texCoords == null)
+      {
+        ILogger.instance().logError("MultiTextureMapping::bind() with _texCoords == NULL");
+      }
+      else
+      {
         state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
-  //    }
-  //    else {
-  //      state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
-  //                                              _texCoords,
-  //                                              2,
-  //                                              0,
-  //                                              false,
-  //                                              0,
-  //                                              _transparent,
-  //                                              GLBlendFactor::srcAlpha(),
-  //                                              GLBlendFactor::oneMinusSrcAlpha()),
-  //                         false);
-  //    }
-    }
   
-    // TARGET 1
-    if (_texCoords2 == null)
-    {
-      ILogger.instance().logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
-    }
-    else
-    {
-      state.addGLFeature(new TextureGLFeature(_glTextureId2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
+      }
+  
+      // TARGET 1
+      if (_texCoords2 == null)
+      {
+        ILogger.instance().logError("MultiTextureMapping::bind() with _texCoords2 == NULL");
+      }
+      else
+      {
+        state.addGLFeature(new TextureGLFeature(_glTextureId2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
+      }
+  
     }
   }
 
