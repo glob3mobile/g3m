@@ -60,11 +60,6 @@ public class MultiTextureMapping extends TransformableTextureMapping
   }
 
 
-  private void updateGLState()
-  {
-  }
-
-
   public MultiTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent, TextureIDReference glTextureId2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2)
   {
      super(0, 0, 1, 1, 0, 0, 0);
