@@ -162,8 +162,7 @@ public class TextureGLFeature extends GLColorGroupFeature
     return _target;
   }
 
-  public final IGLTextureId const getTextureID()
-  {
+  public final IGLTextureId getTextureID() {
     return _texID;
   }
 
