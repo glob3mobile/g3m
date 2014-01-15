@@ -887,17 +887,14 @@ public:
     if (true){ //Changing FOV
 
 
-      class AnimatedCameraConstrainer: public ICameraConstrainer {
+      class AnimatedFOVCameraConstrainer: public ICameraConstrainer {
       private:
         mutable double _angle;
         mutable double _step;
       public:
 
-        AnimatedCameraConstrainer() : _angle(34), _step(1)
+        AnimatedFOVCameraConstrainer() : _angle(34), _step(1)
         {
-        }
-
-        ~AnimatedCameraConstrainer() {
         }
 
         bool onCameraChange(const Planet* planet,
@@ -912,7 +909,7 @@ public:
 
           _angle += _step;
 
-          nextCamera->setVerticalFOV(Angle::fromDegrees(_angle));
+          nextCamera->setFOV(Angle::nan(), Angle::fromDegrees(_angle));
 
           return true;
 
@@ -920,8 +917,38 @@ public:
         }
       };
 
-      builder.addCameraConstraint(new AnimatedCameraConstrainer());
+      builder.addCameraConstraint(new AnimatedFOVCameraConstrainer());
     }
+
+    if (false){ //Changing ROLL
+      
+      class AnimatedRollCameraConstrainer: public ICameraConstrainer {
+      private:
+        mutable double _angle;
+        mutable double _step;
+      public:
+
+        AnimatedRollCameraConstrainer() : _angle(0), _step(1)
+        {
+        }
+
+        bool onCameraChange(const Planet* planet,
+                            const Camera* previousCamera,
+                            Camera* nextCamera) const{
+          _angle += _step;
+
+          nextCamera->setRoll(Angle::fromDegrees(_angle));
+
+          return true;
+
+
+        }
+      };
+      
+      builder.addCameraConstraint(new AnimatedRollCameraConstrainer());
+    }
+
+
 
 
 }

@@ -140,7 +140,8 @@ public:
   _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
   _angle2Horizon(that._angle2Horizon),
   _normalizedPosition(that._normalizedPosition),
-  _tanHalfFieldOfView(0.3)
+  _tanHalfVerticalFieldOfView(NAND),
+  _tanHalfHorizontalFieldOfView(NAND)
   {
   }
 
@@ -335,7 +336,11 @@ public:
   bool isPositionWithin(const Sector& sector, double height) const;
   bool isCenterOfViewWithin(const Sector& sector, double height) const;
 
-  void setVerticalFOV(const Angle& angle);
+  //In case any of the angles is NAN it would be inferred considering the vieport ratio
+  void setFOV(const Angle& vertical, const Angle& horizontal);
+
+  Angle getRoll() const;
+  void setRoll(const Angle& angle);
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -371,7 +376,10 @@ private:
   mutable Frustum*         _halfFrustum;                    // ONLY FOR DEBUG
   mutable Frustum*         _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
 
-  double                   _tanHalfFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
+  double                   _tanHalfVerticalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
+  double                   _tanHalfHorizontalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
+
+  double                   _rollInRadians;    //updated at setRoll()
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {
