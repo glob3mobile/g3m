@@ -31,9 +31,6 @@ private:
 
   void releaseGLTextureId();
 
-
-  void updateGLState(){}
-
 public:
 
   SimpleTextureMapping(const TextureIDReference* glTextureId,

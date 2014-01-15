@@ -11,14 +11,12 @@ void TransformableTextureMapping::setTranslation(float translationU,
                                                  float translationV) {
   _translationU = translationU;
   _translationV = translationV;
-#warning    updateState();
 }
 
 void TransformableTextureMapping::setScale(float scaleU,
                                            float scaleV) {
   _scaleU = scaleU;
   _scaleV = scaleV;
-#warning    updateState();
 }
 
 void TransformableTextureMapping::setRotation(float rotationAngleInRadians,
@@ -27,5 +25,4 @@ void TransformableTextureMapping::setRotation(float rotationAngleInRadians,
   _rotationInRadians = rotationAngleInRadians;
   _rotationCenterU = rotationCenterU;
   _rotationCenterV = rotationCenterV;
-#warning    updateState();
 }

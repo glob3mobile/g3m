@@ -367,6 +367,10 @@ public:
     return _target;
   }
 
+  IGLTextureId const* getTextureID() const{
+    return _texID;
+  }
+
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
 

@@ -38,8 +38,6 @@ protected:
   {
   }
 
-  virtual void updateGLState() = 0;
-
 public:
   void setTranslation(float translationU,
                       float translationV);
