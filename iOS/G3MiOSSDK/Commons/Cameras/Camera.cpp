@@ -78,6 +78,8 @@ void Camera::copyFrom(const Camera &that) {
   delete _geodeticPosition;
   _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
   _angle2Horizon = that._angle2Horizon;
+
+  _tanHalfFieldOfView = that._tanHalfFieldOfView;
 }
 
 Camera::Camera(int width, int height) :
@@ -101,7 +103,8 @@ _halfFrustum(NULL),
 _camEffectTarget(new CameraEffectTarget()),
 _geodeticPosition(NULL),
 _angle2Horizon(-99),
-_normalizedPosition(0, 0, 0)
+_normalizedPosition(0, 0, 0),
+_tanHalfFieldOfView(0.3)
 {
   resizeViewport(width, height);
   _dirtyFlags.setAll(true);
@@ -385,7 +388,7 @@ FrustumData Camera::calculateFrustumData() const {
 //         ratio);
 
   // compute rest of frustum numbers
-  const double _tanHalfFieldOfView = 0.3; // aprox tan(34 degrees / 2)
+  //const double _tanHalfFieldOfView = 0.3; // aprox tan(34 degrees / 2)
 
   const double ratioScreen = (double) _height / _width;
   const double right = _tanHalfFieldOfView / ratioScreen * zNear;
@@ -415,4 +418,19 @@ bool Camera::isPositionWithin(const Sector& sector, double height) const{
 bool Camera::isCenterOfViewWithin(const Sector& sector, double height) const{
   const Geodetic3D position = getGeodeticCenterOfView();
   return sector.contains(position._latitude, position._longitude) && height >= position._height;
+}
+
+void Camera::setVerticalFOV(const Angle& angle){
+  Angle halfVFOV = angle.div(2.0);
+  double newTanHalfFieldOfView = halfVFOV.tangent();
+  if (newTanHalfFieldOfView != _tanHalfFieldOfView){
+    _tanHalfFieldOfView = newTanHalfFieldOfView;
+    _dirtyFlags._frustumDataDirty           = true;
+    _dirtyFlags._projectionMatrixDirty      = true;
+    _dirtyFlags._modelViewMatrixDirty       = true;
+    _dirtyFlags._frustumDirty               = true;
+    _dirtyFlags._frustumMCDirty             = true;
+    _dirtyFlags._halfFrustumDirty           = true;
+    _dirtyFlags._halfFrustumMCDirty         = true;
+  }
 }
