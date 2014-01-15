@@ -367,9 +367,16 @@ public:
     return _target;
   }
 
+#ifdef C_CODE
   IGLTextureId const* getTextureID() const{
     return _texID;
   }
+#endif
+#ifdef JAVA_CODE
+  public final IGLTextureId getTextureID() {
+    return _texID;
+  }
+#endif
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
