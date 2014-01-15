@@ -162,6 +162,11 @@ public class TextureGLFeature extends GLColorGroupFeature
     return _target;
   }
 
+  public final IGLTextureId const getTextureID()
+  {
+    return _texID;
+  }
+
   public final void applyOnGlobalGLState(GLGlobalState state)
   {
     blendingOnGlobalGLState(state);

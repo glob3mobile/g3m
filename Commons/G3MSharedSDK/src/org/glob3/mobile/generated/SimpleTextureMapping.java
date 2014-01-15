@@ -45,11 +45,6 @@ public class SimpleTextureMapping extends TransformableTextureMapping
   }
 
 
-  private void updateGLState()
-  {
-  }
-
-
   public SimpleTextureMapping(TextureIDReference glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent)
   {
      super(0, 0, 1, 1, 0, 0, 0);
@@ -100,10 +95,8 @@ public class SimpleTextureMapping extends TransformableTextureMapping
     else
     {
       TextureGLFeature tglf = (TextureGLFeature) state.getGLFeature(GLFeatureID.GLF_TEXTURE);
-      if (tglf != null)
+      if (tglf != null && tglf.getTextureID() == _glTextureId.getID())
       {
-        //ILogger::instance()->logInfo("Reusing TextureGLFeature");
-  
         tglf.setScale(_scaleU, _scaleV);
         tglf.setTranslation(_translationU, _translationV);
         tglf.setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);

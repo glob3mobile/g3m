@@ -31,9 +31,6 @@ public class TexturedMesh extends Mesh
 
   private void createGLState()
   {
-  //  _textureMapping->modifyGLState(*_glState);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
   }
 
 
@@ -95,7 +92,7 @@ public class TexturedMesh extends Mesh
   public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
+//#warning To Diego: As a textureMapping could be used by more than 1 TexturedMesh (I think) it's necessary to check glState consistency at every frame.Otherwise you should store somehow a list of every user of the mapping in order to change their states when any parameter of the mapping is updated.Method modifyGLState() is now much lighter though.
     _textureMapping.modifyGLState(_glState);
   
     _glState.setParent(parentState);
