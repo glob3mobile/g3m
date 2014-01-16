@@ -887,7 +887,7 @@ public:
                                                                            labelBuilder,
                                                                            altimeterCanvasImageBuilder)));
 
-    if (false){ //Changing FOV
+    if (true){ //Changing FOV
 
 
       class AnimatedFOVCameraConstrainer: public ICameraConstrainer {
@@ -896,18 +896,19 @@ public:
         mutable double _step;
       public:
 
-        AnimatedFOVCameraConstrainer() : _angle(34), _step(1)
+        AnimatedFOVCameraConstrainer() : _angle(70), _step(1)
         {
         }
 
         bool onCameraChange(const Planet* planet,
                             const Camera* previousCamera,
-                            Camera* nextCamera) const{
+                            Camera* nextCamera) const {
 
-          if (_angle > 34+30){
-            _step = -0.1;
-          } else if (_angle < 34-30){
-            _step = 0.1;
+          if (_angle > 130) {
+            _step *= -1;
+          }
+          else if (_angle < 10) {
+            _step *= -1;
           }
 
           _angle += _step;
@@ -923,7 +924,7 @@ public:
       builder.addCameraConstraint(new AnimatedFOVCameraConstrainer());
     }
 
-    if (true){ //Changing ROLL
+    if (false){ //Changing ROLL
       
       class AnimatedRollCameraConstrainer: public ICameraConstrainer {
       private:
@@ -931,13 +932,13 @@ public:
         mutable double _step;
       public:
 
-        AnimatedRollCameraConstrainer() : _angle(0), _step(1)
+        AnimatedRollCameraConstrainer() : _angle(0), _step(2)
         {
         }
 
         bool onCameraChange(const Planet* planet,
                             const Camera* previousCamera,
-                            Camera* nextCamera) const{
+                            Camera* nextCamera) const {
           _angle += _step;
 
           nextCamera->setRoll(Angle::fromDegrees(_angle));

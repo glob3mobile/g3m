@@ -394,19 +394,19 @@ FrustumData Camera::calculateFrustumData() const {
   double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
   double tanHalfVFOV = _tanHalfVerticalFieldOfView;
 
-  if (ISNAN(tanHalfHFOV) || ISNAN(tanHalfVFOV)){
-
+  if (ISNAN(tanHalfHFOV) || ISNAN(tanHalfVFOV)) {
     const double ratioScreen = (double) _height / _width;
 
-    if (ISNAN(tanHalfHFOV) && ISNAN(tanHalfVFOV)){
+    if (ISNAN(tanHalfHFOV) && ISNAN(tanHalfVFOV)) {
       tanHalfVFOV = 0.3;
       tanHalfHFOV = tanHalfVFOV / ratioScreen; //Default behaviour _tanHalfFieldOfView = 0.3 // aprox tan(34 degrees / 2)
-    } else{
-
-      if (ISNAN(tanHalfHFOV)){
+    }
+    else {
+      if (ISNAN(tanHalfHFOV)) {
         tanHalfHFOV = tanHalfVFOV / ratioScreen;
-      } else{
-        if ISNAN(tanHalfVFOV){
+      }
+      else {
+        if ISNAN(tanHalfVFOV) {
           tanHalfVFOV = tanHalfHFOV * ratioScreen;
         }
       }
@@ -442,13 +442,13 @@ bool Camera::isCenterOfViewWithin(const Sector& sector, double height) const{
   return sector.contains(position._latitude, position._longitude) && height >= position._height;
 }
 
-void Camera::setFOV(const Angle& vertical, const Angle& horizontal){
+void Camera::setFOV(const Angle& vertical, const Angle& horizontal) {
 
   Angle halfHFOV = horizontal.div(2.0);
   Angle halfVFOV = vertical.div(2.0);
   const double newH = halfHFOV.tangent();
   const double newV = halfVFOV.tangent();
-  if (newH != _tanHalfHorizontalFieldOfView || newV != _tanHalfVerticalFieldOfView){
+  if (newH != _tanHalfHorizontalFieldOfView || newV != _tanHalfVerticalFieldOfView) {
     _tanHalfHorizontalFieldOfView = newH;
     _tanHalfVerticalFieldOfView = newV;
 
@@ -462,14 +462,12 @@ void Camera::setFOV(const Angle& vertical, const Angle& horizontal){
   }
 }
 
-void Camera::setRoll(const Angle& angle){
-
+void Camera::setRoll(const Angle& angle) {
   Angle delta = angle.sub(Angle::fromRadians(_rollInRadians));
-  if (delta._radians > 0){
+  if (delta._radians > 0) {
     _rollInRadians = angle._radians;
     rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
   }
-  
 }
 
 Angle Camera::getRoll() const{

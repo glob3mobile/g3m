@@ -435,8 +435,6 @@
 		D8B0125717E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B0125617E09ECA00AD743A /* SectorAndHeightCameraConstrainer.cpp */; };
 		D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B17F5916F76939007A9E43 /* GLGlobalState.cpp */; };
 		D8B2054B1737B68400750AE4 /* GPUProgramFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B2054A1737B65A00750AE4 /* GPUProgramFactory.hpp */; };
-		D8B5534118800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh in Sources */ = {isa = PBXBuildFile; fileRef = D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */; };
-		D8B5534218800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh in Sources */ = {isa = PBXBuildFile; fileRef = D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */; };
 		D8B749AB175E040900046B96 /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749A9175E040800046B96 /* Ellipsoid.cpp */; };
 		D8B749AE175E04FA00046B96 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B749AC175E04FA00046B96 /* Sphere.cpp */; };
 		D8B749B0175E183900046B96 /* Ellipsoid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AA175E040800046B96 /* Ellipsoid.hpp */; };
@@ -2729,7 +2727,6 @@
 				D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */,
 				CF0C396A157F988100646A2F /* Mark.cpp in Sources */,
 				38D786E61587B446003BBC75 /* Tile.cpp in Sources */,
-				D8B5534118800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh in Sources */,
 				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,
 				CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */,
 				CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */,
@@ -2970,7 +2967,6 @@
 				D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */,
 				CF4027CC1770DC8400D5A80C /* IWebSocketListener.cpp in Sources */,
 				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,
-				D8B5534218800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh in Sources */,
 				CFD41F5A1875E3F600889B7C /* IImageBuilder.cpp in Sources */,
 				CF4027D21770DD5C00D5A80C /* WebSocket_iOS.mm in Sources */,
 				CF4027DD1770E7B900D5A80C /* base64.c in Sources */,
