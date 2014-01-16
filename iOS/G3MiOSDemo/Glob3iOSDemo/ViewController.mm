@@ -904,10 +904,10 @@ public:
                             const Camera* previousCamera,
                             Camera* nextCamera) const {
 
-          if (_angle > 130) {
+          if (_angle > 170) {
             _step *= -1;
           }
-          else if (_angle < 10) {
+          else if (_angle < 5) {
             _step *= -1;
           }
 
