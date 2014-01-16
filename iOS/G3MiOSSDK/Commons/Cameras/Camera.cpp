@@ -467,7 +467,7 @@ void Camera::setRoll(const Angle& angle){
   Angle delta = angle.sub(Angle::fromRadians(_rollInRadians));
   if (delta._radians > 0){
     _rollInRadians = angle._radians;
-    rotateWithAxis(getViewDirection(), delta);
+    rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
   }
   
 }

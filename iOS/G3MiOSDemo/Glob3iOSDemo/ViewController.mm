@@ -132,6 +132,9 @@
 #import <G3MiOSSDK/LabelImageBuilder.hpp>
 #import <G3MiOSSDK/CanvasImageBuilder.hpp>
 
+#import <G3MiOSSDK/TerrainTouchListener.hpp>
+#import <G3MiOSSDK/PlanetRenderer.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -884,7 +887,7 @@ public:
                                                                            labelBuilder,
                                                                            altimeterCanvasImageBuilder)));
 
-    if (true){ //Changing FOV
+    if (false){ //Changing FOV
 
 
       class AnimatedFOVCameraConstrainer: public ICameraConstrainer {
@@ -920,7 +923,7 @@ public:
       builder.addCameraConstraint(new AnimatedFOVCameraConstrainer());
     }
 
-    if (false){ //Changing ROLL
+    if (true){ //Changing ROLL
       
       class AnimatedRollCameraConstrainer: public ICameraConstrainer {
       private:
@@ -944,8 +947,9 @@ public:
 
         }
       };
-      
+
       builder.addCameraConstraint(new AnimatedRollCameraConstrainer());
+
     }
 
 
@@ -2937,7 +2941,9 @@ public:
 
       // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.099999998178312, -15.41699999885168, 7000),
+                                                     Angle::fromDegrees(0),
+                                                     Angle::fromDegrees(85));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -3329,6 +3335,38 @@ public:
 
           }
         }
+      }
+
+
+      if (true){ //CHANGE ROLL WITH TOUCH
+
+
+        class RollTerrainTouchListener: public TerrainTouchListener{
+        private:
+          G3MWidget_iOS* _iosWidget;
+        public:
+
+          RollTerrainTouchListener(G3MWidget_iOS* widget): _iosWidget(widget){}
+
+
+          virtual bool onTerrainTouch(const G3MEventContext* ec,
+                                      const Vector2I&        pixel,
+                                      const Camera*          camera,
+                                      const Geodetic3D&      position,
+                                      const Tile*            tile){
+
+            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
+
+            return true;
+
+
+          }
+
+        };
+
+
+        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new RollTerrainTouchListener(_iosWidget));
+
       }
 
     }
