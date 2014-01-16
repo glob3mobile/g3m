@@ -630,6 +630,9 @@ void G3MWidget::onPause() {
   _mainRenderer->onPause(_context);
   _busyRenderer->onPause(_context);
   _errorRenderer->onPause(_context);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->onPause(_context);
+  }
 
   _downloader->onPause(_context);
   _storage->onPause(_context);
@@ -645,6 +648,9 @@ void G3MWidget::onResume() {
   _mainRenderer->onResume(_context);
   _busyRenderer->onResume(_context);
   _errorRenderer->onResume(_context);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->onResume(_context);
+  }
 
   _effectsScheduler->onResume(_context);
 
@@ -659,6 +665,9 @@ void G3MWidget::onDestroy() {
   _mainRenderer->onDestroy(_context);
   _busyRenderer->onDestroy(_context);
   _errorRenderer->onDestroy(_context);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->onDestroy(_context);
+  }
 
   _downloader->onDestroy(_context);
   _storage->onDestroy(_context);
