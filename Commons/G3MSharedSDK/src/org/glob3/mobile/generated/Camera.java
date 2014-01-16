@@ -27,6 +27,8 @@ public class Camera
      _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
      _angle2Horizon = that._angle2Horizon;
      _normalizedPosition = new MutableVector3D(that._normalizedPosition);
+     _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
+     _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
   }
 
   public Camera(int width, int height)
@@ -52,6 +54,8 @@ public class Camera
      _geodeticPosition = null;
      _angle2Horizon = -99;
      _normalizedPosition = new MutableVector3D(0, 0, 0);
+     _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
+     _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
     resizeViewport(width, height);
     _dirtyFlags.setAll(true);
   }
@@ -91,9 +95,9 @@ public class Camera
   
     _frustumData = new FrustumData(that._frustumData);
   
-  //  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
-  //  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
-  //  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+    //  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
+    //  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
+    //  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
   
     _projectionMatrix.copyValue(that._projectionMatrix);
     _modelMatrix.copyValue(that._modelMatrix);
@@ -125,6 +129,9 @@ public class Camera
        _geodeticPosition.dispose();
     _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
     _angle2Horizon = that._angle2Horizon;
+  
+    _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
+    _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
   }
 
   public final void copyFromForcingMatrixCreation(Camera c)
@@ -488,7 +495,7 @@ public class Camera
     setCartesianPosition(position.asMutableVector3D());
     setCenter(cartesianCenter.asMutableVector3D());
     setUp(finalUp.asMutableVector3D());
-  //  _dirtyFlags.setAll(true);
+    //  _dirtyFlags.setAll(true);
   }
 
   public final void forceMatrixCreation()
@@ -586,15 +593,52 @@ public class Camera
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
+  //In case any of the angles is NAN it would be inferred considering the vieport ratio
+  public final void setFOV(Angle vertical, Angle horizontal)
+  {
+  
+    Angle halfHFOV = horizontal.div(2.0);
+    Angle halfVFOV = vertical.div(2.0);
+    final double newH = halfHFOV.tangent();
+    final double newV = halfVFOV.tangent();
+    if (newH != _tanHalfHorizontalFieldOfView || newV != _tanHalfVerticalFieldOfView)
+    {
+      _tanHalfHorizontalFieldOfView = newH;
+      _tanHalfVerticalFieldOfView = newV;
+  
+      _dirtyFlags._frustumDataDirty = true;
+      _dirtyFlags._projectionMatrixDirty = true;
+      _dirtyFlags._modelViewMatrixDirty = true;
+      _dirtyFlags._frustumDirty = true;
+      _dirtyFlags._frustumMCDirty = true;
+      _dirtyFlags._halfFrustumDirty = true;
+      _dirtyFlags._halfFrustumMCDirty = true;
+    }
+  }
+
+  public final Angle getRoll()
+  {
+    return Angle.fromRadians(_rollInRadians);
+  }
+  public final void setRoll(Angle angle)
+  {
+    Angle delta = angle.sub(Angle.fromRadians(_rollInRadians));
+    if (delta._radians > 0)
+    {
+      _rollInRadians = angle._radians;
+      rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
+    }
+  }
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
     final Vector3D up2D = _up.asVector3D().projectionInPlane(normal);
   
-  //  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
-  //         normal._x, normal._y, normal._z,
-  //         north2D._x, north2D._y,
-  //         up2D._x, up2D._y);
+    //  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
+    //         normal._x, normal._y, normal._z,
+    //         north2D._x, north2D._y,
+    //         up2D._x, up2D._y);
   
     return up2D.signedAngleBetween(north2D, normal);
   }
@@ -629,6 +673,11 @@ public class Camera
   private Frustum _frustumInModelCoordinates;
   private Frustum _halfFrustum; // ONLY FOR DEBUG
   private Frustum _halfFrustumInModelCoordinates; // ONLY FOR DEBUG
+
+  private double _tanHalfVerticalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
+  private double _tanHalfHorizontalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
+
+  private double _rollInRadians; //updated at setRoll()
 
   //The Camera Effect Target
   private static class CameraEffectTarget implements EffectTarget
@@ -756,24 +805,50 @@ public class Camera
       zNear = zFar / goalRatio;
     }
   
-  //  int __TODO_remove_debug_code;
-  //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
-  //         height,
-  //         zNear,
-  //         zFar,
-  //         ratio);
+    //  int __TODO_remove_debug_code;
+    //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+    //         height,
+    //         zNear,
+    //         zFar,
+    //         ratio);
   
     // compute rest of frustum numbers
-    final double _tanHalfFieldOfView = 0.3; // aprox tan(34 degrees / 2)
   
-    final double ratioScreen = (double) _height / _width;
-    final double right = _tanHalfFieldOfView / ratioScreen * zNear;
+    double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
+    double tanHalfVFOV = _tanHalfVerticalFieldOfView;
+  
+    if ((tanHalfHFOV != tanHalfHFOV) || (tanHalfVFOV != tanHalfVFOV))
+    {
+      final double ratioScreen = (double) _height / _width;
+  
+      if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
+      {
+        tanHalfVFOV = 0.3;
+        tanHalfHFOV = tanHalfVFOV / ratioScreen; //Default behaviour _tanHalfFieldOfView = 0.3 // aprox tan(34 degrees / 2)
+      }
+      else
+      {
+        if ((tanHalfHFOV != tanHalfHFOV))
+        {
+          tanHalfHFOV = tanHalfVFOV / ratioScreen;
+        }
+        else
+        {
+          if (tanHalfVFOV != tanHalfVFOV)
+          {
+            tanHalfVFOV = tanHalfHFOV * ratioScreen;
+          }
+        }
+      }
+    }
+  
+    final double right = tanHalfHFOV * zNear;
     final double left = -right;
-    final double top = _tanHalfFieldOfView * zNear;
+    final double top = tanHalfVFOV * zNear;
     final double bottom = -top;
   
-  
     return new FrustumData(left, right, bottom, top, zNear, zFar);
+  
   }
 
   //void _setGeodeticPosition(const Vector3D& pos);
