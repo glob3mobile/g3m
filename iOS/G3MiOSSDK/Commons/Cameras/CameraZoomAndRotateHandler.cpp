@@ -68,7 +68,7 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
     Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
     if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) ||
         (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
-      printf ("zoom..\n");
+      //printf ("zoom..\n");
       cameraContext->setCurrentGesture(Zoom);
     }
     
@@ -80,6 +80,7 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
       Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
       if (!intersection.isNan()) {
         _centralGlobePoint = intersection.asMutableVector3D();
+        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
         _fingerSep0 = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
         _lastAngle = _angle0 = atan2(difCurrentPixels._y, difCurrentPixels._x);
         cameraContext->setCurrentGesture(Zoom);
@@ -98,11 +99,11 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
   // call specific transformation
   switch (cameraContext->getCurrentGesture()) {
     case Zoom:
-      if (_processZoom) zoom(cameraContext->getNextCamera(), difCurrentPixels);
+      zoom(cameraContext->getNextCamera(), difCurrentPixels);
       break;
       
     case Rotate:
-      if (_processRotation) rotate();
+      rotate();
       break;
       
     default:
@@ -197,7 +198,14 @@ void CameraZoomAndRotateHandler::zoom(Camera* camera, Vector2I difCurrentPixels)
 	
 	// make zoom and rotation
   camera->copyFrom(_camera0);
-  camera->rotateWithAxis(_centralGlobePoint.asVector3D(), Angle::fromRadians(angle));
+  
+  // make rotation
+  camera->rotateWithAxisAndPoint(_centralGlobeNormal.asVector3D(),
+                                 _centralGlobePoint.asVector3D(),
+                                 Angle::fromRadians(angle));
+  //camera->rotateWithAxis(_centralGlobePoint.asVector3D(), Angle::fromRadians(angle));
+  
+  // make zoom
   camera->moveForward(desp*dist);
   
   /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);

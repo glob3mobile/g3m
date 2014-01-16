@@ -1271,7 +1271,7 @@ builder.initializeWidget();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
 
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
