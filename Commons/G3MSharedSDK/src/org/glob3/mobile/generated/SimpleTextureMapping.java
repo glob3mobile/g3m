@@ -6,8 +6,13 @@ public class SimpleTextureMapping extends TextureMapping
   private IFloatBuffer _texCoords;
   private final boolean _ownedTexCoords;
 
-  private MutableVector2D _translation = new MutableVector2D();
-  private MutableVector2D _scale = new MutableVector2D();
+  private float _translationU;
+  private float _translationV;
+  private float _scaleU;
+  private float _scaleV;
+  private float _rotationInRadians;
+  private float _rotationCenterU;
+  private float _rotationCenterV;
 
   private final boolean _transparent;
 
@@ -30,17 +35,40 @@ public class SimpleTextureMapping extends TextureMapping
   {
      _glTextureId = glTextureId;
      _texCoords = texCoords;
-     _translation = new MutableVector2D(0, 0);
-     _scale = new MutableVector2D(1, 1);
+     _translationU = 0F;
+     _translationV = 0F;
+     _scaleU = 1F;
+     _scaleV = 1F;
      _ownedTexCoords = ownedTexCoords;
      _transparent = transparent;
-
+     _rotationInRadians = 0F;
+     _rotationCenterU = 0F;
+     _rotationCenterV = 0F;
   }
 
-  public final void setTranslationAndScale(Vector2D translation, Vector2D scale)
+  public final void setTranslation(float u, float v)
   {
-    _translation = translation.asMutableVector2D();
-    _scale = scale.asMutableVector2D();
+    _translationU = u;
+    _translationV = v;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning updateState();
+  }
+
+  public final void setScale(float u, float v)
+  {
+    _scaleU = u;
+    _scaleV = v;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning updateState();
+  }
+
+  public final void setRotation(float angleInRadians, float centerU, float centerV)
+  {
+    _rotationInRadians = angleInRadians;
+    _rotationCenterU = centerU;
+    _rotationCenterV = centerV;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning updateState();
   }
 
   public void dispose()
@@ -76,13 +104,13 @@ public class SimpleTextureMapping extends TextureMapping
     {
       state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
-      if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0))
+      if ((_scaleU != 1) || (_scaleV != 1) || (_translationU != 0) || (_translationV != 0) || (_rotationInRadians != 0))
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
       }
       else
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
       }
     }
   }

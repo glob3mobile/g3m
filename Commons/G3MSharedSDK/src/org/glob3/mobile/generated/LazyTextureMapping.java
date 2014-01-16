@@ -9,8 +9,12 @@ public class LazyTextureMapping extends TextureMapping
 
   private boolean _ownedTexCoords;
   private IFloatBuffer _texCoords;
-  private MutableVector2D _translation = new MutableVector2D();
-  private MutableVector2D _scale = new MutableVector2D();
+
+  private float _translationU;
+  private float _translationV;
+
+  private float _scaleU;
+  private float _scaleV;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  LazyTextureMapping operator =(LazyTextureMapping that);
@@ -36,8 +40,10 @@ public class LazyTextureMapping extends TextureMapping
      _glTextureId = null;
      _initialized = false;
      _texCoords = null;
-     _translation = new MutableVector2D(0,0);
-     _scale = new MutableVector2D(1,1);
+     _translationU = 0F;
+     _translationV = 0F;
+     _scaleU = 1F;
+     _scaleV = 1F;
      _ownedTexCoords = ownedTexCoords;
      _transparent = transparent;
   }
@@ -85,8 +91,14 @@ public class LazyTextureMapping extends TextureMapping
     {
       _initializer.initialize();
   
-      _scale = _initializer.getScale();
-      _translation = _initializer.getTranslation();
+      final Vector2F scale = _initializer.getScale();
+      _scaleU = scale._x;
+      _scaleV = scale._y;
+  
+      final Vector2F translation = _initializer.getTranslation();
+      _translationU = translation._x;
+      _translationV = translation._y;
+  
       _texCoords = _initializer.createTextCoords();
   
       if (_initializer != null)
@@ -100,13 +112,13 @@ public class LazyTextureMapping extends TextureMapping
     {
       state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
-      if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0))
+      if (_scaleU != 1 || _scaleV != 1 || _translationU != 0 || _translationV != 0)
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, 0, 0, 0), false); //BLEND
       }
       else
       {
-        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false); //TRANSFORM - BLEND
+        state.addGLFeature(new TextureGLFeature(_glTextureId.getID(), _texCoords, 2, 0, false, 0, _transparent, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
       }
   
     }

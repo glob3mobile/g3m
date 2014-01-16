@@ -326,9 +326,23 @@ public:
                    bool blend,
                    int sFactor,
                    int dFactor,
-                   bool coordsTransformed,
-                   const Vector2D& translate,
-                   const Vector2D& scale);
+                   float translateU,
+                   float translateV,
+                   float scaleU,
+                   float scaleV,
+                   float rotationAngleInRadians,
+                   float rotationCenterU,
+                   float rotationCenterV);
+
+  TextureGLFeature(const IGLTextureId* texID,
+                   IFloatBuffer* texCoords,
+                   int arrayElementSize,
+                   int index,
+                   bool normalized,
+                   int stride,
+                   bool blend,
+                   int sFactor,
+                   int dFactor);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };

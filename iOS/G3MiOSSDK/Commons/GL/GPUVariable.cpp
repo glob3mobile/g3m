@@ -9,7 +9,7 @@
 #include "GPUVariable.hpp"
 #include "ILogger.hpp"
 
-bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u) {
+bool GPUVariable::hasUniform(int code, GPUUniformKey u) {
   if (u == UNRECOGNIZED_UNIFORM) {
     return false;
   }
@@ -19,10 +19,10 @@ bool GPUVariable::codeContainsUniform(int code, GPUUniformKey u) {
 #ifdef JAVA_CODE
   final int index = u.getValue();
 #endif
-  return codeContainsUniform(code, index);
+  return hasUniform(code, index);
 }
 
-bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a) {
+bool GPUVariable::hasAttribute(int code, GPUAttributeKey a) {
   if (a == UNRECOGNIZED_ATTRIBUTE) {
     return false;
   }
@@ -32,14 +32,14 @@ bool GPUVariable::codeContainsAttribute(int code, GPUAttributeKey a) {
 #ifdef JAVA_CODE
   final int index = a.getValue();
 #endif
-  return codeContainsAttribute(code, index);
+  return hasAttribute(code, index);
 }
 
-bool GPUVariable::codeContainsUniform(int code, int u) {
+bool GPUVariable::hasUniform(int code, int u) {
   return ((code >> u) & 0x00000001) != 0;
 }
 
-bool GPUVariable::codeContainsAttribute(int code, int a) {
+bool GPUVariable::hasAttribute(int code, int a) {
   return ((code >> a) & 0x00000001) != 0;
 }
 
@@ -91,19 +91,19 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   }
 
   if (name.compare("uViewPortExtent") == 0) {
-    return  VIEWPORT_EXTENT;
+    return VIEWPORT_EXTENT;
   }
 
   if (name.compare("uTranslationTexCoord") == 0) {
-    return  TRANSLATION_TEXTURE_COORDS;
+    return TRANSLATION_TEXTURE_COORDS;
   }
 
   if (name.compare("uScaleTexCoord") == 0) {
-    return  SCALE_TEXTURE_COORDS;
+    return SCALE_TEXTURE_COORDS;
   }
 
   if (name.compare("uPointSize") == 0) {
-    return  POINT_SIZE;
+    return POINT_SIZE;
   }
 
   if (name.compare("uAmbientLightColor") == 0) {
@@ -131,7 +131,15 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   }
 
   if (name.compare("uBillboardPosition") == 0) {
-    return  BILLBOARD_POSITION;
+    return BILLBOARD_POSITION;
+  }
+
+  if (name.compare("uRotationCenterTexCoord") == 0){
+    return ROTATION_CENTER_TEXTURE_COORDS;
+  }
+
+  if (name.compare("uRotationAngleTexCoord") == 0){
+    return ROTATION_ANGLE_TEXTURE_COORDS;
   }
 
   return UNRECOGNIZED_UNIFORM;
@@ -144,15 +152,15 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
   }
 
   if (name.compare("aColor") == 0) {
-    return  COLOR;
+    return COLOR;
   }
 
   if (name.compare("aTextureCoord") == 0) {
-    return  TEXTURE_COORDS;
+    return TEXTURE_COORDS;
   }
 
   if (name.compare("aNormal") == 0) {
-    return  NORMAL;
+    return NORMAL;
   }
 
   return UNRECOGNIZED_ATTRIBUTE;

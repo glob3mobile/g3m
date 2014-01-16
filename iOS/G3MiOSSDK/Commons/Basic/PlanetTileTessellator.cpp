@@ -195,13 +195,13 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   return result;
 }
 
-const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
+const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
                                                    const Angle& latitude,
                                                    const Angle& longitude,
                                                    bool mercator) const {
   const Sector sector = tile->_sector;
 
-  const Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+  const Vector2F linearUV = sector.getUVCoordinatesF(latitude, longitude);
   if (!mercator) {
     return linearUV;
   }
@@ -213,7 +213,7 @@ const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
   const double globalV = MercatorUtils::getMercatorV(latitude);
   const double localV  = (globalV - upperGlobalV) / deltaGlobalV;
 
-  return Vector2D(linearUV._x, localV);
+  return Vector2F(linearUV._x, (float) localV);
 }
 
 IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolution,

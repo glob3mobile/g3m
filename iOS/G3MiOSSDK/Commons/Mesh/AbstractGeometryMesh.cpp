@@ -195,7 +195,7 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const{
 
   const int size = _vertices->size();
 
-#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
+//#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
 
   for (int i = 0; i < size; i+=6) {
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));

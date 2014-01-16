@@ -50,21 +50,40 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
   else {
     state.clearGLFeatureGroup(COLOR_GROUP);
 
-    if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0)) {
+    if ((_scaleU != 1) ||
+        (_scaleV != 1) ||
+        (_translationU != 0) ||
+        (_translationV != 0) ||
+        (_rotationInRadians != 0)) {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
-                                              _texCoords, 2, 0, false, 0,
+                                              _texCoords,
+                                              2,
+                                              0,
+                                              false,
+                                              0,
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              true, _translation.asVector2D(), _scale.asVector2D()), false); //TRANSFORM
+                                              GLBlendFactor::oneMinusSrcAlpha(),
+                                              _translationU,
+                                              _translationV,
+                                              _scaleU,
+                                              _scaleV,
+                                              _rotationInRadians,
+                                              _rotationCenterU,
+                                              _rotationCenterV),
+                         false);
     }
     else {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
-                                              _texCoords, 2, 0, false, 0,
+                                              _texCoords,
+                                              2,
+                                              0,
+                                              false,
+                                              0,
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              false, Vector2D::zero(), Vector2D::zero() ), false); //TRANSFORM
+                                              GLBlendFactor::oneMinusSrcAlpha()),
+                         false);
     }
   }
 }

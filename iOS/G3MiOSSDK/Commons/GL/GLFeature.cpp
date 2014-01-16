@@ -106,6 +106,8 @@ GeometryGLFeature::~GeometryGLFeature() {
 #endif
 }
 
+
+
 TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    IFloatBuffer* texCoords,
                                    int arrayElementSize,
@@ -115,9 +117,51 @@ TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
                                    bool blend,
                                    int sFactor,
                                    int dFactor,
-                                   bool coordsTransformed,
-                                   const Vector2D& translate,
-                                   const Vector2D& scale) :
+                                   float translateU,
+                                   float translateV,
+                                   float scaleU,
+                                   float scaleV,
+                                   float rotationAngleInRadians,
+                                   float rotationCenterU,
+                                   float rotationCenterV) :
+GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
+_texID(texID)
+{
+  GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
+                                                                     arrayElementSize,
+                                                                     index,
+                                                                     stride,
+                                                                     normalized);
+  _values.addAttributeValue(TEXTURE_COORDS, value, false);
+
+  _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
+                          new GPUUniformValueVec2Float(translateU, translateV),
+                          false);
+
+  _values.addUniformValue(SCALE_TEXTURE_COORDS,
+                          new GPUUniformValueVec2Float(scaleU, scaleV),
+                          false);
+
+  if (rotationAngleInRadians != 0.0) {
+    _values.addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
+                            new GPUUniformValueVec2Float(rotationCenterU, rotationCenterV),
+                            false);
+
+    _values.addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS,
+                            new GPUUniformValueFloat(rotationAngleInRadians),
+                            false);
+  }
+}
+
+TextureGLFeature::TextureGLFeature(const IGLTextureId* texID,
+                                   IFloatBuffer* texCoords,
+                                   int arrayElementSize,
+                                   int index,
+                                   bool normalized,
+                                   int stride,
+                                   bool blend,
+                                   int sFactor,
+                                   int dFactor) :
 GLColorGroupFeature(GLF_TEXTURE, 4, blend, sFactor, dFactor),
 _texID(texID)
 {
@@ -128,18 +172,6 @@ _texID(texID)
                                                                      stride,
                                                                      normalized);
   _values.addAttributeValue(TEXTURE_COORDS, value, false);
-
-  if (coordsTransformed) {
-    _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float((float) translate._x,
-                                                         (float) translate._y),
-                            false);
-
-    _values.addUniformValue(SCALE_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float((float) scale._x,
-                                                         (float) scale._y),
-                            false);
-  }
 }
 
 void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{

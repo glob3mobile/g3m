@@ -56,6 +56,7 @@ public:
                       const std::vector<const IImage*>& images,
                       const std::vector<RectangleF*>& sourceRects,
                       const std::vector<RectangleF*>& destRects,
+                      const std::vector<float>& transparencies,
                       IImageListener* listener,
                       bool autodelete);
 
@@ -63,12 +64,14 @@ public:
                       const std::vector<const IImage*>& images,
                       const std::vector<RectangleF*>& sourceRects,
                       const std::vector<RectangleF*>& destRects,
+                      const std::vector<float>& transparencies,
                       IImageListener* listener,
                       bool autodelete) {
     combine(extent._x, extent._y,
             images,
             sourceRects,
             destRects,
+            transparencies,
             listener,
             autodelete);
   }

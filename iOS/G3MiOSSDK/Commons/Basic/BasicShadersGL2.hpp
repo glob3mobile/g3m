@@ -174,6 +174,38 @@ public:
 "} \n ");
     this->add(sourcesFlatColorMesh_DirectionLight);
 
+    GPUProgramSources sourcesFullTransformedTexCoorTexturedMesh("FullTransformedTexCoorTexturedMesh",
+ emptyString +  
+"attribute vec4 aPosition; \n " + 
+"attribute vec2 aTextureCoord; \n " + 
+"uniform mediump vec2 uTranslationTexCoord; \n " + 
+"uniform mediump vec2 uScaleTexCoord; \n " + 
+"uniform mat4 uModelview; \n " + 
+"uniform float uPointSize; \n " + 
+"uniform float uRotationAngleTexCoord; \n " + 
+"uniform vec2 uRotationCenterTexCoord; \n " + 
+"varying vec4 VertexColor; \n " + 
+"varying vec2 TextureCoordOut; \n " + 
+"void main() { \n " + 
+"gl_Position = uModelview * aPosition; \n " + 
+"float s = sin( uRotationAngleTexCoord ); \n " + 
+"float c = cos( uRotationAngleTexCoord ); \n " + 
+"TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + 
+"TextureCoordOut = TextureCoordOut - uRotationCenterTexCoord; \n " + 
+"TextureCoordOut = vec2((TextureCoordOut.x * c) + (TextureCoordOut.y * s), \n " + 
+"(-TextureCoordOut.x * s) + (TextureCoordOut.y * c)); \n " + 
+"TextureCoordOut += uRotationCenterTexCoord; \n " + 
+"gl_PointSize = uPointSize; \n " + 
+"} \n ",
+ emptyString +  
+"varying mediump vec2 TextureCoordOut; \n " + 
+"varying mediump vec4 VertexColor; \n " + 
+"uniform sampler2D Sampler; \n " + 
+"void main() { \n " + 
+"gl_FragColor = texture2D(Sampler, TextureCoordOut); \n " + 
+"} \n ");
+    this->add(sourcesFullTransformedTexCoorTexturedMesh);
+
     GPUProgramSources sourcesNoColorMesh("NoColorMesh",
  emptyString +  
 "attribute vec4 aPosition; \n " + 

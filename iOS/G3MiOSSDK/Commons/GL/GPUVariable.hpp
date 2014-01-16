@@ -33,7 +33,9 @@ enum GPUUniformKey{
   MODEL = 12,
   POINT_LIGHT_POSITION= 13,
   POINT_LIGHT_COLOR= 14,
-  BILLBOARD_POSITION = 15
+  BILLBOARD_POSITION = 15,
+  ROTATION_CENTER_TEXTURE_COORDS = 16,
+  ROTATION_ANGLE_TEXTURE_COORDS = 17
 };
 
 enum GPUAttributeKey{
@@ -56,11 +58,11 @@ public:
   static int getUniformCode(int u);
   static int getAttributeCode(int a);
 
-  static bool codeContainsUniform(int code, int u);
-  static bool codeContainsAttribute(int code, int a);
+  static bool hasUniform(int code, int u);
+  static bool hasAttribute(int code, int a);
 
-  static bool codeContainsUniform(int code, GPUUniformKey u);
-  static bool codeContainsAttribute(int code, GPUAttributeKey a);
+  static bool hasUniform(int code, GPUUniformKey u);
+  static bool hasAttribute(int code, GPUAttributeKey a);
 
   virtual ~GPUVariable() {}
 

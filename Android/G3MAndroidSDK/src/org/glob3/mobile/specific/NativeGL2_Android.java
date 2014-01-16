@@ -516,12 +516,6 @@ public final class NativeGL2_Android
 
 
    @Override
-   public int TextureParameterValue_Linear() {
-      return GLES20.GL_LINEAR;
-   }
-
-
-   @Override
    public int TextureParameterValue_ClampToEdge() {
       return GLES20.GL_CLAMP_TO_EDGE;
    }
@@ -821,6 +815,48 @@ public final class NativeGL2_Android
    @Override
    public int Type_Vec3Float() {
       return GLES20.GL_FLOAT_VEC3;
+   }
+
+
+   @Override
+   public void depthMask(final boolean depthMask) {
+      GLES20.glDepthMask(depthMask);
+   }
+
+
+   @Override
+   public int TextureParameterValue_Linear() {
+      return GLES20.GL_LINEAR;
+   }
+
+
+   @Override
+   public int TextureParameterValue_Nearest() {
+      return GLES20.GL_NEAREST;
+   }
+
+
+   @Override
+   public int TextureParameterValue_NearestMipmapNearest() {
+      return GLES20.GL_NEAREST_MIPMAP_NEAREST;
+   }
+
+
+   @Override
+   public int TextureParameterValue_NearestMipmapLinear() {
+      return GLES20.GL_NEAREST_MIPMAP_LINEAR;
+   }
+
+
+   @Override
+   public int TextureParameterValue_LinearMipmapNearest() {
+      return GLES20.GL_LINEAR_MIPMAP_NEAREST;
+   }
+
+
+   @Override
+   public int TextureParameterValue_LinearMipmapLinear() {
+      return GLES20.GL_LINEAR_MIPMAP_LINEAR;
    }
 
 

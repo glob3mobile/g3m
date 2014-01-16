@@ -1399,6 +1399,8 @@ G3MWidget* MapBooBuilder::create() {
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
+  Renderer* hudRenderer = NULL;
+
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
                                  getDownloader(),
@@ -1410,6 +1412,7 @@ G3MWidget* MapBooBuilder::create() {
                                  mainRenderer,
                                  createBusyRenderer(),
                                  createErrorRenderer(),
+                                 hudRenderer,
                                  Color::black(),
                                  false,      // logFPS
                                  false,      // logDownloaderStatistics

@@ -328,10 +328,9 @@ public class GLGlobalState
   
         currentState._boundTextureId = _boundTextureId;
       }
-      else
-      {
-        //ILogger::instance()->logInfo("Texture already bound.\n");
-      }
+      //else {
+      //  ILogger::instance()->logInfo("Texture already bound.\n");
+      //}
     }
   
     if (_pixelStoreIAlignmentUnpack != -1 && _pixelStoreIAlignmentUnpack != currentState._pixelStoreIAlignmentUnpack)

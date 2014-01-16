@@ -29,6 +29,8 @@ private:
 
   void showStatistics() const;
 
+  bool addSkipBackupAttributeToItemAtPath(NSString* path);
+
 public:
   void rawSave(NSString* table,
                NSString* name,

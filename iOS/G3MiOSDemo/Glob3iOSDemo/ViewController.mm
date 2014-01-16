@@ -10,7 +10,6 @@
 
 
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
-
 #import <G3MiOSSDK/VisibleSectorListener.hpp>
 #import <G3MiOSSDK/MarksRenderer.hpp>
 #import <G3MiOSSDK/ShapesRenderer.hpp>
@@ -40,12 +39,10 @@
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
 #import <G3MiOSSDK/LayoutUtils.hpp>
-
 #import <G3MiOSSDK/IJSONParser.hpp>
 #import <G3MiOSSDK/JSONGenerator.hpp>
 #import <G3MiOSSDK/BSONParser.hpp>
 #import <G3MiOSSDK/BSONGenerator.hpp>
-
 #import <G3MiOSSDK/MeshShape.hpp>
 #import <G3MiOSSDK/IShortBuffer.hpp>
 #import <G3MiOSSDK/SimpleCameraConstrainer.hpp>
@@ -66,17 +63,13 @@
 #import <G3MiOSSDK/MapBoxLayer.hpp>
 #import <G3MiOSSDK/GoogleMapsLayer.hpp>
 #import <G3MiOSSDK/BingMapsLayer.hpp>
-
 #import <G3MiOSSDK/BusyQuadRenderer.hpp>
 #import <G3MiOSSDK/Factory_iOS.hpp>
-
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/GEOJSONParser.hpp>
-
 //import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/FloatBufferElevationData.hpp>
-
 #import <G3MiOSSDK/GEOSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DMultiLineStringGeometry.hpp>
 #import <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
@@ -89,7 +82,6 @@
 #import <G3MiOSSDK/GEOShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 #import <G3MiOSSDK/GFont.hpp>
-
 #import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 #import <G3MiOSSDK/RectangleI.hpp>
@@ -101,47 +93,42 @@
 #import <G3MiOSSDK/SGShape.hpp>
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
-
 #import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
-
-#include <G3MiOSSDK/GPUProgramFactory.hpp>
+#import <G3MiOSSDK/GPUProgramFactory.hpp>
 #import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
 #import <G3MiOSSDK/Color.hpp>
-
 #import <G3MiOSSDK/TileRasterizer.hpp>
 #import <G3MiOSSDK/DebugTileRasterizer.hpp>
 #import <G3MiOSSDK/GEOTileRasterizer.hpp>
-
 #import <G3MiOSSDK/GEORasterLineSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
-
 #import <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
 #import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
 #import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
-
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
-
 #import <G3MiOSSDK/GenericQuadTree.hpp>
 #import <G3MiOSSDK/GEOFeatureCollection.hpp>
 #import <G3MiOSSDK/Angle.hpp>
-
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
-
-#import <G3MiOSSDK/HUDRenderer.hpp>
 #import <G3MiOSSDK/HUDImageRenderer.hpp>
-
 #import <G3MiOSSDK/CartoCSSParser.hpp>
-
 #import <G3MiOSSDK/ColumnCanvasElement.hpp>
 #import <G3MiOSSDK/TextCanvasElement.hpp>
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
-
 #import <G3MiOSSDK/SceneLighting.hpp>
 
+#import <G3MiOSSDK/HUDRenderer.hpp>
+#import <G3MiOSSDK/HUDQuadWidget.hpp>
+#import <G3MiOSSDK/HUDAbsolutePosition.hpp>
+#import <G3MiOSSDK/HUDRelativePosition.hpp>
+#import <G3MiOSSDK/HUDAbsoluteSize.hpp>
+#import <G3MiOSSDK/HUDRelativeSize.hpp>
+#import <G3MiOSSDK/DownloaderImageBuilder.hpp>
+#import <G3MiOSSDK/LabelImageBuilder.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -663,85 +650,140 @@ public:
   }
 
   if (true) { //HUD
-    //    HUDRenderer* hudRenderer = new HUDRenderer();
-    //
-    //    NSBundle* mainBundle = [NSBundle mainBundle];
-    //    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Icon-72"
-    //                                                                                                   ofType: @"png"]],
-    //                                     NULL);
-    //    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
-    //
-    //    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"horizontal-gears"
-    //                                                                                                    ofType: @"png"]],
-    //                                      NULL);
-    //    hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
-    //
-    //    builder.addRenderer(hudRenderer);
+
+//    DownloaderImageBuilder* xxxx = new DownloaderImageBuilder(URL("file:///debug-compass.png"));
+//    aaa;
+
+    HUDRenderer* hudRenderer = new HUDRenderer();
+    builder.setHUDRenderer(hudRenderer);
 
 
-    class TestImageFactory : public HUDImageRenderer::CanvasImageFactory {
-    protected:
-      void drawOn(ICanvas* canvas,
-                  int width,
-                  int height) {
-        //        canvas->setFillColor(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f));
-        //        canvas->fillRectangle(0, 0,
-        //                              width, height);
+    LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
+                                                            GFont::monospaced(38), // font
+                                                            6,                     // margin
+                                                            Color::yellow(),       // color
+                                                            Color::black(),        // shadowColor
+                                                            5,                     // shadowBlur
+                                                            2,                     // shadowOffsetX
+                                                            -2,                    // shadowOffsetY
+                                                            Color::red(),          // backgroundColor
+                                                            4,                     // cornerRadius
+                                                            true                   // mutable
+                                                            );
 
-        //        canvas->setLineColor(Color::yellow());
-        //        canvas->setLineWidth(5);
-        //        canvas->strokeRectangle(0, 0,
-        //                                width, height);
+#warning Diego at work!
+    HUDQuadWidget* compass = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
+                                               labelBuilder,
+                                               //new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
+                                               new HUDAbsolutePosition(10),
+                                               new HUDAbsolutePosition(10),
+                                               // new HUDRelativeSize(0.15, HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                               // new HUDRelativeSize(0.15, HUDRelativeSize::VIEWPORT_MIN_AXIS)
+                                               new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+                                               new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
+//    compass->setTexCoordsRotation(Angle::fromDegrees(45),
+//                                   0.5f, 0.5f);
+    hudRenderer->addWidget(compass);
 
-        //        canvas->setFont(GFont::sansSerif(30));
+    HUDQuadWidget* compass2 = new HUDQuadWidget(//URL("file:///debug-texture.png"),
+                                                new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
+                                                //URL("file:///debug-compass.png"),
+                                                //new HUDAbsolutePosition(320),
+                                                //new HUDAbsolutePosition(150+10),
+                                                new HUDRelativePosition(0.5,
+                                                                        HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                        HUDRelativePosition::CENTER),
+                                                new HUDRelativePosition(0.5,
+                                                                        HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                        HUDRelativePosition::MIDDLE),
+                                                new HUDRelativeSize(0.5,
+                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                                new HUDRelativeSize(0.25,
+                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS));
+    compass2->setTexCoordsRotation(//Angle::fromDegrees(90),
+                                   Angle::fromDegrees(30),
+                                   0.5f, 0.5f);
+    //compass2->setTexCoordsTranslation(0, 0.5f);
+    compass2->setTexCoordsScale(1, 0.5f);
+    hudRenderer->addWidget(compass2);
 
-        //        const std::string text = "Hello World from HUD!";
-        //        canvas->setFont(GFont::sansSerif(30));
-        //        const Vector2F extent = canvas->textExtent(text);
-        //
-        //        canvas->setFillColor(Color::white());
-        //        canvas->setShadow(Color::black(), 10, 2, -2);
-        //
-        //        canvas->fillText(text,
-        //                         (width  - extent._x) / 2,
-        //                         (height - extent._y) / 2);
+//    float visibleFactor = 4;
+    float visibleFactor = 3;
+//    HUDQuadWidget* ruler = new HUDQuadWidget(URL("file:///altimeter-ruler-1536x113.png"),
+//                                             new HUDAbsolutePosition(320*2),
+//                                             new HUDAbsolutePosition(10),
+//                                             113, 1536 / visibleFactor);
+    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
+                                             new HUDRelativePosition(1,
+                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                     HUDRelativePosition::LEFT,
+                                                                     10),
+                                             new HUDRelativePosition(0.5,
+                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                     HUDRelativePosition::MIDDLE),
+//                                             new HUDAbsoluteSize(113),
+//                                             new HUDAbsoluteSize(1536 / visibleFactor)
+                                             new HUDRelativeSize(2 * (113.0 / 1536.0),
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                             new HUDRelativeSize(2 / visibleFactor,
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS)
+                                             );
+    ruler->setTexCoordsScale(1, 1.0f / visibleFactor);
+    hudRenderer->addWidget(ruler);
 
-        const std::string text = "glob3mobile.com";
-        canvas->setFont(GFont::sansSerif(25));
-        const Vector2F extent = canvas->textExtent(text);
+    class AnimateHUDWidgetsTask : public GTask {
+    private:
+      HUDQuadWidget*     _compass1;
+      HUDQuadWidget*     _compass2;
+      HUDQuadWidget*     _ruler;
+      LabelImageBuilder* _labelBuilder;
+      double _angleInRadians;
 
-        canvas->setFillColor(Color::white());
-        canvas->setShadow(Color::black(), 1, 0, 0);
+      float _translationV;
+      float _translationStep;
 
-        canvas->fillText(text,
-                         (width  - extent._x) / 2,
-                         (height - extent._y) - extent._y/2);
+    public:
+      AnimateHUDWidgetsTask(HUDQuadWidget* compass1,
+                            HUDQuadWidget* compass2,
+                            HUDQuadWidget* ruler,
+                            LabelImageBuilder* labelBuilder) :
+      _compass1(compass1),
+      _compass2(compass2),
+      _ruler(ruler),
+      _labelBuilder(labelBuilder),
+      _angleInRadians(0),
+      _translationV(0),
+      _translationStep(0.002)
+      {
+      }
 
+      void run(const G3MContext* context) {
+        _angleInRadians += Angle::fromDegrees(2)._radians;
+//        _labelBuilder->setText( Angle::fromRadians(_angleInRadians).description() );
+        double degrees = Angle::fromRadians(_angleInRadians)._degrees;
+        while (degrees > 360) {
+          degrees -= 360;
+        }
+        const std::string degreesText = IStringUtils::instance()->toString( IMathUtils::instance()->round( degrees )  );
+        _labelBuilder->setText( degreesText );
 
-        //        canvas->setFillColor(Color::black());
-        //        canvas->fillRectangle(0, 0,
-        //                              width, height);
-        //
-        //        ColumnCanvasElement column(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
-        //                                   0,  /* margin */
-        //                                   16,  /* padding */
-        //                                   8   /* cornerRadius */);
-        //        const GFont labelFont  = GFont::sansSerif(22);
-        //        const Color labelColor = Color::white();
-        //        column.add( new TextCanvasElement("Error message #1", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("Another error message", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("And another error message", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("And just another error message", labelFont, labelColor) );
-        //
-        //        column.drawCentered(canvas);
+        //        _compass1->setTexCoordsRotation(_angleInRadians,
+        //                                        0.5f, 0.5f);
+        _compass2->setTexCoordsRotation(-_angleInRadians,
+                                        0.5f, 0.5f);
+
+        if (_translationV > 0.5 || _translationV < 0) {
+          _translationStep *= -1;
+        }
+        _translationV += _translationStep;
+        _ruler->setTexCoordsTranslation(0, _translationV);
       }
     };
 
-    /*
-     HUDImageRenderer* hudRenderer = new HUDImageRenderer(new TestImageFactory());
-     builder.addRenderer(hudRenderer);
-     */
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(50),
+                                                 new AnimateHUDWidgetsTask(compass, compass2, ruler, labelBuilder)));
   }
+
 
 
   //  [self createInterpolationTest: meshRenderer];
@@ -1057,7 +1099,7 @@ public:
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
 
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
@@ -1087,7 +1129,7 @@ public:
   }
 
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
     //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -1102,6 +1144,65 @@ public:
   if (false) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
+  }
+
+  bool testingTransparencies = true;
+  if (testingTransparencies){
+
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 6),
+                                        //NULL,
+                                        TimeInterval::fromDays(30),
+                                        true,
+                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                       2, 4,
+                                                                       0, 6,
+                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                       false)
+                                        );
+    layerSet->addLayer(blueMarble);
+
+    WMSLayer* i3Landsat = new WMSLayer("esat",
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/jpeg",
+                                       "EPSG:4326",
+                                       "",
+                                       false,
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                      2, 4,
+                                                                      0, 12,
+                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                      false));
+    layerSet->addLayer(i3Landsat);
+
+    WMSLayer *pnoa = new WMSLayer("PNOA",
+                                  URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                  WMS_1_1_0,
+                                  Sector::fromDegrees(21, -18, 45, 6),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::fromDays(30),
+                                  true,
+                                  NULL,
+                                  0.5);
+    layerSet->addLayer(pnoa);
   }
 
 
@@ -1640,12 +1741,22 @@ public:
 {
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
   Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                              Angle::fromDegrees(-122),
-                                              8000),
+                                              Angle::fromDegrees(-122 - 2),
+                                              824000 / 2),
                                RELATIVE_TO_GROUND,
-                               URL("file:///g3m-marker.png", false),
-                               50000, 50000,
+                               URL("file:///hud.png", false),
+                               //50000, 50000,
+                               663000, 824000,
                                false);
+//  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                              Angle::fromDegrees(-122 - 2),
+//                                              50000 / 2),
+//                               RELATIVE_TO_GROUND,
+//                               URL("file:///hud2.png", false),
+//                               //50000, 50000,
+//                               50000, 50000,
+//                               false);
+  quad1->setPitch(Angle::fromDegrees(90));
   shapesRenderer->addShape(quad1);
 
   Shape* quad2 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
@@ -1830,6 +1941,10 @@ public:
   destRs.push_back(new RectangleF(0,0,256,256));
   destRs.push_back(new RectangleF(0, 128, 64, 64));
 
+  std::vector<float> transparencies;
+  transparencies.push_back(1.0);
+  transparencies.push_back(0.5);
+
   class QuadListener: public IImageListener {
     ShapesRenderer* _sr;
   public:
@@ -1857,6 +1972,7 @@ public:
                        images,
                        srcRs,
                        destRs,
+                       transparencies,
                        new QuadListener(shapesRenderer), true);
 
   for (int i = 0; i < 2; i++) {

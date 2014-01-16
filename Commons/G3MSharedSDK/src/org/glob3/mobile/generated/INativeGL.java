@@ -132,7 +132,13 @@ public abstract class INativeGL
   public abstract int TextureParameter_WrapS();
   public abstract int TextureParameter_WrapT();
 
+  public abstract int TextureParameterValue_Nearest();
   public abstract int TextureParameterValue_Linear();
+  public abstract int TextureParameterValue_NearestMipmapNearest();
+  public abstract int TextureParameterValue_NearestMipmapLinear();
+  public abstract int TextureParameterValue_LinearMipmapNearest();
+  public abstract int TextureParameterValue_LinearMipmapLinear();
+
   public abstract int TextureParameterValue_ClampToEdge();
 
   public abstract int Alignment_Pack();
@@ -162,5 +168,7 @@ public abstract class INativeGL
 
   public abstract GPUUniform getActiveUniform(GPUProgram program, int i);
   public abstract GPUAttribute getActiveAttribute(GPUProgram program, int i);
+
+  public abstract void depthMask(boolean v);
 
 }
