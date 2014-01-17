@@ -132,6 +132,9 @@
 #import <G3MiOSSDK/LabelImageBuilder.hpp>
 #import <G3MiOSSDK/CanvasImageBuilder.hpp>
 
+#import <G3MiOSSDK/TerrainTouchListener.hpp>
+#import <G3MiOSSDK/PlanetRenderer.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -801,22 +804,22 @@ public:
     ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
 
-//    float visibleFactor = 10; // 85x5100
-//    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altitude_ladder.png")),
-//                                             new HUDRelativePosition(1,
-//                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
-//                                                                     HUDRelativePosition::LEFT,
-//                                                                     10),
-//                                             new HUDRelativePosition(0.5,
-//                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
-//                                                                     HUDRelativePosition::MIDDLE),
-//                                             new HUDRelativeSize(8.0f * (85.0f / 5100.0f),
-//                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
-//                                             new HUDRelativeSize(8.0f / visibleFactor,
-//                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
-//                                             new DownloaderImageBuilder(URL("file:///widget-background.png")));
-//    ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
-//    hudRenderer->addWidget(ruler);
+    //    float visibleFactor = 10; // 85x5100
+    //    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altitude_ladder.png")),
+    //                                             new HUDRelativePosition(1,
+    //                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+    //                                                                     HUDRelativePosition::LEFT,
+    //                                                                     10),
+    //                                             new HUDRelativePosition(0.5,
+    //                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+    //                                                                     HUDRelativePosition::MIDDLE),
+    //                                             new HUDRelativeSize(8.0f * (85.0f / 5100.0f),
+    //                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+    //                                             new HUDRelativeSize(8.0f / visibleFactor,
+    //                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+    //                                             new DownloaderImageBuilder(URL("file:///widget-background.png")));
+    //    ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
+    //    hudRenderer->addWidget(ruler);
 
 
     class AnimateHUDWidgetsTask : public GTask {
@@ -851,7 +854,7 @@ public:
 
       void run(const G3MContext* context) {
         _angleInRadians += Angle::fromDegrees(2)._radians;
-//        _labelBuilder->setText( Angle::fromRadians(_angleInRadians).description() );
+        //        _labelBuilder->setText( Angle::fromRadians(_angleInRadians).description() );
         double degrees = Angle::fromRadians(_angleInRadians)._degrees;
         while (degrees > 360) {
           degrees -= 360;
@@ -864,8 +867,8 @@ public:
         _compass2->setTexCoordsRotation(-_angleInRadians,
                                         0.5f, 0.5f);
 
-//        _compass3->setTexCoordsRotation(Angle::fromRadians(_angle),
-//                                        0.5f, 0.5f);
+        //        _compass3->setTexCoordsRotation(Angle::fromRadians(_angle),
+        //                                        0.5f, 0.5f);
 
         if (_translationV > 0.5 || _translationV < 0) {
           _translationStep *= -1;
@@ -883,64 +886,134 @@ public:
                                                                            ruler,
                                                                            labelBuilder,
                                                                            altimeterCanvasImageBuilder)));
-  }
+
+    if (true){ //Changing FOV
 
 
-  //  [self createInterpolationTest: meshRenderer];
+      class AnimatedFOVCameraConstrainer: public ICameraConstrainer {
+      private:
+        mutable double _angle;
+        mutable double _step;
+      public:
 
-  //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+        AnimatedFOVCameraConstrainer() : _angle(70), _step(1)
+        {
+        }
 
-  //Draw light direction
-  if (false) {
+        bool onCameraChange(const Planet* planet,
+                            const Camera* previousCamera,
+                            Camera* nextCamera) const {
 
-    Vector3D lightDir = Vector3D(100000, 0,0);
-    //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
-    FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+          if (_angle > 170) {
+            _step *= -1;
+          }
+          else if (_angle < 5) {
+            _step *= -1;
+          }
 
-    Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
-                                                Angle::fromDegrees(-15.431389),
-                                                10000));
+          _angle += _step;
 
-    vertex->add(v);
-    vertex->add(v.add(lightDir));
-    //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+          nextCamera->setFOV(Angle::nan(), Angle::fromDegrees(_angle));
 
-    meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
-                                          true,
-                                          vertex->getCenter(),
-                                          vertex->create(),
-                                          3.0,
-                                          1.0,
-                                          Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
+          return true;
 
-    delete vertex;
 
-  }
+        }
+      };
 
-  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                     geoRenderer: geoRenderer
-                                                                    meshRenderer: meshRenderer
-                                                                   marksRenderer: marksRenderer
-                                                                          planet: planet];
-  builder.setInitializationTask(initializationTask, true);
+      builder.addCameraConstraint(new AnimatedFOVCameraConstrainer());
+    }
 
-  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
-  builder.addPeriodicalTask(periodicalTask);
+    if (false){ //Changing ROLL
+      
+      class AnimatedRollCameraConstrainer: public ICameraConstrainer {
+      private:
+        mutable double _angle;
+        mutable double _step;
+      public:
 
-  const bool logFPS = false;
-  builder.setLogFPS(logFPS);
+        AnimatedRollCameraConstrainer() : _angle(0), _step(2)
+        {
+        }
 
-  const bool logDownloaderStatistics = false;
-  builder.setLogDownloaderStatistics(logDownloaderStatistics);
+        bool onCameraChange(const Planet* planet,
+                            const Camera* previousCamera,
+                            Camera* nextCamera) const {
+          _angle += _step;
 
-  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+          nextCamera->setRoll(Angle::fromDegrees(_angle));
 
-  //  WidgetUserData* userData = NULL;
-  //  builder.setUserData(userData);
+          return true;
 
-  // initialization
-  builder.initializeWidget();
-  //  [self testGenericQuadTree:geoTileRasterizer];
+
+        }
+      };
+
+      builder.addCameraConstraint(new AnimatedRollCameraConstrainer());
+
+    }
+
+
+
+
+}
+
+
+//  [self createInterpolationTest: meshRenderer];
+
+//  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+
+//Draw light direction
+if (false) {
+
+  Vector3D lightDir = Vector3D(100000, 0,0);
+  //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
+                                              Angle::fromDegrees(-15.431389),
+                                              10000));
+
+  vertex->add(v);
+  vertex->add(v.add(lightDir));
+  //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+
+  meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
+                                        true,
+                                        vertex->getCenter(),
+                                        vertex->create(),
+                                        3.0,
+                                        1.0,
+                                        Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
+
+  delete vertex;
+
+}
+
+GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
+                                                                   geoRenderer: geoRenderer
+                                                                  meshRenderer: meshRenderer
+                                                                 marksRenderer: marksRenderer
+                                                                        planet: planet];
+builder.setInitializationTask(initializationTask, true);
+
+PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
+builder.addPeriodicalTask(periodicalTask);
+
+const bool logFPS = false;
+builder.setLogFPS(logFPS);
+
+const bool logDownloaderStatistics = false;
+builder.setLogDownloaderStatistics(logDownloaderStatistics);
+
+//builder.getPlanetRendererBuilder()->setRenderDebug(true);
+
+//  WidgetUserData* userData = NULL;
+//  builder.setUserData(userData);
+
+// initialization
+builder.initializeWidget();
+//  [self testGenericQuadTree:geoTileRasterizer];
 
 }
 
@@ -1199,7 +1272,7 @@ public:
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
 
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
@@ -2869,7 +2942,9 @@ public:
 
       // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.099999998178312, -15.41699999885168, 7000),
+                                                     Angle::fromDegrees(0),
+                                                     Angle::fromDegrees(85));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -2942,32 +3017,32 @@ public:
             int i = rand()%4;
             switch (i) {
               case 0:
-              [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider1, false);
-              break;
+                [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider1, false);
+                break;
               case 1:
 
-              _elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                                            Sector::fromDegrees(
-                                                                                                39.4642996294239623,
-                                                                                                -6.3829977122432933,
-                                                                                                39.4829891936013553,
-                                                                                                -6.3645288909498845
-                                                                                                ),
-                                                                            Vector2I(2008, 2032),
-                                                                            0);
+                _elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+                                                                              Sector::fromDegrees(
+                                                                                                  39.4642996294239623,
+                                                                                                  -6.3829977122432933,
+                                                                                                  39.4829891936013553,
+                                                                                                  -6.3645288909498845
+                                                                                                  ),
+                                                                              Vector2I(2008, 2032),
+                                                                              0);
 
 
-              [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider2, true);
-              break;
+                [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider2, true);
+                break;
               case 2:
-              [_iosWidget widget]->getPlanetRenderer()->setVerticalExaggeration(rand() % 5);
-              break;
+                [_iosWidget widget]->getPlanetRenderer()->setVerticalExaggeration(rand() % 5);
+                break;
               case 3:
-              [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(NULL, false);
-              break;
+                [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(NULL, false);
+                break;
 
               default:
-              break;
+                break;
             }
 
             ElevationDataProvider* edp = [_iosWidget widget]->getPlanetRenderer()->getElevationDataProvider();
@@ -3263,13 +3338,45 @@ public:
         }
       }
 
+
+      if (true){ //CHANGE ROLL WITH TOUCH
+
+
+        class RollTerrainTouchListener: public TerrainTouchListener{
+        private:
+          G3MWidget_iOS* _iosWidget;
+        public:
+
+          RollTerrainTouchListener(G3MWidget_iOS* widget): _iosWidget(widget){}
+
+
+          virtual bool onTerrainTouch(const G3MEventContext* ec,
+                                      const Vector2I&        pixel,
+                                      const Camera*          camera,
+                                      const Geodetic3D&      position,
+                                      const Tile*            tile){
+
+            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
+
+            return true;
+
+
+          }
+
+        };
+
+
+        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new RollTerrainTouchListener(_iosWidget));
+
+      }
+
     }
 
     bool isDone(const G3MContext* context) {
       return true;
     }
   };
-  
+
   GInitializationTask* initializationTask = new SampleInitializationTask([self G3MWidget],
                                                                          shapesRenderer,
                                                                          geoRenderer,

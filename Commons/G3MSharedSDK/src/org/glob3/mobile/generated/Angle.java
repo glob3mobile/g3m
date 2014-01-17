@@ -133,9 +133,10 @@ public class Angle
 //    return COS(_radians);
 //  }
 
-//  double tangent() const {
-//    return TAN(_radians);
-//  }
+  public final double tangent()
+  {
+    return java.lang.Math.tan(_radians);
+  }
 
   public final boolean closeTo(Angle other)
   {
