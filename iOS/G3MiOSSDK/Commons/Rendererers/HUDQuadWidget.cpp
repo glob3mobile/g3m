@@ -244,7 +244,7 @@ void HUDQuadWidget::cleanMesh() {
 }
 
 void HUDQuadWidget::changed() {
-#warning Diego at work!
+//#warning Diego at work!
   cleanMesh();
 
   delete _image;

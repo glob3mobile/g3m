@@ -1442,7 +1442,7 @@ void MapBooBuilder::saveApplicationData() const {
   //  std::vector<MapBoo_Scene*> _applicationScenes;
   //  int                        _applicationCurrentSceneIndex;
   //  int                        _lastApplicationCurrentSceneIndex;
-#warning Diego at work!
+//#warning Diego at work!
 }
 
 void MapBooBuilder::setHasParsedApplication() {
