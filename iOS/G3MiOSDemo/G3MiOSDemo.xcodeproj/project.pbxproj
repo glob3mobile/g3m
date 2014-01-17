@@ -26,6 +26,7 @@
 		CF4027E71770E8F100D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E61770E8F100D5A80C /* libicucore.dylib */; };
 		CF4027E91770E8F900D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E81770E8F900D5A80C /* CFNetwork.framework */; };
 		CF4027EB1770E90000D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027EA1770E90000D5A80C /* Security.framework */; };
+		CF4968F81889810100D1C35E /* CompassHeadings.png in Resources */ = {isa = PBXBuildFile; fileRef = CF4968F71889810100D1C35E /* CompassHeadings.png */; };
 		CF61A643186384BD00DDC0DC /* DebugTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = CF61A642186384BD00DDC0DC /* DebugTexture.png */; };
 		CF61A6451863880500DDC0DC /* debug-texture.png in Resources */ = {isa = PBXBuildFile; fileRef = CF61A6441863880500DDC0DC /* debug-texture.png */; };
 		CF61A647186388B200DDC0DC /* debug-compass.png in Resources */ = {isa = PBXBuildFile; fileRef = CF61A646186388B200DDC0DC /* debug-compass.png */; };
@@ -119,6 +120,7 @@
 		CF4027E61770E8F100D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		CF4027E81770E8F900D5A80C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CF4027EA1770E90000D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CF4968F71889810100D1C35E /* CompassHeadings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CompassHeadings.png; sourceTree = "<group>"; };
 		CF61A642186384BD00DDC0DC /* DebugTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DebugTexture.png; sourceTree = "<group>"; };
 		CF61A6441863880500DDC0DC /* debug-texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "debug-texture.png"; sourceTree = "<group>"; };
 		CF61A646186388B200DDC0DC /* debug-compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "debug-compass.png"; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF4968F71889810100D1C35E /* CompassHeadings.png */,
 				CF290D57187F322C000BE644 /* altitude_ladder.png */,
 				CF88E727186C8A78003112BF /* widget-background.png */,
 				D8317202186C5BAD00522E1B /* simpleStencil.png */,
@@ -420,6 +423,7 @@
 				CFB57D9F1860DAD900D5B094 /* Compass_rose_browns_00.png in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
+				CF4968F81889810100D1C35E /* CompassHeadings.png in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
 				E71B15381626D27F003D1013 /* Default-Landscape@2x.png in Resources */,
 				E71B15391626D27F003D1013 /* Default-Portrait.png in Resources */,

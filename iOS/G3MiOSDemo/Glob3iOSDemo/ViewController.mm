@@ -771,7 +771,8 @@ public:
                                              new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
     hudRenderer->addWidget(label);
 
-    HUDQuadWidget* compass2 = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
+    HUDQuadWidget* compass2 = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
+                                                new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_WIDTH,
                                                                         HUDRelativePosition::CENTER),
