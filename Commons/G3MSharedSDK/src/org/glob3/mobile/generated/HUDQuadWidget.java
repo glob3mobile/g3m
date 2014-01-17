@@ -348,8 +348,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
 
   public final void changed()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
+  ///#warning Diego at work!
     cleanMesh();
   
     _image = null;
