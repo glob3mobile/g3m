@@ -1193,8 +1193,7 @@ public abstract class MapBooBuilder
     //  std::vector<MapBoo_Scene*> _applicationScenes;
     //  int                        _applicationCurrentSceneIndex;
     //  int                        _lastApplicationCurrentSceneIndex;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
+  ///#warning Diego at work!
   }
 
   /** Private to MapbooBuilder, don't call it */
