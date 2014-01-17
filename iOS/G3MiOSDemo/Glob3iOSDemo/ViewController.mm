@@ -395,77 +395,77 @@ public:
 }
 
 
-class SampleMapBooApplicationChangeListener : public MapBooApplicationChangeListener {
-public:
-  void onNameChanged(const G3MContext* context,
-                     const std::string& name) {
-    ILogger::instance()->logInfo("MapBoo application name=\"%s\"",
-                                 name.c_str());
-  }
+//class SampleMapBooApplicationChangeListener : public MapBooApplicationChangeListener {
+//public:
+//  void onNameChanged(const G3MContext* context,
+//                     const std::string& name) {
+//    ILogger::instance()->logInfo("MapBoo application name=\"%s\"",
+//                                 name.c_str());
+//  }
+//
+//  void onIconChanged(const G3MContext* context,
+//                     const std::string& icon) {
+//    ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",
+//                                 icon.c_str());
+//  }
+//
+//  void onScenesChanged(const G3MContext* context,
+//                       const std::vector<MapBoo_Scene*>& scenes) {
+//    const int scenesSize = scenes.size();
+//    for (int i = 0; i < scenesSize; i++) {
+//      ILogger::instance()->logInfo("MapBoo application scene #%d %s",
+//                                   i,
+//                                   scenes[i]->description().c_str());
+//    }
+//  }
+//
+//  void onSceneChanged(const G3MContext* context,
+//                      int sceneIndex,
+//                      const MapBoo_Scene* scene) {
+//    ILogger::instance()->logInfo("MapBoo application current scene=%l",
+//                                 sceneIndex);
+//  }
+//
+//  void onWebsiteChanged(const G3MContext* context,
+//                        const std::string& website) {}
+//
+//  void onEMailChanged(const G3MContext* context,
+//                      const std::string& eMail) {}
+//
+//  void onAboutChanged(const G3MContext* context,
+//                      const std::string& about) {}
+//
+//  void onWebSocketOpen(const G3MContext* context) {}
+//
+//  void onWebSocketClose(const G3MContext* context) {}
+//
+//  void onTerrainTouch(MapBooBuilder*         builder,
+//                      const G3MEventContext* ec,
+//                      const Vector2I&        pixel,
+//                      const Camera*          camera,
+//                      const Geodetic3D&      position,
+//                      const Tile*            tile) { }
+//};
 
-  void onIconChanged(const G3MContext* context,
-                     const std::string& icon) {
-    ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",
-                                 icon.c_str());
-  }
 
-  void onScenesChanged(const G3MContext* context,
-                       const std::vector<MapBoo_Scene*>& scenes) {
-    const int scenesSize = scenes.size();
-    for (int i = 0; i < scenesSize; i++) {
-      ILogger::instance()->logInfo("MapBoo application scene #%d %s",
-                                   i,
-                                   scenes[i]->description().c_str());
-    }
-  }
-
-  void onSceneChanged(const G3MContext* context,
-                      int sceneIndex,
-                      const MapBoo_Scene* scene) {
-    ILogger::instance()->logInfo("MapBoo application current scene=%l",
-                                 sceneIndex);
-  }
-
-  void onWebsiteChanged(const G3MContext* context,
-                        const std::string& website) {}
-
-  void onEMailChanged(const G3MContext* context,
-                      const std::string& eMail) {}
-
-  void onAboutChanged(const G3MContext* context,
-                      const std::string& about) {}
-
-  void onWebSocketOpen(const G3MContext* context) {}
-
-  void onWebSocketClose(const G3MContext* context) {}
-
-  void onTerrainTouch(MapBooBuilder*         builder,
-                      const G3MEventContext* ec,
-                      const Vector2I&        pixel,
-                      const Camera*          camera,
-                      const Geodetic3D&      position,
-                      const Tile*            tile) { }
-};
-
-
-- (void) initWithMapBooBuilder
-{
-  MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
-
-  const std::string applicationId = "2glgs5j2mq5i9nxx68q";
-
-  bool enableNotifications = false;
-
-  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
-                                       URL("http://192.168.1.2:8080/web", false),
-                                       URL("ws://192.168.1.2:8888/tube", false),
-                                       "",
-                                       VIEW_RUNTIME,
-                                       applicationListener,
-                                       enableNotifications);
-
-  _g3mcBuilder->initializeWidget();
-}
+//- (void) initWithMapBooBuilder
+//{
+//  MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
+//
+//  const std::string applicationId = "2glgs5j2mq5i9nxx68q";
+//
+//  bool enableNotifications = false;
+//
+//  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
+//                                       URL("http://192.168.1.2:8080/web", false),
+//                                       URL("ws://192.168.1.2:8888/tube", false),
+//                                       "",
+//                                       VIEW_RUNTIME,
+//                                       applicationListener,
+//                                       enableNotifications);
+//
+//  _g3mcBuilder->initializeWidget();
+//}
 
 - (void) initWithDefaultBuilder
 {
