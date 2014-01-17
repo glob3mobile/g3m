@@ -358,7 +358,7 @@ bool PlanetRendererBuilder::getRenderTileMeshes() {
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-#warning Testing Terrain Normals
+//#warning Testing Terrain Normals
   const bool skirted = true;
   return new PlanetTileTessellator(skirted, getRenderedSector());
 }

@@ -177,7 +177,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   //Storing textCoords in Tile
   tile->setTessellatorData(new PlanetTileTessellatorData(textCoords));
 
-#warning Testing_Terrain_Normals;
+//#warning Testing_Terrain_Normals;
   IFloatBuffer* verticesB = vertices->create();
   IShortBuffer* indicesB  = indices.create();
   //IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);

@@ -596,7 +596,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   }
 
   updateGLState(rc);
-#warning Testing Terrain Normals
+//#warning Testing Terrain Normals
   _glState->setParent(glState);
 
   // Saving camera for use in onTouchEvent
