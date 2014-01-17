@@ -378,6 +378,10 @@ public class G3MWidget
     _mainRenderer.onPause(_context);
     _busyRenderer.onPause(_context);
     _errorRenderer.onPause(_context);
+    if (_hudRenderer != null)
+    {
+      _hudRenderer.onPause(_context);
+    }
   
     _downloader.onPause(_context);
     _storage.onPause(_context);
@@ -394,6 +398,10 @@ public class G3MWidget
     _mainRenderer.onResume(_context);
     _busyRenderer.onResume(_context);
     _errorRenderer.onResume(_context);
+    if (_hudRenderer != null)
+    {
+      _hudRenderer.onResume(_context);
+    }
   
     _effectsScheduler.onResume(_context);
   
@@ -409,6 +417,10 @@ public class G3MWidget
     _mainRenderer.onDestroy(_context);
     _busyRenderer.onDestroy(_context);
     _errorRenderer.onDestroy(_context);
+    if (_hudRenderer != null)
+    {
+      _hudRenderer.onDestroy(_context);
+    }
   
     _downloader.onDestroy(_context);
     _storage.onDestroy(_context);
