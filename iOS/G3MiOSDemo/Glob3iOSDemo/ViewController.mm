@@ -779,9 +779,9 @@ public:
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_HEIGTH,
                                                                         HUDRelativePosition::MIDDLE),
-                                                new HUDRelativeSize(0.5,
+                                                new HUDRelativeSize(0.25,  // 0.5,
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                                new HUDRelativeSize(0.25,
+                                                new HUDRelativeSize(0.125, // 0.25,
                                                                     HUDRelativeSize::VIEWPORT_MIN_AXIS));
     compass2->setTexCoordsRotation(Angle::fromDegrees(30),
                                    0.5f, 0.5f);
