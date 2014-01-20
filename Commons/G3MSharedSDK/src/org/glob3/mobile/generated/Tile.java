@@ -1131,6 +1131,18 @@ public class Tile
   
   }
 
+  public final Vector2I getPixelNormalizedFromPosition(Geodetic2D position2D, Vector2I size)
+  {
+    final IMathUtils math = IMathUtils.instance();
+    if (_sector.contains(position2D))
+    {
+      final Vector2D uv = _sector.getUVCoordinates(position2D);
+      return new Vector2I(math.toInt(size._x * (1 - uv._x)), math.toInt(size._y * (1 - uv._y)));
+    }
+  
+    return null;
+  }
+
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
