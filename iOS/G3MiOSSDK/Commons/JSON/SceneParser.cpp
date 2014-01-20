@@ -228,6 +228,8 @@ void SceneParser::parserJSONTMSLayer(LayerSet* layerSet, const JSONObject* jsonL
     tmsLayer->setEnable(enabled);
   }
   
+  tmsLayer->setTitle(jsonLayer->getAsString(NAME)->value());
+  
   layerSet->addLayer(tmsLayer);
 }
 
