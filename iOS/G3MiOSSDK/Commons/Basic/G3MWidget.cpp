@@ -450,16 +450,18 @@ void G3MWidget::render(int width, int height) {
   if (!_initialCameraPositionHasBeenSet) {
     _initialCameraPositionHasBeenSet = true;
 
-    Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
-                                                                     _mainRenderer->getPlanetRenderer());
+    const Geodetic3D position = _initialCameraPositionProvider->getCameraPosition(_planet,
+                                                                                  _mainRenderer->getPlanetRenderer());
 
-    _currentCamera->setGeodeticPosition(g);
+    _currentCamera->setGeodeticPosition(position);
     _currentCamera->setHeading(Angle::zero());
     _currentCamera->setPitch(Angle::zero());
+    _currentCamera->setRoll(Angle::zero());
     
-    _nextCamera->setGeodeticPosition(g);
+    _nextCamera->setGeodeticPosition(position);
     _nextCamera->setHeading(Angle::zero());
     _nextCamera->setPitch(Angle::zero());
+    _nextCamera->setRoll(Angle::zero());
   }
 
   _timer->start();
@@ -688,6 +690,10 @@ void G3MWidget::setCameraHeading(const Angle& angle) {
 
 void G3MWidget::setCameraPitch(const Angle& angle) {
   getNextCamera()->setPitch(angle);
+}
+
+void G3MWidget::setCameraRoll(const Angle& angle) {
+  getNextCamera()->setRoll(angle);
 }
 
 void G3MWidget::setCameraPosition(const Geodetic3D& position) {

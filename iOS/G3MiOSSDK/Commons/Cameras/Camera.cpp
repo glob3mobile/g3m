@@ -463,7 +463,7 @@ void Camera::setFOV(const Angle& vertical, const Angle& horizontal) {
 }
 
 void Camera::setRoll(const Angle& angle) {
-  Angle delta = angle.sub(Angle::fromRadians(_rollInRadians));
+  const Angle delta = angle.sub(Angle::fromRadians(_rollInRadians));
   if (delta._radians > 0) {
     _rollInRadians = angle._radians;
     rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
