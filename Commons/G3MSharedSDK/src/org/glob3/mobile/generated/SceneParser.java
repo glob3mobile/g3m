@@ -209,6 +209,8 @@ public class SceneParser
       tmsLayer.setEnable(enabled);
     }
   
+    tmsLayer.setTitle(jsonLayer.getAsString(NAME).value());
+  
     layerSet.addLayer(tmsLayer);
   }
   private void parserJSON3DLayer(LayerSet layerSet, JSONObject jsonLayer)
