@@ -91,6 +91,25 @@ public class GPUVariableValueSet
     }
   }
 
+  public final void removeUniformValue(GPUUniformKey key)
+  {
+    final int index = key.getValue();
+
+    if (_uniformValues[index] != null)
+    {
+      _uniformValues[index]._release();
+      _uniformValues[index] = null;
+    }
+
+    for (int i = 0; i < 32; i++)
+    {
+      if (_uniformValues[i] != null)
+      {
+        _highestUniformKey = i;
+      }
+    }
+  }
+
   public final void addAttributeValue(GPUAttributeKey key, GPUAttributeValue v, boolean mustRetain)
   {
     final int index = key.getValue();

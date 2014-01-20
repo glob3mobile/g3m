@@ -43,17 +43,14 @@ public class GL
   private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
 
-  //  GLGlobalState *_currentState;
-  //  GPUProgram* _currentGPUProgram;
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void loadModelView();
 
   private IGLTextureId getGLTextureId()
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::getGLTextureId()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::getGLTextureId()");
+    //  }
   
     if (_texturesIdBag.size() == 0)
     {
@@ -96,9 +93,6 @@ public class GL
   }
 
   //Get Locations warning of errors
-//  bool _errorGettingLocationOcurred;
-//  int checkedGetAttribLocation(GPUProgram* program,
-//                               const std::string& name);
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  IGLUniformID checkedGetUniformLocation(GPUProgram program, String name);
 //  const bool _verbose;
@@ -140,9 +134,9 @@ public class GL
 
   public final void clearScreen(Color color)
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::clearScreen()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::clearScreen()");
+    //  }
     _clearScreenState.setClearColor(color);
     _clearScreenState.applyChanges(this, _currentGLGlobalState);
   
@@ -170,12 +164,12 @@ public class GL
 
   public final void drawArrays(int mode, int first, int count, GLState state, GPUProgramManager progManager)
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-  //                                 mode,
-  //                                 first,
-  //                                 count);
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+    //                                 mode,
+    //                                 first,
+    //                                 count);
+    //  }
   
     state.applyOnGPU(this, progManager);
   
@@ -184,9 +178,9 @@ public class GL
 
   public final int getError()
   {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::getError()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::getError()");
+    //  }
   
     return _nativeGL.getError();
   }
@@ -194,15 +188,13 @@ public class GL
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
   
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::uploadTexture()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::uploadTexture()");
+    //  }
   
     final IGLTextureId texId = getGLTextureId();
     if (texId != null)
     {
-      int texture2D = GLTextureType.texture2D();
-  
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
@@ -210,12 +202,25 @@ public class GL
   
       newState.applyChanges(this, _currentGLGlobalState);
   
-      int linear = GLTextureParameterValue.linear();
-      int clampToEdge = GLTextureParameterValue.clampToEdge();
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(),linear);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(),clampToEdge);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(),clampToEdge);
+      final int texture2D = GLTextureType.texture2D();
+      final int linear = GLTextureParameterValue.linear();
+  
+      if (generateMipmap)
+      {
+  //      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::linearMipmapLinear());
+  //      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::nearestMipmapLinear());
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), GLTextureParameterValue.linearMipmapNearest());
+      }
+      else
+      {
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
+      }
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(), linear);
+  
+      final int clampToEdge = GLTextureParameterValue.clampToEdge();
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), clampToEdge);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), clampToEdge);
+  
       _nativeGL.texImage2D(image, format);
   
       if (generateMipmap)
@@ -236,9 +241,9 @@ public class GL
   public final void deleteTexture(IGLTextureId textureId)
   {
   
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::deleteTexture()");
-  //  }
+    //  if (_verbose) {
+    //    ILogger::instance()->logInfo("GL::deleteTexture()");
+    //  }
   
     if (textureId != null)
     {
@@ -254,14 +259,14 @@ public class GL
   
       if (_currentGLGlobalState.getBoundTexture() == textureId)
       {
-         _currentGLGlobalState.bindTexture(null);
+        _currentGLGlobalState.bindTexture(null);
       }
   
-  //    GLState::textureHasBeenDeleted(textureId);
+      //    GLState::textureHasBeenDeleted(textureId);
   
-  //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-  //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-  //    }
+      //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
+      //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
+      //    }
   
       //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
     }
@@ -319,9 +324,21 @@ public class GL
     _nativeGL.linkProgram(program);
   }
 
-  public final boolean deleteProgram(int program)
+  public final boolean deleteProgram(GPUProgram program)
   {
-    return _nativeGL.deleteProgram(program);
+
+    if (program == null)
+    {
+      return false;
+    }
+
+    if (_currentGPUProgram == program) //In case of deleting active program
+    {
+      _currentGPUProgram.removeReference();
+      _currentGPUProgram = null;
+    }
+
+    return _nativeGL.deleteProgram(program.getProgramID());
   }
 
   public final INativeGL getNative()
@@ -387,17 +404,26 @@ public class GL
 
   public final void useProgram(GPUProgram program)
   {
-    if (program != null && _currentGPUProgram != program)
+    if (program != null)
     {
-  
-      if (_currentGPUProgram != null)
+      if (_currentGPUProgram != program)
       {
-        _currentGPUProgram.onUnused(this);
+  
+        if (_currentGPUProgram != null)
+        {
+          _currentGPUProgram.onUnused(this);
+          _currentGPUProgram.removeReference();
+        }
+  
+        _nativeGL.useProgram(program);
+        program.onUsed();
+        _currentGPUProgram = program;
+        _currentGPUProgram.addReference();
       }
   
-      _nativeGL.useProgram(program);
-      program.onUsed();
-      _currentGPUProgram = program;
+  //    if (!_nativeGL->isProgram(program->getProgramID())){
+  //      ILogger::instance()->logError("INVALID PROGRAM.");
+  //    }
     }
   
   }

@@ -90,7 +90,8 @@ private:
                        bool mercator,
                        FloatBufferBuilderFromGeodetic* vertices,
                        ShortBufferBuilder& indices,
-                       FloatBufferBuilderFromCartesian2D& textCoords) const;
+                       FloatBufferBuilderFromCartesian2D& textCoords,
+                       TileTessellatorMeshData& data) const;
 
   void createEastSkirt(const Planet* planet,
                        const Sector& tileSector,
@@ -146,7 +147,8 @@ public:
                        const ElevationData* elevationData,
                        float verticalExaggeration,
                        bool mercator,
-                       bool debug) const;
+                       bool debug,
+                       TileTessellatorMeshData& data) const;
 
   Mesh* createTileDebugMesh(const Planet* planet,
                             const Vector2I& resolution,
@@ -160,7 +162,7 @@ public:
                                  const Tile* tile,
                                  bool mercator) const;
 
-  const Vector2D getTextCoord(const Tile* tile,
+  const Vector2F getTextCoord(const Tile* tile,
                               const Angle& latitude,
                               const Angle& longitude,
                               bool mercator) const;

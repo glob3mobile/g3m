@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class GL;
 //class IFactory;
 //class IGLTextureId;
-
+//class TextureIDReference;
 
 public class TextureSpec
 {

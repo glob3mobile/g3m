@@ -18,9 +18,7 @@ Capabilities
 ============
 
 ####Works on iOS, Android devices and HTML5 environments
-![Screenshot Android] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android.png)
-![Screenshot iOS] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/ios.png)
-![Screenshot webGL] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/webgl.png)
+![Screenshot Android] (https://dl.dropboxusercontent.com/u/20446978/wikig3m/s15.png)
 ####Written from the scratch, no legacy dependencies.
 G3M is a library thought to develop mobile apps from the scratch, since first line of code all the development goes towards 
 a productive environment for multiplatform mobile apps development.
@@ -266,7 +264,7 @@ There are another different projects developed that are used for demo purpose an
 + <a href="http://milanuncios3d.glob3mobile.com" frameborder="0" allowfullscreen>Mil Anuncios 3D</a>
 + <a href="http://meteorite.glob3mobile.com">Meteorite</a>
 + <a href="http://xeovisor3d.glob3mobile.com/example.html">Xeovisor3D</a>
-
++ <a href="http://wb.glob3mobile.com/">World Bank GFDRR Demo</a>
 
 Videos
 ======

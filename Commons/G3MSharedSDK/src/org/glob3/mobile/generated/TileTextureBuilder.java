@@ -180,6 +180,7 @@ public class TileTextureBuilder extends RCObject
       final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
       java.util.ArrayList<RectangleF> sourceRects = new java.util.ArrayList<RectangleF>();
       java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
+      java.util.ArrayList<Float> transparencies = new java.util.ArrayList<Float>();
       String textureId = _tile.getKey().tinyDescription();
 
       final Sector tileSector = _tile._sector;
@@ -214,6 +215,9 @@ public class TileTextureBuilder extends RCObject
           destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
           textureId += petition.getURL().getPath();
           textureId += "_";
+
+          //Layer transparency set by user
+          transparencies.add(petition.getLayerTransparency());
         }
         else
         {
@@ -230,7 +234,12 @@ public class TileTextureBuilder extends RCObject
           textureId += _tileRasterizer.getId();
         }
 
-        IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, new TextureUploader(this, _tile, _mercator, _tileRasterizer, sourceRects, destRects, textureId), true);
+        if (images.size() != transparencies.size())
+        {
+          ILogger.instance().logError("Wrong number of transparencies");
+        }
+
+        IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, transparencies, new TextureUploader(this, _tile, _mercator, _tileRasterizer, sourceRects, destRects, textureId), true);
         return true;
       }
 

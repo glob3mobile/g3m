@@ -50,7 +50,7 @@ _context(NULL)
   _scenes.push_back( new G3MPointCloudDemoScene(this) );
   _scenes.push_back( new G3M3DModelDemoScene(this) );
   _scenes.push_back( new G3MCameraDemoScene(this) );
-  _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
+  //_scenes.push_back( new G3MIsosurfaceDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

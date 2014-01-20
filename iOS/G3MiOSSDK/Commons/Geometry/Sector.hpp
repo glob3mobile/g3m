@@ -15,6 +15,7 @@
 #include "Geodetic2D.hpp"
 #include "Context.hpp"
 #include "Vector2D.hpp"
+#include "Vector2F.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector3D.hpp"
 #include "Color.hpp"
@@ -151,10 +152,14 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-//    return Vector2D(getUCoordinate(longitude),
-//                    getVCoordinate(latitude));
     return Vector2D((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians,
                     (_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians);
+  }
+
+  Vector2F getUVCoordinatesF(const Angle& latitude,
+                            const Angle& longitude) const {
+    return Vector2F((float) ((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians),
+                    (float) ((_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians));
   }
 
   double getUCoordinate(const Angle& longitude) const {
@@ -207,7 +212,23 @@ public:
   bool touchesSouthPole() const {
     return (_lower._latitude._degrees <= -89.9);
   }
-  
+
+  Angle getNorth() const{
+    return _upper._latitude;
+  }
+
+  Angle getSouth() const{
+    return _lower._latitude;
+  }
+
+  Angle getEast() const{
+    return _upper._longitude;
+  }
+
+  Angle getWest() const{
+    return _lower._longitude;
+  }
+
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection) const;
 

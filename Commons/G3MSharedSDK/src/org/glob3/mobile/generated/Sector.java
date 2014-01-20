@@ -233,9 +233,12 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-//    return Vector2D(getUCoordinate(longitude),
-//                    getVCoordinate(latitude));
     return new Vector2D((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians, (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians);
+  }
+
+  public final Vector2F getUVCoordinatesF(Angle latitude, Angle longitude)
+  {
+    return new Vector2F((float)((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians), (float)((_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians));
   }
 
   public final double getUCoordinate(Angle longitude)
@@ -352,6 +355,26 @@ public class Sector
   public final boolean touchesSouthPole()
   {
     return (_lower._latitude._degrees <= -89.9);
+  }
+
+  public final Angle getNorth()
+  {
+    return _upper._latitude;
+  }
+
+  public final Angle getSouth()
+  {
+    return _lower._latitude;
+  }
+
+  public final Angle getEast()
+  {
+    return _upper._longitude;
+  }
+
+  public final Angle getWest()
+  {
+    return _lower._longitude;
   }
 
   public final void rasterize(ICanvas canvas, GEORasterProjection projection)

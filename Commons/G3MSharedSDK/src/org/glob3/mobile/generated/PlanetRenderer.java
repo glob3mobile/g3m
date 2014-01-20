@@ -199,14 +199,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
       if (firstLevel < firstLevelToVisit)
       {
-        ILogger.instance().logError("Can only visit from level %", firstLevelToVisit);
+        ILogger.instance().logError("Can only visit from level %d", firstLevelToVisit);
         return;
       }
   
       final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
       if (maxLevel > maxLevelToVisit)
       {
-        ILogger.instance().logError("Can only visit to level %", maxLevelToVisit);
+        ILogger.instance().logError("Can only visit to level %d", maxLevelToVisit);
         return;
       }
   
@@ -221,7 +221,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < layersCount; i++)
       {
         Layer layer = _layerSet.getLayer(i);
-        if (layer.isEnable() && layer.isReady())
+        if (layer.isEnable() && layer.getRenderState()._type == RenderState_Type.RENDER_READY)
         {
           layers.add(layer);
         }
@@ -291,6 +291,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
 
+  private boolean _renderTileMeshes;
+
   private Sector _renderedSector;
 //  bool _validLayerTilesRenderParameters;
   private boolean _layerTilesRenderParametersDirty;
@@ -315,7 +317,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -339,6 +341,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
      _layerTilesRenderParameters = null;
      _layerTilesRenderParametersDirty = true;
+     _renderTileMeshes = renderTileMeshes;
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -415,8 +418,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     updateGLState(rc);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Testing Terrain Normals
+  ///#warning Testing Terrain Normals
     _glState.setParent(glState);
   
     // Saving camera for use in onTouchEvent
@@ -425,7 +427,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     _statistics.clear();
   
     final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-    final float dpiFactor = deviceInfo.getPixelsInMM(0.1f);
+  //  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
     final float deviceQualityFactor = deviceInfo.getQualityFactor();
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
@@ -434,6 +436,21 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
     double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
     final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+  
+    //Texture Size for every tile
+    int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
+    int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
+  
+    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+  
+    texWidth *= correctionFactor;
+    texHeight *= correctionFactor;
+  
+    final double texWidthSquared = texWidth * texWidth;
+    final double texHeightSquared = texHeight * texHeight;
+  
+    final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
@@ -444,7 +461,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, dpiFactor, deviceQualityFactor); // if first render, force full render
+        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes); // if first render, force full render
       }
     }
     else
@@ -463,7 +480,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         {
           Tile tile = iter.next();
   
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, dpiFactor, deviceQualityFactor); // if first render, force full render
+          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes); //SENDING SQUARED TEX SIZE -  if first render, force full render
         }
   
         toVisit = toVisitInNextIteration;
@@ -570,11 +587,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       return RenderState.error(_errors);
     }
   
-    if (!_layerSet.isReady())
+    final RenderState layerSetRenderState = _layerSet.getRenderState();
+    if (layerSetRenderState._type != RenderState_Type.RENDER_READY)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning __TODO_Layer_error;
-      return RenderState.busy();
+      return layerSetRenderState;
     }
   
     if (_elevationDataProvider != null)
@@ -636,9 +652,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
         if (_texturizer != null)
         {
-          if (!_texturizer.isReady(rc, _layerSet))
+          final RenderState texturizerRenderState = _texturizer.getRenderState(_layerSet);
+          if (texturizerRenderState._type != RenderState_Type.RENDER_READY)
           {
-            return RenderState.busy();
+            return texturizerRenderState;
           }
         }
   
@@ -735,7 +752,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   /**
    Add a listener for notification of visible-sector changes.
 
-   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered inmediatly.
+   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered immediately.
    */
   public final void addVisibleSectorListener(VisibleSectorListener listener, TimeInterval stabilizationInterval)
   {
@@ -885,6 +902,16 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final ElevationDataProvider getElevationDataProvider()
   {
     return _elevationDataProvider;
+  }
+
+  public final void setRenderTileMeshes(boolean renderTileMeshes)
+  {
+    _renderTileMeshes = renderTileMeshes;
+  }
+
+  public final boolean getRenderTileMeshes()
+  {
+    return _renderTileMeshes;
   }
 
 }

@@ -316,6 +316,19 @@ private:
 #endif
   }
 
+  const int _target;
+
+  void createBasicValues(IFloatBuffer* texCoords,
+                         int arrayElementSize,
+                         int index,
+                         bool normalized,
+                         int stride);
+
+  GPUUniformValueVec2FloatMutable* _translation;
+  GPUUniformValueVec2FloatMutable* _scale;
+  GPUUniformValueVec2FloatMutable* _rotationCenter;
+  GPUUniformValueFloatMutable* _rotationAngle;
+
 public:
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords,
@@ -326,9 +339,44 @@ public:
                    bool blend,
                    int sFactor,
                    int dFactor,
-                   bool coordsTransformed,
-                   const Vector2D& translate,
-                   const Vector2D& scale);
+                   float translateU,
+                   float translateV,
+                   float scaleU,
+                   float scaleV,
+                   float rotationAngleInRadians,
+                   float rotationCenterU,
+                   float rotationCenterV,
+                   int target = 0);
+
+  TextureGLFeature(const IGLTextureId* texID,
+                   IFloatBuffer* texCoords,
+                   int arrayElementSize,
+                   int index,
+                   bool normalized,
+                   int stride,
+                   bool blend,
+                   int sFactor,
+                   int dFactor,
+                   int target = 0);
+
+  void setTranslation(float u, float v);
+  void setScale(float u, float v);
+  void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v);
+
+  int getTarget() const{
+    return _target;
+  }
+
+#ifdef C_CODE
+  IGLTextureId const* getTextureID() const{
+    return _texID;
+  }
+#endif
+#ifdef JAVA_CODE
+  public final IGLTextureId getTextureID() {
+    return _texID;
+  }
+#endif
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
@@ -420,8 +468,8 @@ public:
                          bool normalized,
                          int stride,
                          bool coordsTransformed,
-                         const Vector2D& translate,
-                         const Vector2D& scale);
+                         const Vector2F& translate,
+                         const Vector2F& scale);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
@@ -437,9 +485,9 @@ private:
   }
 
 public:
-  DirectionLightGLFeature(const Vector3D& dir,
-                          const Color& lightColor,
-                          float ambientLight);
+  DirectionLightGLFeature(const Vector3D& diffuseLightDirection,
+                          const Color& diffuseLightColor,
+                          const Color& ambientLightColor);
 
   void applyOnGlobalGLState(GLGlobalState* state) const{}
 

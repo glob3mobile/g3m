@@ -17,6 +17,7 @@
 #include "URL.hpp"
 #include "LayerTouchEventListener.hpp"
 #include "TimeInterval.hpp"
+#include "Renderer.hpp"
 
 class Petition;
 class Tile;
@@ -29,6 +30,7 @@ class Layer {
 protected:
   LayerCondition*                       _condition;
   std::vector<LayerTouchEventListener*> _listeners;
+  std::vector<std::string>              _errors;
 
   LayerSet* _layerSet;
 
@@ -50,11 +52,14 @@ protected:
 
   std::string _title;
 
+  const float _transparency;
+
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
         bool readExpired,
-        const LayerTilesRenderParameters* parameters) :
+        const LayerTilesRenderParameters* parameters,
+        float transparency) :
   _condition(condition),
   _name(name),
   _layerSet(NULL),
@@ -62,7 +67,8 @@ protected:
   _readExpired(readExpired),
   _enable(true),
   _parameters(parameters),
-  _title("")
+  _title(""),
+  _transparency(transparency)
   {
 
   }
@@ -97,6 +103,7 @@ public:
   virtual ~Layer();
 
   virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                         const Tile* tile) const = 0;
 
   virtual bool isAvailable(const G3MRenderContext* rc,
@@ -110,10 +117,8 @@ public:
   virtual URL getFeatureInfoURL(const Geodetic2D& position,
                                 const Sector& sector) const = 0;
 
-  virtual bool isReady() const {
-    return true;
-  }
-
+  virtual RenderState getRenderState() = 0;
+  
   virtual void initialize(const G3MContext* context) {
   }
 

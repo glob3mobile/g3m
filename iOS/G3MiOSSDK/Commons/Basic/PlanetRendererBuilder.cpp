@@ -33,7 +33,8 @@ _stabilizationMilliSeconds(NULL),
 _texturePriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
-_renderedSector(NULL)
+_renderedSector(NULL),
+_renderTileMeshes(true)
 {
 }
 
@@ -313,7 +314,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getParameters(),
                                                       getShowStatistics(),
                                                       getTexturePriority(),
-                                                      getRenderedSector());
+                                                      getRenderedSector(),
+                                                      getRenderTileMeshes());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -347,8 +349,16 @@ TilesRenderParameters* PlanetRendererBuilder::createPlanetRendererParameters() {
                                    getQuality());
 }
 
+void PlanetRendererBuilder::setRenderTileMeshes(bool renderTileMeshes) {
+  _renderTileMeshes = renderTileMeshes;
+}
+
+bool PlanetRendererBuilder::getRenderTileMeshes() {
+  return _renderTileMeshes;
+}
+
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-#warning Testing Terrain Normals
+//#warning Testing Terrain Normals
   const bool skirted = true;
   return new PlanetTileTessellator(skirted, getRenderedSector());
 }

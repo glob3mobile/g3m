@@ -32,9 +32,11 @@ private:
                    const TimeInterval&               timeToCache,
                    bool                              readExpired,
                    LayerCondition*                   condition,
-                   const LayerTilesRenderParameters* parameters);
+                   const LayerTilesRenderParameters* parameters,
+                   float transparency = (float)1.0);
 
-  const std::string getPath(const Tile* tile,
+  const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                            const Tile* tile,
                             const Sector& sector) const;
 
 protected:
@@ -52,7 +54,8 @@ public:
                                        const int           maxLevel,
                                        const TimeInterval& timeToCache,
                                        bool                readExpired = true,
-                                       LayerCondition*     condition = NULL);
+                                       LayerCondition*     condition = NULL,
+                                       float transparency = (float)1.0);
 
   static URLTemplateLayer* newWGS84(const std::string&  urlTemplate,
                                     const Sector&       sector,
@@ -61,7 +64,8 @@ public:
                                     const int           maxLevel,
                                     const TimeInterval& timeToCache,
                                     bool                readExpired = true,
-                                    LayerCondition*     condition = NULL);
+                                    LayerCondition*     condition = NULL,
+                                    float transparency = (float)1.0);
 
   const std::string description() const;
 
@@ -71,8 +75,10 @@ public:
                         const Sector& sector) const;
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
   
+  RenderState getRenderState();
 };
 
 #endif

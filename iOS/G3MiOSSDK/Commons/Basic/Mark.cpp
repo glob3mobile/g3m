@@ -20,6 +20,8 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "GLFeature.hpp"
 #include "Vector2D.hpp"
+#include "Geodetic3D.hpp"
+#include "TextureIDReference.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -168,7 +170,8 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState())
+_glState(NULL),
+_normalAtMarkPosition(NULL)
 {
 
 }
@@ -208,7 +211,8 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState())
+_glState(NULL),
+_normalAtMarkPosition(NULL)
 {
 
 }
@@ -245,7 +249,8 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState())
+_glState(NULL),
+_normalAtMarkPosition(NULL)
 {
 
 }
@@ -283,7 +288,8 @@ _autoDeleteListener(autoDeleteListener),
 _imageID( imageID ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
-_glState(new GLState())
+_glState(NULL),
+_normalAtMarkPosition(NULL)
 {
 
 }
@@ -299,9 +305,7 @@ void Mark::initialize(const G3MContext* context,
   }
 
   if (!_textureSolved) {
-    const bool hasLabel   = ( _label.length()             != 0 );
     const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
-
     if (hasIconURL) {
       IDownloader* downloader = context->getDownloader();
 
@@ -319,6 +323,7 @@ void Mark::initialize(const G3MContext* context,
                                true);
     }
     else {
+      const bool hasLabel = ( _label.length() != 0 );
       if (hasLabel) {
         ITextUtils::instance()->createLabelImage(_label,
                                                  _labelFontSize,
@@ -364,6 +369,8 @@ Mark::~Mark() {
 
   delete _position;
 
+  delete _normalAtMarkPosition;
+
   if (_surfaceElevationProvider != NULL) {
     if (!_surfaceElevationProvider->removeListener(this)) {
       ILogger::instance()->logError("Couldn't remove mark as listener of Surface Elevation Provider.");
@@ -381,7 +388,9 @@ Mark::~Mark() {
     IFactory::instance()->deleteImage(_textureImage);
   }
 
-  _glState->_release();
+  if (_glState != NULL){
+    _glState->_release();
+  }
 
   if (_textureId != NULL) {
 #ifdef JAVA_CODE
@@ -422,20 +431,23 @@ double Mark::getMinDistanceToCamera() {
 
 void Mark::createGLState(const Planet* planet) {
 
+  _glState = new GLState();
+
   _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
-                                               _textureWidth, _textureHeight),
-                        false);
+                                                _textureWidth, _textureHeight),
+                         false);
 
   if (_textureId != NULL) {
     _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
-                                               getBillboardTexCoords(),
-                                               2,
-                                               0,
-                                               false,
-                                               0,
-                                               true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha(),
-                                               false, Vector2D::zero(), Vector2D::zero()),
-                          false);
+                                                getBillboardTexCoords(),
+                                                2,
+                                                0,
+                                                false,
+                                                0,
+                                                true,
+                                                GLBlendFactor::srcAlpha(),
+                                                GLBlendFactor::oneMinusSrcAlpha()),
+                           false);
   }
 }
 
@@ -453,6 +465,7 @@ IFloatBuffer* Mark::getBillboardTexCoords() {
 
 void Mark::render(const G3MRenderContext* rc,
                   const Vector3D& cameraPosition,
+                  double cameraHeight,
                   const GLState* parentGLState,
                   const Planet* planet,
                   GL* gl) {
@@ -474,16 +487,35 @@ void Mark::render(const G3MRenderContext* rc,
   _renderedMark = false;
 
   if (renderableByDistance) {
-    const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
+    bool occludedByHorizon = false;
 
-    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > HALF_PI) {
+    if (_position->_height > cameraHeight){
+      //Computing horizon culling
+      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
+      if (dists.size() > 0){
+        const double dist = dists[0];
+        if (dist > 0.0 && dist < 1.0){
+          occludedByHorizon = true;
+        }
+      }
+
+    } else{
+      //if camera position is upper than mark we can compute horizon culling in a much simpler way
+      if (_normalAtMarkPosition == NULL){
+        _normalAtMarkPosition = new Vector3D(planet->geodeticSurfaceNormal(*markPosition));
+      }
+      occludedByHorizon = (_normalAtMarkPosition->angleBetween(markCameraVector)._radians <= HALF_PI);
+    }
+
+
+    if (!occludedByHorizon) {
 
       if (_textureId == NULL) {
         if (_textureImage != NULL) {
           _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                GLFormat::rgba(),
-                                                                _imageID,
-                                                                false);
+                                                                       GLFormat::rgba(),
+                                                                       _imageID,
+                                                                       false);
 
           rc->getFactory()->deleteImage(_textureImage);
           _textureImage = NULL;
@@ -491,9 +523,8 @@ void Mark::render(const G3MRenderContext* rc,
         }
       } else{
 
-#warning ASK JM - Is not easier to delete the state?
-        if (_glState->getNumberOfGLFeatures() == 0) {
-          createGLState(planet);    //GLState was disposed due to elevation change
+        if (_glState == NULL) {
+          createGLState(planet);    //If GLState was disposed due to elevation change
         }
 
         _glState->setParent(parentGLState); //Linking with parent
@@ -520,9 +551,12 @@ void Mark::elevationChanged(const Geodetic2D& position,
   } else{
     _currentSurfaceElevation = rawElevation * verticalExaggeration;
   }
-
+  
   delete _cartesianPosition;
   _cartesianPosition = NULL;
 
-  _glState->clearAllGLFeatures();
+  if (_glState != NULL){
+    _glState->_release();
+    _glState = NULL;
+  }
 }

@@ -29,14 +29,16 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
                    bool readExpired,
-                   const LayerTilesRenderParameters* parameters):
+                   const LayerTilesRenderParameters* parameters,
+                   float transparency):
 Layer(condition,
       mapLayer,
       timeToCache,
       readExpired,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
-      : parameters),
+      : parameters,
+      transparency),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -64,14 +66,16 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
                    bool readExpired,
-                   const LayerTilesRenderParameters* parameters):
+                   const LayerTilesRenderParameters* parameters,
+                   float transparency):
 Layer(condition,
       mapLayer,
       timeToCache,
       readExpired,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
-      : parameters),
+      : parameters,
+      transparency),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -97,6 +101,7 @@ double WMSLayer::toBBOXLatitude(const Angle& latitude) const {
 }
 
 std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -234,7 +239,8 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
                                     URL(req, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    _isTransparent);
+                                    _isTransparent,
+                                    _transparency);
   petitions.push_back(petition);
 
 	return petitions;
@@ -445,4 +451,23 @@ WMSLayer* WMSLayer::copy() const {
                       TimeInterval::fromMilliseconds(_timeToCacheMS),
                       _readExpired,
                       (_parameters == NULL) ? NULL : _parameters->copy());
+}
+
+RenderState WMSLayer::getRenderState() {
+  _errors.clear();
+  if (_mapLayer.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapLayer");
+  }
+  const std::string mapServerUrl = _mapServerURL.getPath();
+  if (mapServerUrl.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: mapServerURL");
+  }
+  if (_format.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: format");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

@@ -9,6 +9,8 @@
 #include "GLState.hpp"
 #include "GLFeature.hpp"
 
+#include <vector>
+
 GLState::~GLState() {
   delete _accumulatedFeatures;
 
@@ -18,6 +20,10 @@ GLState::~GLState() {
   if (_parentGLState != NULL) {
     _parentGLState->_release();
   }
+
+  if (_linkedProgram != NULL){
+    _linkedProgram->removeReference();
+  }
 }
 
 void GLState::hasChangedStructure() const {
@@ -26,7 +32,11 @@ void GLState::hasChangedStructure() const {
   _valuesSet = NULL;
   delete _globalState;
   _globalState = NULL;
-  _lastGPUProgramUsed = NULL;
+
+  if (_linkedProgram != NULL){
+    _linkedProgram->removeReference();
+    _linkedProgram = NULL;
+  }
 
   delete _accumulatedFeatures;
   _accumulatedFeatures = NULL;
@@ -97,30 +107,12 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 
     GLFeatureSet* accumulatedFeatures = getAccumulatedFeatures();
 
-    //    for (int i = 0; i < N_GLFEATURES_GROUPS; i++) {
-    //      GLFeatureGroupName groupName = GLFeatureGroup::getGroupName(i);
-    //      GLFeatureGroup* group = GLFeatureGroup::createGroup(groupName);
-    //
-    ////      for (int j = 0; j < accumulatedFeatures->size(); j++) {
-    ////        const GLFeature* f = accumulatedFeatures->get(j);
-    ////        if (f->getGroup() == groupName) {
-    ////          group->add(f);
-    ////        }
-    ////      }
-    ////      group->addToGPUVariableSet(_valuesSet);
-    ////      group->applyOnGlobalGLState(_globalState);
-    //
-    //      group->apply(*accumulatedFeatures, *_valuesSet, *_globalState);
-    //
-    //      delete group;
-    //    }
-
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
     const int uniformsCode   = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
 
-    _lastGPUProgramUsed = progManager.getProgram(gl, uniformsCode, attributesCode);
+    _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
   }
 
   if (_valuesSet == NULL || _globalState == NULL) {
@@ -128,13 +120,13 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
     return;
   }
 
-  if (_lastGPUProgramUsed != NULL) {
-    gl->useProgram(_lastGPUProgramUsed);
+  if (_linkedProgram != NULL) {
+    gl->useProgram(_linkedProgram);
 
-    _valuesSet->applyValuesToProgram(_lastGPUProgramUsed);
+    _valuesSet->applyValuesToProgram(_linkedProgram);
     _globalState->applyChanges(gl, *gl->getCurrentGLGlobalState());
 
-    _lastGPUProgramUsed->applyChanges(gl);
+    _linkedProgram->applyChanges(gl);
 
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
   }
@@ -168,4 +160,16 @@ GLFeature* GLState::getGLFeature(GLFeatureID id) const{
   }
 
   return NULL;
+}
+
+GLFeatureSet GLState::getGLFeatures(GLFeatureID id) const{
+  GLFeatureSet features;
+  const int size = _features.size();
+  for (int i = 0; i < size; i++) {
+    GLFeature* f = _features.get(i);
+    if (f->_id == id) {
+      features.add(f);
+    }
+  }
+  return features;
 }

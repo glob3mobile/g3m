@@ -19,7 +19,8 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  const TimeInterval& timeToCache,
                                  bool readExpired,
                                  int initialLevel,
-                                 LayerCondition* condition) :
+                                 LayerCondition* condition,
+                                 float transparency) :
 Layer(condition,
       "GoogleMaps",
       timeToCache,
@@ -31,7 +32,8 @@ Layer(condition,
                                      20,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                     true) ),
+                                     true),
+      transparency),
 _key(key),
 _initialLevel(initialLevel)
 {
@@ -47,6 +49,7 @@ URL GoogleMapsLayer::getFeatureInfoURL(const Geodetic2D& position,
 
 
 std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -102,7 +105,8 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    true) );
+                                    true,
+                                    _transparency) );
   
   return petitions;
 }
@@ -131,4 +135,16 @@ bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {
   }
 
   return true;
+}
+
+RenderState GoogleMapsLayer::getRenderState() {
+  _errors.clear();
+  if (_key.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: key");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

@@ -20,7 +20,8 @@ HereLayer::HereLayer(const std::string& appId,
                      const TimeInterval& timeToCache,
                      bool readExpired,
                      int initialLevel,
-                     LayerCondition* condition) :
+                     LayerCondition* condition,
+                     float transparency) :
 Layer(condition,
       "here",
       timeToCache,
@@ -32,7 +33,8 @@ Layer(condition,
                                      20,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                     true)),
+                                     true),
+      transparency),
 _appId(appId),
 _appCode(appCode),
 _initialLevel(initialLevel)
@@ -46,6 +48,7 @@ URL HereLayer::getFeatureInfoURL(const Geodetic2D& position,
 }
 
 std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                          const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -144,7 +147,8 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    true) );
+                                    true,
+                                    _transparency) );
 
   return petitions;
 }
@@ -178,4 +182,19 @@ bool HereLayer::rawIsEquals(const Layer* that) const {
   }
 
   return true;
+}
+
+RenderState HereLayer::getRenderState() {
+  _errors.clear();
+  if (_appId.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: appId");
+  }
+  if (_appCode.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: appCode");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

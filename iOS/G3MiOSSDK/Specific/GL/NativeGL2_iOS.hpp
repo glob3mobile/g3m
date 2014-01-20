@@ -209,6 +209,10 @@ public:
     delete [] data;
   }
 
+  void setActiveTexture(int i) const{
+    glActiveTexture(GL_TEXTURE0 + i);
+  }
+
   void generateMipmap(int target) const {
     glGenerateMipmap(target);
   }
@@ -359,9 +363,12 @@ public:
     return GL_TEXTURE_WRAP_T;
   }
 
-  int TextureParameterValue_Linear() const {
-    return GL_LINEAR;
-  }
+  int TextureParameterValue_Nearest()              const { return GL_NEAREST;                }
+  int TextureParameterValue_Linear()               const { return GL_LINEAR;                 }
+  int TextureParameterValue_NearestMipmapNearest() const { return GL_NEAREST_MIPMAP_NEAREST; }
+  int TextureParameterValue_NearestMipmapLinear()  const { return GL_NEAREST_MIPMAP_LINEAR;  }
+  int TextureParameterValue_LinearMipmapNearest()  const { return GL_LINEAR_MIPMAP_NEAREST;  }
+  int TextureParameterValue_LinearMipmapLinear()   const { return GL_LINEAR_MIPMAP_LINEAR;   }
 
   int TextureParameterValue_ClampToEdge() const {
     return GL_CLAMP_TO_EDGE;
@@ -400,12 +407,16 @@ public:
   }
   
   bool deleteProgram(int program) const {
+    //ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
-    return true;
-//    int NOT_WORKING_APPARENTLY;
-//    int ps;
-//    glGetProgramiv(program, GL_DELETE_STATUS, &ps);
-//    return (ps == GL_TRUE);
+
+    if (glIsProgram(program) == GL_FALSE){
+      return true;
+    } else{
+      int markedToBeDeleted;
+      glGetProgramiv(program, GL_DELETE_STATUS, &markedToBeDeleted);
+      return (markedToBeDeleted == GL_TRUE);
+    }
   }
   
   void attachShader(int program, int shader) const {
@@ -547,13 +558,16 @@ public:
         return new GPUUniformVec3Float(name, new GLUniformID_iOS(id));
       case GL_BOOL:
         return new GPUUniformBool(name, new GLUniformID_iOS(id));
-//      case GL_SAMPLER_2D:
-//        int NOT_IMPLEMENTED_YET;
-//        return NULL;
+      case GL_SAMPLER_2D:
+        return new GPUUniformSampler2D(name, new GLUniformID_iOS(id));
       default:
         return NULL;
         break;
     }
+  }
+
+  void depthMask(bool v) const{
+    glDepthMask(v);
   }
   
 };

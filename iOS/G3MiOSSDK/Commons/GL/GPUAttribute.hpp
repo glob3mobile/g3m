@@ -93,7 +93,9 @@ public:
   const GPUAttributeKey _key;
 
   virtual ~GPUAttribute() {
-    _value->_release();
+    if (_value != NULL){
+      _value->_release();
+    }
 
 #ifdef JAVA_CODE
     super.dispose();

@@ -57,6 +57,7 @@
                 mainRenderer: (Renderer*) mainRenderer
                 busyRenderer: (Renderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
+                 hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor
                       logFPS: (bool) logFPS
      logDownloaderStatistics: (bool) logDownloaderStatistics
@@ -69,7 +70,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
 
-  SceneLighting* sceneLighting = new CameraFocusSceneLighting();
+  SceneLighting* sceneLighting = new CameraFocusSceneLighting(Color::fromRGBA((float)0.3, (float)0.3, (float)0.3, 1.0),
+                                                              Color::yellow());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
   
@@ -84,6 +86,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   mainRenderer,
                                   busyRenderer,
                                   errorRenderer,
+                                  hudRenderer,
                                   backgroundColor,
                                   logFPS,
                                   logDownloaderStatistics,

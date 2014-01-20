@@ -50,10 +50,10 @@ void Camera::copyFrom(const Camera &that) {
 
   _frustumData = FrustumData(that._frustumData);
 
-//  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
-//  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
-//  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
-  
+  //  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
+  //  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
+  //  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+
   _projectionMatrix.copyValue(that._projectionMatrix);
   _modelMatrix.copyValue(that._modelMatrix);
   _modelViewMatrix.copyValue(that._modelViewMatrix);
@@ -74,10 +74,13 @@ void Camera::copyFrom(const Camera &that) {
 
   delete _halfFrustumInModelCoordinates;
   _halfFrustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
-  
+
   delete _geodeticPosition;
   _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
   _angle2Horizon = that._angle2Horizon;
+
+  _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
+  _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
 }
 
 Camera::Camera(int width, int height) :
@@ -101,7 +104,9 @@ _halfFrustum(NULL),
 _camEffectTarget(new CameraEffectTarget()),
 _geodeticPosition(NULL),
 _angle2Horizon(-99),
-_normalizedPosition(0, 0, 0)
+_normalizedPosition(0, 0, 0),
+_tanHalfVerticalFieldOfView(NAND),
+_tanHalfHorizontalFieldOfView(NAND)
 {
   resizeViewport(width, height);
   _dirtyFlags.setAll(true);
@@ -141,7 +146,7 @@ void Camera::resizeViewport(int width, int height) {
   _height = height;
 
   _dirtyFlags._projectionMatrixDirty = true;
-  
+
   _dirtyFlags.setAll(true);
 
   //cleanCachedValues();
@@ -157,11 +162,11 @@ void Camera::print() {
 const Angle Camera::getHeading(const Vector3D& normal) const {
   const Vector3D north2D  = _planet->getNorth().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
-  
-//  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
-//         normal._x, normal._y, normal._z,
-//         north2D._x, north2D._y,
-//         up2D._x, up2D._y);
+
+  //  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
+  //         normal._x, normal._y, normal._z,
+  //         north2D._x, north2D._y,
+  //         up2D._x, up2D._y);
 
   return up2D.signedAngleBetween(north2D, normal);
 }
@@ -342,7 +347,7 @@ Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
   if (point1.isNan()) {
     return Angle::nan();
   }
-  
+
   return point0.angleBetween(point1);
 }
 
@@ -362,7 +367,7 @@ void Camera::setPointOfView(const Geodetic3D& center,
   setCartesianPosition(position.asMutableVector3D());
   setCenter(cartesianCenter.asMutableVector3D());
   setUp(finalUp.asMutableVector3D());
-//  _dirtyFlags.setAll(true);
+  //  _dirtyFlags.setAll(true);
 }
 
 FrustumData Camera::calculateFrustumData() const {
@@ -377,26 +382,46 @@ FrustumData Camera::calculateFrustumData() const {
     zNear = zFar / goalRatio;
   }
 
-//  int __TODO_remove_debug_code;
-//  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
-//         height,
-//         zNear,
-//         zFar,
-//         ratio);
+  //  int __TODO_remove_debug_code;
+  //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+  //         height,
+  //         zNear,
+  //         zFar,
+  //         ratio);
 
   // compute rest of frustum numbers
-  const double _tanHalfFieldOfView = 0.3; // aprox tan(34 degrees / 2)
 
-  const double ratioScreen = (double) _height / _width;
-  const double right = _tanHalfFieldOfView / ratioScreen * zNear;
+  double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
+  double tanHalfVFOV = _tanHalfVerticalFieldOfView;
+
+  if (ISNAN(tanHalfHFOV) || ISNAN(tanHalfVFOV)) {
+    const double ratioScreen = (double) _height / _width;
+
+    if (ISNAN(tanHalfHFOV) && ISNAN(tanHalfVFOV)) {
+      tanHalfVFOV = 0.3;
+      tanHalfHFOV = tanHalfVFOV / ratioScreen; //Default behaviour _tanHalfFieldOfView = 0.3 // aprox tan(34 degrees / 2)
+    }
+    else {
+      if (ISNAN(tanHalfHFOV)) {
+        tanHalfHFOV = tanHalfVFOV / ratioScreen;
+      }
+      else {
+        if ISNAN(tanHalfVFOV) {
+          tanHalfVFOV = tanHalfHFOV * ratioScreen;
+        }
+      }
+    }
+  }
+
+  const double right = tanHalfHFOV * zNear;
   const double left = -right;
-  const double top = _tanHalfFieldOfView * zNear;
+  const double top = tanHalfVFOV * zNear;
   const double bottom = -top;
-
 
   return FrustumData(left, right,
                      bottom, top,
                      zNear, zFar);
+
 }
 
 double Camera::getProjectedSphereArea(const Sphere& sphere) const {
@@ -415,4 +440,36 @@ bool Camera::isPositionWithin(const Sector& sector, double height) const{
 bool Camera::isCenterOfViewWithin(const Sector& sector, double height) const{
   const Geodetic3D position = getGeodeticCenterOfView();
   return sector.contains(position._latitude, position._longitude) && height >= position._height;
+}
+
+void Camera::setFOV(const Angle& vertical, const Angle& horizontal) {
+
+  Angle halfHFOV = horizontal.div(2.0);
+  Angle halfVFOV = vertical.div(2.0);
+  const double newH = halfHFOV.tangent();
+  const double newV = halfVFOV.tangent();
+  if (newH != _tanHalfHorizontalFieldOfView || newV != _tanHalfVerticalFieldOfView) {
+    _tanHalfHorizontalFieldOfView = newH;
+    _tanHalfVerticalFieldOfView = newV;
+
+    _dirtyFlags._frustumDataDirty           = true;
+    _dirtyFlags._projectionMatrixDirty      = true;
+    _dirtyFlags._modelViewMatrixDirty       = true;
+    _dirtyFlags._frustumDirty               = true;
+    _dirtyFlags._frustumMCDirty             = true;
+    _dirtyFlags._halfFrustumDirty           = true;
+    _dirtyFlags._halfFrustumMCDirty         = true;
+  }
+}
+
+void Camera::setRoll(const Angle& angle) {
+  const Angle delta = angle.sub(Angle::fromRadians(_rollInRadians));
+  if (delta._radians > 0) {
+    _rollInRadians = angle._radians;
+    rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
+  }
+}
+
+Angle Camera::getRoll() const{
+  return Angle::fromRadians(_rollInRadians);
 }

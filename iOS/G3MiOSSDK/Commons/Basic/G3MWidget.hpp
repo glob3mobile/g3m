@@ -108,6 +108,7 @@ public:
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
                            ErrorRenderer*                   errorRenderer,
+                           Renderer*                        hudRenderer,
                            const Color&                     backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
@@ -134,6 +135,10 @@ public:
 
   GL* getGL() const {
     return _gl;
+  }
+
+  EffectsScheduler* getEffectsScheduler() const {
+    return _effectsScheduler;
   }
 
   const Camera* getCurrentCamera() const {
@@ -169,7 +174,9 @@ public:
   void setCameraHeading(const Angle& angle);
   
   void setCameraPitch(const Angle& angle);
-  
+
+  void setCameraRoll(const Angle& angle);
+
   void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const Angle& heading=Angle::zero(),
                                  const Angle& pitch=Angle::zero());
@@ -200,6 +207,10 @@ public:
   CameraRenderer* getCameraRenderer() const {
     return _cameraRenderer;
   }
+
+  Renderer* getHUDRenderer() const {
+    return _hudRenderer;
+  }
   
   const G3MContext* getG3MContext() const {
     return _context;
@@ -229,8 +240,8 @@ private:
   Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
   ErrorRenderer*      _errorRenderer;
-//  bool                _mainRendererReady;
-  RenderState*        _mainRendererState;
+  Renderer*           _hudRenderer;
+  RenderState*        _rendererState;
   Renderer*           _selectedRenderer;
   
   EffectsScheduler*   _effectsScheduler;
@@ -249,6 +260,7 @@ private:
   const bool       _logFPS;
   const bool       _logDownloaderStatistics;
   std::string      _lastCacheStatistics;
+  const int        _nFramesBeetweenProgramsCleanUp;
   
   ITimer* _renderStatisticsTimer;
   
@@ -295,6 +307,7 @@ private:
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
             ErrorRenderer*                   errorRenderer,
+            Renderer*                        hudRenderer,
             const Color&                     backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,
@@ -307,6 +320,8 @@ private:
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
+
+  RenderState calculateRendererState();
   
 };
 

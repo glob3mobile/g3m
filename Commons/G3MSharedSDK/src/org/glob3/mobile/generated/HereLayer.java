@@ -53,28 +53,32 @@ public class HereLayer extends Layer
   }
 
 
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  {
+     this(appId, appCode, timeToCache, readExpired, initialLevel, condition, (float)1.0);
+  }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, null);
+     this(appId, appCode, timeToCache, readExpired, initialLevel, null, (float)1.0);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired)
   {
-     this(appId, appCode, timeToCache, readExpired, 2, null);
+     this(appId, appCode, timeToCache, readExpired, 2, null, (float)1.0);
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, true, 2, null);
+     this(appId, appCode, timeToCache, true, 2, null, (float)1.0);
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
   {
-     super(condition, "here", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+     super(condition, "here", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
      _appId = appId;
      _appCode = appCode;
      _initialLevel = initialLevel;
   
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -170,7 +174,7 @@ public class HereLayer extends Layer
     if (isb != null)
        isb.dispose();
   
-    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
+    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true, _transparency));
   
     return petitions;
   }
@@ -190,4 +194,22 @@ public class HereLayer extends Layer
     return new HereLayer(_appId, _appCode, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_appId.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: appId");
+    }
+    if (_appCode.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: appCode");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
 }

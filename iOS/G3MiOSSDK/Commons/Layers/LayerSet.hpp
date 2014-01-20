@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "Layer.hpp"
+#include "Renderer.hpp"
 
 class Petition;
 class Vector2I;
@@ -25,7 +26,7 @@ private:
   ChangedListener* _listener;
   
 //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
-
+  std::vector<std::string> _errors;
   
   void layersChanged() const;
 
@@ -52,13 +53,14 @@ public:
   void addLayer(Layer* layer);
   
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
   
   bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
   
-  bool isReady() const;
+  RenderState getRenderState();
   
   void initialize(const G3MContext* context)const;
   

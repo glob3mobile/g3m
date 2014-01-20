@@ -141,6 +141,8 @@ private:
   double _currentSurfaceElevation;
   AltitudeMode _altitudeMode;
 
+  Vector3D* _normalAtMarkPosition;
+
 public:
   /**
    * Creates a marker with icon and label
@@ -258,6 +260,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition,
+              double cameraHeight,
               const GLState* parentGLState,
               const Planet* planet,
               GL* gl);

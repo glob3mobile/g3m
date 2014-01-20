@@ -29,13 +29,17 @@ public abstract class TMSLayer extends Layer
   private final boolean _isTransparent;
 
 
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
-  {
-     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, null);
-  }
   public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector) : parameters);
+     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, parameters, (float)1.0);
+  }
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  {
+     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, null, (float)1.0);
+  }
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  {
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector) : parameters, transparency);
      _mapServerURL = mapServerURL;
      _mapLayer = mapLayer;
      _sector = new Sector(sector);
@@ -43,7 +47,7 @@ public abstract class TMSLayer extends Layer
      _isTransparent = isTransparent;
   }
 
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile)
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
   
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
@@ -68,7 +72,7 @@ public abstract class TMSLayer extends Layer
   
     ILogger.instance().logInfo(isb.getString());
   
-    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), getTimeToCache(), getReadExpired(), _isTransparent);
+    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), getTimeToCache(), getReadExpired(), _isTransparent, _transparency);
     petitions.add(petition);
   
      return petitions;
@@ -86,4 +90,27 @@ public abstract class TMSLayer extends Layer
     return "[TMSLayer]";
   }
 
+  public final RenderState getRenderState()
+  {
+    _errors.clear();
+    if (_mapLayer.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: mapLayer");
+    }
+    final String mapServerUrl = _mapServerURL.getPath();
+    if (mapServerUrl.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: mapServerURL");
+    }
+    if (_format.compareTo("") == 0)
+    {
+      _errors.add("Missing layer parameter: format");
+    }
+  
+    if (_errors.size() > 0)
+    {
+      return RenderState.error(_errors);
+    }
+    return RenderState.ready();
+  }
 }

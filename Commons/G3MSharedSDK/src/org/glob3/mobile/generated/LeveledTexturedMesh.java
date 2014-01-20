@@ -174,4 +174,9 @@ public class LeveledTexturedMesh extends Mesh
     }
   }
 
+  public final void showNormals(boolean v)
+  {
+    _mesh.showNormals(v);
+  }
+
 }

@@ -50,6 +50,7 @@ private:
   PlanetRendererBuilder*            _planetRendererBuilder;
   Renderer*                         _busyRenderer;
   ErrorRenderer*                    _errorRenderer;
+  Renderer*                         _hudRenderer;
   std::vector<Renderer*>*           _renderers;
   GInitializationTask*              _initializationTask;
   bool                              _autoDeleteInitializationTask;
@@ -69,6 +70,7 @@ private:
   CameraRenderer*                   getCameraRenderer();
   Renderer*                         getBusyRenderer();
   ErrorRenderer*                    getErrorRenderer();
+  Renderer*                         getHUDRenderer() const;
   Color*                            getBackgroundColor();
   std::vector<Renderer*>*           getRenderers();
   bool                              getLogFPS();
@@ -130,6 +132,8 @@ public:
   void setBusyRenderer(Renderer* busyRenderer);
 
   void setErrorRenderer(ErrorRenderer* errorRenderer);
+
+  void setHUDRenderer(Renderer* hudRenderer);
 
   void addRenderer(Renderer* renderer);
 

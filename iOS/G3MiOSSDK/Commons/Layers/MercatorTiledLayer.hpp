@@ -44,12 +44,14 @@ public:
                      const Sector&                   sector,
                      int                             initialLevel,
                      int                             maxLevel,
-                     LayerCondition*                 condition);
+                     LayerCondition*                 condition,
+                     float transparency = (float)1.0);
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
 
   virtual const std::string description() const;
@@ -57,6 +59,7 @@ public:
 
   virtual MercatorTiledLayer* copy() const;
 
+  virtual RenderState getRenderState();
 };
 
 #endif

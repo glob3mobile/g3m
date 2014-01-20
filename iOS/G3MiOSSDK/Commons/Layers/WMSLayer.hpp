@@ -71,7 +71,8 @@ public:
            LayerCondition* condition,
            const TimeInterval& timeToCache,
            bool readExpired,
-           const LayerTilesRenderParameters* parameters = NULL);
+           const LayerTilesRenderParameters* parameters = NULL,
+           float transparency = (float)1.0);
 
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
@@ -84,10 +85,12 @@ public:
            LayerCondition* condition,
            const TimeInterval& timeToCache,
            bool readExpired,
-           const LayerTilesRenderParameters* parameters = NULL);
+           const LayerTilesRenderParameters* parameters = NULL,
+           float transparency = (float)1.0);
 
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
 
   URL getFeatureInfoURL(const Geodetic2D& g,
@@ -102,7 +105,8 @@ public:
   const std::string description() const;
 
   WMSLayer* copy() const;
-
+  
+  RenderState getRenderState();
 };
 
 #endif

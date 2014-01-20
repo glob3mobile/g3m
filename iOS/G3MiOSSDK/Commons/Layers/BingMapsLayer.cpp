@@ -28,12 +28,14 @@ BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              const TimeInterval& timeToCache,
                              bool readExpired,
                              int initialLevel,
-                             LayerCondition* condition) :
+                             LayerCondition* condition,
+                             float transparency) :
 Layer(condition,
       "BingMaps",
       timeToCache,
       readExpired,
-      NULL),
+      NULL,
+      transparency),
 _imagerySet(imagerySet),
 _key(key),
 _initialLevel(initialLevel),
@@ -78,10 +80,6 @@ public:
 
 void BingMapsLayer::onDownloadErrorMetadata() {
   ILogger::instance()->logError("BingMapsLayer: Error while downloading metadata.");
-}
-
-bool BingMapsLayer::isReady() const {
-  return _isInitialized;
 }
 
 void BingMapsLayer::onDowloadMetadata(IByteBuffer* buffer) {
@@ -248,6 +246,7 @@ const std::string BingMapsLayer::getQuadkey(const int zoom,
 }
 
 std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                             const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                              const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -277,7 +276,8 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    true) );
+                                    true,
+                                    _transparency) );
   
   return petitions;
 }
@@ -311,4 +311,22 @@ BingMapsLayer* BingMapsLayer::copy() const {
                            _readExpired,
                            _initialLevel,
                            (_condition == NULL) ? NULL : _condition->copy());
+}
+
+RenderState BingMapsLayer::getRenderState() {
+  _errors.clear();
+  if (_imagerySet.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: imagerySet");
+  }
+  if (_key.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: key");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  if (!_isInitialized) {
+    return RenderState::busy();
+  }
+  return RenderState::ready();
 }

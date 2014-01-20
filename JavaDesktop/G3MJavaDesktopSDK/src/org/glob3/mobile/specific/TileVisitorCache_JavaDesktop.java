@@ -27,7 +27,7 @@ public class TileVisitorCache_JavaDesktop
       for (int i = 0; i < layers.size(); i++) {
          final Layer layer = layers.get(i);
          //TODO: OJO WITH THIS NULL
-         final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, tile);
+         final java.util.ArrayList<Petition> pet = layer.createTileMapPetitions(null, null, tile);
 
          // Storing petitions
          for (int j = 0; j < pet.size(); j++) {

@@ -21,6 +21,7 @@
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "Color.hpp"
+#include "SimpleTextureMapping.hpp"
 
 const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
   if (_textureImage == NULL) {
@@ -28,9 +29,9 @@ const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
   }
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                       GLFormat::rgba(),
-                                                                       _textureURL.getPath(),
-                                                                       false);
+                                                                                    GLFormat::rgba(),
+                                                                                    _textureURL.getPath(),
+                                                                                    false);
 
   rc->getFactory()->deleteImage(_textureImage);
   _textureImage = NULL;
@@ -167,6 +168,6 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
                                                     texCoords.create(),
                                                     true,
                                                     true);
-
+  
   return new TexturedMesh(im, true, texMap, true, true);
 }

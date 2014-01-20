@@ -34,9 +34,11 @@ public:
             const TimeInterval& timeToCache,
             bool readExpired = true,
             int initialLevel = 2,
-            LayerCondition* condition = NULL);
+            LayerCondition* condition = NULL,
+            float transparency = (float)1.0);
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                 const Tile* tile) const;
 
   URL getFeatureInfoURL(const Geodetic2D& position,
@@ -46,6 +48,7 @@ public:
 
   HereLayer* copy() const;
 
+  RenderState getRenderState();
 };
 
 #endif

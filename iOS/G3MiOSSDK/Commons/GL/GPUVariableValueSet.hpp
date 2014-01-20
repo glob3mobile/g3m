@@ -76,6 +76,26 @@ public:
     }
   }
 
+  void removeUniformValue(GPUUniformKey key) {
+#ifdef C_CODE
+    const int index = key;
+#endif
+#ifdef JAVA_CODE
+    final int index = key.getValue();
+#endif
+
+    if (_uniformValues[index] != NULL){
+      _uniformValues[index]->_release();
+      _uniformValues[index] = NULL;
+    }
+
+    for (int i = 0; i < 32; i++) {
+      if (_uniformValues[i] != NULL){
+        _highestUniformKey = i;
+      }
+    }
+  }
+
   void addAttributeValue(GPUAttributeKey key, GPUAttributeValue* v, bool mustRetain) {
 #ifdef C_CODE
     const int index = key;

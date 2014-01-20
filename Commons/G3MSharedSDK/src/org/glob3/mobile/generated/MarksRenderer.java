@@ -217,7 +217,7 @@ public class MarksRenderer extends LeafRenderer
       Mark mark = _marks.get(i);
       if (mark.isReady())
       {
-        mark.render(rc, cameraPosition, _glState, planet, gl);
+        mark.render(rc, cameraPosition, camera.getHeight(), _glState, planet, gl);
       }
     }
   }

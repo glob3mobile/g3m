@@ -88,11 +88,13 @@ public class Mark implements SurfaceElevationListener
   private void createGLState(Planet planet)
   {
   
+    _glState = new GLState();
+  
     _glState.addGLFeature(new BillboardGLFeature(getCartesianPosition(planet), _textureWidth, _textureHeight), false);
   
     if (_textureId != null)
     {
-      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), false, Vector2D.zero(), Vector2D.zero()), false);
+      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
     }
   }
 
@@ -113,6 +115,8 @@ public class Mark implements SurfaceElevationListener
   private SurfaceElevationProvider _surfaceElevationProvider;
   private double _currentSurfaceElevation;
   private AltitudeMode _altitudeMode;
+
+  private Vector3D _normalAtMarkPosition;
 
   /**
    * Creates a marker with icon and label
@@ -183,7 +187,8 @@ public class Mark implements SurfaceElevationListener
      _imageID = iconURL.getPath() + "_" + label;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
-     _glState = new GLState();
+     _glState = null;
+     _normalAtMarkPosition = null;
   
   }
 
@@ -248,7 +253,8 @@ public class Mark implements SurfaceElevationListener
      _imageID = "_" + label;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
-     _glState = new GLState();
+     _glState = null;
+     _normalAtMarkPosition = null;
   
   }
 
@@ -301,7 +307,8 @@ public class Mark implements SurfaceElevationListener
      _imageID = iconURL.getPath() + "_";
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
-     _glState = new GLState();
+     _glState = null;
+     _normalAtMarkPosition = null;
   
   }
 
@@ -354,7 +361,8 @@ public class Mark implements SurfaceElevationListener
      _imageID = imageID;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
-     _glState = new GLState();
+     _glState = null;
+     _normalAtMarkPosition = null;
   
   }
 
@@ -363,6 +371,9 @@ public class Mark implements SurfaceElevationListener
   
     if (_position != null)
        _position.dispose();
+  
+    if (_normalAtMarkPosition != null)
+       _normalAtMarkPosition.dispose();
   
     if (_surfaceElevationProvider != null)
     {
@@ -389,7 +400,10 @@ public class Mark implements SurfaceElevationListener
       IFactory.instance().deleteImage(_textureImage);
     }
   
-    _glState._release();
+    if (_glState != null)
+    {
+      _glState._release();
+    }
   
     if (_textureId != null)
     {
@@ -419,9 +433,7 @@ public class Mark implements SurfaceElevationListener
   
     if (!_textureSolved)
     {
-      final boolean hasLabel = (_label.length() != 0);
       final boolean hasIconURL = (_iconURL.getPath().length() != 0);
-  
       if (hasIconURL)
       {
         IDownloader downloader = context.getDownloader();
@@ -430,6 +442,7 @@ public class Mark implements SurfaceElevationListener
       }
       else
       {
+        final boolean hasLabel = (_label.length() != 0);
         if (hasLabel)
         {
           ITextUtils.instance().createLabelImage(_label, _labelFontSize, _labelFontColor, _labelShadowColor, new MarkLabelImageListener(null, this), true);
@@ -543,7 +556,7 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, GLState parentGLState, Planet planet, GL gl)
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl)
   {
   
     final Vector3D markPosition = getCartesianPosition(planet);
@@ -566,9 +579,34 @@ public class Mark implements SurfaceElevationListener
   
     if (renderableByDistance)
     {
-      final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
+      boolean occludedByHorizon = false;
   
-      if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > DefineConstants.HALF_PI)
+      if (_position._height > cameraHeight)
+      {
+        //Computing horizon culling
+        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition, markCameraVector);
+        if (dists.size() > 0)
+        {
+          final double dist = dists.get(0);
+          if (dist > 0.0 && dist < 1.0)
+          {
+            occludedByHorizon = true;
+          }
+        }
+  
+      }
+      else
+      {
+        //if camera position is upper than mark we can compute horizon culling in a much simpler way
+        if (_normalAtMarkPosition == null)
+        {
+          _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
+        }
+        occludedByHorizon = (_normalAtMarkPosition.angleBetween(markCameraVector)._radians <= DefineConstants.HALF_PI);
+      }
+  
+  
+      if (!occludedByHorizon)
       {
   
         if (_textureId == null)
@@ -585,11 +623,9 @@ public class Mark implements SurfaceElevationListener
         else
         {
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ASK JM - Is ! easier to delete the state?
-          if (_glState.getNumberOfGLFeatures() == 0)
+          if (_glState == null)
           {
-            createGLState(planet); //GLState was disposed due to elevation change
+            createGLState(planet); //If GLState was disposed due to elevation change
           }
   
           _glState.setParent(parentGLState); //Linking with parent
@@ -619,7 +655,11 @@ public class Mark implements SurfaceElevationListener
        _cartesianPosition.dispose();
     _cartesianPosition = null;
   
-    _glState.clearAllGLFeatures();
+    if (_glState != null)
+    {
+      _glState._release();
+      _glState = null;
+    }
   }
 
   public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration

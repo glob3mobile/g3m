@@ -57,17 +57,7 @@ private:
   private GPUUniformValue _value;
 #endif
 
-protected:
-  virtual ~GPUUniform() {
-    delete _id;
-    if (_value != NULL) {
-      _value->_release();
-    }
 
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-  }
 
 public:
   const IGLUniformID* _id;
@@ -85,6 +75,17 @@ public:
   _type(type),
   _key(getUniformKey(name))
   {
+  }
+
+  virtual ~GPUUniform() {
+    delete _id;
+    if (_value != NULL) {
+      _value->_release();
+    }
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
 //  const std::string getName() const { return _name; }
@@ -163,20 +164,20 @@ public:
 
 
 class GPUUniformBool: public GPUUniform {
-private:
+
+public:
+  GPUUniformBool(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glBool()) {}
+
   ~GPUUniformBool() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
-
-public:
-  GPUUniformBool(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glBool()) {}
 };
 
 
 class GPUUniformValueVec2Float:public GPUUniformValue {
-private:
+protected:
   ~GPUUniformValueVec2Float() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -184,7 +185,7 @@ private:
   }
 
 public:
-  const float _x, _y;
+  float _x, _y;
 
   GPUUniformValueVec2Float(float x, float y):GPUUniformValue(GLType::glVec2Float()), _x(x),_y(y) {}
 
@@ -208,17 +209,37 @@ public:
   }
 };
 
-
-class GPUUniformVec2Float: public GPUUniform {
+class GPUUniformValueVec2FloatMutable : public GPUUniformValueVec2Float {
 private:
-  ~GPUUniformVec2Float() {
+  ~GPUUniformValueVec2FloatMutable() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
 public:
+
+  GPUUniformValueVec2FloatMutable(float x, float y):
+  GPUUniformValueVec2Float(x,y) {}
+
+  void changeValue(float x, float y) {
+    _x = x;
+    _y = y;
+  }
+};
+
+
+class GPUUniformVec2Float: public GPUUniform {
+
+public:
   GPUUniformVec2Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec2Float()) {}
+
+  ~GPUUniformVec2Float() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 };
 
 
@@ -233,6 +254,14 @@ protected:
   }
 
 public:
+
+  GPUUniformValueVec3Float(const Color& color) :
+  GPUUniformValue(GLType::glVec3Float()),
+  _x(color._red),
+  _y(color._green),
+  _z(color._blue)
+  {
+  }
 
   GPUUniformValueVec3Float(float x, float y, float z):
   GPUUniformValue(GLType::glVec3Float()),_x(x),_y(y), _z(z) {}
@@ -280,15 +309,14 @@ public:
 };
 
 class GPUUniformVec3Float: public GPUUniform {
-private:
+public:
+  GPUUniformVec3Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec3Float()) {}
+
   virtual ~GPUUniformVec3Float() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
-
-public:
-  GPUUniformVec3Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec3Float()) {}
 };
 ////////////////////////////////////////////////////////////
 
@@ -341,15 +369,14 @@ public:
 
 
 class GPUUniformVec4Float: public GPUUniform {
-private:
+public:
+  GPUUniformVec4Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec4Float()) {}
+
   virtual ~GPUUniformVec4Float() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
-
-public:
-  GPUUniformVec4Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glVec4Float()) {}
 };
 
 /////////////////////
@@ -441,20 +468,19 @@ public:
 
 
 class GPUUniformMatrix4Float: public GPUUniform {
-private:
+public:
+  GPUUniformMatrix4Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glMatrix4Float()) {}
+
   ~GPUUniformMatrix4Float() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
-
-public:
-  GPUUniformMatrix4Float(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glMatrix4Float()) {}
 };
 
 
 class GPUUniformValueFloat : public GPUUniformValue {
-private:
+protected:
   ~GPUUniformValueFloat() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -462,7 +488,7 @@ private:
   }
 
 public:
-  const float _value;
+  float _value;
 
   GPUUniformValueFloat(float d):GPUUniformValue(GLType::glFloat()),_value(d) {}
 
@@ -484,17 +510,77 @@ public:
   }
 };
 
-
-class GPUUniformFloat: public GPUUniform {
+class GPUUniformValueFloatMutable : public GPUUniformValueFloat {
 private:
-  ~GPUUniformFloat() {
+  ~GPUUniformValueFloatMutable() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
 public:
+
+  GPUUniformValueFloatMutable(float x):
+  GPUUniformValueFloat(x) {}
+
+  void changeValue(float x) {
+    _value = x;
+  }
+};
+
+
+class GPUUniformFloat: public GPUUniform {
+public:
   GPUUniformFloat(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glFloat()) {}
+
+  ~GPUUniformFloat() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+};
+
+class GPUUniformSampler2D: public GPUUniform {
+public:
+  GPUUniformSampler2D(const std::string&name, IGLUniformID* id):GPUUniform(name,id, GLType::glInt()) {}
+
+  ~GPUUniformSampler2D() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+};
+
+class GPUUniformValueInt : public GPUUniformValue {
+private:
+  ~GPUUniformValueInt() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  const int _value;
+
+  GPUUniformValueInt(int b):GPUUniformValue(GLType::glInt()),_value(b) {}
+
+  void setUniform(GL* gl, const IGLUniformID* id) const{
+    gl->uniform1i(id, _value);
+  }
+  bool isEquals(const GPUUniformValue* v) const{
+    return _value == ((GPUUniformValueInt*)v)->_value;
+  }
+
+  std::string description() const{
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("Uniform Value Integer: ");
+    isb->addInt(_value);
+    std::string s = isb->getString();
+    delete isb;
+    return s;
+  }
 };
 
 #endif

@@ -23,12 +23,14 @@ URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate
                                    const TimeInterval&               timeToCache,
                                    bool                              readExpired,
                                    LayerCondition*                   condition,
-                                   const LayerTilesRenderParameters* parameters) :
+                                   const LayerTilesRenderParameters* parameters,
+                                   float transparency) :
 Layer(condition,
       "URLTemplate",
       timeToCache,
       readExpired,
-      parameters),
+      parameters,
+      transparency),
 _urlTemplate(urlTemplate),
 _sector(sector),
 _isTransparent(isTransparent),
@@ -46,7 +48,8 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                                                 const int           maxLevel,
                                                 const TimeInterval& timeToCache,
                                                 bool                readExpired,
-                                                LayerCondition*     condition) {
+                                                LayerCondition*     condition,
+                                                float transparency) {
   return new URLTemplateLayer(urlTemplate,
                               sector,
                               isTransparent,
@@ -54,7 +57,8 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                               readExpired,
                               (condition == NULL) ? new LevelTileCondition(firstLevel, maxLevel) : condition,
                               LayerTilesRenderParameters::createDefaultMercator(2,
-                                                                                maxLevel));
+                                                                                maxLevel),
+                              transparency);
 }
 
 URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
@@ -64,14 +68,16 @@ URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
                                              const int           maxLevel,
                                              const TimeInterval& timeToCache,
                                              bool                readExpired,
-                                             LayerCondition*     condition) {
+                                             LayerCondition*     condition,
+                                             float transparency) {
   return new URLTemplateLayer(urlTemplate,
                               sector,
                               isTransparent,
                               timeToCache,
                               readExpired,
                               (condition == NULL) ? new LevelTileCondition(firstLevel, maxLevel) : condition,
-                              LayerTilesRenderParameters::createDefaultWGS84(sector, firstLevel, maxLevel));
+                              LayerTilesRenderParameters::createDefaultWGS84(sector, firstLevel, maxLevel),
+                              transparency);
 }
 
 
@@ -108,7 +114,8 @@ URL URLTemplateLayer::getFeatureInfoURL(const Geodetic2D& position,
   return URL();
 }
 
-const std::string URLTemplateLayer::getPath(const Tile* tile,
+const std::string URLTemplateLayer::getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                            const Tile* tile,
                                             const Sector& sector) const {
 
   if (_mu == NULL) {
@@ -123,7 +130,7 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
 
   const int level   = tile->_level;
   const int column  = tile->_column;
-  const int numRows = (int) _mu->pow(2.0, level);
+  const int numRows = (int) (layerTilesRenderParameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int row     = numRows - tile->_row - 1;
 
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
@@ -150,6 +157,7 @@ const std::string URLTemplateLayer::getPath(const Tile* tile,
 }
 
 std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                 const Tile* tile) const {
   std::vector<Petition*> petitions;
 
@@ -164,13 +172,27 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
     return petitions;
   }
 
-  const std::string path = getPath(tile, sector);
+  const std::string path = getPath(layerTilesRenderParameters, tile, sector);
 
   petitions.push_back( new Petition(sector,
                                     URL(path, false),
                                     TimeInterval::fromMilliseconds(_timeToCacheMS),
                                     _readExpired,
-                                    _isTransparent) );
+                                    _isTransparent,
+                                    _transparency) );
   
   return petitions;
+}
+
+
+RenderState URLTemplateLayer::getRenderState() {
+  _errors.clear();
+  if (_urlTemplate.compare("") == 0) {
+    _errors.push_back("Missing layer parameter: urlTemplate");
+  }
+  
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

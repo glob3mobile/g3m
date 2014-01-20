@@ -29,7 +29,8 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
                                        const Sector&                   sector,
                                        int                             initialLevel,
                                        int                             maxLevel,
-                                       LayerCondition*                 condition) :
+                                       LayerCondition*                 condition,
+                                       float transparency) :
 Layer(condition,
       name,
       timeToCache,
@@ -41,7 +42,8 @@ Layer(condition,
                                      maxLevel,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                     true)),
+                                     true),
+      transparency),
 _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
@@ -59,6 +61,7 @@ URL MercatorTiledLayer::getFeatureInfoURL(const Geodetic2D& position,
 }
 
 std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRenderContext* rc,
+                                                                  const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                   const Tile* tile) const {
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -120,7 +123,8 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    true) );
+                                    true,
+                                    _transparency) );
 
   return petitions;
 }
@@ -192,4 +196,8 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
   }
 
   return true;
+}
+
+RenderState MercatorTiledLayer::getRenderState() {
+  return RenderState::ready();
 }

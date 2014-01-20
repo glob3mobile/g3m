@@ -25,9 +25,9 @@
 #include "GLState.hpp"
 
 void GL::clearScreen(const Color& color) {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::clearScreen()");
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::clearScreen()");
+  //  }
   _clearScreenState->setClearColor(color);
   _clearScreenState->applyChanges(this, *_currentGLGlobalState);
 
@@ -35,7 +35,7 @@ void GL::clearScreen(const Color& color) {
 }
 
 void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
-                  GPUProgramManager& progManager) {
+                      GPUProgramManager& progManager) {
 
   state->applyOnGPU(this, progManager);
 
@@ -45,15 +45,15 @@ void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
 }
 
 void GL::drawArrays(int mode,
-                int first,
-                int count, const GLState* state,
-                GPUProgramManager& progManager) {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-//                                 mode,
-//                                 first,
-//                                 count);
-//  }
+                    int first,
+                    int count, const GLState* state,
+                    GPUProgramManager& progManager) {
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
+  //                                 mode,
+  //                                 first,
+  //                                 count);
+  //  }
 
   state->applyOnGPU(this, progManager);
 
@@ -63,9 +63,9 @@ void GL::drawArrays(int mode,
 }
 
 int GL::getError() {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::getError()");
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getError()");
+  //  }
 
   return _nativeGL->getError();
 }
@@ -74,91 +74,100 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
                                       int format,
                                       bool generateMipmap) {
 
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::uploadTexture()");
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::uploadTexture()");
+  //  }
 
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
-    int texture2D = GLTextureType::texture2D();
-
     GLGlobalState newState;
 
     newState.setPixelStoreIAlignmentUnpack(1);
     newState.bindTexture(texId);
 
     newState.applyChanges(this, *_currentGLGlobalState);
-    
-    int linear = GLTextureParameterValue::linear();
-    int clampToEdge = GLTextureParameterValue::clampToEdge();
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), linear);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),linear);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),clampToEdge);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),clampToEdge);
+
+    const int texture2D = GLTextureType::texture2D();
+    const int linear = GLTextureParameterValue::linear();
+
+    if (generateMipmap) {
+//      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::linearMipmapLinear());
+//      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::nearestMipmapLinear());
+      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::linearMipmapNearest());
+    }
+    else {
+      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), linear);
+    }
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(), linear);
+
+    const int clampToEdge = GLTextureParameterValue::clampToEdge();
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(), clampToEdge);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(), clampToEdge);
+
     _nativeGL->texImage2D(image, format);
-    
+
     if (generateMipmap) {
       _nativeGL->generateMipmap(texture2D);
     }
-    
+
   }
   else {
     ILogger::instance()->logError("can't get a valid texture id\n");
     return NULL;
   }
-  
+
   return texId;
 }
 
 const IGLTextureId* GL::getGLTextureId() {
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::getGLTextureId()");
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::getGLTextureId()");
+  //  }
 
   if (_texturesIdBag.size() == 0) {
     //const int bugdetSize = 256;
     const int bugdetSize = 1024;
     //const int bugdetSize = 10240;
-    
+
     const std::vector<IGLTextureId*> ids = _nativeGL->genTextures(bugdetSize);
     const int idsCount = ids.size();
     for (int i = 0; i < idsCount; i++) {
       // ILogger::instance()->logInfo("  = Created textureId=%s", ids[i]->description().c_str());
       _texturesIdBag.push_front(ids[i]);
     }
-    
+
     _texturesIdAllocationCounter += idsCount;
-    
+
     ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).",
                                  idsCount,
                                  _texturesIdAllocationCounter);
   }
-  
+
   //  _texturesIdGetCounter++;
-  
+
   if (_texturesIdBag.size() == 0) {
     ILogger::instance()->logError("TextureIds bag exhausted");
     return NULL;
   }
-  
+
   const IGLTextureId* result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
-  
+
   //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
   //         result.getGLTextureId(),
   //         _texturesIdBag.size(),
   //         _texturesIdGetCounter,
   //         _texturesIdTakeCounter,
   //         _texturesIdGetCounter - _texturesIdTakeCounter);
-  
+
   return result;
 }
 
 void GL::deleteTexture(const IGLTextureId* textureId) {
 
-//  if (_verbose) {
-//    ILogger::instance()->logInfo("GL::deleteTexture()");
-//  }
+  //  if (_verbose) {
+  //    ILogger::instance()->logInfo("GL::deleteTexture()");
+  //  }
 
   if (textureId != NULL) {
     if ( _nativeGL->deleteTexture(textureId) ) {
@@ -169,29 +178,37 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
     }
 
     if (_currentGLGlobalState->getBoundTexture() == textureId) {
-       _currentGLGlobalState->bindTexture(NULL);
+      _currentGLGlobalState->bindTexture(NULL);
     }
-    
-//    GLState::textureHasBeenDeleted(textureId);
 
-//    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
-//      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
-//    }
-    
+    //    GLState::textureHasBeenDeleted(textureId);
+
+    //    if (GLState::getCurrentGLGlobalState()->getBoundTexture() == textureId) {
+    //      GLState::getCurrentGLGlobalState()->bindTexture(NULL);
+    //    }
+
     //ILogger::instance()->logInfo("  = delete textureId=%s", texture->description().c_str());
   }
 }
 
 void GL::useProgram(GPUProgram* program) {
-  if (program != NULL && _currentGPUProgram != program) {
+  if (program != NULL){
+    if (_currentGPUProgram != program) {
 
-    if (_currentGPUProgram != NULL) {
-      _currentGPUProgram->onUnused(this);
+      if (_currentGPUProgram != NULL) {
+        _currentGPUProgram->onUnused(this);
+        _currentGPUProgram->removeReference();
+      }
+
+      _nativeGL->useProgram(program);
+      program->onUsed();
+      _currentGPUProgram = program;
+      _currentGPUProgram->addReference();
     }
 
-    _nativeGL->useProgram(program);
-    program->onUsed();
-    _currentGPUProgram = program;
+//    if (!_nativeGL->isProgram(program->getProgramID())){
+//      ILogger::instance()->logError("INVALID PROGRAM.");
+//    }
   }
 
 }

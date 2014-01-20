@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
@@ -15,7 +16,6 @@ import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GPUProgramFactory;
 import org.glob3.mobile.generated.GPUProgramManager;
-import org.glob3.mobile.generated.GPUProgramSources;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -51,85 +51,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class G3MWidget_WebGL
          extends
             Composite {
-
-   private final static String  _fragmentShader = "varying mediump vec2 TextureCoordOut;"
-                                                  + "uniform mediump vec2 TranslationTexCoord;"
-                                                  + "uniform mediump vec2 ScaleTexCoord;"
-                                                  + ""
-                                                  + "varying mediump vec4 VertexColor;"
-                                                  + ""
-                                                  + "uniform sampler2D Sampler;"
-                                                  + "uniform bool EnableTexture;"
-                                                  + "uniform lowp vec4 FlatColor;"
-                                                  + ""
-                                                  + "uniform bool EnableColorPerVertex;"
-                                                  + "uniform bool EnableFlatColor;"
-                                                  + "uniform mediump float FlatColorIntensity;"
-                                                  + "uniform mediump float ColorPerVertexIntensity;"
-                                                  + ""
-                                                  + "void main() {"
-                                                  + "  "
-                                                  + "  if (EnableTexture) {"
-                                                  + "    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);"
-                                                  + ""
-                                                  + "    if (EnableFlatColor || EnableColorPerVertex){"
-                                                  + "      lowp vec4 color;"
-                                                  + "      if (EnableFlatColor) {"
-                                                  + "        color = FlatColor;"
-                                                  + "        if (EnableColorPerVertex) {"
-                                                  + "          color = color * VertexColor;"
-                                                  + "        }"
-                                                  + "      }"
-                                                  + "      else {"
-                                                  + "        color = VertexColor;"
-                                                  + "      }"
-                                                  + "      "
-                                                  + "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;"
-                                                  + "      gl_FragColor = mix(gl_FragColor,"
-                                                  + "                         VertexColor,"
-                                                  + "                         intensity);" + "    }" + "  }" + "  else {"
-                                                  + "    " + "    if (EnableColorPerVertex) {"
-                                                  + "      gl_FragColor = VertexColor;" + "      if (EnableFlatColor) {"
-                                                  + "        gl_FragColor = gl_FragColor * FlatColor;" + "      }" + "    }"
-                                                  + "    else {" + "      gl_FragColor = FlatColor;" + "    }" + "    " + "  }"
-                                                  + "  " + "}";
-
-   //   private final static String  _vertexShader   = "attribute vec4 Position;"
-   //                                                  + "attribute vec2 TextureCoord; "
-   //                                                  + "attribute vec4 Color;"
-   //                                                  + "uniform mat4 Projection;"
-   //                                                  + "uniform mat4 Modelview;"
-   //                                                  + "uniform bool BillBoard;"
-   //                                                  + "uniform float ViewPortRatio;"
-   //                                                  + "uniform float PointSize;"
-   //                                                  + "varying vec4 VertexColor;"
-   //                                                  + "varying vec2 TextureCoordOut;"
-   //                                                  + "void main() {"
-   //                                                  + "  gl_Position = Projection * Modelview * Position;"
-   //                                                  + "  if (BillBoard) {"
-   //                                                  + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
-   //                                                  + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
-   //                                                  + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
-   //                                                  + "  gl_PointSize = PointSize;" + "}";
-
-   private final static String  _vertexShader   = "attribute vec4 Position;"
-                                                  + "attribute vec2 TextureCoord;"
-                                                  + "attribute vec4 Color;"
-                                                  + "uniform mat4 Projection;"
-                                                  + "uniform mat4 Modelview;"
-                                                  + "uniform bool BillBoard;"
-                                                  + "uniform vec2 TextureExtent;"
-                                                  + "uniform vec2 ViewPortExtent;"
-                                                  + "uniform float PointSize;"
-                                                  + "varying vec4 VertexColor;"
-                                                  + "varying vec2 TextureCoordOut;"
-                                                  + "void main() {"
-                                                  + "  gl_Position = Projection * Modelview * Position;"
-                                                  + "  if (BillBoard) {"
-                                                  + "    gl_Position.x += ((TextureCoord.x - 0.5) * 2.0 * TextureExtent.x / ViewPortExtent.x) * gl_Position.w;"
-                                                  + "    gl_Position.y -= ((TextureCoord.y - 0.5) * 2.0 * TextureExtent.y / ViewPortExtent.y) * gl_Position.w;"
-                                                  + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
-                                                  + "  gl_PointSize = PointSize;" + "}";
 
    private Canvas               _canvas;
    private JavaScriptObject     _webGLContext;
@@ -426,7 +347,9 @@ public class G3MWidget_WebGL
 
 
    private GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory factory = new GPUProgramFactory();
+      final GPUProgramFactory factory = new BasicShadersGL2();
+
+      /*
       factory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader, Shaders_WebGL._billboardFragmentShader));
       factory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader, Shaders_WebGL._defaultFragmentShader));
 
@@ -450,6 +373,7 @@ public class G3MWidget_WebGL
 
       factory.add(new GPUProgramSources("FlatColorMesh+DirectionLight", Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader,
                Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
+               */
 
       return new GPUProgramManager(factory);
    }
@@ -466,6 +390,7 @@ public class G3MWidget_WebGL
                           final Renderer mainRenderer,
                           final Renderer busyRenderer,
                           final ErrorRenderer errorRenderer,
+                          final Renderer hudRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
@@ -475,7 +400,6 @@ public class G3MWidget_WebGL
                           final WidgetUserData userData,
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider) {
-
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
@@ -489,6 +413,7 @@ public class G3MWidget_WebGL
                mainRenderer, //
                busyRenderer, //
                errorRenderer, //
+               hudRenderer, //
                backgroundColor, //
                logFPS, //
                logDownloaderStatistics, //
