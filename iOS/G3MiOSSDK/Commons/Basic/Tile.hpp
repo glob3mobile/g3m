@@ -312,6 +312,9 @@ public:
   void ancestorChangedElevationData(Tile* ancestor);
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
+  
+  const Vector2I* getPixelNormalizedFromPosition(const Geodetic2D& position2D,
+                                           const Vector2I* size) const;
 
 };
 

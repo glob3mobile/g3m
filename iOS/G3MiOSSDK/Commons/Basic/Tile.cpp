@@ -996,6 +996,17 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
   }
 }
 
+const Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
+                                                     const Vector2I* size) const{
+  const IMathUtils* math = IMathUtils::instance();
+  if (_sector.contains(position2D)) {
+    const Vector2D uv = _sector.getUVCoordinates(position2D);
+    return new Vector2I(math->toInt(size->_x * (1 - uv._x)), math->toInt(size->_y * (1 - uv._y)));
+  }
+  
+  return NULL;
+}
+
 //const Vector2D Tile::getRenderedVSTileSectorsRatio(const PlanetRenderer* pr) const{
 //  const Sector* renderedSector = pr->getRenderedSector();
 //  if (renderedSector != NULL) {
