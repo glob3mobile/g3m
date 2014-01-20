@@ -120,15 +120,17 @@ public class G3MWidget
     {
       _initialCameraPositionHasBeenSet = true;
   
-      Geodetic3D g = _initialCameraPositionProvider.getCameraPosition(_planet, _mainRenderer.getPlanetRenderer());
+      final Geodetic3D position = _initialCameraPositionProvider.getCameraPosition(_planet, _mainRenderer.getPlanetRenderer());
   
-      _currentCamera.setGeodeticPosition(g);
+      _currentCamera.setGeodeticPosition(position);
       _currentCamera.setHeading(Angle.zero());
       _currentCamera.setPitch(Angle.zero());
+      _currentCamera.setRoll(Angle.zero());
   
-      _nextCamera.setGeodeticPosition(g);
+      _nextCamera.setGeodeticPosition(position);
       _nextCamera.setHeading(Angle.zero());
       _nextCamera.setPitch(Angle.zero());
+      _nextCamera.setRoll(Angle.zero());
     }
   
     _timer.start();
@@ -497,6 +499,11 @@ public class G3MWidget
   public final void setCameraPitch(Angle angle)
   {
     getNextCamera().setPitch(angle);
+  }
+
+  public final void setCameraRoll(Angle angle)
+  {
+    getNextCamera().setRoll(angle);
   }
 
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading)

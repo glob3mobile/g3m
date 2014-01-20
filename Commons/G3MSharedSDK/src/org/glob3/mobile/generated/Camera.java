@@ -622,7 +622,7 @@ public class Camera
   }
   public final void setRoll(Angle angle)
   {
-    Angle delta = angle.sub(Angle.fromRadians(_rollInRadians));
+    final Angle delta = angle.sub(Angle.fromRadians(_rollInRadians));
     if (delta._radians > 0)
     {
       _rollInRadians = angle._radians;
