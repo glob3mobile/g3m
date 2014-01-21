@@ -1057,12 +1057,12 @@ void Tile::computeTileCorners(const Planet* planet){
   _middleWestPoint = new Vector3D(planet->toCartesian(gW));
 }
 
-const Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
+Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
                                                      const Vector2I* size) const{
   const IMathUtils* math = IMathUtils::instance();
   if (_sector.contains(position2D)) {
     const Vector2D uv = _sector.getUVCoordinates(position2D);
-    return new Vector2I(math->toInt(size->_x * (1 - uv._x)), math->toInt(size->_y * (1 - uv._y)));
+    return new Vector2I(math->toInt(size->_x * uv._x), math->toInt(size->_y * uv._y));
   }
   
   return NULL;

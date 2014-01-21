@@ -1777,7 +1777,6 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_serverURL.getPath());
 
-  isb->addString(getServerURL().getPath());
   isb->addString("/Public/applications/");
   isb->addString(_applicationId);
   isb->addString("/scenes/");
