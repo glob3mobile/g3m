@@ -234,6 +234,32 @@ Mesh* createSectorMesh(const Planet* planet,
 
 #pragma mark - View lifecycle
 
+class CameraRollChangerTask : public GTask {
+  G3MWidget* _widget;
+  double _rollInDegrees;
+  double _step;
+
+public:
+  CameraRollChangerTask(G3MWidget* widget) :
+  _widget(widget),
+  _rollInDegrees(40),
+  _step(2)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    if ((_rollInDegrees < 10) ||
+        (_rollInDegrees > 120)) {
+      _step *= -1;
+    }
+    _rollInDegrees += _step;
+
+#warning JM please take a look to setRoll!
+    _widget->setCameraRoll(Angle::fromDegrees(_rollInDegrees));
+  }
+};
+
+
 - (void)viewDidLoad
 {
   [super viewDidLoad];
@@ -249,6 +275,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
+
+  [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
+                                               new CameraRollChangerTask([[self G3MWidget] widget]));
 }
 
 
@@ -888,7 +917,7 @@ public:
                                                                            labelBuilder,
                                                                            altimeterCanvasImageBuilder)));
 
-    if (true){ //Changing FOV
+    if (false){ //Changing FOV
 
 
       class AnimatedFOVCameraConstrainer: public ICameraConstrainer {

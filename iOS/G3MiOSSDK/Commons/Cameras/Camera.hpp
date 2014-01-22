@@ -22,10 +22,8 @@
 #include "Frustum.hpp"
 #include "Vector3F.hpp"
 #include "Effects.hpp"
-
-////#include "GPUProgramState.hpp"
-
 #include "GLState.hpp"
+
 class ILogger;
 class GPUProgramState;
 
@@ -45,8 +43,6 @@ public:
   mutable bool _geodeticCenterOfViewDirty;
   mutable bool _frustumDirty;
   mutable bool _frustumMCDirty;
-  mutable bool _halfFrustumDirty;
-  mutable bool _halfFrustumMCDirty;
 
   CameraDirtyFlags() {
     setAll(true);
@@ -61,9 +57,6 @@ public:
     _geodeticCenterOfViewDirty  = other._geodeticCenterOfViewDirty;
     _frustumDirty               = other._frustumDirty;
     _frustumMCDirty             = other._frustumMCDirty;
-    _halfFrustumDirty           = other._halfFrustumDirty;
-    _halfFrustumMCDirty         = other._halfFrustumMCDirty;
-
   }
 
 
@@ -77,8 +70,6 @@ public:
     _geodeticCenterOfViewDirty  = other._geodeticCenterOfViewDirty;
     _frustumDirty               = other._frustumDirty;
     _frustumMCDirty             = other._frustumMCDirty;
-    _halfFrustumDirty           = other._halfFrustumDirty;
-    _halfFrustumMCDirty         = other._halfFrustumMCDirty;
   }
 
   std::string description() {
@@ -93,8 +84,6 @@ public:
 
     if (_frustumDirty) d+= "F ";
     if (_frustumMCDirty) d += "FMC ";
-    if (_halfFrustumDirty) d+= "HF ";
-    if (_halfFrustumMCDirty) d+= "HFMC ";
     return d;
   }
 
@@ -107,8 +96,6 @@ public:
     _geodeticCenterOfViewDirty  = value;
     _frustumDirty               = value;
     _frustumMCDirty             = value;
-    _halfFrustumDirty           = value;
-    _halfFrustumMCDirty         = value;
   }
 };
 
@@ -134,8 +121,6 @@ public:
   _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
-  _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
-  _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
   _camEffectTarget(new CameraEffectTarget()),
   _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
   _angle2Horizon(that._angle2Horizon),
@@ -151,8 +136,6 @@ public:
     delete _camEffectTarget;
     delete _frustum;
     delete _frustumInModelCoordinates;
-    delete _halfFrustum;
-    delete _halfFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
   }
@@ -166,15 +149,10 @@ public:
 
   void resizeViewport(int width, int height);
 
-//  void render(const G3MRenderContext* rc,
-//              const GLGlobalState& parentState) const;
-
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
-//  const Vector2I point2Pixel(const Vector3D& point) const;
-//  const Vector2I point2Pixel(const Vector3F& point) const;
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
 
@@ -197,8 +175,6 @@ public:
   const Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
   const Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
 
-
-  //Dragging camera
   void dragCamera(const Vector3D& p0,
                   const Vector3D& p1);
   void rotateWithAxis(const Vector3D& axis,
@@ -206,11 +182,8 @@ public:
   void moveForward(double d);
   void translateCamera(const Vector3D& desp);
 
-
-  //Pivot
   void pivotOnCenter(const Angle& a);
 
-  //Rotate
   void rotateWithAxisAndPoint(const Vector3D& axis,
                               const Vector3D& point,
                               const Angle& delta);
@@ -218,7 +191,6 @@ public:
   void print();
 
   const Frustum* const getFrustumInModelCoordinates() const {
-    //    return getFrustumMC();
     if (_dirtyFlags._frustumMCDirty) {
       _dirtyFlags._frustumMCDirty = false;
       delete _frustumInModelCoordinates;
@@ -227,20 +199,12 @@ public:
     return _frustumInModelCoordinates;
   }
 
-  const Frustum* const getHalfFrustuminModelCoordinates() const {
-    return getHalfFrustumMC();
-  }
-
-  //  void setPosition(const Geodetic3D& position);
-
   Vector3D getHorizontalVector();
 
   Angle compute3DAngularDistance(const Vector2I& pixel0,
                                  const Vector2I& pixel1);
 
   void initialize(const G3MContext* context);
-
-  //  void resetPosition();
 
   void setCartesianPosition(const MutableVector3D& v) {
     if (!v.equalTo(_position)) {
@@ -304,16 +268,6 @@ public:
     getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();
   }
-  
-
-
-//  void addProjectionAndModelGLFeatures(GLState& glState) const{
-//    glState.clearGLFeatureGroup(CAMERA_GROUP);
-//    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
-//    glState.addGLFeature(p, false);
-//    ModelGLFeature* m = new ModelGLFeature(getModelMatrix44D());
-//    glState.addGLFeature(m, false);
-//  }
 
   Matrix44D* getModelMatrix44D() const{
     return getModelMatrix().asMatrix44D();
@@ -337,7 +291,8 @@ public:
   bool isCenterOfViewWithin(const Sector& sector, double height) const;
 
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
-  void setFOV(const Angle& vertical, const Angle& horizontal);
+  void setFOV(const Angle& vertical,
+              const Angle& horizontal);
 
   Angle getRoll() const;
   void setRoll(const Angle& angle);
@@ -373,10 +328,8 @@ private:
   mutable Geodetic3D*      _geodeticCenterOfView;
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
-  mutable Frustum*         _halfFrustum;                    // ONLY FOR DEBUG
-  mutable Frustum*         _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
 
-  double                   _tanHalfVerticalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
+  double                   _tanHalfVerticalFieldOfView;   // = 0.3; // aprox tan(34 degrees / 2)
   double                   _tanHalfHorizontalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
 
   double                   _rollInRadians;    //updated at setRoll()
@@ -444,28 +397,6 @@ private:
     return _frustum;
   }
 
-  Frustum* getHalfFrustum() const {
-    // __temporal_test_for_clipping;
-    if (_dirtyFlags._halfFrustumDirty) {
-      _dirtyFlags._halfFrustumDirty = false;
-      delete _halfFrustum;
-      FrustumData data = getFrustumData();
-      _halfFrustum = new Frustum(data._left/4, data._right/4,
-                                 data._bottom/4, data._top/4,
-                                 data._znear, data._zfar);
-    }
-    return _halfFrustum;
-  }
-
-  Frustum* getHalfFrustumMC() const {
-    if (_dirtyFlags._halfFrustumMCDirty) {
-      _dirtyFlags._halfFrustumMCDirty = false;
-      delete _halfFrustumInModelCoordinates;
-      _halfFrustumInModelCoordinates = getHalfFrustum()->transformedBy_P(getModelMatrix());
-    }
-    return _halfFrustumInModelCoordinates;
-  }
-  
   FrustumData calculateFrustumData() const;
   
   //void _setGeodeticPosition(const Vector3D& pos);
