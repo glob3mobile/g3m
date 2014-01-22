@@ -242,14 +242,14 @@ class CameraRollChangerTask : public GTask {
 public:
   CameraRollChangerTask(G3MWidget* widget) :
   _widget(widget),
-  _rollInDegrees(40),
+  _rollInDegrees(0),
   _step(2)
   {
   }
 
   void run(const G3MContext* context) {
-    if ((_rollInDegrees < 10) ||
-        (_rollInDegrees > 120)) {
+    if ((_rollInDegrees < -180) ||
+        (_rollInDegrees > 180)) {
       _step *= -1;
     }
     _rollInDegrees += _step;

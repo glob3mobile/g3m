@@ -126,7 +126,8 @@ public:
   _angle2Horizon(that._angle2Horizon),
   _normalizedPosition(that._normalizedPosition),
   _tanHalfVerticalFieldOfView(NAND),
-  _tanHalfHorizontalFieldOfView(NAND)
+  _tanHalfHorizontalFieldOfView(NAND),
+  _rollInRadians(that._rollInRadians)
   {
   }
 
@@ -332,7 +333,7 @@ private:
   double                   _tanHalfVerticalFieldOfView;   // = 0.3; // aprox tan(34 degrees / 2)
   double                   _tanHalfHorizontalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
 
-  double                   _rollInRadians;    //updated at setRoll()
+  double                   _rollInRadians;
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {
