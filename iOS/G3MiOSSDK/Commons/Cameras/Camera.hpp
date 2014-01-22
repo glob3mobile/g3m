@@ -57,9 +57,7 @@ public:
     _frustumMCDirty             = other._frustumMCDirty;
   }
 
-
-  CameraDirtyFlags(const CameraDirtyFlags& other)
-  {
+  CameraDirtyFlags(const CameraDirtyFlags& other) {
     _frustumDataDirty           = other._frustumDataDirty;
     _projectionMatrixDirty      = other._projectionMatrixDirty;
     _modelMatrixDirty           = other._modelMatrixDirty;
@@ -70,18 +68,16 @@ public:
     _frustumMCDirty             = other._frustumMCDirty;
   }
 
-  std::string description() {
+  const std::string description() const {
     std::string d = "";
-    if (_frustumDataDirty) d+= "FD ";
-    if (_projectionMatrixDirty) d += "PM ";
-    if (_modelMatrixDirty) d+= "MM ";
-
-    if (_modelViewMatrixDirty) d+= "MVM ";
+    if (_frustumDataDirty)           d += "FD ";
+    if (_projectionMatrixDirty)      d += "PM ";
+    if (_modelMatrixDirty)           d += "MM ";
+    if (_modelViewMatrixDirty)       d += "MVM ";
     if (_cartesianCenterOfViewDirty) d += "CCV ";
-    if (_geodeticCenterOfViewDirty) d+= "GCV ";
-
-    if (_frustumDirty) d+= "F ";
-    if (_frustumMCDirty) d += "FMC ";
+    if (_geodeticCenterOfViewDirty)  d += "GCV ";
+    if (_frustumDirty)               d += "F ";
+    if (_frustumMCDirty)             d += "FMC ";
     return d;
   }
 
@@ -98,9 +94,6 @@ public:
 };
 
 
-/**
- * Class to control the camera.
- */
 class Camera {
 public:
   Camera(const Camera &that):
@@ -394,8 +387,6 @@ private:
   }
 
   FrustumData calculateFrustumData() const;
-
-  //void _setGeodeticPosition(const Vector3D& pos);
 
   // opengl projection matrix
   const MutableMatrix44D& getProjectionMatrix() const{
