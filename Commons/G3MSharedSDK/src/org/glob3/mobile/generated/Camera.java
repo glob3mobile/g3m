@@ -1,7 +1,4 @@
 package org.glob3.mobile.generated; 
-/**
- * Class to control the camera.
- */
 public class Camera
 {
   public Camera(Camera that)
@@ -696,8 +693,6 @@ public class Camera
     return new FrustumData(left, right, bottom, top, zNear, zFar);
   
   }
-
-  //void _setGeodeticPosition(const Vector3D& pos);
 
   // opengl projection matrix
   private MutableMatrix44D getProjectionMatrix()

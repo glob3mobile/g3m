@@ -56,7 +56,6 @@ public class CameraDirtyFlags
     _frustumMCDirty = other._frustumMCDirty;
   }
 
-
   public CameraDirtyFlags(CameraDirtyFlags other)
   {
     _frustumDataDirty = other._frustumDataDirty;
@@ -73,21 +72,19 @@ public class CameraDirtyFlags
   {
     String d = "";
     if (_frustumDataDirty)
-       d+= "FD ";
+       d += "FD ";
     if (_projectionMatrixDirty)
        d += "PM ";
     if (_modelMatrixDirty)
-       d+= "MM ";
-
+       d += "MM ";
     if (_modelViewMatrixDirty)
-       d+= "MVM ";
+       d += "MVM ";
     if (_cartesianCenterOfViewDirty)
        d += "CCV ";
     if (_geodeticCenterOfViewDirty)
-       d+= "GCV ";
-
+       d += "GCV ";
     if (_frustumDirty)
-       d+= "F ";
+       d += "F ";
     if (_frustumMCDirty)
        d += "FMC ";
     return d;
