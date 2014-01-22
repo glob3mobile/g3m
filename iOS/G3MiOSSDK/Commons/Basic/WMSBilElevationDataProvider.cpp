@@ -1,12 +1,12 @@
 //
-//  WMSBillElevationDataProvider.cpp
+//  WMSBilElevationDataProvider.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/17/13.
 //
 //
 
-#include "WMSBillElevationDataProvider.hpp"
+#include "WMSBilElevationDataProvider.hpp"
 
 #include "Context.hpp"
 #include "IDownloader.hpp"
@@ -20,7 +20,7 @@
 #include "ShortBufferElevationData.hpp"
 
 
-class WMSBillElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
+class WMSBilElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
   const Sector            _sector;
   const int               _width;
@@ -33,7 +33,7 @@ private:
 
 public:
 
-  WMSBillElevationDataProvider_BufferDownloadListener(const Sector& sector,
+  WMSBilElevationDataProvider_BufferDownloadListener(const Sector& sector,
                                                       const Vector2I& extent,
                                                       IElevationDataListener* listener,
                                                       bool autodeleteListener,
@@ -95,16 +95,16 @@ public:
 
 };
 
-void WMSBillElevationDataProvider::initialize(const G3MContext* context) {
+void WMSBilElevationDataProvider::initialize(const G3MContext* context) {
   _downloader = context->getDownloader();
 }
 
-const long long WMSBillElevationDataProvider::requestElevationData(const Sector& sector,
+const long long WMSBilElevationDataProvider::requestElevationData(const Sector& sector,
                                                                    const Vector2I& extent,
                                                                    IElevationDataListener* listener,
                                                                    bool autodeleteListener) {
   if (_downloader == NULL) {
-    ILogger::instance()->logError("WMSBillElevationDataProvider was not initialized.");
+    ILogger::instance()->logError("WMSBilElevationDataProvider was not initialized.");
     return -1;
   }
 
@@ -159,7 +159,7 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
                                     2000000000,
                                     TimeInterval::fromDays(30),
                                     true,
-                                    new WMSBillElevationDataProvider_BufferDownloadListener(sector,
+                                    new WMSBilElevationDataProvider_BufferDownloadListener(sector,
                                                                                             extent,
                                                                                             listener,
                                                                                             autodeleteListener,
@@ -167,6 +167,6 @@ const long long WMSBillElevationDataProvider::requestElevationData(const Sector&
                                     true);
 }
 
-void WMSBillElevationDataProvider::cancelRequest(const long long requestId) {
+void WMSBilElevationDataProvider::cancelRequest(const long long requestId) {
   _downloader->cancelRequest(requestId);
 }

@@ -1,13 +1,13 @@
 //
-//  SingleBillElevationDataProvider.hpp
+//  SingleBilElevationDataProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/21/13.
 //
 //
 
-#ifndef __G3MiOSSDK__SingleBillElevationDataProvider__
-#define __G3MiOSSDK__SingleBillElevationDataProvider__
+#ifndef __G3MiOSSDK__SingleBilElevationDataProvider__
+#define __G3MiOSSDK__SingleBilElevationDataProvider__
 
 #include "ElevationDataProvider.hpp"
 
@@ -18,10 +18,10 @@
 #include <map>
 #include "Sector.hpp"
 
-class SingleBillElevationDataProvider_BufferDownloadListener;
+class SingleBilElevationDataProvider_BufferDownloadListener;
 
 
-struct SingleBillElevationDataProvider_Request {
+struct SingleBilElevationDataProvider_Request {
   const Sector _sector;
 #ifdef C_CODE
   const Vector2I _extent;
@@ -32,7 +32,7 @@ struct SingleBillElevationDataProvider_Request {
   IElevationDataListener* const _listener;
   const bool _autodeleteListener;
 
-  SingleBillElevationDataProvider_Request(const Sector& sector,
+  SingleBilElevationDataProvider_Request(const Sector& sector,
                                           const Vector2I& extent,
                                           IElevationDataListener* listener,
                                           bool autodeleteListener):
@@ -43,17 +43,17 @@ struct SingleBillElevationDataProvider_Request {
   {
   }
 
-  ~SingleBillElevationDataProvider_Request() {
+  ~SingleBilElevationDataProvider_Request() {
   }
   
 };
 
-class SingleBillElevationDataProvider : public ElevationDataProvider {
+class SingleBilElevationDataProvider : public ElevationDataProvider {
 private:
 
 
   long long _currentRequestID;
-  std::map<long long, SingleBillElevationDataProvider_Request*> _requestsQueue;
+  std::map<long long, SingleBilElevationDataProvider_Request*> _requestsQueue;
 
 
   ElevationData* _elevationData;
@@ -81,15 +81,15 @@ private:
 
   IDownloader* _downloader;
   long long    _requestToDownloaderID;
-  SingleBillElevationDataProvider_BufferDownloadListener* _listener;
+  SingleBilElevationDataProvider_BufferDownloadListener* _listener;
 
 public:
-  SingleBillElevationDataProvider(const URL& bilUrl,
+  SingleBilElevationDataProvider(const URL& bilUrl,
                                   const Sector& sector,
                                   const Vector2I& extent,
                                   double deltaHeight = 0);
 
-  ~SingleBillElevationDataProvider();
+  ~SingleBilElevationDataProvider();
 
   bool isReadyToRender(const G3MRenderContext* rc) {
     return (_elevationDataResolved);
