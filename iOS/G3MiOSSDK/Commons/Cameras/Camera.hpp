@@ -29,20 +29,18 @@ class GPUProgramState;
 
 
 class CameraDirtyFlags {
-
 private:
-
   CameraDirtyFlags& operator=(const CameraDirtyFlags& that);
 
 public:
-  mutable bool _frustumDataDirty;
-  mutable bool _projectionMatrixDirty;
-  mutable bool _modelMatrixDirty;
-  mutable bool _modelViewMatrixDirty;
-  mutable bool _cartesianCenterOfViewDirty;
-  mutable bool _geodeticCenterOfViewDirty;
-  mutable bool _frustumDirty;
-  mutable bool _frustumMCDirty;
+  bool _frustumDataDirty;
+  bool _projectionMatrixDirty;
+  bool _modelMatrixDirty;
+  bool _modelViewMatrixDirty;
+  bool _cartesianCenterOfViewDirty;
+  bool _geodeticCenterOfViewDirty;
+  bool _frustumDirty;
+  bool _frustumMCDirty;
 
   CameraDirtyFlags() {
     setAll(true);
@@ -237,7 +235,7 @@ public:
   }
 
   void setGeodeticPosition(const Geodetic3D& g3d);
-  
+
   void setGeodeticPosition(const Angle &latitude,
                            const Angle &longitude,
                            const double height) {
@@ -283,9 +281,9 @@ public:
   }
 
   double getAngle2HorizonInRadians() const { return _angle2Horizon; }
-  
+
   double getProjectedSphereArea(const Sphere& sphere) const;
-  
+
   void applyTransform(const MutableMatrix44D& mat);
 
   bool isPositionWithin(const Sector& sector, double height) const;
@@ -318,7 +316,6 @@ private:
   // Must be updated when changing position
   mutable double          _angle2Horizon;
   MutableVector3D         _normalizedPosition;
-  
 
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData      _frustumData;
@@ -329,10 +326,8 @@ private:
   mutable Geodetic3D*      _geodeticCenterOfView;
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
-
   double                   _tanHalfVerticalFieldOfView;
   double                   _tanHalfHorizontalFieldOfView;
-
   double                   _rollInRadians;
 
   //The Camera Effect Target
@@ -399,7 +394,7 @@ private:
   }
 
   FrustumData calculateFrustumData() const;
-  
+
   //void _setGeodeticPosition(const Vector3D& pos);
 
   // opengl projection matrix
@@ -428,7 +423,7 @@ private:
     }
     return _modelViewMatrix;
   }
-
+  
 };
 
 
