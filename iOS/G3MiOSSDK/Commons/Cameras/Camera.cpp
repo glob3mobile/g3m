@@ -311,8 +311,8 @@ FrustumData Camera::calculateFrustumData() const {
     const double ratioScreen = (double) _height / _width;
 
     if (ISNAN(tanHalfHFOV) && ISNAN(tanHalfVFOV)) {
-      tanHalfVFOV = 0.3;
-      tanHalfHFOV = tanHalfVFOV / ratioScreen; //Default behaviour _tanHalfFieldOfView = 0.3 // aprox tan(34 degrees / 2)
+      tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
+      tanHalfHFOV = tanHalfVFOV / ratioScreen;
     }
     else {
       if (ISNAN(tanHalfHFOV)) {

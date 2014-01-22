@@ -330,8 +330,8 @@ private:
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
 
-  double                   _tanHalfVerticalFieldOfView;   // = 0.3; // aprox tan(34 degrees / 2)
-  double                   _tanHalfHorizontalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
+  double                   _tanHalfVerticalFieldOfView;
+  double                   _tanHalfHorizontalFieldOfView;
 
   double                   _rollInRadians;
 
