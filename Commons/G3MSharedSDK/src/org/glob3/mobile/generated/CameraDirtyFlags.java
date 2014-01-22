@@ -9,7 +9,6 @@ package org.glob3.mobile.generated;
  */
 
 
-
 /*
  *  Camera.hpp
  *  Prueba Opengl iPad
@@ -21,8 +20,6 @@ package org.glob3.mobile.generated;
 
 
 
-
-////#include "GPUProgramState.hpp"
 
 //class ILogger;
 //class GPUProgramState;
@@ -43,8 +40,6 @@ public class CameraDirtyFlags
   public boolean _geodeticCenterOfViewDirty;
   public boolean _frustumDirty;
   public boolean _frustumMCDirty;
-  public boolean _halfFrustumDirty;
-  public boolean _halfFrustumMCDirty;
 
   public CameraDirtyFlags()
   {
@@ -61,9 +56,6 @@ public class CameraDirtyFlags
     _geodeticCenterOfViewDirty = other._geodeticCenterOfViewDirty;
     _frustumDirty = other._frustumDirty;
     _frustumMCDirty = other._frustumMCDirty;
-    _halfFrustumDirty = other._halfFrustumDirty;
-    _halfFrustumMCDirty = other._halfFrustumMCDirty;
-
   }
 
 
@@ -77,8 +69,6 @@ public class CameraDirtyFlags
     _geodeticCenterOfViewDirty = other._geodeticCenterOfViewDirty;
     _frustumDirty = other._frustumDirty;
     _frustumMCDirty = other._frustumMCDirty;
-    _halfFrustumDirty = other._halfFrustumDirty;
-    _halfFrustumMCDirty = other._halfFrustumMCDirty;
   }
 
   public final String description()
@@ -102,10 +92,6 @@ public class CameraDirtyFlags
        d+= "F ";
     if (_frustumMCDirty)
        d += "FMC ";
-    if (_halfFrustumDirty)
-       d+= "HF ";
-    if (_halfFrustumMCDirty)
-       d+= "HFMC ";
     return d;
   }
 
@@ -119,7 +105,5 @@ public class CameraDirtyFlags
     _geodeticCenterOfViewDirty = value;
     _frustumDirty = value;
     _frustumMCDirty = value;
-    _halfFrustumDirty = value;
-    _halfFrustumMCDirty = value;
   }
 }
