@@ -27,6 +27,7 @@ public class Camera
      _normalizedPosition = new MutableVector3D(that._normalizedPosition);
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
+     _rollInRadians = that._rollInRadians;
   }
 
   public Camera(int width, int height)
@@ -52,6 +53,7 @@ public class Camera
      _normalizedPosition = new MutableVector3D(0, 0, 0);
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
+     _rollInRadians = 0;
     resizeViewport(width, height);
     _dirtyFlags.setAll(true);
   }
@@ -503,7 +505,7 @@ public class Camera
   public final void setRoll(Angle angle)
   {
     final Angle delta = angle.sub(Angle.fromRadians(_rollInRadians));
-    if (delta._radians > 0)
+    if (delta._radians != 0)
     {
       _rollInRadians = angle._radians;
       rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
@@ -555,7 +557,7 @@ public class Camera
   private double _tanHalfVerticalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
   private double _tanHalfHorizontalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
 
-  private double _rollInRadians; //updated at setRoll()
+  private double _rollInRadians;
 
   //The Camera Effect Target
   private static class CameraEffectTarget implements EffectTarget
