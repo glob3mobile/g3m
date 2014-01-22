@@ -543,7 +543,6 @@ public class Camera
   private double _angle2Horizon;
   private MutableVector3D _normalizedPosition = new MutableVector3D();
 
-
   private CameraDirtyFlags _dirtyFlags = new CameraDirtyFlags();
   private FrustumData _frustumData = new FrustumData();
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
@@ -553,10 +552,8 @@ public class Camera
   private Geodetic3D _geodeticCenterOfView;
   private Frustum _frustum;
   private Frustum _frustumInModelCoordinates;
-
-  private double _tanHalfVerticalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
-  private double _tanHalfHorizontalFieldOfView; // = 0.3; // aprox tan(34 degrees / 2)
-
+  private double _tanHalfVerticalFieldOfView;
+  private double _tanHalfHorizontalFieldOfView;
   private double _rollInRadians;
 
   //The Camera Effect Target
@@ -672,8 +669,8 @@ public class Camera
   
       if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
       {
-        tanHalfVFOV = 0.3;
-        tanHalfHFOV = tanHalfVFOV / ratioScreen; //Default behaviour _tanHalfFieldOfView = 0.3 // aprox tan(34 degrees / 2)
+        tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3 => aprox tan(34 degrees / 2)
+        tanHalfHFOV = tanHalfVFOV / ratioScreen;
       }
       else
       {
