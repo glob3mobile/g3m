@@ -21,6 +21,8 @@ public abstract class MapBooBuilder
   private String _applicationCurrentSceneId;
   private String _lastApplicationCurrentSceneId;
 
+  private int _applicationEventId;
+
   private GL _gl;
   private G3MWidget _g3mWidget;
   private IStorage _storage;
@@ -329,9 +331,6 @@ public abstract class MapBooBuilder
 
   private String getApplicationCurrentSceneId()
   {
-  //  if (_applicationCurrentSceneId.compare("-1") == 0) {
-  //    _applicationCurrentSceneId = _applicationScenes.at(0)->getId() ;
-  //  }
     return _applicationCurrentSceneId;
   }
   private MapBoo_Scene getApplicationCurrentScene()
@@ -1011,15 +1010,27 @@ public abstract class MapBooBuilder
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_serverURL.getPath());
-    isb.addString("/applications/");
+    isb.addString("/REST/1/applications/");
     isb.addString(_applicationId);
-    isb.addString("?view=runtime&lastTs=");
-    isb.addInt(_applicationTimestamp);
+    isb.addString("?view=runtime&eventId=");
+    isb.addInt(_applicationEventId);
     final String path = isb.getString();
     if (isb != null)
        isb.dispose();
   
     return new URL(path, false);
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final int getApplicationEventId()
+  {
+    return _applicationEventId;
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void setApplicationEventId(int eventId)
+  {
+    _applicationEventId = eventId;
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1240,9 +1251,10 @@ public abstract class MapBooBuilder
         final JSONString jsonError = jsonObject.getAsString("error");
         if (jsonError == null)
         {
+          final int eventId = (int) jsonObject.getAsNumber("eventId", 0);
           final int timestamp = (int) jsonObject.getAsNumber("timestamp", 0);
   
-          if (getApplicationTimestamp() != timestamp)
+          if (getApplicationEventId() != eventId)
           {
             final JSONString jsonName = jsonObject.getAsString("name");
             if (jsonName != null)
@@ -1328,6 +1340,7 @@ public abstract class MapBooBuilder
               }
             }
   
+            setApplicationEventId(eventId);
             setApplicationTimestamp(timestamp);
             saveApplicationData();
             setHasParsedApplication();
@@ -1376,6 +1389,34 @@ public abstract class MapBooBuilder
          jsonBaseObject.dispose();
     }
   
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void parseApplicationEventsJSON(String json, URL url)
+  {
+    final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
+    if (jsonBaseObject == null)
+    {
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
+    }
+    else
+    {
+      final JSONArray jsonArray = jsonBaseObject.asArray();
+      if (jsonArray != null)
+      {
+        final int size = jsonArray.size();
+        for (int i = 0; i < size; i++)
+        {
+          parseApplicationJSON(jsonArray.getAsString(i).value(), url);
+        }
+      }
+      else
+      {
+        parseApplicationJSON(json, url);
+      }
+    }
+    if (jsonBaseObject != null)
+       jsonBaseObject.dispose();
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1553,4 +1594,10 @@ public abstract class MapBooBuilder
     return _serverURL;
   }
 
+  /** Private to MapbooBuilder, don't call it */
+  public final void pollApplicationDataFromServer(G3MContext context)
+  {
+    IDownloader downloader = context.getDownloader();
+    downloader.requestBuffer(createApplicationRestURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+  }
 }

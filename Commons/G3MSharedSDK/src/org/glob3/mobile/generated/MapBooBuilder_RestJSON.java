@@ -10,7 +10,7 @@ public class MapBooBuilder_RestJSON extends IBufferDownloadListener
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    _builder.parseApplicationJSON(buffer.getAsString(), url);
+    _builder.parseApplicationEventsJSON(buffer.getAsString(), url);
     if (buffer != null)
        buffer.dispose();
   }

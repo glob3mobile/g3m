@@ -20,6 +20,8 @@ public class MapBooBuilder_TubeWatchdogPeriodicalTask extends GTask
     {
       if (!_builder.isApplicationTubeOpen())
       {
+        _builder.pollApplicationDataFromServer(context);
+
         _builder.openApplicationTube(context);
       }
     }
