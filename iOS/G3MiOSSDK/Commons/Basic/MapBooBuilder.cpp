@@ -909,6 +909,28 @@ std::vector<MapBoo_Notification*>* MapBooBuilder::parseNotifications(const JSONA
   return result;
 }
 
+void MapBooBuilder::parseApplicationEventsJSON(const std::string& json,
+                                              const URL& url) {
+  const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
+  if (jsonBaseObject == NULL) {
+    ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
+                                  url.getPath().c_str());
+  }
+  else {
+    const JSONArray* jsonArray = jsonBaseObject->asArray();
+    if (jsonArray != NULL) {
+      const int size = jsonArray->size();
+      for (int i = 0; i < size; i++) {
+        parseApplicationJSON(jsonArray->getAsString(i)->value(), url);
+      }
+    }
+    else {
+      parseApplicationJSON(json, url);
+    }
+  }
+  delete jsonBaseObject;
+}
+
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
@@ -927,9 +949,10 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
     else {
       const JSONString* jsonError = jsonObject->getAsString("error");
       if (jsonError == NULL) {
+        const int eventId = (int) jsonObject->getAsNumber("eventId", 0);
         const int timestamp = (int) jsonObject->getAsNumber("timestamp", 0);
 
-        if (getApplicationTimestamp() != timestamp) {
+        if (getApplicationEventId() != eventId) {
           const JSONString* jsonName = jsonObject->getAsString("name");
           if (jsonName != NULL) {
             setApplicationName( jsonName->value() );
@@ -998,6 +1021,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
             }
           }
 
+          setApplicationEventId(eventId);
           setApplicationTimestamp(timestamp);
           saveApplicationData();
           setHasParsedApplication();
@@ -1186,6 +1210,8 @@ public:
     }
     else {
       if (!_builder->isApplicationTubeOpen()) {
+        _builder->pollApplicationDataFromServer(context);
+        
         _builder->openApplicationTube(context);
       }
     }
@@ -1266,8 +1292,7 @@ public:
   }
 
   bool isDone(const G3MContext* context) {
-    return _builder->isApplicationTubeOpen() && _builder->hasParsedApplication();
-    //return true;
+    return _builder->hasParsedApplication();
   }
 };
 
@@ -1292,7 +1317,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    _builder->parseApplicationJSON(buffer->getAsString(), url);
+    _builder->parseApplicationEventsJSON(buffer->getAsString(), url);
     delete buffer;
   }
 
@@ -1314,10 +1339,10 @@ public:
 const URL MapBooBuilder::createApplicationRestURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_serverURL.getPath());
-  isb->addString("/applications/");
+  isb->addString("/REST/1/applications/");
   isb->addString(_applicationId);
-  isb->addString("?view=runtime&lastTs=");
-  isb->addInt(_applicationTimestamp);
+  isb->addString("?view=runtime&eventId=");
+  isb->addInt(_applicationEventId);
   const std::string path = isb->getString();
   delete isb;
 
@@ -1342,9 +1367,6 @@ void MapBooBuilder::openApplicationTube(const G3MContext* context) {
 }
 
 const std::string MapBooBuilder::getApplicationCurrentSceneId() {
-//  if (_applicationCurrentSceneId.compare("-1") == 0) {
-//    _applicationCurrentSceneId = _applicationScenes.at(0)->getId() ;
-//  }
   return _applicationCurrentSceneId;
 }
 
@@ -1426,6 +1448,15 @@ G3MWidget* MapBooBuilder::create() {
   delete periodicalTasks;
 
   return _g3mWidget;
+}
+
+
+int MapBooBuilder::getApplicationEventId() const {
+  return _applicationEventId;
+}
+
+void MapBooBuilder::setApplicationEventId(const int eventId) {
+  _applicationEventId = eventId;
 }
 
 int MapBooBuilder::getApplicationTimestamp() const {
@@ -1768,4 +1799,14 @@ const MapBoo_Notification* MapBooBuilder::createNotification(const Geodetic2D&  
                                                                     camera->getPitch(),
                                                                     true /* animated */);
   return new MapBoo_Notification(position, cameraPosition, message, iconURL);
+}
+
+void MapBooBuilder::pollApplicationDataFromServer(const G3MContext *context) {
+  IDownloader* downloader = context->getDownloader();
+  downloader->requestBuffer(createApplicationRestURL(),
+                            DownloadPriority::HIGHEST,
+                            TimeInterval::zero(),
+                            false, // readExpired
+                            new MapBooBuilder_RestJSON(this),
+                            true);
 }

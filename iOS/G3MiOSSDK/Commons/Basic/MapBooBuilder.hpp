@@ -378,6 +378,8 @@ private:
   std::vector<MapBoo_Scene*> _applicationScenes;
   std::string                _applicationCurrentSceneId;
   std::string                _lastApplicationCurrentSceneId;
+  
+  int                        _applicationEventId;
 
   GL* _gl;
   G3MWidget* _g3mWidget;
@@ -526,6 +528,12 @@ protected:
 
 public:
   /** Private to MapbooBuilder, don't call it */
+  int getApplicationEventId() const;
+  
+  /** Private to MapbooBuilder, don't call it */
+  void setApplicationEventId(const int eventId);
+  
+  /** Private to MapbooBuilder, don't call it */
   int getApplicationTimestamp() const;
 
   /** Private to MapbooBuilder, don't call it */
@@ -563,6 +571,10 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void parseApplicationJSON(const std::string& json,
+                            const URL& url);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void parseApplicationEventsJSON(const std::string& json,
                             const URL& url);
 
   /** Private to MapbooBuilder, don't call it */
@@ -623,6 +635,8 @@ public:
     return _serverURL;
   }
 
+  /** Private to MapbooBuilder, don't call it */
+  void pollApplicationDataFromServer(const G3MContext* context);
 };
 
 #endif
