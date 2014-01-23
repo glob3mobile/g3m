@@ -9,7 +9,6 @@ package org.glob3.mobile.generated;
  */
 
 
-
 /*
  *  Camera.hpp
  *  Prueba Opengl iPad
@@ -22,16 +21,12 @@ package org.glob3.mobile.generated;
 
 
 
-////#include "GPUProgramState.hpp"
-
 //class ILogger;
 //class GPUProgramState;
 
 
 public class CameraDirtyFlags
 {
-
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  CameraDirtyFlags operator =(CameraDirtyFlags that);
 
@@ -43,8 +38,6 @@ public class CameraDirtyFlags
   public boolean _geodeticCenterOfViewDirty;
   public boolean _frustumDirty;
   public boolean _frustumMCDirty;
-  public boolean _halfFrustumDirty;
-  public boolean _halfFrustumMCDirty;
 
   public CameraDirtyFlags()
   {
@@ -61,11 +54,7 @@ public class CameraDirtyFlags
     _geodeticCenterOfViewDirty = other._geodeticCenterOfViewDirty;
     _frustumDirty = other._frustumDirty;
     _frustumMCDirty = other._frustumMCDirty;
-    _halfFrustumDirty = other._halfFrustumDirty;
-    _halfFrustumMCDirty = other._halfFrustumMCDirty;
-
   }
-
 
   public CameraDirtyFlags(CameraDirtyFlags other)
   {
@@ -77,35 +66,27 @@ public class CameraDirtyFlags
     _geodeticCenterOfViewDirty = other._geodeticCenterOfViewDirty;
     _frustumDirty = other._frustumDirty;
     _frustumMCDirty = other._frustumMCDirty;
-    _halfFrustumDirty = other._halfFrustumDirty;
-    _halfFrustumMCDirty = other._halfFrustumMCDirty;
   }
 
   public final String description()
   {
     String d = "";
     if (_frustumDataDirty)
-       d+= "FD ";
+       d += "FD ";
     if (_projectionMatrixDirty)
        d += "PM ";
     if (_modelMatrixDirty)
-       d+= "MM ";
-
+       d += "MM ";
     if (_modelViewMatrixDirty)
-       d+= "MVM ";
+       d += "MVM ";
     if (_cartesianCenterOfViewDirty)
        d += "CCV ";
     if (_geodeticCenterOfViewDirty)
-       d+= "GCV ";
-
+       d += "GCV ";
     if (_frustumDirty)
-       d+= "F ";
+       d += "F ";
     if (_frustumMCDirty)
        d += "FMC ";
-    if (_halfFrustumDirty)
-       d+= "HF ";
-    if (_halfFrustumMCDirty)
-       d+= "HFMC ";
     return d;
   }
 
@@ -119,7 +100,5 @@ public class CameraDirtyFlags
     _geodeticCenterOfViewDirty = value;
     _frustumDirty = value;
     _frustumMCDirty = value;
-    _halfFrustumDirty = value;
-    _halfFrustumMCDirty = value;
   }
 }
