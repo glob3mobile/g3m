@@ -276,8 +276,10 @@ public:
 
   [[self G3MWidget] startAnimation];
 
+  /*
   [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
                                                new CameraRollChangerTask([[self G3MWidget] widget]));
+   */
 }
 
 
