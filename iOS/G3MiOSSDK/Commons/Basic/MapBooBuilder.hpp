@@ -568,9 +568,13 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   const URL createApplicationTubeURL() const;
-
+  
   /** Private to MapbooBuilder, don't call it */
   void parseApplicationJSON(const std::string& json,
+                            const URL& url);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void parseApplicationJSON(const JSONObject* jsonBaseObjectLayer,
                             const URL& url);
   
   /** Private to MapbooBuilder, don't call it */

@@ -921,7 +921,8 @@ void MapBooBuilder::parseApplicationEventsJSON(const std::string& json,
     if (jsonArray != NULL) {
       const int size = jsonArray->size();
       for (int i = 0; i < size; i++) {
-        parseApplicationJSON(jsonArray->getAsString(i)->value(), url);
+        const JSONObject* jsonObject = jsonArray->getAsObject(i);
+        parseApplicationJSON(jsonObject, url);
       }
     }
     else {
@@ -931,11 +932,130 @@ void MapBooBuilder::parseApplicationEventsJSON(const std::string& json,
   delete jsonBaseObject;
 }
 
+
+void MapBooBuilder::parseApplicationJSON(const JSONObject* jsonObject,
+                                         const URL& url) {
+  if (jsonObject == NULL) {
+    ILogger::instance()->logError("Invalid ApplicationJSON");
+  }
+  else {
+    const JSONString* jsonError = jsonObject->getAsString("error");
+    if (jsonError == NULL) {
+      const int eventId = (int) jsonObject->getAsNumber("eventId", 0);
+      const int timestamp = (int) jsonObject->getAsNumber("timestamp", 0);
+      
+      if (getApplicationEventId() != eventId) {
+        const JSONString* jsonName = jsonObject->getAsString("name");
+        if (jsonName != NULL) {
+          setApplicationName( jsonName->value() );
+        }
+        
+        const JSONString* jsonWebsite = jsonObject->getAsString("website");
+        if (jsonWebsite != NULL) {
+          setApplicationWebsite( jsonWebsite->value() );
+        }
+        
+        const JSONString* jsonEMail = jsonObject->getAsString("email");
+        if (jsonEMail != NULL) {
+          setApplicationEMail( jsonEMail->value() );
+        }
+        
+        const JSONString* jsonAbout = jsonObject->getAsString("about");
+        if (jsonAbout != NULL) {
+          setApplicationAbout( jsonAbout->value() );
+        }
+        
+        const JSONObject* jsonScene = jsonObject->getAsObject("scene");
+        if (jsonScene != NULL) {
+          MapBoo_Scene* scene = parseScene(jsonScene);
+          if (scene != NULL) {
+            setApplicationScene(scene);
+          }
+        }
+        
+        const JSONArray* jsonAllScenes = jsonObject->getAsArray("scenes");
+        if (jsonAllScenes != NULL) {
+          std::vector<MapBoo_Scene*> scenes;
+          
+          const int scenesCount = jsonAllScenes->size();
+          for (int i = 0; i < scenesCount; i++) {
+            MapBoo_Scene* scene = parseScene( jsonAllScenes->getAsObject(i) );
+            if (scene != NULL) {
+              scenes.push_back(scene);
+            }
+          }
+          
+          setApplicationScenes(scenes);
+        }
+        
+        const JSONObject* jsonScenes = jsonObject->getAsObject("scenes");
+        if (jsonScenes != NULL) {
+          const JSONObject* jsonPutScene = jsonScenes->getAsObject("putScene");
+          if (jsonPutScene != NULL) {
+            const JSONNumber* jsonPosition = jsonPutScene->getAsNumber("position");
+            int position = (jsonPosition != NULL) ? (int) jsonPosition->value() : 0;
+            const JSONObject* jsonNewScene = jsonPutScene->getAsObject("scene");
+            if (jsonNewScene != NULL) {
+              MapBoo_Scene* scene = parseScene(jsonNewScene);
+              if (scene != NULL) {
+                addApplicationScene(scene, position);
+              }
+            }
+          }
+          else {
+            const JSONObject* jsonDeleteScene = jsonScenes->getAsObject("deleteScene");
+            if (jsonDeleteScene != NULL) {
+              const JSONString* jsonSceneId = jsonDeleteScene->getAsString("sceneId");
+              if (jsonSceneId != NULL) {
+                deleteApplicationScene(jsonSceneId->value());
+              }
+            }
+          }
+        }
+        
+        setApplicationEventId(eventId);
+        setApplicationTimestamp(timestamp);
+        saveApplicationData();
+        setHasParsedApplication();
+      }
+      
+      const JSONString* jsonCurrentSceneId = jsonObject->getAsString("currentSceneId");
+      if (jsonCurrentSceneId != NULL) {
+        setApplicationCurrentSceneId( jsonCurrentSceneId->value() );
+      }
+      
+      if (_enableNotifications) {
+        const JSONArray* jsonNotifications = jsonObject->getAsArray("notifications");
+        if (jsonNotifications != NULL) {
+          addApplicationNotifications( parseNotifications(jsonNotifications) );
+        }
+        
+        const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
+        if (jsonNotification != NULL) {
+          addApplicationNotification( parseNotification(jsonNotification) );
+        }
+      }
+      
+      if (_initialParse) {
+        _initialParse = false;
+        if (_applicationCurrentSceneId.compare("-1") == 0) {
+          if (_applicationScenes.size() > 0) {
+            setApplicationCurrentSceneId(_applicationScenes.at(0)->getId());
+          }
+        }
+      }
+    }
+    else {
+      ILogger::instance()->logError("Server Error: %s",
+                                    jsonError->value().c_str());
+    }
+  }
+}
+
+
 void MapBooBuilder::parseApplicationJSON(const std::string& json,
                                          const URL& url) {
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
-  
-  //ILogger::instance()->logInfo(json);
 
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
@@ -943,125 +1063,9 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
   }
   else {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
-    if (jsonObject == NULL) {
-      ILogger::instance()->logError("Invalid ApplicationJSON");
-    }
-    else {
-      const JSONString* jsonError = jsonObject->getAsString("error");
-      if (jsonError == NULL) {
-        const int eventId = (int) jsonObject->getAsNumber("eventId", 0);
-        const int timestamp = (int) jsonObject->getAsNumber("timestamp", 0);
-
-        if (getApplicationEventId() != eventId) {
-          const JSONString* jsonName = jsonObject->getAsString("name");
-          if (jsonName != NULL) {
-            setApplicationName( jsonName->value() );
-          }
-
-          const JSONString* jsonWebsite = jsonObject->getAsString("website");
-          if (jsonWebsite != NULL) {
-            setApplicationWebsite( jsonWebsite->value() );
-          }
-
-          const JSONString* jsonEMail = jsonObject->getAsString("email");
-          if (jsonEMail != NULL) {
-            setApplicationEMail( jsonEMail->value() );
-          }
-
-          const JSONString* jsonAbout = jsonObject->getAsString("about");
-          if (jsonAbout != NULL) {
-            setApplicationAbout( jsonAbout->value() );
-          }
-          
-          const JSONObject* jsonScene = jsonObject->getAsObject("scene");
-          if (jsonScene != NULL) {
-            MapBoo_Scene* scene = parseScene(jsonScene);
-            if (scene != NULL) {
-              setApplicationScene(scene);
-            }
-          }
-
-          const JSONArray* jsonAllScenes = jsonObject->getAsArray("scenes");
-          if (jsonAllScenes != NULL) {
-            std::vector<MapBoo_Scene*> scenes;
-
-            const int scenesCount = jsonAllScenes->size();
-            for (int i = 0; i < scenesCount; i++) {
-              MapBoo_Scene* scene = parseScene( jsonAllScenes->getAsObject(i) );
-              if (scene != NULL) {
-                scenes.push_back(scene);
-              }
-            }
-
-            setApplicationScenes(scenes);
-          }
-          
-          const JSONObject* jsonScenes = jsonObject->getAsObject("scenes");
-          if (jsonScenes != NULL) {
-            const JSONObject* jsonPutScene = jsonScenes->getAsObject("putScene");
-            if (jsonPutScene != NULL) {
-              const JSONNumber* jsonPosition = jsonPutScene->getAsNumber("position");
-              int position = (jsonPosition != NULL) ? (int) jsonPosition->value() : 0;
-              const JSONObject* jsonNewScene = jsonPutScene->getAsObject("scene");
-              if (jsonNewScene != NULL) {
-                MapBoo_Scene* scene = parseScene(jsonNewScene);
-                if (scene != NULL) {
-                  addApplicationScene(scene, position);
-                }
-              }
-            }
-            else {
-              const JSONObject* jsonDeleteScene = jsonScenes->getAsObject("deleteScene");
-              if (jsonDeleteScene != NULL) {
-                const JSONString* jsonSceneId = jsonDeleteScene->getAsString("sceneId");
-                if (jsonSceneId != NULL) {
-                  deleteApplicationScene(jsonSceneId->value());
-                }
-              }
-            }
-          }
-
-          setApplicationEventId(eventId);
-          setApplicationTimestamp(timestamp);
-          saveApplicationData();
-          setHasParsedApplication();
-        }
-
-        const JSONString* jsonCurrentSceneId = jsonObject->getAsString("currentSceneId");
-        if (jsonCurrentSceneId != NULL) {
-          setApplicationCurrentSceneId( jsonCurrentSceneId->value() );
-        }
-
-        if (_enableNotifications) {
-          const JSONArray* jsonNotifications = jsonObject->getAsArray("notifications");
-          if (jsonNotifications != NULL) {
-            addApplicationNotifications( parseNotifications(jsonNotifications) );
-          }
-
-          const JSONObject* jsonNotification = jsonObject->getAsObject("notification");
-          if (jsonNotification != NULL) {
-            addApplicationNotification( parseNotification(jsonNotification) );
-          }
-        }
-        
-        if (_initialParse) {
-          _initialParse = false;
-          if (_applicationCurrentSceneId.compare("-1") == 0) {
-            if (_applicationScenes.size() > 0) {
-              setApplicationCurrentSceneId(_applicationScenes.at(0)->getId());
-            }
-          }
-        }
-      }
-      else {
-        ILogger::instance()->logError("Server Error: %s",
-                                      jsonError->value().c_str());
-      }
-    }
-
-    delete jsonBaseObject;
+    parseApplicationJSON(jsonObject, url);
   }
-
+  delete jsonBaseObject;
 }
 
 void MapBooBuilder::addApplicationNotifications(const std::vector<MapBoo_Notification*>* notifications) {
