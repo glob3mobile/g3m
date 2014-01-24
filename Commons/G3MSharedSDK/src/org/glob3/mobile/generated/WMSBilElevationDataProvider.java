@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  WMSBillElevationDataProvider.cpp
+//  WMSBilElevationDataProvider.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/17/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  WMSBillElevationDataProvider.hpp
+//  WMSBilElevationDataProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/17/13.
@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class IDownloader;
 
-public class WMSBillElevationDataProvider extends ElevationDataProvider
+public class WMSBilElevationDataProvider extends ElevationDataProvider
 {
   private IDownloader _downloader;
   private URL _url = new URL();
@@ -28,7 +28,7 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
   private Sector _sector ;
   private final double _deltaHeight;
 
-  public WMSBillElevationDataProvider(URL url, String layerName, Sector sector, double deltaHeight)
+  public WMSBilElevationDataProvider(URL url, String layerName, Sector sector, double deltaHeight)
   {
      _url = new URL(url);
      _sector = new Sector(sector);
@@ -52,7 +52,7 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
   {
     if (_downloader == null)
     {
-      ILogger.instance().logError("WMSBillElevationDataProvider was not initialized.");
+      ILogger.instance().logError("WMSBilElevationDataProvider was not initialized.");
       return -1;
     }
   
@@ -105,7 +105,7 @@ public class WMSBillElevationDataProvider extends ElevationDataProvider
        isb.dispose();
   
   
-    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBillElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
+    return _downloader.requestBuffer(new URL(path, false), 2000000000, TimeInterval.fromDays(30), true, new WMSBilElevationDataProvider_BufferDownloadListener(sector, extent, listener, autodeleteListener, _deltaHeight), true);
   }
 
   public final void cancelRequest(long requestId)

@@ -142,6 +142,11 @@ void Tile::setTextureSolved(bool textureSolved) {
   if (textureSolved != _textureSolved) {
     _textureSolved = textureSolved;
 
+    if (_textureSolved){
+      delete _texturizerData;
+      _texturizerData = NULL;
+    }
+
     if (_subtiles != NULL) {
       const int subtilesSize = _subtiles->size();
       for (int i = 0; i < subtilesSize; i++) {

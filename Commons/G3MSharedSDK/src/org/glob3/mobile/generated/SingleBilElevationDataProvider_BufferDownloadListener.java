@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated; 
-public class SingleBillElevationDataProvider_BufferDownloadListener extends IBufferDownloadListener
+public class SingleBilElevationDataProvider_BufferDownloadListener extends IBufferDownloadListener
 {
-  private SingleBillElevationDataProvider _singleBillElevationDataProvider;
+  private SingleBilElevationDataProvider _singleBillElevationDataProvider;
   private final Sector _sector ;
   private final int _resolutionWidth;
   private final int _resolutionHeight;
 
   private final double _deltaHeight;
 
-  public SingleBillElevationDataProvider_BufferDownloadListener(SingleBillElevationDataProvider singleBillElevationDataProvider, Sector sector, int resolutionWidth, int resolutionHeight, double deltaHeight)
+  public SingleBilElevationDataProvider_BufferDownloadListener(SingleBilElevationDataProvider singleBillElevationDataProvider, Sector sector, int resolutionWidth, int resolutionHeight, double deltaHeight)
   {
      _singleBillElevationDataProvider = singleBillElevationDataProvider;
      _sector = new Sector(sector);
@@ -45,7 +45,7 @@ public class SingleBillElevationDataProvider_BufferDownloadListener extends IBuf
 
   public final void onCancel(URL url)
   {
-    ILogger.instance().logInfo("SingleBillElevationDataProvider download petition was canceled.");
+    ILogger.instance().logInfo("SingleBilElevationDataProvider download petition was canceled.");
     if (_singleBillElevationDataProvider != null)
     {
       _singleBillElevationDataProvider.onElevationData(null);

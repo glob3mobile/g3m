@@ -799,6 +799,13 @@ public class Tile
     {
       _textureSolved = textureSolved;
   
+      if (_textureSolved)
+      {
+        if (_texturizerData != null)
+           _texturizerData.dispose();
+        _texturizerData = null;
+      }
+  
       if (_subtiles != null)
       {
         final int subtilesSize = _subtiles.size();

@@ -1,13 +1,13 @@
 //
-//  WMSBillElevationDataProvider.hpp
+//  WMSBilElevationDataProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 2/17/13.
 //
 //
 
-#ifndef __G3MiOSSDK__WMSBillElevationDataProvider__
-#define __G3MiOSSDK__WMSBillElevationDataProvider__
+#ifndef __G3MiOSSDK__WMSBilElevationDataProvider__
+#define __G3MiOSSDK__WMSBilElevationDataProvider__
 
 #include "ElevationDataProvider.hpp"
 #include <stddef.h>
@@ -18,7 +18,7 @@
 
 class IDownloader;
 
-class WMSBillElevationDataProvider : public ElevationDataProvider {
+class WMSBilElevationDataProvider : public ElevationDataProvider {
 private:
   IDownloader*      _downloader;
   URL               _url;
@@ -27,7 +27,7 @@ private:
   const double      _deltaHeight;
 
 public:
-  WMSBillElevationDataProvider(const URL& url,
+  WMSBilElevationDataProvider(const URL& url,
                                const std::string& layerName,
                                const Sector& sector,
                                double deltaHeight) :
