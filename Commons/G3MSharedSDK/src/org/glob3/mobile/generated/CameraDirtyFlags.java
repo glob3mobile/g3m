@@ -90,6 +90,11 @@ public class CameraDirtyFlags
     return d;
   }
 
+  @Override
+  public String toString() {
+    return description();
+  }
+
   public final void setAll(boolean value)
   {
     _frustumDataDirty = value;

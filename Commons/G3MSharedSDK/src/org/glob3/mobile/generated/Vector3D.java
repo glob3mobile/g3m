@@ -285,6 +285,10 @@ public class Vector3D
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final Vector3D clamp(Vector3D min, Vector3D max)
   {

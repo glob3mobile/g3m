@@ -95,6 +95,10 @@ public class Vector2I
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final boolean isEquals(Vector2I that)
   {

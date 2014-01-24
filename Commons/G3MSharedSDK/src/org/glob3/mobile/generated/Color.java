@@ -417,5 +417,9 @@ public class Color
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

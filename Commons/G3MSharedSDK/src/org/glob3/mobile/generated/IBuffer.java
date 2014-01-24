@@ -39,5 +39,9 @@ public interface IBuffer
   int timestamp();
 
   String description();
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

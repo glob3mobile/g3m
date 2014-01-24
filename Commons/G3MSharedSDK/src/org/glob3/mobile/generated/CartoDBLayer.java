@@ -68,6 +68,11 @@ public class CartoDBLayer extends MercatorTiledLayer
     return "[CartoDBLayer]";
   }
 
+  @Override
+  public String toString() {
+    return description();
+  }
+
   public final CartoDBLayer copy()
   {
     return new CartoDBLayer(_userName, _table, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy());

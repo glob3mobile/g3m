@@ -108,6 +108,10 @@ public class URL
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public static String escape(String path)
   {

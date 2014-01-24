@@ -59,5 +59,9 @@ public abstract class Interpolator
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  String description();
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

@@ -36,4 +36,9 @@ public class BilinearInterpolator extends Interpolator
     return "BilinearInterpolator";
   }
 
+  @Override
+  public String toString() {
+    return description();
+  }
+
 }

@@ -278,6 +278,10 @@ public class BingMapsLayer extends Layer
   {
     return "[BingMapsLayer]";
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final BingMapsLayer copy()
   {
