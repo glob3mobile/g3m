@@ -29,6 +29,7 @@ public:
                          ShapesRenderer*         shapesRenderer,
                          MarksRenderer*          marksRenderer,
                          GEOTileRasterizer*      geoTileRasterizer) const = 0 ;
+
 };
 
 #endif
