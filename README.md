@@ -259,7 +259,6 @@ There are another different projects developed that are used for demo purpose an
 
 ###WebGL Demos
 
-+ <a href="http://galileo.glob3mobile.com" >Galileo</a>
 + <a href="http://owmg.glob3mobile.com/">Open Weather Map</a>
 + <a href="http://milanuncios3d.glob3mobile.com" frameborder="0" allowfullscreen>Mil Anuncios 3D</a>
 + <a href="http://meteorite.glob3mobile.com">Meteorite</a>
@@ -269,7 +268,6 @@ There are another different projects developed that are used for demo purpose an
 Videos
 ======
 
-+ <a href="http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage" frameborder="0" allowfullscreen>Galileo</a>
 + <a href="http://www.youtube.com/watch?feature=player_detailpage&v=kEep7i0ZurE" frameborder="0" allowfullscreen>Mapboo</a>
 + <a href="http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Desktop</a>
 + <a href="http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen>G3M on Mozilla OS</a>
