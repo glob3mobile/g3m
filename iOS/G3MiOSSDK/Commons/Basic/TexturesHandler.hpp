@@ -93,6 +93,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 #ifdef C_CODE
   bool operator<(const TextureSpec& that) const {

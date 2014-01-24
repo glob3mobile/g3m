@@ -82,6 +82,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   const std::string getAsString() const;
 

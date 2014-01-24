@@ -180,6 +180,12 @@ public:
   const Geodetic2D clamp(const Geodetic2D& pos) const;
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   Sector* shrinkedByPercentP(float percent) const {
     const Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);

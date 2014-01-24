@@ -80,6 +80,13 @@ public:
     if (_frustumMCDirty)             d += "FMC ";
     return d;
   }
+  
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   void setAll(bool value) {
     _frustumDataDirty           = value;

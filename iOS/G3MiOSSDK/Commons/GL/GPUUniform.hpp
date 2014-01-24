@@ -43,6 +43,13 @@ public:
   virtual bool isEquals(const GPUUniformValue* v) const = 0;
 
   virtual std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
 };
 
 
