@@ -56,9 +56,6 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
                                                           "BusyQuadRenderer-Texture",
                                                           false);
 
-  rc->getFactory()->deleteImage(_image);
-  _image = NULL;
-
   if (texId == NULL) {
     rc->getLogger()->logError("Can't upload texture to GPU");
     return false;
