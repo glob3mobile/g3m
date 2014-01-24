@@ -1233,8 +1233,6 @@ public abstract class MapBooBuilder
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
   
-    //ILogger::instance()->logInfo(json);
-  
     if (jsonBaseObject == null)
     {
       ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
@@ -1242,153 +1240,157 @@ public abstract class MapBooBuilder
     else
     {
       final JSONObject jsonObject = jsonBaseObject.asObject();
-      if (jsonObject == null)
+      parseApplicationJSON(jsonObject, url);
+    }
+    if (jsonBaseObject != null)
+       jsonBaseObject.dispose();
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void parseApplicationJSON(JSONObject jsonObject, URL url)
+  {
+    if (jsonObject == null)
+    {
+      ILogger.instance().logError("Invalid ApplicationJSON");
+    }
+    else
+    {
+      final JSONString jsonError = jsonObject.getAsString("error");
+      if (jsonError == null)
       {
-        ILogger.instance().logError("Invalid ApplicationJSON");
+        final int eventId = (int) jsonObject.getAsNumber("eventId", 0);
+        final int timestamp = (int) jsonObject.getAsNumber("timestamp", 0);
+  
+        if (getApplicationEventId() != eventId)
+        {
+          final JSONString jsonName = jsonObject.getAsString("name");
+          if (jsonName != null)
+          {
+            setApplicationName(jsonName.value());
+          }
+  
+          final JSONString jsonWebsite = jsonObject.getAsString("website");
+          if (jsonWebsite != null)
+          {
+            setApplicationWebsite(jsonWebsite.value());
+          }
+  
+          final JSONString jsonEMail = jsonObject.getAsString("email");
+          if (jsonEMail != null)
+          {
+            setApplicationEMail(jsonEMail.value());
+          }
+  
+          final JSONString jsonAbout = jsonObject.getAsString("about");
+          if (jsonAbout != null)
+          {
+            setApplicationAbout(jsonAbout.value());
+          }
+  
+          final JSONObject jsonScene = jsonObject.getAsObject("scene");
+          if (jsonScene != null)
+          {
+            MapBoo_Scene scene = parseScene(jsonScene);
+            if (scene != null)
+            {
+              setApplicationScene(scene);
+            }
+          }
+  
+          final JSONArray jsonAllScenes = jsonObject.getAsArray("scenes");
+          if (jsonAllScenes != null)
+          {
+            java.util.ArrayList<MapBoo_Scene> scenes = new java.util.ArrayList<MapBoo_Scene>();
+  
+            final int scenesCount = jsonAllScenes.size();
+            for (int i = 0; i < scenesCount; i++)
+            {
+              MapBoo_Scene scene = parseScene(jsonAllScenes.getAsObject(i));
+              if (scene != null)
+              {
+                scenes.add(scene);
+              }
+            }
+  
+            setApplicationScenes(scenes);
+          }
+  
+          final JSONObject jsonScenes = jsonObject.getAsObject("scenes");
+          if (jsonScenes != null)
+          {
+            final JSONObject jsonPutScene = jsonScenes.getAsObject("putScene");
+            if (jsonPutScene != null)
+            {
+              final JSONNumber jsonPosition = jsonPutScene.getAsNumber("position");
+              int position = (jsonPosition != null) ? (int) jsonPosition.value() : 0;
+              final JSONObject jsonNewScene = jsonPutScene.getAsObject("scene");
+              if (jsonNewScene != null)
+              {
+                MapBoo_Scene scene = parseScene(jsonNewScene);
+                if (scene != null)
+                {
+                  addApplicationScene(scene, position);
+                }
+              }
+            }
+            else
+            {
+              final JSONObject jsonDeleteScene = jsonScenes.getAsObject("deleteScene");
+              if (jsonDeleteScene != null)
+              {
+                final JSONString jsonSceneId = jsonDeleteScene.getAsString("sceneId");
+                if (jsonSceneId != null)
+                {
+                  deleteApplicationScene(jsonSceneId.value());
+                }
+              }
+            }
+          }
+  
+          setApplicationEventId(eventId);
+          setApplicationTimestamp(timestamp);
+          saveApplicationData();
+          setHasParsedApplication();
+        }
+  
+        final JSONString jsonCurrentSceneId = jsonObject.getAsString("currentSceneId");
+        if (jsonCurrentSceneId != null)
+        {
+          setApplicationCurrentSceneId(jsonCurrentSceneId.value());
+        }
+  
+        if (_enableNotifications)
+        {
+          final JSONArray jsonNotifications = jsonObject.getAsArray("notifications");
+          if (jsonNotifications != null)
+          {
+            addApplicationNotifications(parseNotifications(jsonNotifications));
+          }
+  
+          final JSONObject jsonNotification = jsonObject.getAsObject("notification");
+          if (jsonNotification != null)
+          {
+            addApplicationNotification(parseNotification(jsonNotification));
+          }
+        }
+  
+        if (_initialParse)
+        {
+          _initialParse = false;
+          if (_applicationCurrentSceneId.compareTo("-1") == 0)
+          {
+            if (_applicationScenes.size() > 0)
+            {
+              setApplicationCurrentSceneId(_applicationScenes.get(0).getId());
+            }
+          }
+        }
       }
       else
       {
-        final JSONString jsonError = jsonObject.getAsString("error");
-        if (jsonError == null)
-        {
-          final int eventId = (int) jsonObject.getAsNumber("eventId", 0);
-          final int timestamp = (int) jsonObject.getAsNumber("timestamp", 0);
-  
-          if (getApplicationEventId() != eventId)
-          {
-            final JSONString jsonName = jsonObject.getAsString("name");
-            if (jsonName != null)
-            {
-              setApplicationName(jsonName.value());
-            }
-  
-            final JSONString jsonWebsite = jsonObject.getAsString("website");
-            if (jsonWebsite != null)
-            {
-              setApplicationWebsite(jsonWebsite.value());
-            }
-  
-            final JSONString jsonEMail = jsonObject.getAsString("email");
-            if (jsonEMail != null)
-            {
-              setApplicationEMail(jsonEMail.value());
-            }
-  
-            final JSONString jsonAbout = jsonObject.getAsString("about");
-            if (jsonAbout != null)
-            {
-              setApplicationAbout(jsonAbout.value());
-            }
-  
-            final JSONObject jsonScene = jsonObject.getAsObject("scene");
-            if (jsonScene != null)
-            {
-              MapBoo_Scene scene = parseScene(jsonScene);
-              if (scene != null)
-              {
-                setApplicationScene(scene);
-              }
-            }
-  
-            final JSONArray jsonAllScenes = jsonObject.getAsArray("scenes");
-            if (jsonAllScenes != null)
-            {
-              java.util.ArrayList<MapBoo_Scene> scenes = new java.util.ArrayList<MapBoo_Scene>();
-  
-              final int scenesCount = jsonAllScenes.size();
-              for (int i = 0; i < scenesCount; i++)
-              {
-                MapBoo_Scene scene = parseScene(jsonAllScenes.getAsObject(i));
-                if (scene != null)
-                {
-                  scenes.add(scene);
-                }
-              }
-  
-              setApplicationScenes(scenes);
-            }
-  
-            final JSONObject jsonScenes = jsonObject.getAsObject("scenes");
-            if (jsonScenes != null)
-            {
-              final JSONObject jsonPutScene = jsonScenes.getAsObject("putScene");
-              if (jsonPutScene != null)
-              {
-                final JSONNumber jsonPosition = jsonPutScene.getAsNumber("position");
-                int position = (jsonPosition != null) ? (int) jsonPosition.value() : 0;
-                final JSONObject jsonNewScene = jsonPutScene.getAsObject("scene");
-                if (jsonNewScene != null)
-                {
-                  MapBoo_Scene scene = parseScene(jsonNewScene);
-                  if (scene != null)
-                  {
-                    addApplicationScene(scene, position);
-                  }
-                }
-              }
-              else
-              {
-                final JSONObject jsonDeleteScene = jsonScenes.getAsObject("deleteScene");
-                if (jsonDeleteScene != null)
-                {
-                  final JSONString jsonSceneId = jsonDeleteScene.getAsString("sceneId");
-                  if (jsonSceneId != null)
-                  {
-                    deleteApplicationScene(jsonSceneId.value());
-                  }
-                }
-              }
-            }
-  
-            setApplicationEventId(eventId);
-            setApplicationTimestamp(timestamp);
-            saveApplicationData();
-            setHasParsedApplication();
-          }
-  
-          final JSONString jsonCurrentSceneId = jsonObject.getAsString("currentSceneId");
-          if (jsonCurrentSceneId != null)
-          {
-            setApplicationCurrentSceneId(jsonCurrentSceneId.value());
-          }
-  
-          if (_enableNotifications)
-          {
-            final JSONArray jsonNotifications = jsonObject.getAsArray("notifications");
-            if (jsonNotifications != null)
-            {
-              addApplicationNotifications(parseNotifications(jsonNotifications));
-            }
-  
-            final JSONObject jsonNotification = jsonObject.getAsObject("notification");
-            if (jsonNotification != null)
-            {
-              addApplicationNotification(parseNotification(jsonNotification));
-            }
-          }
-  
-          if (_initialParse)
-          {
-            _initialParse = false;
-            if (_applicationCurrentSceneId.compareTo("-1") == 0)
-            {
-              if (_applicationScenes.size() > 0)
-              {
-                setApplicationCurrentSceneId(_applicationScenes.get(0).getId());
-              }
-            }
-          }
-        }
-        else
-        {
-          ILogger.instance().logError("Server Error: %s", jsonError.value());
-        }
+        ILogger.instance().logError("Server Error: %s", jsonError.value());
       }
-  
-      if (jsonBaseObject != null)
-         jsonBaseObject.dispose();
     }
-  
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1407,7 +1409,8 @@ public abstract class MapBooBuilder
         final int size = jsonArray.size();
         for (int i = 0; i < size; i++)
         {
-          parseApplicationJSON(jsonArray.getAsString(i).value(), url);
+          final JSONObject jsonObject = jsonArray.getAsObject(i);
+          parseApplicationJSON(jsonObject, url);
         }
       }
       else
