@@ -163,6 +163,8 @@ public:
     }
   }
 
+  void removeShape(Shape* shape);
+
   void removeAllShapes(bool deleteShapes=true);
 
   void enableAll();

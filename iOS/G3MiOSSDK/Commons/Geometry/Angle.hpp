@@ -126,9 +126,9 @@ public:
 //    return COS(_radians);
 //  }
 
-//  double tangent() const {
-//    return TAN(_radians);
-//  }
+  double tangent() const {
+    return TAN(_radians);
+  }
 
   bool closeTo(const Angle& other) const {
     return (IMathUtils::instance()->abs(_degrees - other._degrees) < THRESHOLD);
@@ -232,6 +232,13 @@ public:
   }
 
   const std::string description() const;
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 

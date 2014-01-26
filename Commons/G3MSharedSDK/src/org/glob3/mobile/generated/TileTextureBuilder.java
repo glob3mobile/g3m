@@ -298,6 +298,7 @@ public class TileTextureBuilder extends RCObject
         {
            //If the image could be properly turn into texture
           _tile.setTextureSolved(true);
+          deletePetitions(); //We must release the petitions so we can get rid off no longer needed images
         }
       }
 

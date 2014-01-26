@@ -26,6 +26,8 @@ package org.glob3.mobile.generated;
 //class UniformsStruct;
 //class GPUProgram;
 
+//#define MAX_N_TEXTURES 4
+
 public class GLGlobalState
 {
 
@@ -37,7 +39,7 @@ public class GLGlobalState
   private boolean _cullFace;
   private int _culledFace;
 
-  private IGLTextureId _boundTextureId;
+  private final IGLTextureId[] _boundTextureId = new IGLTextureId[DefineConstants.MAX_N_TEXTURES];
 
   private float _lineWidth;
 
@@ -72,12 +74,17 @@ public class GLGlobalState
      _polygonOffsetFill = parentState._polygonOffsetFill;
      _blendDFactor = parentState._blendDFactor;
      _blendSFactor = parentState._blendSFactor;
-     _boundTextureId = parentState._boundTextureId;
      _pixelStoreIAlignmentUnpack = parentState._pixelStoreIAlignmentUnpack;
      _clearColorR = parentState._clearColorR;
      _clearColorG = parentState._clearColorG;
      _clearColorB = parentState._clearColorB;
      _clearColorA = parentState._clearColorA;
+
+    for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
+    {
+      _boundTextureId[i] = parentState._boundTextureId[i];
+    }
+
   }
 
 
@@ -99,7 +106,6 @@ public class GLGlobalState
      _polygonOffsetFill = false;
      _blendDFactor = GLBlendFactor.zero();
      _blendSFactor = GLBlendFactor.one();
-     _boundTextureId = null;
      _pixelStoreIAlignmentUnpack = -1;
      _clearColorR = 0.0F;
      _clearColorG = 0.0F;
@@ -109,6 +115,11 @@ public class GLGlobalState
     if (!_initializationAvailable)
     {
       ILogger.instance().logError("GLGlobalState creation before it is available.");
+    }
+
+    for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
+    {
+      _boundTextureId[i] = null;
     }
 
   }
@@ -225,12 +236,30 @@ public class GLGlobalState
 
   public final void bindTexture(IGLTextureId textureId)
   {
-    _boundTextureId = textureId;
+    _boundTextureId[0] = textureId;
   }
 
   public final IGLTextureId getBoundTexture()
   {
-    return _boundTextureId;
+    return _boundTextureId[0];
+  }
+
+  public final void bindTexture(int target, IGLTextureId textureId)
+  {
+
+
+    if (target > DefineConstants.MAX_N_TEXTURES)
+    {
+      ILogger.instance().logError("WRONG TARGET FOR TEXTURE");
+      return;
+    }
+
+    _boundTextureId[target] = textureId;
+  }
+
+  public final IGLTextureId getBoundTexture(int target)
+  {
+    return _boundTextureId[0];
   }
 
   public final void setPixelStoreIAlignmentUnpack(int p)
@@ -343,17 +372,22 @@ public class GLGlobalState
     }
   
     //Texture (After blending factors)
-    if (_boundTextureId != null)
-    {
-      if (currentState._boundTextureId == null || !_boundTextureId.isEquals(currentState._boundTextureId))
-      {
-        nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureId);
   
-        currentState._boundTextureId = _boundTextureId;
-      }
-      else
+    for (int i = 0; i < DefineConstants.MAX_N_TEXTURES; i++)
+    {
+  
+      if (_boundTextureId[i] != null)
       {
-        //ILogger::instance()->logInfo("Texture already bound.\n");
+        if (currentState._boundTextureId[i] == null || !_boundTextureId[i].isEquals(currentState._boundTextureId[i]))
+        {
+          nativeGL.setActiveTexture(i);
+          nativeGL.bindTexture(GLTextureType.texture2D(), _boundTextureId[i]);
+  
+          currentState._boundTextureId[i] = _boundTextureId[i];
+        }
+        //else {
+        //  ILogger::instance()->logInfo("Texture already bound.\n");
+        //}
       }
     }
   

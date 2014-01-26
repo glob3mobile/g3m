@@ -45,7 +45,6 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
-import android.view.MotionEvent.PointerCoords;
 
 
 public final class G3MWidget_Android
@@ -212,7 +211,7 @@ public final class G3MWidget_Android
 
    @Override
    public void onLongPress(final MotionEvent e) {
-      final PointerCoords pc = new PointerCoords();
+      final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       e.getPointerCoords(0, pc);
       final Touch t = new Touch(new Vector2I((int) pc.x, (int) pc.y), new Vector2I(0, 0));
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
@@ -273,6 +272,7 @@ public final class G3MWidget_Android
                           final org.glob3.mobile.generated.Renderer mainRenderer,
                           final org.glob3.mobile.generated.Renderer busyRenderer,
                           final ErrorRenderer errorRenderer,
+                          final org.glob3.mobile.generated.Renderer hudRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
@@ -296,6 +296,7 @@ public final class G3MWidget_Android
                mainRenderer, //
                busyRenderer, //
                errorRenderer, //
+               hudRenderer, //
                backgroundColor, //
                logFPS, //
                logDownloaderStatistics, //

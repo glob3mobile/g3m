@@ -363,6 +363,7 @@ public class G3MWidget_WebGL
                           final Renderer mainRenderer,
                           final Renderer busyRenderer,
                           final ErrorRenderer errorRenderer,
+                          final Renderer hudRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
@@ -372,7 +373,6 @@ public class G3MWidget_WebGL
                           final WidgetUserData userData,
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider) {
-
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
@@ -386,6 +386,7 @@ public class G3MWidget_WebGL
                mainRenderer, //
                busyRenderer, //
                errorRenderer, //
+               hudRenderer, //
                backgroundColor, //
                logFPS, //
                logDownloaderStatistics, //

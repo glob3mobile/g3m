@@ -210,6 +210,10 @@ public:
     delete [] data;
   }
 
+  void setActiveTexture(int i) const{
+    glActiveTexture(GL_TEXTURE0 + i);
+  }
+
   void generateMipmap(int target) const {
     glGenerateMipmap(target);
   }
@@ -360,9 +364,12 @@ public:
     return GL_TEXTURE_WRAP_T;
   }
 
-  int TextureParameterValue_Linear() const {
-    return GL_LINEAR;
-  }
+  int TextureParameterValue_Nearest()              const { return GL_NEAREST;                }
+  int TextureParameterValue_Linear()               const { return GL_LINEAR;                 }
+  int TextureParameterValue_NearestMipmapNearest() const { return GL_NEAREST_MIPMAP_NEAREST; }
+  int TextureParameterValue_NearestMipmapLinear()  const { return GL_NEAREST_MIPMAP_LINEAR;  }
+  int TextureParameterValue_LinearMipmapNearest()  const { return GL_LINEAR_MIPMAP_NEAREST;  }
+  int TextureParameterValue_LinearMipmapLinear()   const { return GL_LINEAR_MIPMAP_LINEAR;   }
 
   int TextureParameterValue_ClampToEdge() const {
     return GL_CLAMP_TO_EDGE;
@@ -571,9 +578,8 @@ public:
         return new GPUUniformVec3Float(name, new GLUniformID_iOS(id));
       case GL_BOOL:
         return new GPUUniformBool(name, new GLUniformID_iOS(id));
-//      case GL_SAMPLER_2D:
-//        int NOT_IMPLEMENTED_YET;
-//        return NULL;
+      case GL_SAMPLER_2D:
+        return new GPUUniformSampler2D(name, new GLUniformID_iOS(id));
       default:
         return NULL;
         break;
@@ -611,7 +617,7 @@ public:
     glGetFloatv(GL_DEPTH_RANGE, r);
     return Vector2F(r[0], r[1]);
   }
-
+  
 };
 
 #endif

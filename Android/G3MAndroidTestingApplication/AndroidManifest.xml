@@ -12,7 +12,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -20,37 +20,27 @@
         android:theme="@android:style/Theme.Black.NoTitleBar" >
         <activity
             android:name="com.glob3.mobile.g3mandroidtestingapplication.MainActivity"
-            android:label="@string/app_name" 
             android:configChanges="screenSize|orientation|screenLayout"
-            >
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
-               <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.LAUNCHER" /> 
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-                <activity
+        <activity
             android:name="com.glob3.mobile.g3mandroidtestingapplication.PointCloudActivity"
-            android:label="@string/app_name" 
             android:configChanges="screenSize|orientation|screenLayout"
-            >
+            android:label="@string/app_name" >
             <intent-filter>
-    <!--            <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" /> -->
+
+                <!--
+                    <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                -->
             </intent-filter>
         </activity>
-        
-                                <activity
-            android:name="com.glob3.mobile.g3mandroidtestingapplication.ScenarioTerrainActivity"
-            android:label="@string/app_name" 
-            android:configChanges="screenSize|orientation|screenLayout"
-            >
-<!--             <intent-filter> -->
-<!--                <action android:name="android.intent.action.MAIN" /> -->
-<!--                 <category android:name="android.intent.category.LAUNCHER" /> -->
-<!--             </intent-filter> -->
-        </activity>
-        
     </application>
 
 </manifest>

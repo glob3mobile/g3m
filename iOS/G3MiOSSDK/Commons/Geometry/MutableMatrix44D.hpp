@@ -228,7 +228,7 @@ public:
     return _isValid;
   }
 
-  std::string description() const{
+  std::string description() const {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addString("MUTABLE MATRIX 44D: ");
     float* f = asMatrix44D()->getColumnMajorFloatArray();
@@ -240,6 +240,12 @@ public:
     delete isb;
     return s;
   }
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   void copyValueOfMultiplication(const MutableMatrix44D& m1, const MutableMatrix44D& m2);
 

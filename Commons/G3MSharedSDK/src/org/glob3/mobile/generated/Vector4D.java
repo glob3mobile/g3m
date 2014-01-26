@@ -87,6 +87,10 @@ public class Vector4D
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector4D transformedBy(MutableMatrix44D m);

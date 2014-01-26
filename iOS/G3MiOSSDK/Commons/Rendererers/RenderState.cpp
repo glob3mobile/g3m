@@ -8,12 +8,15 @@
 
 #include "RenderState.hpp"
 
+const RenderState RenderState::READY = RenderState(RENDER_READY);
+const RenderState RenderState::BUSY  = RenderState(RENDER_BUSY);
+
 RenderState RenderState::ready() {
-  return RenderState(RENDER_READY);
+  return READY;
 }
 
 RenderState RenderState::busy() {
-  return RenderState(RENDER_BUSY);
+  return BUSY;
 }
 
 RenderState RenderState::error(const std::vector<std::string>& errors) {

@@ -159,7 +159,7 @@ int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
         const StringCartoCSSToken* stringToken = (const StringCartoCSSToken*) token;
         selectors.push_back( stringToken->str() );
         //ILogger::instance()->logInfo("\"%s\"", stringToken->str().c_str());
-#warning Diego at work!
+//#warning Diego at work!
         break;
       }
         
@@ -167,7 +167,7 @@ int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
         const ExpressionCartoCSSToken* expressionToken = (const ExpressionCartoCSSToken*) token;
         selectors.push_back( "[" + expressionToken->_source + "]");
         //ILogger::instance()->logInfo("[%s]", expressionToken->_source.c_str());
-#warning Diego at work!
+//#warning Diego at work!
         break;
       }
 
@@ -201,7 +201,7 @@ int CartoCSSParser::parseSymbolizerBlock(CartoCSSSymbolizer* currentSymbolizer,
     }
 
     ILogger::instance()->logInfo("****%s", _tokens[cursor]->description().c_str());
-#warning Diego at work!
+//#warning Diego at work!
     cursor++;
   }
 

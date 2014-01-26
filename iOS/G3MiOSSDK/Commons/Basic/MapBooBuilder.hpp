@@ -76,12 +76,15 @@ public:
 
   virtual void onIconChanged(const G3MContext* context,
                              const std::string& icon) = 0;
-
+  
+  virtual void onSceneChanged(const G3MContext* context,
+                              MapBoo_Scene* scene) = 0;
+  
   virtual void onScenesChanged(const G3MContext* context,
                                const std::vector<MapBoo_Scene*>& scenes) = 0;
 
-  virtual void onSceneChanged(const G3MContext* context,
-                              int sceneIndex,
+  virtual void onCurrentSceneChanged(const G3MContext* context,
+                              const std::string& sceneId,
                               const MapBoo_Scene* scene) = 0;
 
   virtual void onWebSocketOpen(const G3MContext* context) = 0;
@@ -100,6 +103,7 @@ public:
 
 enum MapBoo_ViewType {
   VIEW_RUNTIME,
+  VIEW_EDITION_PREVIEW,
   VIEW_PRESENTATION
 };
 
@@ -138,6 +142,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   ~MapBoo_MultiImage_Level() {
 
@@ -178,6 +188,12 @@ public:
   MapBoo_MultiImage_Level* getBestLevel(int width) const;
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -222,6 +238,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -300,6 +322,12 @@ public:
   ~MapBoo_Scene();
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -372,8 +400,8 @@ private:
   std::string                _applicationAbout;
   int                        _applicationTimestamp;
   std::vector<MapBoo_Scene*> _applicationScenes;
-  int                        _applicationCurrentSceneIndex;
-  int                        _lastApplicationCurrentSceneIndex;
+  std::string                _applicationCurrentSceneId;
+  std::string                _lastApplicationCurrentSceneId;
 
   GL* _gl;
   G3MWidget* _g3mWidget;
@@ -435,7 +463,7 @@ private:
 
   URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer) const;
 
-  const int getApplicationCurrentSceneIndex();
+  const std::string getApplicationCurrentSceneId();
   const MapBoo_Scene* getApplicationCurrentScene();
 
   Color getCurrentBackgroundColor();
@@ -451,6 +479,8 @@ private:
   const MapBoo_CameraPosition* parseCameraPosition(const JSONObject* jsonObject) const;
 
   void changedCurrentScene();
+  
+  void updateVisibleScene();
 
   const std::string getApplicationCurrentSceneCommand() const;
 
@@ -481,6 +511,10 @@ private:
   MarksRenderer* getMarksRenderer();
 
   bool _hasParsedApplication;
+  
+  bool _initialParse;
+  
+  void fireOnScenesChanged();
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -532,7 +566,16 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void setApplicationAbout(const std::string& about);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void addApplicationScene(MapBoo_Scene* scene, const int position);
 
+  /** Private to MapbooBuilder, don't call it */
+  void deleteApplicationScene(const std::string& sceneId);
+
+  /** Private to MapbooBuilder, don't call it */
+  void setApplicationScene(MapBoo_Scene* scene);
+  
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
 
@@ -550,10 +593,10 @@ public:
   void openApplicationTube(const G3MContext* context);
 
   /** Private to MapbooBuilder, don't call it */
-  void setApplicationCurrentSceneIndex(int currentSceneIndex);
+  void setApplicationCurrentSceneId(const std::string& currentSceneId);
 
   /** Private to MapbooBuilder, don't call it */
-  void rawChangeScene(int sceneIndex);
+  void rawChangeScene(const std::string& sceneId);
 
   /** Private to MapbooBuilder, don't call it */
   void setContext(const G3MContext* context);
@@ -595,7 +638,7 @@ public:
                         const std::string&           message,
                         const URL*                   iconURL) const;
 
-  void changeScene(int sceneIndex);
+  void changeScene(const std::string& sceneId);
   
   void changeScene(const MapBoo_Scene* scene);
 

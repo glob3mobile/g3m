@@ -109,6 +109,7 @@ public:
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
                            ErrorRenderer*                   errorRenderer,
+                           Renderer*                        hudRenderer,
                            const Color&                     backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
@@ -176,7 +177,9 @@ public:
   void setCameraHeading(const Angle& angle);
   
   void setCameraPitch(const Angle& angle);
-  
+
+  void setCameraRoll(const Angle& angle);
+
   void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const Angle& heading=Angle::zero(),
                                  const Angle& pitch=Angle::zero());
@@ -206,6 +209,10 @@ public:
   
   CameraRenderer* getCameraRenderer() const {
     return _cameraRenderer;
+  }
+
+  Renderer* getHUDRenderer() const {
+    return _hudRenderer;
   }
   
   const G3MContext* getG3MContext() const {
@@ -243,8 +250,8 @@ private:
   Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
   ErrorRenderer*      _errorRenderer;
-//  bool                _mainRendererReady;
-  RenderState*        _mainRendererState;
+  Renderer*           _hudRenderer;
+  RenderState*        _rendererState;
   Renderer*           _selectedRenderer;
   
   EffectsScheduler*   _effectsScheduler;
@@ -312,6 +319,7 @@ private:
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
             ErrorRenderer*                   errorRenderer,
+            Renderer*                        hudRenderer,
             const Color&                     backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,
@@ -324,6 +332,8 @@ private:
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
+
+  RenderState calculateRendererState();
   
 };
 

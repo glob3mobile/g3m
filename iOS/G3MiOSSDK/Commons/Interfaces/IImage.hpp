@@ -25,6 +25,12 @@ public:
   virtual const Vector2I getExtent() const = 0;
 
   virtual const std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   virtual IImage* shallowCopy() const = 0;
 };

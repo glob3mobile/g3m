@@ -20,16 +20,16 @@ public class G3MWidget
     }
   }
 
-  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
+  public static G3MWidget create(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
   {
   
-    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider);
+    return new G3MWidget(gl, storage, downloader, threadUtils, cameraActivityListener, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, errorRenderer, hudRenderer, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks, gpuProgramManager, sceneLighting, initialCameraPositionProvider);
   }
 
   public void dispose()
   {
-    if (_mainRendererState != null)
-       _mainRendererState.dispose();
+    if (_rendererState != null)
+       _rendererState.dispose();
     if (_renderContext != null)
        _renderContext.dispose();
   
@@ -46,6 +46,8 @@ public class G3MWidget
        _busyRenderer.dispose();
     if (_errorRenderer != null)
        _errorRenderer.dispose();
+    if (_hudRenderer != null)
+       _hudRenderer.dispose();
     if (_gl != null)
        _gl.dispose();
     if (_effectsScheduler != null)
@@ -118,15 +120,17 @@ public class G3MWidget
     {
       _initialCameraPositionHasBeenSet = true;
   
-      Geodetic3D g = _initialCameraPositionProvider.getCameraPosition(_planet, _mainRenderer.getPlanetRenderer());
+      final Geodetic3D position = _initialCameraPositionProvider.getCameraPosition(_planet, _mainRenderer.getPlanetRenderer());
   
-      _currentCamera.setGeodeticPosition(g);
+      _currentCamera.setGeodeticPosition(position);
       _currentCamera.setHeading(Angle.zero());
       _currentCamera.setPitch(Angle.zero());
+      _currentCamera.setRoll(Angle.zero());
   
-      _nextCamera.setGeodeticPosition(g);
+      _nextCamera.setGeodeticPosition(position);
       _nextCamera.setHeading(Angle.zero());
       _nextCamera.setPitch(Angle.zero());
+      _nextCamera.setRoll(Angle.zero());
     }
   
     _timer.start();
@@ -173,19 +177,23 @@ public class G3MWidget
   
     _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
+<<<<<<< HEAD
   
   
     if (_mainRendererState != null)
        _mainRendererState.dispose();
     _mainRendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer) ? _mainRenderer.getRenderState(_renderContext) : RenderState.busy());
     RenderState_Type renderStateType = _mainRendererState._type;
+=======
+    _rendererState = calculateRendererState();
+    final RenderState_Type renderStateType = _rendererState._type;
+>>>>>>> origin/purgatory
   
     _renderContext.clearForNewFrame();
   
     _effectsScheduler.doOneCyle(_renderContext);
   
     _frameTasksExecutor.doPreRenderCycle(_renderContext);
-  
   
     Renderer selectedRenderer;
     switch (renderStateType)
@@ -199,12 +207,15 @@ public class G3MWidget
         break;
   
       default:
-        _errorRenderer.setErrors(_mainRendererState.getErrors());
+        _errorRenderer.setErrors(_rendererState.getErrors());
         selectedRenderer = _errorRenderer;
         break;
     }
   
+<<<<<<< HEAD
     //  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
+=======
+>>>>>>> origin/purgatory
     if (selectedRenderer != _selectedRenderer)
     {
       if (_selectedRenderer != null)
@@ -221,7 +232,6 @@ public class G3MWidget
     {
       _rootState = new GLState();
     }
-  
   
     if (renderStateType == RenderState_Type.RENDER_READY)
     {
@@ -245,6 +255,17 @@ public class G3MWidget
         orderedRenderable.render(_renderContext);
         if (orderedRenderable != null)
            orderedRenderable.dispose();
+      }
+    }
+  
+    if (_hudRenderer != null)
+    {
+      if (renderStateType == RenderState_Type.RENDER_READY)
+      {
+        if (_hudRenderer.isEnable())
+        {
+          _hudRenderer.render(_renderContext, _rootState);
+        }
       }
     }
   
@@ -384,6 +405,10 @@ public class G3MWidget
     _mainRenderer.onResizeViewportEvent(ec, width, height);
     _busyRenderer.onResizeViewportEvent(ec, width, height);
     _errorRenderer.onResizeViewportEvent(ec, width, height);
+    if (_hudRenderer != null)
+    {
+      _hudRenderer.onResizeViewportEvent(ec, width, height);
+    }
   }
 
   public final void onPause()
@@ -397,6 +422,10 @@ public class G3MWidget
     _mainRenderer.onPause(_context);
     _busyRenderer.onPause(_context);
     _errorRenderer.onPause(_context);
+    if (_hudRenderer != null)
+    {
+      _hudRenderer.onPause(_context);
+    }
   
     _downloader.onPause(_context);
     _storage.onPause(_context);
@@ -413,6 +442,10 @@ public class G3MWidget
     _mainRenderer.onResume(_context);
     _busyRenderer.onResume(_context);
     _errorRenderer.onResume(_context);
+    if (_hudRenderer != null)
+    {
+      _hudRenderer.onResume(_context);
+    }
   
     _effectsScheduler.onResume(_context);
   
@@ -428,6 +461,10 @@ public class G3MWidget
     _mainRenderer.onDestroy(_context);
     _busyRenderer.onDestroy(_context);
     _errorRenderer.onDestroy(_context);
+    if (_hudRenderer != null)
+    {
+      _hudRenderer.onDestroy(_context);
+    }
   
     _downloader.onDestroy(_context);
     _storage.onDestroy(_context);
@@ -504,6 +541,11 @@ public class G3MWidget
   public final void setCameraPitch(Angle angle)
   {
     getNextCamera().setPitch(angle);
+  }
+
+  public final void setCameraRoll(Angle angle)
+  {
+    getNextCamera().setRoll(angle);
   }
 
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading)
@@ -610,6 +652,11 @@ public class G3MWidget
   public final CameraRenderer getCameraRenderer()
   {
     return _cameraRenderer;
+  }
+
+  public final Renderer getHUDRenderer()
+  {
+    return _hudRenderer;
   }
 
   public final G3MContext getG3MContext()
@@ -721,8 +768,8 @@ public class G3MWidget
   private Renderer _mainRenderer;
   private Renderer _busyRenderer;
   private ErrorRenderer _errorRenderer;
-//  bool                _mainRendererReady;
-  private RenderState _mainRendererState;
+  private Renderer _hudRenderer;
+  private RenderState _rendererState;
   private Renderer _selectedRenderer;
 
   private EffectsScheduler _effectsScheduler;
@@ -777,9 +824,13 @@ public class G3MWidget
 
   private boolean _forceBusyRenderer;
 
+<<<<<<< HEAD
   private int _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
 
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
+=======
+  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
+>>>>>>> origin/purgatory
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -795,6 +846,7 @@ public class G3MWidget
      _mainRenderer = mainRenderer;
      _busyRenderer = busyRenderer;
      _errorRenderer = errorRenderer;
+     _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
      _currentCamera = new Camera(_width, _height);
@@ -804,7 +856,7 @@ public class G3MWidget
      _renderCounter = 0;
      _totalRenderTime = 0;
      _logFPS = logFPS;
-     _mainRendererState = new RenderState(RenderState.busy());
+     _rendererState = new RenderState(RenderState.busy());
      _selectedRenderer = null;
      _renderStatisticsTimer = null;
      _logDownloaderStatistics = logDownloaderStatistics;
@@ -830,6 +882,10 @@ public class G3MWidget
     _mainRenderer.initialize(_context);
     _busyRenderer.initialize(_context);
     _errorRenderer.initialize(_context);
+    if (_hudRenderer != null)
+    {
+      _hudRenderer.initialize(_context);
+    }
     _currentCamera.initialize(_context);
     _nextCamera.initialize(_context);
   
@@ -860,13 +916,22 @@ public class G3MWidget
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    RenderState_Type renderStateType = _mainRendererState._type;
+    final RenderState_Type renderStateType = _rendererState._type;
     switch (renderStateType)
     {
       case RENDER_READY:
       {
         boolean handled = false;
-        if (_mainRenderer.isEnable())
+  
+        if (_hudRenderer != null)
+        {
+          if (_hudRenderer.isEnable())
+          {
+            handled = _hudRenderer.onTouchEvent(ec, touchEvent);
+          }
+        }
+  
+        if (!handled && _mainRenderer.isEnable())
         {
           handled = _mainRenderer.onTouchEvent(ec, touchEvent);
         }
@@ -895,6 +960,56 @@ public class G3MWidget
         break;
       }
     }
+  }
+
+  private RenderState calculateRendererState()
+  {
+    if (_forceBusyRenderer)
+    {
+      return RenderState.busy();
+    }
+  
+    if (!_initializationTaskReady)
+    {
+      return RenderState.busy();
+    }
+  
+    boolean busyFlag = false;
+  
+    RenderState cameraRendererRenderState = _cameraRenderer.getRenderState(_renderContext);
+    if (cameraRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+    {
+      return cameraRendererRenderState;
+    }
+    else if (cameraRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+    {
+      busyFlag = true;
+    }
+  
+    if (_hudRenderer != null)
+    {
+      RenderState hudRendererRenderState = _hudRenderer.getRenderState(_renderContext);
+      if (hudRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+      {
+        return hudRendererRenderState;
+      }
+      else if (hudRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+      {
+        busyFlag = true;
+      }
+    }
+  
+    RenderState mainRendererRenderState = _mainRenderer.getRenderState(_renderContext);
+    if (mainRendererRenderState._type == RenderState_Type.RENDER_ERROR)
+    {
+      return mainRendererRenderState;
+    }
+    else if (mainRendererRenderState._type == RenderState_Type.RENDER_BUSY)
+    {
+      busyFlag = true;
+    }
+  
+    return busyFlag ? RenderState.busy() : RenderState.ready();
   }
 
 }

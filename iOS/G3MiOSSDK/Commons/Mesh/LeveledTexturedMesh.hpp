@@ -14,7 +14,9 @@
 #include "IGLTextureId.hpp"
 #include "GLState.hpp"
 #include <vector>
+#include "Vector2F.hpp"
 
+class TextureIDReference;
 
 class LazyTextureMappingInitializer {
 public:
@@ -23,9 +25,9 @@ public:
 
   virtual void initialize() = 0;
 
-  virtual const MutableVector2D getScale() const = 0;
+  virtual const Vector2F getScale() const = 0;
 
-  virtual const MutableVector2D getTranslation() const = 0;
+  virtual const Vector2F getTranslation() const = 0;
 
   virtual IFloatBuffer* createTextCoords() const = 0;
 };
@@ -44,10 +46,14 @@ private:
 
   mutable bool _initialized;
 
-  mutable bool             _ownedTexCoords;
-  mutable IFloatBuffer*    _texCoords;
-  mutable MutableVector2D  _translation;
-  mutable MutableVector2D  _scale;
+  mutable bool          _ownedTexCoords;
+  mutable IFloatBuffer* _texCoords;
+
+  mutable float _translationU;
+  mutable float _translationV;
+
+  mutable float _scaleU;
+  mutable float _scaleV;
 
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
 
@@ -66,8 +72,10 @@ public:
   _glTextureId(NULL),
   _initialized(false),
   _texCoords(NULL),
-  _translation(0,0),
-  _scale(1,1),
+  _translationU(0),
+  _translationV(0),
+  _scaleU(1),
+  _scaleV(1),
   _ownedTexCoords(ownedTexCoords),
   _transparent(transparent)
   {

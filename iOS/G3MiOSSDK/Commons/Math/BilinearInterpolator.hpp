@@ -25,6 +25,13 @@ public:
   const std::string description() const {
     return "BilinearInterpolator";
   }
+  
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 

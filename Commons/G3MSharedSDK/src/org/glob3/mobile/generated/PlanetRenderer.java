@@ -199,14 +199,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       final int firstLevelToVisit = (firstLevel < parameters._firstLevel) ? parameters._firstLevel : firstLevel;
       if (firstLevel < firstLevelToVisit)
       {
-        ILogger.instance().logError("Can only visit from level %", firstLevelToVisit);
+        ILogger.instance().logError("Can only visit from level %d", firstLevelToVisit);
         return;
       }
   
       final int maxLevelToVisit = (maxLevel > parameters._maxLevel) ? parameters._maxLevel : maxLevel;
       if (maxLevel > maxLevelToVisit)
       {
-        ILogger.instance().logError("Can only visit to level %", maxLevelToVisit);
+        ILogger.instance().logError("Can only visit to level %d", maxLevelToVisit);
         return;
       }
   
@@ -479,8 +479,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     updateGLState(rc);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Testing Terrain Normals
+  ///#warning Testing Terrain Normals
     _glState.setParent(glState);
   
     // Saving camera for use in onTouchEvent

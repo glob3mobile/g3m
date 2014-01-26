@@ -35,7 +35,12 @@ enum GPUUniformKey{
   POINT_LIGHT_COLOR= 14,
   BILLBOARD_POSITION = 15,
   DEPTH_FAR = 16,
-  DEPTH_NEAR = 17
+  DEPTH_NEAR = 17,
+  ROTATION_CENTER_TEXTURE_COORDS = 16,
+  ROTATION_ANGLE_TEXTURE_COORDS = 17,
+  SAMPLER = 18,
+  SAMPLER2 = 19,
+  SAMPLER3 = 20
 };
 
 enum GPUAttributeKey{
@@ -43,7 +48,9 @@ enum GPUAttributeKey{
   POSITION = 0,
   TEXTURE_COORDS = 1,
   COLOR = 2,
-  NORMAL = 3
+  NORMAL = 3,
+  TEXTURE_COORDS_2 = 4,
+  TEXTURE_COORDS_3 = 5
 };
 
 class GPUVariable {
@@ -58,11 +65,11 @@ public:
   static int getUniformCode(int u);
   static int getAttributeCode(int a);
 
-  static bool codeContainsUniform(int code, int u);
-  static bool codeContainsAttribute(int code, int a);
+  static bool hasUniform(int code, int u);
+  static bool hasAttribute(int code, int a);
 
-  static bool codeContainsUniform(int code, GPUUniformKey u);
-  static bool codeContainsAttribute(int code, GPUAttributeKey a);
+  static bool hasUniform(int code, GPUUniformKey u);
+  static bool hasAttribute(int code, GPUAttributeKey a);
 
   virtual ~GPUVariable() {}
 

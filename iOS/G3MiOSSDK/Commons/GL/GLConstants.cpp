@@ -54,7 +54,13 @@ int GLTextureParameter::_magFilter = 0;
 int GLTextureParameter::_wrapS = 0;
 int GLTextureParameter::_wrapT = 0;
 
-int GLTextureParameterValue::_linear = 0;
+int GLTextureParameterValue::_nearest              = 0;
+int GLTextureParameterValue::_linear               = 0;
+int GLTextureParameterValue::_nearestMipmapNearest = 0;
+int GLTextureParameterValue::_nearestMipmapLinear  = 0;
+int GLTextureParameterValue::_linearMipmapNearest  = 0;
+int GLTextureParameterValue::_linearMipmapLinear   = 0;
+
 int GLTextureParameterValue::_clampToEdge = 0;
 
 int GLAlignment::_pack = 0;

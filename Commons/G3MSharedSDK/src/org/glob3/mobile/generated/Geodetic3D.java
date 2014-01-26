@@ -82,6 +82,10 @@ public class Geodetic3D
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 
   public final Geodetic3D add(Geodetic3D that)

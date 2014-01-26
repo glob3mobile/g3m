@@ -18,8 +18,16 @@ public enum GPUUniformKey
   POINT_LIGHT_POSITION(13),
   POINT_LIGHT_COLOR(14),
   BILLBOARD_POSITION(15),
+<<<<<<< HEAD
   DEPTH_FAR(16),
   DEPTH_NEAR(17);
+=======
+  ROTATION_CENTER_TEXTURE_COORDS(16),
+  ROTATION_ANGLE_TEXTURE_COORDS(17),
+  SAMPLER(18),
+  SAMPLER2(19),
+  SAMPLER3(20);
+>>>>>>> origin/purgatory
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

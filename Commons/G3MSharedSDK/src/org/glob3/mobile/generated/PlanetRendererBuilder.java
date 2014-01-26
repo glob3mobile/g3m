@@ -232,8 +232,7 @@ public class PlanetRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Testing Terrain Normals
+  ///#warning Testing Terrain Normals
     final boolean skirted = true;
     return new PlanetTileTessellator(skirted, getRenderedSector());
   }

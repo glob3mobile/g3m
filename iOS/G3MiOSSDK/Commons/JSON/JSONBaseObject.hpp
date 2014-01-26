@@ -43,6 +43,12 @@ public:
   virtual JSONBaseObject* deepCopy() const = 0;
 
   virtual const std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   virtual void acceptVisitor(JSONVisitor* visitor) const = 0;
 

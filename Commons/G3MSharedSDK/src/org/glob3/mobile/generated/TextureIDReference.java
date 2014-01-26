@@ -1,4 +1,22 @@
 package org.glob3.mobile.generated; 
+//
+//  TextureIDReference.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/9/14.
+//
+//
+
+//
+//  TextureIDReference.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/9/14.
+//
+//
+
+
+//class IGLTextureId;
 //class TexturesHandler;
 
 public class TextureIDReference

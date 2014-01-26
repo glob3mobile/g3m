@@ -233,9 +233,12 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-//    return Vector2D(getUCoordinate(longitude),
-//                    getVCoordinate(latitude));
     return new Vector2D((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians, (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians);
+  }
+
+  public final Vector2F getUVCoordinatesF(Angle latitude, Angle longitude)
+  {
+    return new Vector2F((float)((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians), (float)((_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians));
   }
 
   public final double getUCoordinate(Angle longitude)
@@ -317,6 +320,10 @@ public class Sector
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
   public final Sector shrinkedByPercentP(float percent)

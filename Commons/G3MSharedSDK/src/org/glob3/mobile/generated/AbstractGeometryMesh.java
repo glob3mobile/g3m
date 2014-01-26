@@ -136,8 +136,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   
     final int size = _vertices.size();
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's ! enough graphical memory]
+  ///#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
   
     for (int i = 0; i < size; i+=6)
     {

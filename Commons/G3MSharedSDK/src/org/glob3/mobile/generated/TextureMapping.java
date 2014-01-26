@@ -16,16 +16,7 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include <vector>
-
-//class IGLTextureId;
-
-//class G3MRenderContext;
-//class IFloatBuffer;
-//class GLGlobalState;
-//class GPUProgramState;
 //class GLState;
-//class TexturesHandler;
 
 public abstract class TextureMapping
 {

@@ -203,6 +203,10 @@ public abstract class Layer
   }
 
   public abstract String description();
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final boolean isEquals(Layer that)
   {

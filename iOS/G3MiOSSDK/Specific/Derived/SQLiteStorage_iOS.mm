@@ -30,7 +30,7 @@ NSString* SQLiteStorage_iOS::getDBPath() const {
 bool SQLiteStorage_iOS::addSkipBackupAttributeToItemAtPath(NSString* path) {
   assert([[NSFileManager defaultManager] fileExistsAtPath: path]);
 
-  NSURL* url = [NSURL URLWithString:path];
+  NSURL* url = [NSURL URLWithString: [NSString stringWithFormat:@"file://%@", path]];
 
   NSError *error = nil;
   BOOL success = [url setResourceValue: [NSNumber numberWithBool: YES]

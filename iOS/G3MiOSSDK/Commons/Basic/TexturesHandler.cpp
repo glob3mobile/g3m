@@ -11,9 +11,9 @@
 
 #include "IImage.hpp"
 #include "Context.hpp"
-
 #include "IStringBuilder.hpp"
 #include "GL.hpp"
+#include "TextureIDReference.hpp"
 
 const std::string TextureSpec::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -28,7 +28,6 @@ const std::string TextureSpec::description() const {
   delete isb;
   return s;
 }
-
 
 class TextureHolder {
 public:
@@ -118,9 +117,9 @@ const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec
 
 
 const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
-                                                    int format,
-                                                    const std::string& name,
-                                                    bool hasMipMap) {
+                                                                 int format,
+                                                                 const std::string& name,
+                                                                 bool hasMipMap) {
 
   TextureSpec textureSpec(name,
                           image->getWidth(),
@@ -206,12 +205,3 @@ TexturesHandler::~TexturesHandler() {
   }
 }
 
-
-TextureIDReference::~TextureIDReference() {
-  _texHandler->releaseGLTextureId(_id);
-}
-
-TextureIDReference* TextureIDReference::createCopy() const{
-  _texHandler->retainGLTextureId(_id);
-  return new TextureIDReference(_id, _texHandler);
-}

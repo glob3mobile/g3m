@@ -17,9 +17,9 @@
 #include "GL.hpp"
 
 class GPUProgramManager {
-  
+
   std::map<std::string, GPUProgram*> _programs;
-  
+
   GPUProgramFactory *_factory;
 
   GPUProgram* getCompiledProgram(const std::string& name);
@@ -30,13 +30,13 @@ class GPUProgramManager {
 
   GPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);
 public:
-  
+
   GPUProgramManager(GPUProgramFactory *factory):_factory(factory) {}
-  
+
   ~GPUProgramManager();
 
   GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode, RenderType renderType);
-  
+
   void removeUnused();
 };
 

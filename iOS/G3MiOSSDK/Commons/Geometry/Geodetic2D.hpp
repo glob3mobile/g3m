@@ -169,7 +169,13 @@ public:
   }
   
   const std::string description() const;
-  
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
   bool isEquals(const Geodetic2D& that) const {
     return _latitude.isEquals(that._latitude) && _longitude.isEquals(that._longitude);
   }

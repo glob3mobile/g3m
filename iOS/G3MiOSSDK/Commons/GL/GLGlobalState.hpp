@@ -26,6 +26,8 @@ struct AttributesStruct;
 class UniformsStruct;
 class GPUProgram;
 
+#define MAX_N_TEXTURES 4
+
 class GLGlobalState {
 private:
 
@@ -38,12 +40,12 @@ private:
   int  _culledFace;
   
 #ifdef C_CODE
-  const IGLTextureId* _boundTextureId;
+  const IGLTextureId* _boundTextureId[MAX_N_TEXTURES];
 #endif
 #ifdef JAVA_CODE
-  private IGLTextureId _boundTextureId;
+  private final IGLTextureId[] _boundTextureId = new IGLTextureId[DefineConstants.MAX_N_TEXTURES];
 #endif
-  
+
   float _lineWidth;
   
   //Polygon Offset
@@ -76,13 +78,17 @@ private:
   _polygonOffsetFill(parentState._polygonOffsetFill),
   _blendDFactor(parentState._blendDFactor),
   _blendSFactor(parentState._blendSFactor),
-  _boundTextureId(parentState._boundTextureId),
   _pixelStoreIAlignmentUnpack(parentState._pixelStoreIAlignmentUnpack),
   _clearColorR(parentState._clearColorR),
   _clearColorG(parentState._clearColorG),
   _clearColorB(parentState._clearColorB),
   _clearColorA(parentState._clearColorA)
   {
+
+    for (int i = 0; i < MAX_N_TEXTURES; i++){
+      _boundTextureId[i] = parentState._boundTextureId[i];
+    }
+
   }
   
 public:
@@ -103,7 +109,6 @@ public:
   _polygonOffsetFill(false),
   _blendDFactor(GLBlendFactor::zero()),
   _blendSFactor(GLBlendFactor::one()),
-  _boundTextureId(NULL),
   _pixelStoreIAlignmentUnpack(-1),
   _clearColorR(0.0),
   _clearColorG(0.0),
@@ -113,6 +118,10 @@ public:
 
     if (!_initializationAvailable) {
       ILogger::instance()->logError("GLGlobalState creation before it is available.");
+    }
+
+    for (int i = 0; i < MAX_N_TEXTURES; i++){
+      _boundTextureId[i] = NULL;
     }
 
   }
@@ -186,13 +195,28 @@ public:
   }
   
   void bindTexture(const IGLTextureId* textureId) {
-    _boundTextureId = textureId;
+    _boundTextureId[0] = textureId;
   }
   
   const IGLTextureId* getBoundTexture() const{
-    return _boundTextureId;
+    return _boundTextureId[0];
   }
-  
+
+  void bindTexture(int target, const IGLTextureId* textureId) {
+
+
+    if (target > MAX_N_TEXTURES){
+      ILogger::instance()->logError("WRONG TARGET FOR TEXTURE");
+      return;
+    }
+
+    _boundTextureId[target] = textureId;
+  }
+
+  const IGLTextureId* getBoundTexture(int target) const{
+    return _boundTextureId[0];
+  }
+
   void setPixelStoreIAlignmentUnpack(int p) {
     _pixelStoreIAlignmentUnpack = p;
   }
