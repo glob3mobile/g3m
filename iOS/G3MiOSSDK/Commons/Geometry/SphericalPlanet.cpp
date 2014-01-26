@@ -303,6 +303,8 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   const double factor = finalRaysAngle / _angleBetweenInitialRays;
   double dAccum=0, angle0, angle1;
   double distance = _origin.sub(_centerPoint).length();
+  
+  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
 
   // compute estimated camera translation: step 0
   double d = distance*(factor-1)/factor;

@@ -383,6 +383,8 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
   double dAccum=0, angle0, angle1;
   double distance = _origin.sub(_centerPoint).length();
 
+  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
+
   // compute estimated camera translation: step 0
   double d = distance*(factor-1)/factor;
   MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
