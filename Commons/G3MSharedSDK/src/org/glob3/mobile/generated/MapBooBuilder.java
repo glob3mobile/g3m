@@ -890,6 +890,7 @@ public abstract class MapBooBuilder
      _applicationEMail = "";
      _applicationAbout = "";
      _applicationTimestamp = -1;
+     _applicationEventId = -1;
      _gl = null;
      _g3mWidget = null;
      _storage = null;
