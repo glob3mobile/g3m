@@ -23,7 +23,7 @@
 #include "DirectMesh.hpp"
 #include "ICanvas.hpp"
 #include "IStringUtils.hpp"
-
+#include "SimpleTextureMapping.hpp"
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 
@@ -37,7 +37,7 @@ void HUDImageRenderer::CanvasImageFactory::create(const G3MRenderContext* rc,
   canvas->initialize(width, height);
 
   drawOn(canvas, width, height);
-  
+
   canvas->createImage(listener, deleteListener);
 
   delete canvas;
@@ -120,10 +120,10 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const std::string textureName = "HUDImageRenderer" + su->toString(_instanceID) + "/" + su->toString(_changeCounter++);
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
-                                                                       GLFormat::rgba(),
-                                                                       textureName,
-                                                                       false);
-  
+                                                                                    GLFormat::rgba(),
+                                                                                    textureName,
+                                                                                    false);
+
   delete _image;
   _image = NULL;
 
@@ -191,7 +191,7 @@ Mesh* HUDImageRenderer::getMesh(const G3MRenderContext* rc) {
       _mesh = createMesh(rc);
     }
   }
-  
+
   return _mesh;
 }
 

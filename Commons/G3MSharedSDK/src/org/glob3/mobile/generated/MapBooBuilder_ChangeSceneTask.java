@@ -2,16 +2,16 @@ package org.glob3.mobile.generated;
 public class MapBooBuilder_ChangeSceneTask extends GTask
 {
   private MapBooBuilder _builder;
-  private final int _sceneIndex;
+  private final String _sceneId;
 
-  public MapBooBuilder_ChangeSceneTask(MapBooBuilder builder, int sceneIndex)
+  public MapBooBuilder_ChangeSceneTask(MapBooBuilder builder, String sceneId)
   {
      _builder = builder;
-     _sceneIndex = sceneIndex;
+     _sceneId = sceneId;
   }
 
   public final void run(G3MContext context)
   {
-    _builder.rawChangeScene(_sceneIndex);
+    _builder.rawChangeScene(_sceneId);
   }
 }

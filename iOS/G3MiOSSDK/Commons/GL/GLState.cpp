@@ -9,6 +9,8 @@
 #include "GLState.hpp"
 #include "GLFeature.hpp"
 
+#include <vector>
+
 GLState::~GLState() {
   delete _accumulatedFeatures;
 
@@ -158,4 +160,16 @@ GLFeature* GLState::getGLFeature(GLFeatureID id) const{
   }
 
   return NULL;
+}
+
+GLFeatureSet GLState::getGLFeatures(GLFeatureID id) const{
+  GLFeatureSet features;
+  const int size = _features.size();
+  for (int i = 0; i < size; i++) {
+    GLFeature* f = _features.get(i);
+    if (f->_id == id) {
+      features.add(f);
+    }
+  }
+  return features;
 }

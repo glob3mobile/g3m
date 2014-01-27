@@ -33,7 +33,12 @@ private:
 
   const TextureIDReference* getTextureId(const G3MRenderContext* rc);
 
-  IImage* _downloadedImage;
+#ifdef C_CODE
+  const IImage* _downloadedImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _downloadedImage;
+#endif
   void requestImage(const G3MRenderContext* rc);
 
 #ifdef C_CODE
@@ -69,12 +74,8 @@ public:
   
   bool isReadyToRender(const G3MRenderContext* rc);
 
-  void onImageDownload(IImage* image);
+  void onImageDownload(const IImage* image);
   
-  GPUProgramState* createGPUProgramState(const G3MRenderContext* rc, const GPUProgramState* parentState);
-  
-//  const GLState* createGLState(const G3MRenderContext* rc, const GLState* parentGLState);
-
   bool modifyGLState(const G3MRenderContext* rc, GLState* state);
 
   std::string description() {

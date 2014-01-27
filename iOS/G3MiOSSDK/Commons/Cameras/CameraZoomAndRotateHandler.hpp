@@ -15,30 +15,24 @@
 
 
 class CameraZoomAndRotateHandler: public CameraEventHandler {
-private:
-  const bool _processRotation;
-  const bool _processZoom;
-  
+private:  
   double _fingerSep0;
   double _lastAngle;
   double _angle0;
   
   MutableVector3D _centralGlobePoint;
+  MutableVector3D _centralGlobeNormal;
   
   void zoom(Camera* camera, Vector2I difCurrentPixels);
   void rotate();
   
   
 public:
-  CameraZoomAndRotateHandler(bool processRotation,
-                          bool processZoom):
-  _camera0(Camera(0, 0)),
+  CameraZoomAndRotateHandler():
+  _camera0(Camera(0, 0))
   //_initialPoint(0,0,0),
-  //_initialPixel(0,0,0),
-  _processRotation(processRotation),
-  _processZoom(processZoom)
-  {
-  }
+  //_initialPixel(0,0,0)
+  {}
   
   ~CameraZoomAndRotateHandler() {
 #ifdef JAVA_CODE

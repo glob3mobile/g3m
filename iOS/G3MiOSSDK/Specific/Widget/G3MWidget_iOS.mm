@@ -57,6 +57,7 @@
                 mainRenderer: (Renderer*) mainRenderer
                 busyRenderer: (Renderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
+                 hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor
                       logFPS: (bool) logFPS
      logDownloaderStatistics: (bool) logDownloaderStatistics
@@ -85,6 +86,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                   mainRenderer,
                                   busyRenderer,
                                   errorRenderer,
+                                  hudRenderer,
                                   backgroundColor,
                                   logFPS,
                                   logDownloaderStatistics,

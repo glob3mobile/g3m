@@ -9,7 +9,6 @@
 #import "ViewController.h"
 
 #import <G3MiOSSDK/G3MBuilder_iOS.hpp>
-
 #import <G3MiOSSDK/VisibleSectorListener.hpp>
 #import <G3MiOSSDK/MarksRenderer.hpp>
 #import <G3MiOSSDK/ShapesRenderer.hpp>
@@ -39,12 +38,10 @@
 #import <G3MiOSSDK/EllipsoidShape.hpp>
 #import <G3MiOSSDK/SceneJSShapesParser.hpp>
 #import <G3MiOSSDK/LayoutUtils.hpp>
-
 #import <G3MiOSSDK/IJSONParser.hpp>
 #import <G3MiOSSDK/JSONGenerator.hpp>
 #import <G3MiOSSDK/BSONParser.hpp>
 #import <G3MiOSSDK/BSONGenerator.hpp>
-
 #import <G3MiOSSDK/MeshShape.hpp>
 #import <G3MiOSSDK/IShortBuffer.hpp>
 #import <G3MiOSSDK/SimpleCameraConstrainer.hpp>
@@ -65,17 +62,13 @@
 #import <G3MiOSSDK/MapBoxLayer.hpp>
 #import <G3MiOSSDK/GoogleMapsLayer.hpp>
 #import <G3MiOSSDK/BingMapsLayer.hpp>
-
 #import <G3MiOSSDK/BusyQuadRenderer.hpp>
 #import <G3MiOSSDK/Factory_iOS.hpp>
-
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/GEOJSONParser.hpp>
-
 //import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
 #import <G3MiOSSDK/FloatBufferElevationData.hpp>
-
 #import <G3MiOSSDK/GEOSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DMultiLineStringGeometry.hpp>
 #import <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
@@ -88,7 +81,6 @@
 #import <G3MiOSSDK/GEOShapeSymbol.hpp>
 #import <G3MiOSSDK/GEOMarkSymbol.hpp>
 #import <G3MiOSSDK/GFont.hpp>
-
 #import <G3MiOSSDK/CompositeElevationDataProvider.hpp>
 #import <G3MiOSSDK/LayerTilesRenderParameters.hpp>
 #import <G3MiOSSDK/RectangleI.hpp>
@@ -100,47 +92,47 @@
 #import <G3MiOSSDK/SGShape.hpp>
 #import <G3MiOSSDK/SGNode.hpp>
 #import <G3MiOSSDK/SGMaterialNode.hpp>
-
 #import <G3MiOSSDK/MapBooBuilder_iOS.hpp>
 #import <G3MiOSSDK/IWebSocketListener.hpp>
-
-#include <G3MiOSSDK/GPUProgramFactory.hpp>
+#import <G3MiOSSDK/GPUProgramFactory.hpp>
 #import <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
 #import <G3MiOSSDK/Color.hpp>
-
 #import <G3MiOSSDK/TileRasterizer.hpp>
 #import <G3MiOSSDK/DebugTileRasterizer.hpp>
 #import <G3MiOSSDK/GEOTileRasterizer.hpp>
-
 #import <G3MiOSSDK/GEORasterLineSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
-
 #import <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
 #import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
 #import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
-
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
-
 #import <G3MiOSSDK/GenericQuadTree.hpp>
 #import <G3MiOSSDK/GEOFeatureCollection.hpp>
 #import <G3MiOSSDK/Angle.hpp>
-
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
-
-#import <G3MiOSSDK/HUDRenderer.hpp>
 #import <G3MiOSSDK/HUDImageRenderer.hpp>
-
 #import <G3MiOSSDK/CartoCSSParser.hpp>
-
 #import <G3MiOSSDK/ColumnCanvasElement.hpp>
 #import <G3MiOSSDK/TextCanvasElement.hpp>
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
-
 #import <G3MiOSSDK/SceneLighting.hpp>
 
+#import <G3MiOSSDK/HUDRenderer.hpp>
+#import <G3MiOSSDK/HUDQuadWidget.hpp>
+#import <G3MiOSSDK/HUDAbsolutePosition.hpp>
+#import <G3MiOSSDK/HUDRelativePosition.hpp>
+#import <G3MiOSSDK/MultiTexturedHUDQuadWidget.hpp>
+#import <G3MiOSSDK/HUDAbsoluteSize.hpp>
+#import <G3MiOSSDK/HUDRelativeSize.hpp>
+#import <G3MiOSSDK/DownloaderImageBuilder.hpp>
+#import <G3MiOSSDK/LabelImageBuilder.hpp>
+#import <G3MiOSSDK/CanvasImageBuilder.hpp>
+
+#import <G3MiOSSDK/TerrainTouchListener.hpp>
+#import <G3MiOSSDK/PlanetRenderer.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -238,6 +230,32 @@ Mesh* createSectorMesh(const Planet* planet,
 
 #pragma mark - View lifecycle
 
+class CameraRollChangerTask : public GTask {
+  G3MWidget* _widget;
+  double _rollInDegrees;
+  double _step;
+
+public:
+  CameraRollChangerTask(G3MWidget* widget) :
+  _widget(widget),
+  _rollInDegrees(0),
+  _step(2)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    if ((_rollInDegrees < -180) ||
+        (_rollInDegrees > 180)) {
+      _step *= -1;
+    }
+    _rollInDegrees += _step;
+
+#warning JM please take a look to setRoll!
+    _widget->setCameraRoll(Angle::fromDegrees(_rollInDegrees));
+  }
+};
+
+
 - (void)viewDidLoad
 {
   [super viewDidLoad];
@@ -253,6 +271,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
+
+  [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
+                                               new CameraRollChangerTask([[self G3MWidget] widget]));
 }
 
 
@@ -393,87 +414,77 @@ public:
 }
 
 
-class SampleMapBooApplicationChangeListener : public MapBooApplicationChangeListener {
-public:
-  void onNameChanged(const G3MContext* context,
-                     const std::string& name) {
-    ILogger::instance()->logInfo("MapBoo application name=\"%s\"",
-                                 name.c_str());
-  }
-  
-  void onIconChanged(const G3MContext* context,
-                     const std::string& icon) {
-    ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",
-                                 icon.c_str());
-  }
-  
-  void onScenesChanged(const G3MContext* context,
-                       const std::vector<MapBoo_Scene*>& scenes) {
-    const int scenesSize = scenes.size();
-    for (int i = 0; i < scenesSize; i++) {
-      ILogger::instance()->logInfo("MapBoo application scene #%d %s",
-                                   i,
-                                   scenes[i]->description().c_str());
-    }
-  }
-  
-  void onSceneChanged(const G3MContext* context,
-                      int sceneIndex,
-                      const MapBoo_Scene* scene) {
-    ILogger::instance()->logInfo("MapBoo application current scene=%l",
-                                 sceneIndex);
-  }
-  
-  void onWebsiteChanged(const G3MContext* context,
-                        const std::string& website) {}
-  
-  void onEMailChanged(const G3MContext* context,
-                      const std::string& eMail) {}
-  
-  void onAboutChanged(const G3MContext* context,
-                      const std::string& about) {}
-  
-  void onWebSocketOpen(const G3MContext* context) {}
-  
-  void onWebSocketClose(const G3MContext* context) {}
-  
-  void onTerrainTouch(MapBooBuilder*         builder,
-                      const G3MEventContext* ec,
-                      const Vector2I&        pixel,
-                      const Camera*          camera,
-                      const Geodetic3D&      position,
-                      const Tile*            tile) { }
-};
+//class SampleMapBooApplicationChangeListener : public MapBooApplicationChangeListener {
+//public:
+//  void onNameChanged(const G3MContext* context,
+//                     const std::string& name) {
+//    ILogger::instance()->logInfo("MapBoo application name=\"%s\"",
+//                                 name.c_str());
+//  }
+//
+//  void onIconChanged(const G3MContext* context,
+//                     const std::string& icon) {
+//    ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",
+//                                 icon.c_str());
+//  }
+//
+//  void onScenesChanged(const G3MContext* context,
+//                       const std::vector<MapBoo_Scene*>& scenes) {
+//    const int scenesSize = scenes.size();
+//    for (int i = 0; i < scenesSize; i++) {
+//      ILogger::instance()->logInfo("MapBoo application scene #%d %s",
+//                                   i,
+//                                   scenes[i]->description().c_str());
+//    }
+//  }
+//
+//  void onSceneChanged(const G3MContext* context,
+//                      int sceneIndex,
+//                      const MapBoo_Scene* scene) {
+//    ILogger::instance()->logInfo("MapBoo application current scene=%l",
+//                                 sceneIndex);
+//  }
+//
+//  void onWebsiteChanged(const G3MContext* context,
+//                        const std::string& website) {}
+//
+//  void onEMailChanged(const G3MContext* context,
+//                      const std::string& eMail) {}
+//
+//  void onAboutChanged(const G3MContext* context,
+//                      const std::string& about) {}
+//
+//  void onWebSocketOpen(const G3MContext* context) {}
+//
+//  void onWebSocketClose(const G3MContext* context) {}
+//
+//  void onTerrainTouch(MapBooBuilder*         builder,
+//                      const G3MEventContext* ec,
+//                      const Vector2I&        pixel,
+//                      const Camera*          camera,
+//                      const Geodetic3D&      position,
+//                      const Tile*            tile) { }
+//};
 
 
-- (void) initWithMapBooBuilder
-{
-  MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
-  
-  const std::string applicationId = "2glgs5j2mq5i9nxx68q";
-  
-  //  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
-  //                                       URL("http://192.168.1.2:8080/web", false),
-  //                                       URL("ws://192.168.1.2:8888/tube", false),
-  //                                       useWebSockets,
-  //                                       applicationId,
-  //                                       applicationListener);
-  
-  //  MarksRenderer* marksRenderer = new MarksRenderer(false);
-  //
-  //  _g3mcBuilder->addRenderer(marksRenderer);
-  bool enableNotifications = false;
-  
-  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
-                                       URL("http://192.168.1.2:8080/web", false),
-                                       URL("ws://192.168.1.2:8888/tube", false),
-                                       "",
-                                       VIEW_RUNTIME,
-                                       applicationListener,
-                                       enableNotifications);
-  
-  _g3mcBuilder->initializeWidget();
-}
+//- (void) initWithMapBooBuilder
+//{
+//  MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
+//
+//  const std::string applicationId = "2glgs5j2mq5i9nxx68q";
+//
+//  bool enableNotifications = false;
+//
+//  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
+//                                       URL("http://192.168.1.2:8080/web", false),
+//                                       URL("ws://192.168.1.2:8888/tube", false),
+//                                       "",
+//                                       VIEW_RUNTIME,
+//                                       applicationListener,
+//                                       enableNotifications);
+//
+//  _g3mcBuilder->initializeWidget();
+//}
 
 - (void) initWithDefaultBuilder
 {
@@ -491,12 +502,12 @@ public:
   //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider)
 
 
-//  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-//                                                                                     Sector::fullSphere(),
-//                                                                                     Vector2I(2048, 1024));
+  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //                                                                                     Sector::fullSphere(),
+  //                                                                                     Vector2I(2048, 1024));
 
   ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                              Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
+                                                                                     Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -579,7 +590,7 @@ public:
   
   const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
-//  const Planet* planet = Planet::createFlatEarth();
+  //  const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
   
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -608,7 +619,7 @@ public:
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
-  
+
   // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
@@ -661,133 +672,360 @@ public:
   }
 
   if (true) { //HUD
-    //    HUDRenderer* hudRenderer = new HUDRenderer();
-    //
-    //    NSBundle* mainBundle = [NSBundle mainBundle];
-    //    Image_iOS *image = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"Icon-72"
-    //                                                                                                   ofType: @"png"]],
-    //                                     NULL);
-    //    hudRenderer->addImage("IMAGE", image, Vector2D(100, 100), Vector2D(40,40));
-    //
-    //    Image_iOS *image2 = new Image_iOS([[UIImage alloc] initWithContentsOfFile: [mainBundle pathForResource: @"horizontal-gears"
-    //                                                                                                    ofType: @"png"]],
-    //                                      NULL);
-    //    hudRenderer->addImage("IMAGE2", image2, Vector2D(100, 100), Vector2D(240,40));
-    //
-    //    builder.addRenderer(hudRenderer);
-    class TestImageFactory : public HUDImageRenderer::CanvasImageFactory {
+    #warning Diego at work!
+    HUDRenderer* hudRenderer = new HUDRenderer();
+    builder.setHUDRenderer(hudRenderer);
+
+
+    class AltimeterCanvasImageBuilder : public CanvasImageBuilder {
+    private:
+      float _altitude = 38500;
+      float _step     = 100;
+
     protected:
-      void drawOn(ICanvas* canvas,
-                  int width,
-                  int height) {
-        //        canvas->setFillColor(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f));
-        //        canvas->fillRectangle(0, 0,
-        //                              width, height);
-        //        canvas->setLineColor(Color::yellow());
-        //        canvas->setLineWidth(5);
-        //        canvas->strokeRectangle(0, 0,
-        //                                width, height);
-        //        canvas->setFont(GFont::sansSerif(30));
-        //        const std::string text = "Hello World from HUD!";
-        //        canvas->setFont(GFont::sansSerif(30));
-        //        const Vector2F extent = canvas->textExtent(text);
-        //
-        //        canvas->setFillColor(Color::white());
-        //        canvas->setShadow(Color::black(), 10, 2, -2);
-        //
-        //        canvas->fillText(text,
-        //                         (width  - extent._x) / 2,
-        //                         (height - extent._y) / 2);
-        const std::string text = "glob3mobile.com";
-        canvas->setFont(GFont::sansSerif(25));
-        const Vector2F extent = canvas->textExtent(text);
-        
+      void buildOnCanvas(const G3MContext* context,
+                         ICanvas* canvas) {
+        const float width  = canvas->getWidth();
+        const float height = canvas->getHeight();
+
+        canvas->setFillColor(Color::fromRGBA(0, 0, 0, 0.5));
+        canvas->fillRectangle(0, 0, width, height);
+
         canvas->setFillColor(Color::white());
-        canvas->setShadow(Color::black(), 1, 0, 0);
-        
-        canvas->fillText(text,
-                         (width  - extent._x) / 2,
-                         (height - extent._y) - extent._y/2);
-        //        canvas->setFillColor(Color::black());
-        //        canvas->fillRectangle(0, 0,
-        //                              width, height);
-        //
-        //        ColumnCanvasElement column(Color::fromRGBA(0.9f, 0.4f, 0.4f, 1.0f),
-        //                                   0,  /* margin */
-        //                                   16,  /* padding */
-        //                                   8   /* cornerRadius */);
-        //        const GFont labelFont  = GFont::sansSerif(22);
-        //        const Color labelColor = Color::white();
-        //        column.add( new TextCanvasElement("Error message #1", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("Another error message", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("And another error message", labelFont, labelColor) );
-        //        column.add( new TextCanvasElement("And just another error message", labelFont, labelColor) );
-        //
-        //        column.drawCentered(canvas);
+
+
+        const IStringUtils* su = context->getStringUtils();
+
+        int altitude = _altitude;
+
+        canvas->setFont(GFont::monospaced(32));
+        for (int y = 0; y <= height; y += 16) {
+          if ((y % 80) == 0) {
+            canvas->fillRectangle(0, y-1.5f, width/6.0f, 3);
+
+            const std::string label = su->toString(altitude);
+            const Vector2F labelExtent = canvas->textExtent(label);
+            canvas->fillText(label,
+                             width/6.0f * 1.25f,
+                             y - labelExtent._y/2);
+
+            altitude -= 100;
+          }
+          else {
+            canvas->fillRectangle(0, y-0.5f, width/8.0f, 1);
+          }
+        }
+
+        canvas->setLineColor(Color::white());
+        canvas->setLineWidth(8);
+        canvas->strokeRectangle(0, 0, width, height);
       }
+
+    public:
+      AltimeterCanvasImageBuilder() :
+      CanvasImageBuilder(256, 256*3)
+      {
+      }
+
+      bool isMutable() const {
+        return true;
+      }
+
+      void step() {
+        _altitude += _step;
+        if (_altitude > 40000) {
+          _altitude = 40000;
+          _step *= -1;
+        }
+        if (_altitude < 0) {
+          _altitude = 0;
+          _step *= -1;
+        }
+
+        changed();
+      }
+
     };
     
-    /*
-     HUDImageRenderer* hudRenderer = new HUDImageRenderer(new TestImageFactory());
-     builder.addRenderer(hudRenderer);
-     */
-  }
-  
-  
-  //  [self createInterpolationTest: meshRenderer];
-  
-  //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
-  
-  //Draw light direction
-  if (false) {
-    
-    Vector3D lightDir = Vector3D(100000, 0,0);
-    //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
-    FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder = new AltimeterCanvasImageBuilder();
+    HUDQuadWidget* test = new HUDQuadWidget(altimeterCanvasImageBuilder,
+                                            new HUDRelativePosition(0,
+                                                                    HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                    HUDRelativePosition::RIGHT,
+                                                                    10),
+                                            new HUDRelativePosition(0.5,
+                                                                    HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                    HUDRelativePosition::MIDDLE),
+                                            new HUDRelativeSize(0.22,
+                                                                HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                            new HUDRelativeSize(0.66,
+                                                                HUDRelativeSize::VIEWPORT_MIN_AXIS)
+                                            );
+    hudRenderer->addWidget(test);
 
-    Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
-                                                Angle::fromDegrees(-15.431389),
-                                                10000));
 
-    vertex->add(v);
-    vertex->add(v.add(lightDir));
-    //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
-    
-    meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
-                                          true,
-                                          vertex->getCenter(),
-                                          vertex->create(),
-                                          3.0,
-                                          1.0,
-                                          Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
-    delete vertex;
-  }
-  
-  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                     geoRenderer: geoRenderer
-                                                                    meshRenderer: meshRenderer
-                                                                   marksRenderer: marksRenderer
-                                                                          planet: planet];
-  builder.setInitializationTask(initializationTask, true);
-  
-  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
-  builder.addPeriodicalTask(periodicalTask);
-  
-  const bool logFPS = false;
-  builder.setLogFPS(logFPS);
-  
-  const bool logDownloaderStatistics = false;
-  builder.setLogDownloaderStatistics(logDownloaderStatistics);
+    LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
+                                                            GFont::monospaced(38), // font
+                                                            6,                     // margin
+                                                            Color::yellow(),       // color
+                                                            Color::black(),        // shadowColor
+                                                            3,                     // shadowBlur
+                                                            1,                     // shadowOffsetX
+                                                            -1,                    // shadowOffsetY
+                                                            Color::red(),          // backgroundColor
+                                                            4,                     // cornerRadius
+                                                            true                   // mutable
+                                                            );
 
-  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+    HUDQuadWidget* label = new HUDQuadWidget(labelBuilder,
+                                             new HUDAbsolutePosition(10),
+                                             new HUDAbsolutePosition(10),
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
+    hudRenderer->addWidget(label);
 
-  //  WidgetUserData* userData = NULL;
-  //  builder.setUserData(userData);
-  
-  // initialization
-  builder.initializeWidget();
-  //  [self testGenericQuadTree:geoTileRasterizer];
-  
+    HUDQuadWidget* compass2 = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
+                                                new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
+                                                new HUDRelativePosition(0.5,
+                                                                        HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                        HUDRelativePosition::CENTER),
+                                                new HUDRelativePosition(0.5,
+                                                                        HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                        HUDRelativePosition::MIDDLE),
+                                                new HUDRelativeSize(0.25,  // 0.5,
+                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                                new HUDRelativeSize(0.125, // 0.25,
+                                                                    HUDRelativeSize::VIEWPORT_MIN_AXIS));
+    compass2->setTexCoordsRotation(Angle::fromDegrees(30),
+                                   0.5f, 0.5f);
+    compass2->setTexCoordsScale(1, 0.5f);
+    hudRenderer->addWidget(compass2);
+
+    float visibleFactor = 3;
+    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
+                                             new HUDRelativePosition(1,
+                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+                                                                     HUDRelativePosition::LEFT,
+                                                                     10),
+                                             new HUDRelativePosition(0.5,
+                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+                                                                     HUDRelativePosition::MIDDLE),
+                                             new HUDRelativeSize(2 * (113.0 / 1536.0),
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                             new HUDRelativeSize(2 / visibleFactor,
+                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+                                             new DownloaderImageBuilder(URL("file:///widget-background.png")));
+    ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
+    hudRenderer->addWidget(ruler);
+
+    //    float visibleFactor = 10; // 85x5100
+    //    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altitude_ladder.png")),
+    //                                             new HUDRelativePosition(1,
+    //                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
+    //                                                                     HUDRelativePosition::LEFT,
+    //                                                                     10),
+    //                                             new HUDRelativePosition(0.5,
+    //                                                                     HUDRelativePosition::VIEWPORT_HEIGTH,
+    //                                                                     HUDRelativePosition::MIDDLE),
+    //                                             new HUDRelativeSize(8.0f * (85.0f / 5100.0f),
+    //                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+    //                                             new HUDRelativeSize(8.0f / visibleFactor,
+    //                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
+    //                                             new DownloaderImageBuilder(URL("file:///widget-background.png")));
+    //    ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
+    //    hudRenderer->addWidget(ruler);
+
+
+    class AnimateHUDWidgetsTask : public GTask {
+    private:
+      HUDQuadWidget*     _compass1;
+      HUDQuadWidget*     _compass2;
+      HUDQuadWidget*     _ruler;
+      LabelImageBuilder* _labelBuilder;
+      AltimeterCanvasImageBuilder* _altimeterCanvasImageBuilder;
+
+      double _angleInRadians;
+
+      float _translationV;
+      float _translationStep;
+
+    public:
+      AnimateHUDWidgetsTask(HUDQuadWidget* compass1,
+                            HUDQuadWidget* compass2,
+                            HUDQuadWidget* ruler,
+                            LabelImageBuilder* labelBuilder,
+                            AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder) :
+      _compass1(compass1),
+      _compass2(compass2),
+      _ruler(ruler),
+      _labelBuilder(labelBuilder),
+      _altimeterCanvasImageBuilder(altimeterCanvasImageBuilder),
+      _angleInRadians(0),
+      _translationV(0),
+      _translationStep(0.002)
+      {
+      }
+
+      void run(const G3MContext* context) {
+        _angleInRadians += Angle::fromDegrees(2)._radians;
+        //        _labelBuilder->setText( Angle::fromRadians(_angleInRadians).description() );
+        double degrees = Angle::fromRadians(_angleInRadians)._degrees;
+        while (degrees > 360) {
+          degrees -= 360;
+        }
+        const std::string degreesText = IStringUtils::instance()->toString( IMathUtils::instance()->round( degrees )  );
+        _labelBuilder->setText( degreesText );
+
+        //        _compass1->setTexCoordsRotation(_angleInRadians,
+        //                                        0.5f, 0.5f);
+        _compass2->setTexCoordsRotation(-_angleInRadians,
+                                        0.5f, 0.5f);
+
+        //        _compass3->setTexCoordsRotation(Angle::fromRadians(_angle),
+        //                                        0.5f, 0.5f);
+
+        if (_translationV > 0.5 || _translationV < 0) {
+          _translationStep *= -1;
+        }
+        _translationV += _translationStep;
+        _ruler->setTexCoordsTranslation(0, _translationV);
+
+        _altimeterCanvasImageBuilder->step();
+      }
+    };
+
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(50),
+                                                 new AnimateHUDWidgetsTask(label,
+                                                                           compass2,
+                                                                           ruler,
+                                                                           labelBuilder,
+                                                                           altimeterCanvasImageBuilder)));
+
+    if (false){ //Changing FOV
+
+
+      class AnimatedFOVCameraConstrainer: public ICameraConstrainer {
+      private:
+        mutable double _angle;
+        mutable double _step;
+      public:
+
+        AnimatedFOVCameraConstrainer() : _angle(70), _step(1)
+        {
+        }
+
+        bool onCameraChange(const Planet* planet,
+                            const Camera* previousCamera,
+                            Camera* nextCamera) const {
+
+          if (_angle > 170) {
+            _step *= -1;
+          }
+          else if (_angle < 5) {
+            _step *= -1;
+          }
+
+          _angle += _step;
+
+          nextCamera->setFOV(Angle::nan(), Angle::fromDegrees(_angle));
+
+          return true;
+        }
+      };
+
+      builder.addCameraConstraint(new AnimatedFOVCameraConstrainer());
+    }
+
+    if (false){ //Changing ROLL
+      
+      class AnimatedRollCameraConstrainer: public ICameraConstrainer {
+      private:
+        mutable double _angle;
+        mutable double _step;
+      public:
+
+        AnimatedRollCameraConstrainer() : _angle(0), _step(2)
+        {
+        }
+
+        bool onCameraChange(const Planet* planet,
+                            const Camera* previousCamera,
+                            Camera* nextCamera) const {
+          _angle += _step;
+
+          nextCamera->setRoll(Angle::fromDegrees(_angle));
+
+          return true;
+
+
+        }
+      };
+
+      builder.addCameraConstraint(new AnimatedRollCameraConstrainer());
+
+    }
+
+
+
+
+}
+
+
+//  [self createInterpolationTest: meshRenderer];
+
+//  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+
+//Draw light direction
+if (false) {
+
+  Vector3D lightDir = Vector3D(100000, 0,0);
+  //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+  FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
+                                              Angle::fromDegrees(-15.431389),
+                                              10000));
+
+  vertex->add(v);
+  vertex->add(v.add(lightDir));
+  //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+
+  meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
+                                        true,
+                                        vertex->getCenter(),
+                                        vertex->create(),
+                                        3.0,
+                                        1.0,
+                                        Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
+
+  delete vertex;
+
+}
+
+GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
+                                                                   geoRenderer: geoRenderer
+                                                                  meshRenderer: meshRenderer
+                                                                 marksRenderer: marksRenderer
+                                                                        planet: planet];
+builder.setInitializationTask(initializationTask, true);
+
+PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
+builder.addPeriodicalTask(periodicalTask);
+
+const bool logFPS = false;
+builder.setLogFPS(logFPS);
+
+const bool logDownloaderStatistics = false;
+builder.setLogDownloaderStatistics(logDownloaderStatistics);
+
+//builder.getPlanetRendererBuilder()->setRenderDebug(true);
+
+//  WidgetUserData* userData = NULL;
+//  builder.setUserData(userData);
+
+// initialization
+builder.initializeWidget();
+//  [self testGenericQuadTree:geoTileRasterizer];
 }
 
 - (void) testGenericQuadTree: (GEOTileRasterizer*) geoTileRasterizer{
@@ -1043,8 +1281,7 @@ public:
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler(processRotation, processZoom));
-  
+  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
@@ -1073,7 +1310,7 @@ public:
   }
   
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = true;
+  const bool useMapQuestOSM = false;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
     //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -1089,8 +1326,68 @@ public:
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
   }
-  
-  
+
+  bool testingTransparencies = true;
+  if (testingTransparencies){
+
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 6),
+                                        //NULL,
+                                        TimeInterval::fromDays(30),
+                                        true,
+                                        new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                       2, 4,
+                                                                       0, 6,
+                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                       false)
+                                        );
+    layerSet->addLayer(blueMarble);
+
+    WMSLayer* i3Landsat = new WMSLayer("esat",
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/jpeg",
+                                       "EPSG:4326",
+                                       "",
+                                       false,
+                                       new LevelTileCondition(7, 100),
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                      2, 4,
+                                                                      0, 12,
+                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                      false));
+    layerSet->addLayer(i3Landsat);
+
+    WMSLayer *pnoa = new WMSLayer("PNOA",
+                                  URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                  WMS_1_1_0,
+                                  Sector::fromDegrees(21, -18, 45, 6),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::fromDays(30),
+                                  true,
+                                  NULL,
+                                  0.5);
+    layerSet->addLayer(pnoa);
+  }
+
+
+>>>>>>> purgatory
   const bool useCartoDB = false;
   if (useCartoDB) {
     layerSet->addLayer( new CartoDBLayer("mdelacalle",
@@ -1257,48 +1554,48 @@ public:
   }
 
   if (false) {
-//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
-//                                                  Sector::fullSphere(),
-//                                                  false,
-//                                                  0,
-//                                                  4,
-//                                                  TimeInterval::zero(),
-//                                                  false));
+    //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
+    //                                                  Sector::fullSphere(),
+    //                                                  false,
+    //                                                  0,
+    //                                                  4,
+    //                                                  TimeInterval::zero(),
+    //                                                  false));
 
-//    WMSLayer* blueMarble = new WMSLayer("bmng200405",
-//                                        URL("http://www.nasa.network.com/wms?", false),
-//                                        WMS_1_1_0,
-//                                        Sector::fullSphere(),
-//                                        "image/jpeg",
-//                                        "EPSG:4326",
-//                                        "",
-//                                        false,
-//                                        //new LevelTileCondition(0, 8),
-//                                        NULL,
-//                                        TimeInterval::fromDays(30),
-//                                        true);
-//    layerSet->addLayer(blueMarble);
+    //    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+    //                                        URL("http://www.nasa.network.com/wms?", false),
+    //                                        WMS_1_1_0,
+    //                                        Sector::fullSphere(),
+    //                                        "image/jpeg",
+    //                                        "EPSG:4326",
+    //                                        "",
+    //                                        false,
+    //                                        //new LevelTileCondition(0, 8),
+    //                                        NULL,
+    //                                        TimeInterval::fromDays(30),
+    //                                        true);
+    //    layerSet->addLayer(blueMarble);
 
 
     // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
     // [lower=[lat=48.302366666666664, lon=11.65903888888889], upper=[lat=48.40372222222222, lon=11.788533333333335]]
 
-//    AndTileCondition* condition = new AndTileCondition(new LevelTileCondition(0, 500),
-//                                                       new SectorTileCondition(Sector::fromDegrees(39.99854166666677, -72.00145833333336,
-//                                                                                                   42.50145833333343, -68.9985416666667)));
-//
-//    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/2-N40-W072_ll_tif.tiles/{level}/{x}/{y}.png",
-//                                                  Sector::fullSphere(),
-//                                                  true,
-//                                                  0,
-//                                                  8,
-//                                                  TimeInterval::zero(),
-//                                                  false,
-//                                                  //new LevelTileCondition(3, 500)
-//                                                  //new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
-//                                                  //                                            42.50166666666667, 3.0016666666666665))
-//                                                  condition
-//                                                  ));
+    //    AndTileCondition* condition = new AndTileCondition(new LevelTileCondition(0, 500),
+    //                                                       new SectorTileCondition(Sector::fromDegrees(39.99854166666677, -72.00145833333336,
+    //                                                                                                   42.50145833333343, -68.9985416666667)));
+    //
+    //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/2-N40-W072_ll_tif.tiles/{level}/{x}/{y}.png",
+    //                                                  Sector::fullSphere(),
+    //                                                  true,
+    //                                                  0,
+    //                                                  8,
+    //                                                  TimeInterval::zero(),
+    //                                                  false,
+    //                                                  //new LevelTileCondition(3, 500)
+    //                                                  //new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+    //                                                  //                                            42.50166666666667, 3.0016666666666665))
+    //                                                  condition
+    //                                                  ));
 
     layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/_merged/{level}/{x}/{y}.jpg",
                                                   Sector::fullSphere(),
@@ -1633,14 +1930,14 @@ public:
                                //50000, 50000,
                                663000, 824000,
                                false);
-//  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-//                                              Angle::fromDegrees(-122 - 2),
-//                                              50000 / 2),
-//                               RELATIVE_TO_GROUND,
-//                               URL("file:///hud2.png", false),
-//                               //50000, 50000,
-//                               50000, 50000,
-//                               false);
+  //  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+  //                                              Angle::fromDegrees(-122 - 2),
+  //                                              50000 / 2),
+  //                               RELATIVE_TO_GROUND,
+  //                               URL("file:///hud2.png", false),
+  //                               //50000, 50000,
+  //                               50000, 50000,
+  //                               false);
   quad1->setPitch(Angle::fromDegrees(90));
   shapesRenderer->addShape(quad1);
   
@@ -1820,7 +2117,11 @@ public:
   std::vector<RectangleF *> destRs;
   destRs.push_back(new RectangleF(0,0,256,256));
   destRs.push_back(new RectangleF(0, 128, 64, 64));
-  
+
+  std::vector<float> transparencies;
+  transparencies.push_back(1.0);
+  transparencies.push_back(0.5);
+
   class QuadListener: public IImageListener {
     ShapesRenderer* _sr;
   public:
@@ -1848,6 +2149,7 @@ public:
                        images,
                        srcRs,
                        destRs,
+                       transparencies,
                        new QuadListener(shapesRenderer), true);
   
   for (int i = 0; i < 2; i++) {
@@ -2013,12 +2315,12 @@ private:
     _colorIndex = (_colorIndex + 1) % wheelSize;
 
     BoxShape* box = new BoxShape(new Geodetic3D(geometry->getPosition(), 0),
-                        RELATIVE_TO_GROUND,
-                        Vector3D(boxExtent, boxExtent, height),
-                        1,
-                        //Color::newFromRGBA(1, 1, 0, 0.6),
-                        Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
-                        Color::newFromRGBA(0.2, 0.2, 0, 1));
+                                 RELATIVE_TO_GROUND,
+                                 Vector3D(boxExtent, boxExtent, height),
+                                 1,
+                                 //Color::newFromRGBA(1, 1, 0, 0.6),
+                                 Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
+                                 Color::newFromRGBA(0.2, 0.2, 0, 1));
 
     //box->setPitch(Angle::fromDegrees(45));
     return box;
@@ -2523,7 +2825,7 @@ public:
         const double height = mu->quadraticBezierInterpolation(fromHeight, middleHeight, toHeight, alpha);
 
         vertices->add(Geodetic2D::linearInterpolation(fromPosition, toPosition, alpha),
-                     height);
+                      height);
       }
 
       Mesh* result = new DirectMesh(GLPrimitive::lineStrip(),
@@ -2641,7 +2943,9 @@ public:
 
       // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40, -71, 700000));
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.099999998178312, -15.41699999885168, 7000),
+                                                     Angle::fromDegrees(0),
+                                                     Angle::fromDegrees(85));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -2849,23 +3153,23 @@ public:
                                                   Angle::fromDegreesMinutesSeconds(-78, 2, 10.92),
                                                   10000),
                                        true);
-          /*
-           const double fromDistance = 75000;
-           const double toDistance   = 18750;
+            /*
+             const double fromDistance = 75000;
+             const double toDistance   = 18750;
 
-           const Angle fromAzimuth = Angle::fromDegrees(-90);
-           const Angle toAzimuth   = Angle::fromDegrees(270);
+             const Angle fromAzimuth = Angle::fromDegrees(-90);
+             const Angle toAzimuth   = Angle::fromDegrees(270);
 
-           const Angle fromAltitude = Angle::fromDegrees(90);
-           const Angle toAltitude   = Angle::fromDegrees(15);
+             const Angle fromAltitude = Angle::fromDegrees(90);
+             const Angle toAltitude   = Angle::fromDegrees(15);
 
-           shape->orbitCamera(TimeInterval::fromSeconds(20),
-           fromDistance, toDistance,
-           fromAzimuth,  toAzimuth,
-           fromAltitude, toAltitude);
-           */
-        }
-      };
+             shape->orbitCamera(TimeInterval::fromSeconds(20),
+             fromDistance, toDistance,
+             fromAzimuth,  toAzimuth,
+             fromAltitude, toAltitude);
+             */
+          }
+        };
 
         _shapesRenderer->loadBSONSceneJS(URL("file:///A320.bson"),
                                          URL::FILE_PROTOCOL + "textures-A320/",
@@ -2876,9 +3180,9 @@ public:
                                          ABSOLUTE,
                                          new PlaneShapeLoadListener(),
                                          true);
-        
+
       }
-      
+
       if (false) {
         NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"A320"
                                                                   ofType: @"bson"];
@@ -3056,13 +3360,46 @@ public:
                                    Angle::fromDegrees(720),
                                    Angle::zero());
       }
+
+
+      if (true){ //CHANGE ROLL WITH TOUCH
+
+
+        class RollTerrainTouchListener: public TerrainTouchListener{
+        private:
+          G3MWidget_iOS* _iosWidget;
+        public:
+
+          RollTerrainTouchListener(G3MWidget_iOS* widget): _iosWidget(widget){}
+
+
+          virtual bool onTerrainTouch(const G3MEventContext* ec,
+                                      const Vector2I&        pixel,
+                                      const Camera*          camera,
+                                      const Geodetic3D&      position,
+                                      const Tile*            tile){
+
+            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
+
+            return true;
+
+
+          }
+
+        };
+
+
+        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new RollTerrainTouchListener(_iosWidget));
+
+      }
+
     }
     
     bool isDone(const G3MContext* context) {
       return true;
     }
   };
-  
+
   GInitializationTask* initializationTask = new SampleInitializationTask([self G3MWidget],
                                                                          shapesRenderer,
                                                                          geoRenderer,

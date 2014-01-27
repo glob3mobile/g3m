@@ -17,7 +17,12 @@ public enum GPUUniformKey
   MODEL(12),
   POINT_LIGHT_POSITION(13),
   POINT_LIGHT_COLOR(14),
-  BILLBOARD_POSITION(15);
+  BILLBOARD_POSITION(15),
+  ROTATION_CENTER_TEXTURE_COORDS(16),
+  ROTATION_ANGLE_TEXTURE_COORDS(17),
+  SAMPLER(18),
+  SAMPLER2(19),
+  SAMPLER3(20);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

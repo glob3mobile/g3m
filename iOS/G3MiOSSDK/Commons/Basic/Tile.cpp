@@ -112,6 +112,11 @@ Tile::~Tile() {
   }
 
   delete _tessellatorData;
+
+  delete _middleEastPoint;
+  delete _middleNorthPoint;
+  delete _middleSouthPoint;
+  delete _middleWestPoint;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,

@@ -19,8 +19,11 @@ enum RenderState_Type {
 };
 
 class RenderState {
+private:
+  const static RenderState READY;
+  const static RenderState BUSY;
+  
 public:
-
   static RenderState ready();
   static RenderState busy();
   static RenderState error(const std::vector<std::string>& errors);
@@ -35,8 +38,15 @@ public:
   _type(that._type),
   _errors(that._errors)
   {
-
   }
+
+//  RenderState& operator= (const RenderState& that) {
+//    if (this != &that) {
+//      _type = that._type;
+//      _errors = that._errors;
+//    }
+//    return *this;
+//  }
 
   ~RenderState() {
 

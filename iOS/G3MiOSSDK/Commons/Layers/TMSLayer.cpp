@@ -26,7 +26,8 @@ TMSLayer::TMSLayer(const std::string& mapLayer,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
                    bool readExpired,
-                   const LayerTilesRenderParameters* parameters):
+                   const LayerTilesRenderParameters* parameters,
+                   float transparency):
 
 Layer(condition,
       mapLayer,
@@ -34,7 +35,8 @@ Layer(condition,
       readExpired,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultWGS84(sector)
-      : parameters),
+      : parameters,
+      transparency),
 _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),
 _sector(sector),
@@ -73,7 +75,8 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
                                     URL(isb->getString(), false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    _isTransparent);
+                                    _isTransparent,
+                                    _transparency);
   petitions.push_back(petition);
 
   delete isb;

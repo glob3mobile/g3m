@@ -91,14 +91,20 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
   }
 
   //Texture (After blending factors)
-  if (_boundTextureId != NULL) {
-    if (currentState._boundTextureId == NULL ||
-        !_boundTextureId->isEquals(currentState._boundTextureId)) {
-      nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId);
 
-      currentState._boundTextureId = _boundTextureId;
-    } else{
-      //ILogger::instance()->logInfo("Texture already bound.\n");
+  for (int i = 0; i < MAX_N_TEXTURES; i++){
+
+    if (_boundTextureId[i] != NULL) {
+      if (currentState._boundTextureId[i] == NULL ||
+          !_boundTextureId[i]->isEquals(currentState._boundTextureId[i])) {
+        nativeGL->setActiveTexture(i);
+        nativeGL->bindTexture(GLTextureType::texture2D(), _boundTextureId[i]);
+
+        currentState._boundTextureId[i] = _boundTextureId[i];
+      }
+      //else {
+      //  ILogger::instance()->logInfo("Texture already bound.\n");
+      //}
     }
   }
 

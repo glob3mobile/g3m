@@ -18,9 +18,7 @@ Capabilities
 ============
 
 ####Works on iOS, Android devices and HTML5 environments
-![Screenshot Android] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android.png)
-![Screenshot iOS] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/ios.png)
-![Screenshot webGL] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/webgl.png)
+![Screenshot Android] (https://dl.dropboxusercontent.com/u/20446978/wikig3m/s15.png)
 ####Written from the scratch, no legacy dependencies.
 G3M is a library thought to develop mobile apps from the scratch, since first line of code all the development goes towards 
 a productive environment for multiplatform mobile apps development.
@@ -261,7 +259,6 @@ There are another different projects developed that are used for demo purpose an
 
 ###WebGL Demos
 
-+ <a href="http://galileo.glob3mobile.com" >Galileo</a>
 + <a href="http://owmg.glob3mobile.com/">Open Weather Map</a>
 + <a href="http://milanuncios3d.glob3mobile.com" frameborder="0" allowfullscreen>Mil Anuncios 3D</a>
 + <a href="http://meteorite.glob3mobile.com">Meteorite</a>
@@ -271,7 +268,6 @@ There are another different projects developed that are used for demo purpose an
 Videos
 ======
 
-+ <a href="http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage" frameborder="0" allowfullscreen>Galileo</a>
 + <a href="http://www.youtube.com/watch?feature=player_detailpage&v=kEep7i0ZurE" frameborder="0" allowfullscreen>Mapboo</a>
 + <a href="http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Desktop</a>
 + <a href="http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen>G3M on Mozilla OS</a>

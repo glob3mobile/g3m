@@ -29,14 +29,16 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
                    bool readExpired,
-                   const LayerTilesRenderParameters* parameters):
+                   const LayerTilesRenderParameters* parameters,
+                   float transparency):
 Layer(condition,
       mapLayer,
       timeToCache,
       readExpired,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
-      : parameters),
+      : parameters,
+      transparency),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -64,14 +66,16 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
                    bool readExpired,
-                   const LayerTilesRenderParameters* parameters):
+                   const LayerTilesRenderParameters* parameters,
+                   float transparency):
 Layer(condition,
       mapLayer,
       timeToCache,
       readExpired,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
-      : parameters),
+      : parameters,
+      transparency),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -235,7 +239,8 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
                                     URL(req, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    _isTransparent);
+                                    _isTransparent,
+                                    _transparency);
   petitions.push_back(petition);
   
 	return petitions;

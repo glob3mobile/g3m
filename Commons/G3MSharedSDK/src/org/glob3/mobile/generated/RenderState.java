@@ -1,14 +1,16 @@
 package org.glob3.mobile.generated; 
 public class RenderState
 {
+  private static final RenderState READY = new RenderState(RenderState_Type.RENDER_READY);
+  private static final RenderState BUSY = new RenderState(RenderState_Type.RENDER_BUSY);
 
   public static RenderState ready()
   {
-    return new RenderState(RenderState_Type.RENDER_READY);
+    return READY;
   }
   public static RenderState busy()
   {
-    return new RenderState(RenderState_Type.RENDER_BUSY);
+    return BUSY;
   }
   public static RenderState error(java.util.ArrayList<String> errors)
   {
@@ -26,8 +28,15 @@ public class RenderState
   {
      _type = that._type;
      _errors = that._errors;
-
   }
+
+//  RenderState& operator= (const RenderState& that) {
+//    if (this != &that) {
+//      _type = that._type;
+//      _errors = that._errors;
+//    }
+//    return *this;
+//  }
 
   public void dispose()
   {
