@@ -11,6 +11,10 @@
 #include "IStringBuilder.hpp"
 #include "JSONBoolean.hpp"
 #include "JSONNumber.hpp"
+#include "JSONDouble.hpp"
+#include "JSONFloat.hpp"
+#include "JSONInteger.hpp"
+#include "JSONLong.hpp"
 #include "JSONString.hpp"
 #include "JSONVisitor.hpp"
 
@@ -33,6 +37,31 @@ const JSONBaseObject* JSONArray::get(const int index) const {
 void JSONArray::add(JSONBaseObject* object) {
   _entries.push_back(object);
 }
+
+void JSONArray::add(const std::string& value) {
+  _entries.push_back(new JSONString(value));
+}
+
+void JSONArray::add(double value) {
+  _entries.push_back(new JSONDouble(value));
+}
+
+void JSONArray::add(float value) {
+  _entries.push_back(new JSONFloat(value));
+}
+
+void JSONArray::add(int value) {
+  _entries.push_back(new JSONInteger(value));
+}
+
+void JSONArray::add(long long value) {
+  _entries.push_back(new JSONLong(value));
+}
+
+void JSONArray::add(bool value) {
+  _entries.push_back(new JSONBoolean(value));
+}
+
 
 int JSONArray::size() const {
   return _entries.size();
