@@ -82,7 +82,7 @@ public:
   static Vector3D intersectionXYPlaneWithRay(const Vector3D& origin,
                                              const Vector3D& direction);
 
-  Angle angleRotatedToVector(const Vector3D& vector, const Vector3D& axis) const;
+  Angle vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis) const;
 
   
 };

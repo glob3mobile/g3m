@@ -52,7 +52,9 @@ Vector3D Plane::intersectionXYPlaneWithRay(const Vector3D& origin,
   return point;
 }
 
-Angle Plane::angleRotatedToVector(const Vector3D& vector, const Vector3D& axis) const{
+Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis) const{
+
+  //Check Agustin Trujillo's document that explains how this algorithm works
 
   IMathUtils* mu = IMathUtils::instance();
 
@@ -80,7 +82,6 @@ Angle Plane::angleRotatedToVector(const Vector3D& vector, const Vector3D& axis) 
   const double d2_2 = d2*d2;
 
   //Calculating k's
-
   const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2; //TODO!!!
   const double k2 = (b*z - c*y) / d2;
   const double k3 = (a*x + b*y + c*z) * a / d2_2;
