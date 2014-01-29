@@ -188,12 +188,9 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   const IMathUtils* mu = IMathUtils::instance();
   MutableVector3D positionCamera = _origin;
 
-  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
-  
-  _dragHeight0 = _dragHeight1 = 0;
- 
-  {
-    // compute distance to translate camera
+  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf 
+  /*
+  // compute distance to translate camera
   double d0 = _distanceBetweenInitialPoints;
   const Vector3D r1 = finalRay0;
   const Vector3D r2 = finalRay1;
@@ -202,7 +199,7 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   double zc = _origin.z();
   double uz = _centerRay.z();
   double t2 = (d0 / mu->sqrt(k) - zc) / uz;
-  }
+  */
 
   // compute distance to translate camera
   double d0 = _distanceBetweenInitialPoints;
@@ -221,8 +218,9 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   double c = Kx*Kx + Ky*Ky + (zA-zB)*(zA-zB) - d0*d0;
   double root = b*b - 4*a*c;
   if (root<0) return MutableMatrix44D::invalid();
-  double t2 = (-b + sqrt(root)) / (2*a);
-  
+  double squareRoot = mu->sqrt(root);
+  double t2 = (-b - squareRoot) / (2*a);
+    
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
   positionCamera = _origin;
