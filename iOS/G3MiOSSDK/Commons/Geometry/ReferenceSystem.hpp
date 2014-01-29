@@ -20,9 +20,9 @@ class ReferenceSystem{
 public:
 
   ReferenceSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z):
-
+  _x(x),_y(y),_z(z)
   {
-
+    //TODO CHECK CONSISTENCY
 
 
   }
