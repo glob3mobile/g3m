@@ -295,13 +295,13 @@ public class G3MMeshParser
       return new java.util.ArrayList<Mesh>();
     }
   
-    ;
-  
     java.util.HashMap<String, G3MMeshMaterial> materials = parseMaterials(jsonObject.getAsArray("materials"));
   
     java.util.ArrayList<Mesh> meshes = parseMeshes(materials, jsonObject.getAsArray("meshes"), planet);
   
-    TODO;
+    for (final G3MMeshMaterial material : materials.values()) {
+      material.dispose();
+    }
   
     return meshes;
   }
