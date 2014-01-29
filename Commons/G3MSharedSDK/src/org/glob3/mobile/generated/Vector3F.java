@@ -24,6 +24,11 @@ public class Vector3F
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector3F operator =(Vector3F that);
 
+  public static Vector3F zero()
+  {
+    return new Vector3F(0, 0, 0);
+  }
+
   public final float _x;
   public final float _y;
   public final float _z;
