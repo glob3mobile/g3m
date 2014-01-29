@@ -284,8 +284,6 @@ std::vector<Mesh*> G3MMeshParser::parse(const JSONObject* jsonObject,
     return std::vector<Mesh*>();
   }
 
-  ;
-
   std::map<std::string, G3MMeshMaterial*> materials = parseMaterials( jsonObject->getAsArray("materials") );
 
   std::vector<Mesh*> meshes = parseMeshes(materials,
@@ -300,8 +298,10 @@ std::vector<Mesh*> G3MMeshParser::parse(const JSONObject* jsonObject,
   }
 #endif
 #ifdef JAVA_CODE
-  TODO;
+  for (final G3MMeshMaterial material : materials.values()) {
+    material.dispose();
+  }
 #endif
-  
+
   return meshes;
 }
