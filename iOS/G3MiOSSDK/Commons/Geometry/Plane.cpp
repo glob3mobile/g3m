@@ -82,7 +82,7 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
   const double d2_2 = d2*d2;
 
   //Calculating k's
-  const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2; //TODO!!!
+  const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2;
   const double k2 = (b*z - c*y) / d2;
   const double k3 = (a*x + b*y + c*z) * a / d2_2;
 
@@ -113,12 +113,24 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
   const double c2 = (firstTerm - root) / divisor;
 
   double firstSolution = mu->acos(c1);
+  double secondSolution = mu->acos(c2);
+
+  //Considering the lower angle to rotate as solution
+  const double solution = firstSolution < secondSolution? firstSolution : secondSolution;
+
+  if (mu->abs((s1 * c1 + s2*SIN(firstSolution) + s3)) < 0.001){ //if valid solution (can't compare with 0)
+    return Angle::fromRadians(solution);
+  } else{
+    return Angle::fromRadians(-solution);
+  }
+
+
+/*
   //Check if the solution is valid
-  if ((s1 * c1 + s2*SIN(firstSolution) + s3) != 0){
+  if ((s1 * c1 + s2*SIN(firstSolution) + s3) > 0.1){
     firstSolution = -firstSolution;
   }
 
-  double secondSolution = mu->acos(c2);
   //Check if the solution is valid
   if ((s1 * c2 + s2*SIN(secondSolution) + s3) != 0){
     secondSolution = -secondSolution;
@@ -126,10 +138,12 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
 
   //We return the shortest angle
   if (mu->abs(firstSolution) < mu->abs(secondSolution)) {
-    return Angle::fromDegrees(firstSolution);
+    return Angle::fromRadians(firstSolution);
   } else{
-    return Angle::fromDegrees(secondSolution);
+    return Angle::fromRadians(secondSolution);
   }
+ 
+ */
 
 }
 

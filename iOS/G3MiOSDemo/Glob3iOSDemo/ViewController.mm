@@ -280,6 +280,27 @@ public:
   [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
                                                new CameraRollChangerTask([[self G3MWidget] widget]));
    */
+
+  //Test Plane
+  Plane xPlane(Vector3D(1.0,0.0,0.0), 0.0);
+  Vector3D vector(1.0,0.0,0.0);
+  Vector3D axis(0.0,1.0,1.0);
+
+  for (int i = 0; i <= 90; i++){
+    Vector3D v2 = vector.rotateAroundAxis(axis, Angle::fromDegrees(i));
+
+    Angle angle = xPlane.vectorRotationForAxis(v2, axis);
+    NSLog(@"ANGLE: %f", angle._degrees);  //Should return 90..0
+  }
+
+
+  for (int i = 0; i <= 90; i++){
+    Vector3D v2 = axis.rotateAroundAxis(vector, Angle::fromDegrees(i));
+
+    Angle angle = xPlane.vectorRotationForAxis(v2, axis);
+    NSLog(@"ANGLE: %f", angle._degrees); //Should return 0
+  }
+
 }
 
 
