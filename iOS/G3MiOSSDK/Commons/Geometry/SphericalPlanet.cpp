@@ -267,7 +267,7 @@ Effect* SphericalPlanet::createEffectFromLastSingleDrag() const
   return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
 
-
+/*
 void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
                                       const Vector3D& centerRay,
                                       const Vector3D& initialRay0,
@@ -286,7 +286,7 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   Geodetic2D g1 = toGeodetic2D(_initialPoint1.asVector3D());
   Geodetic2D g  = getMidPoint(g0, g1);
   _initialPoint = toCartesian(g).asMutableVector3D();
-}
+}*/
 
 
 MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,

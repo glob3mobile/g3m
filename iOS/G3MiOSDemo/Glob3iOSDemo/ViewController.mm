@@ -609,9 +609,9 @@ public:
 
   builder.setCameraRenderer([self createCameraRenderer]);
 
-  const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
-  //const Planet* planet = Planet::createFlatEarth();
+  const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
 
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
@@ -631,7 +631,7 @@ public:
   //                                  NULL)
   //                     );
 
-  bool useElevations = true;
+  bool useElevations = false;
   if (useElevations) {
     [self initializeElevationDataProvider: builder];
   }

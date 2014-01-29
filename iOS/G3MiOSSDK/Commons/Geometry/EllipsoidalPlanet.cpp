@@ -346,7 +346,7 @@ Effect* EllipsoidalPlanet::createEffectFromLastSingleDrag() const
   return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
 
-
+/*
 void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
                                         const Vector3D& centerRay,
                                         const Vector3D& initialRay0,
@@ -366,7 +366,7 @@ void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
   Geodetic2D g  = getMidPoint(g0, g1);
   _initialPoint = toCartesian(g).asMutableVector3D();
 }
-
+*/
 
 MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
                                                const Vector3D& finalRay1) const

@@ -230,6 +230,8 @@ public:
   }
 
   Vector3D getScenePositionForPixel(int x, int y);
+
+  Vector3D getScenePositionForCentralPixel();
   
   Vector3D getFirstValidScenePositionForCentralColumn();
 

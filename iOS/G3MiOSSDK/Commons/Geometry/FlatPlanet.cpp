@@ -155,15 +155,21 @@ Effect* FlatPlanet::createEffectFromLastSingleDrag() const
 
 void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
                                  const Vector3D& centerRay,
-                                 const Vector3D& initialRay0,
-                                 const Vector3D& initialRay1) const
+                                 const Vector3D& centerPosition,
+                                 const Vector3D& touchedPosition0,
+                                 const Vector3D& touchedPosition1) const
 {
   _origin = origin.asMutableVector3D();
   _centerRay = centerRay.asMutableVector3D();
-  _initialPoint0 = Plane::intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
-  _initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
+  //_initialPoint0 = Plane::intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
+  //_initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
+  _initialPoint0 = touchedPosition0.asMutableVector3D();
+  _dragHeight0 = toGeodetic3D(touchedPosition0)._height;
+  _initialPoint1 = touchedPosition1.asMutableVector3D();
+  _dragHeight1 = toGeodetic3D(touchedPosition1)._height;
   _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
-  _centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
+  //_centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
+  _centerPoint = centerPosition.asMutableVector3D();
   //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
 
   // middle point in 3D
@@ -183,7 +189,11 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   MutableVector3D positionCamera = _origin;
 
   // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
-  // compute distance to translate camera
+  
+  _dragHeight0 = _dragHeight1 = 0;
+ 
+  {
+    // compute distance to translate camera
   double d0 = _distanceBetweenInitialPoints;
   const Vector3D r1 = finalRay0;
   const Vector3D r2 = finalRay1;
@@ -192,7 +202,27 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   double zc = _origin.z();
   double uz = _centerRay.z();
   double t2 = (d0 / mu->sqrt(k) - zc) / uz;
+  }
 
+  // compute distance to translate camera
+  double d0 = _distanceBetweenInitialPoints;
+  const Vector3D r1 = finalRay0;
+  const Vector3D r2 = finalRay1;
+  double zA = _dragHeight0;
+  double zB = _dragHeight1;
+  double zc = _origin.z();
+  double uz = _centerRay.z();
+  double Rx = r2._x / r2._z - r1._x / r1._z;
+  double Ry = r2._y / r2._z - r1._y / r1._z;
+  double Kx = zc*Rx + zA*r1._x/r1._z - zB*r2._x/r2._z;
+  double Ky = zc*Ry + zA*r1._y/r1._z - zB*r2._y/r2._z;
+  double a = uz*uz * (Rx*Rx + Ry*Ry);
+  double b = 2 * uz * (Rx*Kx + Ry*Ky);
+  double c = Kx*Kx + Ky*Ky + (zA-zB)*(zA-zB) - d0*d0;
+  double root = b*b - 4*a*c;
+  if (root<0) return MutableMatrix44D::invalid();
+  double t2 = (-b + sqrt(root)) / (2*a);
+  
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
   positionCamera = _origin;
@@ -210,11 +240,12 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   }
 
   // compute 3D point of view center
-  Vector3D centerPoint2 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D());
+  double meanDragHeight = 0.5 * (_dragHeight0 + _dragHeight1);
+  Vector3D centerPoint2 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D(), meanDragHeight);
 
   // compute middle point in 3D
-  Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
-  Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D());
+  Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
+  Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D(), _dragHeight1);
   Vector3D finalPoint = P0.add(P1).times(0.5);
 
   // drag globe from centerPoint to finalPoint
@@ -228,7 +259,7 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     Vector3D normal = geodeticSurfaceNormal(centerPoint2);
     Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
-    Vector3D p0     = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
+    Vector3D p0     = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
     Vector3D v1     = p0.sub(centerPoint2).projectionInPlane(normal);
     double angle    = v0.angleBetween(v1)._degrees;
     double sign     = v1.cross(v0).dot(normal);
