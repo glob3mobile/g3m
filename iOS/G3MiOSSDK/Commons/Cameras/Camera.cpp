@@ -177,8 +177,8 @@ const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
 }
 
 const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
-  const int px = pixel._x;
-  const int py = _height - pixel._y;
+  const double px = pixel._x + 0.5;
+  const double py = _height - pixel._y - 0.5;
   const Vector3D pixel3D(px, py, 0);
 
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D,

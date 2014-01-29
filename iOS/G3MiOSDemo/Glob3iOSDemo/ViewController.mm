@@ -631,7 +631,7 @@ public:
   //                                  NULL)
   //                     );
 
-  bool useElevations = false;
+  bool useElevations = true;
   if (useElevations) {
     [self initializeElevationDataProvider: builder];
   }
