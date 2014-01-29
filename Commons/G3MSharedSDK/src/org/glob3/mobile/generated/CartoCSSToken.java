@@ -16,4 +16,9 @@ public abstract class CartoCSSToken
   }
 
   public abstract String description();
+
+  @Override
+  public String toString() {
+    return description();
+  }
 }

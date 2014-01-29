@@ -75,7 +75,13 @@ public:
     delete isb;
     return s;
   }
-  
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
   bool isEquals(const Vector2I& that) const;
 };
 

@@ -106,6 +106,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   float getLayerTransparency() const{
     return _layerTransparency;

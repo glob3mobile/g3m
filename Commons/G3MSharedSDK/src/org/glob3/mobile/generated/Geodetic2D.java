@@ -197,6 +197,10 @@ public class Geodetic2D
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final boolean isEquals(Geodetic2D that)
   {

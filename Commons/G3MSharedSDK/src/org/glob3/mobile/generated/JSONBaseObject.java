@@ -78,6 +78,10 @@ public abstract class JSONBaseObject
   public abstract JSONBaseObject deepCopy();
 
   public abstract String description();
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public abstract void acceptVisitor(JSONVisitor visitor);
 

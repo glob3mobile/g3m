@@ -1185,7 +1185,6 @@ public class Tile {
 
       ILogger.instance().logError("Can't create subview of elevation data from ancestor");
       return null;
-
    }
 
 

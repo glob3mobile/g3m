@@ -76,6 +76,12 @@ public:
                     _x * that._y - _y * that._x);
   }
 
+  bool isZero() const {
+    return ((_x == 0) &&
+            (_y == 0) &&
+            (_z == 0));
+  }
+  
 };
 
 #endif

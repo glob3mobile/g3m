@@ -101,6 +101,10 @@ public class TileKey
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final String tinyDescription()
   {

@@ -178,6 +178,12 @@ public:
   Vector3D projectionInPlane(const Vector3D& normal) const;
   
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   const Vector3D clamp(const Vector3D& min,
                        const Vector3D& max) const;

@@ -133,6 +133,10 @@ public class Petition
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final float getLayerTransparency()
   {

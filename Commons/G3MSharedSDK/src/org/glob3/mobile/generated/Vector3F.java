@@ -79,4 +79,9 @@ public class Vector3F
     return new Vector3F(_y * that._z - _z * that._y, _z * that._x - _x * that._z, _x * that._y - _y * that._x);
   }
 
+  public final boolean isZero()
+  {
+    return ((_x == 0) && (_y == 0) && (_z == 0));
+  }
+
 }

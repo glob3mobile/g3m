@@ -108,6 +108,12 @@ public:
   void onDownloadErrorMetadata();
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   BingMapsLayer* copy() const;
   

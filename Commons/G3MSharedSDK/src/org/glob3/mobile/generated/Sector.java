@@ -321,6 +321,10 @@ public class Sector
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final Sector shrinkedByPercentP(float percent)
   {

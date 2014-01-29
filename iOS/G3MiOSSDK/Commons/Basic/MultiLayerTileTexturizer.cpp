@@ -536,7 +536,8 @@ public:
       if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
         if (composeAndUploadTexture()) {
            //If the image could be properly turn into texture
-          _tile->setTextureSolved(true);   
+          _tile->setTextureSolved(true);
+          deletePetitions();    //We must release the petitions so we can get rid off no longer needed images
         }
       }
       

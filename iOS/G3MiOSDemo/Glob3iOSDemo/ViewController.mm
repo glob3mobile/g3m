@@ -46,7 +46,7 @@
 #import <G3MiOSSDK/MeshShape.hpp>
 #import <G3MiOSSDK/IShortBuffer.hpp>
 #import <G3MiOSSDK/SimpleCameraConstrainer.hpp>
-#import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
+#import <G3MiOSSDK/WMSBilElevationDataProvider.hpp>
 #import <G3MiOSSDK/ElevationData.hpp>
 #import <G3MiOSSDK/IBufferDownloadListener.hpp>
 #import <G3MiOSSDK/BilParser.hpp>
@@ -67,8 +67,8 @@
 #import <G3MiOSSDK/Factory_iOS.hpp>
 #import <G3MiOSSDK/G3MWidget.hpp>
 #import <G3MiOSSDK/GEOJSONParser.hpp>
-//import <G3MiOSSDK/WMSBillElevationDataProvider.hpp>
-#import <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+//import <G3MiOSSDK/WMSBilElevationDataProvider.hpp>
+#import <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #import <G3MiOSSDK/FloatBufferElevationData.hpp>
 #import <G3MiOSSDK/GEOSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DMultiLineStringGeometry.hpp>
@@ -234,6 +234,32 @@ Mesh* createSectorMesh(const Planet* planet,
 
 #pragma mark - View lifecycle
 
+class CameraRollChangerTask : public GTask {
+  G3MWidget* _widget;
+  double _rollInDegrees;
+  double _step;
+
+public:
+  CameraRollChangerTask(G3MWidget* widget) :
+  _widget(widget),
+  _rollInDegrees(0),
+  _step(2)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    if ((_rollInDegrees < -180) ||
+        (_rollInDegrees > 180)) {
+      _step *= -1;
+    }
+    _rollInDegrees += _step;
+
+#warning JM please take a look to setRoll!
+    _widget->setCameraRoll(Angle::fromDegrees(_rollInDegrees));
+  }
+};
+
+
 - (void)viewDidLoad
 {
   [super viewDidLoad];
@@ -249,6 +275,11 @@ Mesh* createSectorMesh(const Planet* planet,
   //  [self initWithBuilderAndSegmentedWorld];
 
   [[self G3MWidget] startAnimation];
+
+  /*
+  [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
+                                               new CameraRollChangerTask([[self G3MWidget] widget]));
+   */
 }
 
 
@@ -383,7 +414,7 @@ public:
   builder.setInitializationTask(new MoveCameraInitializationTask([self G3MWidget], sector),
                                 true);
 
-  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///aus4326.bil", false),
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///aus4326.bil", false),
                                                                                      sector,
                                                                                      Vector2I(2083, 2001),
                                                                                      -758.905);
@@ -483,11 +514,11 @@ public:
   //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
-  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+  //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
   //                                                                                     Sector::fullSphere(),
   //                                                                                     Vector2I(2048, 1024));
 
-  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
                                                                                      Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
@@ -888,7 +919,7 @@ public:
                                                                            labelBuilder,
                                                                            altimeterCanvasImageBuilder)));
 
-    if (true){ //Changing FOV
+    if (false){ //Changing FOV
 
 
       class AnimatedFOVCameraConstrainer: public ICameraConstrainer {
@@ -2996,11 +3027,11 @@ public:
         public:
           ElevationTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget) {
 
-            _elevationDataProvider1 = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+            _elevationDataProvider1 = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                           Sector::fullSphere(),
                                                                           Vector2I(2048, 1024));
 
-            //            _elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+            //            _elevationDataProvider2 = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
             //                                                                        Sector::fromDegrees(
             //                                                                                            39.4642996294239623,
             //                                                                                            -6.3829977122432933,
@@ -3022,7 +3053,7 @@ public:
                 break;
               case 1:
 
-                _elevationDataProvider2 = new SingleBillElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+                _elevationDataProvider2 = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
                                                                               Sector::fromDegrees(
                                                                                                   39.4642996294239623,
                                                                                                   -6.3829977122432933,

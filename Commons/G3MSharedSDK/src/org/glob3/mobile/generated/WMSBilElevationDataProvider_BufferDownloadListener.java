@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class WMSBillElevationDataProvider_BufferDownloadListener extends IBufferDownloadListener
+public class WMSBilElevationDataProvider_BufferDownloadListener extends IBufferDownloadListener
 {
   private final Sector _sector ;
   private final int _width;
@@ -11,7 +11,7 @@ public class WMSBillElevationDataProvider_BufferDownloadListener extends IBuffer
   private final double _deltaHeight;
 
 
-  public WMSBillElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, double deltaHeight)
+  public WMSBilElevationDataProvider_BufferDownloadListener(Sector sector, Vector2I extent, IElevationDataListener listener, boolean autodeleteListener, double deltaHeight)
   {
      _sector = new Sector(sector);
      _width = extent._x;
