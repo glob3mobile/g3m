@@ -100,35 +100,6 @@ void EffectsScheduler::cancelAllEffectsFor(EffectTarget* target) {
 
 void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
                                               const TimeInterval& when) {
-  //  std::vector<int> indicesToRemove;
-  //  const int size = _effectsRuns.size();
-  //  for (int i = 0; i < size; i++) {
-  //    EffectRun* effectRun = _effectsRuns[i];
-  //
-  //    if (effectRun->_started) {
-  //      Effect* effect = effectRun->_effect;
-  //      if (effect->isDone(rc, when)) {
-  //        effect->stop(rc, when);
-  //
-  //        indicesToRemove.push_back(i);
-  //      }
-  //    }
-  //  }
-  //
-  //  // backward iteration, to remove from bottom to top
-  //  for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-  //    const int indexToRemove = indicesToRemove[i];
-  //    EffectRun* effectRun = _effectsRuns[indexToRemove];
-  //    delete effectRun;
-  //
-  //#ifdef C_CODE
-  //    _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
-  //#endif
-  //#ifdef JAVA_CODE
-  //    _effectsRuns.remove(indexToRemove);
-  //#endif
-  //  }
-
 #ifdef C_CODE
   std::vector<int> indicesToRemove;
   const int size = _effectsRuns.size();
