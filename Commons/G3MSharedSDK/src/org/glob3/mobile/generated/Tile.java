@@ -312,9 +312,42 @@ public class Tile
     final double latitudeMiddleArcDistSquared = latitudeMiddleDistSquared * _latitudeArcSegmentRatioSquared;
     final double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
   
-    //Testing Area
-    _lastLodTest = ((latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared *texWidthSquared));
+  //  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+  //  const double lonLonRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
   
+    //Testing Area
+    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Tile-LOD bug
+  //  if (_lastLodTest) {
+  ////    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
+  ////           _level,
+  ////           latitudeMiddleDistSquared,
+  ////           longitudeMiddleDistSquared,
+  ////           latitudeMiddleArcDistSquared,
+  ////           longitudeMiddleArcDistSquared,
+  ////           latLonRatio,
+  ////           lonLonRatio
+  ////           );
+  //    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLonRatio=%f\n",
+  //           _level,
+  //           latLonRatio,
+  //           lonLonRatio
+  //           );
+  //
+  //  }
+  
+  
+    /*
+     BAD:
+     2014-01-30 11:23:17.885 G3MiOSDemo[8358:60b] Info: Touched on (Tile level=10, row=1439, column=1976, sector=(Sector (lat=36.474609375000007105d, lon=-6.328125d) - (lat=36.5625d, lon=-6.2402343749999991118d)))
+     2014-01-30 11:23:17.887 G3MiOSDemo[8358:60b] Info: Camera position=(lat=36.516484364230244353d, lon=-6.2802353330784788099d, height=60.391400095963234662) heading=45.450683 pitch=61.017430
+    
+     GOOD:
+     2014-01-30 11:23:45.400 G3MiOSDemo[8358:60b] Info: Touched on (Tile level=17, row=184253, column=252998, sector=(Sector (lat=36.5164947509765625d, lon=-6.280059814453125d) - (lat=36.517181396484375d, lon=-6.2793731689453116118d)))
+     2014-01-30 11:23:45.402 G3MiOSDemo[8358:60b] Info: Camera position=(lat=36.516058816654393127d, lon=-6.2798670606496447277d, height=74.299752202274888191) heading=19.412124 pitch=61.017203
+     */
   
     return _lastLodTest;
   }
