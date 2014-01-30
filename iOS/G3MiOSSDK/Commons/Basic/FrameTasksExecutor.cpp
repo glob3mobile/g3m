@@ -59,14 +59,17 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
     if (isCanceled) {
       delete task;
 #ifdef C_CODE
-      _preRenderTasks.erase(i);
+      //_preRenderTasks.erase(i);
+      i = _preRenderTasks.erase(i);
 #endif
 #ifdef JAVA_CODE
       i.remove();
 #endif
       //      canceledCounter++;
     }
-    i++;
+    else {
+      i++;
+    }
   }
 
   //  if (canceledCounter > 0) {

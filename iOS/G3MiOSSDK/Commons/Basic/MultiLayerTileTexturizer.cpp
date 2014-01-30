@@ -786,7 +786,7 @@ public:
   virtual ~TileTextureBuilderStartTask() {
     _builder->_release();
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
   }
 

@@ -95,7 +95,7 @@ public final class ThreadUtils_Android
    }
 
 
-   private void drainQueues() {
+   private final void drainQueues() {
       for (final Runnable runnable : _backgroundQueue) {
          _backgroundExecutor.execute(runnable);
       }
