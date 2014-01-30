@@ -3070,7 +3070,7 @@ public:
       }
 
 
-      if (true){ //CHANGE ROLL WITH TOUCH
+      if (false){ //CHANGE ROLL WITH TOUCH
 
 
         class RollTerrainTouchListener: public TerrainTouchListener{
