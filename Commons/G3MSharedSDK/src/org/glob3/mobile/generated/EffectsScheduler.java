@@ -44,7 +44,7 @@ public class EffectsScheduler
       }
     }
   
-    for (final EffectRun effectRun : _effectsRuns) {
+    for (final EffectRun effectRun : effectsToStop) {
       effectRun._effect.stop(rc, when);
       effectRun.dispose();
     }
