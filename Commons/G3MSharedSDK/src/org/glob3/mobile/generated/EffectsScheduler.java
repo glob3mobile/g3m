@@ -48,20 +48,6 @@ public class EffectsScheduler
       effectRun._effect.stop(rc, when);
       effectRun.dispose();
     }
-  
-  //  final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-  //  while (iterator.hasNext()) {
-  //    final EffectRun effectRun = iterator.next();
-  //    if (effectRun._started) {
-  //      final Effect effect = effectRun._effect;
-  //      if (effect.isDone(rc, when)) {
-  //        effect.stop(rc, when);
-  //
-  //        effectRun.dispose();
-  //        iterator.remove();
-  //      }
-  //    }
-  //  }
   }
 
   public EffectsScheduler()

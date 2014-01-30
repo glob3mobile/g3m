@@ -313,7 +313,7 @@ public class Tile
     final double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
   
   //  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-  //  const double lonLonRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+  //  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
   
     //Testing Area
     _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
@@ -330,10 +330,10 @@ public class Tile
   ////           latLonRatio,
   ////           lonLonRatio
   ////           );
-  //    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLonRatio=%f\n",
+  //    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
   //           _level,
   //           latLonRatio,
-  //           lonLonRatio
+  //           lonLatRatio
   //           );
   //
   //  }
