@@ -123,35 +123,10 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
   const int removedSize = effectsToStop.size();
   for (int i = 0; i < removedSize; i++) {
     EffectRun* effectRun = effectsToStop[i];
-    Effect* effect = effectRun->_effect;
-    effect->stop(rc, when);
+    effectRun->_effect->stop(rc, when);
 
     delete effectRun;
   }
-
-//  std::vector<int> indicesToRemove;
-//  const int size = _effectsRuns.size();
-//  for (int i = 0; i < size; i++) {
-//    EffectRun* effectRun = _effectsRuns[i];
-//
-//    if (effectRun->_started) {
-//      Effect* effect = effectRun->_effect;
-//      if (effect->isDone(rc, when)) {
-//        effect->stop(rc, when);
-//
-//        indicesToRemove.push_back(i);
-//      }
-//    }
-//  }
-//
-//  // backward iteration, to remove from bottom to top
-//  for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
-//    const int indexToRemove = indicesToRemove[i];
-//    EffectRun* effectRun = _effectsRuns[indexToRemove];
-//    delete effectRun;
-//
-//    _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
-//  }
 #endif
 
 #ifdef JAVA_CODE
@@ -171,20 +146,6 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
     effectRun._effect.stop(rc, when);
     effectRun.dispose();
   }
-
-//  final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-//  while (iterator.hasNext()) {
-//    final EffectRun effectRun = iterator.next();
-//    if (effectRun._started) {
-//      final Effect effect = effectRun._effect;
-//      if (effect.isDone(rc, when)) {
-//        effect.stop(rc, when);
-//
-//        effectRun.dispose();
-//        iterator.remove();
-//      }
-//    }
-//  }
 #endif
 }
 
