@@ -167,7 +167,7 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
     }
   }
 
-  for (final EffectRun effectRun : _effectsRuns) {
+  for (final EffectRun effectRun : effectsToStop) {
     effectRun._effect.stop(rc, when);
     effectRun.dispose();
   }
