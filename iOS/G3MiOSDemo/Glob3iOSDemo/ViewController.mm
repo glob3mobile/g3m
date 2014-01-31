@@ -1039,7 +1039,7 @@ builder.setLogFPS(logFPS);
 const bool logDownloaderStatistics = false;
 builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-//builder.getPlanetRendererBuilder()->setRenderDebug(true);
+builder.getPlanetRendererBuilder()->setRenderDebug(true);
 
 //  WidgetUserData* userData = NULL;
 //  builder.setUserData(userData);
@@ -1843,7 +1843,7 @@ builder.initializeWidget();
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -1901,6 +1901,33 @@ builder.initializeWidget();
                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0),
                       RELATIVE_TO_GROUND);
   marksRenderer->addMark(m1);
+
+
+  Mark* mn = new Mark("NORTE",
+                      URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                      Geodetic3D(Angle::fromDegrees(36.56), Angle::fromDegrees(6.28), 0),
+                      RELATIVE_TO_GROUND);
+  marksRenderer->addMark(mn);
+
+  Mark* ms = new Mark("SUR",
+                      URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                      Geodetic3D(Angle::fromDegrees(36.47), Angle::fromDegrees(6.28), 0),
+                      RELATIVE_TO_GROUND);
+  marksRenderer->addMark(ms);
+
+  Mark* me = new Mark("ESTE",
+                      URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                      Geodetic3D(Angle::fromDegrees(36.51), Angle::fromDegrees(6.32), 0),
+                      RELATIVE_TO_GROUND);
+  marksRenderer->addMark(me);
+
+  Mark* mw = new Mark("OESTE",
+                      URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                      Geodetic3D(Angle::fromDegrees(36.51), Angle::fromDegrees(6.24), 0),
+                      RELATIVE_TO_GROUND);
+  marksRenderer->addMark(mw);
+
+
 
 
   if (true) {
@@ -2810,10 +2837,11 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
+//      Camera position=(lat=36.517870519736206347d, lon=-6.2845124950787862872d, height=160.95384510290000435) heading=16.599913 pitch=71.773261
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.099999998178312, -15.41699999885168, 7000),
-                                                     Angle::fromDegrees(0),
-                                                     Angle::fromDegrees(85));
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
+                                                     Angle::fromDegrees(-32.066195 ),
+                                                     Angle::fromDegrees(78.523121));
 
 
       class G3MeshBufferDownloadListener : public IBufferDownloadListener {

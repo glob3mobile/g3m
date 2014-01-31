@@ -296,6 +296,50 @@ public:
   Angle getRoll() const;
   void setRoll(const Angle& angle);
 
+  Plane getZNearPlane() const{
+
+    const double height = getGeodeticPosition()._height;
+    double zNear = height * 0.1;
+
+    double zFar = _planet->distanceToHorizon(_position.asVector3D());
+
+    const double goalRatio = 1000;
+    const double ratio = zFar / zNear;
+    if (ratio < goalRatio) {
+      zNear = zFar / goalRatio;
+    }
+
+    Vector3D point = getCartesianPosition().add(getViewDirection().normalized().times(zNear));
+
+    Vector3D vd = getViewDirection();
+
+    double d = -(vd._x * point._x + vd._y * point._y + vd._z * point._z);
+
+    return Plane(getViewDirection(), d);
+  }
+
+  Plane getZ0Plane() const{
+
+    const double height = getGeodeticPosition()._height;
+    double zNear = height * 0.1;
+
+    double zFar = _planet->distanceToHorizon(_position.asVector3D());
+
+    const double goalRatio = 1000;
+    const double ratio = zFar / zNear;
+    if (ratio < goalRatio) {
+      zNear = zFar / goalRatio;
+    }
+
+    Vector3D point = getCartesianPosition();
+
+    Vector3D vd = getViewDirection();
+
+    double d = -(vd._x * point._x + vd._y * point._y + vd._z * point._z);
+
+    return Plane(getViewDirection(), d);
+  }
+
 private:
   const Angle getHeading(const Vector3D& normal) const;
 
@@ -421,6 +465,8 @@ private:
     }
     return _modelViewMatrix;
   }
+
+
   
 };
 

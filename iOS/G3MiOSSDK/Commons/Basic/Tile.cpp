@@ -29,6 +29,8 @@
 #include "PlanetRenderer.hpp"
 #include "PlanetTileTessellator.hpp"
 
+Geodetic3D* LAST_CAMERA_POS = NULL;
+
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
            const Sector& sector,
@@ -363,6 +365,8 @@ bool Tile::isVisible(const G3MRenderContext* rc,
           boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates));
 }
 
+static bool FREEZE = false;
+
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                TileTexturizer* texturizer,
@@ -422,36 +426,72 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const Vector2F pE = camera->point2Pixel(*_middleEastPoint);
   const Vector2F pW = camera->point2Pixel(*_middleWestPoint);
 
+    if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+      int a = 0;
+      a++;
+    }
+
   const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
   const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
 
   const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
   const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
 
-//  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-//  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
 
-  //Testing Area
-  _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+
+  if ( _sector.contains(LAST_CAMERA_POS->asGeodetic2D()) ){
+    Plane p = camera->getZ0Plane();
+
+    double dN = p.signedDistance(*_middleNorthPoint);
+    double dS = p.signedDistance(*_middleSouthPoint);
+    double dE = p.signedDistance(*_middleEastPoint);
+    double dW = p.signedDistance(*_middleWestPoint);
+
+    ILogger::instance()->logInfo("N: %f %f, S: %f %f, E: %f %f W: %f %f", pN._x, pN._y, pS._x, pS._y, pE._x, pE._y, pW._x, pW._y);
+    ILogger::instance()->logInfo("NS: %f, EW: %f", sqrt(pN.squaredDistanceTo(pS)) , sqrt(pW.squaredDistanceTo(pE)));
+
+  }
+
+  if (latLonRatio < 0.15) {
+    _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
+  }
+  else if (lonLatRatio < 0.15) {
+    _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
+  }
+  else {
+    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+  }
+
+  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+
+    ILogger::instance()->logInfo("N: %f %f, S: %f %f, E: %f %f W: %f %f", pN._x, pN._y, pS._x, pS._y, pE._x, pE._y, pW._x, pW._y);
+    ILogger::instance()->logInfo("NS: %f, EW: %f", sqrt(pN.squaredDistanceTo(pS)) , sqrt(pW.squaredDistanceTo(pE)));
+
+  }
 
 #warning Tile-LOD bug
-//  if (_lastLodTest) {
-////    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
-////           _level,
-////           latitudeMiddleDistSquared,
-////           longitudeMiddleDistSquared,
-////           latitudeMiddleArcDistSquared,
-////           longitudeMiddleArcDistSquared,
-////           latLonRatio,
-////           lonLonRatio
-////           );
-//    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
-//           _level,
-//           latLonRatio,
-//           lonLatRatio
-//           );
-//
-//  }
+  if (_lastLodTest && _sector.contains(LAST_CAMERA_POS->asGeodetic2D())) {
+
+
+    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDist=%f\n   longitudeMiddleDist=%f\n   latitudeMiddleArcDist=%f\n   longitudeMiddleArcDist=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
+           _level,
+           sqrt(latitudeMiddleDistSquared),
+           sqrt(longitudeMiddleDistSquared),
+           sqrt(latitudeMiddleArcDistSquared),
+           sqrt(longitudeMiddleArcDistSquared),
+           latLonRatio,
+           lonLatRatio
+           );
+
+    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
+           _level,
+           latLonRatio,
+           lonLatRatio
+           );
+
+  }
 
 
   /*
@@ -686,6 +726,8 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   }
 }
 
+
+
 void Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
                   std::list<Tile*>* toVisitInNextIteration,
@@ -718,6 +760,9 @@ void Tile::render(const G3MRenderContext* rc,
     _verticalExaggeration = verticalExaggeration;
   }
 
+  delete LAST_CAMERA_POS;
+  LAST_CAMERA_POS = new Geodetic3D(rc->getCurrentCamera()->getGeodeticPosition() );
+
 
   if (isVisible(rc,
                 planet,
@@ -748,7 +793,8 @@ void Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
-      if (renderTileMeshes) {
+
+      if (renderTileMeshes && _level == 10 && _column == 2119 && _row == 1439 ) {
         rawRender(rc,
                   &parentState,
                   texturizer,
@@ -760,10 +806,14 @@ void Tile::render(const G3MRenderContext* rc,
                   tilesRenderParameters,
                   isForcedFullRender,
                   texturePriority);
+
+
       }
+
       if (tilesRenderParameters->_renderDebug) {
         debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
       }
+
 
       tilesStatistics->computePlanetRenderered(this);
 
@@ -803,6 +853,7 @@ void Tile::render(const G3MRenderContext* rc,
     prune(texturizer, elevationDataProvider);
     //TODO: AVISAR CAMBIO DE TERRENO
   }
+
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
@@ -1074,6 +1125,11 @@ void Tile::computeTileCorners(const Planet* planet){
     ILogger::instance()->logError("Error in Tile::computeTileCorners");
     return;
   }
+
+    if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+      int a = 0;
+      a++;
+    }
 
   delete _middleWestPoint;
   delete _middleEastPoint;
