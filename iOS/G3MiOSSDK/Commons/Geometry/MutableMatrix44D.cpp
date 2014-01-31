@@ -409,7 +409,7 @@ Vector2D MutableMatrix44D::project(const Vector3D& point,
   //Transformating point
   double out0 = _m00 * x + _m01 * y + _m02 * z + _m03 /* * w */;
   double out1 = _m10 * x + _m11 * y + _m12 * z + _m13 /* * w */;
-  //double out2 = _m20 * x + _m21 * y + _m22 * z + _m23 * w;
+  double out2 = _m20 * x + _m21 * y + _m22 * z + _m23 /* w */;
   const double out3 = _m30 * x + _m31 * y + _m32 * z + _m33 /* * w */;
 
   if (out3 == 0.0) {
@@ -418,11 +418,11 @@ Vector2D MutableMatrix44D::project(const Vector3D& point,
 
   out0 /= out3;
   out1 /= out3;
-  //out2 /= out3;
+  out2 /= out3;
 
   const double winx = vpLeft + (1.0 + out0) * vpWidth / 2.0;
   const double winy = vpTop  + (1.0 + out1) * vpHeight / 2.0;
-  //double winz = (1.0 + in2) / 2.0;
+  double winz = (1.0 + out2) / 2.0;
   return Vector2D(winx, winy);
 }
 

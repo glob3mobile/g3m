@@ -339,6 +339,16 @@ public:
 
     return Plane(getViewDirection(), d);
   }
+  
+  // data to compute frustum
+  FrustumData getFrustumData() const {
+    if (_dirtyFlags._frustumDataDirty) {
+      _dirtyFlags._frustumDataDirty = false;
+      _frustumData = calculateFrustumData();
+    }
+    return _frustumData;
+  }
+
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -399,14 +409,6 @@ private:
     }
   }
 
-  // data to compute frustum
-  FrustumData getFrustumData() const {
-    if (_dirtyFlags._frustumDataDirty) {
-      _dirtyFlags._frustumDataDirty = false;
-      _frustumData = calculateFrustumData();
-    }
-    return _frustumData;
-  }
 
   // intersection of view direction with globe in(x,y,z)
   MutableVector3D   _getCartesianCenterOfView() const {

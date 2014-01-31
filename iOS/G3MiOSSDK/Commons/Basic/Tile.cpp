@@ -420,16 +420,39 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     prepareTestLODData(planet);
   }
 
+  
+  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+    int a = 0;
+    a++;
+  }
+  
+  
+
+  // compute max angle of the tile from the observer
   const Camera* camera = rc->getCurrentCamera();
-  const Vector2F pN = camera->point2Pixel(*_middleNorthPoint);
+  const Vector3D cameraPosition = camera->getCartesianPosition();
+  const Vector3D rayMiddleNorth = cameraPosition.sub(*_middleNorthPoint);
+  const Vector3D rayMiddleSouth = cameraPosition.sub(*_middleSouthPoint);
+  const Angle angleNS = rayMiddleNorth.angleBetween(rayMiddleSouth);
+  const Vector3D rayMiddleWest = cameraPosition.sub(*_middleWestPoint);
+  const Vector3D rayMiddleEast = cameraPosition.sub(*_middleEastPoint);
+  const Angle angleWE = rayMiddleWest.angleBetween(rayMiddleEast);
+  const Angle maxAngle = Angle::max(angleNS, angleWE);
+  
+  // compute the angle threshold
+  double top = camera->getFrustumData()._top;
+  double znear = camera->getFrustumData()._znear;
+  double X = top * 256 / camera->getHeight();
+  double halfAngle = acos(znear/sqrt(znear*znear+X*X));
+  //_lastLodTest = (maxAngle._degrees < 5)? true : false;
+  _lastLodTest = (maxAngle._radians/2 < halfAngle)? true : false;
+  
+  
+  
+  /*const Vector2F pN = camera->point2Pixel(*_middleNorthPoint);
   const Vector2F pS = camera->point2Pixel(*_middleSouthPoint);
   const Vector2F pE = camera->point2Pixel(*_middleEastPoint);
   const Vector2F pW = camera->point2Pixel(*_middleWestPoint);
-
-    if ( _level == 10 && _column == 2119 && _row == 1439 ) {
-      int a = 0;
-      a++;
-    }
 
   const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
   const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
@@ -439,6 +462,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
   const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+   
 
 
   if ( _sector.contains(LAST_CAMERA_POS->asGeodetic2D()) ){
@@ -492,7 +516,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
            );
 
   }
-
+*/
 
   /*
    BAD:
@@ -503,6 +527,12 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
    2014-01-30 11:23:45.400 G3MiOSDemo[8358:60b] Info: Touched on (Tile level=17, row=184253, column=252998, sector=(Sector (lat=36.5164947509765625d, lon=-6.280059814453125d) - (lat=36.517181396484375d, lon=-6.2793731689453116118d)))
    2014-01-30 11:23:45.402 G3MiOSDemo[8358:60b] Info: Camera position=(lat=36.516058816654393127d, lon=-6.2798670606496447277d, height=74.299752202274888191) heading=19.412124 pitch=61.017203
    */
+
+  
+  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+    int a = 0;
+    a++;
+  }
 
   return _lastLodTest;
 }
@@ -794,7 +824,7 @@ void Tile::render(const G3MRenderContext* rc,
 
     if (isRawRender) {
 
-      if (renderTileMeshes && _level == 10 && _column == 2119 && _row == 1439 ) {
+      if (renderTileMeshes /*&& _level == 10 && _column == 2119 && _row == 1439 */) {
         rawRender(rc,
                   &parentState,
                   texturizer,
