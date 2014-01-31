@@ -427,7 +427,11 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
   
   
-
+  int AGUSTIN_AT_WORK;
+  
+  // instead of project points to pixels, and then compute distance between pixels
+  // it's better to compute angle between projected rays of each point
+  
   // compute max angle of the tile from the observer
   const Camera* camera = rc->getCurrentCamera();
   const Vector3D cameraPosition = camera->getCartesianPosition();
@@ -437,7 +441,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const Vector3D rayMiddleWest = cameraPosition.sub(*_middleWestPoint);
   const Vector3D rayMiddleEast = cameraPosition.sub(*_middleEastPoint);
   const Angle angleWE = rayMiddleWest.angleBetween(rayMiddleEast);
-  const Angle maxAngle = Angle::max(angleNS, angleWE);
   
   /*
   // compute the angle threshold, that represents 256 pixels on the screen
@@ -450,10 +453,14 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   ********** thresholdAngle = 11.42 degrees *****
    */
   
-  _lastLodTest = (maxAngle._degrees < 11.5)? true : false;
+  // simple test condition --> the max angle represents less than 256 pixels
+  // const Angle maxAngle = Angle::max(angleNS, angleWE);
+  //_lastLodTest = (maxAngle._degrees < 11.42)? true : false;
+
+  // this condition is better in the horizon --> the sum of the angles represent less than 512 pixels
+  _lastLodTest = (angleNS.add(angleWE)._degrees < 22.84)? true : false;
   
-  // this is a simple condition
-  // we must adapt all the conditions below to this new parameter
+  
   
   
   
