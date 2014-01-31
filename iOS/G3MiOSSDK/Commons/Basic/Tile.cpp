@@ -439,7 +439,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const Angle angleWE = rayMiddleWest.angleBetween(rayMiddleEast);
   const Angle maxAngle = Angle::max(angleNS, angleWE);
   
-  // compute the angle threshold
+  // compute the angle threshold, that represents 256 pixels on the screen
+  // it could be optimized removing acos and sqrt
   double top = camera->getFrustumData()._top;
   double znear = camera->getFrustumData()._znear;
   double X = top * 256 / camera->getHeight();
