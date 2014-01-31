@@ -439,14 +439,18 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const Angle angleWE = rayMiddleWest.angleBetween(rayMiddleEast);
   const Angle maxAngle = Angle::max(angleNS, angleWE);
   
+  /*
   // compute the angle threshold, that represents 256 pixels on the screen
-  // it could be optimized removing acos and sqrt
   double top = camera->getFrustumData()._top;
   double znear = camera->getFrustumData()._znear;
   double X = top * 256 / camera->getHeight();
   double halfAngle = acos(znear/sqrt(znear*znear+X*X));
-  //_lastLodTest = (maxAngle._degrees < 5)? true : false;
-  _lastLodTest = (maxAngle._radians/2 < halfAngle)? true : false;
+  ********** IT'S ALWAYS THE SAME VALUE FOR EVERY CAMERA POSITION!! = 
+  ********** halfAngle = 5.71 degrees *********
+  ********** thresholdAngle = 11.42 degrees *****
+   */
+  
+  _lastLodTest = (maxAngle._degrees < 11.5)? true : false;
   
   
   
