@@ -649,18 +649,25 @@ public:
   if (true) { //Testing Reference System
 
     //Test Plane
-    Plane plane(Vector3D(1.0,0.0,1.0), 0.0);
-    Vector3D vectorInPlane(0,1,0);
-    Vector3D axis(0.0,0.0,1.0);
+    Plane plane(Vector3D(0.0,1.0,1.0), 0.0);
+    Vector3D vectorInPlane(0,0,1);
+    Vector3D axis(1.0,0.0,0.0);
 
     for (int i = 0; i <= 90; i++){
       Vector3D v2 = vectorInPlane.rotateAroundAxis(axis, Angle::fromDegrees(-i));
       Angle angle = plane.vectorRotationForAxis(v2, axis);
     }
 
-    ReferenceSystem global = ReferenceSystem::global();
+    //ReferenceSystem global = ReferenceSystem::global();
+    double lat = 28.96384553643802, lon = -13.60974902228918;
+    ReferenceSystem sr = planet->getReferenceSystemAt(Geodetic3D::fromDegrees(lat, lon, 0));
 
-    meshRenderer->addMesh( global.createMesh(10e7, Color::red(), Color::green(), Color::blue()));
+    //Heading
+    ReferenceSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(0, 1, 0))
+                            .changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(lat, lon, 1.5e4)));
+
+    meshRenderer->addMesh( sr.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
+    meshRenderer->addMesh( sr2.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
 
   }
 
@@ -706,7 +713,7 @@ public:
     builder.setSceneLighting(light);
   }
 
-  if (true) { //HUD
+  if (false) { //HUD
 
 #warning Diego at work!
 

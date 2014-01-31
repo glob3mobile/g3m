@@ -12,6 +12,10 @@
 #include "SphericalPlanet.hpp"
 #include "FlatPlanet.hpp"
 
+#include "ReferenceSystem.cpp"
+#include "Vector3D.hpp"
+#include "Geodetic3D.hpp"
+#include "Plane.hpp"
 
 const Planet* Planet::createEarth() {
   return new EllipsoidalPlanet(Ellipsoid(Vector3D::zero,
@@ -25,4 +29,14 @@ const Planet* Planet::createSphericalEarth() {
 
 const Planet* Planet::createFlatEarth() {
   return new FlatPlanet(Vector2D(4*6378137.0, 2*6378137.0));
+}
+
+ReferenceSystem Planet::getReferenceSystemAt(const Geodetic3D& geo) const{
+
+  Vector3D origin = toCartesian(geo);
+  Vector3D z = centricSurfaceNormal(origin);
+  Vector3D y = getNorth().projectionInPlane(z);
+  Vector3D x = y.cross(z);
+
+  return ReferenceSystem(x,y,z, origin);
 }
