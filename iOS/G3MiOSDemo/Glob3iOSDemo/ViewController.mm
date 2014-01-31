@@ -135,6 +135,8 @@
 #import <G3MiOSSDK/TerrainTouchListener.hpp>
 #import <G3MiOSSDK/PlanetRenderer.hpp>
 
+#import <G3MiOSSDK/ReferenceSystem.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -277,29 +279,9 @@ public:
   [[self G3MWidget] startAnimation];
 
   /*
-  [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
-                                               new CameraRollChangerTask([[self G3MWidget] widget]));
+   [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
+   new CameraRollChangerTask([[self G3MWidget] widget]));
    */
-
-  //Test Plane
-  Plane xPlane(Vector3D(1.0,0.0,0.0), 0.0);
-  Vector3D vector(1.0,0.0,0.0);
-  Vector3D axis(0.0,1.0,1.0);
-
-  for (int i = 0; i <= 90; i++){
-    Vector3D v2 = vector.rotateAroundAxis(axis, Angle::fromDegrees(i));
-
-    Angle angle = xPlane.vectorRotationForAxis(v2, axis);
-    NSLog(@"ANGLE: %f", angle._degrees);  //Should return 90..0
-  }
-
-
-  for (int i = 0; i <= 90; i++){
-    Vector3D v2 = axis.rotateAroundAxis(vector, Angle::fromDegrees(i));
-
-    Angle angle = xPlane.vectorRotationForAxis(v2, axis);
-    NSLog(@"ANGLE: %f", angle._degrees); //Should return 0
-  }
 
 }
 
@@ -436,9 +418,9 @@ public:
                                 true);
 
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///aus4326.bil", false),
-                                                                                     sector,
-                                                                                     Vector2I(2083, 2001),
-                                                                                     -758.905);
+                                                                                    sector,
+                                                                                    Vector2I(2083, 2001),
+                                                                                    -758.905);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
@@ -540,7 +522,7 @@ public:
   //                                                                                     Vector2I(2048, 1024));
 
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                                                     Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
+                                                                                    Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -663,6 +645,24 @@ public:
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
+
+  if (true) { //Testing Reference System
+
+    //Test Plane
+    Plane plane(Vector3D(1.0,0.0,1.0), 0.0);
+    Vector3D vectorInPlane(0,1,0);
+    Vector3D axis(0.0,0.0,1.0);
+
+    for (int i = 0; i <= 90; i++){
+      Vector3D v2 = vectorInPlane.rotateAroundAxis(axis, Angle::fromDegrees(-i));
+      Angle angle = plane.vectorRotationForAxis(v2, axis);
+    }
+
+    ReferenceSystem global = ReferenceSystem::global();
+
+    meshRenderer->addMesh( global.createMesh(10e7, Color::red(), Color::green(), Color::blue()));
+
+  }
 
 
   //  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/points.json"),
@@ -978,7 +978,7 @@ public:
     }
 
     if (false){ //Changing ROLL
-      
+
       class AnimatedRollCameraConstrainer: public ICameraConstrainer {
       private:
         mutable double _angle;
@@ -1009,64 +1009,64 @@ public:
 
 
 
-}
+  }
 
 
-//  [self createInterpolationTest: meshRenderer];
+  //  [self createInterpolationTest: meshRenderer];
 
-//  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+  //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
-//Draw light direction
-if (false) {
+  //Draw light direction
+  if (false) {
 
-  Vector3D lightDir = Vector3D(100000, 0,0);
-  //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
-  FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    Vector3D lightDir = Vector3D(100000, 0,0);
+    //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
-  Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
-                                              Angle::fromDegrees(-15.431389),
-                                              10000));
+    Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
+                                                Angle::fromDegrees(-15.431389),
+                                                10000));
 
-  vertex->add(v);
-  vertex->add(v.add(lightDir));
-  //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+    vertex->add(v);
+    vertex->add(v.add(lightDir));
+    //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
 
-  meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
-                                        true,
-                                        vertex->getCenter(),
-                                        vertex->create(),
-                                        3.0,
-                                        1.0,
-                                        Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
+    meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
+                                          true,
+                                          vertex->getCenter(),
+                                          vertex->create(),
+                                          3.0,
+                                          1.0,
+                                          Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
 
-  delete vertex;
+    delete vertex;
 
-}
+  }
 
-GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                   geoRenderer: geoRenderer
-                                                                  meshRenderer: meshRenderer
-                                                                 marksRenderer: marksRenderer
-                                                                        planet: planet];
-builder.setInitializationTask(initializationTask, true);
+  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
+                                                                     geoRenderer: geoRenderer
+                                                                    meshRenderer: meshRenderer
+                                                                   marksRenderer: marksRenderer
+                                                                          planet: planet];
+  builder.setInitializationTask(initializationTask, true);
 
-PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
-builder.addPeriodicalTask(periodicalTask);
+  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
+  builder.addPeriodicalTask(periodicalTask);
 
-const bool logFPS = false;
-builder.setLogFPS(logFPS);
+  const bool logFPS = false;
+  builder.setLogFPS(logFPS);
 
-const bool logDownloaderStatistics = false;
-builder.setLogDownloaderStatistics(logDownloaderStatistics);
+  const bool logDownloaderStatistics = false;
+  builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-//builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
 
-//  WidgetUserData* userData = NULL;
-//  builder.setUserData(userData);
+  //  WidgetUserData* userData = NULL;
+  //  builder.setUserData(userData);
 
-// initialization
-builder.initializeWidget();
-//  [self testGenericQuadTree:geoTileRasterizer];
+  // initialization
+  builder.initializeWidget();
+  //  [self testGenericQuadTree:geoTileRasterizer];
 
 }
 
@@ -3049,8 +3049,8 @@ public:
           ElevationTask(G3MWidget_iOS* iosWidget): _iosWidget(iosWidget) {
 
             _elevationDataProvider1 = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-                                                                          Sector::fullSphere(),
-                                                                          Vector2I(2048, 1024));
+                                                                         Sector::fullSphere(),
+                                                                         Vector2I(2048, 1024));
 
             //            _elevationDataProvider2 = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
             //                                                                        Sector::fromDegrees(
@@ -3075,14 +3075,14 @@ public:
               case 1:
 
                 _elevationDataProvider2 = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                                              Sector::fromDegrees(
-                                                                                                  39.4642996294239623,
-                                                                                                  -6.3829977122432933,
-                                                                                                  39.4829891936013553,
-                                                                                                  -6.3645288909498845
-                                                                                                  ),
-                                                                              Vector2I(2008, 2032),
-                                                                              0);
+                                                                             Sector::fromDegrees(
+                                                                                                 39.4642996294239623,
+                                                                                                 -6.3829977122432933,
+                                                                                                 39.4829891936013553,
+                                                                                                 -6.3645288909498845
+                                                                                                 ),
+                                                                             Vector2I(2008, 2032),
+                                                                             0);
 
 
                 [_iosWidget widget]->getPlanetRenderer()->setElevationDataProvider(_elevationDataProvider2, true);

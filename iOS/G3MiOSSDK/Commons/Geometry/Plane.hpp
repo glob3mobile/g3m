@@ -82,7 +82,13 @@ public:
   static Vector3D intersectionXYPlaneWithRay(const Vector3D& origin,
                                              const Vector3D& direction);
 
+  bool isVectorParallel(const Vector3D& vector) const;
+
   Angle vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis) const;
+
+  Vector3D getNormal() const{
+    return _normal;
+  }
 
   
 };

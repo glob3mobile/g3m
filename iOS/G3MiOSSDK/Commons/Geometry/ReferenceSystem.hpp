@@ -13,19 +13,34 @@
 
 #include <iostream>
 
+class Mesh;
+class Color;
+
 class ReferenceSystem{
 
-  Vector3D _x, _y, _z;
+  const Vector3D _x;
+  const Vector3D _y;
+  const Vector3D _z;
+  const Vector3D _origin;
 
 public:
 
-  ReferenceSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z):
-  _x(x),_y(y),_z(z)
+  static ReferenceSystem global(){
+    return ReferenceSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
+  }
+
+  ReferenceSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin):
+  _x(x),_y(y),_z(z), _origin(origin)
   {
     //TODO CHECK CONSISTENCY
-
-
+    if (_x.dot(y) != 0 || _x.dot(z) != 0 || _y.dot(z) != 0){
+      ILogger::instance()->logError("Inconsistent ReferenceSystem created.");
+    }
   }
+
+  Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
+
+
 
 };
 
