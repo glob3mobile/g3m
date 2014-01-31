@@ -452,6 +452,9 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   
   _lastLodTest = (maxAngle._degrees < 11.5)? true : false;
   
+  // this is a simple condition
+  // we must adapt all the conditions below to this new parameter
+  
   
   
   /*const Vector2F pN = camera->point2Pixel(*_middleNorthPoint);

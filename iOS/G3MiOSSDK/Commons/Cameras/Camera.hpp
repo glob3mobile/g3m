@@ -340,15 +340,6 @@ public:
     return Plane(getViewDirection(), d);
   }
   
-  // data to compute frustum
-  FrustumData getFrustumData() const {
-    if (_dirtyFlags._frustumDataDirty) {
-      _dirtyFlags._frustumDataDirty = false;
-      _frustumData = calculateFrustumData();
-    }
-    return _frustumData;
-  }
-
 
 private:
   const Angle getHeading(const Vector3D& normal) const;
@@ -427,6 +418,15 @@ private:
       _geodeticCenterOfView = new Geodetic3D(_planet->toGeodetic3D(getXYZCenterOfView()));
     }
     return _geodeticCenterOfView;
+  }
+  
+  // data to compute frustum
+  FrustumData getFrustumData() const {
+    if (_dirtyFlags._frustumDataDirty) {
+      _dirtyFlags._frustumDataDirty = false;
+      _frustumData = calculateFrustumData();
+    }
+    return _frustumData;
   }
 
   // camera frustum
