@@ -2810,11 +2810,20 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
+//
+//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.518803097704875427,
+//                                                                             -6.2814697225724938079,
+//                                                                             30.098082578364309114),
+//                                                     Angle::fromDegrees(-17.488762),
+//                                                     Angle::fromDegrees(82.525557));
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.099999998178312, -15.41699999885168, 7000),
-                                                     Angle::fromDegrees(0),
-                                                     Angle::fromDegrees(85));
+//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
+//                                                     Angle::fromDegrees(-32.066195 ),
+//                                                     Angle::fromDegrees(78.523121));
 
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
+                                                     Angle::fromDegrees(-32.066195 ),
+                                                     Angle::fromDegrees(78.523121));
 
       class G3MeshBufferDownloadListener : public IBufferDownloadListener {
         const Planet* _planet;

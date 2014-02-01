@@ -409,11 +409,36 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   _lastLodTimeInMS = nowInMS; //Storing time of result
 
-  const Planet* planet = rc->getPlanet();
 
-  if ((_latitudeArcSegmentRatioSquared == 0) ||
-      (_longitudeArcSegmentRatioSquared  == 0)) {
-    prepareTestLODData(planet);
+//  const int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
+//  const int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
+//
+//  double factor = 5;
+//  switch (tilesRenderParameters->_quality) {
+//    case QUALITY_HIGH:
+//      factor = 1.5;
+//      break;
+//    case QUALITY_MEDIUM:
+//      factor = 3;
+//      break;
+//      //case QUALITY_LOW:
+//    default:
+//      factor = 5;
+//      break;
+//  }
+//  const Box* boundingVolume = getTileBoundingVolume(rc);
+//  if (boundingVolume == NULL) {
+//    return true;
+//  }
+//
+//  const Vector2F ex = boundingVolume->projectedExtent(rc);
+//  const float t = (ex._x * ex._y);
+//  _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
+
+
+  if ((_latitudeArcSegmentRatioSquared  == 0) ||
+      (_longitudeArcSegmentRatioSquared == 0)) {
+    prepareTestLODData( rc->getPlanet() );
   }
 
   const Camera* camera = rc->getCurrentCamera();
@@ -425,33 +450,51 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
   const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
 
+  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
+  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
+
   const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
   const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
 
-//  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-//  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+
+  if (latLonRatio < 0.15) {
+    _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
+  }
+  else if (lonLatRatio < 0.15) {
+    _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
+  }
+  else {
+    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+  }
+
 
   //Testing Area
-  _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+//  _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
 
 #warning Tile-LOD bug
-//  if (_lastLodTest) {
-////    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
-////           _level,
-////           latitudeMiddleDistSquared,
-////           longitudeMiddleDistSquared,
-////           latitudeMiddleArcDistSquared,
-////           longitudeMiddleArcDistSquared,
-////           latLonRatio,
-////           lonLonRatio
-////           );
-//    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
+  if (_lastLodTest) {
+//    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
 //           _level,
+//           latitudeMiddleDistSquared,
+//           longitudeMiddleDistSquared,
+//           latitudeMiddleArcDistSquared,
+//           longitudeMiddleArcDistSquared,
 //           latLonRatio,
 //           lonLatRatio
 //           );
-//
-//  }
+    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
+           _level,
+           latLonRatio,
+           lonLatRatio
+           );
+  }
+
+#warning remove-debug-code
+  if (_level == 10 && _column == 2119 && _row == 1439 ) {
+    printf("dddd");
+  }
 
 
   /*
@@ -1092,4 +1135,9 @@ void Tile::computeTileCorners(const Planet* planet){
   _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
   _middleEastPoint = new Vector3D(planet->toCartesian(gE));
   _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+
+#warning remove-debug-code
+  if (_level == 10 && _column == 2119 && _row == 1439 ) {
+    printf("dddd");
+  }
 }
