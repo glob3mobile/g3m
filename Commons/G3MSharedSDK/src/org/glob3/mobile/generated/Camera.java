@@ -509,6 +509,55 @@ public class Camera
     }
   }
 
+  public final Plane getZNearPlane()
+  {
+
+    final double height = getGeodeticPosition()._height;
+    double zNear = height * 0.1;
+
+    double zFar = _planet.distanceToHorizon(_position.asVector3D());
+
+    final double goalRatio = 1000;
+    final double ratio = zFar / zNear;
+    if (ratio < goalRatio)
+    {
+      zNear = zFar / goalRatio;
+    }
+
+    Vector3D point = getCartesianPosition().add(getViewDirection().normalized().times(zNear));
+
+    Vector3D vd = getViewDirection();
+
+    double d = -(vd._x * point._x + vd._y * point._y + vd._z * point._z);
+
+    return new Plane(getViewDirection(), d);
+  }
+
+  public final Plane getZ0Plane()
+  {
+
+    final double height = getGeodeticPosition()._height;
+    double zNear = height * 0.1;
+
+    double zFar = _planet.distanceToHorizon(_position.asVector3D());
+
+    final double goalRatio = 1000;
+    final double ratio = zFar / zNear;
+    if (ratio < goalRatio)
+    {
+      zNear = zFar / goalRatio;
+    }
+
+    Vector3D point = getCartesianPosition();
+
+    Vector3D vd = getViewDirection();
+
+    double d = -(vd._x * point._x + vd._y * point._y + vd._z * point._z);
+
+    return new Plane(getViewDirection(), d);
+  }
+
+
   private Angle getHeading(Vector3D normal)
   {
     final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
@@ -586,16 +635,6 @@ public class Camera
     }
   }
 
-  // data to compute frustum
-  private FrustumData getFrustumData()
-  {
-    if (_dirtyFlags._frustumDataDirty)
-    {
-      _dirtyFlags._frustumDataDirty = false;
-      _frustumData = calculateFrustumData();
-    }
-    return _frustumData;
-  }
 
   // intersection of view direction with globe in(x,y,z)
   private MutableVector3D _getCartesianCenterOfView()
@@ -619,6 +658,17 @@ public class Camera
       _geodeticCenterOfView = new Geodetic3D(_planet.toGeodetic3D(getXYZCenterOfView()));
     }
     return _geodeticCenterOfView;
+  }
+
+  // data to compute frustum
+  private FrustumData getFrustumData()
+  {
+    if (_dirtyFlags._frustumDataDirty)
+    {
+      _dirtyFlags._frustumDataDirty = false;
+      _frustumData = calculateFrustumData();
+    }
+    return _frustumData;
   }
 
   // camera frustum
@@ -726,5 +776,7 @@ public class Camera
     }
     return _modelViewMatrix;
   }
+
+
 
 }

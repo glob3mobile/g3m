@@ -83,6 +83,12 @@ public class Tile
       return;
     }
   
+      if (_level == 10 && _column == 2119 && _row == 1439)
+      {
+        int a = 0;
+        a++;
+      }
+  
     if (_middleWestPoint != null)
        _middleWestPoint.dispose();
     if (_middleEastPoint != null)
@@ -300,44 +306,116 @@ public class Tile
       prepareTestLODData(planet);
     }
   
+  
+    if (_level == 10 && _column == 2119 && _row == 1439)
+    {
+      int a = 0;
+      a++;
+    }
+  
+  
+    int AGUSTIN_AT_WORK;
+  
+    // instead of project points to pixels, and then compute distance between pixels
+    // it's better to compute angle between projected rays of each point
+  
+    // compute max angle of the tile from the observer
     final Camera camera = rc.getCurrentCamera();
-    final Vector2F pN = camera.point2Pixel(_middleNorthPoint);
-    final Vector2F pS = camera.point2Pixel(_middleSouthPoint);
-    final Vector2F pE = camera.point2Pixel(_middleEastPoint);
-    final Vector2F pW = camera.point2Pixel(_middleWestPoint);
+    final Vector3D cameraPosition = camera.getCartesianPosition();
+    final Vector3D rayMiddleNorth = cameraPosition.sub(_middleNorthPoint);
+    final Vector3D rayMiddleSouth = cameraPosition.sub(_middleSouthPoint);
+    final Angle angleNS = rayMiddleNorth.angleBetween(rayMiddleSouth);
+    final Vector3D rayMiddleWest = cameraPosition.sub(_middleWestPoint);
+    final Vector3D rayMiddleEast = cameraPosition.sub(_middleEastPoint);
+    final Angle angleWE = rayMiddleWest.angleBetween(rayMiddleEast);
   
-    final double latitudeMiddleDistSquared = pN.squaredDistanceTo(pS);
-    final double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
+    /*
+    // compute the angle threshold, that represents 256 pixels on the screen
+    double top = camera->getFrustumData()._top;
+    double znear = camera->getFrustumData()._znear;
+    double X = top * 256 / camera->getHeight();
+    double halfAngle = acos(znear/sqrt(znear*znear+X*X));
+    ********** IT'S ALWAYS THE SAME VALUE FOR EVERY CAMERA POSITION!! =
+    ********** halfAngle = 5.71 degrees *********
+    ********** thresholdAngle = 11.42 degrees *****
+     */
   
-    final double latitudeMiddleArcDistSquared = latitudeMiddleDistSquared * _latitudeArcSegmentRatioSquared;
-    final double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
+    // simple test condition --> the max angle represents less than 256 pixels
+    // const Angle maxAngle = Angle::max(angleNS, angleWE);
+    //_lastLodTest = (maxAngle._degrees < 11.42)? true : false;
   
-  //  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-  //  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+    // this condition is better in the horizon --> the sum of the angles represent less than 512 pixels
+    _lastLodTest = angleNS.add(angleWE)._degrees < 22.84;
   
-    //Testing Area
-    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Tile-LOD bug
-  //  if (_lastLodTest) {
-  ////    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
-  ////           _level,
-  ////           latitudeMiddleDistSquared,
-  ////           longitudeMiddleDistSquared,
-  ////           latitudeMiddleArcDistSquared,
-  ////           longitudeMiddleArcDistSquared,
-  ////           latLonRatio,
-  ////           lonLonRatio
-  ////           );
-  //    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
-  //           _level,
-  //           latLonRatio,
-  //           lonLatRatio
-  //           );
-  //
-  //  }
+    /*const Vector2F pN = camera->point2Pixel(*_middleNorthPoint);
+    const Vector2F pS = camera->point2Pixel(*_middleSouthPoint);
+    const Vector2F pE = camera->point2Pixel(*_middleEastPoint);
+    const Vector2F pW = camera->point2Pixel(*_middleWestPoint);
   
+    const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
+    const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
+  
+    const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
+    const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
+  
+    const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+    const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+    
+  
+  
+    if ( _sector.contains(LAST_CAMERA_POS->asGeodetic2D()) ){
+      Plane p = camera->getZ0Plane();
+  
+      double dN = p.signedDistance(*_middleNorthPoint);
+      double dS = p.signedDistance(*_middleSouthPoint);
+      double dE = p.signedDistance(*_middleEastPoint);
+      double dW = p.signedDistance(*_middleWestPoint);
+  
+      ILogger::instance()->logInfo("N: %f %f, S: %f %f, E: %f %f W: %f %f", pN._x, pN._y, pS._x, pS._y, pE._x, pE._y, pW._x, pW._y);
+      ILogger::instance()->logInfo("NS: %f, EW: %f", sqrt(pN.squaredDistanceTo(pS)) , sqrt(pW.squaredDistanceTo(pE)));
+  
+    }
+  
+    if (latLonRatio < 0.15) {
+      _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
+    }
+    else if (lonLatRatio < 0.15) {
+      _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
+    }
+    else {
+      _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+    }
+  
+    if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+  
+      ILogger::instance()->logInfo("N: %f %f, S: %f %f, E: %f %f W: %f %f", pN._x, pN._y, pS._x, pS._y, pE._x, pE._y, pW._x, pW._y);
+      ILogger::instance()->logInfo("NS: %f, EW: %f", sqrt(pN.squaredDistanceTo(pS)) , sqrt(pW.squaredDistanceTo(pE)));
+  
+    }
+  
+  #warning Tile-LOD bug
+    if (_lastLodTest && _sector.contains(LAST_CAMERA_POS->asGeodetic2D())) {
+  
+  
+      printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDist=%f\n   longitudeMiddleDist=%f\n   latitudeMiddleArcDist=%f\n   longitudeMiddleArcDist=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
+             _level,
+             sqrt(latitudeMiddleDistSquared),
+             sqrt(longitudeMiddleDistSquared),
+             sqrt(latitudeMiddleArcDistSquared),
+             sqrt(longitudeMiddleArcDistSquared),
+             latLonRatio,
+             lonLatRatio
+             );
+  
+      printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
+             _level,
+             latLonRatio,
+             lonLatRatio
+             );
+  
+    }
+  */
   
     /*
      BAD:
@@ -348,6 +426,13 @@ public class Tile
      2014-01-30 11:23:45.400 G3MiOSDemo[8358:60b] Info: Touched on (Tile level=17, row=184253, column=252998, sector=(Sector (lat=36.5164947509765625d, lon=-6.280059814453125d) - (lat=36.517181396484375d, lon=-6.2793731689453116118d)))
      2014-01-30 11:23:45.402 G3MiOSDemo[8358:60b] Info: Camera position=(lat=36.516058816654393127d, lon=-6.2798670606496447277d, height=74.299752202274888191) heading=19.412124 pitch=61.017203
      */
+  
+  
+    if (_level == 10 && _column == 2119 && _row == 1439)
+    {
+      int a = 0;
+      a++;
+    }
   
     return _lastLodTest;
   }
@@ -760,6 +845,10 @@ public class Tile
       _verticalExaggeration = verticalExaggeration;
     }
   
+    if (GlobalMembersTile.LAST_CAMERA_POS != null)
+       GlobalMembersTile.LAST_CAMERA_POS.dispose();
+    GlobalMembersTile.LAST_CAMERA_POS = new Geodetic3D(rc.getCurrentCamera().getGeodeticPosition());
+  
   
     if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
     {
@@ -771,14 +860,19 @@ public class Tile
   
       if (isRawRender)
       {
-        if (renderTileMeshes)
+  
+        if (renderTileMeshes) //&& _level == 10 && _column == 2119 && _row == 1439
         {
           rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority);
+  
+  
         }
+  
         if (tilesRenderParameters._renderDebug)
         {
           debugRender(rc, parentState, tessellator, layerTilesRenderParameters);
         }
+  
   
         tilesStatistics.computePlanetRenderered(this);
   
@@ -819,6 +913,7 @@ public class Tile
       prune(texturizer, elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
     }
+  
   }
 
   public final TileKey getKey()
