@@ -450,8 +450,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
   const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
 
-  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
-  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
+//  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
+//  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
 
   const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
   const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
@@ -474,27 +474,27 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 //  _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
 
 #warning Tile-LOD bug
-  if (_lastLodTest) {
-//    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
+//  if (_lastLodTest) {
+////    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
+////           _level,
+////           latitudeMiddleDistSquared,
+////           longitudeMiddleDistSquared,
+////           latitudeMiddleArcDistSquared,
+////           longitudeMiddleArcDistSquared,
+////           latLonRatio,
+////           lonLatRatio
+////           );
+//    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
 //           _level,
-//           latitudeMiddleDistSquared,
-//           longitudeMiddleDistSquared,
-//           latitudeMiddleArcDistSquared,
-//           longitudeMiddleArcDistSquared,
 //           latLonRatio,
 //           lonLatRatio
 //           );
-    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
-           _level,
-           latLonRatio,
-           lonLatRatio
-           );
-  }
-
-#warning remove-debug-code
-  if (_level == 10 && _column == 2119 && _row == 1439 ) {
-    printf("dddd");
-  }
+//  }
+//
+//#warning remove-debug-code
+//  if (_level == 10 && _column == 2119 && _row == 1439 ) {
+//    printf("dddd");
+//  }
 
 
   /*
