@@ -56,7 +56,9 @@ public abstract class MapBooBuilder
     final Sector renderedSector = Sector.fullSphere();
     final boolean renderTileMeshes = true;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes);
+    final boolean logTilesPetitions = false;
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions);
   
     if (_enableNotifications)
     {

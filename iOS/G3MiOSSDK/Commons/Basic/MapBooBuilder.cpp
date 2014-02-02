@@ -509,6 +509,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const Sector renderedSector = Sector::fullSphere();
   const bool renderTileMeshes = true;
 
+  const bool logTilesPetitions = false;
+
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
                                               true,
@@ -520,7 +522,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               showStatistics,
                                               texturePriority,
                                               renderedSector,
-                                              renderTileMeshes);
+                                              renderTileMeshes,
+                                              logTilesPetitions);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));

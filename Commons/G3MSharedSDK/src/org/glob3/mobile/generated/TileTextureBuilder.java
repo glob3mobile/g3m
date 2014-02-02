@@ -34,6 +34,8 @@ public class TileTextureBuilder extends RCObject
 
   private final TileTessellator _tessellator;
 
+  private final boolean _logTilesPetitions;
+
   private java.util.ArrayList<TileTextureBuilder_PetitionStatus> _status = new java.util.ArrayList<TileTextureBuilder_PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
 
@@ -93,7 +95,7 @@ public class TileTextureBuilder extends RCObject
 
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, java.util.ArrayList<Petition> petitions, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority)
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, java.util.ArrayList<Petition> petitions, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority, boolean logTilesPetitions)
   {
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
@@ -111,6 +113,7 @@ public class TileTextureBuilder extends RCObject
      _canceled = false;
      _alreadyStarted = false;
      _texturePriority = texturePriority;
+     _logTilesPetitions = logTilesPetitions;
     _petitions = cleanUpPetitions(petitions);
 
     _petitionsCount = _petitions.size();
@@ -146,7 +149,10 @@ public class TileTextureBuilder extends RCObject
 
       final long priority = _texturePriority + _tile._level;
 
-      //      printf("%s\n", petition->getURL().getPath().c_str());
+      if (_logTilesPetitions)
+      {
+        ILogger.instance().logInfo("Tile petition \"%s\"", petition.getURL().getPath());
+      }
 
       final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true);
       if (requestId >= 0)

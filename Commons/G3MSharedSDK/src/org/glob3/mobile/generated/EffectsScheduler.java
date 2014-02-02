@@ -100,14 +100,23 @@ public class EffectsScheduler
   {
     final TimeInterval now = _timer.now();
   
+    final java.util.ArrayList<EffectRun> effectsToCancel = new java.util.ArrayList<EffectRun>();
+  
     final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
     while (iterator.hasNext()) {
       final EffectRun effectRun = iterator.next();
       if (effectRun._started) {
-        effectRun._effect.cancel(now);
+        effectsToCancel.add(effectRun);
       }
-      effectRun.dispose();
+      else {
+        effectRun.dispose();
+      }
       iterator.remove();
+    }
+  
+    for (final EffectRun effectRun : effectsToCancel) {
+      effectRun._effect.cancel(now);
+      effectRun.dispose();
     }
   }
 
@@ -115,16 +124,25 @@ public class EffectsScheduler
   {
     final TimeInterval now = _timer.now();
   
+    final java.util.ArrayList<EffectRun> effectsToCancel = new java.util.ArrayList<EffectRun>();
+  
     final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
     while (iterator.hasNext()) {
       final EffectRun effectRun = iterator.next();
       if (effectRun._target == target) {
         if (effectRun._started) {
-          effectRun._effect.cancel(now);
+          effectsToCancel.add(effectRun);
         }
-        effectRun.dispose();
+        else {
+          effectRun.dispose();
+        }
         iterator.remove();
       }
+    }
+  
+    for (final EffectRun effectRun : effectsToCancel) {
+      effectRun._effect.cancel(now);
+      effectRun.dispose();
     }
   }
 
