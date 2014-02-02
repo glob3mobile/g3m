@@ -223,6 +223,7 @@ private:
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
+  const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
 
   TilesStatistics _statistics;
@@ -309,7 +310,8 @@ public:
                  bool                         showStatistics,
                  long long                    texturePriority,
                  const Sector&                renderedSector,
-                 const bool                   renderTileMeshes);
+                 const bool                   renderTileMeshes,
+                 const bool                   logTilesPetitions);
 
   ~PlanetRenderer();
 

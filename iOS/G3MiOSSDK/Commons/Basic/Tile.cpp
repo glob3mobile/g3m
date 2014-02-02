@@ -520,7 +520,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    const TilesRenderParameters* tilesRenderParameters,
                                    bool isForcedFullRender,
                                    long long texturePriority,
-                                   float verticalExaggeration) {
+                                   float verticalExaggeration,
+                                   bool logTilesPetitions) {
 
   //You have to set _verticalExaggertion
   if (verticalExaggeration != _verticalExaggeration) {
@@ -552,7 +553,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               texturePriority,
                                               this,
                                               tessellatorMesh,
-                                              _texturizedMesh);
+                                              _texturizedMesh,
+                                              logTilesPetitions);
     }
   }
 }
@@ -567,7 +569,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                      const LayerSet* layerSet,
                      const TilesRenderParameters* tilesRenderParameters,
                      bool isForcedFullRender,
-                     long long texturePriority) {
+                     long long texturePriority,
+                     bool logTilesPetitions) {
 
   Mesh* tessellatorMesh = getTessellatorMesh(rc,
                                              elevationDataProvider,
@@ -594,7 +597,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                                               texturePriority,
                                               this,
                                               tessellatorMesh,
-                                              _texturizedMesh);
+                                              _texturizedMesh,
+                                              logTilesPetitions);
     }
 
     if (_texturizedMesh != NULL) {
@@ -752,7 +756,8 @@ void Tile::render(const G3MRenderContext* rc,
                   double texWidthSquared,
                   double texHeightSquared,
                   double nowInMS,
-                  const bool renderTileMeshes) {
+                  const bool renderTileMeshes,
+                  bool logTilesPetitions) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -802,7 +807,8 @@ void Tile::render(const G3MRenderContext* rc,
                   layerSet,
                   tilesRenderParameters,
                   isForcedFullRender,
-                  texturePriority);
+                  texturePriority,
+                  logTilesPetitions);
       }
       if (tilesRenderParameters->_renderDebug) {
         debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
