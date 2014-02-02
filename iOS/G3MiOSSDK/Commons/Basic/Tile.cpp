@@ -458,11 +458,8 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   //_lastLodTest = (maxAngle._degrees < 11.42)? true : false;
 
   // this condition is better in the horizon --> the sum of the angles represent less than 512 pixels
-  _lastLodTest = (angleNS.add(angleWE)._degrees < 22.84)? true : false;
-  
-  
-  
-  
+  _lastLodTest = angleNS.add(angleWE)._degrees < 22.84;
+
   
   /*const Vector2F pN = camera->point2Pixel(*_middleNorthPoint);
   const Vector2F pS = camera->point2Pixel(*_middleSouthPoint);
