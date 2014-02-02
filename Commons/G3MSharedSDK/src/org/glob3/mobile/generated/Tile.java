@@ -83,11 +83,10 @@ public class Tile
       return;
     }
   
-      if (_level == 10 && _column == 2119 && _row == 1439)
-      {
-        int a = 0;
-        a++;
-      }
+  //    if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+  //      int a = 0;
+  //      a++;
+  //    }
   
     if (_middleWestPoint != null)
        _middleWestPoint.dispose();
@@ -307,11 +306,10 @@ public class Tile
     }
   
   
-    if (_level == 10 && _column == 2119 && _row == 1439)
-    {
-      int a = 0;
-      a++;
-    }
+  //  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+  //    int a = 0;
+  //    a++;
+  //  }
   
   
     int AGUSTIN_AT_WORK;
@@ -428,11 +426,10 @@ public class Tile
      */
   
   
-    if (_level == 10 && _column == 2119 && _row == 1439)
-    {
-      int a = 0;
-      a++;
-    }
+  //  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+  //    int a = 0;
+  //    a++;
+  //  }
   
     return _lastLodTest;
   }
@@ -861,7 +858,7 @@ public class Tile
       if (isRawRender)
       {
   
-        if (renderTileMeshes) //&& _level == 10 && _column == 2119 && _row == 1439
+        if (renderTileMeshes)
         {
           rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority);
   
