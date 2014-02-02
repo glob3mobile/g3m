@@ -365,8 +365,6 @@ bool Tile::isVisible(const G3MRenderContext* rc,
           boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates));
 }
 
-static bool FREEZE = false;
-
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                TileTexturizer* texturizer,
@@ -421,11 +419,11 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
 
   
-  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
-    int a = 0;
-    a++;
-  }
-  
+//  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+//    int a = 0;
+//    a++;
+//  }
+
   
   int AGUSTIN_AT_WORK;
   
@@ -541,10 +539,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
    */
 
   
-  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
-    int a = 0;
-    a++;
-  }
+//  if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+//    int a = 0;
+//    a++;
+//  }
 
   return _lastLodTest;
 }
@@ -836,7 +834,7 @@ void Tile::render(const G3MRenderContext* rc,
 
     if (isRawRender) {
 
-      if (renderTileMeshes /*&& _level == 10 && _column == 2119 && _row == 1439 */) {
+      if (renderTileMeshes) {
         rawRender(rc,
                   &parentState,
                   texturizer,
@@ -1168,10 +1166,10 @@ void Tile::computeTileCorners(const Planet* planet){
     return;
   }
 
-    if ( _level == 10 && _column == 2119 && _row == 1439 ) {
-      int a = 0;
-      a++;
-    }
+//    if ( _level == 10 && _column == 2119 && _row == 1439 ) {
+//      int a = 0;
+//      a++;
+//    }
 
   delete _middleWestPoint;
   delete _middleEastPoint;

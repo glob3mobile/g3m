@@ -319,17 +319,15 @@ public:
   }
 
   Plane getZ0Plane() const{
-
-    const double height = getGeodeticPosition()._height;
-    double zNear = height * 0.1;
-
-    double zFar = _planet->distanceToHorizon(_position.asVector3D());
-
-    const double goalRatio = 1000;
-    const double ratio = zFar / zNear;
-    if (ratio < goalRatio) {
-      zNear = zFar / goalRatio;
-    }
+//    const double height = getGeodeticPosition()._height;
+//    double zNear = height * 0.1;
+//    double zFar = _planet->distanceToHorizon(_position.asVector3D());
+//
+//    const double goalRatio = 1000;
+//    const double ratio = zFar / zNear;
+//    if (ratio < goalRatio) {
+//      zNear = zFar / goalRatio;
+//    }
 
     Vector3D point = getCartesianPosition();
 
