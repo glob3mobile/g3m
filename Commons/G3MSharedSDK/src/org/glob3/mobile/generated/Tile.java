@@ -104,6 +104,13 @@ public class Tile
     _middleSouthPoint = new Vector3D(planet.toCartesian(gS));
     _middleEastPoint = new Vector3D(planet.toCartesian(gE));
     _middleWestPoint = new Vector3D(planet.toCartesian(gW));
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning remove-debug-code
+    if (_level == 10 && _column == 2119 && _row == 1439)
+    {
+      System.out.print("dddd");
+    }
   }
 
   private double _latitudeArcSegmentRatioSquared;
@@ -293,11 +300,36 @@ public class Tile
   
     _lastLodTimeInMS = nowInMS; //Storing time of result
   
-    final Planet planet = rc.getPlanet();
+  
+  //  const int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
+  //  const int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
+  //
+  //  double factor = 5;
+  //  switch (tilesRenderParameters->_quality) {
+  //    case QUALITY_HIGH:
+  //      factor = 1.5;
+  //      break;
+  //    case QUALITY_MEDIUM:
+  //      factor = 3;
+  //      break;
+  //      //case QUALITY_LOW:
+  //    default:
+  //      factor = 5;
+  //      break;
+  //  }
+  //  const Box* boundingVolume = getTileBoundingVolume(rc);
+  //  if (boundingVolume == NULL) {
+  //    return true;
+  //  }
+  //
+  //  const Vector2F ex = boundingVolume->projectedExtent(rc);
+  //  const float t = (ex._x * ex._y);
+  //  _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
+  
   
     if ((_latitudeArcSegmentRatioSquared == 0) || (_longitudeArcSegmentRatioSquared == 0))
     {
-      prepareTestLODData(planet);
+      prepareTestLODData(rc.getPlanet());
     }
   
     final Camera camera = rc.getCurrentCamera();
@@ -309,14 +341,31 @@ public class Tile
     final double latitudeMiddleDistSquared = pN.squaredDistanceTo(pS);
     final double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
   
+  //  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
+  //  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
+  
     final double latitudeMiddleArcDistSquared = latitudeMiddleDistSquared * _latitudeArcSegmentRatioSquared;
     final double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
   
-  //  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-  //  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+    final double latLonRatio = latitudeMiddleArcDistSquared / longitudeMiddleArcDistSquared;
+    final double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+  
+    if (latLonRatio < 0.15)
+    {
+      _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
+    }
+    else if (lonLatRatio < 0.15)
+    {
+      _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
+    }
+    else
+    {
+      _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+    }
+  
   
     //Testing Area
-    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+  //  _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Tile-LOD bug
@@ -328,14 +377,18 @@ public class Tile
   ////           latitudeMiddleArcDistSquared,
   ////           longitudeMiddleArcDistSquared,
   ////           latLonRatio,
-  ////           lonLonRatio
+  ////           lonLatRatio
   ////           );
   //    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
   //           _level,
   //           latLonRatio,
   //           lonLatRatio
   //           );
+  //  }
   //
+  ///#warning remove-debug-code
+  //  if (_level == 10 && _column == 2119 && _row == 1439 ) {
+  //    printf("dddd");
   //  }
   
   
@@ -352,7 +405,7 @@ public class Tile
     return _lastLodTest;
   }
 
-  private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority)
+  private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority, boolean logTilesPetitions)
   {
   
     Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
@@ -371,7 +424,7 @@ public class Tile
   
       if (needsToCallTexturizer)
       {
-        _texturizedMesh = texturizer.texturize(rc, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh);
+        _texturizedMesh = texturizer.texturize(rc, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh, logTilesPetitions);
       }
   
       if (_texturizedMesh != null)
@@ -720,7 +773,7 @@ public class Tile
     return _parent;
   }
 
-  public final void prepareForFullRendering(G3MRenderContext rc, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority, float verticalExaggeration)
+  public final void prepareForFullRendering(G3MRenderContext rc, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority, float verticalExaggeration, boolean logTilesPetitions)
   {
   
     //You have to set _verticalExaggertion
@@ -744,12 +797,12 @@ public class Tile
   
       if (needsToCallTexturizer)
       {
-        _texturizedMesh = texturizer.texturize(rc, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh);
+        _texturizedMesh = texturizer.texturize(rc, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh, logTilesPetitions);
       }
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions)
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -773,7 +826,7 @@ public class Tile
       {
         if (renderTileMeshes)
         {
-          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority);
+          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, logTilesPetitions);
         }
         if (tilesRenderParameters._renderDebug)
         {

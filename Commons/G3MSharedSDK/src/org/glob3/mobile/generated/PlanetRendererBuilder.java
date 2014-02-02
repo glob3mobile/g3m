@@ -209,6 +209,8 @@ public class PlanetRendererBuilder
     return _texturePriority;
   }
 
+  private boolean _logTilesPetitions;
+
   private LayerSet createLayerSet()
   {
     return LayerBuilder.createDefaultSatelliteImagery();
@@ -253,6 +255,11 @@ public class PlanetRendererBuilder
     return _renderTileMeshes;
   }
 
+  private boolean getLogTilesPetitions()
+  {
+    return _logTilesPetitions;
+  }
+
 
   public PlanetRendererBuilder()
   {
@@ -273,6 +280,7 @@ public class PlanetRendererBuilder
      _verticalExaggeration = 0F;
      _renderedSector = null;
      _renderTileMeshes = true;
+     _logTilesPetitions = false;
   }
   public void dispose()
   {
@@ -301,7 +309,7 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector(), getRenderTileMeshes());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -450,6 +458,11 @@ public class PlanetRendererBuilder
   public final void setRenderTileMeshes(boolean renderTileMeshes)
   {
     _renderTileMeshes = renderTileMeshes;
+  }
+
+  public final void setLogTilesPetitions(boolean logTilesPetitions)
+  {
+    _logTilesPetitions = logTilesPetitions;
   }
 
 }
