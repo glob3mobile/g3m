@@ -370,7 +370,6 @@ public class Tile
     ********** thresholdAngle = 11.42 degrees *****
      */
   
-<<<<<<< HEAD
     // simple test condition --> the max angle represents less than 256 pixels
     // const Angle maxAngle = Angle::max(angleNS, angleWE);
     //_lastLodTest = (maxAngle._degrees < 11.42)? true : false;
@@ -383,67 +382,19 @@ public class Tile
     const Vector2F pS = camera->point2Pixel(*_middleSouthPoint);
     const Vector2F pE = camera->point2Pixel(*_middleEastPoint);
     const Vector2F pW = camera->point2Pixel(*_middleWestPoint);
-=======
-  //  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
-  //  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
-  
-    final double latitudeMiddleArcDistSquared = latitudeMiddleDistSquared * _latitudeArcSegmentRatioSquared;
-    final double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
-  
-    final double latLonRatio = latitudeMiddleArcDistSquared / longitudeMiddleArcDistSquared;
-    final double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
-  
-    if (latLonRatio < 0.15)
-    {
-      _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
-    }
-    else if (lonLatRatio < 0.15)
-    {
-      _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
-    }
-    else
-    {
-      _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
-    }
-  
-  
-    //Testing Area
-  //  _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Tile-LOD bug
-  //  if (_lastLodTest) {
-  ////    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
-  ////           _level,
-  ////           latitudeMiddleDistSquared,
-  ////           longitudeMiddleDistSquared,
-  ////           latitudeMiddleArcDistSquared,
-  ////           longitudeMiddleArcDistSquared,
-  ////           latLonRatio,
-  ////           lonLatRatio
-  ////           );
-  //    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
-  //           _level,
-  //           latLonRatio,
-  //           lonLatRatio
-  //           );
-  //  }
-  //
-  ///#warning remove-debug-code
-  //  if (_level == 10 && _column == 2119 && _row == 1439 ) {
-  //    printf("dddd");
-  //  }
->>>>>>> purgatory
   
     const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
     const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
+  
+  //  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
+  //  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
   
     const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
     const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
   
     const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
     const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
-    
+  
   
   
     if ( _sector.contains(LAST_CAMERA_POS->asGeodetic2D()) ){
@@ -489,6 +440,32 @@ public class Tile
              latLonRatio,
              lonLatRatio
              );
+  
+    //Testing Area
+  //  _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+  
+  #warning Tile-LOD bug
+  //  if (_lastLodTest) {
+  ////    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
+  ////           _level,
+  ////           latitudeMiddleDistSquared,
+  ////           longitudeMiddleDistSquared,
+  ////           latitudeMiddleArcDistSquared,
+  ////           longitudeMiddleArcDistSquared,
+  ////           latLonRatio,
+  ////           lonLatRatio
+  ////           );
+  //    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
+  //           _level,
+  //           latLonRatio,
+  //           lonLatRatio
+  //           );
+  //  }
+  //
+  //#warning remove-debug-code
+  //  if (_level == 10 && _column == 2119 && _row == 1439 ) {
+  //    printf("dddd");
+  //  }
   
       printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
              _level,
@@ -944,13 +921,7 @@ public class Tile
   
         if (renderTileMeshes)
         {
-<<<<<<< HEAD
-          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority);
-  
-  
-=======
           rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, logTilesPetitions);
->>>>>>> purgatory
         }
   
         if (tilesRenderParameters._renderDebug)
