@@ -409,11 +409,36 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   _lastLodTimeInMS = nowInMS; //Storing time of result
 
-  const Planet* planet = rc->getPlanet();
 
-  if ((_latitudeArcSegmentRatioSquared == 0) ||
-      (_longitudeArcSegmentRatioSquared  == 0)) {
-    prepareTestLODData(planet);
+//  const int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
+//  const int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
+//
+//  double factor = 5;
+//  switch (tilesRenderParameters->_quality) {
+//    case QUALITY_HIGH:
+//      factor = 1.5;
+//      break;
+//    case QUALITY_MEDIUM:
+//      factor = 3;
+//      break;
+//      //case QUALITY_LOW:
+//    default:
+//      factor = 5;
+//      break;
+//  }
+//  const Box* boundingVolume = getTileBoundingVolume(rc);
+//  if (boundingVolume == NULL) {
+//    return true;
+//  }
+//
+//  const Vector2F ex = boundingVolume->projectedExtent(rc);
+//  const float t = (ex._x * ex._y);
+//  _lastLodTest = t <= ((texWidth * texHeight) * ((factor * deviceQualityFactor) / dpiFactor));
+
+
+  if ((_latitudeArcSegmentRatioSquared  == 0) ||
+      (_longitudeArcSegmentRatioSquared == 0)) {
+    prepareTestLODData( rc->getPlanet() );
   }
 
   const Camera* camera = rc->getCurrentCamera();
@@ -422,15 +447,65 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const Vector2F pE = camera->point2Pixel(*_middleEastPoint);
   const Vector2F pW = camera->point2Pixel(*_middleWestPoint);
 
-  const double latitudeMiddleDistSquared = pN.squaredDistanceTo(pS);
+  const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
   const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
 
-  const double latitudeMiddleArcDistSquared = latitudeMiddleDistSquared * _latitudeArcSegmentRatioSquared;
+//  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
+//  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
+
+  const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
   const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
 
-  //Testing Area
-  _lastLodTest = ((latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared*texWidthSquared));
+  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
 
+  if (latLonRatio < 0.15) {
+    _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
+  }
+  else if (lonLatRatio < 0.15) {
+    _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
+  }
+  else {
+    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+  }
+
+
+  //Testing Area
+//  _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+
+#warning Tile-LOD bug
+//  if (_lastLodTest) {
+////    printf("break point on me: meetsRenderCriteria at level %d\n   latitudeMiddleDistSquared=%f\n   longitudeMiddleDistSquared=%f\n   latitudeMiddleArcDistSquared=%f\n   longitudeMiddleArcDistSquared=%f\n   latLonRatio=%f\n   lonLonRatio=%f\n",
+////           _level,
+////           latitudeMiddleDistSquared,
+////           longitudeMiddleDistSquared,
+////           latitudeMiddleArcDistSquared,
+////           longitudeMiddleArcDistSquared,
+////           latLonRatio,
+////           lonLatRatio
+////           );
+//    printf(">> meetsRenderCriteria at level %d latLonRatio=%f lonLatRatio=%f\n",
+//           _level,
+//           latLonRatio,
+//           lonLatRatio
+//           );
+//  }
+//
+//#warning remove-debug-code
+//  if (_level == 10 && _column == 2119 && _row == 1439 ) {
+//    printf("dddd");
+//  }
+
+
+  /*
+   BAD:
+   2014-01-30 11:23:17.885 G3MiOSDemo[8358:60b] Info: Touched on (Tile level=10, row=1439, column=1976, sector=(Sector (lat=36.474609375000007105d, lon=-6.328125d) - (lat=36.5625d, lon=-6.2402343749999991118d)))
+   2014-01-30 11:23:17.887 G3MiOSDemo[8358:60b] Info: Camera position=(lat=36.516484364230244353d, lon=-6.2802353330784788099d, height=60.391400095963234662) heading=45.450683 pitch=61.017430
+   
+   GOOD:
+   2014-01-30 11:23:45.400 G3MiOSDemo[8358:60b] Info: Touched on (Tile level=17, row=184253, column=252998, sector=(Sector (lat=36.5164947509765625d, lon=-6.280059814453125d) - (lat=36.517181396484375d, lon=-6.2793731689453116118d)))
+   2014-01-30 11:23:45.402 G3MiOSDemo[8358:60b] Info: Camera position=(lat=36.516058816654393127d, lon=-6.2798670606496447277d, height=74.299752202274888191) heading=19.412124 pitch=61.017203
+   */
 
   return _lastLodTest;
 }
@@ -445,7 +520,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    const TilesRenderParameters* tilesRenderParameters,
                                    bool isForcedFullRender,
                                    long long texturePriority,
-                                   float verticalExaggeration) {
+                                   float verticalExaggeration,
+                                   bool logTilesPetitions) {
 
   //You have to set _verticalExaggertion
   if (verticalExaggeration != _verticalExaggeration) {
@@ -477,7 +553,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               texturePriority,
                                               this,
                                               tessellatorMesh,
-                                              _texturizedMesh);
+                                              _texturizedMesh,
+                                              logTilesPetitions);
     }
   }
 }
@@ -492,7 +569,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                      const LayerSet* layerSet,
                      const TilesRenderParameters* tilesRenderParameters,
                      bool isForcedFullRender,
-                     long long texturePriority) {
+                     long long texturePriority,
+                     bool logTilesPetitions) {
 
   Mesh* tessellatorMesh = getTessellatorMesh(rc,
                                              elevationDataProvider,
@@ -519,7 +597,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                                               texturePriority,
                                               this,
                                               tessellatorMesh,
-                                              _texturizedMesh);
+                                              _texturizedMesh,
+                                              logTilesPetitions);
     }
 
     if (_texturizedMesh != NULL) {
@@ -677,7 +756,8 @@ void Tile::render(const G3MRenderContext* rc,
                   double texWidthSquared,
                   double texHeightSquared,
                   double nowInMS,
-                  const bool renderTileMeshes) {
+                  const bool renderTileMeshes,
+                  bool logTilesPetitions) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -727,7 +807,8 @@ void Tile::render(const G3MRenderContext* rc,
                   layerSet,
                   tilesRenderParameters,
                   isForcedFullRender,
-                  texturePriority);
+                  texturePriority,
+                  logTilesPetitions);
       }
       if (tilesRenderParameters->_renderDebug) {
         debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
@@ -1060,6 +1141,11 @@ void Tile::computeTileCorners(const Planet* planet){
   _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
   _middleEastPoint = new Vector3D(planet->toCartesian(gE));
   _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+
+#warning remove-debug-code
+  if (_level == 10 && _column == 2119 && _row == 1439 ) {
+    printf("dddd");
+  }
 }
 
 Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,

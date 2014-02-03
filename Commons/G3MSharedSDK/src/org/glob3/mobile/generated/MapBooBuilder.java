@@ -60,9 +60,11 @@ public abstract class MapBooBuilder {
       final Sector renderedSector = Sector.fullSphere();
       final boolean renderTileMeshes = true;
 
+      final boolean logTilesPetitions = false;
+
       final PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration,
                texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector,
-               renderTileMeshes);
+               renderTileMeshes, logTilesPetitions);
 
       if (_enableNotifications) {
          result.addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
@@ -339,6 +341,16 @@ public abstract class MapBooBuilder {
       }
       return null;
    }
+
+
+   //const std::string MapBooBuilder::parseSceneId(const JSONObject* jsonObject) const {
+   //  if (jsonObject == NULL) {
+   //    ILogger::instance()->logError("Missing Scene ID");
+   //    return "";
+   //  }
+   //
+   //  return jsonObject->getAsString("$oid", "");
+   //}
 
 
    private Color getCurrentBackgroundColor() {

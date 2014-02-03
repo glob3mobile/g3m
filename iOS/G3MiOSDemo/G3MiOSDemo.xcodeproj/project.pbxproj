@@ -14,6 +14,8 @@
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
 		CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF04CCF916D3E4D5004DFACF /* 409_554.bil */; };
 		CF09A94E16A0A0F500E72811 /* test.bson in Resources */ = {isa = PBXBuildFile; fileRef = CF09A94D16A09F7000E72811 /* test.bson */; };
+		CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */ = {isa = PBXBuildFile; fileRef = CF0FC6ED1899A443005988D7 /* g3mesh.json */; };
+		CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */ = {isa = PBXBuildFile; fileRef = CF0FC6F11899B86B005988D7 /* 3d_.json */; };
 		CF13F2CC16F3AC4B005704D6 /* caceres-2008x2032.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */; };
 		CF15759318649D410059312A /* altimeter-ruler-1536x113.png in Resources */ = {isa = PBXBuildFile; fileRef = CF15759218649D410059312A /* altimeter-ruler-1536x113.png */; };
 		CF186B0416B8572400A39478 /* A320.json in Resources */ = {isa = PBXBuildFile; fileRef = CF186B0316B8572400A39478 /* A320.json */; };
@@ -108,6 +110,8 @@
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
 		CF04CCF916D3E4D5004DFACF /* 409_554.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = 409_554.bil; sourceTree = "<group>"; };
 		CF09A94D16A09F7000E72811 /* test.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.bson; sourceTree = "<group>"; };
+		CF0FC6ED1899A443005988D7 /* g3mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = g3mesh.json; sourceTree = "<group>"; };
+		CF0FC6F11899B86B005988D7 /* 3d_.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 3d_.json; sourceTree = "<group>"; };
 		CF13F2CB16F3AC4B005704D6 /* caceres-2008x2032.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "caceres-2008x2032.bil"; sourceTree = "<group>"; };
 		CF15759218649D410059312A /* altimeter-ruler-1536x113.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "altimeter-ruler-1536x113.png"; sourceTree = "<group>"; };
 		CF186B0316B8572400A39478 /* A320.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A320.json; sourceTree = "<group>"; };
@@ -278,6 +282,8 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF0FC6F11899B86B005988D7 /* 3d_.json */,
+				CF0FC6ED1899A443005988D7 /* g3mesh.json */,
 				CF4968F71889810100D1C35E /* CompassHeadings.png */,
 				CF290D57187F322C000BE644 /* altitude_ladder.png */,
 				CF88E727186C8A78003112BF /* widget-background.png */,
@@ -422,6 +428,7 @@
 				CF8E9887180D98DC00A08208 /* pointcloud in Resources */,
 				CFB57D9F1860DAD900D5B094 /* Compass_rose_browns_00.png in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
+				CF0FC6F21899B86B005988D7 /* 3d_.json in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
 				CF4968F81889810100D1C35E /* CompassHeadings.png in Resources */,
 				E71B15371626D27F003D1013 /* Default-Landscape.png in Resources */,
@@ -467,6 +474,7 @@
 				CFC39A8916FB9DB7004992C2 /* small-caceres.bil in Resources */,
 				CF8C0EBB16FC99C400DBEDE4 /* cc3d4326.json in Resources */,
 				CFC04FC4185FA00400E7494A /* hud2.png in Resources */,
+				CF0FC6EE1899A443005988D7 /* g3mesh.json in Resources */,
 				E70B224D1700DBA300172DF3 /* A320.bson in Resources */,
 				CF9B5AD7175FC167002FB1B3 /* full-earth-2048x1024.bil in Resources */,
 				CF945F871768D59300215A4F /* MDT200-A_CORUNIA.bil in Resources */,

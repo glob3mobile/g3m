@@ -108,6 +108,12 @@ public class Tile {
       _middleSouthPoint = new Vector3D(planet.toCartesian(gS));
       _middleEastPoint = new Vector3D(planet.toCartesian(gE));
       _middleWestPoint = new Vector3D(planet.toCartesian(gW));
+
+      //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+      //#warning remove-debug-code
+      if ((_level == 10) && (_column == 2119) && (_row == 1439)) {
+         System.out.print("dddd");
+      }
    }
 
    private double _latitudeArcSegmentRatioSquared;
@@ -168,31 +174,35 @@ public class Tile {
                      null, _verticalExaggeration, layerTilesRenderParameters._mercator, tilesRenderParameters._renderDebug,
                      _tileTessellatorMeshData);
 
-            computeTileCorners(rc.getPlanet()); //COMPUTING CORNERS
-
-         }
-         else {
-            final Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(),
-                     layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration,
-                     layerTilesRenderParameters._mercator, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
-
-            MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
-            if (meshHolder == null) {
-               meshHolder = new MeshHolder(tessellatorMesh);
-               _tessellatorMesh = meshHolder;
-            }
-            else {
-               meshHolder.setMesh(tessellatorMesh);
-            }
-
-            computeTileCorners(rc.getPlanet()); //COMPUTING CORNERS
+            computeTileCorners(rc.getPlanet()); //COMPUTING CORNERS  
          }
 
-         //Notifying when the tile is first created and every time the elevation data changes
-         _planetRenderer.sectorElevationChanged(_elevationData);
+         if (_middleWestPoint != null) {
+            _middleWestPoint.dispose();
+         }
+         if (_middleEastPoint != null) {
+            _middleEastPoint.dispose();
+         }
+         if (_middleNorthPoint != null) {
+            _middleNorthPoint.dispose();
+         }
+         if (_middleSouthPoint != null) {
+            _middleSouthPoint.dispose();
+         }
+
+         final double mediumHeight = _tileTessellatorMeshData._averageHeight;
+
+         final Geodetic2D center = _sector.getCenter();
+         final Geodetic3D gN = new Geodetic3D(new Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
+         final Geodetic3D gS = new Geodetic3D(new Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
+         final Geodetic3D gW = new Geodetic3D(new Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
+         final Geodetic3D gE = new Geodetic3D(new Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
+
+         _middleNorthPoint = new Vector3D(rc.getPlanet().toCartesian(gN));
+         _middleSouthPoint = new Vector3D(rc.getPlanet().toCartesian(gS));
+         _middleEastPoint = new Vector3D(rc.getPlanet().toCartesian(gE));
+         _middleWestPoint = new Vector3D(rc.getPlanet().toCartesian(gW));
       }
-
-      //_tessellatorMesh->showNormals(true);
 
       return _tessellatorMesh;
    }
@@ -346,7 +356,8 @@ public class Tile {
                           final LayerSet layerSet,
                           final TilesRenderParameters tilesRenderParameters,
                           final boolean isForcedFullRender,
-                          final long texturePriority) {
+                          final long texturePriority,
+                          final boolean logTilesPetitions) {
 
       final Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters,
                tilesRenderParameters);
@@ -362,7 +373,7 @@ public class Tile {
 
          if (needsToCallTexturizer) {
             _texturizedMesh = texturizer.texturize(rc, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet,
-                     isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh);
+                     isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh, logTilesPetitions);
          }
 
          if (_texturizedMesh != null) {
@@ -380,9 +391,6 @@ public class Tile {
          }
       }
 
-
-      //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-      //  boundingVolume->render(rc, parentState);
    }
 
 
@@ -637,43 +645,6 @@ public class Tile {
       if (_debugMesh != null) {
          _debugMesh.dispose();
       }
-      _debugMesh = null;
-
-      if (_flatColorMesh != null) {
-         _flatColorMesh.dispose();
-      }
-      _flatColorMesh = null;
-
-      if (_tessellatorMesh != null) {
-         _tessellatorMesh.dispose();
-      }
-      _tessellatorMesh = null;
-
-      if (_texturizerData != null) {
-         _texturizerData.dispose();
-      }
-      _texturizerData = null;
-
-      if (_texturizedMesh != null) {
-         _texturizedMesh.dispose();
-      }
-      _texturizedMesh = null;
-
-      //  delete _tileBoundingVolume;
-      //  _tileBoundingVolume = NULL;
-
-      if (_elevationData != null) {
-         _elevationData.dispose();
-      }
-      _elevationData = null;
-
-      if (_elevationDataRequest != null) {
-         _elevationDataRequest.cancelRequest(); //The listener will auto delete
-         if (_elevationDataRequest != null) {
-            _elevationDataRequest.dispose();
-         }
-         _elevationDataRequest = null;
-      }
 
       if (_tessellatorData != null) {
          _tessellatorData.dispose();
@@ -690,6 +661,227 @@ public class Tile {
       }
       if (_middleWestPoint != null) {
          _middleWestPoint.dispose();
+      }
+   }
+
+
+   //  const Sector getSector() const {
+   //    return _sector;
+   //  }
+   //
+   //  int getLevel() const {
+   //    return _level;
+   //  }
+   //
+   //  int getRow() const {
+   //    return _row;
+   //  }
+   //
+   //  int getColumn() const {
+   //    return _column;
+   //  }
+
+
+   public final void prepareForFullRendering(final G3MRenderContext rc,
+                                             final TileTexturizer texturizer,
+                                             final ElevationDataProvider elevationDataProvider,
+                                             final TileTessellator tessellator,
+                                             final TileRasterizer tileRasterizer,
+                                             final LayerTilesRenderParameters layerTilesRenderParameters,
+                                             final LayerSet layerSet,
+                                             final TilesRenderParameters tilesRenderParameters,
+                                             final boolean isForcedFullRender,
+                                             final long texturePriority,
+                                             final float verticalExaggeration,
+                                             final boolean logTilesPetitions) {
+
+      //You have to set _verticalExaggertion
+      if (verticalExaggeration != _verticalExaggeration) {
+         // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+         _verticalExaggeration = verticalExaggeration;
+      }
+
+
+      final Mesh tessellatorMesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters,
+               tilesRenderParameters);
+      if (tessellatorMesh == null) {
+         return;
+      }
+
+      //  TileTexturizer* texturizer = prc->getTexturizer();
+      if (texturizer != null) {
+         final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
+
+         if (needsToCallTexturizer) {
+            _texturizedMesh = texturizer.texturize(rc, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet,
+                     isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh, logTilesPetitions);
+         }
+      }
+   }
+
+
+   public final void render(final G3MRenderContext rc,
+                            final GLState parentState,
+                            final java.util.LinkedList<Tile> toVisitInNextIteration,
+                            final Planet planet,
+                            final Vector3D cameraNormalizedPosition,
+                            final double cameraAngle2HorizonInRadians,
+                            final Frustum cameraFrustumInModelCoordinates,
+                            final TilesStatistics tilesStatistics,
+                            final float verticalExaggeration,
+                            final LayerTilesRenderParameters layerTilesRenderParameters,
+                            final TileTexturizer texturizer,
+                            final TilesRenderParameters tilesRenderParameters,
+                            final ITimer lastSplitTimer,
+                            final ElevationDataProvider elevationDataProvider,
+                            final TileTessellator tessellator,
+                            final TileRasterizer tileRasterizer,
+                            final LayerSet layerSet,
+                            final Sector renderedSector,
+                            final boolean isForcedFullRender,
+                            final long texturePriority,
+                            final double texWidthSquared,
+                            final double texHeightSquared,
+                            final double nowInMS,
+                            final boolean renderTileMeshes,
+                            final boolean logTilesPetitions) {
+
+      tilesStatistics.computeTileProcessed(this);
+
+      if (verticalExaggeration != _verticalExaggeration) {
+         // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+         _verticalExaggeration = verticalExaggeration;
+      }
+
+
+      if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates,
+               elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters)) {
+         setIsVisible(true, texturizer);
+
+         tilesStatistics.computeVisibleTile(this);
+
+         final boolean isRawRender = ((toVisitInNextIteration == null)
+                                      || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters,
+                                               tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+
+         if (isRawRender) {
+            if (renderTileMeshes) {
+               rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer,
+                        layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority,
+                        logTilesPetitions);
+            }
+            if (tilesRenderParameters._renderDebug) {
+               debugRender(rc, parentState, tessellator, layerTilesRenderParameters);
+            }
+
+            tilesStatistics.computePlanetRenderered(this);
+
+            prune(texturizer, elevationDataProvider);
+            //TODO: AVISAR CAMBIO DE TERRENO
+         }
+         else {
+            final Geodetic2D lower = _sector._lower;
+            final Geodetic2D upper = _sector._upper;
+
+            final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
+
+            final Angle splitLatitude = layerTilesRenderParameters._mercator ? MercatorUtils.calculateSplitLatitude(
+                     lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
+            /*                               */
+            /*                               */
+
+            final java.util.ArrayList<Tile> subTiles = getSubTiles(splitLatitude, splitLongitude);
+            if (_justCreatedSubtiles) {
+               lastSplitTimer.start();
+               tilesStatistics.computeSplitInFrame();
+               _justCreatedSubtiles = false;
+            }
+
+            final int subTilesSize = subTiles.size();
+            for (int i = 0; i < subTilesSize; i++) {
+               final Tile subTile = subTiles.get(i);
+               toVisitInNextIteration.addLast(subTile);
+            }
+         }
+      }
+      else {
+         setIsVisible(false, texturizer);
+
+         prune(texturizer, elevationDataProvider);
+         //TODO: AVISAR CAMBIO DE TERRENO
+      }
+   }
+
+
+   public final TileKey getKey() {
+      return new TileKey(_level, _row, _column);
+   }
+
+
+   public final void setTextureSolved(final boolean textureSolved) {
+      if (textureSolved != _textureSolved) {
+         _textureSolved = textureSolved;
+
+         if (_textureSolved) {
+            if (_texturizerData != null) {
+               _texturizerData.dispose();
+            }
+            _texturizerData = null;
+         }
+         _debugMesh = null;
+
+         if (_flatColorMesh != null) {
+            _flatColorMesh.dispose();
+         }
+         _flatColorMesh = null;
+
+         if (_tessellatorMesh != null) {
+            _tessellatorMesh.dispose();
+         }
+         _tessellatorMesh = null;
+
+         if (_texturizerData != null) {
+            _texturizerData.dispose();
+         }
+         _texturizerData = null;
+
+         if (_texturizedMesh != null) {
+            _texturizedMesh.dispose();
+         }
+         _texturizedMesh = null;
+
+         //  delete _tileBoundingVolume;
+         //  _tileBoundingVolume = NULL;
+
+         if (_elevationData != null) {
+            _elevationData.dispose();
+         }
+         _elevationData = null;
+
+         if (_elevationDataRequest != null) {
+            _elevationDataRequest.cancelRequest(); //The listener will auto delete
+            if (_elevationDataRequest != null) {
+               _elevationDataRequest.dispose();
+            }
+            _elevationDataRequest = null;
+         }
+
+         if (_tessellatorData != null) {
+            _tessellatorData.dispose();
+         }
+
+         if (_middleEastPoint != null) {
+            _middleEastPoint.dispose();
+         }
+         if (_middleNorthPoint != null) {
+            _middleNorthPoint.dispose();
+         }
+         if (_middleSouthPoint != null) {
+            _middleSouthPoint.dispose();
+         }
+         if (_middleWestPoint != null) {
+            _middleWestPoint.dispose();
+         }
       }
    }
 
@@ -768,7 +960,7 @@ public class Tile {
 
          if (needsToCallTexturizer) {
             _texturizedMesh = texturizer.texturize(rc, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet,
-                     isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh);
+                     isForcedFullRender, texturePriority, this, tessellatorMesh, _texturizedMesh, false);
          }
       }
    }
@@ -820,7 +1012,7 @@ public class Tile {
          if (isRawRender) {
             if (renderTileMeshes) {
                rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer,
-                        layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority);
+                        layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, false);
             }
             if (tilesRenderParameters._renderDebug) {
                debugRender(rc, parentState, tessellator, layerTilesRenderParameters);
@@ -861,26 +1053,6 @@ public class Tile {
 
          prune(texturizer, elevationDataProvider);
          //TODO: AVISAR CAMBIO DE TERRENO
-      }
-   }
-
-
-   public final TileKey getKey() {
-      return new TileKey(_level, _row, _column);
-   }
-
-
-   public final void setTextureSolved(final boolean textureSolved) {
-      if (textureSolved != _textureSolved) {
-         _textureSolved = textureSolved;
-
-         if (_subtiles != null) {
-            final int subtilesSize = _subtiles.size();
-            for (int i = 0; i < subtilesSize; i++) {
-               final Tile subtile = _subtiles.get(i);
-               subtile.ancestorTexturedSolvedChanged(this, _textureSolved);
-            }
-         }
       }
    }
 

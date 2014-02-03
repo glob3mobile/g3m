@@ -18,6 +18,10 @@ private:
   Vector3F& operator=(const Vector3F& that);
 
 public:
+  static Vector3F zero() {
+    return Vector3F(0,0,0);
+  }
+
   const float _x;
   const float _y;
   const float _z;

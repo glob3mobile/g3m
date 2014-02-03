@@ -46,8 +46,9 @@ public:
                   long long texturePriority,
                   Tile* tile,
                   Mesh* tessellatorMesh,
-                  Mesh* previousMesh);
-  
+                  Mesh* previousMesh,
+                  bool logTilesPetitions);
+
   void tileToBeDeleted(Tile* tile,
                        Mesh* mesh);
   
