@@ -26,6 +26,11 @@ private:
   private IStringUtils _su;
 #endif
 
+  const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                            const Tile* tile,
+                            const Sector& sector) const;
+
+protected:
   URLTemplateLayer(const std::string&                urlTemplate,
                    const Sector&                     sector,
                    bool                              isTransparent,
@@ -35,11 +40,6 @@ private:
                    const LayerTilesRenderParameters* parameters,
                    float transparency = (float)1.0);
 
-  const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                            const Tile* tile,
-                            const Sector& sector) const;
-
-protected:
   std::string getLayerType() const {
     return "URLTemplate";
   }
