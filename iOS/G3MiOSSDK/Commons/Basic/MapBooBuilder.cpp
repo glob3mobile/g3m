@@ -1772,3 +1772,69 @@ const MapBoo_Notification* MapBooBuilder::createNotification(const Geodetic2D&  
                                                                     true /* animated */);
   return new MapBoo_Notification(position, cameraPosition, message, iconURL);
 }
+
+const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
+                                                     const Vector2I* size,
+                                                     const Vector2I* pixel,
+                                                     const Geodetic3D& position){
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_serverURL.getPath());
+
+  isb->addString("/Public/applications/");
+  isb->addString(_applicationId);
+  isb->addString("/scenes/");
+  
+  const MapBoo_Scene* scene = getApplicationCurrentScene();
+  isb->addString(scene->getId());
+  
+  isb->addString("/getinfo?");
+  
+  isb->addString("tileX=");
+  isb->addInt(tile->_column);
+  
+  isb->addString("&tileY=");
+  isb->addInt(tile->_row);
+  
+  isb->addString("&tileLevel=");
+  isb->addInt(tile->_level);
+  
+  
+  //Sector
+  isb->addString("&upperLat=");
+  isb->addDouble(tile->_sector._upper._latitude._degrees);
+  isb->addString("&lowerLat=");
+  isb->addDouble(tile->_sector._lower._latitude._degrees);
+  isb->addString("&upperLon=");
+  isb->addDouble(tile->_sector._upper._longitude._degrees);
+  isb->addString("&lowerLon=");
+  isb->addDouble(tile->_sector._lower._longitude._degrees);
+  
+  
+  isb->addString("&tileBBox=");
+  isb->addString("TODO");
+  
+  isb->addString("&tileWidth=");
+  isb->addInt(size->_x);
+  
+  isb->addString("&tileHeight=");
+  isb->addInt(size->_y);
+  
+  isb->addString("&pixelX=");
+  isb->addInt(pixel->_x);
+  
+  isb->addString("&pixelY=");
+  isb->addInt(pixel->_y);
+  
+  isb->addString("&lat=");
+  isb->addDouble(position._latitude._degrees);
+  
+  isb->addString("&lon=");
+  isb->addDouble(position._longitude._degrees);
+  
+  const std::string path = isb->getString();
+  delete isb;
+  
+  return URL(path, false);
+  
+}
+

@@ -1147,3 +1147,14 @@ void Tile::computeTileCorners(const Planet* planet){
     printf("dddd");
   }
 }
+
+Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
+                                                     const Vector2I* size) const{
+  const IMathUtils* math = IMathUtils::instance();
+  if (_sector.contains(position2D)) {
+    const Vector2D uv = _sector.getUVCoordinates(position2D);
+    return new Vector2I(math->toInt(size->_x * uv._x), math->toInt(size->_y * uv._y));
+  }
+  
+  return NULL;
+}
