@@ -91,19 +91,19 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
   const double d2_2 = d2*d2;
 
   //Calculating k's
-/*
+
   const double k1 =  (d1_2*x - a*(b*y + c*z))/d2_2;
   const double k2 =  (-(c*d2*y) + b*d2*z)/d2_2;
   const double k3 =  (a*(a*x + b*y + c*z))/d2_2;
 
   const double k4 =  (-(a*b*d1_2*x) + c*d2_2*(-(c*y) + b*z) + a_2*b*(b*y + c*z))/(d1_2*d2_2);
-  const double k5 =  (-(c*d1_2*x) + 2*a*b*c*y - a*b_2*z + a*c_2*z)/(d1_2*d2);
+  const double k5 =  -(-(c*d1_2*x) + 2*a*b*c*y - a*b_2*z + a*c_2*z)/(d1_2*d2);
   const double k6 =  (b*(a*x + b*y + c*z))/d2_2;
   
   const double k7 =  -((-(a*c*d1_2*x) + b*d2_2*(c*y - b*z) + a_2*c*(b*y + c*z))/(d1_2*d2_2));
   const double k8 =  (-(b*d1_2*x) + a*b_2*y - a*c_2*y + 2*a*b*c*z)/(d1_2*d2);
   const double k9 =  -((c*(a*x + b*y + c*z))/d2_2);
-*/
+
   /*
   const double k1 = (d1_2*x - a*(b*y + c*z))/ d2_2;   // * COS
   const double k2 = (-(c*d2*y) + b*d2*z) / d2_2;      // * SIN
@@ -118,7 +118,7 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
   const double k9 = -(c*d1_2*(a*x + b*y + c*z)) / (d1_2 * d2_2);
 */
 
-
+/*
 
   const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2;
   const double k2 = (b*z*d2 - c*y*d2) / d2_2;
@@ -131,7 +131,7 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
   const double k7 = ((a_2*c_2*z) + (b_2*z*d2_2) + (a_2*b*c*y) - (a*c*x*d1_2) - (b*c*y*d2_2)) / (d1_2 * d2_2);
   const double k8 = ((-b*x*d1_2*d2) + (a*b_2*y*d2) + (a*c_2*y*d2)) / (d1_2 * d2_2);
   const double k9 = ((c_2*z*d1_2) + (a*c*x*d1_2) + (b*c*y*d1_2)) / (d1_2 * d2_2);
-
+*/
 
 
   //Calculating S's

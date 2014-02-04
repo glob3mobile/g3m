@@ -57,10 +57,12 @@ public:
   _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
   {
     //TODO CHECK CONSISTENCY
-    if (!_x.isPerpendicularTo(y) || !_x.isPerpendicularTo(z) || !_y.isPerpendicularTo(z)){
+    if (!areOrtogonal(x, y, z)){
       ILogger::instance()->logError("Inconsistent ReferenceSystem created.");
     }
   }
+
+  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
   Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
 
@@ -70,9 +72,9 @@ public:
 
   ReferenceSystem applyTaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll) const;
 
-  ReferenceSystem changeOrigin(const Vector3D& newOrigin) const{
-    return ReferenceSystem(_x, _y, _z, newOrigin);
-  }
+  ReferenceSystem changeOrigin(const Vector3D& newOrigin) const;
+
+  TaitBryanAngles getTaitBryanAngles(const ReferenceSystem& global) const;
 
 
 

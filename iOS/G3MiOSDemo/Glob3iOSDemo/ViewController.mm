@@ -658,16 +658,19 @@ public:
       Angle angle = plane.vectorRotationForAxis(v2, axis);
     }
 
-    //ReferenceSystem global = ReferenceSystem::global();
+    //ReferenceSystem sr = ReferenceSystem::global();
     double lat = 28.96384553643802, lon = -13.60974902228918;
     ReferenceSystem sr = planet->getReferenceSystemAt(Geodetic3D::fromDegrees(lat, lon, 0));
 
     //Heading
-    ReferenceSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(0, 1, 0))
+    ReferenceSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(0, 90, 0))
                             .changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(lat, lon, 1.5e4)));
 
     meshRenderer->addMesh( sr.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
     meshRenderer->addMesh( sr2.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
+
+    TaitBryanAngles tba = sr2.getTaitBryanAngles(sr);
+    printf("ANGLES: %f, %f, %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
 
   }
 
@@ -3004,7 +3007,7 @@ public:
 
       [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.099999998178312, -15.41699999885168, 7000),
                                                      Angle::fromDegrees(0),
-                                                     Angle::fromDegrees(85));
+                                                     Angle::fromDegrees(0));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
