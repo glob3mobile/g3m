@@ -76,16 +76,31 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
 
   //We calculate
 
-  if (vpp.dot(wp) == 0){
+  //Pitch "especial" positions
+  double x = vpp.dot(wp);
+  if (x == -1.0){
+    //Pitch -90
+    Angle pitch = Angle::fromDegrees(-90);
+    Angle roll = Angle::zero();
+    Angle heading = u.angleBetween(uppp);
+
+    return TaitBryanAngles(heading,
+                           pitch,
+                           roll);
+
+  } else if (x > 0.99999 && x < 1.000001){
     //Pitch 90
+
     Angle pitch = Angle::fromDegrees(90);
+    Angle roll = Angle::zero();
+    Angle heading = u.angleBetween(uppp);
 
-    //Angle heading = Angle::in
-
-    //Angle roll = uppp.angleBetween(upp);
-
+    return TaitBryanAngles(heading,
+                           pitch,
+                           roll);
   }
 
+  //Normal formula
   const Vector3D up = wp.cross(vpp);
   const Vector3D vp = up.cross(wp);
 

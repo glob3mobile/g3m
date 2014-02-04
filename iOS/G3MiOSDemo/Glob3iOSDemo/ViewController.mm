@@ -663,7 +663,7 @@ public:
     ReferenceSystem sr = planet->getReferenceSystemAt(Geodetic3D::fromDegrees(lat, lon, 0));
 
     //Heading
-    ReferenceSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(0, 90, 0))
+    ReferenceSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(170, 80, 10))
                             .changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(lat, lon, 1.5e4)));
 
     meshRenderer->addMesh( sr.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
