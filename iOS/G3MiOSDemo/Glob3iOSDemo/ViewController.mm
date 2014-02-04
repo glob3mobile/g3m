@@ -3007,7 +3007,7 @@ public:
 
       [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.099999998178312, -15.41699999885168, 7000),
                                                      Angle::fromDegrees(0),
-                                                     Angle::fromDegrees(0));
+                                                     Angle::fromDegrees(-90));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -3419,7 +3419,9 @@ public:
                                       const Geodetic3D&      position,
                                       const Tile*            tile){
 
-            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
+//            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
+
+            [_iosWidget widget]->getNextCamera()->setHeading(Angle::fromDegrees(45));
 
             return true;
 

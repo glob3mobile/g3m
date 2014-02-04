@@ -42,12 +42,12 @@ public:
 
 class ReferenceSystem{
 
+public:
+
   const Vector3D _x;
   const Vector3D _y;
   const Vector3D _z;
   const Vector3D _origin;
-
-public:
 
   static ReferenceSystem global(){
     return ReferenceSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
@@ -60,6 +60,15 @@ public:
     if (!areOrtogonal(x, y, z)){
       ILogger::instance()->logError("Inconsistent ReferenceSystem created.");
     }
+  }
+
+  //For camera
+  ReferenceSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin):
+  _x(up.cross(viewDirection).normalized()),
+  _y(viewDirection.normalized()),
+  _z(up.normalized()),
+  _origin(origin)
+  {
   }
 
   static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
@@ -75,8 +84,6 @@ public:
   ReferenceSystem changeOrigin(const Vector3D& newOrigin) const;
 
   TaitBryanAngles getTaitBryanAngles(const ReferenceSystem& global) const;
-
-
 
 };
 

@@ -14,6 +14,8 @@
 #include "Sphere.hpp"
 #include "Sector.hpp"
 
+#include "ReferenceSystem.hpp"
+
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
   if (_planet->isFlat()) {
@@ -110,6 +112,8 @@ void Camera::print() {
   ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
+/*
+
 const Angle Camera::getHeading(const Vector3D& normal) const {
   const Vector3D north2D  = _planet->getNorth().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
@@ -126,7 +130,14 @@ const Angle Camera::getHeading() const {
   const Vector3D normal = _planet->geodeticSurfaceNormal( _position );
   return getHeading(normal);
 }
+ 
+ */
 
+const Angle Camera::getHeading() const{
+  return getTaitBryanAngles()._heading;
+}
+
+/*
 void Camera::setHeading(const Angle& angle) {
   const Vector3D normal      = _planet->geodeticSurfaceNormal( _position );
   const Angle currentHeading = getHeading(normal);
@@ -134,7 +145,18 @@ void Camera::setHeading(const Angle& angle) {
   rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
   //printf ("previous heading=%f   current heading=%f\n", currentHeading._degrees, getHeading()._degrees);
 }
+ */
 
+void Camera::setHeading(const Angle& angle) {
+  ILogger::instance()->logInfo("SET HEADING: %f", angle._degrees);
+  TaitBryanAngles angles = getTaitBryanAngles();
+
+  ReferenceSystem localRS = getLocalReferenceSystem();
+  ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
+  setCameraReferenceSystem(cameraRS);
+}
+
+/*
 const Angle Camera::getPitch() const {
   const Vector3D normal = _planet->geodeticSurfaceNormal(_position);
   const Angle angle     = _up.asVector3D().angleBetween(normal);
@@ -147,11 +169,24 @@ void Camera::setPitch(const Angle& angle) {
   rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
   //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
 }
+ */
+
+const Angle Camera::getPitch() const {
+  return getTaitBryanAngles()._pitch;
+}
+
+void Camera::setPitch(const Angle& angle) {
+  TaitBryanAngles angles = getTaitBryanAngles();
+
+  ReferenceSystem localRS = getLocalReferenceSystem();
+  ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
+  setCameraReferenceSystem(cameraRS);
+}
 
 void Camera::setGeodeticPosition(const Geodetic3D& g3d) {
   const Angle heading = getHeading();
   const Angle pitch = getPitch();
-  setPitch(Angle::zero());
+  setPitch(Angle::fromDegrees(-90));
   MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
   if (dragMatrix.isValid()) applyTransform(dragMatrix);
   setHeading(heading);
@@ -374,6 +409,7 @@ void Camera::setFOV(const Angle& vertical,
   }
 }
 
+/*
 void Camera::setRoll(const Angle& angle) {
   const Angle delta = angle.sub(Angle::fromRadians(_rollInRadians));
   if (delta._radians != 0) {
@@ -384,4 +420,36 @@ void Camera::setRoll(const Angle& angle) {
 
 Angle Camera::getRoll() const {
   return Angle::fromRadians(_rollInRadians);
+}
+ */
+
+void Camera::setRoll(const Angle& angle) {
+  TaitBryanAngles angles = getTaitBryanAngles();
+
+  ReferenceSystem localRS = getLocalReferenceSystem();
+  ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
+  setCameraReferenceSystem(cameraRS);
+}
+
+Angle Camera::getRoll() const {
+  return getTaitBryanAngles()._roll;
+}
+
+ReferenceSystem Camera::getLocalReferenceSystem() const{
+  return _planet->getReferenceSystemAt(getGeodeticPosition());
+}
+
+ReferenceSystem Camera::getCameraReferenceSystem() const{
+  return ReferenceSystem(getViewDirection(), getUp(), getCartesianPosition());
+}
+
+void Camera::setCameraReferenceSystem(const ReferenceSystem& rs){
+  _center = _position.add(rs._y.asMutableVector3D());
+  _up = rs._z.asMutableVector3D();
+}
+
+TaitBryanAngles Camera::getTaitBryanAngles() const{
+  ReferenceSystem localRS = getLocalReferenceSystem();
+  ReferenceSystem cameraRS = getCameraReferenceSystem();
+  return cameraRS.getTaitBryanAngles(localRS);
 }

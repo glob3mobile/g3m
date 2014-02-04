@@ -26,6 +26,8 @@
 
 class ILogger;
 class GPUProgramState;
+class ReferenceSystem;
+class TaitBryanAngles;
 
 
 class CameraDirtyFlags {
@@ -297,7 +299,7 @@ public:
   void setRoll(const Angle& angle);
 
 private:
-  const Angle getHeading(const Vector3D& normal) const;
+//  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
@@ -421,6 +423,14 @@ private:
     }
     return _modelViewMatrix;
   }
+
+  ReferenceSystem getLocalReferenceSystem() const;
+
+  ReferenceSystem getCameraReferenceSystem() const;
+
+  TaitBryanAngles getTaitBryanAngles() const;
+
+  void setCameraReferenceSystem(const ReferenceSystem& rs);
   
 };
 

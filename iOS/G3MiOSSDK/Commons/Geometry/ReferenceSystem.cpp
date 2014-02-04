@@ -90,7 +90,6 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
 
   } else if (x > 0.99999 && x < 1.000001){
     //Pitch 90
-
     Angle pitch = Angle::fromDegrees(90);
     Angle roll = Angle::zero();
     Angle heading = u.angleBetween(uppp);
