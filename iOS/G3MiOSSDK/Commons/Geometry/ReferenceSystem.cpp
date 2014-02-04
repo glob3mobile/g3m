@@ -13,6 +13,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "Plane.hpp"
+#include "IStringBuilder.hpp"
 
 bool ReferenceSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z){
   return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
@@ -78,23 +79,25 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
 
   //Pitch "especial" positions
   double x = vpp.dot(wp);
-  if (x == -1.0){
+  if (x < -0.99999 && x > -1.000001){
     //Pitch -90
+    printf("PITCH -90\n");
     Angle pitch = Angle::fromDegrees(-90);
     Angle roll = Angle::zero();
-    Angle heading = u.angleBetween(uppp);
+    Angle heading = wp.signedAngleBetween(v, w);
 
-    return TaitBryanAngles(heading,
+    return TaitBryanAngles(heading.add(Angle::fromDegrees(90)),
                            pitch,
                            roll);
 
   } else if (x > 0.99999 && x < 1.000001){
     //Pitch 90
+    printf("PITCH 90\n");
     Angle pitch = Angle::fromDegrees(90);
     Angle roll = Angle::zero();
-    Angle heading = u.angleBetween(uppp);
+    Angle heading = wp.signedAngleBetween(v, w);
 
-    return TaitBryanAngles(heading,
+    return TaitBryanAngles(heading.add(Angle::fromDegrees(90)),
                            pitch,
                            roll);
   }
@@ -107,13 +110,19 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
   const Vector3D wpp = vpp.cross(upp);
 
   //Calculating Angles
+  /*
   Angle heading = u.angleBetween(up);
   Angle pitch = vp.angleBetween(vpp);
   Angle roll = uppp.angleBetween(upp);
+   */
 
-  return TaitBryanAngles(Angle::fromDegrees(180).sub(heading),
+  Angle heading = v.signedAngleBetween(vp, w);
+  Angle pitch = vpp.signedAngleBetween(vp, up);
+  Angle roll = upp.signedAngleBetween(uppp, vpp);
+
+  return TaitBryanAngles(heading,
                          pitch,
-                         Angle::fromDegrees(180).sub(roll));
+                         roll.add(Angle::fromDegrees(180)));
 }
 
 ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
@@ -203,4 +212,24 @@ ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
    */
 
   return ReferenceSystem(uppp, vppp, wppp, _origin);
+}
+
+std::string TaitBryanAngles::description() const{
+
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("(TaitBryanAngles Heading= ");
+  isb->addDouble(_heading._degrees);
+  isb->addString(", Pitch= ");
+  isb->addDouble(_pitch._degrees);
+  isb->addString(", Roll= ");
+  isb->addDouble(_roll._degrees);
+  isb->addString(")");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+
+}
+
+bool ReferenceSystem::isEqualsTo(const ReferenceSystem& that) const{
+  return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }

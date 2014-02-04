@@ -646,7 +646,7 @@ public:
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
 
-  if (true) { //Testing Reference System
+  if (false) { //Testing Reference System
 
     //Test Plane
     Plane plane(Vector3D(0.0,1.0,1.0), 0.0);
@@ -3005,7 +3005,7 @@ public:
 
       // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.099999998178312, -15.41699999885168, 7000),
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.96384553643802, -13.60974902228918, 2000),
                                                      Angle::fromDegrees(0),
                                                      Angle::fromDegrees(-90));
 
@@ -3402,15 +3402,14 @@ public:
       }
 
 
-      if (true){ //CHANGE ROLL WITH TOUCH
-
-
+      if (true){ //CHANGE CAMERA WITH TOUCH
         class RollTerrainTouchListener: public TerrainTouchListener{
         private:
           G3MWidget_iOS* _iosWidget;
+          MeshRenderer* _meshRenderer;
         public:
 
-          RollTerrainTouchListener(G3MWidget_iOS* widget): _iosWidget(widget){}
+          RollTerrainTouchListener(G3MWidget_iOS* widget, MeshRenderer* mr): _iosWidget(widget), _meshRenderer(mr){}
 
 
           virtual bool onTerrainTouch(const G3MEventContext* ec,
@@ -3420,18 +3419,49 @@ public:
                                       const Tile*            tile){
 
 //            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
+            Camera* cam = [_iosWidget widget]->getNextCamera();
 
-            [_iosWidget widget]->getNextCamera()->setHeading(Angle::fromDegrees(45));
+
+            TaitBryanAngles angles = cam->getTaitBryanAngles();
+            printf("A1: %s\n", angles.description().c_str() );
+
+            Angle step = Angle::fromDegrees(10);
+
+            switch ((pixel._x * 3) / cam->getWidth()) {
+              case 0:
+                [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
+                break;
+
+              case 1:
+                [_iosWidget widget]->getNextCamera()->setPitch(angles._pitch.add(step));
+                break;
+
+              case 2:
+                [_iosWidget widget]->getNextCamera()->setRoll(angles._roll.add(step));
+                break;
+
+              default:
+                break;
+            }
+
+            TaitBryanAngles angles2 = cam->getTaitBryanAngles();
+            printf("A2: %s\n", angles2.description().c_str() );
+
+            Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
+            Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
+
+
+            _meshRenderer->addMesh(cam->getLocalReferenceSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+            _meshRenderer->addMesh(cam->getCameraReferenceSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+
 
             return true;
-
-
           }
 
         };
 
 
-        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new RollTerrainTouchListener(_iosWidget));
+        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new RollTerrainTouchListener(_iosWidget, _meshRenderer));
 
       }
 

@@ -12,6 +12,7 @@
 #include "Vector3D.hpp"
 
 #include <iostream>
+#include <string>
 
 class Mesh;
 class Color;
@@ -38,6 +39,8 @@ public:
                            Angle::fromDegrees(pitch),
                            Angle::fromDegrees(roll));
   }
+
+  std::string description() const;
 };
 
 class ReferenceSystem{
@@ -64,7 +67,7 @@ public:
 
   //For camera
   ReferenceSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin):
-  _x(up.cross(viewDirection).normalized()),
+  _x(viewDirection.cross(up).normalized()),
   _y(viewDirection.normalized()),
   _z(up.normalized()),
   _origin(origin)
@@ -84,6 +87,8 @@ public:
   ReferenceSystem changeOrigin(const Vector3D& newOrigin) const;
 
   TaitBryanAngles getTaitBryanAngles(const ReferenceSystem& global) const;
+
+  bool isEqualsTo(const ReferenceSystem& that) const;
 
 };
 

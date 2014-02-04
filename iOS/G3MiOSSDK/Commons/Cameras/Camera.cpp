@@ -148,12 +148,14 @@ void Camera::setHeading(const Angle& angle) {
  */
 
 void Camera::setHeading(const Angle& angle) {
-  ILogger::instance()->logInfo("SET HEADING: %f", angle._degrees);
+  ILogger::instance()->logInfo("SET CAMERA HEADING: %f", angle._degrees);
   TaitBryanAngles angles = getTaitBryanAngles();
 
   ReferenceSystem localRS = getLocalReferenceSystem();
   ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
   setCameraReferenceSystem(cameraRS);
+
+  ILogger::instance()->logInfo("CAMERA HEADING AFTER SET: %f", getHeading()._degrees);
 }
 
 /*
@@ -176,6 +178,13 @@ const Angle Camera::getPitch() const {
 }
 
 void Camera::setPitch(const Angle& angle) {
+  ILogger::instance()->logInfo("SET CAMERA PITCH: %f", angle._degrees);
+
+  if (fabs(angle._degrees) < 5){
+    int a = 0;
+    a++;
+  }
+
   TaitBryanAngles angles = getTaitBryanAngles();
 
   ReferenceSystem localRS = getLocalReferenceSystem();
@@ -424,6 +433,7 @@ Angle Camera::getRoll() const {
  */
 
 void Camera::setRoll(const Angle& angle) {
+  ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
   TaitBryanAngles angles = getTaitBryanAngles();
 
   ReferenceSystem localRS = getLocalReferenceSystem();
@@ -446,6 +456,8 @@ ReferenceSystem Camera::getCameraReferenceSystem() const{
 void Camera::setCameraReferenceSystem(const ReferenceSystem& rs){
   _center = _position.add(rs._y.asMutableVector3D());
   _up = rs._z.asMutableVector3D();
+
+  _dirtyFlags.setAll(true);  //Recalculate Everything
 }
 
 TaitBryanAngles Camera::getTaitBryanAngles() const{

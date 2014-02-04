@@ -298,6 +298,10 @@ public:
   Angle getRoll() const;
   void setRoll(const Angle& angle);
 
+  ReferenceSystem getLocalReferenceSystem() const;
+  ReferenceSystem getCameraReferenceSystem() const;
+  TaitBryanAngles getTaitBryanAngles() const;
+
 private:
 //  const Angle getHeading(const Vector3D& normal) const;
 
@@ -424,11 +428,7 @@ private:
     return _modelViewMatrix;
   }
 
-  ReferenceSystem getLocalReferenceSystem() const;
 
-  ReferenceSystem getCameraReferenceSystem() const;
-
-  TaitBryanAngles getTaitBryanAngles() const;
 
   void setCameraReferenceSystem(const ReferenceSystem& rs);
   
