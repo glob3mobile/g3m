@@ -69,21 +69,6 @@ public class URLTemplateLayer extends Layer
     return path;
   }
 
-  protected URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
-  {
-     this(urlTemplate, sector, isTransparent, timeToCache, readExpired, condition, parameters, (float)1.0);
-  }
-  protected URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
-  {
-     super(condition, "URLTemplate", timeToCache, readExpired, parameters, transparency);
-     _urlTemplate = urlTemplate;
-     _sector = new Sector(sector);
-     _isTransparent = isTransparent;
-     _su = null;
-     _mu = null;
-  
-  }
-
   protected final String getLayerType()
   {
     return "URLTemplate";
@@ -138,6 +123,21 @@ public class URLTemplateLayer extends Layer
   public static URLTemplateLayer newWGS84(String urlTemplate, Sector sector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, float transparency)
   {
     return new URLTemplateLayer(urlTemplate, sector, isTransparent, timeToCache, readExpired, (condition == null) ? new LevelTileCondition(firstLevel, maxLevel) : condition, LayerTilesRenderParameters.createDefaultWGS84(sector, firstLevel, maxLevel), transparency);
+  }
+
+  public URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
+  {
+     this(urlTemplate, sector, isTransparent, timeToCache, readExpired, condition, parameters, (float)1.0);
+  }
+  public URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
+  {
+     super(condition, "URLTemplate", timeToCache, readExpired, parameters, transparency);
+     _urlTemplate = urlTemplate;
+     _sector = new Sector(sector);
+     _isTransparent = isTransparent;
+     _su = null;
+     _mu = null;
+  
   }
 
   public final String description()
