@@ -26,21 +26,6 @@ public class URLTemplateLayer extends Layer
   private IMathUtils   _mu;
   private IStringUtils _su;
 
-  private URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
-  {
-     this(urlTemplate, sector, isTransparent, timeToCache, readExpired, condition, parameters, (float)1.0);
-  }
-  private URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
-  {
-     super(condition, "URLTemplate", timeToCache, readExpired, parameters, transparency);
-     _urlTemplate = urlTemplate;
-     _sector = new Sector(sector);
-     _isTransparent = isTransparent;
-     _su = null;
-     _mu = null;
-  
-  }
-
   private String getPath(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, Sector sector)
   {
   
@@ -82,6 +67,21 @@ public class URLTemplateLayer extends Layer
     path = _su.replaceSubstring(path, "{east}", _su.toString(east));
   
     return path;
+  }
+
+  protected URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
+  {
+     this(urlTemplate, sector, isTransparent, timeToCache, readExpired, condition, parameters, (float)1.0);
+  }
+  protected URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
+  {
+     super(condition, "URLTemplate", timeToCache, readExpired, parameters, transparency);
+     _urlTemplate = urlTemplate;
+     _sector = new Sector(sector);
+     _isTransparent = isTransparent;
+     _su = null;
+     _mu = null;
+  
   }
 
   protected final String getLayerType()
