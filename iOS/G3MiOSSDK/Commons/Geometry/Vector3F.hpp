@@ -85,6 +85,12 @@ public:
             (_y == 0) &&
             (_z == 0));
   }
+
+  bool isNan() const {
+    return (ISNAN(_x) ||
+            ISNAN(_y) ||
+            ISNAN(_z));
+  }
   
 };
 

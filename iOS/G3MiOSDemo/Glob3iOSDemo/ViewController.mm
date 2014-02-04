@@ -649,11 +649,11 @@ public:
   //                                   10,
   //                                   new TestMeshLoadListener(),
   //                                   true);
-  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
-                                   2,
-                                   0,
-                                   new TestMeshLoadListener(),
-                                   true);
+//  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
+//                                   2,
+//                                   0,
+//                                   new TestMeshLoadListener(),
+//                                   true);
 
   //  void testMeshLoad(const G3MContext* context) {
   //    context->getDownloader()->requestBuffer(URL("file:///isosurface-mesh.json"),
@@ -663,8 +663,8 @@ public:
   //                                            new ParseMeshBufferDownloadListener(_meshRenderer, _planet),
   //                                            true);
   //  }
-  meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
-                             Color::newFromRGBA(1, 1, 0, 1));
+//  meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
+//                             Color::newFromRGBA(1, 1, 0, 1));
 
   meshRenderer->showNormals(true); //SHOWING NORMALS
 
@@ -2821,9 +2821,9 @@ public:
 //                                                     Angle::fromDegrees(-32.066195 ),
 //                                                     Angle::fromDegrees(78.523121));
 
-      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
-                                                     Angle::fromDegrees(-32.066195 ),
-                                                     Angle::fromDegrees(78.523121));
+//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
+//                                                     Angle::fromDegrees(-32.066195 ),
+//                                                     Angle::fromDegrees(78.523121));
 
       class G3MeshBufferDownloadListener : public IBufferDownloadListener {
         const Planet* _planet;
@@ -2868,14 +2868,62 @@ public:
 
 
 #warning Diego at work!
-      context->getDownloader()->requestBuffer(//URL("file:///g3mesh.json"),
-                                              URL("file:///3d_.json"),
+      context->getDownloader()->requestBuffer(URL("file:///3d_.json"),
                                               1000000,
                                               TimeInterval::zero(),
                                               false,
                                               new G3MeshBufferDownloadListener(context->getPlanet(),
                                                                                _meshRenderer),
                                               true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_1.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_1-1.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_1-2.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_1-3.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_2-0.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_2-1.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_2-2.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
 
       if (true){
 

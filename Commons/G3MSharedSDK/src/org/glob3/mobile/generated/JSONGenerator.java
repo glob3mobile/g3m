@@ -55,11 +55,29 @@ public class JSONGenerator extends JSONVisitor
 
   public final void visitDouble(JSONDouble value)
   {
-    _isb.addDouble(value.doubleValue());
+    final double doubleValue = value.doubleValue();
+    final long longValue = (long) doubleValue;
+    if (longValue == doubleValue)
+    {
+      _isb.addLong(longValue);
+    }
+    else
+    {
+      _isb.addDouble(doubleValue);
+    }
   }
   public final void visitFloat(JSONFloat value)
   {
-    _isb.addFloat(value.floatValue());
+    final float floatValue = value.floatValue();
+    final int intValue = (int) floatValue;
+    if (intValue == floatValue)
+    {
+      _isb.addInt(intValue);
+    }
+    else
+    {
+      _isb.addFloat(floatValue);
+    }
   }
   public final void visitInteger(JSONInteger value)
   {
