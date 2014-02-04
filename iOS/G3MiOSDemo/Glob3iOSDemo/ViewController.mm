@@ -2868,14 +2868,62 @@ public:
 
 
 #warning Diego at work!
-      context->getDownloader()->requestBuffer(//URL("file:///g3mesh.json"),
-                                              URL("file:///3d_.json"),
+      context->getDownloader()->requestBuffer(URL("file:///3d_.json"),
                                               1000000,
                                               TimeInterval::zero(),
                                               false,
                                               new G3MeshBufferDownloadListener(context->getPlanet(),
                                                                                _meshRenderer),
                                               true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_1.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_1-1.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_1-2.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_1-3.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_2-0.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_2-1.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
+//      context->getDownloader()->requestBuffer(URL("file:///3d_2-2.json"),
+//                                              1000000,
+//                                              TimeInterval::zero(),
+//                                              false,
+//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+//                                                                               _meshRenderer),
+//                                              true);
 
       if (true){
 
