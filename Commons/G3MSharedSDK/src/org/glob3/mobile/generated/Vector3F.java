@@ -89,4 +89,9 @@ public class Vector3F
     return ((_x == 0) && (_y == 0) && (_z == 0));
   }
 
+  public final boolean isNan()
+  {
+    return ((_x != _x) || (_y != _y) || (_z != _z));
+  }
+
 }
