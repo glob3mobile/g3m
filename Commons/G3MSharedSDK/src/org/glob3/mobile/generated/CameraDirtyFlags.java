@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 
 //class ILogger;
 //class GPUProgramState;
+//class ReferenceSystem;
+//class TaitBryanAngles;
 
 
 public class CameraDirtyFlags

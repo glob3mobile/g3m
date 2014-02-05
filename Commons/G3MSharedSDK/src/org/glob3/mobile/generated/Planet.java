@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class Camera;
 //class Sector;
 //class Vector2I;
+//class ReferenceSystem;
 
 public abstract class Planet
 {
@@ -110,4 +111,15 @@ public abstract class Planet
   public abstract void applyCameraConstrainers(Camera previousCamera, Camera nextCamera);
 
   public abstract Geodetic3D getDefaultCameraPosition(Sector shownSector);
+
+  public final ReferenceSystem getReferenceSystemAt(Geodetic3D geo)
+  {
+  
+    Vector3D origin = toCartesian(geo);
+    Vector3D z = centricSurfaceNormal(origin);
+    Vector3D y = getNorth().projectionInPlane(z);
+    Vector3D x = y.cross(z);
+  
+    return new ReferenceSystem(x,y,z, origin);
+  }
 }

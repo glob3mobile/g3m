@@ -124,12 +124,12 @@ public class G3MWidget
   
       _currentCamera.setGeodeticPosition(position);
       _currentCamera.setHeading(Angle.zero());
-      _currentCamera.setPitch(Angle.zero());
+      _currentCamera.setPitch(Angle.fromDegrees(-90));
       _currentCamera.setRoll(Angle.zero());
   
       _nextCamera.setGeodeticPosition(position);
       _nextCamera.setHeading(Angle.zero());
-      _nextCamera.setPitch(Angle.zero());
+      _nextCamera.setPitch(Angle.fromDegrees(-90));
       _nextCamera.setRoll(Angle.zero());
     }
   

@@ -41,6 +41,14 @@ public class Plane
      _dF = (float) d;
   }
 
+  public Plane(Vector3D normal, Vector3D point)
+  {
+     _normal = new Vector3D(normal.normalized());
+     _d = - normal._x * point._x - normal._y * point._y - normal._z * point._z;
+     _normalF = new Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized();
+     _dF = (float) _d;
+  }
+
   public Plane(double a, double b, double c, double d)
   {
      _normal = new Vector3D(new Vector3D(a,b,c).normalized());
@@ -119,6 +127,186 @@ public class Plane
        return Vector3D.nan();
     Vector3D point = origin.add(direction.times(t));
     return point;
+  }
+
+  public final boolean isVectorParallel(Vector3D vector)
+  {
+    final double d = _normal.dot(vector);
+    return ((d != d) || IMathUtils.instance().abs(d) < 0.01);
+  }
+
+  public final Angle vectorRotationForAxis(Vector3D vector, Vector3D axis)
+  {
+  
+    //Check Agustin Trujillo's document that explains how this algorithm works
+  
+    if (isVectorParallel(vector))
+    {
+      return Angle.zero();
+    }
+  
+    IMathUtils mu = IMathUtils.instance();
+  
+    //Vector values
+  
+    final double a = axis._x;
+    final double b = axis._y;
+    final double c = axis._z;
+    final double a_2 = a *a;
+    final double b_2 = b *b;
+    final double c_2 = c *c;
+  
+    final double x = vector._x;
+    final double y = vector._y;
+    final double z = vector._z;
+  
+    final double nx = _normal._x;
+    final double ny = _normal._y;
+    final double nz = _normal._z;
+  
+    //Diagonal values
+    final double d1 = mu.sqrt(b *b + c *c);
+    final double d1_2 = d1 *d1;
+    final double d2 = mu.sqrt(a *a + d1_2);
+    final double d2_2 = d2 *d2;
+  
+    //Calculating k's
+  
+    final double k1 = (d1_2 *x - a*(b *y + c *z))/d2_2;
+    final double k2 = (-(c *d2 *y) + b *d2 *z)/d2_2;
+    final double k3 = (a*(a *x + b *y + c *z))/d2_2;
+  
+    final double k4 = (-(a *b *d1_2 *x) + c *d2_2*(-(c *y) + b *z) + a_2 *b*(b *y + c *z))/(d1_2 *d2_2);
+    final double k5 = -(-(c *d1_2 *x) + 2 *a *b *c *y - a *b_2 *z + a *c_2 *z)/(d1_2 *d2);
+    final double k6 = (b*(a *x + b *y + c *z))/d2_2;
+  
+    final double k7 = -((-(a *c *d1_2 *x) + b *d2_2*(c *y - b *z) + a_2 *c*(b *y + c *z))/(d1_2 *d2_2));
+    final double k8 = (-(b *d1_2 *x) + a *b_2 *y - a *c_2 *y + 2 *a *b *c *z)/(d1_2 *d2);
+    final double k9 = -((c*(a *x + b *y + c *z))/d2_2);
+  
+    /*
+    const double k1 = (d1_2*x - a*(b*y + c*z))/ d2_2; // * COS
+    const double k2 = (-(c*d2*y) + b*d2*z) / d2_2; // * SIN
+    const double k3 = (a*(a*x + b*y + c*z)) / d2_2; // * 1
+  
+    const double k4 = (-(a*b*d1_2*x) + c*d2_2*(-(c*y) + b*z) + a_2*b*(b*y + c*z)) / (d1_2 * d2_2);
+    const double k5 = d2* (-(c*d1_2*x) + 2*a*b*c*y - a*b_2*z + a*c_2*z) / (d1_2 * d2_2);
+    const double k6 = (d1_2*b*(a*x + b*y + c*z)) / (d1_2 * d2_2);
+  
+    const double k7 = (a*c*d1_2*x - b*d2_2*(c*y - b*z) - a_2*c*(b*y + c*z)) / (d1_2 * d2_2);
+    const double k8 = d2*(-(b*d1_2*x) + a*b_2*y - a*c_2*y + 2*a*b*c*z) / (d1_2 * d2_2);
+    const double k9 = -(c*d1_2*(a*x + b*y + c*z)) / (d1_2 * d2_2);
+  */
+  
+  /*
+  
+    const double k1 = (x*d1_2 - a*b*y - a*c*z) / d2_2;
+    const double k2 = (b*z*d2 - c*y*d2) / d2_2;
+    const double k3 = (a_2*x + a*b*y + a*c*z) / d2_2;
+  
+    const double k4 = ((a_2*b_2*y) + (c_2*y*d2_2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
+    const double k5 = ((c*x*d1_2*d2) + (a_2*b*c*z) - (a*b*x*d1_2) - (b*c*z*d2_2)) / (d1_2 * d2_2);
+    const double k6 = ((b_2*y*d1_2) + (a*b*x*d1_2) + (b*c*z*d1_2)) / (d1_2 * d2_2);
+  
+    const double k7 = ((a_2*c_2*z) + (b_2*z*d2_2) + (a_2*b*c*y) - (a*c*x*d1_2) - (b*c*y*d2_2)) / (d1_2 * d2_2);
+    const double k8 = ((-b*x*d1_2*d2) + (a*b_2*y*d2) + (a*c_2*y*d2)) / (d1_2 * d2_2);
+    const double k9 = ((c_2*z*d1_2) + (a*c*x*d1_2) + (b*c*y*d1_2)) / (d1_2 * d2_2);
+  */
+  
+  
+    //Calculating S's
+    final double s1 = nx * k1 + ny * k4 + nz * k7;
+    final double s2 = nx * k2 + ny * k5 + nz * k8;
+    final double s3 = nx * k3 + ny * k6 + nz * k9;
+  
+    final double s1_2 = s1 *s1;
+    final double s2_2 = s2 *s2;
+    final double s3_2 = s3 *s3;
+  
+    //Calculating angle sinus
+    final double rootValue = 4 * ((s1_2 * s3_2) - ((s1_2 + s2_2) * (s3_2 - s2_2)));
+    final double root = mu.sqrt(rootValue);
+    final double firstTerm = -2 *s1 *s3;
+    final double divisor = 2 * (s1_2 + s2_2);
+  
+    final double c1 = (firstTerm + root) / divisor;
+    final double c2 = (firstTerm - root) / divisor;
+  
+    final double firstSolution = mu.acos(c1);
+    final double secondSolution = mu.acos(c2);
+  
+    //Considering the lower angle to rotate as solution
+    double solution = firstSolution < secondSolution != 0? firstSolution : secondSolution;
+  
+  //  double ss = (s1 * c1 + s2*SIN(solution) + s3);
+  //  double ss2 = (s1 * c1 + s2*SIN(-solution) + s3);
+    if (mu.abs((s1 * c1 + s2 *java.lang.Math.sin(solution) + s3)) > 0.001) //if valid solution (can't compare with 0)
+    {
+      solution = -solution;
+    }
+  /*
+    printf("k1 = %f\n", k1);
+    printf("k2 = %f\n", k2);
+    printf("k3 = %f\n", k3);
+    printf("k4 = %f\n", k4);
+    printf("k5 = %f\n", k5);
+    printf("k6 = %f\n", k6);
+    printf("k7 = %f\n", k7);
+    printf("k8 = %f\n", k8);
+    printf("k9 = %f\n", k9);
+  */
+  
+    //*********
+     //Check code
+    Angle res = Angle.fromRadians(solution);
+    Vector3D nv = vector.rotateAroundAxis(axis, res);
+    if (!isVectorParallel(nv))
+    {
+  
+      ILogger.instance().logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f", vector.description(), axis.description(), res.description(), _normal.dot(nv));
+  
+  //    Vector3D nv = vector.rotateAroundAxis(axis, res.times(-1));
+  //
+  //    double d = _normal.dot(nv);
+  //    d++;
+  
+  
+    }
+  
+  
+  
+     //**********
+  
+  
+  
+    return Angle.fromRadians(solution);
+  
+  
+  /*
+    //Check if the solution is valid
+    if ((s1 * c1 + s2*SIN(firstSolution) + s3) > 0.1){
+      firstSolution = -firstSolution;
+    }
+  
+    //Check if the solution is valid
+    if ((s1 * c2 + s2*SIN(secondSolution) + s3) != 0){
+      secondSolution = -secondSolution;
+    }
+  
+    //We return the shortest angle
+    if (mu->abs(firstSolution) < mu->abs(secondSolution)) {
+      return Angle::fromRadians(firstSolution);
+    } else{
+      return Angle::fromRadians(secondSolution);
+    }
+  
+   */
+  
+  }
+
+  public final Vector3D getNormal()
+  {
+    return _normal;
   }
 
 
