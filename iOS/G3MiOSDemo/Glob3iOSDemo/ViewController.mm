@@ -3005,9 +3005,10 @@ public:
 
       // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
 
+      
       [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(28.96384553643802, -13.60974902228918, 2000),
-                                                     Angle::fromDegrees(0),
-                                                     Angle::fromDegrees(-90));
+                                                     Angle::fromDegrees(45),
+                                                     Angle::fromDegrees(-45));
 
       if (false) {
         [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10),
@@ -3427,7 +3428,7 @@ public:
 
             Angle step = Angle::fromDegrees(10);
 
-            switch ((pixel._x * 3) / cam->getWidth()) {
+            switch ((pixel._x * 4) / cam->getWidth()) {
               case 0:
                 [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
                 break;

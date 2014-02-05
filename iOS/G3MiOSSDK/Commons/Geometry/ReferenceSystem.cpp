@@ -82,6 +82,78 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
   if (x < -0.99999 && x > -1.000001){
     //Pitch -90
     printf("PITCH -90\n");
+
+    const Vector3D wpp = wppp; //No Roll
+
+
+    Angle pitch = Angle::fromDegrees(-90);
+    Angle roll = Angle::zero();
+    Angle heading = v.signedAngleBetween(wpp, w);
+
+    printf("V: %s WP: %s W: %s\n", v.description().c_str(), wp.description().c_str(), w.description().c_str());
+
+    return TaitBryanAngles(heading,
+                           pitch,
+                           roll);
+
+  } else if (x > 0.99999 && x < 1.000001){
+    //Pitch 90
+    printf("PITCH 90\n");
+
+    const Vector3D wpp = wppp; //No Roll
+
+    Angle pitch = Angle::fromDegrees(90);
+    Angle roll = Angle::zero();
+    Angle heading = v.signedAngleBetween(wpp, w).sub(Angle::fromDegrees(180));
+
+    return TaitBryanAngles(heading,
+                           pitch,
+                           roll);
+  }
+
+  //Normal formula
+  const Vector3D up = vpp.cross(wp);
+  const Vector3D vp = wp.cross(up);
+
+  const Vector3D upp = up;
+  const Vector3D wpp = upp.cross(vpp);
+
+  //Calculating Angles
+  /*
+   Angle heading = u.angleBetween(up);
+   Angle pitch = vp.angleBetween(vpp);
+   Angle roll = uppp.angleBetween(upp);
+   */
+
+  Angle heading = u.signedAngleBetween(up, w);
+  Angle pitch = vp.signedAngleBetween(vpp, up);
+  Angle roll = wpp.signedAngleBetween(wppp, vpp);
+
+  return TaitBryanAngles(heading,
+                         pitch,
+                         roll);
+/*
+
+  //We know...
+
+  const Vector3D u = global._x;
+  const Vector3D v = global._y;
+  const Vector3D w = global._z;
+
+  const Vector3D uppp = _x;
+  const Vector3D vppp = _y;
+  const Vector3D wppp = _z;
+
+  const Vector3D wp = w;
+  const Vector3D vpp = vppp;
+
+  //We calculate
+
+  //Pitch "especial" positions
+  double x = vpp.dot(wp);
+  if (x < -0.99999 && x > -1.000001){
+    //Pitch -90
+    printf("PITCH -90\n");
     Angle pitch = Angle::fromDegrees(-90);
     Angle roll = Angle::zero();
     Angle heading = wp.signedAngleBetween(v, w);
@@ -109,13 +181,6 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
   const Vector3D upp = up;
   const Vector3D wpp = vpp.cross(upp);
 
-  //Calculating Angles
-  /*
-  Angle heading = u.angleBetween(up);
-  Angle pitch = vp.angleBetween(vpp);
-  Angle roll = uppp.angleBetween(upp);
-   */
-
   Angle heading = v.signedAngleBetween(vp, w);
   Angle pitch = vpp.signedAngleBetween(vp, up);
   Angle roll = upp.signedAngleBetween(uppp, vpp);
@@ -123,6 +188,7 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
   return TaitBryanAngles(heading,
                          pitch,
                          roll.add(Angle::fromDegrees(180)));
+ */
 }
 
 ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
