@@ -301,6 +301,9 @@ public:
   ReferenceSystem getLocalReferenceSystem() const;
   ReferenceSystem getCameraReferenceSystem() const;
   TaitBryanAngles getTaitBryanAngles() const;
+  void setTaitBryanAngles(const Angle& heading,
+                          const Angle& pitch,
+                          const Angle& roll);
 
 private:
 //  const Angle getHeading(const Vector3D& normal) const;

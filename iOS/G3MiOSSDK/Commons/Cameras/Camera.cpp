@@ -409,3 +409,12 @@ TaitBryanAngles Camera::getTaitBryanAngles() const{
   ReferenceSystem cameraRS = getCameraReferenceSystem();
   return cameraRS.getTaitBryanAngles(localRS);
 }
+
+void Camera::setTaitBryanAngles(const Angle& heading,
+                        const Angle& pitch,
+                        const Angle& roll){
+
+  ReferenceSystem localRS = getLocalReferenceSystem();
+  ReferenceSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
+  setCameraReferenceSystem(newCameraRS);
+}
