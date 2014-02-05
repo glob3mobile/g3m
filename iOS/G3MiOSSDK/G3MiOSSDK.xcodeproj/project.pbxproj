@@ -188,6 +188,10 @@
 		CF6D724917185F370043C74B /* GroupCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */; };
 		CF6D724C171861770043C74B /* ColumnCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */; };
 		CF6D724D171861B80043C74B /* ColumnCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */; };
+		CF6FE3ED1899812800C05775 /* G3MMeshParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */; };
+		CF6FE3F01899852300C05775 /* G3MMeshMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */; };
+		CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */; };
+		CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */; };
 		CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75C39516E92CDF00F7EE9F /* HereLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */; };
@@ -670,6 +674,8 @@
 			dstSubfolderSpec = 16;
 			files = (
 				D856FBFD189BB5610053F514 /* ReferenceSystem.hpp in CopyFiles */,
+				CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */,
+				CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */,
 				D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */,
 				D874D09118900B4500610F85 /* BasicShadersGL2.hpp in CopyFiles */,
 				D874D09218900B4500610F85 /* Future.hpp in CopyFiles */,
@@ -1282,6 +1288,10 @@
 		CF6D724617185CF20043C74B /* GroupCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GroupCanvasElement.hpp; path = Commons/Basic/GroupCanvasElement.hpp; sourceTree = "<group>"; };
 		CF6D724A171861770043C74B /* ColumnCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnCanvasElement.cpp; path = Commons/Basic/ColumnCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6D724B171861770043C74B /* ColumnCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColumnCanvasElement.hpp; path = Commons/Basic/ColumnCanvasElement.hpp; sourceTree = "<group>"; };
+		CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MMeshParser.cpp; path = Commons/Mesh/G3MMeshParser.cpp; sourceTree = "<group>"; };
+		CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MMeshParser.hpp; path = Commons/Mesh/G3MMeshParser.hpp; sourceTree = "<group>"; };
+		CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MMeshMaterial.cpp; path = Commons/Mesh/G3MMeshMaterial.cpp; sourceTree = "<group>"; };
+		CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MMeshMaterial.hpp; path = Commons/Mesh/G3MMeshMaterial.hpp; sourceTree = "<group>"; };
 		CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalsUtils.cpp; path = Commons/Geometry/NormalsUtils.cpp; sourceTree = "<group>"; };
 		CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NormalsUtils.hpp; path = Commons/Geometry/NormalsUtils.hpp; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
@@ -2555,6 +2565,10 @@
 				CF290D4C187F149D000BE644 /* SimpleTextureMapping.hpp */,
 				CF290D4E187F1543000BE644 /* TransformableTextureMapping.cpp */,
 				CF290D4F187F1543000BE644 /* TransformableTextureMapping.hpp */,
+				CF6FE3EB1899812800C05775 /* G3MMeshParser.cpp */,
+				CF6FE3EC1899812800C05775 /* G3MMeshParser.hpp */,
+				CF6FE3EE1899852300C05775 /* G3MMeshMaterial.cpp */,
+				CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -2906,6 +2920,7 @@
 				CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */,
 				CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */,
 				CFD3D8B116D1729A00CE9242 /* WMSBilElevationDataProvider.cpp in Sources */,
+				CF6FE3F01899852300C05775 /* G3MMeshMaterial.cpp in Sources */,
 				CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */,
 				CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */,
 				CFDA835916D6698700295F96 /* FloatBufferElevationData.cpp in Sources */,
@@ -2965,6 +2980,7 @@
 				D80A286C1746474E0058CEC3 /* EllipsoidalPlanet.cpp in Sources */,
 				D8B749AB175E040900046B96 /* Ellipsoid.cpp in Sources */,
 				D8B749AE175E04FA00046B96 /* Sphere.cpp in Sources */,
+				CF6FE3ED1899812800C05775 /* G3MMeshParser.cpp in Sources */,
 				CFC3F8FA17510DA800986630 /* MapBooBuilder.cpp in Sources */,
 				CFC3F8FE175110FE00986630 /* MapBooBuilder_iOS.mm in Sources */,
 				CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */,

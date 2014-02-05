@@ -26,21 +26,6 @@ public class URLTemplateLayer extends Layer
   private IMathUtils   _mu;
   private IStringUtils _su;
 
-  private URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
-  {
-     this(urlTemplate, sector, isTransparent, timeToCache, readExpired, condition, parameters, (float)1.0);
-  }
-  private URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
-  {
-     super(condition, "URLTemplate", timeToCache, readExpired, parameters, transparency);
-     _urlTemplate = urlTemplate;
-     _sector = new Sector(sector);
-     _isTransparent = isTransparent;
-     _su = null;
-     _mu = null;
-  
-  }
-
   private String getPath(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, Sector sector)
   {
   
@@ -71,6 +56,7 @@ public class URLTemplateLayer extends Layer
     path = _su.replaceSubstring(path, "{height}", _su.toString(tileTextureResolution._y));
     path = _su.replaceSubstring(path, "{x}", _su.toString(column));
     path = _su.replaceSubstring(path, "{y}", _su.toString(row));
+    path = _su.replaceSubstring(path, "{y2}", _su.toString(tile._row));
     path = _su.replaceSubstring(path, "{level}", _su.toString(level));
     path = _su.replaceSubstring(path, "{lowerLatitude}", _su.toString(sector._lower._latitude._degrees));
     path = _su.replaceSubstring(path, "{lowerLongitude}", _su.toString(sector._lower._longitude._degrees));
@@ -138,6 +124,21 @@ public class URLTemplateLayer extends Layer
   public static URLTemplateLayer newWGS84(String urlTemplate, Sector sector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, float transparency)
   {
     return new URLTemplateLayer(urlTemplate, sector, isTransparent, timeToCache, readExpired, (condition == null) ? new LevelTileCondition(firstLevel, maxLevel) : condition, LayerTilesRenderParameters.createDefaultWGS84(sector, firstLevel, maxLevel), transparency);
+  }
+
+  public URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters)
+  {
+     this(urlTemplate, sector, isTransparent, timeToCache, readExpired, condition, parameters, (float)1.0);
+  }
+  public URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
+  {
+     super(condition, "URLTemplate", timeToCache, readExpired, parameters, transparency);
+     _urlTemplate = urlTemplate;
+     _sector = new Sector(sector);
+     _isTransparent = isTransparent;
+     _su = null;
+     _mu = null;
+  
   }
 
   public final String description()

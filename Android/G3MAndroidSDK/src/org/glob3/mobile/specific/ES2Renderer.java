@@ -46,8 +46,8 @@ public final class ES2Renderer
    }
 
 
-   void setOpenGLThread(final Thread openglThread) {
-      _nativeGL.setOpenGLThread(openglThread);
+   void setOpenGLThread(final Thread openGLThread) {
+      _nativeGL.setOpenGLThread(openGLThread);
    }
 
 

@@ -12,7 +12,7 @@ public class TileTextureBuilderStartTask extends FrameTask
   public void dispose()
   {
     _builder._release();
-  super.dispose();
+    super.dispose();
   }
 
   public final void execute(G3MRenderContext rc)

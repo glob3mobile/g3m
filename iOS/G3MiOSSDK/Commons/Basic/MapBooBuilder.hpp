@@ -646,6 +646,11 @@ public:
   const URL getServerURL() const {
     return _serverURL;
   }
+  
+  const URL createGetFeatureInfoRestURL(const Tile* tile,
+                                        const Vector2I* size,
+                                        const Vector2I* pixel,
+                                        const Geodetic3D& position);
 
 };
 

@@ -81,16 +81,11 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
   double x = vpp.dot(wp);
   if (x < -0.99999 && x > -1.000001){
     //Pitch -90
-    printf("PITCH -90\n");
-
     const Vector3D wpp = wppp; //No Roll
-
 
     Angle pitch = Angle::fromDegrees(-90);
     Angle roll = Angle::zero();
     Angle heading = v.signedAngleBetween(wpp, w);
-
-    printf("V: %s WP: %s W: %s\n", v.description().c_str(), wp.description().c_str(), w.description().c_str());
 
     return TaitBryanAngles(heading,
                            pitch,
@@ -98,8 +93,6 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
 
   } else if (x > 0.99999 && x < 1.000001){
     //Pitch 90
-    printf("PITCH 90\n");
-
     const Vector3D wpp = wppp; //No Roll
 
     Angle pitch = Angle::fromDegrees(90);
@@ -118,13 +111,6 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
   const Vector3D upp = up;
   const Vector3D wpp = upp.cross(vpp);
 
-  //Calculating Angles
-  /*
-   Angle heading = u.angleBetween(up);
-   Angle pitch = vp.angleBetween(vpp);
-   Angle roll = uppp.angleBetween(upp);
-   */
-
   Angle heading = u.signedAngleBetween(up, w);
   Angle pitch = vp.signedAngleBetween(vpp, up);
   Angle roll = wpp.signedAngleBetween(wppp, vpp);
@@ -132,63 +118,6 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
   return TaitBryanAngles(heading,
                          pitch,
                          roll);
-/*
-
-  //We know...
-
-  const Vector3D u = global._x;
-  const Vector3D v = global._y;
-  const Vector3D w = global._z;
-
-  const Vector3D uppp = _x;
-  const Vector3D vppp = _y;
-  const Vector3D wppp = _z;
-
-  const Vector3D wp = w;
-  const Vector3D vpp = vppp;
-
-  //We calculate
-
-  //Pitch "especial" positions
-  double x = vpp.dot(wp);
-  if (x < -0.99999 && x > -1.000001){
-    //Pitch -90
-    printf("PITCH -90\n");
-    Angle pitch = Angle::fromDegrees(-90);
-    Angle roll = Angle::zero();
-    Angle heading = wp.signedAngleBetween(v, w);
-
-    return TaitBryanAngles(heading.add(Angle::fromDegrees(90)),
-                           pitch,
-                           roll);
-
-  } else if (x > 0.99999 && x < 1.000001){
-    //Pitch 90
-    printf("PITCH 90\n");
-    Angle pitch = Angle::fromDegrees(90);
-    Angle roll = Angle::zero();
-    Angle heading = wp.signedAngleBetween(v, w);
-
-    return TaitBryanAngles(heading.add(Angle::fromDegrees(90)),
-                           pitch,
-                           roll);
-  }
-
-  //Normal formula
-  const Vector3D up = wp.cross(vpp);
-  const Vector3D vp = up.cross(wp);
-
-  const Vector3D upp = up;
-  const Vector3D wpp = vpp.cross(upp);
-
-  Angle heading = v.signedAngleBetween(vp, w);
-  Angle pitch = vpp.signedAngleBetween(vp, up);
-  Angle roll = upp.signedAngleBetween(uppp, vpp);
-
-  return TaitBryanAngles(heading,
-                         pitch,
-                         roll.add(Angle::fromDegrees(180)));
- */
 }
 
 ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
@@ -202,17 +131,6 @@ ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
   const Vector3D v = _y;
   const Vector3D w = _z;
 
-  /*
-  if (!areOrtogonal(u, v, w)){
-    printf("PROBLEM");
-  }
-
-  printf("U: %s,\nV: %s,\nW: %s\n",
-         u.description().c_str(),
-         v.description().c_str(),
-         w.description().c_str());
-   */
-
   //Heading rotation
   bool isHeadingZero = heading.isZero();
 
@@ -222,17 +140,6 @@ ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
   const Vector3D up = isHeadingZero ? u : u.transformedBy(hm, 1.0);
   const Vector3D vp = isHeadingZero ? v : v.transformedBy(hm, 1.0);
   const Vector3D wp = w;
-
-  /*
-  if (!areOrtogonal(up, vp, wp)){
-    printf("PROBLEM P\n");
-  }
-
-  printf("UP: %s,\nVP: %s,\nWP: %s\n",
-         up.description().c_str(),
-         vp.description().c_str(),
-         wp.description().c_str());
-   */
 
   //Pitch rotation
   bool isPitchZero = pitch.isZero();
@@ -244,18 +151,6 @@ ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
   const Vector3D vpp = isPitchZero? vp : vp.transformedBy(pm, 1.0);
   const Vector3D wpp = isPitchZero? wp : wp.transformedBy(pm, 1.0);
 
-  /*
-  if (!areOrtogonal(upp, vpp, wpp)){
-    printf("PROBLEM PP\n");
-  }
-
-  printf("UPP: %s,\nVPP: %s,\nWPP: %s\n",
-         upp.description().c_str(),
-         vpp.description().c_str(),
-         wpp.description().c_str());
-   */
-
-
   //Roll rotation
   bool isRollZero = roll.isZero();
 
@@ -265,17 +160,6 @@ ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
   const Vector3D uppp = isRollZero? upp : upp.transformedBy(rm, 1.0);
   const Vector3D vppp = vpp;
   const Vector3D wppp = isRollZero? wpp : wpp.transformedBy(rm, 1.0);
-
-  /*
-  if (!areOrtogonal(uppp, vppp, wppp)){
-    printf("PROBLEM PPP\n");
-  }
-
-  printf("UPPP: %s,\nVPPP: %s,\nWPPP: %s\n",
-         uppp.description().c_str(),
-         vppp.description().c_str(),
-         wppp.description().c_str());
-   */
 
   return ReferenceSystem(uppp, vppp, wppp, _origin);
 }
