@@ -26,7 +26,7 @@
 
 class ILogger;
 class GPUProgramState;
-class ReferenceSystem;
+class CoordinateSystem;
 class TaitBryanAngles;
 
 
@@ -298,8 +298,8 @@ public:
   Angle getRoll() const;
   void setRoll(const Angle& angle);
 
-  ReferenceSystem getLocalReferenceSystem() const;
-  ReferenceSystem getCameraReferenceSystem() const;
+  CoordinateSystem getLocalCoordinateSystem() const;
+  CoordinateSystem getCameraCoordinateSystem() const;
   TaitBryanAngles getTaitBryanAngles() const;
   void setTaitBryanAngles(const Angle& heading,
                           const Angle& pitch,
@@ -433,7 +433,7 @@ private:
 
 
 
-  void setCameraReferenceSystem(const ReferenceSystem& rs);
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
 

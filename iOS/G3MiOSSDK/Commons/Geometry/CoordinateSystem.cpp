@@ -1,5 +1,5 @@
 //
-//  ReferenceSystem.cpp
+//  CoordinateSystem.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 29/01/14.
@@ -13,23 +13,23 @@
 #include "IStringBuilder.hpp"
 #include "TaitBryanAngles.hpp"
 
-#include "ReferenceSystem.hpp"
+#include "CoordinateSystem.hpp"
 
-ReferenceSystem ReferenceSystem::global(){
-  return ReferenceSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
-}
+//CoordinateSystem CoordinateSystem::global(){
+//  return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
+//}
 
-ReferenceSystem::ReferenceSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin):
+CoordinateSystem::CoordinateSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin):
 _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
 {
   //TODO CHECK CONSISTENCY
   if (!areOrtogonal(x, y, z)){
-    ILogger::instance()->logError("Inconsistent ReferenceSystem created.");
+    ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
   }
 }
 
 //For camera
-ReferenceSystem::ReferenceSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin):
+CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin):
 _x(viewDirection.cross(up).normalized()),
 _y(viewDirection.normalized()),
 _z(up.normalized()),
@@ -37,15 +37,15 @@ _origin(origin)
 {
 }
 
-bool ReferenceSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z){
+bool CoordinateSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z){
   return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
 }
 
-ReferenceSystem ReferenceSystem::changeOrigin(const Vector3D& newOrigin) const{
-  return ReferenceSystem(_x, _y, _z, newOrigin);
+CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const{
+  return CoordinateSystem(_x, _y, _z, newOrigin);
 }
 
-Mesh* ReferenceSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const{
+Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const{
 
   FloatBufferBuilderFromColor colors;
 
@@ -82,7 +82,7 @@ Mesh* ReferenceSystem::createMesh(double size, const Color& xColor, const Color&
   return dm;
 }
 
-TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& global) const{
+TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& global) const{
 
   //We know...
 
@@ -142,11 +142,11 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
                          roll);
 }
 
-ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const TaitBryanAngles& angles) const{
+CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const TaitBryanAngles& angles) const{
   return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
 }
 
-ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
+CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading,
                                                       const Angle& pitch,
                                                       const Angle& roll) const{
 
@@ -187,11 +187,11 @@ ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
   const Vector3D vppp = vpp;
   const Vector3D wppp = isRollZero? wpp : wpp.transformedBy(rm, 1.0);
 
-  return ReferenceSystem(uppp, vppp, wppp, _origin);
+  return CoordinateSystem(uppp, vppp, wppp, _origin);
 }
 
 
-bool ReferenceSystem::isEqualsTo(const ReferenceSystem& that) const{
+bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const{
   return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }
 

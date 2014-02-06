@@ -136,7 +136,7 @@
 #import <G3MiOSSDK/PlanetRenderer.hpp>
 #import <G3MiOSSDK/G3MMeshParser.hpp>
 
-#import <G3MiOSSDK/ReferenceSystem.hpp>
+#import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
 
 
@@ -660,12 +660,12 @@ public:
       Angle angle = plane.vectorRotationForAxis(v2, axis);
     }
 
-    //ReferenceSystem sr = ReferenceSystem::global();
+    //CoordinateSystem sr = CoordinateSystem::global();
     double lat = 28.96384553643802, lon = -13.60974902228918;
-    ReferenceSystem sr = planet->getReferenceSystemAt(Geodetic3D::fromDegrees(lat, lon, 0));
+    CoordinateSystem sr = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(lat, lon, 0));
 
     //Heading
-    ReferenceSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(170, 80, 10))
+    CoordinateSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(170, 80, 10))
     .changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(lat, lon, 1.5e4)));
 
     meshRenderer->addMesh( sr.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
@@ -3213,8 +3213,8 @@ public:
             Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
 
 
-            _meshRenderer->addMesh(cam->getLocalReferenceSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
-            _meshRenderer->addMesh(cam->getCameraReferenceSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+            _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+            _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
 
 
             return true;
