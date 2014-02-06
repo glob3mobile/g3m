@@ -21,11 +21,9 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class ILogger;
 //class GPUProgramState;
-//class CoordinateSystem;
-//class TaitBryanAngles;
-
 
 public class CameraDirtyFlags
 {

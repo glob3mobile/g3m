@@ -333,16 +333,21 @@ public class Tile
     }
   
     final Camera camera = rc.getCurrentCamera();
-    final Vector2F pN = camera.point2Pixel(_middleNorthPoint);
-    final Vector2F pS = camera.point2Pixel(_middleSouthPoint);
-    final Vector2F pE = camera.point2Pixel(_middleEastPoint);
-    final Vector2F pW = camera.point2Pixel(_middleWestPoint);
   
-    final double latitudeMiddleDistSquared = pN.squaredDistanceTo(pS);
-    final double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
+    /* //PREVIOUS METHOD NOT BASED IN ANGULAR DISTANCE
+    const Vector2F pN = camera->point2Pixel(*_middleNorthPoint);
+    const Vector2F pS = camera->point2Pixel(*_middleSouthPoint);
+    const Vector2F pE = camera->point2Pixel(*_middleEastPoint);
+    const Vector2F pW = camera->point2Pixel(*_middleWestPoint);
+    const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
+    const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
+     */
   
-  //  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
-  //  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
+    final double pixelsDistanceNS = camera.getEstimatedPixelDistance(_middleNorthPoint, _middleSouthPoint);
+    final double pixelsDistanceWE = camera.getEstimatedPixelDistance(_middleWestPoint, _middleEastPoint);
+  
+    final double latitudeMiddleDistSquared = pixelsDistanceNS * pixelsDistanceNS;
+    final double longitudeMiddleDistSquared = pixelsDistanceWE * pixelsDistanceWE;
   
     final double latitudeMiddleArcDistSquared = latitudeMiddleDistSquared * _latitudeArcSegmentRatioSquared;
     final double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;

@@ -7,10 +7,13 @@
  *
  */
 
-#ifndef CAMERA
-#define CAMERA
+#ifndef G3MiOSSDK_Camera
+#define G3MiOSSDK_Camera
 
 #include <math.h>
+
+#include "CoordinateSystem.hpp"
+#include "TaitBryanAngles.hpp"
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
@@ -26,9 +29,6 @@
 
 class ILogger;
 class GPUProgramState;
-class CoordinateSystem;
-class TaitBryanAngles;
-
 
 class CameraDirtyFlags {
 private:
@@ -304,6 +304,8 @@ public:
   void setTaitBryanAngles(const Angle& heading,
                           const Angle& pitch,
                           const Angle& roll);
+
+  double getEstimatedPixelDistance(const Vector3D& point0, const Vector3D& point1) const;
 
 private:
 //  const Angle getHeading(const Vector3D& normal) const;

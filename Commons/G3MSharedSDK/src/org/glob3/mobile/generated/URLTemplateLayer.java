@@ -26,7 +26,12 @@ public class URLTemplateLayer extends Layer
   private IMathUtils   _mu;
   private IStringUtils _su;
 
-  private String getPath(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, Sector sector)
+  protected final String getLayerType()
+  {
+    return "URLTemplate";
+  }
+
+  protected String getPath(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, Sector sector)
   {
   
     if (_mu == null)
@@ -68,11 +73,6 @@ public class URLTemplateLayer extends Layer
     path = _su.replaceSubstring(path, "{east}", _su.toString(east));
   
     return path;
-  }
-
-  protected final String getLayerType()
-  {
-    return "URLTemplate";
   }
 
   protected final boolean rawIsEquals(Layer that)
