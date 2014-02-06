@@ -21,13 +21,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark TaitBryanAngles
-
-
-
-
-
 
 public class ReferenceSystem
 {
