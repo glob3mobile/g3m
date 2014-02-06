@@ -14,7 +14,7 @@
 #include "Sphere.hpp"
 #include "Sector.hpp"
 
-#include "ReferenceSystem.hpp"
+#include "CoordinateSystem.hpp"
 #include "TaitBryanAngles.hpp"
 
 void Camera::initialize(const G3MContext* context) {
@@ -121,9 +121,9 @@ void Camera::setHeading(const Angle& angle) {
   //ILogger::instance()->logInfo("SET CAMERA HEADING: %f", angle._degrees);
   TaitBryanAngles angles = getTaitBryanAngles();
 
-  ReferenceSystem localRS = getLocalReferenceSystem();
-  ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
-  setCameraReferenceSystem(cameraRS);
+  CoordinateSystem localRS = getLocalCoordinateSystem();
+  CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
+  setCameraCoordinateSystem(cameraRS);
 }
 
 const Angle Camera::getPitch() const {
@@ -133,9 +133,9 @@ const Angle Camera::getPitch() const {
 void Camera::setPitch(const Angle& angle) {
   //ILogger::instance()->logInfo("SET CAMERA PITCH: %f", angle._degrees);
   TaitBryanAngles angles = getTaitBryanAngles();
-  ReferenceSystem localRS = getLocalReferenceSystem();
-  ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
-  setCameraReferenceSystem(cameraRS);
+  CoordinateSystem localRS = getLocalCoordinateSystem();
+  CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
+  setCameraCoordinateSystem(cameraRS);
 }
 
 void Camera::setGeodeticPosition(const Geodetic3D& g3d) {
@@ -382,32 +382,32 @@ void Camera::setRoll(const Angle& angle) {
   //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
   TaitBryanAngles angles = getTaitBryanAngles();
 
-  ReferenceSystem localRS = getLocalReferenceSystem();
-  ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
-  setCameraReferenceSystem(cameraRS);
+  CoordinateSystem localRS = getLocalCoordinateSystem();
+  CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
+  setCameraCoordinateSystem(cameraRS);
 }
 
 Angle Camera::getRoll() const {
   return getTaitBryanAngles()._roll;
 }
 
-ReferenceSystem Camera::getLocalReferenceSystem() const{
-  return _planet->getReferenceSystemAt(getGeodeticPosition());
+CoordinateSystem Camera::getLocalCoordinateSystem() const{
+  return _planet->getCoordinateSystemAt(getGeodeticPosition());
 }
 
-ReferenceSystem Camera::getCameraReferenceSystem() const{
-  return ReferenceSystem(getViewDirection(), getUp(), getCartesianPosition());
+CoordinateSystem Camera::getCameraCoordinateSystem() const{
+  return CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
 }
 
-void Camera::setCameraReferenceSystem(const ReferenceSystem& rs){
+void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs){
   _center = _position.add(rs._y.asMutableVector3D());
   _up = rs._z.asMutableVector3D();
   _dirtyFlags.setAll(true);  //Recalculate Everything
 }
 
 TaitBryanAngles Camera::getTaitBryanAngles() const{
-  ReferenceSystem localRS = getLocalReferenceSystem();
-  ReferenceSystem cameraRS = getCameraReferenceSystem();
+  CoordinateSystem localRS = getLocalCoordinateSystem();
+  CoordinateSystem cameraRS = getCameraCoordinateSystem();
   return cameraRS.getTaitBryanAngles(localRS);
 }
 
@@ -415,7 +415,7 @@ void Camera::setTaitBryanAngles(const Angle& heading,
                         const Angle& pitch,
                         const Angle& roll){
 
-  ReferenceSystem localRS = getLocalReferenceSystem();
-  ReferenceSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
-  setCameraReferenceSystem(newCameraRS);
+  CoordinateSystem localRS = getLocalCoordinateSystem();
+  CoordinateSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
+  setCameraCoordinateSystem(newCameraRS);
 }
