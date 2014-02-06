@@ -11,6 +11,18 @@ package org.glob3.mobile.generated;
 
 
 
+//For camera
+
+
+
+
+
+
+
+
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark TaitBryanAngles
 
 
 
@@ -19,6 +31,29 @@ package org.glob3.mobile.generated;
 
 public class ReferenceSystem
 {
+   public ReferenceSystem global()
+   {
+     return new ReferenceSystem(Vector3D.upX(), Vector3D.upY(), Vector3D.upZ(), Vector3D.zero);
+   }
+   public ReferenceSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
+   {
+      _x = x.normalized();
+      _y = y.normalized();
+      _z = z.normalized();
+      _origin = origin;
+     //TODO CHECK CONSISTENCY
+     if (!areOrtogonal(x, y, z))
+     {
+       ILogger.instance().logError("Inconsistent ReferenceSystem created.");
+     }
+   }
+   public ReferenceSystem(Vector3D viewDirection, Vector3D up, Vector3D origin)
+   {
+      _x = viewDirection.cross(up).normalized();
+      _y = viewDirection.normalized();
+      _z = up.normalized();
+      _origin = origin;
+   }
    public boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
    {
      return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
@@ -111,6 +146,10 @@ public class ReferenceSystem
      Angle roll = wpp.signedAngleBetween(wppp, vpp);
    
      return new TaitBryanAngles(heading, pitch, roll);
+   }
+   public ReferenceSystem applyTaitBryanAngles(TaitBryanAngles angles)
+   {
+     return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
    }
    public ReferenceSystem applyTaitBryanAngles(Angle heading, Angle pitch, Angle roll)
    {

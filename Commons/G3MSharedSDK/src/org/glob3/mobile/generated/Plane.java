@@ -172,6 +172,7 @@ public class Plane
   
     //Calculating k's
   
+    //Symplified by mathematica
     final double k1 = (d1_2 *x - a*(b *y + c *z))/d2_2;
     final double k2 = (-(c *d2 *y) + b *d2 *z)/d2_2;
     final double k3 = (a*(a *x + b *y + c *z))/d2_2;
@@ -183,20 +184,6 @@ public class Plane
     final double k7 = -((-(a *c *d1_2 *x) + b *d2_2*(c *y - b *z) + a_2 *c*(b *y + c *z))/(d1_2 *d2_2));
     final double k8 = (-(b *d1_2 *x) + a *b_2 *y - a *c_2 *y + 2 *a *b *c *z)/(d1_2 *d2);
     final double k9 = -((c*(a *x + b *y + c *z))/d2_2);
-  
-    /*
-    const double k1 = (d1_2*x - a*(b*y + c*z))/ d2_2; // * COS
-    const double k2 = (-(c*d2*y) + b*d2*z) / d2_2; // * SIN
-    const double k3 = (a*(a*x + b*y + c*z)) / d2_2; // * 1
-  
-    const double k4 = (-(a*b*d1_2*x) + c*d2_2*(-(c*y) + b*z) + a_2*b*(b*y + c*z)) / (d1_2 * d2_2);
-    const double k5 = d2* (-(c*d1_2*x) + 2*a*b*c*y - a*b_2*z + a*c_2*z) / (d1_2 * d2_2);
-    const double k6 = (d1_2*b*(a*x + b*y + c*z)) / (d1_2 * d2_2);
-  
-    const double k7 = (a*c*d1_2*x - b*d2_2*(c*y - b*z) - a_2*c*(b*y + c*z)) / (d1_2 * d2_2);
-    const double k8 = d2*(-(b*d1_2*x) + a*b_2*y - a*c_2*y + 2*a*b*c*z) / (d1_2 * d2_2);
-    const double k9 = -(c*d1_2*(a*x + b*y + c*z)) / (d1_2 * d2_2);
-  */
   
   /*
   
@@ -236,71 +223,36 @@ public class Plane
     final double secondSolution = mu.acos(c2);
   
     //Considering the lower angle to rotate as solution
-    double solution = firstSolution < secondSolution != 0? firstSolution : secondSolution;
+    double solution = firstSolution;
+    if (firstSolution > secondSolution) //Taking smaller value
+    {
+      solution = secondSolution;
+    }
   
-  //  double ss = (s1 * c1 + s2*SIN(solution) + s3);
-  //  double ss2 = (s1 * c1 + s2*SIN(-solution) + s3);
     if (mu.abs((s1 * c1 + s2 *java.lang.Math.sin(solution) + s3)) > 0.001) //if valid solution (can't compare with 0)
     {
       solution = -solution;
     }
-  /*
-    printf("k1 = %f\n", k1);
-    printf("k2 = %f\n", k2);
-    printf("k3 = %f\n", k3);
-    printf("k4 = %f\n", k4);
-    printf("k5 = %f\n", k5);
-    printf("k6 = %f\n", k6);
-    printf("k7 = %f\n", k7);
-    printf("k8 = %f\n", k8);
-    printf("k9 = %f\n", k9);
-  */
   
     //*********
+    /*
      //Check code
-    Angle res = Angle.fromRadians(solution);
+    Angle res = Angle::fromRadians(solution);
     Vector3D nv = vector.rotateAroundAxis(axis, res);
-    if (!isVectorParallel(nv))
-    {
+    if (!isVectorParallel(nv)){
   
-      ILogger.instance().logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f", vector.description(), axis.description(), res.description(), _normal.dot(nv));
-  
-  //    Vector3D nv = vector.rotateAroundAxis(axis, res.times(-1));
-  //
-  //    double d = _normal.dot(nv);
-  //    d++;
-  
-  
+      ILogger::instance()->logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f",
+                                    vector.description().c_str(),
+                                    axis.description().c_str(),
+                                    res.description().c_str(),
+                                    _normal.dot(nv));
     }
-  
+  */
   
   
      //**********
   
-  
-  
     return Angle.fromRadians(solution);
-  
-  
-  /*
-    //Check if the solution is valid
-    if ((s1 * c1 + s2*SIN(firstSolution) + s3) > 0.1){
-      firstSolution = -firstSolution;
-    }
-  
-    //Check if the solution is valid
-    if ((s1 * c2 + s2*SIN(secondSolution) + s3) != 0){
-      secondSolution = -secondSolution;
-    }
-  
-    //We return the shortest angle
-    if (mu->abs(firstSolution) < mu->abs(secondSolution)) {
-      return Angle::fromRadians(firstSolution);
-    } else{
-      return Angle::fromRadians(secondSolution);
-    }
-  
-   */
   
   }
 
