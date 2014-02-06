@@ -494,22 +494,11 @@ public class Camera
     }
   }
 
-
-  /*
-  void Camera::setRoll(const Angle& angle) {
-    const Angle delta = angle.sub(Angle::fromRadians(_rollInRadians));
-    if (delta._radians != 0) {
-      _rollInRadians = angle._radians;
-      rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
-    }
+  public final Angle getRoll()
+  {
+    return getTaitBryanAngles()._roll;
   }
-  
-  Angle getRoll() const {
-    return Angle::fromRadians(_rollInRadians);
-  }
-   */
-  
-  public final void Camera.setRoll(Angle angle)
+  public final void setRoll(Angle angle)
   {
     //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
     TaitBryanAngles angles = getTaitBryanAngles();
@@ -518,8 +507,6 @@ public class Camera
     CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
     setCameraCoordinateSystem(cameraRS);
   }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void setRoll(Angle angle);
 
   public final CoordinateSystem getLocalCoordinateSystem()
   {
