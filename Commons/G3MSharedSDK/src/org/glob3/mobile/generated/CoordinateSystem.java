@@ -63,6 +63,13 @@ Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color
 
 public class CoordinateSystem
 {
+	
+	Vector3D _x;
+	Vector3D _y;
+	Vector3D _z;
+	Vector3D _origin;
+	
+	
    public CoordinateSystem global()
    {
      return new CoordinateSystem(Vector3D.upX(), Vector3D.upY(), Vector3D.upZ(), Vector3D.zero);

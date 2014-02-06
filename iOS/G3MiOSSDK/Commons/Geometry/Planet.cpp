@@ -12,7 +12,8 @@
 #include "SphericalPlanet.hpp"
 #include "FlatPlanet.hpp"
 
-#include "CoordinateSystem.cpp"
+
+#include "CoordinateSystem.hpp"
 #include "Vector3D.hpp"
 #include "Geodetic3D.hpp"
 #include "Plane.hpp"

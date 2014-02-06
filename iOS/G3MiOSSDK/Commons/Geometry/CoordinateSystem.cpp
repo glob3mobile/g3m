@@ -6,8 +6,6 @@
 //
 //
 
-
-
 #include "CoordinateSystem.hpp"
 
 CoordinateSystem CoordinateSystem::global(){
