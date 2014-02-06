@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  ReferenceSystem.cpp
+//  CoordinateSystem.cpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 29/01/14.
@@ -9,6 +9,9 @@ package org.glob3.mobile.generated;
 
 
 
+//CoordinateSystem CoordinateSystem::global(){
+//  return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
+//}
 
 
 //For camera
@@ -22,13 +25,9 @@ package org.glob3.mobile.generated;
 
 
 
-public class ReferenceSystem
+public class CoordinateSystem
 {
-   public ReferenceSystem global()
-   {
-     return new ReferenceSystem(Vector3D.upX(), Vector3D.upY(), Vector3D.upZ(), Vector3D.zero);
-   }
-   public ReferenceSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
+   public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
    {
       _x = x.normalized();
       _y = y.normalized();
@@ -37,10 +36,10 @@ public class ReferenceSystem
      //TODO CHECK CONSISTENCY
      if (!areOrtogonal(x, y, z))
      {
-       ILogger.instance().logError("Inconsistent ReferenceSystem created.");
+       ILogger.instance().logError("Inconsistent CoordinateSystem created.");
      }
    }
-   public ReferenceSystem(Vector3D viewDirection, Vector3D up, Vector3D origin)
+   public CoordinateSystem(Vector3D viewDirection, Vector3D up, Vector3D origin)
    {
       _x = viewDirection.cross(up).normalized();
       _y = viewDirection.normalized();
@@ -51,9 +50,9 @@ public class ReferenceSystem
    {
      return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
    }
-   public ReferenceSystem changeOrigin(Vector3D newOrigin)
+   public CoordinateSystem changeOrigin(Vector3D newOrigin)
    {
-     return new ReferenceSystem(_x, _y, _z, newOrigin);
+     return new CoordinateSystem(_x, _y, _z, newOrigin);
    }
    public Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
    {
@@ -83,7 +82,7 @@ public class ReferenceSystem
    
      return dm;
    }
-   public TaitBryanAngles getTaitBryanAngles(ReferenceSystem global)
+   public TaitBryanAngles getTaitBryanAngles(CoordinateSystem global)
    {
    
      //We know...
@@ -140,11 +139,11 @@ public class ReferenceSystem
    
      return new TaitBryanAngles(heading, pitch, roll);
    }
-   public ReferenceSystem applyTaitBryanAngles(TaitBryanAngles angles)
+   public CoordinateSystem applyTaitBryanAngles(TaitBryanAngles angles)
    {
      return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
    }
-   public ReferenceSystem applyTaitBryanAngles(Angle heading, Angle pitch, Angle roll)
+   public CoordinateSystem applyTaitBryanAngles(Angle heading, Angle pitch, Angle roll)
    {
    
      //Check out Agustin Trujillo's review of this topic
@@ -181,9 +180,9 @@ public class ReferenceSystem
      final Vector3D vppp = vpp;
      final Vector3D wppp = isRollZero? wpp : wpp.transformedBy(rm, 1.0);
    
-     return new ReferenceSystem(uppp, vppp, wppp, _origin);
+     return new CoordinateSystem(uppp, vppp, wppp, _origin);
    }
-   public boolean isEqualsTo(ReferenceSystem that)
+   public boolean isEqualsTo(CoordinateSystem that)
    {
      return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
    }
