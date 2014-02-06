@@ -15,6 +15,7 @@
 #include "Sector.hpp"
 
 #include "ReferenceSystem.hpp"
+#include "TaitBryanAngles.hpp"
 
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();

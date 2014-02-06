@@ -137,6 +137,7 @@
 #import <G3MiOSSDK/G3MMeshParser.hpp>
 
 #import <G3MiOSSDK/ReferenceSystem.hpp>
+#import <G3MiOSSDK/TaitBryanAngles.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {

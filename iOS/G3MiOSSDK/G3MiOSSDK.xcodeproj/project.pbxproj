@@ -396,6 +396,8 @@
 		D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */; };
 		D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */; };
 		D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */; };
+		D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */; };
+		D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -673,6 +675,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */,
 				D856FBFD189BB5610053F514 /* ReferenceSystem.hpp in CopyFiles */,
 				CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */,
 				CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */,
@@ -1564,6 +1567,8 @@
 		D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix44DProvider.cpp; path = Commons/Geometry/Matrix44DProvider.cpp; sourceTree = "<group>"; };
 		D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneLighting.hpp; path = Commons/Basic/SceneLighting.hpp; sourceTree = "<group>"; };
 		D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLighting.cpp; path = Commons/Basic/SceneLighting.cpp; sourceTree = "<group>"; };
+		D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaitBryanAngles.cpp; path = Commons/Geometry/TaitBryanAngles.cpp; sourceTree = "<group>"; };
+		D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TaitBryanAngles.hpp; path = Commons/Geometry/TaitBryanAngles.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81D2071160748EA009A8BA6 /* GLConstants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLConstants.cpp; sourceTree = "<group>"; };
@@ -2134,6 +2139,8 @@
 				CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */,
 				D8F2EBAB18994A7B001B6103 /* ReferenceSystem.cpp */,
 				D8F2EBAC18994A7B001B6103 /* ReferenceSystem.hpp */,
+				D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */,
+				D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2974,6 +2981,7 @@
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
 				D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */,
 				D88EE1BE1869A44900AED85A /* MultiTextureMapping.cpp in Sources */,
+				D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */,
 				D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */,
 				D80A28711746572E0058CEC3 /* GLState.cpp in Sources */,
 				D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */,
