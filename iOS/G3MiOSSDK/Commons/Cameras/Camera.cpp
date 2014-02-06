@@ -14,9 +14,6 @@
 #include "Sphere.hpp"
 #include "Sector.hpp"
 
-#include "CoordinateSystem.hpp"
-#include "TaitBryanAngles.hpp"
-
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
   if (_planet->isFlat()) {

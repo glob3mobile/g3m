@@ -56,4 +56,4 @@ public:
 
 };
 
-#endif /* defined(__G3MiOSSDK__CoordinateSystem__) */
+#endif

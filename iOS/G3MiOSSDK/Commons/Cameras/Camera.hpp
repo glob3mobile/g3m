@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef CAMERA
-#define CAMERA
+#ifndef G3MiOSSDK_Camera
+#define G3MiOSSDK_Camera
 
 #include <math.h>
 
@@ -26,9 +26,9 @@
 
 class ILogger;
 class GPUProgramState;
-class CoordinateSystem;
-class TaitBryanAngles;
 
+#include "TaitBryanAngles.hpp"
+#include "CoordinateSystem.hpp"
 
 class CameraDirtyFlags {
 private:
