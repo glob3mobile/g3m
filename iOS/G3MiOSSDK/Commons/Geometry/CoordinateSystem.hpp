@@ -13,14 +13,15 @@
 #include <string>
 
 
-#include "Vector3D.hpp"
+//#include "Vector3D.hpp"
 
+class Vector3D;
 class Mesh;
 class Color;
 class TaitBryanAngles;
 class Angle;
 
-class CoordinateSystem{
+class CoordinateSystem {
 
 public:
 
