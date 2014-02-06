@@ -6,14 +6,14 @@
 //
 //
 
-#include "ReferenceSystem.hpp"
-
 #include "DirectMesh.hpp"
 #include "Color.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "IStringBuilder.hpp"
 #include "TaitBryanAngles.hpp"
+
+#include "ReferenceSystem.hpp"
 
 ReferenceSystem ReferenceSystem::global(){
   return ReferenceSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);

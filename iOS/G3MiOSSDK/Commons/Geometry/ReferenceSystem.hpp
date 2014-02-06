@@ -12,12 +12,13 @@
 #include <iostream>
 #include <string>
 
+
+#include "Vector3D.hpp"
+
 class Mesh;
 class Color;
 class TaitBryanAngles;
 class Angle;
-
-#include "Vector3D.hpp"
 
 class ReferenceSystem{
 
