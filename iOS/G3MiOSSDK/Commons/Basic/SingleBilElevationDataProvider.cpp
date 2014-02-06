@@ -39,7 +39,7 @@ _listener(NULL)
 
 class SingleBilElevationDataProvider_BufferDownloadListener : public IBufferDownloadListener {
 private:
-  SingleBilElevationDataProvider* _singleBillElevationDataProvider;
+  SingleBilElevationDataProvider* _singleBilElevationDataProvider;
   const Sector _sector;
   const int _resolutionWidth;
   const int _resolutionHeight;
@@ -47,12 +47,12 @@ private:
   const double _deltaHeight;
 
 public:
-  SingleBilElevationDataProvider_BufferDownloadListener(SingleBilElevationDataProvider* singleBillElevationDataProvider,
+  SingleBilElevationDataProvider_BufferDownloadListener(SingleBilElevationDataProvider* singleBilElevationDataProvider,
                                                          const Sector& sector,
                                                          int resolutionWidth,
                                                          int resolutionHeight,
                                                          double deltaHeight) :
-  _singleBillElevationDataProvider(singleBillElevationDataProvider),
+  _singleBilElevationDataProvider(singleBilElevationDataProvider),
   _sector(sector),
   _resolutionWidth(resolutionWidth),
   _resolutionHeight(resolutionHeight),
@@ -62,33 +62,33 @@ public:
   }
 
   void notifyProviderHasBeenDeleted() {
-    _singleBillElevationDataProvider = NULL;
+    _singleBilElevationDataProvider = NULL;
   }
 
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    if (_singleBillElevationDataProvider != NULL) {
+    if (_singleBilElevationDataProvider != NULL) {
       ShortBufferElevationData* elevationData = BilParser::parseBil16(_sector,
                                                                       Vector2I(_resolutionWidth, _resolutionHeight),
                                                                       buffer,
                                                                       _deltaHeight);
 
-      _singleBillElevationDataProvider->onElevationData(elevationData);
+      _singleBilElevationDataProvider->onElevationData(elevationData);
     }
     delete buffer;
   }
 
   void onError(const URL& url) {
-    if (_singleBillElevationDataProvider != NULL) {
-      _singleBillElevationDataProvider->onElevationData(NULL);
+    if (_singleBilElevationDataProvider != NULL) {
+      _singleBilElevationDataProvider->onElevationData(NULL);
     }
   }
 
   void onCancel(const URL& url) {
     ILogger::instance()->logInfo("SingleBilElevationDataProvider download petition was canceled.");
-    if (_singleBillElevationDataProvider != NULL) {
-      _singleBillElevationDataProvider->onElevationData(NULL);
+    if (_singleBilElevationDataProvider != NULL) {
+      _singleBilElevationDataProvider->onElevationData(NULL);
     }
   }
 

@@ -25,7 +25,7 @@
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #include <G3MiOSSDK/MarkTouchListener.hpp>
 
 class G3MVectorialDemoScene_RestaurantMarkTouchListener : public MarkTouchListener {
