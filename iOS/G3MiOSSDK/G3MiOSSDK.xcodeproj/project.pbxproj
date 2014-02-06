@@ -396,10 +396,13 @@
 		D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80E59B3170B155C00E7C799 /* GPUProgramManager.cpp */; };
 		D80FAADC17CB81B600ACD249 /* Matrix44DProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */; };
 		D80FAADF17CB82EE00ACD249 /* SceneLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */; };
+		D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */; };
+		D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
+		D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */; };
 		D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */; };
 		D874D08E18900B1600610F85 /* SingleBilElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */; };
 		D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */; };
@@ -457,6 +460,7 @@
 		D8D894EE17731B6A007E41A5 /* GPUVariable.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8D894EC17731870007E41A5 /* GPUVariable.hpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */; };
+		D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */; };
 		D8FBCA981797F88300DBBB90 /* GLGlobalState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */; };
 		E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* PlanetRendererBuilder.cpp */; };
 		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
@@ -671,6 +675,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */,
+				D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */,
 				CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */,
 				CF6FE3F21899A2AC00C05775 /* G3MMeshMaterial.hpp in CopyFiles */,
 				D874D09018900B4500610F85 /* SingleBilElevationDataProvider.hpp in CopyFiles */,
@@ -1561,6 +1567,8 @@
 		D80FAADB17CB81B600ACD249 /* Matrix44DProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix44DProvider.cpp; path = Commons/Geometry/Matrix44DProvider.cpp; sourceTree = "<group>"; };
 		D80FAADD17CB82ED00ACD249 /* SceneLighting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneLighting.hpp; path = Commons/Basic/SceneLighting.hpp; sourceTree = "<group>"; };
 		D80FAADE17CB82EE00ACD249 /* SceneLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneLighting.cpp; path = Commons/Basic/SceneLighting.cpp; sourceTree = "<group>"; };
+		D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaitBryanAngles.cpp; path = Commons/Geometry/TaitBryanAngles.cpp; sourceTree = "<group>"; };
+		D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TaitBryanAngles.hpp; path = Commons/Geometry/TaitBryanAngles.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = GL.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D81D2071160748EA009A8BA6 /* GLConstants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLConstants.cpp; sourceTree = "<group>"; };
@@ -1578,7 +1586,7 @@
 		D8715C1C17032AC700CF7BE2 /* GPUProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUProgram.cpp; sourceTree = "<group>"; };
 		D8715C1D17032AC700CF7BE2 /* GPUProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUProgram.hpp; sourceTree = "<group>"; };
 		D8715C1F170344FB00CF7BE2 /* GPUAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GPUAttribute.hpp; sourceTree = "<group>"; };
-		D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleBilElevationDataProvider.cpp; path = Commons/Basic/SingleBilElevationDataProvider.cpp; sourceTree = "<group>"; };
+		D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = SingleBilElevationDataProvider.cpp; path = Commons/Basic/SingleBilElevationDataProvider.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleBilElevationDataProvider.hpp; path = Commons/Basic/SingleBilElevationDataProvider.hpp; sourceTree = "<group>"; };
 		D8765CFC1779C3AE004B62F4 /* AbstractGeometryMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstractGeometryMesh.cpp; path = Commons/Mesh/AbstractGeometryMesh.cpp; sourceTree = "<group>"; };
 		D8765CFD1779C3AE004B62F4 /* AbstractGeometryMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractGeometryMesh.hpp; path = Commons/Mesh/AbstractGeometryMesh.hpp; sourceTree = "<group>"; };
@@ -1675,6 +1683,8 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GenericQuadTree.hpp; path = Commons/Basic/GenericQuadTree.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GenericQuadTree.cpp; path = Commons/Basic/GenericQuadTree.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoordinateSystem.cpp; path = Commons/Geometry/CoordinateSystem.cpp; sourceTree = "<group>"; };
+		D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CoordinateSystem.hpp; path = Commons/Geometry/CoordinateSystem.hpp; sourceTree = "<group>"; };
 		D8FBCA971797F87900DBBB90 /* GLGlobalState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLGlobalState.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
@@ -2127,6 +2137,10 @@
 				FB2B1B2617F880B5006307EC /* Quadric.hpp */,
 				CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */,
 				CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */,
+				D8F2EBAB18994A7B001B6103 /* CoordinateSystem.cpp */,
+				D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */,
+				D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */,
+				D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2896,6 +2910,7 @@
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
 				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
+				D8F2EBAD18994A7B001B6103 /* CoordinateSystem.cpp in Sources */,
 				CFCAEC4916BB20D500CDC17D /* ShapeOrbitCameraEffect.cpp in Sources */,
 				CF65361316BC41B2001F9139 /* ShapePositionEffect.cpp in Sources */,
 				CF6B5F5D16C1910500C590C1 /* JSONDouble.cpp in Sources */,
@@ -2966,6 +2981,7 @@
 				441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */,
 				D8A76ECD1744F02400E0FFE8 /* GPUAttribute.cpp in Sources */,
 				D88EE1BE1869A44900AED85A /* MultiTextureMapping.cpp in Sources */,
+				D8173ECA18A3A2D6001E7B57 /* TaitBryanAngles.cpp in Sources */,
 				D8A76ECF1744F0C900E0FFE8 /* GPUUniform.cpp in Sources */,
 				D80A28711746572E0058CEC3 /* GLState.cpp in Sources */,
 				D80A286B1746474E0058CEC3 /* Planet.cpp in Sources */,

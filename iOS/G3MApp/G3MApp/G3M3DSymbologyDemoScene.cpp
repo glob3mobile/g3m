@@ -110,5 +110,7 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
                                        Geodetic3D::fromDegrees(25.5, -74.52, 1595850),
                                        Angle::zero(),
-                                       Angle::fromDegrees(45));
+                                       //Angle::fromDegrees(45)
+                                       Angle::fromDegrees(45 - 90)
+                                       );
 }

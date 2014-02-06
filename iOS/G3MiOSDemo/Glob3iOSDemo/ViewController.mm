@@ -136,6 +136,9 @@
 #import <G3MiOSSDK/PlanetRenderer.hpp>
 #import <G3MiOSSDK/G3MMeshParser.hpp>
 
+#import <G3MiOSSDK/CoordinateSystem.hpp>
+#import <G3MiOSSDK/TaitBryanAngles.hpp>
+
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -278,9 +281,10 @@ Mesh* createSectorMesh(const Planet* planet,
   [[self G3MWidget] startAnimation];
 
   /*
-  [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
-                                               new CameraRollChangerTask([[self G3MWidget] widget]));
+   [[self G3MWidget] widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(100),
+   new CameraRollChangerTask([[self G3MWidget] widget]));
    */
+
 }
 
 
@@ -416,9 +420,9 @@ public:
                                 true);
 
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///aus4326.bil", false),
-                                                                                     sector,
-                                                                                     Vector2I(2083, 2001),
-                                                                                     -758.905);
+                                                                                    sector,
+                                                                                    Vector2I(2083, 2001),
+                                                                                    -758.905);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
@@ -520,7 +524,7 @@ public:
   //                                                                                     Vector2I(2048, 1024));
 
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                                                     Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
+                                                                                    Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -644,16 +648,44 @@ public:
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
 
+  if (false) { //Testing Reference System
+
+    //Test Plane
+    Plane plane(Vector3D(0.0,1.0,1.0), 0.0);
+    Vector3D vectorInPlane(0,0,1);
+    Vector3D axis(1.0,0.0,0.0);
+
+    for (int i = 0; i <= 90; i++){
+      Vector3D v2 = vectorInPlane.rotateAroundAxis(axis, Angle::fromDegrees(-i));
+      Angle angle = plane.vectorRotationForAxis(v2, axis);
+    }
+
+    //CoordinateSystem sr = CoordinateSystem::global();
+    double lat = 28.96384553643802, lon = -13.60974902228918;
+    CoordinateSystem sr = planet->getCoordinateSystemAt(Geodetic3D::fromDegrees(lat, lon, 0));
+
+    //Heading
+    CoordinateSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(170, 80, 10))
+    .changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(lat, lon, 1.5e4)));
+
+    meshRenderer->addMesh( sr.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
+    meshRenderer->addMesh( sr2.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
+
+    TaitBryanAngles tba = sr2.getTaitBryanAngles(sr);
+    printf("ANGLES: %f, %f, %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
+
+  }
+
 
   //  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/points.json"),
   //                                   10,
   //                                   new TestMeshLoadListener(),
   //                                   true);
-//  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
-//                                   2,
-//                                   0,
-//                                   new TestMeshLoadListener(),
-//                                   true);
+  //  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
+  //                                   2,
+  //                                   0,
+  //                                   new TestMeshLoadListener(),
+  //                                   true);
 
   //  void testMeshLoad(const G3MContext* context) {
   //    context->getDownloader()->requestBuffer(URL("file:///isosurface-mesh.json"),
@@ -663,8 +695,8 @@ public:
   //                                            new ParseMeshBufferDownloadListener(_meshRenderer, _planet),
   //                                            true);
   //  }
-//  meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
-//                             Color::newFromRGBA(1, 1, 0, 1));
+  //  meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
+  //                             Color::newFromRGBA(1, 1, 0, 1));
 
   meshRenderer->showNormals(true); //SHOWING NORMALS
 
@@ -958,7 +990,7 @@ public:
     }
 
     if (false){ //Changing ROLL
-      
+
       class AnimatedRollCameraConstrainer: public ICameraConstrainer {
       private:
         mutable double _angle;
@@ -989,64 +1021,64 @@ public:
 
 
 
-}
+  }
 
 
-//  [self createInterpolationTest: meshRenderer];
+  //  [self createInterpolationTest: meshRenderer];
 
-//  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
+  //  meshRenderer->addMesh([self createPointsMesh: builder.getPlanet() ]);
 
-//Draw light direction
-if (false) {
+  //Draw light direction
+  if (false) {
 
-  Vector3D lightDir = Vector3D(100000, 0,0);
-  //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
-  FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    Vector3D lightDir = Vector3D(100000, 0,0);
+    //    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero);
+    FloatBufferBuilderFromCartesian3D* vertex = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
-  Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
-                                              Angle::fromDegrees(-15.431389),
-                                              10000));
+    Vector3D v = planet->toCartesian(Geodetic3D(Angle::fromDegrees(28.127222),
+                                                Angle::fromDegrees(-15.431389),
+                                                10000));
 
-  vertex->add(v);
-  vertex->add(v.add(lightDir));
-  //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
+    vertex->add(v);
+    vertex->add(v.add(lightDir));
+    //lightDir.normalized().times(planet->getRadii().maxAxis() *1.5));
 
-  meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
-                                        true,
-                                        vertex->getCenter(),
-                                        vertex->create(),
-                                        3.0,
-                                        1.0,
-                                        Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
+    meshRenderer->addMesh( new DirectMesh(GLPrimitive::lines(),
+                                          true,
+                                          vertex->getCenter(),
+                                          vertex->create(),
+                                          3.0,
+                                          1.0,
+                                          Color::newFromRGBA(1.0, 0.0, 0.0, 1.0)));
 
-  delete vertex;
+    delete vertex;
 
-}
+  }
 
-GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                   geoRenderer: geoRenderer
-                                                                  meshRenderer: meshRenderer
-                                                                 marksRenderer: marksRenderer
-                                                                        planet: planet];
-builder.setInitializationTask(initializationTask, true);
+  GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
+                                                                     geoRenderer: geoRenderer
+                                                                    meshRenderer: meshRenderer
+                                                                   marksRenderer: marksRenderer
+                                                                          planet: planet];
+  builder.setInitializationTask(initializationTask, true);
 
-PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
-builder.addPeriodicalTask(periodicalTask);
+  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
+  builder.addPeriodicalTask(periodicalTask);
 
-const bool logFPS = false;
-builder.setLogFPS(logFPS);
+  const bool logFPS = false;
+  builder.setLogFPS(logFPS);
 
-const bool logDownloaderStatistics = false;
-builder.setLogDownloaderStatistics(logDownloaderStatistics);
+  const bool logDownloaderStatistics = false;
+  builder.setLogDownloaderStatistics(logDownloaderStatistics);
 
-//builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
 
-//  WidgetUserData* userData = NULL;
-//  builder.setUserData(userData);
+  //  WidgetUserData* userData = NULL;
+  //  builder.setUserData(userData);
 
-// initialization
-builder.initializeWidget();
-//  [self testGenericQuadTree:geoTileRasterizer];
+  // initialization
+  builder.initializeWidget();
+  //  [self testGenericQuadTree:geoTileRasterizer];
 
 }
 
@@ -1347,12 +1379,12 @@ builder.initializeWidget();
   //  int initialLevel = 1,
   //  int maxLevel = 19,
   //  LayerCondition* condition = NULL
-  if (false) {
+  if (true) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = true;
+  bool testingTransparencies = false;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -2805,25 +2837,29 @@ public:
 
     }
 
-
-
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-//
-//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.518803097704875427,
-//                                                                             -6.2814697225724938079,
-//                                                                             30.098082578364309114),
-//                                                     Angle::fromDegrees(-17.488762),
-//                                                     Angle::fromDegrees(82.525557));
+      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
+                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
+                                                     Angle::fromDegrees(180),
+                                                     Angle::fromDegrees(-45),
+                                                     false,
+                                                     false);
+      
+      //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.518803097704875427,
+      //                                                                             -6.2814697225724938079,
+      //                                                                             30.098082578364309114),
+      //                                                     Angle::fromDegrees(-17.488762),
+      //                                                     Angle::fromDegrees(82.525557));
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
-//                                                     Angle::fromDegrees(-32.066195 ),
-//                                                     Angle::fromDegrees(78.523121));
+      //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
+      //                                                     Angle::fromDegrees(-32.066195 ),
+      //                                                     Angle::fromDegrees(78.523121));
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
-//                                                     Angle::fromDegrees(-32.066195 ),
-//                                                     Angle::fromDegrees(78.523121));
+      //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.51826434744587857, 6.2798347736047421819, 102.37859667537750852),
+      //                                                     Angle::fromDegrees(-32.066195 ),
+      //                                                     Angle::fromDegrees(78.523121));
 
       class G3MeshBufferDownloadListener : public IBufferDownloadListener {
         const Planet* _planet;
@@ -2875,55 +2911,55 @@ public:
                                               new G3MeshBufferDownloadListener(context->getPlanet(),
                                                                                _meshRenderer),
                                               true);
-//      context->getDownloader()->requestBuffer(URL("file:///3d_1.json"),
-//                                              1000000,
-//                                              TimeInterval::zero(),
-//                                              false,
-//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
-//                                                                               _meshRenderer),
-//                                              true);
-//      context->getDownloader()->requestBuffer(URL("file:///3d_1-1.json"),
-//                                              1000000,
-//                                              TimeInterval::zero(),
-//                                              false,
-//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
-//                                                                               _meshRenderer),
-//                                              true);
-//      context->getDownloader()->requestBuffer(URL("file:///3d_1-2.json"),
-//                                              1000000,
-//                                              TimeInterval::zero(),
-//                                              false,
-//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
-//                                                                               _meshRenderer),
-//                                              true);
-//      context->getDownloader()->requestBuffer(URL("file:///3d_1-3.json"),
-//                                              1000000,
-//                                              TimeInterval::zero(),
-//                                              false,
-//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
-//                                                                               _meshRenderer),
-//                                              true);
-//      context->getDownloader()->requestBuffer(URL("file:///3d_2-0.json"),
-//                                              1000000,
-//                                              TimeInterval::zero(),
-//                                              false,
-//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
-//                                                                               _meshRenderer),
-//                                              true);
-//      context->getDownloader()->requestBuffer(URL("file:///3d_2-1.json"),
-//                                              1000000,
-//                                              TimeInterval::zero(),
-//                                              false,
-//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
-//                                                                               _meshRenderer),
-//                                              true);
-//      context->getDownloader()->requestBuffer(URL("file:///3d_2-2.json"),
-//                                              1000000,
-//                                              TimeInterval::zero(),
-//                                              false,
-//                                              new G3MeshBufferDownloadListener(context->getPlanet(),
-//                                                                               _meshRenderer),
-//                                              true);
+      //      context->getDownloader()->requestBuffer(URL("file:///3d_1.json"),
+      //                                              1000000,
+      //                                              TimeInterval::zero(),
+      //                                              false,
+      //                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+      //                                                                               _meshRenderer),
+      //                                              true);
+      //      context->getDownloader()->requestBuffer(URL("file:///3d_1-1.json"),
+      //                                              1000000,
+      //                                              TimeInterval::zero(),
+      //                                              false,
+      //                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+      //                                                                               _meshRenderer),
+      //                                              true);
+      //      context->getDownloader()->requestBuffer(URL("file:///3d_1-2.json"),
+      //                                              1000000,
+      //                                              TimeInterval::zero(),
+      //                                              false,
+      //                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+      //                                                                               _meshRenderer),
+      //                                              true);
+      //      context->getDownloader()->requestBuffer(URL("file:///3d_1-3.json"),
+      //                                              1000000,
+      //                                              TimeInterval::zero(),
+      //                                              false,
+      //                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+      //                                                                               _meshRenderer),
+      //                                              true);
+      //      context->getDownloader()->requestBuffer(URL("file:///3d_2-0.json"),
+      //                                              1000000,
+      //                                              TimeInterval::zero(),
+      //                                              false,
+      //                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+      //                                                                               _meshRenderer),
+      //                                              true);
+      //      context->getDownloader()->requestBuffer(URL("file:///3d_2-1.json"),
+      //                                              1000000,
+      //                                              TimeInterval::zero(),
+      //                                              false,
+      //                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+      //                                                                               _meshRenderer),
+      //                                              true);
+      //      context->getDownloader()->requestBuffer(URL("file:///3d_2-2.json"),
+      //                                              1000000,
+      //                                              TimeInterval::zero(),
+      //                                              false,
+      //                                              new G3MeshBufferDownloadListener(context->getPlanet(),
+      //                                                                               _meshRenderer),
+      //                                              true);
 
       if (true){
 
@@ -3126,16 +3162,14 @@ public:
         }
       }
 
-
-      if (false){ //CHANGE ROLL WITH TOUCH
-
-
-        class RollTerrainTouchListener: public TerrainTouchListener{
+      if (true){ //CHANGE CAMERA WITH TOUCH
+        class CameraAnglesTerrainListener: public TerrainTouchListener{
         private:
           G3MWidget_iOS* _iosWidget;
+          MeshRenderer* _meshRenderer;
         public:
 
-          RollTerrainTouchListener(G3MWidget_iOS* widget): _iosWidget(widget){}
+          CameraAnglesTerrainListener(G3MWidget_iOS* widget, MeshRenderer* mr): _iosWidget(widget), _meshRenderer(mr){}
 
 
           virtual bool onTerrainTouch(const G3MEventContext* ec,
@@ -3144,17 +3178,50 @@ public:
                                       const Geodetic3D&      position,
                                       const Tile*            tile){
 
-            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
+            //            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
+            Camera* cam = [_iosWidget widget]->getNextCamera();
+
+
+            TaitBryanAngles angles = cam->getTaitBryanAngles();
+            printf("A1: %s\n", angles.description().c_str() );
+
+            Angle step = Angle::fromDegrees(10);
+
+            switch ((pixel._x * 4) / cam->getWidth()) {
+              case 0:
+                [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
+                break;
+
+              case 1:
+                [_iosWidget widget]->getNextCamera()->setPitch(angles._pitch.add(step));
+                break;
+
+              case 2:
+                [_iosWidget widget]->getNextCamera()->setRoll(angles._roll.add(step));
+                break;
+
+              default:
+                break;
+            }
+
+            TaitBryanAngles angles2 = cam->getTaitBryanAngles();
+            printf("A2: %s\n", angles2.description().c_str() );
+
+            Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
+            Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
+
+
+            _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+            _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+
 
             return true;
-
-
           }
 
         };
 
 
-        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new RollTerrainTouchListener(_iosWidget));
+        [_iosWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new CameraAnglesTerrainListener(_iosWidget, _meshRenderer));
 
       }
 

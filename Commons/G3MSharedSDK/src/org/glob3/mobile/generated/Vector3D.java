@@ -129,6 +129,11 @@ public class Vector3D
     return _x * v._x + _y * v._y + _z * v._z;
   }
 
+  public final boolean isPerpendicularTo(Vector3D v)
+  {
+    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+  }
+
   public final Vector3D add(Vector3D v)
   {
     return new Vector3D(_x + v._x, _y + v._y, _z + v._z);

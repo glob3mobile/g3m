@@ -36,7 +36,7 @@ AbstractMesh(primitive,
 
 void DirectMesh::rawRender(const G3MRenderContext* rc) const{
   GL* gl = rc->getGL();
-  
+
   const int verticesCount = getVertexCount();
   gl->drawArrays(_primitive, 0, verticesCount, _glState, *rc->getGPUProgramManager());
 }

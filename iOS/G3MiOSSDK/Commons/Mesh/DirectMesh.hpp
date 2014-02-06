@@ -33,12 +33,9 @@ public:
 
   ~DirectMesh() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
   }
-  
-//  void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const;
 
 };
 

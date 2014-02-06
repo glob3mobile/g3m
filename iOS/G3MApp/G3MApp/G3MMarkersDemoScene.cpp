@@ -134,7 +134,8 @@ void G3MMarkersDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
                                        Angle::zero(), // heading
-                                       Angle::fromDegrees(30) // pitch
+                                       //Angle::fromDegrees(30) // pitch
+                                       Angle::fromDegrees(30 - 90) // pitch
                                        );
 }
 

@@ -442,16 +442,21 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
 
   const Camera* camera = rc->getCurrentCamera();
+
+  /* //PREVIOUS METHOD NOT BASED IN ANGULAR DISTANCE
   const Vector2F pN = camera->point2Pixel(*_middleNorthPoint);
   const Vector2F pS = camera->point2Pixel(*_middleSouthPoint);
   const Vector2F pE = camera->point2Pixel(*_middleEastPoint);
   const Vector2F pW = camera->point2Pixel(*_middleWestPoint);
-
   const double latitudeMiddleDistSquared  = pN.squaredDistanceTo(pS);
   const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
+   */
 
-//  const double latitudeMiddleDist = sqrt( latitudeMiddleDistSquared );
-//  const double longitudeMiddleDist = sqrt( longitudeMiddleDistSquared );
+  const double pixelsDistanceNS = camera->getEstimatedPixelDistance(*_middleNorthPoint, *_middleSouthPoint);
+  const double pixelsDistanceWE = camera->getEstimatedPixelDistance(*_middleWestPoint, *_middleEastPoint);
+
+  const double latitudeMiddleDistSquared  = pixelsDistanceNS * pixelsDistanceNS;
+  const double longitudeMiddleDistSquared = pixelsDistanceWE * pixelsDistanceWE;
 
   const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
   const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
@@ -1141,11 +1146,6 @@ void Tile::computeTileCorners(const Planet* planet){
   _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
   _middleEastPoint = new Vector3D(planet->toCartesian(gE));
   _middleWestPoint = new Vector3D(planet->toCartesian(gW));
-
-#warning remove-debug-code
-  if (_level == 10 && _column == 2119 && _row == 1439 ) {
-    printf("dddd");
-  }
 }
 
 Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
