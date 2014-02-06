@@ -9,45 +9,40 @@
 #ifndef __G3MiOSSDK__CoordinateSystem__
 #define __G3MiOSSDK__CoordinateSystem__
 
-#include <iostream>
-#include <string>
+#include "Vector3D.hpp"
+#include "Angle.hpp"
+#include "TaitBryanAngles.hpp"
+#include "Color.hpp"
+/*
+#include "Mesh.hpp"
 
-
-//#include "Vector3D.hpp"
-
-class Vector3D;
-class Mesh;
-class Color;
-class TaitBryanAngles;
-class Angle;
+#include "DirectMesh.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromColor.hpp"
+ */
 
 class CoordinateSystem {
 
+private:
+
+  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
+
 public:
 
-#ifdef C_CODE
   const Vector3D _x;
   const Vector3D _y;
   const Vector3D _z;
   const Vector3D _origin;
-#endif
-#ifdef JAVA_CODE
-  final Vector3D _x;
-	final Vector3D _y;
-	final Vector3D _z;
-	final Vector3D _origin;
-#endif
 
-  //static CoordinateSystem global();
+  static CoordinateSystem global();
 
   CoordinateSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin);
 
   //For camera
   CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin);
 
-  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
-  Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
+  //Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
 
   CoordinateSystem applyTaitBryanAngles(const TaitBryanAngles& angles) const;
 

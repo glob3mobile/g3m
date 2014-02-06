@@ -342,9 +342,9 @@ public class Camera
     //ILogger::instance()->logInfo("SET CAMERA HEADING: %f", angle._degrees);
     TaitBryanAngles angles = getTaitBryanAngles();
   
-    ReferenceSystem localRS = getLocalReferenceSystem();
-    ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
-    setCameraReferenceSystem(cameraRS);
+    CoordinateSystem localRS = getLocalCoordinateSystem();
+    CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
+    setCameraCoordinateSystem(cameraRS);
   }
   public final Angle getPitch()
   {
@@ -354,9 +354,9 @@ public class Camera
   {
     //ILogger::instance()->logInfo("SET CAMERA PITCH: %f", angle._degrees);
     TaitBryanAngles angles = getTaitBryanAngles();
-    ReferenceSystem localRS = getLocalReferenceSystem();
-    ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
-    setCameraReferenceSystem(cameraRS);
+    CoordinateSystem localRS = getLocalCoordinateSystem();
+    CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
+    setCameraCoordinateSystem(cameraRS);
   }
 
   public final Geodetic3D getGeodeticPosition()
@@ -514,33 +514,33 @@ public class Camera
     //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
     TaitBryanAngles angles = getTaitBryanAngles();
   
-    ReferenceSystem localRS = getLocalReferenceSystem();
-    ReferenceSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
-    setCameraReferenceSystem(cameraRS);
+    CoordinateSystem localRS = getLocalCoordinateSystem();
+    CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
+    setCameraCoordinateSystem(cameraRS);
   }
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  void setRoll(Angle angle);
 
-  public final ReferenceSystem getLocalReferenceSystem()
+  public final CoordinateSystem getLocalCoordinateSystem()
   {
-    return _planet.getReferenceSystemAt(getGeodeticPosition());
+    return _planet.getCoordinateSystemAt(getGeodeticPosition());
   }
-  public final ReferenceSystem getCameraReferenceSystem()
+  public final CoordinateSystem getCameraCoordinateSystem()
   {
-    return new ReferenceSystem(getViewDirection(), getUp(), getCartesianPosition());
+    return new CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
   }
   public final TaitBryanAngles getTaitBryanAngles()
   {
-    ReferenceSystem localRS = getLocalReferenceSystem();
-    ReferenceSystem cameraRS = getCameraReferenceSystem();
+    CoordinateSystem localRS = getLocalCoordinateSystem();
+    CoordinateSystem cameraRS = getCameraCoordinateSystem();
     return cameraRS.getTaitBryanAngles(localRS);
   }
   public final void setTaitBryanAngles(Angle heading, Angle pitch, Angle roll)
   {
   
-    ReferenceSystem localRS = getLocalReferenceSystem();
-    ReferenceSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
-    setCameraReferenceSystem(newCameraRS);
+    CoordinateSystem localRS = getLocalCoordinateSystem();
+    CoordinateSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
+    setCameraCoordinateSystem(newCameraRS);
   }
 
 //  const Angle getHeading(const Vector3D& normal) const;
@@ -752,7 +752,7 @@ public class Camera
 
 
 
-  private void setCameraReferenceSystem(ReferenceSystem rs)
+  private void setCameraCoordinateSystem(CoordinateSystem rs)
   {
     _center = _position.add(rs._y.asMutableVector3D());
     _up = rs._z.asMutableVector3D();

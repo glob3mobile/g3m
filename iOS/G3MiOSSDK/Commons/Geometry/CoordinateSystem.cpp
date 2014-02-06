@@ -6,18 +6,13 @@
 //
 //
 
-#include "DirectMesh.hpp"
-#include "Color.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
-#include "IStringBuilder.hpp"
-#include "TaitBryanAngles.hpp"
+
 
 #include "CoordinateSystem.hpp"
 
-//CoordinateSystem CoordinateSystem::global(){
-//  return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
-//}
+CoordinateSystem CoordinateSystem::global(){
+  return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
+}
 
 CoordinateSystem::CoordinateSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin):
 _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
@@ -45,6 +40,7 @@ CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const
   return CoordinateSystem(_x, _y, _z, newOrigin);
 }
 
+/*
 Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const{
 
   FloatBufferBuilderFromColor colors;
@@ -81,6 +77,7 @@ Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color
 
   return dm;
 }
+ */
 
 TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& global) const{
 
@@ -146,9 +143,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const TaitBryanAngles& a
   return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
 }
 
-CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading,
-                                                      const Angle& pitch,
-                                                      const Angle& roll) const{
+CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll) const{
 
   //Check out Agustin Trujillo's review of this topic
   //This implementation is purposely explicit on every step
