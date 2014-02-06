@@ -530,6 +530,18 @@ public class Camera
     setCameraCoordinateSystem(newCameraRS);
   }
 
+  public final double getEstimatedPixelDistance(Vector3D point0, Vector3D point1)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    final Vector3D cameraPosition = getCartesianPosition();
+    final Vector3D ray0 = cameraPosition.sub(point0);
+    final Vector3D ray1 = cameraPosition.sub(point1);
+    final Angle angle = ray1.angleBetween(ray0);
+    final FrustumData frustumData = getFrustumData();
+    double X = frustumData._znear * mu.atan(angle._radians/2);
+    return X * getHeight() / frustumData._top;
+  }
+
 //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
