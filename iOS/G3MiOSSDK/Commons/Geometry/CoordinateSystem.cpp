@@ -89,7 +89,7 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
   const Vector3D v = global._y;
   const Vector3D w = global._z;
 
-  const Vector3D uppp = _x;
+  //const Vector3D uppp = _x;
   const Vector3D vppp = _y;
   const Vector3D wppp = _z;
 
