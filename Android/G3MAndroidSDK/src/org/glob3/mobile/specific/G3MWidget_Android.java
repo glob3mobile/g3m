@@ -425,6 +425,11 @@ public final class G3MWidget_Android
    }
 
 
+   public void setCameraRoll(final Angle angle) {
+      getG3MWidget().setCameraRoll(angle);
+   }
+
+
    public void setWidget(final G3MWidget widget) {
       _g3mWidget = widget;
    }
