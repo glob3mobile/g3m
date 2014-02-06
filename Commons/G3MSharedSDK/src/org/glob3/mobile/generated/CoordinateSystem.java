@@ -16,28 +16,22 @@ package org.glob3.mobile.generated;
 //
 
 
-/*
-#include "Mesh.hpp"
 
-#include "DirectMesh.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
- */
+//class Mesh;
+//class Color;
 
 public class CoordinateSystem
 {
-
-
-  private static boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
-  {
-    return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
-  }
-
 
   public final Vector3D _x ;
   public final Vector3D _y ;
   public final Vector3D _z ;
   public final Vector3D _origin ;
+
+  public static boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
+  {
+    return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
+  }
 
   public static CoordinateSystem global()
   {
@@ -68,8 +62,34 @@ public class CoordinateSystem
      _origin = new Vector3D(origin);
   }
 
-
-  //Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
+  public final Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
+  {
+  
+    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+  
+    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithGivenCenter(_origin);
+    fbb.add(_origin);
+    fbb.add(_origin.add(_x.normalized().times(size)));
+    colors.add(xColor);
+    colors.add(xColor);
+  
+    fbb.add(_origin);
+    fbb.add(_origin.add(_y.normalized().times(size)));
+    colors.add(yColor);
+    colors.add(yColor);
+  
+    fbb.add(_origin);
+    fbb.add(_origin.add(_z.normalized().times(size)));
+    colors.add(zColor);
+    colors.add(zColor);
+  
+    DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), (float)5.0, (float)1.0, null, colors.create(), (float)1.0, false, null);
+  
+    if (fbb != null)
+       fbb.dispose();
+  
+    return dm;
+  }
 
   public final CoordinateSystem applyTaitBryanAngles(TaitBryanAngles angles)
   {
@@ -121,46 +141,6 @@ public class CoordinateSystem
     return new CoordinateSystem(_x, _y, _z, newOrigin);
   }
 
-
-  /*
-  Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const{
-  
-    FloatBufferBuilderFromColor colors;
-  
-    FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithGivenCenter(_origin);
-    fbb->add(_origin);
-    fbb->add(_origin.add(_x.normalized().times(size)));
-    colors.add(xColor);
-    colors.add(xColor);
-  
-    fbb->add(_origin);
-    fbb->add(_origin.add(_y.normalized().times(size)));
-    colors.add(yColor);
-    colors.add(yColor);
-  
-    fbb->add(_origin);
-    fbb->add(_origin.add(_z.normalized().times(size)));
-    colors.add(zColor);
-    colors.add(zColor);
-  
-    DirectMesh* dm = new DirectMesh(GLPrimitive::lines(),
-                                    true,
-                                    fbb->getCenter(),
-                                    fbb->create(),
-                                    (float)5.0,
-                                    (float)1.0,
-                                    NULL,
-                                    colors.create(),
-                                    (float)1.0,
-                                    false,
-                                    NULL);
-  
-    delete fbb;
-  
-    return dm;
-  }
-   */
-  
   public final TaitBryanAngles getTaitBryanAngles(CoordinateSystem global)
   {
   
