@@ -1146,11 +1146,6 @@ void Tile::computeTileCorners(const Planet* planet){
   _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
   _middleEastPoint = new Vector3D(planet->toCartesian(gE));
   _middleWestPoint = new Vector3D(planet->toCartesian(gW));
-
-#warning remove-debug-code
-  if (_level == 10 && _column == 2119 && _row == 1439 ) {
-    printf("dddd");
-  }
 }
 
 Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
