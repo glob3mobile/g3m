@@ -508,11 +508,11 @@ public class G3MWidget
 
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading)
   {
-     setAnimatedCameraPosition(position, heading, Angle.zero());
+     setAnimatedCameraPosition(position, heading, Angle.fromDegrees(-90));
   }
   public final void setAnimatedCameraPosition(Geodetic3D position)
   {
-     setAnimatedCameraPosition(position, Angle.zero(), Angle.zero());
+     setAnimatedCameraPosition(position, Angle.zero(), Angle.fromDegrees(-90));
   }
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading, Angle pitch)
   {
@@ -529,11 +529,11 @@ public class G3MWidget
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading)
   {
-     setAnimatedCameraPosition(interval, position, heading, Angle.zero(), false, false);
+     setAnimatedCameraPosition(interval, position, heading, Angle.fromDegrees(-90), false, false);
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position)
   {
-     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.zero(), false, false);
+     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.fromDegrees(-90), false, false);
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch, boolean linearTiming, boolean linearHeight)
   {
