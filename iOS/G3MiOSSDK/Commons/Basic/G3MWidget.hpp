@@ -178,13 +178,13 @@ public:
   void setCameraRoll(const Angle& angle);
 
   void setAnimatedCameraPosition(const Geodetic3D& position,
-                                 const Angle& heading=Angle::zero(),
-                                 const Angle& pitch=Angle::zero());
+                                 const Angle& heading = Angle::zero(),
+                                 const Angle& pitch   = Angle::fromDegrees(-90));
   
   void setAnimatedCameraPosition(const TimeInterval& interval,
                                  const Geodetic3D& position,
                                  const Angle& heading = Angle::zero(),
-                                 const Angle& pitch   = Angle::zero(),
+                                 const Angle& pitch   = Angle::fromDegrees(-90),
                                  const bool linearTiming = false,
                                  const bool linearHeight = false);
   

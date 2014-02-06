@@ -47,8 +47,11 @@ void G3MScenarioDEMDemoScene::rawActivate(const G3MContext* context) {
 
 
   const Geodetic3D position = Geodetic3D::fromDegrees(40.13966959177994, -5.89060128999895, 4694.511700438305);
-  const Angle heading = Angle::fromDegrees(51.146970);
-  const Angle pitch = Angle::fromDegrees(69.137225);
+  //const Angle heading = Angle::fromDegrees(51.146970);
+  //const Angle pitch = Angle::fromDegrees(69.137225);
+  const Angle heading = Angle::fromDegrees(-51.146970);
+  const Angle pitch = Angle::fromDegrees(-20.862775);
+
   g3mWidget->setCameraPosition(position);
   g3mWidget->setCameraHeading(heading);
   g3mWidget->setCameraPitch(pitch);
