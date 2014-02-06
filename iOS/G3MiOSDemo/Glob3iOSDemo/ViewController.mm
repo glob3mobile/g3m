@@ -2845,7 +2845,7 @@ public:
       [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
                                                      Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
                                                      Angle::fromDegrees(0),
-                                                     Angle::fromDegrees(90),
+                                                     Angle::fromDegrees(-45),
                                                      false,
                                                      false);
       
