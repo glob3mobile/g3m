@@ -11,27 +11,19 @@
 
 #include "Vector3D.hpp"
 #include "TaitBryanAngles.hpp"
-#include "Color.hpp"
-/*
-#include "Mesh.hpp"
 
-#include "DirectMesh.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
- */
+class Mesh;
+class Color;
 
 class CoordinateSystem {
-
-private:
-
-  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
-
 public:
 
   const Vector3D _x;
   const Vector3D _y;
   const Vector3D _z;
   const Vector3D _origin;
+
+  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
   static CoordinateSystem global();
 
@@ -40,8 +32,7 @@ public:
   //For camera
   CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin);
 
-
-  //Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
+  Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
 
   CoordinateSystem applyTaitBryanAngles(const TaitBryanAngles& angles) const;
 
