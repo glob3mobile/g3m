@@ -26,14 +26,14 @@ private:
   private IStringUtils _su;
 #endif
 
-  const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                            const Tile* tile,
-                            const Sector& sector) const;
-
 protected:
   std::string getLayerType() const {
     return "URLTemplate";
   }
+
+  virtual const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                    const Tile* tile,
+                                    const Sector& sector) const;
 
   bool rawIsEquals(const Layer* that) const;
 
