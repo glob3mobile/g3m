@@ -9,10 +9,6 @@
 #ifndef __G3MiOSSDK__ReferenceSystem__
 #define __G3MiOSSDK__ReferenceSystem__
 
-#include <iostream>
-#include <string>
-
-
 #include "Vector3D.hpp"
 
 class Mesh;
@@ -21,9 +17,7 @@ class TaitBryanAngles;
 class Angle;
 
 class ReferenceSystem{
-
 public:
-
 #ifdef C_CODE
   const Vector3D _x;
   const Vector3D _y;
@@ -57,7 +51,7 @@ public:
   TaitBryanAngles getTaitBryanAngles(const ReferenceSystem& global) const;
 
   bool isEqualsTo(const ReferenceSystem& that) const;
-
+  
 };
 
-#endif /* defined(__G3MiOSSDK__ReferenceSystem__) */
+#endif
