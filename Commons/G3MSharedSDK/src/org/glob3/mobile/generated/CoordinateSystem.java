@@ -150,7 +150,7 @@ public class CoordinateSystem
     final Vector3D v = global._y;
     final Vector3D w = global._z;
   
-    final Vector3D uppp = _x;
+    //const Vector3D uppp = _x;
     final Vector3D vppp = _y;
     final Vector3D wppp = _z;
   
