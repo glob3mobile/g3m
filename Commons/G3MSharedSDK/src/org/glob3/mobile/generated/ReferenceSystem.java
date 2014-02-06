@@ -24,12 +24,6 @@ package org.glob3.mobile.generated;
 
 public class ReferenceSystem
 {
-	
-	final Vector3D _x;
-	final Vector3D _y;
-	final Vector3D _z;
-	final Vector3D _origin;
-	
    public ReferenceSystem global()
    {
      return new ReferenceSystem(Vector3D.upX(), Vector3D.upY(), Vector3D.upZ(), Vector3D.zero);
