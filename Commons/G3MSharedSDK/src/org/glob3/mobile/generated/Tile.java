@@ -104,13 +104,6 @@ public class Tile
     _middleSouthPoint = new Vector3D(planet.toCartesian(gS));
     _middleEastPoint = new Vector3D(planet.toCartesian(gE));
     _middleWestPoint = new Vector3D(planet.toCartesian(gW));
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning remove-debug-code
-    if (_level == 10 && _column == 2119 && _row == 1439)
-    {
-      System.out.print("dddd");
-    }
   }
 
   private double _latitudeArcSegmentRatioSquared;
