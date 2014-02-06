@@ -9,9 +9,6 @@ package org.glob3.mobile.generated;
 
 
 
-//CoordinateSystem CoordinateSystem::global(){
-//  return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
-//}
 
 
 //For camera
@@ -27,6 +24,10 @@ package org.glob3.mobile.generated;
 
 public class CoordinateSystem
 {
+   public CoordinateSystem global()
+   {
+     return new CoordinateSystem(Vector3D.upX(), Vector3D.upY(), Vector3D.upZ(), Vector3D.zero);
+   }
    public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
    {
       _x = x.normalized();
