@@ -69,11 +69,11 @@ Mesh* ReferenceSystem::createMesh(double size, const Color& xColor, const Color&
                                   true,
                                   fbb->getCenter(),
                                   fbb->create(),
-                                  5.0,
-                                  1.0,
+                                  (float)5.0,
+                                  (float)1.0,
                                   NULL,
                                   colors.create(),
-                                  1.0,
+                                  (float)1.0,
                                   false,
                                   NULL);
 

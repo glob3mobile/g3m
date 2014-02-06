@@ -23,10 +23,18 @@ class ReferenceSystem{
 
 public:
 
+#ifdef C_CODE
   const Vector3D _x;
   const Vector3D _y;
   const Vector3D _z;
   const Vector3D _origin;
+#endif
+#ifdef JAVA_CODE
+  final Vector3D _x;
+	final Vector3D _y;
+	final Vector3D _z;
+	final Vector3D _origin;
+#endif
 
   static ReferenceSystem global();
 

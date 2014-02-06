@@ -509,7 +509,7 @@ public class Camera
   }
    */
   
-  public final void Camera.setRoll(Angle angle)
+  public final void setRoll(Angle angle)
   {
     //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
     TaitBryanAngles angles = getTaitBryanAngles();

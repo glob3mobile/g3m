@@ -24,6 +24,12 @@ package org.glob3.mobile.generated;
 
 public class ReferenceSystem
 {
+	
+	final Vector3D _x;
+	final Vector3D _y;
+	final Vector3D _z;
+	final Vector3D _origin;
+	
    public ReferenceSystem global()
    {
      return new ReferenceSystem(Vector3D.upX(), Vector3D.upY(), Vector3D.upZ(), Vector3D.zero);
@@ -76,7 +82,7 @@ public class ReferenceSystem
      colors.add(zColor);
      colors.add(zColor);
    
-     DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), 5.0, 1.0, null, colors.create(), 1.0, false, null);
+     DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), (float)5.0, (float)1.0, null, colors.create(), (float)1.0, false, null);
    
      if (fbb != null)
         fbb.dispose();
