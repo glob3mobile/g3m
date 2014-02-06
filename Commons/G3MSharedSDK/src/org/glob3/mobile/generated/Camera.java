@@ -538,7 +538,7 @@ public class Camera
     final Vector3D ray1 = cameraPosition.sub(point1);
     final Angle angle = ray1.angleBetween(ray0);
     final FrustumData frustumData = getFrustumData();
-    double X = frustumData._znear * mu.atan(angle._radians/2);
+    final double X = frustumData._znear * mu.atan(angle._radians/2);
     return X * getHeight() / frustumData._top;
   }
 
