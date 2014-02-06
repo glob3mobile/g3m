@@ -12,8 +12,29 @@
 #include "Color.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
-#include "Plane.hpp"
 #include "IStringBuilder.hpp"
+
+ReferenceSystem ReferenceSystem::global(){
+  return ReferenceSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
+}
+
+ReferenceSystem::ReferenceSystem(const Vector3D& x, const Vector3D& y, const Vector3D& z, const Vector3D& origin):
+_x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
+{
+  //TODO CHECK CONSISTENCY
+  if (!areOrtogonal(x, y, z)){
+    ILogger::instance()->logError("Inconsistent ReferenceSystem created.");
+  }
+}
+
+//For camera
+ReferenceSystem::ReferenceSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin):
+_x(viewDirection.cross(up).normalized()),
+_y(viewDirection.normalized()),
+_z(up.normalized()),
+_origin(origin)
+{
+}
 
 bool ReferenceSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z){
   return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
@@ -120,6 +141,10 @@ TaitBryanAngles ReferenceSystem::getTaitBryanAngles(const ReferenceSystem& globa
                          roll);
 }
 
+ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const TaitBryanAngles& angles) const{
+  return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
+}
+
 ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
                                                       const Angle& pitch,
                                                       const Angle& roll) const{
@@ -164,6 +189,30 @@ ReferenceSystem ReferenceSystem::applyTaitBryanAngles(const Angle& heading,
   return ReferenceSystem(uppp, vppp, wppp, _origin);
 }
 
+
+bool ReferenceSystem::isEqualsTo(const ReferenceSystem& that) const{
+  return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
+}
+
+#pragma mark TaitBryanAngles
+
+TaitBryanAngles::TaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll):
+_heading(heading),
+_pitch(pitch),
+_roll(roll)
+{
+}
+
+TaitBryanAngles TaitBryanAngles::fromRadians(double heading, double pitch, double roll){
+  return TaitBryanAngles(Angle::fromRadians(heading), Angle::fromRadians(pitch), Angle::fromRadians(roll));
+}
+
+TaitBryanAngles TaitBryanAngles::fromDegrees(double heading, double pitch, double roll){
+  return TaitBryanAngles(Angle::fromDegrees(heading),
+                         Angle::fromDegrees(pitch),
+                         Angle::fromDegrees(roll));
+}
+
 std::string TaitBryanAngles::description() const{
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -178,8 +227,4 @@ std::string TaitBryanAngles::description() const{
   delete isb;
   return s;
 
-}
-
-bool ReferenceSystem::isEqualsTo(const ReferenceSystem& that) const{
-  return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }
