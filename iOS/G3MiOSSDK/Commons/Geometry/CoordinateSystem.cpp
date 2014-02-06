@@ -6,11 +6,7 @@
 //
 //
 
-#include "DirectMesh.hpp"
-#include "Color.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
-#include "TaitBryanAngles.hpp"
+
 
 #include "CoordinateSystem.hpp"
 
@@ -44,6 +40,7 @@ CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const
   return CoordinateSystem(_x, _y, _z, newOrigin);
 }
 
+/*
 Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const{
 
   FloatBufferBuilderFromColor colors;
@@ -80,6 +77,7 @@ Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color
 
   return dm;
 }
+ */
 
 TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& global) const{
 

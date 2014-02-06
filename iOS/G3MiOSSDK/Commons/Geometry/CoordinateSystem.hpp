@@ -9,13 +9,23 @@
 #ifndef __G3MiOSSDK__CoordinateSystem__
 #define __G3MiOSSDK__CoordinateSystem__
 
-class Mesh;
-class Color;
-class TaitBryanAngles;
-class Angle;
-class Vector3D;
+#include "Vector3D.hpp"
+#include "Angle.hpp"
+#include "TaitBryanAngles.hpp"
+#include "Color.hpp"
+/*
+#include "Mesh.hpp"
+
+#include "DirectMesh.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromColor.hpp"
+ */
 
 class CoordinateSystem {
+
+private:
+
+  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
 public:
 
@@ -31,9 +41,8 @@ public:
   //For camera
   CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin);
 
-  static bool areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z);
 
-  Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
+  //Mesh* createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const;
 
   CoordinateSystem applyTaitBryanAngles(const TaitBryanAngles& angles) const;
 
