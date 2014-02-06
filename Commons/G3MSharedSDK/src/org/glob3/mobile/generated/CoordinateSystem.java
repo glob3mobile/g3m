@@ -11,10 +11,49 @@ package org.glob3.mobile.generated;
 
 
 
+
 //For camera
 
 
 
+/*
+Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const{
+
+  FloatBufferBuilderFromColor colors;
+
+  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithGivenCenter(_origin);
+  fbb->add(_origin);
+  fbb->add(_origin.add(_x.normalized().times(size)));
+  colors.add(xColor);
+  colors.add(xColor);
+
+  fbb->add(_origin);
+  fbb->add(_origin.add(_y.normalized().times(size)));
+  colors.add(yColor);
+  colors.add(yColor);
+
+  fbb->add(_origin);
+  fbb->add(_origin.add(_z.normalized().times(size)));
+  colors.add(zColor);
+  colors.add(zColor);
+
+  DirectMesh* dm = new DirectMesh(GLPrimitive::lines(),
+                                  true,
+                                  fbb->getCenter(),
+                                  fbb->create(),
+                                  (float)5.0,
+                                  (float)1.0,
+                                  NULL,
+                                  colors.create(),
+                                  (float)1.0,
+                                  false,
+                                  NULL);
+
+  delete fbb;
+
+  return dm;
+}
+ */
 
 
 
@@ -54,34 +93,6 @@ public class CoordinateSystem
    public CoordinateSystem changeOrigin(Vector3D newOrigin)
    {
      return new CoordinateSystem(_x, _y, _z, newOrigin);
-   }
-   public Mesh createMesh(double size, Color xColor, Color yColor, Color zColor)
-   {
-   
-     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
-   
-     FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithGivenCenter(_origin);
-     fbb.add(_origin);
-     fbb.add(_origin.add(_x.normalized().times(size)));
-     colors.add(xColor);
-     colors.add(xColor);
-   
-     fbb.add(_origin);
-     fbb.add(_origin.add(_y.normalized().times(size)));
-     colors.add(yColor);
-     colors.add(yColor);
-   
-     fbb.add(_origin);
-     fbb.add(_origin.add(_z.normalized().times(size)));
-     colors.add(zColor);
-     colors.add(zColor);
-   
-     DirectMesh dm = new DirectMesh(GLPrimitive.lines(), true, fbb.getCenter(), fbb.create(), (float)5.0, (float)1.0, null, colors.create(), (float)1.0, false, null);
-   
-     if (fbb != null)
-        fbb.dispose();
-   
-     return dm;
    }
    public TaitBryanAngles getTaitBryanAngles(CoordinateSystem global)
    {
