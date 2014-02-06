@@ -361,20 +361,6 @@ void Camera::setFOV(const Angle& vertical,
   }
 }
 
-/*
-void Camera::setRoll(const Angle& angle) {
-  const Angle delta = angle.sub(Angle::fromRadians(_rollInRadians));
-  if (delta._radians != 0) {
-    _rollInRadians = angle._radians;
-    rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
-  }
-}
-
-Angle Camera::getRoll() const {
-  return Angle::fromRadians(_rollInRadians);
-}
- */
-
 void Camera::setRoll(const Angle& angle) {
   //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
   TaitBryanAngles angles = getTaitBryanAngles();

@@ -12,6 +12,9 @@
 
 #include <math.h>
 
+#include "CoordinateSystem.hpp"
+#include "TaitBryanAngles.hpp"
+
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "Context.hpp"
@@ -26,9 +29,6 @@
 
 class ILogger;
 class GPUProgramState;
-
-#include "TaitBryanAngles.hpp"
-#include "CoordinateSystem.hpp"
 
 class CameraDirtyFlags {
 private:

@@ -10,7 +10,6 @@
 #define __G3MiOSSDK__CoordinateSystem__
 
 #include "Vector3D.hpp"
-#include "Angle.hpp"
 #include "TaitBryanAngles.hpp"
 #include "Color.hpp"
 /*

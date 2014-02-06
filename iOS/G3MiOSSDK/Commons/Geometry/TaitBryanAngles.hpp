@@ -28,4 +28,4 @@ public:
   std::string description() const;
 };
 
-#endif /* defined(__G3MiOSSDK__TaitBryanAngles__) */
+#endif
