@@ -1379,12 +1379,12 @@ public:
   //  int initialLevel = 1,
   //  int maxLevel = 19,
   //  LayerCondition* condition = NULL
-  if (false) {
+  if (true) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = true;
+  bool testingTransparencies = false;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1875,7 +1875,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
