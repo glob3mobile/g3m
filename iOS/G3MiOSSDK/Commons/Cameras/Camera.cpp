@@ -390,11 +390,13 @@ Angle Camera::getRoll() const {
 double Camera::getEstimatedPixelDistance(const Vector3D& point0,
                                          const Vector3D& point1) const
 {
+  const IMathUtils* mu = IMathUtils::instance();
   const Vector3D cameraPosition = getCartesianPosition();
   const Vector3D ray0 = cameraPosition.sub(point0);
   const Vector3D ray1 = cameraPosition.sub(point1);
   const Angle angle = ray1.angleBetween(ray0);
-  double pixels = angle._degrees * 256 / 11.42;
-  return pixels;
+  const FrustumData frustumData = getFrustumData();
+  double X = frustumData._znear * mu->atan(angle._radians/2);
+  return X * getHeight() / frustumData._top;
 }
 
