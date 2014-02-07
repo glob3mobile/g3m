@@ -530,9 +530,9 @@ public class Camera
 
   public final double getEstimatedPixelDistance(Vector3D point0, Vector3D point1)
   {
-    final Vector3D cameraPosition = getCartesianPosition();
-    final Vector3D ray0 = cameraPosition.sub(point0);
-    final Vector3D ray1 = cameraPosition.sub(point1);
+    //const Vector3D cameraPosition = getCartesianPosition();
+    final Vector3D ray0 = _position.sub(point0);
+    final Vector3D ray1 = _position.sub(point1);
     final double angleInRadians = ray1.angleInRadiansBetween(ray0);
     final FrustumData frustumData = getFrustumData();
     final double X = frustumData._znear * IMathUtils.instance().atan(angleInRadians/2);
