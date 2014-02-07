@@ -732,6 +732,12 @@ public class Tile
   //Change to public for TileCache
   public final java.util.ArrayList<Tile> getSubTiles(boolean mercator)
   {
+    if (_subtiles != null)
+    {
+      // quick check to avoid splitLongitude/splitLatitude calculation
+      return _subtiles;
+    }
+  
     final Geodetic2D lower = _sector._lower;
     final Geodetic2D upper = _sector._upper;
   
@@ -838,16 +844,7 @@ public class Tile
       }
       else
       {
-        final Geodetic2D lower = _sector._lower;
-        final Geodetic2D upper = _sector._upper;
-  
-        final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
-  
-        final Angle splitLatitude = layerTilesRenderParameters._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
-        /*                               */
-        /*                               */
-  
-        java.util.ArrayList<Tile> subTiles = getSubTiles(splitLatitude, splitLongitude);
+        java.util.ArrayList<Tile> subTiles = getSubTiles(layerTilesRenderParameters._mercator);
         if (_justCreatedSubtiles)
         {
           lastSplitTimer.start();
