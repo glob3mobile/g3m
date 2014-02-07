@@ -684,16 +684,22 @@ void G3MWidget::addPeriodicalTask(const TimeInterval& interval,
   addPeriodicalTask( new PeriodicalTask(interval, task) );
 }
 
-void G3MWidget::setCameraHeading(const Angle& angle) {
-  getNextCamera()->setHeading(angle);
+void G3MWidget::setCameraHeading(const Angle& heading) {
+  getNextCamera()->setHeading(heading);
 }
 
-void G3MWidget::setCameraPitch(const Angle& angle) {
-  getNextCamera()->setPitch(angle);
+void G3MWidget::setCameraPitch(const Angle& pitch) {
+  getNextCamera()->setPitch(pitch);
 }
 
-void G3MWidget::setCameraRoll(const Angle& angle) {
-  getNextCamera()->setRoll(angle);
+void G3MWidget::setCameraRoll(const Angle& roll) {
+  getNextCamera()->setRoll(roll);
+}
+
+void G3MWidget::setCameraHeadingPitchRoll(const Angle& heading,
+                                          const Angle& pitch,
+                                          const Angle& roll) {
+  getNextCamera()->setHeadingPitchRoll(heading, pitch, roll);
 }
 
 void G3MWidget::setCameraPosition(const Geodetic3D& position) {

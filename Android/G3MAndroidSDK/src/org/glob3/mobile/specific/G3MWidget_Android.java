@@ -410,24 +410,31 @@ public final class G3MWidget_Android
    }
 
 
-   public void setCameraHeading(final Angle angle) {
-      getG3MWidget().setCameraHeading(angle);
-   }
-
-
    public void cancelCameraAnimation() {
       getG3MWidget().cancelCameraAnimation();
    }
 
 
-   public void setCameraPitch(final Angle angle) {
-      getG3MWidget().setCameraPitch(angle);
+   public void setCameraHeading(final Angle heading) {
+      getG3MWidget().setCameraHeading(heading);
    }
 
 
-   public void setCameraRoll(final Angle angle) {
-      getG3MWidget().setCameraRoll(angle);
+   public void setCameraPitch(final Angle pitch) {
+      getG3MWidget().setCameraPitch(pitch);
    }
+
+
+   public void setCameraRoll(final Angle roll) {
+      getG3MWidget().setCameraRoll(roll);
+   }
+
+
+   //   public void setCameraHeadingPitchRoll(final Angle heading,
+   //                                         final Angle pitch,
+   //                                         final Angle roll) {
+   //      getG3MWidget().setCameraHeadingPitchRoll(heading, pitch, roll);
+   //   }
 
 
    public void setWidget(final G3MWidget widget) {

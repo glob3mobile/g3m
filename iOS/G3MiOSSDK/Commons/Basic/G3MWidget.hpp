@@ -171,11 +171,15 @@ public:
 
   void setCameraPosition(const Geodetic3D& position);
   
-  void setCameraHeading(const Angle& angle);
+  void setCameraHeading(const Angle& heading);
   
-  void setCameraPitch(const Angle& angle);
+  void setCameraPitch(const Angle& pitch);
 
-  void setCameraRoll(const Angle& angle);
+  void setCameraRoll(const Angle& roll);
+
+  void setCameraHeadingPitchRoll(const Angle& heading,
+                                 const Angle& pitch,
+                                 const Angle& roll);
 
   void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const Angle& heading = Angle::zero(),
