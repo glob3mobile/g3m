@@ -181,16 +181,24 @@ public class Vector3D
 
   public final Angle angleBetween(Vector3D other)
   {
+    return Angle.fromRadians(angleInRadiansBetween(other));
+  }
+  public final double angleInRadiansBetween(Vector3D other)
+  {
     final Vector3D v1 = normalized();
     final Vector3D v2 = other.normalized();
   
     double c = v1.dot(v2);
     if (c > 1.0)
-       c = 1.0;
+    {
+      c = 1.0;
+    }
     else if (c < -1.0)
-       c = -1.0;
+    {
+      c = -1.0;
+    }
   
-    return Angle.fromRadians(IMathUtils.instance().acos(c));
+    return IMathUtils.instance().acos(c);
   }
   public final Angle signedAngleBetween(Vector3D other, Vector3D up)
   {
