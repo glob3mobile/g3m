@@ -639,6 +639,11 @@ void Tile::debugRender(const G3MRenderContext* rc,
 
 
 std::vector<Tile*>* Tile::getSubTiles(const bool mercator) {
+  if (_subtiles != NULL) {
+    // quick check to avoid splitLongitude/splitLatitude calculation
+    return _subtiles;
+  }
+
   const Geodetic2D lower = _sector._lower;
   const Geodetic2D upper = _sector._upper;
 
@@ -825,19 +830,7 @@ void Tile::render(const G3MRenderContext* rc,
       //TODO: AVISAR CAMBIO DE TERRENO
     }
     else {
-      const Geodetic2D lower = _sector._lower;
-      const Geodetic2D upper = _sector._upper;
-
-      const Angle splitLongitude = Angle::midAngle(lower._longitude,
-                                                   upper._longitude);
-
-      const Angle splitLatitude = layerTilesRenderParameters->_mercator
-      /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
-                                                                                  upper._latitude)
-      /*                               */ : Angle::midAngle(lower._latitude,
-                                                            upper._latitude);
-
-      std::vector<Tile*>* subTiles = getSubTiles(splitLatitude, splitLongitude);
+      std::vector<Tile*>* subTiles = getSubTiles(layerTilesRenderParameters->_mercator);
       if (_justCreatedSubtiles) {
         lastSplitTimer->start();
         tilesStatistics->computeSplitInFrame();
