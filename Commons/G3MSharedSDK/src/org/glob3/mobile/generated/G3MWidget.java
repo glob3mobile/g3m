@@ -491,19 +491,24 @@ public class G3MWidget
     _initialCameraPositionHasBeenSet = true;
   }
 
-  public final void setCameraHeading(Angle angle)
+  public final void setCameraHeading(Angle heading)
   {
-    getNextCamera().setHeading(angle);
+    getNextCamera().setHeading(heading);
   }
 
-  public final void setCameraPitch(Angle angle)
+  public final void setCameraPitch(Angle pitch)
   {
-    getNextCamera().setPitch(angle);
+    getNextCamera().setPitch(pitch);
   }
 
-  public final void setCameraRoll(Angle angle)
+  public final void setCameraRoll(Angle roll)
   {
-    getNextCamera().setRoll(angle);
+    getNextCamera().setRoll(roll);
+  }
+
+  public final void setCameraHeadingPitchRoll(Angle heading, Angle pitch, Angle roll)
+  {
+    getNextCamera().setHeadingPitchRoll(heading, pitch, roll);
   }
 
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading)
