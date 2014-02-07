@@ -239,7 +239,7 @@ public class Plane
      //Check code
     Angle res = Angle::fromRadians(solution);
     Vector3D nv = vector.rotateAroundAxis(axis, res);
-    if (!isVectorParallel(nv)){
+    if (!isVectorParallel(nv)) {
   
       ILogger::instance()->logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f",
                                     vector.description().c_str(),

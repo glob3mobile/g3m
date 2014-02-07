@@ -335,27 +335,26 @@ public class Camera
 
   public final Angle getHeading()
   {
-    return getTaitBryanAngles()._heading;
+    return getHeadingPitchRoll()._heading;
   }
   public final void setHeading(Angle angle)
   {
     //ILogger::instance()->logInfo("SET CAMERA HEADING: %f", angle._degrees);
-    TaitBryanAngles angles = getTaitBryanAngles();
-  
-    CoordinateSystem localRS = getLocalCoordinateSystem();
-    CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
+    final TaitBryanAngles angles = getHeadingPitchRoll();
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
     setCameraCoordinateSystem(cameraRS);
   }
   public final Angle getPitch()
   {
-    return getTaitBryanAngles()._pitch;
+    return getHeadingPitchRoll()._pitch;
   }
   public final void setPitch(Angle angle)
   {
     //ILogger::instance()->logInfo("SET CAMERA PITCH: %f", angle._degrees);
-    TaitBryanAngles angles = getTaitBryanAngles();
-    CoordinateSystem localRS = getLocalCoordinateSystem();
-    CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
+    final TaitBryanAngles angles = getHeadingPitchRoll();
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
     setCameraCoordinateSystem(cameraRS);
   }
 
@@ -496,15 +495,15 @@ public class Camera
 
   public final Angle getRoll()
   {
-    return getTaitBryanAngles()._roll;
+    return getHeadingPitchRoll()._roll;
   }
   public final void setRoll(Angle angle)
   {
     //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
-    TaitBryanAngles angles = getTaitBryanAngles();
+    final TaitBryanAngles angles = getHeadingPitchRoll();
   
-    CoordinateSystem localRS = getLocalCoordinateSystem();
-    CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
     setCameraCoordinateSystem(cameraRS);
   }
 
@@ -516,17 +515,16 @@ public class Camera
   {
     return new CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
   }
-  public final TaitBryanAngles getTaitBryanAngles()
+  public final TaitBryanAngles getHeadingPitchRoll()
   {
-    CoordinateSystem localRS = getLocalCoordinateSystem();
-    CoordinateSystem cameraRS = getCameraCoordinateSystem();
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = getCameraCoordinateSystem();
     return cameraRS.getTaitBryanAngles(localRS);
   }
   public final void setHeadingPitchRoll(Angle heading, Angle pitch, Angle roll)
   {
-  
-    CoordinateSystem localRS = getLocalCoordinateSystem();
-    CoordinateSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
     setCameraCoordinateSystem(newCameraRS);
   }
 
