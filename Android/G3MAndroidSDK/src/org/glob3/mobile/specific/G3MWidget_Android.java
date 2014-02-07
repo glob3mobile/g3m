@@ -430,11 +430,11 @@ public final class G3MWidget_Android
    }
 
 
-   //   public void setCameraHeadingPitchRoll(final Angle heading,
-   //                                         final Angle pitch,
-   //                                         final Angle roll) {
-   //      getG3MWidget().setCameraHeadingPitchRoll(heading, pitch, roll);
-   //   }
+   public void setCameraHeadingPitchRoll(final Angle heading,
+                                         final Angle pitch,
+                                         final Angle roll) {
+      getG3MWidget().setCameraHeadingPitchRoll(heading, pitch, roll);
+   }
 
 
    public void setWidget(final G3MWidget widget) {
