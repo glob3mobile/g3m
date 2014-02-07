@@ -522,7 +522,7 @@ public class Camera
     CoordinateSystem cameraRS = getCameraCoordinateSystem();
     return cameraRS.getTaitBryanAngles(localRS);
   }
-  public final void setTaitBryanAngles(Angle heading, Angle pitch, Angle roll)
+  public final void setHeadingPitchRoll(Angle heading, Angle pitch, Angle roll)
   {
   
     CoordinateSystem localRS = getLocalCoordinateSystem();
@@ -542,7 +542,7 @@ public class Camera
     return X * getHeight() / frustumData._top;
   }
 
-//  const Angle getHeading(const Vector3D& normal) const;
+  //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _width;
