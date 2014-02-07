@@ -165,6 +165,7 @@ public:
   }
   
   Angle angleBetween(const Vector3D& other) const;
+  double angleInRadiansBetween(const Vector3D& other) const;
   Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const;
   
   Vector3D rotateAroundAxis(const Vector3D& axis,

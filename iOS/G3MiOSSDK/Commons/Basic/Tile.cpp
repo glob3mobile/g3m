@@ -418,7 +418,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const Camera* camera = rc->getCurrentCamera();
 
   const double pixelsDistanceNS = camera->getEstimatedPixelDistance(*_middleNorthPoint, *_middleSouthPoint);
-  const double pixelsDistanceWE = camera->getEstimatedPixelDistance(*_middleWestPoint, *_middleEastPoint);
+  const double pixelsDistanceWE = camera->getEstimatedPixelDistance(*_middleWestPoint,  *_middleEastPoint);
 
   const double latitudeMiddleDistSquared  = pixelsDistanceNS * pixelsDistanceNS;
   const double longitudeMiddleDistSquared = pixelsDistanceWE * pixelsDistanceWE;

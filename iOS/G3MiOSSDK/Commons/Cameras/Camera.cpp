@@ -403,12 +403,11 @@ void Camera::setHeadingPitchRoll(const Angle& heading,
 
 double Camera::getEstimatedPixelDistance(const Vector3D& point0,
                                          const Vector3D& point1) const {
-  const IMathUtils* mu = IMathUtils::instance();
   const Vector3D cameraPosition = getCartesianPosition();
   const Vector3D ray0 = cameraPosition.sub(point0);
   const Vector3D ray1 = cameraPosition.sub(point1);
-  const Angle angle = ray1.angleBetween(ray0);
+  const double angleInRadians = ray1.angleInRadiansBetween(ray0);
   const FrustumData frustumData = getFrustumData();
-  const double X = frustumData._znear * mu->atan(angle._radians/2);
-  return X * getHeight() / frustumData._top;
+  const double X = frustumData._znear * IMathUtils::instance()->atan(angleInRadians/2);
+  return X * _height / frustumData._top;
 }
