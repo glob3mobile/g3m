@@ -82,7 +82,7 @@ public:
     if (_frustumMCDirty)             d += "FMC ";
     return d;
   }
-  
+
 #ifdef JAVA_CODE
   @Override
   public String toString() {
@@ -301,15 +301,15 @@ public:
   CoordinateSystem getLocalCoordinateSystem() const;
   CoordinateSystem getCameraCoordinateSystem() const;
   TaitBryanAngles getTaitBryanAngles() const;
-  void setTaitBryanAngles(const Angle& heading,
-                          const Angle& pitch,
-                          const Angle& roll);
+  void setHeadingPitchRoll(const Angle& heading,
+                           const Angle& pitch,
+                           const Angle& roll);
 
   double getEstimatedPixelDistance(const Vector3D& point0,
                                    const Vector3D& point1) const;
 
 private:
-//  const Angle getHeading(const Vector3D& normal) const;
+  //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
@@ -433,9 +433,9 @@ private:
     }
     return _modelViewMatrix;
   }
-
-
-
+  
+  
+  
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
