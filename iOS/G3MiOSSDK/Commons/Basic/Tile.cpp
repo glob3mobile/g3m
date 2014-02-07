@@ -142,7 +142,7 @@ void Tile::setTextureSolved(bool textureSolved) {
   if (textureSolved != _textureSolved) {
     _textureSolved = textureSolved;
 
-    if (_textureSolved){
+    if (_textureSolved) {
       delete _texturizerData;
       _texturizerData = NULL;
     }
@@ -389,7 +389,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
 
   if (_lastLodTimeInMS != 0 &&
-      (nowInMS - _lastLodTimeInMS) < 500 ){
+      (nowInMS - _lastLodTimeInMS) < 500 ) {
     return _lastLodTest;
   }
 
@@ -1092,9 +1092,9 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
   }
 }
 
-void Tile::prepareTestLODData(const Planet* planet){
+void Tile::prepareTestLODData(const Planet* planet) {
 
-  if (_middleNorthPoint == NULL){
+  if (_middleNorthPoint == NULL) {
     ILogger::instance()->logError("Error in Tile::prepareTestLODData");
     return;
   }
@@ -1122,9 +1122,9 @@ void Tile::prepareTestLODData(const Planet* planet){
   _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
 }
 
-void Tile::computeTileCorners(const Planet* planet){
+void Tile::computeTileCorners(const Planet* planet) {
 
-  if (_tessellatorMesh == NULL){
+  if (_tessellatorMesh == NULL) {
     ILogger::instance()->logError("Error in Tile::computeTileCorners");
     return;
   }

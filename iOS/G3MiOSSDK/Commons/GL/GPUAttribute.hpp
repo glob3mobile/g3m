@@ -99,7 +99,7 @@ public:
   const GPUAttributeKey _key;
 
   virtual ~GPUAttribute() {
-    if (_value != NULL){
+    if (_value != NULL) {
       _value->_release();
     }
 

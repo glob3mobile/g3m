@@ -14,7 +14,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 
-CoordinateSystem CoordinateSystem::global(){
+CoordinateSystem CoordinateSystem::global() {
   return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
 }
 
@@ -22,7 +22,7 @@ CoordinateSystem::CoordinateSystem(const Vector3D& x, const Vector3D& y, const V
 _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
 {
   //TODO CHECK CONSISTENCY
-  if (!areOrtogonal(x, y, z)){
+  if (!areOrtogonal(x, y, z)) {
     ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
   }
 }
@@ -36,7 +36,7 @@ _origin(origin)
 {
 }
 
-bool CoordinateSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z){
+bool CoordinateSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z) {
   return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
 }
 
@@ -100,7 +100,7 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
 
   //Pitch "especial" positions
   double x = vpp.dot(wp);
-  if (x < -0.99999 && x > -1.000001){
+  if (x < -0.99999 && x > -1.000001) {
     //Pitch -90
     const Vector3D wpp = wppp; //No Roll
 
@@ -112,7 +112,7 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
                            pitch,
                            roll);
 
-  } else if (x > 0.99999 && x < 1.000001){
+  } else if (x > 0.99999 && x < 1.000001) {
     //Pitch 90
     const Vector3D wpp = wppp; //No Roll
 

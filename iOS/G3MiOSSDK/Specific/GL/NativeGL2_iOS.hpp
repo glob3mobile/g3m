@@ -410,7 +410,7 @@ public:
     //ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
 
-    if (glIsProgram(program) == GL_FALSE){
+    if (glIsProgram(program) == GL_FALSE) {
       return true;
     } else{
       int markedToBeDeleted;

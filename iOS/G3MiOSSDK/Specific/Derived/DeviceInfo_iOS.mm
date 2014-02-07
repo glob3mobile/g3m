@@ -33,7 +33,7 @@ DeviceInfo_iOS::DeviceInfo_iOS() {
     bool iPadMini = strcmp(machine, "iPad2,5") == 0;
     delete [] machine;
 
-    if (iPadMini){
+    if (iPadMini) {
       _dpi = 163 * scale;
     }
     else{ //REGULAR IPAD

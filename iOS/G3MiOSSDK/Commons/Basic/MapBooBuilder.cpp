@@ -1776,7 +1776,7 @@ const MapBoo_Notification* MapBooBuilder::createNotification(const Geodetic2D&  
 const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
                                                      const Vector2I* size,
                                                      const Vector2I* pixel,
-                                                     const Geodetic3D& position){
+                                                     const Geodetic3D& position) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_serverURL.getPath());
 

@@ -61,7 +61,7 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
 
   //Check Agustin Trujillo's document that explains how this algorithm works
 
-  if (isVectorParallel(vector)){
+  if (isVectorParallel(vector)) {
     return Angle::zero();
   }
 
@@ -144,11 +144,11 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
 
   //Considering the lower angle to rotate as solution
   double solution = firstSolution;
-  if (firstSolution > secondSolution){ //Taking smaller value
+  if (firstSolution > secondSolution) { //Taking smaller value
     solution = secondSolution;
   }
 
-  if (mu->abs((s1 * c1 + s2*SIN(solution) + s3)) > 0.001){ //if valid solution (can't compare with 0)
+  if (mu->abs((s1 * c1 + s2*SIN(solution) + s3)) > 0.001) { //if valid solution (can't compare with 0)
     solution = -solution;
   }
 
@@ -157,7 +157,7 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
    //Check code
   Angle res = Angle::fromRadians(solution);
   Vector3D nv = vector.rotateAroundAxis(axis, res);
-  if (!isVectorParallel(nv)){
+  if (!isVectorParallel(nv)) {
 
     ILogger::instance()->logError("PROBLEM AT vectorRotationForAxis() V = %s, AXIS = %s, RESULT = %s, DEVIANCE = %f",
                                   vector.description().c_str(),

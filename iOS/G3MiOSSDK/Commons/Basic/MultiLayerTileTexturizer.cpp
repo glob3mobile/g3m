@@ -469,7 +469,7 @@ public:
           textureId += _tileRasterizer->getId();
         }
 
-        if (images.size() != transparencies.size()){
+        if (images.size() != transparencies.size()) {
           ILogger::instance()->logError("Wrong number of transparencies");
         }
 

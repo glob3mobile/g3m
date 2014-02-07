@@ -374,10 +374,10 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
     }
   }
 
-  if (minElevation == mu->maxDouble()){
+  if (minElevation == mu->maxDouble()) {
     minElevation = 0;
   }
-  if (maxElevation == mu->minDouble()){
+  if (maxElevation == mu->minDouble()) {
     maxElevation = 0;
   }
 

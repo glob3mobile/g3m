@@ -388,7 +388,7 @@ Mark::~Mark() {
     IFactory::instance()->deleteImage(_textureImage);
   }
 
-  if (_glState != NULL){
+  if (_glState != NULL) {
     _glState->_release();
   }
 
@@ -489,19 +489,19 @@ void Mark::render(const G3MRenderContext* rc,
   if (renderableByDistance) {
     bool occludedByHorizon = false;
 
-    if (_position->_height > cameraHeight){
+    if (_position->_height > cameraHeight) {
       //Computing horizon culling
       const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
-      if (dists.size() > 0){
+      if (dists.size() > 0) {
         const double dist = dists[0];
-        if (dist > 0.0 && dist < 1.0){
+        if (dist > 0.0 && dist < 1.0) {
           occludedByHorizon = true;
         }
       }
 
     } else{
       //if camera position is upper than mark we can compute horizon culling in a much simpler way
-      if (_normalAtMarkPosition == NULL){
+      if (_normalAtMarkPosition == NULL) {
         _normalAtMarkPosition = new Vector3D(planet->geodeticSurfaceNormal(*markPosition));
       }
       occludedByHorizon = (_normalAtMarkPosition->angleBetween(markCameraVector)._radians <= HALF_PI);
@@ -555,7 +555,7 @@ void Mark::elevationChanged(const Geodetic2D& position,
   delete _cartesianPosition;
   _cartesianPosition = NULL;
 
-  if (_glState != NULL){
+  if (_glState != NULL) {
     _glState->_release();
     _glState = NULL;
   }

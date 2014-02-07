@@ -16,11 +16,11 @@ _roll(roll)
 {
 }
 
-TaitBryanAngles TaitBryanAngles::fromRadians(double heading, double pitch, double roll){
+TaitBryanAngles TaitBryanAngles::fromRadians(double heading, double pitch, double roll) {
   return TaitBryanAngles(Angle::fromRadians(heading), Angle::fromRadians(pitch), Angle::fromRadians(roll));
 }
 
-TaitBryanAngles TaitBryanAngles::fromDegrees(double heading, double pitch, double roll){
+TaitBryanAngles TaitBryanAngles::fromDegrees(double heading, double pitch, double roll) {
   return TaitBryanAngles(Angle::fromDegrees(heading),
                          Angle::fromDegrees(pitch),
                          Angle::fromDegrees(roll));

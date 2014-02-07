@@ -300,7 +300,7 @@ public:
 
   CoordinateSystem getLocalCoordinateSystem() const;
   CoordinateSystem getCameraCoordinateSystem() const;
-  TaitBryanAngles getTaitBryanAngles() const;
+  TaitBryanAngles getHeadingPitchRoll() const;
   void setHeadingPitchRoll(const Angle& heading,
                            const Angle& pitch,
                            const Angle& roll);

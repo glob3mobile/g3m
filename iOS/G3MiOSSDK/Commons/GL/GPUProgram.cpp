@@ -16,7 +16,7 @@
 GPUProgram* GPUProgram::createProgram(GL* gl,
                                       const std::string& name,
                                       const std::string& vertexSource,
-                                      const std::string& fragmentSource){
+                                      const std::string& fragmentSource) {
 
   GPUProgram* p = new GPUProgram();
 
@@ -80,7 +80,7 @@ GPUProgram::~GPUProgram() {
 
   //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
 
-//  if (_manager != NULL){
+//  if (_manager != NULL) {
 //    _manager->compiledProgramDeleted(this->_name);
 //  }
 
@@ -95,7 +95,7 @@ GPUProgram::~GPUProgram() {
   delete[] _createdAttributes;
   delete[] _createdUniforms;
 
-  if (!_gl->deleteProgram(this)){
+  if (!_gl->deleteProgram(this)) {
     ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
   }
 }

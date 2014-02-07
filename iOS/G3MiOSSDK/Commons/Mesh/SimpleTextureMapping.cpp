@@ -53,7 +53,7 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
   }
   else {
     TextureGLFeature* tglf = (TextureGLFeature*) state.getGLFeature(GLF_TEXTURE);
-    if (tglf != NULL && tglf->getTextureID() == _glTextureId->getID()){
+    if (tglf != NULL && tglf->getTextureID() == _glTextureId->getID()) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
       tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
