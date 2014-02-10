@@ -3180,9 +3180,9 @@ public:
 
             //            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
             Camera* cam = [_iosWidget widget]->getNextCamera();
+/*
 
-
-            TaitBryanAngles angles = cam->getTaitBryanAngles();
+            //TaitBryanAngles angles = cam->getTaitBryanAngles();
             printf("A1: %s\n", angles.description().c_str() );
 
             Angle step = Angle::fromDegrees(10);
@@ -3214,7 +3214,7 @@ public:
             _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
             _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
 
-
+*/
             return true;
           }
 
