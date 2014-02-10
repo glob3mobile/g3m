@@ -3162,7 +3162,7 @@ public:
         }
       }
 
-      if (true){ //CHANGE CAMERA WITH TOUCH
+      if (false){ //CHANGE CAMERA WITH TOUCH
         class CameraAnglesTerrainListener: public TerrainTouchListener{
         private:
           G3MWidget_iOS* _iosWidget;
@@ -3182,7 +3182,12 @@ public:
             Camera* cam = [_iosWidget widget]->getNextCamera();
 /*
 
+<<<<<<< HEAD
             //TaitBryanAngles angles = cam->getTaitBryanAngles();
+=======
+
+            TaitBryanAngles angles = cam->getHeadingPitchRoll();
+>>>>>>> 10100b4c5f73c124779494d0ba45d11b9ed1ebc2
             printf("A1: %s\n", angles.description().c_str() );
 
             Angle step = Angle::fromDegrees(10);
@@ -3204,7 +3209,7 @@ public:
                 break;
             }
 
-            TaitBryanAngles angles2 = cam->getTaitBryanAngles();
+            TaitBryanAngles angles2 = cam->getHeadingPitchRoll();
             printf("A2: %s\n", angles2.description().c_str() );
 
             Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
