@@ -133,7 +133,7 @@ IFloatBuffer* Mark::_billboardTexCoord = NULL;
 
 
 Mark::Mark(const std::string& label,
-           const URL          iconURL,
+           const URL&         iconURL,
            const Geodetic3D&  position,
            AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
@@ -217,7 +217,7 @@ _normalAtMarkPosition(NULL)
 
 }
 
-Mark::Mark(const URL          iconURL,
+Mark::Mark(const URL&         iconURL,
            const Geodetic3D&  position,
            AltitudeMode       altitudeMode,
            double             minDistanceToCamera,

@@ -148,7 +148,7 @@ public:
    * Creates a marker with icon and label
    */
   Mark(const std::string& label,
-       const URL          iconURL,
+       const URL&         iconURL,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
@@ -180,7 +180,7 @@ public:
   /**
    * Creates a marker just with icon, without label
    */
-  Mark(const URL          iconURL,
+  Mark(const URL&         iconURL,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
