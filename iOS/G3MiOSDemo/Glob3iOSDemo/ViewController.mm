@@ -3179,7 +3179,7 @@ public:
                                       const Tile*            tile){
 
             //            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
-            Camera* cam = [_iosWidget widget]->getNextCamera();
+//            Camera* cam = [_iosWidget widget]->getNextCamera();
 /*
 
 <<<<<<< HEAD
