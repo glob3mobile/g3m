@@ -2840,13 +2840,19 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
-                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
-                                                     Angle::fromDegrees(180),
-                                                     Angle::fromDegrees(-45),
-                                                     false,
-                                                     false);
-      
+//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
+//                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
+//                                                     Angle::fromDegrees(180),
+//                                                     Angle::fromDegrees(-45),
+//                                                     false,
+//                                                     false);
+
+//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                     Geodetic3D::fromDegrees(28.624949838863251728,
+//                                                                             -13.898810737833036555,
+//                                                                             5));
+
+
       //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.518803097704875427,
       //                                                                             -6.2814697225724938079,
       //                                                                             30.098082578364309114),

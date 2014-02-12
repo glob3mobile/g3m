@@ -37,12 +37,37 @@ Layer(condition,
       NULL,
       transparency),
 _imagerySet(imagerySet),
+_culture("en-US"),
 _key(key),
 _initialLevel(initialLevel),
 _isInitialized(false)
 {
 
 }
+
+BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
+                             const std::string& culture,
+                             const std::string& key,
+                             const TimeInterval& timeToCache,
+                             bool readExpired,
+                             int initialLevel,
+                             LayerCondition* condition,
+                             float transparency) :
+Layer(condition,
+      "BingMaps",
+      timeToCache,
+      readExpired,
+      NULL,
+      transparency),
+_imagerySet(imagerySet),
+_culture(culture),
+_key(key),
+_initialLevel(initialLevel),
+_isInitialized(false)
+{
+
+}
+
 
 
 class BingMapsLayer_MetadataBufferDownloadListener : public IBufferDownloadListener {
@@ -270,7 +295,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   std::string path = _imageUrl;
   path = su->replaceSubstring(path, "{subdomain}", subdomain);
   path = su->replaceSubstring(path, "{quadkey}",   quadkey);
-  path = su->replaceSubstring(path, "{culture}",   "en-US");
+  path = su->replaceSubstring(path, "{culture}",   _culture);
 
   petitions.push_back( new Petition(tile->_sector,
                                     URL(path, false),
