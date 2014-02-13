@@ -19,7 +19,7 @@ bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
-  
+    
   switch (touchEvent->getType()) {
     case Down:
       onDown(eventContext, *touchEvent, cameraContext);

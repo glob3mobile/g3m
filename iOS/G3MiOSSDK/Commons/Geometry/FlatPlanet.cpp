@@ -153,6 +153,10 @@ Effect* FlatPlanet::createEffectFromLastSingleDrag() const
 }
 
 
+bool BEGIN_DOUBLE_DRAG = false;
+double CORRECTION_T2;
+MutableVector3D CENTER_POINT;
+
 void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
                                  const Vector3D& centerRay,
                                  const Vector3D& centerPosition,
@@ -174,6 +178,8 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
 
   // middle point in 3D
   _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
+  
+  BEGIN_DOUBLE_DRAG = true;
 }
 
 
@@ -220,6 +226,17 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   if (root<0) return MutableMatrix44D::invalid();
   double squareRoot = mu->sqrt(root);
   double t2 = (-b - squareRoot) / (2*a);
+  
+  
+  if (BEGIN_DOUBLE_DRAG) {
+    BEGIN_DOUBLE_DRAG = false;
+    CORRECTION_T2 = t2;
+    t2 = 0;
+    printf("primer t2 = %f\n", t2);
+  } else {
+    t2 -= CORRECTION_T2;
+    printf("    t2=%f\n", t2);
+  }
     
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
@@ -232,6 +249,9 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     MutableVector3D delta = _initialPoint.sub((_centerPoint));
     delta = delta.add(viewDirection.times(t2));
+    
+    printf ("    traslado delta = %f %f %f\n", delta.x(), delta.y(), delta.z());
+    
     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(delta.asVector3D());
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
@@ -239,16 +259,39 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
 
   // compute 3D point of view center
   double meanDragHeight = 0.5 * (_dragHeight0 + _dragHeight1);
-  Vector3D centerPoint2 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D(), meanDragHeight);
+  //Vector3D centerPoint2 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D(), meanDragHeight);
+  
 
   // compute middle point in 3D
   Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
   Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D(), _dragHeight1);
   Vector3D finalPoint = P0.add(P1).times(0.5);
+ 
+  
+  
+  if (t2==0) {
+    MutableVector3D delta = _initialPoint.sub((_centerPoint));
+    CENTER_POINT = finalPoint.asMutableVector3D().sub(delta);
+  }
+  Vector3D centerPoint2 = CENTER_POINT.asVector3D();
+  
+  printf ("    _centerPoint = %f %f %f\n", _centerPoint.x(), _centerPoint.y(), _centerPoint.z());
+  printf ("    centerPoint2 = %f %f %f\n", centerPoint2._x, centerPoint2._y, centerPoint2._z);
+
+  
+  
+  printf ("    finalPoint = %f %f %f\n", finalPoint._x, finalPoint._y, finalPoint._z);
+  
 
   // drag globe from centerPoint to finalPoint
   {
     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(centerPoint2.sub(finalPoint));
+    
+    
+    Vector3D pepe=centerPoint2.sub(finalPoint);
+    printf ("    traslado de center a final = %f %f %f\n", pepe._x, pepe._y, pepe._z);
+    
+    
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
   }
