@@ -124,7 +124,7 @@ void IImageUtils::combine(int width,
     const RectangleF* dstRect = destRects[i];
     const float transparency = transparencies[i];
 
-    if (transparency == 1.0){
+    if (transparency == 1.0) {
       canvas->drawImage(image,
                         srcRect->_x, srcRect->_y, srcRect->_width, srcRect->_height,
                         dstRect->_x, dstRect->_y, dstRect->_width, dstRect->_height);

@@ -106,6 +106,10 @@ public:
   double dot(const Vector3D& v) const {
     return _x * v._x + _y * v._y + _z * v._z;
   }
+
+  bool isPerpendicularTo(const Vector3D& v) const{
+    return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+  }
   
   Vector3D add(const Vector3D& v) const {
     return Vector3D(_x + v._x,
@@ -162,6 +166,7 @@ public:
   }
   
   Angle angleBetween(const Vector3D& other) const;
+  double angleInRadiansBetween(const Vector3D& other) const;
   Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const;
   
   Vector3D rotateAroundAxis(const Vector3D& axis,

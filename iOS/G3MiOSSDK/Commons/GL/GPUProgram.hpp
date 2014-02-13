@@ -130,7 +130,7 @@ public:
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);
 
-  void addReference(){ ++_nReferences;}
+  void addReference() { ++_nReferences;}
   void removeReference() { --_nReferences;}
   int getNReferences() const { return _nReferences;}
 

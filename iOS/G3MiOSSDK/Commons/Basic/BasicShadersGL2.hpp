@@ -355,25 +355,23 @@ public:
     this->add(sourcesShader);
 
     GPUProgramSources sourcesTexturedMesh("TexturedMesh",
- emptyString
- + "attribute vec4 aPosition; \n "
- + "attribute vec2 aTextureCoord; \n "
- + "uniform mat4 uModelview; \n "
- + "uniform float uPointSize; \n "
- + "varying vec4 VertexColor; \n "
- + "varying vec2 TextureCoordOut; \n "
- + "void main() { \n "
- + "gl_Position = uModelview * aPosition; \n "
- + "TextureCoordOut = aTextureCoord; \n "
- + "gl_PointSize = uPointSize; \n "
- + "} \n ",
- emptyString
- + "varying mediump vec2 TextureCoordOut; \n "
- + "varying mediump vec4 VertexColor; \n "
- + "uniform sampler2D Sampler; \n "
- + "void main() { \n "
- + "gl_FragColor = texture2D(Sampler, TextureCoordOut); \n "
- + "} \n ");
+ emptyString +  
+"attribute vec4 aPosition; \n " + 
+"attribute vec2 aTextureCoord; \n " + 
+"uniform mat4 uModelview; \n " + 
+"uniform float uPointSize; \n " + 
+"varying vec2 TextureCoordOut; \n " + 
+"void main() { \n " + 
+"gl_Position = uModelview * aPosition; \n " + 
+"TextureCoordOut = aTextureCoord; \n " + 
+"gl_PointSize = uPointSize; \n " + 
+"} \n ",
+ emptyString +  
+"varying mediump vec2 TextureCoordOut; \n " + 
+"uniform sampler2D Sampler; \n " + 
+"void main() { \n " + 
+"gl_FragColor = texture2D(Sampler, TextureCoordOut); \n " + 
+"} \n ");
     this->add(sourcesTexturedMesh);
 
     GPUProgramSources sourcesTexturedMesh_DirectionLight("TexturedMesh_DirectionLight",

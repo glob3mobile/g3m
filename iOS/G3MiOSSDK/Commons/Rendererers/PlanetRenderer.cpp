@@ -122,7 +122,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                bool                         showStatistics,
                                long long                    texturePriority,
                                const Sector&                renderedSector,
-                               const bool                   renderTileMeshes) :
+                               const bool                   renderTileMeshes,
+                               const bool                   logTilesPetitions) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -146,7 +147,8 @@ _renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector
 _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
 _renderedTilesListFrame(-1),
-_renderTileMeshes(renderTileMeshes)
+_renderTileMeshes(renderTileMeshes),
+_logTilesPetitions(logTilesPetitions)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -461,7 +463,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _tilesRenderParameters,
                                       true,
                                       _texturePriority,
-                                      _verticalExaggeration);
+                                      _verticalExaggeration,
+                                      _logTilesPetitions);
       }
     }
 
@@ -615,17 +618,17 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
-      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
+      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics, _logTilesPetitions);
     }
   } else{
-
     std::list<Tile*> *renderedTiles = getRenderedTilesList(rc);
 
     for (std::list<Tile*>::iterator iter = renderedTiles->begin();
          iter != renderedTiles->end();
          iter++) {
       Tile* tile = *iter;
-      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
+      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics,
+                             _logTilesPetitions);
     }
   }
 

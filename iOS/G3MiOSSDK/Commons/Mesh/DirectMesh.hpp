@@ -25,7 +25,7 @@ public:
              IFloatBuffer* vertices,
              float lineWidth,
              float pointSize,
-             Color* flatColor = NULL,
+             const Color* flatColor = NULL,
              IFloatBuffer* colors = NULL,
              const float colorsIntensity = 0.0f,
              bool depthTest = true,
@@ -33,9 +33,8 @@ public:
 
   ~DirectMesh() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
   }
 
 };

@@ -114,6 +114,18 @@ private:
                                   double texHeightSquared,
                                   double nowInMS);
 
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* glState,
+                 TileTexturizer* texturizer,
+                 ElevationDataProvider* elevationDataProvider,
+                 const TileTessellator* tessellator,
+                 TileRasterizer* tileRasterizer,
+                 const LayerTilesRenderParameters* layerTilesRenderParameters,
+                 const LayerSet* layerSet,
+                 const TilesRenderParameters* tilesRenderParameters,
+                 bool isForcedFullRender,
+                 long long texturePriority,
+                 bool logTilesPetitions);
 
   void debugRender(const G3MRenderContext* rc,
                    const GLState* glState,
@@ -159,18 +171,6 @@ private:
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
 
-  inline void rawRender(const G3MRenderContext* rc,
-                        const GLState* glState,
-                        TileTexturizer* texturizer,
-                        ElevationDataProvider* elevationDataProvider,
-                        const TileTessellator* tessellator,
-                        TileRasterizer* tileRasterizer,
-                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                        const LayerSet* layerSet,
-                        const TilesRenderParameters* tilesRenderParameters,
-                        bool isForcedFullRender,
-                        long long texturePriority);
-
 public:
   const Sector    _sector;
   const int       _level;
@@ -208,7 +208,8 @@ public:
                                const TilesRenderParameters* tilesRenderParameters,
                                bool isForcedFullRender,
                                long long texturePriority,
-                               float verticalExaggeration);
+                               float verticalExaggeration,
+                               bool logTilesPetitions);
 
   //RETURN ISRAWRENDER
   bool render(const G3MRenderContext* rc,
@@ -234,7 +235,8 @@ public:
               double texWidth,
               double texHeight,
               double nowInMS,
-              const bool renderTileMeshes);
+              const bool renderTileMeshes,
+              bool logTilesPetitions);
 
   void actualizeQuadTree(const G3MRenderContext* rc,
                          std::list<Tile*>& renderedTiles,
@@ -271,7 +273,8 @@ public:
                         const TilesRenderParameters* tilesRenderParameters,
                         bool isForcedFullRender,
                         long long texturePriority,
-                        TilesStatistics* tilesStatistics);
+                        TilesStatistics* tilesStatistics,
+                        bool logTilesPetitions);
 
   void zRender(const G3MRenderContext* rc,
                const GLState& parentState);
@@ -354,7 +357,9 @@ public:
   void ancestorChangedElevationData(Tile* ancestor);
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
-  
+
+  Vector2I* getPixelNormalizedFromPosition(const Geodetic2D& position2D,
+                                           const Vector2I* size) const;
 };
 
 #endif

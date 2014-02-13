@@ -26,8 +26,13 @@ JSONBaseObject* JSONParser_iOS::parse(NSData* jsonData,
                                                       error: &e];
 
   if (e) {
-    ILogger::instance()->logWarning("JSON Parser: Error=%s",
+    ILogger::instance()->logError("JSON Parser: Error=%s",
                                     [[e localizedDescription] UTF8String]);
+    if ([e userInfo]) {
+      ILogger::instance()->logError("JSON Parser: UserInfo=%s",
+                                      [[[e userInfo] description] UTF8String]);
+    }
+
     return NULL;
   }
 

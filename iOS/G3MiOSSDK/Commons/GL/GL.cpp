@@ -188,7 +188,7 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
 }
 
 void GL::useProgram(GPUProgram* program) {
-  if (program != NULL){
+  if (program != NULL) {
     if (_currentGPUProgram != program) {
 
       if (_currentGPUProgram != NULL) {
@@ -202,7 +202,7 @@ void GL::useProgram(GPUProgram* program) {
       _currentGPUProgram->addReference();
     }
 
-//    if (!_nativeGL->isProgram(program->getProgramID())){
+//    if (!_nativeGL->isProgram(program->getProgramID())) {
 //      ILogger::instance()->logError("INVALID PROGRAM.");
 //    }
   }

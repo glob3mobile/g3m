@@ -53,6 +53,8 @@ private:
   std::vector<long long>* getStabilizationMilliSeconds();
   long long getTexturePriority();
 
+  bool _logTilesPetitions;
+
   LayerSet* createLayerSet();
   TilesRenderParameters* createPlanetRendererParameters();
   TileTessellator* createTileTessellator();
@@ -65,6 +67,8 @@ private:
 
   bool _renderTileMeshes;
   bool getRenderTileMeshes();
+
+  bool getLogTilesPetitions();
 
 
 public:
@@ -101,6 +105,8 @@ public:
   void setQuality(Quality quality);
 
   void setRenderTileMeshes(bool renderTileMeshes);
+
+  void setLogTilesPetitions(bool logTilesPetitions);
 
 };
 

@@ -84,13 +84,13 @@ public:
     final int index = key.getValue();
 #endif
 
-    if (_uniformValues[index] != NULL){
+    if (_uniformValues[index] != NULL) {
       _uniformValues[index]->_release();
       _uniformValues[index] = NULL;
     }
 
     for (int i = 0; i < 32; i++) {
-      if (_uniformValues[i] != NULL){
+      if (_uniformValues[i] != NULL) {
         _highestUniformKey = i;
       }
     }

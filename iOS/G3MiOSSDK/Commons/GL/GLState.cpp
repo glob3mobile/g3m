@@ -22,7 +22,7 @@ GLState::~GLState() {
     _parentGLState->_release();
   }
 
-  if (_linkedProgram != NULL){
+  if (_linkedProgram != NULL) {
     _linkedProgram->removeReference();
   }
 }
@@ -34,7 +34,7 @@ void GLState::hasChangedStructure() const {
   delete _globalState;
   _globalState = NULL;
 
-  if (_linkedProgram != NULL){
+  if (_linkedProgram != NULL) {
     _linkedProgram->removeReference();
     _linkedProgram = NULL;
   }

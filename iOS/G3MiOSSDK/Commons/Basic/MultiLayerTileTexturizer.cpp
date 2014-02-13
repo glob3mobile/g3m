@@ -261,6 +261,8 @@ private:
 
   const TileTessellator* _tessellator;
 
+  const bool _logTilesPetitions;
+
   std::vector<TileTextureBuilder_PetitionStatus> _status;
   std::vector<long long>                         _requestsIds;
 
@@ -321,7 +323,8 @@ public:
                      Tile*                             tile,
                      const Mesh*                       tessellatorMesh,
                      const TileTessellator*            tessellator,
-                     long long                         texturePriority) :
+                     long long                         texturePriority,
+                     bool                              logTilesPetitions) :
   _texturizer(texturizer),
   _tileRasterizer(tileRasterizer),
   _texturesHandler(rc->getTexturesHandler()),
@@ -337,7 +340,8 @@ public:
   _finalized(false),
   _canceled(false),
   _alreadyStarted(false),
-  _texturePriority(texturePriority)
+  _texturePriority(texturePriority),
+  _logTilesPetitions(logTilesPetitions)
   {
     _petitions = cleanUpPetitions( petitions );
 
@@ -368,7 +372,9 @@ public:
 
       const long long priority = _texturePriority + _tile->_level;
 
-      //      printf("%s\n", petition->getURL().getPath().c_str());
+      if (_logTilesPetitions) {
+        ILogger::instance()->logInfo("Tile petition \"%s\"", petition->getURL().getPath().c_str());
+      }
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
@@ -463,7 +469,7 @@ public:
           textureId += _tileRasterizer->getId();
         }
 
-        if (images.size() != transparencies.size()){
+        if (images.size() != transparencies.size()) {
           ILogger::instance()->logError("Wrong number of transparencies");
         }
 
@@ -786,7 +792,7 @@ public:
   virtual ~TileTextureBuilderStartTask() {
     _builder->_release();
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
   }
 
@@ -809,7 +815,8 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                           long long texturePriority,
                                           Tile* tile,
                                           Mesh* tessellatorMesh,
-                                          Mesh* previousMesh) {
+                                          Mesh* previousMesh,
+                                          bool logTilesPetitions) {
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
 
   if (builderHolder == NULL) {
@@ -824,7 +831,8 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                                                         tile,
                                                                         tessellatorMesh,
                                                                         tessellator,
-                                                                        texturePriority
+                                                                        texturePriority,
+                                                                        logTilesPetitions
                                                                         )
                                                  );
     tile->setTexturizerData(builderHolder);

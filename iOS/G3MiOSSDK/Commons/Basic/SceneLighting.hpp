@@ -43,11 +43,11 @@ public:
 
   CameraFocusSceneLighting(const Color& ambient, const Color& diffuse);
 
-  ~CameraFocusSceneLighting(){}
+  ~CameraFocusSceneLighting() {}
 
   void modifyGLState(GLState* glState, const G3MRenderContext* rc);
 
-  void setLightDirectionsMeshRenderer(MeshRenderer* meshRenderer){
+  void setLightDirectionsMeshRenderer(MeshRenderer* meshRenderer) {
     _meshRenderer = meshRenderer;
   }
 

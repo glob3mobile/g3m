@@ -98,7 +98,7 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
 
   //Texture (After blending factors)
 
-  for (int i = 0; i < MAX_N_TEXTURES; i++){
+  for (int i = 0; i < MAX_N_TEXTURES; i++) {
 
     if (_boundTextureId[i] != NULL) {
       if (currentState._boundTextureId[i] == NULL ||

@@ -80,10 +80,10 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
 
   if (!flatColor && texture && !color) {
 
-    if (hasTexture2){
+    if (hasTexture2) {
 
-      if (transformTC){
-        if (rotationTC){
+      if (transformTC) {
+        if (rotationTC) {
           return compileProgramWithName(gl, "FullTransformedTexCoorMultiTexturedMesh");
         }
         return compileProgramWithName(gl, "TransformedTexCoorMultiTexturedMesh");

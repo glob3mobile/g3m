@@ -65,7 +65,7 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   const Vector3D camDir = cam->getViewDirection();
   const Vector3D up = cam->getUp();
   if (_cameraDirX == camDir._x && _cameraDirY == camDir._y && _cameraDirZ == camDir._z &&
-      _upX == up._x && _upY == up._y && _upZ == up._z){
+      _upX == up._x && _upY == up._y && _upZ == up._z) {
     return;
   }
 
@@ -88,10 +88,10 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   }
 
   //ADD MESH
-  if (_meshRenderer != NULL){
+  if (_meshRenderer != NULL) {
     Vector3D lastCamDir(_cameraDirX, _cameraDirY, _cameraDirZ);
 
-    if (lastCamDir.angleBetween(lightDir)._degrees > 10){
+    if (lastCamDir.angleBetween(lightDir)._degrees > 10) {
 
       FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
       vertices->add(cam->getCartesianPosition());

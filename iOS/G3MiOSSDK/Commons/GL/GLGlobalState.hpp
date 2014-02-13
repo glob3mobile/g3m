@@ -85,7 +85,7 @@ private:
   _clearColorA(parentState._clearColorA)
   {
 
-    for (int i = 0; i < MAX_N_TEXTURES; i++){
+    for (int i = 0; i < MAX_N_TEXTURES; i++) {
       _boundTextureId[i] = parentState._boundTextureId[i];
     }
 
@@ -120,7 +120,7 @@ public:
       ILogger::instance()->logError("GLGlobalState creation before it is available.");
     }
 
-    for (int i = 0; i < MAX_N_TEXTURES; i++){
+    for (int i = 0; i < MAX_N_TEXTURES; i++) {
       _boundTextureId[i] = NULL;
     }
 
@@ -205,7 +205,7 @@ public:
   void bindTexture(int target, const IGLTextureId* textureId) {
 
 
-    if (target > MAX_N_TEXTURES){
+    if (target > MAX_N_TEXTURES) {
       ILogger::instance()->logError("WRONG TARGET FOR TEXTURE");
       return;
     }

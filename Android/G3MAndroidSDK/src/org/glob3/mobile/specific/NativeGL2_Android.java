@@ -40,19 +40,19 @@ public final class NativeGL2_Android
          extends
             INativeGL {
 
-   private Thread _openglThread = null;
+   private Thread _openGLThread = null;
 
 
-   void setOpenGLThread(final Thread openglThread) {
-      _openglThread = openglThread;
+   void setOpenGLThread(final Thread openGLThread) {
+      _openGLThread = openGLThread;
    }
 
 
    private final void checkOpenGLThread() {
-      if (_openglThread != null) {
+      if (_openGLThread != null) {
          final Thread currentThread = Thread.currentThread();
-         if (currentThread != _openglThread) {
-            throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openglThread
+         if (currentThread != _openGLThread) {
+            throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
                                        + ", CurrentThread=" + currentThread + ")");
          }
       }

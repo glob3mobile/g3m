@@ -35,7 +35,8 @@ _elevationDataProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
 _terrainTouchListeners(NULL),
-_renderTileMeshes(true)
+_renderTileMeshes(true),
+_logTilesPetitions(false)
 {
 }
 
@@ -133,6 +134,15 @@ TilesRenderParameters* PlanetRendererBuilder::getParameters() {
  */
 bool PlanetRendererBuilder::getShowStatistics() {
   return _showStatistics;
+}
+
+bool PlanetRendererBuilder::getLogTilesPetitions() {
+  return _logTilesPetitions;
+}
+
+
+void PlanetRendererBuilder::setLogTilesPetitions(bool logTilesPetitions) {
+  _logTilesPetitions = logTilesPetitions;
 }
 
 /**
@@ -330,7 +340,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getShowStatistics(),
                                                       getTexturePriority(),
                                                       getRenderedSector(),
-                                                      getRenderTileMeshes());
+                                                      getRenderTileMeshes(),
+                                                      getLogTilesPetitions());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),

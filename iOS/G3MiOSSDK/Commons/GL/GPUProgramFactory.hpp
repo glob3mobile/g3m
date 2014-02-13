@@ -56,7 +56,7 @@ public:
 
     const int size = _sources.size();
     for (int i = 0; i < size; i++) {
-      if (_sources[i]._name.compare(name) == 0){
+      if (_sources[i]._name.compare(name) == 0) {
         return &(_sources[i]);
       }
     }
