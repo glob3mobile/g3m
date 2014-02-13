@@ -865,7 +865,7 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
                                              nowInMS);
     }
   } else{
-    ILogger::instance()->logInfo("Reusing Render Tiles List");
+    //ILogger::instance()->logInfo("Reusing Render Tiles List");
   }
 
   return &_renderedTiles;
