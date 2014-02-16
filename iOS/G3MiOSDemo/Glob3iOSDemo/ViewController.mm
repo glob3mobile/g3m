@@ -532,7 +532,8 @@ public:
                                       -16.0019401695656);               // max longitude
   Vector2I extent = Vector2I(256, 256);                             // image resolution
   
-  URL url = URL("http://128.102.22.115/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm3&STYLES=&FORMAT=image/bil&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&BBOX=-17.0232177085356,27.967811065876,-16.0019401695656,28.6103464294992&WIDTH=256&HEIGHT=256", false);
+//  URL url = URL("http://128.102.22.115/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm3&STYLES=&FORMAT=image/bil&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&BBOX=-17.0232177085356,27.967811065876,-16.0019401695656,28.6103464294992&WIDTH=256&HEIGHT=256", false);
+  URL url = URL("file:///Tenerife-256x256.bil", false);
   
   // add this image to the builder
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
@@ -1110,7 +1111,7 @@ builder.initializeWidget();
   
   Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.50), Angle::fromDegrees(-16.58), 250000);
   [self G3MWidget].widget->setCameraPosition(position);
-  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-65));
+  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
   
 
 }

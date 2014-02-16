@@ -10,6 +10,7 @@
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
 		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
+		CC405A7B18B0BA280082F7D6 /* Tenerife-256x256.bil in Resources */ = {isa = PBXBuildFile; fileRef = CC405A7A18B0BA280082F7D6 /* Tenerife-256x256.bil */; };
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF0223831668318600024B73 /* geojson in Resources */ = {isa = PBXBuildFile; fileRef = CF0223821668318600024B73 /* geojson */; };
 		CF04CCFA16D3E4D5004DFACF /* 409_554.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF04CCF916D3E4D5004DFACF /* 409_554.bil */; };
@@ -117,6 +118,7 @@
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
+		CC405A7A18B0BA280082F7D6 /* Tenerife-256x256.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Tenerife-256x256.bil"; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF0223821668318600024B73 /* geojson */ = {isa = PBXFileReference; lastKnownFileType = folder; path = geojson; sourceTree = "<group>"; };
 		CF04CCF916D3E4D5004DFACF /* 409_554.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = 409_554.bil; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				E7A1A99316F202B700D138D8 /* sand-clock.png */,
 				CFE3DBB0164B0E7D00910037 /* seymour-plane.json */,
 				CFC39A8816FB9DB7004992C2 /* small-caceres.bil */,
+				CC405A7A18B0BA280082F7D6 /* Tenerife-256x256.bil */,
 				CF09A94D16A09F7000E72811 /* test.bson */,
 				CF186B0516B857DE00A39478 /* textures-A320 */,
 				CF186B0916B85A5F00A39478 /* textures-citation */,
@@ -469,6 +472,7 @@
 				CFE26D6518A1547B00253709 /* 3d_1-2.json in Resources */,
 				E71B153B1626D27F003D1013 /* Icon-72.png in Resources */,
 				CFE26D6B18A154D700253709 /* 3d_2-1.json in Resources */,
+				CC405A7B18B0BA280082F7D6 /* Tenerife-256x256.bil in Resources */,
 				E71B153C1626D27F003D1013 /* Icon-72@2x.png in Resources */,
 				E71B153D1626D27F003D1013 /* Icon-Small-50.png in Resources */,
 				CFE26D6A18A154D700253709 /* 3d_2-0.json in Resources */,
