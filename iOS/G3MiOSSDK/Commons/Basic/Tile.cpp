@@ -1241,6 +1241,9 @@ Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
 bool Tile::retexturize(const Sector& sector){
 
   if (_sector.touchesWith(sector)){
+
+    _texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
+
     delete _texturizedMesh;
     _texturizedMesh = NULL;
     _textureSolved = false;

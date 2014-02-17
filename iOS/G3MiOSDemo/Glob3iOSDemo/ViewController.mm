@@ -3345,7 +3345,7 @@ public:
 
             LayerSet* ls = [_iosWidget widget]->getPlanetRenderer()->getLayerSet();
             Layer* layer = ls->getLayer(ls->size()-1);
-            layer->setEnable(false);
+            layer->setEnable(!layer->isEnable());
             ls->layerChanged(layer);
 
             return true;
