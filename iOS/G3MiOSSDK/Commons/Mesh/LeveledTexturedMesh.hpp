@@ -137,7 +137,7 @@ public:
   _currentLevel(-1),
   _glState(new GLState())
   {
-    if (_mappings->size() <= 0) {
+    if (_mappings == NULL || _mappings->size() <= 0) {
       ILogger::instance()->logError("LeveledTexturedMesh: empty mappings");
     }
   }

@@ -1237,3 +1237,26 @@ Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
   
   return NULL;
 }
+
+bool Tile::retexturize(const Sector& sector){
+
+  if (_sector.touchesWith(sector)){
+    delete _texturizedMesh;
+    _texturizedMesh = NULL;
+    _textureSolved = false;
+    delete _texturizerData;
+    _texturizerData = NULL;
+    _texturizerDirty = true;
+
+    if (_subtiles != NULL){
+      const int nSubTiles = _subtiles->size();
+      for (int i = 0; i < nSubTiles; i++) {
+        (*_subtiles)[i]->retexturize(sector);
+      }
+    }
+
+    return true;
+  }
+
+  return false;
+}

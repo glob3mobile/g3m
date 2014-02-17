@@ -148,7 +148,8 @@ _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
 _renderedTilesListFrame(-1),
 _renderTileMeshes(renderTileMeshes),
-_logTilesPetitions(logTilesPetitions)
+_logTilesPetitions(logTilesPetitions),
+_rc(NULL)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -596,6 +597,8 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
 void PlanetRenderer::render(const G3MRenderContext* rc,
                             GLState* glState) {
 
+  _rc = rc; //Saving last RenderContext
+
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
     return;
@@ -896,5 +899,32 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
   if (_verticalExaggeration != verticalExaggeration) {
     _verticalExaggeration = verticalExaggeration;
     changed();
+  }
+}
+
+void PlanetRenderer::retexturize(const Sector& sector){
+  //TODO:
+  const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
+
+  const int firstLevelTilesCount = _firstLevelTiles.size();
+  for (int i = 0; i < firstLevelTilesCount; i++) {
+    Tile* tile = _firstLevelTiles[i];
+
+    if (tile->retexturize(sector)){ //First tile needs retexturizing
+
+      tile->prepareForFullRendering(_rc,
+                                    _texturizer,
+                                    _elevationDataProvider,
+                                    _tessellator,
+                                    _tileRasterizer,
+                                    layerTilesRenderParameters,
+                                    _layerSet,
+                                    _tilesRenderParameters,
+                                    true,
+                                    _texturePriority,
+                                    _verticalExaggeration,
+                                    _logTilesPetitions);
+    }
+
   }
 }

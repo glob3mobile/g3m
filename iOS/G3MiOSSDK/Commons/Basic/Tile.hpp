@@ -360,6 +360,8 @@ public:
 
   Vector2I* getPixelNormalizedFromPosition(const Geodetic2D& position2D,
                                            const Vector2I* size) const;
+
+  bool retexturize(const Sector& sector);
 };
 
 #endif

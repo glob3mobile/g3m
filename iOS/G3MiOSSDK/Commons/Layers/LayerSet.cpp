@@ -12,6 +12,8 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "ChangedListener.hpp"
 
+#include "PlanetRenderer.hpp"
+
 LayerSet::~LayerSet() {
 //  delete _layerTilesRenderParameters;
   for (unsigned int i = 0; i < _layers.size(); i++) {
@@ -193,7 +195,11 @@ void LayerSet::removeAllLayers(const bool deleteLayers) {
 }
 
 void LayerSet::layerChanged(const Layer* layer) const {
-  layersChanged();
+  //layersChanged();
+
+
+#warning FIX THIS HACK
+  ((PlanetRenderer*)_listener)->retexturize(Sector::fullSphere());
 }
 
 void LayerSet::layersChanged() const {

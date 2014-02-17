@@ -304,6 +304,8 @@ private:
   std::list<Tile*> _renderedTiles;
   std::list<Tile*>* getRenderedTilesList(const G3MRenderContext* rc);
 
+  const G3MRenderContext* _rc;    //For retexturize()
+
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -472,6 +474,12 @@ public:
 
   bool getRenderTileMeshes() const {
     return _renderTileMeshes;
+  }
+
+  void retexturize(const Sector& sector = Sector::fullSphere());
+
+  LayerSet* getLayerSet() const{
+    return _layerSet;
   }
 
 };
