@@ -318,6 +318,9 @@ public:
   double getEstimatedPixelDistance(const Vector3D& point0,
                                    const Vector3D& point1) const;
 
+
+  Mesh* createMeshRepresentation() const;
+
 private:
   //  const Angle getHeading(const Vector3D& normal) const;
 
@@ -449,7 +452,8 @@ private:
   
   
   void setCameraCoordinateSystem(const CoordinateSystem& rs);
-  
+
+  static Mesh* getPlaneMesh(const Vector3D& center, const Vector3D& up, const Vector3D& left, const Color& color);
 };
 
 

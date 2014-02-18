@@ -13,6 +13,9 @@
 #include <string>
 #include "Sphere.hpp"
 #include "Sector.hpp"
+#include "CompositeMesh.hpp"
+#include "DirectMesh.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
 
 void Camera::initialize(const G3MContext* context) {
   _planet = context->getPlanet();
@@ -443,4 +446,124 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   const FrustumData frustumData = getFrustumData();
   const double X = frustumData._znear * IMathUtils::instance()->atan(angleInRadians/2);
   return X * _height / frustumData._top;
+}
+
+Mesh* Camera::getPlaneMesh(const Vector3D& center, const Vector3D& up, const Vector3D& left, const Color& color){
+
+  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  fbb->add(center);
+
+  fbb->add(center.add(up.times(-1)).add(left));
+  fbb->add(center.add(up).add(left));
+
+  fbb->add(center.add(up.times(-1)).add(left.times(-1)));
+  fbb->add(center.add(up).add(left.times(-1)));
+
+  Mesh* mesh = new DirectMesh(GLPrimitive::triangleStrip(),
+                                   true,
+                                   fbb->getCenter(),
+                                   fbb->create(),
+                                   (float)1.0,
+                                   (float)10.0,
+                                   Color::newFromRGBA((float)195.0 / (float)255.0,
+                                                      (float)30.0 / (float)255.0,
+                                                      (float)213.0 / (float)255.0,
+                                                      1.0),
+                                   NULL,
+                                   (float)1.0,
+                                   true);
+  delete fbb;
+  fbb = NULL;
+
+  return mesh;
+
+}
+
+Mesh* Camera::createMeshRepresentation() const{
+
+  Geodetic3D pos = getGeodeticPosition();
+  Vector3D posInGround = _planet->toCartesian(pos._latitude, pos._longitude, 0);
+
+  FrustumData fd = getFrustumData();
+
+  const double zNear = fd._znear;
+  const double zFar = fd._zfar;
+
+  CoordinateSystem camCS = getCameraCoordinateSystem();
+
+  Mesh* mLocal = getLocalCoordinateSystem().changeOrigin(posInGround).
+                                            createMesh(zNear, Color::red(), Color::green(), Color::blue());
+
+  Mesh* mCam = camCS.createMesh(zNear, Color::red(), Color::green(), Color::blue());
+
+  CompositeMesh* mesh = new CompositeMesh();
+  mesh->addMesh(mLocal);
+  mesh->addMesh(mCam);
+
+  //DRAWING ZNEAR PLANE
+  Vector3D cartesianPos = getCartesianPosition();
+  Vector3D centerZNear = cartesianPos.add(getViewDirection().normalized().times(zNear));
+
+  const Vector3D upZNear = camCS._z.normalized().times(fd._top);
+  const Vector3D leftZNear = camCS._x.normalized().times(fd._left);
+
+  Mesh* zNearMesh = getPlaneMesh(centerZNear, upZNear, leftZNear, Color::fromRGBA((float)195.0 / (float)255.0,
+                                                                      (float)30.0 / (float)255.0,
+                                                                      (float)213.0 / (float)255.0,
+                                                                      1.0));
+
+  mesh->addMesh(zNearMesh);
+
+  //DRAWING ZFAR PLANE
+  Vector3D centerZFar = cartesianPos.add(getViewDirection().normalized().times(zFar));
+
+  const double tanHalfFOVVertical = fd._top / zNear;
+  const double tanHalfFOVHorizontal = fd._left / zNear;
+
+  const Vector3D upZFar = camCS._z.normalized().times(tanHalfFOVVertical * zFar);
+  const Vector3D leftZFar = camCS._x.normalized().times(tanHalfFOVHorizontal * zFar);
+
+  Mesh* zFarMesh = getPlaneMesh(centerZFar, upZFar, leftZFar, Color::fromRGBA((float)195.0 / (float)255.0,
+                                                                                  (float)30.0 / (float)255.0,
+                                                                                  (float)213.0 / (float)255.0,
+                                                                                  1.0));
+  
+  mesh->addMesh(zFarMesh);
+
+
+
+
+//  Vector3D centerZFar = cartesianPos.add(getViewDirection().normalized().times(zFar));
+//
+//  fbb = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+//  fbb->add(center);
+//
+//  const Vector3D up = camCS._z.normalized().times(fd._top);
+//  const Vector3D left = camCS._x.normalized().times(fd._left);
+//
+//  fbb->add(center.add(up.times(-1)).add(left));
+//  fbb->add(center.add(up).add(left));
+//
+//  fbb->add(center.add(up.times(-1)).add(left.times(-1)));
+//  fbb->add(center.add(up).add(left.times(-1)));
+//
+//  Mesh* zNearMesh = new DirectMesh(GLPrimitive::triangleStrip(),
+//                                   true,
+//                                   fbb->getCenter(),
+//                                   fbb->create(),
+//                                   (float)1.0,
+//                                   (float)10.0,
+//                                   Color::newFromRGBA((float)195.0 / (float)255.0,
+//                                                      (float)30.0 / (float)255.0,
+//                                                      (float)213.0 / (float)255.0,
+//                                                      1.0),
+//                                   NULL,
+//                                   (float)1.0,
+//                                   false);
+//  delete fbb;
+//  fbb = NULL;
+//
+//  mesh->addMesh(zNearMesh);
+
+  return mesh;
 }
