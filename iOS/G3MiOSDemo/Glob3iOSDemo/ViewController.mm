@@ -627,22 +627,53 @@ public:
 
 - (void) testMeshAnimationForBuilder: (G3MBuilder_iOS*) builder{
 
-  int nFrames = 4;
+  int nFrames = 200;
 
-  MeshRenderer* mr[nFrames];
+  MeshRenderer** mr = new MeshRenderer*[nFrames];
 
   for(int i = 0; i < nFrames; i++){
     mr[i] = new MeshRenderer();
 
-    Geodetic3D moscow = Geodetic3D::fromDegrees(55.755825999412004, 37.61730000085663, 0);
-    Vector3D center = builder->getPlanet()->toCartesian(moscow);
-    Vector3D normal = builder->getPlanet()->geodeticSurfaceNormal(moscow);
+    if (bool russia = true)
+    {
+      Geodetic3D moscow = Geodetic3D::fromDegrees(55.755825999412004, 37.61730000085663, 0);
+      Vector3D center = builder->getPlanet()->toCartesian(moscow);
+      Vector3D normal = builder->getPlanet()->geodeticSurfaceNormal(moscow);
 
-    mr[i]->addMesh([self circleMeshWithCenter:center
-                                       radius:1e6
-                                       normal:normal
-                                     segments:100
-                                        color:Color::red()]);
+      mr[i]->addMesh([self circleMeshWithCenter:center
+                                         radius:1e6 * (i/ (float)nFrames)
+                                         normal:normal
+                                       segments:100
+                                          color:Color::red()]);
+    }
+
+    if (bool deutschland = true)
+    {
+      Geodetic3D munchen = Geodetic3D::fromDegrees(48.23685704229997, 11.579850238049403, 0);
+      Vector3D center = builder->getPlanet()->toCartesian(munchen);
+      Vector3D normal = builder->getPlanet()->geodeticSurfaceNormal(munchen);
+
+      mr[i]->addMesh([self circleMeshWithCenter:center
+                                         radius:0.6e6 * (i/ (float)nFrames)
+                                         normal:normal
+                                       segments:100
+                                          color:Color::black()]);
+    }
+
+    if (bool britain = true)
+    {
+      Geodetic3D london = Geodetic3D::fromDegrees(51.52012542691352, -0.24143882445059717, 0);
+      Vector3D center = builder->getPlanet()->toCartesian(london);
+      Vector3D normal = builder->getPlanet()->geodeticSurfaceNormal(london);
+
+      mr[i]->addMesh([self circleMeshWithCenter:center
+                                         radius:0.4e6 * (i/ (float)nFrames)
+                                         normal:normal
+                                       segments:100
+                                          color:Color::blue()]);
+    }
+
+
     builder->addRenderer(mr[i]);
   }
 
@@ -651,29 +682,33 @@ public:
 
     MeshRenderer** _mr;
     int _nMeshs;
+    int _activeMesh;
 
   public:
     ChangeMeshTask(MeshRenderer** mr, int nMeshes) :
     _mr(mr),
-    _nMeshs(nMeshes)
+    _nMeshs(nMeshes),
+    _activeMesh(0)
     {
       for(int i = 0; i < _nMeshs; i++){
         mr[i]->setEnable(false);
       }
+      mr[_activeMesh]->setEnable(true);
     }
 
     void run(const G3MContext* context) {
+      _mr[_activeMesh]->setEnable(false);
 
-      int index = 1;
-//      for(int i = 0; i < _nMeshs; i++){
-//        _mr[i]->setEnable(i == index);
-//      }
+      _activeMesh = (_activeMesh+1) % _nMeshs;
+
+      _mr[_activeMesh]->setEnable(true);
+
     }
 
   };
 
-  builder->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(1000),
-                                               new ChangeMeshTask(mr, nFrames)));
+  builder->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(50),
+                                                new ChangeMeshTask(mr, nFrames)));
 
 }
 
@@ -3341,7 +3376,7 @@ public:
                                                                          meshRenderer,
                                                                          marksRenderer,
                                                                          planet);
-  
+
   return initializationTask;
 }
 
