@@ -587,6 +587,96 @@ public:
 
 };
 
+- (Mesh*) circleMeshWithCenter: (Vector3D) center
+                        radius: (double) radius
+                        normal: (Vector3D) normal
+                      segments: (int) nSegments
+                         color: (Color)color{
+
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  // first is the center
+  vertices->add(center);
+
+  const Vector3D radii = normal.cross(Vector3D::upX()).normalized().times(radius);
+
+  for (int deg = 0; deg <= 360; deg += 360 / nSegments) {
+    Vector3D rad = radii.rotateAroundAxis(normal, Angle::fromDegrees(deg));
+    Vector3D vertex = rad.add(center);
+    vertices->add(vertex);
+  }
+
+  Color* diskColor = new Color(color);
+
+  Mesh* result = new DirectMesh(GLPrimitive::triangleFan(),
+                                true,
+                                vertices->getCenter(),
+                                vertices->create(),
+                                1,
+                                1,
+                                diskColor,
+                                NULL,
+                                1.0f,
+                                false);
+
+  delete vertices;
+
+  return result;
+}
+
+
+- (void) testMeshAnimationForBuilder: (G3MBuilder_iOS*) builder{
+
+  int nFrames = 4;
+
+  MeshRenderer* mr[nFrames];
+
+  for(int i = 0; i < nFrames; i++){
+    mr[i] = new MeshRenderer();
+
+    Geodetic3D moscow = Geodetic3D::fromDegrees(55.755825999412004, 37.61730000085663, 0);
+    Vector3D center = builder->getPlanet()->toCartesian(moscow);
+    Vector3D normal = builder->getPlanet()->geodeticSurfaceNormal(moscow);
+
+    mr[i]->addMesh([self circleMeshWithCenter:center
+                                       radius:1e6
+                                       normal:normal
+                                     segments:100
+                                        color:Color::red()]);
+    builder->addRenderer(mr[i]);
+  }
+
+  class ChangeMeshTask : public GTask {
+  private:
+
+    MeshRenderer** _mr;
+    int _nMeshs;
+
+  public:
+    ChangeMeshTask(MeshRenderer** mr, int nMeshes) :
+    _mr(mr),
+    _nMeshs(nMeshes)
+    {
+      for(int i = 0; i < _nMeshs; i++){
+        mr[i]->setEnable(false);
+      }
+    }
+
+    void run(const G3MContext* context) {
+
+      int index = 1;
+//      for(int i = 0; i < _nMeshs; i++){
+//        _mr[i]->setEnable(i == index);
+//      }
+    }
+
+  };
+
+  builder->addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(1000),
+                                               new ChangeMeshTask(mr, nFrames)));
+
+}
+
 - (void) initCustomizedWithBuilder
 {
 
@@ -603,6 +693,8 @@ public:
   //  builder.addCameraConstraint(scc);
 
   builder.setCameraRenderer([self createCameraRenderer]);
+
+  [self testMeshAnimationForBuilder:&builder];
 
   const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
@@ -2840,17 +2932,17 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
-//                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
-//                                                     Angle::fromDegrees(180),
-//                                                     Angle::fromDegrees(-45),
-//                                                     false,
-//                                                     false);
+      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
+      //                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
+      //                                                     Angle::fromDegrees(180),
+      //                                                     Angle::fromDegrees(-45),
+      //                                                     false,
+      //                                                     false);
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-//                                                     Geodetic3D::fromDegrees(28.624949838863251728,
-//                                                                             -13.898810737833036555,
-//                                                                             5));
+      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+      //                                                     Geodetic3D::fromDegrees(28.624949838863251728,
+      //                                                                             -13.898810737833036555,
+      //                                                                             5));
 
 
       //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.518803097704875427,
@@ -3073,7 +3165,7 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
         //      NSString* geojsonName = @"geojson/countries";
         //        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
@@ -3185,47 +3277,47 @@ public:
                                       const Tile*            tile){
 
             //            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
-//            Camera* cam = [_iosWidget widget]->getNextCamera();
-/*
+            //            Camera* cam = [_iosWidget widget]->getNextCamera();
+            /*
 
-<<<<<<< HEAD
-            //TaitBryanAngles angles = cam->getTaitBryanAngles();
-=======
+             <<<<<<< HEAD
+             //TaitBryanAngles angles = cam->getTaitBryanAngles();
+             =======
 
-            TaitBryanAngles angles = cam->getHeadingPitchRoll();
->>>>>>> 10100b4c5f73c124779494d0ba45d11b9ed1ebc2
-            printf("A1: %s\n", angles.description().c_str() );
+             TaitBryanAngles angles = cam->getHeadingPitchRoll();
+             >>>>>>> 10100b4c5f73c124779494d0ba45d11b9ed1ebc2
+             printf("A1: %s\n", angles.description().c_str() );
 
-            Angle step = Angle::fromDegrees(10);
+             Angle step = Angle::fromDegrees(10);
 
-            switch ((pixel._x * 4) / cam->getWidth()) {
-              case 0:
-                [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
-                break;
+             switch ((pixel._x * 4) / cam->getWidth()) {
+             case 0:
+             [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
+             break;
 
-              case 1:
-                [_iosWidget widget]->getNextCamera()->setPitch(angles._pitch.add(step));
-                break;
+             case 1:
+             [_iosWidget widget]->getNextCamera()->setPitch(angles._pitch.add(step));
+             break;
 
-              case 2:
-                [_iosWidget widget]->getNextCamera()->setRoll(angles._roll.add(step));
-                break;
+             case 2:
+             [_iosWidget widget]->getNextCamera()->setRoll(angles._roll.add(step));
+             break;
 
-              default:
-                break;
-            }
+             default:
+             break;
+             }
 
-            TaitBryanAngles angles2 = cam->getHeadingPitchRoll();
-            printf("A2: %s\n", angles2.description().c_str() );
+             TaitBryanAngles angles2 = cam->getHeadingPitchRoll();
+             printf("A2: %s\n", angles2.description().c_str() );
 
-            Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
-            Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
+             Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
+             Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
 
 
-            _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
-            _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+             _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+             _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
 
-*/
+             */
             return true;
           }
 
