@@ -274,6 +274,8 @@ Mesh* createSectorMesh(const Planet* planet,
 
   [self initCustomizedWithBuilder];
 
+  //[self initWidgetForTestingElevationData];
+
   //  [self initWithMapBooBuilder];
 
   //  [self initWithBuilderAndSegmentedWorld];
@@ -711,6 +713,58 @@ public:
                                                 new ChangeMeshTask(mr, nFrames)));
 
 }
+
+
+- (void) initWidgetForTestingElevationData
+{
+  double scaleFactor = 0.0005;
+
+  G3MBuilder_iOS builder([self G3MWidget]);
+
+  Sector gcSector = Sector::fromDegrees(27.7116484957735, -15.90589160041418,
+                                        28.225913322423995, -15.32910937385168 ).shrinkedByPercent(1.0 - scaleFactor);
+
+  LayerSet* layerSet = new LayerSet();
+
+  WMSLayer* grafcan = new WMSLayer("WMS_OrtoExpress",
+                                   URL("http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?", false),
+                                   WMS_1_1_0,
+                                   gcSector,
+                                   "image/jpeg",
+                                   "EPSG:4326",
+                                   "",
+                                   false,
+                                   new LevelTileCondition(0, 18),
+                                   TimeInterval::fromDays(30),
+                                   true);
+  layerSet->addLayer(grafcan);
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+
+
+  std::string name;
+  if (false){ //HILL
+    name = "file:///gaussian_ED_100x100_height=10000.bil";
+  } else{ //HOLE
+    name = "file:///gaussian_ED_100x100_height=-10000.bil";
+  }
+
+
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL(name, false),
+                                                                                    gcSector,
+                                                                                    Vector2I(100, 100),
+                                                                                    0);
+
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(scaleFactor);
+
+  builder.setShownSector(gcSector);
+
+  
+  // initialization
+  builder.initializeWidget();
+  
+}
+
 
 - (void) initCustomizedWithBuilder
 {
