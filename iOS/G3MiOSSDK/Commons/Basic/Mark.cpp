@@ -554,7 +554,7 @@ void Mark::elevationChanged(const Geodetic2D& position,
   
   delete _cartesianPosition;
   _cartesianPosition = NULL;
-
+  
   if (_glState != NULL) {
     _glState->_release();
     _glState = NULL;
