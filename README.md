@@ -10,10 +10,9 @@
 </script>
 g3m
 ===
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/glob3mobile/g3m/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/54960ae0d94d09fa885cfceb159b9427 "githalytics.com")](http://githalytics.com/glob3mobile/g3m)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/glob3mobile/g3m/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 ##The multiplatform advanced visualization framework
-
 ###G3M is a **framework** developed and designed to: 
 
  + Develop **mobile maps** apps in 2D, 2,5D and 3D
