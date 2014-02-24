@@ -272,9 +272,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
 
-  //[self initWidgetForTestingElevationData];
+  [self initWidgetForTestingElevationData];
 
   //  [self initWithMapBooBuilder];
 
@@ -646,7 +646,7 @@ public:
                                          radius:1e6 * (i/ (float)nFrames)
                                          normal:normal
                                        segments:100
-                                          color:Color::red()]);
+                                          color:Color::fromRGBA(1.0, 0.0, 0.0, 0.5)]);
     }
 
     if (bool deutschland = true)
@@ -718,6 +718,7 @@ public:
 - (void) initWidgetForTestingElevationData
 {
   double scaleFactor = 0.0005;
+  int meshResolution = 64;
 
   G3MBuilder_iOS builder([self G3MWidget]);
 
@@ -725,6 +726,15 @@ public:
                                         28.225913322423995, -15.32910937385168 ).shrinkedByPercent(1.0 - scaleFactor);
 
   LayerSet* layerSet = new LayerSet();
+
+//  LayerTilesRenderParameters(const Sector&   topSector,
+//                             const int       topSectorSplitsByLatitude,
+//                             const int       topSectorSplitsByLongitude,
+//                             const int       firstLevel,
+//                             const int       maxLevel,
+//                             const Vector2I& tileTextureResolution,
+//                             const Vector2I& tileMeshResolution,
+//                             const bool      mercator) :
 
   WMSLayer* grafcan = new WMSLayer("WMS_OrtoExpress",
                                    URL("http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?", false),
@@ -734,15 +744,24 @@ public:
                                    "EPSG:4326",
                                    "",
                                    false,
-                                   new LevelTileCondition(0, 18),
+                                   new LevelTileCondition(0, 50),
                                    TimeInterval::fromDays(30),
-                                   true);
+                                   true,
+                                   new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                  2,2,
+                                                                  1,50,
+                                                                  Vector2I(256,256),
+                                                                  Vector2I(meshResolution,meshResolution),
+                                                                  false)
+                                   );
+
   layerSet->addLayer(grafcan);
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  builder.getPlanetRendererBuilder()->setRenderDebug(false);
 
 
   std::string name;
-  if (false){ //HILL
+  if (true){ //HILL
     name = "file:///gaussian_ED_100x100_height=10000.bil";
   } else{ //HOLE
     name = "file:///gaussian_ED_100x100_height=-10000.bil";
@@ -2056,7 +2075,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
