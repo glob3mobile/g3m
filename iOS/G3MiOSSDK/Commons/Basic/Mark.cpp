@@ -255,7 +255,7 @@ _normalAtMarkPosition(NULL)
 Mark::Mark(const IImage*      image,
            const std::string& imageID,
            const Geodetic3D&  position,
-           AltitudeMode altitudeMode,
+           AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
            MarkUserData*      userData,
            bool               autoDeleteUserData,
