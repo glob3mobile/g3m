@@ -610,8 +610,6 @@ public class G3MWidget
     _effectsScheduler.cancelAllEffects();
   }
 
-  //  void resetCameraPosition();
-
   public final CameraRenderer getCameraRenderer()
   {
     return _cameraRenderer;
@@ -627,11 +625,6 @@ public class G3MWidget
     return _context;
   }
 
-
-  //void G3MWidget::resetCameraPosition() {
-  //  getNextCamera()->resetPosition();
-  //}
-  
   public final void setBackgroundColor(Color backgroundColor)
   {
     if (_backgroundColor != null)
