@@ -130,11 +130,11 @@ private:
 
   bool    _renderedMark;
 
-  static IFloatBuffer* _billboardTexCoord;
 
   GLState* _glState;
   void createGLState(const Planet* planet);
 
+  static IFloatBuffer* _billboardTexCoord;
   static IFloatBuffer* getBillboardTexCoords();
 
   SurfaceElevationProvider* _surfaceElevationProvider;
