@@ -84,7 +84,7 @@ public class Mark implements SurfaceElevationListener
 
 
   private GLState _glState;
-  private void createGLState(Planet planet)
+  private void createGLState(Planet planet, IFloatBuffer billboardTexCoords)
   {
     _glState = new GLState();
   
@@ -92,23 +92,8 @@ public class Mark implements SurfaceElevationListener
   
     if (_textureId != null)
     {
-      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
     }
-  }
-
-  private static IFloatBuffer _billboardTexCoord = null;
-  private static IFloatBuffer getBillboardTexCoords()
-  {
-    if (_billboardTexCoord == null)
-    {
-      FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
-      texCoor.add(1,1);
-      texCoor.add(1,0);
-      texCoor.add(0,1);
-      texCoor.add(0,0);
-      _billboardTexCoord = texCoor.create();
-    }
-    return _billboardTexCoord;
   }
 
   private SurfaceElevationProvider _surfaceElevationProvider;
@@ -555,7 +540,7 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl)
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
   
     final Vector3D markPosition = getCartesianPosition(planet);
@@ -618,7 +603,7 @@ public class Mark implements SurfaceElevationListener
         {
           if (_glState == null)
           {
-            createGLState(planet); // If GLState was disposed due to elevation change
+            createGLState(planet, billboardTexCoords); // If GLState was disposed due to elevation change
           }
           _glState.setParent(parentGLState);
   

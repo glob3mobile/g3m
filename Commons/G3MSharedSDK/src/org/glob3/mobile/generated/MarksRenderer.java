@@ -60,6 +60,20 @@ public class MarksRenderer extends LeafRenderer
       _glState.addGLFeature(new ViewportExtentGLFeature(cam.getWidth(), cam.getHeight()), false);
     }
   }
+  private IFloatBuffer _billboardTexCoords;
+  private IFloatBuffer getBillboardTexCoords()
+  {
+    if (_billboardTexCoords == null)
+    {
+      FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
+      texCoor.add(1,1);
+      texCoor.add(1,0);
+      texCoor.add(0,1);
+      texCoor.add(0,0);
+      _billboardTexCoords = texCoor.create();
+    }
+    return _billboardTexCoords;
+  }
 
 
   public MarksRenderer(boolean readyWhenMarksReady)
@@ -71,6 +85,7 @@ public class MarksRenderer extends LeafRenderer
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
      _glState = new GLState();
+     _billboardTexCoords = null;
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
@@ -102,6 +117,9 @@ public class MarksRenderer extends LeafRenderer
     _markTouchListener = null;
   
     _glState._release();
+  
+    if (_billboardTexCoords != null)
+       _billboardTexCoords.dispose();
   
     super.dispose();
   
@@ -136,12 +154,14 @@ public class MarksRenderer extends LeafRenderer
       final Planet planet = rc.getPlanet();
       GL gl = rc.getGL();
   
+      IFloatBuffer billboardTexCoord = getBillboardTexCoords();
+  
       for (int i = 0; i < marksSize; i++)
       {
         Mark mark = _marks.get(i);
         if (mark.isReady())
         {
-          mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl);
+          mark.render(rc, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
         }
       }
     }
