@@ -129,9 +129,6 @@ public:
 };
 
 
-IFloatBuffer* Mark::_billboardTexCoord = NULL;
-
-
 Mark::Mark(const std::string& label,
            const URL&         iconURL,
            const Geodetic3D&  position,
@@ -429,7 +426,8 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet) {
+void Mark::createGLState(const Planet* planet,
+                         IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
 
   _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
@@ -438,7 +436,7 @@ void Mark::createGLState(const Planet* planet) {
 
   if (_textureId != NULL) {
     _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
-                                                getBillboardTexCoords(),
+                                                billboardTexCoords,
                                                 2,
                                                 0,
                                                 false,
@@ -450,24 +448,13 @@ void Mark::createGLState(const Planet* planet) {
   }
 }
 
-IFloatBuffer* Mark::getBillboardTexCoords() {
-  if (_billboardTexCoord == NULL) {
-    FloatBufferBuilderFromCartesian2D texCoor;
-    texCoor.add(1,1);
-    texCoor.add(1,0);
-    texCoor.add(0,1);
-    texCoor.add(0,0);
-    _billboardTexCoord = texCoor.create();
-  }
-  return _billboardTexCoord;
-}
-
 void Mark::render(const G3MRenderContext* rc,
                   const Vector3D& cameraPosition,
                   double cameraHeight,
                   const GLState* parentGLState,
                   const Planet* planet,
-                  GL* gl) {
+                  GL* gl,
+                  IFloatBuffer* billboardTexCoords) {
 
   const Vector3D* markPosition = getCartesianPosition(planet);
 
@@ -520,7 +507,7 @@ void Mark::render(const G3MRenderContext* rc,
 
       if (_textureId != NULL) {
         if (_glState == NULL) {
-          createGLState(planet);  // If GLState was disposed due to elevation change
+          createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
         }
         _glState->setParent(parentGLState);
 

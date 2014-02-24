@@ -36,7 +36,8 @@ _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
 _downloadPriority(DownloadPriority::MEDIUM),
-_glState(new GLState())
+_glState(new GLState()),
+_billboardTexCoords(NULL)
 {
 }
 
@@ -53,6 +54,8 @@ MarksRenderer::~MarksRenderer() {
   _markTouchListener = NULL;
 
   _glState->_release();
+
+  delete _billboardTexCoords;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -183,6 +186,18 @@ RenderState MarksRenderer::getRenderState(const G3MRenderContext* rc) {
   return RenderState::ready();
 }
 
+IFloatBuffer* MarksRenderer::getBillboardTexCoords() {
+  if (_billboardTexCoords == NULL) {
+    FloatBufferBuilderFromCartesian2D texCoor;
+    texCoor.add(1,1);
+    texCoor.add(1,0);
+    texCoor.add(0,1);
+    texCoor.add(0,0);
+    _billboardTexCoords = texCoor.create();
+  }
+  return _billboardTexCoords;
+}
+
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   const int marksSize = _marks.size();
   if (marksSize > 0) {
@@ -198,6 +213,8 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
     const Planet* planet = rc->getPlanet();
     GL* gl = rc->getGL();
 
+    IFloatBuffer* billboardTexCoord = getBillboardTexCoords();
+
     for (int i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
       if (mark->isReady()) {
@@ -206,7 +223,8 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                      cameraHeight,
                      _glState,
                      planet,
-                     gl);
+                     gl,
+                     billboardTexCoord);
       }
     }
   }

@@ -43,6 +43,8 @@ private:
   GLState* _glState;
 
   void updateGLState(const G3MRenderContext* rc);
+  IFloatBuffer* _billboardTexCoords;
+  IFloatBuffer* getBillboardTexCoords();
 
 public:
 
