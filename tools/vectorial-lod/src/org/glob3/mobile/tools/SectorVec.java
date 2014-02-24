@@ -54,35 +54,6 @@ public class SectorVec
    }
 
 
-   //   public List<SectorVec> getSubsectors() {
-   //
-   //      final List<SectorVec> subSectors = new ArrayList<SectorVec>(4);
-   //      int rowInc = this._row - 1;
-   //      int columnInc = this._column - 1;
-   //      final SectorVec s11 = new SectorVec(new Geodetic2D(this._center._latitude, this._lower._longitude), new Geodetic2D(
-   //               this._upper._latitude, this._center._longitude), this, this._level + 1, this._row + rowInc, this._column
-   //                                                                                                           + columnInc);
-   //      rowInc = this._row - 1;
-   //      columnInc = this._column;
-   //      final SectorVec s12 = new SectorVec(this._center, this._upper, this, this._level + 1, this._row + rowInc, this._column
-   //                                                                                                                + columnInc);
-   //      rowInc = this._row;
-   //      columnInc = this._column - 1;
-   //      final SectorVec s21 = new SectorVec(this._lower, this._center, this, this._level + 1, this._row + rowInc, this._column
-   //                                                                                                                + columnInc);
-   //      rowInc = this._row;
-   //      columnInc = this._column;
-   //      final SectorVec s22 = new SectorVec(new Geodetic2D(this._lower._latitude, this._center._longitude), new Geodetic2D(
-   //               this._center._latitude, this._upper._longitude), this, this._level + 1, this._row + rowInc, this._column
-   //                                                                                                           + columnInc);
-   //      subSectors.add(s11);
-   //      subSectors.add(s12);
-   //      subSectors.add(s21);
-   //      subSectors.add(s22);
-   //
-   //      return subSectors;
-   //   }
-
    public List<SectorVec> getSubsectors() {
 
       final List<SectorVec> subSectors = new ArrayList<SectorVec>(4);
@@ -115,9 +86,9 @@ public class SectorVec
 
    @Override
    public String toString() {
-      return "SectorVec [_lower=" + toStringGeodetic2D(_lower) + ", _upper=" + toStringGeodetic2D(_upper) + ", _center="
-             + toStringGeodetic2D(_center) + ", _deltaLatitude=" + toStringAngle(_deltaLatitude) + ", _deltaLongitude="
-             + toStringAngle(_deltaLongitude) + "]";
+      return "SectorVec [_parent=" + _parent + ", _level=" + _level + ", _row=" + _row + ", _column=" + _column + ", _lower="
+             + toStringGeodetic2D(_lower) + ", _upper=" + toStringGeodetic2D(_upper) + ", _center=" + toStringGeodetic2D(_center)
+             + ", _deltaLatitude=" + toStringAngle(_deltaLatitude) + ", _deltaLongitude=" + toStringAngle(_deltaLongitude) + "]";
    }
 
 

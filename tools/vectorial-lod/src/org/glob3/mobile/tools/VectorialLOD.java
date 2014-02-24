@@ -36,6 +36,9 @@ public class VectorialLOD {
    static String              _lodFolder            = null;
 
 
+   /*
+    * For handling postgis database access and connections
+    */
    private static class DataBaseService {
 
       public final String               _host;
@@ -175,19 +178,27 @@ public class VectorialLOD {
          _geomFilterCriteria = geomFilterCriteria;
          _includeProperties = includeProperties;
       }
-
-
    }
 
 
    /**
     * 
     * @param dataSourceTable
+    *           : table from postgis database containing the vectorial data
     * @param sector
+    *           : geometry bounding sector for any of the tiles
     * @param qualityFactor
+    *           : value used to adjust simplification tolerance during Douglas-Peucker simplification. Greater values entail less
+    *           tolerance, and so on less vertex filtered and more vertex generate for the resultant geometry. Usual values
+    *           between 1.0 to 10.0.
     * @param geomFilterCriteria
+    *           : filter criteria using pure database query format that will be included in a where clause. i.e.
+    *           "\"continent\" like 'Euro%' AND \"pop_est\" > 10000000"
     * @param includeProperties
-    * @return
+    *           : fields/columns associated to the vectorial data that shall be included as feature properties in the resultant
+    *           geoJson data.
+    * @return : String with the vectorial data in geoJson format.
+    * 
     */
    public static String selectGeometries(final String dataSourceTable,
                                          final Sector sector,
@@ -195,9 +206,7 @@ public class VectorialLOD {
                                          final String geomFilterCriteria,
                                          final String... includeProperties) {
 
-      //      final String theGeom = getGeometryColumnName(dataSourceTable);
       final String bboxQuery = buildSectorQuery(sector);
-      //      final String simplifyTolerance = getMaxVertexTolerance(dataSourceTable, bboxQuery, GEOMETRY_MAX_VERTEX, maxVertexPercentage);
       final String propsQuery = buildPropertiesQuery(includeProperties);
 
       final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.";
@@ -207,7 +216,6 @@ public class VectorialLOD {
       final String baseQuery4 = " WHERE (";
       final String baseQuery5 = ")) As f ) As fc;";
 
-      //      ResultSet rs;
       String geoJsonResult = "";
       Connection conn = null;
       Statement st = null;
@@ -216,13 +224,10 @@ public class VectorialLOD {
          st = conn.createStatement();
 
          final String theGeom = getGeometryColumnName(st, dataSourceTable);
-         //final String simplifyTolerance = getMaxVertexTolerance(st, dataSourceTable, bboxQuery, GEOMETRY_MAX_VERTEX, level);
-         //         final String simplifyTolerance = getMaxVertexTolerance(st, dataSourceTable, bboxQuery, level);
          final String simplifyTolerance = getMaxVertexTolerance(sector, qualityFactor);
 
          if ((theGeom == null) || (simplifyTolerance == null)) {
             st.close();
-            //_dataBase.connectionRelease(conn);
             return null; // null tolerance means no data on this bbox
          }
 
@@ -237,12 +242,10 @@ public class VectorialLOD {
 
          if (!rs.next()) {
             st.close();
-            //_dataBase.connectionRelease(conn);
             return null; // null tolerance means no data on this bbox
          }
          geoJsonResult = rs.getString(1);
          st.close();
-         //_dataBase.connectionRelease(conn);
       }
       catch (final SQLException e) {
          // TODO Auto-generated catch block
@@ -282,8 +285,8 @@ public class VectorialLOD {
     * version 0.12: 
     * - tolerance obtained from the sector deltaLongitude downscaled by 1000. 
     * - qualityFactor to adjust tolerance (usual values: from 1.0 to 10.0)
-    *   greater values means less tolerance on Douglas-Peuker algorithm and 
-    *   so on less simplification and more vertex as result.
+    *   greater values entail less tolerance on Douglas-Peuker algorithm and 
+    *   so on less simplification and more vertex generated as result.
     */
    private static String getMaxVertexTolerance(final Sector sector,
                                                final float qualityFactor) {
@@ -435,12 +438,6 @@ public class VectorialLOD {
                   dataSource._geomFilterCriteria, //
                   dataSource._includeProperties);
 
-         //         final String geoJson = selectGeometries("ne_10m_admin_0_countries", //
-         //                  sector.getSector(), //
-         //                  2.0f, // qualityFactor
-         //                  "true", //
-         //                  "continent", "pop_est");
-
          final String fileName = getTileFileName(sector);
          final FileWriter file = new FileWriter(fileName);
          if (geoJson != null) {
@@ -452,18 +449,6 @@ public class VectorialLOD {
             System.out.println("Generated empty tile: " + getTileName(sector));
          }
          file.close();
-
-         //         if (geoJson != null) {
-         //            final String fileName = getTileFileName(sector);
-         //            final FileWriter file = new FileWriter(fileName);
-         //            System.out.println("Generating: " + getTileName(sector));
-         //            file.write(geoJson);
-         //            file.flush();
-         //            file.close();
-         //         }
-         //         else {
-         //            System.out.println("Skip empty tile: " + getTileName(sector));
-         //         }
       }
       catch (final IOException e) {
          System.out.println("Exception while writting geoJson object ! ");
