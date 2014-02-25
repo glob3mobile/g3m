@@ -10,8 +10,8 @@
 #define __G3MiOSSDK__ErrorHandling__
 
 #ifdef C_CODE
-#include <string>
-#define THROW_EXCEPTION(x) throw(std::string(x));
+#include <stdexcept>
+#define THROW_EXCEPTION(x) throw(std::logic_error(x));
 #endif
 
 #endif
