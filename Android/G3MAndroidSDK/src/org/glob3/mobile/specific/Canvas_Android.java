@@ -20,7 +20,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 
 
-public class Canvas_Android
+public final class Canvas_Android
          extends
             ICanvas {
 
@@ -96,12 +96,12 @@ public class Canvas_Android
 
    @Override
    public void dispose() {
-      super.dispose();
       if (_bitmap != null) {
          _bitmap.recycle();
          _bitmap = null;
       }
       _canvas = null;
+      super.dispose();
    }
 
 
@@ -430,10 +430,9 @@ public class Canvas_Android
                Math.round(srcTop + srcHeight)); // Bottom
 
       final Paint paint = new Paint();
-      paint.setAlpha((int) (255 * transparency));
+      paint.setAlpha(Math.round(255 * transparency));
 
       _canvas.drawBitmap(bitmap, src, dst, paint);
-
    }
 
 }
