@@ -44,7 +44,7 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  
+
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
                                    width,
                                    height,
@@ -52,14 +52,14 @@ void Canvas_iOS::_initialize(int width, int height) {
                                    width * 4,  // bitmap bytes per row: 4 bytes per pixel
                                    colorSpace,
                                    kCGImageAlphaPremultipliedLast);
-  
+
   CGColorSpaceRelease( colorSpace );
-  
+
   if (_context == NULL) {
     ILogger::instance()->logError("Can't create CGContext");
     return;
   }
-  
+
   tryToSetCurrentFontToContext();
 }
 
@@ -184,14 +184,14 @@ void Canvas_iOS::drawRoundedRectangle(float left, float top,
                                       CGPathDrawingMode mode) {
   CGRect rrect = CGRectMake(left, _canvasHeight - top,
                             width, -height);
-  
+
 	const float minx = CGRectGetMinX(rrect);
   const float midx = CGRectGetMidX(rrect);
   const float maxx = CGRectGetMaxX(rrect);
 	const float miny = CGRectGetMinY(rrect);
   const float midy = CGRectGetMidY(rrect);
   const float maxy = CGRectGetMaxY(rrect);
-  
+
 	CGContextMoveToPoint(_context, minx, midy);
 	CGContextAddArcToPoint(_context, minx, miny, midx, miny, radius);
 	CGContextAddArcToPoint(_context, maxx, miny, maxx, midy, radius);
@@ -237,7 +237,7 @@ void Canvas_iOS::_fillAndStrokeRoundedRectangle(float left, float top,
 UIFont* Canvas_iOS::createUIFont(const GFont& font) {
   const bool bold   = font.isBold();
   const bool italic = font.isItalic();
-  
+
   NSString* fontName = nil;
   if (font.isSansSerif()) {
     if (bold) {
@@ -297,14 +297,14 @@ UIFont* Canvas_iOS::createUIFont(const GFont& font) {
     ILogger::instance()->logError("Unsupported Font type");
     return nil;
   }
-  
+
   return [UIFont fontWithName: fontName
                          size: font.getSize()];
 }
 
 void Canvas_iOS::_setFont(const GFont& font) {
   _currentUIFont = createUIFont(font);
-  
+
   tryToSetCurrentFontToContext();
 }
 
@@ -312,54 +312,47 @@ const Vector2F Canvas_iOS::_textExtent(const std::string& text) {
   NSString* nsString = [NSString stringWithCppString: text];
 
   CGSize cgSize = [nsString sizeWithFont: _currentUIFont];
-  
+
   return Vector2F(cgSize.width, cgSize.height);
 }
 
 void Canvas_iOS::_fillText(const std::string& text,
                            float left, float top) {
-  //  const Vector2F textExtent = _textExtent(text);
-  //
-  //  CGContextShowTextAtPoint(_context,
-  //                           left, _canvasHeight - top - textExtent._y,
-  //                           text.c_str(),
-  //                           text.size());
-  
   UIGraphicsPushContext(_context);
-  
+
   CGContextSaveGState(_context);
   CGContextTranslateCTM(_context, 0.0f, _canvasHeight);
   CGContextScaleCTM(_context, 1.0f, -1.0f);
-  
+
   NSString* nsText = [NSString stringWithCppString: text.c_str()];
 
   [nsText drawAtPoint: CGPointMake(left, top)
              withFont: _currentUIFont];
-  
+
   CGContextRestoreGState(_context);
-  
+
   UIGraphicsPopContext();
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop) {
-UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
-CGImage* cgImage = [uiImage CGImage];
+  UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
+  CGImage* cgImage = [uiImage CGImage];
 
-CGContextDrawImage(_context,
-                   CGRectMake(destLeft,
-                              destTop,
-                              image->getWidth(),
-                              image->getHeight()),
-                   cgImage);
+  CGContextDrawImage(_context,
+                     CGRectMake(destLeft,
+                                destTop,
+                                image->getWidth(),
+                                image->getHeight()),
+                     cgImage);
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop, float destWidth, float destHeight) {
-  
+
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
-  
+
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
                                 destTop,
@@ -371,15 +364,15 @@ void Canvas_iOS::_drawImage(const IImage* image,
 void Canvas_iOS::_drawImage(const IImage* image,
                             float srcLeft, float srcTop, float srcWidth, float srcHeight,
                             float destLeft, float destTop, float destWidth, float destHeight) {
-  
+
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
-  
+
   CGRect destRect = CGRectMake(destLeft,
                                _canvasHeight - (destTop + destHeight), // Bottom
                                destWidth,
                                destHeight);
-  
+
   if ((srcLeft == 0) &&
       (srcTop == 0) &&
       (srcWidth == image->getWidth()) &&
@@ -394,21 +387,21 @@ void Canvas_iOS::_drawImage(const IImage* image,
                                  srcTop,
                                  srcWidth,
                                  srcHeight);
-    
+
     CGImage* cgCropImage = CGImageCreateWithImageInRect(cgImage, cropRect);
-    
+
     CGContextDrawImage(_context,
                        destRect,
                        cgCropImage);
-    
+
     CGImageRelease(cgCropImage);
   }
 }
 
 void Canvas_iOS::_drawImage(const IImage* image,
-                float srcLeft, float srcTop, float srcWidth, float srcHeight,
-                float destLeft, float destTop, float destWidth, float destHeight,
-                float transparency) {
+                            float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                            float destLeft, float destTop, float destWidth, float destHeight,
+                            float transparency) {
 
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
@@ -459,8 +452,7 @@ void Canvas_iOS::_beginPath() {
   }
 
   _path = CGPathCreateMutable();
-  
-  //_transform = CGAffineTransformScale(CGAffineTransformMakeTranslation(0, _canvasHeight), 1, -1);
+
   _transform = CGAffineTransformMake(1, 0, -0, -1, 0, _canvasHeight);
 }
 
