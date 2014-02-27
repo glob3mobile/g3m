@@ -876,16 +876,12 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
 
 double PlanetRenderer::getElevationAt(const Geodetic2D& g) const{
   if (_elevationDataProvider != NULL){
-
-
     for (int i = 0; i < _firstLevelTiles.size(); i++) {
       double h = _firstLevelTiles[i]->getElevationAt(g);
       if (!ISNAN(h)){
         return h;
       }
-
     }
-
-
   }
+  return 0.0;
 }

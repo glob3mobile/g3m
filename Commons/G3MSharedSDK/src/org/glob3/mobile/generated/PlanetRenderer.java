@@ -920,8 +920,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   {
     if (_elevationDataProvider != null)
     {
-  
-  
       for (int i = 0; i < _firstLevelTiles.size(); i++)
       {
         double h = _firstLevelTiles.get(i).getElevationAt(g);
@@ -929,11 +927,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         {
           return h;
         }
-  
       }
-  
-  
     }
+    return 0.0;
   }
 
 }

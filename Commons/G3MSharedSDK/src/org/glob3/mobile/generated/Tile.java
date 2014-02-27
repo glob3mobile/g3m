@@ -1167,7 +1167,7 @@ public class Tile
       }
       for (int i = 0; i < _subtiles.size(); i++)
       {
-        double h = (_subtiles)[i].getElevationAt(g);
+        double h = _subtiles.get(i).getElevationAt(g);
         if (!(h != h))
         {
           return h;

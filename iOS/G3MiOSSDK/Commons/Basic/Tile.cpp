@@ -1085,7 +1085,7 @@ double Tile::getElevationAt(const Geodetic2D& g) const{
       return _elevationData->getElevationAt(g);
     }
     for (int i = 0; i < _subtiles->size(); i++) {
-      double h = (*_subtiles)[i]->getElevationAt(g);
+      double h = _subtiles->at(i)->getElevationAt(g);
       if (!ISNAN(h)){
         return h;
       }
