@@ -15,4 +15,6 @@ public interface SurfaceElevationProvider
 
   boolean removeListener(SurfaceElevationListener listener);
 
+  double getElevationAt(Geodetic2D g);
+
 }

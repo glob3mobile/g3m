@@ -916,4 +916,24 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return _renderTileMeshes;
   }
 
+  public final double getElevationAt(Geodetic2D g)
+  {
+    if (_elevationDataProvider != null)
+    {
+  
+  
+      for (int i = 0; i < _firstLevelTiles.size(); i++)
+      {
+        double h = _firstLevelTiles.get(i).getElevationAt(g);
+        if (!(h != h))
+        {
+          return h;
+        }
+  
+      }
+  
+  
+    }
+  }
+
 }

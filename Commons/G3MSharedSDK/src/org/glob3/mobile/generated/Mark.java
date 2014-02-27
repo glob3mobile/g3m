@@ -170,7 +170,7 @@ public class Mark implements SurfaceElevationListener
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_" + label;
      _surfaceElevationProvider = null;
-     _currentSurfaceElevation = 0.0;
+     _currentSurfaceElevation = java.lang.Double.NaN;
      _glState = null;
      _normalAtMarkPosition = null;
   
@@ -236,7 +236,7 @@ public class Mark implements SurfaceElevationListener
      _autoDeleteListener = autoDeleteListener;
      _imageID = "_" + label;
      _surfaceElevationProvider = null;
-     _currentSurfaceElevation = 0.0;
+     _currentSurfaceElevation = java.lang.Double.NaN;
      _glState = null;
      _normalAtMarkPosition = null;
   
@@ -290,7 +290,7 @@ public class Mark implements SurfaceElevationListener
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL.getPath() + "_";
      _surfaceElevationProvider = null;
-     _currentSurfaceElevation = 0.0;
+     _currentSurfaceElevation = java.lang.Double.NaN;
      _glState = null;
      _normalAtMarkPosition = null;
   
@@ -344,7 +344,7 @@ public class Mark implements SurfaceElevationListener
      _autoDeleteListener = autoDeleteListener;
      _imageID = imageID;
      _surfaceElevationProvider = null;
-     _currentSurfaceElevation = 0.0;
+     _currentSurfaceElevation = java.lang.Double.NaN;
      _glState = null;
      _normalAtMarkPosition = null;
   
@@ -527,9 +527,35 @@ public class Mark implements SurfaceElevationListener
     if (_cartesianPosition == null)
     {
   
+  
+  
       double altitude = _position._height;
       if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
       {
+  
+  
+  
+  
+  
+        if (_currentSurfaceElevation != _currentSurfaceElevation) //No elevation has been set for this mark
+        {
+  
+          if (_surfaceElevationProvider == null)
+          {
+            _currentSurfaceElevation = 0.0;
+          }
+          else
+          {
+            Geodetic2D pos2D = new Geodetic2D(_position._latitude, _position._longitude);
+            _currentSurfaceElevation = _surfaceElevationProvider.getElevationAt(pos2D);
+          }
+  
+          if (_currentSurfaceElevation != _currentSurfaceElevation)
+          {
+            ILogger.instance().logError("No elevation has been set for mark.");
+          }
+        }
+  
         altitude += _currentSurfaceElevation;
       }
   

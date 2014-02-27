@@ -43,7 +43,7 @@ public abstract class AbstractImageBuilder implements IImageBuilder
   {
     if (_listener != null)
     {
-      ILogger.instance().logError("listener already set!");
+      throw new RuntimeException("listener already set!");
     }
     _listener = listener;
   }

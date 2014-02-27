@@ -1157,6 +1157,26 @@ public class Tile
     return null;
   }
 
+  public final double getElevationAt(Geodetic2D g)
+  {
+    if (_sector.contains(g))
+    {
+      if (_subtiles == null)
+      {
+        return _elevationData.getElevationAt(g);
+      }
+      for (int i = 0; i < _subtiles.size(); i++)
+      {
+        double h = (_subtiles)[i].getElevationAt(g);
+        if (!(h != h))
+        {
+          return h;
+        }
+      }
+    }
+    return java.lang.Double.NaN;
+  }
+
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
