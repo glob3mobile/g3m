@@ -466,6 +466,8 @@ public:
     return _renderTileMeshes;
   }
 
+  double getElevationAt(const Geodetic2D& g) const;
+
 };
 
 

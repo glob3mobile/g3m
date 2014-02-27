@@ -166,7 +166,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" + label ),
 _surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
+_currentSurfaceElevation(NAND),
 _glState(NULL),
 _normalAtMarkPosition(NULL)
 {
@@ -207,7 +207,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( "_" + label ),
 _surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
+_currentSurfaceElevation(NAND),
 _glState(NULL),
 _normalAtMarkPosition(NULL)
 {
@@ -245,7 +245,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL.getPath() + "_" ),
 _surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
+_currentSurfaceElevation(NAND),
 _glState(NULL),
 _normalAtMarkPosition(NULL)
 {
@@ -284,7 +284,7 @@ _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( imageID ),
 _surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
+_currentSurfaceElevation(NAND),
 _glState(NULL),
 _normalAtMarkPosition(NULL)
 {
@@ -400,8 +400,29 @@ Mark::~Mark() {
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
 
+
+
     double altitude = _position->_height;
     if (_altitudeMode == RELATIVE_TO_GROUND) {
+
+
+
+
+
+      if (_currentSurfaceElevation != _currentSurfaceElevation){ //No elevation has been set for this mark
+
+        if (_surfaceElevationProvider == NULL){
+          _currentSurfaceElevation = 0.0;
+        } else{
+          Geodetic2D pos2D(_position->_latitude, _position->_longitude);
+          _currentSurfaceElevation = _surfaceElevationProvider->getElevationAt(pos2D);
+        }
+
+        if (_currentSurfaceElevation != _currentSurfaceElevation){
+          ILogger::instance()->logError("No elevation has been set for mark.");
+        }
+      }
+
       altitude += _currentSurfaceElevation;
     }
 

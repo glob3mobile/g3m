@@ -1078,3 +1078,18 @@ Vector2I* Tile::getPixelNormalizedFromPosition(const Geodetic2D& position2D,
   
   return NULL;
 }
+
+double Tile::getElevationAt(const Geodetic2D& g) const{
+  if (_sector.contains(g)){
+    if (_subtiles == NULL){
+      return _elevationData->getElevationAt(g);
+    }
+    for (int i = 0; i < _subtiles->size(); i++) {
+      double h = (*_subtiles)[i]->getElevationAt(g);
+      if (!ISNAN(h)){
+        return h;
+      }
+    }
+  }
+  return NAND;
+}

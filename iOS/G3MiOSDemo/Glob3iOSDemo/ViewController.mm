@@ -272,7 +272,8 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
+  [self initForTestingMarks];
 
   //  [self initWithMapBooBuilder];
 
@@ -286,6 +287,73 @@ Mesh* createSectorMesh(const Planet* planet,
    */
 
 }
+
+- (void) initForTestingMarks
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+
+  const bool logFPS = false;
+  builder.setLogFPS(logFPS);
+
+  Sector gcSector = Sector::fromDegrees(27.7116484957735, -15.90589160041418,
+                                        28.225913322423995, -15.32910937385168 );
+
+  SingleBilElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("http://data.worldwind.arc.nasa.gov/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm30&STYLES=&FORMAT=image/bil&CRS=EPSG:4326&BBOX=-15.90589160041418,27.7116484957735,-15.32910937385168,28.225913322423995&WIDTH=1000&HEIGHT=1000", false),
+                                                             gcSector,
+                                                             Vector2I(1000, 1000));
+
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+
+
+  MarksRenderer* mr = new MarksRenderer(false);
+  builder.addRenderer(mr);
+
+  builder.setShownSector(gcSector);
+
+
+  const bool logDownloaderStatistics = false;
+  builder.setLogDownloaderStatistics(logDownloaderStatistics);
+  // initialization
+  builder.initializeWidget();
+
+  [G3MWidget widget]->getPlanetRenderer();
+
+
+  ///
+  class MarksTerrainListener: public TerrainTouchListener{
+  private:
+    MarksRenderer* _mr;
+    Mark* _m;
+  public:
+
+    MarksTerrainListener(MarksRenderer* mr):_mr(mr), _m(NULL){}
+
+
+    virtual bool onTerrainTouch(const G3MEventContext* ec,
+                                const Vector2I&        pixel,
+                                const Camera*          camera,
+                                const Geodetic3D&      position,
+                                const Tile*            tile){
+
+      if (_m == NULL){
+        _m = new Mark("Mark", position, RELATIVE_TO_GROUND);
+        _mr->addMark(_m);
+      } else{
+        _mr->removeMark(_m);
+        delete _m;
+        _m = NULL;
+      }
+
+      return true;
+    }
+
+  };
+
+  [G3MWidget widget]->getPlanetRenderer()->addTerrainTouchListener(new MarksTerrainListener(mr));
+
+  
+}
+
 
 
 class MoveCameraInitializationTask : public GInitializationTask {

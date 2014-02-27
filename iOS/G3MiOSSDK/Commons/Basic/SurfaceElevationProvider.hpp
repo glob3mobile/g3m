@@ -86,6 +86,8 @@ public:
                            SurfaceElevationListener* listener) = 0;
 
   virtual bool removeListener(SurfaceElevationListener* listener) = 0;
+
+  virtual double getElevationAt(const Geodetic2D& g) const = 0;
   
 };
 
