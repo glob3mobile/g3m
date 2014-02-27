@@ -130,12 +130,10 @@ private:
 
   bool    _renderedMark;
 
-  static IFloatBuffer* _billboardTexCoord;
 
   GLState* _glState;
-  void createGLState(const Planet* planet);
-
-  static IFloatBuffer* getBillboardTexCoords();
+  void createGLState(const Planet* planet,
+                     IFloatBuffer* billboardTexCoords);
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _currentSurfaceElevation;
@@ -263,7 +261,8 @@ public:
               double cameraHeight,
               const GLState* parentGLState,
               const Planet* planet,
-              GL* gl);
+              GL* gl,
+              IFloatBuffer* billboardTexCoords);
 
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration

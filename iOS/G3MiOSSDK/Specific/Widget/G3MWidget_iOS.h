@@ -35,23 +35,15 @@ class GInitializationTask;
 class TimeInterval;
 class ErrorRenderer;
 
-// opengl versions value
-enum GL_version {
-  OpenGL_1,   //obsolete
-  OpenGL_2
-};
-
 // This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
 // The view content is basically an EAGL surface you render your OpenGL scene into.
 // Note that setting the view non-opaque will only work if the EAGL surface has an alpha channel.
 @interface G3MWidget_iOS : UIView {
 @private
   BOOL _displayLinkSupported;
-  
-  enum GL_version glver;
-  
+
   TouchEvent* _lastTouchEvent;
-  
+
   void* _widgetVP;
 }
 
@@ -110,8 +102,6 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void)setCameraPitch: (const Angle&) angle;
 
 - (void)cancelCameraAnimation;
-
-//- (void)resetCameraPosition;
 
 - (WidgetUserData*) userData;
 

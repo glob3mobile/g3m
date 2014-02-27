@@ -922,15 +922,15 @@ public abstract class MapBooBuilder
   {
     if (_gl != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _gl already initialized");
-      return;
-      //ERROR("LOGIC ERROR: _gl already initialized");
+      //ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
+      //return;
+      throw new RuntimeException("LOGIC ERROR: _gl already initialized");
     }
     if (gl == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _gl cannot be NULL");
-      return;
-      //ERROR("LOGIC ERROR: _gl cannot be NULL");
+      //ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+      //return;
+      throw new RuntimeException("LOGIC ERROR: _gl cannot be NULL");
     }
     _gl = gl;
   }
