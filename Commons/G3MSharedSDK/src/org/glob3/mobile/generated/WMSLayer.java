@@ -9,14 +9,11 @@ public class WMSLayer extends Layer
   private final WMSServerVersion _mapServerVersion;
   private final String _queryLayer;
   private final WMSServerVersion _queryServerVersion;
-
-  private Sector _sector ;
-
+  private final Sector _sector ;
   private final String _format;
   private final String _srs;
   private final String _style;
   private final boolean _isTransparent;
-
   private String _extraParameter;
 
   private double toBBOXLongitude(Angle longitude)
