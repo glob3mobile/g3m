@@ -62,7 +62,13 @@ enum TouchEventType {
 class TouchEvent {
 private:
   const TouchEventType             _eventType;
+#ifdef C_CODE
   const std::vector<const Touch*>  _touchs;
+#endif
+#ifdef JAVA_CODE
+  private final java.util.ArrayList<Touch> _touchs;
+#endif
+  
   const bool                       _shiftPressed;
   const bool                       _ctrlPressed;
   const double                     _wheelDelta;
