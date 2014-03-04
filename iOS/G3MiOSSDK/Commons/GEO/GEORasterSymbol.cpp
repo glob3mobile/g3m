@@ -279,3 +279,6 @@ void GEORasterSymbol::rasterize(ICanvas*                   canvas,
     rawRasterize(canvas, projection);
   }
 }
+
+
+

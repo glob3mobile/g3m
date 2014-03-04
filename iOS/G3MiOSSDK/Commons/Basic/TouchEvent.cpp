@@ -10,6 +10,12 @@
 
 unsigned char TouchEvent::getTapCount() const
 {
+#ifdef C_CODE
   if (_touchs.empty()) return 0;
   return _touchs[0]->getTapCount();
+#endif
+#ifdef JAVA_CODE
+  if (_touchs.isEmpty()) return 0;
+  return _touchs.get(0)->getTapCount();
+#endif
 }

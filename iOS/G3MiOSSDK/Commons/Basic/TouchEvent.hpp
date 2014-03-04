@@ -131,7 +131,12 @@ public:
   }
 
   const Touch* getTouch(int i) const {
+#ifdef C_CODE
     return _touchs[i];
+#endif
+#ifdef JAVA_CODE
+    return _touchs.get(i);
+#endif
   }
 
   int getTouchCount() const {
@@ -141,9 +146,14 @@ public:
   unsigned char getTapCount() const;
 
   ~TouchEvent() {
+#ifdef C_CODE
     for (unsigned int i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
     }
+#endif
+#ifdef JAVA_CODE
+    _touchs.clear();
+#endif
   }
 
 };

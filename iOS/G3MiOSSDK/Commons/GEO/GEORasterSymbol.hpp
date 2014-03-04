@@ -79,6 +79,11 @@ public:
 
   virtual void rawRasterize(ICanvas*                   canvas,
                             const GEORasterProjection* projection) const = 0;
+  
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  void unusedMethod() const {
+    
+  }
 };
 
 #endif
