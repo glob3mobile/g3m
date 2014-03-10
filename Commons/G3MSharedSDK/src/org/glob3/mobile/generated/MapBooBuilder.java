@@ -1555,7 +1555,7 @@ public abstract class MapBooBuilder
     return _serverURL;
   }
 
-  public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I size, Vector2I pixel, Geodetic3D position)
+  public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_serverURL.getPath());
@@ -1594,16 +1594,16 @@ public abstract class MapBooBuilder
     isb.addString("TODO");
   
     isb.addString("&tileWidth=");
-    isb.addInt(size._x);
+    isb.addInt(tileDimension._x);
   
     isb.addString("&tileHeight=");
-    isb.addInt(size._y);
+    isb.addInt(tileDimension._y);
   
     isb.addString("&pixelX=");
-    isb.addInt(pixel._x);
+    isb.addInt(pixelPosition._x);
   
     isb.addString("&pixelY=");
-    isb.addInt(pixel._y);
+    isb.addInt(pixelPosition._y);
   
     isb.addString("&lat=");
     isb.addDouble(position._latitude._degrees);

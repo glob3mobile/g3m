@@ -15,6 +15,10 @@ public class GetTilesURLVisitor implements ITileVisitor
      _ltrp = ltrp;
   }
 
+  public void dispose()
+  {
+  }
+
   public final void visitTile(java.util.ArrayList<Layer> layers, Tile tile)
   {
 
@@ -29,11 +33,5 @@ public class GetTilesURLVisitor implements ITileVisitor
     }
 
   }
-
-@Override
-public void dispose() {
-	// TODO Auto-generated method stub
-	
-}
 
 }

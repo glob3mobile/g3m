@@ -368,6 +368,12 @@ public class Tile
       }
     }
   
+    if (_level > GlobalMembersTile.MAX_LOD)
+    {
+      GlobalMembersTile.MAX_LOD = _level;
+      System.out.printf("MAXLOD = %d\n", _level);
+    }
+  
   
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
     //  boundingVolume->render(rc, parentState);
@@ -1145,16 +1151,11 @@ public class Tile
   
   }
 
-  public final Vector2I getPixelNormalizedFromPosition(Geodetic2D position2D, Vector2I size)
+  public final Vector2I getNormalizedPixelsFromPosition(Geodetic2D position2D, Vector2I tileDimension)
   {
     final IMathUtils math = IMathUtils.instance();
-    if (_sector.contains(position2D))
-    {
-      final Vector2D uv = _sector.getUVCoordinates(position2D);
-      return new Vector2I(math.toInt(size._x * uv._x), math.toInt(size._y * uv._y));
-    }
-  
-    return null;
+    final Vector2D uv = _sector.getUVCoordinates(position2D);
+    return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
 
 }

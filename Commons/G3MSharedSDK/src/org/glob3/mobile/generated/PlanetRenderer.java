@@ -318,13 +318,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-<<<<<<< HEAD
-  private G3MRenderContext _renderContext;
+  final G3MRenderContext _renderContext;
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector)
-=======
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions)
->>>>>>> purgatory
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -348,12 +344,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
      _layerTilesRenderParameters = null;
      _layerTilesRenderParametersDirty = true;
-<<<<<<< HEAD
      _renderContext = null;
-=======
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
->>>>>>> purgatory
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
