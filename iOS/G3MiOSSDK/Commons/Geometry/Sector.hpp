@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Sector_h
-#define G3MiOSSDK_Sector_h
+#ifndef G3MiOSSDK_Sector
+#define G3MiOSSDK_Sector
 
 #include <vector>
 #include <math.h>

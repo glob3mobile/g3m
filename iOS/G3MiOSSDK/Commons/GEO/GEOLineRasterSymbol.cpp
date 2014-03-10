@@ -15,7 +15,9 @@ GEOLineRasterSymbol::GEOLineRasterSymbol(const std::vector<Geodetic2D*>* coordin
                                          const GEO2DLineRasterStyle& style,
                                          const int minTileLevel,
                                          const int maxTileLevel):
-GEORasterSymbol( calculateSectorFromCoordinates(coordinates), minTileLevel, maxTileLevel ),
+GEORasterSymbol(calculateSectorFromCoordinates(coordinates),
+                minTileLevel,
+                maxTileLevel),
 _coordinates( copyCoordinates(coordinates) ),
 _style(style)
 {

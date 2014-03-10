@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_IRenderer_h
-#define G3MiOSSDK_IRenderer_h
+#ifndef G3MiOSSDK_IRenderer
+#define G3MiOSSDK_IRenderer
 
 class G3MContext;
 class G3MRenderContext;

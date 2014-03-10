@@ -1,13 +1,13 @@
 //
-//  ILogger.h
+//  ILogger.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_ILogger_h
-#define G3MiOSSDK_ILogger_h
+#ifndef G3MiOSSDK_ILogger
+#define G3MiOSSDK_ILogger
 
 
 #include <string>
@@ -43,9 +43,9 @@ public:
   }
   
   
-  virtual void logInfo   (const std::string& x, ...) const = 0;
-  virtual void logWarning(const std::string& x, ...) const = 0;
-  virtual void logError  (const std::string& x, ...) const = 0;
+  virtual void logInfo   (const std::string x, ...) const = 0;
+  virtual void logWarning(const std::string x, ...) const = 0;
+  virtual void logError  (const std::string x, ...) const = 0;
   
   virtual ~ILogger() {
   }

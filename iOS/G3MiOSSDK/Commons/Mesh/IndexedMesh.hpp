@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_IndexedMesh_h
-#define G3MiOSSDK_IndexedMesh_h
+#ifndef G3MiOSSDK_IndexedMesh
+#define G3MiOSSDK_IndexedMesh
 
 #include "AbstractMesh.hpp"
 

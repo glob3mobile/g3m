@@ -32,6 +32,10 @@ private:
 
   const std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
 
+protected:
+  void rawRasterize(ICanvas*                   canvas,
+                    const GEORasterProjection* projection) const;
+
 public:
 
   GEOPolygonRasterSymbol(const GEO2DPolygonData*        polygonData,
@@ -41,9 +45,6 @@ public:
                          const int maxTileLevel = -1);
 
   ~GEOPolygonRasterSymbol();
-
-  void rawRasterize(ICanvas*                   canvas,
-                    const GEORasterProjection* projection) const;
 
 };
 

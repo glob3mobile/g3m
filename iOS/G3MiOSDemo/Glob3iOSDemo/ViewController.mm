@@ -138,6 +138,7 @@
 
 #import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
+#import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -2490,27 +2491,28 @@ public:
 
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
-    const double population = properties->getAsNumber("population", 0);
-
-    if (population > 2000000) {
-      //    if (rand()%2 == 0) {
-      //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
-      //    }
-      //    else {
-      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
-      //    }
-
-      Mark* mark = createMark(geometry);
-      if (mark != NULL) {
-        symbols->push_back( new GEOMarkSymbol(mark) );
-      }
-    }
-
-//    const std::string label = properties->getAsString("name", "");
+//    const double population = properties->getAsNumber("population", 0);
 //
-//    if (label.compare("") != 0) {
-//      symbols->push_back( new GEORasterLabelSymbol( label ) );
+//    if (population > 2000000) {
+//      //    if (rand()%2 == 0) {
+//      //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
+//      //    }
+//      //    else {
+//      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
+//      //    }
+//
+//      Mark* mark = createMark(geometry);
+//      if (mark != NULL) {
+//        symbols->push_back( new GEOMarkSymbol(mark) );
+//      }
 //    }
+
+    const std::string label = properties->getAsString("name", "");
+
+    if (label.compare("") != 0) {
+      symbols->push_back( new GEOLabelRasterSymbol(label,
+                                                   geometry->getPosition()) );
+    }
 
     return symbols;
   }
