@@ -34,15 +34,12 @@ private:
   const WMSServerVersion _mapServerVersion;
   const std::string      _queryLayer;
   const WMSServerVersion _queryServerVersion;
-
-  Sector              _sector;
-
-  const std::string   _format;
-  const std::string   _srs;
-  const std::string   _style;
-  const bool          _isTransparent;
-
-  std::string         _extraParameter;
+  const Sector           _sector;
+  const std::string      _format;
+  const std::string      _srs;
+  const std::string      _style;
+  const bool             _isTransparent;
+  std::string            _extraParameter;
 
   inline double toBBOXLongitude(const Angle& longitude) const;
   inline double toBBOXLatitude (const Angle& latitude)  const;
@@ -105,7 +102,7 @@ public:
   const std::string description() const;
 
   WMSLayer* copy() const;
-  
+
   RenderState getRenderState();
 };
 
