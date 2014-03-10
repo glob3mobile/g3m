@@ -302,7 +302,7 @@ private:
   const G3MRenderContext* _renderContext;
 #endif
 #ifdef JAVA_CODE
-  final G3MRenderContext _renderContext;
+  G3MRenderContext _renderContext;
 #endif
 
 public:
