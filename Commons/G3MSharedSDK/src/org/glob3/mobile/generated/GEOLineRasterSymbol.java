@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  GEORasterLineSymbol.cpp
+//  GEOLineRasterSymbol.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/10/13.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GEORasterLineSymbol.hpp
+//  GEOLineRasterSymbol.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/10/13.
@@ -19,21 +19,21 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEORasterLineSymbol extends GEORasterSymbol
+public class GEOLineRasterSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
   private final GEO2DLineRasterStyle      _style;
 
 
-  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style, int minTileLevel)
+  public GEOLineRasterSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style, int minTileLevel)
   {
      this(coordinates, style, minTileLevel, -1);
   }
-  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style)
+  public GEOLineRasterSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style)
   {
      this(coordinates, style, -1, -1);
   }
-  public GEORasterLineSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style, int minTileLevel, int maxTileLevel)
+  public GEOLineRasterSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEO2DLineRasterStyle style, int minTileLevel, int maxTileLevel)
   {
      super(calculateSectorFromCoordinates(coordinates), minTileLevel, maxTileLevel);
      _coordinates = copyCoordinates(coordinates);
