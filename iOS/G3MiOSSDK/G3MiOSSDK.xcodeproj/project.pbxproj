@@ -107,9 +107,9 @@
 		CF2DF7CF178DE7BE00FF5FF0 /* GEOTileRasterizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2DF7CD178DE79200FF5FF0 /* GEOTileRasterizer.hpp */; };
 		CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2DF7D0178DEA8900FF5FF0 /* QuadTree.cpp */; };
 		CF2DF7D3178DEAC900FF5FF0 /* QuadTree.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2DF7D1178DEA8900FF5FF0 /* QuadTree.hpp */; };
-		CF2DF7D6178DECC400FF5FF0 /* GEORasterLineSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2DF7D4178DECC400FF5FF0 /* GEORasterLineSymbol.cpp */; };
+		CF2DF7D6178DECC400FF5FF0 /* GEOLineRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2DF7D4178DECC400FF5FF0 /* GEOLineRasterSymbol.cpp */; };
 		CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2DF7D7178DECF000FF5FF0 /* GEOMultiLineRasterSymbol.cpp */; };
-		CF2DF7DA178DED1100FF5FF0 /* GEORasterLineSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2DF7D5178DECC400FF5FF0 /* GEORasterLineSymbol.hpp */; };
+		CF2DF7DA178DED1100FF5FF0 /* GEOLineRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2DF7D5178DECC400FF5FF0 /* GEOLineRasterSymbol.hpp */; };
 		CF2DF7DB178DED1100FF5FF0 /* GEOMultiLineRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2DF7D8178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.hpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35A20516D3D44E00D795D8 /* BilParser.cpp */; };
@@ -304,8 +304,8 @@
 		CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67B0179F04150056A2BD /* GEO2DPolygonGeometry.cpp */; };
 		CFBD67B3179F04400056A2BD /* GEO2DPolygonGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67B1179F04160056A2BD /* GEO2DPolygonGeometry.hpp */; };
 		CFBD67B6179F084F0056A2BD /* CameraDoubleTapHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */; };
-		CFBD67B9179F09380056A2BD /* GEORasterPolygonSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67B7179F09360056A2BD /* GEORasterPolygonSymbol.cpp */; };
-		CFBD67BA179F09850056A2BD /* GEORasterPolygonSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67B8179F09370056A2BD /* GEORasterPolygonSymbol.hpp */; };
+		CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67B7179F09360056A2BD /* GEOPolygonRasterSymbol.cpp */; };
+		CFBD67BA179F09850056A2BD /* GEOPolygonRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67B8179F09370056A2BD /* GEOPolygonRasterSymbol.hpp */; };
 		CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD67BB179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp */; };
 		CFBD67BE179F0C5C0056A2BD /* GEO2DSurfaceRasterStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFBD67BC179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.hpp */; };
 		CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */; };
@@ -742,13 +742,13 @@
 				CFA1FDA517A1AB4400DAEAB2 /* GEO2DMultiPolygonGeometry.hpp in CopyFiles */,
 				CFA1FDA117A196A300DAEAB2 /* GEO2DPolygonData.hpp in CopyFiles */,
 				CFBD67BE179F0C5C0056A2BD /* GEO2DSurfaceRasterStyle.hpp in CopyFiles */,
-				CFBD67BA179F09850056A2BD /* GEORasterPolygonSymbol.hpp in CopyFiles */,
+				CFBD67BA179F09850056A2BD /* GEOPolygonRasterSymbol.hpp in CopyFiles */,
 				CFBD67B6179F084F0056A2BD /* CameraDoubleTapHandler.hpp in CopyFiles */,
 				CFBD67B3179F04400056A2BD /* GEO2DPolygonGeometry.hpp in CopyFiles */,
 				CFBD67AE179DBC210056A2BD /* GEO2DLineRasterStyle.hpp in CopyFiles */,
 				CF2A47C6178F213A00901857 /* GEORasterProjection.hpp in CopyFiles */,
 				CF2A47C2178EF97D00901857 /* CanvasTileRasterizer.hpp in CopyFiles */,
-				CF2DF7DA178DED1100FF5FF0 /* GEORasterLineSymbol.hpp in CopyFiles */,
+				CF2DF7DA178DED1100FF5FF0 /* GEOLineRasterSymbol.hpp in CopyFiles */,
 				CF2DF7DB178DED1100FF5FF0 /* GEOMultiLineRasterSymbol.hpp in CopyFiles */,
 				CF2DF7D3178DEAC900FF5FF0 /* QuadTree.hpp in CopyFiles */,
 				CF2DF7CF178DE7BE00FF5FF0 /* GEOTileRasterizer.hpp in CopyFiles */,
@@ -1180,8 +1180,8 @@
 		CF2DF7CD178DE79200FF5FF0 /* GEOTileRasterizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOTileRasterizer.hpp; path = Commons/GEO/GEOTileRasterizer.hpp; sourceTree = "<group>"; };
 		CF2DF7D0178DEA8900FF5FF0 /* QuadTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = QuadTree.cpp; path = Commons/Basic/QuadTree.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF2DF7D1178DEA8900FF5FF0 /* QuadTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = QuadTree.hpp; path = Commons/Basic/QuadTree.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		CF2DF7D4178DECC400FF5FF0 /* GEORasterLineSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterLineSymbol.cpp; path = Commons/GEO/GEORasterLineSymbol.cpp; sourceTree = "<group>"; };
-		CF2DF7D5178DECC400FF5FF0 /* GEORasterLineSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterLineSymbol.hpp; path = Commons/GEO/GEORasterLineSymbol.hpp; sourceTree = "<group>"; };
+		CF2DF7D4178DECC400FF5FF0 /* GEOLineRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLineRasterSymbol.cpp; path = Commons/GEO/GEOLineRasterSymbol.cpp; sourceTree = "<group>"; };
+		CF2DF7D5178DECC400FF5FF0 /* GEOLineRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOLineRasterSymbol.hpp; path = Commons/GEO/GEOLineRasterSymbol.hpp; sourceTree = "<group>"; };
 		CF2DF7D7178DECF000FF5FF0 /* GEOMultiLineRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMultiLineRasterSymbol.cpp; path = Commons/GEO/GEOMultiLineRasterSymbol.cpp; sourceTree = "<group>"; };
 		CF2DF7D8178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMultiLineRasterSymbol.hpp; path = Commons/GEO/GEOMultiLineRasterSymbol.hpp; sourceTree = "<group>"; };
 		CF31CBEE158776020085E8F1 /* Effects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Effects.hpp; path = Commons/Basic/Effects.hpp; sourceTree = "<group>"; };
@@ -1440,8 +1440,8 @@
 		CFBD67AC179DBB7F0056A2BD /* GEO2DLineRasterStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GEO2DLineRasterStyle.hpp; path = Commons/GEO/GEO2DLineRasterStyle.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFBD67B0179F04150056A2BD /* GEO2DPolygonGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DPolygonGeometry.cpp; path = Commons/GEO/GEO2DPolygonGeometry.cpp; sourceTree = "<group>"; };
 		CFBD67B1179F04160056A2BD /* GEO2DPolygonGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DPolygonGeometry.hpp; path = Commons/GEO/GEO2DPolygonGeometry.hpp; sourceTree = "<group>"; };
-		CFBD67B7179F09360056A2BD /* GEORasterPolygonSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterPolygonSymbol.cpp; path = Commons/GEO/GEORasterPolygonSymbol.cpp; sourceTree = "<group>"; };
-		CFBD67B8179F09370056A2BD /* GEORasterPolygonSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterPolygonSymbol.hpp; path = Commons/GEO/GEORasterPolygonSymbol.hpp; sourceTree = "<group>"; };
+		CFBD67B7179F09360056A2BD /* GEOPolygonRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOPolygonRasterSymbol.cpp; path = Commons/GEO/GEOPolygonRasterSymbol.cpp; sourceTree = "<group>"; };
+		CFBD67B8179F09370056A2BD /* GEOPolygonRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOPolygonRasterSymbol.hpp; path = Commons/GEO/GEOPolygonRasterSymbol.hpp; sourceTree = "<group>"; };
 		CFBD67BB179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DSurfaceRasterStyle.cpp; path = Commons/GEO/GEO2DSurfaceRasterStyle.cpp; sourceTree = "<group>"; };
 		CFBD67BC179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DSurfaceRasterStyle.hpp; path = Commons/GEO/GEO2DSurfaceRasterStyle.hpp; sourceTree = "<group>"; };
 		CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DMultiLineStringGeometry.cpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.cpp; sourceTree = "<group>"; };
@@ -2384,8 +2384,8 @@
 				CF5C119C178CA746000ED715 /* GEORasterSymbol.hpp */,
 				CF2DF7CC178DE79200FF5FF0 /* GEOTileRasterizer.cpp */,
 				CF2DF7CD178DE79200FF5FF0 /* GEOTileRasterizer.hpp */,
-				CF2DF7D4178DECC400FF5FF0 /* GEORasterLineSymbol.cpp */,
-				CF2DF7D5178DECC400FF5FF0 /* GEORasterLineSymbol.hpp */,
+				CF2DF7D4178DECC400FF5FF0 /* GEOLineRasterSymbol.cpp */,
+				CF2DF7D5178DECC400FF5FF0 /* GEOLineRasterSymbol.hpp */,
 				CF2DF7D7178DECF000FF5FF0 /* GEOMultiLineRasterSymbol.cpp */,
 				CF2DF7D8178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.hpp */,
 				CF2A47C3178F211200901857 /* GEORasterProjection.cpp */,
@@ -2394,8 +2394,8 @@
 				CFBD67AC179DBB7F0056A2BD /* GEO2DLineRasterStyle.hpp */,
 				CFBD67B0179F04150056A2BD /* GEO2DPolygonGeometry.cpp */,
 				CFBD67B1179F04160056A2BD /* GEO2DPolygonGeometry.hpp */,
-				CFBD67B7179F09360056A2BD /* GEORasterPolygonSymbol.cpp */,
-				CFBD67B8179F09370056A2BD /* GEORasterPolygonSymbol.hpp */,
+				CFBD67B7179F09360056A2BD /* GEOPolygonRasterSymbol.cpp */,
+				CFBD67B8179F09370056A2BD /* GEOPolygonRasterSymbol.hpp */,
 				CFBD67BB179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp */,
 				CFBD67BC179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.hpp */,
 				CFA1FD9E17A1966C00DAEAB2 /* GEO2DPolygonData.cpp */,
@@ -3022,13 +3022,13 @@
 				CF5C119D178CA747000ED715 /* GEORasterSymbol.cpp in Sources */,
 				CF2DF7CE178DE79200FF5FF0 /* GEOTileRasterizer.cpp in Sources */,
 				CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */,
-				CF2DF7D6178DECC400FF5FF0 /* GEORasterLineSymbol.cpp in Sources */,
+				CF2DF7D6178DECC400FF5FF0 /* GEOLineRasterSymbol.cpp in Sources */,
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,
 				CF2A47C1178EF92C00901857 /* CanvasTileRasterizer.cpp in Sources */,
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */,
-				CFBD67B9179F09380056A2BD /* GEORasterPolygonSymbol.cpp in Sources */,
+				CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */,
 				CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */,
 				CFA1FDA017A1966D00DAEAB2 /* GEO2DPolygonData.cpp in Sources */,
 				CFA1FDA417A1AB1800DAEAB2 /* GEO2DMultiPolygonGeometry.cpp in Sources */,

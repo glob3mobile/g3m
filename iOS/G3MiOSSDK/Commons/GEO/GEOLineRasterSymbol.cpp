@@ -1,17 +1,17 @@
 //
-//  GEORasterLineSymbol.cpp
+//  GEOLineRasterSymbol.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/10/13.
 //
 //
 
-#include "GEORasterLineSymbol.hpp"
+#include "GEOLineRasterSymbol.hpp"
 
 #include "Tile.hpp"
 #include "ICanvas.hpp"
 
-GEORasterLineSymbol::GEORasterLineSymbol(const std::vector<Geodetic2D*>* coordinates,
+GEOLineRasterSymbol::GEOLineRasterSymbol(const std::vector<Geodetic2D*>* coordinates,
                                          const GEO2DLineRasterStyle& style,
                                          const int minTileLevel,
                                          const int maxTileLevel):
@@ -22,7 +22,7 @@ _style(style)
 }
 
 
-GEORasterLineSymbol::~GEORasterLineSymbol() {
+GEOLineRasterSymbol::~GEOLineRasterSymbol() {
   if (_coordinates != NULL) {
     const int size = _coordinates->size();
 
@@ -40,7 +40,7 @@ GEORasterLineSymbol::~GEORasterLineSymbol() {
 
 }
 
-void GEORasterLineSymbol::rawRasterize(ICanvas*                   canvas,
+void GEOLineRasterSymbol::rawRasterize(ICanvas*                   canvas,
                                        const GEORasterProjection* projection) const {
   if (_style.apply(canvas)) {
     rasterLine(_coordinates,
