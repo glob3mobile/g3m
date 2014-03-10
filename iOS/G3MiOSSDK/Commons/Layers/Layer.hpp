@@ -52,11 +52,14 @@ protected:
 
   std::string _title;
 
+  const float _transparency;
+
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
         bool readExpired,
-        const LayerTilesRenderParameters* parameters) :
+        const LayerTilesRenderParameters* parameters,
+        float transparency) :
   _condition(condition),
   _name(name),
   _layerSet(NULL),
@@ -64,7 +67,8 @@ protected:
   _readExpired(readExpired),
   _enable(true),
   _parameters(parameters),
-  _title("")
+  _title(""),
+  _transparency(transparency)
   {
 
   }
@@ -147,6 +151,12 @@ public:
   }
 
   virtual const std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   bool isEquals(const Layer* that) const;
   

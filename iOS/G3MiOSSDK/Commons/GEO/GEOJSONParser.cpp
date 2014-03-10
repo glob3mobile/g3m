@@ -40,10 +40,6 @@ GEOObject* GEOJSONParser::parseBSON(const IByteBuffer* bson) {
 }
 
 void GEOJSONParser::showStatistics() const {
-
-//  mutable int _polygon2DCount;
-//  mutable int _holesLineStringsInPolygon2DCount;
-
   ILogger::instance()->logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), Polygons2D=%d (Holes=%d), MultiPolygons=%d, features=%d, featuresCollection=%d",
                                _coordinates2DCount,
                                _points2DCount,

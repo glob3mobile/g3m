@@ -22,14 +22,12 @@ package org.glob3.mobile.generated;
 
 public class CameraZoomAndRotateHandler extends CameraEventHandler
 {
-  private final boolean _processRotation;
-  private final boolean _processZoom;
-
   private double _fingerSep0;
   private double _lastAngle;
   private double _angle0;
 
   private MutableVector3D _centralGlobePoint = new MutableVector3D();
+  private MutableVector3D _centralGlobeNormal = new MutableVector3D();
 
   private void zoom(Camera camera, Vector2I difCurrentPixels)
   {
@@ -65,7 +63,12 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   
      // make zoom and rotation
     camera.copyFrom(_camera0);
-    camera.rotateWithAxis(_centralGlobePoint.asVector3D(), Angle.fromRadians(angle));
+  
+    // make rotation
+    camera.rotateWithAxisAndPoint(_centralGlobeNormal.asVector3D(), _centralGlobePoint.asVector3D(), Angle.fromRadians(angle));
+    //camera->rotateWithAxis(_centralGlobePoint.asVector3D(), Angle::fromRadians(angle));
+  
+    // make zoom
     camera.moveForward(desp *dist);
   
     /*printf("dist=%.2f.  desp=%f.   factor=%f   new dist=%.2f\n", dist, desp, factor, dist-desp*dist);
@@ -79,13 +82,11 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   }
 
 
-  public CameraZoomAndRotateHandler(boolean processRotation, boolean processZoom)
+  public CameraZoomAndRotateHandler()
   //_initialPoint(0,0,0),
-  //_initialPixel(0,0,0),
+  //_initialPixel(0,0,0)
   {
      _camera0 = new Camera(new Camera(0, 0));
-     _processRotation = processRotation;
-     _processZoom = processZoom;
   }
 
   public void dispose()
@@ -184,7 +185,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
       Vector2I difPixel1 = pixel1.sub(_initialPixel1.asVector2I());
       if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
       {
-        System.out.print("zoom..\n");
+        //printf ("zoom..\n");
         cameraContext.setCurrentGesture(Gesture.Zoom);
       }
   
@@ -197,6 +198,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
         if (!intersection.isNan())
         {
           _centralGlobePoint = intersection.asMutableVector3D();
+          _centralGlobeNormal = planet.geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
           _fingerSep0 = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
           _lastAngle = _angle0 = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
           cameraContext.setCurrentGesture(Gesture.Zoom);
@@ -216,13 +218,11 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     switch (cameraContext.getCurrentGesture())
     {
       case Zoom:
-        if (_processZoom)
-           zoom(cameraContext.getNextCamera(), difCurrentPixels);
+        zoom(cameraContext.getNextCamera(), difCurrentPixels);
         break;
   
       case Rotate:
-        if (_processRotation)
-           rotate();
+        rotate();
         break;
   
       default:

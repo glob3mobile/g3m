@@ -124,7 +124,8 @@ private:
                         const LayerSet* layerSet,
                         const TilesRenderParameters* tilesRenderParameters,
                         bool isForcedFullRender,
-                        long long texturePriority);
+                        long long texturePriority,
+                        bool logTilesPetitions);
 
   void debugRender(const G3MRenderContext* rc,
                    const GLState* glState,
@@ -223,7 +224,8 @@ public:
                                const TilesRenderParameters* tilesRenderParameters,
                                bool isForcedFullRender,
                                long long texturePriority,
-                               float verticalExaggeration);
+                               float verticalExaggeration,
+                               bool logTilesPetitions);
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState,
@@ -247,7 +249,9 @@ public:
               long long texturePriority,
               double texWidth,
               double texHeight,
-              double nowInMS);
+              double nowInMS,
+              const bool renderTileMeshes,
+              bool logTilesPetitions);
 
   const TileKey getKey() const;
 
@@ -295,6 +299,12 @@ public:
                    ElevationDataProvider* elevationDataProvider);
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
                                             const Angle& splitLongitude,
@@ -321,6 +331,9 @@ public:
   void ancestorChangedElevationData(Tile* ancestor);
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
+  
+  Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
+                                           const Vector2I& size) const;
 
 };
 

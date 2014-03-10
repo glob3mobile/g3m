@@ -51,6 +51,8 @@ private:
   std::vector<long long>* getStabilizationMilliSeconds();
   long long getTexturePriority();
 
+  bool _logTilesPetitions;
+
   LayerSet* createLayerSet();
   TilesRenderParameters* createPlanetRendererParameters();
   TileTessellator* createTileTessellator();
@@ -60,6 +62,12 @@ private:
 
   Sector* _renderedSector;
   Sector getRenderedSector();
+
+  bool _renderTileMeshes;
+  bool getRenderTileMeshes();
+
+  bool getLogTilesPetitions();
+
 
 public:
   PlanetRendererBuilder();
@@ -72,7 +80,7 @@ public:
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
-  void setUseTilesSplitBuget(const bool useTilesSplitBudget);
+  void setUseTilesSplitBudget(const bool useTilesSplitBudget);
   void setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,
@@ -92,7 +100,11 @@ public:
 
   Quality getQuality() const;
   void setQuality(Quality quality);
-  
+
+  void setRenderTileMeshes(bool renderTileMeshes);
+
+  void setLogTilesPetitions(bool logTilesPetitions);
+
 };
 
 #endif

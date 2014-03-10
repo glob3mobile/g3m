@@ -121,7 +121,9 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const TilesRenderParameters* tilesRenderParameters,
                                bool                         showStatistics,
                                long long                    texturePriority,
-                               const Sector&                renderedSector) :
+                               const Sector&                renderedSector,
+                               const bool                   renderTileMeshes,
+                               const bool                   logTilesPetitions) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -144,7 +146,9 @@ _glState(new GLState()),
 _renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector(renderedSector)),
 _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
-_renderContext(NULL)
+_renderContext(NULL),
+_renderTileMeshes(renderTileMeshes),
+_logTilesPetitions(logTilesPetitions)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -459,7 +463,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _tilesRenderParameters,
                                       true,
                                       _texturePriority,
-                                      _verticalExaggeration);
+                                      _verticalExaggeration,
+                                      _logTilesPetitions);
       }
     }
 
@@ -599,7 +604,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   }
 
   updateGLState(rc);
-#warning Testing Terrain Normals
+//#warning Testing Terrain Normals
   _glState->setParent(glState);
 
   // Saving camera for use in onTouchEvent
@@ -662,7 +667,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _texturePriority,
                    texWidthSquared,
                    texHeightSquared,
-                   nowInMS);
+                   nowInMS,
+                   _renderTileMeshes,
+                   _logTilesPetitions);
     }
   }
   else {
@@ -701,7 +708,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _texturePriority,
                      texWidthSquared,     //SENDING SQUARED TEX SIZE
                      texHeightSquared,
-                     nowInMS);
+                     nowInMS,
+                     _renderTileMeshes,
+                     _logTilesPetitions);
       }
 
       toVisit = toVisitInNextIteration;

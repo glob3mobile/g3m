@@ -174,11 +174,11 @@ public:
   
   bool deleteProgram(const GPUProgram* program) {
 
-    if (program == NULL){
+    if (program == NULL) {
       return false;
     }
 
-    if (_currentGPUProgram == program){ //In case of deleting active program
+    if (_currentGPUProgram == program) { //In case of deleting active program
       _currentGPUProgram->removeReference();
       _currentGPUProgram = NULL;
     }

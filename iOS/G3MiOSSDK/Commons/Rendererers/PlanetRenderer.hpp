@@ -223,6 +223,7 @@ private:
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
+  const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
 
   TilesStatistics _statistics;
@@ -279,7 +280,9 @@ private:
   void updateGLState(const G3MRenderContext* rc);
 
   SurfaceElevationProvider_Tree _elevationListenersTree;
-  
+
+  bool _renderTileMeshes;
+
   Sector* _renderedSector;
 //  bool _validLayerTilesRenderParameters;
   bool _layerTilesRenderParametersDirty;
@@ -313,7 +316,9 @@ public:
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
                  long long                    texturePriority,
-                 const Sector&                renderedSector);
+                 const Sector&                renderedSector,
+                 const bool                   renderTileMeshes,
+                 const bool                   logTilesPetitions);
 
   ~PlanetRenderer();
 
@@ -386,7 +391,7 @@ public:
   /**
    Add a listener for notification of visible-sector changes.
 
-   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered inmediatly.
+   @param stabilizationInterval How many time the visible-sector has to be settled (without changes) before triggering the event.  Useful for avoid process while the camera is being moved (as in animations).  If stabilizationInterval is zero, the event is triggered immediately.
    */
   void addVisibleSectorListener(VisibleSectorListener* listener,
                                 const TimeInterval& stabilizationInterval);
@@ -459,6 +464,14 @@ public:
 
   ElevationDataProvider* getElevationDataProvider() const{
     return _elevationDataProvider;
+  }
+
+  void setRenderTileMeshes(bool renderTileMeshes) {
+    _renderTileMeshes = renderTileMeshes;
+  }
+
+  bool getRenderTileMeshes() const {
+    return _renderTileMeshes;
   }
 
 };

@@ -28,6 +28,7 @@ class Petition {
 private:
   const Sector* _sector;
   IImage* _image;
+  const float _layerTransparency;
 
 #ifdef C_CODE
   const URL     _url;
@@ -51,13 +52,15 @@ public:
            const URL& url,
            const TimeInterval& timeToCache,
            bool readExpired,
-           bool isTransparent):
+           bool isTransparent,
+           float layerTransparency):
   _sector(new Sector(sector)),
   _url(url),
   _timeToCacheInMS(timeToCache._milliseconds),
   _readExpired(readExpired),
   _isTransparent(isTransparent),
-  _image(NULL)
+  _image(NULL),
+  _layerTransparency(layerTransparency)
   {
 
   }
@@ -103,6 +106,16 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
+  float getLayerTransparency() const{
+    return _layerTransparency;
+  }
   
 };
 

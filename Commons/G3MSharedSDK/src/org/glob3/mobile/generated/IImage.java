@@ -24,6 +24,10 @@ public abstract class IImage
   public abstract Vector2I getExtent();
 
   public abstract String description();
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public abstract IImage shallowCopy();
 }

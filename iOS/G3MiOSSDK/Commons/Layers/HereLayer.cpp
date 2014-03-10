@@ -20,7 +20,8 @@ HereLayer::HereLayer(const std::string& appId,
                      const TimeInterval& timeToCache,
                      bool readExpired,
                      int initialLevel,
-                     LayerCondition* condition) :
+                     LayerCondition* condition,
+                     float transparency) :
 Layer(condition,
       "here",
       timeToCache,
@@ -32,7 +33,8 @@ Layer(condition,
                                      20,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                     true)),
+                                     true),
+      transparency),
 _appId(appId),
 _appCode(appCode),
 _initialLevel(initialLevel)
@@ -145,7 +147,8 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
                                     URL(path, false),
                                     getTimeToCache(),
                                     getReadExpired(),
-                                    true) );
+                                    true,
+                                    _transparency) );
 
   return petitions;
 }

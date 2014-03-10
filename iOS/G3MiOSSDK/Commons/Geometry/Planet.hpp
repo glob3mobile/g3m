@@ -18,6 +18,7 @@ class Effect;
 class Camera;
 class Sector;
 class Vector2I;
+class CoordinateSystem;
 
 class Planet {
 public:
@@ -111,6 +112,8 @@ public:
                                        Camera* nextCamera) const = 0;
 
   virtual Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const = 0;
+
+  CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
 };
 
 #endif

@@ -42,6 +42,10 @@ public class MapBoo_MultiImage_Level
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public void dispose()
   {

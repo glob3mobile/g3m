@@ -130,23 +130,23 @@ private:
 
   bool    _renderedMark;
 
-  static IFloatBuffer* _billboardTexCoord;
 
   GLState* _glState;
-  void createGLState(const Planet* planet);
-
-  static IFloatBuffer* getBillboardTexCoords();
+  void createGLState(const Planet* planet,
+                     IFloatBuffer* billboardTexCoords);
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _currentSurfaceElevation;
   AltitudeMode _altitudeMode;
+
+  Vector3D* _normalAtMarkPosition;
 
 public:
   /**
    * Creates a marker with icon and label
    */
   Mark(const std::string& label,
-       const URL          iconURL,
+       const URL&         iconURL,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
@@ -178,7 +178,7 @@ public:
   /**
    * Creates a marker just with icon, without label
    */
-  Mark(const URL          iconURL,
+  Mark(const URL&         iconURL,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
@@ -258,9 +258,11 @@ public:
 
   void render(const G3MRenderContext* rc,
               const Vector3D& cameraPosition,
+              double cameraHeight,
               const GLState* parentGLState,
               const Planet* planet,
-              GL* gl);
+              GL* gl,
+              IFloatBuffer* billboardTexCoords);
 
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration

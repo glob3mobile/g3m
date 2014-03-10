@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.GPUUniform;
 import org.glob3.mobile.generated.GPUUniformBool;
 import org.glob3.mobile.generated.GPUUniformFloat;
 import org.glob3.mobile.generated.GPUUniformMatrix4Float;
+import org.glob3.mobile.generated.GPUUniformSampler2D;
 import org.glob3.mobile.generated.GPUUniformVec2Float;
 import org.glob3.mobile.generated.GPUUniformVec3Float;
 import org.glob3.mobile.generated.GPUUniformVec4Float;
@@ -38,19 +39,19 @@ public final class NativeGL2_Android
          extends
             INativeGL {
 
-   private Thread _openglThread = null;
+   private Thread _openGLThread = null;
 
 
-   void setOpenGLThread(final Thread openglThread) {
-      _openglThread = openglThread;
+   void setOpenGLThread(final Thread openGLThread) {
+      _openGLThread = openGLThread;
    }
 
 
    private final void checkOpenGLThread() {
-      if (_openglThread != null) {
+      if (_openGLThread != null) {
          final Thread currentThread = Thread.currentThread();
-         if (currentThread != _openglThread) {
-            throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openglThread
+         if (currentThread != _openGLThread) {
+            throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
                                        + ", CurrentThread=" + currentThread + ")");
          }
       }
@@ -516,12 +517,6 @@ public final class NativeGL2_Android
 
 
    @Override
-   public int TextureParameterValue_Linear() {
-      return GLES20.GL_LINEAR;
-   }
-
-
-   @Override
    public int TextureParameterValue_ClampToEdge() {
       return GLES20.GL_CLAMP_TO_EDGE;
    }
@@ -756,9 +751,8 @@ public final class NativeGL2_Android
             return new GPUUniformVec3Float(nameStr, new GLUniformID_Android(id));
          case GLES20.GL_BOOL:
             return new GPUUniformBool(nameStr, new GLUniformID_Android(id));
-            //         case GLES20.GL_SAMPLER_2D:
-            //            final int NOT_IMPLEMENTED_YET;
-            //            return null;
+         case GLES20.GL_SAMPLER_2D:
+            return new GPUUniformSampler2D(nameStr, new GLUniformID_Android(id));
          default:
             return null;
       }
@@ -821,6 +815,54 @@ public final class NativeGL2_Android
    @Override
    public int Type_Vec3Float() {
       return GLES20.GL_FLOAT_VEC3;
+   }
+
+
+   @Override
+   public void depthMask(final boolean depthMask) {
+      GLES20.glDepthMask(depthMask);
+   }
+
+
+   @Override
+   public int TextureParameterValue_Linear() {
+      return GLES20.GL_LINEAR;
+   }
+
+
+   @Override
+   public int TextureParameterValue_Nearest() {
+      return GLES20.GL_NEAREST;
+   }
+
+
+   @Override
+   public int TextureParameterValue_NearestMipmapNearest() {
+      return GLES20.GL_NEAREST_MIPMAP_NEAREST;
+   }
+
+
+   @Override
+   public int TextureParameterValue_NearestMipmapLinear() {
+      return GLES20.GL_NEAREST_MIPMAP_LINEAR;
+   }
+
+
+   @Override
+   public int TextureParameterValue_LinearMipmapNearest() {
+      return GLES20.GL_LINEAR_MIPMAP_NEAREST;
+   }
+
+
+   @Override
+   public int TextureParameterValue_LinearMipmapLinear() {
+      return GLES20.GL_LINEAR_MIPMAP_LINEAR;
+   }
+
+
+   @Override
+   public void setActiveTexture(final int i) {
+      GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
    }
 
 

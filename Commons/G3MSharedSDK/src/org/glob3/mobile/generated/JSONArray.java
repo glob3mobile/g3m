@@ -98,6 +98,30 @@ public class JSONArray extends JSONBaseObject
   {
     _entries.add(object);
   }
+  public final void add(String value)
+  {
+    _entries.add(new JSONString(value));
+  }
+  public final void add(double value)
+  {
+    _entries.add(new JSONDouble(value));
+  }
+  public final void add(float value)
+  {
+    _entries.add(new JSONFloat(value));
+  }
+  public final void add(int value)
+  {
+    _entries.add(new JSONInteger(value));
+  }
+  public final void add(long value)
+  {
+    _entries.add(new JSONLong(value));
+  }
+  public final void add(boolean value)
+  {
+    _entries.add(new JSONBoolean(value));
+  }
 
   public final String description()
   {

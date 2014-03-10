@@ -89,8 +89,14 @@ public:
   }
   
   const std::string description() const;
-  
-  
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
+
   Geodetic3D add(const Geodetic3D& that) const {
     return Geodetic3D(_latitude.add(that._latitude),
                       _longitude.add(that._longitude),

@@ -20,7 +20,7 @@ class Geodetic2D;
 class Sector;
 
 #include "Vector2I.hpp"
-#include "Vector2D.hpp"
+#include "Vector2F.hpp"
 
 class TileTessellatorMeshData{
 public:
@@ -59,11 +59,11 @@ public:
                                          const Tile* tile,
                                          bool mercator) const = 0;
 
-  virtual const Vector2D getTextCoord(const Tile* tile,
+  virtual const Vector2F getTextCoord(const Tile* tile,
                                       const Geodetic2D& position,
                                       bool mercator) const;
 
-  virtual const Vector2D getTextCoord(const Tile* tile,
+  virtual const Vector2F getTextCoord(const Tile* tile,
                                       const Angle& latitude,
                                       const Angle& longitude,
                                       bool mercator) const = 0;

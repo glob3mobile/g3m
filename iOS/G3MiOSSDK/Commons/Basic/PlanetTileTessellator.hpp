@@ -162,7 +162,7 @@ public:
                                  const Tile* tile,
                                  bool mercator) const;
 
-  const Vector2D getTextCoord(const Tile* tile,
+  const Vector2F getTextCoord(const Tile* tile,
                               const Angle& latitude,
                               const Angle& longitude,
                               bool mercator) const;

@@ -15,6 +15,7 @@
 #include "Geodetic2D.hpp"
 #include "Context.hpp"
 #include "Vector2D.hpp"
+#include "Vector2F.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector3D.hpp"
 #include "Color.hpp"
@@ -151,10 +152,14 @@ public:
 
   Vector2D getUVCoordinates(const Angle& latitude,
                             const Angle& longitude) const {
-//    return Vector2D(getUCoordinate(longitude),
-//                    getVCoordinate(latitude));
     return Vector2D((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians,
                     (_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians);
+  }
+
+  Vector2F getUVCoordinatesF(const Angle& latitude,
+                            const Angle& longitude) const {
+    return Vector2F((float) ((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians),
+                    (float) ((_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians));
   }
 
   double getUCoordinate(const Angle& longitude) const {
@@ -175,6 +180,12 @@ public:
   const Geodetic2D clamp(const Geodetic2D& pos) const;
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   Sector* shrinkedByPercentP(float percent) const {
     const Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);

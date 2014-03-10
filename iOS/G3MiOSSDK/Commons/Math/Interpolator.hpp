@@ -50,8 +50,15 @@ public:
                                double u,
                                double v) const = 0;
 
-  const std::string description() const;
+  virtual const std::string description() const = 0;
 
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+  
 };
 
 #endif

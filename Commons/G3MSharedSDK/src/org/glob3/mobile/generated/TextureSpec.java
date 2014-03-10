@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class GL;
 //class IFactory;
 //class IGLTextureId;
-
+//class TextureIDReference;
 
 public class TextureSpec
 {
@@ -120,6 +120,10 @@ public class TextureSpec
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
 

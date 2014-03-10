@@ -44,6 +44,15 @@ public:
   {
   }
 
+  Plane(const Vector3D& normal,
+        const Vector3D& point):
+  _normal(normal.normalized()),
+  _d(- normal._x * point._x - normal._y * point._y - normal._z * point._z),
+  _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
+  _dF((float) _d)
+  {
+  }
+
   Plane(double a, double b, double c, double d):
   _normal(Vector3D(a,b,c).normalized()),
   _d(d),
@@ -81,6 +90,14 @@ public:
   
   static Vector3D intersectionXYPlaneWithRay(const Vector3D& origin,
                                              const Vector3D& direction);
+
+  bool isVectorParallel(const Vector3D& vector) const;
+
+  Angle vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis) const;
+
+  Vector3D getNormal() const{
+    return _normal;
+  }
 
   
 };

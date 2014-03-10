@@ -150,5 +150,9 @@ public class MapBoo_Scene
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

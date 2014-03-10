@@ -44,25 +44,25 @@ enum {
       NativeGL2_iOS* nGL = new NativeGL2_iOS();
       _gl = new GL(nGL,false);
     _firstRender = true;
-    context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
-    if (!context || ![EAGLContext setCurrentContext:context]
+    if (!_context || ![EAGLContext setCurrentContext:_context]
         //|| ![self loadShaders]
         ) {
       return nil;
     }
     
     // Create default framebuffer object. The backing will be allocated for the current layer in -resizeFromLayer
-    glGenFramebuffers(1, &defaultFramebuffer);
-    glGenRenderbuffers(1, &colorRenderbuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
+    glGenFramebuffers(1, &_defaultFramebuffer);
+    glGenRenderbuffers(1, &_colorRenderbuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderbuffer);
     
     // Create the depthbuffer
-    glGenRenderbuffers(1, &depthRenderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+    glGenRenderbuffers(1, &_depthRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderbuffer);
   }
   
   return self;
@@ -80,11 +80,11 @@ enum {
     if (_firstRender) {
       // This application only creates a single context which is already set current at this point.
       // This call is redundant, but needed if dealing with multiple contexts.
-      [EAGLContext setCurrentContext:context];
+      [EAGLContext setCurrentContext:_context];
 
       // This application only creates a single default framebuffer which is already bound at this point.
       // This call is redundant, but needed if dealing with multiple framebuffers.
-      glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
+      glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
       glViewport(0, 0, _width, _height);
     }
 
@@ -94,11 +94,11 @@ enum {
     if (_firstRender) {
       // This application only creates a single color renderbuffer which is already bound at this point.
       // This call is redundant, but needed if dealing with multiple renderbuffers.
-      glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+      glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
       _firstRender = false;
 
     }
-    [context presentRenderbuffer:GL_RENDERBUFFER];
+    [_context presentRenderbuffer:GL_RENDERBUFFER];
   }
 }
 
@@ -164,13 +164,13 @@ enum {
   _firstRender = true;
   
   // Allocate color buffer backing based on the current layer size
-  glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-  [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
+  glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
+  [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
   glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
   glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
 
   // damos tamaño al buffer de profundidad
-  glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+  glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderbuffer);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _width, _height);
   
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -183,26 +183,26 @@ enum {
 
 - (void)dealloc {
   // Tear down GL
-  if (defaultFramebuffer) {
-    glDeleteFramebuffers(1, &defaultFramebuffer);
-    defaultFramebuffer = 0;
+  if (_defaultFramebuffer) {
+    glDeleteFramebuffers(1, &_defaultFramebuffer);
+    _defaultFramebuffer = 0;
   }
   
-  if (colorRenderbuffer) {
-    glDeleteRenderbuffers(1, &colorRenderbuffer);
-    colorRenderbuffer = 0;
+  if (_colorRenderbuffer) {
+    glDeleteRenderbuffers(1, &_colorRenderbuffer);
+    _colorRenderbuffer = 0;
   }
   
-  if (depthRenderbuffer) {
-    glDeleteRenderbuffers(1, &depthRenderbuffer);
-    depthRenderbuffer = 0;
+  if (_depthRenderbuffer) {
+    glDeleteRenderbuffers(1, &_depthRenderbuffer);
+    _depthRenderbuffer = 0;
   }
   
   // Tear down context
-  if ([EAGLContext currentContext] == context)
+  if ([EAGLContext currentContext] == _context)
     [EAGLContext setCurrentContext:nil];
   
-  context = nil;
+  _context = nil;
   
 }
 

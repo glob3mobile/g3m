@@ -154,16 +154,16 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
   rawRender(rc);
 
   //RENDERING NORMALS
-  if (_normals != NULL){
-    if (_showNormals){
-      if (_normalsMesh == NULL){
+  if (_normals != NULL) {
+    if (_showNormals) {
+      if (_normalsMesh == NULL) {
         _normalsMesh = createNormalsMesh();
       }
-      if (_normalsMesh != NULL){
+      if (_normalsMesh != NULL) {
         _normalsMesh->render(rc, parentGLState);
       }
     } else{
-      if (_normalsMesh != NULL){
+      if (_normalsMesh != NULL) {
         delete _normalsMesh;
         _normalsMesh = NULL;
       }
@@ -195,7 +195,7 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const{
 
   const int size = _vertices->size();
 
-#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
+//#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
 
   for (int i = 0; i < size; i+=6) {
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));

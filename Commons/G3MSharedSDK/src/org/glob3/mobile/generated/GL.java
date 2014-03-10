@@ -195,8 +195,6 @@ public class GL
     final IGLTextureId texId = getGLTextureId();
     if (texId != null)
     {
-      int texture2D = GLTextureType.texture2D();
-  
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
@@ -204,12 +202,25 @@ public class GL
   
       newState.applyChanges(this, _currentGLGlobalState);
   
-      int linear = GLTextureParameterValue.linear();
-      int clampToEdge = GLTextureParameterValue.clampToEdge();
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(),linear);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(),clampToEdge);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(),clampToEdge);
+      final int texture2D = GLTextureType.texture2D();
+      final int linear = GLTextureParameterValue.linear();
+  
+      if (generateMipmap)
+      {
+  //      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::linearMipmapLinear());
+  //      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::nearestMipmapLinear());
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), GLTextureParameterValue.linearMipmapNearest());
+      }
+      else
+      {
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
+      }
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(), linear);
+  
+      final int clampToEdge = GLTextureParameterValue.clampToEdge();
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), clampToEdge);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), clampToEdge);
+  
       _nativeGL.texImage2D(image, format);
   
       if (generateMipmap)
@@ -410,7 +421,7 @@ public class GL
         _currentGPUProgram.addReference();
       }
   
-  //    if (!_nativeGL->isProgram(program->getProgramID())){
+  //    if (!_nativeGL->isProgram(program->getProgramID())) {
   //      ILogger::instance()->logError("INVALID PROGRAM.");
   //    }
     }

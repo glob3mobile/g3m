@@ -80,8 +80,6 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 
   const IGLTextureId* texId = getGLTextureId();
   if (texId != NULL) {
-    int texture2D = GLTextureType::texture2D();
-
     GLGlobalState newState;
 
     newState.setPixelStoreIAlignmentUnpack(1);
@@ -89,12 +87,23 @@ const IGLTextureId* GL::uploadTexture(const IImage* image,
 
     newState.applyChanges(this, *_currentGLGlobalState);
 
-    int linear = GLTextureParameterValue::linear();
-    int clampToEdge = GLTextureParameterValue::clampToEdge();
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), linear);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(),linear);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(),clampToEdge);
-    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(),clampToEdge);
+    const int texture2D = GLTextureType::texture2D();
+    const int linear = GLTextureParameterValue::linear();
+
+    if (generateMipmap) {
+//      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::linearMipmapLinear());
+//      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::nearestMipmapLinear());
+      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), GLTextureParameterValue::linearMipmapNearest());
+    }
+    else {
+      _nativeGL->texParameteri(texture2D, GLTextureParameter::minFilter(), linear);
+    }
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::magFilter(), linear);
+
+    const int clampToEdge = GLTextureParameterValue::clampToEdge();
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapS(), clampToEdge);
+    _nativeGL->texParameteri(texture2D, GLTextureParameter::wrapT(), clampToEdge);
+
     _nativeGL->texImage2D(image, format);
 
     if (generateMipmap) {
@@ -183,7 +192,7 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
 }
 
 void GL::useProgram(GPUProgram* program) {
-  if (program != NULL){
+  if (program != NULL) {
     if (_currentGPUProgram != program) {
 
       if (_currentGPUProgram != NULL) {
@@ -197,7 +206,7 @@ void GL::useProgram(GPUProgram* program) {
       _currentGPUProgram->addReference();
     }
 
-//    if (!_nativeGL->isProgram(program->getProgramID())){
+//    if (!_nativeGL->isProgram(program->getProgramID())) {
 //      ILogger::instance()->logError("INVALID PROGRAM.");
 //    }
   }

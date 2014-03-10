@@ -26,7 +26,6 @@ public:
 
   static std::string generate(const JSONBaseObject* value);
 
-  //  void visitNumber(const JSONNumber* value);
   void visitDouble (const JSONDouble*  value);
   void visitFloat  (const JSONFloat*   value);
   void visitInteger(const JSONInteger* value);

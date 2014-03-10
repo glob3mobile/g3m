@@ -112,6 +112,11 @@ Tile::~Tile() {
   }
 
   delete _tessellatorData;
+
+  delete _middleEastPoint;
+  delete _middleNorthPoint;
+  delete _middleSouthPoint;
+  delete _middleWestPoint;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -136,6 +141,11 @@ void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
 void Tile::setTextureSolved(bool textureSolved) {
   if (textureSolved != _textureSolved) {
     _textureSolved = textureSolved;
+
+    if (_textureSolved) {
+      delete _texturizerData;
+      _texturizerData = NULL;
+    }
 
     if (_subtiles != NULL) {
       const int subtilesSize = _subtiles->size();
@@ -379,7 +389,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
 
   if (_lastLodTimeInMS != 0 &&
-      (nowInMS - _lastLodTimeInMS) < 500 ){
+      (nowInMS - _lastLodTimeInMS) < 500 ) {
     return _lastLodTest;
   }
 
@@ -399,28 +409,35 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   _lastLodTimeInMS = nowInMS; //Storing time of result
 
-  const Planet* planet = rc->getPlanet();
 
-  if ((_latitudeArcSegmentRatioSquared == 0) ||
-      (_longitudeArcSegmentRatioSquared  == 0)) {
-    prepareTestLODData(planet);
+  if ((_latitudeArcSegmentRatioSquared  == 0) ||
+      (_longitudeArcSegmentRatioSquared == 0)) {
+    prepareTestLODData( rc->getPlanet() );
   }
 
   const Camera* camera = rc->getCurrentCamera();
-  const Vector2F pN = camera->point2Pixel(*_middleNorthPoint);
-  const Vector2F pS = camera->point2Pixel(*_middleSouthPoint);
-  const Vector2F pE = camera->point2Pixel(*_middleEastPoint);
-  const Vector2F pW = camera->point2Pixel(*_middleWestPoint);
 
-  const double latitudeMiddleDistSquared = pN.squaredDistanceTo(pS);
-  const double longitudeMiddleDistSquared = pE.squaredDistanceTo(pW);
+  const double pixelsDistanceNS = camera->getEstimatedPixelDistance(*_middleNorthPoint, *_middleSouthPoint);
+  const double pixelsDistanceWE = camera->getEstimatedPixelDistance(*_middleWestPoint,  *_middleEastPoint);
 
-  const double latitudeMiddleArcDistSquared = latitudeMiddleDistSquared * _latitudeArcSegmentRatioSquared;
+  const double latitudeMiddleDistSquared  = pixelsDistanceNS * pixelsDistanceNS;
+  const double longitudeMiddleDistSquared = pixelsDistanceWE * pixelsDistanceWE;
+
+  const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
   const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
 
-  //Testing Area
-  _lastLodTest = ((latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared*texWidthSquared));
+  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
 
+  if (latLonRatio < 0.15) {
+    _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
+  }
+  else if (lonLatRatio < 0.15) {
+    _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
+  }
+  else {
+    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+  }
 
   return _lastLodTest;
 }
@@ -435,7 +452,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    const TilesRenderParameters* tilesRenderParameters,
                                    bool isForcedFullRender,
                                    long long texturePriority,
-                                   float verticalExaggeration) {
+                                   float verticalExaggeration,
+                                   bool logTilesPetitions) {
 
   //You have to set _verticalExaggertion
   if (verticalExaggeration != _verticalExaggeration) {
@@ -467,7 +485,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               texturePriority,
                                               this,
                                               tessellatorMesh,
-                                              _texturizedMesh);
+                                              _texturizedMesh,
+                                              logTilesPetitions);
     }
   }
 }
@@ -484,7 +503,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                      const LayerSet* layerSet,
                      const TilesRenderParameters* tilesRenderParameters,
                      bool isForcedFullRender,
-                     long long texturePriority) {
+                     long long texturePriority,
+                     bool logTilesPetitions) {
 
   Mesh* tessellatorMesh = getTessellatorMesh(rc,
                                              elevationDataProvider,
@@ -511,7 +531,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                                               texturePriority,
                                               this,
                                               tessellatorMesh,
-                                              _texturizedMesh);
+                                              _texturizedMesh,
+                                              logTilesPetitions);
     }
 
     if (_texturizedMesh != NULL) {
@@ -552,6 +573,11 @@ void Tile::debugRender(const G3MRenderContext* rc,
 
 
 std::vector<Tile*>* Tile::getSubTiles(const bool mercator) {
+  if (_subtiles != NULL) {
+    // quick check to avoid splitLongitude/splitLatitude calculation
+    return _subtiles;
+  }
+
   const Geodetic2D lower = _sector._lower;
   const Geodetic2D upper = _sector._upper;
 
@@ -673,7 +699,9 @@ void Tile::render(const G3MRenderContext* rc,
                   long long texturePriority,
                   double texWidthSquared,
                   double texHeightSquared,
-                  double nowInMS) {
+                  double nowInMS,
+                  const bool renderTileMeshes,
+                  bool logTilesPetitions) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -712,17 +740,20 @@ void Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
-      rawRender(rc,
-                &parentState,
-                texturizer,
-                elevationDataProvider,
-                tessellator,
-                tileRasterizer,
-                layerTilesRenderParameters,
-                layerSet,
-                tilesRenderParameters,
-                isForcedFullRender,
-                texturePriority);
+      if (renderTileMeshes) {
+        rawRender(rc,
+                  &parentState,
+                  texturizer,
+                  elevationDataProvider,
+                  tessellator,
+                  tileRasterizer,
+                  layerTilesRenderParameters,
+                  layerSet,
+                  tilesRenderParameters,
+                  isForcedFullRender,
+                  texturePriority,
+                  logTilesPetitions);
+      }
       if (tilesRenderParameters->_renderDebug) {
         debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
       }
@@ -733,19 +764,7 @@ void Tile::render(const G3MRenderContext* rc,
       //TODO: AVISAR CAMBIO DE TERRENO
     }
     else {
-      const Geodetic2D lower = _sector._lower;
-      const Geodetic2D upper = _sector._upper;
-
-      const Angle splitLongitude = Angle::midAngle(lower._longitude,
-                                                   upper._longitude);
-
-      const Angle splitLatitude = layerTilesRenderParameters->_mercator
-      /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
-                                                                                  upper._latitude)
-      /*                               */ : Angle::midAngle(lower._latitude,
-                                                            upper._latitude);
-
-      std::vector<Tile*>* subTiles = getSubTiles(splitLatitude, splitLongitude);
+      std::vector<Tile*>* subTiles = getSubTiles(layerTilesRenderParameters->_mercator);
       if (_justCreatedSubtiles) {
         lastSplitTimer->start();
         tilesStatistics->computeSplitInFrame();
@@ -1000,9 +1019,9 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
   }
 }
 
-void Tile::prepareTestLODData(const Planet* planet){
+void Tile::prepareTestLODData(const Planet* planet) {
 
-  if (_middleNorthPoint == NULL){
+  if (_middleNorthPoint == NULL) {
     ILogger::instance()->logError("Error in Tile::prepareTestLODData");
     return;
   }
@@ -1030,9 +1049,9 @@ void Tile::prepareTestLODData(const Planet* planet){
   _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
 }
 
-void Tile::computeTileCorners(const Planet* planet){
+void Tile::computeTileCorners(const Planet* planet) {
 
-  if (_tessellatorMesh == NULL){
+  if (_tessellatorMesh == NULL) {
     ILogger::instance()->logError("Error in Tile::computeTileCorners");
     return;
   }
@@ -1054,4 +1073,11 @@ void Tile::computeTileCorners(const Planet* planet){
   _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
   _middleEastPoint = new Vector3D(planet->toCartesian(gE));
   _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+}
+
+Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
+                                                     const Vector2I& tileDimension) const{
+  const IMathUtils* math = IMathUtils::instance();
+  const Vector2D uv = _sector.getUVCoordinates(position2D);
+  return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));
 }

@@ -1,9 +1,18 @@
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-4197306-21', 'github.com');
+  ga('send', 'pageview');
+
+</script>
 g3m
 ===
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/54960ae0d94d09fa885cfceb159b9427 "githalytics.com")](http://githalytics.com/glob3mobile/g3m)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/glob3mobile/g3m/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
 ##The multiplatform advanced visualization framework
-
 ###G3M is a **framework** developed and designed to: 
 
  + Develop **mobile maps** apps in 2D, 2,5D and 3D
@@ -18,9 +27,7 @@ Capabilities
 ============
 
 ####Works on iOS, Android devices and HTML5 environments
-![Screenshot Android] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/android.png)
-![Screenshot iOS] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/ios.png)
-![Screenshot webGL] (https://dl.dropboxusercontent.com/u/20446978/wiki-github/webgl.png)
+![Screenshot Android] (https://dl.dropboxusercontent.com/u/20446978/wikig3m/s15.png)
 ####Written from the scratch, no legacy dependencies.
 G3M is a library thought to develop mobile apps from the scratch, since first line of code all the development goes towards 
 a productive environment for multiplatform mobile apps development.
@@ -261,17 +268,21 @@ There are another different projects developed that are used for demo purpose an
 
 ###WebGL Demos
 
-+ <a href="http://galileo.glob3mobile.com" >Galileo</a>
 + <a href="http://owmg.glob3mobile.com/">Open Weather Map</a>
 + <a href="http://milanuncios3d.glob3mobile.com" frameborder="0" allowfullscreen>Mil Anuncios 3D</a>
 + <a href="http://meteorite.glob3mobile.com">Meteorite</a>
 + <a href="http://xeovisor3d.glob3mobile.com/example.html">Xeovisor3D</a>
++ <a href="http://wb.glob3mobile.com/">World Bank GFDRR Demo</a>
+
+###Augmented reality and google glasses
+[Augmented reality on google glass](http://glasses.mobilemaptools.com)
+
+<a href="https://www.youtube.com/watch?feature=player_detailpage&v=6K2UF8O6JPg" frameborder="0" allowfullscreen>AR Google Glass</a>
 
 
 Videos
 ======
 
-+ <a href="http://www.youtube.com/embed/0ANVt__igJ4?feature=player_detailpage" frameborder="0" allowfullscreen>Galileo</a>
 + <a href="http://www.youtube.com/watch?feature=player_detailpage&v=kEep7i0ZurE" frameborder="0" allowfullscreen>Mapboo</a>
 + <a href="http://www.youtube.com/embed/2iwYc0mvG84?feature=player_detailpage" frameborder="0" allowfullscreen>Glob3 Desktop</a>
 + <a href="http://www.youtube.com/embed/YXmj_uc2d68?feature=player_detailpage" frameborder="0" allowfullscreen>G3M on Mozilla OS</a>

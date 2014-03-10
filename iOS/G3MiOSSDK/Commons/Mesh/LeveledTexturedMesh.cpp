@@ -10,11 +10,9 @@
 
 #include "Vector3D.hpp"
 #include "GL.hpp"
-#include "TexturesHandler.hpp"
-
+#include "TextureIDReference.hpp"
 #include "GPUProgram.hpp"
 #include "GPUProgramManager.hpp"
-//#include "GPUProgramState.hpp"
 #include "Camera.hpp"
 #include "GLState.hpp"
 
@@ -22,8 +20,14 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
   if (!_initialized) {
     _initializer->initialize();
 
-    _scale       = _initializer->getScale();
-    _translation = _initializer->getTranslation();
+    const Vector2F scale = _initializer->getScale();
+    _scaleU = scale._x;
+    _scaleV = scale._y;
+
+    const Vector2F translation = _initializer->getTranslation();
+    _translationU = translation._x;
+    _translationV = translation._y;
+
     _texCoords   = _initializer->createTextCoords();
 
     delete _initializer;
@@ -35,23 +39,29 @@ void LazyTextureMapping::modifyGLState(GLState& state) const{
   if (_texCoords != NULL) {
     state.clearGLFeatureGroup(COLOR_GROUP);
 
-    if (!_scale.isEquals(1.0, 1.0) || !_translation.isEquals(0.0, 0.0)) {
+    if (_scaleU != 1 ||
+        _scaleV != 1 ||
+        _translationU != 0 ||
+        _translationV != 0) {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
                                               GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              true, _translation.asVector2D(), _scale.asVector2D()),
-                         false); //TRANSFORM
+                                              _translationU,
+                                              _translationV,
+                                              _scaleU,
+                                              _scaleV,
+                                              0, 0, 0),
+                         false);
     }
     else {
       state.addGLFeature(new TextureGLFeature(_glTextureId->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
                                               GLBlendFactor::srcAlpha(),
-                                              GLBlendFactor::oneMinusSrcAlpha(),    //BLEND
-                                              false, Vector2D::zero(), Vector2D::zero() ),
-                         false); //TRANSFORM
+                                              GLBlendFactor::oneMinusSrcAlpha()),
+                         false);
     }
 
   }

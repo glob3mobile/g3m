@@ -242,4 +242,19 @@ public class GLState extends RCObject
   
     return null;
   }
+
+  public final GLFeatureSet getGLFeatures(GLFeatureID id)
+  {
+    GLFeatureSet features = new GLFeatureSet();
+    final int size = _features.size();
+    for (int i = 0; i < size; i++)
+    {
+      GLFeature f = _features.get(i);
+      if (f._id == id)
+      {
+        features.add(f);
+      }
+    }
+    return features;
+  }
 }

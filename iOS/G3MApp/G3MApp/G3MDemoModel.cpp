@@ -18,7 +18,7 @@
 #include <G3MiOSSDK/ErrorHandling.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -50,7 +50,7 @@ _context(NULL)
   _scenes.push_back( new G3MPointCloudDemoScene(this) );
   _scenes.push_back( new G3M3DModelDemoScene(this) );
   _scenes.push_back( new G3MCameraDemoScene(this) );
-  _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
+  //_scenes.push_back( new G3MIsosurfaceDemoScene(this) );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
@@ -76,7 +76,7 @@ void G3MDemoModel::reset() {
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(1);
 
-  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+  //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
   //                                                                                     Sector::fullSphere(),
   //                                                                                     Vector2I(2048, 1024));
   ElevationDataProvider* elevationDataProvider = NULL;

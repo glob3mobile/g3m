@@ -59,25 +59,26 @@ void G3MWidget::initSingletons(ILogger*            logger,
   }
 }
 
-G3MWidget::G3MWidget(GL*                              gl,
-                     IStorage*                        storage,
-                     IDownloader*                     downloader,
-                     IThreadUtils*                    threadUtils,
-                     ICameraActivityListener*         cameraActivityListener,
-                     const Planet*                    planet,
-                     std::vector<ICameraConstrainer*> cameraConstrainers,
-                     CameraRenderer*                  cameraRenderer,
-                     Renderer*                        mainRenderer,
-                     Renderer*                        busyRenderer,
-                     ErrorRenderer*                   errorRenderer,
-                     const Color&                     backgroundColor,
-                     const bool                       logFPS,
-                     const bool                       logDownloaderStatistics,
-                     GInitializationTask*             initializationTask,
-                     bool                             autoDeleteInitializationTask,
-                     std::vector<PeriodicalTask*>     periodicalTasks,
-                     GPUProgramManager*               gpuProgramManager,
-                     SceneLighting*                   sceneLighting,
+G3MWidget::G3MWidget(GL*                                  gl,
+                     IStorage*                            storage,
+                     IDownloader*                         downloader,
+                     IThreadUtils*                        threadUtils,
+                     ICameraActivityListener*             cameraActivityListener,
+                     const Planet*                        planet,
+                     std::vector<ICameraConstrainer*>     cameraConstrainers,
+                     CameraRenderer*                      cameraRenderer,
+                     Renderer*                            mainRenderer,
+                     Renderer*                            busyRenderer,
+                     ErrorRenderer*                       errorRenderer,
+                     Renderer*                            hudRenderer,
+                     const Color&                         backgroundColor,
+                     const bool                           logFPS,
+                     const bool                           logDownloaderStatistics,
+                     GInitializationTask*                 initializationTask,
+                     bool                                 autoDeleteInitializationTask,
+                     std::vector<PeriodicalTask*>         periodicalTasks,
+                     GPUProgramManager*                   gpuProgramManager,
+                     SceneLighting*                       sceneLighting,
                      const InitialCameraPositionProvider* initialCameraPositionProvider):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
@@ -93,6 +94,7 @@ _cameraRenderer(cameraRenderer),
 _mainRenderer(mainRenderer),
 _busyRenderer(busyRenderer),
 _errorRenderer(errorRenderer),
+_hudRenderer(hudRenderer),
 _width(1),
 _height(1),
 _currentCamera(new Camera(_width, _height)),
@@ -102,7 +104,7 @@ _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
 _totalRenderTime(0),
 _logFPS(logFPS),
-_mainRendererState(new RenderState(RenderState::busy())),
+_rendererState( new RenderState( RenderState::busy() ) ),
 _selectedRenderer(NULL),
 _renderStatisticsTimer(NULL),
 _logDownloaderStatistics(logDownloaderStatistics),
@@ -139,6 +141,9 @@ _nFramesBeetweenProgramsCleanUp(500)
   _mainRenderer->initialize(_context);
   _busyRenderer->initialize(_context);
   _errorRenderer->initialize(_context);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->initialize(_context);
+  }
   _currentCamera->initialize(_context);
   _nextCamera->initialize(_context);
 
@@ -181,25 +186,26 @@ _nFramesBeetweenProgramsCleanUp(500)
 }
 
 
-G3MWidget* G3MWidget::create(GL*                              gl,
-                             IStorage*                        storage,
-                             IDownloader*                     downloader,
-                             IThreadUtils*                    threadUtils,
-                             ICameraActivityListener*         cameraActivityListener,
-                             const Planet*                    planet,
-                             std::vector<ICameraConstrainer*> cameraConstrainers,
-                             CameraRenderer*                  cameraRenderer,
-                             Renderer*                        mainRenderer,
-                             Renderer*                        busyRenderer,
-                             ErrorRenderer*                   errorRenderer,
-                             const Color&                     backgroundColor,
-                             const bool                       logFPS,
-                             const bool                       logDownloaderStatistics,
-                             GInitializationTask*             initializationTask,
-                             bool                             autoDeleteInitializationTask,
-                             std::vector<PeriodicalTask*>     periodicalTasks,
-                             GPUProgramManager*               gpuProgramManager,
-                             SceneLighting*                   sceneLighting,
+G3MWidget* G3MWidget::create(GL*                                  gl,
+                             IStorage*                            storage,
+                             IDownloader*                         downloader,
+                             IThreadUtils*                        threadUtils,
+                             ICameraActivityListener*             cameraActivityListener,
+                             const Planet*                        planet,
+                             std::vector<ICameraConstrainer*>     cameraConstrainers,
+                             CameraRenderer*                      cameraRenderer,
+                             Renderer*                            mainRenderer,
+                             Renderer*                            busyRenderer,
+                             ErrorRenderer*                       errorRenderer,
+                             Renderer*                            hudRenderer,
+                             const Color&                         backgroundColor,
+                             const bool                           logFPS,
+                             const bool                           logDownloaderStatistics,
+                             GInitializationTask*                 initializationTask,
+                             bool                                 autoDeleteInitializationTask,
+                             std::vector<PeriodicalTask*>         periodicalTasks,
+                             GPUProgramManager*                   gpuProgramManager,
+                             SceneLighting*                       sceneLighting,
                              const InitialCameraPositionProvider* initialCameraPositionProvider) {
 
   return new G3MWidget(gl,
@@ -213,6 +219,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                        mainRenderer,
                        busyRenderer,
                        errorRenderer,
+                       hudRenderer,
                        backgroundColor,
                        logFPS,
                        logDownloaderStatistics,
@@ -225,7 +232,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
 }
 
 G3MWidget::~G3MWidget() {
-  delete _mainRendererState;
+  delete _rendererState;
   delete _renderContext;
 
   delete _userData;
@@ -235,6 +242,7 @@ G3MWidget::~G3MWidget() {
   delete _mainRenderer;
   delete _busyRenderer;
   delete _errorRenderer;
+  delete _hudRenderer;
   delete _gl;
   delete _effectsScheduler;
   delete _currentCamera;
@@ -271,11 +279,18 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
                                  const TouchEvent* touchEvent) const {
-  RenderState_Type renderStateType = _mainRendererState->_type;
+  const RenderState_Type renderStateType = _rendererState->_type;
   switch (renderStateType) {
     case RENDER_READY: {
       bool handled = false;
-      if (_mainRenderer->isEnable()) {
+
+      if (_hudRenderer != NULL) {
+        if (_hudRenderer->isEnable()) {
+          handled = _hudRenderer->onTouchEvent(&ec, touchEvent);
+        }
+      }
+
+      if (!handled && _mainRenderer->isEnable()) {
         handled = _mainRenderer->onTouchEvent(&ec, touchEvent);
       }
 
@@ -366,6 +381,9 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   _mainRenderer->onResizeViewportEvent(&ec, width, height);
   _busyRenderer->onResizeViewportEvent(&ec, width, height);
   _errorRenderer->onResizeViewportEvent(&ec, width, height);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->onResizeViewportEvent(&ec, width, height);
+  }
 }
 
 
@@ -375,6 +393,46 @@ void G3MWidget::resetPeriodicalTasksTimeouts() {
     PeriodicalTask* pt = _periodicalTasks[i];
     pt->resetTimeout();
   }
+}
+
+RenderState G3MWidget::calculateRendererState() {
+  if (_forceBusyRenderer) {
+    return RenderState::busy();
+  }
+
+  if (!_initializationTaskReady) {
+    return RenderState::busy();
+  }
+
+  bool busyFlag = false;
+
+  RenderState cameraRendererRenderState = _cameraRenderer->getRenderState(_renderContext);
+  if (cameraRendererRenderState._type == RENDER_ERROR) {
+    return cameraRendererRenderState;
+  }
+  else if (cameraRendererRenderState._type == RENDER_BUSY) {
+    busyFlag = true;
+  }
+
+  if (_hudRenderer != NULL) {
+    RenderState hudRendererRenderState = _hudRenderer->getRenderState(_renderContext);
+    if (hudRendererRenderState._type == RENDER_ERROR) {
+      return hudRendererRenderState;
+    }
+    else if (hudRendererRenderState._type == RENDER_BUSY) {
+      busyFlag = true;
+    }
+  }
+
+  RenderState mainRendererRenderState = _mainRenderer->getRenderState(_renderContext);
+  if (mainRendererRenderState._type == RENDER_ERROR) {
+    return mainRendererRenderState;
+  }
+  else if (mainRendererRenderState._type == RENDER_BUSY) {
+    busyFlag = true;
+  }
+
+  return busyFlag ? RenderState::busy() : RenderState::ready();
 }
 
 void G3MWidget::render(int width, int height) {
@@ -392,16 +450,18 @@ void G3MWidget::render(int width, int height) {
   if (!_initialCameraPositionHasBeenSet) {
     _initialCameraPositionHasBeenSet = true;
 
-    Geodetic3D g = _initialCameraPositionProvider->getCameraPosition(_planet,
-                                                                     _mainRenderer->getPlanetRenderer());
+    const Geodetic3D position = _initialCameraPositionProvider->getCameraPosition(_planet,
+                                                                                  _mainRenderer->getPlanetRenderer());
 
-    _currentCamera->setGeodeticPosition(g);
+    _currentCamera->setGeodeticPosition(position);
     _currentCamera->setHeading(Angle::zero());
-    _currentCamera->setPitch(Angle::zero());
-    
-    _nextCamera->setGeodeticPosition(g);
+    _currentCamera->setPitch(Angle::fromDegrees(-90));
+    _currentCamera->setRoll(Angle::zero());
+
+    _nextCamera->setGeodeticPosition(position);
     _nextCamera->setHeading(Angle::zero());
-    _nextCamera->setPitch(Angle::zero());
+    _nextCamera->setPitch(Angle::fromDegrees(-90));
+    _nextCamera->setRoll(Angle::zero());
   }
 
   _timer->start();
@@ -443,19 +503,20 @@ void G3MWidget::render(int width, int height) {
 
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
-
-  delete _mainRendererState;
-  _mainRendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer)
-                                       ? _mainRenderer->getRenderState(_renderContext)
-                                       : RenderState::busy());
-  RenderState_Type renderStateType = _mainRendererState->_type;
+#ifdef C_CODE
+  delete _rendererState;
+  _rendererState = new RenderState( calculateRendererState() );
+#endif
+#ifdef JAVA_CODE
+  _rendererState = calculateRendererState();
+#endif
+  const RenderState_Type renderStateType = _rendererState->_type;
 
   _renderContext->clear();
 
   _effectsScheduler->doOneCyle(_renderContext);
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
-
 
   Renderer* selectedRenderer;
   switch (renderStateType) {
@@ -468,12 +529,11 @@ void G3MWidget::render(int width, int height) {
       break;
 
     default:
-      _errorRenderer->setErrors( _mainRendererState->getErrors() );
+      _errorRenderer->setErrors( _rendererState->getErrors() );
       selectedRenderer = _errorRenderer;
       break;
   }
 
-//  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {
     if (_selectedRenderer != NULL) {
       _selectedRenderer->stop(_renderContext);
@@ -487,7 +547,6 @@ void G3MWidget::render(int width, int height) {
   if (_rootState == NULL) {
     _rootState = new GLState();
   }
-
 
   if (renderStateType == RENDER_READY) {
     _cameraRenderer->render(_renderContext, _rootState);
@@ -509,8 +568,16 @@ void G3MWidget::render(int width, int height) {
     }
   }
 
+  if (_hudRenderer != NULL) {
+    if (renderStateType == RENDER_READY) {
+      if (_hudRenderer->isEnable()) {
+        _hudRenderer->render(_renderContext, _rootState);
+      }
+    }
+  }
+
   //Removing unused programs
-  if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0){
+  if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
     _gpuProgramManager->removeUnused();
   }
 
@@ -565,6 +632,9 @@ void G3MWidget::onPause() {
   _mainRenderer->onPause(_context);
   _busyRenderer->onPause(_context);
   _errorRenderer->onPause(_context);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->onPause(_context);
+  }
 
   _downloader->onPause(_context);
   _storage->onPause(_context);
@@ -580,6 +650,9 @@ void G3MWidget::onResume() {
   _mainRenderer->onResume(_context);
   _busyRenderer->onResume(_context);
   _errorRenderer->onResume(_context);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->onResume(_context);
+  }
 
   _effectsScheduler->onResume(_context);
 
@@ -594,6 +667,9 @@ void G3MWidget::onDestroy() {
   _mainRenderer->onDestroy(_context);
   _busyRenderer->onDestroy(_context);
   _errorRenderer->onDestroy(_context);
+  if (_hudRenderer != NULL) {
+    _hudRenderer->onDestroy(_context);
+  }
 
   _downloader->onDestroy(_context);
   _storage->onDestroy(_context);
@@ -608,12 +684,22 @@ void G3MWidget::addPeriodicalTask(const TimeInterval& interval,
   addPeriodicalTask( new PeriodicalTask(interval, task) );
 }
 
-void G3MWidget::setCameraHeading(const Angle& angle) {
-  getNextCamera()->setHeading(angle);
+void G3MWidget::setCameraHeading(const Angle& heading) {
+  getNextCamera()->setHeading(heading);
 }
 
-void G3MWidget::setCameraPitch(const Angle& angle) {
-  getNextCamera()->setPitch(angle);
+void G3MWidget::setCameraPitch(const Angle& pitch) {
+  getNextCamera()->setPitch(pitch);
+}
+
+void G3MWidget::setCameraRoll(const Angle& roll) {
+  getNextCamera()->setRoll(roll);
+}
+
+void G3MWidget::setCameraHeadingPitchRoll(const Angle& heading,
+                                          const Angle& pitch,
+                                          const Angle& roll) {
+  getNextCamera()->setHeadingPitchRoll(heading, pitch, roll);
 }
 
 void G3MWidget::setCameraPosition(const Geodetic3D& position) {
@@ -707,13 +793,9 @@ void G3MWidget::cancelCameraAnimation() {
   _effectsScheduler->cancelAllEffectsFor(target);
 }
 
-//void G3MWidget::resetCameraPosition() {
-//  getNextCamera()->resetPosition();
-//}
-
 void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
   delete _backgroundColor;
-  
+
   _backgroundColor = new Color(backgroundColor);
 }
 
