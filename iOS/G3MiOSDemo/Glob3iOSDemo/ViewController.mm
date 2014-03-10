@@ -272,8 +272,8 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  //[self initCustomizedWithBuilder];
-  [self initForTestingMarks];
+  [self initCustomizedWithBuilder];
+  //[self initForTestingMarks];
 
   //  [self initWithMapBooBuilder];
 
@@ -786,11 +786,9 @@ public:
     builder.setSceneLighting(light);
   }
 
-  if (false) { //HUD
+  if (true) { //HUD
 
 #warning Diego at work!
-
-
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
@@ -2004,11 +2002,14 @@ public:
 
 
   if (true) {
+    int c = 0;
     for (int i = 0; i < 10; i+=2) {
       for (int j = 0; j < 10; j+=2) {
         Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
 
-        Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
+        char name[100];
+        sprintf(name, "Mark %d", c++);
+        Mark* m1 = new Mark(name , g, RELATIVE_TO_GROUND);
         marksRenderer->addMark(m1);
 
       }
@@ -2450,7 +2451,8 @@ private:
                                  1,
                                  //Color::newFromRGBA(1, 1, 0, 0.6),
                                  Color( Color::fromRGBA(1, 0.5, 0, 1).wheelStep(wheelSize, _colorIndex) ),
-                                 Color::newFromRGBA(0.2, 0.2, 0, 1));
+                                 Color::newFromRGBA(0.2, 0.2, 0, 1),
+                                 false);
 
     //box->setPitch(Angle::fromDegrees(45));
     return box;
