@@ -86,8 +86,6 @@ public class CommandLine {
 
 
       final int exitVal = p.waitFor();
-
-      System.out.println("Destroying Process");
       p.destroy();
 
 
