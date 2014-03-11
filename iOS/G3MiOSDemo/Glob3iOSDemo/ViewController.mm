@@ -720,10 +720,6 @@ public:
   }
 
   if (false) { //HUD
-
-#warning Diego at work!
-
-
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
@@ -2914,7 +2910,6 @@ public:
       };
 
 
-#warning Diego at work!
       context->getDownloader()->requestBuffer(URL("file:///3d_.json"),
                                               1000000,
                                               TimeInterval::zero(),
