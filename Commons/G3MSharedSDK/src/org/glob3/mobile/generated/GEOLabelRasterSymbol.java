@@ -24,7 +24,7 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
 {
   private final String _label;
   private final Geodetic2D _position ;
-  private final GFont _font = new GFont();
+  private final GFont _font;
   private final Color _color ;
 
 
@@ -66,7 +66,7 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
      super(calculateSectorFromPosition(position), minTileLevel, maxTileLevel);
      _position = new Geodetic2D(position);
      _label = label;
-     _font = new GFont(font);
+     _font = font;
      _color = new Color(color);
   
   }
