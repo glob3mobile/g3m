@@ -25,7 +25,7 @@ GEOMultiLineRasterSymbol::~GEOMultiLineRasterSymbol() {
   if (_coordinatesArray != NULL) {
     const int coordinatesArrayCount = _coordinatesArray->size();
     for (int i = 0; i < coordinatesArrayCount; i++) {
-      std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
+      std::vector<Geodetic2D*>* coordinates = GEOMultiLineRasterSymbol::getCoordinateArray(i);
       const int coordinatesCount = coordinates->size();
       for (int j = 0; j < coordinatesCount; j++) {
         const Geodetic2D* coordinate = coordinates->at(j);
@@ -47,7 +47,7 @@ void GEOMultiLineRasterSymbol::rawRasterize(ICanvas*                   canvas,
   if (_style.apply(canvas)) {
     const int coordinatesArrayCount = _coordinatesArray->size();
     for (int i = 0; i < coordinatesArrayCount; i++) {
-      std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
+      std::vector<Geodetic2D*>* coordinates = GEOMultiLineRasterSymbol::getCoordinateArray(i);
       rasterLine(coordinates,
                  canvas,
                  projection);

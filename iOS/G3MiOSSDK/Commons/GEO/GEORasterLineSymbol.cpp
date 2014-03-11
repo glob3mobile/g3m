@@ -27,8 +27,13 @@ GEORasterLineSymbol::~GEORasterLineSymbol() {
     const int size = _coordinates->size();
 
     for (int i = 0; i < size; i++) {
+#ifdef C_CODE
       const Geodetic2D* coordinate = _coordinates->at(i);
       delete coordinate;
+#endif
+#ifdef JAVA_CODE
+      final Geodetic2D coordinate = _coordinates.get(i);
+#endif
     }
 
     delete _coordinates;

@@ -16,6 +16,6 @@ unsigned char TouchEvent::getTapCount() const
 #endif
 #ifdef JAVA_CODE
   if (_touchs.isEmpty()) return 0;
-  return _touchs.get(0)->getTapCount();
+  return _touchs.get(0).getTapCount();
 #endif
 }

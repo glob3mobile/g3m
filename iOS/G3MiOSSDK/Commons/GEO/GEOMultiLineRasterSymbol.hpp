@@ -23,7 +23,15 @@ private:
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
   private final GEO2DLineRasterStyle                           _style;
 #endif
-
+  
+  std::vector<Geodetic2D*>* getCoordinateArray(int i) const{
+#ifdef C_CODE
+    return _coordinatesArray->at(i);
+#endif
+#ifdef JAVA_CODE
+    return _coordinatesArray.get(i);
+#endif
+  }
 public:
   GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
                            const GEO2DLineRasterStyle& style,
@@ -34,6 +42,8 @@ public:
 
   void rawRasterize(ICanvas*                   canvas,
                     const GEORasterProjection* projection) const;
+  
+  
 
 };
 
