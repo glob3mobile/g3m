@@ -148,5 +148,5 @@ public class CameraSingleDragHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(Gesture.None);
   }
 
-  private Camera _camera0 ; //Initial Camera saved on Down event
+  private Camera _camera0 = new Camera(); //Initial Camera saved on Down event
 }

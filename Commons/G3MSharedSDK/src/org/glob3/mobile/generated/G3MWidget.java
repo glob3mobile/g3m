@@ -737,8 +737,8 @@ public class G3MWidget
      _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
-     _currentCamera ;
-     _nextCamera ;
+     _currentCamera = new Camera();
+     _nextCamera = new Camera();
      _backgroundColor = new Color(backgroundColor);
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;

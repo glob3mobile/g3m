@@ -245,6 +245,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   public double _initialFingerSeparation;
   public double _initialFingerInclination;
 
-  public Camera _camera0 ; //Initial Camera saved on Down event
+  public Camera _camera0 = new Camera(); //Initial Camera saved on Down event
 
 }

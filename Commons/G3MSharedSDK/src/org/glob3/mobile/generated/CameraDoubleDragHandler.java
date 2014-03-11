@@ -133,6 +133,6 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(Gesture.None);
   }
 
-  public Camera _camera0 ; //Initial Camera saved on Down event
+  public Camera _camera0 = new Camera(); //Initial Camera saved on Down event
 
 }

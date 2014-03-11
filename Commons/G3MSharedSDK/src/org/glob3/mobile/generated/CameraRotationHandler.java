@@ -24,7 +24,7 @@ public class CameraRotationHandler extends CameraEventHandler
   private MutableVector2I _pivotPixel = new MutableVector2I(); //Initial pixel at start of gesture
 
 //  int _lastYValid;
-  private Camera _camera0 ; //Initial Camera saved on Down event
+  private Camera _camera0 = new Camera(); //Initial Camera saved on Down event
 
   public CameraRotationHandler()
   {
