@@ -332,8 +332,8 @@ public:
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
   
-  Vector2I* getPixelNormalizedFromPosition(const Geodetic2D& position2D,
-                                           const Vector2I* size) const;
+  Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
+                                           const Vector2I& size) const;
 
 };
 
