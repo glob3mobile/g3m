@@ -129,7 +129,6 @@
 		CF4027DD1770E7B900D5A80C /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = CF4027D61770E7B900D5A80C /* base64.c */; };
 		CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = CF4027D91770E7B900D5A80C /* NSData+SRB64Additions.m */; };
 		CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CF4027DC1770E7B900D5A80C /* SRWebSocket.m */; };
-		CF4027E11770E84700D5A80C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E01770E84700D5A80C /* libicucore.dylib */; };
 		CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E21770E84E00D5A80C /* CFNetwork.framework */; };
 		CF4027E51770E85500D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E41770E85500D5A80C /* Security.framework */; };
 		CF41B7DC1726BFDC007DECD8 /* RectangleF.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D89FBD7A172543D100FFA541 /* RectangleF.hpp */; };
@@ -1736,7 +1735,6 @@
 				D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */,
 				CF4027E51770E85500D5A80C /* Security.framework in Frameworks */,
 				CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */,
-				CF4027E11770E84700D5A80C /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
