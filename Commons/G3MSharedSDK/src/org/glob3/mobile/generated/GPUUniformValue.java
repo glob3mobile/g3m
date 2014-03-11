@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GPUUniform.h
+//  GPUUniform.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 05/04/13.

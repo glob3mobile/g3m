@@ -677,21 +677,21 @@ public class Tile
     return getSubTiles(splitLatitude, splitLongitude);
   }
 
-//  const Sector getSector() const {
-//    return _sector;
-//  }
-//
-//  int getLevel() const {
-//    return _level;
-//  }
-//
-//  int getRow() const {
-//    return _row;
-//  }
-//
-//  int getColumn() const {
-//    return _column;
-//  }
+  //  const Sector getSector() const {
+  //    return _sector;
+  //  }
+  //
+  //  int getLevel() const {
+  //    return _level;
+  //  }
+  //
+  //  int getRow() const {
+  //    return _row;
+  //  }
+  //
+  //  int getColumn() const {
+  //    return _column;
+  //  }
 
   public final Mesh getTexturizedMesh()
   {

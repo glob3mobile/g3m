@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  Extent.h
+//  Extent.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 16/07/12.

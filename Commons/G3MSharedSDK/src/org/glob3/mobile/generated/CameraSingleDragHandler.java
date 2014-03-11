@@ -28,7 +28,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 //  _initialPoint(0,0,0),
 //  _initialPixel(0,0),
   {
-     _camera0 = new Camera(new Camera(0, 0));
+     _camera0 = new Camera(new Camera());
      _useInertia = useInertia;
   }
 

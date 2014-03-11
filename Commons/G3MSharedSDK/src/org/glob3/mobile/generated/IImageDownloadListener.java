@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  IBufferDownloadListener.h
+//  IBufferDownloadListener.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 26/06/12.

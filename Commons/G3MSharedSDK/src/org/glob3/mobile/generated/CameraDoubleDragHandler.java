@@ -24,7 +24,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public CameraDoubleDragHandler()
   {
-     _camera0 = new Camera(new Camera(0, 0));
+     _camera0 = new Camera(new Camera());
   }
 
   public void dispose()

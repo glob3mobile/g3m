@@ -29,6 +29,14 @@ public class GEOPolygonRasterSymbol extends GEORasterSymbol
 
   private final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _holesCoordinatesArray;
 
+  protected final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
+  {
+    final boolean rasterSurface = _surfaceStyle.apply(canvas);
+    final boolean rasterBoundary = _lineStyle.apply(canvas);
+  
+    rasterPolygon(_coordinates, _holesCoordinatesArray, rasterSurface, rasterBoundary, canvas, projection);
+  }
+
 
   public GEOPolygonRasterSymbol(GEO2DPolygonData polygonData, GEO2DLineRasterStyle lineStyle, GEO2DSurfaceRasterStyle surfaceStyle, int minTileLevel)
   {
@@ -53,14 +61,6 @@ public class GEOPolygonRasterSymbol extends GEORasterSymbol
   
     super.dispose();
   
-  }
-
-  public final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
-  {
-    final boolean rasterSurface = _surfaceStyle.apply(canvas);
-    final boolean rasterBoundary = _lineStyle.apply(canvas);
-  
-    rasterPolygon(_coordinates, _holesCoordinatesArray, rasterSurface, rasterBoundary, canvas, projection);
   }
 
 }
