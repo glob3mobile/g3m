@@ -2492,26 +2492,23 @@ public:
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
 //    const double population = properties->getAsNumber("population", 0);
-//
+
 //    if (population > 2000000) {
-//      //    if (rand()%2 == 0) {
-//      //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
-//      //    }
-//      //    else {
 //      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
-//      //    }
-//
-//      Mark* mark = createMark(geometry);
-//      if (mark != NULL) {
-//        symbols->push_back( new GEOMarkSymbol(mark) );
-//      }
+
+      Mark* mark = createMark(geometry);
+      if (mark != NULL) {
+        symbols->push_back( new GEOMarkSymbol(mark) );
+      }
 //    }
 
     const std::string label = properties->getAsString("name", "");
 
     if (label.compare("") != 0) {
       symbols->push_back( new GEOLabelRasterSymbol(label,
-                                                   geometry->getPosition()) );
+                                                   geometry->getPosition(),
+                                                   GFont::monospaced(),
+                                                   Color::yellow()) );
     }
 
     return symbols;

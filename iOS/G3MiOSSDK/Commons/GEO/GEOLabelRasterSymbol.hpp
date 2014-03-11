@@ -13,10 +13,16 @@
 
 #include <string>
 
+#include "GFont.hpp"
+
+
 class GEOLabelRasterSymbol : public GEORasterSymbol {
 private:
   const std::string _label;
   const Geodetic2D  _position;
+  const GFont       _font;
+  const Color       _color;
+
 
   static const Sector* calculateSectorFromPosition(const Geodetic2D& position);
 
@@ -28,6 +34,8 @@ public:
 
   GEOLabelRasterSymbol(const std::string& label,
                        const Geodetic2D& position,
+                       const GFont& font,
+                       const Color& color,
                        const int minTileLevel = -1,
                        const int maxTileLevel = -1);
 
