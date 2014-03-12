@@ -126,11 +126,15 @@ public class CommandLine {
 
       if (exitVal == 0) {
          isrError.close();
-         System.out.println("ERROR: " + errorGobbler.getResult());
+         if (!errorGobbler.getResult().isEmpty()) {
+            System.out.println("RESULT: " + errorGobbler.getResult());
+         }
          errorGobbler.destroy();
          return outputGobbler;
       }
-      System.out.println("OUTPUT: " + outputGobbler.getResult());
+      if (!errorGobbler.getResult().isEmpty()) {
+         System.out.println("OUTPUT: " + outputGobbler.getResult());
+      }
       isrOutput.close();
       outputGobbler.destroy();
       return errorGobbler;
