@@ -27,3 +27,46 @@ const std::string Vector2D::description() const {
   delete isb;
   return s;
 }
+
+const double Vector2D::distanceTo(const Vector2D& that) const {
+  return IMathUtils::instance()->sqrt( squaredDistanceTo(that) );
+}
+
+const double Vector2D::squaredDistanceTo(const Vector2D& that) const {
+  const double dx = _x - that._x;
+  const double dy = _y - that._y;
+  return (dx * dx) + (dy * dy);
+}
+
+double Vector2D::distanceToSegment(const Vector2D& A, const Vector2D& B) const{
+
+  //Check this out: http://luisrey.wordpress.com/2008/07/06/distancia-punto-1/
+
+  if (A.isEquals(B)){
+    return this->distanceTo(A);
+  }
+
+  const double ax = A._x;
+  const double ay = A._y;
+  const double bx = B._x;
+  const double by = B._y;
+  const double cx = this->_x;
+  const double cy = this->_y;
+
+  const double dx = bx - ax;
+  const double dy = by - ay;
+
+  double u = ((cx-ax)*dx) + ((cy-ay)*dy) / (dx*dx + dy*dy);
+
+  if (u <= 0.0){
+    return this->distanceTo(A);
+  } else if (u >= 1.0){
+    return this->distanceTo(B);
+  } else{
+
+    //Point proyection is inside the segment
+    Vector2D proyection(ax + u * dx, ay + u * dy);
+    return distanceTo(proyection);
+  }
+
+}

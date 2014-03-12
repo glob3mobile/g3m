@@ -98,6 +98,10 @@ public:
   }
   
   MutableVector2D asMutableVector2D() const;
+
+  bool isEquals(const Vector2D& that) const{
+    return _x == that._x && _y == that._y;
+  }
   
   bool isNan() const {
 //    return IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y);
@@ -110,6 +114,12 @@ public:
     }
     return false;
   }
+
+  const double distanceTo(const Vector2D& that) const;
+
+  const double squaredDistanceTo(const Vector2D& that) const;
+
+  double distanceToSegment(const Vector2D& A, const Vector2D& B) const;
   
   const std::string description() const;
 #ifdef JAVA_CODE

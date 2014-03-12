@@ -1106,7 +1106,7 @@ public:
 
   }
 
-  if (false) {
+  if (true) {
     GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                        geoRenderer: geoRenderer
                                                                       meshRenderer: meshRenderer
@@ -2859,7 +2859,7 @@ public:
 {
 
 #warning BEGINNING OF CODE FOR PRECACHING AREA
-  bool precachingArea = false;
+  bool precachingArea = true;
   if (precachingArea){
 
     class PrecacherInitializationTask : public GInitializationTask {
@@ -2933,9 +2933,25 @@ public:
 
       void run(const G3MContext* context) {
 
+        std::list<Geodetic2D> route;
+        route.push_back(_lower);
+        route.push_back(_upper);
+
         _urls = [_iosWidget widget]->getPlanetRenderer()->getTilesURL(_lower, _upper, _level);
 
         ILogger::instance()->logInfo("Retrieving %d images.", _urls.size());
+
+        std::list<URL> urls = [_iosWidget widget]->getPlanetRenderer()->getResourcesURL(Sector(_lower, _upper),
+                                                                                        0, _level,
+                                                                                        &route);
+
+        ILogger::instance()->logInfo("Retrieving %d images.", urls.size());
+        _urls.clear();
+        for (std::list<URL>::iterator i = urls.begin(); i != urls.end(); i++){
+          _urls.push_back((*i).getPath());
+        }
+
+
 
         if (_urls.size() == 0){
           _done = true;
@@ -2969,12 +2985,12 @@ public:
 
 
     //LIMA
-    Geodetic2D lower = Geodetic2D::fromDegrees(-12.065, -77.038);
-    Geodetic2D upper = Geodetic2D::fromDegrees(-12.060, -77.034);
+//    Geodetic2D lower = Geodetic2D::fromDegrees(-12.065, -77.038);
+//    Geodetic2D upper = Geodetic2D::fromDegrees(-12.060, -77.034);
 
     //Las Palmas de GC
-    //Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
-    //Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
+    Geodetic2D upper = Geodetic2D::fromDegrees(28.20760859532738, -15.3314208984375);
+    Geodetic2D lower = Geodetic2D::fromDegrees(28.084096949164735, -15.4852294921875);
     int level = 17;
 
     PrecacherInitializationTask* initializationTask = new PrecacherInitializationTask([self G3MWidget],
