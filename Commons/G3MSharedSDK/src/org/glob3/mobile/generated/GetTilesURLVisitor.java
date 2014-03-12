@@ -25,6 +25,10 @@ public class GetTilesURLVisitor implements ITileVisitor
 
     for (int i = 0; i < layers.size(); i++)
     {
+
+
+      GlobalMembersPlanetRenderer.TILES_VISITED[tile._level]++;
+
       java.util.ArrayList<Petition> pets = layers.get(i).createTileMapPetitions(_renderContext, _ltrp, tile);
       for (int j = 0; j < pets.size(); j++)
       {

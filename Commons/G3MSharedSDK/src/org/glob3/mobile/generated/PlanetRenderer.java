@@ -295,7 +295,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private boolean _renderTileMeshes;
 
   private Sector _renderedSector;
-//  bool _validLayerTilesRenderParameters;
+  //  bool _validLayerTilesRenderParameters;
   private boolean _layerTilesRenderParametersDirty;
   private LayerTilesRenderParameters _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
@@ -318,11 +318,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-<<<<<<< HEAD
   G3MRenderContext _renderContext;
-=======
->>>>>>> zrender-touchhandlers
-//  std::list<Tile*> _tilesRenderedInLastFrame;
+  //  std::list<Tile*> _tilesRenderedInLastFrame;
 
   private long _renderedTilesListFrame;
   private java.util.LinkedList<Tile> _renderedTiles = new java.util.LinkedList<Tile>();
@@ -380,6 +377,43 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     return _renderedTiles;
+  }
+
+  private void addLayerSetURLForSector(java.util.LinkedList<URL> urls, Tile tile)
+  {
+    java.util.ArrayList<Petition> petitions = _layerSet.createTileMapPetitions(_renderContext, _layerTilesRenderParameters, tile);
+    for (int i = 0; i < petitions.size(); i++)
+    {
+      urls.addLast(petitions.get(i).getURL());
+      if (petitions.get(i) != null)
+         petitions.get(i).dispose();
+    }
+  }
+  private boolean sectorCloseToRoute(Sector sector, java.util.LinkedList<Geodetic2D> route, double angularDistanceFromCenterInRadians)
+  {
+  
+    Geodetic2D geoCenter = sector.getCenter();
+    Vector2D center = new Vector2D(geoCenter._longitude._radians, geoCenter._latitude._radians);
+  
+    java.util.Iterator<Geodetic2D> itA = route.iterator();
+    java.util.Iterator<Geodetic2D> itB = route.iterator()++;
+  
+    while (itB.hasNext())
+    {
+      final Vector2D A = new Vector2D(itA._longitude._radians, itA._latitude._radians);
+      final Vector2D B = new Vector2D(itB._longitude._radians, itB._latitude._radians);
+  
+      double dist = center.distanceToSegment(A, B);
+  
+      if (dist <= angularDistanceFromCenterInRadians)
+      {
+        return true;
+      }
+  
+      itA = itB;
+    }
+  
+    return false;
   }
 
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions)
@@ -488,7 +522,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     updateGLState(rc);
-  ///#warning Testing Terrain Normals
+    ///#warning Testing Terrain Normals
     _glState.setParent(glState);
   
     // Saving camera for use in onTouchEvent
@@ -566,13 +600,13 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       final Planet planet = ec.getPlanet();
   
-  //    if (ec->getWidget() != NULL){
-        positionCartesian = new Vector3D(ec.getWidget().getScenePositionForPixel(pixel._x, pixel._y));
-  //    } else{
-  //      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-  //      const Vector3D origin = _lastCamera->getCartesianPosition();
-  //      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
-  //    }
+      //    if (ec->getWidget() != NULL){
+      positionCartesian = new Vector3D(ec.getWidget().getScenePositionForPixel(pixel._x, pixel._y));
+      //    } else{
+      //      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+      //      const Vector3D origin = _lastCamera->getCartesianPosition();
+      //      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
+      //    }
   
       if (positionCartesian == null || positionCartesian.isNan())
       {
@@ -909,6 +943,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final java.util.LinkedList<String> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD)
   {
   
+    for (int i = 0; i < 20; i++)
+    {
+      GlobalMembersPlanetRenderer.TILES_VISITED[i] = 0;
+    }
+  
     Sector sector = new Sector(lower, upper);
     final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
     GetTilesURLVisitor visitor = new GetTilesURLVisitor(_renderContext, _layerTilesRenderParameters);
@@ -916,6 +955,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     acceptTileVisitor(visitor, sector, parameters._firstLevel, maxLOD);
   
     java.util.LinkedList<String> urls = visitor._urls;
+  
+    for (int i = 0; i < 20; i++)
+    {
+      System.out.printf("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+    }
   
     if (visitor != null)
        visitor.dispose();
@@ -997,6 +1041,75 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final boolean getRenderTileMeshes()
   {
     return _renderTileMeshes;
+  }
+
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, int minLOD, int maxLOD)
+  {
+     return getResourcesURL(sector, minLOD, maxLOD, null);
+  }
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, int minLOD, int maxLOD, java.util.LinkedList<Geodetic2D> route)
+  {
+  
+    for (int i = 0; i < 20; i++)
+    {
+      GlobalMembersPlanetRenderer.TILES_VISITED[i] = 0;
+    }
+  
+    java.util.LinkedList<URL> urls = new java.util.LinkedList<URL>();
+  
+    java.util.LinkedList<Tile> _tiles = new java.util.LinkedList<Tile>(); //List of tiles to check
+    final int ftSize = _firstLevelTiles.size();
+    for (int i = 0; i < ftSize; i++)
+    {
+      if (_firstLevelTiles.get(i)._sector.touchesWith(sector))
+      {
+        _tiles.addLast(_firstLevelTiles.get(i));
+      }
+    }
+  
+    while (!_tiles.isEmpty())
+    {
+      Tile tile = _tiles.getFirst();
+      _tiles.removeFirst();
+  
+  
+      if (tile._sector.touchesWith(sector))
+      {
+  
+        //Checking Route if any
+        if (route != null)
+        {
+          if (!sectorCloseToRoute(tile._sector, route, tile._sector.getDeltaRadiusInRadians() * 2.0))
+          {
+            continue;
+          }
+        }
+  
+        if (tile._level >= minLOD)
+        {
+          GlobalMembersPlanetRenderer.TILES_VISITED[tile._level]++;
+  
+          addLayerSetURLForSector(urls, tile);
+        }
+  
+        if (tile._level < maxLOD)
+        {
+          java.util.ArrayList<Tile> newTiles = tile.getSubTiles(_layerTilesRenderParameters._mercator);
+          for (int i = 0; i < newTiles.size(); i++)
+          {
+            _tiles.addLast((newTiles)[i]);
+          }
+        }
+  
+      }
+    }
+  
+    for (int i = 0; i < 20; i++)
+    {
+      System.out.printf("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+    }
+  
+    return urls;
   }
 
 }

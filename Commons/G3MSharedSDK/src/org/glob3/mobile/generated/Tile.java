@@ -368,15 +368,12 @@ public class Tile
       }
     }
   
-<<<<<<< HEAD
     if (_level > GlobalMembersTile.MAX_LOD)
     {
       GlobalMembersTile.MAX_LOD = _level;
       System.out.printf("MAXLOD = %d\n", _level);
     }
   
-=======
->>>>>>> zrender-touchhandlers
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
     //  boundingVolume->render(rc, parentState);
   }
