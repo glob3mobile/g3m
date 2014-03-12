@@ -362,7 +362,20 @@ public class SphericalPlanet extends Planet
     return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle.fromRadians(_lastDragRadiansStep));
   }
 
-  public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D initialRay0, Vector3D initialRay1)
+ /* void beginDoubleDrag(const Vector3D& origin,
+                       const Vector3D& centerRay,
+                               const Vector3D& initialRay0,
+                               const Vector3D& initialRay1) const;*/
+  public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition0, Vector3D touchedPosition1)
+  {
+  }
+
+
+  /*
+  void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
+                                        const Vector3D& centerRay,
+                                        const Vector3D& initialRay0,
+                                        const Vector3D& initialRay1) const
   {
     _origin = origin.asMutableVector3D();
     _centerRay = centerRay.asMutableVector3D();
@@ -375,10 +388,11 @@ public class SphericalPlanet extends Planet
     // middle point in 3D
     Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
     Geodetic2D g1 = toGeodetic2D(_initialPoint1.asVector3D());
-    Geodetic2D g = getMidPoint(g0, g1);
+    Geodetic2D g  = getMidPoint(g0, g1);
     _initialPoint = toCartesian(g).asMutableVector3D();
-  }
-
+  }*/
+  
+  
   public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
   {
     // test if initialPoints are valid
@@ -394,6 +408,8 @@ public class SphericalPlanet extends Planet
     double angle0;
     double angle1;
     double distance = _origin.sub(_centerPoint).length();
+  
+    // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
   
     // compute estimated camera translation: step 0
     double d = distance*(factor-1)/factor;

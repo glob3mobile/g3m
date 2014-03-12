@@ -172,17 +172,13 @@ public abstract class INativeGL
   public abstract GPUUniform getActiveUniform(GPUProgram program, int i);
   public abstract GPUAttribute getActiveAttribute(GPUProgram program, int i);
 
-<<<<<<< HEAD
   public abstract Color read1PixelAsRGBAColor(int x, int y);
   public abstract double read1PixelAsDouble(int x, int y);
 
   public abstract void depthMask(boolean v);
 
   public abstract Vector2F getDepthRange();
-=======
-  public abstract void depthMask(boolean v);
 
   public abstract void setActiveTexture(int i);
->>>>>>> origin/purgatory
 
 }
