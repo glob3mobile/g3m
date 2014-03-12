@@ -8,7 +8,7 @@
 
 #include "GenericQuadTree.hpp"
 
-#include "GEORasterLineSymbol.hpp"
+#include "GEOLineRasterSymbol.hpp"
 #include "ICanvas.hpp"
 
 #pragma mark NODE
@@ -420,7 +420,7 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
                             0);//const int        dashPhase) :
 
 
-    GEORasterLineSymbol * symbol = new GEORasterLineSymbol(&line, ls);
+    GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(&line, ls);
 
     geoTileRasterizer->addSymbol(symbol);
   }

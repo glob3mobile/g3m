@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  IImage.h
+//  IImage.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 01/06/12.
@@ -8,10 +8,6 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include <vector>
-///#include "RectangleI.hpp"
-//class RectangleI;
-//class IImageListener;
 
 public abstract class IImage
 {

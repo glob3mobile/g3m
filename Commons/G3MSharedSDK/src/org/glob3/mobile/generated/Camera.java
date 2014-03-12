@@ -27,10 +27,8 @@ public class Camera
      _rollInRadians = that._rollInRadians;
   }
 
-  public Camera(int width, int height)
+  public Camera()
   {
-     _width = 0;
-     _height = 0;
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
      _center = new MutableVector3D(0, 0, 0);
@@ -51,7 +49,7 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _rollInRadians = 0;
-    resizeViewport(width, height);
+    resizeViewport(0, 0);
     _dirtyFlags.setAll(true);
   }
 
@@ -123,8 +121,6 @@ public class Camera
   {
     _width = width;
     _height = height;
-  
-    _dirtyFlags._projectionMatrixDirty = true;
   
     _dirtyFlags.setAll(true);
   }

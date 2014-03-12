@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_IStringBuilder_hpp
-#define G3MiOSSDK_IStringBuilder_hpp
+#ifndef G3MiOSSDK_IStringBuilder
+#define G3MiOSSDK_IStringBuilder
 
 #include <string>
 

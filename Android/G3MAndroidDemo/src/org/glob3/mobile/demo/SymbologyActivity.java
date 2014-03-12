@@ -13,9 +13,9 @@ import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
 import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
 import org.glob3.mobile.generated.GEO2DPointGeometry;
 import org.glob3.mobile.generated.GEO2DPolygonGeometry;
+import org.glob3.mobile.generated.GEOLineRasterSymbol;
 import org.glob3.mobile.generated.GEOMarkSymbol;
-import org.glob3.mobile.generated.GEORasterLineSymbol;
-import org.glob3.mobile.generated.GEORasterPolygonSymbol;
+import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.GEOSymbol;
 import org.glob3.mobile.generated.GEOSymbolizer;
@@ -131,7 +131,7 @@ public class SymbologyActivity
                                @Override
                                public ArrayList<GEOSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
                                   final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                  symbols.add(new GEORasterPolygonSymbol(geometry.getPolygonData(),
+                                  symbols.add(new GEOPolygonRasterSymbol(geometry.getPolygonData(),
                                            Symbology.createPolygonLineRasterStyle(geometry),
                                            Symbology.createPolygonSurfaceRasterStyle(geometry)));
 
@@ -149,7 +149,7 @@ public class SymbologyActivity
                                @Override
                                public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
                                   final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-                                  symbols.add(new GEORasterLineSymbol(geometry.getCoordinates(),
+                                  symbols.add(new GEOLineRasterSymbol(geometry.getCoordinates(),
                                            Symbology.createLineRasterStyle(geometry)));
                                   return symbols;
                                }

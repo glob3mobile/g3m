@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_ByteBuffer_iOS_hpp
-#define G3MiOSSDK_ByteBuffer_iOS_hpp
+#ifndef G3MiOSSDK_ByteBuffer_iOS
+#define G3MiOSSDK_ByteBuffer_iOS
 
 #include "IByteBuffer.hpp"
 #include "ILogger.hpp"

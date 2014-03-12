@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Mark_hpp
-#define G3MiOSSDK_Mark_hpp
+#ifndef G3MiOSSDK_Mark
+#define G3MiOSSDK_Mark
 
 #include <string>
 #include "Geodetic3D.hpp"

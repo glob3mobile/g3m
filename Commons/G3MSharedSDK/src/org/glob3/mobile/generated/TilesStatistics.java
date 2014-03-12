@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  PlanetRenderer.h
+//  PlanetRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.

@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_MultiLayerTileTexturizer_hpp
-#define G3MiOSSDK_MultiLayerTileTexturizer_hpp
+#ifndef G3MiOSSDK_MultiLayerTileTexturizer
+#define G3MiOSSDK_MultiLayerTileTexturizer
 
 #include "TileTexturizer.hpp"
 #include "TileKey.hpp"

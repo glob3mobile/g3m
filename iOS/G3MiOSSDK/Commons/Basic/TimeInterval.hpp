@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TimeInterval_hpp
-#define G3MiOSSDK_TimeInterval_hpp
+#ifndef G3MiOSSDK_TimeInterval
+#define G3MiOSSDK_TimeInterval
 
 #include "IMathUtils.hpp"
 

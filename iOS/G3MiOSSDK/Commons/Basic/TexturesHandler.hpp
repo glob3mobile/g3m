@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TexturesHandler_hpp
-#define G3MiOSSDK_TexturesHandler_hpp
+#ifndef G3MiOSSDK_TexturesHandler
+#define G3MiOSSDK_TexturesHandler
 
 #include <string>
 #include <vector>

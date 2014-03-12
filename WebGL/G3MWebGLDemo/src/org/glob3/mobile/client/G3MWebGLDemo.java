@@ -28,8 +28,6 @@ public class G3MWebGLDemo
       initDefaultWithBuilder();
       final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
       g3mWidgetHolder.add(_widget);
-
-
    }
 
 

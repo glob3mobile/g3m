@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLConstants_hpp
-#define G3MiOSSDK_GLConstants_hpp
+#ifndef G3MiOSSDK_GLConstants
+#define G3MiOSSDK_GLConstants
 
 #include "INativeGL.hpp"
 

@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Attribute.h
+//  Attribute.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 27/03/13.

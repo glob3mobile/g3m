@@ -1,17 +1,17 @@
 //
-//  GEORasterPolygonSymbol.cpp
+//  GEOPolygonRasterSymbol.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/23/13.
 //
 //
 
-#include "GEORasterPolygonSymbol.hpp"
+#include "GEOPolygonRasterSymbol.hpp"
 
 #include "GEO2DPolygonData.hpp"
 
 
-GEORasterPolygonSymbol::GEORasterPolygonSymbol(const GEO2DPolygonData*        polygonData,
+GEOPolygonRasterSymbol::GEOPolygonRasterSymbol(const GEO2DPolygonData*        polygonData,
                                                const GEO2DLineRasterStyle&    lineStyle,
                                                const GEO2DSurfaceRasterStyle& surfaceStyle,
                                                const int minTileLevel,
@@ -25,7 +25,7 @@ _surfaceStyle(surfaceStyle)
 
 }
 
-GEORasterPolygonSymbol::~GEORasterPolygonSymbol() {
+GEOPolygonRasterSymbol::~GEOPolygonRasterSymbol() {
 #ifdef C_CODE
   if (_coordinates != NULL) {
     const int coordinatesSize = _coordinates->size();
@@ -61,7 +61,7 @@ GEORasterPolygonSymbol::~GEORasterPolygonSymbol() {
 }
 
 
-void GEORasterPolygonSymbol::rawRasterize(ICanvas*                   canvas,
+void GEOPolygonRasterSymbol::rawRasterize(ICanvas*                   canvas,
                                           const GEORasterProjection* projection) const {
   const bool rasterSurface  = _surfaceStyle.apply(canvas);
   const bool rasterBoundary = _lineStyle.apply(canvas);

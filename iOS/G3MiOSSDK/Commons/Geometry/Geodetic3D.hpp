@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Geodetic3D_hpp
-#define G3MiOSSDK_Geodetic3D_hpp
+#ifndef G3MiOSSDK_Geodetic3D
+#define G3MiOSSDK_Geodetic3D
 
 #include "Angle.hpp"
 #include "Geodetic2D.hpp"

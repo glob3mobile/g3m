@@ -1,13 +1,13 @@
 //
-//  Timer_iOS.h
+//  Timer_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/06/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Timer_iOS_h
-#define G3MiOSSDK_Timer_iOS_h
+#ifndef G3MiOSSDK_Timer_iOS
+#define G3MiOSSDK_Timer_iOS
 
 #include "ITimer.hpp"
 
