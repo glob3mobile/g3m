@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_JSONBaseObject_hpp
-#define G3MiOSSDK_JSONBaseObject_hpp
+#ifndef G3MiOSSDK_JSONBaseObject
+#define G3MiOSSDK_JSONBaseObject
 
 class JSONObject;
 class JSONArray;

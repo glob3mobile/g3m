@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_MutableVector3D_hpp
-#define G3MiOSSDK_MutableVector3D_hpp
+#ifndef G3MiOSSDK_MutableVector3D
+#define G3MiOSSDK_MutableVector3D
 
 #include "IMathUtils.hpp"
 

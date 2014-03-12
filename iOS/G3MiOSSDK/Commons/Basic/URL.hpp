@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_URL_hpp
-#define G3MiOSSDK_URL_hpp
+#ifndef G3MiOSSDK_URL
+#define G3MiOSSDK_URL
 
 #include <string>
 #include "IStringUtils.hpp"

@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Storage.h
+//  Storage.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 26/06/12.

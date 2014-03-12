@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TouchEvent.h
+//  TouchEvent.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.

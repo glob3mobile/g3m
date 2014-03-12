@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_SimpleFloatBufferBuilder_hpp
-#define G3MiOSSDK_SimpleFloatBufferBuilder_hpp
+#ifndef G3MiOSSDK_SimpleFloatBufferBuilder
+#define G3MiOSSDK_SimpleFloatBufferBuilder
 
 #include "FloatBufferBuilder.hpp"
 

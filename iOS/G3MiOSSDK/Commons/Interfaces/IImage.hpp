@@ -1,19 +1,15 @@
 //
-//  IImage.h
+//  IImage.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 01/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_IImage_h
-#define G3MiOSSDK_IImage_h
+#ifndef G3MiOSSDK_IImage
+#define G3MiOSSDK_IImage
 
-//#include <vector>
-//#include "RectangleI.hpp"
 #include "Vector2I.hpp"
-//class RectangleI;
-//class IImageListener;
 
 class IImage {
 public:

@@ -6,8 +6,8 @@
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GL_hpp
-#define G3MiOSSDK_GL_hpp
+#ifndef G3MiOSSDK_GL
+#define G3MiOSSDK_GL
 
 #include "INativeGL.hpp"
 

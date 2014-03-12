@@ -17,7 +17,7 @@
 
 #include "GEOSymbol.hpp"
 #include "GEO2DLineRasterStyle.hpp"
-#include "GEORasterLineSymbol.hpp"
+#include "GEOLineRasterSymbol.hpp"
 
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
@@ -227,7 +227,7 @@ const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
                           0);//const int        dashPhase) :
 
 
-  return new GEORasterLineSymbol(&line, ls);
+  return new GEOLineRasterSymbol(&line, ls);
 
 }
 

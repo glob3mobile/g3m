@@ -648,8 +648,8 @@ public:
   }
   
   const URL createGetFeatureInfoRestURL(const Tile* tile,
-                                        const Vector2I* size,
-                                        const Vector2I* pixel,
+                                        const Vector2I& size,
+                                        const Vector2I& pixel,
                                         const Geodetic3D& position);
 
 };

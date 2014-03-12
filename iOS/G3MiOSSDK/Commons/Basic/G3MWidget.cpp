@@ -97,8 +97,8 @@ _errorRenderer(errorRenderer),
 _hudRenderer(hudRenderer),
 _width(1),
 _height(1),
-_currentCamera(new Camera(_width, _height)),
-_nextCamera(new Camera(_width, _height)),
+_currentCamera(new Camera()),
+_nextCamera(new Camera()),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -186,26 +186,26 @@ _nFramesBeetweenProgramsCleanUp(500)
 }
 
 
-G3MWidget* G3MWidget::create(GL*                              gl,
-                             IStorage*                        storage,
-                             IDownloader*                     downloader,
-                             IThreadUtils*                    threadUtils,
-                             ICameraActivityListener*         cameraActivityListener,
-                             const Planet*                    planet,
-                             std::vector<ICameraConstrainer*> cameraConstrainers,
-                             CameraRenderer*                  cameraRenderer,
-                             Renderer*                        mainRenderer,
-                             Renderer*                        busyRenderer,
-                             ErrorRenderer*                   errorRenderer,
-                             Renderer*                        hudRenderer,
-                             const Color&                     backgroundColor,
-                             const bool                       logFPS,
-                             const bool                       logDownloaderStatistics,
-                             GInitializationTask*             initializationTask,
-                             bool                             autoDeleteInitializationTask,
-                             std::vector<PeriodicalTask*>     periodicalTasks,
-                             GPUProgramManager*               gpuProgramManager,
-                             SceneLighting*                   sceneLighting,
+G3MWidget* G3MWidget::create(GL*                                  gl,
+                             IStorage*                            storage,
+                             IDownloader*                         downloader,
+                             IThreadUtils*                        threadUtils,
+                             ICameraActivityListener*             cameraActivityListener,
+                             const Planet*                        planet,
+                             std::vector<ICameraConstrainer*>     cameraConstrainers,
+                             CameraRenderer*                      cameraRenderer,
+                             Renderer*                            mainRenderer,
+                             Renderer*                            busyRenderer,
+                             ErrorRenderer*                       errorRenderer,
+                             Renderer*                            hudRenderer,
+                             const Color&                         backgroundColor,
+                             const bool                           logFPS,
+                             const bool                           logDownloaderStatistics,
+                             GInitializationTask*                 initializationTask,
+                             bool                                 autoDeleteInitializationTask,
+                             std::vector<PeriodicalTask*>         periodicalTasks,
+                             GPUProgramManager*                   gpuProgramManager,
+                             SceneLighting*                       sceneLighting,
                              const InitialCameraPositionProvider* initialCameraPositionProvider) {
 
   return new G3MWidget(gl,
@@ -457,7 +457,7 @@ void G3MWidget::render(int width, int height) {
     _currentCamera->setHeading(Angle::zero());
     _currentCamera->setPitch(Angle::fromDegrees(-90));
     _currentCamera->setRoll(Angle::zero());
-    
+
     _nextCamera->setGeodeticPosition(position);
     _nextCamera->setHeading(Angle::zero());
     _nextCamera->setPitch(Angle::fromDegrees(-90));
@@ -793,13 +793,9 @@ void G3MWidget::cancelCameraAnimation() {
   _effectsScheduler->cancelAllEffectsFor(target);
 }
 
-//void G3MWidget::resetCameraPosition() {
-//  getNextCamera()->resetPosition();
-//}
-
 void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
   delete _backgroundColor;
-  
+
   _backgroundColor = new Color(backgroundColor);
 }
 

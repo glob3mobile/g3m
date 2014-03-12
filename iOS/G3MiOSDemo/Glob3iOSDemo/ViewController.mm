@@ -101,11 +101,11 @@
 #import <G3MiOSSDK/TileRasterizer.hpp>
 #import <G3MiOSSDK/DebugTileRasterizer.hpp>
 #import <G3MiOSSDK/GEOTileRasterizer.hpp>
-#import <G3MiOSSDK/GEORasterLineSymbol.hpp>
+#import <G3MiOSSDK/GEOLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
 #import <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
-#import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
+#import <G3MiOSSDK/GEOPolygonRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
@@ -138,6 +138,7 @@
 
 #import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
+#import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -719,10 +720,6 @@ public:
   }
 
   if (false) { //HUD
-
-#warning Diego at work!
-
-
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
@@ -2437,7 +2434,7 @@ public:
 
     for (int i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = polygonsData->at(i);
-      symbols->push_back( new GEORasterPolygonSymbol(polygonData,
+      symbols->push_back( new GEOPolygonRasterSymbol(polygonData,
                                                      lineStyle,
                                                      surfaceStyle) );
 
@@ -2450,7 +2447,7 @@ public:
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
 
-    symbols->push_back( new GEORasterPolygonSymbol(geometry->getPolygonData(),
+    symbols->push_back( new GEOPolygonRasterSymbol(geometry->getPolygonData(),
                                                    createPolygonLineRasterStyle(geometry),
                                                    createPolygonSurfaceRasterStyle(geometry)) );
 
@@ -2464,7 +2461,7 @@ public:
     //                                                createLineStyle(geometry),
     //                                                30000) );
 
-    symbols->push_back( new GEORasterLineSymbol(geometry->getCoordinates(),
+    symbols->push_back( new GEOLineRasterSymbol(geometry->getCoordinates(),
                                                 createLineRasterStyle(geometry)) );
 
     return symbols;
@@ -2490,25 +2487,29 @@ public:
 
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
-    const double population = properties->getAsNumber("population", 0);
+//    const double population = properties->getAsNumber("population", 0);
 
-    if (population > 2000000) {
-      //    if (rand()%2 == 0) {
-      //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
-      //    }
-      //    else {
-      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
-      //    }
+//    if (population > 2000000) {
+//      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
 
       Mark* mark = createMark(geometry);
       if (mark != NULL) {
         symbols->push_back( new GEOMarkSymbol(mark) );
       }
+//    }
+
+    const std::string label = properties->getAsString("name", "");
+
+    if (label.compare("") != 0) {
+      symbols->push_back( new GEOLabelRasterSymbol(label,
+                                                   geometry->getPosition(),
+                                                   GFont::monospaced(),
+                                                   Color::yellow()) );
     }
 
     return symbols;
   }
-
+  
 };
 
 
@@ -2909,7 +2910,6 @@ public:
       };
 
 
-#warning Diego at work!
       context->getDownloader()->requestBuffer(URL("file:///3d_.json"),
                                               1000000,
                                               TimeInterval::zero(),

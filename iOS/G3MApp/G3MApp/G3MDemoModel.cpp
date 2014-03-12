@@ -55,7 +55,7 @@ _context(NULL)
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
   if (_context != NULL) {
-    ERROR("G3MContext already initialized");
+    THROW_EXCEPTION("G3MContext already initialized");
   }
   _context = context;
 
@@ -64,7 +64,7 @@ void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
 
 void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
   if (_g3mWidget != NULL) {
-    ERROR("G3MWidget already initialized");
+    THROW_EXCEPTION("G3MWidget already initialized");
   }
   _g3mWidget = g3mWidget;
 }
@@ -138,7 +138,7 @@ void G3MDemoModel::selectScene(const std::string& sceneName) {
 
 void G3MDemoModel::selectScene(G3MDemoScene* scene) {
   if (_context == NULL) {
-    ERROR("G3MContext not initialized");
+    THROW_EXCEPTION("G3MContext not initialized");
   }
 
   if ((scene != NULL) &&

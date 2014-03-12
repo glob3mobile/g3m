@@ -610,8 +610,6 @@ public class G3MWidget
     _effectsScheduler.cancelAllEffects();
   }
 
-  //  void resetCameraPosition();
-
   public final CameraRenderer getCameraRenderer()
   {
     return _cameraRenderer;
@@ -627,11 +625,6 @@ public class G3MWidget
     return _context;
   }
 
-
-  //void G3MWidget::resetCameraPosition() {
-  //  getNextCamera()->resetPosition();
-  //}
-  
   public final void setBackgroundColor(Color backgroundColor)
   {
     if (_backgroundColor != null)
@@ -744,8 +737,8 @@ public class G3MWidget
      _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
-     _currentCamera = new Camera(_width, _height);
-     _nextCamera = new Camera(_width, _height);
+     _currentCamera = new Camera();
+     _nextCamera = new Camera();
      _backgroundColor = new Color(backgroundColor);
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;

@@ -242,14 +242,14 @@ IThreadUtils* MapBooBuilder::getThreadUtils() {
 
 void MapBooBuilder::setGL(GL *gl) {
   if (_gl != NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
-    return;
-    //ERROR("LOGIC ERROR: _gl already initialized");
+    //ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
+    //return;
+    THROW_EXCEPTION("LOGIC ERROR: _gl already initialized");
   }
   if (gl == NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
-    return;
-    //ERROR("LOGIC ERROR: _gl cannot be NULL");
+    //ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+    //return;
+    THROW_EXCEPTION("LOGIC ERROR: _gl cannot be NULL");
   }
   _gl = gl;
 }
@@ -528,7 +528,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
   }
-
+  
   return result;
 }
 
@@ -1774,8 +1774,8 @@ const MapBoo_Notification* MapBooBuilder::createNotification(const Geodetic2D&  
 }
 
 const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
-                                                     const Vector2I* size,
-                                                     const Vector2I* pixel,
+                                                     const Vector2I& tileDimension,
+                                                     const Vector2I& pixelPosition,
                                                      const Geodetic3D& position) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_serverURL.getPath());
@@ -1814,16 +1814,16 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
   isb->addString("TODO");
   
   isb->addString("&tileWidth=");
-  isb->addInt(size->_x);
+  isb->addInt(tileDimension._x);
   
   isb->addString("&tileHeight=");
-  isb->addInt(size->_y);
+  isb->addInt(tileDimension._y);
   
   isb->addString("&pixelX=");
-  isb->addInt(pixel->_x);
+  isb->addInt(pixelPosition._x);
   
   isb->addString("&pixelY=");
-  isb->addInt(pixel->_y);
+  isb->addInt(pixelPosition._y);
   
   isb->addString("&lat=");
   isb->addDouble(position._latitude._degrees);

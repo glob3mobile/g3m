@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_IMathUtils_hpp
-#define G3MiOSSDK_IMathUtils_hpp
+#ifndef G3MiOSSDK_IMathUtils
+#define G3MiOSSDK_IMathUtils
 
 #include <string>
 #include <cstdio>

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Effects_hpp
-#define G3MiOSSDK_Effects_hpp
+#ifndef G3MiOSSDK_Effects
+#define G3MiOSSDK_Effects
 
 
 #include "TimeInterval.hpp"

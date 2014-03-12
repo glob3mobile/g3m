@@ -1,13 +1,13 @@
 //
-//  GEORasterPolygonSymbol.hpp
+//  GEOPolygonRasterSymbol.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 7/23/13.
 //
 //
 
-#ifndef __G3MiOSSDK__GEORasterPolygonSymbol__
-#define __G3MiOSSDK__GEORasterPolygonSymbol__
+#ifndef __G3MiOSSDK__GEOPolygonRasterSymbol__
+#define __G3MiOSSDK__GEOPolygonRasterSymbol__
 
 #include "GEORasterSymbol.hpp"
 
@@ -17,7 +17,7 @@
 class GEO2DPolygonData;
 
 
-class GEORasterPolygonSymbol : public GEORasterSymbol {
+class GEOPolygonRasterSymbol : public GEORasterSymbol {
 private:
 #ifdef C_CODE
   const std::vector<Geodetic2D*>* _coordinates;
@@ -32,18 +32,19 @@ private:
 
   const std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
 
+protected:
+  void rawRasterize(ICanvas*                   canvas,
+                    const GEORasterProjection* projection) const;
+
 public:
 
-  GEORasterPolygonSymbol(const GEO2DPolygonData*        polygonData,
+  GEOPolygonRasterSymbol(const GEO2DPolygonData*        polygonData,
                          const GEO2DLineRasterStyle&    lineStyle,
                          const GEO2DSurfaceRasterStyle& surfaceStyle,
                          const int minTileLevel = -1,
                          const int maxTileLevel = -1);
 
-  ~GEORasterPolygonSymbol();
-
-  void rawRasterize(ICanvas*                   canvas,
-                    const GEORasterProjection* projection) const;
+  ~GEOPolygonRasterSymbol();
 
 };
 

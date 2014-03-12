@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Layer_hpp
-#define G3MiOSSDK_Layer_hpp
+#ifndef G3MiOSSDK_Layer
+#define G3MiOSSDK_Layer
 
 #include <string>
 

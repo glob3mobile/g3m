@@ -1,13 +1,13 @@
 //
-//  CameraEffects.h
+//  CameraEffects.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo on 17/07/13.
 //
 //
 
-#ifndef G3MiOSSDK_CameraEffects_h
-#define G3MiOSSDK_CameraEffects_h
+#ifndef G3MiOSSDK_CameraEffects
+#define G3MiOSSDK_CameraEffects
 
 
 #include "Effects.hpp"

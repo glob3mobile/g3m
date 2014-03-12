@@ -82,34 +82,18 @@ public class Mark implements SurfaceElevationListener
 
   private boolean _renderedMark;
 
-  private static IFloatBuffer _billboardTexCoord = null;
 
   private GLState _glState;
-  private void createGLState(Planet planet)
+  private void createGLState(Planet planet, IFloatBuffer billboardTexCoords)
   {
-  
     _glState = new GLState();
   
     _glState.addGLFeature(new BillboardGLFeature(getCartesianPosition(planet), _textureWidth, _textureHeight), false);
   
     if (_textureId != null)
     {
-      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), getBillboardTexCoords(), 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
     }
-  }
-
-  private static IFloatBuffer getBillboardTexCoords()
-  {
-    if (_billboardTexCoord == null)
-    {
-      FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
-      texCoor.add(1,1);
-      texCoor.add(1,0);
-      texCoor.add(0,1);
-      texCoor.add(0,0);
-      _billboardTexCoord = texCoor.create();
-    }
-    return _billboardTexCoord;
   }
 
   private SurfaceElevationProvider _surfaceElevationProvider;
@@ -556,7 +540,7 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl)
+  public final void render(G3MRenderContext rc, Vector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
   
     final Vector3D markPosition = getCartesianPosition(planet);
@@ -583,7 +567,7 @@ public class Mark implements SurfaceElevationListener
   
       if (_position._height > cameraHeight)
       {
-        //Computing horizon culling
+        // Computing horizon culling
         final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition, markCameraVector);
         if (dists.size() > 0)
         {
@@ -593,11 +577,10 @@ public class Mark implements SurfaceElevationListener
             occludedByHorizon = true;
           }
         }
-  
       }
       else
       {
-        //if camera position is upper than mark we can compute horizon culling in a much simpler way
+        // if camera position is upper than mark we can compute horizon culling in a much simpler way
         if (_normalAtMarkPosition == null)
         {
           _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
@@ -608,27 +591,21 @@ public class Mark implements SurfaceElevationListener
   
       if (!occludedByHorizon)
       {
-  
-        if (_textureId == null)
+        if ((_textureId == null) && (_textureImage != null))
         {
-          if (_textureImage != null)
-          {
-            _textureId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false);
+          _textureId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false);
   
-            rc.getFactory().deleteImage(_textureImage);
-            _textureImage = null;
-            createGLState(planet);
-          }
+          rc.getFactory().deleteImage(_textureImage);
+          _textureImage = null;
         }
-        else
-        {
   
+        if (_textureId != null)
+        {
           if (_glState == null)
           {
-            createGLState(planet); //If GLState was disposed due to elevation change
+            createGLState(planet, billboardTexCoords); // If GLState was disposed due to elevation change
           }
-  
-          _glState.setParent(parentGLState); //Linking with parent
+          _glState.setParent(parentGLState);
   
           rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
   

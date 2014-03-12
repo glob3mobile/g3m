@@ -677,21 +677,21 @@ public class Tile
     return getSubTiles(splitLatitude, splitLongitude);
   }
 
-//  const Sector getSector() const {
-//    return _sector;
-//  }
-//
-//  int getLevel() const {
-//    return _level;
-//  }
-//
-//  int getRow() const {
-//    return _row;
-//  }
-//
-//  int getColumn() const {
-//    return _column;
-//  }
+  //  const Sector getSector() const {
+  //    return _sector;
+  //  }
+  //
+  //  int getLevel() const {
+  //    return _level;
+  //  }
+  //
+  //  int getRow() const {
+  //    return _row;
+  //  }
+  //
+  //  int getColumn() const {
+  //    return _column;
+  //  }
 
   public final Mesh getTexturizedMesh()
   {
@@ -1145,16 +1145,11 @@ public class Tile
   
   }
 
-  public final Vector2I getPixelNormalizedFromPosition(Geodetic2D position2D, Vector2I size)
+  public final Vector2I getNormalizedPixelsFromPosition(Geodetic2D position2D, Vector2I tileDimension)
   {
     final IMathUtils math = IMathUtils.instance();
-    if (_sector.contains(position2D))
-    {
-      final Vector2D uv = _sector.getUVCoordinates(position2D);
-      return new Vector2I(math.toInt(size._x * uv._x), math.toInt(size._y * uv._y));
-    }
-  
-    return null;
+    final Vector2D uv = _sector.getUVCoordinates(position2D);
+    return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
 
 }
