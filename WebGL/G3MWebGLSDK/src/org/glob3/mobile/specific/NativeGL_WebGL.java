@@ -464,10 +464,11 @@ public final class NativeGL_WebGL extends INativeGL {
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_WRAP_T;
 	}-*/;
 
-	@Override
-	public native int TextureParameterValue_Linear() /*-{
-		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR;
-	}-*/;
+//	@Override
+//	public native int TextureParameterValue_Linear() /*-{
+//		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR;
+//	}-*/;
+
 
 	@Override
 	public native int TextureParameterValue_ClampToEdge() /*-{

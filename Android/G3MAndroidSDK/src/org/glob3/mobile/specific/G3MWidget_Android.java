@@ -59,12 +59,8 @@ public final class G3MWidget_Android
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
-<<<<<<< HEAD
-   
    private boolean _processingDoubleTap = false;
-=======
    private Thread                     _openGLThread         = null;
->>>>>>> purgatory
 
 
    public G3MWidget_Android(final android.content.Context context) {
