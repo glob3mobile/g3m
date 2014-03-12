@@ -394,14 +394,19 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     Geodetic2D geoCenter = sector.getCenter();
     Vector2D center = new Vector2D(geoCenter._longitude._radians, geoCenter._latitude._radians);
+    
+    java.util.Iterator<Geodetic2D> iterator = route.iterator();
+
+	Geodetic2D geoA = null;
+	Geodetic2D geoB = iterator.next();
   
-    java.util.Iterator<Geodetic2D> itA = route.iterator();
-    java.util.Iterator<Geodetic2D> itB = route.iterator()++;
-  
-    while (itB.hasNext())
+    while (iterator.hasNext())
     {
-      final Vector2D A = new Vector2D(itA._longitude._radians, itA._latitude._radians);
-      final Vector2D B = new Vector2D(itB._longitude._radians, itB._latitude._radians);
+    	geoA = geoB;
+    	geoB = iterator.next();
+    	
+      final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
+      final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
   
       double dist = center.distanceToSegment(A, B);
   
@@ -409,8 +414,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       {
         return true;
       }
-  
-      itA = itB;
     }
   
     return false;
@@ -1097,7 +1100,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
           java.util.ArrayList<Tile> newTiles = tile.getSubTiles(_layerTilesRenderParameters._mercator);
           for (int i = 0; i < newTiles.size(); i++)
           {
-            _tiles.addLast((newTiles)[i]);
+            _tiles.addLast(newTiles.get(i));
           }
         }
   

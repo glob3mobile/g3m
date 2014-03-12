@@ -855,6 +855,7 @@ bool PlanetRenderer::sectorCloseToRoute(const Sector& sector,
   Geodetic2D geoCenter = sector.getCenter();
   Vector2D center(geoCenter._longitude._radians, geoCenter._latitude._radians);
 
+#ifdef C_CODE
   std::list<Geodetic2D>::const_iterator itA = route.begin();
   std::list<Geodetic2D>::const_iterator itB = route.begin()++;
 
@@ -871,6 +872,30 @@ bool PlanetRenderer::sectorCloseToRoute(const Sector& sector,
     itA = itB;
     itB++;
   }
+#endif
+
+#ifdef JAVA_CODE
+  java.util.Iterator<Geodetic2D> iterator = route.iterator();
+
+	Geodetic2D geoA = null;
+	Geodetic2D geoB = iterator.next();
+
+  while (iterator.hasNext())
+  {
+    geoA = geoB;
+    geoB = iterator.next();
+
+    final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
+    final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
+
+    double dist = center.distanceToSegment(A, B);
+
+    if (dist <= angularDistanceFromCenterInRadians)
+    {
+      return true;
+    }
+  }
+#endif
 
   return false;
 }
@@ -918,7 +943,7 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
       if (tile->_level < maxLOD){
         std::vector<Tile*>* newTiles = tile->getSubTiles(_layerTilesRenderParameters->_mercator);
         for (int i = 0; i < newTiles->size(); i++) {
-          _tiles.push_back((*newTiles)[i]);
+          _tiles.push_back(newTiles->at(i));
         }
       }
 
