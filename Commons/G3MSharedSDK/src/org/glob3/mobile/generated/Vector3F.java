@@ -7,18 +7,20 @@ package org.glob3.mobile.generated;
 //
 //
 
+//
+//  Vector3F.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 2/9/13.
+//
+//
 
 
 
+//class Vector3D;
 
 public class Vector3F
 {
-<<<<<<< HEAD
-   public Vector3D asVector3D()
-   {
-     return new Vector3D(_x, _y, _z);
-   }
-=======
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector3F operator =(Vector3F that);
@@ -83,6 +85,11 @@ public class Vector3F
     return new Vector3F(_y * that._z - _z * that._y, _z * that._x - _x * that._z, _x * that._y - _y * that._x);
   }
 
+  public final Vector3D asVector3D()
+  {
+    return new Vector3D(_x, _y, _z);
+  }
+
   public final boolean isZero()
   {
     return ((_x == 0) && (_y == 0) && (_z == 0));
@@ -93,5 +100,4 @@ public class Vector3F
     return ((_x != _x) || (_y != _y) || (_z != _z));
   }
 
->>>>>>> purgatory
 }

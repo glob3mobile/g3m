@@ -343,6 +343,10 @@ public class MarksRenderer extends LeafRenderer
     return true;
   }
 
+  public final void modifiyGLState(GLState state)
+  {
+
+  }
   public final void zRender(G3MRenderContext rc, GLState glState)
   {
   }

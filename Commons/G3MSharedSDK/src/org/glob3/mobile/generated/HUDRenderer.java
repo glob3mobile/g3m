@@ -185,6 +185,10 @@ public class HUDRenderer extends LeafRenderer
     }
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
   public final void render(G3MRenderContext rc, GLState glState)
   {
     if (_widgetsSize == 0)
@@ -203,10 +207,6 @@ public class HUDRenderer extends LeafRenderer
     }
   
     nativeGL.depthMask(true);
-  }
-
-  public final void zRender(G3MRenderContext rc, GLState glState)
-  {
   }
 
 }

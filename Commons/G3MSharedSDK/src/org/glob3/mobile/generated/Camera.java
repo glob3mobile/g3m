@@ -131,14 +131,10 @@ public class Camera
     _dirtyFlags.setAll(true);
   }
 
-<<<<<<< HEAD
-//  void render(const G3MRenderContext* rc,
-//              const GLGlobalState& parentState) const;
-
   public final Vector3D pixel2Ray(Vector2I pixel)
   {
-    final int px = pixel._x;
-    final int py = _height - pixel._y;
+    final double px = pixel._x + 0.5;
+    final double py = _height - pixel._y - 0.5;
     final Vector3D pixel3D = new Vector3D(px, py, 0);
   
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
@@ -156,9 +152,6 @@ public class Camera
   //}
   
   public final Vector3D pixel2Ray(Vector3D pixel3D)
-=======
-  public final Vector3D pixel2Ray(Vector2I pixel)
->>>>>>> origin/purgatory
   {
   
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
@@ -513,7 +506,6 @@ public class Camera
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
-<<<<<<< HEAD
   public final void setGroundHeightFromCartesianPoint(Vector3D point)
   {
     _groundHeight = _planet.toGeodetic3D(point)._height;
@@ -522,7 +514,8 @@ public class Camera
   public final double getHeightFromGround()
   {
     return getGeodeticPosition()._height - _groundHeight;
-=======
+  }
+
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   public final void setFOV(Angle vertical, Angle horizontal)
   {
@@ -549,22 +542,12 @@ public class Camera
   }
   public final void setRoll(Angle angle)
   {
-<<<<<<< HEAD
-    final Angle delta = angle.sub(Angle.fromRadians(_rollInRadians));
-    if (delta._radians != 0)
-    {
-      _rollInRadians = angle._radians;
-      rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
-    }
->>>>>>> origin/purgatory
-=======
     //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
     final TaitBryanAngles angles = getHeadingPitchRoll();
   
     final CoordinateSystem localRS = getLocalCoordinateSystem();
     final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
     setCameraCoordinateSystem(cameraRS);
->>>>>>> purgatory
   }
 
   public final CoordinateSystem getLocalCoordinateSystem()

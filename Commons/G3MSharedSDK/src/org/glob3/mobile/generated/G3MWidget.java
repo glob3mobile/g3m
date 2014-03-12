@@ -177,17 +177,10 @@ public class G3MWidget
   
     _currentCamera.copyFromForcingMatrixCreation(_nextCamera);
   
-<<<<<<< HEAD
   
   
-    if (_mainRendererState != null)
-       _mainRendererState.dispose();
-    _mainRendererState = new RenderState((_initializationTaskReady && !_forceBusyRenderer) ? _mainRenderer.getRenderState(_renderContext) : RenderState.busy());
-    RenderState_Type renderStateType = _mainRendererState._type;
-=======
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
->>>>>>> origin/purgatory
   
     _renderContext.clearForNewFrame();
   
@@ -212,10 +205,6 @@ public class G3MWidget
         break;
     }
   
-<<<<<<< HEAD
-    //  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
-=======
->>>>>>> origin/purgatory
     if (selectedRenderer != _selectedRenderer)
     {
       if (_selectedRenderer != null)
@@ -722,6 +711,11 @@ public class G3MWidget
     }
   }
 
+  public final Vector3D getScenePositionForCentralPixel()
+  {
+    return getScenePositionForPixel(_width/2, _height/2);
+  }
+
   public final Vector3D getFirstValidScenePositionForCentralColumn()
   {
     int row = _height / 2;
@@ -756,7 +750,6 @@ public class G3MWidget
     }
     return Vector3D.nan();
   }
-
 
   private IStorage _storage;
   private IDownloader _downloader;
@@ -827,13 +820,9 @@ public class G3MWidget
 
   private boolean _forceBusyRenderer;
 
-<<<<<<< HEAD
   private int _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
 
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
-=======
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
->>>>>>> origin/purgatory
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
