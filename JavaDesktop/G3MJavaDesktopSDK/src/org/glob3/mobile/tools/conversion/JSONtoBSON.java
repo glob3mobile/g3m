@@ -32,8 +32,8 @@ public class JSONtoBSON {
       ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
 
 
-      final String pathFileJson = "/Users/mdelacalle/Downloads/Haiyan/buildings.json";
-      final String pathFileBson = "/Users/mdelacalle/Downloads/Haiyan/buildings.bson";
+      final String pathFileJson = "/Users/mdelacalle/Desktop/A380/A380.json";
+      final String pathFileBson = "/Users/mdelacalle/Documents/java_src/workspaces10122013/GalileoDemo/assets/A380.bson";
       final JSONBaseObject jbase = readJsonFile(new File(pathFileJson));
       writeBsonFile(jbase, new File(pathFileBson));
 
