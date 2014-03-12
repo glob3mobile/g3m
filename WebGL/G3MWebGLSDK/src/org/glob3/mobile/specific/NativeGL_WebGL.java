@@ -1,9 +1,8 @@
-
-
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUProgram;
 import org.glob3.mobile.generated.GPUUniform;
@@ -15,117 +14,148 @@ import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.Matrix44D;
 import org.glob3.mobile.generated.ShaderType;
+import org.glob3.mobile.generated.Vector2F;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
 
+public final class NativeGL_WebGL extends INativeGL {
+	/*
+	 * Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled
+	 * forces the browser to do expensive emulation work when running on desktop
+	 * OpenGL platforms, for example on Mac. It is preferable to always draw
+	 * with vertex attrib 0 array enabled, by using bindAttribLocation to bind
+	 * some always-used attribute to location 0.
+	 */
 
-public final class NativeGL_WebGL
-         extends
-            INativeGL {
-   /*      
-   Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled forces the browser to do expensive emulation
-   work when running on desktop OpenGL platforms, for example on Mac. It is preferable to always draw with vertex 
-   attrib 0 array enabled, by using bindAttribLocation to bind some always-used attribute to location 0.
-   */
+	private final JavaScriptObject _gl;
 
-   private final JavaScriptObject                      _gl;
+	private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
 
-   private final java.util.ArrayList<JavaScriptObject> _shaderList = new java.util.ArrayList<JavaScriptObject>();
+	public NativeGL_WebGL(final JavaScriptObject webGLContext) {
+		_gl = webGLContext;
+	}
 
+	/*
+	 * @Override public void useProgram(final IGLProgramId program) { final
+	 * JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
+	 * jsUseProgram(p); }
+	 */
 
-   public NativeGL_WebGL(final JavaScriptObject webGLContext) {
-      _gl = webGLContext;
-   }
+	// private native void jsUseProgram(JavaScriptObject program) /*-{
+	// this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(program);
+	// }-*/;
 
+	/*
+	 * @Override public int getAttribLocation(final IGLProgramId program, final
+	 * String name) { final JavaScriptObject p = ((GLProgramId_WebGL)
+	 * program).getProgram(); final int result = jsGetAttribLocation(p, name);
+	 * return result; }
+	 */
 
-   @Override
-   public native void uniform2f(final IGLUniformID loc,
-                                final float x,
-                                final float y) /*-{
+	// private native int jsGetAttribLocation(final JavaScriptObject program,
+	// final String name) /*-{
+	// return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+	// .getAttribLocation(program, name);
+	// }-*/;
+
+	/*
+	 * @Override public IGLUniformID getUniformLocation(final IGLProgramId
+	 * program, final String name) { final JavaScriptObject p =
+	 * ((GLProgramId_WebGL) program).getProgram(); final JavaScriptObject u =
+	 * jsGetUniformLocation(p, name); final IGLUniformID result = new
+	 * GLUniformID_WebGL(u); return result; }
+	 */
+
+	// private native JavaScriptObject jsGetUniformLocation(final
+	// JavaScriptObject program,
+	// final String name) /*-{
+	// return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+	// .getUniformLocation(program, name);
+	// }-*/;
+
+	@Override
+	public native void uniform2f(final IGLUniformID loc, final float x,
+			final float y) /*-{
 		var locId = loc.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform2f(locId, x, y);
-   }-*/;
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform2f(locId, x,
+				y);
+	}-*/;
 
-
-   @Override
-   public native void uniform1f(final IGLUniformID loc,
-                                final float x) /*-{
+	@Override
+	public native void uniform1f(final IGLUniformID loc, final float x) /*-{
 		var locId = loc.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform1f(locId, x);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void uniform1i(final IGLUniformID loc,
-                                final int v)/*-{
+	@Override
+	public native void uniform1i(final IGLUniformID loc, final int v)/*-{
 		var locId = loc.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform1i(locId, v);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void uniform4f(final IGLUniformID location,
-                                final float v0,
-                                final float v1,
-                                final float v2,
-                                final float v3) /*-{
+	@Override
+	public native void uniform4f(final IGLUniformID location, final float v0,
+			final float v1, final float v2, final float v3) /*-{
 		var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(locId, v0, v1, v2, v3);
-   }-*/;
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(locId,
+				v0, v1, v2, v3);
+	}-*/;
 
+	// @Override
+	// public native void uniformMatrix4fv(final IGLUniformID location,
+	// final boolean transpose,
+	// final IFloatBuffer buffer) /*-{
+	// var id =
+	// location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+	// var value =
+	// buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
+	// this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
+	// id, transpose, value);
+	// }-*/;
 
-   @Override
-   public native void uniformMatrix4fv(final IGLUniformID location,
-                                       final boolean transpose,
-                                       final Matrix44D matrix) /*-{
+	@Override
+	public native void uniformMatrix4fv(final IGLUniformID location,
+			final boolean transpose, final Matrix44D matrix) /*-{
 		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
 		var buffer = matrix.@org.glob3.mobile.generated.Matrix44D::getColumnMajorFloatBuffer()();
 		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(id, transpose, value);
-   }-*/;
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
+				id, transpose, value);
+	}-*/;
 
+	@Override
+	public native void clearColor(final float red, final float green,
+			final float blue, final float alpha) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.clearColor(red,
+				green, blue, alpha);
+	}-*/;
 
-   @Override
-   public native void clearColor(final float red,
-                                 final float green,
-                                 final float blue,
-                                 final float alpha) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.clearColor(red, green, blue, alpha);
-   }-*/;
-
-
-   @Override
-   public native void clear(final int buffers) /*-{
+	@Override
+	public native void clear(final int buffers) /*-{
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.clear(buffers);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void enable(final int feature) /*-{
+	@Override
+	public native void enable(final int feature) /*-{
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.enable(feature);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void disable(final int feature) /*-{
+	@Override
+	public native void disable(final int feature) /*-{
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.disable(feature);
-   }-*/;
+	}-*/;
 
+	@Override
+	public native void polygonOffset(final float factor, final float units) /*-{
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.polygonOffset(
+				factor, units);
+	}-*/;
 
-   @Override
-   public native void polygonOffset(final float factor,
-                                    final float units) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.polygonOffset(factor, units);
-   }-*/;
-
-
-   @Override
-   public native void vertexAttribPointer(final int index,
-                                          final int size,
-                                          final boolean normalized,
-                                          final int stride,
-                                          final IFloatBuffer buffer) /*-{
+	@Override
+	public native void vertexAttribPointer(final int index, final int size,
+			final boolean normalized, final int stride,
+			final IFloatBuffer buffer) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		//		// var webGLBuffer = gl.createBuffer();
@@ -138,13 +168,11 @@ public final class NativeGL_WebGL
 		var webGLBuffer = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::bindVBO(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
 
 		gl.vertexAttribPointer(index, size, gl.FLOAT, normalized, stride, 0);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void drawElements(final int mode,
-                                   final int count,
-                                   final IShortBuffer indices) /*-{
+	@Override
+	public native void drawElements(final int mode, final int count,
+			final IShortBuffer indices) /*-{
 		//debugger;
 
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
@@ -156,17 +184,15 @@ public final class NativeGL_WebGL
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
 		gl.drawElements(mode, count, gl.UNSIGNED_SHORT, 0);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void lineWidth(final float width) /*-{
+	@Override
+	public native void lineWidth(final float width) /*-{
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.lineWidth(width);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int getError() /*-{
+	@Override
+	public native int getError() /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var e = gl.getError();
 
@@ -195,8 +221,7 @@ public final class NativeGL_WebGL
 		}
 
 		return Number(e);
-   }-*/;
-
+	}-*/;
 
    @Override
    public native void blendFunc(final int sfactor,
@@ -204,21 +229,19 @@ public final class NativeGL_WebGL
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.blendFunc(sfactor, dfactor);
    }-*/;
 
-
-   @Override
-   public native void bindTexture(final int target,
-                                  final IGLTextureId texture) /*-{
+	@Override
+	public native void bindTexture(final int target, final IGLTextureId texture) /*-{
 		var id = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.bindTexture(target, id);
    }-*/;
 
 
-   @Override
-   public native boolean deleteTexture(final IGLTextureId texture) /*-{
+	@Override
+	public native boolean deleteTexture(final IGLTextureId texture) /*-{
 		var textureID = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteTexture(textureID);
 		return false;
-   }-*/;
+	}-*/;
 
 
    @Override
@@ -240,8 +263,8 @@ public final class NativeGL_WebGL
    }-*/;
 
 
-   @Override
-   public native ArrayList<IGLTextureId> genTextures(final int n) /*-{
+	@Override
+	public native ArrayList<IGLTextureId> genTextures(final int n) /*-{
 		var array = @java.util.ArrayList::new()();
 		for (i = 0; i < n; i++) {
 			var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.createTexture();
@@ -251,7 +274,7 @@ public final class NativeGL_WebGL
 		}
 
 		return array;
-   }-*/;
+	}-*/;
 
 
    @Override
@@ -262,16 +285,15 @@ public final class NativeGL_WebGL
    }-*/;
 
 
-   @Override
-   public native void texImage2D(final IImage image,
-                                 final int format) /*-{
+	@Override
+	public native void texImage2D(final IImage image, final int format) /*-{
 		var img = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var TEXTURE_2D = gl.TEXTURE_2D;
 		var UNSIGNED_BYTE = gl.UNSIGNED_BYTE;
 
 		gl.texImage2D(TEXTURE_2D, 0, format, format, UNSIGNED_BYTE, img);
-   }-*/;
+	}-*/;
 
 
    @Override
@@ -287,252 +309,216 @@ public final class NativeGL_WebGL
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.drawArrays(mode, first, count);
    }-*/;
 
-
-   @Override
-   public native void cullFace(final int c) /*-{
+	@Override
+	public native void cullFace(final int c) /*-{
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.cullFace(c);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void getIntegerv(final int v,
-                                  final int[] i) /*-{
+	@Override
+	public native void getIntegerv(final int v, final int[] i) /*-{
 		// TODO Warning: getIntegerv is not implemented in WebGL.
 		var result = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.getParameter(v);
 
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::convertJsArrayIngeterToJavaArrayInt(Lcom/google/gwt/core/client/JsArrayInteger;[I)(result, i);
-   }-*/;
+	}-*/;
 
+	private void convertJsArrayIngeterToJavaArrayInt(
+			final JsArrayInteger jsArray, final int[] javaArray) {
+		for (int i = 0; i < jsArray.length(); i++) {
+			javaArray[i] = jsArray.get(i);
+		}
+	}
 
-   private void convertJsArrayIngeterToJavaArrayInt(final JsArrayInteger jsArray,
-                                                    final int[] javaArray) {
-      for (int i = 0; i < jsArray.length(); i++) {
-         javaArray[i] = jsArray.get(i);
-      }
-   }
-
-
-   @Override
-   public native int CullFace_Front() /*-{
+	@Override
+	public native int CullFace_Front() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FRONT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int CullFace_Back() /*-{
+	@Override
+	public native int CullFace_Back() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.BACK;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int CullFace_FrontAndBack() /*-{
+	@Override
+	public native int CullFace_FrontAndBack() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FRONT_AND_BACK;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int BufferType_ColorBuffer() /*-{
+	@Override
+	public native int BufferType_ColorBuffer() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.COLOR_BUFFER_BIT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int BufferType_DepthBuffer() /*-{
+	@Override
+	public native int BufferType_DepthBuffer() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.DEPTH_BUFFER_BIT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Feature_PolygonOffsetFill() /*-{
+	@Override
+	public native int Feature_PolygonOffsetFill() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.POLYGON_OFFSET_FILL;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Feature_DepthTest() /*-{
+	@Override
+	public native int Feature_DepthTest() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.DEPTH_TEST;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Feature_Blend() /*-{
+	@Override
+	public native int Feature_Blend() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.BLEND;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Feature_CullFace() /*-{
+	@Override
+	public native int Feature_CullFace() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.CULL_FACE;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Type_Float() /*-{
+	@Override
+	public native int Type_Float() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Type_UnsignedByte() /*-{
+	@Override
+	public native int Type_UnsignedByte() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.UNSIGNED_BYTE;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Type_UnsignedInt() /*-{
+	@Override
+	public native int Type_UnsignedInt() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.UNSIGNED_INT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Type_Int() /*-{
+	@Override
+	public native int Type_Int() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.INT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Primitive_Triangles() /*-{
+	@Override
+	public native int Primitive_Triangles() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TRIANGLES;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Primitive_TriangleStrip() /*-{
+	@Override
+	public native int Primitive_TriangleStrip() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TRIANGLE_STRIP;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Primitive_TriangleFan() /*-{
+	@Override
+	public native int Primitive_TriangleFan() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TRIANGLE_FAN;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Primitive_Lines() /*-{
+	@Override
+	public native int Primitive_Lines() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINES;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Primitive_LineStrip() /*-{
+	@Override
+	public native int Primitive_LineStrip() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINE_STRIP;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Primitive_LineLoop() /*-{
+	@Override
+	public native int Primitive_LineLoop() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINE_LOOP;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Primitive_Points() /*-{
+	@Override
+	public native int Primitive_Points() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.POINTS;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int BlendFactor_SrcAlpha() /*-{
+	@Override
+	public native int BlendFactor_SrcAlpha() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.SRC_ALPHA;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int BlendFactor_OneMinusSrcAlpha() /*-{
+	@Override
+	public native int BlendFactor_OneMinusSrcAlpha() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ONE_MINUS_SRC_ALPHA;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureType_Texture2D() /*-{
+	@Override
+	public native int TextureType_Texture2D() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_2D;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameter_MinFilter() /*-{
+	@Override
+	public native int TextureParameter_MinFilter() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_MIN_FILTER;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameter_MagFilter() /*-{
+	@Override
+	public native int TextureParameter_MagFilter() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_MAG_FILTER;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameter_WrapS() /*-{
+	@Override
+	public native int TextureParameter_WrapS() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_WRAP_S;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int TextureParameter_WrapT() /*-{
+	@Override
+	public native int TextureParameter_WrapT() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_WRAP_T;
-   }-*/;
+	}-*/;
 
+	@Override
+	public native int TextureParameterValue_Linear() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINEAR;
+	}-*/;
 
-   @Override
-   public native int TextureParameterValue_ClampToEdge() /*-{
+	@Override
+	public native int TextureParameterValue_ClampToEdge() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.CLAMP_TO_EDGE;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Alignment_Pack() /*-{
+	@Override
+	public native int Alignment_Pack() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.PACK_ALIGNMENT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Alignment_Unpack() /*-{
+	@Override
+	public native int Alignment_Unpack() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.UNPACK_ALIGNMENT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Format_RGBA() /*-{
+	@Override
+	public native int Format_RGBA() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.RGBA;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Variable_Viewport() /*-{
+	@Override
+	public native int Variable_Viewport() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.VIEWPORT;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Error_NoError() /*-{
+	@Override
+	public native int Error_NoError() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.NO_ERROR;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int createProgram() /*-{
+	@Override
+	public native int createProgram() /*-{
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.createProgram();
 		shaderList.@java.util.ArrayList::add(Ljava/lang/Object;)(jsoProgram);
 		var id = shaderList.@java.util.ArrayList::size()() - 1;
 
 		return id;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native boolean deleteProgram(final int program) /*-{
+	@Override
+	public native boolean deleteProgram(final int program) /*-{
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteProgram(jsoProgram);
    }-*/;
 
-
-   @Override
-   public native void attachShader(final int program,
-                                   final int shader) /*-{
+	@Override
+	public native void attachShader(final int program, final int shader) /*-{
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
@@ -541,8 +527,8 @@ public final class NativeGL_WebGL
    }-*/;
 
 
-   @Override
-   public native int createShader(final ShaderType type) /*-{
+	@Override
+	public native int createShader(final ShaderType type) /*-{
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderType;
@@ -563,12 +549,10 @@ public final class NativeGL_WebGL
 		var id = shaderList.@java.util.ArrayList::size()() - 1;
 
 		return id;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native boolean compileShader(final int shader,
-                                       final String source) /*-{
+	@Override
+	public native boolean compileShader(final int shader, final String source) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
@@ -577,11 +561,10 @@ public final class NativeGL_WebGL
 		gl.compileShader(jsoShader);
 
 		return gl.getShaderParameter(jsoShader, gl.COMPILE_STATUS);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native boolean deleteShader(final int shader) /*-{
+	@Override
+	public native boolean deleteShader(final int shader) /*-{
 		//TODO: IMPLEMENTATION FAILS
 		//debugger;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
@@ -589,11 +572,10 @@ public final class NativeGL_WebGL
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
 		return true;
 		//return gl.deleteShader(jsoShader);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void printShaderInfoLog(final int shader) /*-{
+	@Override
+	public native void printShaderInfoLog(final int shader) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
@@ -601,11 +583,10 @@ public final class NativeGL_WebGL
 		if (!gl.getShaderParameter(jsoShader, gl.COMPILE_STATUS)) {
 			$wnd.alert("Error compiling shaders: " + gl.getShaderInfoLog(jsoShader));
 		}
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native boolean linkProgram(final int program) /*-{
+	@Override
+	public native boolean linkProgram(final int program) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
@@ -613,11 +594,10 @@ public final class NativeGL_WebGL
 		gl.linkProgram(jsoProgram);
 
 		return gl.getProgramParameter(jsoProgram, gl.LINK_STATUS);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void printProgramInfoLog(final int program) /*-{
+	@Override
+	public native void printProgramInfoLog(final int program) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
@@ -625,82 +605,69 @@ public final class NativeGL_WebGL
 		if (!gl.getProgramParameter(jsoProgram, gl.LINK_STATUS)) {
 			$wnd.alert("Error linking program: " + gl.getProgramInfoLog(jsoProgram));
 		}
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int BlendFactor_One() /*-{
+	@Override
+	public native int BlendFactor_One() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ONE;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int BlendFactor_Zero() /*-{
+	@Override
+	public native int BlendFactor_Zero() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ZERO;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void useProgram(GPUProgram program) /*-{
+	@Override
+	public native void useProgram(GPUProgram program) /*-{
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.useProgram(jsoProgram);
    }-*/;
 
-
-   @Override
-   public native int Type_Vec2Float() /*-{
+	@Override
+	public native int Type_Vec2Float() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC2;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Type_Vec4Float() /*-{
+	@Override
+	public native int Type_Vec4Float() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC4;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Type_Bool() /*-{
+	@Override
+	public native int Type_Bool() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.BOOL;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Type_Matrix4Float() /*-{
+	@Override
+	public native int Type_Matrix4Float() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_MAT4;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Variable_ActiveAttributes() /*-{
+	@Override
+	public native int Variable_ActiveAttributes() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ACTIVE_ATTRIBUTES;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int Variable_ActiveUniforms() /*-{
+	@Override
+	public native int Variable_ActiveUniforms() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.ACTIVE_UNIFORMS;
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void bindAttribLocation(GPUProgram program,
-                                         int loc,
-                                         String name) /*-{
+	@Override
+	public native void bindAttribLocation(GPUProgram program, int loc,
+			String name) /*-{
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		gl.bindAttribLocation(jsoProgram, loc, name);
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native int getProgramiv(GPUProgram program,
-                                  int param) /*-{
+	@Override
+	public native int getProgramiv(GPUProgram program, int param) /*-{
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
@@ -709,12 +676,11 @@ public final class NativeGL_WebGL
 		//Return the value for the passed pname given the passed program. The type returned is the natural type for the requested pname
 		return gl.getProgramParameter(jsoProgram, param);
 
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native GPUUniform getActiveUniform(final GPUProgram program,
-                                             final int i) /*-{
+	@Override
+	public native GPUUniform getActiveUniform(final GPUProgram program,
+			final int i) /*-{
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
@@ -745,12 +711,11 @@ public final class NativeGL_WebGL
 			return null;
 			break;
 		}
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native GPUAttribute getActiveAttribute(final GPUProgram program,
-                                                 final int i) /*-{
+	@Override
+	public native GPUAttribute getActiveAttribute(final GPUProgram program,
+			final int i) /*-{
 		var progInt = program.@org.glob3.mobile.generated.GPUProgram::getProgramID()();
 		var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
 		var jsoProgram = shaderList.@java.util.ArrayList::get(I)(progInt);
@@ -771,29 +736,83 @@ public final class NativeGL_WebGL
 			return null;
 			break;
 		}
-   }-*/;
+	}-*/;
 
-
-   @Override
-   public native void uniform3f(IGLUniformID location,
-                                float x,
-                                float y,
-                                float z) /*-{
-		var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform3f(locId, x, y, z);
-   }-*/;
-
-
-   @Override
-   public native int Type_Vec3Float() /*-{
+	@Override
+	public native int Type_Vec3Float() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.FLOAT_VEC3;
-   }-*/;
+	}-*/;
 
+	@Override
+	public native int Format_RGB() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.RGB;
+	}-*/;
 
-   @Override
-   public native void depthMask(final boolean depthMask) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.depthMask(depthMask);
-   }-*/;
+	@Override
+	public native Color read1PixelAsRGBAColor(int x, int y) /*-{
+
+		//CHECK : var ctx = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		var pixels = new Uint8Array(4);
+		gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
+		var r = pixels[0];
+		var g = pixels[1];
+		var b = pixels[2];
+		var a = pixels[3];
+
+		return @org.glob3.mobile.generated.Color::fromRGBA(FFFF)(r,g,b,a);
+	}-*/;
+
+	@Override
+	public native double read1PixelAsDouble(int x, int y) /*-{
+		//CHECK : var ctx = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		var pixels = new Uint8Array(4);
+		gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
+		var r = pixels[0];
+		var g = pixels[1];
+		var b = pixels[2];
+		var a = pixels[3];
+
+		if (a != 0) { //ZRENDER Shader sets all pixels with 0 alpha
+			return Number.NaN;
+		}
+
+		var winZ = r * 65536.0;
+		winZ += g * 256.0;
+		winZ += b;
+		winZ /= 16777215.0;
+
+		return winZ;
+	}-*/;
+
+	@Override
+	public native void depthMask(boolean v) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.depthMask(v);
+	}-*/;
+
+	@Override
+	public native Vector2F getDepthRange() /*-{
+		debugger;
+
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+
+		var range = gl.getParameter(gl.DEPTH_RANGE);
+		var near = range[0];
+		var far = range[1];
+		return @org.glob3.mobile.generated.Vector2F::new(FF)(near, far);
+	}-*/;
+
+	@Override
+	public native void uniform3f(IGLUniformID location, float x, float y,
+			float z) /*-{
+		var locId = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform3f(locId, x,
+				y, z);
+	}-*/;
 
 
    @Override
@@ -837,6 +856,5 @@ public final class NativeGL_WebGL
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.activeTexture(gl.TEXTURE0 + i);
    }-*/;
-
 
 }

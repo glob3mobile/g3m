@@ -318,9 +318,76 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
+<<<<<<< HEAD
   G3MRenderContext _renderContext;
 
+=======
+<<<<<<< HEAD
+//  std::list<Tile*> _tilesRenderedInLastFrame;
+
+  private long _renderedTilesListFrame;
+  private java.util.LinkedList<Tile> _renderedTiles = new java.util.LinkedList<Tile>();
+  private java.util.LinkedList<Tile> getRenderedTilesList(G3MRenderContext rc)
+  {
+  
+    long frameCounter = rc.frameCounter();
+    if (frameCounter != _renderedTilesListFrame)
+    {
+      _renderedTilesListFrame = frameCounter;
+  
+      final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
+      if (layerTilesRenderParameters == null)
+      {
+        return null;
+      }
+  
+      final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
+      final float deviceQualityFactor = deviceInfo.getQualityFactor();
+  
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+  
+      _lastCamera = rc.getCurrentCamera();
+  
+      final Planet planet = rc.getPlanet();
+      final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
+      double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
+      final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+  
+      _renderedTiles.clear();
+  
+      //Texture Size for every tile
+      int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
+      int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
+  
+      final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+      final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+  
+      texWidth *= correctionFactor;
+      texHeight *= correctionFactor;
+  
+      final double texWidthSquared = texWidth * texWidth;
+      final double texHeightSquared = texHeight * texHeight;
+  
+      final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
+  
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        _firstLevelTiles.get(i).actualizeQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS); // if first render, force full render
+      }
+    }
+    else
+    {
+      ILogger.instance().logInfo("Reusing Render Tiles List");
+    }
+  
+    return _renderedTiles;
+  }
+
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes)
+=======
+>>>>>>> zrender-touchhandlers
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions)
+>>>>>>> purgatory
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -344,7 +411,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
      _layerTilesRenderParameters = null;
      _layerTilesRenderParametersDirty = true;
+<<<<<<< HEAD
      _renderContext = null;
+=======
+     _renderedTilesListFrame = -1;
+>>>>>>> zrender-touchhandlers
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
     _layerSet.setChangeListener(this);
@@ -433,56 +504,34 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     _statistics.clear();
   
-    final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-  //  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
-    final float deviceQualityFactor = deviceInfo.getQualityFactor();
-  
-    final int firstLevelTilesCount = _firstLevelTiles.size();
-  
-    final Planet planet = rc.getPlanet();
-    final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
-    double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
-    final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
-  
-    //Texture Size for every tile
-    int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
-    int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
-  
-    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
-  
-    texWidth *= correctionFactor;
-    texHeight *= correctionFactor;
-  
-    final double texWidthSquared = texWidth * texWidth;
-    final double texHeightSquared = texHeight * texHeight;
-  
-    final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
-  
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
       // loaded as they will be used as last-chance fallback texture for any tile.
       _firstRender = false;
   
+      final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
+<<<<<<< HEAD
+        tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics);
+=======
         tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions); // if first render, force full render
+>>>>>>> purgatory
       }
     }
     else
     {
-      java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
-      for (int i = 0; i < firstLevelTilesCount; i++)
-      {
-        toVisit.addLast(_firstLevelTiles.get(i));
-      }
   
-      while (toVisit.size() > 0)
-      {
-        java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
+      java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
   
+<<<<<<< HEAD
+      for (java.util.Iterator<Tile> iter = renderedTiles.iterator(); iter.hasNext();)
+      {
+        Tile tile = iter.next();
+        tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics);
+=======
         for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
         {
           Tile tile = iter.next();
@@ -491,6 +540,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         }
   
         toVisit = toVisitInNextIteration;
+>>>>>>> purgatory
       }
     }
   
@@ -533,19 +583,27 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     if (touchEvent.getType() == TouchEventType.LongPress)
     {
+  
       final Vector2I pixel = touchEvent.getTouch(0).getPos();
-      final Vector3D ray = _lastCamera.pixel2Ray(pixel);
-      final Vector3D origin = _lastCamera.getCartesianPosition();
+  
+      Vector3D positionCartesian = null;
   
       final Planet planet = ec.getPlanet();
   
-      final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
-      if (positionCartesian.isNan())
+  //    if (ec->getWidget() != NULL){
+        positionCartesian = new Vector3D(ec.getWidget().getScenePositionForPixel(pixel._x, pixel._y));
+  //    } else{
+  //      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+  //      const Vector3D origin = _lastCamera->getCartesianPosition();
+  //      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
+  //    }
+  
+      if (positionCartesian == null || positionCartesian.isNan())
       {
         return false;
       }
   
-      final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
+      Geodetic3D position = planet.toGeodetic3D(positionCartesian);
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)
@@ -872,6 +930,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   }
 
+<<<<<<< HEAD
   public final java.util.LinkedList<String> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD)
   {
   
@@ -886,6 +945,33 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     if (visitor != null)
        visitor.dispose();
     return urls;
+=======
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  
+    final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
+    if (layerTilesRenderParameters == null)
+    {
+      return;
+    }
+  
+    GLState zRenderGLState = new GLState();
+    zRenderGLState.addGLFeature(new ModelViewGLFeature(rc.getCurrentCamera()), false);
+    zRenderGLState.setParent(glState);
+  
+    java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
+  
+    for (java.util.Iterator<Tile> iter = renderedTiles.iterator(); iter.hasNext();)
+    {
+      Tile tile = iter.next();
+  
+      tile.zRender(rc, zRenderGLState);
+    }
+  
+  
+  
+    zRenderGLState._release();
+>>>>>>> zrender-touchhandlers
   }
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)

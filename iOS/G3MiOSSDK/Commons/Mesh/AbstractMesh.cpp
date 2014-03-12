@@ -189,7 +189,7 @@ void AbstractMesh::createGLState() {
 void AbstractMesh::rawRender(const G3MRenderContext* rc,
                              const GLState* parentGLState) const{
   _glState->setParent(parentGLState);
-  rawRender(rc);
+  rawRender(rc, _glState, REGULAR_RENDER);
 
   //RENDERING NORMALS
   if (_normals != NULL) {
@@ -207,6 +207,32 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
       }
     }
   }
+
+}
+
+void AbstractMesh::zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const{
+
+  GLState* zRenderGLState = new GLState();
+
+  zRenderGLState->addGLFeature(new GeometryGLFeature(_vertices,    //The attribute is a float vector of 4 elements
+                                                     3,            //Our buffer contains elements of 3
+                                                     0,            //Index 0
+                                                     false,        //Not normalized
+                                                     0,            //Stride 0
+                                                     true,         //Depth test
+                                                     false, 0,
+                                                     false, (float)0.0, (float)0.0,
+                                                     _lineWidth,
+                                                     true, _pointSize), false);
+
+  if (_translationMatrix != NULL) {
+    zRenderGLState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
+  }
+
+  zRenderGLState->setParent(parentGLState);
+  rawRender(rc, zRenderGLState, Z_BUFFER_RENDER);
+  
+  zRenderGLState->_release();
 }
 
 
@@ -258,7 +284,6 @@ Mesh* AbstractMesh::createNormalsMesh() const{
   compositeMesh->addMesh(normalsMesh);
 
   return compositeMesh;
-  
 }
 
 

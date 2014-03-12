@@ -69,35 +69,6 @@ public class MapBooBuilder_WebGL
    @Override
    protected GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory gpuProgramFactory = new BasicShadersGL2();
-      /*
-            gpuProgramFactory.add(new GPUProgramSources("Billboard", Shaders_WebGL._billboardVertexShader,
-                     Shaders_WebGL._billboardFragmentShader));
-
-            gpuProgramFactory.add(new GPUProgramSources("Default", Shaders_WebGL._defaultVertexShader,
-                     Shaders_WebGL._defaultFragmentShader));
-
-            gpuProgramFactory.add(new GPUProgramSources("ColorMesh", Shaders_WebGL._colorMeshVertexShader,
-                     Shaders_WebGL._colorMeshFragmentShader));
-
-            gpuProgramFactory.add(new GPUProgramSources("TexturedMesh", Shaders_WebGL._texturedMeshVertexShader,
-                     Shaders_WebGL._texturedMeshFragmentShader));
-
-            gpuProgramFactory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh",
-                     Shaders_WebGL._transformedTexCoortexturedMeshVertexShader,
-                     Shaders_WebGL._transformedTexCoortexturedMeshFragmentShader));
-
-            gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh", Shaders_WebGL._flatColorMeshVertexShader,
-                     Shaders_WebGL._flatColorMeshFragmentShader));
-
-            gpuProgramFactory.add(new GPUProgramSources("NoColorMesh", Shaders_WebGL._noColorMeshVertexShader,
-                     Shaders_WebGL._noColorMeshFragmentShader));
-
-            gpuProgramFactory.add(new GPUProgramSources("TexturedMesh+DirectionLight",
-                     Shaders_WebGL._TexturedMesh_DirectionLightVertexShader, Shaders_WebGL._TexturedMesh_DirectionLightFragmentShader));
-
-            gpuProgramFactory.add(new GPUProgramSources("FlatColorMesh+DirectionLight",
-                     Shaders_WebGL._FlatColorMesh_DirectionLightVertexShader, Shaders_WebGL._FlatColorMesh_DirectionLightFragmentShader));
-      */
       return new GPUProgramManager(gpuProgramFactory);
    }
 

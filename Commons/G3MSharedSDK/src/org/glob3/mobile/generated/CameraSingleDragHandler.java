@@ -99,7 +99,18 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
     // dragging
     final Vector2I pixel = touchEvent.getTouch(0).getPos();
-    eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), _camera0.pixel2Ray(pixel));
+  
+    Vector3D touchedPosition = eventContext.getWidget().getScenePositionForPixel(pixel._x, pixel._y);
+  
+    //Geodetic3D geoPos = eventContext->getPlanet()->toGeodetic3D(v);
+    //printf("ZBUFFER EN %f, %f, %f\n ", geoPos._latitude._degrees, geoPos._longitude._degrees, geoPos._height);
+  /*
+    eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
+                                               _camera0.pixel2Ray(pixel));*/
+  
+    eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), touchedPosition);
+  
+  
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {

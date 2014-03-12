@@ -18,7 +18,7 @@ private:
   bool                _ownsIndices;
   IShortBuffer*       _indices;
 protected:
-  void rawRender(const G3MRenderContext* rc) const;
+  void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const;
 
 public:
   IndexedGeometryMesh(const int       primitive,
@@ -44,6 +44,7 @@ public:
                       bool            depthTest = true);
 
   ~IndexedGeometryMesh();
+
 
 
 };

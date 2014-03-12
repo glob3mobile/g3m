@@ -52,7 +52,7 @@ private:
   Mesh* _debugMesh;
   Mesh* _texturizedMesh;
   TileElevationDataRequest* _elevationDataRequest;
-  
+
   Mesh* _flatColorMesh;
 
   bool _textureSolved;
@@ -114,18 +114,18 @@ private:
                                   double texHeightSquared,
                                   double nowInMS);
 
-  inline void rawRender(const G3MRenderContext* rc,
-                        const GLState* glState,
-                        TileTexturizer* texturizer,
-                        ElevationDataProvider* elevationDataProvider,
-                        const TileTessellator* tessellator,
-                        TileRasterizer* tileRasterizer,
-                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                        const LayerSet* layerSet,
-                        const TilesRenderParameters* tilesRenderParameters,
-                        bool isForcedFullRender,
-                        long long texturePriority,
-                        bool logTilesPetitions);
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* glState,
+                 TileTexturizer* texturizer,
+                 ElevationDataProvider* elevationDataProvider,
+                 const TileTessellator* tessellator,
+                 TileRasterizer* tileRasterizer,
+                 const LayerTilesRenderParameters* layerTilesRenderParameters,
+                 const LayerSet* layerSet,
+                 const TilesRenderParameters* tilesRenderParameters,
+                 bool isForcedFullRender,
+                 long long texturePriority,
+                 bool logTilesPetitions);
 
   void debugRender(const G3MRenderContext* rc,
                    const GLState* glState,
@@ -186,25 +186,9 @@ public:
        const PlanetRenderer* planetRenderer);
 
   ~Tile();
-  
+
   //Change to public for TileCache
   std::vector<Tile*>* getSubTiles(const bool mercator);
-
-//  const Sector getSector() const {
-//    return _sector;
-//  }
-//
-//  int getLevel() const {
-//    return _level;
-//  }
-//
-//  int getRow() const {
-//    return _row;
-//  }
-//
-//  int getColumn() const {
-//    return _column;
-//  }
 
   Mesh* getTexturizedMesh() const {
     return _texturizedMesh;
@@ -227,7 +211,8 @@ public:
                                float verticalExaggeration,
                                bool logTilesPetitions);
 
-  void render(const G3MRenderContext* rc,
+  //RETURN ISRAWRENDER
+  bool render(const G3MRenderContext* rc,
               const GLState& parentState,
               std::list<Tile*>* toVisitInNextIteration,
               const Planet* planet,
@@ -252,6 +237,47 @@ public:
               double nowInMS,
               const bool renderTileMeshes,
               bool logTilesPetitions);
+
+  void actualizeQuadTree(const G3MRenderContext* rc,
+                         std::list<Tile*>& renderedTiles,
+                         const Planet* planet,
+                         const Vector3D& cameraNormalizedPosition,
+                         double cameraAngle2HorizonInRadians,
+                         const Frustum* cameraFrustumInModelCoordinates,
+                         TilesStatistics* tilesStatistics,
+                         const float verticalExaggeration,
+                         const LayerTilesRenderParameters* layerTilesRenderParameters,
+                         TileTexturizer* texturizer,
+                         const TilesRenderParameters* tilesRenderParameters,
+                         ITimer* lastSplitTimer,
+                         ElevationDataProvider* elevationDataProvider,
+                         const TileTessellator* tessellator,
+                         TileRasterizer* tileRasterizer,
+                         const LayerSet* layerSet,
+                         const Sector* renderedSector,
+                         bool isForcedFullRender,
+                         long long texturePriority,
+                         double texWidthSquared,
+                         double texHeightSquared,
+                         double nowInMS);
+
+
+  void performRawRender(const G3MRenderContext* rc,
+                        const GLState* glState,
+                        TileTexturizer* texturizer,
+                        ElevationDataProvider* elevationDataProvider,
+                        const TileTessellator* tessellator,
+                        TileRasterizer* tileRasterizer,
+                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                        const LayerSet* layerSet,
+                        const TilesRenderParameters* tilesRenderParameters,
+                        bool isForcedFullRender,
+                        long long texturePriority,
+                        TilesStatistics* tilesStatistics,
+                        bool logTilesPetitions);
+
+  void zRender(const G3MRenderContext* rc,
+               const GLState& parentState);
 
   const TileKey getKey() const;
 
@@ -309,32 +335,31 @@ public:
   inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
                                             const Angle& splitLongitude,
                                             bool setParent);
-  
+
   bool isElevationDataSolved() const {
     return (_elevationDataLevel == _level);
   }
-  
+
   ElevationData* getElevationData() const {
     return _elevationData;
   }
-  
+
   void setElevationData(ElevationData* ed, int level);
-  
+
   void getElevationDataFromAncestor(const Vector2I& extent);
-  
+
   void initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                const TileTessellator* tesselator,
                                const Vector2I& tileMeshResolution,
                                const Planet* planet,
                                bool renderDebug);
-  
+
   void ancestorChangedElevationData(Tile* ancestor);
   
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
-  
+
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
-
 };
 
 #endif

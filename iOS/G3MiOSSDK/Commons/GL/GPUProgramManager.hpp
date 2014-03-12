@@ -35,7 +35,7 @@ public:
 
   ~GPUProgramManager();
 
-  GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode);
+  GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode, RenderType renderType);
 
   void removeUnused();
 };

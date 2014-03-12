@@ -33,6 +33,12 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
     currentState._depthTest = _depthTest;
   }
 
+  // Depth Mask
+  if (_depthMask != currentState._depthMask) {
+    nativeGL->depthMask(_depthMask);
+    currentState._depthTest = _depthTest;
+  }
+
   // Blending
   if (_blend != currentState._blend) {
     if (_blend) {

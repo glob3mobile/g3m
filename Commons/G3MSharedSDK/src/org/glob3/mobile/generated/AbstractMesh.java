@@ -103,8 +103,9 @@ public abstract class AbstractMesh extends Mesh
     createGLState();
   }
 
-  protected abstract void rawRender(G3MRenderContext rc);
+//  virtual void rawRender(const G3MRenderContext* rc) const = 0;
 //  virtual void rawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
+  protected abstract void rawRender(G3MRenderContext rc, GLState glState, RenderType renderType);
 
   protected GLState _glState;
 
@@ -180,7 +181,6 @@ public abstract class AbstractMesh extends Mesh
     compositeMesh.addMesh(normalsMesh);
   
     return compositeMesh;
-  
   }
 
   public void dispose()
@@ -243,7 +243,7 @@ public abstract class AbstractMesh extends Mesh
   public final void rawRender(G3MRenderContext rc, GLState parentGLState)
   {
     _glState.setParent(parentGLState);
-    rawRender(rc);
+    rawRender(rc, _glState, RenderType.REGULAR_RENDER);
   
     //RENDERING NORMALS
     if (_normals != null)
@@ -269,6 +269,25 @@ public abstract class AbstractMesh extends Mesh
         }
       }
     }
+  
+  }
+
+  public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
+  {
+  
+    GLState zRenderGLState = new GLState();
+  
+    zRenderGLState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, true, false, 0, false, (float)0.0, (float)0.0, _lineWidth, true, _pointSize), false); //Depth test - Stride 0 - Not normalized - Index 0 - Our buffer contains elements of 3 - The attribute is a float vector of 4 elements
+  
+    if (_translationMatrix != null)
+    {
+      zRenderGLState.addGLFeature(new ModelTransformGLFeature(_translationMatrix.asMatrix44D()), false);
+    }
+  
+    zRenderGLState.setParent(parentGLState);
+    rawRender(rc, zRenderGLState, RenderType.Z_BUFFER_RENDER);
+  
+    zRenderGLState._release();
   }
 
   public final void showNormals(boolean v)

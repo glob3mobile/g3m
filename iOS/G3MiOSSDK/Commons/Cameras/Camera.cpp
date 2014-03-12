@@ -71,6 +71,7 @@ _width(0),
 _height(0),
 _planet(NULL),
 _position(0, 0, 0),
+_groundHeight(0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _dirtyFlags(),
@@ -144,9 +145,26 @@ void Camera::setGeodeticPosition(const Geodetic3D& g3d) {
   setPitch(pitch);
 }
 
+
+//void Camera::render(const G3MRenderContext* rc,
+//                    const GLGlobalState& parentState) const {
+//  //TODO: NO LONGER NEEDED!!!
+//}
+
+const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
+
+  const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
+                                                      0, 0, _width, _height);
+  if (obj.isNan()) {
+    return obj;
+  }
+
+  return obj.sub(_position.asVector3D());
+}
+
 const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
-  const int px = pixel._x;
-  const int py = _height - pixel._y;
+  const double px = pixel._x + 0.5;
+  const double py = _height - pixel._y - 0.5;
   const Vector3D pixel3D(px, py, 0);
 
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
@@ -166,12 +184,24 @@ const Vector2F Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
+  Vector3D direction = point.sub(getCartesianPosition());
+  double angle = direction.angleBetween(getViewDirection())._degrees;
+  if (angle > 90){    //Projecting point behind the camera
+    return Vector2F((float)-p._x, (float)-(_height - p._y));
+  }
+
   return Vector2F((float) p._x, (float) (_height - p._y) );
 }
 
 const Vector2F Camera::point2Pixel(const Vector3F& point) const {
   const Vector2F p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
+
+  Vector3D direction = point.asVector3D().sub(getCartesianPosition());
+  double angle = direction.angleBetween(getViewDirection())._degrees;
+  if (angle > 90){    //Projecting point behind the camera
+    return Vector2F((float)-p._x, (float)-(_height - p._y));
+  }
 
   return Vector2F(p._x, (_height - p._y) );
 }
@@ -270,9 +300,12 @@ void Camera::setPointOfView(const Geodetic3D& center,
 }
 
 FrustumData Camera::calculateFrustumData() const {
-  const double height = getGeodeticPosition()._height;
-  double zNear = height * 0.1;
+  const double heightFromGround = getHeightFromGround();
+  
+  double zNear = heightFromGround * 0.1;
 
+  //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
+  
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
 
   const double goalRatio = 1000;

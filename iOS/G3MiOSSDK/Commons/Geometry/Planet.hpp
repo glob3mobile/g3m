@@ -84,23 +84,25 @@ public:
   
   virtual bool isFlat() const = 0;
 
-  virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;
+  //virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;
+  virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const = 0;
   
   virtual MutableMatrix44D singleDrag(const Vector3D& finalRay) const = 0;
-    
+  
   virtual Effect* createEffectFromLastSingleDrag() const = 0;
 
   virtual void beginDoubleDrag(const Vector3D& origin,
                                const Vector3D& centerRay,
-                               const Vector3D& initialRay0,
-                               const Vector3D& initialRay1) const = 0;
+                               const Vector3D& centerPosition,
+                               const Vector3D& touchedPosition0,
+                               const Vector3D& touchedPosition1) const = 0;
   
   virtual MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                                       const Vector3D& finalRay1) const = 0;
   
   virtual Effect* createDoubleTapEffect(const Vector3D& origin,
                                         const Vector3D& centerRay,
-                                        const Vector3D& tapRay) const = 0;
+                                        const Vector3D& touchedPosition) const = 0;
   
   virtual double distanceToHorizon(const Vector3D& position) const = 0;
   

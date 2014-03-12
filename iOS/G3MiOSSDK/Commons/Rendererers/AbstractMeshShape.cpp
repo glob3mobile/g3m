@@ -52,3 +52,10 @@ bool AbstractMeshShape::isTransparent(const G3MRenderContext* rc) {
   }
   return mesh->isTransparent(rc);
 }
+
+void AbstractMeshShape::zRawRender(const G3MRenderContext* rc, GLState* parentGLState){
+  Mesh* mesh = getMesh(rc);
+  if (mesh != NULL) {
+    mesh->zRender(rc, parentGLState);
+  }
+}

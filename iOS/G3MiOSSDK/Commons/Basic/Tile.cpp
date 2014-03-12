@@ -99,8 +99,8 @@ Tile::~Tile() {
   delete _texturizedMesh;
   _texturizedMesh = NULL;
 
-//  delete _tileBoundingVolume;
-//  _tileBoundingVolume = NULL;
+  //  delete _tileBoundingVolume;
+  //  _tileBoundingVolume = NULL;
 
   delete _elevationData;
   _elevationData = NULL;
@@ -555,7 +555,6 @@ void Tile::rawRender(const G3MRenderContext* rc,
     printf("MAXLOD = %d\n", _level);
   }
 
-
   //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
   //  boundingVolume->render(rc, parentState);
 }
@@ -677,7 +676,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   }
 }
 
-void Tile::render(const G3MRenderContext* rc,
+bool Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
                   std::list<Tile*>* toVisitInNextIteration,
                   const Planet* planet,
@@ -777,13 +776,20 @@ void Tile::render(const G3MRenderContext* rc,
         toVisitInNextIteration->push_back(subTile);
       }
     }
+
+
+    return isRawRender; //RETURN ISRAWRENDER
   }
   else {
     setIsVisible(false, texturizer);
 
     prune(texturizer, elevationDataProvider);
     //TODO: AVISAR CAMBIO DE TERRENO
+
+
+    return false;   //RETURN ISRAWRENDER
   }
+
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
@@ -1009,7 +1015,7 @@ ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) cons
 
   ILogger::instance()->logError("Can't create subview of elevation data from ancestor");
   return NULL;
-  
+
 }
 
 void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
@@ -1019,7 +1025,160 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
   }
 }
 
-void Tile::prepareTestLODData(const Planet* planet) {
+void Tile::performRawRender(const G3MRenderContext* rc,
+                            const GLState* glState,
+                            TileTexturizer* texturizer,
+                            ElevationDataProvider* elevationDataProvider,
+                            const TileTessellator* tessellator,
+                            TileRasterizer* tileRasterizer,
+                            const LayerTilesRenderParameters* layerTilesRenderParameters,
+                            const LayerSet* layerSet,
+                            const TilesRenderParameters* tilesRenderParameters,
+                            bool isForcedFullRender,
+                            long long texturePriority,
+                            TilesStatistics* tilesStatistics,
+                            bool logTilesPetitions){
+
+  rawRender(rc,
+            glState,
+            texturizer,
+            elevationDataProvider,
+            tessellator,
+            tileRasterizer,
+            layerTilesRenderParameters,
+            layerSet,
+            tilesRenderParameters,
+            isForcedFullRender,
+            texturePriority,
+            logTilesPetitions);
+  if (tilesRenderParameters->_renderDebug) { //TO RAW RENDER
+    debugRender(rc, glState, tessellator, layerTilesRenderParameters);
+  }
+
+  tilesStatistics->computePlanetRenderered(this);
+
+  //TODO: AVISAR CAMBIO DE TERRENO
+}
+
+void Tile::actualizeQuadTree(const G3MRenderContext* rc,
+                             std::list<Tile*>& renderedTiles,
+                             const Planet* planet,
+                             const Vector3D& cameraNormalizedPosition,
+                             double cameraAngle2HorizonInRadians,
+                             const Frustum* cameraFrustumInModelCoordinates,
+                             TilesStatistics* tilesStatistics,
+                             const float verticalExaggeration,
+                             const LayerTilesRenderParameters* layerTilesRenderParameters,
+                             TileTexturizer* texturizer,
+                             const TilesRenderParameters* tilesRenderParameters,
+                             ITimer* lastSplitTimer,
+                             ElevationDataProvider* elevationDataProvider,
+                             const TileTessellator* tessellator,
+                             TileRasterizer* tileRasterizer,
+                             const LayerSet* layerSet,
+                             const Sector* renderedSector,
+                             bool isForcedFullRender,
+                             long long texturePriority,
+                             double texWidthSquared,
+                             double texHeightSquared,
+                             double nowInMS) {
+
+  tilesStatistics->computeTileProcessed(this);
+
+  if (verticalExaggeration != _verticalExaggeration) {
+    // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+    _verticalExaggeration = verticalExaggeration;
+  }
+
+
+  if (isVisible(rc,
+                planet,
+                cameraNormalizedPosition,
+                cameraAngle2HorizonInRadians,
+                cameraFrustumInModelCoordinates,
+                elevationDataProvider,
+                renderedSector,
+                tessellator,
+                layerTilesRenderParameters,
+                tilesRenderParameters)) {
+    setIsVisible(true, texturizer);
+
+    tilesStatistics->computeVisibleTile(this);
+
+    const bool isRawRender = (
+                              meetsRenderCriteria(rc,
+                                                  layerTilesRenderParameters,
+                                                  texturizer,
+                                                  tilesRenderParameters,
+                                                  tilesStatistics,
+                                                  lastSplitTimer,
+                                                  texWidthSquared,
+                                                  texHeightSquared,
+                                                  nowInMS) ||
+                              (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
+                              );
+
+    if (isRawRender) {
+
+      renderedTiles.push_back(this);
+
+      prune(texturizer, elevationDataProvider);
+      //TODO: AVISAR CAMBIO DE TERRENO
+
+    }
+    else {
+      const Geodetic2D lower = _sector._lower;
+      const Geodetic2D upper = _sector._upper;
+
+      const Angle splitLongitude = Angle::midAngle(lower._longitude,
+                                                   upper._longitude);
+
+      const Angle splitLatitude = layerTilesRenderParameters->_mercator
+      /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
+                                                                                  upper._latitude)
+      /*                               */ : Angle::midAngle(lower._latitude,
+                                                            upper._latitude);
+
+      std::vector<Tile*>* subTiles = getSubTiles(splitLatitude, splitLongitude);
+      if (_justCreatedSubtiles) {
+        lastSplitTimer->start();
+        tilesStatistics->computeSplitInFrame();
+        _justCreatedSubtiles = false;
+      }
+
+      const int subTilesSize = subTiles->size();
+      for (int i = 0; i < subTilesSize; i++) {
+        Tile* subTile = subTiles->at(i);
+
+        subTile->actualizeQuadTree(rc,/* parentState,*/ renderedTiles, planet,
+                                   cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared,
+                                   texHeightSquared,
+                                   nowInMS);
+      }
+    }
+  }
+  else {
+    setIsVisible(false, texturizer);
+
+    prune(texturizer, elevationDataProvider);
+    //TODO: AVISAR CAMBIO DE TERRENO
+  }
+
+}
+
+
+void Tile::zRender(const G3MRenderContext* rc,
+                   const GLState& parentState) {
+
+  if (_tessellatorMesh == NULL) {
+    ILogger::instance()->logError("Calling ZRender for Tile withouth any valid mesh.");
+    return;
+  } else{
+    _tessellatorMesh->zRender(rc, &parentState);
+  }
+}
+
+void Tile::prepareTestLODData(const Planet* planet){
 
   if (_middleNorthPoint == NULL) {
     ILogger::instance()->logError("Error in Tile::prepareTestLODData");
@@ -1060,15 +1219,15 @@ void Tile::computeTileCorners(const Planet* planet) {
   delete _middleEastPoint;
   delete _middleNorthPoint;
   delete _middleSouthPoint;
-
+  
   const double mediumHeight = _tileTessellatorMeshData._averageHeight;
-
+  
   const Geodetic2D center = _sector.getCenter();
   const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
   const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
   const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
   const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
-
+  
   _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
   _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
   _middleEastPoint = new Vector3D(planet->toCartesian(gE));

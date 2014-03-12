@@ -7,6 +7,7 @@ public class Camera
      _height = that._height;
      _planet = that._planet;
      _position = new MutableVector3D(that._position);
+     _groundHeight = that._groundHeight;
      _center = new MutableVector3D(that._center);
      _up = new MutableVector3D(that._up);
      _dirtyFlags = new CameraDirtyFlags(that._dirtyFlags);
@@ -33,6 +34,7 @@ public class Camera
      _height = 0;
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
+     _groundHeight = 0;
      _center = new MutableVector3D(0, 0, 0);
      _up = new MutableVector3D(0, 0, 1);
      _dirtyFlags = new CameraDirtyFlags();
@@ -129,11 +131,35 @@ public class Camera
     _dirtyFlags.setAll(true);
   }
 
+<<<<<<< HEAD
+//  void render(const G3MRenderContext* rc,
+//              const GLGlobalState& parentState) const;
+
   public final Vector3D pixel2Ray(Vector2I pixel)
   {
     final int px = pixel._x;
     final int py = _height - pixel._y;
     final Vector3D pixel3D = new Vector3D(px, py, 0);
+  
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
+    if (obj.isNan())
+    {
+      return obj;
+    }
+  
+    return obj.sub(_position.asVector3D());
+  }
+
+  //void Camera::render(const G3MRenderContext* rc,
+  //                    const GLGlobalState& parentState) const {
+  //  //TODO: NO LONGER NEEDED!!!
+  //}
+  
+  public final Vector3D pixel2Ray(Vector3D pixel3D)
+=======
+  public final Vector3D pixel2Ray(Vector2I pixel)
+>>>>>>> origin/purgatory
+  {
   
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
     if (obj.isNan())
@@ -153,11 +179,25 @@ public class Camera
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
+    Vector3D direction = point.sub(getCartesianPosition());
+    double angle = direction.angleBetween(getViewDirection())._degrees;
+    if (angle > 90) //Projecting point behind the camera
+    {
+      return new Vector2F((float)-p._x, (float)-(_height - p._y));
+    }
+  
     return new Vector2F((float) p._x, (float)(_height - p._y));
   }
   public final Vector2F point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
+  
+    Vector3D direction = point.asVector3D().sub(getCartesianPosition());
+    double angle = direction.angleBetween(getViewDirection())._degrees;
+    if (angle > 90) //Projecting point behind the camera
+    {
+      return new Vector2F((float)-p._x, (float)-(_height - p._y));
+    }
   
     return new Vector2F(p._x, (_height - p._y));
   }
@@ -473,6 +513,16 @@ public class Camera
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
+<<<<<<< HEAD
+  public final void setGroundHeightFromCartesianPoint(Vector3D point)
+  {
+    _groundHeight = _planet.toGeodetic3D(point)._height;
+  }
+
+  public final double getHeightFromGround()
+  {
+    return getGeodeticPosition()._height - _groundHeight;
+=======
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   public final void setFOV(Angle vertical, Angle horizontal)
   {
@@ -499,12 +549,22 @@ public class Camera
   }
   public final void setRoll(Angle angle)
   {
+<<<<<<< HEAD
+    final Angle delta = angle.sub(Angle.fromRadians(_rollInRadians));
+    if (delta._radians != 0)
+    {
+      _rollInRadians = angle._radians;
+      rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
+    }
+>>>>>>> origin/purgatory
+=======
     //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
     final TaitBryanAngles angles = getHeadingPitchRoll();
   
     final CoordinateSystem localRS = getLocalCoordinateSystem();
     final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
     setCameraCoordinateSystem(cameraRS);
+>>>>>>> purgatory
   }
 
   public final CoordinateSystem getLocalCoordinateSystem()
@@ -552,6 +612,8 @@ public class Camera
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
 
   private Geodetic3D _geodeticPosition; //Must be updated when changing position
+
+  private double _groundHeight;
 
   // this value is only used in the method Sector::isBackOriented
   // it's stored in double instead of Angle class to optimize performance in android
@@ -655,8 +717,11 @@ public class Camera
 
   private FrustumData calculateFrustumData()
   {
-    final double height = getGeodeticPosition()._height;
-    double zNear = height * 0.1;
+    final double heightFromGround = getHeightFromGround();
+  
+    double zNear = heightFromGround * 0.1;
+  
+    //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
     double zFar = _planet.distanceToHorizon(_position.asVector3D());
   

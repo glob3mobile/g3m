@@ -84,3 +84,25 @@ void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bo
     ILogger::instance()->logError("NO GLSTATE");
   }
 }
+
+void SGNode::zRender(const G3MRenderContext* rc,
+                     const GLState* parentState){
+
+  const GLState* glState = createZRenderState(rc, parentState);
+  if (glState != NULL) {
+
+    zRawRender(rc, glState);
+
+    const int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++) {
+      SGNode* child = _children[i];
+      child->zRender(rc, glState);
+    }
+
+    glState->_release();    //We always destroy render Z state
+
+  } else{
+    ILogger::instance()->logError("NO GLSTATE FOR ZRENDER");
+  }
+
+}

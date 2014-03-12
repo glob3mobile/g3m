@@ -9,11 +9,11 @@
 #include "Ellipsoid.hpp"
 
 
-std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
-                                                              const Vector3D& direction) const {
+std::vector<double> Ellipsoid::intersectionCenteredEllipsoidWithRay(const Vector3D& origin,
+                                                                    const Vector3D& direction,
+                                                                    const Vector3D& oneOverRadiiSquared)
+{
   std::vector<double> intersections;
-  
-  Vector3D oneOverRadiiSquared = getOneOverRadiiSquared();
   
   // By laborious algebraic manipulation....
   const double a = (direction._x * direction._x * oneOverRadiiSquared._x +
@@ -58,4 +58,19 @@ std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
   }
   return intersections;
 }
+
+
+Vector3D Ellipsoid::closestIntersectionCenteredEllipsoidWithRay(const Vector3D& origin,
+                                                                const Vector3D& direction,
+                                                                const Vector3D& oneOverRadiiSquared)
+{
+  std::vector<double> distances = Ellipsoid::intersectionCenteredEllipsoidWithRay(origin,
+                                                                                  direction,
+                                                                                  oneOverRadiiSquared);
+  if (distances.empty()) {
+    return Vector3D::nan();
+  }
+  return origin.add(direction.times(distances[0]));
+}
+
 

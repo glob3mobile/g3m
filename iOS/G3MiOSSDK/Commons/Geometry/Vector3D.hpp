@@ -14,6 +14,7 @@
 #include "MutableMatrix44D.hpp"
 
 class MutableVector3D;
+class Vector3F;
 
 class Vector3D {
 private:
@@ -196,6 +197,8 @@ public:
   const double squaredDistanceTo(const Vector3D& that) const;
 
   const double distanceTo(const Vector3D& that) const;
+
+  Vector3F asVector3F() const;
 
 };
 

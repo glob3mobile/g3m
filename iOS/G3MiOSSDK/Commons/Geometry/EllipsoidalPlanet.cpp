@@ -238,16 +238,6 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
 }
 
 
-Vector3D EllipsoidalPlanet::closestIntersection(const Vector3D& pos,
-                                                const Vector3D& ray) const {
-  std::vector<double> distances = intersectionsDistances(pos , ray);
-  if (distances.empty()) {
-    return Vector3D::nan();
-  }
-  return pos.add(ray.times(distances[0]));
-}
-
-
 Vector3D EllipsoidalPlanet::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -298,10 +288,19 @@ MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic
 }
 
 
-void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
+void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const
 {
   _origin = origin.asMutableVector3D();
-  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  //_initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  _initialPoint = touchedPosition.asMutableVector3D();
+  Vector3D _originalRadiusSquared = _ellipsoid.getRadiiSquared();
+  double _dragRadiusFactorSquared = touchedPosition._x * touchedPosition._x / _originalRadiusSquared._x +
+                                    touchedPosition._y * touchedPosition._y / _originalRadiusSquared._y +
+                                    touchedPosition._z * touchedPosition._z / _originalRadiusSquared._z;
+  _oneOverDragRadiiSquared = MutableVector3D(1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._x,
+                                             1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._y,
+                                             1.0 / _dragRadiusFactorSquared / _originalRadiusSquared._z);
+
   _validSingleDrag = false;
 }
 
@@ -313,7 +312,9 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
 
   // compute final point
   const Vector3D origin = _origin.asVector3D();
-  MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
+  MutableVector3D finalPoint = Ellipsoid::closestIntersectionCenteredEllipsoidWithRay(origin,
+                                                                                      finalRay,
+                                                                                      _oneOverDragRadiiSquared.asVector3D()).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
     finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
@@ -345,7 +346,7 @@ Effect* EllipsoidalPlanet::createEffectFromLastSingleDrag() const
   return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
 
-
+/*
 void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
                                         const Vector3D& centerRay,
                                         const Vector3D& initialRay0,
@@ -365,7 +366,7 @@ void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
   Geodetic2D g  = getMidPoint(g0, g1);
   _initialPoint = toCartesian(g).asMutableVector3D();
 }
-
+*/
 
 MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
                                                const Vector3D& finalRay1) const
@@ -381,6 +382,8 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
   const double factor = finalRaysAngle / _angleBetweenInitialRays;
   double dAccum=0, angle0, angle1;
   double distance = _origin.sub(_centerPoint).length();
+
+  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
 
   // compute estimated camera translation: step 0
   double d = distance*(factor-1)/factor;
@@ -499,22 +502,32 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
 
 Effect* EllipsoidalPlanet::createDoubleTapEffect(const Vector3D& origin,
                                                  const Vector3D& centerRay,
-                                                 const Vector3D& tapRay) const
+                                                 const Vector3D& touchedPosition) const
 {
-  const Vector3D initialPoint = closestIntersection(origin, tapRay);
-  if (initialPoint.isNan()) return NULL;
+  //const Vector3D initialPoint = closestIntersection(origin, tapRay);
+  if (touchedPosition.isNan()) return NULL;
 
   // compute central point of view
-  const Vector3D centerPoint = closestIntersection(origin, centerRay);
+  //const Vector3D centerPoint = closestIntersection(origin, centerRay);
+  Vector3D originalRadiusSquared = _ellipsoid.getRadiiSquared();
+  double dragRadiusFactorSquared = touchedPosition._x * touchedPosition._x / originalRadiusSquared._x +
+                                    touchedPosition._y * touchedPosition._y / originalRadiusSquared._y +
+                                    touchedPosition._z * touchedPosition._z / originalRadiusSquared._z;
+  Vector3D oneOverDragRadiiSquared = Vector3D(1.0 / dragRadiusFactorSquared / originalRadiusSquared._x,
+                                              1.0 / dragRadiusFactorSquared / originalRadiusSquared._y,
+                                              1.0 / dragRadiusFactorSquared / originalRadiusSquared._z);
+  Vector3D centerPoint = Ellipsoid::closestIntersectionCenteredEllipsoidWithRay(origin,
+                                                                                centerRay,
+                                                                                oneOverDragRadiiSquared);
 
   // compute drag parameters
   const IMathUtils* mu = IMathUtils::instance();
-  const Vector3D axis = initialPoint.cross(centerPoint);
-  const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/initialPoint.length()/centerPoint.length()));
+  const Vector3D axis = touchedPosition.cross(centerPoint);
+  const Angle angle   = Angle::fromRadians(- mu->asin(axis.length()/touchedPosition.length()/centerPoint.length()));
 
   // compute zoom factor
-  const double height   = toGeodetic3D(origin)._height;
-  const double distance = height * 0.6;
+  const double distanceToGround   = toGeodetic3D(origin)._height - toGeodetic3D(touchedPosition)._height;
+  const double distance = distanceToGround * 0.6;
 
   // create effect
   return new DoubleTapRotationEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);

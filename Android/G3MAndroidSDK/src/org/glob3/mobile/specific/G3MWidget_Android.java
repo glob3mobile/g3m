@@ -59,7 +59,12 @@ public final class G3MWidget_Android
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
+<<<<<<< HEAD
+   
+   private boolean _processingDoubleTap = false;
+=======
    private Thread                     _openGLThread         = null;
+>>>>>>> purgatory
 
 
    public G3MWidget_Android(final android.content.Context context) {
@@ -135,6 +140,8 @@ public final class G3MWidget_Android
             public boolean onDoubleTap(final MotionEvent event) {
 
                final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+               
+               _processingDoubleTap = true;
 
                queueEvent(new Runnable() {
                   @Override
@@ -192,7 +199,12 @@ public final class G3MWidget_Android
       if (te == null) {
          return false;
       }
-
+      
+      if (_processingDoubleTap){
+    	  _processingDoubleTap = false; //Dismissing next event after double tap
+    	  return false;
+      }
+      
       queueEvent(new Runnable() {
          @Override
          public void run() {
@@ -267,31 +279,6 @@ public final class G3MWidget_Android
 
    private GPUProgramManager createGPUProgramManager() {
       final GPUProgramFactory factory = new BasicShadersGL2();
-
-      /*
-      factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
-      factory.add(new GPUProgramSources("Default", GL2Shaders._defaultVertexShader, GL2Shaders._defaultFragmentShader));
-
-      factory.add(new GPUProgramSources("ColorMesh", GL2Shaders._colorMeshVertexShader, GL2Shaders._colorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TexturedMesh", GL2Shaders._texturedMeshVertexShader,
-               GL2Shaders._texturedMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TransformedTexCoorTexturedMesh", GL2Shaders._transformedTexCoortexturedMeshVertexShader,
-               GL2Shaders._transformedTexCoortexturedMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("FlatColorMesh", GL2Shaders._flatColorMeshVertexShader,
-               GL2Shaders._flatColorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("NoColorMesh", GL2Shaders._noColorMeshVertexShader, GL2Shaders._noColorMeshFragmentShader));
-
-      factory.add(new GPUProgramSources("TexturedMesh+DirectionLight", GL2Shaders._TexturedMesh_DirectionLightVertexShader,
-               GL2Shaders._TexturedMesh_DirectionLightFragmentShader));
-
-      factory.add(new GPUProgramSources("FlatColor+DirectionLight", GL2Shaders._FlatColorMesh_DirectionLightVertexShader,
-               GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
-      */
-
       return new GPUProgramManager(factory);
    }
 

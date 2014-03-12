@@ -72,7 +72,9 @@ public:
     std::vector<double> intersections;
     return intersections;
   }
-  
+
+  void zRawRender(const G3MRenderContext* rc, GLState* parentGLState);
+
   
 };
 

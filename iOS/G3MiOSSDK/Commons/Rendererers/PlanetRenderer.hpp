@@ -304,6 +304,11 @@ private:
 #ifdef JAVA_CODE
   G3MRenderContext _renderContext;
 #endif
+//  std::list<Tile*> _tilesRenderedInLastFrame;
+
+  long long _renderedTilesListFrame;
+  std::list<Tile*> _renderedTiles;
+  std::list<Tile*>* getRenderedTilesList(const G3MRenderContext* rc);
 
 public:
   PlanetRenderer(TileTessellator*             tessellator,
@@ -459,7 +464,11 @@ public:
 
   std::list<std::string> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD);
 
-  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider, bool owned);
+  void zRender(const G3MRenderContext* rc, GLState* glState);
+
+  void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
+                                bool owned);
+
   void setVerticalExaggeration(float verticalExaggeration);
 
   ElevationDataProvider* getElevationDataProvider() const{

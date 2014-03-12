@@ -18,7 +18,6 @@ class IDownloader;
 class ILogger;
 class GL;
 class EffectsScheduler;
-//class ITimer;
 class IStringUtils;
 class IThreadUtils;
 class IMathUtils;
@@ -27,6 +26,7 @@ class IStorage;
 class OrderedRenderable;
 class GPUProgramManager;
 class SurfaceElevationProvider;
+class G3MWidget;
 
 #include "ITimer.hpp"
 #include <vector>
@@ -44,10 +44,13 @@ protected:
   EffectsScheduler*   _effectsScheduler;
   IStorage*           _storage;
 
+  G3MWidget*          _widget;
+
   SurfaceElevationProvider* _surfaceElevationProvider;
 
 public:
-  G3MContext(const IFactory*           factory,
+  G3MContext(G3MWidget*                widget,
+             const IFactory*           factory,
              const IStringUtils*       stringUtils,
              const IThreadUtils*       threadUtils,
              const ILogger*            logger,
@@ -68,12 +71,17 @@ public:
   _downloader(downloader),
   _effectsScheduler(effectsScheduler),
   _storage(storage),
-  _surfaceElevationProvider(surfaceElevationProvider)
+  _surfaceElevationProvider(surfaceElevationProvider),
+  _widget(widget)
   {
   }
 
   virtual ~G3MContext() {
 
+  }
+
+  G3MWidget* getWidget() const{
+    return _widget;
   }
 
   const IFactory* getFactory() const {
@@ -128,7 +136,8 @@ public:
 
 class G3MEventContext: public G3MContext {
 public:
-  G3MEventContext(const IFactory*           factory,
+  G3MEventContext(G3MWidget*                widget,
+                  const IFactory*           factory,
                   const IStringUtils*       stringUtils,
                   const IThreadUtils*       threadUtils,
                   const ILogger*            logger,
@@ -139,7 +148,8 @@ public:
                   EffectsScheduler*         scheduler,
                   IStorage*                 storage,
                   SurfaceElevationProvider* surfaceElevationProvider) :
-  G3MContext(factory,
+  G3MContext(widget,
+             factory,
              stringUtils,
              threadUtils,
              logger,
@@ -175,8 +185,11 @@ private:
 
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
+  long long _frameCounter;
+
 public:
-  G3MRenderContext(FrameTasksExecutor*       frameTasksExecutor,
+  G3MRenderContext(G3MWidget*                widget,
+                   FrameTasksExecutor*       frameTasksExecutor,
                    const IFactory*           factory,
                    const IStringUtils*       stringUtils,
                    const IThreadUtils*       threadUtils,
@@ -194,7 +207,8 @@ public:
                    IStorage*                 storage,
                    GPUProgramManager*        gpuProgramManager,
                    SurfaceElevationProvider* surfaceElevationProvider) :
-  G3MContext(factory,
+  G3MContext(widget,
+             factory,
              stringUtils,
              threadUtils,
              logger,
@@ -212,16 +226,19 @@ public:
   _texturesHandler(texturesHandler),
   _frameStartTimer(frameStartTimer),
   _orderedRenderables(NULL),
-  _gpuProgramManager(gpuProgramManager)
+  _gpuProgramManager(gpuProgramManager),
+  _frameCounter(0)
   {
 
   }
 
-  void clear() {
+  void clearForNewFrame() {
     _frameStartTimer->start();
 
     delete _orderedRenderables;
     _orderedRenderables = NULL;
+
+    _frameCounter++;
   }
 
   GL* getGL() const {
@@ -250,6 +267,10 @@ public:
   
   GPUProgramManager* getGPUProgramManager() const{
     return _gpuProgramManager;
+  }
+
+  long long frameCounter() const{
+    return _frameCounter;
   }
 
   virtual ~G3MRenderContext();

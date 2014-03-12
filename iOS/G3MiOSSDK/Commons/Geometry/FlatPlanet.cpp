@@ -112,10 +112,15 @@ MutableMatrix44D FlatPlanet::createGeodeticTransformMatrix(const Geodetic3D& pos
 }
 
 
-void FlatPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
+void FlatPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const
 {
   _origin = origin.asMutableVector3D();
-  _initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+  //_initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+  _initialPoint = touchedPosition.asMutableVector3D();
+  _dragHeight = toGeodetic3D(touchedPosition)._height;
+
+  //printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+
   _lastFinalPoint = _initialPoint;
   _validSingleDrag = false;
 }
@@ -128,7 +133,7 @@ MutableMatrix44D FlatPlanet::singleDrag(const Vector3D& finalRay) const
 
   // compute final point
   const Vector3D origin = _origin.asVector3D();
-  MutableVector3D finalPoint = Plane::intersectionXYPlaneWithRay(origin, finalRay).asMutableVector3D();
+  MutableVector3D finalPoint = Plane::intersectionXYPlaneWithRay(origin, finalRay, _dragHeight).asMutableVector3D();
   if (finalPoint.isNan()) return MutableMatrix44D::invalid();
 
   // save params for possible inertial animations
@@ -148,21 +153,33 @@ Effect* FlatPlanet::createEffectFromLastSingleDrag() const
 }
 
 
+bool BEGIN_DOUBLE_DRAG = false;
+double CORRECTION_T2;
+MutableVector3D CENTER_POINT;
+
 void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
                                  const Vector3D& centerRay,
-                                 const Vector3D& initialRay0,
-                                 const Vector3D& initialRay1) const
+                                 const Vector3D& centerPosition,
+                                 const Vector3D& touchedPosition0,
+                                 const Vector3D& touchedPosition1) const
 {
   _origin = origin.asMutableVector3D();
   _centerRay = centerRay.asMutableVector3D();
-  _initialPoint0 = Plane::intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
-  _initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
+  //_initialPoint0 = Plane::intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
+  //_initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
+  _initialPoint0 = touchedPosition0.asMutableVector3D();
+  _dragHeight0 = toGeodetic3D(touchedPosition0)._height;
+  _initialPoint1 = touchedPosition1.asMutableVector3D();
+  _dragHeight1 = toGeodetic3D(touchedPosition1)._height;
   _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
-  _centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
+  //_centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
+  _centerPoint = centerPosition.asMutableVector3D();
   //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
 
   // middle point in 3D
   _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
+  
+  BEGIN_DOUBLE_DRAG = true;
 }
 
 
@@ -177,6 +194,8 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   const IMathUtils* mu = IMathUtils::instance();
   MutableVector3D positionCamera = _origin;
 
+  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf 
+  /*
   // compute distance to translate camera
   double d0 = _distanceBetweenInitialPoints;
   const Vector3D r1 = finalRay0;
@@ -186,7 +205,39 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   double zc = _origin.z();
   double uz = _centerRay.z();
   double t2 = (d0 / mu->sqrt(k) - zc) / uz;
+  */
 
+  // compute distance to translate camera
+  double d0 = _distanceBetweenInitialPoints;
+  const Vector3D r1 = finalRay0;
+  const Vector3D r2 = finalRay1;
+  double zA = _dragHeight0;
+  double zB = _dragHeight1;
+  double zc = _origin.z();
+  double uz = _centerRay.z();
+  double Rx = r2._x / r2._z - r1._x / r1._z;
+  double Ry = r2._y / r2._z - r1._y / r1._z;
+  double Kx = zc*Rx + zA*r1._x/r1._z - zB*r2._x/r2._z;
+  double Ky = zc*Ry + zA*r1._y/r1._z - zB*r2._y/r2._z;
+  double a = uz*uz * (Rx*Rx + Ry*Ry);
+  double b = 2 * uz * (Rx*Kx + Ry*Ky);
+  double c = Kx*Kx + Ky*Ky + (zA-zB)*(zA-zB) - d0*d0;
+  double root = b*b - 4*a*c;
+  if (root<0) return MutableMatrix44D::invalid();
+  double squareRoot = mu->sqrt(root);
+  double t2 = (-b - squareRoot) / (2*a);
+  
+  
+  if (BEGIN_DOUBLE_DRAG) {
+    BEGIN_DOUBLE_DRAG = false;
+    CORRECTION_T2 = t2;
+    t2 = 0;
+    printf("primer t2 = %f\n", t2);
+  } else {
+    t2 -= CORRECTION_T2;
+    printf("    t2=%f\n", t2);
+  }
+    
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
   positionCamera = _origin;
@@ -198,22 +249,49 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     MutableVector3D delta = _initialPoint.sub((_centerPoint));
     delta = delta.add(viewDirection.times(t2));
+    
+    printf ("    traslado delta = %f %f %f\n", delta.x(), delta.y(), delta.z());
+    
     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(delta.asVector3D());
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
   }
 
   // compute 3D point of view center
-  Vector3D centerPoint2 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D());
+  double meanDragHeight = 0.5 * (_dragHeight0 + _dragHeight1);
+  //Vector3D centerPoint2 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D(), meanDragHeight);
+  
 
   // compute middle point in 3D
-  Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
-  Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D());
+  Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
+  Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D(), _dragHeight1);
   Vector3D finalPoint = P0.add(P1).times(0.5);
+ 
+  
+  
+  if (t2==0) {
+    MutableVector3D delta = _initialPoint.sub((_centerPoint));
+    CENTER_POINT = finalPoint.asMutableVector3D().sub(delta);
+  }
+  Vector3D centerPoint2 = CENTER_POINT.asVector3D();
+  
+  printf ("    _centerPoint = %f %f %f\n", _centerPoint.x(), _centerPoint.y(), _centerPoint.z());
+  printf ("    centerPoint2 = %f %f %f\n", centerPoint2._x, centerPoint2._y, centerPoint2._z);
+
+  
+  
+  printf ("    finalPoint = %f %f %f\n", finalPoint._x, finalPoint._y, finalPoint._z);
+  
 
   // drag globe from centerPoint to finalPoint
   {
     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(centerPoint2.sub(finalPoint));
+    
+    
+    Vector3D pepe=centerPoint2.sub(finalPoint);
+    printf ("    traslado de center a final = %f %f %f\n", pepe._x, pepe._y, pepe._z);
+    
+    
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
   }
@@ -222,7 +300,7 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     Vector3D normal = geodeticSurfaceNormal(centerPoint2);
     Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
-    Vector3D p0     = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D());
+    Vector3D p0     = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
     Vector3D v1     = p0.sub(centerPoint2).projectionInPlane(normal);
     double angle    = v0.angleBetween(v1)._degrees;
     double sign     = v1.cross(v0).dot(normal);
@@ -237,16 +315,22 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
 
 Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
                                           const Vector3D& centerRay,
-                                          const Vector3D& tapRay) const
+                                          const Vector3D& touchedPosition) const
 {
-  const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
-  if (initialPoint.isNan()) return NULL;
-  const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+  //const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
+  if (touchedPosition.isNan()) return NULL;
+  //const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+  double dragHeight = toGeodetic3D(touchedPosition)._height;
+  const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay, dragHeight);
 
   // create effect
+  double distanceToGround = toGeodetic3D(origin)._height - dragHeight;
+  
+  //printf("\n-- double tap to height %.2f, desde mi altura=%.2f\n", dragHeight, toGeodetic3D(origin)._height);
+  
   return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(0.75),
-                                        initialPoint.sub(centerPoint),
-                                        toGeodetic3D(origin)._height*0.6);
+                                        touchedPosition.sub(centerPoint),
+                                        distanceToGround*0.6);
 }
 
 

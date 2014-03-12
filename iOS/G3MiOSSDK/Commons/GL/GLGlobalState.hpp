@@ -34,6 +34,7 @@ private:
   static bool _initializationAvailable;
 
   bool _depthTest;
+  bool _depthMask;
   bool _blend;
   bool _cullFace;
   int  _culledFace;
@@ -67,6 +68,7 @@ private:
 
   GLGlobalState(const GLGlobalState& parentState) :
   _depthTest(parentState._depthTest),
+  _depthMask(parentState._depthMask),
   _blend(parentState._blend),
   _cullFace(parentState._cullFace),
   _culledFace(parentState._culledFace),
@@ -97,6 +99,7 @@ public:
   
   GLGlobalState() :
   _depthTest(false),
+  _depthMask(true),
   _blend(false),
   _cullFace(true),
   _culledFace(GLCullFace::back()),
@@ -140,7 +143,15 @@ public:
   void disableDepthTest() {
       _depthTest = false;
   }
+  void enableDepthMask() {
+    _depthMask = true;
+  }
+  void disableDepthMask() {
+    _depthMask = false;
+  }
+
   bool isEnabledDepthTest() const { return _depthTest; }
+  bool isEnabledDepthMask() const { return _depthMask; }
   
   void enableBlend() {
       _blend = true;

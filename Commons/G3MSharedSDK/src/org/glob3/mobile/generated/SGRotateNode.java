@@ -57,5 +57,13 @@ public class SGRotateNode extends SGNode
     return "SGRotateNode";
   }
 
+  public final GLState createZRenderState(G3MRenderContext rc, GLState parentState)
+  {
+    GLState state = new GLState();
+    state.setParent(parentState);
+    state.addGLFeature(new ModelTransformGLFeature(_rotationMatrix.asMatrix44D()), false);
+    return state;
+  }
+
 
 }

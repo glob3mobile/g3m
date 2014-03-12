@@ -75,6 +75,19 @@ public class GPUVariable
       return GPUUniformKey.BILLBOARD_POSITION;
     }
   
+<<<<<<< HEAD
+    if (name.compareTo("uDepthFar") == 0)
+    {
+      return GPUUniformKey.DEPTH_FAR;
+    }
+  
+    if (name.compareTo("uDepthNear") == 0)
+    {
+      return GPUUniformKey.DEPTH_NEAR;
+    }
+  
+    ILogger.instance().logError("UNRECOGNIZED UNIFORM - ", name);
+=======
     if (name.compareTo("uRotationCenterTexCoord") == 0)
     {
       return GPUUniformKey.ROTATION_CENTER_TEXTURE_COORDS;
@@ -99,6 +112,7 @@ public class GPUVariable
     {
       return GPUUniformKey.SAMPLER3;
     }
+>>>>>>> origin/purgatory
   
     return GPUUniformKey.UNRECOGNIZED_UNIFORM;
   }
@@ -134,6 +148,8 @@ public class GPUVariable
     {
       return GPUAttributeKey.NORMAL;
     }
+  
+    ILogger.instance().logError("UNRECOGNIZED ATTRIBUTE - ", name);
   
     return GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE;
   }

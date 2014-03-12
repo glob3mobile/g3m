@@ -7,19 +7,18 @@ package org.glob3.mobile.generated;
 //
 //
 
-//
-//  Vector3F.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 2/9/13.
-//
-//
 
 
 
 
 public class Vector3F
 {
+<<<<<<< HEAD
+   public Vector3D asVector3D()
+   {
+     return new Vector3D(_x, _y, _z);
+   }
+=======
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector3F operator =(Vector3F that);
@@ -94,4 +93,5 @@ public class Vector3F
     return ((_x != _x) || (_y != _y) || (_z != _z));
   }
 
+>>>>>>> purgatory
 }

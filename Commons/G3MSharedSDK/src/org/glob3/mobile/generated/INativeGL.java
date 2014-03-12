@@ -15,6 +15,8 @@ package org.glob3.mobile.generated;
 //class IGLUniformID;
 //class IGLTextureId;
 //class Matrix44D;
+//class Color;
+//class Vector2F;
 
 
 
@@ -145,6 +147,7 @@ public abstract class INativeGL
   public abstract int Alignment_Unpack();
 
   public abstract int Format_RGBA();
+  public abstract int Format_RGB();
 
   public abstract int Variable_Viewport();
   public abstract int Variable_ActiveAttributes();
@@ -169,8 +172,17 @@ public abstract class INativeGL
   public abstract GPUUniform getActiveUniform(GPUProgram program, int i);
   public abstract GPUAttribute getActiveAttribute(GPUProgram program, int i);
 
+<<<<<<< HEAD
+  public abstract Color read1PixelAsRGBAColor(int x, int y);
+  public abstract double read1PixelAsDouble(int x, int y);
+
+  public abstract void depthMask(boolean v);
+
+  public abstract Vector2F getDepthRange();
+=======
   public abstract void depthMask(boolean v);
 
   public abstract void setActiveTexture(int i);
+>>>>>>> origin/purgatory
 
 }

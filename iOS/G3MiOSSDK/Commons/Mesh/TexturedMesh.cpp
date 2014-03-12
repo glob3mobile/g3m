@@ -19,3 +19,9 @@ void TexturedMesh::rawRender(const G3MRenderContext* rc,
   _glState->setParent(parentState);
   _mesh->render(rc, _glState);
 }
+
+void TexturedMesh::zRawRender(const G3MRenderContext* rc,
+                          const GLState* parentState) const{
+  //TODO: transparencies
+  _mesh->zRender(rc, parentState);
+}

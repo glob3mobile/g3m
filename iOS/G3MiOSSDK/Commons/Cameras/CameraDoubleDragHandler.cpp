@@ -9,6 +9,7 @@
 #include "CameraDoubleDragHandler.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
+#include "G3MWidget.hpp"
 
 
 
@@ -18,7 +19,7 @@ bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
-  
+    
   switch (touchEvent->getType()) {
     case Down:
       onDown(eventContext, *touchEvent, cameraContext);
@@ -45,12 +46,16 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(DoubleDrag);  
 
   // double dragging
+  G3MWidget* widget = eventContext->getWidget();
   const Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector3D touchedPosition0 = widget->getScenePositionForPixel(pixel0._x, pixel0._y);
   const Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
+  Vector3D touchedPosition1 = widget->getScenePositionForPixel(pixel1._x, pixel1._y);
   eventContext->getPlanet()->beginDoubleDrag(_camera0.getCartesianPosition(),
                                              _camera0.getViewDirection(),
-                                             _camera0.pixel2Ray(pixel0),
-                                             _camera0.pixel2Ray(pixel1));
+                                             widget->getScenePositionForCentralPixel(),
+                                             touchedPosition0,
+                                             touchedPosition1);
 }
 
 

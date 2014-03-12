@@ -515,7 +515,8 @@ void Mark::render(const G3MRenderContext* rc,
                                 0,
                                 4,
                                 _glState,
-                                *rc->getGPUProgramManager());
+                                *rc->getGPUProgramManager(),
+                                REGULAR_RENDER);
 
         _renderedMark = true;
       }

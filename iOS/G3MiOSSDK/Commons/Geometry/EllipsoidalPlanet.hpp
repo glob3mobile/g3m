@@ -32,6 +32,7 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable MutableVector3D _oneOverDragRadiiSquared;
   mutable MutableVector3D _centerPoint;
   mutable MutableVector3D _centerRay;
   mutable MutableVector3D _initialPoint0;
@@ -85,7 +86,9 @@ public:
   
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const {
-    return _ellipsoid.intersectionsDistances(origin, direction);
+    return Ellipsoid::intersectionCenteredEllipsoidWithRay(origin,
+                                                           direction,
+                                                           _ellipsoid.getOneOverRadiiSquared());
   }
   
   Vector3D toCartesian(const Angle& latitude,
@@ -134,30 +137,40 @@ public:
   
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
   
-  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
-  
+  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const {
+    return Ellipsoid::closestIntersectionCenteredEllipsoidWithRay(pos,
+                                                                  ray,
+                                                                  _ellipsoid.getOneOverRadiiSquared());
+  }
   
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
   bool isFlat() const { return false; }
 
-  void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
     
   Effect* createEffectFromLastSingleDrag() const;
   
-  void beginDoubleDrag(const Vector3D& origin,
+/*  void beginDoubleDrag(const Vector3D& origin,
                        const Vector3D& centerRay,
                        const Vector3D& initialRay0,
-                       const Vector3D& initialRay1) const;
+                       const Vector3D& initialRay1) const;*/
+  void beginDoubleDrag(const Vector3D& origin,
+                       const Vector3D& centerRay,
+                       const Vector3D& centerPosition,
+                       const Vector3D& touchedPosition0,
+                       const Vector3D& touchedPosition1) const {}
+
   
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1) const;
   
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                         const Vector3D& centerRay,
-                                        const Vector3D& tapRay) const;
+                                        const Vector3D& touchedPosition) const;
   
   double distanceToHorizon(const Vector3D& position) const;
   

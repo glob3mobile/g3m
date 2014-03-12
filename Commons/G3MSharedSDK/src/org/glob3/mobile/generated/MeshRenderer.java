@@ -299,6 +299,30 @@ public class MeshRenderer extends LeafRenderer
     loadBSONPointCloud(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, pointSize, deltaHeight, listener, deleteListener);
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+    final Camera cam = rc.getCurrentCamera();
+    final Frustum frustum = rc.getCurrentCamera().getFrustumInModelCoordinates();
+  
+    GLState state = new GLState();
+    state.addGLFeature(new ModelViewGLFeature(cam), true);
+    state.setParent(glState);
+  
+    final int meshesCount = _meshes.size();
+    for (int i = 0; i < meshesCount; i++)
+    {
+      Mesh mesh = _meshes.get(i);
+      final BoundingVolume boundingVolume = mesh.getBoundingVolume();
+      if (boundingVolume.touchesFrustum(frustum))
+      {
+        mesh.zRender(rc, state);
+      }
+    }
+  
+    state._release();
+  
+  }
+
   public final void loadJSONMesh(URL url, Color color, long priority, TimeInterval timeToCache, boolean readExpired, MeshLoadListener listener)
   {
      loadJSONMesh(url, color, priority, timeToCache, readExpired, listener, true);

@@ -84,4 +84,8 @@ public class GLErrorRenderer extends LeafRenderer
 
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

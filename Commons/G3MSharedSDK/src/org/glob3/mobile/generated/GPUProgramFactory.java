@@ -17,17 +17,7 @@ public class GPUProgramFactory
 
   public final GPUProgramSources get(String name)
   {
-    ///#ifdef C_CODE
-    //    std::map<std::string, GPUProgramSources>::const_iterator it = _sources.find(name);
-    //    if (it != _sources.end()) {
-    //      return &it->second;
-    //    } else{
-    //      return NULL;
-    //    }
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //    return _sources.get(name);
-    ///#endif
+
     final int size = _sources.size();
     for (int i = 0; i < size; i++)
     {

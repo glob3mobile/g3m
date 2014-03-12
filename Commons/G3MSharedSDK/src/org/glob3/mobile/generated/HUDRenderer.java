@@ -205,4 +205,8 @@ public class HUDRenderer extends LeafRenderer
     nativeGL.depthMask(true);
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  }
+
 }

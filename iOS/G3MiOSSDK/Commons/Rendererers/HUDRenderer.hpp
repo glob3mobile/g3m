@@ -65,6 +65,8 @@ public:
                              int width,
                              int height);
 
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
+
   void render(const G3MRenderContext* rc,
               GLState* glState);
   

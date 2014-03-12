@@ -1,11 +1,12 @@
-
-
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GPUAttribute;
 import org.glob3.mobile.generated.GPUAttributeVec2Float;
 import org.glob3.mobile.generated.GPUAttributeVec3Float;
@@ -28,12 +29,12 @@ import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.Matrix44D;
 import org.glob3.mobile.generated.ShaderType;
+import org.glob3.mobile.generated.Vector2F;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
-
 
 public final class NativeGL2_Android
          extends
@@ -816,7 +817,6 @@ public final class NativeGL2_Android
    public int Type_Vec3Float() {
       return GLES20.GL_FLOAT_VEC3;
    }
-
 
    @Override
    public void depthMask(final boolean depthMask) {

@@ -34,6 +34,7 @@ public class GLGlobalState
   private static boolean _initializationAvailable = false;
 
   private boolean _depthTest;
+  private boolean _depthMask;
   private boolean _blend;
   private boolean _cullFace;
   private int _culledFace;
@@ -63,6 +64,7 @@ public class GLGlobalState
   private GLGlobalState(GLGlobalState parentState)
   {
      _depthTest = parentState._depthTest;
+     _depthMask = parentState._depthMask;
      _blend = parentState._blend;
      _cullFace = parentState._cullFace;
      _culledFace = parentState._culledFace;
@@ -94,6 +96,7 @@ public class GLGlobalState
   public GLGlobalState()
   {
      _depthTest = false;
+     _depthMask = true;
      _blend = false;
      _cullFace = true;
      _culledFace = GLCullFace.back();
@@ -143,9 +146,22 @@ public class GLGlobalState
   {
       _depthTest = false;
   }
+  public final void enableDepthMask()
+  {
+    _depthMask = true;
+  }
+  public final void disableDepthMask()
+  {
+    _depthMask = false;
+  }
+
   public final boolean isEnabledDepthTest()
   {
      return _depthTest;
+  }
+  public final boolean isEnabledDepthMask()
+  {
+     return _depthMask;
   }
 
   public final void enableBlend()
@@ -275,6 +291,13 @@ public class GLGlobalState
       {
         nativeGL.disable(GLStage.depthTest());
       }
+      currentState._depthTest = _depthTest;
+    }
+  
+    // Depth Mask
+    if (_depthMask != currentState._depthMask)
+    {
+      nativeGL.depthMask(_depthMask);
       currentState._depthTest = _depthTest;
     }
   

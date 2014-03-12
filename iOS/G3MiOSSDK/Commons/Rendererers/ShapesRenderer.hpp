@@ -265,6 +265,8 @@ public:
                     listener,
                     deleteListener);
   }
+
+  void zRender(const G3MRenderContext* rc, GLState* glState);
   
 };
 

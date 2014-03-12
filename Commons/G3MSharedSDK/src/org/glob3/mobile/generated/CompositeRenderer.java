@@ -260,4 +260,18 @@ public class CompositeRenderer extends Renderer
     return false;
   }
 
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      Renderer renderer = _renderers.get(i);
+      if (renderer.isEnable())
+      {
+        renderer.zRender(rc, glState);
+      }
+    }
+  
+  }
+
 }

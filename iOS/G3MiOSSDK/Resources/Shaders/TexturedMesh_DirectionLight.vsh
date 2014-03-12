@@ -27,11 +27,11 @@ void main() {
 
   vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
   vec3 lightDirNormalized = normalize( uDiffuseLightDirection );
-  
+
   float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);
 
   gl_Position = uModelview * aPosition;
-  
+
   TextureCoordOut = aTextureCoord;
 
   gl_PointSize = uPointSize;

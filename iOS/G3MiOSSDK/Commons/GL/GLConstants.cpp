@@ -67,6 +67,7 @@ int GLAlignment::_pack = 0;
 int GLAlignment::_unpack = 0;
 
 int GLFormat::_rgba = 0;
+int GLFormat::_rgb = 0;
 
 int GLVariable::_viewport = 0;
 int GLVariable::_activeUniforms = 0;

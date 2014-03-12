@@ -24,6 +24,7 @@ public class FlatPlanet extends Planet
 
   private MutableVector3D _origin = new MutableVector3D();
   private MutableVector3D _initialPoint = new MutableVector3D();
+  private double _dragHeight;
   private MutableVector3D _lastFinalPoint = new MutableVector3D();
   private boolean _validSingleDrag;
   private MutableVector3D _lastDirection = new MutableVector3D();
@@ -195,10 +196,16 @@ public class FlatPlanet extends Planet
      return true;
   }
 
-  public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
+  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  public final void beginSingleDrag(Vector3D origin, Vector3D touchedPosition)
   {
     _origin = origin.asMutableVector3D();
-    _initialPoint = Plane.intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+    //_initialPoint = Plane::intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
+    _initialPoint = touchedPosition.asMutableVector3D();
+    _dragHeight = toGeodetic3D(touchedPosition)._height;
+  
+    //printf("INiTIAL POINT EN %f, %f, %f\n ", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
+  
     _lastFinalPoint = _initialPoint;
     _validSingleDrag = false;
   }
@@ -211,7 +218,7 @@ public class FlatPlanet extends Planet
   
     // compute final point
     final Vector3D origin = _origin.asVector3D();
-    MutableVector3D finalPoint = Plane.intersectionXYPlaneWithRay(origin, finalRay).asMutableVector3D();
+    MutableVector3D finalPoint = Plane.intersectionXYPlaneWithRay(origin, finalRay, _dragHeight).asMutableVector3D();
     if (finalPoint.isNan())
        return MutableMatrix44D.invalid();
   
@@ -255,6 +262,7 @@ public class FlatPlanet extends Planet
     final IMathUtils mu = IMathUtils.instance();
     MutableVector3D positionCamera = _origin;
   
+    // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
     // compute distance to translate camera
     double d0 = _distanceBetweenInitialPoints;
     final Vector3D r1 = finalRay0;
@@ -312,15 +320,21 @@ public class FlatPlanet extends Planet
     return matrix;
   }
 
-  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D tapRay)
+  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D touchedPosition)
   {
-    final Vector3D initialPoint = Plane.intersectionXYPlaneWithRay(origin, tapRay);
-    if (initialPoint.isNan())
+    //const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
+    if (touchedPosition.isNan())
        return null;
-    final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay);
+    //const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+    double dragHeight = toGeodetic3D(touchedPosition)._height;
+    final Vector3D centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay, dragHeight);
   
     // create effect
-    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), initialPoint.sub(centerPoint), toGeodetic3D(origin)._height *0.6);
+    double distanceToGround = toGeodetic3D(origin)._height - dragHeight;
+  
+    //printf("\n-- double tap to height %.2f, desde mi altura=%.2f\n", dragHeight, toGeodetic3D(origin)._height);
+  
+    return new DoubleTapTranslationEffect(TimeInterval.fromSeconds(0.75), touchedPosition.sub(centerPoint), distanceToGround *0.6);
   }
 
   public final double distanceToHorizon(Vector3D position)

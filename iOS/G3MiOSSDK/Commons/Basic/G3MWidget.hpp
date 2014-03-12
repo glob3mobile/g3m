@@ -46,6 +46,7 @@ class GLState;
 class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
+class Vector3D;
 
 #include <vector>
 #include <string>
@@ -122,6 +123,8 @@ public:
   ~G3MWidget();
 
   void render(int width, int height);
+
+  void zRender();
 
   void onTouchEvent(const TouchEvent* myEvent);
 
@@ -232,6 +235,14 @@ public:
     _forceBusyRenderer = forceBusyRenderer;
   }
 
+  Vector3D getScenePositionForPixel(int x, int y);
+
+  Vector3D getScenePositionForCentralPixel();
+  
+  Vector3D getFirstValidScenePositionForCentralColumn();
+
+  Vector3D getFirstValidScenePositionForFrameBufferColumn(int column);
+
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -301,6 +312,8 @@ private:
   G3MRenderContext* _renderContext;
 
   bool _forceBusyRenderer;
+
+  long _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
