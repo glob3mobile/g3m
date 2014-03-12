@@ -2,6 +2,7 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,28 +28,35 @@ import org.glob3.mobile.generated.Angle;
 =======
 import java.util.Random;
 
+=======
+>>>>>>> zrender-touchhandlers
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.ElevationDataProvider;
-import org.glob3.mobile.generated.EllipsoidShape;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.HUDQuadWidget;
+import org.glob3.mobile.generated.HUDRelativePosition;
+import org.glob3.mobile.generated.HUDRelativeSize;
+import org.glob3.mobile.generated.HUDRenderer;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.MapQuestLayer;
+import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
-import org.glob3.mobile.generated.PeriodicalTask;
-import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.SingleBillElevationDataProvider;
+import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
+<<<<<<< HEAD
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -76,6 +84,12 @@ import org.glob3.mobile.specific.SQLiteStorage_Android;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.Vector2I;
+>>>>>>> zrender-touchhandlers
+=======
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.specific.G3MBuilder_Android;
+import org.glob3.mobile.specific.G3MWidget_Android;
 >>>>>>> zrender-touchhandlers
 
 import android.app.Activity;
@@ -549,6 +563,8 @@ class PrecacherInitializationTask extends GInitializationTask {
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
 
+   G3MBuilder_Android builder = null;
+   MarksRenderer marksRenderer = new MarksRenderer(false);
 
    @Override
    protected void onCreate(final Bundle savedInstanceState) {
@@ -558,7 +574,7 @@ class PrecacherInitializationTask extends GInitializationTask {
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
       setContentView(R.layout.activity_main);
-      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      builder = new G3MBuilder_Android(this);
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
 
 
@@ -567,6 +583,9 @@ class PrecacherInitializationTask extends GInitializationTask {
 			meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
 			builder.addRenderer(meshRenderer);
 		}
+	
+		builder.addRenderer(marksRenderer);
+		
       final LayerSet layerSet = new LayerSet();
       //layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
@@ -787,7 +806,7 @@ class PrecacherInitializationTask extends GInitializationTask {
 			  URL url = new URL("http://128.102.22.115/elev?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=srtm3&STYLES=&FORMAT=image/bil&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&BBOX=-17.0232177085356,27.967811065876,-16.0019401695656,28.6103464294992&WIDTH=256&HEIGHT=256", false);
 			  
 			  // add this image to the builder
-			  ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
+			  ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
 			  builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
 
 		}

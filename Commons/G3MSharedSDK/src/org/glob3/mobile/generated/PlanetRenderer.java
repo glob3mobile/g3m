@@ -318,7 +318,10 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
+<<<<<<< HEAD
   G3MRenderContext _renderContext;
+=======
+>>>>>>> zrender-touchhandlers
 //  std::list<Tile*> _tilesRenderedInLastFrame;
 
   private long _renderedTilesListFrame;
