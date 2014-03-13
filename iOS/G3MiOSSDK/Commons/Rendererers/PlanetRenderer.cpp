@@ -929,7 +929,7 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
       //Checking Route if any
       if (route != NULL){
         if (!sectorCloseToRoute(tile->_sector, *route,
-                                tile->_sector.getDeltaRadiusInRadians() * 2.0)){
+                                tile->_sector.getDeltaRadiusInRadians() * 4.0)){
           continue;
         }
       }
