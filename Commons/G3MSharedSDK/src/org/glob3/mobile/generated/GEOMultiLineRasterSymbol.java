@@ -22,6 +22,10 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
   private final GEO2DLineRasterStyle                           _style;
 
+  private java.util.ArrayList<Geodetic2D> getCoordinateArray(int i)
+  {
+    return _coordinatesArray.get(i);
+  }
   public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style, int minTileLevel)
   {
      this(coordinatesArray, style, minTileLevel, -1);
@@ -44,7 +48,7 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
       final int coordinatesArrayCount = _coordinatesArray.size();
       for (int i = 0; i < coordinatesArrayCount; i++)
       {
-        java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
+        java.util.ArrayList<Geodetic2D> coordinates = this.getCoordinateArray(i);
         final int coordinatesCount = coordinates.size();
         for (int j = 0; j < coordinatesCount; j++)
         {
@@ -68,10 +72,12 @@ public class GEOMultiLineRasterSymbol extends GEORasterSymbol
       final int coordinatesArrayCount = _coordinatesArray.size();
       for (int i = 0; i < coordinatesArrayCount; i++)
       {
-        java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
+        java.util.ArrayList<Geodetic2D> coordinates = this.getCoordinateArray(i);
         rasterLine(coordinates, canvas, projection);
       }
     }
   }
+
+
 
 }

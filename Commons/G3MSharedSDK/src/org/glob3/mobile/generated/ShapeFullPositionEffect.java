@@ -26,14 +26,14 @@ public class ShapeFullPositionEffect extends EffectWithDuration
   private final Geodetic3D _fromPosition ;
   private final Geodetic3D _toPosition ;
 
-  private final Angle _fromPitch ;
-  private final Angle _toPitch ;
+  private final Angle _fromPitch ; //VERSION 1.0
+  private final Angle _toPitch ; //VERSION 1.0
 
-  private final Angle _fromHeading ;
-  private final Angle _toHeading ;
+  private final Angle _fromHeading ; //VERSION 1.0
+  private final Angle _toHeading ; //VERSION 1.0
 
-  private final Angle _fromRoll ;
-  private final Angle _toRoll ;
+  private final Angle _fromRoll ; //VERSION 1.0
+  private final Angle _toRoll ; //VERSION 1.0
 
 
   public ShapeFullPositionEffect(TimeInterval duration, Shape shape, Geodetic3D fromPosition, Geodetic3D toPosition, Angle fromPitch, Angle toPitch, Angle fromHeading, Angle toHeading, Angle fromRoll, Angle toRoll)

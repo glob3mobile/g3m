@@ -49,8 +49,6 @@ public class GEORasterLineSymbol extends GEORasterSymbol
       for (int i = 0; i < size; i++)
       {
         final Geodetic2D coordinate = _coordinates.get(i);
-        if (coordinate != null)
-           coordinate.dispose();
       }
   
       _coordinates = null;

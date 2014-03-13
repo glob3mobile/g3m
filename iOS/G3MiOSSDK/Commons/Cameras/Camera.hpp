@@ -314,8 +314,12 @@ private:
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
   int _height;
-
+#ifdef C_CODE
   const Planet *_planet;
+#endif
+#ifdef JAVA_CODE
+  private Planet _planet;
+#endif
 
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
@@ -346,6 +350,10 @@ private:
   class CameraEffectTarget: public EffectTarget {
   public:
     ~CameraEffectTarget() {
+    }
+    
+    // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+    void unusedMethod() const {
     }
   };
 

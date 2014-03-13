@@ -24,8 +24,8 @@ package org.glob3.mobile.generated;
 
 public class Box extends BoundingVolume
 {
-  private final Vector3D _lower ;
-  private final Vector3D _upper ;
+  private final Vector3D _lower ; //VERSION 1.0
+  private final Vector3D _upper ; //VERSION 1.0
 
   private java.util.ArrayList<Vector3D> _cornersD = null; // cache for getCorners() method
   private java.util.ArrayList<Vector3F> _cornersF = null; // cache for getCornersF() method

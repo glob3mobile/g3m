@@ -20,9 +20,9 @@ package org.glob3.mobile.generated;
 
 public class TaitBryanAngles
 {
-  public final Angle _heading ;
-  public final Angle _pitch ;
-  public final Angle _roll ;
+  public final Angle _heading ; //VERSION 1.0
+  public final Angle _pitch ; //VERSION 1.0
+  public final Angle _roll ; //VERSION 1.0
 
   public TaitBryanAngles(Angle heading, Angle pitch, Angle roll)
   {

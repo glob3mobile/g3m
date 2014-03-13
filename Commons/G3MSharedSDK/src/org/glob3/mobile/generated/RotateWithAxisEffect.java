@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 public class RotateWithAxisEffect extends EffectWithForce
 {
-  private final Vector3D _axis ;
+  private final Vector3D _axis ; //VERSION 1.0
 
   public RotateWithAxisEffect(Vector3D axis, Angle angle)
   {

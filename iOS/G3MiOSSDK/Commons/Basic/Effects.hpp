@@ -25,9 +25,12 @@ class EffectTarget {
 public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
-#else
+#endif
+#ifdef JAVA_CODE
   void dispose();
 #endif
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  virtual void unusedMethod() const = 0;
 };
 
 class Effect {
@@ -206,8 +209,12 @@ private:
 
   std::vector<EffectRun*> _effectsRuns;
   ITimer*                 _timer;
+#ifdef C_CODE
   const IFactory*         _factory;
-
+#endif
+#ifdef JAVA_CODE
+  private IFactory _factory;
+#endif
 
   void processFinishedEffects(const G3MRenderContext* rc,
                               const TimeInterval& when);

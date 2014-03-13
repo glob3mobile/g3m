@@ -23,10 +23,10 @@ package org.glob3.mobile.generated;
 public class CoordinateSystem
 {
 
-  public final Vector3D _x ;
-  public final Vector3D _y ;
-  public final Vector3D _z ;
-  public final Vector3D _origin ;
+  public final Vector3D _x ; //VERSION 1.0
+  public final Vector3D _y ; //VERSION 1.0
+  public final Vector3D _z ; //VERSION 1.0
+  public final Vector3D _origin ; //VERSION 1.0
 
   public static boolean areOrtogonal(Vector3D x, Vector3D y, Vector3D z)
   {

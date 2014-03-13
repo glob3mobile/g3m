@@ -9,14 +9,14 @@ public class Frustum
   private final Plane _farPlane;
 
   // the eight vertices of the frustum, i.e: ltn = left,top,near
-  private final Vector3D _ltn ;
-  private final Vector3D _rtn ;
-  private final Vector3D _lbn ;
-  private final Vector3D _rbn ;
-  private final Vector3D _ltf ;
-  private final Vector3D _rtf ;
-  private final Vector3D _lbf ;
-  private final Vector3D _rbf ;
+  private final Vector3D _ltn ; //VERSION 1.0
+  private final Vector3D _rtn ; //VERSION 1.0
+  private final Vector3D _lbn ; //VERSION 1.0
+  private final Vector3D _rbn ; //VERSION 1.0
+  private final Vector3D _ltf ; //VERSION 1.0
+  private final Vector3D _rtf ; //VERSION 1.0
+  private final Vector3D _lbf ; //VERSION 1.0
+  private final Vector3D _rbf ; //VERSION 1.0
 
   private BoundingVolume _boundingVolume;
 

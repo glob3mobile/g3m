@@ -163,7 +163,7 @@ ICameraActivityListener* IG3MBuilder::getCameraActivityListener() {
  *
  * @return _planet: const Planet*
  */
-const Planet* IG3MBuilder::getPlanet() {
+ Planet* IG3MBuilder::getPlanet() const{
   if (!_planet) {
     _planet = Planet::createEarth();
   }
@@ -407,7 +407,7 @@ void IG3MBuilder::setCameraActivityListener(ICameraActivityListener *cameraActiv
  *
  * @param planet - cannot be NULL.
  */
-void IG3MBuilder::setPlanet(const Planet *planet) {
+void IG3MBuilder::setPlanet(Planet *planet) {
   if (_planet) {
     ILogger::instance()->logError("LOGIC ERROR: planet already initialized");
     return;

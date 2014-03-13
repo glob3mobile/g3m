@@ -84,6 +84,11 @@ public:
   super.dispose();
 #endif
   }
+  
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  void unusedMethod() const {
+    
+  }
 
   void incDegrees(double value) {
     _degrees += value; 

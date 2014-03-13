@@ -21,12 +21,12 @@ package org.glob3.mobile.generated;
 
 public class Ellipsoid
 {
-  private final Vector3D _center ;
-  private final Vector3D _radii ;
+  private final Vector3D _center ; //VERSION 1.0
+  private final Vector3D _radii ; //VERSION 1.0
 
-  private final Vector3D _radiiSquared ;
-  private final Vector3D _radiiToTheFourth ;
-  private final Vector3D _oneOverRadiiSquared ;
+  private final Vector3D _radiiSquared ; //VERSION 1.0
+  private final Vector3D _radiiToTheFourth ; //VERSION 1.0
+  private final Vector3D _oneOverRadiiSquared ; //VERSION 1.0
 
 
   public Ellipsoid(Vector3D center, Vector3D radii)

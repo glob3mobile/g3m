@@ -21,7 +21,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
 public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 {
   private Mesh _mesh;
@@ -192,6 +191,12 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     _glState._release();
 
   super.dispose();
+  }
+
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  public final void unusedMethod()
+  {
+
   }
 
   public final void incDegrees(double value)

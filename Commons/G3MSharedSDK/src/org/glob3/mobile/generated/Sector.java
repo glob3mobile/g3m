@@ -39,8 +39,8 @@ public class Sector
 
   public final Geodetic2D _center ;
 
-  public final Angle _deltaLatitude ;
-  public final Angle _deltaLongitude ;
+  public final Angle _deltaLatitude ; //VERSION 1.0
+  public final Angle _deltaLongitude ; //VERSION 1.0
 
 
   public void dispose()

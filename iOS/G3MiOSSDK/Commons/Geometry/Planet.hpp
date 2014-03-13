@@ -23,9 +23,9 @@ class CoordinateSystem;
 class Planet {
 public:
   
-  static const Planet* createEarth();
-  static const Planet* createSphericalEarth();
-  static const Planet* createFlatEarth();
+  static Planet* createEarth();
+  static Planet* createSphericalEarth();
+  static Planet* createFlatEarth();
 
   
   virtual ~Planet() {

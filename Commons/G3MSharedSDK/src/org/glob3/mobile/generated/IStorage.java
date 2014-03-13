@@ -61,4 +61,9 @@ public abstract class IStorage
 
   public abstract boolean isAvailable();
 
+  //useless, it's here only to make the C++ => Java translator creates an abstract class intead of an empty class
+  public final void unusedMethodNoVirtual()
+  {
+    //todo nothing
+  }
 }

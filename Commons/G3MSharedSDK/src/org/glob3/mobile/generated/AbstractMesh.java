@@ -26,7 +26,7 @@ public abstract class AbstractMesh extends Mesh
 {
   protected final int _primitive;
   protected final boolean _owner;
-  protected Vector3D _center ;
+  protected Vector3D _center ; //VERSION 1.0
   protected final MutableMatrix44D _translationMatrix;
   protected IFloatBuffer _vertices;
   protected final Color _flatColor;

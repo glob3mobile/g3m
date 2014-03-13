@@ -90,6 +90,10 @@ public:
   
   virtual ~Shape();
   
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  void unusedMethod() const {
+  }
+  
   const Geodetic3D getPosition() const {
     return *_position;
   }

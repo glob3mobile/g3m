@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class DoubleTapTranslationEffect extends EffectWithDuration
 {
-  private final Vector3D _translation ;
+  private final Vector3D _translation ; //VERSION 1.0
   private final double _distance;
   private double _lastAlpha;
 

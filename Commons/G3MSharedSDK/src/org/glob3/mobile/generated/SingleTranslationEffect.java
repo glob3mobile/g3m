@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class SingleTranslationEffect extends EffectWithForce
 {
-  private final Vector3D _direction ;
+  private final Vector3D _direction ; //VERSION 1.0
 
 
   public SingleTranslationEffect(Vector3D desp)

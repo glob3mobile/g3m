@@ -544,8 +544,7 @@ public class Camera
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _width;
   private int _height;
-
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private Planet _planet;
 
   private MutableVector3D _position = new MutableVector3D(); // position
   private MutableVector3D _center = new MutableVector3D(); // point where camera is looking at
@@ -576,6 +575,11 @@ public class Camera
   private static class CameraEffectTarget implements EffectTarget
   {
     public void dispose()
+    {
+    }
+
+    // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+    public final void unusedMethod()
     {
     }
   }

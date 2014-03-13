@@ -2,7 +2,8 @@ package org.glob3.mobile.generated;
 public class TouchEvent
 {
   private final TouchEventType _eventType;
-  private final java.util.ArrayList<Touch> _touchs; // *** REMOVED CONSTRUCTOR BY MY RULES<Touch>();
+  private final java.util.ArrayList<Touch> _touchs;
+
   private final boolean _shiftPressed;
   private final boolean _ctrlPressed;
   private final double _wheelDelta;
@@ -38,15 +39,13 @@ public class TouchEvent
 
   public static TouchEvent create(TouchEventType type, Touch touch)
   {
-    final java.util.ArrayList<Touch> touchs = new java.util.ArrayList<Touch>(java.util.Arrays.asList(touch)); //CHANGED BY CONVERSOR RULE
-
+    final java.util.ArrayList<Touch> touchs = new java.util.ArrayList<Touch>(java.util.Arrays.asList(touch));
     return create(type, touchs);
   }
 
   public static TouchEvent create(TouchEventType type, Touch touch, boolean shift, boolean ctrl, double wheelDelta)
   {
-    final java.util.ArrayList<Touch> touchs = new java.util.ArrayList<Touch>(java.util.Arrays.asList(touch)); //CHANGED BY CONVERSOR RULE
-
+final java.util.ArrayList<Touch> touchs = new java.util.ArrayList<Touch>(java.util.Arrays.asList(touch));
     return create(type, touchs, shift, ctrl, wheelDelta);
   }
 
@@ -67,18 +66,13 @@ public class TouchEvent
 
   public final byte getTapCount()
   {
-    if (_touchs.isEmpty())
-       return 0;
+    if (_touchs.isEmpty()) return 0;
     return _touchs.get(0).getTapCount();
   }
 
   public void dispose()
   {
-    for (int i = 0; i < _touchs.size(); i++)
-    {
-      if (_touchs.get(i) != null)
-         _touchs.get(i).dispose();
-    }
+    _touchs.clear();
   }
 
 }

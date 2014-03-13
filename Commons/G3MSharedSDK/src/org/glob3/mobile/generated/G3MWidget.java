@@ -656,7 +656,7 @@ public class G3MWidget
 
   private FrameTasksExecutor _frameTasksExecutor;
   private GL _gl;
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private final Planet _planet;
 
   private CameraRenderer _cameraRenderer;
   private Renderer _mainRenderer;

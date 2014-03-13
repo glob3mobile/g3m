@@ -83,7 +83,7 @@ public class Sphere extends BoundingVolume
   }
 
 
-  public final Vector3D _center ;
+  public final Vector3D _center ; //VERSION 1.0
   public final double _radius;
   public final double _radiusSquared;
 

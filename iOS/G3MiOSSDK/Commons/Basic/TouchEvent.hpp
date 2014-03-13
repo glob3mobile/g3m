@@ -111,8 +111,12 @@ public:
 
   static TouchEvent* create(const TouchEventType& type,
                             const Touch* touch) {
+#ifdef C_CODE
     const std::vector<const Touch*> touchs(1, touch);
-
+#endif
+#ifdef JAVA_CODE
+    final java.util.ArrayList<Touch> touchs = new java.util.ArrayList<Touch>(java.util.Arrays.asList(touch));
+#endif
     return create(type, touchs);
   }
 
@@ -121,8 +125,12 @@ public:
                             bool shift,
                             bool ctrl,
                             double wheelDelta) {
-    const std::vector<const Touch*> touchs(1, touch);
-
+#ifdef C_CODE
+const std::vector<const Touch*> touchs(1, touch);
+#endif
+#ifdef JAVA_CODE
+final java.util.ArrayList<Touch> touchs = new java.util.ArrayList<Touch>(java.util.Arrays.asList(touch));
+#endif
     return create(type, touchs, shift, ctrl, wheelDelta);
   }
 

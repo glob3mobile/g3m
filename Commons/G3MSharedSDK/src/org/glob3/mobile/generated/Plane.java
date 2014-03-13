@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class Plane
 {
-  private final Vector3D _normal ;
+  private final Vector3D _normal ; //VERSION 1.0
   private final double _d;
 
   private final Vector3F _normalF;
@@ -229,7 +229,7 @@ public class Plane
       solution = secondSolution;
     }
   
-    if (mu.abs((s1 * c1 + s2 *java.lang.Math.sin(solution) + s3)) > 0.001) //if valid solution (can't compare with 0)
+    if (mu.abs((s1 * c1 + s2 *java.lang.Math.sin(solution) + s3)) > 0.001)
     {
       solution = -solution;
     }

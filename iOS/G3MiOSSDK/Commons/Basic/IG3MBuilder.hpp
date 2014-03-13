@@ -43,7 +43,13 @@ private:
   IDownloader*                      _downloader;
   IThreadUtils*                     _threadUtils;
   ICameraActivityListener*          _cameraActivityListener;
-  const Planet*                     _planet;
+  
+//#ifdef C_CODE
+  mutable Planet*                     _planet;
+//#endif
+//#ifdef JAVA_CODE
+//  private Planet _planet;
+//#endif
   std::vector<ICameraConstrainer*>* _cameraConstraints;
   CameraRenderer*                   _cameraRenderer;
   Color*                            _backgroundColor;
@@ -119,7 +125,7 @@ public:
 
   void setCameraActivityListener(ICameraActivityListener* cameraActivityListener);
 
-  void setPlanet(const Planet* planet);
+  void setPlanet(Planet* planet);
 
   void addCameraConstraint(ICameraConstrainer* cameraConstraint);
 
@@ -164,7 +170,7 @@ public:
   }
 #endif
 
-  const Planet* getPlanet();
+  Planet* getPlanet() const;
   PlanetRendererBuilder* getPlanetRendererBuilder();
 
   void addGPUProgramSources(const GPUProgramSources& s);

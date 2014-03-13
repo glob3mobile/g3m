@@ -49,7 +49,13 @@ public abstract class IG3MBuilder
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
   private ICameraActivityListener _cameraActivityListener;
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+
+///#ifdef C_CODE
+  private Planet _planet;
+///#endif
+///#ifdef JAVA_CODE
+//  private Planet _planet;
+///#endif
   private java.util.ArrayList<ICameraConstrainer> _cameraConstraints;
   private CameraRenderer _cameraRenderer;
   private Color _backgroundColor;
@@ -962,19 +968,19 @@ public abstract class IG3MBuilder
   }
 
 
-  /**
-   * Returns the _planet. If it does not exist, it will be default initializated.
-   *
-   * @return _planet: const Planet*
-   */
+ /**
+  * Returns the _planet. If it does not exist, it will be default initializated.
+  *
+  * @return _planet: const Planet*
+  */
   public final Planet getPlanet()
   {
-    if (_planet == null)
-    {
-      _planet = Planet.createEarth();
-    }
-    return _planet;
-  }
+   if (_planet == null)
+   {
+     _planet = Planet.createEarth();
+   }
+   return _planet;
+ }
 
   /**
    * Returns the _planetRendererBuilder. If it does not exist, it will be default initializated. 

@@ -5,8 +5,8 @@ package org.glob3.mobile.generated;
 public class Geodetic3D
 {
 
-  public final Angle _latitude ;
-  public final Angle _longitude ;
+  public final Angle _latitude ; //VERSION 1.0
+  public final Angle _longitude ; //VERSION 1.0
   public final double _height;
 
 

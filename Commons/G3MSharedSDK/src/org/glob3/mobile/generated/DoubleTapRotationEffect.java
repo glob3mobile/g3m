@@ -1,8 +1,8 @@
 package org.glob3.mobile.generated; 
 public class DoubleTapRotationEffect extends EffectWithDuration
 {
-  private final Vector3D _axis ;
-  private final Angle _angle ;
+  private final Vector3D _axis ; //VERSION 1.0
+  private final Angle _angle ; //VERSION 1.0
   private final double _distance;
   private double _lastAlpha;
 
