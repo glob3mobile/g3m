@@ -637,7 +637,7 @@ public:
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
 
-  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -2487,25 +2487,25 @@ public:
 
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
-//    const double population = properties->getAsNumber("population", 0);
+    const double population = properties->getAsNumber("population", 0);
 
-//    if (population > 2000000) {
-//      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
+    if (population > 2000000) {
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
 
       Mark* mark = createMark(geometry);
       if (mark != NULL) {
         symbols->push_back( new GEOMarkSymbol(mark) );
       }
-//    }
-
-    const std::string label = properties->getAsString("name", "");
-
-    if (label.compare("") != 0) {
-      symbols->push_back( new GEOLabelRasterSymbol(label,
-                                                   geometry->getPosition(),
-                                                   GFont::monospaced(),
-                                                   Color::yellow()) );
     }
+
+//    const std::string label = properties->getAsString("name", "");
+//
+//    if (label.compare("") != 0) {
+//      symbols->push_back( new GEOLabelRasterSymbol(label,
+//                                                   geometry->getPosition(),
+//                                                   GFont::monospaced(),
+//                                                   Color::yellow()) );
+//    }
 
     return symbols;
   }
