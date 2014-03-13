@@ -147,6 +147,11 @@ void Tile::setTextureSolved(bool textureSolved) {
       _texturizerData = NULL;
     }
 
+    if (_debugMesh != NULL){
+      delete _debugMesh;
+      _debugMesh = NULL;
+    }
+
     if (_subtiles != NULL) {
       const int subtilesSize = _subtiles->size();
       for (int i = 0; i < subtilesSize; i++) {
@@ -226,8 +231,10 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
   if (_debugMesh == NULL) {
     const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
 
+    Color color = isTextureSolved()? Color::blue() : Color::red();
+
     //TODO: CHECK
-    _debugMesh = tessellator->createTileDebugMesh(rc->getPlanet(), tileMeshResolution, this);
+    _debugMesh = tessellator->createTileDebugMesh(rc->getPlanet(), tileMeshResolution, this, color);
   }
   return _debugMesh;
 }

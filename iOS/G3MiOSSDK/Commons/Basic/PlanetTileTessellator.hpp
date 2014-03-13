@@ -152,7 +152,8 @@ public:
 
   Mesh* createTileDebugMesh(const Planet* planet,
                             const Vector2I& resolution,
-                            const Tile* tile) const;
+                            const Tile* tile,
+                            const Color& colorDebug) const;
 
   bool isReady(const G3MRenderContext* rc) const {
     return true;

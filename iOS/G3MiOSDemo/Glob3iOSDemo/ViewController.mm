@@ -667,7 +667,7 @@ public:
   }
 
   //builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-  //builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
+  builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
   /*builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));*/
 
@@ -1909,7 +1909,7 @@ builder.initializeWidget();
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
@@ -2995,6 +2995,10 @@ public:
 
     PrecacherInitializationTask* initializationTask = new PrecacherInitializationTask([self G3MWidget],
                                                                                       lower, upper, level);
+
+
+
+
     return initializationTask;
 
   }
