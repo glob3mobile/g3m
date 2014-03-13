@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TileTexturizer_hpp
-#define G3MiOSSDK_TileTexturizer_hpp
+#ifndef G3MiOSSDK_TileTexturizer
+#define G3MiOSSDK_TileTexturizer
 
 #include "Renderer.hpp"
 
@@ -42,7 +42,8 @@ public:
                           long long texturePriority,
                           Tile* tile,
                           Mesh* tessellatorMesh,
-                          Mesh* previousMesh) = 0;
+                          Mesh* previousMesh,
+                          bool logTilesPetitions) = 0;
 
   virtual void tileToBeDeleted(Tile* tile,
                                Mesh* mesh) = 0;

@@ -1,13 +1,13 @@
 //
-//  GPUUniform.h
+//  GPUUniform.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 05/04/13.
 //
 //
 
-#ifndef G3MiOSSDK_GPUUniform_h
-#define G3MiOSSDK_GPUUniform_h
+#ifndef G3MiOSSDK_GPUUniform
+#define G3MiOSSDK_GPUUniform
 
 #include "GL.hpp"
 #include "GLConstants.hpp"
@@ -43,6 +43,13 @@ public:
   virtual bool isEquals(const GPUUniformValue* v) const = 0;
 
   virtual std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
 };
 
 

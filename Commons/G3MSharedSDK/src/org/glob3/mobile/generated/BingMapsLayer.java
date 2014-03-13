@@ -2,6 +2,7 @@ package org.glob3.mobile.generated;
 public class BingMapsLayer extends Layer
 {
   private final String _imagerySet;
+  private final String _culture;
   private final String _key;
 
   private final int _initialLevel;
@@ -107,6 +108,34 @@ public class BingMapsLayer extends Layer
   {
      super(condition, "BingMaps", timeToCache, readExpired, null, transparency);
      _imagerySet = imagerySet;
+     _culture = "en-US";
+     _key = key;
+     _initialLevel = initialLevel;
+     _isInitialized = false;
+  
+  }
+
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  {
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, condition, (float)1.0);
+  }
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
+  {
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, null, (float)1.0);
+  }
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired)
+  {
+     this(imagerySet, culture, key, timeToCache, readExpired, 2, null, (float)1.0);
+  }
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache)
+  {
+     this(imagerySet, culture, key, timeToCache, true, 2, null, (float)1.0);
+  }
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
+  {
+     super(condition, "BingMaps", timeToCache, readExpired, null, transparency);
+     _imagerySet = imagerySet;
+     _culture = culture;
      _key = key;
      _initialLevel = initialLevel;
      _isInitialized = false;
@@ -143,7 +172,7 @@ public class BingMapsLayer extends Layer
     String path = _imageUrl;
     path = su.replaceSubstring(path, "{subdomain}", subdomain);
     path = su.replaceSubstring(path, "{quadkey}", quadkey);
-    path = su.replaceSubstring(path, "{culture}", "en-US");
+    path = su.replaceSubstring(path, "{culture}", _culture);
   
     petitions.add(new Petition(tile._sector, new URL(path, false), getTimeToCache(), getReadExpired(), true, _transparency));
   
@@ -277,6 +306,10 @@ public class BingMapsLayer extends Layer
   public final String description()
   {
     return "[BingMapsLayer]";
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
   public final BingMapsLayer copy()

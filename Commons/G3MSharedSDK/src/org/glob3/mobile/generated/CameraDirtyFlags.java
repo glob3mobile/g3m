@@ -21,9 +21,9 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class ILogger;
 //class GPUProgramState;
-
 
 public class CameraDirtyFlags
 {
@@ -88,6 +88,11 @@ public class CameraDirtyFlags
     if (_frustumMCDirty)
        d += "FMC ";
     return d;
+  }
+
+  @Override
+  public String toString() {
+    return description();
   }
 
   public final void setAll(boolean value)

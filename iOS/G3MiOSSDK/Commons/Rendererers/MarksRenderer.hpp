@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_MarksRenderer_hpp
-#define G3MiOSSDK_MarksRenderer_hpp
+#ifndef G3MiOSSDK_MarksRenderer
+#define G3MiOSSDK_MarksRenderer
 
 #include <vector>
 #include "LeafRenderer.hpp"
@@ -39,10 +39,12 @@ private:
   bool               _autoDeleteMarkTouchListener;
 
   long long _downloadPriority;
-  
+
   GLState* _glState;
-  
+
   void updateGLState(const G3MRenderContext* rc);
+  IFloatBuffer* _billboardTexCoords;
+  IFloatBuffer* getBillboardTexCoords();
 
 public:
 
@@ -99,16 +101,15 @@ public:
   long long getDownloadPriority() const {
     return _downloadPriority;
   }
-  
+
   bool isVisible(const G3MRenderContext* rc) {
     return true;
   }
-  
+
   void modifiyGLState(GLState* state) {
     
   }
   
-//  void onTouchEventRecived(const G3MEventContext* ec, const TouchEvent* touchEvent);
 };
 
 #endif

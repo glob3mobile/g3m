@@ -95,7 +95,7 @@ public final class ThreadUtils_Android
    }
 
 
-   private void drainQueues() {
+   private final void drainQueues() {
       for (final Runnable runnable : _backgroundQueue) {
          _backgroundExecutor.execute(runnable);
       }
@@ -110,10 +110,7 @@ public final class ThreadUtils_Android
 
    @Override
    public synchronized void onPause(final G3MContext context) {
-      //      final int ___DIEGO_AT_WORK;
-      //      if (_running) {
       _running = false;
-      //      }
    }
 
 

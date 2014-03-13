@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Angle_hpp
-#define G3MiOSSDK_Angle_hpp
+#ifndef G3MiOSSDK_Angle
+#define G3MiOSSDK_Angle
 
 #define THRESHOLD               1e-5
 
@@ -232,6 +232,13 @@ public:
   }
 
   const std::string description() const;
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 

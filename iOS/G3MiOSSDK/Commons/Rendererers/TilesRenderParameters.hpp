@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_TilesRenderParameters_hpp
-#define G3MiOSSDK_TilesRenderParameters_hpp
+#ifndef G3MiOSSDK_TilesRenderParameters
+#define G3MiOSSDK_TilesRenderParameters
 
 
 

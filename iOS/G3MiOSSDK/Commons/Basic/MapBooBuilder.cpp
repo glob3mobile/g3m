@@ -243,14 +243,14 @@ IThreadUtils* MapBooBuilder::getThreadUtils() {
 
 void MapBooBuilder::setGL(GL *gl) {
   if (_gl != NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
-    return;
-    //ERROR("LOGIC ERROR: _gl already initialized");
+    //ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
+    //return;
+    THROW_EXCEPTION("LOGIC ERROR: _gl already initialized");
   }
   if (gl == NULL) {
-    ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
-    return;
-    //ERROR("LOGIC ERROR: _gl cannot be NULL");
+    //ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+    //return;
+    THROW_EXCEPTION("LOGIC ERROR: _gl cannot be NULL");
   }
   _gl = gl;
 }
@@ -510,6 +510,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const Sector renderedSector = Sector::fullSphere();
   const bool renderTileMeshes = true;
 
+  const bool logTilesPetitions = false;
+
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
                                               true,
@@ -521,12 +523,13 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               showStatistics,
                                               texturePriority,
                                               renderedSector,
-                                              renderTileMeshes);
+                                              renderTileMeshes,
+                                              logTilesPetitions);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
   }
-
+  
   return result;
 }
 
@@ -1815,3 +1818,69 @@ void MapBooBuilder::pollApplicationDataFromServer(const G3MContext *context) {
                             new MapBooBuilder_RestJSON(this),
                             true);
 }
+
+const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
+                                                     const Vector2I& tileDimension,
+                                                     const Vector2I& pixelPosition,
+                                                     const Geodetic3D& position) {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_serverURL.getPath());
+
+  isb->addString("/Public/applications/");
+  isb->addString(_applicationId);
+  isb->addString("/scenes/");
+  
+  const MapBoo_Scene* scene = getApplicationCurrentScene();
+  isb->addString(scene->getId());
+  
+  isb->addString("/getinfo?");
+  
+  isb->addString("tileX=");
+  isb->addInt(tile->_column);
+  
+  isb->addString("&tileY=");
+  isb->addInt(tile->_row);
+  
+  isb->addString("&tileLevel=");
+  isb->addInt(tile->_level);
+  
+  
+  //Sector
+  isb->addString("&upperLat=");
+  isb->addDouble(tile->_sector._upper._latitude._degrees);
+  isb->addString("&lowerLat=");
+  isb->addDouble(tile->_sector._lower._latitude._degrees);
+  isb->addString("&upperLon=");
+  isb->addDouble(tile->_sector._upper._longitude._degrees);
+  isb->addString("&lowerLon=");
+  isb->addDouble(tile->_sector._lower._longitude._degrees);
+  
+  
+  isb->addString("&tileBBox=");
+  isb->addString("TODO");
+  
+  isb->addString("&tileWidth=");
+  isb->addInt(tileDimension._x);
+  
+  isb->addString("&tileHeight=");
+  isb->addInt(tileDimension._y);
+  
+  isb->addString("&pixelX=");
+  isb->addInt(pixelPosition._x);
+  
+  isb->addString("&pixelY=");
+  isb->addInt(pixelPosition._y);
+  
+  isb->addString("&lat=");
+  isb->addDouble(position._latitude._degrees);
+  
+  isb->addString("&lon=");
+  isb->addDouble(position._longitude._degrees);
+  
+  const std::string path = isb->getString();
+  delete isb;
+  
+  return URL(path, false);
+  
+}
+

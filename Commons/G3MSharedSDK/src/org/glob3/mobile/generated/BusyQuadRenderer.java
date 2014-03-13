@@ -42,9 +42,6 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
     texId = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false);
   
-    rc.getFactory().deleteImage(_image);
-    _image = null;
-  
     if (texId == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
@@ -152,6 +149,10 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
   public void dispose()
   {
+    //rc->getFactory()->deleteImage(_image);
+    //_image = NULL;
+    if (_image != null)
+       _image.dispose();
     if (_quadMesh != null)
        _quadMesh.dispose();
     if (_backgroundColor != null)

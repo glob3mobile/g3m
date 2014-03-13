@@ -86,8 +86,6 @@ public class CommandLine {
 
 
       final int exitVal = p.waitFor();
-
-      System.out.println("Destroying Process");
       p.destroy();
 
 
@@ -128,8 +126,14 @@ public class CommandLine {
 
       if (exitVal == 0) {
          isrError.close();
+         if (!errorGobbler.getResult().isEmpty()) {
+            System.out.println("RESULT: " + errorGobbler.getResult());
+         }
          errorGobbler.destroy();
          return outputGobbler;
+      }
+      if (!errorGobbler.getResult().isEmpty()) {
+         System.out.println("OUTPUT: " + outputGobbler.getResult());
       }
       isrOutput.close();
       outputGobbler.destroy();

@@ -40,6 +40,7 @@ public:
 class BingMapsLayer : public Layer {
 private:
   const std::string _imagerySet;
+  const std::string _culture;
   const std::string _key;
 
   const int _initialLevel;
@@ -93,6 +94,15 @@ public:
                 LayerCondition* condition = NULL,
                 float transparency = (float)1.0);
 
+  BingMapsLayer(const std::string& imagerySet,
+                const std::string& culture,
+                const std::string& key,
+                const TimeInterval& timeToCache,
+                bool readExpired = true,
+                int initialLevel = 2,
+                LayerCondition* condition = NULL,
+                float transparency = (float)1.0);
+
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
 
@@ -108,6 +118,12 @@ public:
   void onDownloadErrorMetadata();
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   BingMapsLayer* copy() const;
   

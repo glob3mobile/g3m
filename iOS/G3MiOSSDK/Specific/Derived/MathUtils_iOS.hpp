@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_MathUtils_hpp
-#define G3MiOSSDK_MathUtils_hpp
+#ifndef G3MiOSSDK_MathUtils
+#define G3MiOSSDK_MathUtils
 
 #include <math.h>
 #include <limits>

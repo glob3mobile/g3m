@@ -124,12 +124,12 @@ public class G3MWidget
   
       _currentCamera.setGeodeticPosition(position);
       _currentCamera.setHeading(Angle.zero());
-      _currentCamera.setPitch(Angle.zero());
+      _currentCamera.setPitch(Angle.fromDegrees(-90));
       _currentCamera.setRoll(Angle.zero());
   
       _nextCamera.setGeodeticPosition(position);
       _nextCamera.setHeading(Angle.zero());
-      _nextCamera.setPitch(Angle.zero());
+      _nextCamera.setPitch(Angle.fromDegrees(-90));
       _nextCamera.setRoll(Angle.zero());
     }
   
@@ -491,28 +491,33 @@ public class G3MWidget
     _initialCameraPositionHasBeenSet = true;
   }
 
-  public final void setCameraHeading(Angle angle)
+  public final void setCameraHeading(Angle heading)
   {
-    getNextCamera().setHeading(angle);
+    getNextCamera().setHeading(heading);
   }
 
-  public final void setCameraPitch(Angle angle)
+  public final void setCameraPitch(Angle pitch)
   {
-    getNextCamera().setPitch(angle);
+    getNextCamera().setPitch(pitch);
   }
 
-  public final void setCameraRoll(Angle angle)
+  public final void setCameraRoll(Angle roll)
   {
-    getNextCamera().setRoll(angle);
+    getNextCamera().setRoll(roll);
+  }
+
+  public final void setCameraHeadingPitchRoll(Angle heading, Angle pitch, Angle roll)
+  {
+    getNextCamera().setHeadingPitchRoll(heading, pitch, roll);
   }
 
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading)
   {
-     setAnimatedCameraPosition(position, heading, Angle.zero());
+     setAnimatedCameraPosition(position, heading, Angle.fromDegrees(-90));
   }
   public final void setAnimatedCameraPosition(Geodetic3D position)
   {
-     setAnimatedCameraPosition(position, Angle.zero(), Angle.zero());
+     setAnimatedCameraPosition(position, Angle.zero(), Angle.fromDegrees(-90));
   }
   public final void setAnimatedCameraPosition(Geodetic3D position, Angle heading, Angle pitch)
   {
@@ -529,11 +534,11 @@ public class G3MWidget
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading)
   {
-     setAnimatedCameraPosition(interval, position, heading, Angle.zero(), false, false);
+     setAnimatedCameraPosition(interval, position, heading, Angle.fromDegrees(-90), false, false);
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position)
   {
-     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.zero(), false, false);
+     setAnimatedCameraPosition(interval, position, Angle.zero(), Angle.fromDegrees(-90), false, false);
   }
   public final void setAnimatedCameraPosition(TimeInterval interval, Geodetic3D position, Angle heading, Angle pitch, boolean linearTiming, boolean linearHeight)
   {
@@ -605,8 +610,6 @@ public class G3MWidget
     _effectsScheduler.cancelAllEffects();
   }
 
-  //  void resetCameraPosition();
-
   public final CameraRenderer getCameraRenderer()
   {
     return _cameraRenderer;
@@ -622,11 +625,6 @@ public class G3MWidget
     return _context;
   }
 
-
-  //void G3MWidget::resetCameraPosition() {
-  //  getNextCamera()->resetPosition();
-  //}
-  
   public final void setBackgroundColor(Color backgroundColor)
   {
     if (_backgroundColor != null)
@@ -739,8 +737,8 @@ public class G3MWidget
      _hudRenderer = hudRenderer;
      _width = 1;
      _height = 1;
-     _currentCamera = new Camera(_width, _height);
-     _nextCamera = new Camera(_width, _height);
+     _currentCamera = new Camera();
+     _nextCamera = new Camera();
      _backgroundColor = new Color(backgroundColor);
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TexturesHandler_hpp
-#define G3MiOSSDK_TexturesHandler_hpp
+#ifndef G3MiOSSDK_TexturesHandler
+#define G3MiOSSDK_TexturesHandler
 
 #include <string>
 #include <vector>
@@ -93,6 +93,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 #ifdef C_CODE
   bool operator<(const TextureSpec& that) const {

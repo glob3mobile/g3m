@@ -65,7 +65,6 @@ public:
                               rotationAngleInRadians,
                               rotationCenterU,
                               rotationCenterV),
-
   _glTextureId(glTextureId),
   _texCoords(texCoords),
   _ownedTexCoords(ownedTexCoords),

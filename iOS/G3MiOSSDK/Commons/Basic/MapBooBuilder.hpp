@@ -142,6 +142,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   ~MapBoo_MultiImage_Level() {
 
@@ -182,6 +188,12 @@ public:
   MapBoo_MultiImage_Level* getBestLevel(int width) const;
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -226,6 +238,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -304,6 +322,12 @@ public:
   ~MapBoo_Scene();
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -638,6 +662,11 @@ public:
   const URL getServerURL() const {
     return _serverURL;
   }
+  
+  const URL createGetFeatureInfoRestURL(const Tile* tile,
+                                        const Vector2I& size,
+                                        const Vector2I& pixel,
+                                        const Geodetic3D& position);
 
   /** Private to MapbooBuilder, don't call it */
   void pollApplicationDataFromServer(const G3MContext* context);

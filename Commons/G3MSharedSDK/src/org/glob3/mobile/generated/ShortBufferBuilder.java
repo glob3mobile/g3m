@@ -104,5 +104,9 @@ public class ShortBufferBuilder
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

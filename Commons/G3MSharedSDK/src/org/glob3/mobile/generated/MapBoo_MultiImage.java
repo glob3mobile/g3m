@@ -78,5 +78,9 @@ public class MapBoo_MultiImage
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

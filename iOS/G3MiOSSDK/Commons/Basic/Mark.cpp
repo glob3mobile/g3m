@@ -129,11 +129,8 @@ public:
 };
 
 
-IFloatBuffer* Mark::_billboardTexCoord = NULL;
-
-
 Mark::Mark(const std::string& label,
-           const URL          iconURL,
+           const URL&         iconURL,
            const Geodetic3D&  position,
            AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
@@ -217,7 +214,7 @@ _normalAtMarkPosition(NULL)
 
 }
 
-Mark::Mark(const URL          iconURL,
+Mark::Mark(const URL&         iconURL,
            const Geodetic3D&  position,
            AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
@@ -258,7 +255,7 @@ _normalAtMarkPosition(NULL)
 Mark::Mark(const IImage*      image,
            const std::string& imageID,
            const Geodetic3D&  position,
-           AltitudeMode altitudeMode,
+           AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
            MarkUserData*      userData,
            bool               autoDeleteUserData,
@@ -388,7 +385,7 @@ Mark::~Mark() {
     IFactory::instance()->deleteImage(_textureImage);
   }
 
-  if (_glState != NULL){
+  if (_glState != NULL) {
     _glState->_release();
   }
 
@@ -429,8 +426,8 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
-void Mark::createGLState(const Planet* planet) {
-
+void Mark::createGLState(const Planet* planet,
+                         IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
 
   _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
@@ -439,7 +436,7 @@ void Mark::createGLState(const Planet* planet) {
 
   if (_textureId != NULL) {
     _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
-                                                getBillboardTexCoords(),
+                                                billboardTexCoords,
                                                 2,
                                                 0,
                                                 false,
@@ -451,24 +448,13 @@ void Mark::createGLState(const Planet* planet) {
   }
 }
 
-IFloatBuffer* Mark::getBillboardTexCoords() {
-  if (_billboardTexCoord == NULL) {
-    FloatBufferBuilderFromCartesian2D texCoor;
-    texCoor.add(1,1);
-    texCoor.add(1,0);
-    texCoor.add(0,1);
-    texCoor.add(0,0);
-    _billboardTexCoord = texCoor.create();
-  }
-  return _billboardTexCoord;
-}
-
 void Mark::render(const G3MRenderContext* rc,
                   const Vector3D& cameraPosition,
                   double cameraHeight,
                   const GLState* parentGLState,
                   const Planet* planet,
-                  GL* gl) {
+                  GL* gl,
+                  IFloatBuffer* billboardTexCoords) {
 
   const Vector3D* markPosition = getCartesianPosition(planet);
 
@@ -489,45 +475,41 @@ void Mark::render(const G3MRenderContext* rc,
   if (renderableByDistance) {
     bool occludedByHorizon = false;
 
-    if (_position->_height > cameraHeight){
-      //Computing horizon culling
+    if (_position->_height > cameraHeight) {
+      // Computing horizon culling
       const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
-      if (dists.size() > 0){
+      if (dists.size() > 0) {
         const double dist = dists[0];
-        if (dist > 0.0 && dist < 1.0){
+        if (dist > 0.0 && dist < 1.0) {
           occludedByHorizon = true;
         }
       }
-
-    } else{
-      //if camera position is upper than mark we can compute horizon culling in a much simpler way
-      if (_normalAtMarkPosition == NULL){
-        _normalAtMarkPosition = new Vector3D(planet->geodeticSurfaceNormal(*markPosition));
+    }
+    else {
+      // if camera position is upper than mark we can compute horizon culling in a much simpler way
+      if (_normalAtMarkPosition == NULL) {
+        _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
       }
       occludedByHorizon = (_normalAtMarkPosition->angleBetween(markCameraVector)._radians <= HALF_PI);
     }
 
 
     if (!occludedByHorizon) {
+      if ((_textureId == NULL) && (_textureImage != NULL)) {
+        _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+                                                                     GLFormat::rgba(),
+                                                                     _imageID,
+                                                                     false);
 
-      if (_textureId == NULL) {
-        if (_textureImage != NULL) {
-          _textureId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                       GLFormat::rgba(),
-                                                                       _imageID,
-                                                                       false);
+        rc->getFactory()->deleteImage(_textureImage);
+        _textureImage = NULL;
+      }
 
-          rc->getFactory()->deleteImage(_textureImage);
-          _textureImage = NULL;
-          createGLState(planet);
-        }
-      } else{
-
+      if (_textureId != NULL) {
         if (_glState == NULL) {
-          createGLState(planet);    //If GLState was disposed due to elevation change
+          createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
         }
-
-        _glState->setParent(parentGLState); //Linking with parent
+        _glState->setParent(parentGLState);
 
         rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                                 0,
@@ -543,19 +525,20 @@ void Mark::render(const G3MRenderContext* rc,
 }
 
 void Mark::elevationChanged(const Geodetic2D& position,
-                            double rawElevation,            //Without considering vertical exaggeration
+                            double rawElevation,  // Without considering vertical exaggeration
                             double verticalExaggeration) {
 
   if (ISNAN(rawElevation)) {
     _currentSurfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
-  } else{
+  }
+  else {
     _currentSurfaceElevation = rawElevation * verticalExaggeration;
   }
   
   delete _cartesianPosition;
   _cartesianPosition = NULL;
-
-  if (_glState != NULL){
+  
+  if (_glState != NULL) {
     _glState->_release();
     _glState = NULL;
   }

@@ -34,7 +34,8 @@ _texturePriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
-_renderTileMeshes(true)
+_renderTileMeshes(true),
+_logTilesPetitions(false)
 {
 }
 
@@ -132,6 +133,15 @@ TilesRenderParameters* PlanetRendererBuilder::getParameters() {
  */
 bool PlanetRendererBuilder::getShowStatistics() {
   return _showStatistics;
+}
+
+bool PlanetRendererBuilder::getLogTilesPetitions() {
+  return _logTilesPetitions;
+}
+
+
+void PlanetRendererBuilder::setLogTilesPetitions(bool logTilesPetitions) {
+  _logTilesPetitions = logTilesPetitions;
 }
 
 /**
@@ -253,7 +263,7 @@ void PlanetRendererBuilder::setRenderDebug(const bool renderDebug) {
   _renderDebug = renderDebug;
 }
 
-void PlanetRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) {
+void PlanetRendererBuilder::setUseTilesSplitBudget(const bool useTilesSplitBudget) {
   _useTilesSplitBudget = useTilesSplitBudget;
 }
 
@@ -315,7 +325,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getShowStatistics(),
                                                       getTexturePriority(),
                                                       getRenderedSector(),
-                                                      getRenderTileMeshes());
+                                                      getRenderTileMeshes(),
+                                                      getLogTilesPetitions());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),

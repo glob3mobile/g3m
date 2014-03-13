@@ -111,7 +111,7 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
                                          int arrayElementSize,
                                          int index,
                                          bool normalized,
-                                         int stride){
+                                         int stride) {
   GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
                                                                      arrayElementSize,
                                                                      index,
@@ -200,15 +200,15 @@ _rotationAngle(NULL)
 
 }
 
-void TextureGLFeature::setTranslation(float u, float v){
-  if (_translation == NULL){
+void TextureGLFeature::setTranslation(float u, float v) {
+  if (_translation == NULL) {
     _translation = new GPUUniformValueVec2FloatMutable(u, v);
 
     _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
                             _translation,
                             false);
   } else{
-    if (u == 0.0 && v == 0.0){
+    if (u == 0.0 && v == 0.0) {
       _values.removeUniformValue(TRANSLATION_TEXTURE_COORDS);
     }
     else{
@@ -216,8 +216,8 @@ void TextureGLFeature::setTranslation(float u, float v){
     }
   }
 }
-void TextureGLFeature::setScale(float u, float v){
-  if (_scale == NULL){
+void TextureGLFeature::setScale(float u, float v) {
+  if (_scale == NULL) {
     _scale = new GPUUniformValueVec2FloatMutable(u, v);
 
     _values.addUniformValue(SCALE_TEXTURE_COORDS,
@@ -225,7 +225,7 @@ void TextureGLFeature::setScale(float u, float v){
                             false);
   } else{
 
-    if (u == 1.0 && v == 1.0){
+    if (u == 1.0 && v == 1.0) {
       _values.removeUniformValue(SCALE_TEXTURE_COORDS);
     }
     else{
@@ -235,10 +235,10 @@ void TextureGLFeature::setScale(float u, float v){
 
 }
 
-void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v){
+void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v) {
 
-  if (_rotationAngle == NULL || _rotationCenter == NULL){
-    if (angle != 0.0){
+  if (_rotationAngle == NULL || _rotationCenter == NULL) {
+    if (angle != 0.0) {
       _rotationCenter = new GPUUniformValueVec2FloatMutable(u, v);
 
       _values.addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
@@ -252,7 +252,7 @@ void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, f
                               false);
     }
   } else{
-    if (angle == 0.0){
+    if (angle == 0.0) {
       _values.removeUniformValue(ROTATION_CENTER_TEXTURE_COORDS);
       _values.removeUniformValue(ROTATION_ANGLE_TEXTURE_COORDS);
     } else{

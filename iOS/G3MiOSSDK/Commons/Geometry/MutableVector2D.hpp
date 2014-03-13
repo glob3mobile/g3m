@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_MutableVector2D_hpp
-#define G3MiOSSDK_MutableVector2D_hpp
+#ifndef G3MiOSSDK_MutableVector2D
+#define G3MiOSSDK_MutableVector2D
 
 #include "IMathUtils.hpp"
 
@@ -103,7 +103,13 @@ public:
   }
   
   const std::string description() const;
-  
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
 };
 
 

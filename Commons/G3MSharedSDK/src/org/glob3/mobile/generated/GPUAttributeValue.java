@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Attribute.h
+//  Attribute.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 27/03/13.
@@ -70,5 +70,9 @@ public abstract class GPUAttributeValue extends RCObject
   public abstract void setAttribute(GL gl, int id);
   public abstract boolean isEquals(GPUAttributeValue v);
   public abstract String description();
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

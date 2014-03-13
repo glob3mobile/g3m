@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Plane_h
-#define G3MiOSSDK_Plane_h
+#ifndef G3MiOSSDK_Plane
+#define G3MiOSSDK_Plane
 
 #include "Vector3D.hpp"
 #include "Vector3F.hpp"
@@ -41,6 +41,15 @@ public:
   _d(d),
   _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
   _dF((float) d)
+  {
+  }
+
+  Plane(const Vector3D& normal,
+        const Vector3D& point):
+  _normal(normal.normalized()),
+  _d(- normal._x * point._x - normal._y * point._y - normal._z * point._z),
+  _normalF( Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized() ),
+  _dF((float) _d)
   {
   }
 
@@ -81,6 +90,14 @@ public:
   
   static Vector3D intersectionXYPlaneWithRay(const Vector3D& origin,
                                              const Vector3D& direction);
+
+  bool isVectorParallel(const Vector3D& vector) const;
+
+  Angle vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis) const;
+
+  Vector3D getNormal() const{
+    return _normal;
+  }
 
   
 };

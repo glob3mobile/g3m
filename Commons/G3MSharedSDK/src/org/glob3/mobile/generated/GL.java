@@ -421,7 +421,7 @@ public class GL
         _currentGPUProgram.addReference();
       }
   
-  //    if (!_nativeGL->isProgram(program->getProgramID())){
+  //    if (!_nativeGL->isProgram(program->getProgramID())) {
   //      ILogger::instance()->logError("INVALID PROGRAM.");
   //    }
     }

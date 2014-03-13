@@ -9,7 +9,7 @@
 #include "G3MDemoBuilder.hpp"
 
 #include <G3MiOSSDK/PlanetRendererBuilder.hpp>
-//#include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+//#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/IG3MBuilder.hpp>
 #include <G3MiOSSDK/ErrorHandling.hpp>
@@ -50,7 +50,7 @@ public:
 
 void G3MDemoBuilder::build() {
   if (_initialized) {
-    ERROR("G3MWidget already initialized.");
+    THROW_EXCEPTION("G3MWidget already initialized.");
   }
 
   IG3MBuilder* builder = getG3MBuilder();
@@ -61,7 +61,7 @@ void G3MDemoBuilder::build() {
 //  const float verticalExaggeration = 10.0f;
 //  builder->getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
-//  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
 //                                                                                     Sector::fullSphere(),
 //                                                                                     Vector2I(2048, 1024));
 //  builder->getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
@@ -80,7 +80,7 @@ void G3MDemoBuilder::build() {
 
 G3MDemoModel* G3MDemoBuilder::getModel() {
   if (!_initialized || _model == NULL) {
-    ERROR("Model not yet created. Have to initialize the widget before getting the model.");
+    THROW_EXCEPTION("Model not yet created. Have to initialize the widget before getting the model.");
   }
   return _model;
 }

@@ -57,7 +57,11 @@ public abstract class Interpolator
 
   public abstract double interpolation(double valueSW, double valueSE, double valueNE, double valueNW, double u, double v);
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  String description();
+  public abstract String description();
+
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

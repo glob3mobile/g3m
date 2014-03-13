@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CameraRenderer_h
-#define G3MiOSSDK_CameraRenderer_h
+#ifndef G3MiOSSDK_CameraRenderer
+#define G3MiOSSDK_CameraRenderer
 
 #include <vector>
 

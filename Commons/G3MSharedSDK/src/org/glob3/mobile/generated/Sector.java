@@ -321,6 +321,10 @@ public class Sector
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public final Sector shrinkedByPercentP(float percent)
   {
@@ -438,7 +442,7 @@ public class Sector
     GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
   
   
-    return new GEORasterLineSymbol(line, ls);
+    return new GEOLineRasterSymbol(line, ls);
   
   }
 

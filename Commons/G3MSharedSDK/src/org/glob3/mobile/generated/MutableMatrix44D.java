@@ -322,6 +322,10 @@ public class MutableMatrix44D
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 
   //const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {

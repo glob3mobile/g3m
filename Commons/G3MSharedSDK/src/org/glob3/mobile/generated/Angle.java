@@ -295,4 +295,9 @@ public class Angle
     return s;
   }
 
+  @Override
+  public String toString() {
+    return description();
+  }
+
 }

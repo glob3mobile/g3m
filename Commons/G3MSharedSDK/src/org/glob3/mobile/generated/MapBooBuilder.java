@@ -58,7 +58,9 @@ public abstract class MapBooBuilder
     final Sector renderedSector = Sector.fullSphere();
     final boolean renderTileMeshes = true;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes);
+    final boolean logTilesPetitions = false;
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions);
   
     if (_enableNotifications)
     {
@@ -920,15 +922,15 @@ public abstract class MapBooBuilder
   {
     if (_gl != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _gl already initialized");
-      return;
-      //ERROR("LOGIC ERROR: _gl already initialized");
+      //ILogger::instance()->logError("LOGIC ERROR: _gl already initialized");
+      //return;
+      throw new RuntimeException("LOGIC ERROR: _gl already initialized");
     }
     if (gl == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _gl cannot be NULL");
-      return;
-      //ERROR("LOGIC ERROR: _gl cannot be NULL");
+      //ILogger::instance()->logError("LOGIC ERROR: _gl cannot be NULL");
+      //return;
+      throw new RuntimeException("LOGIC ERROR: _gl cannot be NULL");
     }
     _gl = gl;
   }
@@ -1603,5 +1605,69 @@ public abstract class MapBooBuilder
   {
     IDownloader downloader = context.getDownloader();
     downloader.requestBuffer(createApplicationRestURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+  }
+
+  public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_serverURL.getPath());
+  
+    isb.addString("/Public/applications/");
+    isb.addString(_applicationId);
+    isb.addString("/scenes/");
+  
+    final MapBoo_Scene scene = getApplicationCurrentScene();
+    isb.addString(scene.getId());
+  
+    isb.addString("/getinfo?");
+  
+    isb.addString("tileX=");
+    isb.addInt(tile._column);
+  
+    isb.addString("&tileY=");
+    isb.addInt(tile._row);
+  
+    isb.addString("&tileLevel=");
+    isb.addInt(tile._level);
+  
+  
+    //Sector
+    isb.addString("&upperLat=");
+    isb.addDouble(tile._sector._upper._latitude._degrees);
+    isb.addString("&lowerLat=");
+    isb.addDouble(tile._sector._lower._latitude._degrees);
+    isb.addString("&upperLon=");
+    isb.addDouble(tile._sector._upper._longitude._degrees);
+    isb.addString("&lowerLon=");
+    isb.addDouble(tile._sector._lower._longitude._degrees);
+  
+  
+    isb.addString("&tileBBox=");
+    isb.addString("TODO");
+  
+    isb.addString("&tileWidth=");
+    isb.addInt(tileDimension._x);
+  
+    isb.addString("&tileHeight=");
+    isb.addInt(tileDimension._y);
+  
+    isb.addString("&pixelX=");
+    isb.addInt(pixelPosition._x);
+  
+    isb.addString("&pixelY=");
+    isb.addInt(pixelPosition._y);
+  
+    isb.addString("&lat=");
+    isb.addDouble(position._latitude._degrees);
+  
+    isb.addString("&lon=");
+    isb.addDouble(position._longitude._degrees);
+  
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    return new URL(path, false);
+  
   }
 }

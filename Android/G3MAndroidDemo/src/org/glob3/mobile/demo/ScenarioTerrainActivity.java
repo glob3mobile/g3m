@@ -10,7 +10,7 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBillElevationDataProvider;
+import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -66,7 +66,7 @@ public class ScenarioTerrainActivity
 
       // NROWS          1335
       // NCOLS          2516
-      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///0576.bil", false), demSector,
+      final ElevationDataProvider dem = new SingleBilElevationDataProvider(new URL("file:///0576.bil", false), demSector,
                new Vector2I(2516, 1335), DELTA_HEIGHT);
 
       builder.getPlanetRendererBuilder().setElevationDataProvider(dem);

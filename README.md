@@ -1,9 +1,18 @@
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-4197306-21', 'github.com');
+  ga('send', 'pageview');
+
+</script>
 g3m
 ===
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/54960ae0d94d09fa885cfceb159b9427 "githalytics.com")](http://githalytics.com/glob3mobile/g3m)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/glob3mobile/g3m/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
 ##The multiplatform advanced visualization framework
-
 ###G3M is a **framework** developed and designed to: 
 
  + Develop **mobile maps** apps in 2D, 2,5D and 3D
@@ -264,6 +273,12 @@ There are another different projects developed that are used for demo purpose an
 + <a href="http://meteorite.glob3mobile.com">Meteorite</a>
 + <a href="http://xeovisor3d.glob3mobile.com/example.html">Xeovisor3D</a>
 + <a href="http://wb.glob3mobile.com/">World Bank GFDRR Demo</a>
+
+###Augmented reality and google glasses
+[Augmented reality on google glass](http://glasses.mobilemaptools.com)
+
+<a href="https://www.youtube.com/watch?feature=player_detailpage&v=6K2UF8O6JPg" frameborder="0" allowfullscreen>AR Google Glass</a>
+
 
 Videos
 ======

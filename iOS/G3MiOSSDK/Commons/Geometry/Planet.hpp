@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Planet_hpp
-#define G3MiOSSDK_Planet_hpp
+#ifndef G3MiOSSDK_Planet
+#define G3MiOSSDK_Planet
 
 #include <string>
 #include <list>
@@ -18,6 +18,7 @@ class Effect;
 class Camera;
 class Sector;
 class Vector2I;
+class CoordinateSystem;
 
 class Planet {
 public:
@@ -111,6 +112,8 @@ public:
                                        Camera* nextCamera) const = 0;
 
   virtual Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const = 0;
+
+  CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
 };
 
 #endif

@@ -1,13 +1,13 @@
 //
-//  PlanetRenderer.h
+//  PlanetRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_PlanetRenderer_h
-#define G3MiOSSDK_PlanetRenderer_h
+#ifndef G3MiOSSDK_PlanetRenderer
+#define G3MiOSSDK_PlanetRenderer
 
 class Tile;
 class TileTessellator;
@@ -223,6 +223,7 @@ private:
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
+  const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
 
   TilesStatistics _statistics;
@@ -309,7 +310,8 @@ public:
                  bool                         showStatistics,
                  long long                    texturePriority,
                  const Sector&                renderedSector,
-                 const bool                   renderTileMeshes);
+                 const bool                   renderTileMeshes,
+                 const bool                   logTilesPetitions);
 
   ~PlanetRenderer();
 

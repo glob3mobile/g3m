@@ -7,10 +7,13 @@
  *
  */
 
-#ifndef CAMERA
-#define CAMERA
+#ifndef G3MiOSSDK_Camera
+#define G3MiOSSDK_Camera
 
 #include <math.h>
+
+#include "CoordinateSystem.hpp"
+#include "TaitBryanAngles.hpp"
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
@@ -26,7 +29,6 @@
 
 class ILogger;
 class GPUProgramState;
-
 
 class CameraDirtyFlags {
 private:
@@ -81,6 +83,13 @@ public:
     return d;
   }
 
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
   void setAll(bool value) {
     _frustumDataDirty           = value;
     _projectionMatrixDirty      = value;
@@ -122,7 +131,7 @@ public:
   {
   }
 
-  Camera(int width, int height);
+  explicit Camera();
 
   ~Camera() {
     delete _camEffectTarget;
@@ -289,8 +298,18 @@ public:
   Angle getRoll() const;
   void setRoll(const Angle& angle);
 
+  CoordinateSystem getLocalCoordinateSystem() const;
+  CoordinateSystem getCameraCoordinateSystem() const;
+  TaitBryanAngles getHeadingPitchRoll() const;
+  void setHeadingPitchRoll(const Angle& heading,
+                           const Angle& pitch,
+                           const Angle& roll);
+
+  double getEstimatedPixelDistance(const Vector3D& point0,
+                                   const Vector3D& point1) const;
+
 private:
-  const Angle getHeading(const Vector3D& normal) const;
+  //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
@@ -414,6 +433,10 @@ private:
     }
     return _modelViewMatrix;
   }
+  
+  
+  
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
   
 };
 

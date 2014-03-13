@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Sector_h
-#define G3MiOSSDK_Sector_h
+#ifndef G3MiOSSDK_Sector
+#define G3MiOSSDK_Sector
 
 #include <vector>
 #include <math.h>
@@ -180,6 +180,12 @@ public:
   const Geodetic2D clamp(const Geodetic2D& pos) const;
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   Sector* shrinkedByPercentP(float percent) const {
     const Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);

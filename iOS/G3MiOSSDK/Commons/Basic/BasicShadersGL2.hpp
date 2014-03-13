@@ -360,7 +360,6 @@ public:
 "attribute vec2 aTextureCoord; \n " + 
 "uniform mat4 uModelview; \n " + 
 "uniform float uPointSize; \n " + 
-"varying vec4 VertexColor; \n " + 
 "varying vec2 TextureCoordOut; \n " + 
 "void main() { \n " + 
 "gl_Position = uModelview * aPosition; \n " + 
@@ -369,7 +368,6 @@ public:
 "} \n ",
  emptyString +  
 "varying mediump vec2 TextureCoordOut; \n " + 
-"varying mediump vec4 VertexColor; \n " + 
 "uniform sampler2D Sampler; \n " + 
 "void main() { \n " + 
 "gl_FragColor = texture2D(Sampler, TextureCoordOut); \n " + 

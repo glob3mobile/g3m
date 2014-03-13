@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_BusyQuadRenderer_hpp
-#define G3MiOSSDK_BusyQuadRenderer_hpp
+#ifndef G3MiOSSDK_BusyQuadRenderer
+#define G3MiOSSDK_BusyQuadRenderer
 
 
 #include "LeafRenderer.hpp"
@@ -83,6 +83,9 @@ public:
   }
 
   virtual ~BusyQuadRenderer() {
+    //rc->getFactory()->deleteImage(_image);
+    //_image = NULL;
+    delete _image;
     delete _quadMesh;
     delete _backgroundColor;
 

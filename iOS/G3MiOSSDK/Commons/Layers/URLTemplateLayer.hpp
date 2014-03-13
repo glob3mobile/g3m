@@ -26,23 +26,14 @@ private:
   private IStringUtils _su;
 #endif
 
-  URLTemplateLayer(const std::string&                urlTemplate,
-                   const Sector&                     sector,
-                   bool                              isTransparent,
-                   const TimeInterval&               timeToCache,
-                   bool                              readExpired,
-                   LayerCondition*                   condition,
-                   const LayerTilesRenderParameters* parameters,
-                   float transparency = (float)1.0);
-
-  const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                            const Tile* tile,
-                            const Sector& sector) const;
-
 protected:
   std::string getLayerType() const {
     return "URLTemplate";
   }
+
+  virtual const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                    const Tile* tile,
+                                    const Sector& sector) const;
 
   bool rawIsEquals(const Layer* that) const;
 
@@ -66,6 +57,15 @@ public:
                                     bool                readExpired = true,
                                     LayerCondition*     condition = NULL,
                                     float transparency = (float)1.0);
+
+  URLTemplateLayer(const std::string&                urlTemplate,
+                   const Sector&                     sector,
+                   bool                              isTransparent,
+                   const TimeInterval&               timeToCache,
+                   bool                              readExpired,
+                   LayerCondition*                   condition,
+                   const LayerTilesRenderParameters* parameters,
+                   float transparency = (float)1.0);
 
   const std::string description() const;
 

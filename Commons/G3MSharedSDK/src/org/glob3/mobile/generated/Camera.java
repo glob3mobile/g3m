@@ -27,10 +27,8 @@ public class Camera
      _rollInRadians = that._rollInRadians;
   }
 
-  public Camera(int width, int height)
+  public Camera()
   {
-     _width = 0;
-     _height = 0;
      _planet = null;
      _position = new MutableVector3D(0, 0, 0);
      _center = new MutableVector3D(0, 0, 0);
@@ -51,7 +49,7 @@ public class Camera
      _tanHalfVerticalFieldOfView = java.lang.Double.NaN;
      _tanHalfHorizontalFieldOfView = java.lang.Double.NaN;
      _rollInRadians = 0;
-    resizeViewport(width, height);
+    resizeViewport(0, 0);
     _dirtyFlags.setAll(true);
   }
 
@@ -123,8 +121,6 @@ public class Camera
   {
     _width = width;
     _height = height;
-  
-    _dirtyFlags._projectionMatrixDirty = true;
   
     _dirtyFlags.setAll(true);
   }
@@ -335,29 +331,27 @@ public class Camera
 
   public final Angle getHeading()
   {
-    final Vector3D normal = _planet.geodeticSurfaceNormal(_position);
-    return getHeading(normal);
+    return getHeadingPitchRoll()._heading;
   }
   public final void setHeading(Angle angle)
   {
-    final Vector3D normal = _planet.geodeticSurfaceNormal(_position);
-    final Angle currentHeading = getHeading(normal);
-    final Angle delta = currentHeading.sub(angle);
-    rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-    //printf ("previous heading=%f   current heading=%f\n", currentHeading._degrees, getHeading()._degrees);
+    //ILogger::instance()->logInfo("SET CAMERA HEADING: %f", angle._degrees);
+    final TaitBryanAngles angles = getHeadingPitchRoll();
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angle, angles._pitch, angles._roll);
+    setCameraCoordinateSystem(cameraRS);
   }
   public final Angle getPitch()
   {
-    final Vector3D normal = _planet.geodeticSurfaceNormal(_position);
-    final Angle angle = _up.asVector3D().angleBetween(normal);
-    return Angle.fromDegrees(90).sub(angle);
+    return getHeadingPitchRoll()._pitch;
   }
   public final void setPitch(Angle angle)
   {
-    final Angle currentPitch = getPitch();
-    final Vector3D u = getHorizontalVector();
-    rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
-    //printf ("previous pitch=%f   current pitch=%f\n", currentPitch._degrees, getPitch()._degrees);
+    //ILogger::instance()->logInfo("SET CAMERA PITCH: %f", angle._degrees);
+    final TaitBryanAngles angles = getHeadingPitchRoll();
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angle, angles._roll);
+    setCameraCoordinateSystem(cameraRS);
   }
 
   public final Geodetic3D getGeodeticPosition()
@@ -373,7 +367,7 @@ public class Camera
   {
     final Angle heading = getHeading();
     final Angle pitch = getPitch();
-    setPitch(Angle.zero());
+    setPitch(Angle.fromDegrees(-90));
     MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
     if (dragMatrix.isValid())
        applyTransform(dragMatrix);
@@ -497,30 +491,51 @@ public class Camera
 
   public final Angle getRoll()
   {
-    return Angle.fromRadians(_rollInRadians);
+    return getHeadingPitchRoll()._roll;
   }
   public final void setRoll(Angle angle)
   {
-    final Angle delta = angle.sub(Angle.fromRadians(_rollInRadians));
-    if (delta._radians != 0)
-    {
-      _rollInRadians = angle._radians;
-      rotateWithAxisAndPoint(getViewDirection(), _position.asVector3D(), delta);
-    }
+    //ILogger::instance()->logInfo("SET CAMERA ROLL: %f", angle._degrees);
+    final TaitBryanAngles angles = getHeadingPitchRoll();
+  
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = localRS.applyTaitBryanAngles(angles._heading, angles._pitch, angle);
+    setCameraCoordinateSystem(cameraRS);
   }
 
-  private Angle getHeading(Vector3D normal)
+  public final CoordinateSystem getLocalCoordinateSystem()
   {
-    final Vector3D north2D = _planet.getNorth().projectionInPlane(normal);
-    final Vector3D up2D = _up.asVector3D().projectionInPlane(normal);
-  
-    //  printf("   normal=(%f, %f, %f)   north2d=(%f, %f)   up2D=(%f, %f)\n",
-    //         normal._x, normal._y, normal._z,
-    //         north2D._x, north2D._y,
-    //         up2D._x, up2D._y);
-  
-    return up2D.signedAngleBetween(north2D, normal);
+    return _planet.getCoordinateSystemAt(getGeodeticPosition());
   }
+  public final CoordinateSystem getCameraCoordinateSystem()
+  {
+    return new CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
+  }
+  public final TaitBryanAngles getHeadingPitchRoll()
+  {
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem cameraRS = getCameraCoordinateSystem();
+    return cameraRS.getTaitBryanAngles(localRS);
+  }
+  public final void setHeadingPitchRoll(Angle heading, Angle pitch, Angle roll)
+  {
+    final CoordinateSystem localRS = getLocalCoordinateSystem();
+    final CoordinateSystem newCameraRS = localRS.applyTaitBryanAngles(heading, pitch, roll);
+    setCameraCoordinateSystem(newCameraRS);
+  }
+
+  public final double getEstimatedPixelDistance(Vector3D point0, Vector3D point1)
+  {
+    //const Vector3D cameraPosition = getCartesianPosition();
+    final Vector3D ray0 = _position.sub(point0);
+    final Vector3D ray1 = _position.sub(point1);
+    final double angleInRadians = ray1.angleInRadiansBetween(ray0);
+    final FrustumData frustumData = getFrustumData();
+    final double X = frustumData._znear * IMathUtils.instance().atan(angleInRadians/2);
+    return X * _height / frustumData._top;
+  }
+
+  //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _width;
@@ -725,6 +740,15 @@ public class Camera
       _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
     }
     return _modelViewMatrix;
+  }
+
+
+
+  private void setCameraCoordinateSystem(CoordinateSystem rs)
+  {
+    _center = _position.add(rs._y.asMutableVector3D());
+    _up = rs._z.asMutableVector3D();
+    _dirtyFlags.setAll(true); //Recalculate Everything
   }
 
 }
