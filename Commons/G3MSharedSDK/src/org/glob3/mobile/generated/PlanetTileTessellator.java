@@ -123,26 +123,25 @@ public class PlanetTileTessellator extends TileTessellator
         if (elevationData != null)
         {
           final double rawElevation = elevationData.getElevationAt(position);
-          if (!(rawElevation != rawElevation))
+  
+          elevation = (rawElevation != rawElevation)? 0 : rawElevation * verticalExaggeration;
+  
+          //MIN
+          if (elevation < minElevation)
           {
-            elevation = rawElevation * verticalExaggeration;
-  
-            //MIN
-            if (elevation < minElevation)
-            {
-              minElevation = elevation;
-            }
-  
-            //MAX
-            if (elevation > maxElevation)
-            {
-              maxElevation = elevation;
-            }
-  
-            //AVERAGE
-            averageElevation += elevation;
+            minElevation = elevation;
           }
+  
+          //MAX
+          if (elevation > maxElevation)
+          {
+            maxElevation = elevation;
+          }
+  
+          //AVERAGE
+          averageElevation += elevation;
         }
+  
         vertices.add(position, elevation);
   
         //TEXT COORDS
@@ -350,6 +349,17 @@ public class PlanetTileTessellator extends TileTessellator
     indices.add((short)(surfaceIndex - 1));
   }
 
+  private static double skirtDepthForSector(Planet planet, Sector sector)
+  {
+  
+    final Vector3D se = planet.toCartesian(sector.getSE());
+    final Vector3D nw = planet.toCartesian(sector.getNW());
+    final double diagonalLength = nw.sub(se).length();
+    final double sideLength = diagonalLength * 0.70710678118;
+    //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
+    return sideLength / 20.0;
+  }
+
 
   public PlanetTileTessellator(boolean skirted, Sector sector)
   {
@@ -386,19 +396,12 @@ public class PlanetTileTessellator extends TileTessellator
   
     if (_skirted)
     {
-      final Vector3D se = planet.toCartesian(tileSector.getSE());
-      final Vector3D nw = planet.toCartesian(tileSector.getNW());
-      final double diagonalLength = nw.sub(se).length();
-      //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
-      final double relativeSkirtHeight = (diagonalLength * -0.05 * 0.70710678118) + minElevation;
+      final double relativeSkirtHeight = minElevation - skirtDepthForSector(planet, tileSector);
   
       double absoluteSkirtHeight = 0;
       if (_renderedSector != null)
       {
-        final Vector3D ase = planet.toCartesian(_renderedSector.getSE());
-        final Vector3D anw = planet.toCartesian(_renderedSector.getNW());
-        //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
-        absoluteSkirtHeight = (anw.sub(ase).length() * -0.05 * 0.70710678118);
+        absoluteSkirtHeight = - skirtDepthForSector(planet, *_renderedSector);
       }
   
       createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
@@ -413,7 +416,7 @@ public class PlanetTileTessellator extends TileTessellator
     //Storing textCoords in Tile
     tile.setTessellatorData(new PlanetTileTessellatorData(textCoords));
   
-  ///#warning Testing_Terrain_Normals;
+    ///#warning Testing_Terrain_Normals;
     IFloatBuffer verticesB = vertices.create();
     IShortBuffer indicesB = indices.create();
     //IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
