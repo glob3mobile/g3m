@@ -711,7 +711,7 @@ public:
 
   }
 
-  if (true){ //SECTOR CACERES
+  if (false){ //SECTOR CACERES
     builder.setShownSector(Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845).shrinkedByPercent(-30));
   }
 
