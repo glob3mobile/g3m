@@ -185,12 +185,11 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   //Storing textCoords in Tile
   tile->setTessellatorData(new PlanetTileTessellatorData(textCoords));
 
-  //#warning Testing_Terrain_Normals;
   IFloatBuffer* verticesB = vertices->create();
   IShortBuffer* indicesB  = indices.create();
-  //IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-  //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
   IFloatBuffer* normals = NULL;
+//#warning Testing_Terrain_Normals;
+//  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
 
   Mesh* result = new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                                          vertices->getCenter(),
