@@ -401,7 +401,7 @@ public class PlanetTileTessellator extends TileTessellator
       double absoluteSkirtHeight = 0;
       if (_renderedSector != null)
       {
-        absoluteSkirtHeight = - skirtDepthForSector(planet, *_renderedSector);
+    	  absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
       }
   
       createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);

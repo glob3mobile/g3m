@@ -137,7 +137,12 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
 
     double absoluteSkirtHeight = 0;
     if (_renderedSector != NULL) {
+#ifdef C_CODE
       absoluteSkirtHeight = - skirtDepthForSector(planet, *_renderedSector);
+#endif
+#ifdef JAVA_CODE
+      absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
+#endif
     }
 
     createEastSkirt(planet,
