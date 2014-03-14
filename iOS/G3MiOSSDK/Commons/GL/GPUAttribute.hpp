@@ -1,13 +1,13 @@
 //
-//  Attribute.h
+//  Attribute.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 27/03/13.
 //
 //
 
-#ifndef G3MiOSSDK_Attribute_h
-#define G3MiOSSDK_Attribute_h
+#ifndef G3MiOSSDK_Attribute
+#define G3MiOSSDK_Attribute
 
 
 #include "INativeGL.hpp"

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Tile_h
-#define G3MiOSSDK_Tile_h
+#ifndef G3MiOSSDK_Tile
+#define G3MiOSSDK_Tile
 
 #include "Sector.hpp"
 #include <list>
@@ -318,8 +318,8 @@ public:
 
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
 
-  inline void prune(TileTexturizer*        texturizer,
-                    ElevationDataProvider* elevationDataProvider);
+  void prune(TileTexturizer*        texturizer,
+             ElevationDataProvider* elevationDataProvider);
 
   void toBeDeleted(TileTexturizer*        texturizer,
                    ElevationDataProvider* elevationDataProvider);
@@ -355,7 +355,7 @@ public:
                                bool renderDebug);
 
   void ancestorChangedElevationData(Tile* ancestor);
-  
+
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
 
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,

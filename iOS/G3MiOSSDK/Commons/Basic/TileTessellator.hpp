@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TileTessellator_hpp
-#define G3MiOSSDK_TileTessellator_hpp
+#ifndef G3MiOSSDK_TileTessellator
+#define G3MiOSSDK_TileTessellator
 
 class G3MRenderContext;
 class Planet;

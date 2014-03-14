@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_InitializationContext_h
-#define G3MiOSSDK_InitializationContext_h
+#ifndef G3MiOSSDK_InitializationContext
+#define G3MiOSSDK_InitializationContext
 
 
 class IFactory;

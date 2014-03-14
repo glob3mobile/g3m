@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_LayoutUtils_h
-#define G3MiOSSDK_LayoutUtils_h
+#ifndef G3MiOSSDK_LayoutUtils
+#define G3MiOSSDK_LayoutUtils
 
 #include <vector>
 

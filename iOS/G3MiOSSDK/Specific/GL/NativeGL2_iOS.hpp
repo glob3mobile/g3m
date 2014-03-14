@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_NativeGL_iOS_hpp
-#define G3MiOSSDK_NativeGL_iOS_hpp
+#ifndef G3MiOSSDK_NativeGL_iOS
+#define G3MiOSSDK_NativeGL_iOS
 
 #include <OpenGLES/ES2/gl.h>
 

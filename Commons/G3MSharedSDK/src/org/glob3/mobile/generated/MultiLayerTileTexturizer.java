@@ -86,9 +86,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void tileToBeDeleted(Tile tile, Mesh mesh)
   {
-  
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
-  
     if (builderHolder != null)
     {
       TileTextureBuilder builder = builderHolder.get();
@@ -96,11 +94,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cleanTile();
       builder.cleanMesh();
     }
-  //  else {
-  //    if (mesh != NULL) {
-  //      ILogger::instance()->logInfo("break (point) on me 4\n");
-  //    }
-  //  }
   }
 
   public final boolean tileMeetsRenderCriteria(Tile tile)
@@ -180,11 +173,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cancel();
       builder.cleanMesh();
     }
-  //  else {
-  //    if (mesh != NULL) {
-  //      ILogger::instance()->logInfo("break (point) on me 5\n");
-  //    }
-  //  }
   }
 
 }

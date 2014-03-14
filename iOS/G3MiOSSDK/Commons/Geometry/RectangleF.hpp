@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_RectangleF_h
-#define G3MiOSSDK_RectangleF_h
+#ifndef G3MiOSSDK_RectangleF
+#define G3MiOSSDK_RectangleF
 
 
 class RectangleF {

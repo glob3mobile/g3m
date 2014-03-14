@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_FlatPlanet_hpp
-#define G3MiOSSDK_FlatPlanet_hpp
+#ifndef G3MiOSSDK_FlatPlanet
+#define G3MiOSSDK_FlatPlanet
 
 #include "MutableVector3D.hpp"
 #include "Geodetic3D.hpp"

@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  ILogger.h
+//  ILogger.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.

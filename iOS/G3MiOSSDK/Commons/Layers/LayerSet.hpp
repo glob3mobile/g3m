@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_LayerSet_hpp
-#define G3MiOSSDK_LayerSet_hpp
+#ifndef G3MiOSSDK_LayerSet
+#define G3MiOSSDK_LayerSet
 
 #include <vector>
 #include "Layer.hpp"

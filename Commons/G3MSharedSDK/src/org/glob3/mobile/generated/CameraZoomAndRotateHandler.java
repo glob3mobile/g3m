@@ -86,7 +86,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   //_initialPoint(0,0,0),
   //_initialPixel(0,0,0)
   {
-     _camera0 = new Camera(new Camera(0, 0));
+     _camera0 = new Camera(new Camera());
   }
 
   public void dispose()
@@ -245,6 +245,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
   public double _initialFingerSeparation;
   public double _initialFingerInclination;
 
-  public Camera _camera0 ; //Initial Camera saved on Down event
+  public Camera _camera0 = new Camera(); //Initial Camera saved on Down event
 
 }

@@ -522,7 +522,7 @@ void Mark::render(const G3MRenderContext* rc,
       }
     }
   }
-  
+
 }
 
 void Mark::elevationChanged(const Geodetic2D& position,

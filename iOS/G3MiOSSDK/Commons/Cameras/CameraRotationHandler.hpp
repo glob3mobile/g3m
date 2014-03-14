@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CameraRotationHandlerr_h
-#define G3MiOSSDK_CameraRotationHandler_h
+#ifndef G3MiOSSDK_CameraRotationHandler
+#define G3MiOSSDK_CameraRotationHandler
 
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
@@ -23,7 +23,7 @@ private:
 
 public:
   CameraRotationHandler():
-  _camera0(Camera(0, 0)),
+  _camera0(Camera()),
   _pivotPoint(0, 0, 0),
   _pivotPixel(0, 0)
   {}

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Box_h
-#define G3MiOSSDK_Box_h
+#ifndef G3MiOSSDK_Box
+#define G3MiOSSDK_Box
 
 #include "BoundingVolume.hpp"
 #include "Vector3D.hpp"

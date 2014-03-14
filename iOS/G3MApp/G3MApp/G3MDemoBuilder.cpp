@@ -50,7 +50,7 @@ public:
 
 void G3MDemoBuilder::build() {
   if (_initialized) {
-    ERROR("G3MWidget already initialized.");
+    THROW_EXCEPTION("G3MWidget already initialized.");
   }
 
   IG3MBuilder* builder = getG3MBuilder();
@@ -80,7 +80,7 @@ void G3MDemoBuilder::build() {
 
 G3MDemoModel* G3MDemoBuilder::getModel() {
   if (!_initialized || _model == NULL) {
-    ERROR("Model not yet created. Have to initialize the widget before getting the model.");
+    THROW_EXCEPTION("Model not yet created. Have to initialize the widget before getting the model.");
   }
   return _model;
 }

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_BusyMeshRenderer_hpp
-#define G3MiOSSDK_BusyMeshRenderer_hpp
+#ifndef G3MiOSSDK_BusyMeshRenderer
+#define G3MiOSSDK_BusyMeshRenderer
 
 #include "LeafRenderer.hpp"
 #include "IndexedMesh.hpp"

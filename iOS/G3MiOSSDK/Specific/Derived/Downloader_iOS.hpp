@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Downloader_iOS_hpp
-#define G3MiOSSDK_Downloader_iOS_hpp
+#ifndef G3MiOSSDK_Downloader_iOS
+#define G3MiOSSDK_Downloader_iOS
 
 #import "Downloader_iOS_WorkerThread.h"
 #import "Downloader_iOS_Handler.h"

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_PeriodicalTask_hpp
-#define G3MiOSSDK_PeriodicalTask_hpp
+#ifndef G3MiOSSDK_PeriodicalTask
+#define G3MiOSSDK_PeriodicalTask
 
 #include "GTask.hpp"
 #include "IFactory.hpp"

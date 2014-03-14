@@ -682,6 +682,25 @@ public class Tile
     return getSubTiles(splitLatitude, splitLongitude);
   }
 
+<<<<<<< HEAD
+=======
+  //  const Sector getSector() const {
+  //    return _sector;
+  //  }
+  //
+  //  int getLevel() const {
+  //    return _level;
+  //  }
+  //
+  //  int getRow() const {
+  //    return _row;
+  //  }
+  //
+  //  int getColumn() const {
+  //    return _column;
+  //  }
+
+>>>>>>> fixing-skirts
   public final Mesh getTexturizedMesh()
   {
     return _texturizedMesh;

@@ -29,7 +29,7 @@ private:
   
 public:
   CameraZoomAndRotateHandler():
-  _camera0(Camera(0, 0))
+  _camera0(Camera())
   //_initialPoint(0,0,0),
   //_initialPixel(0,0,0)
   {}

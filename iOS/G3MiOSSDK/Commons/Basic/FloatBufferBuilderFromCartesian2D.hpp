@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_FloatBufferBuilderFromCartesian2D_hpp
-#define G3MiOSSDK_FloatBufferBuilderFromCartesian2D_hpp
+#ifndef G3MiOSSDK_FloatBufferBuilderFromCartesian2D
+#define G3MiOSSDK_FloatBufferBuilderFromCartesian2D
 
 #include "Vector2D.hpp"
 #include "FloatBufferBuilder.hpp"
