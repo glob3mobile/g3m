@@ -394,17 +394,18 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     Geodetic2D geoCenter = sector.getCenter();
     Vector2D center = new Vector2D(geoCenter._longitude._radians, geoCenter._latitude._radians);
-    
+  
+  
     java.util.Iterator<Geodetic2D> iterator = route.iterator();
-
-	Geodetic2D geoA = null;
-	Geodetic2D geoB = iterator.next();
+  
+  	Geodetic2D geoA = null;
+  	Geodetic2D geoB = iterator.next();
   
     while (iterator.hasNext())
     {
-    	geoA = geoB;
-    	geoB = iterator.next();
-    	
+      geoA = geoB;
+      geoB = iterator.next();
+  
       final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
       final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
   
@@ -1082,7 +1083,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         //Checking Route if any
         if (route != null)
         {
-          if (!sectorCloseToRoute(tile._sector, route, tile._sector.getDeltaRadiusInRadians() * 2.0))
+          if (!sectorCloseToRoute(tile._sector, route, tile._sector.getDeltaRadiusInRadians() * 4.0))
           {
             continue;
           }

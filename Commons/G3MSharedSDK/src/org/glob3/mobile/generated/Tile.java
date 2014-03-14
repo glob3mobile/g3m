@@ -197,8 +197,10 @@ public class Tile
     {
       final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
   
+      Color color = isTextureSolved()? Color.blue() : Color.red();
+  
       //TODO: CHECK
-      _debugMesh = tessellator.createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this);
+      _debugMesh = tessellator.createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this, color);
     }
     return _debugMesh;
   }
@@ -682,25 +684,6 @@ public class Tile
     return getSubTiles(splitLatitude, splitLongitude);
   }
 
-<<<<<<< HEAD
-=======
-  //  const Sector getSector() const {
-  //    return _sector;
-  //  }
-  //
-  //  int getLevel() const {
-  //    return _level;
-  //  }
-  //
-  //  int getRow() const {
-  //    return _row;
-  //  }
-  //
-  //  int getColumn() const {
-  //    return _column;
-  //  }
-
->>>>>>> fixing-skirts
   public final Mesh getTexturizedMesh()
   {
     return _texturizedMesh;
@@ -923,6 +906,13 @@ public class Tile
         if (_texturizerData != null)
            _texturizerData.dispose();
         _texturizerData = null;
+      }
+  
+      if (_debugMesh != null)
+      {
+        if (_debugMesh != null)
+           _debugMesh.dispose();
+        _debugMesh = null;
       }
   
       if (_subtiles != null)
