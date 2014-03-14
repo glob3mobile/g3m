@@ -216,7 +216,7 @@ double ElevationData::getElevationAt(const Angle& latitude,
         return NAND;
       }
 
-      result = IMathUtils::instance()->linearInterpolation(heightNextY, heightY, alphaY);
+      result = IMathUtils::instance()->linearInterpolation(heightY, heightNextY, alphaY);
     }
   }
   else {
