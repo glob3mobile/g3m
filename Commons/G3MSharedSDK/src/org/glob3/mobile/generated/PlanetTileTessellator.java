@@ -401,7 +401,7 @@ public class PlanetTileTessellator extends TileTessellator
       double absoluteSkirtHeight = 0;
       if (_renderedSector != null)
       {
-    	  absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
+        absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
       }
   
       createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
@@ -431,7 +431,7 @@ public class PlanetTileTessellator extends TileTessellator
     return result;
   }
 
-  public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile)
+  public final Mesh createTileDebugMesh(Planet planet, Vector2I rawResolution, Tile tile, Color colorDebug)
   {
     final Sector sector = getRenderedSectorForTile(tile); // tile->getSector();
   
@@ -475,7 +475,7 @@ public class PlanetTileTessellator extends TileTessellator
       indices.add(posS++);
     }
   
-    Color color = Color.newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
+    Color color = new Color(colorDebug);
   
     Mesh result = new IndexedMesh(GLPrimitive.lineLoop(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, 1, color, null, 0, false); // colorsIntensity -  colors
   
