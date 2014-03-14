@@ -515,11 +515,11 @@ public abstract class MapBooBuilder
         final Sector sector = currentScene.getSector();
         if (sector == null)
         {
-          _g3mWidget.setShownSector(Sector.fullSphere());
+          _g3mWidget.setRenderedSector(Sector.fullSphere());
         }
         else
         {
-          _g3mWidget.setShownSector(sector);
+          _g3mWidget.setRenderedSector(sector);
         }
   
         final MapBoo_CameraPosition cameraPosition = currentScene.getCameraPosition();
@@ -582,11 +582,11 @@ public abstract class MapBooBuilder
         final Sector sector = currentScene.getSector();
         if (sector == null)
         {
-          _g3mWidget.setShownSector(Sector.fullSphere());
+          _g3mWidget.setRenderedSector(Sector.fullSphere());
         }
         else
         {
-          _g3mWidget.setShownSector(sector);
+          _g3mWidget.setRenderedSector(sector);
         }
       }
     }
@@ -1600,13 +1600,6 @@ public abstract class MapBooBuilder
     return _serverURL;
   }
 
-  /** Private to MapbooBuilder, don't call it */
-  public final void pollApplicationDataFromServer(G3MContext context)
-  {
-    IDownloader downloader = context.getDownloader();
-    downloader.requestBuffer(createApplicationRestURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
-  }
-
   public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
@@ -1669,5 +1662,12 @@ public abstract class MapBooBuilder
   
     return new URL(path, false);
   
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void pollApplicationDataFromServer(G3MContext context)
+  {
+    IDownloader downloader = context.getDownloader();
+    downloader.requestBuffer(createApplicationRestURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
   }
 }
