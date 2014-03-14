@@ -1600,10 +1600,10 @@ void MapBooBuilder::changedCurrentScene() {
     if (currentScene != NULL) {
       const Sector* sector = currentScene->getSector();
       if (sector == NULL) {
-        _g3mWidget->setShownSector( Sector::fullSphere() );
+        _g3mWidget->setRenderedSector( Sector::fullSphere() );
       }
       else {
-        _g3mWidget->setShownSector( *sector );
+        _g3mWidget->setRenderedSector( *sector );
       }
 
       const MapBoo_CameraPosition* cameraPosition = currentScene->getCameraPosition();
@@ -1667,10 +1667,10 @@ void MapBooBuilder::updateVisibleScene() {
     if (currentScene != NULL) {
       const Sector* sector = currentScene->getSector();
       if (sector == NULL) {
-        _g3mWidget->setShownSector( Sector::fullSphere() );
+        _g3mWidget->setRenderedSector( Sector::fullSphere() );
       }
       else {
-        _g3mWidget->setShownSector( *sector );
+        _g3mWidget->setRenderedSector( *sector );
       }
     }
   }

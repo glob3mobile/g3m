@@ -446,7 +446,7 @@ public:
     return _renderedSector;
   }
 
-  void setRenderedSector(const Sector& sector);
+  bool setRenderedSector(const Sector& sector);
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
