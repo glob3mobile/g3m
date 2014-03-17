@@ -1107,7 +1107,7 @@ public:
 
   }
 
-  if (true) {
+  if (false) {
     GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                        geoRenderer: geoRenderer
                                                                       meshRenderer: meshRenderer
