@@ -12,6 +12,8 @@
 
 #include "GL.hpp"
 #include "TouchEvent.hpp"
+#include "G3MWidget.hpp"
+
 
 
 
@@ -77,7 +79,8 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
             (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1)) {
       
       // compute intersection of view direction with the globe
-      Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+      //Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+      Vector3D intersection = eventContext->getWidget()->getScenePositionForCentralPixel();
       if (!intersection.isNan()) {
         _centralGlobePoint = intersection.asMutableVector3D();
         _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
