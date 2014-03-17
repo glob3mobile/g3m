@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+	
+	<servlet>
+	    <servlet-name>Proxy</servlet-name>
+	    <servlet-class>org.glob3.mobile.server.proxy.Proxy</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>Proxy</servlet-name>
+	    <url-pattern>/proxy</url-pattern>
+	</servlet-mapping>
+
+	<!-- TODO: Optionally add a <welcome-file-list> tag to display a welcome file. -->
+</web-app>

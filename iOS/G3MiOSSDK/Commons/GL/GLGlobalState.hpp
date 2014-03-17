@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLGlobalState_hpp
-#define G3MiOSSDK_GLGlobalState_hpp
+#ifndef G3MiOSSDK_GLGlobalState
+#define G3MiOSSDK_GLGlobalState
 
 class IFloatBuffer;
 

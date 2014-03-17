@@ -65,22 +65,22 @@ class Sector;
 class WidgetUserData {
 private:
   G3MWidget* _widget;
-  
+
 public:
   WidgetUserData() :
   _widget(NULL)
   {
-    
+
   }
-  
+
   virtual ~WidgetUserData() {
 
   }
-  
+
   void setWidget(G3MWidget* widget) {
     _widget = widget;
   }
-  
+
   G3MWidget* getWidget() const {
     return _widget;
   }
@@ -89,7 +89,7 @@ public:
 
 class G3MWidget {
 public:
-  
+
   static void initSingletons(ILogger*            logger,
                              IFactory*           factory,
                              const IStringUtils* stringUtils,
@@ -97,43 +97,43 @@ public:
                              IMathUtils*         mathUtils,
                              IJSONParser*        jsonParser,
                              ITextUtils*         textUtils);
-  
-  static G3MWidget* create(GL*                              gl,
-                           IStorage*                        storage,
-                           IDownloader*                     downloader,
-                           IThreadUtils*                    threadUtils,
-                           ICameraActivityListener*         cameraActivityListener,
-                           const Planet*                    planet,
-                           std::vector<ICameraConstrainer*> cameraConstrainers,
-                           CameraRenderer*                  cameraRenderer,
-                           Renderer*                        mainRenderer,
-                           Renderer*                        busyRenderer,
-                           ErrorRenderer*                   errorRenderer,
-                           Renderer*                        hudRenderer,
-                           const Color&                     backgroundColor,
-                           const bool                       logFPS,
-                           const bool                       logDownloaderStatistics,
-                           GInitializationTask*             initializationTask,
-                           bool                             autoDeleteInitializationTask,
-                           std::vector<PeriodicalTask*>     periodicalTasks,
-                           GPUProgramManager*               gpuProgramManager,
-                           SceneLighting*                   sceneLighting,
+
+  static G3MWidget* create(GL*                                  gl,
+                           IStorage*                            storage,
+                           IDownloader*                         downloader,
+                           IThreadUtils*                        threadUtils,
+                           ICameraActivityListener*             cameraActivityListener,
+                           const Planet*                        planet,
+                           std::vector<ICameraConstrainer*>     cameraConstrainers,
+                           CameraRenderer*                      cameraRenderer,
+                           Renderer*                            mainRenderer,
+                           Renderer*                            busyRenderer,
+                           ErrorRenderer*                       errorRenderer,
+                           Renderer*                            hudRenderer,
+                           const Color&                         backgroundColor,
+                           const bool                           logFPS,
+                           const bool                           logDownloaderStatistics,
+                           GInitializationTask*                 initializationTask,
+                           bool                                 autoDeleteInitializationTask,
+                           std::vector<PeriodicalTask*>         periodicalTasks,
+                           GPUProgramManager*                   gpuProgramManager,
+                           SceneLighting*                       sceneLighting,
                            const InitialCameraPositionProvider* initialCameraPositionProvider);
-  
+
   ~G3MWidget();
-  
+
   void render(int width, int height);
 
   void zRender();
   
   void onTouchEvent(const TouchEvent* myEvent);
-  
+
   void onResizeViewportEvent(int width, int height);
-  
+
   void onPause();
-  
+
   void onResume();
-  
+
   void onDestroy();
 
   GL* getGL() const {
@@ -154,28 +154,28 @@ public:
 
   void setUserData(WidgetUserData* userData) {
     delete _userData;
-    
+
     _userData = userData;
     if (_userData != NULL) {
       _userData->setWidget(this);
     }
   }
-  
+
   WidgetUserData* getUserData() const {
     return _userData;
   }
-  
+
   void addPeriodicalTask(PeriodicalTask* periodicalTask);
-  
+
   void addPeriodicalTask(const TimeInterval& interval,
                          GTask* task);
 
   void resetPeriodicalTasksTimeouts();
 
   void setCameraPosition(const Geodetic3D& position);
-  
+
   void setCameraHeading(const Angle& heading);
-  
+
   void setCameraPitch(const Angle& pitch);
 
   void setCameraRoll(const Angle& roll);
@@ -187,14 +187,14 @@ public:
   void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const Angle& heading = Angle::zero(),
                                  const Angle& pitch   = Angle::fromDegrees(-90));
-  
+
   void setAnimatedCameraPosition(const TimeInterval& interval,
                                  const Geodetic3D& position,
                                  const Angle& heading = Angle::zero(),
                                  const Angle& pitch   = Angle::fromDegrees(-90),
                                  const bool linearTiming = false,
                                  const bool linearHeight = false);
-  
+
   void setAnimatedCameraPosition(const TimeInterval& interval,
                                  const Geodetic3D& fromPosition,
                                  const Geodetic3D& toPosition,
@@ -204,13 +204,11 @@ public:
                                  const Angle& toPitch,
                                  const bool linearTiming  = false,
                                  const bool linearHeight  = false);
-  
+
   void cancelCameraAnimation();
 
   void cancelAllEffects();
 
-  //  void resetCameraPosition();
-  
   CameraRenderer* getCameraRenderer() const {
     return _cameraRenderer;
   }
@@ -218,7 +216,7 @@ public:
   Renderer* getHUDRenderer() const {
     return _hudRenderer;
   }
-  
+
   const G3MContext* getG3MContext() const {
     return _context;
   }
@@ -247,11 +245,11 @@ private:
   IDownloader*             _downloader;
   IThreadUtils*            _threadUtils;
   ICameraActivityListener* _cameraActivityListener;
-  
+
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
   const Planet*       _planet;
-  
+
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
@@ -259,11 +257,11 @@ private:
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
   Renderer*           _selectedRenderer;
-  
+
   EffectsScheduler*   _effectsScheduler;
-  
+
   std::vector<ICameraConstrainer*> _cameraConstrainers;
-  
+
   Camera*          _currentCamera;
   Camera*          _nextCamera;
   TexturesHandler* _texturesHandler;
@@ -277,27 +275,27 @@ private:
   const bool       _logDownloaderStatistics;
   std::string      _lastCacheStatistics;
   const int        _nFramesBeetweenProgramsCleanUp;
-  
+
   ITimer* _renderStatisticsTimer;
-  
+
   WidgetUserData* _userData;
-  
+
   GInitializationTask* _initializationTask;
   bool                 _autoDeleteInitializationTask;
-  
+
   std::vector<PeriodicalTask*> _periodicalTasks;
-  
+
   int _width;
   int _height;
-  
+
   const G3MContext* _context;
-  
+
   bool _paused;
   bool _initializationTaskWasRun;
   bool _initializationTaskReady;
-  
+
   bool _clickOnProcess;
-  
+
   GPUProgramManager* _gpuProgramManager;
 
   SurfaceElevationProvider* _surfaceElevationProvider;

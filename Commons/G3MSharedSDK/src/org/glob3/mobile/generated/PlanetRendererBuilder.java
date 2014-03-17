@@ -405,7 +405,7 @@ public class PlanetRendererBuilder
   {
     _renderDebug = renderDebug;
   }
-  public final void setUseTilesSplitBuget(boolean useTilesSplitBudget)
+  public final void setUseTilesSplitBudget(boolean useTilesSplitBudget)
   {
     _useTilesSplitBudget = useTilesSplitBudget;
   }

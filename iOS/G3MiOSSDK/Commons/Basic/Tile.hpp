@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Tile_h
-#define G3MiOSSDK_Tile_h
+#ifndef G3MiOSSDK_Tile
+#define G3MiOSSDK_Tile
 
 #include "Sector.hpp"
 #include <list>
@@ -190,6 +190,22 @@ public:
   //Change to public for TileCache
   std::vector<Tile*>* getSubTiles(const bool mercator);
 
+  //  const Sector getSector() const {
+  //    return _sector;
+  //  }
+  //
+  //  int getLevel() const {
+  //    return _level;
+  //  }
+  //
+  //  int getRow() const {
+  //    return _row;
+  //  }
+  //
+  //  int getColumn() const {
+  //    return _column;
+  //  }
+
   Mesh* getTexturizedMesh() const {
     return _texturizedMesh;
   }
@@ -318,8 +334,8 @@ public:
 
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
 
-  inline void prune(TileTexturizer*        texturizer,
-                    ElevationDataProvider* elevationDataProvider);
+  void prune(TileTexturizer*        texturizer,
+             ElevationDataProvider* elevationDataProvider);
 
   void toBeDeleted(TileTexturizer*        texturizer,
                    ElevationDataProvider* elevationDataProvider);
@@ -355,11 +371,12 @@ public:
                                bool renderDebug);
 
   void ancestorChangedElevationData(Tile* ancestor);
-  
+
   ElevationData* createElevationDataSubviewFromAncestor(Tile* ancestor) const;
 
-  Vector2I* getPixelNormalizedFromPosition(const Geodetic2D& position2D,
-                                           const Vector2I* size) const;
+  Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
+                                           const Vector2I& size) const;
+  
 };
 
 #endif

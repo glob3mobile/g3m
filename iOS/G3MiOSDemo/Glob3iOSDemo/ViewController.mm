@@ -101,11 +101,11 @@
 #import <G3MiOSSDK/TileRasterizer.hpp>
 #import <G3MiOSSDK/DebugTileRasterizer.hpp>
 #import <G3MiOSSDK/GEOTileRasterizer.hpp>
-#import <G3MiOSSDK/GEORasterLineSymbol.hpp>
+#import <G3MiOSSDK/GEOLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEOMultiLineRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DLineRasterStyle.hpp>
 #import <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
-#import <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
+#import <G3MiOSSDK/GEOPolygonRasterSymbol.hpp>
 #import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
@@ -139,6 +139,7 @@
 
 #import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
+#import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -647,7 +648,7 @@ public:
   /*builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));*/
 
-  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -684,6 +685,10 @@ public:
     TaitBryanAngles tba = sr2.getTaitBryanAngles(sr);
     printf("ANGLES: %f, %f, %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
 
+  }
+
+  if (false){ //SECTOR CACERES
+    builder.setShownSector(Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845).shrinkedByPercent(-30));
   }
 
 
@@ -749,10 +754,6 @@ public:
   }
 
   if (false) { //HUD
-
-#warning Diego at work!
-
-
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
@@ -2485,7 +2486,7 @@ public:
 
     for (int i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = polygonsData->at(i);
-      symbols->push_back( new GEORasterPolygonSymbol(polygonData,
+      symbols->push_back( new GEOPolygonRasterSymbol(polygonData,
                                                      lineStyle,
                                                      surfaceStyle) );
 
@@ -2498,7 +2499,7 @@ public:
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
 
-    symbols->push_back( new GEORasterPolygonSymbol(geometry->getPolygonData(),
+    symbols->push_back( new GEOPolygonRasterSymbol(geometry->getPolygonData(),
                                                    createPolygonLineRasterStyle(geometry),
                                                    createPolygonSurfaceRasterStyle(geometry)) );
 
@@ -2512,7 +2513,7 @@ public:
     //                                                createLineStyle(geometry),
     //                                                30000) );
 
-    symbols->push_back( new GEORasterLineSymbol(geometry->getCoordinates(),
+    symbols->push_back( new GEOLineRasterSymbol(geometry->getCoordinates(),
                                                 createLineRasterStyle(geometry)) );
 
     return symbols;
@@ -2541,18 +2542,22 @@ public:
     const double population = properties->getAsNumber("population", 0);
 
     if (population > 2000000) {
-      //    if (rand()%2 == 0) {
-      //      symbols->push_back( new GEOShapeSymbol( createEllipsoidShape(geometry) ) );
-      //    }
-      //    else {
       symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
-      //    }
 
       Mark* mark = createMark(geometry);
       if (mark != NULL) {
         symbols->push_back( new GEOMarkSymbol(mark) );
       }
     }
+
+    //    const std::string label = properties->getAsString("name", "");
+    //
+    //    if (label.compare("") != 0) {
+    //      symbols->push_back( new GEOLabelRasterSymbol(label,
+    //                                                   geometry->getPosition(),
+    //                                                   GFont::monospaced(),
+    //                                                   Color::yellow()) );
+    //    }
 
     return symbols;
   }
@@ -2885,17 +2890,17 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
-//                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
-//                                                     Angle::fromDegrees(180),
-//                                                     Angle::fromDegrees(-45),
-//                                                     false,
-//                                                     false);
+      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
+      //                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
+      //                                                     Angle::fromDegrees(180),
+      //                                                     Angle::fromDegrees(-45),
+      //                                                     false,
+      //                                                     false);
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-//                                                     Geodetic3D::fromDegrees(28.624949838863251728,
-//                                                                             -13.898810737833036555,
-//                                                                             5));
+      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+      //                                                     Geodetic3D::fromDegrees(28.624949838863251728,
+      //                                                                             -13.898810737833036555,
+      //                                                                             5));
 
 
       //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.518803097704875427,
@@ -2954,7 +2959,6 @@ public:
       };
 
 
-#warning Diego at work!
       context->getDownloader()->requestBuffer(URL("file:///3d_.json"),
                                               1000000,
                                               TimeInterval::zero(),
@@ -3285,47 +3289,43 @@ public:
                                       const Tile*            tile){
 
             //            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
-//            Camera* cam = [_iosWidget widget]->getNextCamera();
-/*
+            //            Camera* cam = [_iosWidget widget]->getNextCamera();
+            /*
 
-<<<<<<< HEAD
-            //TaitBryanAngles angles = cam->getTaitBryanAngles();
-=======
+             //TaitBryanAngles angles = cam->getTaitBryanAngles();
+             TaitBryanAngles angles = cam->getHeadingPitchRoll();
+             printf("A1: %s\n", angles.description().c_str() );
 
-            TaitBryanAngles angles = cam->getHeadingPitchRoll();
->>>>>>> 10100b4c5f73c124779494d0ba45d11b9ed1ebc2
-            printf("A1: %s\n", angles.description().c_str() );
+             Angle step = Angle::fromDegrees(10);
 
-            Angle step = Angle::fromDegrees(10);
+             switch ((pixel._x * 4) / cam->getWidth()) {
+             case 0:
+             [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
+             break;
 
-            switch ((pixel._x * 4) / cam->getWidth()) {
-              case 0:
-                [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
-                break;
+             case 1:
+             [_iosWidget widget]->getNextCamera()->setPitch(angles._pitch.add(step));
+             break;
 
-              case 1:
-                [_iosWidget widget]->getNextCamera()->setPitch(angles._pitch.add(step));
-                break;
+             case 2:
+             [_iosWidget widget]->getNextCamera()->setRoll(angles._roll.add(step));
+             break;
 
-              case 2:
-                [_iosWidget widget]->getNextCamera()->setRoll(angles._roll.add(step));
-                break;
+             default:
+             break;
+             }
 
-              default:
-                break;
-            }
+             TaitBryanAngles angles2 = cam->getHeadingPitchRoll();
+             printf("A2: %s\n", angles2.description().c_str() );
 
-            TaitBryanAngles angles2 = cam->getHeadingPitchRoll();
-            printf("A2: %s\n", angles2.description().c_str() );
-
-            Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
-            Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
+             Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
+             Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
 
 
-            _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
-            _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+             _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+             _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
 
-*/
+             */
             return true;
           }
 
@@ -3349,7 +3349,7 @@ public:
                                                                          meshRenderer,
                                                                          marksRenderer,
                                                                          planet);
-  
+
   return initializationTask;
 }
 

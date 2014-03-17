@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_PlanetTileTessellator_hpp
-#define G3MiOSSDK_PlanetTileTessellator_hpp
+#ifndef G3MiOSSDK_PlanetTileTessellator
+#define G3MiOSSDK_PlanetTileTessellator
 
 #include "TileTessellator.hpp"
 #include <map>
@@ -128,6 +128,8 @@ private:
                         FloatBufferBuilderFromGeodetic* vertices,
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
+
+  static double skirtDepthForSector(const Planet* planet, const Sector& sector);
 
 public:
 

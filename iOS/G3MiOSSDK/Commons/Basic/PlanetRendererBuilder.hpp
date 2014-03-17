@@ -82,7 +82,7 @@ public:
   void setPlanetRendererParameters(TilesRenderParameters* parameters);
   void setShowStatistics(const bool showStatistics);
   void setRenderDebug(const bool renderDebug);
-  void setUseTilesSplitBuget(const bool useTilesSplitBudget);
+  void setUseTilesSplitBudget(const bool useTilesSplitBudget);
   void setForceFirstLevelTilesRenderOnStart(const bool forceFirstLevelTilesRenderOnStart);
   void setIncrementalTileQuality(const bool incrementalTileQuality);
   void addVisibleSectorListener(VisibleSectorListener* listener,

@@ -852,20 +852,13 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
                                                Mesh* mesh) {
-
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
-
   if (builderHolder != NULL) {
     TileTextureBuilder* builder = builderHolder->get();
     builder->cancel();
     builder->cleanTile();
     builder->cleanMesh();
   }
-//  else {
-//    if (mesh != NULL) {
-//      ILogger::instance()->logInfo("break (point) on me 4\n");
-//    }
-//  }
 }
 
 void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
@@ -876,11 +869,6 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
     builder->cancel();
     builder->cleanMesh();
   }
-//  else {
-//    if (mesh != NULL) {
-//      ILogger::instance()->logInfo("break (point) on me 5\n");
-//    }
-//  }
 }
 
 const TextureIDReference* MultiLayerTileTexturizer::getTopLevelTextureIdForTile(Tile* tile) {

@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_EllipsoidalPlanet_hpp
-#define G3MiOSSDK_EllipsoidalPlanet_hpp
+#ifndef G3MiOSSDK_EllipsoidalPlanet
+#define G3MiOSSDK_EllipsoidalPlanet
 
 #include <vector>
 #include <list>

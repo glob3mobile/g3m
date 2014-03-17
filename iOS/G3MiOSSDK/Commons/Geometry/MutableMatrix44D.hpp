@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_MutableMatrix44D_hpp
-#define G3MiOSSDK_MutableMatrix44D_hpp
+#ifndef G3MiOSSDK_MutableMatrix44D
+#define G3MiOSSDK_MutableMatrix44D
 
 class FrustumData;
 class Vector3D;

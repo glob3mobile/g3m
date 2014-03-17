@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Plane_h
-#define G3MiOSSDK_Plane_h
+#ifndef G3MiOSSDK_Plane
+#define G3MiOSSDK_Plane
 
 #include "Vector3D.hpp"
 #include "Vector3F.hpp"

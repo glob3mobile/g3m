@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_JSONString_hpp
-#define G3MiOSSDK_JSONString_hpp
+#ifndef G3MiOSSDK_JSONString
+#define G3MiOSSDK_JSONString
 
 #include "JSONBaseObject.hpp"
 

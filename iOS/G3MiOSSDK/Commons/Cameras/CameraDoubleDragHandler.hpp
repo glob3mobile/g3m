@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CameraDoubleDragHandler_h
-#define G3MiOSSDK_CameraDoubleDragHandler_h
+#ifndef G3MiOSSDK_CameraDoubleDragHandler
+#define G3MiOSSDK_CameraDoubleDragHandler
 
 
 #include "CameraEventHandler.hpp"
@@ -18,7 +18,7 @@ class CameraDoubleDragHandler: public CameraEventHandler {
     
 public:
   CameraDoubleDragHandler():
-  _camera0(Camera(0, 0))
+  _camera0(Camera())
   {
   }
   

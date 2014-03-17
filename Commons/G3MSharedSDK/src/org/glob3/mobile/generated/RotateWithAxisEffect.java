@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  CameraEffects.h
+//  CameraEffects.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo on 17/07/13.

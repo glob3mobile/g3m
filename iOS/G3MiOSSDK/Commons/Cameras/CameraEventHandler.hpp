@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CameraEventHandler_hpp
-#define G3MiOSSDK_CameraEventHandler_hpp
+#ifndef G3MiOSSDK_CameraEventHandler
+#define G3MiOSSDK_CameraEventHandler
 
 #include "CameraRenderer.hpp"
 

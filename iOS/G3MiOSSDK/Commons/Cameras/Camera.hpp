@@ -132,7 +132,7 @@ public:
   {
   }
 
-  Camera(int width, int height);
+  explicit Camera();
 
   ~Camera() {
     delete _camEffectTarget;

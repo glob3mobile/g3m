@@ -274,7 +274,7 @@ void PlanetRendererBuilder::setRenderDebug(const bool renderDebug) {
   _renderDebug = renderDebug;
 }
 
-void PlanetRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) {
+void PlanetRendererBuilder::setUseTilesSplitBudget(const bool useTilesSplitBudget) {
   _useTilesSplitBudget = useTilesSplitBudget;
 }
 

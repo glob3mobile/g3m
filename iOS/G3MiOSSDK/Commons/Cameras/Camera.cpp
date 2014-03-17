@@ -66,9 +66,7 @@ void Camera::copyFrom(const Camera &that) {
   _tanHalfHorizontalFieldOfView = that._tanHalfHorizontalFieldOfView;
 }
 
-Camera::Camera(int width, int height) :
-_width(0),
-_height(0),
+Camera::Camera() :
 _planet(NULL),
 _position(0, 0, 0),
 _groundHeight(0),
@@ -91,15 +89,13 @@ _tanHalfVerticalFieldOfView(NAND),
 _tanHalfHorizontalFieldOfView(NAND),
 _rollInRadians(0)
 {
-  resizeViewport(width, height);
+  resizeViewport(0, 0);
   _dirtyFlags.setAll(true);
 }
 
 void Camera::resizeViewport(int width, int height) {
-  _width = width;
+  _width  = width;
   _height = height;
-
-  _dirtyFlags._projectionMatrixDirty = true;
 
   _dirtyFlags.setAll(true);
 }

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CompositeRenderer_h
-#define G3MiOSSDK_CompositeRenderer_h
+#ifndef G3MiOSSDK_CompositeRenderer
+#define G3MiOSSDK_CompositeRenderer
 
 #include "Renderer.hpp"
 #include <vector>

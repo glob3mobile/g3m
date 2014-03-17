@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Planet_hpp
-#define G3MiOSSDK_Planet_hpp
+#ifndef G3MiOSSDK_Planet
+#define G3MiOSSDK_Planet
 
 #include <string>
 #include <list>
