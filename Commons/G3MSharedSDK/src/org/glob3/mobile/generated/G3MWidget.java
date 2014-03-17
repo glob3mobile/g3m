@@ -339,7 +339,6 @@ public class G3MWidget
     }
   
   }
-
   public final void onTouchEvent(TouchEvent touchEvent)
   {
   

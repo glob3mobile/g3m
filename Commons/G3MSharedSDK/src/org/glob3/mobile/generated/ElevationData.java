@@ -250,10 +250,7 @@ public abstract class ElevationData
           return java.lang.Double.NaN;
         }
   
-<<<<<<< HEAD
-=======
         //result = IMathUtils::instance()->linearInterpolation(heightNextY, heightY, alphaY);
->>>>>>> origin/zrender-touchhandlers
         result = IMathUtils.instance().linearInterpolation(heightY, heightNextY, alphaY);
       }
     }
