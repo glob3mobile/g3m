@@ -43,7 +43,7 @@ public class DeviceInfo_Android
 
    @Override
    public float getQualityFactor() {
-      return 2;
+      return 1;
    }
 
 }
