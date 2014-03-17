@@ -32,6 +32,7 @@ import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
@@ -82,6 +83,18 @@ Activity {
 		final MeshRenderer meshRenderer = new MeshRenderer();
 		meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
 		builder.addRenderer(meshRenderer);
+		
+		Planet planet = Planet.createFlatEarth();
+		builder.setPlanet(planet);
+		
+		/*// set elevations
+		      final Sector sector = Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992, -16.0019401695656);
+		      final Vector2I extent = new Vector2I(256, 256);
+		      final URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
+		      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
+		      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+		      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
+*/
 
 		// final ShapeLoadListener Plistener = new ShapeLoadListener() {
 		// @Override
@@ -395,6 +408,8 @@ Activity {
 		}
 
 		_g3mWidget = builder.createWidget();  
+		
+		
 
 		if (precaching){
 			pit.setWidget(_g3mWidget);
