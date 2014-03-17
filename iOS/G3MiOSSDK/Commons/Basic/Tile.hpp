@@ -190,6 +190,22 @@ public:
   //Change to public for TileCache
   std::vector<Tile*>* getSubTiles(const bool mercator);
 
+//  const Sector getSector() const {
+  //    return _sector;
+  //  }
+  //
+  //  int getLevel() const {
+  //    return _level;
+  //  }
+  //
+  //  int getRow() const {
+  //    return _row;
+  //  }
+  //
+  //  int getColumn() const {
+  //    return _column;
+  //  }
+
   Mesh* getTexturizedMesh() const {
     return _texturizedMesh;
   }

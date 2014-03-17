@@ -1395,8 +1395,8 @@ builder.initializeWidget();
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  cameraRenderer->addHandler(new CameraDoubleDragHandler());
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
+  //cameraRenderer->addHandler(new CameraDoubleDragHandler());
+  cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
 
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
@@ -3465,7 +3465,6 @@ public:
             /*
 
              TaitBryanAngles angles = cam->getTaitBryanAngles();
-
              TaitBryanAngles angles = cam->getHeadingPitchRoll();
              printf("A1: %s\n", angles.description().c_str() );
 

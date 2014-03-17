@@ -125,7 +125,6 @@ public:
   void render(int width, int height);
 
   void zRender();
-
   void onTouchEvent(const TouchEvent* myEvent);
 
   void onResizeViewportEvent(int width, int height);

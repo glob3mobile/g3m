@@ -194,7 +194,8 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
       {
   
         // compute intersection of view direction with the globe
-        Vector3D intersection = planet.closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+        //Vector3D intersection = planet->closestIntersection(_camera0.getCartesianPosition(), _camera0.getViewDirection());
+        Vector3D intersection = eventContext.getWidget().getScenePositionForCentralPixel();
         if (!intersection.isNan())
         {
           _centralGlobePoint = intersection.asMutableVector3D();

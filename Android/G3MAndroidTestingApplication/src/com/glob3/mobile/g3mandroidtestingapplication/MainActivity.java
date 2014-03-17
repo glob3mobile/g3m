@@ -41,6 +41,7 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.Vector2I;
 import org.glob3.mobile.generated.Vector3D;
+import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
