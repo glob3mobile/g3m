@@ -676,8 +676,6 @@ public class Tile
     return getSubTiles(splitLatitude, splitLongitude);
   }
 
-<<<<<<< HEAD
-=======
   //  const Sector getSector() const {
   //    return _sector;
   //  }
@@ -694,7 +692,6 @@ public class Tile
   //    return _column;
   //  }
 
->>>>>>> origin/purgatory
   public final Mesh getTexturizedMesh()
   {
     return _texturizedMesh;
@@ -1257,6 +1254,7 @@ public class Tile
     final Vector2D uv = _sector.getUVCoordinates(position2D);
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
+
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods

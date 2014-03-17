@@ -347,4 +347,9 @@ public class MarksRenderer extends LeafRenderer
   {
   }
 
+  public final void modifiyGLState(GLState state)
+  {
+
+  }
+
 }
