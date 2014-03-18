@@ -117,14 +117,9 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     }
     else
     {
-    	if (_elevationData._width == extent._x && _elevationData._height == extent._y &&
-    			_elevationData._sector.isEquals(sector)){
-    		listener.onData(sector, extent, _elevationData);
-    	} else{
       //int _DGD_working_on_terrain;
       ElevationData elevationData = new InterpolatedSubviewElevationData(_elevationData, sector, extent);
       listener.onData(sector, extent, elevationData);
-    	}
     }
   
     if (autodeleteListener)
