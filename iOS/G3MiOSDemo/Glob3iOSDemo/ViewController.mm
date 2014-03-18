@@ -637,7 +637,7 @@ public:
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
 
-  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -675,6 +675,10 @@ public:
     TaitBryanAngles tba = sr2.getTaitBryanAngles(sr);
     printf("ANGLES: %f, %f, %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
 
+  }
+
+  if (false){ //SECTOR CACERES
+    builder.setShownSector(Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845).shrinkedByPercent(-30));
   }
 
 
@@ -1376,7 +1380,7 @@ public:
   //  int initialLevel = 1,
   //  int maxLevel = 19,
   //  LayerCondition* condition = NULL
-  if (true) {
+  if (false) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
   }
@@ -1447,7 +1451,7 @@ public:
                                          "tm_world_borders_simpl_0_3",
                                          TimeInterval::fromDays(30)) );
   }
-  const bool useMapQuestOpenAerial = false;
+  const bool useMapQuestOpenAerial = true;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
@@ -2487,29 +2491,29 @@ public:
 
     const JSONObject* properties = geometry->getFeature()->getProperties();
 
-//    const double population = properties->getAsNumber("population", 0);
+    const double population = properties->getAsNumber("population", 0);
 
-//    if (population > 2000000) {
-//      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
+    if (population > 2000000) {
+      symbols->push_back( new GEOShapeSymbol( createBoxShape(geometry, _planet) ) );
 
       Mark* mark = createMark(geometry);
       if (mark != NULL) {
         symbols->push_back( new GEOMarkSymbol(mark) );
       }
-//    }
-
-    const std::string label = properties->getAsString("name", "");
-
-    if (label.compare("") != 0) {
-      symbols->push_back( new GEOLabelRasterSymbol(label,
-                                                   geometry->getPosition(),
-                                                   GFont::monospaced(),
-                                                   Color::yellow()) );
     }
+
+    //    const std::string label = properties->getAsString("name", "");
+    //
+    //    if (label.compare("") != 0) {
+    //      symbols->push_back( new GEOLabelRasterSymbol(label,
+    //                                                   geometry->getPosition(),
+    //                                                   GFont::monospaced(),
+    //                                                   Color::yellow()) );
+    //    }
 
     return symbols;
   }
-  
+
 };
 
 
@@ -2841,17 +2845,17 @@ public:
     void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
-//                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
-//                                                     Angle::fromDegrees(180),
-//                                                     Angle::fromDegrees(-45),
-//                                                     false,
-//                                                     false);
+      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(10.0),
+      //                                                     Geodetic3D::fromDegrees(28.624949838863251728, -13.898810737833036555, 18290),
+      //                                                     Angle::fromDegrees(180),
+      //                                                     Angle::fromDegrees(-45),
+      //                                                     false,
+      //                                                     false);
 
-//      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-//                                                     Geodetic3D::fromDegrees(28.624949838863251728,
-//                                                                             -13.898810737833036555,
-//                                                                             5));
+      //      [_iosWidget widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+      //                                                     Geodetic3D::fromDegrees(28.624949838863251728,
+      //                                                                             -13.898810737833036555,
+      //                                                                             5));
 
 
       //      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.518803097704875427,
@@ -3185,47 +3189,47 @@ public:
                                       const Tile*            tile){
 
             //            [_iosWidget widget]->getNextCamera()->setRoll(Angle::fromDegrees(45));
-//            Camera* cam = [_iosWidget widget]->getNextCamera();
-/*
+            //            Camera* cam = [_iosWidget widget]->getNextCamera();
+            /*
 
-<<<<<<< HEAD
-            //TaitBryanAngles angles = cam->getTaitBryanAngles();
-=======
+             <<<<<<< HEAD
+             //TaitBryanAngles angles = cam->getTaitBryanAngles();
+             =======
 
-            TaitBryanAngles angles = cam->getHeadingPitchRoll();
->>>>>>> 10100b4c5f73c124779494d0ba45d11b9ed1ebc2
-            printf("A1: %s\n", angles.description().c_str() );
+             TaitBryanAngles angles = cam->getHeadingPitchRoll();
+             >>>>>>> 10100b4c5f73c124779494d0ba45d11b9ed1ebc2
+             printf("A1: %s\n", angles.description().c_str() );
 
-            Angle step = Angle::fromDegrees(10);
+             Angle step = Angle::fromDegrees(10);
 
-            switch ((pixel._x * 4) / cam->getWidth()) {
-              case 0:
-                [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
-                break;
+             switch ((pixel._x * 4) / cam->getWidth()) {
+             case 0:
+             [_iosWidget widget]->getNextCamera()->setHeading(angles._heading.add(step));
+             break;
 
-              case 1:
-                [_iosWidget widget]->getNextCamera()->setPitch(angles._pitch.add(step));
-                break;
+             case 1:
+             [_iosWidget widget]->getNextCamera()->setPitch(angles._pitch.add(step));
+             break;
 
-              case 2:
-                [_iosWidget widget]->getNextCamera()->setRoll(angles._roll.add(step));
-                break;
+             case 2:
+             [_iosWidget widget]->getNextCamera()->setRoll(angles._roll.add(step));
+             break;
 
-              default:
-                break;
-            }
+             default:
+             break;
+             }
 
-            TaitBryanAngles angles2 = cam->getHeadingPitchRoll();
-            printf("A2: %s\n", angles2.description().c_str() );
+             TaitBryanAngles angles2 = cam->getHeadingPitchRoll();
+             printf("A2: %s\n", angles2.description().c_str() );
 
-            Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
-            Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
+             Geodetic2D g(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude);
+             Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
 
 
-            _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
-            _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+             _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+             _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
 
-*/
+             */
             return true;
           }
 
@@ -3249,7 +3253,7 @@ public:
                                                                          meshRenderer,
                                                                          marksRenderer,
                                                                          planet);
-  
+
   return initializationTask;
 }
 
