@@ -39,7 +39,7 @@ public:
               const bool         generateMipmap):
   _id(id),
   _width(width),
-  _height(generateMipmap),
+  _height(height),
   _generateMipmap(generateMipmap)
   {
 
