@@ -250,7 +250,8 @@ public abstract class ElevationData
           return java.lang.Double.NaN;
         }
   
-        result = IMathUtils.instance().linearInterpolation(heightNextY, heightY, alphaY);
+        //result = IMathUtils::instance()->linearInterpolation(heightNextY, heightY, alphaY);
+        result = IMathUtils.instance().linearInterpolation(heightY, heightNextY, alphaY);
       }
     }
     else
