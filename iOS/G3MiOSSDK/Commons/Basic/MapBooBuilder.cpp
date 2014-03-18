@@ -859,6 +859,9 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
   }
 
   const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
+  
+  const bool queryable = jsonObject->getAsBoolean("queryable", false);
+
 
   //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
   //    return NULL;
@@ -873,6 +876,7 @@ MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
                           parseSector( jsonObject->get("sector") ),
                           parseLayer( jsonObject->get("baseLayer") ),
                           parseLayer( jsonObject->get("overlayLayer") ),
+                          queryable,
                           hasWarnings);
 }
 
