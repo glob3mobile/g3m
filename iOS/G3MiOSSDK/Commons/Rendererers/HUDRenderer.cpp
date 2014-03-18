@@ -7,7 +7,7 @@
 //
 
 #include "HUDRenderer.hpp"
-
+#include "RenderState.hpp"
 #include "HUDWidget.hpp"
 
 #include "MutableMatrix44D.hpp"

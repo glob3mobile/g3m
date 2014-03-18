@@ -8,7 +8,7 @@
 
 #include "G3MWidget.hpp"
 
-#include "Renderer.hpp"
+#include "ProtoRenderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TexturesHandler.hpp"
@@ -68,7 +68,7 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      std::vector<ICameraConstrainer*>     cameraConstrainers,
                      CameraRenderer*                      cameraRenderer,
                      Renderer*                            mainRenderer,
-                     Renderer*                            busyRenderer,
+                     ProtoRenderer*                       busyRenderer,
                      ErrorRenderer*                       errorRenderer,
                      Renderer*                            hudRenderer,
                      const Color&                         backgroundColor,
@@ -195,7 +195,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              std::vector<ICameraConstrainer*>     cameraConstrainers,
                              CameraRenderer*                      cameraRenderer,
                              Renderer*                            mainRenderer,
-                             Renderer*                            busyRenderer,
+                             ProtoRenderer*                       busyRenderer,
                              ErrorRenderer*                       errorRenderer,
                              Renderer*                            hudRenderer,
                              const Color&                         backgroundColor,
@@ -305,11 +305,9 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
       break;
     }
     case RENDER_BUSY: {
-      _busyRenderer->onTouchEvent(&ec, touchEvent);
       break;
     }
     default: {
-      _errorRenderer->onTouchEvent(&ec, touchEvent);
       break;
     }
   }
@@ -518,7 +516,7 @@ void G3MWidget::render(int width, int height) {
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
 
-  Renderer* selectedRenderer;
+  ProtoRenderer* selectedRenderer;
   switch (renderStateType) {
     case RENDER_READY:
       selectedRenderer = _mainRenderer;
@@ -554,9 +552,10 @@ void G3MWidget::render(int width, int height) {
     _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
   }
 
-  if (_selectedRenderer->isEnable()) {
+  //TODO: CHECK THIS OMISION
+  //if (_selectedRenderer->isEnable()) {
     _selectedRenderer->render(_renderContext, _rootState);
-  }
+  //}
 
   std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {

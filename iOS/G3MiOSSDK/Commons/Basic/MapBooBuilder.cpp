@@ -561,7 +561,7 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
   return cameraRenderer;
 }
 
-Renderer* MapBooBuilder::createBusyRenderer() {
+ProtoRenderer* MapBooBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
 }
 

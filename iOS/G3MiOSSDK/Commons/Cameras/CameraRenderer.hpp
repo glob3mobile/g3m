@@ -11,13 +11,15 @@
 
 #include <vector>
 
-#include "LeafRenderer.hpp"
+#include "ProtoRenderer.hpp"
+#include "RenderState.hpp"
 #include "Context.hpp"
 #include "Effects.hpp"
 
 
 #include "Effects.hpp"
 
+class RenderState;
 class CameraEventHandler;
 
 
@@ -57,7 +59,7 @@ public:
 
 
 
-class CameraRenderer: public LeafRenderer {
+class CameraRenderer: public ProtoRenderer {
 private:
   bool _processTouchEvents;
   std::vector<CameraEventHandler*> _handlers;

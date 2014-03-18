@@ -7,6 +7,7 @@
 //
 
 #include "MarksRenderer.hpp"
+#include "RenderState.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"

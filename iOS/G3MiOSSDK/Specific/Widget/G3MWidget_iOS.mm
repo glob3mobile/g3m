@@ -53,7 +53,7 @@
            cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (Renderer*) busyRenderer
+                busyRenderer: (ProtoRenderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
                  hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor

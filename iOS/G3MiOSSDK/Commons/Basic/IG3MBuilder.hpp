@@ -23,7 +23,9 @@ class PeriodicalTask;
 class G3MWidget;
 class PlanetRendererBuilder;
 class Planet;
+//TODO
 class Renderer;
+class ProtoRenderer;
 class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
@@ -48,7 +50,7 @@ private:
   CameraRenderer*                   _cameraRenderer;
   Color*                            _backgroundColor;
   PlanetRendererBuilder*            _planetRendererBuilder;
-  Renderer*                         _busyRenderer;
+  ProtoRenderer*                    _busyRenderer;
   ErrorRenderer*                    _errorRenderer;
   Renderer*                         _hudRenderer;
   std::vector<Renderer*>*           _renderers;
@@ -68,7 +70,7 @@ private:
   ICameraActivityListener*          getCameraActivityListener();
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
-  Renderer*                         getBusyRenderer();
+  ProtoRenderer*                    getBusyRenderer();
   ErrorRenderer*                    getErrorRenderer();
   Renderer*                         getHUDRenderer() const;
   Color*                            getBackgroundColor();
@@ -129,7 +131,7 @@ public:
 
   void setBackgroundColor(Color* backgroundColor);
 
-  void setBusyRenderer(Renderer* busyRenderer);
+  void setBusyRenderer(ProtoRenderer* busyRenderer);
 
   void setErrorRenderer(ErrorRenderer* errorRenderer);
 

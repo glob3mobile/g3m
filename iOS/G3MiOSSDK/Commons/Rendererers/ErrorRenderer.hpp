@@ -9,9 +9,11 @@
 #ifndef __G3MiOSSDK__ErrorRenderer__
 #define __G3MiOSSDK__ErrorRenderer__
 
-#include "Renderer.hpp"
+#include "ProtoRenderer.hpp"
+#include <vector>
 
-class ErrorRenderer : public Renderer {
+
+class ErrorRenderer : public ProtoRenderer {
 public:
 
   virtual void setErrors(const std::vector<std::string>& errors) = 0;

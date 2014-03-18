@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  HUDErrorRenderer.cpp
 //  G3MiOSSDK
@@ -16,108 +19,126 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //class HUDImageRenderer;
 
 
-public class HUDErrorRenderer extends ErrorRenderer
-{
-  private HUDImageRenderer _hudImageRenderer;
+public class HUDErrorRenderer
+         extends
+            ErrorRenderer {
+   private final HUDImageRenderer _hudImageRenderer;
 
 
-  public HUDErrorRenderer()
-  {
-    _hudImageRenderer = new HUDImageRenderer(new HUDErrorRenderer_ImageFactory());
-  }
-
-  public void dispose()
-  {
-    super.dispose();
-  }
-
-  public final void setErrors(java.util.ArrayList<String> errors)
-  {
-    HUDErrorRenderer_ImageFactory factory = (HUDErrorRenderer_ImageFactory)(_hudImageRenderer.getImageFactory());
-    if (factory.setErrors(errors))
-    {
-      _hudImageRenderer.recreateImage();
-    }
-  }
-
-  public final boolean isEnable()
-  {
-    return _hudImageRenderer.isEnable();
-  }
-
-  public final void setEnable(boolean enable)
-  {
-    _hudImageRenderer.setEnable(enable);
-  }
-
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return _hudImageRenderer.getRenderState(rc);
-  }
-
-  public final boolean isPlanetRenderer()
-  {
-    return _hudImageRenderer.isPlanetRenderer();
-  }
-
-  public final SurfaceElevationProvider getSurfaceElevationProvider()
-  {
-    return _hudImageRenderer.getSurfaceElevationProvider();
-  }
-
-  public final PlanetRenderer getPlanetRenderer()
-  {
-    return _hudImageRenderer.getPlanetRenderer();
-  }
-
-  public final void initialize(G3MContext context)
-  {
-    _hudImageRenderer.initialize(context);
-  }
-
-  public final void render(G3MRenderContext rc, GLState glState)
-  {
-    _hudImageRenderer.render(rc, glState);
-  }
-
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return _hudImageRenderer.onTouchEvent(ec, touchEvent);
-  }
-
-  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
-  {
-    _hudImageRenderer.onResizeViewportEvent(ec, width, height);
-  }
-
-  public final void start(G3MRenderContext rc)
-  {
-    _hudImageRenderer.start(rc);
-  }
-
-  public final void stop(G3MRenderContext rc)
-  {
-    _hudImageRenderer.stop(rc);
-  }
+   public HUDErrorRenderer() {
+      _hudImageRenderer = new HUDImageRenderer(new HUDErrorRenderer_ImageFactory());
+   }
 
 
-  public final void onResume(G3MContext context)
-  {
-    _hudImageRenderer.onResume(context);
-  }
+   @Override
+   public void dispose() {
+      super.dispose();
+   }
 
-  public final void onPause(G3MContext context)
-  {
-    _hudImageRenderer.onPause(context);
-  }
 
-  public final void onDestroy(G3MContext context)
-  {
-    _hudImageRenderer.onDestroy(context);
-  }
+   @Override
+   public final void setErrors(final java.util.ArrayList<String> errors) {
+      final HUDErrorRenderer_ImageFactory factory = (HUDErrorRenderer_ImageFactory) (_hudImageRenderer.getImageFactory());
+      if (factory.setErrors(errors)) {
+         _hudImageRenderer.recreateImage();
+      }
+   }
+
+
+   @Override
+   public final boolean isEnable() {
+      return _hudImageRenderer.isEnable();
+   }
+
+
+   @Override
+   public final void setEnable(final boolean enable) {
+      _hudImageRenderer.setEnable(enable);
+   }
+
+
+   @Override
+   public final RenderState getRenderState(final G3MRenderContext rc) {
+      return _hudImageRenderer.getRenderState(rc);
+   }
+
+
+   @Override
+   public final boolean isPlanetRenderer() {
+      return _hudImageRenderer.isPlanetRenderer();
+   }
+
+
+   @Override
+   public final SurfaceElevationProvider getSurfaceElevationProvider() {
+      return _hudImageRenderer.getSurfaceElevationProvider();
+   }
+
+
+   @Override
+   public final PlanetRenderer getPlanetRenderer() {
+      return _hudImageRenderer.getPlanetRenderer();
+   }
+
+
+   @Override
+   public final void initialize(final G3MContext context) {
+      _hudImageRenderer.initialize(context);
+   }
+
+
+   @Override
+   public final void render(final G3MRenderContext rc,
+                            final GLState glState) {
+      _hudImageRenderer.render(rc, glState);
+   }
+
+
+   @Override
+   public final boolean onTouchEvent(final G3MEventContext ec,
+                                     final TouchEvent touchEvent) {
+      return _hudImageRenderer.onTouchEvent(ec, touchEvent);
+   }
+
+
+   @Override
+   public final void onResizeViewportEvent(final G3MEventContext ec,
+                                           final int width,
+                                           final int height) {
+      _hudImageRenderer.onResizeViewportEvent(ec, width, height);
+   }
+
+
+   @Override
+   public final void start(final G3MRenderContext rc) {
+      _hudImageRenderer.start(rc);
+   }
+
+
+   @Override
+   public final void stop(final G3MRenderContext rc) {
+      _hudImageRenderer.stop(rc);
+   }
+
+
+   @Override
+   public final void onResume(final G3MContext context) {
+      _hudImageRenderer.onResume(context);
+   }
+
+
+   @Override
+   public final void onPause(final G3MContext context) {
+      _hudImageRenderer.onPause(context);
+   }
+
+
+   @Override
+   public final void onDestroy(final G3MContext context) {
+      _hudImageRenderer.onDestroy(context);
+   }
 
 }
