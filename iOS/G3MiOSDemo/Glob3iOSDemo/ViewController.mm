@@ -637,7 +637,7 @@ public:
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
 
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -1380,7 +1380,7 @@ public:
   //  int initialLevel = 1,
   //  int maxLevel = 19,
   //  LayerCondition* condition = NULL
-  if (true) {
+  if (false) {
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
   }
@@ -1451,7 +1451,7 @@ public:
                                          "tm_world_borders_simpl_0_3",
                                          TimeInterval::fromDays(30)) );
   }
-  const bool useMapQuestOpenAerial = false;
+  const bool useMapQuestOpenAerial = true;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
