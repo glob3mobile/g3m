@@ -737,7 +737,7 @@ public final class NativeGL2_Android
       nameStr = nameStr.substring(0, length[0]);
       final int id = GLES20.glGetUniformLocation(program.getProgramID(), nameStr);
 
-      ILogger.instance().logInfo("Uniform Name: %s - %d", nameStr, id);
+      //ILogger.instance().logInfo("Uniform Name: %s - %d", nameStr, id);
       switch (type[0]) {
          case GLES20.GL_FLOAT_MAT4:
             return new GPUUniformMatrix4Float(nameStr, new GLUniformID_Android(id));
@@ -780,7 +780,7 @@ public final class NativeGL2_Android
          nameStr = nameStr.substring(0, length[0]);
          final int id = GLES20.glGetAttribLocation(program.getProgramID(), nameStr);
 
-         ILogger.instance().logInfo("Attribute Name: %s - %d", nameStr, id);
+         //ILogger.instance().logInfo("Attribute Name: %s - %d", nameStr, id);
 
          switch (type[0]) {
             case GLES20.GL_FLOAT_VEC3:

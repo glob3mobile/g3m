@@ -367,11 +367,14 @@ public abstract class MapBooBuilder
   
     final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
   
+    final boolean queryable = jsonObject.getAsBoolean("queryable", false);
+  
+  
     //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
     //    return NULL;
     //  }
   
-    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
+    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), queryable, hasWarnings);
   }
 
   private Color parseColor(JSONString jsonColor)
@@ -1472,9 +1475,10 @@ public abstract class MapBooBuilder
         Layer overlayLayer = (jboOverlayLayer != null) ? parseLayer(jboOverlayLayer.asObject()) : oldOverlayLayer;
   
         final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
+        final boolean queryable = jsonObject.getAsBoolean("queryable", false);
         final boolean cameraPositionChaged = (jboCameraPosition != null);
   
-        MapBoo_Scene newScene = new MapBoo_Scene(sceneToBeUpdatedID, name, description, screenshot, backgroundColor, cameraPosition, sector, baseLayer, overlayLayer, hasWarnings);
+        MapBoo_Scene newScene = new MapBoo_Scene(sceneToBeUpdatedID, name, description, screenshot, backgroundColor, cameraPosition, sector, baseLayer, overlayLayer, queryable, hasWarnings);
   
         _applicationScenes.set(i, newScene);
   
@@ -1666,6 +1670,11 @@ public abstract class MapBooBuilder
     }
   }
 
+
+  public final boolean isQueryableCurrentScene()
+  {
+    return getApplicationCurrentScene().isQueryable();
+  }
 
   public final URL getServerURL()
   {

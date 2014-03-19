@@ -109,7 +109,7 @@ public:
 
   virtual ~LTMInitializer() {
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
 
   }
@@ -127,11 +127,11 @@ public:
                                                                    tileSector._upper,
                                                                    _mercator);
 
-//      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
-//                                     lowerTextCoordUV._y - upperTextCoordUV._y);
-//
-//      _translation = MutableVector2D(lowerTextCoordUV._x,
-//                                     upperTextCoordUV._y);
+      //      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
+      //                                     lowerTextCoordUV._y - upperTextCoordUV._y);
+      //
+      //      _translation = MutableVector2D(lowerTextCoordUV._x,
+      //                                     upperTextCoordUV._y);
 
       _translationU = lowerTextCoordUV._x;
       _translationV = upperTextCoordUV._y;
@@ -230,7 +230,7 @@ private:
 
     deletePetitions();
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
 
   }
@@ -429,7 +429,7 @@ public:
           const Sector imageSector = petition->getSector();
           //Finding intersection image sector - tile sector = srcReq
           const Sector intersectionSector = tileSector.intersection(imageSector);
-          
+
           RectangleF* sourceRect = NULL;
           if (!intersectionSector.isEquals(imageSector)) {
             sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
@@ -505,13 +505,14 @@ public:
 #endif
 
       if (_mesh != NULL) {
-        const bool isMipmap = false;
+#warning testing mipmap
+        const bool generateMipmap = true;
 
         const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
                                                                                         GLFormat::rgba(),
                                                                                         textureId,
-                                                                                        isMipmap);
-        
+                                                                                        generateMipmap);
+
         if (glTextureId != NULL) {
           if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
             delete glTextureId;
@@ -541,12 +542,12 @@ public:
 
       if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
         if (composeAndUploadTexture()) {
-           //If the image could be properly turn into texture
+          //If the image could be properly turn into texture
           _tile->setTextureSolved(true);
           deletePetitions();    //We must release the petitions so we can get rid off no longer needed images
         }
       }
-      
+
     }
   }
 
@@ -563,9 +564,9 @@ public:
     _stepsDone++;
 
     if (_stepsDone == _petitionsCount) {
-//      if (_anyCanceled) {
-//        ILogger::instance()->logInfo("Completed with cancelation\n");
-//      }
+      //      if (_anyCanceled) {
+      //        ILogger::instance()->logInfo("Completed with cancelation\n");
+      //      }
 
       done();
     }
@@ -619,7 +620,7 @@ public:
     }
     //checkIsPending(position);
 
-//    _anyCanceled = true;
+    //    _anyCanceled = true;
     _status[position] = STATUS_CANCELED;
 
     stepDone();
@@ -646,7 +647,7 @@ public:
         if (glTextureId != NULL) {
           TextureIDReference* glTextureIdRetainedCopy = glTextureId->createCopy();
 
-//          _texturesHandler->retainGLTextureId(glTextureId);
+          //          _texturesHandler->retainGLTextureId(glTextureId);
           mapping->setGLTextureId(glTextureIdRetainedCopy);
           fallbackSolved = true;
         }
@@ -852,20 +853,13 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
                                                Mesh* mesh) {
-
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
-
   if (builderHolder != NULL) {
     TileTextureBuilder* builder = builderHolder->get();
     builder->cancel();
     builder->cleanTile();
     builder->cleanMesh();
   }
-//  else {
-//    if (mesh != NULL) {
-//      ILogger::instance()->logInfo("break (point) on me 4\n");
-//    }
-//  }
 }
 
 void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
@@ -876,11 +870,6 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
     builder->cancel();
     builder->cleanMesh();
   }
-//  else {
-//    if (mesh != NULL) {
-//      ILogger::instance()->logInfo("break (point) on me 5\n");
-//    }
-//  }
 }
 
 const TextureIDReference* MultiLayerTileTexturizer::getTopLevelTextureIdForTile(Tile* tile) {
@@ -924,12 +913,12 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
     return;
   }
 
-//  _texturesHandler->retainGLTextureId(glTextureId);
+  //  _texturesHandler->retainGLTextureId(glTextureId);
   const TextureIDReference* glTextureIdRetainedCopy = glTextureId->createCopy();
 
   const int level = tile->_level - ancestorTile->_level;
   if (!tileMesh->setGLTextureIdForLevel(level, glTextureIdRetainedCopy)) {
-//    _texturesHandler->releaseGLTextureId(glTextureId);
+    //    _texturesHandler->releaseGLTextureId(glTextureId);
     delete glTextureIdRetainedCopy;
   }
 }

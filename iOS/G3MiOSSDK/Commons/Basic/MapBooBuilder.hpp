@@ -270,6 +270,7 @@ private:
   const Sector*                _sector;
   Layer*                       _baseLayer;
   Layer*                       _overlayLayer;
+  const bool                   _queryable;
   const bool                   _hasWarnings;
 
 public:
@@ -282,6 +283,7 @@ public:
                const Sector*                sector,
                Layer*                       baseLayer,
                Layer*                       overlayLayer,
+               const bool                   queryable,
                const bool                   hasWarnings) :
   _id(id),
   _name(name),
@@ -292,6 +294,7 @@ public:
   _sector(sector),
   _baseLayer(baseLayer),
   _overlayLayer(overlayLayer),
+  _queryable(queryable),
   _hasWarnings(hasWarnings)
   {
   }
@@ -330,6 +333,11 @@ public:
   
   Layer* getOverlayLayer() const {
     return _overlayLayer;
+  }
+
+  bool isQueryable() const {
+    return _queryable;
+
   }
 
   bool hasWarnings() const {
@@ -679,7 +687,11 @@ public:
   void changeScene(const std::string& sceneId);
   
   void changeScene(const MapBoo_Scene* scene);
-
+  
+  
+  const bool isQueryableCurrentScene() {
+    return getApplicationCurrentScene()->isQueryable();
+  }
 
   const URL getServerURL() const {
     return _serverURL;

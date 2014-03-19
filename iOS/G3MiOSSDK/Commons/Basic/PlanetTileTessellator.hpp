@@ -129,6 +129,8 @@ private:
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
 
+  static double skirtDepthForSector(const Planet* planet, const Sector& sector);
+
 public:
 
   PlanetTileTessellator(const bool skirted, const Sector& sector);
