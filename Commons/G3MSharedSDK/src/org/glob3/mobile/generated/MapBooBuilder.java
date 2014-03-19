@@ -522,20 +522,7 @@ public abstract class MapBooBuilder
           _g3mWidget.setRenderedSector(sector);
         }
   
-        final MapBoo_CameraPosition cameraPosition = currentScene.getCameraPosition();
-        if (cameraPosition != null)
-        {
-          if (cameraPosition.isAnimated())
-          {
-            _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
-          }
-          else
-          {
-            _g3mWidget.setCameraPosition(cameraPosition.getPosition());
-            _g3mWidget.setCameraHeading(cameraPosition.getHeading());
-            _g3mWidget.setCameraPitch(cameraPosition.getPitch());
-          }
-        }
+        setCameraPosition(currentScene.getCameraPosition());
       }
     }
   
@@ -565,7 +552,7 @@ public abstract class MapBooBuilder
   
   }
 
-  private void updateVisibleScene()
+  private void updateVisibleScene(boolean cameraPositionChanged)
   {
     recreateLayerSet();
     final MapBoo_Scene currentScene = getApplicationCurrentScene();
@@ -587,6 +574,11 @@ public abstract class MapBooBuilder
         else
         {
           _g3mWidget.setRenderedSector(sector);
+        }
+  
+        if (cameraPositionChanged)
+        {
+          setCameraPosition(currentScene.getCameraPosition());
         }
       }
     }
@@ -821,7 +813,7 @@ public abstract class MapBooBuilder
         final MapBoo_CameraPosition cameraPosition = notification.getCameraPosition();
         if (cameraPosition != null)
         {
-          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+          setCameraPosition(cameraPosition, true);
         }
       }
     }
@@ -878,6 +870,31 @@ public abstract class MapBooBuilder
     {
       _applicationListener.onScenesChanged(_context,
                                            new java.util.ArrayList<MapBoo_Scene>(_applicationScenes));
+    }
+  }
+
+  private void setCameraPosition(MapBoo_CameraPosition cameraPosition, boolean animated)
+  {
+    if (cameraPosition != null)
+    {
+      if (animated)
+      {
+        _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+      }
+      else
+      {
+        _g3mWidget.setCameraPosition(cameraPosition.getPosition());
+        _g3mWidget.setCameraHeading(cameraPosition.getHeading());
+        _g3mWidget.setCameraPitch(cameraPosition.getPitch());
+      }
+    }
+  }
+  private void setCameraPosition(MapBoo_CameraPosition cameraPosition)
+  {
+    if (cameraPosition != null)
+    {
+      final boolean animated = cameraPosition.isAnimated();
+      setCameraPosition(cameraPosition, animated);
     }
   }
 
@@ -1146,38 +1163,6 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void setApplicationScene(MapBoo_Scene scene)
-  {
-    final int scenesCount = _applicationScenes.size();
-    final String sceneToBeUpdatedID = scene.getId();
-    for (int i = 0; i < scenesCount; i++)
-    {
-      final String sceneID = _applicationScenes.get(i).getId();
-      if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
-      {
-        MapBoo_Scene oldScene = _applicationScenes.get(i);
-        _applicationScenes.set(i, scene);
-  
-        if (sceneID.compareTo(_applicationCurrentSceneId) == 0)
-        {
-          updateVisibleScene();
-        }
-  
-        if (_applicationListener != null)
-        {
-          _applicationListener.onSceneChanged(_context, scene);
-        }
-        fireOnScenesChanged();
-  
-        if (oldScene != null)
-           oldScene.dispose();
-  
-        break;
-      }
-    }
-  }
-
-  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationScenes(java.util.ArrayList<MapBoo_Scene> applicationScenes)
   {
     final int currentScenesCount = _applicationScenes.size();
@@ -1293,11 +1278,7 @@ public abstract class MapBooBuilder
           final JSONObject jsonScene = jsonObject.getAsObject("scene");
           if (jsonScene != null)
           {
-            MapBoo_Scene scene = parseScene(jsonScene);
-            if (scene != null)
-            {
-              setApplicationScene(scene);
-            }
+            parseSceneEventAndUpdateScene(jsonScene);
           }
   
           final JSONArray jsonAllScenes = jsonObject.getAsArray("scenes");
@@ -1423,6 +1404,97 @@ public abstract class MapBooBuilder
     }
     if (jsonBaseObject != null)
        jsonBaseObject.dispose();
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void parseSceneEventAndUpdateScene(JSONObject jsonObject)
+  {
+    if (jsonObject == null)
+    {
+      return;
+    }
+  
+    final JSONString jsonSceneToBeUpdatedID = jsonObject.getAsString("id");
+    if (jsonSceneToBeUpdatedID == null)
+    {
+      return;
+    }
+    final String sceneToBeUpdatedID = jsonSceneToBeUpdatedID.value();
+    final int scenesCount = _applicationScenes.size();
+    for (int i = 0; i < scenesCount; i++)
+    {
+      final String sceneID = _applicationScenes.get(i).getId();
+      if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
+      {
+        MapBoo_Scene oldScene = _applicationScenes.get(i);
+  
+        final String name = jsonObject.getAsString("name", oldScene.getName());
+        final String description = jsonObject.getAsString("description", oldScene.getDescription());
+        final JSONBaseObject jboScreenshot = jsonObject.get("screenshot");
+        final MapBoo_MultiImage screenshot;
+        if (jboScreenshot != null)
+        {
+          screenshot = parseMultiImage(jboScreenshot.asObject());
+        }
+        else
+        {
+          final MapBoo_MultiImage oldScreenshot = oldScene.getScreenshot();
+          screenshot = (oldScreenshot != null) ? oldScreenshot.deepCopy() : null;
+        }
+        final JSONBaseObject jboBackgroundColor = jsonObject.get("backgroundColor");
+        final Color backgroundColor = (jboBackgroundColor != null) ? parseColor(jboBackgroundColor.asString()) : oldScene.getBackgroundColor();
+        final JSONBaseObject jboCameraPosition = jsonObject.get("cameraPosition");
+        final MapBoo_CameraPosition cameraPosition;
+        if (jboCameraPosition != null)
+        {
+          cameraPosition = parseCameraPosition(jboCameraPosition.asObject());
+        }
+        else
+        {
+          final MapBoo_CameraPosition oldCameraPosition = oldScene.getCameraPosition();
+          cameraPosition = (oldCameraPosition != null) ? new MapBoo_CameraPosition(oldCameraPosition.getPosition(), oldCameraPosition.getHeading(), oldCameraPosition.getPitch(), oldCameraPosition.isAnimated()) : null;
+        }
+        final JSONBaseObject jboSector = jsonObject.get("sector");
+        final Sector sector;
+        if (jboSector != null)
+        {
+          sector = parseSector(jboSector.asObject());
+        }
+        else
+        {
+          final Sector oldSector = oldScene.getSector();
+          sector = (oldSector != null) ? new Sector(oldSector._lower, oldSector._upper) : null;
+        }
+        final JSONBaseObject jboBaseLayer = jsonObject.get("baseLayer");
+        Layer baseLayer = (jboBaseLayer != null) ? parseLayer(jboBaseLayer.asObject()) : oldScene.getBaseLayer().copy();
+        final JSONBaseObject jboOverlayLayer = jsonObject.get("overlayLayer");
+        Layer oldOverlayLayer = (oldScene.getOverlayLayer() != null) ? oldScene.getOverlayLayer().copy() : null;
+        Layer overlayLayer = (jboOverlayLayer != null) ? parseLayer(jboOverlayLayer.asObject()) : oldOverlayLayer;
+  
+        final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
+        final boolean cameraPositionChaged = (jboCameraPosition != null);
+  
+        MapBoo_Scene newScene = new MapBoo_Scene(sceneToBeUpdatedID, name, description, screenshot, backgroundColor, cameraPosition, sector, baseLayer, overlayLayer, hasWarnings);
+  
+        _applicationScenes.set(i, newScene);
+  
+        if (sceneID.compareTo(_applicationCurrentSceneId) == 0)
+        {
+          updateVisibleScene(cameraPositionChaged);
+        }
+  
+        if (_applicationListener != null)
+        {
+          _applicationListener.onSceneChanged(_context, newScene);
+        }
+        fireOnScenesChanged();
+  
+        if (oldScene != null)
+           oldScene.dispose();
+  
+        break;
+      }
+    }
   }
 
   /** Private to MapbooBuilder, don't call it */

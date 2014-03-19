@@ -61,6 +61,16 @@ public class MapBoo_Scene
     return _sector;
   }
 
+  public final Layer getBaseLayer()
+  {
+    return _baseLayer;
+  }
+
+  public final Layer getOverlayLayer()
+  {
+    return _overlayLayer;
+  }
+
   public final boolean hasWarnings()
   {
     return _hasWarnings;
