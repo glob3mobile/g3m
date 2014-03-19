@@ -9,9 +9,9 @@
 #ifndef G3MiOSSDK_GLErrorRenderer
 #define G3MiOSSDK_GLErrorRenderer
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 
-class GLErrorRenderer : public LeafRenderer {
+class GLErrorRenderer : public DefaultRenderer {
 public:
   
   void initialize(const G3MContext* context);

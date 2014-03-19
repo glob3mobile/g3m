@@ -550,10 +550,12 @@ void G3MWidget::render(int width, int height) {
     _cameraRenderer->render(_renderContext, _rootState);
 
     _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
+    
   }
 
   //TODO: CHECK THIS OMISION
   //if (_selectedRenderer->isEnable()) {
+  int _todovtp;
     _selectedRenderer->render(_renderContext, _rootState);
   //}
 

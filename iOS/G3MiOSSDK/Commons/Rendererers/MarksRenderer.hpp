@@ -10,7 +10,7 @@
 #define G3MiOSSDK_MarksRenderer
 
 #include <vector>
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 
 //#include "GPUProgramState.hpp"
 
@@ -21,7 +21,7 @@ class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
 
-class MarksRenderer : public LeafRenderer {
+class MarksRenderer : public DefaultRenderer {
 private:
   const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;

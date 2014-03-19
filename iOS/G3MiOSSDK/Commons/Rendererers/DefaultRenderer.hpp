@@ -1,37 +1,38 @@
 //
-//  LeafRenderer.hpp
+//  DefaultRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/16/12.
 //
 //
 
-#ifndef __G3MiOSSDK__LeafRenderer__
-#define __G3MiOSSDK__LeafRenderer__
+#ifndef G3MiOSSDK_DefaultRenderer
+#define G3MiOSSDK_DefaultRenderer
 
 #include "Renderer.hpp"
 #include <stddef.h>
 
+
 class GPUProgramState;
 
-class LeafRenderer : public Renderer {
+class DefaultRenderer : public Renderer {
 private:
   bool _enable;
 
 public:
-  LeafRenderer() :
+  DefaultRenderer() :
   _enable(true)
   {
 
   }
 
-  LeafRenderer(bool enable) :
+  DefaultRenderer(bool enable) :
   _enable(enable)
   {
 
   }
 
-  ~LeafRenderer() {
+  ~DefaultRenderer() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif

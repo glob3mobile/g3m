@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__MeshRenderer__
 #define __G3MiOSSDK__MeshRenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include <vector>
 #include "GLState.hpp"
 #include "DownloadPriority.hpp"
@@ -37,7 +37,7 @@ enum MeshType {
   MESH
 };
 
-class MeshRenderer : public LeafRenderer {
+class MeshRenderer : public DefaultRenderer {
 private:
 
 

@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__ShapesRenderer__
 #define __G3MiOSSDK__ShapesRenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Shape.hpp"
 #include <vector>
 #include "DownloadPriority.hpp"
@@ -41,7 +41,7 @@ public:
 };
 
 
-class ShapesRenderer : public LeafRenderer {
+class ShapesRenderer : public DefaultRenderer {
 private:
   class LoadQueueItem {
   public:

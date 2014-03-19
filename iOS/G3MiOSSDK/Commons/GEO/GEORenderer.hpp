@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__GEORenderer__
 #define __G3MiOSSDK__GEORenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "DownloadPriority.hpp"
 #include "URL.hpp"
 #include "TimeInterval.hpp"
@@ -23,7 +23,7 @@ class ShapesRenderer;
 class GEOTileRasterizer;
 class GEORenderer_ObjectSymbolizerPair;
 
-class GEORenderer : public LeafRenderer {
+class GEORenderer : public DefaultRenderer {
 private:
 
   class LoadQueueItem {

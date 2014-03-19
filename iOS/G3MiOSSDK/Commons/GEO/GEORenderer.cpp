@@ -295,7 +295,7 @@ void GEORenderer::loadBSON(const URL& url,
 }
 
 void GEORenderer::setEnable(bool enable) {
-  LeafRenderer::setEnable(enable);
+  DefaultRenderer::setEnable(enable);
 
   if (_meshRenderer) {
     _meshRenderer->setEnable(enable);

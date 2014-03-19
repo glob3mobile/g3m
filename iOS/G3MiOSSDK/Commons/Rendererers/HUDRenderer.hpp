@@ -9,13 +9,13 @@
 #ifndef __G3MiOSSDK__HUDRenderer__
 #define __G3MiOSSDK__HUDRenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 
 #include <vector>
 
 class HUDWidget;
 
-class HUDRenderer : public LeafRenderer {
+class HUDRenderer : public Renderer {
 private:
 #ifdef C_CODE
   const G3MContext* _context;

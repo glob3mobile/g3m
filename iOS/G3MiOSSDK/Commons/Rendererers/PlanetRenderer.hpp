@@ -20,7 +20,7 @@ class LayerTilesRenderParameters;
 class TerrainTouchListener;
 
 #include "IStringBuilder.hpp"
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
 #include "TileKey.hpp"
@@ -213,7 +213,7 @@ public:
 };
 
 
-class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProvider {
+class PlanetRenderer: public DefaultRenderer, ChangedListener, SurfaceElevationProvider {
 private:
   TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -359,7 +359,7 @@ public:
 
   void setEnable(bool enable) {
 #ifdef C_CODE
-    LeafRenderer::setEnable(enable);
+    DefaultRenderer::setEnable(enable);
 #endif
 #ifdef JAVA_CODE
     super.setEnable(enable);

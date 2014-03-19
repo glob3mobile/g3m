@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__TrailsRenderer__
 #define __G3MiOSSDK__TrailsRenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Geodetic3D.hpp"
 #include <vector>
 #include "Color.hpp"
@@ -157,7 +157,7 @@ public:
 };
 
 
-class TrailsRenderer : public LeafRenderer {
+class TrailsRenderer : public DefaultRenderer {
 private:
   std::vector<Trail*> _trails;
 

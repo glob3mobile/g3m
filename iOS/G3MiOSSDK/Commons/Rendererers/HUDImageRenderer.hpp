@@ -9,14 +9,14 @@
 #ifndef __G3MiOSSDK__HUDImageRenderer__
 #define __G3MiOSSDK__HUDImageRenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Vector2D.hpp"
 #include "IImageListener.hpp"
 class Mesh;
 class ICanvas;
 
 
-class HUDImageRenderer : public LeafRenderer {
+class HUDImageRenderer : public DefaultRenderer {
 public:
 
   class ImageFactory {
