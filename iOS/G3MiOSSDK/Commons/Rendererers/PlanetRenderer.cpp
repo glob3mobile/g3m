@@ -829,7 +829,7 @@ void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
   }
 }
 
-void PlanetRenderer::setRenderedSector(const Sector& sector) {
+bool PlanetRenderer::setRenderedSector(const Sector& sector) {
   if ((_renderedSector != NULL && !_renderedSector->isEquals(sector)) ||
       (_renderedSector == NULL && !sector.isEquals(Sector::fullSphere()))) {
     delete _renderedSector;
@@ -839,11 +839,14 @@ void PlanetRenderer::setRenderedSector(const Sector& sector) {
     } else{
       _renderedSector = new Sector(sector);
     }
+    
+    _tessellator->setRenderedSector(sector);
+    
+    changed();
+    
+    return true;
   }
-
-  _tessellator->setRenderedSector(sector);
-
-  changed();
+  return false;
 }
 
 void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDataProvider,

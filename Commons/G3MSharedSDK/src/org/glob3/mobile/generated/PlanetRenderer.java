@@ -837,7 +837,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return _renderedSector;
   }
 
-  public final void setRenderedSector(Sector sector)
+  public final boolean setRenderedSector(Sector sector)
   {
     if ((_renderedSector != null && !_renderedSector.isEquals(sector)) || (_renderedSector == null && !sector.isEquals(Sector.fullSphere())))
     {
@@ -852,11 +852,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       {
         _renderedSector = new Sector(sector);
       }
+  
+      _tessellator.setRenderedSector(sector);
+  
+      changed();
+  
+      return true;
     }
-  
-    _tessellator.setRenderedSector(sector);
-  
-    changed();
+    return false;
   }
 
   public final void addTerrainTouchListener(TerrainTouchListener listener)
