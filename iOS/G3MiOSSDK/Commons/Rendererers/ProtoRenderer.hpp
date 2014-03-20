@@ -18,7 +18,8 @@ class ProtoRenderer {
 public:
 #ifdef C_CODE
   virtual ~ProtoRenderer() { }
-#else
+#endif
+#ifdef JAVA_CODE
   void dispose();
 #endif
   
