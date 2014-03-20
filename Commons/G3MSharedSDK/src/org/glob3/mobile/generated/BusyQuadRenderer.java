@@ -104,7 +104,6 @@ public class BusyQuadRenderer extends ProtoRenderer, EffectTarget
 
   public final void initialize(G3MContext context)
   {
-
   }
 
 

@@ -145,7 +145,6 @@ public class BusyMeshRenderer extends ProtoRenderer, EffectTarget
 
   public final void initialize(G3MContext context)
   {
-
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
