@@ -17,14 +17,12 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class ErrorRenderer extends Renderer
+
+public abstract class ErrorRenderer extends ProtoRenderer
 {
 
   public abstract void setErrors(java.util.ArrayList<String> errors);
 
-  public void dispose()
-  {
-    super.dispose();
-  }
+
 
 }

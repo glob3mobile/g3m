@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class CameraRenderer extends LeafRenderer
+public class CameraRenderer extends ProtoRenderer
 {
   private boolean _processTouchEvents;
   private java.util.ArrayList<CameraEventHandler> _handlers = new java.util.ArrayList<CameraEventHandler>();
@@ -58,8 +58,7 @@ public class CameraRenderer extends LeafRenderer
 
   public final void initialize(G3MContext context)
   {
-    //_logger = ic->getLogger();
-    //cameraContext = new CameraContext(
+
   }
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
@@ -90,10 +89,7 @@ public class CameraRenderer extends LeafRenderer
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-    //  moved to G3MWidget::onResizeViewportEvent
-    //  if (_cameraContext != NULL) {
-    //    _cameraContext->getNextCamera()->resizeViewport(width, height);
-    //  }
+
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)

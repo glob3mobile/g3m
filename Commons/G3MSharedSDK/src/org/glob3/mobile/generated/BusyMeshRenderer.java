@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
+public class BusyMeshRenderer extends ProtoRenderer, EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
@@ -147,11 +147,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   {
   }
 
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return RenderState.ready();
-  }
-
   public final void render(G3MRenderContext rc, GLState glState)
   {
     GL gl = rc.getGL();
@@ -164,11 +159,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     {
       mesh.render(rc, _glState);
     }
-  }
-
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

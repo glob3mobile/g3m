@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class MeshRenderer extends LeafRenderer
+public class MeshRenderer extends DefaultRenderer
 {
 
 
@@ -58,8 +58,6 @@ public class MeshRenderer extends LeafRenderer
     }
   }
 
-  private G3MContext _context;
-
   private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
 
   private void drainLoadQueue()
@@ -91,8 +89,8 @@ public class MeshRenderer extends LeafRenderer
   public MeshRenderer()
   {
      _glState = new GLState();
-     _context = null;
      _showNormals = false;
+    _context = null;
   }
 
   public void dispose()
@@ -148,34 +146,12 @@ public class MeshRenderer extends LeafRenderer
     }
   }
 
-  public final void onResume(G3MContext context)
+  public final void onChangedContext()
   {
-
-  }
-
-  public final void onPause(G3MContext context)
-  {
-
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
-  }
-
-  public final void initialize(G3MContext context)
-  {
-    _context = context;
-  
     if (_context != null)
     {
       drainLoadQueue();
     }
-  }
-
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return RenderState.ready();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -197,24 +173,8 @@ public class MeshRenderer extends LeafRenderer
     }
   }
 
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return false;
-  }
-
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-
-  }
-
-  public final void start(G3MRenderContext rc)
-  {
-
-  }
-
-  public final void stop(G3MRenderContext rc)
-  {
-
   }
 
   public final void loadJSONPointCloud(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, MeshLoadListener listener)

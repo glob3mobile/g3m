@@ -20,7 +20,9 @@ package org.glob3.mobile.generated;
 
 //class HUDWidget;
 
-public class HUDRenderer extends LeafRenderer
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO IMPLEMENT DEFAULTRENDERER
+public class HUDRenderer extends Renderer
 {
   private G3MContext _context;
 

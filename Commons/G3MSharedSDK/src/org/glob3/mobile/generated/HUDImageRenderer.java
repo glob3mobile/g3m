@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class ICanvas;
 
 
-public class HUDImageRenderer extends LeafRenderer
+public class HUDImageRenderer extends DefaultRenderer
 {
 
   public interface ImageFactory
@@ -183,11 +183,6 @@ public class HUDImageRenderer extends LeafRenderer
   {
   }
 
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return RenderState.ready();
-  }
-
   public final void render(G3MRenderContext rc, GLState glState)
   {
     Mesh mesh = getMesh(rc);
@@ -197,11 +192,6 @@ public class HUDImageRenderer extends LeafRenderer
     }
   }
 
-
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return false;
-  }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
@@ -236,10 +226,6 @@ public class HUDImageRenderer extends LeafRenderer
     super.dispose();
   }
 
-  public final void start(G3MRenderContext rc)
-  {
-  }
-
   public final void recreateImage()
   {
     _creatingMesh = false;
@@ -255,18 +241,6 @@ public class HUDImageRenderer extends LeafRenderer
   public final void stop(G3MRenderContext rc)
   {
     recreateImage();
-  }
-
-  public final void onResume(G3MContext context)
-  {
-  }
-
-  public final void onPause(G3MContext context)
-  {
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
   }
 
   public final HUDImageRenderer.ImageFactory getImageFactory()

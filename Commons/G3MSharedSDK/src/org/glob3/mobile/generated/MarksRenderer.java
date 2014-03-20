@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class MarkTouchListener;
 //class IFloatBuffer;
 
-public class MarksRenderer extends LeafRenderer
+public class MarksRenderer extends DefaultRenderer
 {
   private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
@@ -125,15 +125,13 @@ public class MarksRenderer extends LeafRenderer
   
   }
 
-  public void initialize(G3MContext context)
+  public void onChangedContext()
   {
-    _context = context;
-  
     int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
-      mark.initialize(context, _downloadPriority);
+      mark.initialize(_context, _downloadPriority);
     }
   }
 
@@ -302,25 +300,10 @@ public class MarksRenderer extends LeafRenderer
     return RenderState.ready();
   }
 
-  public final void start(G3MRenderContext rc)
-  {
-  }
-
-  public final void stop(G3MRenderContext rc)
-  {
-  }
-
+  //TODO: WHY? VTP
   public final void onResume(G3MContext context)
   {
     _context = context;
-  }
-
-  public final void onPause(G3MContext context)
-  {
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
   }
 
   /**

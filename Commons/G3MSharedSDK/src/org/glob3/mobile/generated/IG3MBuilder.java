@@ -29,7 +29,9 @@ package org.glob3.mobile.generated;
 //class G3MWidget;
 //class PlanetRendererBuilder;
 //class Planet;
+//TODO
 //class Renderer;
+//class ProtoRenderer;
 //class WidgetUserData;
 //class GPUProgramSources;
 //class GPUProgramManager;
@@ -54,7 +56,7 @@ public abstract class IG3MBuilder
   private CameraRenderer _cameraRenderer;
   private Color _backgroundColor;
   private PlanetRendererBuilder _planetRendererBuilder;
-  private Renderer _busyRenderer;
+  private ProtoRenderer _busyRenderer;
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
   private java.util.ArrayList<Renderer> _renderers;
@@ -161,7 +163,7 @@ public abstract class IG3MBuilder
    *
    * @return _busyRenderer: Renderer*
    */
-  private Renderer getBusyRenderer()
+  private ProtoRenderer getBusyRenderer()
   {
     if (_busyRenderer == null)
     {
@@ -763,7 +765,7 @@ public abstract class IG3MBuilder
    *
    * @param busyRenderer - cannot be NULL.
    */
-  public final void setBusyRenderer(Renderer busyRenderer)
+  public final void setBusyRenderer(ProtoRenderer busyRenderer)
   {
     if (_busyRenderer != null)
     {

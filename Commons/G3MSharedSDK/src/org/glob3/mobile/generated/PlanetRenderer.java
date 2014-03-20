@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class PlanetRenderer extends LeafRenderer implements ChangedListener, SurfaceElevationProvider
+public class PlanetRenderer extends DefaultRenderer implements ChangedListener, SurfaceElevationProvider
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -684,19 +684,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     _firstRender = false;
   }
 
-  public final void onResume(G3MContext context)
-  {
-
-  }
-
   public final void onPause(G3MContext context)
   {
     recreateTiles();
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
   }
 
   public final void setEnable(boolean enable)
