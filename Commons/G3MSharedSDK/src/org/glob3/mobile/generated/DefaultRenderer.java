@@ -44,7 +44,6 @@ public abstract class DefaultRenderer extends Renderer
   public void dispose()
   {
     _context = null;
-    super.dispose();
   }
 
 

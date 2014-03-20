@@ -32,7 +32,7 @@ public class HUDErrorRenderer implements ErrorRenderer
 
   public void dispose()
   {
-    super.dispose();
+
   }
 
   public final void setErrors(java.util.ArrayList<String> errors)

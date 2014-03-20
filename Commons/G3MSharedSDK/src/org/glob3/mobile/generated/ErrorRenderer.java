@@ -1,7 +1,4 @@
-
-
-package org.glob3.mobile.generated;
-
+package org.glob3.mobile.generated; 
 //
 //  ErrorRenderer.cpp
 //  G3MiOSSDK
@@ -19,11 +16,12 @@ package org.glob3.mobile.generated;
 //
 
 
-public interface ErrorRenderer
-         extends
-            ProtoRenderer {
 
-   public void setErrors(java.util.ArrayList<String> errors);
 
+public abstract class ErrorRenderer extends ProtoRenderer
+{
+  void dispose();
+
+  public abstract void setErrors(java.util.ArrayList<String> errors);
 
 }
