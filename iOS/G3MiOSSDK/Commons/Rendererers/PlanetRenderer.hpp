@@ -345,16 +345,8 @@ public:
     _firstRender = false;
   }
 
-  void onResume(const G3MContext* context) {
-
-  }
-
   void onPause(const G3MContext* context) {
     recreateTiles();
-  }
-
-  void onDestroy(const G3MContext* context) {
-
   }
 
   void setEnable(bool enable) {

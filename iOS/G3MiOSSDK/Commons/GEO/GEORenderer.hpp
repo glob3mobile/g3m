@@ -62,6 +62,9 @@ private:
   };
 
   void drainLoadQueue();
+  
+  void cleanLoadQueue();
+
 
   std::vector<GEORenderer_ObjectSymbolizerPair*> _children;
 
@@ -71,13 +74,6 @@ private:
   ShapesRenderer*    _shapesRenderer;
   MarksRenderer*     _marksRenderer;
   GEOTileRasterizer* _geoTileRasterizer;
-
-#ifdef C_CODE
-  const G3MContext* _context;
-#endif
-#ifdef JAVA_CODE
-  private G3MContext _context;
-#endif
 
   std::vector<LoadQueueItem*> _loadQueue;
 
@@ -109,9 +105,9 @@ public:
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer),
-  _geoTileRasterizer(geoTileRasterizer),
-  _context(NULL)
+  _geoTileRasterizer(geoTileRasterizer)
   {
+    initialize(NULL);
   }
 
   virtual ~GEORenderer();
@@ -123,42 +119,16 @@ public:
    */
   void addGEOObject(GEOObject* geoObject,
                     GEOSymbolizer* symbolizer = NULL);
-
-  void onResume(const G3MContext* context) {
-
-  }
-
-  void onPause(const G3MContext* context) {
-
-  }
-
-  void onDestroy(const G3MContext* context) {
-
-  }
-
-  void initialize(const G3MContext* context);
-
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
-  }
-
-  void render(const G3MRenderContext* rc, GLState* glState);
-
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
+  
+  void onChangedContext();
+  
+  void onLostContext();
+  
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-
-  }
-
-  void start(const G3MRenderContext* rc) {
-
-  }
-
-  void stop(const G3MRenderContext* rc) {
 
   }
 

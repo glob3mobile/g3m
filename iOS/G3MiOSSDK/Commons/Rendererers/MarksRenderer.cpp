@@ -65,13 +65,11 @@ MarksRenderer::~MarksRenderer() {
 };
 
 
-void MarksRenderer::initialize(const G3MContext* context) {
-  _context = context;
-
+void MarksRenderer::onChangedContext() {
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    mark->initialize(context, _downloadPriority);
+    mark->initialize(_context, _downloadPriority);
   }
 }
 

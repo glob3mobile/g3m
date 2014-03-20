@@ -16,29 +16,41 @@
 class GPUProgramState;
 
 class DefaultRenderer : public Renderer {
+  
 private:
+  
   bool _enable;
-
-public:
+  
+protected:
+  
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  private G3MContext _context;
+#endif
+  
   DefaultRenderer() :
   _enable(true)
   {
-
+    
   }
-
+  
   DefaultRenderer(bool enable) :
   _enable(enable)
   {
-
+    
   }
-
+  
   ~DefaultRenderer() {
+    _context = NULL;
 #ifdef JAVA_CODE
     super.dispose();
 #endif
-
   }
-
+  
+public:
+  
   bool isEnable() const {
     return _enable;
   }
@@ -46,28 +58,54 @@ public:
   virtual void setEnable(bool enable) {
     _enable = enable;
   }
+  
+  virtual void initialize(const G3MContext* context) {
+    _context = context;
+    onChangedContext();
+  }
 
-  virtual void onResume(const G3MContext* context) = 0;
+  virtual void onResume(const G3MContext* context) {
+    _context = context;
+    onChangedContext();
+  }
 
-  virtual void onPause(const G3MContext* context) = 0;
+  virtual void onPause(const G3MContext* context) {
+    _context = NULL;
+    onLostContext();
+  }
 
-  virtual void onDestroy(const G3MContext* context) = 0;
+  virtual void onDestroy(const G3MContext* context) {
+    _context = NULL;
+    onLostContext();
+  }
 
-  virtual void initialize(const G3MContext* context) = 0;
+  virtual void onChangedContext() { }
+  
+  virtual void onLostContext() { }
 
-  virtual RenderState getRenderState(const G3MRenderContext* rc) = 0;
 
-  virtual void render(const G3MRenderContext* rc, GLState* glState) = 0;
+  virtual RenderState getRenderState(const G3MRenderContext* rc) {
+    return RenderState::ready();
+  }
+  
+  virtual void render(const G3MRenderContext* rc,
+                      GLState* glState) = 0;
 
   virtual bool onTouchEvent(const G3MEventContext* ec,
-                            const TouchEvent* touchEvent) = 0;
+                            const TouchEvent* touchEvent) {
+    return false;
+  }
 
   virtual void onResizeViewportEvent(const G3MEventContext* ec,
                                      int width, int height) = 0;
 
-  virtual void start(const G3MRenderContext* rc) = 0;
+  virtual void start(const G3MRenderContext* rc) {
+  
+  }
 
-  virtual void stop(const G3MRenderContext* rc) = 0;
+  virtual void stop(const G3MRenderContext* rc) {
+    
+  }
 
   virtual SurfaceElevationProvider* getSurfaceElevationProvider() {
     return NULL;

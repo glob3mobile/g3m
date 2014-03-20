@@ -18,11 +18,10 @@ public:
 
   virtual void setErrors(const std::vector<std::string>& errors) = 0;
 
-  virtual ~ErrorRenderer() {
-#ifdef JAVA_CODE
-    super.dispose();
+
+#ifdef C_CODE
+  virtual ~ErrorRenderer() { }
 #endif
-  }
 
 };
 

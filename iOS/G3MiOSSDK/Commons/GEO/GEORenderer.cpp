@@ -240,11 +240,25 @@ void GEORenderer::drainLoadQueue() {
   _loadQueue.clear();
 }
 
-void GEORenderer::initialize(const G3MContext* context) {
-  _context = context;
+void GEORenderer::cleanLoadQueue() {
+  const int loadQueueSize = _loadQueue.size();
+  for (int i = 0; i < loadQueueSize; i++) {
+    LoadQueueItem* item = _loadQueue[i];
+    delete item;
+  }
+  
+  _loadQueue.clear();
+}
 
+void GEORenderer::onChangedContext() {
   if (_context != NULL) {
     drainLoadQueue();
+  }
+}
+
+void GEORenderer::onLostContext() {
+  if (_context == NULL) {
+    cleanLoadQueue();
   }
 }
 

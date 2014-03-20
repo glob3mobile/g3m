@@ -21,11 +21,9 @@ class RenderState;
 class Renderer : public ProtoRenderer {
 public:
   
-  virtual ~Renderer() {
-#ifdef JAVA_CODE
-    super.dispose();
+#ifdef C_CODE
+  virtual ~Renderer() { }
 #endif
-  }
   
   
   virtual bool isEnable() const = 0;

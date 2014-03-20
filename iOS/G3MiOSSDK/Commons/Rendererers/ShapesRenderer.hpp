@@ -99,11 +99,9 @@ private:
   std::vector<Shape*> _shapes;
 
 #ifdef C_CODE
-  const G3MContext* _context;
   const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private G3MContext _context;
   private Camera    _lastCamera;
 #endif
 
@@ -133,11 +131,11 @@ public:
 
   ShapesRenderer(bool renderNotReadyShapes=true) :
   _renderNotReadyShapes(renderNotReadyShapes),
-  _context(NULL),
   _glState(new GLState()),
   _glStateTransparent(new GLState()),
   _lastCamera(NULL)
   {
+    _context = NULL;
   }
 
   ~ShapesRenderer() {
@@ -176,15 +174,7 @@ public:
     _context = context;
   }
 
-  void onPause(const G3MContext* context) {
-
-  }
-
-  void onDestroy(const G3MContext* context) {
-
-  }
-
-  void initialize(const G3MContext* context);
+  void onChangedContext();
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
@@ -193,12 +183,6 @@ public:
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-  }
-
-  void start(const G3MRenderContext* rc) {
-  }
-
-  void stop(const G3MRenderContext* rc) {
   }
 
   void render(const G3MRenderContext* rc, GLState* glState);

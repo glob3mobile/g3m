@@ -55,7 +55,7 @@ public:
 
   virtual ~MarksRenderer();
 
-  virtual void initialize(const G3MContext* context);
+  virtual void onChangedContext();
 
   virtual void render(const G3MRenderContext* rc, GLState* glState);
 
@@ -73,22 +73,11 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  void start(const G3MRenderContext* rc) {
-  }
-
-  void stop(const G3MRenderContext* rc) {
-  }
-
+  //TODO: WHY? VTP
   void onResume(const G3MContext* context) {
     _context = context;
   }
-
-  void onPause(const G3MContext* context) {
-  }
-
-  void onDestroy(const G3MContext* context) {
-  }
-
+  
   /**
    Change the download-priority used by Marks (for downloading textures).
 

@@ -255,14 +255,12 @@ void ShapesRenderer::drainLoadQueue() {
   _loadQueue.clear();
 }
 
-void ShapesRenderer::initialize(const G3MContext* context) {
-  _context = context;
-
+void ShapesRenderer::onChangedContext() {
   if (_context != NULL) {
     const int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
-      shape->initialize(context);
+      shape->initialize(_context);
     }
 
     drainLoadQueue();

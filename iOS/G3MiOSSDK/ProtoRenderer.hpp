@@ -16,6 +16,11 @@ class G3MEventContext;
 
 class ProtoRenderer {
 public:
+#ifdef C_CODE
+  virtual ~ProtoRenderer() { }
+#else
+  void dispose();
+#endif
   
   virtual void initialize(const G3MContext* context) = 0;
   
@@ -29,8 +34,6 @@ public:
   virtual void start(const G3MRenderContext* rc) = 0;
   
   virtual void stop(const G3MRenderContext* rc) = 0;
-  
-  virtual ~ProtoRenderer() { }
   
   // Android activity lifecyle
   virtual void onResume(const G3MContext* context) = 0;

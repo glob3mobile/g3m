@@ -25,19 +25,6 @@ CameraRenderer::~CameraRenderer() {
 
 }
 
-void CameraRenderer::initialize(const G3MContext* context) {
-  //_logger = ic->getLogger();
-  //cameraContext = new CameraContext(
-}
-
-void CameraRenderer::onResizeViewportEvent(const G3MEventContext* ec,
-                                           int width, int height) {
-  //  moved to G3MWidget::onResizeViewportEvent
-  //  if (_cameraContext != NULL) {
-  //    _cameraContext->getNextCamera()->resizeViewport(width, height);
-  //  }
-}
-
 void CameraRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   // create the CameraContext

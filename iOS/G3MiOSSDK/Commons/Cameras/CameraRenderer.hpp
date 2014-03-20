@@ -84,13 +84,17 @@ public:
 
   void render(const G3MRenderContext* rc, GLState* glState);
   
-  void initialize(const G3MContext* context);
+  void initialize(const G3MContext* context) {
+    
+  }
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height);
+                             int width, int height) {
+    
+  }
 
   RenderState getRenderState(const G3MRenderContext* rc) {
     return RenderState::ready();

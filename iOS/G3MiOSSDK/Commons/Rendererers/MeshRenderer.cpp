@@ -75,9 +75,7 @@ void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
-void MeshRenderer::initialize(const G3MContext* context) {
-  _context = context;
-
+void MeshRenderer::onChangedContext() {
   if (_context != NULL) {
     drainLoadQueue();
   }

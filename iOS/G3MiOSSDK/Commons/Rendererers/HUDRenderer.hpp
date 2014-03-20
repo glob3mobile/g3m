@@ -15,6 +15,7 @@
 
 class HUDWidget;
 
+#warning TODO IMPLEMENT DEFAULTRENDERER
 class HUDRenderer : public Renderer {
 private:
 #ifdef C_CODE
