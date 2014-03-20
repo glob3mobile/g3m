@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_ProtoRenderer_hpp
-#define G3MiOSSDK_ProtoRenderer_hpp
+#ifndef G3MiOSSDK_ProtoRenderer
+#define G3MiOSSDK_ProtoRenderer
 
 class G3MContext;
 class G3MRenderContext;
