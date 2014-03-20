@@ -18,11 +18,6 @@ CameraRenderer::~CameraRenderer() {
     CameraEventHandler* handler = _handlers[i];
     delete handler;
   }
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-
 }
 
 void CameraRenderer::render(const G3MRenderContext* rc, GLState* glState) {

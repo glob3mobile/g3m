@@ -43,9 +43,6 @@ protected:
   
   ~DefaultRenderer() {
     _context = NULL;
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
   }
   
 public:

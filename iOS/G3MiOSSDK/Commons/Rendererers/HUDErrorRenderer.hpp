@@ -23,9 +23,7 @@ public:
   HUDErrorRenderer();
 
   ~HUDErrorRenderer() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
+
   }
 
   void setErrors(const std::vector<std::string>& errors);

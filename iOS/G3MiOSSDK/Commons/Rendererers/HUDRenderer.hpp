@@ -15,15 +15,8 @@
 
 class HUDWidget;
 
-#warning TODO IMPLEMENT DEFAULTRENDERER
-class HUDRenderer : public Renderer {
+class HUDRenderer : public DefaultRenderer {
 private:
-#ifdef C_CODE
-  const G3MContext* _context;
-#endif
-#ifdef JAVA_CODE
-  private G3MContext _context;
-#endif
 
   std::vector<HUDWidget*> _widgets;
   int                     _widgetsSize;
@@ -40,27 +33,9 @@ public:
 
   void addWidget(HUDWidget* widget);
 
-  void initialize(const G3MContext* context);
+  void onChangedContext();
 
   RenderState getRenderState(const G3MRenderContext* rc);
-
-  void onResume(const G3MContext* context) {
-  }
-
-  void onPause(const G3MContext* context) {
-  }
-
-  void onDestroy(const G3MContext* context) {
-  }
-
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent);
-
-  void start(const G3MRenderContext* rc) {
-  }
-
-  void stop(const G3MRenderContext* rc) {
-  }
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width,

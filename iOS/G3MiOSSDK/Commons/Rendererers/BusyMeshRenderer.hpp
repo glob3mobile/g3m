@@ -49,8 +49,10 @@ public:
 
   }
   
-  void initialize(const G3MContext* context);
- 
+  void initialize(const G3MContext* context) {
+
+  }
+
   void render(const G3MRenderContext* rc, GLState* glState);
   
   void onResizeViewportEvent(const G3MEventContext* ec,
@@ -70,10 +72,6 @@ public:
     delete _backgroundColor;
 
     _glState->_release();
-    
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
   }
 
   void incDegrees(double value) {
