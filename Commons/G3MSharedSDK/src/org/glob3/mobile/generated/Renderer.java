@@ -15,7 +15,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class Renderer extends ProtoRenderer
+public abstract class Renderer implements ProtoRenderer
 {
 
 

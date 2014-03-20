@@ -27,7 +27,7 @@ public abstract class DefaultRenderer extends Renderer
   private boolean _enable;
 
 
-  private G3MContext _context;
+  protected G3MContext _context;
 
   protected DefaultRenderer()
   {
