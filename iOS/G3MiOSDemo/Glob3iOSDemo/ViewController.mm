@@ -2921,6 +2921,8 @@ public:
                                               new G3MeshBufferDownloadListener(context->getPlanet(),
                                                                                _meshRenderer),
                                               true);
+
+
       //      context->getDownloader()->requestBuffer(URL("file:///3d_1.json"),
       //                                              1000000,
       //                                              TimeInterval::zero(),
