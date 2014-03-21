@@ -512,6 +512,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
 
   const bool logTilesPetitions = false;
 
+  TileRenderingListener* tileRenderingListener = NULL;
+
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
                                               true,
@@ -524,7 +526,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               texturePriority,
                                               renderedSector,
                                               renderTileMeshes,
-                                              logTilesPetitions);
+                                              logTilesPetitions,
+                                              tileRenderingListener);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));

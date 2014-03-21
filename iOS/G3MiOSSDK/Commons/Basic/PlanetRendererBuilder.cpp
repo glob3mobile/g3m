@@ -35,7 +35,8 @@ _elevationDataProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
 _renderTileMeshes(true),
-_logTilesPetitions(false)
+_logTilesPetitions(false),
+_tileRenderingListener(NULL)
 {
 }
 
@@ -54,6 +55,8 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _elevationDataProvider;
 
   delete _renderedSector;
+
+  delete _tileRenderingListener;
 }
 
 /**
@@ -312,6 +315,18 @@ float PlanetRendererBuilder::getVerticalExaggeration() {
   return _verticalExaggeration;
 }
 
+void PlanetRendererBuilder::setTileRenderingListener(TileRenderingListener* tileRenderingListener) {
+  if (_tileRenderingListener != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: TileRenderingListener already set");
+    return;
+  }
+
+  _tileRenderingListener = tileRenderingListener;
+}
+
+TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
+  return _tileRenderingListener;
+}
 
 PlanetRenderer* PlanetRendererBuilder::create() {
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
@@ -326,7 +341,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getTexturePriority(),
                                                       getRenderedSector(),
                                                       getRenderTileMeshes(),
-                                                      getLogTilesPetitions());
+                                                      getLogTilesPetitions(),
+                                                      getTileRenderingListener());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -346,6 +362,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   delete _renderedSector;
   _renderedSector = NULL;
+
+  _tileRenderingListener = NULL;
 
   _tileRasterizers.clear();
 

@@ -28,6 +28,7 @@
 #include "TerrainTouchListener.hpp"
 #include "IDeviceInfo.hpp"
 #include "Sector.hpp"
+#include "TileRenderingListener.hpp"
 
 #include <algorithm>
 
@@ -121,7 +122,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                long long                    texturePriority,
                                const Sector&                renderedSector,
                                const bool                   renderTileMeshes,
-                               const bool                   logTilesPetitions) :
+                               const bool                   logTilesPetitions,
+                               TileRenderingListener*       tileRenderingListener) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -145,7 +147,8 @@ _renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector
 _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
 _renderTileMeshes(renderTileMeshes),
-_logTilesPetitions(logTilesPetitions)
+_logTilesPetitions(logTilesPetitions),
+_tileRenderingListener(tileRenderingListener)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -217,6 +220,8 @@ PlanetRenderer::~PlanetRenderer() {
   }
 
   delete _renderedSector;
+
+  delete _tileRenderingListener;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -664,7 +669,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    texHeightSquared,
                    nowInMS,
                    _renderTileMeshes,
-                   _logTilesPetitions);
+                   _logTilesPetitions,
+                   _tileRenderingListener);
     }
   }
   else {
@@ -705,7 +711,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      texHeightSquared,
                      nowInMS,
                      _renderTileMeshes,
-                     _logTilesPetitions);
+                     _logTilesPetitions,
+                     _tileRenderingListener);
       }
 
       toVisit = toVisitInNextIteration;
