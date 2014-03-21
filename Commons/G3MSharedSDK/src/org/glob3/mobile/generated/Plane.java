@@ -229,7 +229,7 @@ public class Plane
       solution = secondSolution;
     }
   
-    if (mu.abs((s1 * c1 + s2 *java.lang.Math.sin(solution) + s3)) > 0.001)
+    if (mu.abs((s1 * c1 + s2 *java.lang.Math.sin(solution) + s3)) > 0.001) //if valid solution (can't compare with 0)
     {
       solution = -solution;
     }
