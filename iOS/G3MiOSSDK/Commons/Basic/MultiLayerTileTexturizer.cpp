@@ -172,6 +172,10 @@ public:
   }
 
   virtual ~TileTextureBuilderHolder();
+  
+#ifndef C_CODE
+  void unusedMethod() { }
+#endif
 
 };
 
