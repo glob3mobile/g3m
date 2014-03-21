@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class CameraRenderer extends ProtoRenderer
+public class CameraRenderer implements ProtoRenderer
 {
   private boolean _processTouchEvents;
   private java.util.ArrayList<CameraEventHandler> _handlers = new java.util.ArrayList<CameraEventHandler>();

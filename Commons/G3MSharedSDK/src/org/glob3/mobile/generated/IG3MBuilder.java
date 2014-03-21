@@ -51,7 +51,7 @@ public abstract class IG3MBuilder
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
   private ICameraActivityListener _cameraActivityListener;
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private Planet _planet;
   private java.util.ArrayList<ICameraConstrainer> _cameraConstraints;
   private CameraRenderer _cameraRenderer;
   private Color _backgroundColor;

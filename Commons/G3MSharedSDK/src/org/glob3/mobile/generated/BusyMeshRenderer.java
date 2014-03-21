@@ -21,8 +21,7 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class BusyMeshRenderer extends ProtoRenderer, EffectTarget
+public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
@@ -145,6 +144,7 @@ public class BusyMeshRenderer extends ProtoRenderer, EffectTarget
 
   public final void initialize(G3MContext context)
   {
+
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

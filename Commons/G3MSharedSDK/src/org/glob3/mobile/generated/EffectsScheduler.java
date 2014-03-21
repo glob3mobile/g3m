@@ -26,8 +26,7 @@ public class EffectsScheduler
 
   private java.util.ArrayList<EffectRun> _effectsRuns = new java.util.ArrayList<EffectRun>();
   private ITimer _timer;
-  private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
-
+  private IFactory _factory;
 
   private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {

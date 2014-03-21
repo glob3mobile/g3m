@@ -540,9 +540,7 @@ public class Camera
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _width;
   private int _height;
-
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-
+  private Planet _planet;
   private MutableVector3D _position = new MutableVector3D(); // position
   private MutableVector3D _center = new MutableVector3D(); // point where camera is looking at
   private MutableVector3D _up = new MutableVector3D(); // vertical vector

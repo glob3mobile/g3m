@@ -314,9 +314,11 @@ private:
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
   int _height;
-
+#ifdef C_CODE
   const Planet *_planet;
-
+#else
+  Planet *_planet;
+#endif
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector

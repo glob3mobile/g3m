@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 //class GPUProgramState;
 
-public abstract class DefaultRenderer extends Renderer
+public abstract class DefaultRenderer implements Renderer
 {
 
 

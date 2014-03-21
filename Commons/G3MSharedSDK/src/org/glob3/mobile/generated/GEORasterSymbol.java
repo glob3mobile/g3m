@@ -291,10 +291,4 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
       rawRasterize(canvas, projection);
     }
   }
-
-  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
-  public final void unusedMethod()
-  {
-  }
-
 }

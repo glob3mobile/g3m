@@ -79,11 +79,6 @@ public:
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection,
                  int tileLevel) const;
-
-  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
-  void unusedMethod() const {
-  }
-
 };
 
 #endif

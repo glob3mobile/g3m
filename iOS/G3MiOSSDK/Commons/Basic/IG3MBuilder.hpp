@@ -45,7 +45,11 @@ private:
   IDownloader*                      _downloader;
   IThreadUtils*                     _threadUtils;
   ICameraActivityListener*          _cameraActivityListener;
+#ifdef C_CODE
   const Planet*                     _planet;
+#else
+  Planet*                           _planet;
+#endif  
   std::vector<ICameraConstrainer*>* _cameraConstraints;
   CameraRenderer*                   _cameraRenderer;
   Color*                            _backgroundColor;

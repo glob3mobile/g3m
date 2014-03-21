@@ -24,8 +24,7 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class BusyQuadRenderer extends ProtoRenderer, EffectTarget
+public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
 {
   private double _degrees;
   //  const std::string _textureFilename;
@@ -104,6 +103,7 @@ public class BusyQuadRenderer extends ProtoRenderer, EffectTarget
 
   public final void initialize(G3MContext context)
   {
+
   }
 
 
