@@ -492,6 +492,8 @@ public:
                                  int minLOD,
                                  int maxLOD,
                                  const std::list<Geodetic2D>* route = NULL);
+
+  int getNumberOfRenderedTiles() const;
   
 };
 

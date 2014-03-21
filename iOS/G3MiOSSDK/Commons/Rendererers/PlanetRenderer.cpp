@@ -1081,3 +1081,7 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
     changed();
   }
 }
+
+int PlanetRenderer::getNumberOfRenderedTiles() const{
+  return _renderedTiles.size();
+}
