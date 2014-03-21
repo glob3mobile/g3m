@@ -505,7 +505,6 @@ public:
 #endif
 
       if (_mesh != NULL) {
-#warning testing mipmap
         const bool generateMipmap = true;
 
         const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,

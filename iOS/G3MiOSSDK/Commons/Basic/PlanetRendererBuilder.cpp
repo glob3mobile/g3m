@@ -14,6 +14,7 @@
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
 #include "TileRasterizer.hpp"
+#include "TileRenderingListener.hpp"
 
 #include "CompositeTileRasterizer.hpp"
 
