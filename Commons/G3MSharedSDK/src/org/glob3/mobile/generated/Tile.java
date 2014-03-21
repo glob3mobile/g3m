@@ -43,6 +43,7 @@ package org.glob3.mobile.generated;
 //class LayerTilesRenderParameters;
 //class TileRasterizer;
 //class LayerSet;
+//class TileRenderingListener;
 
 
 public class Tile
@@ -552,6 +553,8 @@ public class Tile
     return _boundingVolume;
   }
 
+  private boolean _rendered;
+
   public final Sector _sector ;
   public final int _level;
   public final int _row;
@@ -593,6 +596,7 @@ public class Tile
      _middleWestPoint = null;
      _latitudeArcSegmentRatioSquared = 0;
      _longitudeArcSegmentRatioSquared = 0;
+     _rendered = false;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -627,8 +631,8 @@ public class Tile
        _texturizedMesh.dispose();
     _texturizedMesh = null;
   
-  //  delete _tileBoundingVolume;
-  //  _tileBoundingVolume = NULL;
+    //  delete _tileBoundingVolume;
+    //  _tileBoundingVolume = NULL;
   
     if (_elevationData != null)
        _elevationData.dispose();
@@ -732,7 +736,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -743,6 +747,7 @@ public class Tile
       _verticalExaggeration = verticalExaggeration;
     }
   
+    boolean rendered = false;
   
     if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
     {
@@ -757,6 +762,7 @@ public class Tile
         if (renderTileMeshes)
         {
           rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, logTilesPetitions);
+          rendered = true;
         }
         if (tilesRenderParameters._renderDebug)
         {
@@ -793,6 +799,24 @@ public class Tile
       prune(texturizer, elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
     }
+  
+    if (_rendered != rendered)
+    {
+      _rendered = rendered;
+  
+      if (tileRenderingListener != null)
+      {
+        if (_rendered)
+        {
+          tileRenderingListener.startRendering(this);
+        }
+        else
+        {
+          tileRenderingListener.stopRendering(this);
+        }
+      }
+    }
+  
   }
 
   public final TileKey getKey()

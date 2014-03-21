@@ -60,7 +60,9 @@ public abstract class MapBooBuilder
   
     final boolean logTilesPetitions = false;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions);
+    TileRenderingListener tileRenderingListener = null;
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener);
   
     if (_enableNotifications)
     {
