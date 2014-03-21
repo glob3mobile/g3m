@@ -260,8 +260,6 @@ public class TileTextureBuilder extends RCObject
 
       if (_mesh != null)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning testing mipmap
         final boolean generateMipmap = true;
 
         final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), textureId, generateMipmap);
