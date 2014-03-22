@@ -143,18 +143,18 @@ public class TileTextureBuilder extends RCObject
       return;
     }
 
+//    const long long priority = _texturePriority + _tile->_level;
+
     for (int i = 0; i < _petitionsCount; i++)
     {
       final Petition petition = _petitions.get(i);
-
-      final long priority = _texturePriority + _tile._level;
 
       if (_logTilesPetitions)
       {
         ILogger.instance().logInfo("Tile petition \"%s\"", petition.getURL().getPath());
       }
 
-      final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true);
+      final long requestId = _downloader.requestImage(new URL(petition.getURL()), _texturePriority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true); // priority,
       if (requestId >= 0)
       {
         _requestsIds.add(requestId);

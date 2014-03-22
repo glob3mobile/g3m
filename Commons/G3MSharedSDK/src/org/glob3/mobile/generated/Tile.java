@@ -269,7 +269,7 @@ public class Tile
       }
     }
   
-    if (_lastLodTimeInMS != 0 && (nowInMS - _lastLodTimeInMS) < 500)
+    if (_lastLodTimeInMS != 0 && (nowInMS - _lastLodTimeInMS) < 100) //500
     {
       return _lastLodTest;
     }
@@ -759,10 +759,13 @@ public class Tile
   
       if (isRawRender)
       {
+  
+        final long tileTexturePriority = (tilesRenderParameters._incrementalTileQuality ? texturePriority + layerTilesRenderParameters._maxLevel - _level : texturePriority + _level);
+  
+        rendered = true;
         if (renderTileMeshes)
         {
-          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, logTilesPetitions);
-          rendered = true;
+          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, tileTexturePriority, logTilesPetitions);
         }
         if (tilesRenderParameters._renderDebug)
         {
