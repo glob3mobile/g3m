@@ -391,7 +391,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
 
   if (_lastLodTimeInMS != 0 &&
-      (nowInMS - _lastLodTimeInMS) < 500 ) {
+      (nowInMS - _lastLodTimeInMS) < 100 /*500*/ ) {
     return _lastLodTest;
   }
 
@@ -737,6 +737,12 @@ void Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
+
+      const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
+                                             ? texturePriority + layerTilesRenderParameters->_maxLevel - _level
+                                             : texturePriority + _level);
+
+      rendered = true;
       if (renderTileMeshes) {
         rawRender(rc,
                   &parentState,
@@ -748,9 +754,8 @@ void Tile::render(const G3MRenderContext* rc,
                   layerSet,
                   tilesRenderParameters,
                   isForcedFullRender,
-                  texturePriority,
+                  tileTexturePriority,
                   logTilesPetitions);
-        rendered = true;
       }
       if (tilesRenderParameters->_renderDebug) {
         debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
