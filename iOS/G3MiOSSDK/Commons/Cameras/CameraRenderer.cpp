@@ -11,6 +11,12 @@
 #include "CameraEventHandler.hpp"
 #include "TouchEvent.hpp"
 
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "MeshRenderer.hpp"
+#include "DirectMesh.hpp"
+
+
+
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;
   const int handlersSize = _handlers.size();
@@ -28,6 +34,21 @@ CameraRenderer::~CameraRenderer() {
 void CameraRenderer::initialize(const G3MContext* context) {
   //_logger = ic->getLogger();
   //cameraContext = new CameraContext(
+  
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+  vertices->add(0.0f, 0.0f, 0.0f);
+  Color* color = Color::newFromRGBA(1, 0, 0, 1);
+  
+  Mesh* mesh = new DirectMesh(GLPrimitive::points(),
+                              true,
+                              context->getPlanet()->toCartesian(Angle::fromDegrees(45), Angle::fromDegrees(0), 1000),
+                              vertices->create(),
+                              1,
+                              80,
+                              color);
+  
+  delete vertices;
+  _meshRenderer->addMesh(mesh);
 }
 
 void CameraRenderer::onResizeViewportEvent(const G3MEventContext* ec,

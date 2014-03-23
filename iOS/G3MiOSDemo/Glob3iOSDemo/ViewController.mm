@@ -142,7 +142,7 @@
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
 #import <G3MiOSSDK/TileRenderingListener.hpp>
 
-
+#import <G3MiOSSDK/DirectMesh.hpp>
 
 class TestVisibleSectorListener : public VisibleSectorListener {
 public:
@@ -632,10 +632,6 @@ public:
 //#warning Diego at work!
 //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
 
-  //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-  //  builder.addCameraConstraint(scc);
-
-  builder.setCameraRenderer([self createCameraRenderer]);
 
   //const Planet* planet = Planet::createEarth();
   //const Planet* planet = Planet::createSphericalEarth();
@@ -671,7 +667,7 @@ public:
 
   builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
-
+  
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
 
@@ -680,6 +676,11 @@ public:
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
+  
+  //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+  //  builder.addCameraConstraint(scc);
+  builder.setCameraRenderer([self createCameraRenderer: meshRenderer]);
+
 
   if (false) { //Testing Reference System
 
@@ -1388,7 +1389,7 @@ builder.initializeWidget();
   return result;
 }
 
-- (CameraRenderer*) createCameraRenderer
+- (CameraRenderer*) createCameraRenderer: (MeshRenderer*) meshRenderer
 {
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
@@ -1398,6 +1399,8 @@ builder.initializeWidget();
 
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  
+  cameraRenderer->setRenderDebug(true, meshRenderer);
 
   return cameraRenderer;
 }
