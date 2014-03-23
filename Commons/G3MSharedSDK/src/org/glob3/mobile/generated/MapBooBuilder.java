@@ -21,6 +21,8 @@ public abstract class MapBooBuilder
   private String _applicationCurrentSceneId;
   private String _lastApplicationCurrentSceneId;
 
+  private int _applicationEventId;
+
   private GL _gl;
   private G3MWidget _g3mWidget;
   private IStorage _storage;
@@ -58,7 +60,9 @@ public abstract class MapBooBuilder
   
     final boolean logTilesPetitions = false;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions);
+    TileRenderingListener tileRenderingListener = null;
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener);
   
     if (_enableNotifications)
     {
@@ -331,9 +335,6 @@ public abstract class MapBooBuilder
 
   private String getApplicationCurrentSceneId()
   {
-  //  if (_applicationCurrentSceneId.compare("-1") == 0) {
-  //    _applicationCurrentSceneId = _applicationScenes.at(0)->getId() ;
-  //  }
     return _applicationCurrentSceneId;
   }
   private MapBoo_Scene getApplicationCurrentScene()
@@ -368,11 +369,14 @@ public abstract class MapBooBuilder
   
     final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
   
+    final boolean queryable = jsonObject.getAsBoolean("queryable", false);
+  
+  
     //  if (hasWarnings && (_viewType != VIEW_PRESENTATION)) {
     //    return NULL;
     //  }
   
-    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), hasWarnings);
+    return new MapBoo_Scene(jsonObject.getAsString("id", ""), jsonObject.getAsString("name", ""), jsonObject.getAsString("description", ""), parseMultiImage(jsonObject.getAsObject("screenshot")), parseColor(jsonObject.getAsString("backgroundColor")), parseCameraPosition(jsonObject.getAsObject("cameraPosition")), parseSector(jsonObject.get("sector")), parseLayer(jsonObject.get("baseLayer")), parseLayer(jsonObject.get("overlayLayer")), queryable, hasWarnings);
   }
 
   private Color parseColor(JSONString jsonColor)
@@ -516,27 +520,14 @@ public abstract class MapBooBuilder
         final Sector sector = currentScene.getSector();
         if (sector == null)
         {
-          _g3mWidget.setShownSector(Sector.fullSphere());
+          _g3mWidget.setRenderedSector(Sector.fullSphere());
         }
         else
         {
-          _g3mWidget.setShownSector(sector);
+          _g3mWidget.setRenderedSector(sector);
         }
   
-        final MapBoo_CameraPosition cameraPosition = currentScene.getCameraPosition();
-        if (cameraPosition != null)
-        {
-          if (cameraPosition.isAnimated())
-          {
-            _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
-          }
-          else
-          {
-            _g3mWidget.setCameraPosition(cameraPosition.getPosition());
-            _g3mWidget.setCameraHeading(cameraPosition.getHeading());
-            _g3mWidget.setCameraPitch(cameraPosition.getPitch());
-          }
-        }
+        setCameraPosition(currentScene.getCameraPosition());
       }
     }
   
@@ -566,7 +557,7 @@ public abstract class MapBooBuilder
   
   }
 
-  private void updateVisibleScene()
+  private void updateVisibleScene(boolean cameraPositionChanged)
   {
     recreateLayerSet();
     final MapBoo_Scene currentScene = getApplicationCurrentScene();
@@ -583,11 +574,16 @@ public abstract class MapBooBuilder
         final Sector sector = currentScene.getSector();
         if (sector == null)
         {
-          _g3mWidget.setShownSector(Sector.fullSphere());
+          _g3mWidget.setRenderedSector(Sector.fullSphere());
         }
         else
         {
-          _g3mWidget.setShownSector(sector);
+          _g3mWidget.setRenderedSector(sector);
+        }
+  
+        if (cameraPositionChanged)
+        {
+          setCameraPosition(currentScene.getCameraPosition());
         }
       }
     }
@@ -822,7 +818,7 @@ public abstract class MapBooBuilder
         final MapBoo_CameraPosition cameraPosition = notification.getCameraPosition();
         if (cameraPosition != null)
         {
-          _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+          setCameraPosition(cameraPosition, true);
         }
       }
     }
@@ -882,6 +878,31 @@ public abstract class MapBooBuilder
     }
   }
 
+  private void setCameraPosition(MapBoo_CameraPosition cameraPosition, boolean animated)
+  {
+    if (cameraPosition != null)
+    {
+      if (animated)
+      {
+        _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(3), cameraPosition.getPosition(), cameraPosition.getHeading(), cameraPosition.getPitch());
+      }
+      else
+      {
+        _g3mWidget.setCameraPosition(cameraPosition.getPosition());
+        _g3mWidget.setCameraHeading(cameraPosition.getHeading());
+        _g3mWidget.setCameraPitch(cameraPosition.getPitch());
+      }
+    }
+  }
+  private void setCameraPosition(MapBoo_CameraPosition cameraPosition)
+  {
+    if (cameraPosition != null)
+    {
+      final boolean animated = cameraPosition.isAnimated();
+      setCameraPosition(cameraPosition, animated);
+    }
+  }
+
   protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications)
   {
      _serverURL = serverURL;
@@ -893,6 +914,7 @@ public abstract class MapBooBuilder
      _applicationEMail = "";
      _applicationAbout = "";
      _applicationTimestamp = -1;
+     _applicationEventId = -1;
      _gl = null;
      _g3mWidget = null;
      _storage = null;
@@ -1013,15 +1035,27 @@ public abstract class MapBooBuilder
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_serverURL.getPath());
-    isb.addString("/applications/");
+    isb.addString("/REST/1/applications/");
     isb.addString(_applicationId);
-    isb.addString("?view=runtime&lastTs=");
-    isb.addInt(_applicationTimestamp);
+    isb.addString("?view=runtime&eventId=");
+    isb.addInt(_applicationEventId);
     final String path = isb.getString();
     if (isb != null)
        isb.dispose();
   
     return new URL(path, false);
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final int getApplicationEventId()
+  {
+    return _applicationEventId;
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void setApplicationEventId(int eventId)
+  {
+    _applicationEventId = eventId;
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1134,38 +1168,6 @@ public abstract class MapBooBuilder
   }
 
   /** Private to MapbooBuilder, don't call it */
-  public final void setApplicationScene(MapBoo_Scene scene)
-  {
-    final int scenesCount = _applicationScenes.size();
-    final String sceneToBeUpdatedID = scene.getId();
-    for (int i = 0; i < scenesCount; i++)
-    {
-      final String sceneID = _applicationScenes.get(i).getId();
-      if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
-      {
-        MapBoo_Scene oldScene = _applicationScenes.get(i);
-        _applicationScenes.set(i, scene);
-  
-        if (sceneID.compareTo(_applicationCurrentSceneId) == 0)
-        {
-          updateVisibleScene();
-        }
-  
-        if (_applicationListener != null)
-        {
-          _applicationListener.onSceneChanged(_context, scene);
-        }
-        fireOnScenesChanged();
-  
-        if (oldScene != null)
-           oldScene.dispose();
-  
-        break;
-      }
-    }
-  }
-
-  /** Private to MapbooBuilder, don't call it */
   public final void setApplicationScenes(java.util.ArrayList<MapBoo_Scene> applicationScenes)
   {
     final int currentScenesCount = _applicationScenes.size();
@@ -1224,8 +1226,6 @@ public abstract class MapBooBuilder
   {
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
   
-    //ILogger::instance()->logInfo(json);
-  
     if (jsonBaseObject == null)
     {
       ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
@@ -1233,151 +1233,274 @@ public abstract class MapBooBuilder
     else
     {
       final JSONObject jsonObject = jsonBaseObject.asObject();
-      if (jsonObject == null)
+      parseApplicationJSON(jsonObject, url);
+    }
+    if (jsonBaseObject != null)
+       jsonBaseObject.dispose();
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void parseApplicationJSON(JSONObject jsonObject, URL url)
+  {
+    if (jsonObject == null)
+    {
+      ILogger.instance().logError("Invalid ApplicationJSON");
+    }
+    else
+    {
+      final JSONString jsonError = jsonObject.getAsString("error");
+      if (jsonError == null)
       {
-        ILogger.instance().logError("Invalid ApplicationJSON");
+        final int eventId = (int) jsonObject.getAsNumber("eventId", 0);
+        final int timestamp = (int) jsonObject.getAsNumber("timestamp", 0);
+  
+        if (getApplicationEventId() != eventId)
+        {
+          final JSONString jsonName = jsonObject.getAsString("name");
+          if (jsonName != null)
+          {
+            setApplicationName(jsonName.value());
+          }
+  
+          final JSONString jsonWebsite = jsonObject.getAsString("website");
+          if (jsonWebsite != null)
+          {
+            setApplicationWebsite(jsonWebsite.value());
+          }
+  
+          final JSONString jsonEMail = jsonObject.getAsString("email");
+          if (jsonEMail != null)
+          {
+            setApplicationEMail(jsonEMail.value());
+          }
+  
+          final JSONString jsonAbout = jsonObject.getAsString("about");
+          if (jsonAbout != null)
+          {
+            setApplicationAbout(jsonAbout.value());
+          }
+  
+          final JSONObject jsonScene = jsonObject.getAsObject("scene");
+          if (jsonScene != null)
+          {
+            parseSceneEventAndUpdateScene(jsonScene);
+          }
+  
+          final JSONArray jsonAllScenes = jsonObject.getAsArray("scenes");
+          if (jsonAllScenes != null)
+          {
+            java.util.ArrayList<MapBoo_Scene> scenes = new java.util.ArrayList<MapBoo_Scene>();
+  
+            final int scenesCount = jsonAllScenes.size();
+            for (int i = 0; i < scenesCount; i++)
+            {
+              MapBoo_Scene scene = parseScene(jsonAllScenes.getAsObject(i));
+              if (scene != null)
+              {
+                scenes.add(scene);
+              }
+            }
+  
+            setApplicationScenes(scenes);
+          }
+  
+          final JSONObject jsonScenes = jsonObject.getAsObject("scenes");
+          if (jsonScenes != null)
+          {
+            final JSONObject jsonPutScene = jsonScenes.getAsObject("putScene");
+            if (jsonPutScene != null)
+            {
+              final JSONNumber jsonPosition = jsonPutScene.getAsNumber("position");
+              int position = (jsonPosition != null) ? (int) jsonPosition.value() : 0;
+              final JSONObject jsonNewScene = jsonPutScene.getAsObject("scene");
+              if (jsonNewScene != null)
+              {
+                MapBoo_Scene scene = parseScene(jsonNewScene);
+                if (scene != null)
+                {
+                  addApplicationScene(scene, position);
+                }
+              }
+            }
+            else
+            {
+              final JSONObject jsonDeleteScene = jsonScenes.getAsObject("deleteScene");
+              if (jsonDeleteScene != null)
+              {
+                final JSONString jsonSceneId = jsonDeleteScene.getAsString("sceneId");
+                if (jsonSceneId != null)
+                {
+                  deleteApplicationScene(jsonSceneId.value());
+                }
+              }
+            }
+          }
+  
+          setApplicationEventId(eventId);
+          setApplicationTimestamp(timestamp);
+          saveApplicationData();
+          setHasParsedApplication();
+        }
+  
+        final JSONString jsonCurrentSceneId = jsonObject.getAsString("currentSceneId");
+        if (jsonCurrentSceneId != null)
+        {
+          setApplicationCurrentSceneId(jsonCurrentSceneId.value());
+        }
+  
+        if (_enableNotifications)
+        {
+          final JSONArray jsonNotifications = jsonObject.getAsArray("notifications");
+          if (jsonNotifications != null)
+          {
+            addApplicationNotifications(parseNotifications(jsonNotifications));
+          }
+  
+          final JSONObject jsonNotification = jsonObject.getAsObject("notification");
+          if (jsonNotification != null)
+          {
+            addApplicationNotification(parseNotification(jsonNotification));
+          }
+        }
+  
+        if (_initialParse)
+        {
+          _initialParse = false;
+          if (_applicationCurrentSceneId.compareTo("-1") == 0)
+          {
+            if (_applicationScenes.size() > 0)
+            {
+              setApplicationCurrentSceneId(_applicationScenes.get(0).getId());
+            }
+          }
+        }
       }
       else
       {
-        final JSONString jsonError = jsonObject.getAsString("error");
-        if (jsonError == null)
+        ILogger.instance().logError("Server Error: %s", jsonError.value());
+      }
+    }
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void parseApplicationEventsJSON(String json, URL url)
+  {
+    final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
+    if (jsonBaseObject == null)
+    {
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
+    }
+    else
+    {
+      final JSONArray jsonArray = jsonBaseObject.asArray();
+      if (jsonArray != null)
+      {
+        final int size = jsonArray.size();
+        for (int i = 0; i < size; i++)
         {
-          final int timestamp = (int) jsonObject.getAsNumber("timestamp", 0);
+          final JSONObject jsonObject = jsonArray.getAsObject(i);
+          parseApplicationJSON(jsonObject, url);
+        }
+      }
+      else
+      {
+        parseApplicationJSON(json, url);
+      }
+    }
+    if (jsonBaseObject != null)
+       jsonBaseObject.dispose();
+  }
+
+  /** Private to MapbooBuilder, don't call it */
+  public final void parseSceneEventAndUpdateScene(JSONObject jsonObject)
+  {
+    if (jsonObject == null)
+    {
+      return;
+    }
   
-          if (getApplicationTimestamp() != timestamp)
-          {
-            final JSONString jsonName = jsonObject.getAsString("name");
-            if (jsonName != null)
-            {
-              setApplicationName(jsonName.value());
-            }
+    final JSONString jsonSceneToBeUpdatedID = jsonObject.getAsString("id");
+    if (jsonSceneToBeUpdatedID == null)
+    {
+      return;
+    }
+    final String sceneToBeUpdatedID = jsonSceneToBeUpdatedID.value();
+    final int scenesCount = _applicationScenes.size();
+    for (int i = 0; i < scenesCount; i++)
+    {
+      final String sceneID = _applicationScenes.get(i).getId();
+      if (sceneID.compareTo(sceneToBeUpdatedID) == 0)
+      {
+        MapBoo_Scene oldScene = _applicationScenes.get(i);
   
-            final JSONString jsonWebsite = jsonObject.getAsString("website");
-            if (jsonWebsite != null)
-            {
-              setApplicationWebsite(jsonWebsite.value());
-            }
-  
-            final JSONString jsonEMail = jsonObject.getAsString("email");
-            if (jsonEMail != null)
-            {
-              setApplicationEMail(jsonEMail.value());
-            }
-  
-            final JSONString jsonAbout = jsonObject.getAsString("about");
-            if (jsonAbout != null)
-            {
-              setApplicationAbout(jsonAbout.value());
-            }
-  
-            final JSONObject jsonScene = jsonObject.getAsObject("scene");
-            if (jsonScene != null)
-            {
-              MapBoo_Scene scene = parseScene(jsonScene);
-              if (scene != null)
-              {
-                setApplicationScene(scene);
-              }
-            }
-  
-            final JSONArray jsonAllScenes = jsonObject.getAsArray("scenes");
-            if (jsonAllScenes != null)
-            {
-              java.util.ArrayList<MapBoo_Scene> scenes = new java.util.ArrayList<MapBoo_Scene>();
-  
-              final int scenesCount = jsonAllScenes.size();
-              for (int i = 0; i < scenesCount; i++)
-              {
-                MapBoo_Scene scene = parseScene(jsonAllScenes.getAsObject(i));
-                if (scene != null)
-                {
-                  scenes.add(scene);
-                }
-              }
-  
-              setApplicationScenes(scenes);
-            }
-  
-            final JSONObject jsonScenes = jsonObject.getAsObject("scenes");
-            if (jsonScenes != null)
-            {
-              final JSONObject jsonPutScene = jsonScenes.getAsObject("putScene");
-              if (jsonPutScene != null)
-              {
-                final JSONNumber jsonPosition = jsonPutScene.getAsNumber("position");
-                int position = (jsonPosition != null) ? (int) jsonPosition.value() : 0;
-                final JSONObject jsonNewScene = jsonPutScene.getAsObject("scene");
-                if (jsonNewScene != null)
-                {
-                  MapBoo_Scene scene = parseScene(jsonNewScene);
-                  if (scene != null)
-                  {
-                    addApplicationScene(scene, position);
-                  }
-                }
-              }
-              else
-              {
-                final JSONObject jsonDeleteScene = jsonScenes.getAsObject("deleteScene");
-                if (jsonDeleteScene != null)
-                {
-                  final JSONString jsonSceneId = jsonDeleteScene.getAsString("sceneId");
-                  if (jsonSceneId != null)
-                  {
-                    deleteApplicationScene(jsonSceneId.value());
-                  }
-                }
-              }
-            }
-  
-            setApplicationTimestamp(timestamp);
-            saveApplicationData();
-            setHasParsedApplication();
-          }
-  
-          final JSONString jsonCurrentSceneId = jsonObject.getAsString("currentSceneId");
-          if (jsonCurrentSceneId != null)
-          {
-            setApplicationCurrentSceneId(jsonCurrentSceneId.value());
-          }
-  
-          if (_enableNotifications)
-          {
-            final JSONArray jsonNotifications = jsonObject.getAsArray("notifications");
-            if (jsonNotifications != null)
-            {
-              addApplicationNotifications(parseNotifications(jsonNotifications));
-            }
-  
-            final JSONObject jsonNotification = jsonObject.getAsObject("notification");
-            if (jsonNotification != null)
-            {
-              addApplicationNotification(parseNotification(jsonNotification));
-            }
-          }
-  
-          if (_initialParse)
-          {
-            _initialParse = false;
-            if (_applicationCurrentSceneId.compareTo("-1") == 0)
-            {
-              if (_applicationScenes.size() > 0)
-              {
-                setApplicationCurrentSceneId(_applicationScenes.get(0).getId());
-              }
-            }
-          }
+        final String name = jsonObject.getAsString("name", oldScene.getName());
+        final String description = jsonObject.getAsString("description", oldScene.getDescription());
+        final JSONBaseObject jboScreenshot = jsonObject.get("screenshot");
+        final MapBoo_MultiImage screenshot;
+        if (jboScreenshot != null)
+        {
+          screenshot = parseMultiImage(jboScreenshot.asObject());
         }
         else
         {
-          ILogger.instance().logError("Server Error: %s", jsonError.value());
+          final MapBoo_MultiImage oldScreenshot = oldScene.getScreenshot();
+          screenshot = (oldScreenshot != null) ? oldScreenshot.deepCopy() : null;
         }
+        final JSONBaseObject jboBackgroundColor = jsonObject.get("backgroundColor");
+        final Color backgroundColor = (jboBackgroundColor != null) ? parseColor(jboBackgroundColor.asString()) : oldScene.getBackgroundColor();
+        final JSONBaseObject jboCameraPosition = jsonObject.get("cameraPosition");
+        final MapBoo_CameraPosition cameraPosition;
+        if (jboCameraPosition != null)
+        {
+          cameraPosition = parseCameraPosition(jboCameraPosition.asObject());
+        }
+        else
+        {
+          final MapBoo_CameraPosition oldCameraPosition = oldScene.getCameraPosition();
+          cameraPosition = (oldCameraPosition != null) ? new MapBoo_CameraPosition(oldCameraPosition.getPosition(), oldCameraPosition.getHeading(), oldCameraPosition.getPitch(), oldCameraPosition.isAnimated()) : null;
+        }
+        final JSONBaseObject jboSector = jsonObject.get("sector");
+        final Sector sector;
+        if (jboSector != null)
+        {
+          sector = parseSector(jboSector.asObject());
+        }
+        else
+        {
+          final Sector oldSector = oldScene.getSector();
+          sector = (oldSector != null) ? new Sector(oldSector._lower, oldSector._upper) : null;
+        }
+        final JSONBaseObject jboBaseLayer = jsonObject.get("baseLayer");
+        Layer baseLayer = (jboBaseLayer != null) ? parseLayer(jboBaseLayer.asObject()) : oldScene.getBaseLayer().copy();
+        final JSONBaseObject jboOverlayLayer = jsonObject.get("overlayLayer");
+        Layer oldOverlayLayer = (oldScene.getOverlayLayer() != null) ? oldScene.getOverlayLayer().copy() : null;
+        Layer overlayLayer = (jboOverlayLayer != null) ? parseLayer(jboOverlayLayer.asObject()) : oldOverlayLayer;
+  
+        final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
+        final boolean queryable = jsonObject.getAsBoolean("queryable", false);
+        final boolean cameraPositionChaged = (jboCameraPosition != null);
+  
+        MapBoo_Scene newScene = new MapBoo_Scene(sceneToBeUpdatedID, name, description, screenshot, backgroundColor, cameraPosition, sector, baseLayer, overlayLayer, queryable, hasWarnings);
+  
+        _applicationScenes.set(i, newScene);
+  
+        if (sceneID.compareTo(_applicationCurrentSceneId) == 0)
+        {
+          updateVisibleScene(cameraPositionChaged);
+        }
+  
+        if (_applicationListener != null)
+        {
+          _applicationListener.onSceneChanged(_context, newScene);
+        }
+        fireOnScenesChanged();
+  
+        if (oldScene != null)
+           oldScene.dispose();
+  
+        break;
       }
-  
-      if (jsonBaseObject != null)
-         jsonBaseObject.dispose();
     }
-  
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1550,6 +1673,11 @@ public abstract class MapBooBuilder
   }
 
 
+  public final boolean isQueryableCurrentScene()
+  {
+    return getApplicationCurrentScene().isQueryable();
+  }
+
   public final URL getServerURL()
   {
     return _serverURL;
@@ -1619,4 +1747,10 @@ public abstract class MapBooBuilder
   
   }
 
+  /** Private to MapbooBuilder, don't call it */
+  public final void pollApplicationDataFromServer(G3MContext context)
+  {
+    IDownloader downloader = context.getDownloader();
+    downloader.requestBuffer(createApplicationRestURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+  }
 }

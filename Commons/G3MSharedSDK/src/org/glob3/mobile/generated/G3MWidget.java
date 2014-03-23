@@ -669,10 +669,14 @@ public class G3MWidget
     return _mainRenderer.getPlanetRenderer();
   }
 
-  public final void setShownSector(Sector sector)
+  public final boolean setRenderedSector(Sector sector)
   {
-    getPlanetRenderer().setRenderedSector(sector);
-    _initialCameraPositionHasBeenSet = false;
+    final boolean changed = getPlanetRenderer().setRenderedSector(sector);
+    if (changed)
+    {
+      _initialCameraPositionHasBeenSet = false;
+    }
+    return changed;
   }
 
   public final void setForceBusyRenderer(boolean forceBusyRenderer)

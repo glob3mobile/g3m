@@ -10,9 +10,10 @@ public class MapBoo_Scene
   private final Sector _sector;
   private Layer _baseLayer;
   private Layer _overlayLayer;
+  private final boolean _queryable;
   private final boolean _hasWarnings;
 
-  public MapBoo_Scene(String id, String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Sector sector, Layer baseLayer, Layer overlayLayer, boolean hasWarnings)
+  public MapBoo_Scene(String id, String name, String description, MapBoo_MultiImage screenshot, Color backgroundColor, MapBoo_CameraPosition cameraPosition, Sector sector, Layer baseLayer, Layer overlayLayer, boolean queryable, boolean hasWarnings)
   {
      _id = id;
      _name = name;
@@ -23,6 +24,7 @@ public class MapBoo_Scene
      _sector = sector;
      _baseLayer = baseLayer;
      _overlayLayer = overlayLayer;
+     _queryable = queryable;
      _hasWarnings = hasWarnings;
   }
 
@@ -59,6 +61,22 @@ public class MapBoo_Scene
   public final Sector getSector()
   {
     return _sector;
+  }
+
+  public final Layer getBaseLayer()
+  {
+    return _baseLayer;
+  }
+
+  public final Layer getOverlayLayer()
+  {
+    return _overlayLayer;
+  }
+
+  public final boolean isQueryable()
+  {
+    return _queryable;
+
   }
 
   public final boolean hasWarnings()

@@ -83,4 +83,17 @@ public class MapBoo_MultiImage
     return description();
   }
 
+  public final MapBoo_MultiImage deepCopy()
+  {
+    final Color averageColor = Color.fromRGBA(_averageColor._red, _averageColor._green, _averageColor._blue, _averageColor._alpha);
+    java.util.ArrayList<MapBoo_MultiImage_Level> levels = new java.util.ArrayList<MapBoo_MultiImage_Level>();
+    final int levelsSize = _levels.size();
+    for (int i = 0; i < levelsSize; i++)
+    {
+      final MapBoo_MultiImage_Level level = _levels.get(i);
+      levels.add(new MapBoo_MultiImage_Level(level.getUrl(), level.getWidth(), level.getHeight()));
+    }
+
+    return new MapBoo_MultiImage(averageColor, levels);
+  }
 }

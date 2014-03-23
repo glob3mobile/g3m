@@ -43,6 +43,7 @@ package org.glob3.mobile.generated;
 //class LayerTilesRenderParameters;
 //class TileRasterizer;
 //class LayerSet;
+//class TileRenderingListener;
 
 
 public class Tile
@@ -268,7 +269,7 @@ public class Tile
       }
     }
   
-    if (_lastLodTimeInMS != 0 && (nowInMS - _lastLodTimeInMS) < 500)
+    if (_lastLodTimeInMS != 0 && (nowInMS - _lastLodTimeInMS) < 100) //500
     {
       return _lastLodTest;
     }
@@ -551,6 +552,8 @@ public class Tile
     return _boundingVolume;
   }
 
+  private boolean _rendered;
+
   public final Sector _sector ;
   public final int _level;
   public final int _row;
@@ -592,6 +595,7 @@ public class Tile
      _middleWestPoint = null;
      _latitudeArcSegmentRatioSquared = 0;
      _longitudeArcSegmentRatioSquared = 0;
+     _rendered = false;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -731,8 +735,12 @@ public class Tile
     }
   }
 
+<<<<<<< HEAD
   //RETURN ISRAWRENDER
   public final boolean render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions)
+=======
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
+>>>>>>> origin/purgatory
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -743,6 +751,7 @@ public class Tile
       _verticalExaggeration = verticalExaggeration;
     }
   
+    boolean rendered = false;
   
     if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
     {
@@ -754,9 +763,13 @@ public class Tile
   
       if (isRawRender)
       {
+  
+        final long tileTexturePriority = (tilesRenderParameters._incrementalTileQuality ? texturePriority + layerTilesRenderParameters._maxLevel - _level : texturePriority + _level);
+  
+        rendered = true;
         if (renderTileMeshes)
         {
-          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, logTilesPetitions);
+          rawRender(rc, parentState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, tileTexturePriority, logTilesPetitions);
         }
         if (tilesRenderParameters._renderDebug)
         {
@@ -867,6 +880,7 @@ public class Tile
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   
+<<<<<<< HEAD
   }
 
 
@@ -896,6 +910,25 @@ public class Tile
     {
       _tessellatorMesh.zRender(rc, parentState);
     }
+=======
+    if (_rendered != rendered)
+    {
+      _rendered = rendered;
+  
+      if (tileRenderingListener != null)
+      {
+        if (_rendered)
+        {
+          tileRenderingListener.startRendering(this);
+        }
+        else
+        {
+          tileRenderingListener.stopRendering(this);
+        }
+      }
+    }
+  
+>>>>>>> origin/purgatory
   }
 
   public final TileKey getKey()

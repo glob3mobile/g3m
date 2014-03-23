@@ -70,6 +70,7 @@ private:
 
   bool getLogTilesPetitions();
 
+  TileRenderingListener* _tileRenderingListener;
 
 public:
   PlanetRendererBuilder();
@@ -107,6 +108,10 @@ public:
   void setRenderTileMeshes(bool renderTileMeshes);
 
   void setLogTilesPetitions(bool logTilesPetitions);
+
+  void setTileRenderingListener(TileRenderingListener* tileRenderingListener);
+
+  TileRenderingListener* getTileRenderingListener();
 
 };
 

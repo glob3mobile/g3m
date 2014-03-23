@@ -225,7 +225,7 @@ public:
 
   PlanetRenderer* getPlanetRenderer();
 
-  void setShownSector(const Sector& sector);
+  bool setRenderedSector(const Sector& sector);
 
   void setForceBusyRenderer(bool forceBusyRenderer) {
     _forceBusyRenderer = forceBusyRenderer;

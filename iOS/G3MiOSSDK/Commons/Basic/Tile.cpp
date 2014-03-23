@@ -28,6 +28,7 @@
 #include "FlatColorMesh.hpp"
 #include "PlanetRenderer.hpp"
 #include "PlanetTileTessellator.hpp"
+#include "TileRenderingListener.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -69,7 +70,8 @@ _middleSouthPoint(NULL),
 _middleEastPoint(NULL),
 _middleWestPoint(NULL),
 _latitudeArcSegmentRatioSquared(0),
-_longitudeArcSegmentRatioSquared(0)
+_longitudeArcSegmentRatioSquared(0),
+_rendered(false)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -389,7 +391,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
 
   if (_lastLodTimeInMS != 0 &&
-      (nowInMS - _lastLodTimeInMS) < 500 ) {
+      (nowInMS - _lastLodTimeInMS) < 100 /*500*/ ) {
     return _lastLodTest;
   }
 
@@ -693,7 +695,8 @@ bool Tile::render(const G3MRenderContext* rc,
                   double texHeightSquared,
                   double nowInMS,
                   const bool renderTileMeshes,
-                  bool logTilesPetitions) {
+                  bool logTilesPetitions,
+                  TileRenderingListener* tileRenderingListener) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -702,6 +705,7 @@ bool Tile::render(const G3MRenderContext* rc,
     _verticalExaggeration = verticalExaggeration;
   }
 
+  bool rendered = false;
 
   if (isVisible(rc,
                 planet,
@@ -732,6 +736,12 @@ bool Tile::render(const G3MRenderContext* rc,
                               );
 
     if (isRawRender) {
+
+      const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
+                                             ? texturePriority + layerTilesRenderParameters->_maxLevel - _level
+                                             : texturePriority + _level);
+
+      rendered = true;
       if (renderTileMeshes) {
         rawRender(rc,
                   &parentState,
@@ -743,7 +753,7 @@ bool Tile::render(const G3MRenderContext* rc,
                   layerSet,
                   tilesRenderParameters,
                   isForcedFullRender,
-                  texturePriority,
+                  tileTexturePriority,
                   logTilesPetitions);
       }
       if (tilesRenderParameters->_renderDebug) {
@@ -783,6 +793,19 @@ bool Tile::render(const G3MRenderContext* rc,
     return false;   //RETURN ISRAWRENDER
   }
 
+  if (_rendered != rendered) {
+    _rendered = rendered;
+
+    if (tileRenderingListener != NULL) {
+      if (_rendered) {
+        tileRenderingListener->startRendering(this);
+      }
+      else {
+        tileRenderingListener->stopRendering(this);
+      }
+    }
+  }
+  
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
@@ -1228,7 +1251,7 @@ void Tile::computeTileCorners(const Planet* planet) {
 }
 
 Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
-                                                     const Vector2I& tileDimension) const{
+                                               const Vector2I& tileDimension) const{
   const IMathUtils* math = IMathUtils::instance();
   const Vector2D uv = _sector.getUVCoordinates(position2D);
   return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));

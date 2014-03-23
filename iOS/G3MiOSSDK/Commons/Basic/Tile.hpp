@@ -39,6 +39,7 @@ class PlanetTileTessellatorData;
 class LayerTilesRenderParameters;
 class TileRasterizer;
 class LayerSet;
+class TileRenderingListener;
 
 #include "ITexturizerData.hpp"
 
@@ -171,6 +172,8 @@ private:
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
 
+  bool _rendered;
+
 public:
   const Sector    _sector;
   const int       _level;
@@ -252,7 +255,8 @@ public:
               double texHeight,
               double nowInMS,
               const bool renderTileMeshes,
-              bool logTilesPetitions);
+              bool logTilesPetitions,
+              TileRenderingListener* tileRenderingListener);
 
   void actualizeQuadTree(const G3MRenderContext* rc,
                          std::list<Tile*>& renderedTiles,

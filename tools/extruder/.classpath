@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/G3MJavaDesktopSDK"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Poly2Tri"/>
 	<classpathentry kind="lib" path="libs/gpcj-2.2.0-full.jar"/>
 	<classpathentry kind="lib" path="libs/euclid.jar"/>
 	<classpathentry kind="lib" path="libs/igolibs.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Poly2Tri"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
