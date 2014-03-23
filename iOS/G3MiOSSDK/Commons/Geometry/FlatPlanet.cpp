@@ -14,7 +14,8 @@
 
 
 FlatPlanet::FlatPlanet(const Vector2D& size):
-_size(size)
+_size(size),
+_firstDoubleDragMovement(false)
 {
 
 }
@@ -153,10 +154,6 @@ Effect* FlatPlanet::createEffectFromLastSingleDrag() const
 }
 
 
-bool BEGIN_DOUBLE_DRAG = false;
-double CORRECTION_T2;
-MutableVector3D CENTER_POINT;
-
 void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
                                  const Vector3D& centerRay,
                                  const Vector3D& centerPosition,
@@ -179,7 +176,7 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
   // middle point in 3D
   _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
   
-  BEGIN_DOUBLE_DRAG = true;
+  _firstDoubleDragMovement = true;
 }
 
 
@@ -227,15 +224,13 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   double squareRoot = mu->sqrt(root);
   double t2 = (-b - squareRoot) / (2*a);
   
-  
-  if (BEGIN_DOUBLE_DRAG) {
-    BEGIN_DOUBLE_DRAG = false;
-    CORRECTION_T2 = t2;
+  // the first time, t2 must be corrected
+  if (_firstDoubleDragMovement) {
+    _firstDoubleDragMovement = false;
+    _correctionT2 = t2;
     t2 = 0;
-    printf("primer t2 = %f\n", t2);
   } else {
-    t2 -= CORRECTION_T2;
-    printf("    t2=%f\n", t2);
+    t2 -= _correctionT2;
   }
     
   // start to compound matrix
@@ -249,63 +244,40 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   {
     MutableVector3D delta = _initialPoint.sub((_centerPoint));
     delta = delta.add(viewDirection.times(t2));
-    
-    printf ("    traslado delta = %f %f %f\n", delta.x(), delta.y(), delta.z());
-    
     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(delta.asVector3D());
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
   }
-
-  // compute 3D point of view center
-  double meanDragHeight = 0.5 * (_dragHeight0 + _dragHeight1);
-  //Vector3D centerPoint2 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), viewDirection.asVector3D(), meanDragHeight);
-  
 
   // compute middle point in 3D
   Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
   Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D(), _dragHeight1);
   Vector3D finalPoint = P0.add(P1).times(0.5);
  
-  
-  
+  // compute the corrected center point
   if (t2==0) {
     MutableVector3D delta = _initialPoint.sub((_centerPoint));
-    CENTER_POINT = finalPoint.asMutableVector3D().sub(delta);
+    _correctedCenterPoint = finalPoint.asMutableVector3D().sub(delta);
   }
-  Vector3D centerPoint2 = CENTER_POINT.asVector3D();
+  Vector3D correctedCenterPoint = _correctedCenterPoint.asVector3D();
   
-  printf ("    _centerPoint = %f %f %f\n", _centerPoint.x(), _centerPoint.y(), _centerPoint.z());
-  printf ("    centerPoint2 = %f %f %f\n", centerPoint2._x, centerPoint2._y, centerPoint2._z);
-
-  
-  
-  printf ("    finalPoint = %f %f %f\n", finalPoint._x, finalPoint._y, finalPoint._z);
-  
-
   // drag globe from centerPoint to finalPoint
   {
-    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(centerPoint2.sub(finalPoint));
-    
-    
-    Vector3D pepe=centerPoint2.sub(finalPoint);
-    printf ("    traslado de center a final = %f %f %f\n", pepe._x, pepe._y, pepe._z);
-    
-    
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(correctedCenterPoint.sub(finalPoint));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
   }
 
   // camera rotation
   {
-    Vector3D normal = geodeticSurfaceNormal(centerPoint2);
-    Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
+    Vector3D normal = geodeticSurfaceNormal(correctedCenterPoint);
+    Vector3D v0     = _initialPoint0.asVector3D().sub(correctedCenterPoint).projectionInPlane(normal);
     Vector3D p0     = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
-    Vector3D v1     = p0.sub(centerPoint2).projectionInPlane(normal);
+    Vector3D v1     = p0.sub(correctedCenterPoint).projectionInPlane(normal);
     double angle    = v0.angleBetween(v1)._degrees;
     double sign     = v1.cross(v0).dot(normal);
     if (sign<0) angle = -angle;
-    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, centerPoint2);
+    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, correctedCenterPoint);
     matrix = rotation.multiply(matrix);
   }
 
