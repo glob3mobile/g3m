@@ -614,13 +614,38 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   _lastCamera = rc->getCurrentCamera();
 
   _statistics.clear();
+  
+  const IDeviceInfo* deviceInfo = IFactory::instance()->getDeviceInfo();
+  //  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
+  const float deviceQualityFactor = deviceInfo->getQualityFactor();
+  
+  const int firstLevelTilesCount = _firstLevelTiles.size();
+  
+  const Planet* planet = rc->getPlanet();
+  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
+  const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+  
+  //Texture Size for every tile
+  int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
+  int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;
+  
+  const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+  const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
+  
+  texWidth *= correctionFactor;
+  texHeight *= correctionFactor;
+  
+  const double texWidthSquared = texWidth * texWidth;
+  const double texHeightSquared = texHeight * texHeight;
+  
+  const double nowInMS = _lastSplitTimer->now().milliseconds(); //Getting now from _lastSplitTimer
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.
     _firstRender = false;
 
-    const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
@@ -693,12 +718,15 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _tileRenderingListener);
       }
 
+      toVisit = toVisitInNextIteration;
+/*
     for (std::list<Tile*>::iterator iter = renderedTiles->begin();
          iter != renderedTiles->end();
          iter++) {
       Tile* tile = *iter;
       tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics,
                              _logTilesPetitions);
+ */
     }
   }
 
