@@ -2091,7 +2091,7 @@ builder.initializeWidget();
                               ABSOLUTE,
                               Vector3D(3000, 3000, 20000),
                               2,
-                              Color::fromRGBA(0,    1, 0, 0.5),
+                              Color::fromRGBA(1,    1, 0, 0.5),
                               Color::newFromRGBA(0, 0.75, 0, 0.75));
     //box->setAnimatedScale(1, 1, 20);
     shapesRenderer->addShape(box);
