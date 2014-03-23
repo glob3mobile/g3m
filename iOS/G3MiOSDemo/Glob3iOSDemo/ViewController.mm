@@ -679,7 +679,9 @@ public:
   
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
-  builder.setCameraRenderer([self createCameraRenderer: meshRenderer]);
+  CameraRenderer* cameraRenderer = [self createCameraRenderer];
+  cameraRenderer->setDebugMeshRenderer(meshRenderer);
+  builder.setCameraRenderer(cameraRenderer);
 
 
   if (false) { //Testing Reference System
@@ -1389,7 +1391,7 @@ builder.initializeWidget();
   return result;
 }
 
-- (CameraRenderer*) createCameraRenderer: (MeshRenderer*) meshRenderer
+- (CameraRenderer*) createCameraRenderer
 {
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
@@ -1400,8 +1402,6 @@ builder.initializeWidget();
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
-  cameraRenderer->setRenderDebug(true, meshRenderer);
-
   return cameraRenderer;
 }
 
