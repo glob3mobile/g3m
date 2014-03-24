@@ -27,11 +27,9 @@ private:
   std::vector<Mark*> _marks;
 
 #ifdef C_CODE
-  const G3MContext* _context;
   const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private G3MContext _context;
   private Camera     _lastCamera;
 #endif
 

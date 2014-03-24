@@ -230,11 +230,9 @@ private:
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
-  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
   private Camera     _lastCamera;
-  private G3MContext _context;
 #endif
 
   std::vector<Tile*> _firstLevelTiles;

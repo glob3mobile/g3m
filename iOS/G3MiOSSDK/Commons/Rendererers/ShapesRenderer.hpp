@@ -113,6 +113,8 @@ private:
   std::vector<LoadQueueItem*> _loadQueue;
 
   void drainLoadQueue();
+  
+  void cleanLoadQueue();
 
 
   void requestBuffer(const URL&          url,
@@ -175,6 +177,8 @@ public:
   }
 
   void onChangedContext();
+  
+  void onLostContext();
 
   RenderState getRenderState(const G3MRenderContext* rc);
 

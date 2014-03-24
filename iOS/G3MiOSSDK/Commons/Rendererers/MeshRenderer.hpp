@@ -101,6 +101,8 @@ private:
   std::vector<LoadQueueItem*> _loadQueue;
 
   void drainLoadQueue();
+  
+  void cleanLoadQueue();
 
   void requestMeshBuffer(const URL&          url,
                          long long           priority,
@@ -137,6 +139,8 @@ public:
   void disableAll();
 
   void onChangedContext();
+  
+  void onLostContext();
 
   void render(const G3MRenderContext* rc, GLState* glState);
 

@@ -135,7 +135,6 @@ _firstLevelTilesJustCreated(false),
 _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
-_context(NULL),
 _lastVisibleSector(NULL),
 _texturePriority(texturePriority),
 _allFirstLevelTilesAreTextureSolved(false),
@@ -147,6 +146,7 @@ _layerTilesRenderParametersDirty(true),
 _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions)
 {
+  _context = NULL;
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
     _tileRasterizer->setChangeListener(this);

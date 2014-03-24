@@ -32,7 +32,6 @@ void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
 
 MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
 _readyWhenMarksReady(readyWhenMarksReady),
-_context(NULL),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
@@ -40,6 +39,7 @@ _downloadPriority(DownloadPriority::MEDIUM),
 _glState(new GLState()),
 _billboardTexCoords(NULL)
 {
+  _context = NULL;
 }
 
 

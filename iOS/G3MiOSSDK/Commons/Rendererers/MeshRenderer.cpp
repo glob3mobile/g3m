@@ -81,6 +81,12 @@ void MeshRenderer::onChangedContext() {
   }
 }
 
+void MeshRenderer::onLostContext() {
+  if (_context == NULL) {
+    cleanLoadQueue();
+  }
+}
+
 void MeshRenderer::drainLoadQueue() {
   const int loadQueueSize = _loadQueue.size();
   for (int i = 0; i < loadQueueSize; i++) {
@@ -100,6 +106,16 @@ void MeshRenderer::drainLoadQueue() {
     delete item;
   }
 
+  _loadQueue.clear();
+}
+
+void MeshRenderer::cleanLoadQueue() {
+  const int loadQueueSize = _loadQueue.size();
+  for (int i = 0; i < loadQueueSize; i++) {
+    LoadQueueItem* item = _loadQueue[i];
+    delete item;
+  }
+  
   _loadQueue.clear();
 }
 
