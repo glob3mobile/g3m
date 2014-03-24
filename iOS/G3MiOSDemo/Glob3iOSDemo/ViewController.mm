@@ -281,6 +281,13 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithBuilderAndSegmentedWorld];
 
+  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                       Geodetic3D::fromDegrees(25.743467472995700263,
+                                                                               -5.3656762990500403987,
+                                                                               1664155.1381164737977),
+                                                       Angle::fromDegrees(-0.145718),
+                                                       Angle::fromDegrees(-52.117699));
+
   [[self G3MWidget] startAnimation];
 
   /*
