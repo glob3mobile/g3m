@@ -68,14 +68,26 @@ private:
   BoundingVolume* _boundingVolume;
 
   //LOD TEST DATA
-  Vector3D* _middleNorthPoint;
-  Vector3D* _middleSouthPoint;
-  Vector3D* _middleEastPoint;
-  Vector3D* _middleWestPoint;
+//  Vector3D* _middleNorthPoint;
+//  Vector3D* _middleSouthPoint;
+//  Vector3D* _middleEastPoint;
+//  Vector3D* _middleWestPoint;
+  Vector3D* _northWestPoint;
+  Vector3D* _northEastPoint;
+  Vector3D* _southWestPoint;
+  Vector3D* _southEastPoint;
+
+  static double getSquaredArcSegmentRatio(const Vector3D& a,
+                                          const Vector3D& b);
+
   void computeTileCorners(const Planet* planet);
 
-  double _latitudeArcSegmentRatioSquared;
-  double _longitudeArcSegmentRatioSquared;
+//  double _latitudeArcSegmentRatioSquared;
+//  double _longitudeArcSegmentRatioSquared;
+  double _northArcSegmentRatioSquared;
+  double _southArcSegmentRatioSquared;
+  double _eastArcSegmentRatioSquared;
+  double _westArcSegmentRatioSquared;
 
 
   void prepareTestLODData(const Planet* planet);
