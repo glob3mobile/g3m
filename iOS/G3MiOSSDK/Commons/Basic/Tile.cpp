@@ -414,6 +414,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   if ((_latitudeArcSegmentRatioSquared  == 0) ||
       (_longitudeArcSegmentRatioSquared == 0)) {
+#warning CHECK IT
     prepareTestLODData( rc->getPlanet() );
   }
 
