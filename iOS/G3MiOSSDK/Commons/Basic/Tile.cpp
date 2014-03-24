@@ -375,6 +375,11 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                double texHeightSquared,
                                double nowInMS) {
 
+//  if (_level == 4 && _column == 7 && _row == 10) {
+//    printf("break point!!");
+////    return true;
+//  }
+
   if ((_level >= layerTilesRenderParameters->_maxLevelForPoles) &&
       (_sector.touchesPoles())) {
     return true;
