@@ -69,6 +69,10 @@ _middleNorthPoint(NULL),
 _middleSouthPoint(NULL),
 _middleEastPoint(NULL),
 _middleWestPoint(NULL),
+_NWCorner(NULL),
+_NECorner(NULL),
+_SWCorner(NULL),
+_SECorner(NULL),
 _latitudeArcSegmentRatioSquared(0),
 _longitudeArcSegmentRatioSquared(0),
 _rendered(false)
@@ -119,6 +123,11 @@ Tile::~Tile() {
   delete _middleNorthPoint;
   delete _middleSouthPoint;
   delete _middleWestPoint;
+  
+  delete _NWCorner;
+  delete _NECorner;
+  delete _SWCorner;
+  delete _SECorner;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -423,20 +432,72 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     prepareTestLODData( rc->getPlanet() );
   }
 
-  const Camera* camera = rc->getCurrentCamera();
+  // testLOD1: tile area is computed using horizontal center line and vertical center line of the tile
+  //return testLOD1(rc, texWidthSquared, texHeightSquared);
 
+  // testLOD2: tile area is computed using the four projected tile vertices
+  //return testLOD2(rc, texWidthSquared, texHeightSquared);
+  
+  // testLOD3: each of the 4 tile edges is compared with texture dimensions
+  return testLOD3(rc, texWidthSquared, texHeightSquared);
+}
+
+bool Tile::testLOD3(const G3MRenderContext* rc,
+                    double texWidthSquared,
+                    double texHeightSquared) {
+  const Camera* camera = rc->getCurrentCamera();
+  double edgeN = camera->getEstimatedPixelDistance(*_NWCorner, *_NECorner);
+  double edgeS = camera->getEstimatedPixelDistance(*_SWCorner, *_SECorner);
+  double edgeW = camera->getEstimatedPixelDistance(*_NWCorner, *_SWCorner);
+  double edgeE = camera->getEstimatedPixelDistance(*_NECorner, *_SECorner);
+  
+  if (edgeN*edgeN<texWidthSquared && edgeS*edgeS<texWidthSquared && edgeW*edgeW<texHeightSquared && edgeE*edgeE<texHeightSquared)
+    _lastLodTest = true;
+  else
+    _lastLodTest = false;
+  return _lastLodTest;
+}
+
+
+bool Tile::testLOD2(const G3MRenderContext* rc,
+                    double texWidthSquared,
+                    double texHeightSquared) {
+  const Camera* camera = rc->getCurrentCamera();
+  double edgeN = camera->getEstimatedPixelDistance(*_NWCorner, *_NECorner);
+  double edgeS = camera->getEstimatedPixelDistance(*_SWCorner, *_SECorner);
+  double edgeW = camera->getEstimatedPixelDistance(*_NWCorner, *_SWCorner);
+  double edgeE = camera->getEstimatedPixelDistance(*_NECorner, *_SECorner);
+  double diagonal1 = camera->getEstimatedPixelDistance(*_NWCorner, *_SECorner);
+  
+  // Heron Formula for triangle areas
+  double s1 = 0.5 * (edgeW + edgeS + diagonal1);
+  double area1 = sqrt(s1 * (s1-edgeW) * (s1-edgeS) * (s1-diagonal1));
+  double s2 = 0.5 * (edgeN + edgeE + diagonal1);
+  double area2 = sqrt(s2 * (s2-edgeN) * (s2-edgeE) * (s2-diagonal1));
+  double area = area1 + area2;
+  _lastLodTest = area * area <= texHeightSquared * texWidthSquared;
+  return _lastLodTest;
+}
+
+
+
+bool Tile::testLOD1(const G3MRenderContext* rc,
+                    double texWidthSquared,
+                    double texHeightSquared) {
+  const Camera* camera = rc->getCurrentCamera();
+  
   const double pixelsDistanceNS = camera->getEstimatedPixelDistance(*_middleNorthPoint, *_middleSouthPoint);
   const double pixelsDistanceWE = camera->getEstimatedPixelDistance(*_middleWestPoint,  *_middleEastPoint);
-
+  
   const double latitudeMiddleDistSquared  = pixelsDistanceNS * pixelsDistanceNS;
   const double longitudeMiddleDistSquared = pixelsDistanceWE * pixelsDistanceWE;
-
+  
   const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
   const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
-
+  
   const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
   const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
-
+  
   if (latLonRatio < 0.15) {
     _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
   }
@@ -446,9 +507,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   else {
     _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
   }
-
+  
   return _lastLodTest;
 }
+
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    TileTexturizer* texturizer,
@@ -1083,6 +1145,11 @@ void Tile::computeTileCorners(const Planet* planet) {
   delete _middleEastPoint;
   delete _middleNorthPoint;
   delete _middleSouthPoint;
+  
+  delete _NWCorner;
+  delete _NECorner;
+  delete _SWCorner;
+  delete _SECorner;
 
   const double mediumHeight = _tileTessellatorMeshData._averageHeight;
 
@@ -1096,6 +1163,16 @@ void Tile::computeTileCorners(const Planet* planet) {
   _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
   _middleEastPoint = new Vector3D(planet->toCartesian(gE));
   _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+  
+  const Geodetic3D gNW(_sector.getNorth(), _sector.getWest(), mediumHeight);
+  const Geodetic3D gNE(_sector.getNorth(), _sector.getEast(), mediumHeight);
+  const Geodetic3D gSW(_sector.getSouth(), _sector.getWest(), mediumHeight);
+  const Geodetic3D gSE(_sector.getSouth(), _sector.getEast(), mediumHeight);
+  
+  _NWCorner = new Vector3D(planet->toCartesian(gNW));
+  _NECorner = new Vector3D(planet->toCartesian(gNE));
+  _SWCorner = new Vector3D(planet->toCartesian(gSW));
+  _SECorner = new Vector3D(planet->toCartesian(gSE));
 }
 
 Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,

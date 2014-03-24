@@ -72,6 +72,12 @@ private:
   Vector3D* _middleSouthPoint;
   Vector3D* _middleEastPoint;
   Vector3D* _middleWestPoint;
+  
+  Vector3D* _NWCorner;
+  Vector3D* _NECorner;
+  Vector3D* _SWCorner;
+  Vector3D* _SECorner;
+  
   void computeTileCorners(const Planet* planet);
 
   double _latitudeArcSegmentRatioSquared;
@@ -173,6 +179,16 @@ private:
                                           const TilesRenderParameters* tilesRenderParameters);
 
   bool _rendered;
+  
+  bool testLOD1(const G3MRenderContext* rc,
+                double texWidthSquared,
+                double texHeightSquared);
+  bool testLOD2(const G3MRenderContext* rc,
+                double texWidthSquared,
+                double texHeightSquared);
+  bool testLOD3(const G3MRenderContext* rc,
+                double texWidthSquared,
+                double texHeightSquared);
 
 public:
   const Sector    _sector;

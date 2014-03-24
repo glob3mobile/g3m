@@ -404,6 +404,6 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   const Vector3D ray1 = _position.sub(point1);
   const double angleInRadians = ray1.angleInRadiansBetween(ray0);
   const FrustumData frustumData = getFrustumData();
-  const double X = frustumData._znear * IMathUtils::instance()->atan(angleInRadians/2);
+  const double X = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
   return X * _height / frustumData._top;
 }
