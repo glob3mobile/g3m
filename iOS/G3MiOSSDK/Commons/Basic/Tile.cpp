@@ -384,11 +384,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                double texHeightSquared,
                                double nowInMS) {
 
-//  if (_level == 4 && _column == 7 && _row == 10) {
-//    printf("break point!!");
-////    return true;
-//  }
-
   if ((_level >= layerTilesRenderParameters->_maxLevelForPoles) &&
       (_sector.touchesPoles())) {
     return true;
@@ -431,6 +426,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 #warning CHECK IT
     prepareTestLODData( rc->getPlanet() );
   }
+  
+/*    if (_level == 4 && _column == 7 && _row == 10) {
+      printf("break point!!");
+    }*/
 
   // testLOD1: tile area is computed using horizontal center line and vertical center line of the tile
   //return testLOD1(rc, texWidthSquared, texHeightSquared);
