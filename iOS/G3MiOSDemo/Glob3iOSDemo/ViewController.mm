@@ -139,6 +139,8 @@
 #import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
+#import <G3MiOSSDK/TileRenderingListener.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -279,6 +281,13 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithBuilderAndSegmentedWorld];
 
+  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                       Geodetic3D::fromDegrees(25.743467472995700263,
+                                                                               -5.3656762990500403987,
+                                                                               1664155.1381164737977),
+                                                       Angle::fromDegrees(-0.145718),
+                                                       Angle::fromDegrees(-52.117699));
+
   [[self G3MWidget] startAnimation];
 
   /*
@@ -361,6 +370,8 @@ public:
 //};
 
 
+
+
 - (void) initWithBuilderAndSegmentedWorld
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -427,6 +438,7 @@ public:
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
+
 
   builder.initializeWidget();
 }
@@ -588,17 +600,33 @@ public:
 
 };
 
+
+
+class SampleTileRenderingListener : public TileRenderingListener {
+public:
+  void startRendering(const Tile* tile) {
+    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+  }
+
+  void stopRendering(const Tile* tile) {
+    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+  }
+};
+
+
 - (void) initCustomizedWithBuilder
 {
-
-
   G3MBuilder_iOS builder([self G3MWidget]);
+
+
+  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
-  builder.getPlanetRendererBuilder()->setShowStatistics(false);
+//#warning Diego at work!
+//  builder.getPlanetRendererBuilder()->setShowStatistics(true);
 
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
@@ -637,7 +665,8 @@ public:
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
 
-  //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+//  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -2921,6 +2950,8 @@ public:
                                               new G3MeshBufferDownloadListener(context->getPlanet(),
                                                                                _meshRenderer),
                                               true);
+
+
       //      context->getDownloader()->requestBuffer(URL("file:///3d_1.json"),
       //                                              1000000,
       //                                              TimeInterval::zero(),

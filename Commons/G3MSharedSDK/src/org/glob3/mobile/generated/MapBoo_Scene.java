@@ -63,9 +63,20 @@ public class MapBoo_Scene
     return _sector;
   }
 
+  public final Layer getBaseLayer()
+  {
+    return _baseLayer;
+  }
+
+  public final Layer getOverlayLayer()
+  {
+    return _overlayLayer;
+  }
+
   public final boolean isQueryable()
   {
     return _queryable;
+
   }
 
   public final boolean hasWarnings()

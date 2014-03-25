@@ -260,6 +260,7 @@ public class PlanetRendererBuilder
     return _logTilesPetitions;
   }
 
+  private TileRenderingListener _tileRenderingListener;
 
   public PlanetRendererBuilder()
   {
@@ -281,6 +282,7 @@ public class PlanetRendererBuilder
      _renderedSector = null;
      _renderTileMeshes = true;
      _logTilesPetitions = false;
+     _tileRenderingListener = null;
   }
   public void dispose()
   {
@@ -306,10 +308,13 @@ public class PlanetRendererBuilder
   
     if (_renderedSector != null)
        _renderedSector.dispose();
+  
+    if (_tileRenderingListener != null)
+       _tileRenderingListener.dispose();
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -330,6 +335,8 @@ public class PlanetRendererBuilder
     if (_renderedSector != null)
        _renderedSector.dispose();
     _renderedSector = null;
+  
+    _tileRenderingListener = null;
   
     _tileRasterizers.clear();
   
@@ -463,6 +470,22 @@ public class PlanetRendererBuilder
   public final void setLogTilesPetitions(boolean logTilesPetitions)
   {
     _logTilesPetitions = logTilesPetitions;
+  }
+
+  public final void setTileRenderingListener(TileRenderingListener tileRenderingListener)
+  {
+    if (_tileRenderingListener != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: TileRenderingListener already set");
+      return;
+    }
+  
+    _tileRenderingListener = tileRenderingListener;
+  }
+
+  public final TileRenderingListener getTileRenderingListener()
+  {
+    return _tileRenderingListener;
   }
 
 }
