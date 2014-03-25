@@ -287,8 +287,8 @@ public class Tile
     return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates));
   }
 
-  private boolean _lastLodTest;
-  private double _lastLodTimeInMS;
+  private boolean _lastMeetsRenderCriteriaResult;
+  private double _lastMeetsRenderCriteriaTimeInMS;
 
   private boolean meetsRenderCriteria(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, TilesStatistics tilesStatistics, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, double nowInMS)
   {
@@ -316,9 +316,9 @@ public class Tile
       }
     }
   
-    if (_lastLodTimeInMS != 0 && (nowInMS - _lastLodTimeInMS) < 250) //500
+    if (_lastMeetsRenderCriteriaTimeInMS != 0 && (nowInMS - _lastMeetsRenderCriteriaTimeInMS) < 250) //500
     {
-      return _lastLodTest;
+      return _lastMeetsRenderCriteriaResult;
     }
   
     if (tilesRenderParameters._useTilesSplitBudget)
@@ -339,7 +339,7 @@ public class Tile
       }
     }
   
-    _lastLodTimeInMS = nowInMS; //Storing time of result
+    _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
   
   
   //  if ((_latitudeArcSegmentRatioSquared  == 0) ||
@@ -375,25 +375,27 @@ public class Tile
   //  const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
   //  const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
   
-    final IMathUtils mu = IMathUtils.instance();
-  
-    final double latitudeMiddleArcDistSquared = mu.max(distanceInPixelsSquaredArcNorth, distanceInPixelsSquaredArcSouth);
-    final double longitudeMiddleArcDistSquared = mu.max(distanceInPixelsSquaredArcWest, distanceInPixelsSquaredArcEast);
-  
-  //  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-  //  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+  //  const IMathUtils* mu = IMathUtils::instance();
   //
-  //  if (latLonRatio < 0.15) {
-  //    _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
-  //  }
-  //  else if (lonLatRatio < 0.15) {
-  //    _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
-  //  }
-  //  else {
-      _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
-  //  }
+  //  const double latitudeMiddleArcDistSquared  = mu->max(distanceInPixelsSquaredArcNorth, distanceInPixelsSquaredArcSouth);
+  //  const double longitudeMiddleArcDistSquared = mu->max(distanceInPixelsSquaredArcWest,  distanceInPixelsSquaredArcEast);
+  //
+  ////  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+  ////  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+  ////
+  ////  if (latLonRatio < 0.15) {
+  ////    _lastMeetsRenderCriteriaResult = longitudeMiddleArcDistSquared <= texWidthSquared;
+  ////  }
+  ////  else if (lonLatRatio < 0.15) {
+  ////    _lastMeetsRenderCriteriaResult = latitudeMiddleArcDistSquared <= texHeightSquared;
+  ////  }
+  ////  else {
+  //    _lastMeetsRenderCriteriaResult = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+  ////  }
   
-    return _lastLodTest;
+    _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) && (distanceInPixelsSquaredArcSouth <= texHeightSquared) && (distanceInPixelsSquaredArcWest <= texWidthSquared) && (distanceInPixelsSquaredArcEast <= texWidthSquared));
+  
+    return _lastMeetsRenderCriteriaResult;
   }
 
   private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority, boolean logTilesPetitions)
@@ -659,7 +661,7 @@ public class Tile
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
      _boundingVolume = null;
-     _lastLodTimeInMS = 0;
+     _lastMeetsRenderCriteriaTimeInMS = 0;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
      _northWestPoint = null;
