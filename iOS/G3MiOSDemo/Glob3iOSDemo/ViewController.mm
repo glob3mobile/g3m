@@ -1909,7 +1909,6 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  //const Quality quality = QUALITY_MEDIUM;
   const Quality quality = QUALITY_LOW;
 
   return new TilesRenderParameters(renderDebug,
