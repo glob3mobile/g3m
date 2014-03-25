@@ -380,21 +380,18 @@ public class Tile
     final double latitudeMiddleArcDistSquared = mu.max(distanceInPixelsSquaredArcNorth, distanceInPixelsSquaredArcSouth);
     final double longitudeMiddleArcDistSquared = mu.max(distanceInPixelsSquaredArcWest, distanceInPixelsSquaredArcEast);
   
-    final double latLonRatio = latitudeMiddleArcDistSquared / longitudeMiddleArcDistSquared;
-    final double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
-  
-    if (latLonRatio < 0.15)
-    {
-      _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
-    }
-    else if (lonLatRatio < 0.15)
-    {
-      _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
-    }
-    else
-    {
+  //  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+  //  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+  //
+  //  if (latLonRatio < 0.15) {
+  //    _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
+  //  }
+  //  else if (lonLatRatio < 0.15) {
+  //    _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
+  //  }
+  //  else {
       _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
-    }
+  //  }
   
     return _lastLodTest;
   }
