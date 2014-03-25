@@ -601,17 +601,16 @@ public:
 };
 
 
-
-class SampleTileRenderingListener : public TileRenderingListener {
-public:
-  void startRendering(const Tile* tile) {
-    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-  }
-
-  void stopRendering(const Tile* tile) {
-    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-  }
-};
+//class SampleTileRenderingListener : public TileRenderingListener {
+//public:
+//  void startRendering(const Tile* tile) {
+//    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+//  }
+//
+//  void stopRendering(const Tile* tile) {
+//    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+//  }
+//};
 
 
 - (void) initCustomizedWithBuilder
@@ -619,7 +618,7 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
 
 
-  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
+  //builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
@@ -1485,12 +1484,12 @@ public:
                                          "tm_world_borders_simpl_0_3",
                                          TimeInterval::fromDays(30)) );
   }
-  const bool useMapQuestOpenAerial = true;
+  const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapBox = false;
+  const bool useMapBox = true;
   if (useMapBox) {
     //const std::string mapKey = "dgd.map-v93trj8v";
     //const std::string mapKey = "examples.map-cnkhv76j";
