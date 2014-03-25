@@ -62,7 +62,7 @@ _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _boundingVolume(NULL),
-_lastLodTimeInMS(0),
+_lastMeetsRenderCriteriaTimeInMS(0),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
 //_middleNorthPoint(NULL),
@@ -407,9 +407,9 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
   }
 
-  if (_lastLodTimeInMS != 0 &&
-      (nowInMS - _lastLodTimeInMS) < 250 /*500*/ ) {
-    return _lastLodTest;
+  if (_lastMeetsRenderCriteriaTimeInMS != 0 &&
+      (nowInMS - _lastMeetsRenderCriteriaTimeInMS) < 250 /*500*/ ) {
+    return _lastMeetsRenderCriteriaResult;
   }
 
   if (tilesRenderParameters->_useTilesSplitBudget) {
@@ -426,7 +426,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
   }
 
-  _lastLodTimeInMS = nowInMS; //Storing time of result
+  _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
 
 
 //  if ((_latitudeArcSegmentRatioSquared  == 0) ||
@@ -463,25 +463,30 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 //  const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
 //  const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
 
-  const IMathUtils* mu = IMathUtils::instance();
-
-  const double latitudeMiddleArcDistSquared  = mu->max(distanceInPixelsSquaredArcNorth, distanceInPixelsSquaredArcSouth);
-  const double longitudeMiddleArcDistSquared = mu->max(distanceInPixelsSquaredArcWest,  distanceInPixelsSquaredArcEast);
-
-//  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-//  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+//  const IMathUtils* mu = IMathUtils::instance();
 //
-//  if (latLonRatio < 0.15) {
-//    _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
-//  }
-//  else if (lonLatRatio < 0.15) {
-//    _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
-//  }
-//  else {
-    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
-//  }
+//  const double latitudeMiddleArcDistSquared  = mu->max(distanceInPixelsSquaredArcNorth, distanceInPixelsSquaredArcSouth);
+//  const double longitudeMiddleArcDistSquared = mu->max(distanceInPixelsSquaredArcWest,  distanceInPixelsSquaredArcEast);
+//
+////  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+////  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+////
+////  if (latLonRatio < 0.15) {
+////    _lastMeetsRenderCriteriaResult = longitudeMiddleArcDistSquared <= texWidthSquared;
+////  }
+////  else if (lonLatRatio < 0.15) {
+////    _lastMeetsRenderCriteriaResult = latitudeMiddleArcDistSquared <= texHeightSquared;
+////  }
+////  else {
+//    _lastMeetsRenderCriteriaResult = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+////  }
 
-  return _lastLodTest;
+  _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) &&
+                                    (distanceInPixelsSquaredArcSouth <= texHeightSquared) &&
+                                    (distanceInPixelsSquaredArcWest  <= texWidthSquared ) &&
+                                    (distanceInPixelsSquaredArcEast  <= texWidthSquared ));
+  
+  return _lastMeetsRenderCriteriaResult;
 }
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,

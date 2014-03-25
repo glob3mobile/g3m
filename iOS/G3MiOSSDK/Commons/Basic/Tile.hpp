@@ -114,8 +114,8 @@ private:
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const TilesRenderParameters* tilesRenderParameters);
 
-  bool _lastLodTest;
-  double _lastLodTimeInMS;
+  bool _lastMeetsRenderCriteriaResult;
+  double _lastMeetsRenderCriteriaTimeInMS;
 
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const LayerTilesRenderParameters* layerTilesRenderParameters,

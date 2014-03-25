@@ -665,8 +665,13 @@ public:
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
 
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
-//  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
+                                                                                Color::yellow(),
+                                                                                true,  // showIDLabel
+                                                                                false, // showSectorLabels,
+                                                                                true   // showTileBounds
+                                                                                ));
+  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
 
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
