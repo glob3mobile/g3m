@@ -228,8 +228,6 @@ public:
     _forceBusyRenderer = forceBusyRenderer;
   }
   
-  void setShownSector(Sector sector);
-  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;

@@ -42,13 +42,13 @@ public:
   {
     switch (quality) {
       case QUALITY_LOW:
-        _texturePixelsPerInch = 128;
+        _texturePixelsPerInch = 128 / 2;
         break;
       case QUALITY_MEDIUM:
-        _texturePixelsPerInch = 256;
+        _texturePixelsPerInch = 256 / 2;
         break;
       default: //HIGH
-        _texturePixelsPerInch = 512;
+        _texturePixelsPerInch = 512 / 2;
         break;
     }
   }

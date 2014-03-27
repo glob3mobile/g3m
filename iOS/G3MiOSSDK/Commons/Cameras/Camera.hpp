@@ -251,8 +251,6 @@ public:
     setGeodeticPosition(Geodetic3D(g2d, height));
   }
   
-  void setGeodeticPositionStablePitch(const Geodetic3D& g3d);
-
   /**
    This method put the camera pointing to given center, at the given distance, using the given angles.
 

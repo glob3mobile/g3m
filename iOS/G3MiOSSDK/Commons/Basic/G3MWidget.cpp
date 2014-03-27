@@ -811,8 +811,3 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
   return changed;
 }
 
-void G3MWidget::setShownSector(Sector sector) {
-  //TODO: ERROR
-  int __todo;
-}
-
