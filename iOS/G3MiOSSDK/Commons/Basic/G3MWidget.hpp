@@ -227,7 +227,9 @@ public:
   void setForceBusyRenderer(bool forceBusyRenderer) {
     _forceBusyRenderer = forceBusyRenderer;
   }
-
+  
+  void setShownSector(Sector sector);
+  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;

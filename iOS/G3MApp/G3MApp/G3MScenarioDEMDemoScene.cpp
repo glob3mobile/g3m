@@ -28,7 +28,6 @@ void G3MScenarioDEMDemoScene::rawActivate(const G3MContext* context) {
   const Sector demSector = Sector::fromDegrees(40.1665739916489, -5.85449532145337,
                                                40.3320215899527, -5.5116079822178570);
 
-
   g3mWidget->setShownSector(demSector.shrinkedByPercent(0.2f));
 
   const double deltaHeight = -700.905;
