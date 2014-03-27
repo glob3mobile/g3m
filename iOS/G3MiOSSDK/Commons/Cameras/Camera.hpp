@@ -238,6 +238,8 @@ public:
 
   void setGeodeticPosition(const Geodetic3D& g3d);
 
+  void setGeodeticPositionStablePitch(const Geodetic3D& g3d);
+
   void setGeodeticPosition(const Angle &latitude,
                            const Angle &longitude,
                            const double height) {
