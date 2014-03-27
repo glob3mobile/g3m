@@ -224,7 +224,7 @@ public:
 
   PlanetRenderer* getPlanetRenderer();
 
-  void setShownSector(const Sector& sector);
+  bool setRenderedSector(const Sector& sector);
 
   G3MRenderContext* getRenderContext() const{
     return _renderContext;

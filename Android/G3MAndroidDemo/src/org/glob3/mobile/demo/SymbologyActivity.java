@@ -65,7 +65,7 @@ public class SymbologyActivity
       final LayerSet layerSet = new LayerSet();
 
 
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 5);
+      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 13);
       layerSet.addLayer(mboxTerrainLayer);
 
 

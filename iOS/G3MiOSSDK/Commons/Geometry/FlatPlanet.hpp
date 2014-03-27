@@ -36,6 +36,9 @@ private:
   mutable MutableVector3D _centerPoint;
 //  mutable double          _angleBetweenInitialRays;
 
+  mutable bool            _firstDoubleDragMovement;
+  mutable double          _correctionT2;
+  mutable MutableVector3D _correctedCenterPoint;
 
   
 public:

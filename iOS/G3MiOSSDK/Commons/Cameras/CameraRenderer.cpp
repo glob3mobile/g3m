@@ -11,6 +11,7 @@
 #include "CameraEventHandler.hpp"
 #include "TouchEvent.hpp"
 
+
 CameraRenderer::~CameraRenderer() {
   delete _cameraContext;
   const int handlersSize = _handlers.size();
@@ -75,3 +76,11 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
   // if no handler processed the event, return not-handled
   return false;
 }
+
+
+void CameraRenderer::setDebugMeshRenderer(MeshRenderer* meshRenderer) {
+  _meshRenderer = meshRenderer;
+  for (int n=0; n<_handlers.size(); n++)
+    _handlers[n]->setDebugMeshRenderer(meshRenderer);
+}
+

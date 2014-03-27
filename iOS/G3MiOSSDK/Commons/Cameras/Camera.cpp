@@ -158,6 +158,11 @@ const Vector3D Camera::pixel2Ray(const Vector3D& pixel3D) const {
   return obj.sub(_position.asVector3D());
 }
 
+void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
+  MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
+  if (dragMatrix.isValid()) applyTransform(dragMatrix);
+}
+
 const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const double px = pixel._x + 0.5;
   const double py = _height - pixel._y - 0.5;
@@ -432,11 +437,10 @@ void Camera::setHeadingPitchRoll(const Angle& heading,
 
 double Camera::getEstimatedPixelDistance(const Vector3D& point0,
                                          const Vector3D& point1) const {
-  //const Vector3D cameraPosition = getCartesianPosition();
   const Vector3D ray0 = _position.sub(point0);
   const Vector3D ray1 = _position.sub(point1);
   const double angleInRadians = ray1.angleInRadiansBetween(ray0);
   const FrustumData frustumData = getFrustumData();
-  const double X = frustumData._znear * IMathUtils::instance()->atan(angleInRadians/2);
-  return X * _height / frustumData._top;
+  const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
+  return distanceInMeters * _height / frustumData._top;
 }

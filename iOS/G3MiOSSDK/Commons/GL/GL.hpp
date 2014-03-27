@@ -58,6 +58,8 @@ private:
 
   GLGlobalState *_clearScreenState; //State used to clear screen with certain color
 
+  static bool isPowerOfTwo(int x);
+
 
 public:
   

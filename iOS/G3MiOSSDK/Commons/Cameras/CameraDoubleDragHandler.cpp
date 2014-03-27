@@ -11,6 +11,10 @@
 #include "TouchEvent.hpp"
 #include "G3MWidget.hpp"
 
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "MeshRenderer.hpp"
+#include "DirectMesh.hpp"
+
 
 
 bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
@@ -56,6 +60,29 @@ void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
                                              widget->getScenePositionForCentralPixel(),
                                              touchedPosition0,
                                              touchedPosition1);
+  
+  // draw scene points int render debug mode
+  if (_meshRenderer != NULL) {
+    FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+    vertices->add(0.0f, 0.0f, 0.0f);
+    Mesh* mesh0 = new DirectMesh(GLPrimitive::points(),
+                                true,
+                                touchedPosition0,
+                                vertices->create(),
+                                1,
+                                80,
+                                Color::newFromRGBA(1, 0, 0, 1));
+    Mesh* mesh1 = new DirectMesh(GLPrimitive::points(),
+                                true,
+                                touchedPosition1,
+                                vertices->create(),
+                                1,
+                                80,
+                                Color::newFromRGBA(1, 0, 0, 1));
+    delete vertices;
+    _meshRenderer->addMesh(mesh0);
+    _meshRenderer->addMesh(mesh1);
+  }
 }
 
 
@@ -85,6 +112,12 @@ void CameraDoubleDragHandler::onUp(const G3MEventContext *eventContext,
                                    CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
+  
+  // remove scene points int render debug mode
+  if (_meshRenderer != NULL) {
+    _meshRenderer->clearMeshes();
+  }
+
 }
 
 

@@ -195,6 +195,17 @@ public:
   }
 #endif
 
+  MapBoo_MultiImage* deepCopy() const {
+    const Color averageColor = Color::fromRGBA(_averageColor._red, _averageColor._green, _averageColor._blue, _averageColor._alpha);
+    std::vector<MapBoo_MultiImage_Level*> levels;
+    const int levelsSize = _levels.size();
+    for (int i = 0; i < levelsSize; i++) {
+      const MapBoo_MultiImage_Level* level = _levels.at(i);
+      levels.push_back(new MapBoo_MultiImage_Level(level->getUrl(), level->getWidth(), level->getHeight()));
+    }
+    
+    return new MapBoo_MultiImage(averageColor, levels);
+  }
 };
 
 
@@ -266,10 +277,10 @@ public:
   MapBoo_Scene(const std::string&           id,
                const std::string&           name,
                const std::string&           description,
-               MapBoo_MultiImage*           screenshot,
+               const MapBoo_MultiImage*     screenshot,
                const Color&                 backgroundColor,
                const MapBoo_CameraPosition* cameraPosition,
-               Sector*                      sector,
+               const Sector*                sector,
                Layer*                       baseLayer,
                Layer*                       overlayLayer,
                const bool                   queryable,
@@ -316,8 +327,17 @@ public:
     return _sector;
   }
   
+  Layer* getBaseLayer() const {
+    return _baseLayer;
+  }
+  
+  Layer* getOverlayLayer() const {
+    return _overlayLayer;
+  }
+
   bool isQueryable() const {
     return _queryable;
+
   }
 
   bool hasWarnings() const {
@@ -409,6 +429,8 @@ private:
   std::vector<MapBoo_Scene*> _applicationScenes;
   std::string                _applicationCurrentSceneId;
   std::string                _lastApplicationCurrentSceneId;
+  
+  int                        _applicationEventId;
 
   GL* _gl;
   G3MWidget* _g3mWidget;
@@ -487,7 +509,7 @@ private:
 
   void changedCurrentScene();
   
-  void updateVisibleScene();
+  void updateVisibleScene(const bool cameraPositionChanged);
 
   const std::string getApplicationCurrentSceneCommand() const;
 
@@ -522,6 +544,9 @@ private:
   bool _initialParse;
   
   void fireOnScenesChanged();
+  
+  void setCameraPosition(const MapBoo_CameraPosition* cameraPosition, const bool animated);
+  void setCameraPosition(const MapBoo_CameraPosition* cameraPosition);
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -557,6 +582,12 @@ protected:
 
 public:
   /** Private to MapbooBuilder, don't call it */
+  int getApplicationEventId() const;
+  
+  /** Private to MapbooBuilder, don't call it */
+  void setApplicationEventId(const int eventId);
+  
+  /** Private to MapbooBuilder, don't call it */
   int getApplicationTimestamp() const;
 
   /** Private to MapbooBuilder, don't call it */
@@ -579,9 +610,6 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void deleteApplicationScene(const std::string& sceneId);
-
-  /** Private to MapbooBuilder, don't call it */
-  void setApplicationScene(MapBoo_Scene* scene);
   
   /** Private to MapbooBuilder, don't call it */
   void setApplicationScenes(const std::vector<MapBoo_Scene*>& applicationScenes);
@@ -591,11 +619,22 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   const URL createApplicationTubeURL() const;
-
+  
   /** Private to MapbooBuilder, don't call it */
   void parseApplicationJSON(const std::string& json,
                             const URL& url);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void parseApplicationJSON(const JSONObject* jsonBaseObjectLayer,
+                            const URL& url);
+  
+  /** Private to MapbooBuilder, don't call it */
+  void parseApplicationEventsJSON(const std::string& json,
+                            const URL& url);
 
+  /** Private to MapbooBuilder, don't call it */
+  void parseSceneEventAndUpdateScene(const JSONObject* jsonObject);
+                                     
   /** Private to MapbooBuilder, don't call it */
   void openApplicationTube(const G3MContext* context);
 
@@ -663,6 +702,8 @@ public:
                                         const Vector2I& pixel,
                                         const Geodetic3D& position);
 
+  /** Private to MapbooBuilder, don't call it */
+  void pollApplicationDataFromServer(const G3MContext* context);
 };
 
 #endif
