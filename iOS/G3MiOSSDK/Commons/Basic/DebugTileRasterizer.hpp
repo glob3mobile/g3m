@@ -27,10 +27,11 @@ private:
 #endif
   const Color _color;
 
-  const bool _showLabels;
+  const bool _showIDLabel;
+  const bool _showSectorLabels;
   const bool _showTileBounds;
 
-  std::string getTileKeyLabel(const Tile* tile) const;
+  std::string getIDLabel(const Tile* tile) const;
 
   std::string getSectorLabel1(const Sector& sector) const;
   std::string getSectorLabel2(const Sector& sector) const;
@@ -42,7 +43,8 @@ public:
 
   DebugTileRasterizer(const GFont& font,
                       const Color& color,
-                      bool showLabels,
+                      bool showIDLabel,
+                      bool showSectorLabels,
                       bool showTileBounds);
 
   ~DebugTileRasterizer();

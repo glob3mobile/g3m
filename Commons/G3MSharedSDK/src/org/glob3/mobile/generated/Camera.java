@@ -375,6 +375,13 @@ public class Camera
     setPitch(pitch);
   }
 
+  public final void setGeodeticPositionStablePitch(Geodetic3D g3d)
+  {
+    MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
+    if (dragMatrix.isValid())
+       applyTransform(dragMatrix);
+  }
+
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
   {
     setGeodeticPosition(new Geodetic3D(latitude, longitude, height));
@@ -526,13 +533,12 @@ public class Camera
 
   public final double getEstimatedPixelDistance(Vector3D point0, Vector3D point1)
   {
-    //const Vector3D cameraPosition = getCartesianPosition();
     final Vector3D ray0 = _position.sub(point0);
     final Vector3D ray1 = _position.sub(point1);
     final double angleInRadians = ray1.angleInRadiansBetween(ray0);
     final FrustumData frustumData = getFrustumData();
-    final double X = frustumData._znear * IMathUtils.instance().atan(angleInRadians/2);
-    return X * _height / frustumData._top;
+    final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
+    return distanceInMeters * _height / frustumData._top;
   }
 
   //  const Angle getHeading(const Vector3D& normal) const;

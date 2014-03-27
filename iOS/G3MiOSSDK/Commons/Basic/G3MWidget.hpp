@@ -228,7 +228,7 @@ public:
   void setForceBusyRenderer(bool forceBusyRenderer) {
     _forceBusyRenderer = forceBusyRenderer;
   }
-
+  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;

@@ -62,15 +62,23 @@ _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
 _boundingVolume(NULL),
-_lastLodTimeInMS(0),
+_lastMeetsRenderCriteriaTimeInMS(0),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
-_middleNorthPoint(NULL),
-_middleSouthPoint(NULL),
-_middleEastPoint(NULL),
-_middleWestPoint(NULL),
-_latitudeArcSegmentRatioSquared(0),
-_longitudeArcSegmentRatioSquared(0),
+//_middleNorthPoint(NULL),
+//_middleSouthPoint(NULL),
+//_middleEastPoint(NULL),
+//_middleWestPoint(NULL),
+_northWestPoint(NULL),
+_northEastPoint(NULL),
+_southWestPoint(NULL),
+_southEastPoint(NULL),
+//_latitudeArcSegmentRatioSquared(0),
+//_longitudeArcSegmentRatioSquared(0),
+_northArcSegmentRatioSquared(0),
+_southArcSegmentRatioSquared(0),
+_eastArcSegmentRatioSquared(0),
+_westArcSegmentRatioSquared(0),
 _rendered(false)
 {
   //  int __remove_tile_print;
@@ -115,10 +123,14 @@ Tile::~Tile() {
 
   delete _tessellatorData;
 
-  delete _middleEastPoint;
-  delete _middleNorthPoint;
-  delete _middleSouthPoint;
-  delete _middleWestPoint;
+//  delete _middleEastPoint;
+//  delete _middleNorthPoint;
+//  delete _middleSouthPoint;
+//  delete _middleWestPoint;
+  delete _northWestPoint;
+  delete _northEastPoint;
+  delete _southWestPoint;
+  delete _southEastPoint;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
@@ -395,9 +407,9 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
   }
 
-  if (_lastLodTimeInMS != 0 &&
-      (nowInMS - _lastLodTimeInMS) < 100 /*500*/ ) {
-    return _lastLodTest;
+  if (_lastMeetsRenderCriteriaTimeInMS != 0 &&
+      (nowInMS - _lastMeetsRenderCriteriaTimeInMS) < 250 /*500*/ ) {
+    return _lastMeetsRenderCriteriaResult;
   }
 
   if (tilesRenderParameters->_useTilesSplitBudget) {
@@ -414,40 +426,67 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     }
   }
 
-  _lastLodTimeInMS = nowInMS; //Storing time of result
+  _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
 
 
-  if ((_latitudeArcSegmentRatioSquared  == 0) ||
-      (_longitudeArcSegmentRatioSquared == 0)) {
+//  if ((_latitudeArcSegmentRatioSquared  == 0) ||
+//      (_longitudeArcSegmentRatioSquared == 0)) {
+//#warning CHECK IT
+//    prepareTestLODData( rc->getPlanet() );
+//  }
+  if ((_northArcSegmentRatioSquared == 0) ||
+      (_southArcSegmentRatioSquared == 0) ||
+      (_eastArcSegmentRatioSquared  == 0) ||
+      (_westArcSegmentRatioSquared  == 0)) {
 #warning CHECK IT
     prepareTestLODData( rc->getPlanet() );
   }
 
   const Camera* camera = rc->getCurrentCamera();
 
-  const double pixelsDistanceNS = camera->getEstimatedPixelDistance(*_middleNorthPoint, *_middleSouthPoint);
-  const double pixelsDistanceWE = camera->getEstimatedPixelDistance(*_middleWestPoint,  *_middleEastPoint);
+//  const double pixelsDistanceNS = camera->getEstimatedPixelDistance(*_middleNorthPoint, *_middleSouthPoint);
+//  const double pixelsDistanceWE = camera->getEstimatedPixelDistance(*_middleWestPoint,  *_middleEastPoint);
 
-  const double latitudeMiddleDistSquared  = pixelsDistanceNS * pixelsDistanceNS;
-  const double longitudeMiddleDistSquared = pixelsDistanceWE * pixelsDistanceWE;
+  const double distanceInPixelsNorth = camera->getEstimatedPixelDistance(*_northWestPoint, *_northEastPoint);
+  const double distanceInPixelsSouth = camera->getEstimatedPixelDistance(*_southWestPoint, *_southEastPoint);
+  const double distanceInPixelsWest  = camera->getEstimatedPixelDistance(*_northWestPoint, *_southWestPoint);
+  const double distanceInPixelsEast  = camera->getEstimatedPixelDistance(*_northEastPoint, *_southEastPoint);
 
-  const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
-  const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
+  const double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
+  const double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
+  const double distanceInPixelsSquaredArcWest  = (distanceInPixelsWest  * distanceInPixelsWest)  * _westArcSegmentRatioSquared;
+  const double distanceInPixelsSquaredArcEast  = (distanceInPixelsEast  * distanceInPixelsEast)  * _eastArcSegmentRatioSquared;
 
-  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+//  const double latitudeMiddleDistSquared  = pixelsDistanceNS * pixelsDistanceNS;
+//  const double longitudeMiddleDistSquared = pixelsDistanceWE * pixelsDistanceWE;
+//
+//  const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
+//  const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
 
-  if (latLonRatio < 0.15) {
-    _lastLodTest = longitudeMiddleArcDistSquared <= texWidthSquared;
-  }
-  else if (lonLatRatio < 0.15) {
-    _lastLodTest = latitudeMiddleArcDistSquared <= texHeightSquared;
-  }
-  else {
-    _lastLodTest = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
-  }
+//  const IMathUtils* mu = IMathUtils::instance();
+//
+//  const double latitudeMiddleArcDistSquared  = mu->max(distanceInPixelsSquaredArcNorth, distanceInPixelsSquaredArcSouth);
+//  const double longitudeMiddleArcDistSquared = mu->max(distanceInPixelsSquaredArcWest,  distanceInPixelsSquaredArcEast);
+//
+////  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
+////  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
+////
+////  if (latLonRatio < 0.15) {
+////    _lastMeetsRenderCriteriaResult = longitudeMiddleArcDistSquared <= texWidthSquared;
+////  }
+////  else if (lonLatRatio < 0.15) {
+////    _lastMeetsRenderCriteriaResult = latitudeMiddleArcDistSquared <= texHeightSquared;
+////  }
+////  else {
+//    _lastMeetsRenderCriteriaResult = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
+////  }
 
-  return _lastLodTest;
+  _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) &&
+                                    (distanceInPixelsSquaredArcSouth <= texHeightSquared) &&
+                                    (distanceInPixelsSquaredArcWest  <= texWidthSquared ) &&
+                                    (distanceInPixelsSquaredArcEast  <= texWidthSquared ));
+  
+  return _lastMeetsRenderCriteriaResult;
 }
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,
@@ -1044,32 +1083,58 @@ void Tile::setTessellatorData(PlanetTileTessellatorData* tessellatorData) {
 
 void Tile::prepareTestLODData(const Planet* planet) {
 
-  if (_middleNorthPoint == NULL) {
+//  if (_middleNorthPoint == NULL) {
+//    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
+//    return;
+//  }
+//
+//  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
+//  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
+//  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
+//  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
+//
+//  const Angle latitudeAngle = nN.angleBetween(nS);
+//  double latRad = latitudeAngle._radians;
+//  const double sin_lat_2 = SIN(latRad / 2);
+//  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
+//
+//  const Angle longitudeAngle = nE.angleBetween(nW);
+//  const double lonRad = longitudeAngle._radians;
+//  const double sin_lon_2 = SIN(lonRad / 2);
+//  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
+//
+//  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
+//  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
+
+  if ((_northWestPoint == NULL) ||
+      (_northEastPoint == NULL) ||
+      (_southWestPoint == NULL) ||
+      (_southEastPoint == NULL)) {
     ILogger::instance()->logError("Error in Tile::prepareTestLODData");
     return;
   }
 
-  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
-  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
-  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
-  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
+  const Vector3D normalNW = planet->centricSurfaceNormal(*_northWestPoint);
+  const Vector3D normalNE = planet->centricSurfaceNormal(*_northEastPoint);
+  const Vector3D normalSW = planet->centricSurfaceNormal(*_southWestPoint);
+  const Vector3D normalSE = planet->centricSurfaceNormal(*_southEastPoint);
 
+  _northArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalNE);
+  _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
+  _eastArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNE, normalSE);
+  _westArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNW, normalSW);
+}
+
+double Tile::getSquaredArcSegmentRatio(const Vector3D& a,
+                                       const Vector3D& b) {
   /*
    Arco = ang * Cuerda / (2 * sen(ang/2))
    */
 
-  Angle latitudeAngle = nN.angleBetween(nS);
-  double latRad = latitudeAngle._radians;
-  const double sin_lat_2 = SIN(latRad / 2);
-  const double latitudeArcSegmentRatio = sin_lat_2 == 0? 1 : latRad / (2 * sin_lat_2);
-
-  Angle longitudeAngle = nE.angleBetween(nW);
-  const double lonRad = longitudeAngle._radians;
-  const double sin_lon_2 = SIN(lonRad / 2);
-  const double longitudeArcSegmentRatio = sin_lon_2 == 0? 1 : lonRad / (2 * sin_lon_2);
-
-  _latitudeArcSegmentRatioSquared = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
-  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
+  const double angleInRadians = a.angleInRadiansBetween(b);
+  const double halfAngleSin = SIN(angleInRadians / 2);
+  const double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
+  return (arcSegmentRatio * arcSegmentRatio);
 }
 
 void Tile::computeTileCorners(const Planet* planet) {
@@ -1079,23 +1144,33 @@ void Tile::computeTileCorners(const Planet* planet) {
     return;
   }
 
-  delete _middleWestPoint;
-  delete _middleEastPoint;
-  delete _middleNorthPoint;
-  delete _middleSouthPoint;
+//  delete _middleWestPoint;
+//  delete _middleEastPoint;
+//  delete _middleNorthPoint;
+//  delete _middleSouthPoint;
+  delete _northWestPoint;
+  delete _northEastPoint;
+  delete _southWestPoint;
+  delete _southEastPoint;
+
 
   const double mediumHeight = _tileTessellatorMeshData._averageHeight;
 
-  const Geodetic2D center = _sector.getCenter();
-  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
-  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
-  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
-  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
+//  const Geodetic2D center = _sector.getCenter();
+//  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
+//  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
+//  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
+//  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
+//
+//  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
+//  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
+//  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
+//  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
 
-  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
-  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
-  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
-  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+  _northWestPoint = new Vector3D( planet->toCartesian( _sector.getNW(), mediumHeight ) );
+  _northEastPoint = new Vector3D( planet->toCartesian( _sector.getNE(), mediumHeight ) );
+  _southWestPoint = new Vector3D( planet->toCartesian( _sector.getSW(), mediumHeight ) );
+  _southEastPoint = new Vector3D( planet->toCartesian( _sector.getSE(), mediumHeight ) );
 }
 
 Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,

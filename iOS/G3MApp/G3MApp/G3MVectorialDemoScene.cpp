@@ -178,5 +178,5 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
   const Sector demSector = Sector::fromDegrees(43.69200778158779, 7.36351850323685,
                                                43.7885865186124,  7.48617349925817);
   
-  g3mWidget->setShownSector(demSector.shrinkedByPercent(0.1f));
+  g3mWidget->setRenderedSector(demSector.shrinkedByPercent(0.1f));
 }
