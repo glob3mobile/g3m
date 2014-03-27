@@ -428,12 +428,11 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     return emptyList;
   }
 
-<<<<<<< HEAD
   public boolean isRaster()
   {
     return false;
   }
-=======
+
   public final void zRender(G3MRenderContext rc, GLState parentGLState, boolean renderNotReadyShapes)
   {
     if (renderNotReadyShapes || isReadyToRender(rc))
@@ -460,6 +459,5 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public abstract void zRawRender(G3MRenderContext rc, GLState parentGLState);
 
->>>>>>> senderos-gc
 
 }

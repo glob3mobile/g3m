@@ -41,20 +41,19 @@ public class Plane
      _dF = (float) d;
   }
 
-<<<<<<< HEAD
   public static Plane fromPointAndNormal(Vector3D point0, Vector3D normal)
   {
     final Vector3D myNormal = normal.normalized();
     final double d = -myNormal.dot(point0);
     return new Plane(myNormal, d);
-=======
+  }
+
   public Plane(Vector3D normal, Vector3D point)
   {
      _normal = new Vector3D(normal.normalized());
      _d = - normal._x * point._x - normal._y * point._y - normal._z * point._z;
      _normalF = new Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized();
      _dF = (float) _d;
->>>>>>> origin/purgatory
   }
 
   public Plane(double a, double b, double c, double d)

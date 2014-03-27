@@ -165,7 +165,6 @@ public class SGNode
     return "SGNode";
   }
 
-<<<<<<< HEAD
   public Box getCopyBoundingBox()
   {
     Box boundingBox = null;
@@ -188,7 +187,8 @@ public class SGNode
       }
     }
     return boundingBox;
-=======
+  }
+
   public void zRawRender(G3MRenderContext rc, GLState parentState)
   {
   }
@@ -224,6 +224,5 @@ public class SGNode
     GLState state = new GLState();
     state.setParent(parentState);
     return state;
->>>>>>> senderos-gc
   }
 }

@@ -111,19 +111,10 @@ public class SGShape extends Shape
     return _boundingVolume.intersectionsDistances(origin, direction);
   }
 
-
-  public final boolean isVisible(G3MRenderContext rc)
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
-    return getBoundingVolume(rc).touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
-  }
-
-  public final void setSelectedDrawMode(boolean mode)
-  {
-  }
-
-  public final GEORasterSymbol createRasterSymbolIfNeeded()
-  {
-    return null;
+    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
+    return intersections;
   }
 
   public final void zRawRender(G3MRenderContext rc, GLState parentState)
@@ -143,6 +134,21 @@ public class SGShape extends Shape
     _node.zRender(rc, glState);
   
     glState._release();
+  }
+
+
+  public final boolean isVisible(G3MRenderContext rc)
+  {
+    return getBoundingVolume(rc).touchesFrustum(rc.getCurrentCamera().getFrustumInModelCoordinates());
+  }
+
+  public final void setSelectedDrawMode(boolean mode)
+  {
+  }
+
+  public final GEORasterSymbol createRasterSymbolIfNeeded()
+  {
+    return null;
   }
 
 

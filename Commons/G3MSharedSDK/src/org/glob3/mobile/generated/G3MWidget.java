@@ -885,11 +885,8 @@ public class G3MWidget
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
-<<<<<<< HEAD
      _shapesEditorRenderer = null;
-=======
      _zRenderCounter = -1;
->>>>>>> senderos-gc
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

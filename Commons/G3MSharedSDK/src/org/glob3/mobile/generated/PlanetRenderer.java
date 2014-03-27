@@ -320,13 +320,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-<<<<<<< HEAD
   G3MRenderContext _renderContext;
   //  std::list<Tile*> _tilesRenderedInLastFrame;
-=======
-<<<<<<< HEAD
-//  std::list<Tile*> _tilesRenderedInLastFrame;
->>>>>>> origin/zrender-touchhandlers
 
   private long _renderedTilesListFrame;
   private java.util.LinkedList<Tile> _renderedTiles = new java.util.LinkedList<Tile>();
@@ -427,10 +422,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     return false;
   }
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions)
-=======
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
->>>>>>> origin/purgatory
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -548,33 +540,54 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     _statistics.clear();
   
+    final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
+    //  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
+    final float deviceQualityFactor = deviceInfo.getQualityFactor();
+  
+    final int firstLevelTilesCount = _firstLevelTiles.size();
+  
+    final Planet planet = rc.getPlanet();
+    final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
+    double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
+    final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+  
+    //Texture Size for every tile
+    int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
+    int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
+  
+    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+  
+    texWidth *= correctionFactor;
+    texHeight *= correctionFactor;
+  
+    final double texWidthSquared = texWidth * texWidth;
+    final double texHeightSquared = texHeight * texHeight;
+  
+    final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
+  
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
       // loaded as they will be used as last-chance fallback texture for any tile.
       _firstRender = false;
   
-      final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-<<<<<<< HEAD
-        tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics, _logTilesPetitions);
-=======
         tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
->>>>>>> origin/purgatory
       }
     }
     else
     {
-      java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
-  
-      for (java.util.Iterator<Tile> iter = renderedTiles.iterator(); iter.hasNext();)
+      java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
+      for (int i = 0; i < firstLevelTilesCount; i++)
       {
-<<<<<<< HEAD
-        Tile tile = iter.next();
-        tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics, _logTilesPetitions);
-=======
+        toVisit.addLast(_firstLevelTiles.get(i));
+      }
+  
+      while (toVisit.size() > 0)
+      {
         java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
   
         for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
@@ -585,7 +598,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         }
   
         toVisit = toVisitInNextIteration;
->>>>>>> origin/purgatory
+  /*
+      for (std::list<Tile*>::iterator iter = renderedTiles->begin();
+           iter != renderedTiles->end();
+           iter++) {
+        Tile* tile = *iter;
+        tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics,
+                               _logTilesPetitions);
+   */
       }
     }
   
@@ -1148,6 +1168,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     return urls;
+  }
+
+  public final int getNumberOfRenderedTiles()
+  {
+    return _renderedTiles.size();
   }
 
 }

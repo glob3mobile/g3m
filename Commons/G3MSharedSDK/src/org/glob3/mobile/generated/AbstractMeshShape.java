@@ -90,13 +90,12 @@ public abstract class AbstractMeshShape extends Shape
     return mesh.isTransparent(rc);
   }
 
-<<<<<<< HEAD
   public final GEORasterSymbol createRasterSymbolIfNeeded()
   {
     return null;
   }
 
-=======
+
   public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
   {
     Mesh mesh = getMesh(rc);
@@ -105,5 +104,4 @@ public abstract class AbstractMeshShape extends Shape
       mesh.zRender(rc, parentGLState);
     }
   }
->>>>>>> senderos-gc
 }

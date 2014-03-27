@@ -7,5 +7,5 @@ public class GlobalMembersShapesEditorRenderer
 
 
 
-   public static final float vertexWidth = 12F;
+   public static final float vertexWidth = 20F;
 }

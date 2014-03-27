@@ -234,4 +234,10 @@ public class RasterPolygonShape extends Shape
     return _surfaceColor;
   }
 
+  public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
+  {
+
+  }
+
+
 }

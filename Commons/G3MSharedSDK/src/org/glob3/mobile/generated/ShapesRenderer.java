@@ -214,24 +214,6 @@ public class ShapesRenderer extends LeafRenderer
     }
   }
 
-  public final void removeShape(Shape shape)
-  {
-    int pos = -1;
-    final int shapesSize = _shapes.size();
-    for (int i = 0; i < shapesSize; i++)
-    {
-      if (_shapes.get(i) == shape)
-      {
-        pos = i;
-        break;
-      }
-    }
-    if (pos != -1)
-    {
-      _shapes.remove(pos);
-    }
-  }
-
   public final void removeAllShapes()
   {
      removeAllShapes(true);
@@ -487,18 +469,6 @@ public class ShapesRenderer extends LeafRenderer
     loadBSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, position, altitudeMode, listener, deleteListener);
   }
 
-<<<<<<< HEAD
-  public final void setShapeTouchListener(ShapeTouchListener shapeTouchListener, boolean autoDelete)
-  {
-    if (_autoDeleteShapeTouchListener)
-    {
-      if (_shapeTouchListener != null)
-         _shapeTouchListener.dispose();
-    }
-  
-    _shapeTouchListener = shapeTouchListener;
-    _autoDeleteShapeTouchListener = autoDelete;
-=======
   public final void zRender(G3MRenderContext rc, GLState glState)
   {
   
@@ -515,7 +485,18 @@ public class ShapesRenderer extends LeafRenderer
       Shape shape = _shapes.get(i);
       shape.zRender(rc, state, _renderNotReadyShapes);
     }
->>>>>>> senderos-gc
+  }
+
+  public final void setShapeTouchListener(ShapeTouchListener shapeTouchListener, boolean autoDelete)
+  {
+    if (_autoDeleteShapeTouchListener)
+    {
+      if (_shapeTouchListener != null)
+         _shapeTouchListener.dispose();
+    }
+  
+    _shapeTouchListener = shapeTouchListener;
+    _autoDeleteShapeTouchListener = autoDelete;
   }
 
 }

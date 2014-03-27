@@ -31,4 +31,9 @@ public abstract class CameraEventHandler
 
   public abstract void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
 
+  public void setDebugMeshRenderer(MeshRenderer meshRenderer)
+  {
+
+  }
+
 }

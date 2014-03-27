@@ -229,6 +229,7 @@ public class BoxShape extends AbstractMeshShape
      _borderColor = borderColor;
      _originalBorderColor = (borderColor!=null)? new Color(borderColor) : null;
      _useNormals = useNormals;
+
   }
 
   public void dispose()

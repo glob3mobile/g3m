@@ -189,4 +189,9 @@ public class RasterLineShape extends Shape
   {
     return _color;
   }
+
+  public void zRawRender(G3MRenderContext rc, GLState parentGLState)
+  {
+  }
+
 }

@@ -509,8 +509,6 @@ public class Camera
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   // data to compute frustum
   public final FrustumData getFrustumData()
   {
@@ -522,10 +520,6 @@ public class Camera
     return _frustumData;
   }
 
-
-  private Angle getHeading(Vector3D normal)
-=======
-=======
   public final void setGroundHeightFromCartesianPoint(Vector3D point)
   {
     _groundHeight = _planet.toGeodetic3D(point)._height;
@@ -536,10 +530,8 @@ public class Camera
     return getGeodeticPosition()._height - _groundHeight;
   }
 
->>>>>>> senderos-gc
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   public final void setFOV(Angle vertical, Angle horizontal)
->>>>>>> origin/purgatory
   {
     final Angle halfHFOV = horizontal.div(2.0);
     final Angle halfVFOV = vertical.div(2.0);

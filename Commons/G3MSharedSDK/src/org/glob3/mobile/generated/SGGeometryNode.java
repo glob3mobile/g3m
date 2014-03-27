@@ -140,11 +140,6 @@ public class SGGeometryNode extends SGNode
     return "SGGeometryNode";
   }
 
-<<<<<<< HEAD
-  public final Box getCopyBoundingBox()
-  {
-    return new Box(_boundingBox);
-=======
   public void zRawRender(G3MRenderContext rc, GLState parentState)
   {
     GL gl = rc.getGL();
@@ -170,7 +165,11 @@ public class SGGeometryNode extends SGNode
   //  }
   
     return state;
->>>>>>> senderos-gc
+  }
+
+  public final Box getCopyBoundingBox()
+  {
+    return new Box(_boundingBox);
   }
 
 }

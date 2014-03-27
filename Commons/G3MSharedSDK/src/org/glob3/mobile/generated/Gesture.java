@@ -20,7 +20,9 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class CameraEventHandler;
+//class MeshRenderer;
 
 
 //class ILogger;
