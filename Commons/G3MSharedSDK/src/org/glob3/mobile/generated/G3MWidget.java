@@ -186,33 +186,6 @@ public class G3MWidget
   
     _frameTasksExecutor.doPreRenderCycle(_renderContext);
   
-    ProtoRenderer selectedRenderer;
-    switch (renderStateType)
-    {
-      case RENDER_READY:
-        selectedRenderer = _mainRenderer;
-        break;
-  
-      case RENDER_BUSY:
-        selectedRenderer = _busyRenderer;
-        break;
-  
-      default:
-        _errorRenderer.setErrors(_rendererState.getErrors());
-        selectedRenderer = _errorRenderer;
-        break;
-    }
-  
-    if (selectedRenderer != _selectedRenderer)
-    {
-      if (_selectedRenderer != null)
-      {
-        _selectedRenderer.stop(_renderContext);
-      }
-      _selectedRenderer = selectedRenderer;
-      _selectedRenderer.start(_renderContext);
-    }
-  
     _gl.clearScreen(_backgroundColor);
   
     if (_rootState == null)
@@ -220,19 +193,33 @@ public class G3MWidget
       _rootState = new GLState();
     }
   
-    if (renderStateType == RenderState_Type.RENDER_READY)
+    switch (renderStateType)
     {
-      _cameraRenderer.render(_renderContext, _rootState);
+      case RENDER_READY:
+        setSelectedRenderer(_mainRenderer);
+        _cameraRenderer.render(_renderContext, _rootState);
   
-      _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
+        _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
+  
+        if (_mainRenderer.isEnable())
+        {
+          _mainRenderer.render(_renderContext, _rootState);
+        }
+  
+        break;
+  
+      case RENDER_BUSY:
+        setSelectedRenderer(_busyRenderer);
+        _busyRenderer.render(_renderContext, _rootState);
+        break;
+  
+      default:
+        _errorRenderer.setErrors(_rendererState.getErrors());
+        setSelectedRenderer(_errorRenderer);
+        _errorRenderer.render(_renderContext, _rootState);
+        break;
   
     }
-  
-    //TODO: CHECK THIS OMISION
-    //if (_selectedRenderer->isEnable()) {
-    int _todovtp;
-      _selectedRenderer.render(_renderContext, _rootState);
-    //}
   
     java.util.ArrayList<OrderedRenderable> orderedRenderables = _renderContext.getSortedOrderedRenderables();
     if (orderedRenderables != null)
@@ -308,7 +295,6 @@ public class G3MWidget
         _lastCacheStatistics = cacheStatistics;
       }
     }
-  
   }
 
   public final void onTouchEvent(TouchEvent touchEvent)
@@ -901,6 +887,19 @@ public class G3MWidget
     }
   
     return busyFlag ? RenderState.busy() : RenderState.ready();
+  }
+
+  private void setSelectedRenderer(ProtoRenderer selectedRenderer)
+  {
+    if (selectedRenderer != _selectedRenderer)
+    {
+      if (_selectedRenderer != null)
+      {
+        _selectedRenderer.stop(_renderContext);
+      }
+      _selectedRenderer = selectedRenderer;
+      _selectedRenderer.start(_renderContext);
+    }
   }
 
 }

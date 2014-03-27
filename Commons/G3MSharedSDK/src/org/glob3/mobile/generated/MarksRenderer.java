@@ -30,7 +30,6 @@ public class MarksRenderer extends DefaultRenderer
   private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
-  private G3MContext _context;
   private Camera     _lastCamera;
 
   private MarkTouchListener _markTouchListener;
@@ -79,13 +78,13 @@ public class MarksRenderer extends DefaultRenderer
   public MarksRenderer(boolean readyWhenMarksReady)
   {
      _readyWhenMarksReady = readyWhenMarksReady;
-     _context = null;
      _lastCamera = null;
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
      _downloadPriority = DownloadPriority.MEDIUM;
      _glState = new GLState();
      _billboardTexCoords = null;
+    _context = null;
   }
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)

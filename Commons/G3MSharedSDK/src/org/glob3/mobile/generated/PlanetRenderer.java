@@ -17,7 +17,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private TilesStatistics _statistics = new TilesStatistics();
 
   private Camera     _lastCamera;
-  private G3MContext _context;
 
   private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
   private boolean _firstLevelTilesJustCreated;
@@ -335,7 +334,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _lastSplitTimer = null;
      _lastCamera = null;
      _firstRender = false;
-     _context = null;
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
@@ -347,6 +345,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
+    _context = null;
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {

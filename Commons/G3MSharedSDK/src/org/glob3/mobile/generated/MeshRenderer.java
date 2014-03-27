@@ -75,6 +75,19 @@ public class MeshRenderer extends DefaultRenderer
     _loadQueue.clear();
   }
 
+  private void cleanLoadQueue()
+  {
+    final int loadQueueSize = _loadQueue.size();
+    for (int i = 0; i < loadQueueSize; i++)
+    {
+      LoadQueueItem item = _loadQueue.get(i);
+      if (item != null)
+         item.dispose();
+    }
+  
+    _loadQueue.clear();
+  }
+
   private void requestMeshBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, float pointSize, double deltaHeight, Color color, MeshLoadListener listener, boolean deleteListener, boolean isBSON, MeshType meshType)
   {
     IDownloader downloader = _context.getDownloader();
@@ -151,6 +164,14 @@ public class MeshRenderer extends DefaultRenderer
     if (_context != null)
     {
       drainLoadQueue();
+    }
+  }
+
+  public final void onLostContext()
+  {
+    if (_context == null)
+    {
+      cleanLoadQueue();
     }
   }
 
