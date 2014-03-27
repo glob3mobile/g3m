@@ -337,7 +337,6 @@ public class EllipsoidShape extends AbstractMeshShape
     _texId = null; //Releasing texture
   
     super.dispose();
-  
   }
 
   public final void setBorderColor(Color color)

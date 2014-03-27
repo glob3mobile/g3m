@@ -93,6 +93,16 @@ Vector2I PlanetTileTessellator::calculateResolution(const Vector2I& resolution,
   //  return Vector2I(resolutionX, resolutionY);
 }
 
+double PlanetTileTessellator::skirtDepthForSector(const Planet* planet, const Sector& sector){
+
+  const Vector3D se = planet->toCartesian(sector.getSE());
+  const Vector3D nw = planet->toCartesian(sector.getNW());
+  const double diagonalLength = nw.sub(se).length();
+  const double sideLength = diagonalLength * 0.70710678118;
+  //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
+  return sideLength / 20.0;
+}
+
 
 Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             const Vector2I& rawResolution,
@@ -123,18 +133,16 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                       data);
 
   if (_skirted) {
-    const Vector3D se = planet->toCartesian(tileSector.getSE());
-    const Vector3D nw = planet->toCartesian(tileSector.getNW());
-    const double diagonalLength = nw.sub(se).length();
-    //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
-    const double relativeSkirtHeight = (diagonalLength * -0.05 * 0.70710678118) + minElevation;
+    const double relativeSkirtHeight = minElevation - skirtDepthForSector(planet, tileSector);
 
     double absoluteSkirtHeight = 0;
     if (_renderedSector != NULL) {
-      const Vector3D ase = planet->toCartesian(_renderedSector->getSE());
-      const Vector3D anw = planet->toCartesian(_renderedSector->getNW());
-      //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
-      absoluteSkirtHeight = (anw.sub(ase).length() * -0.05 * 0.70710678118);
+#ifdef C_CODE
+      absoluteSkirtHeight = - skirtDepthForSector(planet, *_renderedSector);
+#endif
+#ifdef JAVA_CODE
+      absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
+#endif
     }
 
     createEastSkirt(planet,
@@ -177,12 +185,11 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   //Storing textCoords in Tile
   tile->setTessellatorData(new PlanetTileTessellatorData(textCoords));
 
-#warning Testing_Terrain_Normals;
   IFloatBuffer* verticesB = vertices->create();
   IShortBuffer* indicesB  = indices.create();
-  //IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-  //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
   IFloatBuffer* normals = NULL;
+//#warning Testing_Terrain_Normals;
+//  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
 
   Mesh* result = new IndexedGeometryMesh(GLPrimitive::triangleStrip(),
                                          vertices->getCenter(),
@@ -195,13 +202,13 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
   return result;
 }
 
-const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
+const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
                                                    const Angle& latitude,
                                                    const Angle& longitude,
                                                    bool mercator) const {
   const Sector sector = tile->_sector;
 
-  const Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+  const Vector2F linearUV = sector.getUVCoordinatesF(latitude, longitude);
   if (!mercator) {
     return linearUV;
   }
@@ -213,7 +220,7 @@ const Vector2D PlanetTileTessellator::getTextCoord(const Tile* tile,
   const double globalV = MercatorUtils::getMercatorV(latitude);
   const double localV  = (globalV - upperGlobalV) / deltaGlobalV;
 
-  return Vector2D(linearUV._x, localV);
+  return Vector2F(linearUV._x, (float) localV);
 }
 
 IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolution,
@@ -248,28 +255,28 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
   // west side
   for (int j = 0; j < resolutionYMinus1; j++) {
     vertices->add(sector.getInnerPoint(0, (double)j/resolutionYMinus1),
-                 offset);
+                  offset);
     indices.add(posS++);
   }
 
   // south side
   for (int i = 0; i < resolutionXMinus1; i++) {
     vertices->add(sector.getInnerPoint((double)i/resolutionXMinus1, 1),
-                 offset);
+                  offset);
     indices.add(posS++);
   }
 
   // east side
   for (int j = resolutionYMinus1; j > 0; j--) {
     vertices->add(sector.getInnerPoint(1, (double)j/resolutionYMinus1),
-                 offset);
+                  offset);
     indices.add(posS++);
   }
 
   // north side
   for (int i = resolutionXMinus1; i > 0; i--) {
     vertices->add(sector.getInnerPoint((double)i/resolutionXMinus1, 0),
-                 offset);
+                  offset);
     indices.add(posS++);
   }
 
@@ -337,23 +344,23 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
 
       if (elevationData != NULL) {
         const double rawElevation = elevationData->getElevationAt(position);
-        if ( !ISNAN(rawElevation) ) {
-          elevation = rawElevation * verticalExaggeration;
 
-          //MIN
-          if (elevation < minElevation) {
-            minElevation = elevation;
-          }
+        elevation = ISNAN(rawElevation)? 0 : rawElevation * verticalExaggeration;
 
-          //MAX
-          if (elevation > maxElevation) {
-            maxElevation = elevation;
-          }
-
-          //AVERAGE
-          averageElevation += elevation;
+        //MIN
+        if (elevation < minElevation) {
+          minElevation = elevation;
         }
+
+        //MAX
+        if (elevation > maxElevation) {
+          maxElevation = elevation;
+        }
+
+        //AVERAGE
+        averageElevation += elevation;
       }
+
       vertices->add( position, elevation );
 
       //TEXT COORDS
@@ -374,10 +381,10 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
     }
   }
 
-  if (minElevation == mu->maxDouble()){
+  if (minElevation == mu->maxDouble()) {
     minElevation = 0;
   }
-  if (maxElevation == mu->minDouble()){
+  if (maxElevation == mu->minDouble()) {
     maxElevation = 0;
   }
 
@@ -563,7 +570,7 @@ void PlanetTileTessellator::createSouthSkirt(const Planet* planet,
     //TEXTURE COORDS/////////////////////////////
     Vector2D uv = textCoords.getVector2D(surfaceIndex);
     textCoords.add((float)uv._x, (float)uv._y);
-    
+
     //INDEX///////////////////////////////////////////////////////////////
     indices.add(surfaceIndex);
     indices.add((short) skirtIndex++);

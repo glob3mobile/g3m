@@ -28,6 +28,10 @@ public abstract class IByteBuffer
   public abstract void rawPut(int i, byte value);
 
   public abstract String description();
+  @Override
+  public String toString() {
+    return description();
+  }
 
   public abstract String getAsString();
 

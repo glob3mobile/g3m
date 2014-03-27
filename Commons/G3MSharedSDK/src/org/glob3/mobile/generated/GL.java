@@ -99,6 +99,12 @@ public class GL
 
   private GLGlobalState _clearScreenState; //State used to clear screen with certain color
 
+  private static boolean isPowerOfTwo(int x)
+  {
+    return ((x >= 0) && ((x == 1) || (x == 2) || (x == 4) || (x == 8) || (x == 16) || (x == 32) || (x == 64) || (x == 128) || (x == 256) || (x == 512) || (x == 1024) || (x == 2048) || (x == 4096) || (x == 8192) || (x == 16384) || (x == 32768) || (x == 65536) || (x == 131072) || (x == 262144) || (x == 524288) || (x == 1048576) || (x == 2097152) || (x == 4194304) || (x == 8388608) || (x == 16777216) || (x == 33554432) || (x == 67108864) || (x == 134217728) || (x == 268435456) || (x == 536870912) || (x == 1073741824)));
+             //(x == 2147483648)
+  }
+
 
 
 
@@ -195,8 +201,6 @@ public class GL
     final IGLTextureId texId = getGLTextureId();
     if (texId != null)
     {
-      int texture2D = GLTextureType.texture2D();
-  
       GLGlobalState newState = new GLGlobalState();
   
       newState.setPixelStoreIAlignmentUnpack(1);
@@ -204,19 +208,37 @@ public class GL
   
       newState.applyChanges(this, _currentGLGlobalState);
   
-      int linear = GLTextureParameterValue.linear();
-      int clampToEdge = GLTextureParameterValue.clampToEdge();
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(),linear);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(),clampToEdge);
-      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(),clampToEdge);
+      final int texture2D = GLTextureType.texture2D();
+      final int linear = GLTextureParameterValue.linear();
+  
+      if (generateMipmap)
+      {
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), GLTextureParameterValue.linearMipmapNearest());
+      }
+      else
+      {
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), linear);
+      }
+  
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.magFilter(), linear);
+  
+      final int clampToEdge = GLTextureParameterValue.clampToEdge();
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapS(), clampToEdge);
+      _nativeGL.texParameteri(texture2D, GLTextureParameter.wrapT(), clampToEdge);
+  
       _nativeGL.texImage2D(image, format);
   
       if (generateMipmap)
       {
-        _nativeGL.generateMipmap(texture2D);
+        if (isPowerOfTwo(image.getWidth()) && isPowerOfTwo(image.getHeight()))
+        {
+          _nativeGL.generateMipmap(texture2D);
+        }
+        else
+        {
+          ILogger.instance().logError("Can't generate bitmap. Texture dimensions are not power of two.");
+        }
       }
-  
     }
     else
     {
@@ -410,7 +432,7 @@ public class GL
         _currentGPUProgram.addReference();
       }
   
-  //    if (!_nativeGL->isProgram(program->getProgramID())){
+  //    if (!_nativeGL->isProgram(program->getProgramID())) {
   //      ILogger::instance()->logError("INVALID PROGRAM.");
   //    }
     }

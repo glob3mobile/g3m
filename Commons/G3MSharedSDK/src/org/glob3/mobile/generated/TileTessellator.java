@@ -15,12 +15,12 @@ public abstract class TileTessellator
 
   public abstract IFloatBuffer createTextCoords(Vector2I resolution, Tile tile, boolean mercator);
 
-  public Vector2D getTextCoord(Tile tile, Geodetic2D position, boolean mercator)
+  public Vector2F getTextCoord(Tile tile, Geodetic2D position, boolean mercator)
   {
     return getTextCoord(tile, position._latitude, position._longitude, mercator);
   }
 
-  public abstract Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator);
+  public abstract Vector2F getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator);
 
   public abstract void setRenderedSector(Sector sector);
 

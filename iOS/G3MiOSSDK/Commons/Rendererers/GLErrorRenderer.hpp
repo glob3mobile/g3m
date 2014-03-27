@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLErrorRenderer_hpp
-#define G3MiOSSDK_GLErrorRenderer_hpp
+#ifndef G3MiOSSDK_GLErrorRenderer
+#define G3MiOSSDK_GLErrorRenderer
 
 #include "LeafRenderer.hpp"
 

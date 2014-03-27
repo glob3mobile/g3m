@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Color_hpp
-#define G3MiOSSDK_Color_hpp
+#ifndef G3MiOSSDK_Color
+#define G3MiOSSDK_Color
 
 #include <string>
 #include "Angle.hpp"
@@ -208,6 +208,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 

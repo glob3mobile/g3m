@@ -123,26 +123,25 @@ public class PlanetTileTessellator extends TileTessellator
         if (elevationData != null)
         {
           final double rawElevation = elevationData.getElevationAt(position);
-          if (!(rawElevation != rawElevation))
+  
+          elevation = (rawElevation != rawElevation)? 0 : rawElevation * verticalExaggeration;
+  
+          //MIN
+          if (elevation < minElevation)
           {
-            elevation = rawElevation * verticalExaggeration;
-  
-            //MIN
-            if (elevation < minElevation)
-            {
-              minElevation = elevation;
-            }
-  
-            //MAX
-            if (elevation > maxElevation)
-            {
-              maxElevation = elevation;
-            }
-  
-            //AVERAGE
-            averageElevation += elevation;
+            minElevation = elevation;
           }
+  
+          //MAX
+          if (elevation > maxElevation)
+          {
+            maxElevation = elevation;
+          }
+  
+          //AVERAGE
+          averageElevation += elevation;
         }
+  
         vertices.add(position, elevation);
   
         //TEXT COORDS
@@ -350,19 +349,18 @@ public class PlanetTileTessellator extends TileTessellator
     indices.add((short)(surfaceIndex - 1));
   }
 
+  private static double skirtDepthForSector(Planet planet, Sector sector)
+  {
+  
+    final Vector3D se = planet.toCartesian(sector.getSE());
+    final Vector3D nw = planet.toCartesian(sector.getNW());
+    final double diagonalLength = nw.sub(se).length();
+    final double sideLength = diagonalLength * 0.70710678118;
+    //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
+    return sideLength / 20.0;
+  }
 
 
-  //
-  //  Vector3F.cpp
-  //  G3MiOSSDK
-  //
-  //  Created by Diego Gomez Deck on 2/9/13.
-  //
-  //
-  
-  
-  
-  
   public PlanetTileTessellator(boolean skirted, Sector sector)
   {
      _skirted = skirted;
@@ -398,19 +396,12 @@ public class PlanetTileTessellator extends TileTessellator
   
     if (_skirted)
     {
-      final Vector3D se = planet.toCartesian(tileSector.getSE());
-      final Vector3D nw = planet.toCartesian(tileSector.getNW());
-      final double diagonalLength = nw.sub(se).length();
-      //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
-      final double relativeSkirtHeight = (diagonalLength * -0.05 * 0.70710678118) + minElevation;
+      final double relativeSkirtHeight = minElevation - skirtDepthForSector(planet, tileSector);
   
       double absoluteSkirtHeight = 0;
       if (_renderedSector != null)
       {
-        final Vector3D ase = planet.toCartesian(_renderedSector.getSE());
-        final Vector3D anw = planet.toCartesian(_renderedSector.getNW());
-        //0.707 = 1 / SQRT(2) -> diagonalLength => estimated side length
-        absoluteSkirtHeight = (anw.sub(ase).length() * -0.05 * 0.70710678118);
+        absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
       }
   
       createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
@@ -425,13 +416,11 @@ public class PlanetTileTessellator extends TileTessellator
     //Storing textCoords in Tile
     tile.setTessellatorData(new PlanetTileTessellatorData(textCoords));
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Testing_Terrain_Normals;
     IFloatBuffer verticesB = vertices.create();
     IShortBuffer indicesB = indices.create();
-    //IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
-    //IFloatBuffer* normals = NormalsUtils::createTriangleSmoothNormals(verticesB, indicesB);
     IFloatBuffer normals = null;
+  ///#warning Testing_Terrain_Normals;
+  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
   
     Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), verticesB, true, normals, true, indicesB, true);
   
@@ -512,11 +501,11 @@ public class PlanetTileTessellator extends TileTessellator
     return data._textCoords.create();
   }
 
-  public final Vector2D getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
+  public final Vector2F getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
   {
     final Sector sector = tile._sector;
   
-    final Vector2D linearUV = sector.getUVCoordinates(latitude, longitude);
+    final Vector2F linearUV = sector.getUVCoordinatesF(latitude, longitude);
     if (!mercator)
     {
       return linearUV;
@@ -529,7 +518,7 @@ public class PlanetTileTessellator extends TileTessellator
     final double globalV = MercatorUtils.getMercatorV(latitude);
     final double localV = (globalV - upperGlobalV) / deltaGlobalV;
   
-    return new Vector2D(linearUV._x, localV);
+    return new Vector2F(linearUV._x, (float) localV);
   }
 
   public final void setRenderedSector(Sector sector)

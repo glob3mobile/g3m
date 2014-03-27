@@ -28,6 +28,7 @@
 #include "TerrainTouchListener.hpp"
 #include "IDeviceInfo.hpp"
 #include "Sector.hpp"
+#include "TileRenderingListener.hpp"
 
 #include <algorithm>
 
@@ -120,7 +121,9 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                bool                         showStatistics,
                                long long                    texturePriority,
                                const Sector&                renderedSector,
-                               const bool                   renderTileMeshes) :
+                               const bool                   renderTileMeshes,
+                               const bool                   logTilesPetitions,
+                               TileRenderingListener*       tileRenderingListener) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -143,7 +146,9 @@ _glState(new GLState()),
 _renderedSector(renderedSector.isEquals(Sector::fullSphere())? NULL : new Sector(renderedSector)),
 _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
-_renderTileMeshes(renderTileMeshes)
+_renderTileMeshes(renderTileMeshes),
+_logTilesPetitions(logTilesPetitions),
+_tileRenderingListener(tileRenderingListener)
 {
   _layerSet->setChangeListener(this);
   if (_tileRasterizer != NULL) {
@@ -215,6 +220,8 @@ PlanetRenderer::~PlanetRenderer() {
   }
 
   delete _renderedSector;
+
+  delete _tileRenderingListener;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -458,7 +465,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _tilesRenderParameters,
                                       true,
                                       _texturePriority,
-                                      _verticalExaggeration);
+                                      _verticalExaggeration,
+                                      _logTilesPetitions);
       }
     }
 
@@ -512,13 +520,13 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
 
     const int firstLevelToVisit = (firstLevel < parameters-> _firstLevel) ? parameters->_firstLevel : firstLevel;
     if (firstLevel < firstLevelToVisit) {
-      ILogger::instance()->logError("Can only visit from level %", firstLevelToVisit);
+      ILogger::instance()->logError("Can only visit from level %d", firstLevelToVisit);
       return;
     }
 
     const int maxLevelToVisit = (maxLevel > parameters->_maxLevel) ? parameters->_maxLevel : maxLevel;
     if (maxLevel > maxLevelToVisit) {
-      ILogger::instance()->logError("Can only visit to level %", maxLevelToVisit);
+      ILogger::instance()->logError("Can only visit to level %d", maxLevelToVisit);
       return;
     }
 
@@ -596,7 +604,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   }
 
   updateGLState(rc);
-#warning Testing Terrain Normals
+//#warning Testing Terrain Normals
   _glState->setParent(glState);
 
   // Saving camera for use in onTouchEvent
@@ -660,7 +668,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    texWidthSquared,
                    texHeightSquared,
                    nowInMS,
-                   _renderTileMeshes);
+                   _renderTileMeshes,
+                   _logTilesPetitions,
+                   _tileRenderingListener);
     }
   }
   else {
@@ -700,7 +710,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      texWidthSquared,     //SENDING SQUARED TEX SIZE
                      texHeightSquared,
                      nowInMS,
-                     _renderTileMeshes);
+                     _renderTileMeshes,
+                     _logTilesPetitions,
+                     _tileRenderingListener);
       }
 
       toVisit = toVisitInNextIteration;
@@ -824,7 +836,7 @@ void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
   }
 }
 
-void PlanetRenderer::setRenderedSector(const Sector& sector) {
+bool PlanetRenderer::setRenderedSector(const Sector& sector) {
   if ((_renderedSector != NULL && !_renderedSector->isEquals(sector)) ||
       (_renderedSector == NULL && !sector.isEquals(Sector::fullSphere()))) {
     delete _renderedSector;
@@ -834,11 +846,14 @@ void PlanetRenderer::setRenderedSector(const Sector& sector) {
     } else{
       _renderedSector = new Sector(sector);
     }
+    
+    _tessellator->setRenderedSector(sector);
+    
+    changed();
+    
+    return true;
   }
-
-  _tessellator->setRenderedSector(sector);
-
-  changed();
+  return false;
 }
 
 void PlanetRenderer::setElevationDataProvider(ElevationDataProvider* elevationDataProvider,

@@ -214,6 +214,24 @@ public class ShapesRenderer extends LeafRenderer
     }
   }
 
+  public final void removeShape(Shape shape)
+  {
+    int pos = -1;
+    final int shapesSize = _shapes.size();
+    for (int i = 0; i < shapesSize; i++)
+    {
+      if (_shapes.get(i) == shape)
+      {
+        pos = i;
+        break;
+      }
+    }
+    if (pos != -1)
+    {
+      _shapes.remove(pos);
+    }
+  }
+
   public final void removeAllShapes()
   {
      removeAllShapes(true);

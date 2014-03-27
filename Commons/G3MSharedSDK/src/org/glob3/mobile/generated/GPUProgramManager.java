@@ -42,6 +42,7 @@ public class GPUProgramManager
       if (ps != null)
       {
         prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource);
+        ///#warning DETECT COLISSION WITH COLLECTION OF GPUPROGRAM
         if (prog == null)
         {
           ILogger.instance().logError("Problem at creating program named %s.", name);
@@ -49,6 +50,10 @@ public class GPUProgramManager
         }
   
         _programs.put(name, prog);
+      }
+      else
+      {
+        ILogger.instance().logError("No shader sources for program named %s.", name);
       }
   
     }
@@ -58,21 +63,24 @@ public class GPUProgramManager
   private GPUProgram getNewProgram(GL gl, int uniformsCode, int attributesCode)
   {
   
-    boolean texture = GPUVariable.codeContainsAttribute(attributesCode, GPUAttributeKey.TEXTURE_COORDS);
-    boolean flatColor = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.FLAT_COLOR);
-    boolean billboard = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.VIEWPORT_EXTENT);
-    boolean color = GPUVariable.codeContainsAttribute(attributesCode, GPUAttributeKey.COLOR);
-    boolean transformTC = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS);
+    final boolean texture = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.TEXTURE_COORDS);
+    final boolean flatColor = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.FLAT_COLOR);
+    final boolean billboard = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.VIEWPORT_EXTENT);
+    final boolean color = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.COLOR);
+    final boolean transformTC = (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS));
+    final boolean rotationTC = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS);
+    final boolean hasLight = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT_COLOR);
   
-    boolean hasLight = GPUVariable.codeContainsUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT_COLOR);
+    final boolean hasTexture2 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER2);
+  //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
   
     if (billboard)
     {
       return compileProgramWithName(gl, "Billboard");
     }
+  
     if (flatColor && !texture && !color)
     {
-  
       if (hasLight)
       {
         return compileProgramWithName(gl, "FlatColorMesh_DirectionLight");
@@ -83,10 +91,29 @@ public class GPUProgramManager
   
     if (!flatColor && texture && !color)
     {
+  
+      if (hasTexture2)
+      {
+  
+        if (transformTC)
+        {
+          if (rotationTC)
+          {
+            return compileProgramWithName(gl, "FullTransformedTexCoorMultiTexturedMesh");
+          }
+          return compileProgramWithName(gl, "TransformedTexCoorMultiTexturedMesh");
+        }
+  
+        return compileProgramWithName(gl, "MultiTexturedMesh");
+      }
+  
       if (hasLight)
       {
         if (transformTC)
         {
+  //        if (rotationTC) {
+  //          return compileProgramWithName(gl, "TransformedTexCoorWithRotationTexturedMesh_DirectionLight");
+  //        }
           return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_DirectionLight");
         }
         return compileProgramWithName(gl, "TexturedMesh_DirectionLight");
@@ -94,8 +121,13 @@ public class GPUProgramManager
   
       if (transformTC)
       {
+        if (rotationTC)
+        {
+          return compileProgramWithName(gl, "FullTransformedTexCoorTexturedMesh");
+        }
         return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
       }
+  
       return compileProgramWithName(gl, "TexturedMesh");
     }
   
@@ -137,8 +169,16 @@ public class GPUProgramManager
     if (p == null)
     {
       p = getNewProgram(gl, uniformsCode, attributesCode);
+      if (p == null)
+      {
+        ILogger.instance().logError("Problem at compiling program.");
+        return null;
+      }
+  
+      ///#warning AVOID getAttributesCode and getUniformsCode calls
       if (p.getAttributesCode() != attributesCode || p.getUniformsCode() != uniformsCode)
       {
+        ///#warning GIVE MORE DETAIL
         ILogger.instance().logError("New compiled program does not match GL state.");
       }
     }
@@ -154,7 +194,7 @@ public class GPUProgramManager
     while (it.hasNext()) {
       java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
       GPUProgram program = (GPUProgram) pairs.getValue();
-      if (program.getNReferences() == 0){
+      if (program.getNReferences() == 0) {
         ILogger.instance().logInfo("Deleting program %s", program.getName() );
         it.remove();
       }

@@ -46,8 +46,8 @@ public final class ES2Renderer
    }
 
 
-   void setOpenGLThread(final Thread openglThread) {
-      _nativeGL.setOpenGLThread(openglThread);
+   void setOpenGLThread(final Thread openGLThread) {
+      _nativeGL.setOpenGLThread(openGLThread);
    }
 
 
@@ -60,20 +60,24 @@ public final class ES2Renderer
       _hasRendered = true;
 
       final G3MWidget widget = _widgetAndroid.getG3MWidget();
-
       widget.render(_width, _height);
-
 
       // experimental FPS reduction - DGD
       final long now = System.currentTimeMillis();
-      final long timeElapsedInRender = now - _startTime;
-      final long timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
+      long timeElapsedInRender = now - _startTime;
+      long timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
       if (timeLeftInMS > 0) {
-         try {
-            // ILogger.instance().logInfo("**** sleeping OpenGL thread for " + timeLeftInMS + "ms");
-            Thread.sleep(timeLeftInMS);
-         }
-         catch (final InterruptedException e) {
+         System.gc();
+
+         timeElapsedInRender = System.currentTimeMillis() - _startTime;
+         timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
+         if (timeLeftInMS > 0) {
+            try {
+               //ILogger.instance().logInfo("**** sleeping OpenGL thread for " + timeLeftInMS + "ms");
+               Thread.sleep(timeLeftInMS);
+            }
+            catch (final InterruptedException e) {
+            }
          }
          _startTime = System.currentTimeMillis();
       }

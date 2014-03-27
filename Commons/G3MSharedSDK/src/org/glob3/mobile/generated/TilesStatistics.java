@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  PlanetRenderer.h
+//  PlanetRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
@@ -59,15 +59,14 @@ public class TilesStatistics
      _renderedSector = null;
     for (int i = 0; i < _maxLOD; i++)
     {
-      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+      _tilesProcessedByLevel[i] = 0;
+      _tilesVisibleByLevel[i] = 0;
+      _tilesRenderedByLevel[i] = 0;
     }
   }
 
   public void dispose()
   {
-    //    if (_buildersStartsInFrame > 0) {
-    //      printf("buildersStartsInFrame=%d\n", _buildersStartsInFrame);
-    //    }
     if (_renderedSector != null)
        _renderedSector.dispose();
   }
@@ -84,7 +83,9 @@ public class TilesStatistics
     _renderedSector = null;
     for (int i = 0; i < _maxLOD; i++)
     {
-      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+      _tilesProcessedByLevel[i] = 0;
+      _tilesVisibleByLevel[i] = 0;
+      _tilesRenderedByLevel[i] = 0;
     }
   }
 
@@ -152,7 +153,6 @@ public class TilesStatistics
     final int level = tile._level;
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
-
     computeRenderedSector(tile);
   }
 
@@ -180,7 +180,6 @@ public class TilesStatistics
 
   public static String asLogString(int[] m, int nMax)
   {
-
     boolean first = true;
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     for(int i = 0; i < nMax; i++)
@@ -197,7 +196,7 @@ public class TilesStatistics
         {
           isb.addString(",");
         }
-        isb.addString("L");
+        //isb->addString("L");
         isb.addInt(level);
         isb.addString(":");
         isb.addInt(counter);

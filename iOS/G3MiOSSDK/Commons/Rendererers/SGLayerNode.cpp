@@ -15,8 +15,8 @@
 #include "SGShape.hpp"
 #include "IImageDownloadListener.hpp"
 #include "TexturesHandler.hpp"
+#include "TextureIDReference.hpp"
 #include "IStringBuilder.hpp"
-
 #include "GPUProgramManager.hpp"
 #include "GPUProgram.hpp"
 
@@ -75,7 +75,7 @@ bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
   return (textureId != NULL);
 }
 
-void SGLayerNode::onImageDownload(IImage* image) {
+void SGLayerNode::onImageDownload(const IImage* image) {
   if (_downloadedImage != NULL) {
     IFactory::instance()->deleteImage(_downloadedImage);
   }
@@ -108,11 +108,11 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
 const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) {
   if (_textureId == NULL) {
     if (_downloadedImage != NULL) {
-      const bool hasMipMap = false;
+      const bool generateMipmap = false;
       _textureId = rc->getTexturesHandler()->getTextureIDReference(_downloadedImage,
-                                                            GLFormat::rgba(),
-                                                            getURL().getPath(),
-                                                            hasMipMap);
+                                                                   GLFormat::rgba(),
+                                                                   getURL().getPath(),
+                                                                   generateMipmap);
 
       IFactory::instance()->deleteImage(_downloadedImage);
       _downloadedImage = NULL;
@@ -120,25 +120,6 @@ const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) 
   }
   return _textureId;
 }
-
-//const GLState* SGLayerNode::createGLState(const G3MRenderContext* rc, const GLState* parentGLState) {
-//  if (!_initialized) {
-//    _initialized = true;
-//    requestImage(rc);
-//  }
-//
-//  const IGLTextureId* textureId = getTextureId(rc);
-//  if (textureId == NULL) {
-//    return NULL;
-//  }
-//  _glState.setParent(parentGLState);
-//  _glState.clearGLFeatureGroup(COLOR_GROUP);
-//
-//  _glState.addGLFeature(new TextureIDGLFeature(textureId,
-//                                               false, 0,0), false);
-//
-//  return &_glState;
-//}
 
 bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
 
@@ -154,7 +135,7 @@ bool SGLayerNode::modifyGLState(const G3MRenderContext* rc, GLState* state) {
   state->clearGLFeatureGroup(COLOR_GROUP);
 
   state->addGLFeature(new TextureIDGLFeature(_textureId->getID()), false);
-
+  
   return true;
   
 }

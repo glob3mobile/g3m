@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_PlanetTileTessellator_hpp
-#define G3MiOSSDK_PlanetTileTessellator_hpp
+#ifndef G3MiOSSDK_PlanetTileTessellator
+#define G3MiOSSDK_PlanetTileTessellator
 
 #include "TileTessellator.hpp"
 #include <map>
@@ -129,6 +129,8 @@ private:
                         ShortBufferBuilder& indices,
                         FloatBufferBuilderFromCartesian2D& textCoords) const;
 
+  static double skirtDepthForSector(const Planet* planet, const Sector& sector);
+
 public:
 
   PlanetTileTessellator(const bool skirted, const Sector& sector);
@@ -162,7 +164,7 @@ public:
                                  const Tile* tile,
                                  bool mercator) const;
 
-  const Vector2D getTextCoord(const Tile* tile,
+  const Vector2F getTextCoord(const Tile* tile,
                               const Angle& latitude,
                               const Angle& longitude,
                               bool mercator) const;

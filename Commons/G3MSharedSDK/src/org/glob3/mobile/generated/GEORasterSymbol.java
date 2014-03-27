@@ -250,6 +250,8 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     }
   }
 
+  protected abstract void rawRasterize(ICanvas canvas, GEORasterProjection projection);
+
 
   public void dispose()
   {
@@ -285,8 +287,6 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
       rawRasterize(canvas, projection);
     }
   }
-
-  public abstract void rawRasterize(ICanvas canvas, GEORasterProjection projection);
 
   // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
   public final void unusedMethod()

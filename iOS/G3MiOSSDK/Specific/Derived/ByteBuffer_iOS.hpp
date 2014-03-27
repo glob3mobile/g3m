@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_ByteBuffer_iOS_hpp
-#define G3MiOSSDK_ByteBuffer_iOS_hpp
+#ifndef G3MiOSSDK_ByteBuffer_iOS
+#define G3MiOSSDK_ByteBuffer_iOS
 
 #include "IByteBuffer.hpp"
 #include "ILogger.hpp"
@@ -22,16 +22,19 @@ public:
   ByteBuffer_iOS(int size) :
   _values(new unsigned char[size]),
   _size(size),
-  _timestamp(-1) {
+  _timestamp(-1)
+  {
     if (_values == NULL) {
       ILogger::instance()->logError("Allocating error.");
     }
   }
 
-  ByteBuffer_iOS(unsigned char* values, int size) :
+  ByteBuffer_iOS(unsigned char* values,
+                 int size) :
   _values(values),
   _size(size),
-  _timestamp(-1) {
+  _timestamp(-1)
+  {
 
   }
 
@@ -48,32 +51,31 @@ public:
   }
 
   unsigned char get(int i) const {
-    
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Get error.");
     }
-    
+
     return _values[i];
   }
 
-  void put(int i, unsigned char value) {
-    
+  void put(int i,
+           unsigned char value) {
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
-    
+
     if (_values[i] != value) {
       _values[i] = value;
       _timestamp++;
     }
   }
 
-  void rawPut(int i, unsigned char value) {
-    
+  void rawPut(int i,
+              unsigned char value) {
     if (i < 0 || i > _size) {
       ILogger::instance()->logError("Buffer Put error.");
     }
-    
+
     _values[i] = value;
   }
 
@@ -82,9 +84,15 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   const std::string getAsString() const;
-
+  
 };
 
 #endif

@@ -14,9 +14,9 @@
 #include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
 #include <G3MiOSSDK/GEOSymbolizer.hpp>
-#include <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
+#include <G3MiOSSDK/GEOPolygonRasterSymbol.hpp>
 #include <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
-#include <G3MiOSSDK/GEORasterLineSymbol.hpp>
+#include <G3MiOSSDK/GEOLineRasterSymbol.hpp>
 #include <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
 #include <G3MiOSSDK/JSONObject.hpp>
 #include <G3MiOSSDK/GEO2DPointGeometry.hpp>
@@ -25,7 +25,7 @@
 #include <G3MiOSSDK/GEOMarkSymbol.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 #include <G3MiOSSDK/MarkTouchListener.hpp>
 
 class G3MVectorialDemoScene_RestaurantMarkTouchListener : public MarkTouchListener {
@@ -134,7 +134,7 @@ public:
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
-    symbols->push_back(new GEORasterLineSymbol(geometry->getCoordinates(),
+    symbols->push_back(new GEOLineRasterSymbol(geometry->getCoordinates(),
                                                createLineRasterStyle(geometry)));
     return symbols;
   }
@@ -145,7 +145,7 @@ public:
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
-    symbols->push_back(new GEORasterPolygonSymbol(geometry->getPolygonData(),
+    symbols->push_back(new GEOPolygonRasterSymbol(geometry->getPolygonData(),
                                                   createPolygonLineRasterStyle(geometry),
                                                   createPolygonSurfaceRasterStyle(geometry)));
     return symbols;
@@ -178,5 +178,5 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
   const Sector demSector = Sector::fromDegrees(43.69200778158779, 7.36351850323685,
                                                43.7885865186124,  7.48617349925817);
   
-  g3mWidget->setShownSector(demSector.shrinkedByPercent(0.1f));
+  g3mWidget->setRenderedSector(demSector.shrinkedByPercent(0.1f));
 }

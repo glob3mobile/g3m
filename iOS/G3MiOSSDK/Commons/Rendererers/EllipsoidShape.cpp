@@ -25,6 +25,8 @@
 #include "OrientedBox.hpp"
 #include "Camera.hpp"
 #include "Quadric.hpp"
+#include "TextureIDReference.hpp"
+#include "SimpleTextureMapping.hpp"
 
 
 EllipsoidShape::~EllipsoidShape() {
@@ -41,7 +43,6 @@ EllipsoidShape::~EllipsoidShape() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* rc) {
@@ -52,9 +53,9 @@ const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* r
     }
 
     _texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                      GLFormat::rgba(),
-                                                      _textureURL.getPath(),
-                                                      false);
+                                                             GLFormat::rgba(),
+                                                             _textureURL.getPath(),
+                                                             false);
 
     rc->getFactory()->deleteImage(_textureImage);
     _textureImage = NULL;

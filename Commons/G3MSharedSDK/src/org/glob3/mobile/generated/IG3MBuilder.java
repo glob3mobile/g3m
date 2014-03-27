@@ -57,6 +57,7 @@ public abstract class IG3MBuilder
   private PlanetRendererBuilder _planetRendererBuilder;
   private Renderer _busyRenderer;
   private ErrorRenderer _errorRenderer;
+  private Renderer _hudRenderer;
   private java.util.ArrayList<Renderer> _renderers;
   private GInitializationTask _initializationTask;
   private boolean _autoDeleteInitializationTask;
@@ -80,7 +81,7 @@ public abstract class IG3MBuilder
   {
     if (_gl == null)
     {
-      ILogger.instance().logError("Logic Error: _gl not initialized");
+      ILogger.instance().logError("LOGIC ERROR: gl not initialized");
     }
   
     return _gl;
@@ -180,6 +181,10 @@ public abstract class IG3MBuilder
     }
   
     return _errorRenderer;
+  }
+  private Renderer getHUDRenderer()
+  {
+    return _hudRenderer;
   }
 
   /**
@@ -331,7 +336,7 @@ public abstract class IG3MBuilder
   {
     if (_initializationTask != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _initializationTask already initialized");
+      ILogger.instance().logError("LOGIC ERROR: initializationTask already initialized");
       return;
     }
     if (initializationTask == null)
@@ -419,28 +424,11 @@ public abstract class IG3MBuilder
     }
   
     final Geodetic3D initialCameraPosition = getPlanet().getDefaultCameraPosition(shownSector);
-  //  const Geodetic3D initialCameraPosition(shownSector.getCenter(), initialCameraPosition2.height());
-  
-    //CAMERA CONSTRAINT FOR INCOMPLETE WORLD
-  //  if (!shownSector.isEquals(Sector::fullSphere())) {
-  //    const double margin = 0.2;
-  //    const double height = 1e5;
-  //
-  //    const double latMargin = shownSector.getDeltaLatitude()._degrees * margin;
-  //    const double lonMargin = shownSector.getDeltaLongitude()._degrees * margin;
-  //
-  //    Sector sector = Sector::fromDegrees(shownSector._lower._latitude._degrees - latMargin,
-  //                                        shownSector._lower._longitude._degrees - lonMargin,
-  //                                        shownSector._upper._latitude._degrees + latMargin,
-  //                                        shownSector._upper._longitude._degrees + lonMargin);
-  //    addCameraConstraint(new SectorAndHeightCameraConstrainer(sector, height) );
-  
-      addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition._height * 1.2));
-  //  }
+    addCameraConstraint(new RenderedSectorCameraConstrainer(mainRenderer.getPlanetRenderer(), initialCameraPosition._height * 1.2));
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp);
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp);
   
     g3mWidget.setUserData(getUserData());
   
@@ -457,6 +445,7 @@ public abstract class IG3MBuilder
     _renderers = null;
     _busyRenderer = null;
     _errorRenderer = null;
+    _hudRenderer = null;
     _initializationTask = null;
     _periodicalTasks = null;
     _periodicalTasks = null;
@@ -490,6 +479,7 @@ public abstract class IG3MBuilder
      _planetRendererBuilder = null;
      _busyRenderer = null;
      _errorRenderer = null;
+     _hudRenderer = null;
      _renderers = null;
      _initializationTask = null;
      _autoDeleteInitializationTask = true;
@@ -540,6 +530,8 @@ public abstract class IG3MBuilder
        _busyRenderer.dispose();
     if (_errorRenderer != null)
        _errorRenderer.dispose();
+    if (_hudRenderer != null)
+       _hudRenderer.dispose();
     if (_backgroundColor != null)
        _backgroundColor.dispose();
     if (_initializationTask != null)
@@ -571,12 +563,12 @@ public abstract class IG3MBuilder
   {
     if (_gl != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _gl already initialized");
+      ILogger.instance().logError("LOGIC ERROR: gl already initialized");
       return;
     }
     if (gl == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _gl cannot be NULL");
+      ILogger.instance().logError("LOGIC ERROR: gl cannot be NULL");
       return;
     }
     _gl = gl;
@@ -592,7 +584,7 @@ public abstract class IG3MBuilder
   {
     if (_storage != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _storage already initialized");
+      ILogger.instance().logError("LOGIC ERROR: storage already initialized");
       return;
     }
     _storage = storage;
@@ -608,12 +600,12 @@ public abstract class IG3MBuilder
   {
     if (_downloader != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _downloader already initialized");
+      ILogger.instance().logError("LOGIC ERROR: downloader already initialized");
       return;
     }
     if (downloader == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _downloader cannot be NULL");
+      ILogger.instance().logError("LOGIC ERROR: downloader cannot be NULL");
       return;
     }
     _downloader = downloader;
@@ -629,12 +621,12 @@ public abstract class IG3MBuilder
   {
     if (_threadUtils != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _threadUtils already initialized");
+      ILogger.instance().logError("LOGIC ERROR: threadUtils already initialized");
       return;
     }
     if (threadUtils == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _threadUtils cannot be NULL");
+      ILogger.instance().logError("LOGIC ERROR: threadUtils cannot be NULL");
       return;
     }
     _threadUtils = threadUtils;
@@ -650,7 +642,7 @@ public abstract class IG3MBuilder
   {
     if (_cameraActivityListener != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _cameraActivityListener already initialized");
+      ILogger.instance().logError("LOGIC ERROR: cameraActivityListener already initialized");
       return;
     }
     if (cameraActivityListener == null)
@@ -671,12 +663,12 @@ public abstract class IG3MBuilder
   {
     if (_planet != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _planet already initialized");
+      ILogger.instance().logError("LOGIC ERROR: planet already initialized");
       return;
     }
     if (planet == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _planet cannot be NULL");
+      ILogger.instance().logError("LOGIC ERROR: planet cannot be NULL");
       return;
     }
     _planet = planet;
@@ -739,12 +731,12 @@ public abstract class IG3MBuilder
   {
     if (_cameraRenderer != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _cameraRenderer already initialized");
+      ILogger.instance().logError("LOGIC ERROR: cameraRenderer already initialized");
       return;
     }
     if (cameraRenderer == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _cameraRenderer cannot be NULL");
+      ILogger.instance().logError("LOGIC ERROR: cameraRenderer cannot be NULL");
       return;
     }
     _cameraRenderer = cameraRenderer;
@@ -760,12 +752,12 @@ public abstract class IG3MBuilder
   {
     if (_backgroundColor != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _backgroundColor already initialized");
+      ILogger.instance().logError("LOGIC ERROR: backgroundColor already initialized");
       return;
     }
     if (backgroundColor == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _backgroundColor cannot be NULL");
+      ILogger.instance().logError("LOGIC ERROR: backgroundColor cannot be NULL");
       return;
     }
     _backgroundColor = backgroundColor;
@@ -781,12 +773,12 @@ public abstract class IG3MBuilder
   {
     if (_busyRenderer != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _busyRenderer already initialized");
+      ILogger.instance().logError("LOGIC ERROR: busyRenderer already initialized");
       return;
     }
     if (busyRenderer == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _busyRenderer cannot be NULL");
+      ILogger.instance().logError("LOGIC ERROR: busyRenderer cannot be NULL");
       return;
     }
     _busyRenderer = busyRenderer;
@@ -796,15 +788,30 @@ public abstract class IG3MBuilder
   {
     if (_errorRenderer != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _errorRenderer already initialized");
+      ILogger.instance().logError("LOGIC ERROR: errorRenderer already initialized");
       return;
     }
     if (errorRenderer == null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _errorRenderer cannot be NULL");
+      ILogger.instance().logError("LOGIC ERROR: errorRenderer cannot be NULL");
       return;
     }
     _errorRenderer = errorRenderer;
+  }
+
+  public final void setHUDRenderer(Renderer hudRenderer)
+  {
+    if (_hudRenderer != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: hudRenderer already initialized");
+      return;
+    }
+    if (hudRenderer == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: hudRenderer cannot be NULL");
+      return;
+    }
+    _hudRenderer = hudRenderer;
   }
 
 
@@ -942,7 +949,7 @@ public abstract class IG3MBuilder
   {
     if (_userData != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _userData already initialized");
+      ILogger.instance().logError("LOGIC ERROR: userData already initialized");
       return;
     }
     if (userData == null)
@@ -1013,7 +1020,7 @@ public abstract class IG3MBuilder
   {
     if (_shownSector != null)
     {
-      ILogger.instance().logError("LOGIC ERROR: _shownSector already initialized");
+      ILogger.instance().logError("LOGIC ERROR: shownSector already initialized");
       return;
     }
     _shownSector = new Sector(sector);

@@ -458,10 +458,6 @@ public class GEOJSONParser
 
   private void showStatistics()
   {
-  
-  //  mutable int _polygon2DCount;
-  //  mutable int _holesLineStringsInPolygon2DCount;
-  
     ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), Polygons2D=%d (Holes=%d), MultiPolygons=%d, features=%d, featuresCollection=%d", _coordinates2DCount, _points2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _polygon2DCount, _holesLineStringsInPolygon2DCount, _multiPolygon2DCount, _featuresCount, _featuresCollectionCount);
   }
 

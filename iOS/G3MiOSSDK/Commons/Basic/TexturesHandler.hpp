@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TexturesHandler_hpp
-#define G3MiOSSDK_TexturesHandler_hpp
+#ifndef G3MiOSSDK_TexturesHandler
+#define G3MiOSSDK_TexturesHandler
 
 #include <string>
 #include <vector>
@@ -20,7 +20,7 @@ class TextureHolder;
 class GL;
 class IFactory;
 class IGLTextureId;
-
+class TextureIDReference;
 
 class TextureSpec {
 private:
@@ -28,7 +28,7 @@ private:
 
   const int         _width;
   const int         _height;
-  const bool        _isMipmap;
+  const bool        _generateMipmap;
 
   TextureSpec& operator=(const TextureSpec& that);
 
@@ -36,28 +36,28 @@ public:
   TextureSpec(const std::string& id,
               const int          width,
               const int          height,
-              const bool         isMipmap):
+              const bool         generateMipmap):
   _id(id),
   _width(width),
   _height(height),
-  _isMipmap(isMipmap)
+  _generateMipmap(generateMipmap)
   {
 
   }
 
-  TextureSpec():_id(""), _width(0),_height(0), _isMipmap(false) {}
+  TextureSpec():_id(""), _width(0),_height(0), _generateMipmap(false) {}
 
   TextureSpec(const TextureSpec& that):
   _id(that._id),
   _width(that._width),
   _height(that._height),
-  _isMipmap(that._isMipmap)
+  _generateMipmap(that._generateMipmap)
   {
 
   }
 
-  bool isMipmap() const {
-    return _isMipmap;
+  bool generateMipmap() const {
+    return _generateMipmap;
   }
 
   int getWidth() const {
@@ -93,6 +93,12 @@ public:
   }
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 #ifdef C_CODE
   bool operator<(const TextureSpec& that) const {
@@ -134,31 +140,6 @@ public:
 #endif
 };
 
-class TexturesHandler;
-
-class TextureIDReference{
-private:
-  const IGLTextureId* _id;
-  TexturesHandler* _texHandler;
-
-private:
-  TextureIDReference(const TextureIDReference& that);
-  
-public:
-
-  TextureIDReference(const IGLTextureId* id,
-                     TexturesHandler* texHandler):
-  _texHandler(texHandler), _id(id) {}
-
-  virtual ~TextureIDReference();
-
-  TextureIDReference* createCopy() const;
-
-  const IGLTextureId* getID() const{
-    return _id;
-  }
-
-};
 
 class TexturesHandler {
 private:
@@ -182,9 +163,9 @@ public:
   ~TexturesHandler();
 
   const TextureIDReference* getTextureIDReference(const IImage* image,
-                                     int format,
-                                     const std::string& name,
-                                     bool hasMipMap);
+                                                  int format,
+                                                  const std::string& name,
+                                                  bool generateMipmap);
 
 
   //This two methods are supposed to be accessed only by TextureIDReference class

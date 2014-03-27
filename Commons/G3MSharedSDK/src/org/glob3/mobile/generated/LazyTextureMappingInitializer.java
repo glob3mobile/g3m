@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+//class TextureIDReference;
 
 public abstract class LazyTextureMappingInitializer
 {
@@ -26,9 +27,9 @@ public abstract class LazyTextureMappingInitializer
 
   public abstract void initialize();
 
-  public abstract MutableVector2D getScale();
+  public abstract Vector2F getScale();
 
-  public abstract MutableVector2D getTranslation();
+  public abstract Vector2F getTranslation();
 
   public abstract IFloatBuffer createTextCoords();
 }

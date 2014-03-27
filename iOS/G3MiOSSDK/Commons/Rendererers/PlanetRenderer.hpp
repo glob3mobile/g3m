@@ -1,13 +1,13 @@
 //
-//  PlanetRenderer.h
+//  PlanetRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_PlanetRenderer_h
-#define G3MiOSSDK_PlanetRenderer_h
+#ifndef G3MiOSSDK_PlanetRenderer
+#define G3MiOSSDK_PlanetRenderer
 
 class Tile;
 class TileTessellator;
@@ -62,14 +62,13 @@ public:
   _renderedSector(NULL)
   {
     for (int i = 0; i < _maxLOD; i++) {
-      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+      _tilesProcessedByLevel[i] = 0;
+      _tilesVisibleByLevel[i]   = 0;
+      _tilesRenderedByLevel[i]  = 0;
     }
   }
 
   ~TilesStatistics() {
-    //    if (_buildersStartsInFrame > 0) {
-    //      printf("buildersStartsInFrame=%d\n", _buildersStartsInFrame);
-    //    }
     delete _renderedSector;
   }
 
@@ -82,7 +81,9 @@ public:
     delete _renderedSector;
     _renderedSector = NULL;
     for (int i = 0; i < _maxLOD; i++) {
-      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+      _tilesProcessedByLevel[i] = 0;
+      _tilesVisibleByLevel[i]   = 0;
+      _tilesRenderedByLevel[i]  = 0;
     }
   }
 
@@ -148,7 +149,6 @@ public:
     const int level = tile->_level;
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
-
     computeRenderedSector(tile);
   }
 
@@ -174,7 +174,6 @@ public:
 
 
   static std::string asLogString(const int m[], const int nMax) {
-
     bool first = true;
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     for(int i = 0; i < nMax; i++) {
@@ -187,7 +186,7 @@ public:
         else {
           isb->addString(",");
         }
-        isb->addString("L");
+        //isb->addString("L");
         isb->addInt(level);
         isb->addString(":");
         isb->addInt(counter);
@@ -223,7 +222,10 @@ private:
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
+  const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
+
+  TileRenderingListener*       _tileRenderingListener;
 
   TilesStatistics _statistics;
 
@@ -309,7 +311,9 @@ public:
                  bool                         showStatistics,
                  long long                    texturePriority,
                  const Sector&                renderedSector,
-                 const bool                   renderTileMeshes);
+                 const bool                   renderTileMeshes,
+                 const bool                   logTilesPetitions,
+                 TileRenderingListener*       tileRenderingListener);
 
   ~PlanetRenderer();
 
@@ -444,7 +448,7 @@ public:
     return _renderedSector;
   }
 
-  void setRenderedSector(const Sector& sector);
+  bool setRenderedSector(const Sector& sector);
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 

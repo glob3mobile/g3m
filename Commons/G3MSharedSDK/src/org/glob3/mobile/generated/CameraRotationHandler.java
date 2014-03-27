@@ -16,9 +16,6 @@ package org.glob3.mobile.generated;
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if ! G3MiOSSDK_CameraRotationHandlerr_h
-//#define G3MiOSSDK_CameraRotationHandler_h
 
 
 public class CameraRotationHandler extends CameraEventHandler
@@ -27,11 +24,11 @@ public class CameraRotationHandler extends CameraEventHandler
   private MutableVector2I _pivotPixel = new MutableVector2I(); //Initial pixel at start of gesture
 
 //  int _lastYValid;
-  private Camera _camera0 ; //Initial Camera saved on Down event
+  private Camera _camera0 = new Camera(); //Initial Camera saved on Down event
 
   public CameraRotationHandler()
   {
-     _camera0 = new Camera(new Camera(0, 0));
+     _camera0 = new Camera(new Camera());
      _pivotPoint = new MutableVector3D(0, 0, 0);
      _pivotPixel = new MutableVector2I(0, 0);
   }
@@ -186,4 +183,3 @@ public class CameraRotationHandler extends CameraEventHandler
 
 
 }
-//#endif

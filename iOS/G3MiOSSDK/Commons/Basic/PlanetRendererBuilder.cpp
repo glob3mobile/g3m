@@ -14,6 +14,7 @@
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
 #include "TileRasterizer.hpp"
+#include "TileRenderingListener.hpp"
 
 #include "CompositeTileRasterizer.hpp"
 
@@ -34,7 +35,9 @@ _texturePriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
-_renderTileMeshes(true)
+_renderTileMeshes(true),
+_logTilesPetitions(false),
+_tileRenderingListener(NULL)
 {
 }
 
@@ -53,6 +56,8 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _elevationDataProvider;
 
   delete _renderedSector;
+
+  delete _tileRenderingListener;
 }
 
 /**
@@ -132,6 +137,15 @@ TilesRenderParameters* PlanetRendererBuilder::getParameters() {
  */
 bool PlanetRendererBuilder::getShowStatistics() {
   return _showStatistics;
+}
+
+bool PlanetRendererBuilder::getLogTilesPetitions() {
+  return _logTilesPetitions;
+}
+
+
+void PlanetRendererBuilder::setLogTilesPetitions(bool logTilesPetitions) {
+  _logTilesPetitions = logTilesPetitions;
 }
 
 /**
@@ -253,7 +267,7 @@ void PlanetRendererBuilder::setRenderDebug(const bool renderDebug) {
   _renderDebug = renderDebug;
 }
 
-void PlanetRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) {
+void PlanetRendererBuilder::setUseTilesSplitBudget(const bool useTilesSplitBudget) {
   _useTilesSplitBudget = useTilesSplitBudget;
 }
 
@@ -302,6 +316,18 @@ float PlanetRendererBuilder::getVerticalExaggeration() {
   return _verticalExaggeration;
 }
 
+void PlanetRendererBuilder::setTileRenderingListener(TileRenderingListener* tileRenderingListener) {
+  if (_tileRenderingListener != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: TileRenderingListener already set");
+    return;
+  }
+
+  _tileRenderingListener = tileRenderingListener;
+}
+
+TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
+  return _tileRenderingListener;
+}
 
 PlanetRenderer* PlanetRendererBuilder::create() {
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
@@ -315,7 +341,9 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getShowStatistics(),
                                                       getTexturePriority(),
                                                       getRenderedSector(),
-                                                      getRenderTileMeshes());
+                                                      getRenderTileMeshes(),
+                                                      getLogTilesPetitions(),
+                                                      getTileRenderingListener());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -335,6 +363,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   delete _renderedSector;
   _renderedSector = NULL;
+
+  _tileRenderingListener = NULL;
 
   _tileRasterizers.clear();
 
@@ -358,7 +388,7 @@ bool PlanetRendererBuilder::getRenderTileMeshes() {
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-#warning Testing Terrain Normals
+//#warning Testing Terrain Normals
   const bool skirted = true;
   return new PlanetTileTessellator(skirted, getRenderedSector());
 }

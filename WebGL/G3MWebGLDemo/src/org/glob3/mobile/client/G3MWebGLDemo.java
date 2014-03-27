@@ -4,7 +4,98 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 import org.glob3.mobile.generated.*;
+=======
+import org.glob3.mobile.generated.AltitudeMode;
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.BusyMeshRenderer;
+import org.glob3.mobile.generated.CameraDoubleDragHandler;
+import org.glob3.mobile.generated.CameraDoubleTapHandler;
+import org.glob3.mobile.generated.CameraRenderer;
+import org.glob3.mobile.generated.CameraRotationHandler;
+import org.glob3.mobile.generated.CameraSingleDragHandler;
+import org.glob3.mobile.generated.CircleShape;
+import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.ErrorRenderer;
+import org.glob3.mobile.generated.FixedFocusSceneLighting;
+import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
+import org.glob3.mobile.generated.FloatBufferBuilderFromGeodetic;
+import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.G3MEventContext;
+import org.glob3.mobile.generated.GEO2DLineRasterStyle;
+import org.glob3.mobile.generated.GEO2DLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DPointGeometry;
+import org.glob3.mobile.generated.GEO2DPolygonData;
+import org.glob3.mobile.generated.GEO2DPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
+import org.glob3.mobile.generated.GEOGeometry;
+import org.glob3.mobile.generated.GEOLineRasterSymbol;
+import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
+import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
+import org.glob3.mobile.generated.GEORenderer;
+import org.glob3.mobile.generated.GEOSymbol;
+import org.glob3.mobile.generated.GEOSymbolizer;
+import org.glob3.mobile.generated.GEOTileRasterizer;
+import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GLPrimitive;
+import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.HUDErrorRenderer;
+import org.glob3.mobile.generated.IBufferDownloadListener;
+import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.ICameraActivityListener;
+import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.IImageListener;
+import org.glob3.mobile.generated.IImageUtils;
+import org.glob3.mobile.generated.IJSONParser;
+import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.InitialCameraPositionProvider;
+import org.glob3.mobile.generated.JSONArray;
+import org.glob3.mobile.generated.JSONBaseObject;
+import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LayerTouchEvent;
+import org.glob3.mobile.generated.LayerTouchEventListener;
+import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkTouchListener;
+import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.Mesh;
+import org.glob3.mobile.generated.MeshRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.PlanetRenderer;
+import org.glob3.mobile.generated.PlanetRendererBuilder;
+import org.glob3.mobile.generated.QuadShape;
+import org.glob3.mobile.generated.RectangleF;
+import org.glob3.mobile.generated.Renderer;
+import org.glob3.mobile.generated.SceneLighting;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.ShapesRenderer;
+import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
+import org.glob3.mobile.generated.StrokeCap;
+import org.glob3.mobile.generated.StrokeJoin;
+import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.Vector3D;
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.generated.WidgetUserData;
+>>>>>>> origin/purgatory
 import org.glob3.mobile.specific.Downloader_WebGL;
 import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
@@ -77,10 +168,10 @@ public class G3MWebGLDemo
       meshRenderer.addMesh(createPointsMesh(builder.getPlanet()));
       builder.addRenderer(meshRenderer);
 
-      if (true) {
-         final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
-         builder.setShownSector(spain);
-      }
+      //		if (true) {
+      //			final Sector spain = Sector.fromDegrees(27.3174927, -18.5284423, 45.0299024, 5.4084426);
+      //			builder.setShownSector(spain);
+      //		}
 
       final boolean useMarkers = true;
       if (useMarkers) {
@@ -206,7 +297,7 @@ public class G3MWebGLDemo
          @Override
          public ArrayList<GEOSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
             final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>();
-            symbols.add(new GEORasterLineSymbol(geometry.getCoordinates(), createLineRasterStyle(geometry)));
+            symbols.add(new GEOLineRasterSymbol(geometry.getCoordinates(), createLineRasterStyle(geometry)));
             return symbols;
          }
 
@@ -248,7 +339,7 @@ public class G3MWebGLDemo
          public ArrayList<GEOSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
             final ArrayList<GEOSymbol> symbols = new ArrayList<GEOSymbol>(0);
 
-            symbols.add(new GEORasterPolygonSymbol(geometry.getPolygonData(), createPolygonLineRasterStyle(geometry),
+            symbols.add(new GEOPolygonRasterSymbol(geometry.getPolygonData(), createPolygonLineRasterStyle(geometry),
                      createPolygonSurfaceRasterStyle(geometry)));
 
             return symbols;
@@ -267,8 +358,7 @@ public class G3MWebGLDemo
 
             for (int i = 0; i < polygonsDataSize; i++) {
                final GEO2DPolygonData polygonData = polygonsData.get(i);
-               symbols.add(new GEORasterPolygonSymbol(polygonData, lineStyle, surfaceStyle));
-
+               symbols.add(new GEOPolygonRasterSymbol(polygonData, lineStyle, surfaceStyle));
             }
 
             return symbols;
@@ -534,7 +624,29 @@ public class G3MWebGLDemo
 
          final LayerSet layerSet = new LayerSet();
 
-         final boolean blueMarble = true;
+         final boolean testingTransparencies = true;
+         if (testingTransparencies) {
+            final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
+                     WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false,
+                     new LevelTileCondition(0, 6), TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(
+                              Sector.fullSphere(), 2, 4, 0, 6, LayerTilesRenderParameters.defaultTileTextureResolution(),
+                              LayerTilesRenderParameters.defaultTileMeshResolution(), false));
+            layerSet.addLayer(blueMarble);
+
+            final WMSLayer i3Landsat = new WMSLayer("esat", new URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                     WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false,
+                     new LevelTileCondition(7, 100), TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(
+                              Sector.fullSphere(), 2, 4, 0, 12, LayerTilesRenderParameters.defaultTileTextureResolution(),
+                              LayerTilesRenderParameters.defaultTileMeshResolution(), false));
+            layerSet.addLayer(i3Landsat);
+
+            final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                     WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null,
+                     TimeInterval.fromDays(30), true, null, (float) 0.5);
+            layerSet.addLayer(pnoa);
+         }
+
+         final boolean blueMarble = false;
          if (blueMarble) {
             final WMSLayer blueMarbleL = new WMSLayer( //
                      "bmng200405", //
@@ -733,6 +845,10 @@ public class G3MWebGLDemo
                      destRs.add(new RectangleF(0, 0, 256, 256));
                      destRs.add(new RectangleF(50, 20, 256, 70));
 
+                     final java.util.ArrayList<Float> transparencies = new ArrayList<Float>();
+                     transparencies.add((float) 1.0);
+                     transparencies.add((float) 0.5);
+
                      class QuadListener
                               extends
                                  IImageListener {
@@ -754,7 +870,8 @@ public class G3MWebGLDemo
                         }
                      }
 
-                     IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, new QuadListener(shapesRenderer), true);
+                     IImageUtils.combine(new Vector2I(256, 256), images, srcRs, destRs, transparencies, new QuadListener(
+                              shapesRenderer), true);
 
                   }
 
@@ -837,6 +954,7 @@ public class G3MWebGLDemo
 
 
          final ErrorRenderer errorRenderer = new HUDErrorRenderer();
+         final Renderer hudRenderer = null;
          _widget.initWidget(//
                   storage, //
                   downloader, //
@@ -848,6 +966,7 @@ public class G3MWebGLDemo
                   mainRenderer, //
                   busyRenderer, //
                   errorRenderer, //
+                  hudRenderer, //
                   backgroundColor, //
                   logFPS, //
                   logDownloaderStatistics, //
@@ -1007,7 +1126,7 @@ public class G3MWebGLDemo
       /*
       final ShapesRenderer shapesRenderer = new ShapesRenderer();
       builder.addRenderer(shapesRenderer);
-      */
+       */
 
       // builder.setInitializationTask(createMarkersInitializationTask());
 
@@ -1122,6 +1241,31 @@ public class G3MWebGLDemo
     	  //layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
       }
 
+
+      final boolean testingTransparencies = true;
+      if (testingTransparencies) {
+         final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
+                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(
+                           0, 6), TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0,
+                           6, LayerTilesRenderParameters.defaultTileTextureResolution(),
+                           LayerTilesRenderParameters.defaultTileMeshResolution(), false));
+         layerSet.addLayer(blueMarble);
+
+         final WMSLayer i3Landsat = new WMSLayer("esat", new URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(
+                           7, 100), TimeInterval.fromDays(30), true, new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0,
+                           12, LayerTilesRenderParameters.defaultTileTextureResolution(),
+                           LayerTilesRenderParameters.defaultTileMeshResolution(), false));
+         layerSet.addLayer(i3Landsat);
+
+         final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                  WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null,
+                  TimeInterval.fromDays(30), true, null, (float) 0.5);
+         layerSet.addLayer(pnoa);
+      }
+
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
       /*
        * final WMSLayer political = new WMSLayer("topp:cia", new
        * URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
@@ -1182,7 +1326,7 @@ public class G3MWebGLDemo
       };
 
       builder.getPlanetRendererBuilder().addVisibleSectorListener(myListener, TimeInterval.fromMilliseconds(2000));
-      */
+       */
 
 
       /*
@@ -1270,7 +1414,7 @@ public class G3MWebGLDemo
        };
 
       builder.setInitializationTask(initializationTask);
-      */
+       */
 
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
@@ -1493,6 +1637,7 @@ public class G3MWebGLDemo
       }
 
       // camera constrainer
+<<<<<<< HEAD
       if (false) {
          final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
             private boolean firstTime = true;
@@ -1531,6 +1676,46 @@ public class G3MWebGLDemo
          builder.addCameraConstraint(myCameraConstrainer);
          builder.setPlanet(Planet.createFlatEarth());
       }
+=======
+      //      if (false) {
+      //         final ICameraConstrainer myCameraConstrainer = new ICameraConstrainer() {
+      //            private boolean firstTime = true;
+      //
+      //
+      //            @Override
+      //            public void dispose() {
+      //            }
+      //
+      //
+      //            @Override
+      //            public boolean onCameraChange(final Planet planet,
+      //                                          final Camera previousCamera,
+      //                                          final Camera nextCamera) {
+      //               if (firstTime) {
+      //                  final Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28), Angle.fromDegrees(-16), 4e5);
+      //                  nextCamera.setGeodeticPosition(position);
+      //                  firstTime = false;
+      //               }
+      //               else {
+      //                  final double maxHeight = 5e5;
+      //                  final double minLat = 26.5, maxLat = 30.5, minLon = -19.5, maxLon = -12.5;
+      //                  final Geodetic3D cameraPosition = nextCamera.getGeodeticPosition();
+      //                  final double lat = cameraPosition._latitude._degrees;
+      //                  final double lon = cameraPosition._longitude._degrees;
+      //                  final double pitch = nextCamera.getPitch()._degrees;
+      //                  final double heading = nextCamera.getHeading()._degrees;
+      //                  if ((cameraPosition._height > maxHeight) || (lon < minLon) || (lon > maxLon) || (lat < minLat)
+      //                      || (lat > maxLat) || (pitch > 0.01) || (Math.abs(heading) > 0.01)) {
+      //                     nextCamera.copyFrom(previousCamera);
+      //                  }
+      //               }
+      //               return true;
+      //            }
+      //         };
+      //         builder.addCameraConstraint(myCameraConstrainer);
+      //         builder.setPlanet(Planet.createFlatEarth());
+      //      }
+>>>>>>> origin/purgatory
 
 
       _widget = builder.createWidget();
@@ -1582,5 +1767,4 @@ public class G3MWebGLDemo
        */
 
    }
-
 }

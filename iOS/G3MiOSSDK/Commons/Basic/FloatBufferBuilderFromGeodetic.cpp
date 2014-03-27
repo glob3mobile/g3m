@@ -8,7 +8,7 @@
 void FloatBufferBuilderFromGeodetic::add(const Angle& latitude,
                                          const Angle& longitude,
                                          const double height) {
-  const Vector3D vector = _ellipsoid->toCartesian(latitude, longitude, height);
+  const Vector3D vector = _planet->toCartesian(latitude, longitude, height);
 
   if (_centerStrategy ==
 #ifdef C_CODE

@@ -233,9 +233,12 @@ public class Sector
 
   public final Vector2D getUVCoordinates(Angle latitude, Angle longitude)
   {
-//    return Vector2D(getUCoordinate(longitude),
-//                    getVCoordinate(latitude));
     return new Vector2D((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians, (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians);
+  }
+
+  public final Vector2F getUVCoordinatesF(Angle latitude, Angle longitude)
+  {
+    return new Vector2F((float)((longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians), (float)((_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians));
   }
 
   public final double getUCoordinate(Angle longitude)
@@ -317,6 +320,10 @@ public class Sector
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
   public final Sector shrinkedByPercentP(float percent)
@@ -435,7 +442,7 @@ public class Sector
     GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
   
   
-    return new GEORasterLineSymbol(line, ls);
+    return new GEOLineRasterSymbol(line, ls);
   
   }
 

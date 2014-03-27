@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLConstants_hpp
-#define G3MiOSSDK_GLConstants_hpp
+#ifndef G3MiOSSDK_GLConstants
+#define G3MiOSSDK_GLConstants
 
 #include "INativeGL.hpp"
 
@@ -213,15 +213,34 @@ public:
 };
 
 class GLTextureParameterValue {
+  static int _nearest;
   static int _linear;
+  static int _nearestMipmapNearest;
+  static int _nearestMipmapLinear;
+  static int _linearMipmapNearest;
+  static int _linearMipmapLinear;
+
   static int _clampToEdge;
-  
+
+
 public:
-  static int linear() { return _linear;}
-  static int clampToEdge() { return _clampToEdge;}
+  static int nearest()              { return _nearest;              }
+  static int linear()               { return _linear;               }
+  static int nearestMipmapNearest() { return _nearestMipmapNearest; }
+  static int nearestMipmapLinear()  { return _nearestMipmapLinear;  }
+  static int linearMipmapNearest()  { return _linearMipmapNearest;  }
+  static int linearMipmapLinear()   { return _linearMipmapLinear;   }
+
+  static int clampToEdge() { return _clampToEdge; }
   
   static void init(const INativeGL* ngl) {
-    _linear = ngl->TextureParameterValue_Linear();
+    _nearest               = ngl->TextureParameterValue_Nearest();
+    _linear                = ngl->TextureParameterValue_Linear();
+    _nearestMipmapNearest  = ngl->TextureParameterValue_NearestMipmapNearest();
+    _nearestMipmapLinear   = ngl->TextureParameterValue_NearestMipmapLinear();
+    _linearMipmapNearest   = ngl->TextureParameterValue_LinearMipmapNearest();
+    _linearMipmapLinear    = ngl->TextureParameterValue_LinearMipmapLinear();
+
     _clampToEdge = ngl->TextureParameterValue_ClampToEdge();
   }
 };

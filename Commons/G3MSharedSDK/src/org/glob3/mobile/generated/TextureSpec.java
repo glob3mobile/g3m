@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //class GL;
 //class IFactory;
 //class IGLTextureId;
-
+//class TextureIDReference;
 
 public class TextureSpec
 {
@@ -32,17 +32,17 @@ public class TextureSpec
 
   private final int _width;
   private final int _height;
-  private final boolean _isMipmap;
+  private final boolean _generateMipmap;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TextureSpec operator =(TextureSpec that);
 
-  public TextureSpec(String id, int width, int height, boolean isMipmap)
+  public TextureSpec(String id, int width, int height, boolean generateMipmap)
   {
      _id = id;
      _width = width;
      _height = height;
-     _isMipmap = isMipmap;
+     _generateMipmap = generateMipmap;
 
   }
 
@@ -51,7 +51,7 @@ public class TextureSpec
      _id = "";
      _width = 0;
      _height = 0;
-     _isMipmap = false;
+     _generateMipmap = false;
   }
 
   public TextureSpec(TextureSpec that)
@@ -59,13 +59,13 @@ public class TextureSpec
      _id = that._id;
      _width = that._width;
      _height = that._height;
-     _isMipmap = that._isMipmap;
+     _generateMipmap = that._generateMipmap;
 
   }
 
-  public final boolean isMipmap()
+  public final boolean generateMipmap()
   {
-    return _isMipmap;
+    return _generateMipmap;
   }
 
   public final int getWidth()
@@ -120,6 +120,10 @@ public class TextureSpec
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
 

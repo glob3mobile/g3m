@@ -129,6 +129,11 @@ public class Vector3D
     return _x * v._x + _y * v._y + _z * v._z;
   }
 
+  public final boolean isPerpendicularTo(Vector3D v)
+  {
+    return IMathUtils.instance().abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
+  }
+
   public final Vector3D add(Vector3D v)
   {
     return new Vector3D(_x + v._x, _y + v._y, _z + v._z);
@@ -176,16 +181,24 @@ public class Vector3D
 
   public final Angle angleBetween(Vector3D other)
   {
+    return Angle.fromRadians(angleInRadiansBetween(other));
+  }
+  public final double angleInRadiansBetween(Vector3D other)
+  {
     final Vector3D v1 = normalized();
     final Vector3D v2 = other.normalized();
   
     double c = v1.dot(v2);
     if (c > 1.0)
-       c = 1.0;
+    {
+      c = 1.0;
+    }
     else if (c < -1.0)
-       c = -1.0;
+    {
+      c = -1.0;
+    }
   
-    return Angle.fromRadians(IMathUtils.instance().acos(c));
+    return IMathUtils.instance().acos(c);
   }
   public final Angle signedAngleBetween(Vector3D other, Vector3D up)
   {
@@ -284,6 +297,10 @@ public class Vector3D
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
   public final Vector3D clamp(Vector3D min, Vector3D max)

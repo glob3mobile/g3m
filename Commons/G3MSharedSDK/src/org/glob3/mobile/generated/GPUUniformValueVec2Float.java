@@ -6,8 +6,8 @@ public class GPUUniformValueVec2Float extends GPUUniformValue
     super.dispose();
   }
 
-  public final float _x;
-  public final float _y;
+  public float _x;
+  public float _y;
 
   public GPUUniformValueVec2Float(float x, float y)
   {

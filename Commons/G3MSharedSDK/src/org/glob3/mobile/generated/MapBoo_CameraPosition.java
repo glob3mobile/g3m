@@ -65,5 +65,9 @@ public class MapBoo_CameraPosition
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

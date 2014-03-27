@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_MultiLayerTileTexturizer_hpp
-#define G3MiOSSDK_MultiLayerTileTexturizer_hpp
+#ifndef G3MiOSSDK_MultiLayerTileTexturizer
+#define G3MiOSSDK_MultiLayerTileTexturizer
 
 #include "TileTexturizer.hpp"
 #include "TileKey.hpp"
@@ -46,8 +46,9 @@ public:
                   long long texturePriority,
                   Tile* tile,
                   Mesh* tessellatorMesh,
-                  Mesh* previousMesh);
-  
+                  Mesh* previousMesh,
+                  bool logTilesPetitions);
+
   void tileToBeDeleted(Tile* tile,
                        Mesh* mesh);
   

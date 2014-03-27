@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_INativeGL_hpp
-#define G3MiOSSDK_INativeGL_hpp
+#ifndef G3MiOSSDK_INativeGL
+#define G3MiOSSDK_INativeGL
 
 class IFloatBuffer;
 //class IIntBuffer;
@@ -165,7 +165,13 @@ public:
   virtual int TextureParameter_WrapS() const = 0;
   virtual int TextureParameter_WrapT() const = 0;
 
+  virtual int TextureParameterValue_Nearest() const = 0;
   virtual int TextureParameterValue_Linear() const = 0;
+  virtual int TextureParameterValue_NearestMipmapNearest() const = 0;
+  virtual int TextureParameterValue_NearestMipmapLinear() const = 0;
+  virtual int TextureParameterValue_LinearMipmapNearest() const = 0;
+  virtual int TextureParameterValue_LinearMipmapLinear() const = 0;
+
   virtual int TextureParameterValue_ClampToEdge() const = 0;
 
   virtual int Alignment_Pack() const = 0;
@@ -195,6 +201,10 @@ public:
   
   virtual GPUUniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
   virtual GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
+
+  virtual void depthMask(bool v) const = 0;
+
+  virtual void setActiveTexture(int i) const = 0;
   
 };
 

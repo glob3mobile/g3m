@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_BoundingVolume_h
-#define G3MiOSSDK_BoundingVolume_h
+#ifndef G3MiOSSDK_BoundingVolume
+#define G3MiOSSDK_BoundingVolume
 
 #include "Context.hpp"
 //#include "IMathUtils.hpp"

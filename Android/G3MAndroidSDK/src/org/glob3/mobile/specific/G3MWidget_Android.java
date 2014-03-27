@@ -45,7 +45,6 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
-import android.view.MotionEvent.PointerCoords;
 
 
 public final class G3MWidget_Android
@@ -60,10 +59,27 @@ public final class G3MWidget_Android
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener  _doubleTapListener;
    private final GestureDetector      _gestureDetector;
+   private Thread                     _openGLThread         = null;
 
 
    public G3MWidget_Android(final android.content.Context context) {
       this(context, null);
+   }
+
+
+   private void setOpenGLThread(final Thread openGLThread) {
+      _openGLThread = openGLThread;
+   }
+
+
+   public final void checkOpenGLThread() {
+      if (_openGLThread != null) {
+         final Thread currentThread = Thread.currentThread();
+         if (currentThread != _openGLThread) {
+            throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
+                                       + ", CurrentThread=" + currentThread + ")");
+         }
+      }
    }
 
 
@@ -86,9 +102,10 @@ public final class G3MWidget_Android
       queueEvent(new Runnable() {
          @Override
          public void run() {
-            final Thread openglThread = Thread.currentThread();
-            ILogger.instance().logInfo("== OpenGL-Thread=%s", openglThread.toString());
-            _es2renderer.setOpenGLThread(openglThread);
+            final Thread openGLThread = Thread.currentThread();
+            ILogger.instance().logInfo("== OpenGL-Thread=%s", openGLThread.toString());
+            _es2renderer.setOpenGLThread(openGLThread);
+            setOpenGLThread(openGLThread);
          }
       });
 
@@ -203,7 +220,7 @@ public final class G3MWidget_Android
 
    @Override
    public void onLongPress(final MotionEvent e) {
-      final PointerCoords pc = new PointerCoords();
+      final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       e.getPointerCoords(0, pc);
       final Touch t = new Touch(new Vector2I((int) pc.x, (int) pc.y), new Vector2I(0, 0));
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
@@ -289,6 +306,7 @@ public final class G3MWidget_Android
                           final org.glob3.mobile.generated.Renderer mainRenderer,
                           final org.glob3.mobile.generated.Renderer busyRenderer,
                           final ErrorRenderer errorRenderer,
+                          final org.glob3.mobile.generated.Renderer hudRenderer,
                           final Color backgroundColor,
                           final boolean logFPS,
                           final boolean logDownloaderStatistics,
@@ -312,6 +330,7 @@ public final class G3MWidget_Android
                mainRenderer, //
                busyRenderer, //
                errorRenderer, //
+               hudRenderer, //
                backgroundColor, //
                logFPS, //
                logDownloaderStatistics, //
@@ -391,18 +410,30 @@ public final class G3MWidget_Android
    }
 
 
-   public void setCameraHeading(final Angle angle) {
-      getG3MWidget().setCameraHeading(angle);
-   }
-
-
    public void cancelCameraAnimation() {
       getG3MWidget().cancelCameraAnimation();
    }
 
 
-   public void setCameraPitch(final Angle angle) {
-      getG3MWidget().setCameraPitch(angle);
+   public void setCameraHeading(final Angle heading) {
+      getG3MWidget().setCameraHeading(heading);
+   }
+
+
+   public void setCameraPitch(final Angle pitch) {
+      getG3MWidget().setCameraPitch(pitch);
+   }
+
+
+   public void setCameraRoll(final Angle roll) {
+      getG3MWidget().setCameraRoll(roll);
+   }
+
+
+   public void setCameraHeadingPitchRoll(final Angle heading,
+                                         final Angle pitch,
+                                         final Angle roll) {
+      getG3MWidget().setCameraHeadingPitchRoll(heading, pitch, roll);
    }
 
 
