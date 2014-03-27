@@ -675,10 +675,10 @@
 		FB2FD51218460AA9002D2E78 /* RasterLineShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2FD510184606FC002D2E78 /* RasterLineShape.hpp */; };
 		FB2FD5151847B898002D2E78 /* RasterPolygonShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2FD5131847B898002D2E78 /* RasterPolygonShape.cpp */; };
 		FB2FD5161847C5C3002D2E78 /* RasterPolygonShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2FD5141847B898002D2E78 /* RasterPolygonShape.hpp */; };
+		FB30D64218E4B104000CBAFD /* GEORasterLineSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB30D63E18E4B104000CBAFD /* GEORasterLineSymbol.cpp */; };
+		FB30D64318E4B104000CBAFD /* GEORasterPolygonSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB30D64018E4B104000CBAFD /* GEORasterPolygonSymbol.cpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
-		FB379FE618E49ABD00127302 /* GEORasterLineSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB379FE418E49ABD00127302 /* GEORasterLineSymbol.cpp */; };
-		FB379FE918E49B5E00127302 /* GEORasterPolygonSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB379FE718E49B5E00127302 /* GEORasterPolygonSymbol.cpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
 		FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */; };
 		FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBC23099179730FF009343FC /* CameraEffects.cpp */; };
@@ -1751,12 +1751,12 @@
 		FB2FD510184606FC002D2E78 /* RasterLineShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RasterLineShape.hpp; path = Commons/Rendererers/RasterLineShape.hpp; sourceTree = "<group>"; };
 		FB2FD5131847B898002D2E78 /* RasterPolygonShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RasterPolygonShape.cpp; path = Commons/Rendererers/RasterPolygonShape.cpp; sourceTree = "<group>"; };
 		FB2FD5141847B898002D2E78 /* RasterPolygonShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RasterPolygonShape.hpp; path = Commons/Rendererers/RasterPolygonShape.hpp; sourceTree = "<group>"; };
+		FB30D63E18E4B104000CBAFD /* GEORasterLineSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterLineSymbol.cpp; path = Commons/GEO/GEORasterLineSymbol.cpp; sourceTree = "<group>"; };
+		FB30D63F18E4B104000CBAFD /* GEORasterLineSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterLineSymbol.hpp; path = Commons/GEO/GEORasterLineSymbol.hpp; sourceTree = "<group>"; };
+		FB30D64018E4B104000CBAFD /* GEORasterPolygonSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterPolygonSymbol.cpp; path = Commons/GEO/GEORasterPolygonSymbol.cpp; sourceTree = "<group>"; };
+		FB30D64118E4B104000CBAFD /* GEORasterPolygonSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterPolygonSymbol.hpp; path = Commons/GEO/GEORasterPolygonSymbol.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
-		FB379FE418E49ABD00127302 /* GEORasterLineSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterLineSymbol.cpp; path = "../../../../../Desktop/demo-vectorial-cotesa-ios/G3MiOSSDK/Commons/GEO/GEORasterLineSymbol.cpp"; sourceTree = "<group>"; };
-		FB379FE518E49ABD00127302 /* GEORasterLineSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterLineSymbol.hpp; path = "../../../../../Desktop/demo-vectorial-cotesa-ios/G3MiOSSDK/Commons/GEO/GEORasterLineSymbol.hpp"; sourceTree = "<group>"; };
-		FB379FE718E49B5E00127302 /* GEORasterPolygonSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterPolygonSymbol.cpp; path = "../../../../../Desktop/demo-vectorial-cotesa-ios/G3MiOSSDK/Commons/GEO/GEORasterPolygonSymbol.cpp"; sourceTree = "<group>"; };
-		FB379FE818E49B5E00127302 /* GEORasterPolygonSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterPolygonSymbol.hpp; path = "../../../../../Desktop/demo-vectorial-cotesa-ios/G3MiOSSDK/Commons/GEO/GEORasterPolygonSymbol.hpp"; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 		FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatPlanet.cpp; path = Commons/Geometry/FlatPlanet.cpp; sourceTree = "<group>"; };
@@ -2390,10 +2390,10 @@
 		CFDAE7A1166840E0006F6A00 /* GEO */ = {
 			isa = PBXGroup;
 			children = (
-				FB379FE718E49B5E00127302 /* GEORasterPolygonSymbol.cpp */,
-				FB379FE818E49B5E00127302 /* GEORasterPolygonSymbol.hpp */,
-				FB379FE418E49ABD00127302 /* GEORasterLineSymbol.cpp */,
-				FB379FE518E49ABD00127302 /* GEORasterLineSymbol.hpp */,
+				FB30D63E18E4B104000CBAFD /* GEORasterLineSymbol.cpp */,
+				FB30D63F18E4B104000CBAFD /* GEORasterLineSymbol.hpp */,
+				FB30D64018E4B104000CBAFD /* GEORasterPolygonSymbol.cpp */,
+				FB30D64118E4B104000CBAFD /* GEORasterPolygonSymbol.hpp */,
 				CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */,
 				CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */,
 				CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */,
@@ -2820,7 +2820,6 @@
 				D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */,
 				CFB57DA61860E4EF00D5B094 /* HUDRenderer.cpp in Sources */,
 				D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */,
-				FB379FE618E49ABD00127302 /* GEORasterLineSymbol.cpp in Sources */,
 				CF0C396A157F988100646A2F /* Mark.cpp in Sources */,
 				38D786E61587B446003BBC75 /* Tile.cpp in Sources */,
 				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,
@@ -2837,7 +2836,9 @@
 				CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */,
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
+				FB30D64318E4B104000CBAFD /* GEORasterPolygonSymbol.cpp in Sources */,
 				D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */,
+				FB30D64218E4B104000CBAFD /* GEORasterLineSymbol.cpp in Sources */,
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
 				CF423A2517F799DD00F50525 /* ErrorRenderer.cpp in Sources */,
@@ -3065,7 +3066,6 @@
 				44A00493175500B900C6686D /* ICameraActivityListener.cpp in Sources */,
 				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
 				D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */,
-				FB379FE918E49B5E00127302 /* GEORasterPolygonSymbol.cpp in Sources */,
 				D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */,
 				D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */,
 				CFAC9E9F18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp in Sources */,
