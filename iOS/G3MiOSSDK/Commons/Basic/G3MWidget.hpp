@@ -326,6 +326,8 @@ private:
 
   RenderState calculateRendererState();
   
+  void setSelectedRenderer(ProtoRenderer* selectedRenderer);
+  
 };
 
 #endif

@@ -516,48 +516,37 @@ void G3MWidget::render(int width, int height) {
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
 
-  ProtoRenderer* selectedRenderer;
-  switch (renderStateType) {
-    case RENDER_READY:
-      selectedRenderer = _mainRenderer;
-      break;
-
-    case RENDER_BUSY:
-      selectedRenderer = _busyRenderer;
-      break;
-
-    default:
-      _errorRenderer->setErrors( _rendererState->getErrors() );
-      selectedRenderer = _errorRenderer;
-      break;
-  }
-
-  if (selectedRenderer != _selectedRenderer) {
-    if (_selectedRenderer != NULL) {
-      _selectedRenderer->stop(_renderContext);
-    }
-    _selectedRenderer = selectedRenderer;
-    _selectedRenderer->start(_renderContext);
-  }
-
   _gl->clearScreen(*_backgroundColor);
-
+  
   if (_rootState == NULL) {
     _rootState = new GLState();
   }
 
-  if (renderStateType == RENDER_READY) {
-    _cameraRenderer->render(_renderContext, _rootState);
+  switch (renderStateType) {
+    case RENDER_READY:
+      setSelectedRenderer(_mainRenderer);
+      _cameraRenderer->render(_renderContext, _rootState);
+      
+      _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
+      
+      if (_mainRenderer->isEnable()) {
+        _mainRenderer->render(_renderContext, _rootState);
+      }
+      
+      break;
 
-    _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
-    
+    case RENDER_BUSY:
+      setSelectedRenderer(_busyRenderer);
+      _busyRenderer->render(_renderContext, _rootState);
+      break;
+
+    default:
+      _errorRenderer->setErrors( _rendererState->getErrors() );
+      setSelectedRenderer(_errorRenderer);
+      _errorRenderer->render(_renderContext, _rootState);
+      break;
+      
   }
-
-  //TODO: CHECK THIS OMISION
-  //if (_selectedRenderer->isEnable()) {
-  int _todovtp;
-    _selectedRenderer->render(_renderContext, _rootState);
-  //}
 
   std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
   if (orderedRenderables != NULL) {
@@ -620,7 +609,16 @@ void G3MWidget::render(int width, int height) {
       _lastCacheStatistics = cacheStatistics;
     }
   }
+}
 
+void G3MWidget::setSelectedRenderer(ProtoRenderer* selectedRenderer) {
+  if (selectedRenderer != _selectedRenderer) {
+    if (_selectedRenderer != NULL) {
+      _selectedRenderer->stop(_renderContext);
+    }
+    _selectedRenderer = selectedRenderer;
+    _selectedRenderer->start(_renderContext);
+  }
 }
 
 void G3MWidget::onPause() {
