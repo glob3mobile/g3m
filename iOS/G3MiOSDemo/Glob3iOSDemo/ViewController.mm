@@ -282,6 +282,13 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithBuilderAndSegmentedWorld];
 
+  /*[[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                       Geodetic3D::fromDegrees(25.743467472995700263,
+                                                                               -5.3656762990500403987,
+                                                                               1664155.1381164737977),
+                                                       Angle::fromDegrees(-0.145718),
+                                                       Angle::fromDegrees(-52.117699));*/
+
   [[self G3MWidget] startAnimation];
 
   /*
@@ -605,17 +612,16 @@ public:
 };
 
 
-
-class SampleTileRenderingListener : public TileRenderingListener {
-public:
-  void startRendering(const Tile* tile) {
-    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-  }
-
-  void stopRendering(const Tile* tile) {
-    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-  }
-};
+//class SampleTileRenderingListener : public TileRenderingListener {
+//public:
+//  void startRendering(const Tile* tile) {
+//    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+//  }
+//
+//  void stopRendering(const Tile* tile) {
+//    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+//  }
+//};
 
 
 - (void) initCustomizedWithBuilder
@@ -623,7 +629,7 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
 
 
-  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
+  //builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
@@ -665,7 +671,12 @@ public:
   /*builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));*/
 
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
+                                                                                Color::yellow(),
+                                                                                true,  // showIDLabel
+                                                                                false, // showSectorLabels,
+                                                                                true   // showTileBounds
+                                                                                ));
   builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
   
   Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
@@ -1510,12 +1521,12 @@ builder.initializeWidget();
                                          "tm_world_borders_simpl_0_3",
                                          TimeInterval::fromDays(30)) );
   }
-  const bool useMapQuestOpenAerial = true;
+  const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapBox = false;
+  const bool useMapBox = true;
   if (useMapBox) {
     //const std::string mapKey = "dgd.map-v93trj8v";
     //const std::string mapKey = "examples.map-cnkhv76j";
@@ -1939,7 +1950,6 @@ builder.initializeWidget();
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  //const Quality quality = QUALITY_MEDIUM;
   const Quality quality = QUALITY_LOW;
 
   return new TilesRenderParameters(renderDebug,

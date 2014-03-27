@@ -903,3 +903,4 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
   }
   return changed;
 }
+
