@@ -116,6 +116,9 @@ public:
   Color* getColor() {
     return _color;
   }
+  
+  virtual void zRawRender(const G3MRenderContext* rc, GLState* parentGLState) { }
+
 };
 
 

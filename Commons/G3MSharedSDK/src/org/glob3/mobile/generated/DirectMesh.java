@@ -19,12 +19,12 @@ package org.glob3.mobile.generated;
 
 public class DirectMesh extends AbstractMesh
 {
-  protected final void rawRender(G3MRenderContext rc)
+  protected final void rawRender(G3MRenderContext rc, GLState glState, RenderType renderType)
   {
     GL gl = rc.getGL();
   
     final int verticesCount = getVertexCount();
-    gl.drawArrays(_primitive, 0, verticesCount, _glState, rc.getGPUProgramManager());
+    gl.drawArrays(_primitive, 0, verticesCount, glState, rc.getGPUProgramManager(), renderType);
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

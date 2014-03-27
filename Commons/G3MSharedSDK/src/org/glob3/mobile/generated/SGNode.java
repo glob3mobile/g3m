@@ -165,6 +165,7 @@ public class SGNode
     return "SGNode";
   }
 
+<<<<<<< HEAD
   public Box getCopyBoundingBox()
   {
     Box boundingBox = null;
@@ -187,5 +188,42 @@ public class SGNode
       }
     }
     return boundingBox;
+=======
+  public void zRawRender(G3MRenderContext rc, GLState parentState)
+  {
+  }
+
+  public void zRender(G3MRenderContext rc, GLState parentState)
+  {
+  
+    final GLState glState = createZRenderState(rc, parentState);
+    if (glState != null)
+    {
+  
+      zRawRender(rc, glState);
+  
+      final int childrenCount = _children.size();
+      for (int i = 0; i < childrenCount; i++)
+      {
+        SGNode child = _children.get(i);
+        child.zRender(rc, glState);
+      }
+  
+      glState._release(); //We always destroy render Z state
+  
+    }
+    else
+    {
+      ILogger.instance().logError("NO GLSTATE FOR ZRENDER");
+    }
+  
+  }
+
+  public GLState createZRenderState(G3MRenderContext rc, GLState parentState)
+  {
+    GLState state = new GLState();
+    state.setParent(parentState);
+    return state;
+>>>>>>> senderos-gc
   }
 }

@@ -39,6 +39,8 @@ public class DoubleTapTranslationEffect extends EffectWithDuration
     final double step = 1.0 - _lastAlpha;
     camera.translateCamera(_translation.times(step));
     camera.moveForward(_distance * step);
+  
+    System.out.printf("acabo double tap en altura %.2f\n", camera.getGeodeticPosition()._height);
   }
 
   public final void cancel(TimeInterval when)

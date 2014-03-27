@@ -11,7 +11,7 @@ public abstract class TileTessellator
 
   public abstract Vector2I getTileMeshResolution(Planet planet, Vector2I resolution, Tile tile, boolean debug);
 
-  public abstract Mesh createTileDebugMesh(Planet planet, Vector2I resolution, Tile tile);
+  public abstract Mesh createTileDebugMesh(Planet planet, Vector2I resolution, Tile tile, Color colorDebug);
 
   public abstract IFloatBuffer createTextCoords(Vector2I resolution, Tile tile, boolean mercator);
 

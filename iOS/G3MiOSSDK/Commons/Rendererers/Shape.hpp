@@ -327,6 +327,11 @@ public:
     return false;
   }
 
+  void zRender(const G3MRenderContext* rc, GLState* parentState, bool renderNotReadyShapes);
+
+  virtual void zRawRender(const G3MRenderContext* rc, GLState* parentGLState) = 0;
+
+
 };
 
 #endif

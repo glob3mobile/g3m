@@ -48,8 +48,8 @@ protected:
   GLState* _glState;
   
   void createGLState();
-  
-  virtual void rawRender(const G3MRenderContext* rc) const = 0;
+
+  virtual void rawRender(const G3MRenderContext* rc, GLState* glState, RenderType renderType) const = 0;
 
   mutable bool _showNormals;
   mutable Mesh* _normalsMesh;
@@ -67,8 +67,11 @@ public:
   bool isTransparent(const G3MRenderContext* rc) const{
     return false; //TODO: CHECK
   }
-  
+
   void rawRender(const G3MRenderContext* rc,
+                 const GLState* parentGLState) const;
+
+  void zRawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
 
   void showNormals(bool v) const{

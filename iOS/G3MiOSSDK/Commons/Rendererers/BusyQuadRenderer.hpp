@@ -118,7 +118,10 @@ public:
   void onDestroy(const G3MContext* context) {
     
   }
-  
+
+  void zRender(const G3MRenderContext* rc,
+               GLState* glState){}
+
 };
 
 //***************************************************************

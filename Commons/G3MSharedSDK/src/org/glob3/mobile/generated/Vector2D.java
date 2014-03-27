@@ -123,6 +123,11 @@ public class Vector2D
     return new MutableVector2D(_x, _y);
   }
 
+  public final boolean isEquals(Vector2D that)
+  {
+    return _x == that._x && _y == that._y;
+  }
+
   public final boolean isNan()
   {
 //    return IMathUtils::instance()->isNan(_x) || IMathUtils::instance()->isNan(_y);
@@ -136,6 +141,58 @@ public class Vector2D
       return true;
     }
     return false;
+  }
+
+  public final double distanceTo(Vector2D that)
+  {
+    return IMathUtils.instance().sqrt(squaredDistanceTo(that));
+  }
+
+  public final double squaredDistanceTo(Vector2D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    return (dx * dx) + (dy * dy);
+  }
+
+  public final double distanceToSegment(Vector2D A, Vector2D B)
+  {
+  
+    //Check this out: http://luisrey.wordpress.com/2008/07/06/distancia-punto-1/
+  
+    if (A.isEquals(B))
+    {
+      return this.distanceTo(A);
+    }
+  
+    final double ax = A._x;
+    final double ay = A._y;
+    final double bx = B._x;
+    final double by = B._y;
+    final double cx = this._x;
+    final double cy = this._y;
+  
+    final double dx = bx - ax;
+    final double dy = by - ay;
+  
+    double u = ((cx-ax)*dx) + ((cy-ay)*dy) / (dx *dx + dy *dy);
+  
+    if (u <= 0.0)
+    {
+      return this.distanceTo(A);
+    }
+    else if (u >= 1.0)
+    {
+      return this.distanceTo(B);
+    }
+    else
+    {
+  
+      //Point proyection is inside the segment
+      Vector2D proyection = new Vector2D(ax + u * dx, ay + u * dy);
+      return distanceTo(proyection);
+    }
+  
   }
 
   public final String description()

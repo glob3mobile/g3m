@@ -21,6 +21,7 @@
 #include "GPUProgram.hpp"
 #include "GPUAttribute.hpp"
 #include "GPUUniform.hpp"
+#include "Vector2F.hpp"
 
 
 class NativeGL2_iOS: public INativeGL {
@@ -386,6 +387,10 @@ public:
     return GL_RGBA;
   }
 
+  int Format_RGB() const {
+    return GL_RGB;
+  }
+
   int Variable_Viewport() const {
     return GL_VIEWPORT;
   }
@@ -526,7 +531,12 @@ public:
   GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
     GLint maxLength;
     glGetProgramiv(program->getProgramID(), GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLength);
-    
+
+    GLenum x = glGetError();
+    if (x != GL_NO_ERROR){
+      printf("ok");
+    }
+
     GLsizei bufsize = maxLength;
     
     GLchar name[maxLength];
@@ -541,9 +551,19 @@ public:
                        &size,
                        &type,
                        name);
+
+     x = glGetError();
+    if (x != GL_NO_ERROR){
+      printf("ok");
+    }
     
     const int id = glGetUniformLocation(program->getProgramID(), name);
-    
+
+     x = glGetError();
+    if (x != GL_NO_ERROR){
+      printf("ok");
+    }
+
     //NSLog(@"Uniform Name: %s - %d, BitCode: %d", name, id, GPUVariable::getUniformCode(GPUVariable::getUniformKey(name))  );
     switch (type) {
       case GL_FLOAT_MAT4:
@@ -566,8 +586,36 @@ public:
     }
   }
 
+  Color read1PixelAsRGBAColor(int x, int y) const{
+    struct{ GLubyte red, green, blue, alpha; } pixel;
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
+    return Color::fromRGBA(pixel.red, pixel.green, pixel.blue, pixel.alpha);
+  }
+
+  double read1PixelAsDouble(int x, int y) const{
+    unsigned char zValue[4];
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, zValue);
+
+    if (zValue[3] != 0){    //ZRENDER Shader sets all pixels with 0 alpha
+      return NAND;
+    }
+
+    double winZ = (double) zValue[0] * 65536.0;
+    winZ += (double) zValue[1] * 256.0;
+    winZ += (double) zValue[2];
+    winZ /= 16777215.0;
+
+    return winZ;
+  }
+
   void depthMask(bool v) const{
     glDepthMask(v);
+  }
+
+  Vector2F getDepthRange() const{
+    float r[2];
+    glGetFloatv(GL_DEPTH_RANGE, r);
+    return Vector2F(r[0], r[1]);
   }
   
 };

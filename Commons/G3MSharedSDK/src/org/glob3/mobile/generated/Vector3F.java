@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+//class Vector3D;
 
 public class Vector3F
 {
@@ -82,6 +83,11 @@ public class Vector3F
   public final Vector3F cross(Vector3F that)
   {
     return new Vector3F(_y * that._z - _z * that._y, _z * that._x - _x * that._z, _x * that._y - _y * that._x);
+  }
+
+  public final Vector3D asVector3D()
+  {
+    return new Vector3D(_x, _y, _z);
   }
 
   public final boolean isZero()

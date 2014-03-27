@@ -19,7 +19,18 @@ GPUProgramManager::~GPUProgramManager() {
 #endif
 }
 
-GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attributesCode) {
+GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attributesCode, RenderType renderType) {
+
+  //ZRENDER
+  if (renderType == Z_BUFFER_RENDER){
+    GPUProgram* prog = getCompiledProgram("ZRender");
+    if (prog == NULL){
+      prog = compileProgramWithName(gl, "ZRender");
+    }
+    return prog;
+  }
+
+  //REGULAR RENDERING
   GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
   if (p == NULL) {
     p = getNewProgram(gl, uniformsCode, attributesCode);

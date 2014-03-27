@@ -24,6 +24,7 @@ public class SphericalPlanet extends Planet
 
   private MutableVector3D _origin = new MutableVector3D();
   private MutableVector3D _initialPoint = new MutableVector3D();
+  private double _dragRadius;
   private MutableVector3D _centerPoint = new MutableVector3D();
   private MutableVector3D _centerRay = new MutableVector3D();
   private MutableVector3D _initialPoint0 = new MutableVector3D();
@@ -94,48 +95,7 @@ public class SphericalPlanet extends Planet
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
-    java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
-  
-    // By laborious algebraic manipulation....
-    final double a = direction._x * direction._x + direction._y * direction._y + direction._z * direction._z;
-  
-    final double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
-  
-    final double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _sphere._radiusSquared;
-  
-    // Solve the quadratic equation: ax^2 + bx + c = 0.
-    // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
-    // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-    final double discriminant = b * b - 4 * a * c;
-    if (discriminant < 0.0)
-    {
-      // no intersections
-      return intersections;
-    }
-    else if (discriminant == 0.0)
-    {
-      // one intersection at a tangent point
-      //return new double[1] { -0.5 * b / a };
-      intersections.add(-0.5 * b / a);
-      return intersections;
-    }
-  
-    final double rootDiscriminant = IMathUtils.instance().sqrt(discriminant);
-    final double root1 = (-b + rootDiscriminant) / (2 *a);
-    final double root2 = (-b - rootDiscriminant) / (2 *a);
-  
-    // Two intersections - return the smallest first.
-    if (root1 < root2)
-    {
-      intersections.add(root1);
-      intersections.add(root2);
-    }
-    else
-    {
-      intersections.add(root2);
-      intersections.add(root1);
-    }
-    return intersections;
+    return Sphere.intersectionCenteredSphereWithRay(origin, direction, _sphere._radius);
   }
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
@@ -332,12 +292,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
-    if (distances.isEmpty())
-    {
-      return Vector3D.nan();
-    }
-    return pos.add(ray.times(distances.get(0)));
+    return Sphere.closestIntersectionCenteredSphereWithRay(pos, ray, _sphere._radius);
   }
 
 
@@ -354,10 +309,14 @@ public class SphericalPlanet extends Planet
      return false;
   }
 
-  public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
+  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  public final void beginSingleDrag(Vector3D origin, Vector3D touchedPosition)
   {
     _origin = origin.asMutableVector3D();
-    _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+    //_initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+    _initialPoint = touchedPosition.asMutableVector3D();
+    _dragRadius = _sphere._radius + toGeodetic3D(touchedPosition)._height;
+  
     _validSingleDrag = false;
   }
 
@@ -369,7 +328,7 @@ public class SphericalPlanet extends Planet
   
     // compute final point
     final Vector3D origin = _origin.asVector3D();
-    MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
+    MutableVector3D finalPoint = Sphere.closestIntersectionCenteredSphereWithRay(origin, finalRay, _dragRadius).asMutableVector3D();
     if (finalPoint.isNan())
     {
       //printf ("--invalid final point in drag!!\n");
@@ -403,7 +362,20 @@ public class SphericalPlanet extends Planet
     return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle.fromRadians(_lastDragRadiansStep));
   }
 
-  public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D initialRay0, Vector3D initialRay1)
+ /* void beginDoubleDrag(const Vector3D& origin,
+                       const Vector3D& centerRay,
+                               const Vector3D& initialRay0,
+                               const Vector3D& initialRay1) const;*/
+  public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition0, Vector3D touchedPosition1)
+  {
+  }
+
+
+  /*
+  void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
+                                        const Vector3D& centerRay,
+                                        const Vector3D& initialRay0,
+                                        const Vector3D& initialRay1) const
   {
     _origin = origin.asMutableVector3D();
     _centerRay = centerRay.asMutableVector3D();
@@ -416,10 +388,11 @@ public class SphericalPlanet extends Planet
     // middle point in 3D
     Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
     Geodetic2D g1 = toGeodetic2D(_initialPoint1.asVector3D());
-    Geodetic2D g = getMidPoint(g0, g1);
+    Geodetic2D g  = getMidPoint(g0, g1);
     _initialPoint = toCartesian(g).asMutableVector3D();
-  }
-
+  }*/
+  
+  
   public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
   {
     // test if initialPoints are valid
@@ -435,6 +408,8 @@ public class SphericalPlanet extends Planet
     double angle0;
     double angle1;
     double distance = _origin.sub(_centerPoint).length();
+  
+    // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
   
     // compute estimated camera translation: step 0
     double d = distance*(factor-1)/factor;
@@ -557,23 +532,26 @@ public class SphericalPlanet extends Planet
     return matrix;
   }
 
-  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D tapRay)
+  public final Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D touchedPosition)
   {
-    final Vector3D initialPoint = closestIntersection(origin, tapRay);
-    if (initialPoint.isNan())
+    //const Vector3D initialPoint = closestIntersection(origin, tapRay);
+    if (touchedPosition.isNan())
        return null;
   
     // compute central point of view
-    final Vector3D centerPoint = closestIntersection(origin, centerRay);
+    //const Vector3D centerPoint = closestIntersection(origin, centerRay);
+    double touchedHeight = toGeodetic3D(touchedPosition)._height;
+    double dragRadius = _sphere._radius + touchedHeight;
+    final Vector3D centerPoint = Sphere.closestIntersectionCenteredSphereWithRay(origin, centerRay, dragRadius);
   
     // compute drag parameters
     final IMathUtils mu = IMathUtils.instance();
-    final Vector3D axis = initialPoint.cross(centerPoint);
-    final Angle angle = Angle.fromRadians(- mu.asin(axis.length()/initialPoint.length()/centerPoint.length()));
+    final Vector3D axis = touchedPosition.cross(centerPoint);
+    final Angle angle = Angle.fromRadians(- mu.asin(axis.length()/touchedPosition.length()/centerPoint.length()));
   
     // compute zoom factor
-    final double height = toGeodetic3D(origin)._height;
-    final double distance = height * 0.6;
+    final double distanceToGround = toGeodetic3D(origin)._height - touchedHeight;
+    final double distance = distanceToGround * 0.6;
   
     // create effect
     return new DoubleTapRotationEffect(TimeInterval.fromSeconds(0.75), axis, angle, distance);

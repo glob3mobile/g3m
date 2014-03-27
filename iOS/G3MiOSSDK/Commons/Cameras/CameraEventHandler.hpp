@@ -41,6 +41,10 @@ public:
                     const TouchEvent& touchEvent,
                     CameraContext *cameraContext) = 0;
   
+  virtual void setDebugMeshRenderer(MeshRenderer* meshRenderer) {
+    
+  }
+  
 };
 
 #endif

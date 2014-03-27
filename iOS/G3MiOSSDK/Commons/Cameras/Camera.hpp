@@ -110,6 +110,7 @@ public:
   _height(that._height),
   _planet(that._planet),
   _position(that._position),
+  _groundHeight(that._groundHeight),
   _center(that._center),
   _up(that._up),
   _dirtyFlags(that._dirtyFlags),
@@ -151,6 +152,7 @@ public:
   void resizeViewport(int width, int height);
 
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
+  const Vector3D pixel2Ray(const Vector3D& pixel3D) const;
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
@@ -302,6 +304,13 @@ public:
     return _frustumData;
   }
 
+  void setGroundHeightFromCartesianPoint(const Vector3D& point) {
+    _groundHeight = _planet->toGeodetic3D(point)._height;
+  }
+  
+  double getHeightFromGround() const {
+    return getGeodeticPosition()._height - _groundHeight;
+  }
 
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   void setFOV(const Angle& vertical,
@@ -334,6 +343,8 @@ private:
   MutableVector3D _up;                  // vertical vector
 
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
+  
+  double _groundHeight;
 
   // this value is only used in the method Sector::isBackOriented
   // it's stored in double instead of Angle class to optimize performance in android

@@ -57,6 +57,12 @@ public:
   std::string description() {
     return "SGGeometryNode";
   }
+
+  virtual void zRawRender(const G3MRenderContext* rc,
+                          const GLState* parentState);
+
+  virtual const GLState* createZRenderState(const G3MRenderContext* rc,
+                                            const GLState* parentState);
   
   Box* getCopyBoundingBox() {
     return new Box(_boundingBox);

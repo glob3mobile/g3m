@@ -48,6 +48,8 @@ public:
   virtual void rawRender(const G3MRenderContext* rc,
                          const GLState* parentGLState) const = 0;
 
+  virtual void zRawRender(const G3MRenderContext* rc, const GLState* parentGLState) const = 0;
+
   void render(const G3MRenderContext* rc,
               const GLState* parentGLState) const {
     if (_enable) {
@@ -55,6 +57,13 @@ public:
     }
   }
 
+  void zRender(const G3MRenderContext* rc,
+              const GLState* parentGLState) const {
+    if (_enable) {
+      zRawRender(rc, parentGLState);
+    }
+  }
+  
   virtual void showNormals(bool v) const = 0;
 
 };

@@ -29,6 +29,7 @@ class IGLUniformID;
 class GPUProgramManager;
 class GPUProgramState;
 class GLState;
+#include "Vector2F.hpp"
 
 #include "GPUProgram.hpp"
 
@@ -95,28 +96,19 @@ public:
   }
   
   void clearScreen(const Color& color);
-  
-//  void drawElements(int mode,
-//                    IShortBuffer* indices, const GLGlobalState& state,
-//                    GPUProgramManager& progManager,
-//                    const GPUProgramState* gpuState);
 
   void drawElements(int mode,
                     IShortBuffer* indices, const GLState* state,
-                    GPUProgramManager& progManager);
-  
-//  void drawArrays(int mode,
-//                  int first,
-//                  int count, const GLGlobalState& state,
-//                  GPUProgramManager& progManager,
-//                  const GPUProgramState* gpuState);
+                    GPUProgramManager& progManager,
+                    RenderType renderType);
 
   void drawArrays(int mode,
                   int first,
                   int count, const GLState* state,
-                  GPUProgramManager& progManager);
+                  GPUProgramManager& progManager,
+                  RenderType renderType);
   
-  int getError();
+  int getError() const;
   
   const IGLTextureId* uploadTexture(const IImage* image,
                                     int format,
@@ -235,11 +227,24 @@ public:
   }
   
   GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
-    return _nativeGL->getActiveUniform(program, i);
+    GPUUniform* u = _nativeGL->getActiveUniform(program, i);
+
+    if (_nativeGL->getError() != GLError::noError()){
+      ILogger::instance()->logError("Problem at getting uniform %d in program %s", i, program->getName().c_str());
+    }
+
+    return u;
   }
   
   GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const{
-    return _nativeGL->getActiveAttribute(program, i);
+
+    GPUAttribute* a = _nativeGL->getActiveAttribute(program, i);
+
+    if (_nativeGL->getError() != GLError::noError()){
+      ILogger::instance()->logError("Problem at getting attribute %d in program %s", i, program->getName().c_str());
+    }
+
+    return a;
   }
   
   //  GLGlobalState* getCurrentState() const{ return _currentState;}
@@ -256,6 +261,23 @@ public:
 
   GLGlobalState* getCurrentGLGlobalState() {
     return _currentGLGlobalState;
+  }
+
+  double readPixelAsDouble(int x, int y, int viewportWidth, int viewportHeight) const{
+
+    const int px = x;
+    const int py = viewportHeight - y;
+
+    double d = _nativeGL->read1PixelAsDouble(px, py);
+    int e = getError();
+    if (e != GLError::noError()){
+      ILogger::instance()->logError("Problem at read1PixelAsDouble");
+    }
+    return d;
+  }
+
+  Vector2F getDepthRange() const{
+    return _nativeGL->getDepthRange();
   }
   
   

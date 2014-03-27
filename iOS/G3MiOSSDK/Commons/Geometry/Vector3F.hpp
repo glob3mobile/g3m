@@ -11,6 +11,7 @@
 
 #include "IMathUtils.hpp"
 
+class Vector3D;
 
 class Vector3F {
 private:
@@ -80,6 +81,8 @@ public:
                     _x * that._y - _y * that._x);
   }
 
+  Vector3D asVector3D() const;
+
   bool isZero() const {
     return ((_x == 0) &&
             (_y == 0) &&
@@ -91,7 +94,7 @@ public:
             ISNAN(_y) ||
             ISNAN(_z));
   }
-  
+
 };
 
 #endif

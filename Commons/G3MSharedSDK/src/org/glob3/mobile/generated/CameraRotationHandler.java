@@ -113,7 +113,12 @@ public class CameraRotationHandler extends CameraEventHandler
     //_lastYValid = _initialPixel.y();
   
     // compute center of view
-    _pivotPoint = camera.getXYZCenterOfView().asMutableVector3D();
+    //_pivotPoint = camera->getXYZCenterOfView().asMutableVector3D();
+    _pivotPoint = eventContext.getWidget().getFirstValidScenePositionForCentralColumn().asMutableVector3D();
+  
+    //const int centralPixelColumn = camera->getWidth() / 2;
+    //_pivotPoint = eventContext->getWidget()->getFirstValidScenePositionForFrameBufferColumn(centralPixelColumn).asMutableVector3D();
+  
     if (_pivotPoint.isNan())
     {
       ILogger.instance().logError("CAMERA ERROR: center point does not intersect globe!!\n");
@@ -166,12 +171,13 @@ public class CameraRotationHandler extends CameraEventHandler
     Vector3D u = camera.getHorizontalVector();
     tempCamera.rotateWithAxisAndPoint(u, _pivotPoint.asVector3D(), Angle.fromDegrees(delta));
   
-    // update camera only if new view intersects globe
-    //tempCamera.updateModelMatrix();
-    if (!tempCamera.getXYZCenterOfView().isNan())
-    {
-      camera.copyFrom(tempCamera);
+    /*
+     // update camera only if new view intersects globe
+    if (!tempCamera.getXYZCenterOfView().isNan()) {
+      camera->copyFrom(tempCamera);
     }
+     */
+    camera.copyFrom(tempCamera);
   }
 
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

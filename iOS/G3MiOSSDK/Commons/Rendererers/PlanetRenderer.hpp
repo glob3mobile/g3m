@@ -203,10 +203,10 @@ public:
                     _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
                     _tilesVisible,   asLogString(_tilesVisibleByLevel, _maxLOD).c_str(),
                     _tilesRendered,  asLogString(_tilesRenderedByLevel, _maxLOD).c_str());
-//    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
-//                    _tilesProcessed,
-//                    _tilesVisible,
-//                    _tilesRendered);
+    //    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
+    //                    _tilesProcessed,
+    //                    _tilesVisible,
+    //                    _tilesRendered);
   }
 
 };
@@ -260,11 +260,11 @@ private:
   Sector* _lastVisibleSector;
 
   std::vector<VisibleSectorListenerEntry*> _visibleSectorListeners;
-  
+
   void visitTilesTouchesWith(const Sector& sector,
                              const int topLevel,
                              const int maxLevel);
-  
+
   void visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                 Tile* tile,
                                 const Sector& sectorToVisit,
@@ -285,7 +285,7 @@ private:
   bool _renderTileMeshes;
 
   Sector* _renderedSector;
-//  bool _validLayerTilesRenderParameters;
+  //  bool _validLayerTilesRenderParameters;
   bool _layerTilesRenderParametersDirty;
 #ifdef C_CODE
   const LayerTilesRenderParameters* _layerTilesRenderParameters;
@@ -298,6 +298,23 @@ private:
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
+
+#ifdef C_CODE
+  const G3MRenderContext* _renderContext;
+#endif
+#ifdef JAVA_CODE
+  G3MRenderContext _renderContext;
+#endif
+  //  std::list<Tile*> _tilesRenderedInLastFrame;
+
+  long long _renderedTilesListFrame;
+  std::list<Tile*> _renderedTiles;
+  std::list<Tile*>* getRenderedTilesList(const G3MRenderContext* rc);
+
+  void addLayerSetURLForSector(std::list<URL>& urls, const Tile* tile) const;
+  bool sectorCloseToRoute(const Sector& sector,
+                          const std::list<Geodetic2D>& route,
+                          double angularDistanceFromCenterInRadians) const;
 
 public:
   PlanetRenderer(TileTessellator*             tessellator,
@@ -452,8 +469,13 @@ public:
 
   void addTerrainTouchListener(TerrainTouchListener* listener);
 
+  std::list<std::string> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD);
+
+  void zRender(const G3MRenderContext* rc, GLState* glState);
+
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
+
   void setVerticalExaggeration(float verticalExaggeration);
 
   ElevationDataProvider* getElevationDataProvider() const{
@@ -468,6 +490,13 @@ public:
     return _renderTileMeshes;
   }
 
+  std::list<URL> getResourcesURL(const Sector& sector,
+                                 int minLOD,
+                                 int maxLOD,
+                                 const std::list<Geodetic2D>* route = NULL);
+
+  int getNumberOfRenderedTiles() const;
+  
 };
 
 

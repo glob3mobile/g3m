@@ -105,10 +105,11 @@ public:
   bool isVisible(const G3MRenderContext* rc) {
     return true;
   }
-
+  
   void modifiyGLState(GLState* state) {
     
   }
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
   
 };
 

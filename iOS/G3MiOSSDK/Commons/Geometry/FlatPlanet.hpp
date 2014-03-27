@@ -22,17 +22,23 @@ private:
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
+  mutable double          _dragHeight;
   mutable MutableVector3D _lastFinalPoint;
   mutable bool            _validSingleDrag;
   mutable MutableVector3D _lastDirection;
   
   mutable MutableVector3D _centerRay;
   mutable MutableVector3D _initialPoint0;
+  mutable double          _dragHeight0;
   mutable MutableVector3D _initialPoint1;
+  mutable double          _dragHeight1;
   mutable double          _distanceBetweenInitialPoints;
   mutable MutableVector3D _centerPoint;
 //  mutable double          _angleBetweenInitialRays;
 
+  mutable bool            _firstDoubleDragMovement;
+  mutable double          _correctionT2;
+  mutable MutableVector3D _correctedCenterPoint;
 
   
 public:
@@ -122,7 +128,8 @@ public:
   
   bool isFlat() const { return true; }
   
-  void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  //void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const;
+  void beginSingleDrag(const Vector3D& origin, const Vector3D& touchedPosition) const;
   
   MutableMatrix44D singleDrag(const Vector3D& finalRay) const;
   
@@ -130,15 +137,16 @@ public:
   
   void beginDoubleDrag(const Vector3D& origin,
                        const Vector3D& centerRay,
-                       const Vector3D& initialRay0,
-                       const Vector3D& initialRay1) const;
+                       const Vector3D& centerPosition,
+                       const Vector3D& touchedPosition0,
+                       const Vector3D& touchedPosition1) const;
   
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1) const;
   
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                 const Vector3D& centerRay,
-                                const Vector3D& tapRay) const;
+                                const Vector3D& touchedPosition) const;
 
   double distanceToHorizon(const Vector3D& position) const;
 

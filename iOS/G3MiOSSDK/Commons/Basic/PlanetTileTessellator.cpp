@@ -237,7 +237,8 @@ IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolut
 
 Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
                                                  const Vector2I& rawResolution,
-                                                 const Tile* tile) const {
+                                                 const Tile* tile,
+                                                 const Color& colorDebug) const {
   const Sector sector = getRenderedSectorForTile(tile); // tile->getSector();
 
   const int resolutionXMinus1 = rawResolution._x - 1;
@@ -280,7 +281,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const Planet* planet,
     indices.add(posS++);
   }
 
-  Color *color = Color::newFromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0);
+  Color *color = new Color(colorDebug);
 
   Mesh* result = new IndexedMesh(GLPrimitive::lineLoop(),
                                  true,

@@ -90,17 +90,18 @@ public abstract class Planet
 
   public abstract boolean isFlat();
 
-  public abstract void beginSingleDrag(Vector3D origin, Vector3D initialRay);
+  //virtual void beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const = 0;
+  public abstract void beginSingleDrag(Vector3D origin, Vector3D touchedPosition);
 
   public abstract MutableMatrix44D singleDrag(Vector3D finalRay);
 
   public abstract Effect createEffectFromLastSingleDrag();
 
-  public abstract void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D initialRay0, Vector3D initialRay1);
+  public abstract void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition0, Vector3D touchedPosition1);
 
   public abstract MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1);
 
-  public abstract Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D tapRay);
+  public abstract Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D touchedPosition);
 
   public abstract double distanceToHorizon(Vector3D position);
 

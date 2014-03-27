@@ -29,6 +29,8 @@ public abstract class Renderer
 
   public abstract void render(G3MRenderContext rc, GLState glState);
 
+  public abstract void zRender(G3MRenderContext rc, GLState glState);
+
   /**
    Gives to Renderer the opportunity to process touch events.
 

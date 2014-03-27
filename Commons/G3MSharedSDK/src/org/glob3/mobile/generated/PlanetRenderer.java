@@ -297,7 +297,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private boolean _renderTileMeshes;
 
   private Sector _renderedSector;
-//  bool _validLayerTilesRenderParameters;
+  //  bool _validLayerTilesRenderParameters;
   private boolean _layerTilesRenderParametersDirty;
   private LayerTilesRenderParameters _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
@@ -320,7 +320,117 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
+<<<<<<< HEAD
+  G3MRenderContext _renderContext;
+  //  std::list<Tile*> _tilesRenderedInLastFrame;
+=======
+<<<<<<< HEAD
+//  std::list<Tile*> _tilesRenderedInLastFrame;
+>>>>>>> origin/zrender-touchhandlers
+
+  private long _renderedTilesListFrame;
+  private java.util.LinkedList<Tile> _renderedTiles = new java.util.LinkedList<Tile>();
+  private java.util.LinkedList<Tile> getRenderedTilesList(G3MRenderContext rc)
+  {
+  
+    long frameCounter = rc.frameCounter();
+    if (frameCounter != _renderedTilesListFrame)
+    {
+      _renderedTilesListFrame = frameCounter;
+  
+      final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
+      if (layerTilesRenderParameters == null)
+      {
+        return null;
+      }
+  
+      final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
+      final float deviceQualityFactor = deviceInfo.getQualityFactor();
+  
+      final int firstLevelTilesCount = _firstLevelTiles.size();
+  
+      _lastCamera = rc.getCurrentCamera();
+  
+      final Planet planet = rc.getPlanet();
+      final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
+      double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
+      final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+  
+      _renderedTiles.clear();
+  
+      //Texture Size for every tile
+      int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
+      int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
+  
+      final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
+      final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+  
+      texWidth *= correctionFactor;
+      texHeight *= correctionFactor;
+  
+      final double texWidthSquared = texWidth * texWidth;
+      final double texHeightSquared = texHeight * texHeight;
+  
+      final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
+  
+      for (int i = 0; i < firstLevelTilesCount; i++)
+      {
+        _firstLevelTiles.get(i).actualizeQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS); // if first render, force full render
+      }
+    }
+    else
+    {
+      //ILogger::instance()->logInfo("Reusing Render Tiles List");
+    }
+  
+    return _renderedTiles;
+  }
+
+  private void addLayerSetURLForSector(java.util.LinkedList<URL> urls, Tile tile)
+  {
+    java.util.ArrayList<Petition> petitions = _layerSet.createTileMapPetitions(_renderContext, _layerTilesRenderParameters, tile);
+    for (int i = 0; i < petitions.size(); i++)
+    {
+      urls.addLast(petitions.get(i).getURL());
+      if (petitions.get(i) != null)
+         petitions.get(i).dispose();
+    }
+  }
+  private boolean sectorCloseToRoute(Sector sector, java.util.LinkedList<Geodetic2D> route, double angularDistanceFromCenterInRadians)
+  {
+  
+    Geodetic2D geoCenter = sector.getCenter();
+    Vector2D center = new Vector2D(geoCenter._longitude._radians, geoCenter._latitude._radians);
+  
+  
+    java.util.Iterator<Geodetic2D> iterator = route.iterator();
+  
+  	Geodetic2D geoA = null;
+  	Geodetic2D geoB = iterator.next();
+  
+    while (iterator.hasNext())
+    {
+      geoA = geoB;
+      geoB = iterator.next();
+  
+      final Vector2D A = new Vector2D(geoA._longitude._radians, geoA._latitude._radians);
+      final Vector2D B = new Vector2D(geoB._longitude._radians, geoB._latitude._radians);
+  
+      double dist = center.distanceToSegment(A, B);
+  
+      if (dist <= angularDistanceFromCenterInRadians)
+      {
+        return true;
+      }
+    }
+  
+    return false;
+  }
+
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions)
+=======
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
+>>>>>>> origin/purgatory
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -344,6 +454,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _renderedSector = renderedSector.isEquals(Sector.fullSphere())? null : new Sector(renderedSector);
      _layerTilesRenderParameters = null;
      _layerTilesRenderParametersDirty = true;
+     _renderContext = null;
+     _renderedTilesListFrame = -1;
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
@@ -419,6 +531,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final void render(G3MRenderContext rc, GLState glState)
   {
   
+    _renderContext = rc;
+  
     final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
     if (layerTilesRenderParameters == null)
     {
@@ -426,7 +540,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   
     updateGLState(rc);
-  ///#warning Testing Terrain Normals
+    ///#warning Testing Terrain Normals
     _glState.setParent(glState);
   
     // Saving camera for use in onTouchEvent
@@ -434,54 +548,33 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     _statistics.clear();
   
-    final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
-  //  const float dpiFactor = deviceInfo->getPixelsInMM(0.1f);
-    final float deviceQualityFactor = deviceInfo.getQualityFactor();
-  
-    final int firstLevelTilesCount = _firstLevelTiles.size();
-  
-    final Planet planet = rc.getPlanet();
-    final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
-    double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
-    final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
-  
-    //Texture Size for every tile
-    int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
-    int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
-  
-    final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
-  
-    texWidth *= correctionFactor;
-    texHeight *= correctionFactor;
-  
-    final double texWidthSquared = texWidth * texWidth;
-    final double texHeightSquared = texHeight * texHeight;
-  
-    final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
-  
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
       // loaded as they will be used as last-chance fallback texture for any tile.
       _firstRender = false;
   
+      final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
+<<<<<<< HEAD
+        tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics, _logTilesPetitions);
+=======
         tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
+>>>>>>> origin/purgatory
       }
     }
     else
     {
-      java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
-      for (int i = 0; i < firstLevelTilesCount; i++)
-      {
-        toVisit.addLast(_firstLevelTiles.get(i));
-      }
+      java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
   
-      while (toVisit.size() > 0)
+      for (java.util.Iterator<Tile> iter = renderedTiles.iterator(); iter.hasNext();)
       {
+<<<<<<< HEAD
+        Tile tile = iter.next();
+        tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics, _logTilesPetitions);
+=======
         java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
   
         for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
@@ -492,6 +585,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         }
   
         toVisit = toVisitInNextIteration;
+>>>>>>> origin/purgatory
       }
     }
   
@@ -534,19 +628,27 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     if (touchEvent.getType() == TouchEventType.LongPress)
     {
+  
       final Vector2I pixel = touchEvent.getTouch(0).getPos();
-      final Vector3D ray = _lastCamera.pixel2Ray(pixel);
-      final Vector3D origin = _lastCamera.getCartesianPosition();
+  
+      Vector3D positionCartesian = null;
   
       final Planet planet = ec.getPlanet();
   
-      final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
-      if (positionCartesian.isNan())
+      //    if (ec->getWidget() != NULL){
+      positionCartesian = new Vector3D(ec.getWidget().getScenePositionForPixel(pixel._x, pixel._y));
+      //    } else{
+      //      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+      //      const Vector3D origin = _lastCamera->getCartesianPosition();
+      //      positionCartesian = new Vector3D(planet->closestIntersection(origin, ray));
+      //    }
+  
+      if (positionCartesian == null || positionCartesian.isNan())
       {
         return false;
       }
   
-      final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
+      Geodetic3D position = planet.toGeodetic3D(positionCartesian);
   
       final int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++)
@@ -876,6 +978,59 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   }
 
+  public final java.util.LinkedList<String> getTilesURL(Geodetic2D lower, Geodetic2D upper, int maxLOD)
+  {
+  
+    for (int i = 0; i < 20; i++)
+    {
+      GlobalMembersPlanetRenderer.TILES_VISITED[i] = 0;
+    }
+  
+    Sector sector = new Sector(lower, upper);
+    final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
+    GetTilesURLVisitor visitor = new GetTilesURLVisitor(_renderContext, _layerTilesRenderParameters);
+  
+    acceptTileVisitor(visitor, sector, parameters._firstLevel, maxLOD);
+  
+    java.util.LinkedList<String> urls = visitor._urls;
+  
+    for (int i = 0; i < 20; i++)
+    {
+      System.out.printf("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+    }
+  
+    if (visitor != null)
+       visitor.dispose();
+    return urls;
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState glState)
+  {
+  
+    final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
+    if (layerTilesRenderParameters == null)
+    {
+      return;
+    }
+  
+    GLState zRenderGLState = new GLState();
+    zRenderGLState.addGLFeature(new ModelViewGLFeature(rc.getCurrentCamera()), false);
+    zRenderGLState.setParent(glState);
+  
+    java.util.LinkedList<Tile> renderedTiles = getRenderedTilesList(rc);
+  
+    for (java.util.Iterator<Tile> iter = renderedTiles.iterator(); iter.hasNext();)
+    {
+      Tile tile = iter.next();
+  
+      tile.zRender(rc, zRenderGLState);
+    }
+  
+  
+  
+    zRenderGLState._release();
+  }
+
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider, boolean owned)
   {
     if (_elevationDataProvider != elevationDataProvider)
@@ -901,6 +1056,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       changed();
     }
   }
+
   public final void setVerticalExaggeration(float verticalExaggeration)
   {
     if (_verticalExaggeration != verticalExaggeration)
@@ -923,6 +1079,75 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final boolean getRenderTileMeshes()
   {
     return _renderTileMeshes;
+  }
+
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, int minLOD, int maxLOD)
+  {
+     return getResourcesURL(sector, minLOD, maxLOD, null);
+  }
+  public final java.util.LinkedList<URL> getResourcesURL(Sector sector, int minLOD, int maxLOD, java.util.LinkedList<Geodetic2D> route)
+  {
+  
+    for (int i = 0; i < 20; i++)
+    {
+      GlobalMembersPlanetRenderer.TILES_VISITED[i] = 0;
+    }
+  
+    java.util.LinkedList<URL> urls = new java.util.LinkedList<URL>();
+  
+    java.util.LinkedList<Tile> _tiles = new java.util.LinkedList<Tile>(); //List of tiles to check
+    final int ftSize = _firstLevelTiles.size();
+    for (int i = 0; i < ftSize; i++)
+    {
+      if (_firstLevelTiles.get(i)._sector.touchesWith(sector))
+      {
+        _tiles.addLast(_firstLevelTiles.get(i));
+      }
+    }
+  
+    while (!_tiles.isEmpty())
+    {
+      Tile tile = _tiles.getFirst();
+      _tiles.removeFirst();
+  
+  
+      if (tile._sector.touchesWith(sector))
+      {
+  
+        //Checking Route if any
+        if (route != null)
+        {
+          if (!sectorCloseToRoute(tile._sector, route, tile._sector.getDeltaRadiusInRadians() * 4.0))
+          {
+            continue;
+          }
+        }
+  
+        if (tile._level >= minLOD)
+        {
+          GlobalMembersPlanetRenderer.TILES_VISITED[tile._level]++;
+  
+          addLayerSetURLForSector(urls, tile);
+        }
+  
+        if (tile._level < maxLOD)
+        {
+          java.util.ArrayList<Tile> newTiles = tile.getSubTiles(_layerTilesRenderParameters._mercator);
+          for (int i = 0; i < newTiles.size(); i++)
+          {
+            _tiles.addLast(newTiles.get(i));
+          }
+        }
+  
+      }
+    }
+  
+    for (int i = 0; i < 20; i++)
+    {
+      System.out.printf("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+    }
+  
+    return urls;
   }
 
 }

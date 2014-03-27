@@ -142,6 +142,11 @@ public:
     return _surfaceColor;
   }
   
+  void zRawRender(const G3MRenderContext* rc, GLState* parentGLState) {
+    
+  }
+
+  
 };
 
 

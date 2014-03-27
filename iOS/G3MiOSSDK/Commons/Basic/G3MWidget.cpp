@@ -114,7 +114,8 @@ _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
 _surfaceElevationProvider( mainRenderer->getSurfaceElevationProvider() ),
-_context(new G3MContext(IFactory::instance(),
+_context(new G3MContext(this,
+                        IFactory::instance(),
                         IStringUtils::instance(),
                         threadUtils,
                         ILogger::instance(),
@@ -137,7 +138,8 @@ _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
-_shapesEditorRenderer(NULL)
+_shapesEditorRenderer(NULL),
+_zRenderCounter(-1)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -167,7 +169,8 @@ _shapesEditorRenderer(NULL)
     addPeriodicalTask(periodicalTasks[i]);
   }
 
-  _renderContext = new G3MRenderContext(_frameTasksExecutor,
+  _renderContext = new G3MRenderContext(this,
+                                        _frameTasksExecutor,
                                         IFactory::instance(),
                                         IStringUtils::instance(),
                                         _threadUtils,
@@ -318,9 +321,70 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 }
 
+Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
+  zRender();
+
+  const double z = _gl->readPixelAsDouble(x,y, _width, _height);
+
+  if (!ISNAN(z)){
+    Vector3D pixel3D(x,_height - y,z);
+    MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
+    Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+    //ILogger::instance()->logInfo("PIXEL 3D: %s -> %s\n", pixel3D.description().c_str(), pos.description().c_str() );
+    //ILogger::instance()->logInfo("Z = %f - DIST CAM: %f\n", z, _currentCamera->getCartesianPosition().sub(pos).length());
+    //ILogger::instance()->logInfo("GEO: %s\n", _planet->toGeodetic2D(pos).description().c_str());
+    
+    // update ground height in camera class
+    _nextCamera->setGroundHeightFromCartesianPoint(pos);
+    return pos;
+  } else{
+    //ILogger::instance()->logInfo("NO Z");
+    return Vector3D::nan();
+  }
+}
+
+
+Vector3D G3MWidget::getScenePositionForCentralPixel() {
+  return getScenePositionForPixel(_width/2, _height/2);
+}
+
+
+Vector3D G3MWidget::getFirstValidScenePositionForFrameBufferColumn(int column){
+  zRender();
+
+  int row = _height / 2;
+  while (row<_height-1){
+
+    const double z = _gl->readPixelAsDouble(column, row, _width, _height);
+
+    if (!ISNAN(z)){
+      Vector3D pixel3D(column, _height - row,z);
+      MutableMatrix44D mmv(*_currentCamera->getModelViewMatrix44D());
+      Vector3D pos = mmv.unproject(pixel3D, 0, 0, _width, _height);
+      _nextCamera->setGroundHeightFromCartesianPoint(pos);
+      return pos;
+    }
+    row++;
+  }
+  return Vector3D::nan();
+}
+
+
+Vector3D G3MWidget::getFirstValidScenePositionForCentralColumn() {
+  int row = _height / 2;
+  MutableVector3D position = MutableVector3D::nan();
+  while (position.isNan() && row<_height-1) {
+    row++;
+    position = getScenePositionForPixel(_width/2, row).asMutableVector3D();
+  }
+  return position.asVector3D();
+}
+
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
-  G3MEventContext ec(IFactory::instance(),
+  G3MEventContext ec(this,
+                     IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
                      ILogger::instance(),
@@ -365,8 +429,29 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
 }
 
+
+
+void G3MWidget::zRender(){
+
+  if (_zRenderCounter == -1 || _zRenderCounter != _renderCounter){
+    _zRenderCounter = _renderCounter;
+  } else{
+    //ILogger::instance()->logInfo("Recycling Z Render");
+    return; //NO NEED OF RENDERING AGAIN
+  }
+
+  if (_mainRenderer->isEnable()){
+    GLState* zRenderGLState = new GLState();
+    _gl->clearScreen(Color::black());
+    _mainRenderer->zRender(_renderContext, zRenderGLState);
+    zRenderGLState->_release();
+  }
+
+}
+
 void G3MWidget::onResizeViewportEvent(int width, int height) {
-  G3MEventContext ec(IFactory::instance(),
+  G3MEventContext ec(this,
+                     IFactory::instance(),
                      IStringUtils::instance(),
                      _threadUtils,
                      ILogger::instance(),
@@ -506,6 +591,8 @@ void G3MWidget::render(int width, int height) {
 
   _currentCamera->copyFromForcingMatrixCreation(*_nextCamera);
 
+
+
 #ifdef C_CODE
   delete _rendererState;
   _rendererState = new RenderState( calculateRendererState() );
@@ -515,7 +602,7 @@ void G3MWidget::render(int width, int height) {
 #endif
   const RenderState_Type renderStateType = _rendererState->_type;
 
-  _renderContext->clear();
+  _renderContext->clearForNewFrame();
 
   _effectsScheduler->doOneCyle(_renderContext);
 
@@ -584,11 +671,17 @@ void G3MWidget::render(int width, int height) {
     _gpuProgramManager->removeUnused();
   }
 
+  _zRenderCounter = -1; //Frame buffer does not contain Z anymore
+
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
   //  if (elapsedTimeMS > 100) {
   //    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTimeMS);
   //  }
-
+//#warning REMOVE
+//  if (RENDER_READY == renderStateType){
+//    zRender();
+//  }
+  
   if (_logFPS) {
     _totalRenderTime += elapsedTimeMS;
 

@@ -15,10 +15,14 @@
 
 
 class CameraDoubleDragHandler: public CameraEventHandler {
-    
+  
+private:
+  MeshRenderer* _meshRenderer;
+  
 public:
   CameraDoubleDragHandler():
-  _camera0(Camera())
+  _camera0(Camera()),
+  _meshRenderer(NULL)
   {
   }
   
@@ -48,6 +52,10 @@ public:
             CameraContext *cameraContext);
   
   Camera _camera0;         //Initial Camera saved on Down event
+  
+  void setDebugMeshRenderer(MeshRenderer* meshRenderer) {
+    _meshRenderer = meshRenderer;
+  }
   
 };
 

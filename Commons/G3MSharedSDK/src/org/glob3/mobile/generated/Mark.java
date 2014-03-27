@@ -607,7 +607,7 @@ public class Mark implements SurfaceElevationListener
           }
           _glState.setParent(parentGLState);
   
-          rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
+          rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager(), RenderType.REGULAR_RENDER);
   
           _renderedMark = true;
         }

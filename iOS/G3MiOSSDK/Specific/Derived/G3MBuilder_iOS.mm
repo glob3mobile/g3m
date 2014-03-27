@@ -14,6 +14,8 @@
 #include "Downloader_iOS.hpp"
 #include "BasicShadersGL2.hpp"
 
+#include "BasicShadersGL2.hpp"
+
 G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
   _nativeWidget = nativeWidget;
 

@@ -53,11 +53,21 @@ public abstract class Mesh
 
   public abstract void rawRender(G3MRenderContext rc, GLState parentGLState);
 
+  public abstract void zRawRender(G3MRenderContext rc, GLState parentGLState);
+
   public final void render(G3MRenderContext rc, GLState parentGLState)
   {
     if (_enable)
     {
       rawRender(rc, parentGLState);
+    }
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState parentGLState)
+  {
+    if (_enable)
+    {
+      zRawRender(rc, parentGLState);
     }
   }
 

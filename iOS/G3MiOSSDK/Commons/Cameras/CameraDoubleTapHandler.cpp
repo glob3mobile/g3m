@@ -11,6 +11,7 @@
 #include "MutableVector2D.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
+#include "G3MWidget.hpp"
 
 bool CameraDoubleTapHandler::onTouchEvent(const G3MEventContext *eventContext,
                                           const TouchEvent* touchEvent,
@@ -50,10 +51,11 @@ void CameraDoubleTapHandler::onDown(const G3MEventContext *eventContext,
   
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
   const Planet* planet = eventContext->getPlanet();
+  Vector3D touchedPosition = eventContext->getWidget()->getScenePositionForPixel(pixel._x, pixel._y);
   Camera* camera = cameraContext->getNextCamera();
   Effect* effect = planet->createDoubleTapEffect(camera->getCartesianPosition(),
                                                  camera->getViewDirection(),
-                                                 camera->pixel2Ray(pixel));
+                                                 touchedPosition);
   
   if (effect != NULL) {
     EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();

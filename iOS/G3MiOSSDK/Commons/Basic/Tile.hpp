@@ -127,18 +127,18 @@ private:
                                   double texHeightSquared,
                                   double nowInMS);
 
-  inline void rawRender(const G3MRenderContext* rc,
-                        const GLState* glState,
-                        TileTexturizer* texturizer,
-                        ElevationDataProvider* elevationDataProvider,
-                        const TileTessellator* tessellator,
-                        TileRasterizer* tileRasterizer,
-                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                        const LayerSet* layerSet,
-                        const TilesRenderParameters* tilesRenderParameters,
-                        bool isForcedFullRender,
-                        long long texturePriority,
-                        bool logTilesPetitions);
+  void rawRender(const G3MRenderContext* rc,
+                 const GLState* glState,
+                 TileTexturizer* texturizer,
+                 ElevationDataProvider* elevationDataProvider,
+                 const TileTessellator* tessellator,
+                 TileRasterizer* tileRasterizer,
+                 const LayerTilesRenderParameters* layerTilesRenderParameters,
+                 const LayerSet* layerSet,
+                 const TilesRenderParameters* tilesRenderParameters,
+                 bool isForcedFullRender,
+                 long long texturePriority,
+                 bool logTilesPetitions);
 
   void debugRender(const G3MRenderContext* rc,
                    const GLState* glState,
@@ -205,7 +205,7 @@ public:
   //Change to public for TileCache
   std::vector<Tile*>* getSubTiles(const bool mercator);
 
-  //  const Sector getSector() const {
+//  const Sector getSector() const {
   //    return _sector;
   //  }
   //
@@ -242,7 +242,8 @@ public:
                                float verticalExaggeration,
                                bool logTilesPetitions);
 
-  void render(const G3MRenderContext* rc,
+  //RETURN ISRAWRENDER
+  bool render(const G3MRenderContext* rc,
               const GLState& parentState,
               std::list<Tile*>* toVisitInNextIteration,
               const Planet* planet,
@@ -268,6 +269,47 @@ public:
               const bool renderTileMeshes,
               bool logTilesPetitions,
               TileRenderingListener* tileRenderingListener);
+
+  void actualizeQuadTree(const G3MRenderContext* rc,
+                         std::list<Tile*>& renderedTiles,
+                         const Planet* planet,
+                         const Vector3D& cameraNormalizedPosition,
+                         double cameraAngle2HorizonInRadians,
+                         const Frustum* cameraFrustumInModelCoordinates,
+                         TilesStatistics* tilesStatistics,
+                         const float verticalExaggeration,
+                         const LayerTilesRenderParameters* layerTilesRenderParameters,
+                         TileTexturizer* texturizer,
+                         const TilesRenderParameters* tilesRenderParameters,
+                         ITimer* lastSplitTimer,
+                         ElevationDataProvider* elevationDataProvider,
+                         const TileTessellator* tessellator,
+                         TileRasterizer* tileRasterizer,
+                         const LayerSet* layerSet,
+                         const Sector* renderedSector,
+                         bool isForcedFullRender,
+                         long long texturePriority,
+                         double texWidthSquared,
+                         double texHeightSquared,
+                         double nowInMS);
+
+
+  void performRawRender(const G3MRenderContext* rc,
+                        const GLState* glState,
+                        TileTexturizer* texturizer,
+                        ElevationDataProvider* elevationDataProvider,
+                        const TileTessellator* tessellator,
+                        TileRasterizer* tileRasterizer,
+                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                        const LayerSet* layerSet,
+                        const TilesRenderParameters* tilesRenderParameters,
+                        bool isForcedFullRender,
+                        long long texturePriority,
+                        TilesStatistics* tilesStatistics,
+                        bool logTilesPetitions);
+
+  void zRender(const G3MRenderContext* rc,
+               const GLState& parentState);
 
   const TileKey getKey() const;
 
@@ -322,9 +364,9 @@ public:
   }
 #endif
 
-  std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
-                                     const Angle& splitLongitude,
-                                     bool setParent);
+  inline std::vector<Tile*>* createSubTiles(const Angle& splitLatitude,
+                                            const Angle& splitLongitude,
+                                            bool setParent);
 
   bool isElevationDataSolved() const {
     return (_elevationDataLevel == _level);
@@ -350,7 +392,6 @@ public:
 
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
-  
 };
 
 #endif

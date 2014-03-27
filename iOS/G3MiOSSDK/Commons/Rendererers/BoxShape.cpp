@@ -32,7 +32,6 @@ BoxShape::~BoxShape() {
 }
 
 
-
 Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
   const float lowerX = (float) -(_extentX / 2);
   const float upperX = (float) +(_extentX / 2);

@@ -35,9 +35,10 @@ void GL::clearScreen(const Color& color) {
 }
 
 void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
-                      GPUProgramManager& progManager) {
+                  GPUProgramManager& progManager,
+                  RenderType renderType) {
 
-  state->applyOnGPU(this, progManager);
+  state->applyOnGPU(this, progManager, renderType);
 
   _nativeGL->drawElements(mode,
                           indices->size(),
@@ -45,27 +46,22 @@ void GL::drawElements(int mode, IShortBuffer* indices, const GLState* state,
 }
 
 void GL::drawArrays(int mode,
-                    int first,
-                    int count, const GLState* state,
-                    GPUProgramManager& progManager) {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::drawArrays(%d, %d, %d)",
-  //                                 mode,
-  //                                 first,
-  //                                 count);
-  //  }
+                int first,
+                int count, const GLState* state,
+                GPUProgramManager& progManager,
+                RenderType renderType) {
 
-  state->applyOnGPU(this, progManager);
+  state->applyOnGPU(this, progManager, renderType);
 
   _nativeGL->drawArrays(mode,
                         first,
                         count);
 }
 
-int GL::getError() {
-  //  if (_verbose) {
-  //    ILogger::instance()->logInfo("GL::getError()");
-  //  }
+int GL::getError() const {
+//  if (_verbose) {
+//    ILogger::instance()->logInfo("GL::getError()");
+//  }
 
   return _nativeGL->getError();
 }

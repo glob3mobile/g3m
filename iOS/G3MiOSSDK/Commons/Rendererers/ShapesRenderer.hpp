@@ -330,6 +330,8 @@ public:
                     listener,
                     deleteListener);
   }
+
+  void zRender(const G3MRenderContext* rc, GLState* glState);
   
   void setShapeTouchListener(ShapeTouchListener* shapeTouchListener,
                              bool autoDelete);

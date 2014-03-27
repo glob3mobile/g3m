@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class MutableVector3D;
+//class Vector3F;
 
 public class Vector3D
 {
@@ -326,6 +327,11 @@ public class Vector3D
   public final double distanceTo(Vector3D that)
   {
     return IMathUtils.instance().sqrt(squaredDistanceTo(that));
+  }
+
+  public final Vector3F asVector3F()
+  {
+    return new Vector3F((float)_x, (float)_y, (float)_z);
   }
 
 }

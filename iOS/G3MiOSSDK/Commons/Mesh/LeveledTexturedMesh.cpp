@@ -220,3 +220,10 @@ void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc,
     _mesh->render(rc, _glState);
   }
 }
+
+void LeveledTexturedMesh::zRawRender(const G3MRenderContext* rc,
+                           const GLState* parentState) const{
+  //TODO: transparencies
+  _mesh->render(rc, parentState);
+}
+

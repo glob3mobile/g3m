@@ -62,6 +62,7 @@ public:
   _originalBorderColor((borderColor!=NULL)? new Color(*borderColor) : NULL),
   _useNormals(useNormals)
   {
+    
   }
 
   ~BoxShape();

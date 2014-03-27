@@ -89,6 +89,19 @@ public:
   };
   
   virtual Box* getCopyBoundingBox();
+
+  virtual void zRawRender(const G3MRenderContext* rc,
+                          const GLState* parentState){}
+
+  virtual void zRender(const G3MRenderContext* rc,
+                       const GLState* parentState);
+
+  virtual const GLState* createZRenderState(const G3MRenderContext* rc,
+                                            const GLState* parentState) {
+    GLState* state = new GLState();
+    state->setParent(parentState);
+    return state;
+  }
 };
 
 #endif

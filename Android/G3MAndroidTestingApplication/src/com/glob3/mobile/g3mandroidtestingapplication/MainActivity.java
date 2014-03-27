@@ -1,7 +1,6 @@
-
-
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
@@ -29,24 +28,60 @@ import org.glob3.mobile.generated.ShapesEditorRenderer;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 =======
+=======
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.LinkedList;
+
+import org.glob3.mobile.generated.AltitudeMode;
+>>>>>>> senderos-gc
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
+import org.glob3.mobile.generated.ElevationDataProvider;
+import org.glob3.mobile.generated.G3MContext;
+import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.HUDQuadWidget;
 import org.glob3.mobile.generated.HUDRelativePosition;
 import org.glob3.mobile.generated.HUDRelativeSize;
 import org.glob3.mobile.generated.HUDRenderer;
+import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.MeshRenderer;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
+<<<<<<< HEAD
 >>>>>>> origin/purgatory
+=======
+import org.glob3.mobile.generated.Shape;
+import org.glob3.mobile.generated.ShapesRenderer;
+import org.glob3.mobile.generated.SingleBilElevationDataProvider;
+>>>>>>> senderos-gc
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.URLTemplateLayer;
+import org.glob3.mobile.generated.Vector2I;
+import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
+<<<<<<< HEAD
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.Shape;
@@ -58,8 +93,12 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.ShapeTouchListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.SceneJSShapesParser;
+=======
+import org.glob3.mobile.specific.SQLiteStorage_Android;
+>>>>>>> senderos-gc
 
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.Window;
@@ -68,21 +107,392 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
-         extends
-            Activity {
+extends
+Activity {
 
+	private G3MWidget_Android _g3mWidget;
+	private RelativeLayout    _placeHolder;
+
+
+	@Override
+	protected void onCreate(final Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.activity_main);
+		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+		// builder.getPlanetRendererBuilder().setRenderDebug(true);
+
+		// final ShapesRenderer shapesRenderer = new ShapesRenderer();
+		// builder.addRenderer(shapesRenderer);
+
+		final MarksRenderer marksRenderer = new MarksRenderer(true);
+		builder.addRenderer(marksRenderer);
+
+		final MeshRenderer meshRenderer = new MeshRenderer();
+		meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
+		builder.addRenderer(meshRenderer);
+		
+		Planet planet = Planet.createFlatEarth();
+		builder.setPlanet(planet);
+		
+		/*// set elevations
+		      final Sector sector = Sector.fromDegrees(27.967811065876, -17.0232177085356, 28.6103464294992, -16.0019401695656);
+		      final Vector2I extent = new Vector2I(256, 256);
+		      final URL url = NasaBillElevationDataURL.compoundURL(sector, extent);
+		      final ElevationDataProvider elevationDataProvider = new SingleBillElevationDataProvider(url, sector, extent);
+		      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+		      builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
+*/
+
+		// final ShapeLoadListener Plistener = new ShapeLoadListener() {
+		// @Override
+		// public void onBeforeAddShape(final SGShape shape) {
+		// // shape.setScale(2000);
+		// //shape.setRoll(Angle.fromDegrees(-90));
+		// }
+		//
+		//
+		// @Override
+		// public void onAfterAddShape(final SGShape shape) {
+		//
+		//
+		// ILogger.instance().logInfo("Downloaded Building");
+		//
+		// final double fromDistance = 10000;
+		// final double toDistance = 1000;
+		//
+		// final Angle fromAzimuth = Angle.fromDegrees(-90);
+		// final Angle toAzimuth = Angle.fromDegrees(270);
+		//
+		// final Angle fromAltitude = Angle.fromDegrees(90);
+		// final Angle toAltitude = Angle.fromDegrees(15);
+		//
+		// shape.orbitCamera(TimeInterval.fromSeconds(5), fromDistance,
+		// toDistance, fromAzimuth, toAzimuth, fromAltitude,
+		// toAltitude);
+		//
+		//
+		// }
+		//
+		//
+		// @Override
+		// public void dispose() {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		// };
+		//
+		//
+		// shapesRenderer.loadBSONSceneJS(new URL("file:///target.bson"), "",
+		// false, new Geodetic3D(Angle.fromDegrees(35.6452500000),
+		// Angle.fromDegrees(-97.214), 30), AltitudeMode.RELATIVE_TO_GROUND,
+		// Plistener);
+		//
+		//
+		// builder.addRenderer(shapesRenderer);
+
+		// if (false) {
+		// shapesRenderer.loadBSONSceneJS(new URL("file:///A320.bson"),
+		// URL.FILE_PROTOCOL + "textures-A320/", false,
+		// new Geodetic3D(Angle.fromDegreesMinutesSeconds(38, 53, 42.24),
+		// Angle.fromDegreesMinutesSeconds(-77, 2, 10.92),
+		// 10000), AltitudeMode.ABSOLUTE, new ShapeLoadListener() {
+		//
+		// @Override
+		// public void onBeforeAddShape(final SGShape shape) {
+		// // TODO Auto-generated method stub
+		// final double scale = 1e5;
+		// shape.setScale(scale, scale, scale);
+		// shape.setPitch(Angle.fromDegrees(90));
+		//
+		// }
+		//
+		//
+		// @Override
+		// public void onAfterAddShape(final SGShape shape) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		//
+		// @Override
+		// public void dispose() {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		// }, true);
+		// }
+
+		// if (false) { // Testing lights
+		// shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 0, 0),
+		// AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+		// 1000000, 1000000, 1000000), (float) 1.0, Color.red(), Color.black(),
+		// true)); // With normals
+		//
+		// shapesRenderer.addShape(new BoxShape(Geodetic3D.fromDegrees(0, 180,
+		// 0), AltitudeMode.RELATIVE_TO_GROUND, new Vector3D(
+		// 1000000, 1000000, 1000000), (float) 1.0, Color.blue(), Color.black(),
+		// true)); // With normals
+		//
+		// }
+
+		// if (false) { // Adding and deleting marks
+		//
+		// final int time = 1; // SECS
+		//
+		// final GTask markTask = new GTask() {
+		// ArrayList<Mark> _marks = new ArrayList<Mark>();
+		//
+		//
+		// int randomInt(final int max) {
+		// return (int) (Math.random() * max);
+		// }
+		//
+		//
+		// @Override
+		// public void run(final G3MContext context) {
+		// final double lat = randomInt(180) - 90;
+		// final double lon = randomInt(360) - 180;
+		//
+		// final Mark m1 = new Mark("RANDOM MARK", new
+		// URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+		// Geodetic3D.fromDegrees(lat, lon, 0), AltitudeMode.RELATIVE_TO_GROUND,
+		// 1e9);
+		// marksRenderer.addMark(m1);
+		//
+		// _marks.add(m1);
+		// if (_marks.size() > 5) {
+		//
+		// marksRenderer.removeAllMarks();
+		//
+		// for (int i = 0; i < _marks.size(); i++) {
+		// _marks.get(i).dispose();
+		// }
+		//
+		//
+		// _marks.clear();
+		//
+		// }
+		//
+		// }
+		// };
+		//
+		// builder.addPeriodicalTask(new
+		// PeriodicalTask(TimeInterval.fromSeconds(time), markTask));
+		// }
+
+		// if (false) {
+		//
+		// final GInitializationTask initializationTask = new
+		// GInitializationTask() {
+		//
+		// @Override
+		// public void run(final G3MContext context) {
+		//
+		// final IBufferDownloadListener listener = new
+		// IBufferDownloadListener() {
+		//
+		// @Override
+		// public void onError(final URL url) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		//
+		// @Override
+		// public void onDownload(final URL url,
+		// final IByteBuffer buffer,
+		// final boolean expired) {
+		// // TODO Auto-generated method stub
+		//
+		// final Shape shape = SceneJSShapesParser.parseFromBSON(buffer,
+		// URL.FILE_PROTOCOL + "2029/", true,
+		// Geodetic3D.fromDegrees(0, 0, 0), AltitudeMode.ABSOLUTE);
+		//
+		// shapesRenderer.addShape(shape);
+		// }
+		//
+		//
+		// @Override
+		// public void onCanceledDownload(final URL url,
+		// final IByteBuffer buffer,
+		// final boolean expired) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		//
+		// @Override
+		// public void onCancel(final URL url) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		// };
+		//
+		// context.getDownloader().requestBuffer(new URL(URL.FILE_PROTOCOL +
+		// "2029/2029.bson"), 1000, TimeInterval.forever(),
+		// true, listener, true);
+		//
+		//
+		// }
+		//
+		//
+		// @Override
+		// public boolean isDone(final G3MContext context) {
+		// // TODO Auto-generated method stub
+		// return true;
+		// }
+		//
+		// };
+		//
+		// builder.setInitializationTask(initializationTask);
+		//
+		// }
+
+		//      if (false) {
+		//
+		//         final int time = 10; // SECS
+		//
+		//         final GTask elevationTask = new GTask() {
+		//
+		//            ElevationDataProvider _elevationDataProvider1 = new SingleBillElevationDataProvider(new URL(
+		//                                                                   "file:///full-earth-2048x1024.bil", false),
+		//                                                                   Sector.fullSphere(), new Vector2I(2048, 1024));
+		//
+		//
+		//            @Override
+		//            public void run(final G3MContext context) {
+		//               final PlanetRenderer pr = _g3mWidget.getG3MWidget().getPlanetRenderer();
+		//
+		//               final Random r = new Random();
+		//
+		//               final int i = r.nextInt() % 4;
+		//               switch (i) {
+		//                  case 0:
+		//                     pr.setElevationDataProvider(_elevationDataProvider1, false);
+		//                     break;
+		//                  case 1:
+		//
+		//                     final ElevationDataProvider _elevationDataProvider2 = new SingleBillElevationDataProvider(new URL(
+		//                              "file:///caceres-2008x2032.bil", false), Sector.fromDegrees(39.4642996294239623,
+		//                              -6.3829977122432933, 39.4829891936013553, -6.3645288909498845), new Vector2I(2008, 2032), 0);
+		//
+		//
+		//                     pr.setElevationDataProvider(_elevationDataProvider2, true);
+		//                     break;
+		//                  case 2:
+		//                     pr.setVerticalExaggeration(r.nextInt() % 5);
+		//                     break;
+		//                  case 3:
+		//                     pr.setElevationDataProvider(null, false);
+		//                     break;
+		//
+		//                  default:
+		//                     break;
+		//               }
+		//
+		//               final ElevationDataProvider edp = pr.getElevationDataProvider();
+		//               if (edp != null) {
+		//                  edp.setEnabled((r.nextInt() % 2) == 0);
+		//               }
+		//            }
+		//         };
+		//
+		//         builder.addPeriodicalTask(new PeriodicalTask(TimeInterval.fromSeconds(time), elevationTask));
+		//
+		//    }
+
+		//BEGINNING OF CODE FOR LOADING STORAGE
+		if (true){
+
+			AssetManager am = getAssets();
+
+			try {
+				//LEYENDO FICHERO DE ASSETS
+				InputStream in = am.open("g3m.cache");
+
+				//OBTENIENDO STREAM DE SALIDA
+				File f = getExternalCacheDir();
+				if ((f == null) || !f.exists()) {
+					f = getCacheDir();
+				}
+				final String documentsDirectory = f.getAbsolutePath();
+				final File f2 = new File(new File(documentsDirectory), "g3m.cache");
+				final String path = f2.getAbsolutePath();
+				OutputStream out = new FileOutputStream(path);
+
+				//COPIANDO FICHERO
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+				in.close();
+				out.close();
+
+
+				SQLiteStorage_Android storage = new SQLiteStorage_Android("g3m.cache", this.getApplicationContext());
+
+				builder.setStorage(storage);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//END OF CODE FOR LOADING STORAGE
+
+
+		//BEGINNING OF CODE FOR PRECACHING AREA
+		boolean precaching = false;
+		PrecacherInitializationTask pit = null;
+		if (precaching){
+			//Las Palmas de GC
+			Geodetic2D upper = Geodetic2D.fromDegrees(28.20760859532738, -15.3314208984375);
+			Geodetic2D lower = Geodetic2D.fromDegrees(28.084096949164735, -15.4852294921875);
+
+			pit = new PrecacherInitializationTask(null, upper, lower, 6);
+			builder.setInitializationTask(pit);
+		}
+
+		_g3mWidget = builder.createWidget();  
+		
+		
+
+		if (precaching){
+			pit.setWidget(_g3mWidget);
+		}
+
+		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+		_placeHolder.addView(_g3mWidget);
+
+		//END OF CODE FOR PRECACHING AREA
+
+	}
+
+
+	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+<<<<<<< HEAD
    private G3MWidget_Android _g3mWidget;
    private RelativeLayout    _placeHolder;
 <<<<<<< HEAD
    private ILogger			 _logger;
 =======
 >>>>>>> origin/purgatory
+=======
+}
+>>>>>>> senderos-gc
 
 
-   @Override
-   protected void onCreate(final Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
+//BEGINNING OF CODE FOR PRECACHING AREA
 
+<<<<<<< HEAD
 <<<<<<< HEAD
       setContentView(R.layout.activity_main);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
@@ -591,81 +1001,106 @@ public class MainActivity
 =======
       requestWindowFeature(Window.FEATURE_NO_TITLE);
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+=======
+class PrecacherInitializationTask extends GInitializationTask {
+>>>>>>> senderos-gc
 
-      setContentView(R.layout.activity_main);
-      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-      // builder.getPlanetRendererBuilder().setRenderDebug(true);
+	private class PrecacherDownloadListener extends IImageDownloadListener {
 
+		PrecacherInitializationTask _task;
 
-      final LayerSet layerSet = new LayerSet();
-      //layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+		public PrecacherDownloadListener(PrecacherInitializationTask task) {
+			_task = task;
+		}
 
-      final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
-               WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0,
-                        18), TimeInterval.fromDays(30), true);
-      blueMarble.setTitle("WMS Nasa Blue Marble");
+		@Override
+		public void onDownload(URL url, IImage image, boolean expired) {
+			// TODO Auto-generated method stub
+			_task.imageDownloaded();
 
-      final URLTemplateLayer azar4326testlayer = URLTemplateLayer.newWGS84(
-               "http://azar.akka.eu/cgi-bin/mapserv?map=maps/azar_4326.map&REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&WIDTH=256&HEIGHT=256&BBOX={lowerLongitude}%2C{lowerLatitude}%2C{upperLongitude}%2C{upperLatitude}0&CRS=EPSG:4326&LAYERS=ScanMilAIP&FORMAT=image/jpeg&SRS=EPSG:4326&STYLES=&TRANSPARENT=true",
-               Sector.fullSphere(), true, 0, 18, TimeInterval.fromDays(30), true, new LevelTileCondition(0, 18));
+		}
 
+		@Override
+		public void onError(URL url) {
+			// TODO Auto-generated method stub
 
-      layerSet.addLayer(azar4326testlayer);
-      //   layerSet.addLayer(blueMarble);
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+		}
 
-      builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+		@Override
+		public void onCancel(URL url) {
+			// TODO Auto-generated method stub
 
-      final HUDRenderer hudRenderer = new HUDRenderer();
-      builder.setHUDRenderer(hudRenderer);
-      createHUD(hudRenderer);
+		}
 
-      _g3mWidget = builder.createWidget();
+		@Override
+		public void onCanceledDownload(URL url, IImage image, boolean expired) {
+			// TODO Auto-generated method stub
 
-      _g3mWidget.setCameraPosition(new Geodetic3D(Angle.fromDegrees(46.5), Angle.fromDegrees(2.20), 2000000));
+		}
 
-      _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-      _placeHolder.addView(_g3mWidget);
-   }
+	}
 
+	private int _nImagesDownloaded = 0;
+	private LinkedList<String> _urls;
+	private boolean _done = false;
+	private G3MWidget_Android _widget = null;
 
-   private void createHUD(final HUDRenderer hudRenderer) {
-      final DownloaderImageBuilder imageBuilder = new DownloaderImageBuilder(new URL("file:///altitude_ladder.png"));
+	private Geodetic2D _upper, _lower;
+	private int _level;
 
-      final float vertVis = 0.1f;
-      final float aspect = 85f / 5100f;
+	public void setWidget(G3MWidget_Android widget){
+		_widget = widget;
+	}
 
-      final HUDRelativePosition x = new HUDRelativePosition( //
-               0.8f, //
-               HUDRelativePosition.Anchor.VIEWPORT_WIDTH, //
-               HUDRelativePosition.Align.RIGHT);
+	public PrecacherInitializationTask(G3MWidget_Android widget, Geodetic2D upper, Geodetic2D lower, int level) {
+		_widget = widget;
+		_upper = upper;
+		_lower = lower;
+		_level = level;
+	}
 
-      final HUDRelativePosition y = new HUDRelativePosition( //
-               0.5f, //
-               HUDRelativePosition.Anchor.VIEWPORT_HEIGTH, //
-               HUDRelativePosition.Align.MIDDLE);
+	public void imageDownloaded() {
+		_nImagesDownloaded++;
+		if (_nImagesDownloaded % 10 == 0) {
+			ILogger.instance().logInfo("IMAGE DOWNLOADED %d\n",
+					_nImagesDownloaded);
+		}
+		int size = _urls.size();
+		if (_nImagesDownloaded == size) {
+			ILogger.instance().logInfo("ALL IMAGES DOWNLOADED \n");
+			_done = true;
+		}
+	}
 
-      final HUDRelativeSize width = new HUDRelativeSize( //
-               10f * aspect, //
-               HUDRelativeSize.Reference.VIEWPORT_MIN_AXIS);
+	@Override
+	public void run(G3MContext context) {
 
-      final HUDRelativeSize height = new HUDRelativeSize( //
-               0.8f, //
-               HUDRelativeSize.Reference.VIEWPORT_MIN_AXIS);
+		G3MWidget widget = _widget.getG3MWidget();
 
-      final HUDQuadWidget altRuler = new HUDQuadWidget(imageBuilder, x, y, width, height);
+		_urls = widget.getPlanetRenderer().getTilesURL(_lower, _upper, _level);
 
+<<<<<<< HEAD
       altRuler.setTexCoordsScale(1, vertVis);
       hudRenderer.addWidget(altRuler);
 >>>>>>> origin/purgatory
    }
+=======
+		IDownloader downloader = context.getDownloader();
+>>>>>>> senderos-gc
 
+		for (int i = 0; i < _urls.size(); i++) {
+			String url = _urls.get(i);
+			downloader.requestImage(new URL(url), 1000,
+					TimeInterval.fromSeconds(0), false,
+					new PrecacherDownloadListener(this), true);
+		}
 
-   @Override
-   public boolean onCreateOptionsMenu(final Menu menu) {
-      // Inflate the menu; this adds items to the action bar if it is present.
-      getMenuInflater().inflate(R.menu.main, menu);
-      return true;
-   }
+	}
 
+	@Override
+	public boolean isDone(G3MContext context) {
+		return _done;
+	}
 }
+
+//END OF CODE FOR PRECACHING AREA

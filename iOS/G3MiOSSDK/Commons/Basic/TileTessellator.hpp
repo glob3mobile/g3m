@@ -18,6 +18,7 @@ class IFloatBuffer;
 class ElevationData;
 class Geodetic2D;
 class Sector;
+class Color;
 
 #include "Vector2I.hpp"
 #include "Vector2F.hpp"
@@ -53,7 +54,8 @@ public:
 
   virtual Mesh* createTileDebugMesh(const Planet* planet,
                                     const Vector2I& resolution,
-                                    const Tile* tile) const = 0;
+                                    const Tile* tile,
+                                    const Color& colorDebug) const = 0;
 
   virtual IFloatBuffer* createTextCoords(const Vector2I& resolution,
                                          const Tile* tile,

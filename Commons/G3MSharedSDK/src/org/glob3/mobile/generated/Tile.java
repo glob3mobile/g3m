@@ -240,8 +240,10 @@ public class Tile
     {
       final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
   
+      Color color = isTextureSolved()? Color.blue() : Color.red();
+  
       //TODO: CHECK
-      _debugMesh = tessellator.createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this);
+      _debugMesh = tessellator.createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this, color);
     }
     return _debugMesh;
   }
@@ -437,6 +439,11 @@ public class Tile
       }
     }
   
+    if (_level > GlobalMembersTile.MAX_LOD)
+    {
+      GlobalMembersTile.MAX_LOD = _level;
+      System.out.printf("MAXLOD = %d\n", _level);
+    }
   
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
     //  boundingVolume->render(rc, parentState);
@@ -761,7 +768,7 @@ public class Tile
     return getSubTiles(splitLatitude, splitLongitude);
   }
 
-  //  const Sector getSector() const {
+//  const Sector getSector() const {
   //    return _sector;
   //  }
   //
@@ -816,7 +823,12 @@ public class Tile
     }
   }
 
+<<<<<<< HEAD
+  //RETURN ISRAWRENDER
+  public final boolean render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions)
+=======
   public final void render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
+>>>>>>> origin/purgatory
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -874,6 +886,79 @@ public class Tile
           toVisitInNextIteration.addLast(subTile);
         }
       }
+  
+  
+      return isRawRender; //RETURN ISRAWRENDER
+    }
+    else
+    {
+      setIsVisible(false, texturizer);
+  
+      prune(texturizer, elevationDataProvider);
+      //TODO: AVISAR CAMBIO DE TERRENO
+  
+  
+      return false; //RETURN ISRAWRENDER
+    }
+  
+  }
+
+  public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS)
+  {
+  
+    tilesStatistics.computeTileProcessed(this);
+  
+    if (verticalExaggeration != _verticalExaggeration)
+    {
+      // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
+      _verticalExaggeration = verticalExaggeration;
+    }
+  
+  
+    if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
+    {
+      setIsVisible(true, texturizer);
+  
+      tilesStatistics.computeVisibleTile(this);
+  
+      final boolean isRawRender = (meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+  
+      if (isRawRender)
+      {
+  
+        renderedTiles.addLast(this);
+  
+        prune(texturizer, elevationDataProvider);
+        //TODO: AVISAR CAMBIO DE TERRENO
+  
+      }
+      else
+      {
+        final Geodetic2D lower = _sector._lower;
+        final Geodetic2D upper = _sector._upper;
+  
+        final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
+  
+        final Angle splitLatitude = layerTilesRenderParameters._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
+        /*                               */
+        /*                               */
+  
+        java.util.ArrayList<Tile> subTiles = getSubTiles(splitLatitude, splitLongitude);
+        if (_justCreatedSubtiles)
+        {
+          lastSplitTimer.start();
+          tilesStatistics.computeSplitInFrame();
+          _justCreatedSubtiles = false;
+        }
+  
+        final int subTilesSize = subTiles.size();
+        for (int i = 0; i < subTilesSize; i++)
+        {
+          Tile subTile = subTiles.get(i);
+  
+          subTile.actualizeQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS); // parentState,
+        }
+      }
     }
     else
     {
@@ -883,6 +968,37 @@ public class Tile
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   
+<<<<<<< HEAD
+  }
+
+
+  public final void performRawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean isForcedFullRender, long texturePriority, TilesStatistics tilesStatistics, boolean logTilesPetitions)
+  {
+  
+    rawRender(rc, glState, texturizer, elevationDataProvider, tessellator, tileRasterizer, layerTilesRenderParameters, layerSet, tilesRenderParameters, isForcedFullRender, texturePriority, logTilesPetitions);
+    if (tilesRenderParameters._renderDebug) //TO RAW RENDER
+    {
+      debugRender(rc, glState, tessellator, layerTilesRenderParameters);
+    }
+  
+    tilesStatistics.computePlanetRenderered(this);
+  
+    //TODO: AVISAR CAMBIO DE TERRENO
+  }
+
+  public final void zRender(G3MRenderContext rc, GLState parentState)
+  {
+  
+    if (_tessellatorMesh == null)
+    {
+      ILogger.instance().logError("Calling ZRender for Tile withouth any valid mesh.");
+      return;
+    }
+    else
+    {
+      _tessellatorMesh.zRender(rc, parentState);
+    }
+=======
     if (_rendered != rendered)
     {
       _rendered = rendered;
@@ -900,6 +1016,7 @@ public class Tile
       }
     }
   
+>>>>>>> origin/purgatory
   }
 
   public final TileKey getKey()
@@ -918,6 +1035,13 @@ public class Tile
         if (_texturizerData != null)
            _texturizerData.dispose();
         _texturizerData = null;
+      }
+  
+      if (_debugMesh != null)
+      {
+        if (_debugMesh != null)
+           _debugMesh.dispose();
+        _debugMesh = null;
       }
   
       if (_subtiles != null)
@@ -1258,7 +1382,6 @@ public class Tile
     final Vector2D uv = _sector.getUVCoordinates(position2D);
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
-
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods

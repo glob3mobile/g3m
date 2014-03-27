@@ -53,6 +53,8 @@ public:
     return NULL;
   }
 
+
+  void zRawRender(const G3MRenderContext* rc, GLState* parentGLState);
 };
 
 #endif

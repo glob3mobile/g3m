@@ -225,6 +225,8 @@ public:
                 bool readExpired);
 
   void setEnable(bool enable);
+
+  void zRender(const G3MRenderContext* rc, GLState* glState){}
   
 };
 

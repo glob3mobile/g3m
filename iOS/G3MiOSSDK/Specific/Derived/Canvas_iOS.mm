@@ -125,9 +125,10 @@ void Canvas_iOS::_setLineMiterLimit(float limit) {
 void Canvas_iOS::_setLineDash(float lengths[],
                               int count,
                               int phase) {
-  CGContextSetLineDash(_context,
+  int ASK_TO_DIEGO;
+  /*CGContextSetLineDash(_context,
                        phase,
-                       lengths, count);
+                       lengths, count);*/
 }
 
 void Canvas_iOS::_setShadow(const Color& color,
