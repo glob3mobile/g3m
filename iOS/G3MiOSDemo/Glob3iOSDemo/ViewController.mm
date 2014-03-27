@@ -730,7 +730,7 @@ public:
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
   CameraRenderer* cameraRenderer = [self createCameraRenderer];
-  cameraRenderer->setDebugMeshRenderer(meshRenderer);
+  //cameraRenderer->setDebugMeshRenderer(meshRenderer);
   builder.setCameraRenderer(cameraRenderer);
 
 
@@ -796,18 +796,16 @@ public:
   builder.addRenderer(marksRenderer);
   GEORenderer* geoRenderer;
 
-/*  if (false) {
+  if (false) {
     geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                     shapesRenderer: shapesRenderer
                                                      marksRenderer: marksRenderer
-                                                 geoTileRasterizer: geoTileRasterizer
-                                                            planet: builder.getPlanet()];
+                                                 geoTileRasterizer: geoTileRasterizer];
     builder.addRenderer(geoRenderer);
     GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
                                                                        geoRenderer: geoRenderer
                                                                       meshRenderer: meshRenderer
-                                                                     marksRenderer: marksRenderer
-                                                                            planet: planet];
+                                                                     marksRenderer: marksRenderer];
     builder.setInitializationTask(initializationTask, true);
     
     //PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
@@ -818,7 +816,7 @@ public:
     
     const bool logDownloaderStatistics = false;
     builder.setLogDownloaderStatistics(logDownloaderStatistics);
-  }*/
+  }
 
   //Showing light directions
   if (false){
@@ -2432,7 +2430,7 @@ public:
 }
 
 
-/*class SampleSymbolizer : public GEOSymbolizer {
+class SampleSymbolizer : public GEOSymbolizer {
 private:
   mutable int _colorIndex = 0;
   
@@ -2722,10 +2720,10 @@ public:
     return symbols;
   }
 
-};*/
+};
 
 
-/*- (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
+- (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
                              geoTileRasterizer: (GEOTileRasterizer*) geoTileRasterizer
@@ -2740,7 +2738,7 @@ public:
                                              geoTileRasterizer);
 
   return geoRenderer;
-}*/
+}
 
 
 //class TestElevationDataListener : public IElevationDataListener {
