@@ -10,7 +10,7 @@ public class TileTextureBuilder extends RCObject
     }
 
     deletePetitions();
-  super.dispose();
+    super.dispose();
 
   }
 
@@ -143,18 +143,18 @@ public class TileTextureBuilder extends RCObject
       return;
     }
 
+//    const long long priority = _texturePriority + _tile->_level;
+
     for (int i = 0; i < _petitionsCount; i++)
     {
       final Petition petition = _petitions.get(i);
-
-      final long priority = _texturePriority + _tile._level;
 
       if (_logTilesPetitions)
       {
         ILogger.instance().logInfo("Tile petition \"%s\"", petition.getURL().getPath());
       }
 
-      final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true);
+      final long requestId = _downloader.requestImage(new URL(petition.getURL()), _texturePriority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true); // priority,
       if (requestId >= 0)
       {
         _requestsIds.add(requestId);
@@ -260,9 +260,9 @@ public class TileTextureBuilder extends RCObject
 
       if (_mesh != null)
       {
-        final boolean isMipmap = false;
+        final boolean generateMipmap = true;
 
-        final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), textureId, isMipmap);
+        final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), textureId, generateMipmap);
 
         if (glTextureId != null)
         {
@@ -302,7 +302,7 @@ public class TileTextureBuilder extends RCObject
       {
         if (composeAndUploadTexture())
         {
-           //If the image could be properly turn into texture
+          //If the image could be properly turn into texture
           _tile.setTextureSolved(true);
           deletePetitions(); //We must release the petitions so we can get rid off no longer needed images
         }
@@ -329,9 +329,9 @@ public class TileTextureBuilder extends RCObject
 
     if (_stepsDone == _petitionsCount)
     {
-//      if (_anyCanceled) {
-//        ILogger::instance()->logInfo("Completed with cancelation\n");
-//      }
+      //      if (_anyCanceled) {
+      //        ILogger::instance()->logInfo("Completed with cancelation\n");
+      //      }
 
       done();
     }
@@ -393,7 +393,7 @@ public class TileTextureBuilder extends RCObject
     }
     //checkIsPending(position);
 
-//    _anyCanceled = true;
+    //    _anyCanceled = true;
     _status.set(position, TileTextureBuilder_PetitionStatus.STATUS_CANCELED);
 
     stepDone();
@@ -418,7 +418,7 @@ public class TileTextureBuilder extends RCObject
         {
           TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
 
-//          _texturesHandler->retainGLTextureId(glTextureId);
+          //          _texturesHandler->retainGLTextureId(glTextureId);
           mapping.setGLTextureId(glTextureIdRetainedCopy);
           fallbackSolved = true;
         }

@@ -30,7 +30,7 @@ public class LTMInitializer extends LazyTextureMappingInitializer
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
 
   }
 
@@ -45,11 +45,11 @@ public class LTMInitializer extends LazyTextureMappingInitializer
 
       final Vector2F upperTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._upper, _mercator);
 
-//      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
-//                                     lowerTextCoordUV._y - upperTextCoordUV._y);
-//
-//      _translation = MutableVector2D(lowerTextCoordUV._x,
-//                                     upperTextCoordUV._y);
+      //      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
+      //                                     lowerTextCoordUV._y - upperTextCoordUV._y);
+      //
+      //      _translation = MutableVector2D(lowerTextCoordUV._x,
+      //                                     upperTextCoordUV._y);
 
       _translationU = lowerTextCoordUV._x;
       _translationV = upperTextCoordUV._y;

@@ -804,7 +804,10 @@ PlanetRenderer* G3MWidget::getPlanetRenderer() {
   return _mainRenderer->getPlanetRenderer();
 }
 
-void G3MWidget::setShownSector(const Sector& sector) {
-  getPlanetRenderer()->setRenderedSector(sector);
-  _initialCameraPositionHasBeenSet = false;
+bool G3MWidget::setRenderedSector(const Sector& sector) {
+  const bool changed = getPlanetRenderer()->setRenderedSector(sector);
+  if (changed) {
+    _initialCameraPositionHasBeenSet = false;
+  }
+  return changed;
 }

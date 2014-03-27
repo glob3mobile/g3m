@@ -135,13 +135,13 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-  //  _texturesHandler->retainGLTextureId(glTextureId);
+    //  _texturesHandler->retainGLTextureId(glTextureId);
     final TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
   
     final int level = tile._level - ancestorTile._level;
     if (!tileMesh.setGLTextureIdForLevel(level, glTextureIdRetainedCopy))
     {
-  //    _texturesHandler->releaseGLTextureId(glTextureId);
+      //    _texturesHandler->releaseGLTextureId(glTextureId);
       if (glTextureIdRetainedCopy != null)
          glTextureIdRetainedCopy.dispose();
     }

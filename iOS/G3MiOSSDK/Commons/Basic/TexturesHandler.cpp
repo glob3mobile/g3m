@@ -119,12 +119,12 @@ const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec
 const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* image,
                                                                  int format,
                                                                  const std::string& name,
-                                                                 bool hasMipMap) {
+                                                                 bool generateMipmap) {
 
   TextureSpec textureSpec(name,
                           image->getWidth(),
                           image->getHeight(),
-                          hasMipMap);
+                          generateMipmap);
 
   const IGLTextureId* previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId != NULL) {
@@ -132,7 +132,7 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
   }
 
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.isMipmap());
+  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.generateMipmap());
 
 
   if (_verbose) {
