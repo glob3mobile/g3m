@@ -140,6 +140,11 @@ void Camera::setGeodeticPosition(const Geodetic3D& g3d) {
   setPitch(pitch);
 }
 
+void Camera::setGeodeticPositionStablePitch(const Geodetic3D& g3d) {
+  MutableMatrix44D dragMatrix = _planet->drag(getGeodeticPosition(), g3d);
+  if (dragMatrix.isValid()) applyTransform(dragMatrix);
+}
+
 const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const int px = pixel._x;
   const int py = _height - pixel._y;
