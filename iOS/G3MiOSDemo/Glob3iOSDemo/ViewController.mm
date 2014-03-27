@@ -672,7 +672,7 @@ public:
                                                                                 ));
   builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
 
-  Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
+  ProtoRenderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
