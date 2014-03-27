@@ -375,6 +375,13 @@ public class Camera
     setPitch(pitch);
   }
 
+  public final void setGeodeticPositionStablePitch(Geodetic3D g3d)
+  {
+    MutableMatrix44D dragMatrix = _planet.drag(getGeodeticPosition(), g3d);
+    if (dragMatrix.isValid())
+       applyTransform(dragMatrix);
+  }
+
   public final void setGeodeticPosition(Angle latitude, Angle longitude, double height)
   {
     setGeodeticPosition(new Geodetic3D(latitude, longitude, height));

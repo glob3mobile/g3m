@@ -251,6 +251,11 @@ public class Tile
   private boolean meetsRenderCriteria(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, TilesStatistics tilesStatistics, ITimer lastSplitTimer, double texWidthSquared, double texHeightSquared, double nowInMS)
   {
   
+  //  if (_level == 4 && _column == 7 && _row == 10) {
+  //    printf("break point!!");
+  ////    return true;
+  //  }
+  
     if ((_level >= layerTilesRenderParameters._maxLevelForPoles) && (_sector.touchesPoles()))
     {
       return true;
@@ -297,6 +302,8 @@ public class Tile
   
     if ((_latitudeArcSegmentRatioSquared == 0) || (_longitudeArcSegmentRatioSquared == 0))
     {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning CHECK IT
       prepareTestLODData(rc.getPlanet());
     }
   
