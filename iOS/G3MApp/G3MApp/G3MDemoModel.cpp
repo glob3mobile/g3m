@@ -84,7 +84,7 @@ void G3MDemoModel::reset() {
 
   _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
 
-  _g3mWidget->setShownSector( Sector::fullSphere() );
+  _g3mWidget->setRenderedSector( Sector::fullSphere() );
 
   getMarksRenderer()->removeAllMarks();
   getMeshRenderer()->clearMeshes();
