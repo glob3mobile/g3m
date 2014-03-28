@@ -1,5 +1,7 @@
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+// prueba git reset
+
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
@@ -433,7 +435,7 @@ Activity {
 		}
 		//END OF CODE FOR LOADING STORAGE
 
-
+/*
 		//BEGINNING OF CODE FOR PRECACHING AREA
 		boolean precaching = false;
 		PrecacherInitializationTask pit = null;
@@ -458,7 +460,7 @@ Activity {
 		_placeHolder.addView(_g3mWidget);
 
 		//END OF CODE FOR PRECACHING AREA
-
+*/
 	}
 
 
@@ -470,18 +472,12 @@ Activity {
 	}
 
 
-   private ILogger			 _logger;
-=======
->>>>>>> origin/purgatory
-=======
-}
->>>>>>> senderos-gc
+   //private ILogger			 _logger;
+
 
 
 //BEGINNING OF CODE FOR PRECACHING AREA
 
-<<<<<<< HEAD
-<<<<<<< HEAD
       setContentView(R.layout.activity_main);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
