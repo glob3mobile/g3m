@@ -281,7 +281,7 @@ public class ShapesRenderer extends DefaultRenderer
       if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() == 1 && touchEvent.getType() == TouchEventType.Down)
       {
         final Vector3D origin = _lastCamera.getCartesianPosition();
-        final Vector2I pixel = touchEvent.getTouch(0).getPos();
+        final Vector2F pixel = touchEvent.getTouch(0).getPos();
         final Vector3D direction = _lastCamera.pixel2Ray(pixel);
         java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
   

@@ -98,7 +98,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(Gesture.Drag);
   
     // dragging
-    final Vector2I pixel = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
     eventContext.getPlanet().beginSingleDrag(_camera0.getCartesianPosition(), _camera0.pixel2Ray(pixel));
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
@@ -109,7 +109,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
     // compute transformation matrix
     final Planet planet = eventContext.getPlanet();
-    final Vector2I pixel = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
     MutableMatrix44D matrix = planet.singleDrag(_camera0.pixel2Ray(pixel));
     if (!matrix.isValid())
        return;
@@ -127,8 +127,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
     if (_useInertia)
     {
       final Touch touch = touchEvent.getTouch(0);
-      final Vector2I currPixel = touch.getPos();
-      final Vector2I prevPixel = touch.getPrevPos();
+      final Vector2F currPixel = touch.getPos();
+      final Vector2F prevPixel = touch.getPrevPos();
       final double desp = currPixel.sub(prevPixel).length();
   
       final float delta = IFactory.instance().getDeviceInfo().getPixelsInMM(0.2f);

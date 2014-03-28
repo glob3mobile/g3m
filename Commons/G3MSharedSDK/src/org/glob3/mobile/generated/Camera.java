@@ -139,6 +139,20 @@ public class Camera
   
     return obj.sub(_position.asVector3D());
   }
+  public final Vector3D pixel2Ray(Vector2F pixel)
+  {
+    final float px = pixel._x;
+    final float py = _height - pixel._y;
+    final Vector3D pixel3D = new Vector3D(px, py, 0);
+  
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
+    if (obj.isNan())
+    {
+      return obj;
+    }
+  
+    return obj.sub(_position.asVector3D());
+  }
 
   public final Vector3D pixel2PlanetPoint(Vector2I pixel)
   {

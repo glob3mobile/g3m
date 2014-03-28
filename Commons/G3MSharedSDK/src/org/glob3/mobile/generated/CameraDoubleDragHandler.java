@@ -105,8 +105,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(Gesture.DoubleDrag);
   
     // double dragging
-    final Vector2I pixel0 = touchEvent.getTouch(0).getPos();
-    final Vector2I pixel1 = touchEvent.getTouch(1).getPos();
+    final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
     eventContext.getPlanet().beginDoubleDrag(_camera0.getCartesianPosition(), _camera0.getViewDirection(), _camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1));
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
@@ -117,8 +117,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     // compute transformation matrix
     final Planet planet = eventContext.getPlanet();
-    final Vector2I pixel0 = touchEvent.getTouch(0).getPos();
-    final Vector2I pixel1 = touchEvent.getTouch(1).getPos();
+    final Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    final Vector2F pixel1 = touchEvent.getTouch(1).getPos();
     MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1));
     if (!matrix.isValid())
        return;

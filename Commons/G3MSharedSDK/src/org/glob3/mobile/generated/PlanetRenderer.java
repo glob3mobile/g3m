@@ -533,7 +533,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (touchEvent.getType() == TouchEventType.LongPress)
     {
-      final Vector2I pixel = touchEvent.getTouch(0).getPos();
+      final Vector2F pixel = touchEvent.getTouch(0).getPos();
       final Vector3D ray = _lastCamera.pixel2Ray(pixel);
       final Vector3D origin = _lastCamera.getCartesianPosition();
   

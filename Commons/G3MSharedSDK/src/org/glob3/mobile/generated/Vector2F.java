@@ -54,6 +54,16 @@ public class Vector2F
   {
   }
 
+  public final Vector2F add(Vector2F that)
+  {
+    return new Vector2F(_x + that._x, _y + that._y);
+  }
+
+  public final Vector2F sub(Vector2F that)
+  {
+    return new Vector2F(_x - that._x, _y - that._y);
+  }
+
   public final double squaredDistanceTo(Vector2I that)
   {
     final double dx = _x - that._x;
@@ -66,6 +76,26 @@ public class Vector2F
     final double dx = _x - that._x;
     final double dy = _y - that._y;
     return (dx * dx) + (dy * dy);
+  }
+
+  public final double squaredLength()
+  {
+    return _x * _x + _y * _y;
+  }
+
+  public final double length()
+  {
+    return IMathUtils.instance().sqrt(squaredLength());
+  }
+
+  public final Vector2F div(double v)
+  {
+    return new Vector2F((float)(_x / v), (float)(_y / v));
+  }
+
+  public final MutableVector2F asMutableVector2F()
+  {
+    return new MutableVector2F(_x, _y);
   }
 
 }

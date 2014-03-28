@@ -211,7 +211,7 @@ public class MarksRenderer extends DefaultRenderer
   
       if (_lastCamera != null)
       {
-        final Vector2I touchedPixel = touchEvent.getTouch(0).getPos();
+        final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();
         final Planet planet = ec.getPlanet();
   
         double minSqDistance = IMathUtils.instance().maxDouble();

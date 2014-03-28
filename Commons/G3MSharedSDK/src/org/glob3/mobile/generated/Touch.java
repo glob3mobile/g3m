@@ -17,37 +17,45 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "Vector2I.hpp"
 
 
 public class Touch
 {
-  private final Vector2I _pos;
-  private final Vector2I _prevPos;
+///#ifdef C_CODE
+  private final Vector2F _pos = new Vector2F();
+  private final Vector2F _prevPos = new Vector2F();
+///#endif
+///#ifdef JAVA_CODE
+//  private final Vector2I _pos;
+//  private final Vector2I _prevPos;
+///#endif
+
   private final byte _tapCount;
 
   public Touch(Touch other)
   {
-     _pos = other._pos;
-     _prevPos = other._prevPos;
+     _pos = new Vector2F(other._pos);
+     _prevPos = new Vector2F(other._prevPos);
      _tapCount = other._tapCount;
   }
 
-  public Touch(Vector2I pos, Vector2I prev)
+  public Touch(Vector2F pos, Vector2F prev)
   {
      this(pos, prev, (byte)0);
   }
-  public Touch(Vector2I pos, Vector2I prev, byte tapCount)
+  public Touch(Vector2F pos, Vector2F prev, byte tapCount)
   {
-     _pos = pos;
-     _prevPos = prev;
+     _pos = new Vector2F(pos);
+     _prevPos = new Vector2F(prev);
      _tapCount = tapCount;
   }
 
-  public final Vector2I getPos()
+  public final Vector2F getPos()
   {
      return _pos;
   }
-  public final Vector2I getPrevPos()
+  public final Vector2F getPrevPos()
   {
      return _prevPos;
   }
