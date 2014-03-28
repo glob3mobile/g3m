@@ -1,7 +1,5 @@
 package com.glob3.mobile.g3mandroidtestingapplication;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
@@ -26,9 +24,7 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesEditorRenderer;
 import org.glob3.mobile.generated.ShapesRenderer;
-import org.glob3.mobile.generated.SingleBillElevationDataProvider;
-=======
-=======
+//import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,7 +33,6 @@ import java.io.OutputStream;
 import java.util.LinkedList;
 
 import org.glob3.mobile.generated.AltitudeMode;
->>>>>>> senderos-gc
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.Color;
@@ -64,13 +59,9 @@ import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Sector;
-<<<<<<< HEAD
->>>>>>> origin/purgatory
-=======
 import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
->>>>>>> senderos-gc
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.URLTemplateLayer;
@@ -81,7 +72,7 @@ import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
-<<<<<<< HEAD
+
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.Shape;
@@ -93,9 +84,9 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.ShapeTouchListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.SceneJSShapesParser;
-=======
+
 import org.glob3.mobile.specific.SQLiteStorage_Android;
->>>>>>> senderos-gc
+
 
 import android.app.Activity;
 import android.content.res.AssetManager;
@@ -478,10 +469,7 @@ Activity {
 		return true;
 	}
 
-<<<<<<< HEAD
-   private G3MWidget_Android _g3mWidget;
-   private RelativeLayout    _placeHolder;
-<<<<<<< HEAD
+
    private ILogger			 _logger;
 =======
 >>>>>>> origin/purgatory

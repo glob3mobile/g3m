@@ -897,6 +897,7 @@ public class Tile
       return false; //RETURN ISRAWRENDER
     }
   
+    /*
     if (_rendered != rendered)
     {
       _rendered = rendered;
@@ -912,7 +913,7 @@ public class Tile
           tileRenderingListener.stopRendering(this);
         }
       }
-    }
+    }*/
   
   }
 
