@@ -1,6 +1,7 @@
 package com.glob3.mobile.g3mandroidtestingapplication;
 
 // prueba git reset
+// prueba git reset 2
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
