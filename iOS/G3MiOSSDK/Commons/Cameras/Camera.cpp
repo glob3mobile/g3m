@@ -159,6 +159,20 @@ const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
+const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
+  const float px = pixel._x;
+  const float py = _height - pixel._y;
+  const Vector3D pixel3D(px, py, 0);
+
+  const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
+                                                      0, 0, _width, _height);
+  if (obj.isNan()) {
+    return obj;
+  }
+
+  return obj.sub(_position.asVector3D());
+}
+
 const Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }

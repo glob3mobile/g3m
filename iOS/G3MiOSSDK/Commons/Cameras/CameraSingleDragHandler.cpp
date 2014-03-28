@@ -47,7 +47,7 @@ void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(Drag); 
 
   // dragging
-  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
   eventContext->getPlanet()->beginSingleDrag(_camera0.getCartesianPosition(),
                                              _camera0.pixel2Ray(pixel));
 }
@@ -61,7 +61,7 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
     
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
-  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
   MutableMatrix44D matrix = planet->singleDrag(_camera0.pixel2Ray(pixel));
   if (!matrix.isValid()) return;
   
@@ -80,8 +80,8 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
   // test if animation is needed
   if (_useInertia) {
     const Touch *touch = touchEvent.getTouch(0);
-    const Vector2I currPixel = touch->getPos();
-    const Vector2I prevPixel = touch->getPrevPos();
+    const Vector2F currPixel = touch->getPos();
+    const Vector2F prevPixel = touch->getPrevPos();
     const double desp        = currPixel.sub(prevPixel).length();
 
     const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);

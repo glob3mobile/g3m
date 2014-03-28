@@ -21,3 +21,12 @@ const double Vector2F::squaredDistanceTo(const Vector2I& that) const {
   const double dy = _y - that._y;
   return (dx * dx) + (dy * dy);
 }
+
+double Vector2F::length() const {
+  return IMathUtils::instance()->sqrt(squaredLength());
+}
+
+Vector2F Vector2F::div(double v) const {
+  return Vector2F((float) (_x / v),
+                  (float) (_y / v) );
+}

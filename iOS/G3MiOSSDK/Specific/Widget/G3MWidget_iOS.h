@@ -44,7 +44,7 @@ class ErrorRenderer;
   BOOL _displayLinkSupported;
 
   TouchEvent* _lastTouchEvent;
-
+  CGFloat _scale;
   void* _widgetVP;
 }
 

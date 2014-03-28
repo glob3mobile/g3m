@@ -38,8 +38,10 @@ void TextUtils_iOS::createLabelImage(const std::string& label,
                                      bool autodelete) {
   NSString* text = [NSString stringWithCppString: label];
 
-  
-  UIFont *font = [UIFont systemFontOfSize: fontSize];
+  UIScreen* mainScreen = [UIScreen mainScreen];
+  const float scale = [mainScreen respondsToSelector:@selector(scale)] ? [mainScreen scale] : 1;
+
+  UIFont *font = [UIFont systemFontOfSize: fontSize * scale];
   CGSize textSize = [text sizeWithFont: font];
 
   CGSize imageSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,
@@ -95,7 +97,10 @@ void TextUtils_iOS::labelImage(const IImage* image,
   else {
     NSString* text = [NSString stringWithCppString: label];
 
-    UIFont *font = [UIFont systemFontOfSize: fontSize];
+    UIScreen* mainScreen = [UIScreen mainScreen];
+    const float scale = [mainScreen respondsToSelector:@selector(scale)] ? [mainScreen scale] : 1;
+
+    UIFont *font = [UIFont systemFontOfSize: fontSize * scale];
     CGSize textSize = [text sizeWithFont: font];
 
     CGSize labelSize = (shadowColor == NULL) ? textSize : CGSizeMake(textSize.width + 2,

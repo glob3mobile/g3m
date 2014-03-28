@@ -117,11 +117,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     eaglLayer.opaque = TRUE;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-//    // for retina display
-//    eaglLayer.contentsScale = 2;
-//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
-//      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
-//    }
+
+    UIScreen* mainScreen = [UIScreen mainScreen];
+    _scale = [mainScreen respondsToSelector:@selector(displayLinkWithTarget:selector:)] ? mainScreen.scale : 1;
+    eaglLayer.contentsScale = _scale;
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
@@ -184,9 +183,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint tapPoint = [sender locationInView:sender.view];
 
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2I((int) tapPoint.x,
-                                      (int) tapPoint.y),
-                             Vector2I(0, 0),
+    Touch *touch = new Touch(Vector2F(tapPoint.x * _scale,
+                                      tapPoint.y * _scale),
+                             Vector2F(0, 0),
                              1);
     pointers.push_back(touch);
 
@@ -295,10 +294,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint previous        = [touch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [touch tapCount];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y),
+    Touch *touch = new Touch(Vector2F(current.x * _scale,
+                                      current.y * _scale),
+                             Vector2F(previous.x * _scale,
+                                      previous.y * _scale),
                              tapCount);
 
     pointers.push_back(touch);
@@ -325,10 +324,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch *touch = new Touch(Vector2F(current.x * _scale,
+                                      current.y * _scale),
+                             Vector2F(previous.x * _scale,
+                                      previous.y * _scale));
 
     pointers.push_back(touch);
   }
@@ -341,9 +340,9 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     if ((pointers.size() == 2) &&
         (_lastTouchEvent->getTouchCount() == 2)) {
 
-      const Vector2I current0 = pointers[0]->getPrevPos();
-      const Vector2I last0 = _lastTouchEvent->getTouch(0)->getPos();
-      const Vector2I last1 = _lastTouchEvent->getTouch(1)->getPos();
+      const Vector2F current0 = pointers[0]->getPrevPos();
+      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
+      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
       delete _lastTouchEvent;
       const double dist0 = current0.sub(last0).squaredLength();
       const double dist1 = current0.sub(last1).squaredLength();
@@ -386,10 +385,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 
     [touch timestamp];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
-                                      (int) current.y),
-                             Vector2I((int) previous.x,
-                                      (int) previous.y));
+    Touch *touch = new Touch(Vector2F(current.x * _scale,
+                                      current.y * _scale),
+                             Vector2F(previous.x * _scale,
+                                      previous.y * _scale));
 
     pointers.push_back(touch);
   }

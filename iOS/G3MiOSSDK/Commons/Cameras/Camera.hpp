@@ -151,6 +151,7 @@ public:
   void resizeViewport(int width, int height);
 
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
+  const Vector3D pixel2Ray(const Vector2F& pixel) const;
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 

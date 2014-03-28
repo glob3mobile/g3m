@@ -12,7 +12,7 @@
 
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
-
+#include "MutableVector2F.hpp"
 
 class CameraZoomAndRotateHandler: public CameraEventHandler {
 private:  
@@ -23,7 +23,8 @@ private:
   MutableVector3D _centralGlobePoint;
   MutableVector3D _centralGlobeNormal;
   
-  void zoom(Camera* camera, Vector2I difCurrentPixels);
+  void zoom(Camera* camera,
+            const Vector2F& difCurrentPixels);
   void rotate();
   
   
@@ -59,9 +60,7 @@ public:
             const TouchEvent& touchEvent,
             CameraContext *cameraContext);
   
-  //MutableVector3D _initialPoint;  //Initial point at dragging
-  MutableVector2I _initialPixel0, _initialPixel1;  //Initial pixels at start of gesture
-  //MutableVector3D _initialPoint0, _initialPoint1;
+  MutableVector2F _initialPixel0, _initialPixel1;  //Initial pixels at start of gesture
   double _initialFingerSeparation;
   double _initialFingerInclination;
   

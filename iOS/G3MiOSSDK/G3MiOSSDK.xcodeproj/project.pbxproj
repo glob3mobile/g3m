@@ -378,6 +378,8 @@
 		CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AD175E04FA00046B96 /* Sphere.hpp */; };
 		CFEBDF1E16E8C9C80063B49F /* MercatorUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */; };
 		CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEEE4BB164867B600F45F59 /* CircleShape.cpp */; };
+		CFEF380D18E5E4DC00969C42 /* MutableVector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEF380B18E5E4DC00969C42 /* MutableVector2F.cpp */; };
+		CFEF380E18E5E6B000969C42 /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFEF380C18E5E4DC00969C42 /* MutableVector2F.hpp */; };
 		CFF1A661177B57BC00775E3E /* AbstractGeometryMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765CFD1779C3AE004B62F4 /* AbstractGeometryMesh.hpp */; };
 		CFF1A662177B57BC00775E3E /* IndexedGeometryMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765CFF1779C3AE004B62F4 /* IndexedGeometryMesh.hpp */; };
 		CFF1A663177B57BC00775E3E /* LeveledMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8765D011779C3AE004B62F4 /* LeveledMesh.hpp */; };
@@ -679,6 +681,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFEF380E18E5E6B000969C42 /* MutableVector2F.hpp in CopyFiles */,
 				44D33CEE18DB07BC0027B892 /* ProtoRenderer.hpp in CopyFiles */,
 				CF2ADB8818DC9341001EF133 /* TileRenderingListener.hpp in CopyFiles */,
 				CFAC9EA018CE27A500EE57EF /* GEOLabelRasterSymbol.hpp in CopyFiles */,
@@ -1541,6 +1544,8 @@
 		CFEBDF1D16E8C9C80063B49F /* MercatorUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MercatorUtils.hpp; path = Commons/Basic/MercatorUtils.hpp; sourceTree = "<group>"; };
 		CFEEE4BB164867B600F45F59 /* CircleShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CircleShape.cpp; path = Commons/Rendererers/CircleShape.cpp; sourceTree = "<group>"; };
 		CFEEE4BC164867B600F45F59 /* CircleShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircleShape.hpp; path = Commons/Rendererers/CircleShape.hpp; sourceTree = "<group>"; };
+		CFEF380B18E5E4DC00969C42 /* MutableVector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2F.cpp; path = Commons/Geometry/MutableVector2F.cpp; sourceTree = "<group>"; };
+		CFEF380C18E5E4DC00969C42 /* MutableVector2F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2F.hpp; path = Commons/Geometry/MutableVector2F.hpp; sourceTree = "<group>"; };
 		CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshRenderer.cpp; path = Commons/Rendererers/MeshRenderer.cpp; sourceTree = "<group>"; };
 		CFF76BE4168614AD00F658CC /* MeshRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshRenderer.hpp; path = Commons/Rendererers/MeshRenderer.hpp; sourceTree = "<group>"; };
 		CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RCObject.cpp; path = Commons/Basic/RCObject.cpp; sourceTree = "<group>"; };
@@ -2154,6 +2159,8 @@
 				D8F2EBAC18994A7B001B6103 /* CoordinateSystem.hpp */,
 				D8173EC818A3A2D6001E7B57 /* TaitBryanAngles.cpp */,
 				D8173EC918A3A2D6001E7B57 /* TaitBryanAngles.hpp */,
+				CFEF380B18E5E4DC00969C42 /* MutableVector2F.cpp */,
+				CFEF380C18E5E4DC00969C42 /* MutableVector2F.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2915,6 +2922,7 @@
 				CF7EDA0A1694914A002C760A /* BSONParser.cpp in Sources */,
 				CF4FAAC31695C66F009734CA /* ByteBufferBuilder.cpp in Sources */,
 				CF4FAAC81695D010009734CA /* JSONVisitor.cpp in Sources */,
+				CFEF380D18E5E4DC00969C42 /* MutableVector2F.cpp in Sources */,
 				CF4FAACC1695E4A8009734CA /* JSONGenerator.cpp in Sources */,
 				CF4FAAD51695F344009734CA /* BSONGenerator.cpp in Sources */,
 				CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */,

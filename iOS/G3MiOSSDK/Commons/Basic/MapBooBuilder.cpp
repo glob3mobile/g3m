@@ -278,7 +278,7 @@ public:
   }
 
   bool onTerrainTouch(const G3MEventContext* ec,
-                      const Vector2I&        pixel,
+                      const Vector2F&        pixel,
                       const Camera*          camera,
                       const Geodetic3D&      position,
                       const Tile*            tile) {
@@ -467,7 +467,7 @@ void MapBooBuilder::sendNotification(const Geodetic2D&  position,
 }
 
 bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
-                                   const Vector2I&        pixel,
+                                   const Vector2F&        pixel,
                                    const Camera*          camera,
                                    const Geodetic3D&      position,
                                    const Tile*            tile) {
