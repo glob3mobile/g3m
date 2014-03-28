@@ -10,7 +10,6 @@ import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.Vector2F;
 
 import android.view.MotionEvent;
-import android.view.MotionEvent.PointerCoords;
 
 
 public final class MotionEventProcessor {
@@ -54,7 +53,7 @@ public final class MotionEventProcessor {
       for (int i = 0; i < event.getPointerCount(); i++) {
 
          final int pointerID = event.getPointerId(i);
-         final PointerCoords pc = new PointerCoords();
+         final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
          event.getPointerCoords(i, pc);
          // TOUCH EVENT
          final Vector2F pos = new Vector2F(pc.x, pc.y);
@@ -155,14 +154,12 @@ public final class MotionEventProcessor {
 
 
    public TouchEvent processDoubleTapEvent(final MotionEvent event) {
-      final PointerCoords pc = new PointerCoords();
+      final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       event.getPointerCoords(0, pc);
       final Vector2F pos = new Vector2F(pc.x, pc.y);
       final Touch t = new Touch(pos, pos, (byte) 2);
 
-      final TouchEvent te = TouchEvent.create(TouchEventType.Down, t);
-
-      return te;
-
+      return TouchEvent.create(TouchEventType.Down, t);
    }
+
 }
