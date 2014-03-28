@@ -22,21 +22,15 @@ package org.glob3.mobile.generated;
 
 public class Touch
 {
-///#ifdef C_CODE
-  private final Vector2F _pos = new Vector2F();
-  private final Vector2F _prevPos = new Vector2F();
-///#endif
-///#ifdef JAVA_CODE
-//  private final Vector2I _pos;
-//  private final Vector2I _prevPos;
-///#endif
+  private final Vector2F _pos;
+  private final Vector2F _prevPos;
 
   private final byte _tapCount;
 
   public Touch(Touch other)
   {
-     _pos = new Vector2F(other._pos);
-     _prevPos = new Vector2F(other._prevPos);
+     _pos = other._pos;
+     _prevPos = other._prevPos;
      _tapCount = other._tapCount;
   }
 
@@ -46,8 +40,8 @@ public class Touch
   }
   public Touch(Vector2F pos, Vector2F prev, byte tapCount)
   {
-     _pos = new Vector2F(pos);
-     _prevPos = new Vector2F(prev);
+     _pos = pos;
+     _prevPos = prev;
      _tapCount = tapCount;
   }
 
