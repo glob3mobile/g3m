@@ -17,14 +17,14 @@
 
 class Touch {
 private:
-//#ifdef C_CODE
+#ifdef C_CODE
   const Vector2F _pos;
   const Vector2F _prevPos;
-//#endif
-//#ifdef JAVA_CODE
-//  private final Vector2I _pos;
-//  private final Vector2I _prevPos;
-//#endif
+#endif
+#ifdef JAVA_CODE
+  private final Vector2F _pos;
+  private final Vector2F _prevPos;
+#endif
 
   const unsigned char _tapCount;
 
