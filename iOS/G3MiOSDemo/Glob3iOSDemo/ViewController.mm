@@ -670,7 +670,7 @@ public:
                                                                                 false, // showSectorLabels,
                                                                                 true   // showTileBounds
                                                                                 ));
-  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
+//  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
 
   ProtoRenderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -1489,7 +1489,7 @@ public:
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapBox = true;
+  const bool useMapBox = false;
   if (useMapBox) {
     //const std::string mapKey = "dgd.map-v93trj8v";
     //const std::string mapKey = "examples.map-cnkhv76j";
@@ -1510,7 +1510,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = false;
+  const bool useBingMaps = true;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           //BingMapType::AerialWithLabels(),
