@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-///#include "Vector2I.hpp"
 
 
 public class Touch
