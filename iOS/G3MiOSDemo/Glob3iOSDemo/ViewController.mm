@@ -532,12 +532,12 @@ public:
   //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
-  //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                                                     Sector::fullSphere(),
-  //                                                                                     Vector2I(2048, 1024));
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                                    Sector::fullSphere(),
+                                                                                    Vector2I(2048, 1024));
 
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                                                    Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
+//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+//                                                                                    Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -1493,7 +1493,8 @@ public:
   if (useMapBox) {
     //const std::string mapKey = "dgd.map-v93trj8v";
     //const std::string mapKey = "examples.map-cnkhv76j";
-    const std::string mapKey = "examples.map-qogxobv1";
+    //const std::string mapKey = "examples.map-qogxobv1";
+    const std::string mapKey = "examples.map-qfyrx5r8";
     layerSet->addLayer( new MapBoxLayer(mapKey, TimeInterval::fromDays(30)) );
   }
 
