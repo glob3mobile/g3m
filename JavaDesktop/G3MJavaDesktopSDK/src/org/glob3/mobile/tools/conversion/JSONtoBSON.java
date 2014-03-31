@@ -32,8 +32,18 @@ public class JSONtoBSON {
       ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
 
 
-      final String pathFileJson = "/Users/mdelacalle/Downloads/Haiyan/buildings.json";
-      final String pathFileBson = "/Users/mdelacalle/Downloads/Haiyan/buildings.bson";
+      //      final String pathFileJson = "/Users/mdelacalle/Desktop/A380/A380.json";
+
+      //Path galileo
+      //final String pathFileBson = "/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/galileo/Android/Galileo/assets/2479-3029-13-.bson";
+
+      //Path Terra-Vision
+      final String pathFileBson = "/Users/mdelacalle/Documents/java_src/terra-vision/webgl/terra-vision-demo/war/assets/2476-1280-12-.bson";
+      final String pathFileJson = "/Users/mdelacalle/Documents/java_src/workspaces10122013/OSM2World-h/2476-1280-12-.json";
+      //    final String pathFileBson = "/Users/mdelacalle/Documents/java_src/IGO-GIT-Repository/wb/sldemo/Android/SLDemo/assets/boston.bson";
+      //http://b.tile.openstreetmap.org/13/2478/3028.png
+      //13/2479/3029.png
+
       final JSONBaseObject jbase = readJsonFile(new File(pathFileJson));
       writeBsonFile(jbase, new File(pathFileBson));
 
