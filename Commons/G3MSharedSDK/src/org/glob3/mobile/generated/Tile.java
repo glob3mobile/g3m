@@ -622,6 +622,7 @@ public class Tile
   }
 
   private boolean _rendered;
+  private TileRenderingListener _tileRenderingListener;
 
   public final Sector _sector ;
   public final int _level;
@@ -673,6 +674,7 @@ public class Tile
      _eastArcSegmentRatioSquared = 0;
      _westArcSegmentRatioSquared = 0;
      _rendered = false;
+     _tileRenderingListener = null;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -684,6 +686,14 @@ public class Tile
   public void dispose()
   {
     prune(null, null);
+  
+    if (_tileRenderingListener != null)
+    {
+      if (_rendered)
+      {
+        _tileRenderingListener.stopRendering(this);
+      }
+    }
   
     //  delete _boundingVolume;
   
@@ -892,10 +902,12 @@ public class Tile
         if (_rendered)
         {
           tileRenderingListener.startRendering(this);
+          _tileRenderingListener = tileRenderingListener;
         }
         else
         {
           tileRenderingListener.stopRendering(this);
+          _tileRenderingListener = null;
         }
       }
     }
