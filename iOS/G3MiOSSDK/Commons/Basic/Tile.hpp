@@ -185,6 +185,7 @@ private:
                                           const TilesRenderParameters* tilesRenderParameters);
 
   bool _rendered;
+  TileRenderingListener* _tileRenderingListener;
 
 public:
   const Sector    _sector;

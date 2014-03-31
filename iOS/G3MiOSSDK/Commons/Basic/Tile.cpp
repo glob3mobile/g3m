@@ -79,7 +79,8 @@ _northArcSegmentRatioSquared(0),
 _southArcSegmentRatioSquared(0),
 _eastArcSegmentRatioSquared(0),
 _westArcSegmentRatioSquared(0),
-_rendered(false)
+_rendered(false),
+_tileRenderingListener(NULL)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -91,6 +92,12 @@ _rendered(false)
 
 Tile::~Tile() {
   prune(NULL, NULL);
+
+  if (_tileRenderingListener != NULL) {
+    if (_rendered) {
+      _tileRenderingListener->stopRendering(this);
+    }
+  }
 
   //  delete _boundingVolume;
 
@@ -839,9 +846,11 @@ void Tile::render(const G3MRenderContext* rc,
     if (tileRenderingListener != NULL) {
       if (_rendered) {
         tileRenderingListener->startRendering(this);
+        _tileRenderingListener = tileRenderingListener;
       }
       else {
         tileRenderingListener->stopRendering(this);
+        _tileRenderingListener = NULL;
       }
     }
   }

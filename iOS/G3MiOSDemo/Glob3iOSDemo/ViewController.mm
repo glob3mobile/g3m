@@ -601,16 +601,16 @@ public:
 };
 
 
-//class SampleTileRenderingListener : public TileRenderingListener {
-//public:
-//  void startRendering(const Tile* tile) {
-//    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-//  }
-//
-//  void stopRendering(const Tile* tile) {
-//    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-//  }
-//};
+class SampleTileRenderingListener : public TileRenderingListener {
+public:
+  void startRendering(const Tile* tile) {
+    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+  }
+
+  void stopRendering(const Tile* tile) {
+    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+  }
+};
 
 
 - (void) initCustomizedWithBuilder
@@ -618,7 +618,7 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
 
 
-  //builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
+  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
