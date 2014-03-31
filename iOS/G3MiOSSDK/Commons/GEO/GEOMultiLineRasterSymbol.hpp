@@ -18,9 +18,11 @@ private:
 #ifdef C_CODE
   mutable const std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
   const GEO2DLineRasterStyle                            _style;
+#else
+  std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
 #endif
 #ifdef JAVA_CODE
-  private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
+  //private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
   private final GEO2DLineRasterStyle                           _style;
 #endif
 

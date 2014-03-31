@@ -27,6 +27,7 @@ package org.glob3.mobile.generated;
 //class ICameraConstrainer;
 //class CameraRenderer;
 //class Renderer;
+//class ProtoRenderer;
 //class GInitializationTask;
 //class PeriodicalTask;
 //class Layer;

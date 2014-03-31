@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class PlanetRenderer extends LeafRenderer implements ChangedListener, SurfaceElevationProvider
+public class PlanetRenderer extends DefaultRenderer implements ChangedListener, SurfaceElevationProvider
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -17,7 +17,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private TilesStatistics _statistics = new TilesStatistics();
 
   private Camera     _lastCamera;
-  private G3MContext _context;
 
   private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
   private boolean _firstLevelTilesJustCreated;
@@ -335,7 +334,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _lastSplitTimer = null;
      _lastCamera = null;
      _firstRender = false;
-     _context = null;
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
@@ -347,6 +345,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
+    _context = null;
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -690,19 +689,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     _firstRender = false;
   }
 
-  public final void onResume(G3MContext context)
-  {
-
-  }
-
   public final void onPause(G3MContext context)
   {
     recreateTiles();
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
   }
 
   public final void setEnable(boolean enable)

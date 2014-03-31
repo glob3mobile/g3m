@@ -20,7 +20,7 @@ class LayerTilesRenderParameters;
 class TerrainTouchListener;
 
 #include "IStringBuilder.hpp"
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
 #include "TileKey.hpp"
@@ -212,7 +212,7 @@ public:
 };
 
 
-class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProvider {
+class PlanetRenderer: public DefaultRenderer, ChangedListener, SurfaceElevationProvider {
 private:
   TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -231,11 +231,9 @@ private:
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
-  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
   private Camera     _lastCamera;
-  private G3MContext _context;
 #endif
 
   std::vector<Tile*> _firstLevelTiles;
@@ -347,21 +345,13 @@ public:
     _firstRender = false;
   }
 
-  void onResume(const G3MContext* context) {
-
-  }
-
   void onPause(const G3MContext* context) {
     recreateTiles();
   }
 
-  void onDestroy(const G3MContext* context) {
-
-  }
-
   void setEnable(bool enable) {
 #ifdef C_CODE
-    LeafRenderer::setEnable(enable);
+    DefaultRenderer::setEnable(enable);
 #endif
 #ifdef JAVA_CODE
     super.setEnable(enable);

@@ -20,9 +20,8 @@ package org.glob3.mobile.generated;
 
 //class HUDWidget;
 
-public class HUDRenderer extends LeafRenderer
+public class HUDRenderer extends DefaultRenderer
 {
-  private G3MContext _context;
 
   private java.util.ArrayList<HUDWidget> _widgets = new java.util.ArrayList<HUDWidget>();
   private int _widgetsSize;
@@ -40,7 +39,7 @@ public class HUDRenderer extends LeafRenderer
   {
      _glState = new GLState();
      _readyWhenWidgetsReady = readyWhenWidgetsReady;
-     _context = null;
+    _context = null;
     _widgetsSize = _widgets.size();
   }
 
@@ -69,14 +68,12 @@ public class HUDRenderer extends LeafRenderer
     }
   }
 
-  public final void initialize(G3MContext context)
+  public final void onChangedContext()
   {
-    _context = context;
-  
     for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
-      widget.initialize(context);
+      widget.initialize(_context);
     }
   }
 
@@ -126,31 +123,6 @@ public class HUDRenderer extends LeafRenderer
     {
       return RenderState.ready();
     }
-  }
-
-  public final void onResume(G3MContext context)
-  {
-  }
-
-  public final void onPause(G3MContext context)
-  {
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-  }
-
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return false;
-  }
-
-  public final void start(G3MRenderContext rc)
-  {
-  }
-
-  public final void stop(G3MRenderContext rc)
-  {
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

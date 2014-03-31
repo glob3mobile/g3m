@@ -7,6 +7,7 @@
 //
 
 #include "MarksRenderer.hpp"
+#include "RenderState.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TouchEvent.hpp"
@@ -31,7 +32,6 @@ void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
 
 MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
 _readyWhenMarksReady(readyWhenMarksReady),
-_context(NULL),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
@@ -39,6 +39,7 @@ _downloadPriority(DownloadPriority::MEDIUM),
 _glState(new GLState()),
 _billboardTexCoords(NULL)
 {
+  _context = NULL;
 }
 
 
@@ -64,13 +65,11 @@ MarksRenderer::~MarksRenderer() {
 };
 
 
-void MarksRenderer::initialize(const G3MContext* context) {
-  _context = context;
-
+void MarksRenderer::onChangedContext() {
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    mark->initialize(context, _downloadPriority);
+    mark->initialize(_context, _downloadPriority);
   }
 }
 

@@ -25,9 +25,6 @@
 #include "GPUUniform.hpp"
 #include "Camera.hpp"
 
-void BusyMeshRenderer::initialize(const G3MContext* context)
-{
-}
 
 void BusyMeshRenderer::start(const G3MRenderContext* rc) {
   Effect* effect = new BusyMeshEffect(this);

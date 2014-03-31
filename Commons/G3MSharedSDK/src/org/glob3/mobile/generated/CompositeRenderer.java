@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class CompositeRenderer extends Renderer
+public class CompositeRenderer implements Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
   private int _renderersSize;
@@ -38,7 +38,7 @@ public class CompositeRenderer extends Renderer
 
   public void dispose()
   {
-    super.dispose();
+
   }
 
   public final boolean isEnable()

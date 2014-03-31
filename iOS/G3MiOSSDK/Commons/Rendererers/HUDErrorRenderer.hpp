@@ -23,32 +23,15 @@ public:
   HUDErrorRenderer();
 
   ~HUDErrorRenderer() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
+
   }
 
   void setErrors(const std::vector<std::string>& errors);
-
-  bool isEnable() const;
-
-  void setEnable(bool enable);
-
-  RenderState getRenderState(const G3MRenderContext* rc);
-
-  bool isPlanetRenderer();
-
-  SurfaceElevationProvider* getSurfaceElevationProvider();
-
-  PlanetRenderer* getPlanetRenderer();
 
   void initialize(const G3MContext* context);
 
   void render(const G3MRenderContext* rc,
               GLState* glState);
-
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);

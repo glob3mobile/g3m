@@ -255,19 +255,33 @@ void ShapesRenderer::drainLoadQueue() {
   _loadQueue.clear();
 }
 
-void ShapesRenderer::initialize(const G3MContext* context) {
-  _context = context;
+void ShapesRenderer::cleanLoadQueue() {
+  const int loadQueueSize = _loadQueue.size();
+  for (int i = 0; i < loadQueueSize; i++) {
+    LoadQueueItem* item = _loadQueue[i];
+    delete item;
+  }
+  _loadQueue.clear();
+}
 
+void ShapesRenderer::onChangedContext() {
   if (_context != NULL) {
     const int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
-      shape->initialize(context);
+      shape->initialize(_context);
     }
 
     drainLoadQueue();
   }
 }
+
+void ShapesRenderer::onLostContext() {
+  if (_context == NULL) {
+    cleanLoadQueue();
+  }
+}
+
 
 
 void ShapesRenderer::loadJSONSceneJS(const URL&          url,

@@ -20,9 +20,8 @@ private:
 
 #ifdef C_CODE
   const G3MContext* _context;
-#endif
-#ifdef JAVA_CODE
-  private G3MContext _context;
+#else
+  G3MContext* _context;
 #endif
 
   bool _enable;
@@ -39,9 +38,7 @@ public:
   }
 
   virtual ~CompositeRenderer() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
+
   }
 
   bool isEnable() const;

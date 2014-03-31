@@ -96,7 +96,7 @@ public abstract class MapBooBuilder
     return cameraRenderer;
   }
 
-  private Renderer createBusyRenderer()
+  private ProtoRenderer createBusyRenderer()
   {
     return new BusyMeshRenderer(Color.newFromRGBA(0, 0, 0, 1));
   }

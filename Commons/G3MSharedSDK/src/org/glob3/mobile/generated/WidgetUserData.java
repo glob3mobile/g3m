@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class Renderer;
+//class ProtoRenderer;
 //class TouchEvent;
 //class Planet;
 //class ILogger;

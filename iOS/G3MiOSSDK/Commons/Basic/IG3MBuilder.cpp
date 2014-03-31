@@ -203,7 +203,7 @@ CameraRenderer* IG3MBuilder::getCameraRenderer() {
  *
  * @return _busyRenderer: Renderer*
  */
-Renderer* IG3MBuilder::getBusyRenderer() {
+ProtoRenderer* IG3MBuilder::getBusyRenderer() {
   if (!_busyRenderer) {
     _busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0, (float)0, (float)1));
   }
@@ -495,7 +495,7 @@ void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
  *
  * @param busyRenderer - cannot be NULL.
  */
-void IG3MBuilder::setBusyRenderer(Renderer* busyRenderer) {
+void IG3MBuilder::setBusyRenderer(ProtoRenderer* busyRenderer) {
   if (_busyRenderer) {
     ILogger::instance()->logError("LOGIC ERROR: busyRenderer already initialized");
     return;
