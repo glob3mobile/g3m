@@ -507,8 +507,10 @@ public class GenericQuadTree_Node
       GenericQuadTree_Element qTElement = it.next();
       if (qTElement._element == element)
       {
-        _elements.remove(qTElement);
+        //_elements.remove(qTElement);
+        it.remove();
         wasRemoved = true;
+        break;
       }
     }
   
