@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class PlanetRenderer extends LeafRenderer implements ChangedListener, SurfaceElevationProvider
+public class PlanetRenderer extends DefaultRenderer implements ChangedListener, SurfaceElevationProvider
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -12,10 +12,11 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private final boolean _logTilesPetitions;
   private ITileVisitor _tileVisitor = null;
 
+  private TileRenderingListener _tileRenderingListener;
+
   private TilesStatistics _statistics = new TilesStatistics();
 
   private Camera     _lastCamera;
-  private G3MContext _context;
 
   private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
   private boolean _firstLevelTilesJustCreated;
@@ -318,7 +319,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -333,7 +334,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _lastSplitTimer = null;
      _lastCamera = null;
      _firstRender = false;
-     _context = null;
      _lastVisibleSector = null;
      _texturePriority = texturePriority;
      _allFirstLevelTilesAreTextureSolved = false;
@@ -344,6 +344,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _layerTilesRenderParametersDirty = true;
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
+     _tileRenderingListener = tileRenderingListener;
+    _context = null;
     _layerSet.setChangeListener(this);
     if (_tileRasterizer != null)
     {
@@ -382,6 +384,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     if (_renderedSector != null)
        _renderedSector.dispose();
+  
+    if (_tileRenderingListener != null)
+       _tileRenderingListener.dispose();
   
     super.dispose();
   
@@ -463,7 +468,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions); // if first render, force full render
+        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
       }
     }
     else
@@ -482,7 +487,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         {
           Tile tile = iter.next();
   
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions); //SENDING SQUARED TEX SIZE -  if first render, force full render
+          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); //SENDING SQUARED TEX SIZE -  if first render, force full render
         }
   
         toVisit = toVisitInNextIteration;
@@ -684,19 +689,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     _firstRender = false;
   }
 
-  public final void onResume(G3MContext context)
-  {
-
-  }
-
   public final void onPause(G3MContext context)
   {
     recreateTiles();
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
   }
 
   public final void setEnable(boolean enable)

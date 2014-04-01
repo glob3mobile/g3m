@@ -33,7 +33,7 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     _cz = (float) center._z;
   }
 
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private final Planet _planet;
 
   private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet planet, Vector3D center)
   {

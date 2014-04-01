@@ -21,6 +21,7 @@ class Planet;
 class ICameraConstrainer;
 class CameraRenderer;
 class Renderer;
+class ProtoRenderer;
 class GInitializationTask;
 class PeriodicalTask;
 class Layer;
@@ -456,7 +457,7 @@ private:
 
   CameraRenderer* createCameraRenderer();
 
-  Renderer* createBusyRenderer();
+  ProtoRenderer* createBusyRenderer();
 
   ErrorRenderer* createErrorRenderer();
 

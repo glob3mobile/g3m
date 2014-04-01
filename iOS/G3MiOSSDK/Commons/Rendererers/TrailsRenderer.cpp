@@ -263,6 +263,3 @@ void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
-void TrailsRenderer::initialize(const G3MContext* context) {
-}
-

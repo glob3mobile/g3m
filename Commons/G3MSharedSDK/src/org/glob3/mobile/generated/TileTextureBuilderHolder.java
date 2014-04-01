@@ -22,4 +22,11 @@ public class TileTextureBuilderHolder implements ITexturizerData
     }
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if ! C_CODE
+  public final void unusedMethod()
+  {
+  }
+//#endif
+
 }

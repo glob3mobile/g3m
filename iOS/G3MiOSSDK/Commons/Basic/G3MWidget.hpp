@@ -10,6 +10,7 @@
 #define G3MiOSSDK_G3MWidget_h
 
 class Renderer;
+class ProtoRenderer;
 class TouchEvent;
 class Planet;
 class ILogger;
@@ -106,7 +107,7 @@ public:
                            std::vector<ICameraConstrainer*>     cameraConstrainers,
                            CameraRenderer*                      cameraRenderer,
                            Renderer*                            mainRenderer,
-                           Renderer*                            busyRenderer,
+                           ProtoRenderer*                       busyRenderer,
                            ErrorRenderer*                       errorRenderer,
                            Renderer*                            hudRenderer,
                            const Color&                         backgroundColor,
@@ -227,7 +228,7 @@ public:
   void setForceBusyRenderer(bool forceBusyRenderer) {
     _forceBusyRenderer = forceBusyRenderer;
   }
-
+  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -240,11 +241,11 @@ private:
 
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
-  Renderer*           _busyRenderer;
+  ProtoRenderer*      _busyRenderer;
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
-  Renderer*           _selectedRenderer;
+  ProtoRenderer*           _selectedRenderer;
 
   EffectsScheduler*   _effectsScheduler;
 
@@ -307,7 +308,7 @@ private:
             std::vector<ICameraConstrainer*> cameraConstrainers,
             CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
-            Renderer*                        busyRenderer,
+            ProtoRenderer*                   busyRenderer,
             ErrorRenderer*                   errorRenderer,
             Renderer*                        hudRenderer,
             const Color&                     backgroundColor,
@@ -324,6 +325,8 @@ private:
                         const TouchEvent* touchEvent) const;
 
   RenderState calculateRendererState();
+  
+  void setSelectedRenderer(ProtoRenderer* selectedRenderer);
   
 };
 

@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 public class GEOMultiLineRasterSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
+  //private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
   private final GEO2DLineRasterStyle                           _style;
 
   protected final void rawRasterize(ICanvas canvas, GEORasterProjection projection)

@@ -139,6 +139,8 @@
 #import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
+#import <G3MiOSSDK/TileRenderingListener.hpp>
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -279,6 +281,13 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithBuilderAndSegmentedWorld];
 
+  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                       Geodetic3D::fromDegrees(25.743467472995700263,
+                                                                               -5.3656762990500403987,
+                                                                               1664155.1381164737977),
+                                                       Angle::fromDegrees(-0.145718),
+                                                       Angle::fromDegrees(-52.117699));
+
   [[self G3MWidget] startAnimation];
 
   /*
@@ -361,6 +370,8 @@ public:
 //};
 
 
+
+
 - (void) initWithBuilderAndSegmentedWorld
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -427,6 +438,7 @@ public:
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
+
 
   builder.initializeWidget();
 }
@@ -520,12 +532,12 @@ public:
   //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 
 
-  //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
-  //                                                                                     Sector::fullSphere(),
-  //                                                                                     Vector2I(2048, 1024));
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
+                                                                                    Sector::fullSphere(),
+                                                                                    Vector2I(2048, 1024));
 
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
-                                                                                    Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
+//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///caceres-2008x2032.bil", false),
+//                                                                                    Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845),                                                              Vector2I(2008, 2032),0);
 
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
 }
@@ -588,17 +600,32 @@ public:
 
 };
 
+
+class SampleTileRenderingListener : public TileRenderingListener {
+public:
+  void startRendering(const Tile* tile) {
+    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+  }
+
+  void stopRendering(const Tile* tile) {
+    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+  }
+};
+
+
 - (void) initCustomizedWithBuilder
 {
-
-
   G3MBuilder_iOS builder([self G3MWidget]);
+
+
+  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
-  builder.getPlanetRendererBuilder()->setShowStatistics(false);
+//#warning Diego at work!
+//  builder.getPlanetRendererBuilder()->setShowStatistics(true);
 
   //  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   //  builder.addCameraConstraint(scc);
@@ -637,9 +664,15 @@ public:
   builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));
 
-  //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
+  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
+                                                                                Color::yellow(),
+                                                                                true,  // showIDLabel
+                                                                                false, // showSectorLabels,
+                                                                                true   // showTileBounds
+                                                                                ));
+  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
 
-  Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
+  ProtoRenderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
@@ -1451,16 +1484,17 @@ public:
                                          "tm_world_borders_simpl_0_3",
                                          TimeInterval::fromDays(30)) );
   }
-  const bool useMapQuestOpenAerial = true;
+  const bool useMapQuestOpenAerial = false;
   if (useMapQuestOpenAerial) {
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapBox = false;
+  const bool useMapBox = true;
   if (useMapBox) {
     //const std::string mapKey = "dgd.map-v93trj8v";
     //const std::string mapKey = "examples.map-cnkhv76j";
-    const std::string mapKey = "examples.map-qogxobv1";
+    //const std::string mapKey = "examples.map-qogxobv1";
+    const std::string mapKey = "examples.map-qfyrx5r8";
     layerSet->addLayer( new MapBoxLayer(mapKey, TimeInterval::fromDays(30)) );
   }
 
@@ -1880,7 +1914,6 @@ public:
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
-  //const Quality quality = QUALITY_MEDIUM;
   const Quality quality = QUALITY_LOW;
 
   return new TilesRenderParameters(renderDebug,

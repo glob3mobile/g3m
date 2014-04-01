@@ -53,7 +53,7 @@
            cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (Renderer*) busyRenderer
+                busyRenderer: (ProtoRenderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
                  hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor
@@ -91,8 +91,8 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                 initializationTask,
                                 autoDeleteInitializationTask,
                                 periodicalTasks,
-                                gpuProgramManager,//GPUProgramManager
-                                sceneLighting,    //Scene Lighting
+                                gpuProgramManager,
+                                sceneLighting,
                                 icpp);
 
   [self widget]->setUserData(userData);
@@ -117,6 +117,11 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     eaglLayer.opaque = TRUE;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+//    // for retina display
+//    eaglLayer.contentsScale = 2;
+//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+//      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
+//    }
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
@@ -155,11 +160,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     // class is used as fallback when it isn't available.
     NSString *reqSysVer = @"3.1";
     NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
-    if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
+    if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending) {
       _displayLinkSupported = TRUE;
+    }
 
     //Detecting LongPress
-    UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                      action:@selector(handleLongPress:)];
     longPressRecognizer.minimumPressDuration = 1.0;
     [self addGestureRecognizer:longPressRecognizer];
   }

@@ -499,16 +499,15 @@ public class GenericQuadTree_Node
 
   public final boolean remove(Object element)
   {
-  
     boolean wasRemoved = false;
   
-    for (java.util.Iterator<GenericQuadTree_Element> it = _elements.iterator(); it.hasNext();)
-    {
-      GenericQuadTree_Element qTElement = it.next();
-      if (qTElement._element == element)
-      {
-        _elements.remove(qTElement);
+    final java.util.Iterator<GenericQuadTree_Element> iterator = _elements.iterator();
+    while (iterator.hasNext()) {
+      final GenericQuadTree_Element item = iterator.next();
+      if (item._element == element) {
+        iterator.remove();
         wasRemoved = true;
+        break;
       }
     }
   

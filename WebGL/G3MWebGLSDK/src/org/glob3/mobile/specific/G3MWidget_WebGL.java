@@ -2,8 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.ArrayList;
-
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.Camera;
@@ -34,6 +32,7 @@ import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.ProtoRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
@@ -379,16 +378,36 @@ public class G3MWidget_WebGL
    }
 
 
-   public void initWidget(/*final INativeGL nativeGL,*/
-                          final IStorage storage,
+   //   public void initWidget(final IStorage storage,
+   //                          final IDownloader downloader,
+   //                          final IThreadUtils threadUtils,
+   //                          final ICameraActivityListener cameraActivityListener,
+   //                          final Planet planet,
+   //                          final ArrayList<ICameraConstrainer> cameraConstraints,
+   //                          final CameraRenderer cameraRenderer,
+   //                          final Renderer mainRenderer,
+   //                          final ProtoRenderer busyRenderer,
+   //                          final ErrorRenderer errorRenderer,
+   //                          final Renderer hudRenderer,
+   //                          final Color backgroundColor,
+   //                          final boolean logFPS,
+   //                          final boolean logDownloaderStatistics,
+   //                          final GInitializationTask initializationTask,
+   //                          final boolean autoDeleteInitializationTask,
+   //                          final ArrayList<PeriodicalTask> periodicalTasks,
+   //                          final WidgetUserData userData,
+   //                          final SceneLighting sceneLighting,
+   //                          final InitialCameraPositionProvider initialCameraPositionProvider) {
+
+   public void initWidget(final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
                           final ICameraActivityListener cameraActivityListener,
                           final Planet planet,
-                          final ArrayList<ICameraConstrainer> cameraConstraints,
+                          final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
                           final CameraRenderer cameraRenderer,
                           final Renderer mainRenderer,
-                          final Renderer busyRenderer,
+                          final ProtoRenderer busyRenderer,
                           final ErrorRenderer errorRenderer,
                           final Renderer hudRenderer,
                           final Color backgroundColor,
@@ -396,7 +415,7 @@ public class G3MWidget_WebGL
                           final boolean logDownloaderStatistics,
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
-                          final ArrayList<PeriodicalTask> periodicalTasks,
+                          final java.util.ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData,
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider) {
@@ -408,7 +427,7 @@ public class G3MWidget_WebGL
                threadUtils, //
                cameraActivityListener, //
                planet, //
-               cameraConstraints, //
+               cameraConstrainers, //
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
@@ -542,4 +561,5 @@ public class G3MWidget_WebGL
    public GL getGL() {
       return _gl;
    }
+
 }

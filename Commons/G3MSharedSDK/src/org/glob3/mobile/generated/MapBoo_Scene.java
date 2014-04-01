@@ -72,10 +72,11 @@ public class MapBoo_Scene
   {
     return _overlayLayer;
   }
-  
+
   public final boolean isQueryable()
   {
     return _queryable;
+
   }
 
   public final boolean hasWarnings()

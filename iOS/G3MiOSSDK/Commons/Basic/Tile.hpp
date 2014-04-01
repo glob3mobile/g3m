@@ -39,6 +39,7 @@ class PlanetTileTessellatorData;
 class LayerTilesRenderParameters;
 class TileRasterizer;
 class LayerSet;
+class TileRenderingListener;
 
 #include "ITexturizerData.hpp"
 
@@ -67,14 +68,26 @@ private:
   BoundingVolume* _boundingVolume;
 
   //LOD TEST DATA
-  Vector3D* _middleNorthPoint;
-  Vector3D* _middleSouthPoint;
-  Vector3D* _middleEastPoint;
-  Vector3D* _middleWestPoint;
+//  Vector3D* _middleNorthPoint;
+//  Vector3D* _middleSouthPoint;
+//  Vector3D* _middleEastPoint;
+//  Vector3D* _middleWestPoint;
+  Vector3D* _northWestPoint;
+  Vector3D* _northEastPoint;
+  Vector3D* _southWestPoint;
+  Vector3D* _southEastPoint;
+
+  static double getSquaredArcSegmentRatio(const Vector3D& a,
+                                          const Vector3D& b);
+
   void computeTileCorners(const Planet* planet);
 
-  double _latitudeArcSegmentRatioSquared;
-  double _longitudeArcSegmentRatioSquared;
+//  double _latitudeArcSegmentRatioSquared;
+//  double _longitudeArcSegmentRatioSquared;
+  double _northArcSegmentRatioSquared;
+  double _southArcSegmentRatioSquared;
+  double _eastArcSegmentRatioSquared;
+  double _westArcSegmentRatioSquared;
 
 
   void prepareTestLODData(const Planet* planet);
@@ -101,8 +114,8 @@ private:
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const TilesRenderParameters* tilesRenderParameters);
 
-  bool _lastLodTest;
-  double _lastLodTimeInMS;
+  bool _lastMeetsRenderCriteriaResult;
+  double _lastMeetsRenderCriteriaTimeInMS;
 
   inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -170,6 +183,9 @@ private:
                                           const TileTessellator* tessellator,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
+
+  bool _rendered;
+  TileRenderingListener* _tileRenderingListener;
 
 public:
   const Sector    _sector;
@@ -251,7 +267,8 @@ public:
               double texHeight,
               double nowInMS,
               const bool renderTileMeshes,
-              bool logTilesPetitions);
+              bool logTilesPetitions,
+              TileRenderingListener* tileRenderingListener);
 
   const TileKey getKey() const;
 

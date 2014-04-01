@@ -20,11 +20,13 @@
 
 DebugTileRasterizer::DebugTileRasterizer(const GFont& font,
                                          const Color& color,
-                                         bool showLabels,
+                                         bool showIDLabel,
+                                         bool showSectorLabels,
                                          bool showTileBounds) :
 _font(font),
 _color(color),
-_showLabels(showLabels),
+_showIDLabel(showIDLabel),
+_showSectorLabels(showSectorLabels),
 _showTileBounds(showTileBounds)
 {
 
@@ -33,7 +35,8 @@ _showTileBounds(showTileBounds)
 DebugTileRasterizer::DebugTileRasterizer() :
 _font(GFont::monospaced(15)),
 _color(Color::yellow()),
-_showLabels(true),
+_showIDLabel(true),
+_showSectorLabels(true),
 _showTileBounds(true)
 {
 }
@@ -45,7 +48,7 @@ DebugTileRasterizer::~DebugTileRasterizer() {
 #endif
 }
 
-std::string DebugTileRasterizer::getTileKeyLabel(const Tile* tile) const {
+std::string DebugTileRasterizer::getIDLabel(const Tile* tile) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("L:");
   isb->addInt( tile->_level );
@@ -99,16 +102,20 @@ void DebugTileRasterizer::rawRasterize(const IImage* image,
     canvas->strokeRectangle(0, 0, width, height);
   }
 
-  if (_showLabels) {
+  if (_showIDLabel || _showSectorLabels) {
     canvas->setShadow(Color::black(), 2, 1, -1);
     ColumnCanvasElement col;
-    col.add( new TextCanvasElement(getTileKeyLabel(tile), _font, _color) );
+    if (_showIDLabel) {
+      col.add( new TextCanvasElement(getIDLabel(tile), _font, _color) );
+    }
 
-    const Sector sectorTile = tile->_sector;
-    col.add( new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color) );
-    col.add( new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color) );
-    col.add( new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color) );
-    col.add( new TextCanvasElement(getSectorLabel4(sectorTile), _font, _color) );
+    if (_showSectorLabels) {
+      const Sector sectorTile = tile->_sector;
+      col.add( new TextCanvasElement(getSectorLabel1(sectorTile), _font, _color) );
+      col.add( new TextCanvasElement(getSectorLabel2(sectorTile), _font, _color) );
+      col.add( new TextCanvasElement(getSectorLabel3(sectorTile), _font, _color) );
+      col.add( new TextCanvasElement(getSectorLabel4(sectorTile), _font, _color) );
+    }
 
     const Vector2F colExtent = col.getExtent(canvas);
     col.drawAt((width  - colExtent._x) / 2,

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class ShapesRenderer extends LeafRenderer
+public class ShapesRenderer extends DefaultRenderer
 {
   private static class LoadQueueItem
   {
@@ -41,7 +41,6 @@ public class ShapesRenderer extends LeafRenderer
 
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
-  private G3MContext _context;
   private Camera    _lastCamera;
 
   private GLState _glState;
@@ -109,6 +108,18 @@ public class ShapesRenderer extends LeafRenderer
     _loadQueue.clear();
   }
 
+  private void cleanLoadQueue()
+  {
+    final int loadQueueSize = _loadQueue.size();
+    for (int i = 0; i < loadQueueSize; i++)
+    {
+      LoadQueueItem item = _loadQueue.get(i);
+      if (item != null)
+         item.dispose();
+    }
+    _loadQueue.clear();
+  }
+
 
   private void requestBuffer(URL url, long priority, TimeInterval timeToCache, boolean readExpired, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener, boolean isBSON)
   {
@@ -126,10 +137,10 @@ public class ShapesRenderer extends LeafRenderer
   public ShapesRenderer(boolean renderNotReadyShapes)
   {
      _renderNotReadyShapes = renderNotReadyShapes;
-     _context = null;
      _glState = new GLState();
      _glStateTransparent = new GLState();
      _lastCamera = null;
+    _context = null;
   }
 
   public void dispose()
@@ -222,30 +233,26 @@ public class ShapesRenderer extends LeafRenderer
     _context = context;
   }
 
-  public final void onPause(G3MContext context)
+  public final void onChangedContext()
   {
-
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
-  }
-
-  public final void initialize(G3MContext context)
-  {
-    _context = context;
-  
     if (_context != null)
     {
       final int shapesCount = _shapes.size();
       for (int i = 0; i < shapesCount; i++)
       {
         Shape shape = _shapes.get(i);
-        shape.initialize(context);
+        shape.initialize(_context);
       }
   
       drainLoadQueue();
+    }
+  }
+
+  public final void onLostContext()
+  {
+    if (_context == null)
+    {
+      cleanLoadQueue();
     }
   }
 
@@ -296,14 +303,6 @@ public class ShapesRenderer extends LeafRenderer
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
-  {
-  }
-
-  public final void start(G3MRenderContext rc)
-  {
-  }
-
-  public final void stop(G3MRenderContext rc)
   {
   }
 

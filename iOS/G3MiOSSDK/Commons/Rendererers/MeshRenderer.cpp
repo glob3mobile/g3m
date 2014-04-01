@@ -75,11 +75,15 @@ void MeshRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
-void MeshRenderer::initialize(const G3MContext* context) {
-  _context = context;
-
+void MeshRenderer::onChangedContext() {
   if (_context != NULL) {
     drainLoadQueue();
+  }
+}
+
+void MeshRenderer::onLostContext() {
+  if (_context == NULL) {
+    cleanLoadQueue();
   }
 }
 
@@ -102,6 +106,16 @@ void MeshRenderer::drainLoadQueue() {
     delete item;
   }
 
+  _loadQueue.clear();
+}
+
+void MeshRenderer::cleanLoadQueue() {
+  const int loadQueueSize = _loadQueue.size();
+  for (int i = 0; i < loadQueueSize; i++) {
+    LoadQueueItem* item = _loadQueue[i];
+    delete item;
+  }
+  
   _loadQueue.clear();
 }
 

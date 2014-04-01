@@ -190,19 +190,9 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
 }
 
 bool GenericQuadTree_Node::remove(const void* element) {
-
   bool wasRemoved = false;
 
 #ifdef C_CODE
-  //  for (std::vector<GenericQuadTree_Element*>::iterator it = _elements.begin();
-  //       it != _elements.end();
-  //       it++) {
-  //    if ((*it)->_element == element) {
-  //      _elements.erase(it);
-  //      wasRemoved = true;
-  //    }
-  //  }
-
   for (int i = 0; i < _elements.size(); i++) {
     GenericQuadTree_Element* item = _elements[i];
     if (item->_element == element) {
@@ -212,16 +202,15 @@ bool GenericQuadTree_Node::remove(const void* element) {
       break;
     }
   }
-
 #endif
 #ifdef JAVA_CODE
-  for (java.util.Iterator<GenericQuadTree_Element> it = _elements.iterator(); it.hasNext();)
-  {
-    GenericQuadTree_Element qTElement = it.next();
-    if (qTElement._element == element)
-    {
-      _elements.remove(qTElement);
+  final java.util.Iterator<GenericQuadTree_Element> iterator = _elements.iterator();
+  while (iterator.hasNext()) {
+    final GenericQuadTree_Element item = iterator.next();
+    if (item._element == element) {
+      iterator.remove();
       wasRemoved = true;
+      break;
     }
   }
 #endif
@@ -229,7 +218,7 @@ bool GenericQuadTree_Node::remove(const void* element) {
   if (wasRemoved) {
     return true;
   }
-  
+
   if (_children != NULL) {
 
     for (int i = 0; i < 4; i++) {

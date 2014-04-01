@@ -26,6 +26,7 @@ class CameraRenderer;
 class LayerSet;
 class ICameraConstrainer;
 class Renderer;
+class ProtoRenderer;
 class WidgetUserData;
 class PlanetRenderer;
 class TilesRenderParameters;
@@ -68,7 +69,7 @@ class ErrorRenderer;
            cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (Renderer*) busyRenderer
+                busyRenderer: (ProtoRenderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
                  hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor

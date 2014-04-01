@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TrailsRenderer extends LeafRenderer
+public class TrailsRenderer extends DefaultRenderer
 {
   private java.util.ArrayList<Trail> _trails = new java.util.ArrayList<Trail>();
 
@@ -62,46 +62,7 @@ public class TrailsRenderer extends LeafRenderer
     _glState._release();
   }
 
-  public final void onResume(G3MContext context)
-  {
-
-  }
-
-  public final void onPause(G3MContext context)
-  {
-
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
-  }
-
-  public final void initialize(G3MContext context)
-  {
-  }
-
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return RenderState.ready();
-  }
-
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return false;
-  }
-
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
-  {
-
-  }
-
-  public final void start(G3MRenderContext rc)
-  {
-
-  }
-
-  public final void stop(G3MRenderContext rc)
   {
 
   }

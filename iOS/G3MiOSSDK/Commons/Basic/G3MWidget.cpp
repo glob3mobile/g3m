@@ -8,7 +8,7 @@
 
 #include "G3MWidget.hpp"
 
-#include "Renderer.hpp"
+#include "ProtoRenderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TexturesHandler.hpp"
@@ -68,7 +68,7 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      std::vector<ICameraConstrainer*>     cameraConstrainers,
                      CameraRenderer*                      cameraRenderer,
                      Renderer*                            mainRenderer,
-                     Renderer*                            busyRenderer,
+                     ProtoRenderer*                       busyRenderer,
                      ErrorRenderer*                       errorRenderer,
                      Renderer*                            hudRenderer,
                      const Color&                         backgroundColor,
@@ -195,7 +195,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              std::vector<ICameraConstrainer*>     cameraConstrainers,
                              CameraRenderer*                      cameraRenderer,
                              Renderer*                            mainRenderer,
-                             Renderer*                            busyRenderer,
+                             ProtoRenderer*                       busyRenderer,
                              ErrorRenderer*                       errorRenderer,
                              Renderer*                            hudRenderer,
                              const Color&                         backgroundColor,
@@ -305,11 +305,9 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
       break;
     }
     case RENDER_BUSY: {
-      _busyRenderer->onTouchEvent(&ec, touchEvent);
       break;
     }
     default: {
-      _errorRenderer->onTouchEvent(&ec, touchEvent);
       break;
     }
   }
@@ -518,44 +516,36 @@ void G3MWidget::render(int width, int height) {
 
   _frameTasksExecutor->doPreRenderCycle(_renderContext);
 
-  Renderer* selectedRenderer;
-  switch (renderStateType) {
-    case RENDER_READY:
-      selectedRenderer = _mainRenderer;
-      break;
-
-    case RENDER_BUSY:
-      selectedRenderer = _busyRenderer;
-      break;
-
-    default:
-      _errorRenderer->setErrors( _rendererState->getErrors() );
-      selectedRenderer = _errorRenderer;
-      break;
-  }
-
-  if (selectedRenderer != _selectedRenderer) {
-    if (_selectedRenderer != NULL) {
-      _selectedRenderer->stop(_renderContext);
-    }
-    _selectedRenderer = selectedRenderer;
-    _selectedRenderer->start(_renderContext);
-  }
-
   _gl->clearScreen(*_backgroundColor);
-
+  
   if (_rootState == NULL) {
     _rootState = new GLState();
   }
 
-  if (renderStateType == RENDER_READY) {
-    _cameraRenderer->render(_renderContext, _rootState);
+  switch (renderStateType) {
+    case RENDER_READY:
+      setSelectedRenderer(_mainRenderer);
+      _cameraRenderer->render(_renderContext, _rootState);
+      
+      _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
+      
+      if (_mainRenderer->isEnable()) {
+        _mainRenderer->render(_renderContext, _rootState);
+      }
+      
+      break;
 
-    _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
-  }
+    case RENDER_BUSY:
+      setSelectedRenderer(_busyRenderer);
+      _busyRenderer->render(_renderContext, _rootState);
+      break;
 
-  if (_selectedRenderer->isEnable()) {
-    _selectedRenderer->render(_renderContext, _rootState);
+    default:
+      _errorRenderer->setErrors( _rendererState->getErrors() );
+      setSelectedRenderer(_errorRenderer);
+      _errorRenderer->render(_renderContext, _rootState);
+      break;
+      
   }
 
   std::vector<OrderedRenderable*>* orderedRenderables = _renderContext->getSortedOrderedRenderables();
@@ -619,7 +609,16 @@ void G3MWidget::render(int width, int height) {
       _lastCacheStatistics = cacheStatistics;
     }
   }
+}
 
+void G3MWidget::setSelectedRenderer(ProtoRenderer* selectedRenderer) {
+  if (selectedRenderer != _selectedRenderer) {
+    if (_selectedRenderer != NULL) {
+      _selectedRenderer->stop(_renderContext);
+    }
+    _selectedRenderer = selectedRenderer;
+    _selectedRenderer->start(_renderContext);
+  }
 }
 
 void G3MWidget::onPause() {
@@ -810,3 +809,4 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
   }
   return changed;
 }
+

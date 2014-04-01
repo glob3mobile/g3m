@@ -514,6 +514,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
 
   const bool logTilesPetitions = false;
 
+  TileRenderingListener* tileRenderingListener = NULL;
+
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
                                               true,
@@ -526,7 +528,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               texturePriority,
                                               renderedSector,
                                               renderTileMeshes,
-                                              logTilesPetitions);
+                                              logTilesPetitions,
+                                              tileRenderingListener);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
@@ -564,7 +567,7 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
   return cameraRenderer;
 }
 
-Renderer* MapBooBuilder::createBusyRenderer() {
+ProtoRenderer* MapBooBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
 }
 

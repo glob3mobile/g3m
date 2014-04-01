@@ -238,6 +238,8 @@ public:
 
   void setGeodeticPosition(const Geodetic3D& g3d);
 
+  void setGeodeticPositionStablePitch(const Geodetic3D& g3d);
+
   void setGeodeticPosition(const Angle &latitude,
                            const Angle &longitude,
                            const double height) {
@@ -248,7 +250,7 @@ public:
                            const double height) {
     setGeodeticPosition(Geodetic3D(g2d, height));
   }
-
+  
   /**
    This method put the camera pointing to given center, at the given distance, using the given angles.
 
@@ -314,9 +316,11 @@ private:
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
   int _height;
-
+#ifdef C_CODE
   const Planet *_planet;
-
+#else
+  Planet *_planet;
+#endif
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector

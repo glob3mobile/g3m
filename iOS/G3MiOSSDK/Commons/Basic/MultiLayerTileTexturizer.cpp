@@ -172,6 +172,10 @@ public:
   }
 
   virtual ~TileTextureBuilderHolder();
+  
+#ifndef C_CODE
+  void unusedMethod() { }
+#endif
 
 };
 
@@ -367,17 +371,17 @@ public:
       return;
     }
 
+//    const long long priority = _texturePriority + _tile->_level;
+
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
-
-      const long long priority = _texturePriority + _tile->_level;
 
       if (_logTilesPetitions) {
         ILogger::instance()->logInfo("Tile petition \"%s\"", petition->getURL().getPath().c_str());
       }
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
-                                                            priority,
+                                                            _texturePriority, // priority,
                                                             petition->getTimeToCache(),
                                                             petition->getReadExpired(),
                                                             new BuilderDownloadStepDownloadListener(this, i),
@@ -505,7 +509,6 @@ public:
 #endif
 
       if (_mesh != NULL) {
-#warning testing mipmap
         const bool generateMipmap = true;
 
         const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,

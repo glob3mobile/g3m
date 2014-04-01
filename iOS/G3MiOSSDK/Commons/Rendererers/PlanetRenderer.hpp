@@ -20,7 +20,7 @@ class LayerTilesRenderParameters;
 class TerrainTouchListener;
 
 #include "IStringBuilder.hpp"
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
 #include "TileKey.hpp"
@@ -62,14 +62,13 @@ public:
   _renderedSector(NULL)
   {
     for (int i = 0; i < _maxLOD; i++) {
-      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+      _tilesProcessedByLevel[i] = 0;
+      _tilesVisibleByLevel[i]   = 0;
+      _tilesRenderedByLevel[i]  = 0;
     }
   }
 
   ~TilesStatistics() {
-    //    if (_buildersStartsInFrame > 0) {
-    //      printf("buildersStartsInFrame=%d\n", _buildersStartsInFrame);
-    //    }
     delete _renderedSector;
   }
 
@@ -82,7 +81,9 @@ public:
     delete _renderedSector;
     _renderedSector = NULL;
     for (int i = 0; i < _maxLOD; i++) {
-      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+      _tilesProcessedByLevel[i] = 0;
+      _tilesVisibleByLevel[i]   = 0;
+      _tilesRenderedByLevel[i]  = 0;
     }
   }
 
@@ -148,7 +149,6 @@ public:
     const int level = tile->_level;
     _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
 
-
     computeRenderedSector(tile);
   }
 
@@ -174,7 +174,6 @@ public:
 
 
   static std::string asLogString(const int m[], const int nMax) {
-
     bool first = true;
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     for(int i = 0; i < nMax; i++) {
@@ -187,7 +186,7 @@ public:
         else {
           isb->addString(",");
         }
-        isb->addString("L");
+        //isb->addString("L");
         isb->addInt(level);
         isb->addString(":");
         isb->addInt(counter);
@@ -213,7 +212,7 @@ public:
 };
 
 
-class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProvider {
+class PlanetRenderer: public DefaultRenderer, ChangedListener, SurfaceElevationProvider {
 private:
   TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -226,15 +225,15 @@ private:
   const bool                   _logTilesPetitions;
   ITileVisitor*                _tileVisitor = NULL;
 
+  TileRenderingListener*       _tileRenderingListener;
+
   TilesStatistics _statistics;
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
-  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
   private Camera     _lastCamera;
-  private G3MContext _context;
 #endif
 
   std::vector<Tile*> _firstLevelTiles;
@@ -311,7 +310,8 @@ public:
                  long long                    texturePriority,
                  const Sector&                renderedSector,
                  const bool                   renderTileMeshes,
-                 const bool                   logTilesPetitions);
+                 const bool                   logTilesPetitions,
+                 TileRenderingListener*       tileRenderingListener);
 
   ~PlanetRenderer();
 
@@ -345,21 +345,13 @@ public:
     _firstRender = false;
   }
 
-  void onResume(const G3MContext* context) {
-
-  }
-
   void onPause(const G3MContext* context) {
     recreateTiles();
   }
 
-  void onDestroy(const G3MContext* context) {
-
-  }
-
   void setEnable(bool enable) {
 #ifdef C_CODE
-    LeafRenderer::setEnable(enable);
+    DefaultRenderer::setEnable(enable);
 #endif
 #ifdef JAVA_CODE
     super.setEnable(enable);
