@@ -190,7 +190,6 @@ bool GenericQuadTree_Node::add(GenericQuadTree_Element* element,
 }
 
 bool GenericQuadTree_Node::remove(const void* element) {
-
   bool wasRemoved = false;
 
 #ifdef C_CODE
@@ -203,16 +202,13 @@ bool GenericQuadTree_Node::remove(const void* element) {
       break;
     }
   }
-
 #endif
 #ifdef JAVA_CODE
-  for (java.util.Iterator<GenericQuadTree_Element> it = _elements.iterator(); it.hasNext();)
-  {
-    GenericQuadTree_Element qTElement = it.next();
-    if (qTElement._element == element)
-    {
-      //_elements.remove(qTElement);
-      it.remove();
+  final java.util.Iterator<GenericQuadTree_Element> iterator = _elements.iterator();
+  while (iterator.hasNext()) {
+    final GenericQuadTree_Element item = iterator.next();
+    if (item._element == element) {
+      iterator.remove();
       wasRemoved = true;
       break;
     }
@@ -222,7 +218,7 @@ bool GenericQuadTree_Node::remove(const void* element) {
   if (wasRemoved) {
     return true;
   }
-  
+
   if (_children != NULL) {
 
     for (int i = 0; i < 4; i++) {
