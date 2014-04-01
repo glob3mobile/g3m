@@ -20,13 +20,15 @@ MapBooBuilder_iOS::MapBooBuilder_iOS(G3MWidget_iOS* nativeWidget,
                                      const std::string& applicationId,
                                      MapBoo_ViewType viewType,
                                      MapBooApplicationChangeListener* applicationListener,
-                                     bool enableNotifications) :
+                                     bool enableNotifications,
+                                     const std::string& token) :
 MapBooBuilder(serverURL,
               tubesURL,
               applicationId,
               viewType,
               applicationListener,
-              enableNotifications),
+              enableNotifications,
+              token),
 _nativeWidget(nativeWidget)
 {
   [_nativeWidget initSingletons];
