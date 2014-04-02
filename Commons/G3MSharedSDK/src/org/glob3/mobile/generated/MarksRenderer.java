@@ -56,7 +56,7 @@ public class MarksRenderer extends DefaultRenderer
     if (_glState.getGLFeature(GLFeatureID.GLF_VIEWPORT_EXTENT) == null)
     {
       _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-      _glState.addGLFeature(new ViewportExtentGLFeature(cam.getWidth(), cam.getHeight()), false);
+      _glState.addGLFeature(new ViewportExtentGLFeature(cam.getViewPortWidth(), cam.getViewPortHeight()), false);
     }
   }
   private IFloatBuffer _billboardTexCoords;
@@ -144,7 +144,10 @@ public class MarksRenderer extends DefaultRenderer
       _lastCamera = camera; // Saving camera for use in onTouchEvent
   
       final Vector3D cameraPosition = camera.getCartesianPosition();
-      final int cameraHeight = camera.getHeight();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning check with JM
+      // const int      cameraHeight   = camera->getHeight();
+      final double cameraHeight = camera.getGeodeticPosition()._height;
   
       updateGLState(rc);
   
