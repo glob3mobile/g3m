@@ -281,12 +281,35 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithBuilderAndSegmentedWorld];
 
+//  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                       Geodetic3D::fromDegrees(25.743467472995700263,
+//                                                                               -5.3656762990500403987,
+//                                                                               1664155.1381164737977),
+//                                                       Angle::fromDegrees(-0.145718),
+//                                                       Angle::fromDegrees(-52.117699));
+
+//  // still ok
+////  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+////                                                       Geodetic3D::fromDegrees(47.366761212727184,
+////                                                                               19.234906652084955,
+////                                                                               1123.1236298941765),
+////                                                       Angle::fromDegrees(-26.023631),
+////                                                       Angle::fromDegrees(-14.269457));
+//
+//  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                       Geodetic3D::fromDegrees(47.368591718752825,
+//                                                                               19.235391601468937,
+//                                                                               1012.2891273516489),
+//                                                       Angle::fromDegrees(-27.256324),
+//                                                       Angle::fromDegrees(-14.263666));
+
+#warning Buggy mark
   [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                       Geodetic3D::fromDegrees(25.743467472995700263,
-                                                                               -5.3656762990500403987,
-                                                                               1664155.1381164737977),
-                                                       Angle::fromDegrees(-0.145718),
-                                                       Angle::fromDegrees(-52.117699));
+                                                       Geodetic3D::fromDegrees(47.3665119223405,
+                                                                               19.251949160207758,
+                                                                               1076.892613024946),
+                                                       Angle::fromDegrees(-5.714247),
+                                                       Angle::fromDegrees(-5.297620));
 
   [[self G3MWidget] startAnimation];
 
@@ -1939,71 +1962,81 @@ public:
 - (MarksRenderer*) createMarksRenderer
 {
 
-  class TestMarkTouchListener : public MarkTouchListener {
-  public:
-    bool touchedMark(Mark* mark) {
-      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
-
-      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
-                                                      message:message
-                                                     delegate:nil
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
-      [alert show];
-
-      return true;
-    }
-  };
-
-
+//  class TestMarkTouchListener : public MarkTouchListener {
+//  public:
+//    bool touchedMark(Mark* mark) {
+//      NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getLabel().c_str()];
+//
+//      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
+//                                                      message:message
+//                                                     delegate:nil
+//                                            cancelButtonTitle:@"OK"
+//                                            otherButtonTitles:nil];
+//      [alert show];
+//
+//      return true;
+//    }
+//  };
+//
+//
   // marks renderer
   const bool readyWhenMarksReady = false;
   MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
 
-  marksRenderer->setMarkTouchListener(new TestMarkTouchListener(), true);
+#warning Buggy mark
+  Mark* buggyMark = new Mark("BUGGY MARK",
+                             Geodetic3D::fromDegrees(47.4369010925, 19.2555999756, 1100.0),
+                             ABSOLUTE,
+                             0 // minDistanceToCamera=4.5e+06,
+                             );
 
-  Mark* m1 = new Mark("Fuerteventura",
-                      URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0),
-                      RELATIVE_TO_GROUND);
-  marksRenderer->addMark(m1);
-
-
-  if (true) {
-    for (int i = 0; i < 10; i+=2) {
-      for (int j = 0; j < 10; j+=2) {
-        Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
-
-        Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
-        marksRenderer->addMark(m1);
-
-      }
-    }
-  }
+  marksRenderer->addMark(buggyMark);
 
 
-  Mark* m2 = new Mark(URL("file:///plane.png", false),
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0),
-                      RELATIVE_TO_GROUND);
-  marksRenderer->addMark(m2);
-
-  //  Mark* m3 = new Mark("Washington, DC",
-  //                      Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
-  //                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
-  //                                 0),
-  //                      0);
-  //  marksRenderer->addMark(m3);
-
-  if (false) {
-    for (int i = 0; i < 2000; i++) {
-      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-
-      marksRenderer->addMark(new Mark("Random",
-                                      URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                                      Geodetic3D(latitude, longitude, 0), RELATIVE_TO_GROUND));
-    }
-  }
+//  marksRenderer->setMarkTouchListener(new TestMarkTouchListener(), true);
+//
+//  Mark* m1 = new Mark("Fuerteventura",
+//                      URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+//                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0),
+//                      RELATIVE_TO_GROUND);
+//  marksRenderer->addMark(m1);
+//
+//
+//  if (true) {
+//    for (int i = 0; i < 10; i+=2) {
+//      for (int j = 0; j < 10; j+=2) {
+//        Geodetic3D g(Angle::fromDegrees(28.05 + i), Angle::fromDegrees(-14.36 + j - 10), (i+j)*10000);
+//
+//        Mark* m1 = new Mark("M", g, RELATIVE_TO_GROUND);
+//        marksRenderer->addMark(m1);
+//
+//      }
+//    }
+//  }
+//
+//
+//  Mark* m2 = new Mark(URL("file:///plane.png", false),
+//                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0),
+//                      RELATIVE_TO_GROUND);
+//  marksRenderer->addMark(m2);
+//
+//  //  Mark* m3 = new Mark("Washington, DC",
+//  //                      Geodetic3D(Angle::fromDegreesMinutesSeconds(38, 53, 42.24),
+//  //                                 Angle::fromDegreesMinutesSeconds(-77, 2, 10.92),
+//  //                                 0),
+//  //                      0);
+//  //  marksRenderer->addMark(m3);
+//
+//  if (false) {
+//    for (int i = 0; i < 2000; i++) {
+//      const Angle latitude  = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+//      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
+//
+//      marksRenderer->addMark(new Mark("Random",
+//                                      URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+//                                      Geodetic3D(latitude, longitude, 0), RELATIVE_TO_GROUND));
+//    }
+//  }
 
   return marksRenderer;
 
@@ -2424,30 +2457,30 @@ private:
   }
 
   Mark* createMark(const GEO2DPointGeometry* geometry) const {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
-
-    const std::string label = properties->getAsString("name", "");
-
-    if (label.compare("") != 0) {
-      double scalerank = properties->getAsNumber("scalerank", 0);
-
-      //      const double population = properties->getAsNumber("population", 0);
-      //
-      //      const double boxExtent = 50000;
-      //      const double baseArea = boxExtent*boxExtent;
-      //      const double volume = population * boxExtent * 3500;
-      //      const double height = (volume / baseArea) / 2 * 1.1;
-
-      const double height = 1000;
-
-      return new Mark(label,
-                      Geodetic3D(geometry->getPosition(), height),
-                      RELATIVE_TO_GROUND,
-                      0,
-                      //25 + (scalerank * -3)
-                      22 + (scalerank * -3)
-                      );
-    }
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//
+//    const std::string label = properties->getAsString("name", "");
+//
+//    if (label.compare("") != 0) {
+//      double scalerank = properties->getAsNumber("scalerank", 0);
+//
+//      //      const double population = properties->getAsNumber("population", 0);
+//      //
+//      //      const double boxExtent = 50000;
+//      //      const double baseArea = boxExtent*boxExtent;
+//      //      const double volume = population * boxExtent * 3500;
+//      //      const double height = (volume / baseArea) / 2 * 1.1;
+//
+//      const double height = 1000;
+//
+//      return new Mark(label,
+//                      Geodetic3D(geometry->getPosition(), height),
+//                      RELATIVE_TO_GROUND,
+//                      0,
+//                      //25 + (scalerank * -3)
+//                      22 + (scalerank * -3)
+//                      );
+//    }
 
     return NULL;
   }

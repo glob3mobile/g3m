@@ -135,8 +135,8 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
 
   const Camera* camera = rc->getCurrentCamera();
 
-  const double halfWidth  = camera->getWidth()  / 2.0;
-  const double halfHeight = camera->getHeight() / 2.0;
+  const double halfWidth  = camera->getViewPortWidth()  / 2.0;
+  const double halfHeight = camera->getViewPortHeight() / 2.0;
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices->add(-halfWidth,  halfHeight, 0);
@@ -177,8 +177,8 @@ Mesh* HUDImageRenderer::getMesh(const G3MRenderContext* rc) {
 
         const Camera* camera = rc->getCurrentCamera();
 
-        const int width  = camera->getWidth();
-        const int height = camera->getHeight();
+        const int width  = camera->getViewPortWidth();
+        const int height = camera->getViewPortHeight();
 
         _imageFactory->create(rc,
                               width, height,
