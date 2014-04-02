@@ -19,6 +19,8 @@ class DefaultRenderer : public Renderer {
   
 private:
   
+  std::vector<std::string> _infos;
+  
   bool _enable;
   
 protected:
@@ -113,6 +115,10 @@ public:
 
   virtual bool isPlanetRenderer() {
     return false;
+  }
+  
+  virtual std::vector<std::string> getInfo() {
+    return _infos;
   }
   
 };

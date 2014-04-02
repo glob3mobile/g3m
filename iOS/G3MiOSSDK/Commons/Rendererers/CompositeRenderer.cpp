@@ -187,3 +187,25 @@ PlanetRenderer* CompositeRenderer::getPlanetRenderer() {
 
   return result;
 }
+
+std::vector<std::string> CompositeRenderer::getInfo() {
+  _infos.clear();
+  
+  for (int i = 0; i < _renderersSize; i++) {
+    Renderer* child = _renderers[i];
+    if (child->isEnable()) {
+      
+      const std::vector<std::string> childInfo = child->getInfo();
+#ifdef C_CODE
+      _infos.insert(_infos.end(),
+                    childInfo.begin(),
+                    childInfo.end());
+#endif
+#ifdef JAVA_CODE
+      _infos.addAll(childInfo);
+#endif
+    }
+  }
+  
+  return _infos;
+}

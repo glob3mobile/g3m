@@ -15,6 +15,7 @@
 class CompositeRenderer: public Renderer
 {
 private:
+  std::vector<std::string> _infos;
   std::vector<Renderer*> _renderers;
   int                    _renderersSize;
 
@@ -76,7 +77,8 @@ public:
   virtual bool isPlanetRenderer() {
     return false;
   }
-
+  
+  std::vector<std::string> getInfo();
 };
 
 #endif

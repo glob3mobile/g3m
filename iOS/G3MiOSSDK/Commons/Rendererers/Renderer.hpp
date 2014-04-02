@@ -51,6 +51,8 @@ public:
   
   virtual PlanetRenderer* getPlanetRenderer() = 0;
   
+  virtual std::vector<std::string> getInfo() = 0;
+  
   
 };
 #endif
