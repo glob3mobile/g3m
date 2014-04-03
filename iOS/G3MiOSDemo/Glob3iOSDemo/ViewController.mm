@@ -281,35 +281,21 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithBuilderAndSegmentedWorld];
 
-//  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-//                                                       Geodetic3D::fromDegrees(25.743467472995700263,
-//                                                                               -5.3656762990500403987,
-//                                                                               1664155.1381164737977),
-//                                                       Angle::fromDegrees(-0.145718),
-//                                                       Angle::fromDegrees(-52.117699));
-
-//  // still ok
-////  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-////                                                       Geodetic3D::fromDegrees(47.366761212727184,
-////                                                                               19.234906652084955,
-////                                                                               1123.1236298941765),
-////                                                       Angle::fromDegrees(-26.023631),
-////                                                       Angle::fromDegrees(-14.269457));
-//
-//  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-//                                                       Geodetic3D::fromDegrees(47.368591718752825,
-//                                                                               19.235391601468937,
-//                                                                               1012.2891273516489),
-//                                                       Angle::fromDegrees(-27.256324),
-//                                                       Angle::fromDegrees(-14.263666));
-
-#warning Buggy mark
   [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                       Geodetic3D::fromDegrees(47.3665119223405,
-                                                                               19.251949160207758,
-                                                                               1076.892613024946),
-                                                       Angle::fromDegrees(-5.714247),
-                                                       Angle::fromDegrees(-5.297620));
+                                                       Geodetic3D::fromDegrees(25.743467472995700263,
+                                                                               -5.3656762990500403987,
+                                                                               1664155.1381164737977),
+                                                       Angle::fromDegrees(-0.145718),
+                                                       Angle::fromDegrees(-52.117699));
+
+
+//#warning Buggy mark
+//  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                       Geodetic3D::fromDegrees(47.3665119223405,
+//                                                                               19.251949160207758,
+//                                                                               1076.892613024946),
+//                                                       Angle::fromDegrees(-5.714247),
+//                                                       Angle::fromDegrees(-5.297620));
 
   [[self G3MWidget] startAnimation];
 
@@ -1983,14 +1969,14 @@ public:
   const bool readyWhenMarksReady = false;
   MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
 
-#warning Buggy mark
-  Mark* buggyMark = new Mark("BUGGY MARK",
-                             Geodetic3D::fromDegrees(47.4369010925, 19.2555999756, 1100.0),
-                             ABSOLUTE,
-                             0 // minDistanceToCamera=4.5e+06,
-                             );
-
-  marksRenderer->addMark(buggyMark);
+//#warning Buggy mark
+//  Mark* buggyMark = new Mark("BUGGY MARK",
+//                             Geodetic3D::fromDegrees(47.4369010925, 19.2555999756, 1100.0),
+//                             ABSOLUTE,
+//                             0 // minDistanceToCamera=4.5e+06,
+//                             );
+//
+//  marksRenderer->addMark(buggyMark);
 
 
 //  marksRenderer->setMarkTouchListener(new TestMarkTouchListener(), true);
