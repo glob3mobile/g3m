@@ -22,9 +22,12 @@ package org.glob3.mobile.generated;
 public class CameraDoubleDragHandler extends CameraEventHandler
 {
 
+  private MeshRenderer _meshRenderer;
+
   public CameraDoubleDragHandler()
   {
      _camera0 = new Camera(new Camera());
+     _meshRenderer = null;
   }
 
   public void dispose()
@@ -111,6 +114,19 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Vector2I pixel1 = touchEvent.getTouch(1).getPos();
     Vector3D touchedPosition1 = widget.getScenePositionForPixel(pixel1._x, pixel1._y);
     eventContext.getPlanet().beginDoubleDrag(_camera0.getCartesianPosition(), _camera0.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
+  
+    // draw scene points int render debug mode
+    if (_meshRenderer != null)
+    {
+      FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+      vertices.add(0.0f, 0.0f, 0.0f);
+      Mesh mesh0 = new DirectMesh(GLPrimitive.points(), true, touchedPosition0, vertices.create(), 1, 80, Color.newFromRGBA(1, 0, 0, 1));
+      Mesh mesh1 = new DirectMesh(GLPrimitive.points(), true, touchedPosition1, vertices.create(), 1, 80, Color.newFromRGBA(1, 0, 0, 1));
+      if (vertices != null)
+         vertices.dispose();
+      _meshRenderer.addMesh(mesh0);
+      _meshRenderer.addMesh(mesh1);
+    }
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -134,8 +150,20 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     cameraContext.setCurrentGesture(Gesture.None);
+  
+    // remove scene points int render debug mode
+    if (_meshRenderer != null)
+    {
+      _meshRenderer.clearMeshes();
+    }
+  
   }
 
   public Camera _camera0 = new Camera(); //Initial Camera saved on Down event
+
+  public final void setDebugMeshRenderer(MeshRenderer meshRenderer)
+  {
+    _meshRenderer = meshRenderer;
+  }
 
 }
