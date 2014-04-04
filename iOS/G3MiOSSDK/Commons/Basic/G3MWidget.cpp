@@ -910,7 +910,7 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 void G3MWidget::setShapesEditorRenderer(ShapesEditorRenderer* shapesEditorRenderer)
 {
   _shapesEditorRenderer = shapesEditorRenderer;
-  _shapesEditorRenderer->activateEdition(getPlanetRenderer());
-
+  if (_shapesEditorRenderer != NULL)
+    _shapesEditorRenderer->activateEdition(getPlanetRenderer());
 }
 

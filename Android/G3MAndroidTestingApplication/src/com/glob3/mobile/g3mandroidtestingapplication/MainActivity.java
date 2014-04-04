@@ -122,12 +122,26 @@ Activity {
 		final MarksRenderer marksRenderer = new MarksRenderer(true);
 		builder.addRenderer(marksRenderer);
 
-		final MeshRenderer meshRenderer = new MeshRenderer();
+		/*final MeshRenderer meshRenderer = new MeshRenderer();
 		meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
-		builder.addRenderer(meshRenderer);
+		builder.addRenderer(meshRenderer);*/
 		
+		// ELEGIR UNA DE ESTAS DOS ALTERNATIVAS
+		
+		// 1) para editar geometría interactivamente creamos un ShapesEditorRenderer
+		// y recuerda llamar al método shapesRenderer.activateEdition cuando el widget esté ya creado
+		// ver tutorial en http://serdis.dis.ulpgc.es/~atrujill/glob3m/Tutorial/editingGeometry.html
+		//ShapesEditorRenderer shapesRenderer = builder.createShapesEditorRenderer();
+		
+		// 2) si no queremos editar, creamos un shaperenderer normal
+		// y si la geometría va a ser raster, además creamos un geoTileRasterizer
+		// ver tutorial en http://serdis.dis.ulpgc.es/~atrujill/glob3m/Tutorial/rasterGeometry.html
+		GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
+		builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+		final ShapesRenderer shapesRenderer = new ShapesRenderer(geoTileRasterizer);
+		builder.addRenderer(shapesRenderer);
       
-      ShapesEditorRenderer shapesRenderer = builder.createShapesEditorRenderer();
+      
       Planet planet = Planet.createFlatEarth();
       builder.setPlanet(planet);
 
@@ -483,6 +497,7 @@ Activity {
     		  shapesRenderer.addShape(pol1);
     	  }
 
+
     	  // DRAWING JSON
          /* shapesRenderer.loadJSONSceneJS(new URL("file:///seymour-plane.json", false), 
         		  "file:////", 
@@ -568,9 +583,6 @@ Activity {
     	  //_g3mWidget.setCameraHeading(Angle.fromDegrees(5.0));
     	  //_g3mWidget.setCameraPitch(Angle.fromDegrees(24.0));
       }
-
-      // activate edition of shapesEditorRenderer
-      shapesRenderer.activateEdition(_g3mWidget.getG3MWidget().getPlanetRenderer());
 	}
 
 	   @Override
