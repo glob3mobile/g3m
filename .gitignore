@@ -48,6 +48,7 @@ Android/G3MAndroidTestingApplication/bin/
 Android/G3MAndroidTestingApplication/gen/
 
 WebGL/G3MWebGLTestingApplication/war/WEB-INF/classes/
+WebGL/G3MWebGLTestingApplication/bin/
 
 JavaDesktop/G3MJavaDesktopDemo/bin/
 JavaDesktop/G3MJavaDesktopSDK/bin/
