@@ -99,8 +99,8 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     }
   
     final Camera camera = rc.getCurrentCamera();
-    final int viewPortWidth = camera.getWidth();
-    final int viewPortHeight = camera.getHeight();
+    final int viewPortWidth = camera.getViewPortWidth();
+    final int viewPortHeight = camera.getViewPortHeight();
   
     final float width = _widthSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
     final float height = _heightSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);

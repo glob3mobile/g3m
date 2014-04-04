@@ -74,9 +74,9 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   
   //  const float r2=50;
     final Camera camera = rc.getCurrentCamera();
-    final int width = camera.getWidth();
-    final int height = camera.getHeight();
-    final int minSize = (width < height) ? width : height;
+    final int viewPortWidth = camera.getViewPortWidth();
+    final int viewPortHeight = camera.getViewPortHeight();
+    final int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
     final float outerRadius = minSize / 15.0f;
   
     final IMathUtils mu = IMathUtils.instance();

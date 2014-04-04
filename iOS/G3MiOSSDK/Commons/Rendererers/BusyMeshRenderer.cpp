@@ -70,9 +70,9 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
 
 //  const float r2=50;
   const Camera* camera = rc->getCurrentCamera();
-  const int width  = camera->getWidth();
-  const int height = camera->getHeight();
-  const int minSize = (width < height) ? width : height;
+  const int viewPortWidth  = camera->getViewPortWidth();
+  const int viewPortHeight = camera->getViewPortHeight();
+  const int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
   const float outerRadius = minSize / 15.0f;
 
   const IMathUtils* mu = IMathUtils::instance();

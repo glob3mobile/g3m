@@ -106,8 +106,8 @@ public:
 class Camera {
 public:
   Camera(const Camera &that):
-  _width(that._width),
-  _height(that._height),
+  _viewPortWidth(that._viewPortWidth),
+  _viewPortHeight(that._viewPortHeight),
   _planet(that._planet),
   _position(that._position),
   _center(that._center),
@@ -157,11 +157,11 @@ public:
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
 
-  int getWidth() const { return _width; }
-  int getHeight() const { return _height; }
+  int getViewPortWidth()  const { return _viewPortWidth; }
+  int getViewPortHeight() const { return _viewPortHeight; }
 
   float getViewPortRatio() const {
-    return (float) _width / _height;
+    return (float) _viewPortWidth / _viewPortHeight;
   }
 
   EffectTarget* getEffectTarget() {
@@ -314,8 +314,8 @@ private:
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
-  int _width;
-  int _height;
+  int _viewPortWidth;
+  int _viewPortHeight;
 #ifdef C_CODE
   const Planet *_planet;
 #else

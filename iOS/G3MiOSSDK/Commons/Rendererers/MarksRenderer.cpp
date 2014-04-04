@@ -205,7 +205,9 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
     _lastCamera = camera; // Saving camera for use in onTouchEvent
 
     const Vector3D cameraPosition = camera->getCartesianPosition();
-    const int      cameraHeight   = camera->getHeight();
+#warning check with JM
+    // const int      cameraHeight   = camera->getHeight();
+    const double cameraHeight = camera->getGeodeticPosition()._height;
 
     updateGLState(rc);
 
@@ -242,7 +244,7 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
 
   if (_glState->getGLFeature(GLF_VIEWPORT_EXTENT) == NULL) {
     _glState->clearGLFeatureGroup(NO_GROUP);
-    _glState->addGLFeature(new ViewportExtentGLFeature(cam->getWidth(), cam->getHeight()), false);
+    _glState->addGLFeature(new ViewportExtentGLFeature(cam->getViewPortWidth(), cam->getViewPortHeight()), false);
   }
 }
 

@@ -38,7 +38,10 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
     if (invalidPosition)
     {
   
-      boolean previousCameraWasValid = previousCamera.getHeight() < _maxHeight;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning check with JM
+  //    bool previousCameraWasValid = previousCamera->getHeight() < _maxHeight;
+      boolean previousCameraWasValid = previousCamera.getGeodeticPosition()._height < _maxHeight;
       if (previousCameraWasValid && sector != null)
       {
         final Geodetic3D centerPosition = previousCamera.getGeodeticCenterOfView();
