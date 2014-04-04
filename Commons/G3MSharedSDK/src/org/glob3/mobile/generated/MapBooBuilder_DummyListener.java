@@ -1,11 +1,8 @@
 package org.glob3.mobile.generated; 
 public class MapBooBuilder_DummyListener extends IBufferDownloadListener
 {
-  private MapBooBuilder _builder;
-
-  public MapBooBuilder_DummyListener(MapBooBuilder builder)
+  public MapBooBuilder_DummyListener()
   {
-     _builder = builder;
   }
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)

@@ -549,7 +549,7 @@ public abstract class MapBooBuilder
           }
           else if (_token.length() > 0)
           {
-              _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_DummyListener(this), false); // readExpired
+              _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_DummyListener(), false); // readExpired
           }
           else
           {
