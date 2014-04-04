@@ -1683,12 +1683,8 @@ void MapBooBuilder::changeScene(const MapBoo_Scene* scene) {
 }
 
 class MapBooBuilder_DummyListener : public IBufferDownloadListener {
-private:
-  MapBooBuilder* _builder;
-  
 public:
-  MapBooBuilder_DummyListener(MapBooBuilder* builder) :
-  _builder(builder)
+  MapBooBuilder_DummyListener()
   {
   }
   
@@ -1755,7 +1751,7 @@ void MapBooBuilder::changedCurrentScene() {
                                                                         DownloadPriority::HIGHEST, //
                                                                         TimeInterval::zero(), //
                                                                         false, // readExpired
-                                                                        new MapBooBuilder_DummyListener(this), //
+                                                                        new MapBooBuilder_DummyListener(), //
                                                                         false);
         }
         else {
