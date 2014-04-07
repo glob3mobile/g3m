@@ -20,6 +20,12 @@
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
 
+#import <G3MiOSSDK/DebugTileRasterizer.hpp>
+#import <G3MiOSSDK/Color.hpp>
+#import <G3MiOSSDK/GFONT.hpp>
+#import <G3MiOSSDK/PlanetRendererBuilder.hpp>
+
+
 @implementation G3MViewController
 
 @synthesize g3mWidget        = _g3mWidget;
@@ -89,6 +95,13 @@ public:
 
   G3MDemoBuilder_iOS demoBuilder(new G3MBuilder_iOS(self.g3mWidget),
                                  listener);
+    
+  //fpulido --
+  DebugTileRasterizer *debugTRaster = new DebugTileRasterizer(GFont::monospaced(), Color::green(), TRUE, TRUE);
+    
+  demoBuilder.getPlanetRendererBuilder()->addTileRasterizer(debugTRaster);
+  //----------
+    
   demoBuilder.initializeWidget();
 
   _demoModel = demoBuilder.getModel();

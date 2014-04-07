@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		34F1D31918D6F409004E1BBB /* GEOVectorialLODTileRasterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34F1D31718D6F409004E1BBB /* GEOVectorialLODTileRasterizer.cpp */; };
+		34F1D31C18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34F1D31A18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp */; };
+		34F1D32118E2E735004E1BBB /* TileTextureBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34F1D31F18E2E735004E1BBB /* TileTextureBuilder.cpp */; };
+		34F1D32318E5940B004E1BBB /* TileTextureBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34F1D32018E2E735004E1BBB /* TileTextureBuilder.hpp */; };
 		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
 		383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
@@ -676,6 +680,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				34F1D32318E5940B004E1BBB /* TileTextureBuilder.hpp in CopyFiles */,
 				CFAC9EA018CE27A500EE57EF /* GEOLabelRasterSymbol.hpp in CopyFiles */,
 				D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */,
 				D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */,
@@ -1027,6 +1032,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		34F1D31718D6F409004E1BBB /* GEOVectorialLODTileRasterizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOVectorialLODTileRasterizer.cpp; path = Commons/GEO/GEOVectorialLODTileRasterizer.cpp; sourceTree = "<group>"; };
+		34F1D31818D6F409004E1BBB /* GEOVectorialLODTileRasterizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOVectorialLODTileRasterizer.hpp; path = Commons/GEO/GEOVectorialLODTileRasterizer.hpp; sourceTree = "<group>"; };
+		34F1D31A18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterSymbolizer.cpp; path = Commons/GEO/GEORasterSymbolizer.cpp; sourceTree = "<group>"; };
+		34F1D31B18D6FFA5004E1BBB /* GEORasterSymbolizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterSymbolizer.hpp; path = Commons/GEO/GEORasterSymbolizer.hpp; sourceTree = "<group>"; };
+		34F1D31F18E2E735004E1BBB /* TileTextureBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTextureBuilder.cpp; path = Commons/Basic/TileTextureBuilder.cpp; sourceTree = "<group>"; };
+		34F1D32018E2E735004E1BBB /* TileTextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileTextureBuilder.hpp; path = Commons/Basic/TileTextureBuilder.hpp; sourceTree = "<group>"; };
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
 		382D4B95159DC26B00FE9296 /* IStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStorage.hpp; path = Commons/Interfaces/IStorage.hpp; sourceTree = "<group>"; };
 		383BD3791577EDC00012AC53 /* Factory_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Factory_iOS.hpp; path = Specific/Derived/Factory_iOS.hpp; sourceTree = "<group>"; };
@@ -2068,6 +2079,8 @@
 				CF290D54187F1695000BE644 /* TextureIDReference.hpp */,
 				CF9F74DD18805470008D65F7 /* CanvasImageBuilder.cpp */,
 				CF9F74DE18805470008D65F7 /* CanvasImageBuilder.hpp */,
+				34F1D31F18E2E735004E1BBB /* TileTextureBuilder.cpp */,
+				34F1D32018E2E735004E1BBB /* TileTextureBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2409,6 +2422,10 @@
 				CF86B90717E2426C00E5659C /* CompositeTileRasterizer.hpp */,
 				CFAC9E9D18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp */,
 				CFAC9E9E18CE277D00EE57EF /* GEOLabelRasterSymbol.hpp */,
+				34F1D31718D6F409004E1BBB /* GEOVectorialLODTileRasterizer.cpp */,
+				34F1D31818D6F409004E1BBB /* GEOVectorialLODTileRasterizer.hpp */,
+				34F1D31A18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp */,
+				34F1D31B18D6FFA5004E1BBB /* GEORasterSymbolizer.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -2820,6 +2837,7 @@
 				D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */,
 				CFB72A3515E65B1F00A5BAF4 /* LayerCondition.cpp in Sources */,
 				CFB72A3915E65BAC00A5BAF4 /* Layer.cpp in Sources */,
+				34F1D32118E2E735004E1BBB /* TileTextureBuilder.cpp in Sources */,
 				CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */,
 				CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */,
 				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
@@ -2961,6 +2979,7 @@
 				CF8AE0091702049F00FE9F56 /* GEOStyle.cpp in Sources */,
 				CF8AE00A1702049F00FE9F56 /* GEOSymbol.cpp in Sources */,
 				CF8AE00B1702049F00FE9F56 /* GEOSymbolizer.cpp in Sources */,
+				34F1D31C18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp in Sources */,
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
@@ -3005,6 +3024,7 @@
 				CFAC9E9F18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp in Sources */,
 				D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */,
 				D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */,
+				34F1D31918D6F409004E1BBB /* GEOVectorialLODTileRasterizer.cpp in Sources */,
 				CF4027CC1770DC8400D5A80C /* IWebSocketListener.cpp in Sources */,
 				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,
 				CFD41F5A1875E3F600889B7C /* IImageBuilder.cpp in Sources */,

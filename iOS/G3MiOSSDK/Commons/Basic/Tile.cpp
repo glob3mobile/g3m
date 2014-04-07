@@ -533,8 +533,15 @@ void Tile::rawRender(const G3MRenderContext* rc,
                                               logTilesPetitions);
     }
 
-    if (_texturizedMesh != NULL) {
-      _texturizedMesh->render(rc, glState);
+    if (_texturizedMesh != NULL) { //fpulido
+    //if (_texturizedMesh != NULL && _texturizedMesh->isEnable()) {
+        if (_texturizedMesh->isEnable()) {
+            _texturizedMesh->render(rc, glState);
+        }
+//        else{
+//            tessellatorMesh->render(rc, glState);
+//            return;
+//        }
     }
     else {
       //Adding flat color if no texture set on the mesh

@@ -92,6 +92,7 @@ public:
                        *_trc,
                        _listener,
                        _autodeleteListener);
+//                       (_childIndex == _children->size()-1));//fpulido
     }
     else {
       child->rasterize(image,
@@ -101,9 +102,20 @@ public:
                                                                       _trc,
                                                                       _listener,
                                                                       _autodeleteListener),
+//                                                                      false),//fpulido
                        true);
     }
   }
+    
+//    void imageCreated(const IImage* image) {
+//        TileRasterizer* child = _children->at(_childIndex);
+//        
+//            child->rasterize(image,
+//                             *_trc,
+//                             _listener,
+//                             (_childIndex == _children->size()-1));
+//    
+//    }
 
 };
 
@@ -136,3 +148,49 @@ void CompositeTileRasterizer::rawRasterize(const IImage* image,
   
   delete image;
 }
+
+
+//void CompositeTileRasterizer::rawRasterize(const IImage* image,
+//                                           const TileRasterizerContext& trc,
+//                                           IImageListener* listener,
+//                                           bool autodeleteListener) const {
+//    if (_children.size() == 0) {
+//        listener->imageCreated(image);
+//        if (autodeleteListener) {
+//            delete listener;
+//        }
+//    }
+//    else {
+//
+//        const int width  = image->getWidth();
+//        const int height = image->getHeight();
+//
+//        ICanvas* canvas = getCanvas(width, height);
+//
+//        canvas->drawImage(image, 0, 0);
+//
+//        const int childrenSize = _children.size();
+//        for (int i = 0; i < childrenSize; i++) {
+//            canvas->createImage(new CompositeTileRasterizer_ChildImageListener(i,
+//                                                                               &_children,
+//                                                                               &trc,
+//                                                                               listener,
+//                                                                               autodeleteListener),
+//                                true);
+//        }
+//
+//    }
+//
+//    delete image;
+//}
+
+
+
+TileRasterizer_AsyncTask* CompositeTileRasterizer::getRawRasterizeTask(const IImage* image,
+                                                                   const TileRasterizerContext& trc,
+                                                                   IImageListener* listener,
+                                                                   bool autodelete) const {
+    
+    return NULL; // composite rasterizer always return NULL. Delegate the selection to any component.
+}
+

@@ -13,8 +13,12 @@
 #include "TileKey.hpp"
 #include "Geodetic3D.hpp"
 
+#include "ITexturizerData.hpp"
+#include "RCObject.hpp"
+#include "Petition.hpp"
+#include "RectangleF.hpp"
+
 class IGLTextureId;
-class TileTextureBuilder;
 class LayerSet;
 class IDownloader;
 class LeveledTexturedMesh;
@@ -22,6 +26,8 @@ class IFloatBuffer;
 class TileRasterizer;
 class TextureIDReference;
 class G3MEventContext;
+
+
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
@@ -73,6 +79,7 @@ public:
                            Mesh* mesh);
   
 };
+
 
 
 #endif

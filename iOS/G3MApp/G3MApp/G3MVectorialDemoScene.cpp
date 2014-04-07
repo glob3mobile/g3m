@@ -14,9 +14,9 @@
 #include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/GEORenderer.hpp>
 #include <G3MiOSSDK/GEOSymbolizer.hpp>
-#include <G3MiOSSDK/GEORasterPolygonSymbol.hpp>
+#include <G3MiOSSDK/GEOPolygonRasterSymbol.hpp>
 #include <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
-#include <G3MiOSSDK/GEORasterLineSymbol.hpp>
+#include <G3MiOSSDK/GEOLineRasterSymbol.hpp>
 #include <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
 #include <G3MiOSSDK/JSONObject.hpp>
 #include <G3MiOSSDK/GEO2DPointGeometry.hpp>
@@ -134,7 +134,7 @@ public:
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
-    symbols->push_back(new GEORasterLineSymbol(geometry->getCoordinates(),
+    symbols->push_back(new GEOLineRasterSymbol(geometry->getCoordinates(),
                                                createLineRasterStyle(geometry)));
     return symbols;
   }
@@ -145,7 +145,7 @@ public:
 
   std::vector<GEOSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEOSymbol*>* symbols = new std::vector<GEOSymbol*>();
-    symbols->push_back(new GEORasterPolygonSymbol(geometry->getPolygonData(),
+    symbols->push_back(new GEOPolygonRasterSymbol(geometry->getPolygonData(),
                                                   createPolygonLineRasterStyle(geometry),
                                                   createPolygonSurfaceRasterStyle(geometry)));
     return symbols;

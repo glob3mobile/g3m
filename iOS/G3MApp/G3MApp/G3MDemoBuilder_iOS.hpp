@@ -12,6 +12,7 @@
 #include "G3MDemoBuilder.hpp"
 
 class G3MBuilder_iOS;
+class PlanetRendererBuilder;
 
 class G3MDemoBuilder_iOS : public G3MDemoBuilder {
 private:
@@ -33,6 +34,8 @@ public:
   ~G3MDemoBuilder_iOS();
 
   void initializeWidget();
+    
+  PlanetRendererBuilder* getPlanetRendererBuilder();
 
 };
 

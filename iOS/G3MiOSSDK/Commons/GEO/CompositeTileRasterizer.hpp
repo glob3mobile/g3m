@@ -46,6 +46,11 @@ public:
   void addTileRasterizer(TileRasterizer* tileRasterizer);
 
   void changed();
+    
+  TileRasterizer_AsyncTask* getRawRasterizeTask(const IImage* image,
+                                                        const TileRasterizerContext& trc,
+                                                        IImageListener* listener,
+                                                        bool autodelete) const;
   
 };
 

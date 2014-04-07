@@ -12,16 +12,19 @@
 #include "CanvasTileRasterizer.hpp"
 #include "QuadTree.hpp"
 
+
 class GEORasterSymbol;
 
 
 class GEOTileRasterizer : public CanvasTileRasterizer {
 private:
   QuadTree _quadTree;
-
+  const GEOTileRasterizer* _geoTileRasterizer;
+    
 public:
   GEOTileRasterizer()
   {
+      _geoTileRasterizer = this;
   }
 
   std::string getId() const {
@@ -42,6 +45,13 @@ public:
   ICanvas* getCanvas(int width, int height) const {
     return CanvasTileRasterizer::getCanvas(width, height);
   }
+    
+  TileRasterizer_AsyncTask* getRawRasterizeTask(const IImage* image,
+                                                        const TileRasterizerContext& trc,
+                                                        IImageListener* listener,
+                                                        bool autodelete) const;
+    
+    
 };
 
 #endif

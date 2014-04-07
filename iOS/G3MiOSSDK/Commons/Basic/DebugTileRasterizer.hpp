@@ -37,6 +37,7 @@ private:
   std::string getSectorLabel3(const Sector& sector) const;
   std::string getSectorLabel4(const Sector& sector) const;
 
+
 public:
   DebugTileRasterizer();
 
@@ -47,9 +48,7 @@ public:
 
   ~DebugTileRasterizer();
 
-  void initialize(const G3MContext* context) {
-
-  }
+  void initialize(const G3MContext* context);
 
   std::string getId() const {
     return "DebugTileRasterizer";
@@ -59,6 +58,16 @@ public:
                     const TileRasterizerContext& trc,
                     IImageListener* listener,
                     bool autodelete) const;
+    
+  TileRasterizer_AsyncTask* getRawRasterizeTask(const IImage* image,
+                                                const TileRasterizerContext& trc,
+                                                IImageListener* listener,
+                                                bool autodelete) const;
+    
+  ICanvas* buildCanvas(const IImage* image,
+                       const TileRasterizerContext* trc,
+                       IImageListener* listener,
+                       bool autodelete) const;
   
 };
 

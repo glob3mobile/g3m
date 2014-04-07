@@ -23,6 +23,12 @@ G3MDemoBuilder_iOS::~G3MDemoBuilder_iOS() {
 void G3MDemoBuilder_iOS::initializeWidget() {
   build();
   _builder->initializeWidget();
-
+ 
   getModel()->initializeG3MWidget( _builder->getNativeWidget().widget );
+}
+
+PlanetRendererBuilder* G3MDemoBuilder_iOS::getPlanetRendererBuilder() {
+    
+    return _builder->getPlanetRendererBuilder();
+    
 }

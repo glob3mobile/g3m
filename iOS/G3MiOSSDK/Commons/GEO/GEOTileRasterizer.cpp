@@ -17,9 +17,15 @@
 #include "GFont.hpp"
 #include "IStringBuilder.hpp"
 #include "GEORasterProjection.hpp"
+#include "IThreadUtils.hpp"
+#include "MultiLayerTileTexturizer.hpp"
 
+
+//----
 
 void GEOTileRasterizer::initialize(const G3MContext* context) {
+    _threadUtils = context->getThreadUtils();
+    
 }
 
 void GEOTileRasterizer::clear() {
@@ -46,34 +52,7 @@ void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
   }
 }
 
-//class GEOTileRasterizer_QuadTreeVisitor : public QuadTreeVisitor {
-//private:
-//  ICanvas*                   _canvas;
-//  const GEORasterProjection* _projection;
-//  const int                  _tileLevel;
-//
-//public:
-//  GEOTileRasterizer_QuadTreeVisitor(ICanvas* canvas,
-//                                    const GEORasterProjection* projection,
-//                                    int tileLevel) :
-//  _canvas(canvas),
-//  _projection(projection),
-//  _tileLevel(tileLevel)
-//  {
-//  }
-//
-//  bool visitElement(const Sector&           sector,
-//                    const QuadTree_Content* content) const {
-//    GEORasterSymbol* symbol = (GEORasterSymbol*) content;
-//
-//    symbol->rasterize(_canvas, _projection, _tileLevel);
-//
-//    return false;
-//  }
-//
-//  void endVisit(bool aborted) const {
-//  }
-//};
+
 
 class GEOTileRasterizer_QuadTreeVisitor : public QuadTreeVisitor {
 private:
@@ -109,6 +88,7 @@ public:
   _projection(NULL)
   {
   }
+    
 
   bool visitElement(const Sector&           sector,
                     const QuadTree_Content* content) const {
@@ -135,62 +115,136 @@ public:
   }
 
   void endVisit(bool aborted) const {
-    if (_canvas == NULL) {
-      _listener->imageCreated(_originalImage);
-      if (_autodelete) {
-        delete _listener;
-      }
-    }
-    else {
-      _canvas->createImage(_listener, _autodelete);
-
-      delete _originalImage;
-      _originalImage = NULL;
-
-      delete _projection;
-    }
+      //do nothing, delay to postExecute at the asyncTask
+      
+//    if (_canvas == NULL) {
+//        _listener->imageCreated(_originalImage);
+//        if (_autodelete) {
+//            delete _listener;
+//        }
+//    }
+//    else {
+//        _canvas->createImage(_listener, _autodelete);
+//
+//        delete _originalImage;
+//        _originalImage = NULL;
+//
+//        delete _projection;
+//    }
+      
   }
+    
+    void postExecuteEndVisit(bool aborted) const {
+        
+        if (_canvas == NULL) {
+            _listener->imageCreated(_originalImage);
+            if (_autodelete) {
+                delete _listener;
+            }
+        }
+        else {
+            _canvas->createImage(_listener, _autodelete);
+            
+            delete _originalImage;
+            _originalImage = NULL;
+            
+            delete _projection;
+        }
+    }
+    
+};
+
+
+
+class GEOTileRasterizer_VisitAsyncTask : public TileRasterizer_AsyncTask {
+private:
+    const QuadTree *_qTree;
+    const Sector          _sector;
+    const GEOTileRasterizer_QuadTreeVisitor* _visitor;
+     int _row, _column; //fpulido debug: quitar luego
+
+public:
+    GEOTileRasterizer_VisitAsyncTask(const IImage* image,
+                                     const TileRasterizerContext* trc,
+                                     IImageListener* listener,
+                                     bool autodelete,
+                                     const GEOTileRasterizer* rasterizer,
+                                     const QuadTree* quadTree):
+    _qTree(quadTree),
+    _sector(trc->_tile->_sector),
+    TileRasterizer_AsyncTask(image,
+                             trc,
+                             listener,
+                             autodelete)
+    {   _row = _trc->_tile->_row;
+        _column = _trc->_tile->_column;
+        ILogger::instance()->logInfo("_builder->_retain from GEOTileRasterizer_VisitAsyncTask: %p, [%d,%d]", _builder, _trc->_tile->_row, _trc->_tile->_column);
+        _visitor = new GEOTileRasterizer_QuadTreeVisitor(rasterizer,
+                                                         image,
+                                                         trc,
+                                                         listener,
+                                                         autodelete);
+    }
+
+    ~GEOTileRasterizer_VisitAsyncTask() {
+        delete _visitor;
+        //ILogger::instance()->logInfo("terminando la tarea GEOTileRasterizer");
+        ILogger::instance()->logInfo("terminando la tarea GEOTileRasterizer: [%d,%d]", _row, _column);
+        //TileRasterizer_AsyncTask::~TileRasterizer_AsyncTask();
+    }
+
+    void runInBackground(const G3MContext* context) {
+        ILogger::instance()->logInfo("runInBackground GEOTileRasterizer: [%d,%d]", _trc->_tile->_row, _trc->_tile->_column);
+        _qTree->acceptVisitor(_sector,
+                             *_visitor);
+    }
+
+    void onPostExecute(const G3MContext* context) {
+        if(_visitor != NULL){
+            _visitor->postExecuteEndVisit(true);
+            //delete _visitor;
+        }
+    }
 };
 
 void GEOTileRasterizer::rawRasterize(const IImage* image,
                                      const TileRasterizerContext& trc,
                                      IImageListener* listener,
                                      bool autodelete) const {
-  //  if (_quadTree.isEmpty()) {
-  //    listener->imageCreated(image);
-  //    if (autodelete) {
-  //      delete listener;
-  //    }
-  //  }
-  //  else {
-  //    const Tile*   tile     = trc._tile;
-  //    const bool    mercator = trc._mercator;
-  //
-  //    const int width  = image->getWidth();
-  //    const int height = image->getHeight();
-  //
-  //    GEORasterProjection* projection = new GEORasterProjection(tile->_sector, mercator,
-  //                                                              width, height);
-  //
-  //    ICanvas* canvas = getCanvas(width, height);
-  //
-  //    canvas->drawImage(image, 0, 0);
-  //
-  //    _quadTree.acceptVisitor(tile->_sector,
-  //                            GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile->_level));
-  //
-  //    canvas->createImage(listener, autodelete);
-  //
-  //    delete image;
-  //
-  //    delete projection;
-  //  }
-
+ 
+  ILogger::instance()->logInfo("rawRasterize");
+    
   const Tile* tile = trc._tile;
-  _quadTree.acceptVisitor(tile->_sector,
-                          GEOTileRasterizer_QuadTreeVisitor(this,
-                                                            image,
-                                                            &trc,
-                                                            listener,
-                                                            autodelete));
+    
+    _quadTree.acceptVisitor(tile->_sector, GEOTileRasterizer_QuadTreeVisitor(this,
+                                                                             image,
+                                                                             &trc,
+                                                                             listener,
+                                                                             autodelete));
+    
 }
+
+
+TileRasterizer_AsyncTask* GEOTileRasterizer::getRawRasterizeTask(const IImage* image,
+                                                      const TileRasterizerContext& trc,
+                                                      IImageListener* listener,
+                                                      bool autodelete) const {
+    
+    //return NULL;
+    
+    return new GEOTileRasterizer_VisitAsyncTask(image,
+                                                &trc,
+                                                listener,
+                                                autodelete,
+                                                this,
+                                                &_quadTree);
+    
+}
+
+
+//-------
+
+
+
+
+
