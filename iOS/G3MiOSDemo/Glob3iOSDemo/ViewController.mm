@@ -275,18 +275,18 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  [self initCustomizedWithBuilder];
+//  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-  //  [self initWithBuilderAndSegmentedWorld];
+  [self initWithBuilderAndSegmentedWorld];
 
-  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                       Geodetic3D::fromDegrees(25.743467472995700263,
-                                                                               -5.3656762990500403987,
-                                                                               1664155.1381164737977),
-                                                       Angle::fromDegrees(-0.145718),
-                                                       Angle::fromDegrees(-52.117699));
+//  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                       Geodetic3D::fromDegrees(25.743467472995700263,
+//                                                                               -5.3656762990500403987,
+//                                                                               1664155.1381164737977),
+//                                                       Angle::fromDegrees(-0.145718),
+//                                                       Angle::fromDegrees(-52.117699));
 
 
 //#warning Buggy mark
@@ -437,16 +437,16 @@ public:
   //  builder.addRenderer(meshRenderer);
   //  meshRenderer->addMesh( createSectorMesh(builder.getPlanet(), 32, sector, Color::red(), 2) );
 
-  builder.setInitializationTask(new MoveCameraInitializationTask([self G3MWidget], sector),
-                                true);
+//  builder.setInitializationTask(new MoveCameraInitializationTask([self G3MWidget], sector),
+//                                true);
 
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///aus4326.bil", false),
-                                                                                    sector,
-                                                                                    Vector2I(2083, 2001),
-                                                                                    -758.905);
-
-  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
+//  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///aus4326.bil", false),
+//                                                                                    sector,
+//                                                                                    Vector2I(2083, 2001),
+//                                                                                    -758.905);
+//
+//  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+//  builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
 
 
   builder.initializeWidget();
