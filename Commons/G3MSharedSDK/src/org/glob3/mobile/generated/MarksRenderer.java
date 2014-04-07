@@ -144,9 +144,6 @@ public class MarksRenderer extends DefaultRenderer
       _lastCamera = camera; // Saving camera for use in onTouchEvent
   
       final Vector3D cameraPosition = camera.getCartesianPosition();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning check with JM
-      // const int      cameraHeight   = camera->getHeight();
       final double cameraHeight = camera.getGeodeticPosition()._height;
   
       updateGLState(rc);
