@@ -70,7 +70,7 @@ private:
     
     long long _texturePriority;
     
-    bool _isComposedAndUploaded;
+    bool _textureComposedAndUploaded;
     
     ~TileTextureBuilder();
     

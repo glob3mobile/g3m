@@ -197,26 +197,29 @@ private:
     
     const std::string _textureId;
     
-    const TileRasterizerContext _trc;
+    const TileRasterizerContext* _trc;//fpulido
     
 public:
     TextureUploader(TileTextureBuilder* builder,
-                    const Tile* tile,
-                    bool mercator,
+//                    const Tile* tile,
+//                    bool mercator,
+                    const TileRasterizerContext* trc,
                     TileRasterizer* tileRasterizer,
                     std::vector<RectangleF*> srcRects,
                     std::vector<RectangleF*> dstRects,
                     const std::string& textureId) :
     _builder(builder),
-    _tile(tile),
-    _mercator(mercator),
-    _trc(tile,mercator),
+    _tile(trc->_tile),
+    _mercator(trc->_mercator),
+//    _trc(tile,mercator),
+    _trc(trc),
     _tileRasterizer(tileRasterizer),
     _srcRects(srcRects),
     _dstRects(dstRects),
     _textureId(textureId)
     {
         ILogger::instance()->logInfo("nace TextureUploader: %p, [%d,%d]",this, _tile->_row,_tile->_column );//fpulido
+        //_trc = new TileRasterizerContext(_tile,_mercator);
     }
     
     void imageCreated(const IImage* image);
@@ -324,7 +327,7 @@ _canceled(false),
 _alreadyStarted(false),
 _texturePriority(texturePriority),
 _logTilesPetitions(logTilesPetitions),
-_isComposedAndUploaded(false)
+_textureComposedAndUploaded(false)
 {
     _petitions = cleanUpPetitions( petitions );
     
@@ -335,8 +338,6 @@ _isComposedAndUploaded(false)
     }
     
     _mesh = createMesh();
-    //_mesh->setEnable(false); //fpulido, initially not enabled until image created
-    
 }
 
 void TileTextureBuilder::start() {
@@ -464,8 +465,7 @@ bool TileTextureBuilder::composeAndUploadTexture() {
                                  destRects,
                                  transparencies,
                                  new TextureUploader(this,
-                                                     _tile,
-                                                     _mercator,
+                                                     new TileRasterizerContext(_tile, _mercator),
                                                      _tileRasterizer,
                                                      sourceRects,
                                                      destRects,
@@ -490,9 +490,7 @@ void TileTextureBuilder::imageCreated(const IImage* image,
 #endif
         
         if (_mesh != NULL) {
-//            if(!_mesh->isEnable()){
-//                _mesh->setEnable(true); //fpulido
-//            }
+
             const bool isMipmap = false;
             
             const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
@@ -529,10 +527,14 @@ void TileTextureBuilder::done() {
         
         if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
             if (composeAndUploadTexture()) {
-                _isComposedAndUploaded = true;
-                //If the image could be properly turn into texture
-//                _tile->setTextureSolved(true); //fpulido
-//                deletePetitions();    //We must release the petitions so we can get rid off no longer needed images
+//                if(!_tileRasterizer->backgroundRasterize()){
+//                     //If the image could be properly turn into texture
+//                    _tile->setTextureSolved(true); //fpulido
+//                    deletePetitions();    //We must release the petitions so we can get rid off no longer needed images
+//                }
+//                else{
+                    _textureComposedAndUploaded = true;
+//                }
             }
         }
         
@@ -734,47 +736,33 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
 void TextureUploader::imageCreated(const IImage* image) {
 
     if (_tileRasterizer == NULL) {
-//        ILogger::instance()->logInfo("TEXTURA: %s", _textureId.c_str()); //fpulido
-        ILogger::instance()->logInfo("IMAGE: %p", image); //fpulido
         _builder->imageCreated(image,
                                _srcRects,
                                _dstRects,
                                _textureId);
+        
         _builder->composedAndUploaded();
     }
     else {
         //const TileRasterizerContext trc(_tile, _mercator);//fpulido
-        //const TileRasterizerContext* trc = new TileRasterizerContext(_tile, _mercator);
-//        _tileRasterizer->rasterize(image,
-//                                   _trc,
-//                                   new TextureUploader(_builder,
-//                                                       _tile,
-//                                                       _mercator,
-//                                                       NULL,
-//                                                       _srcRects,
-//                                                       _dstRects,
-//                                                       _textureId),
-//                                   true);
-        
-         TextureUploader* textUploader = new TextureUploader(_builder,
-                                                     _tile,
-                                                     _mercator,
-                                                     NULL,
-                                                     _srcRects,
-                                                     _dstRects,
-                                                     _textureId);
-        
+        const TileRasterizerContext* trc = new TileRasterizerContext(_tile, _mercator);
         _tileRasterizer->rasterize(image,
-                                   textUploader->_trc,
-                                   textUploader,
+                                   *trc,
+                                   new TextureUploader(_builder,
+                                                       trc,
+                                                       NULL,
+                                                       _srcRects,
+                                                       _dstRects,
+                                                       _textureId),
                                    true);
+        
     }
 }
 
 void TileTextureBuilder::composedAndUploaded() {
-    if (_isComposedAndUploaded){
+    //if (_textureComposedAndUploaded){
         //ILogger::instance()->logInfo("COMPOSED AND UPLOADED: [%d,%d]", _tile->_row, _tile->_column); //fpulido
         _tile->setTextureSolved(true);
         deletePetitions();
-    }
+    //}
 }

@@ -24,7 +24,7 @@
 //----
 
 void GEOTileRasterizer::initialize(const G3MContext* context) {
-    _threadUtils = context->getThreadUtils();
+    _threadUtils = context->getThreadUtils(); //init for background rasterize
     
 }
 
@@ -116,21 +116,24 @@ public:
 
   void endVisit(bool aborted) const {
       //do nothing, delay to postExecute at the asyncTask
+    if(_geoTileRasterizer->backgroundRasterize()){
+        return;
+    }
       
-//    if (_canvas == NULL) {
-//        _listener->imageCreated(_originalImage);
-//        if (_autodelete) {
-//            delete _listener;
-//        }
-//    }
-//    else {
-//        _canvas->createImage(_listener, _autodelete);
-//
-//        delete _originalImage;
-//        _originalImage = NULL;
-//
-//        delete _projection;
-//    }
+    if (_canvas == NULL) {
+        _listener->imageCreated(_originalImage);
+        if (_autodelete) {
+            delete _listener;
+        }
+    }
+    else {
+        _canvas->createImage(_listener, _autodelete);
+
+        delete _originalImage;
+        _originalImage = NULL;
+
+        delete _projection;
+    }
       
   }
     
@@ -168,8 +171,8 @@ public:
                                      const TileRasterizerContext* trc,
                                      IImageListener* listener,
                                      bool autodelete,
-                                     const GEOTileRasterizer* rasterizer,
-                                     const QuadTree* quadTree):
+                                     const QuadTree* quadTree,
+                                     const GEOTileRasterizer* rasterizer):
     _qTree(quadTree),
     _sector(trc->_tile->_sector),
     TileRasterizer_AsyncTask(image,
@@ -190,13 +193,14 @@ public:
         delete _visitor;
         //ILogger::instance()->logInfo("terminando la tarea GEOTileRasterizer");
         ILogger::instance()->logInfo("terminando la tarea GEOTileRasterizer: [%d,%d]", _row, _column);
-        //TileRasterizer_AsyncTask::~TileRasterizer_AsyncTask();
     }
 
     void runInBackground(const G3MContext* context) {
         ILogger::instance()->logInfo("runInBackground GEOTileRasterizer: [%d,%d]", _trc->_tile->_row, _trc->_tile->_column);
-        _qTree->acceptVisitor(_sector,
-                             *_visitor);
+        if(_visitor != NULL){
+            _qTree->acceptVisitor(_sector,
+                                  *_visitor);
+        }
     }
 
     void onPostExecute(const G3MContext* context) {
@@ -215,8 +219,7 @@ void GEOTileRasterizer::rawRasterize(const IImage* image,
   ILogger::instance()->logInfo("rawRasterize");
     
   const Tile* tile = trc._tile;
-    
-    _quadTree.acceptVisitor(tile->_sector, GEOTileRasterizer_QuadTreeVisitor(this,
+  _quadTree.acceptVisitor(tile->_sector, GEOTileRasterizer_QuadTreeVisitor(this,
                                                                              image,
                                                                              &trc,
                                                                              listener,
@@ -236,8 +239,8 @@ TileRasterizer_AsyncTask* GEOTileRasterizer::getRawRasterizeTask(const IImage* i
                                                 &trc,
                                                 listener,
                                                 autodelete,
-                                                this,
-                                                &_quadTree);
+                                                &_quadTree,
+                                                this);
     
 }
 

@@ -36,6 +36,7 @@ void TileRasterizer::rasterize(const IImage* image,
     TileRasterizer_AsyncTask* rawRasterizeTask = getRawRasterizeTask(image, trc, listener, autodelete);
       
       if(rawRasterizeTask != NULL && _threadUtils != NULL){
+          _backgroundRasterize = true;
           _threadUtils->invokeAsyncTask(rawRasterizeTask, true);
       }
       else{
@@ -83,6 +84,9 @@ _autodelete(autodelete)
     }
 }
 
+bool TileRasterizer::backgroundRasterize() const {
+    return _backgroundRasterize;
+}
 
 TileRasterizer_AsyncTask::~TileRasterizer_AsyncTask() {
     //ILogger::instance()->logInfo("llamado destructor de AsyncTask");

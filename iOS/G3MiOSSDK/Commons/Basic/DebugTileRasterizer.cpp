@@ -19,7 +19,7 @@
 #include "ColumnCanvasElement.hpp"
 
 void DebugTileRasterizer::initialize(const G3MContext* context) {
-    _threadUtils = context->getThreadUtils();
+    _threadUtils = context->getThreadUtils(); //init for background rasterize
     
 }
 
@@ -211,22 +211,15 @@ public:
     void runInBackground(const G3MContext* context) {
         ILogger::instance()->logInfo("runInBackground DebugTileRasterizer: [%d,%d]", _trc->_tile->_row, _trc->_tile->_column);
         _canvas = _debugTileRasterizer->buildCanvas(_image, _trc, _listener, _autodelete);
-        //_canvas->createImage(_listener, _autodelete);
+        _canvas->createImage(_listener, _autodelete);
+        delete _image;
     }
     
     void onPostExecute(const G3MContext* context) {
         
-//        if (_canvas == NULL) {
-//            _listener->imageCreated(_image);
-//            if (_autodelete) {
-//                delete _listener;
-//            }
-//        }
-//        else {
-            //_canvas = _debugTileRasterizer->buildCanvas(_image, _trc, _listener, _autodelete);
-            _canvas->createImage(_listener, _autodelete);
-            delete _image;
-//        }
+//        _canvas = _debugTileRasterizer->buildCanvas(_image, _trc, _listener, _autodelete);
+//        _canvas->createImage(_listener, _autodelete);
+//        delete _image;
     }
 };
 

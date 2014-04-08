@@ -84,6 +84,7 @@ class TileRasterizer {
 private:
   ChangedListener* _listener;
   bool _enable;
+  mutable bool _backgroundRasterize;
 
 protected:
   const IThreadUtils* _threadUtils;
@@ -91,7 +92,8 @@ protected:
   TileRasterizer() :
   _enable(true),
   _listener(NULL),
-  _threadUtils(NULL) // needs to be set at initialize method for background rasterize.
+  _threadUtils(NULL), // needs to be set at initialize method for background rasterize.
+  _backgroundRasterize(false)
   {
 
   }
@@ -129,6 +131,8 @@ public:
                                          const TileRasterizerContext& trc,
                                          IImageListener* listener,
                                          bool autodelete) const = 0;
+    
+   bool backgroundRasterize() const;
   
 };
 
