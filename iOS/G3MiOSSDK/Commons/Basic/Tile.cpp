@@ -53,7 +53,6 @@ _subtiles(NULL),
 _justCreatedSubtiles(false),
 _isVisible(false),
 _texturizerData(NULL),
-//_tileBoundingVolume(NULL),
 _elevationData(NULL),
 _elevationDataLevel(-1),
 _elevationDataRequest(NULL),
@@ -65,16 +64,10 @@ _boundingVolume(NULL),
 _lastMeetsRenderCriteriaTimeInMS(0),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
-//_middleNorthPoint(NULL),
-//_middleSouthPoint(NULL),
-//_middleEastPoint(NULL),
-//_middleWestPoint(NULL),
 _northWestPoint(NULL),
 _northEastPoint(NULL),
 _southWestPoint(NULL),
 _southEastPoint(NULL),
-//_latitudeArcSegmentRatioSquared(0),
-//_longitudeArcSegmentRatioSquared(0),
 _northArcSegmentRatioSquared(0),
 _southArcSegmentRatioSquared(0),
 _eastArcSegmentRatioSquared(0),
@@ -99,8 +92,6 @@ Tile::~Tile() {
     }
   }
 
-  //  delete _boundingVolume;
-
   delete _debugMesh;
   _debugMesh = NULL;
 
@@ -116,9 +107,6 @@ Tile::~Tile() {
   delete _texturizedMesh;
   _texturizedMesh = NULL;
 
-  //  delete _tileBoundingVolume;
-  //  _tileBoundingVolume = NULL;
-
   delete _elevationData;
   _elevationData = NULL;
 
@@ -130,10 +118,6 @@ Tile::~Tile() {
 
   delete _tessellatorData;
 
-//  delete _middleEastPoint;
-//  delete _middleNorthPoint;
-//  delete _middleSouthPoint;
-//  delete _middleWestPoint;
   delete _northWestPoint;
   delete _northEastPoint;
   delete _southWestPoint;
@@ -207,8 +191,7 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      tilesRenderParameters->_renderDebug,
                                                      _tileTessellatorMeshData);
 
-      computeTileCorners(rc->getPlanet()); //COMPUTING CORNERS
-
+      computeTileCorners(rc->getPlanet());
     }
     else {
       Mesh* tessellatorMesh = tessellator->createTileMesh(rc->getPlanet(),
@@ -229,14 +212,12 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
         meshHolder->setMesh(tessellatorMesh);
       }
 
-      computeTileCorners(rc->getPlanet()); //COMPUTING CORNERS
+      computeTileCorners(rc->getPlanet());
     }
 
     //Notifying when the tile is first created and every time the elevation data changes
     _planetRenderer->sectorElevationChanged(_elevationData);
   }
-
-  //_tessellatorMesh->showNormals(true);
 
   return _tessellatorMesh;
 }
@@ -247,69 +228,10 @@ Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
   if (_debugMesh == NULL) {
     const Vector2I tileMeshResolution(layerTilesRenderParameters->_tileMeshResolution);
 
-    //TODO: CHECK
     _debugMesh = tessellator->createTileDebugMesh(rc->getPlanet(), tileMeshResolution, this);
   }
   return _debugMesh;
 }
-
-//Box* Tile::getTileBoundingVolume(const G3MRenderContext *rc) {
-//  if (_tileBoundingVolume == NULL) {
-//    const Planet* planet = rc->getPlanet();
-//
-//    const double minHeight = getMinHeight() * _verticalExaggeration;
-//    const double maxHeight = getMaxHeight() * _verticalExaggeration;
-//
-//    const Vector3D v0 = planet->toCartesian( _sector._center, maxHeight );
-//    const Vector3D v1 = planet->toCartesian( _sector.getNE(),     minHeight );
-//    const Vector3D v2 = planet->toCartesian( _sector.getNW(),     minHeight );
-//    const Vector3D v3 = planet->toCartesian( _sector.getSE(),     minHeight );
-//    const Vector3D v4 = planet->toCartesian( _sector.getSW(),     minHeight );
-//
-//    double lowerX = v0._x;
-//    if (v1._x < lowerX) { lowerX = v1._x; }
-//    if (v2._x < lowerX) { lowerX = v2._x; }
-//    if (v3._x < lowerX) { lowerX = v3._x; }
-//    if (v4._x < lowerX) { lowerX = v4._x; }
-//
-//    double upperX = v0._x;
-//    if (v1._x > upperX) { upperX = v1._x; }
-//    if (v2._x > upperX) { upperX = v2._x; }
-//    if (v3._x > upperX) { upperX = v3._x; }
-//    if (v4._x > upperX) { upperX = v4._x; }
-//
-//
-//    double lowerY = v0._y;
-//    if (v1._y < lowerY) { lowerY = v1._y; }
-//    if (v2._y < lowerY) { lowerY = v2._y; }
-//    if (v3._y < lowerY) { lowerY = v3._y; }
-//    if (v4._y < lowerY) { lowerY = v4._y; }
-//
-//    double upperY = v0._y;
-//    if (v1._y > upperY) { upperY = v1._y; }
-//    if (v2._y > upperY) { upperY = v2._y; }
-//    if (v3._y > upperY) { upperY = v3._y; }
-//    if (v4._y > upperY) { upperY = v4._y; }
-//
-//
-//    double lowerZ = v0._z;
-//    if (v1._z < lowerZ) { lowerZ = v1._z; }
-//    if (v2._z < lowerZ) { lowerZ = v2._z; }
-//    if (v3._z < lowerZ) { lowerZ = v3._z; }
-//    if (v4._z < lowerZ) { lowerZ = v4._z; }
-//
-//    double upperZ = v0._z;
-//    if (v1._z > upperZ) { upperZ = v1._z; }
-//    if (v2._z > upperZ) { upperZ = v2._z; }
-//    if (v3._z > upperZ) { upperZ = v3._z; }
-//    if (v4._z > upperZ) { upperZ = v4._z; }
-//
-//
-//    _tileBoundingVolume = new Box(Vector3D(lowerX, lowerY, lowerZ),
-//                                  Vector3D(upperX, upperY, upperZ));
-//  }
-//  return _tileBoundingVolume;
-//}
 
 
 const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
@@ -324,7 +246,6 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
                                     layerTilesRenderParameters,
                                     tilesRenderParameters);
     if (mesh != NULL) {
-      //      _boundingVolume = mesh->getBoundingVolume()->createSphere();
       _boundingVolume = mesh->getBoundingVolume();
     }
   }
@@ -341,34 +262,6 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                      const TileTessellator* tessellator,
                      const LayerTilesRenderParameters* layerTilesRenderParameters,
                      const TilesRenderParameters* tilesRenderParameters) {
-
-  ////  const BoundingVolume* boundingVolume = getTessellatorMesh(rc, trc)->getBoundingVolume();
-  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-  //  if (boundingVolume == NULL) {
-  //    return false;
-  //  }
-  //
-  //  if (!boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates)) {
-  //    return false;
-  //  }
-  //
-  //  // test if sector is back oriented with respect to the camera
-  //  return !_sector.isBackOriented(rc,
-  //                                 getMinHeight(),
-  //                                 planet,
-  //                                 cameraNormalizedPosition,
-  //                                 cameraAngle2HorizonInRadians);
-
-
-  /* //AGUSTIN:now that zfar is located in the horizon, this test is not needed anymore
-   // test if sector is back oriented with respect to the camera
-   if (_sector.isBackOriented(rc,
-   getMinHeight(),
-   planet,
-   cameraNormalizedPosition,
-   cameraAngle2HorizonInRadians)) {
-   return false;
-   }*/
 
   if (renderedSector != NULL && !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
@@ -393,11 +286,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
                                double texWidthSquared,
                                double texHeightSquared,
                                double nowInMS) {
-
-//  if (_level == 4 && _column == 7 && _row == 10) {
-//    printf("break point!!");
-////    return true;
-//  }
 
   if ((_level >= layerTilesRenderParameters->_maxLevelForPoles) &&
       (_sector.touchesPoles())) {
@@ -436,11 +324,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
 
 
-//  if ((_latitudeArcSegmentRatioSquared  == 0) ||
-//      (_longitudeArcSegmentRatioSquared == 0)) {
-//#warning CHECK IT
-//    prepareTestLODData( rc->getPlanet() );
-//  }
   if ((_northArcSegmentRatioSquared == 0) ||
       (_southArcSegmentRatioSquared == 0) ||
       (_eastArcSegmentRatioSquared  == 0) ||
@@ -451,9 +334,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   const Camera* camera = rc->getCurrentCamera();
 
-//  const double pixelsDistanceNS = camera->getEstimatedPixelDistance(*_middleNorthPoint, *_middleSouthPoint);
-//  const double pixelsDistanceWE = camera->getEstimatedPixelDistance(*_middleWestPoint,  *_middleEastPoint);
-
   const double distanceInPixelsNorth = camera->getEstimatedPixelDistance(*_northWestPoint, *_northEastPoint);
   const double distanceInPixelsSouth = camera->getEstimatedPixelDistance(*_southWestPoint, *_southEastPoint);
   const double distanceInPixelsWest  = camera->getEstimatedPixelDistance(*_northWestPoint, *_southWestPoint);
@@ -463,30 +343,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
   const double distanceInPixelsSquaredArcWest  = (distanceInPixelsWest  * distanceInPixelsWest)  * _westArcSegmentRatioSquared;
   const double distanceInPixelsSquaredArcEast  = (distanceInPixelsEast  * distanceInPixelsEast)  * _eastArcSegmentRatioSquared;
-
-//  const double latitudeMiddleDistSquared  = pixelsDistanceNS * pixelsDistanceNS;
-//  const double longitudeMiddleDistSquared = pixelsDistanceWE * pixelsDistanceWE;
-//
-//  const double latitudeMiddleArcDistSquared  = latitudeMiddleDistSquared  * _latitudeArcSegmentRatioSquared;
-//  const double longitudeMiddleArcDistSquared = longitudeMiddleDistSquared * _longitudeArcSegmentRatioSquared;
-
-//  const IMathUtils* mu = IMathUtils::instance();
-//
-//  const double latitudeMiddleArcDistSquared  = mu->max(distanceInPixelsSquaredArcNorth, distanceInPixelsSquaredArcSouth);
-//  const double longitudeMiddleArcDistSquared = mu->max(distanceInPixelsSquaredArcWest,  distanceInPixelsSquaredArcEast);
-//
-////  const double latLonRatio = latitudeMiddleArcDistSquared  / longitudeMiddleArcDistSquared;
-////  const double lonLatRatio = longitudeMiddleArcDistSquared / latitudeMiddleArcDistSquared;
-////
-////  if (latLonRatio < 0.15) {
-////    _lastMeetsRenderCriteriaResult = longitudeMiddleArcDistSquared <= texWidthSquared;
-////  }
-////  else if (lonLatRatio < 0.15) {
-////    _lastMeetsRenderCriteriaResult = latitudeMiddleArcDistSquared <= texHeightSquared;
-////  }
-////  else {
-//    _lastMeetsRenderCriteriaResult = (latitudeMiddleArcDistSquared * longitudeMiddleArcDistSquared) <= (texHeightSquared * texWidthSquared);
-////  }
 
   _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) &&
                                     (distanceInPixelsSquaredArcSouth <= texHeightSquared) &&
@@ -525,7 +381,6 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
     return;
   }
 
-  //  TileTexturizer* texturizer = prc->getTexturizer();
   if (texturizer != NULL) {
     const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
 
@@ -597,14 +452,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                                            Color::newFromRGBA((float) 1.0, (float) 1.0, (float) 1.0, (float) 1.0), true);
       }
       _flatColorMesh->render(rc, glState);
-
-      //tessellatorMesh->render(rc, glState);
     }
   }
-
-
-  //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
-  //  boundingVolume->render(rc, parentState);
 }
 
 void Tile::debugRender(const G3MRenderContext* rc,
@@ -613,8 +462,7 @@ void Tile::debugRender(const G3MRenderContext* rc,
                        const LayerTilesRenderParameters* layerTilesRenderParameters) {
   Mesh* debugMesh = getDebugMesh(rc, tessellator, layerTilesRenderParameters);
   if (debugMesh != NULL) {
-    //debugMesh->render(rc);
-    debugMesh->render(rc,glState);
+    debugMesh->render(rc, glState);
   }
 }
 
@@ -658,7 +506,6 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
   }
 
   if (elevationDataProvider != NULL) {
-    //cancelElevationDataRequest(elevationDataProvider);
     if (_elevationDataRequest != NULL) {
       _elevationDataRequest->cancelRequest();
     }
