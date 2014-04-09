@@ -26,6 +26,7 @@ import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesEditorRenderer;
 import org.glob3.mobile.generated.ShapesRenderer;
 
+
 //import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,6 +38,7 @@ import java.util.LinkedList;
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
@@ -153,6 +155,7 @@ Activity {
 		boolean useInertia = true;
 		cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
 		cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
+		//cameraRenderer.addHandler(new CameraDoubleDragHandler());
 		cameraRenderer.addHandler(new CameraRotationHandler());
 		cameraRenderer.addHandler(new CameraDoubleTapHandler());
 		builder.setCameraRenderer(cameraRenderer);
