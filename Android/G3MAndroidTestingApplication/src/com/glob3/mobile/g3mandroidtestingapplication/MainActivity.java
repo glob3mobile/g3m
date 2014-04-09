@@ -25,6 +25,7 @@ import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapeLoadListener;
 import org.glob3.mobile.generated.ShapesEditorRenderer;
 import org.glob3.mobile.generated.ShapesRenderer;
+
 //import org.glob3.mobile.generated.SingleBillElevationDataProvider;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,6 +37,11 @@ import java.util.LinkedList;
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.CameraDoubleTapHandler;
+import org.glob3.mobile.generated.CameraRenderer;
+import org.glob3.mobile.generated.CameraRotationHandler;
+import org.glob3.mobile.generated.CameraSingleDragHandler;
+import org.glob3.mobile.generated.CameraZoomAndRotateHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.ElevationDataProvider;
@@ -73,7 +79,6 @@ import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
-
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.BoxShape;
 import org.glob3.mobile.generated.Shape;
@@ -85,9 +90,7 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.ShapeTouchListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.SceneJSShapesParser;
-
 import org.glob3.mobile.specific.SQLiteStorage_Android;
-
 
 import android.app.Activity;
 import android.content.res.AssetManager;
@@ -142,8 +145,17 @@ Activity {
 		builder.addRenderer(shapesRenderer);
       
       
-      Planet planet = Planet.createFlatEarth();
+      Planet planet = Planet.createEarth();
       builder.setPlanet(planet);
+
+		// add Camera handlers
+		CameraRenderer cameraRenderer = new CameraRenderer();
+		boolean useInertia = true;
+		cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+		cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
+		cameraRenderer.addHandler(new CameraRotationHandler());
+		cameraRenderer.addHandler(new CameraDoubleTapHandler());
+		builder.setCameraRenderer(cameraRenderer);
 
 
 
