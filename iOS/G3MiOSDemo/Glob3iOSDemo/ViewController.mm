@@ -427,6 +427,8 @@ public:
 
   builder.setShownSector(sector);
 
+  // builder.getPlanetRendererBuilder()->setShowStatistics(true);
+
   //  builder.setPlanet(Planet::createSphericalEarth());
   //  builder.setPlanet(Planet::createFlatEarth());
 
