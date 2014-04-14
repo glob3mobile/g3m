@@ -275,11 +275,11 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-//  [self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
 
   //  [self initWithMapBooBuilder];
 
-  [self initWithBuilderAndSegmentedWorld];
+//  [self initWithBuilderAndSegmentedWorld];
 
 //  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
 //                                                       Geodetic3D::fromDegrees(25.743467472995700263,
