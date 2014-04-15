@@ -31,7 +31,8 @@ void TileRasterizer::rasterize(const IImage* image,
                                const TileRasterizerContext& trc,
                                IImageListener* listener,
                                bool autodelete) const {
-  if (_enable) {
+  
+    if (_enable) {
       
     TileRasterizer_AsyncTask* rawRasterizeTask = getRawRasterizeTask(image, trc, listener, autodelete);
       

@@ -109,10 +109,10 @@
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MScenarioDEMDemoScene.hpp; sourceTree = "<group>"; };
 		CF37F5F0183D26500050CAEF /* 0576.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0576.bil; sourceTree = "<group>"; };
-		CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPhone.storyboard"; sourceTree = "<group>"; };
+		CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MainStoryboard-iPhone.storyboard"; sourceTree = "<group>"; };
 		CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MDemoBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPad.storyboard"; sourceTree = "<group>"; };
+		CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MainStoryboard-iPad.storyboard"; sourceTree = "<group>"; };
 		CF3F8FE81835867D00589B4C /* G3MSelectDemoSceneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3MSelectDemoSceneViewController.h; sourceTree = "<group>"; };
 		CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MSelectDemoSceneViewController.mm; sourceTree = "<group>"; };
 		CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoScene.cpp; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 		CFE3B3E9183ADB2D0078C796 /* planeDiffuse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = planeDiffuse.png; sourceTree = "<group>"; };
 		CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MIsosurfaceDemoScene.cpp; sourceTree = "<group>"; };
 		CFE3B3EE183C05F70078C796 /* G3MIsosurfaceDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MIsosurfaceDemoScene.hpp; sourceTree = "<group>"; };
-		CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "isosurface-mesh.json"; sourceTree = "<group>"; };
+		CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "isosurface-mesh.json"; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CFF64D4818329FE6006ABFF6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -172,7 +172,7 @@
 		E780A3CB16D29EA5000F0395 /* satellite-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "satellite-on-96x48.png"; sourceTree = "<group>"; };
 		E780A3CC16D29EA5000F0395 /* stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop.png; sourceTree = "<group>"; };
 		E780A3D416D29FAA000F0395 /* A320.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = A320.bson; sourceTree = "<group>"; };
-		E780A3D516D29FAA000F0395 /* A320.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = A320.json; sourceTree = "<group>"; };
+		E780A3D516D29FAA000F0395 /* A320.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = A320.json; sourceTree = "<group>"; };
 		E780A3D716D29FAA000F0395 /* A320-NWA.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A320-NWA.png"; sourceTree = "<group>"; };
 		E780A3D816D29FAA000F0395 /* A321-House.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A321-House.png"; sourceTree = "<group>"; };
 		E780A3D916D29FAA000F0395 /* NWA.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NWA.png; sourceTree = "<group>"; };
@@ -467,7 +467,6 @@
 			};
 			buildConfigurationList = E7D1B60016D2436700AF47C1 /* Build configuration list for PBXProject "G3MApp" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,

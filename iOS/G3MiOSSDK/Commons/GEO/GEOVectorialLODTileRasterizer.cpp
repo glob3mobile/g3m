@@ -30,7 +30,7 @@ const URL* BASE_URL= new URL("http://localhost:8080/vectorial", false);
 URL* GEOVectorialLODTileRasterizer::builURLForVectorialTile(const Tile* tile) const {
     
     std::string baseUrl = BASE_URL->getPath();
-    
+    //TODO:
     
     return NULL;
 }
@@ -105,9 +105,6 @@ public:
     }
     
     void runInBackground(const G3MContext* context) {
-        //    ILogger::instance()->logInfo("Parsing GEOObject buffer from \"%s\" (%db)",
-        //                                 _url.getPath().c_str(),
-        //                                 _buffer->size());
         
         if (_isBSON) {
             _geoObject = GEOJSONParser::parseBSON(_buffer);
@@ -125,8 +122,7 @@ public:
             ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
         }
         else {
-            //      ILogger::instance()->logInfo("Adding GEOObject to _geoRenderer");
-            _geoRenderer->addGEOObject(_geoObject, _symbolizer);
+            
             _geoObject = NULL;
         }
     }
