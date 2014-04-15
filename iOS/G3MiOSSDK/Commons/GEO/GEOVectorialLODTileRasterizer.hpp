@@ -20,6 +20,8 @@ class GEOVectorialLODTileRasterizer : public CanvasTileRasterizer {
 private:
     IDownloader *_downloader;
     
+    URL* builURLForVectorialTile(const Tile* tile) const;
+    
 public:
     GEOVectorialLODTileRasterizer()
     {
@@ -36,9 +38,7 @@ public:
                       IImageListener* listener,
                       bool autodelete) const;
     
-//    void addSymbol(const GEORasterSymbol* symbol);
-    
-    void clear();
+    //void clear();
     
     ICanvas* getCanvas(int width, int height) const {
         return CanvasTileRasterizer::getCanvas(width, height);

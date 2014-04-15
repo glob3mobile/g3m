@@ -74,7 +74,6 @@ _trc(trc),
 _listener(listener),
 _autodelete(autodelete)
 {
-    //_trc->_retain();
     TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) _trc->_tile->getTexturizerData();
     if (builderHolder != NULL) {
         _builder = builderHolder->get();
@@ -89,10 +88,6 @@ bool TileRasterizer::backgroundRasterize() const {
 }
 
 TileRasterizer_AsyncTask::~TileRasterizer_AsyncTask() {
-    //ILogger::instance()->logInfo("llamado destructor de AsyncTask");
-//    if(_trc != NULL){
-        //_trc->_release();
-//    }
     if(_builder != NULL){
         _builder->_release();
     }

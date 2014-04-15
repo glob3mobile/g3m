@@ -226,6 +226,9 @@ public:
     
     ~TextureUploader(){
         ILogger::instance()->logInfo("muere TextureUploader: %p, [%d,%d]",this, _tile->_row,_tile->_column );//fpulido
+        if(_trc != NULL){
+            delete _trc;
+        }
     }
     
 };
@@ -282,20 +285,12 @@ const std::vector<Petition*> TileTextureBuilder::cleanUpPetitions(const std::vec
 
 //fpulido, remove later
 void TileTextureBuilder::_retain() const {
-//    _contador++;
-//    _maxcontador++;
     RCObject::_retain();
-    //ILogger::instance()->logInfo("called _retain");
 }
 
 //fpulido, remove later
 void TileTextureBuilder::_release() const {
-//    _contador--;
-//    if(_contador == 0){
-//        ILogger::instance()->logInfo("MAX CONTADOR [%d,%d]= %d", _tile->_row, _tile->_column, _maxcontador);
-//    }
     RCObject::_release();
-    //ILogger::instance()->logInfo("called _release");
 }
 
 
@@ -760,9 +755,10 @@ void TextureUploader::imageCreated(const IImage* image) {
 }
 
 void TileTextureBuilder::composedAndUploaded() {
+    if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
     //if (_textureComposedAndUploaded){
-        //ILogger::instance()->logInfo("COMPOSED AND UPLOADED: [%d,%d]", _tile->_row, _tile->_column); //fpulido
         _tile->setTextureSolved(true);
         deletePetitions();
     //}
+    }
 }

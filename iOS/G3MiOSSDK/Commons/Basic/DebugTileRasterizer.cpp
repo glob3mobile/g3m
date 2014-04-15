@@ -183,7 +183,7 @@ private:
 #ifdef JAVA_CODE
     private ICanvas _canvas;
 #endif
-    
+    int _row, _column; //fpulido debug: quitar luego
     
 public:
     DebugTileRasterizer_AsyncTask(const IImage* image,
@@ -198,14 +198,14 @@ public:
     _debugTileRasterizer(tileRasterizer),
     _canvas(NULL)
     {
-        //_trc = new TileRasterizerContext(trc->_tile, trc->_mercator);
-        ILogger::instance()->logInfo("_builder->_retain from DebugTileRasterizer_AsyncTask: %p, [%d,%d]", _builder, _trc->_tile->_row, _trc->_tile->_column);
+        _row = _trc->_tile->_row;
+        _column = _trc->_tile->_column;
+        ILogger::instance()->logInfo("_builder->_retain from DebugTileRasterizer_AsyncTask: %p, [%d,%d]", _builder, _row, _column);
     }
     
     
     ~DebugTileRasterizer_AsyncTask() {
-        ILogger::instance()->logInfo("terminando la tarea DebugTileRasterizer: [%d,%d]", _trc->_tile->_row, _trc->_tile->_column);
-        //TileRasterizer_AsyncTask::~TileRasterizer_AsyncTask();
+        ILogger::instance()->logInfo("terminando la tarea DebugTileRasterizer: [%d,%d]", _row, _column);
     }
     
     void runInBackground(const G3MContext* context) {
@@ -213,14 +213,17 @@ public:
         _canvas = _debugTileRasterizer->buildCanvas(_image, _trc, _listener, _autodelete);
         _canvas->createImage(_listener, _autodelete);
         delete _image;
+        //_debugTileRasterizer->rawRasterize(_image, *_trc, _listener, _autodelete);
     }
     
     void onPostExecute(const G3MContext* context) {
-        
+        ILogger::instance()->logInfo("onPostExecute DebugTileRasterizer: [%d,%d]", _trc->_tile->_row, _trc->_tile->_column);
 //        _canvas = _debugTileRasterizer->buildCanvas(_image, _trc, _listener, _autodelete);
 //        _canvas->createImage(_listener, _autodelete);
 //        delete _image;
+        //_debugTileRasterizer->rawRasterize(_image, *_trc, _listener, _autodelete);
     }
+    
 };
 
 

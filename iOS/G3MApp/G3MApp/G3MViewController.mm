@@ -25,6 +25,8 @@
 #import <G3MiOSSDK/GFONT.hpp>
 #import <G3MiOSSDK/PlanetRendererBuilder.hpp>
 
+#include "SingularitiesTileRasterizer.hpp"
+
 
 @implementation G3MViewController
 
@@ -100,12 +102,16 @@ public:
   DebugTileRasterizer *debugTRaster = new DebugTileRasterizer(GFont::monospaced(), Color::green(), TRUE, TRUE);
     
   demoBuilder.getPlanetRendererBuilder()->addTileRasterizer(debugTRaster);
+    
+  SingularitiesTileRasterizer *singularitiesTRaster = new SingularitiesTileRasterizer(Color::red());
+   demoBuilder.getPlanetRendererBuilder()->addTileRasterizer(singularitiesTRaster);
   //----------
     
   demoBuilder.initializeWidget();
 
   _demoModel = demoBuilder.getModel();
 }
+
 
 - (void)viewDidAppear:(BOOL)animated
 {

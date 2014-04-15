@@ -216,7 +216,7 @@ void GEOTileRasterizer::rawRasterize(const IImage* image,
                                      IImageListener* listener,
                                      bool autodelete) const {
  
-  ILogger::instance()->logInfo("rawRasterize");
+  ILogger::instance()->logInfo("rawRasterize: [%d,%d]",trc._tile->_row,trc._tile->_column);
     
   const Tile* tile = trc._tile;
   _quadTree.acceptVisitor(tile->_sector, GEOTileRasterizer_QuadTreeVisitor(this,

@@ -24,39 +24,25 @@
 #include "IThreadUtils.hpp"
 
 
+const URL* BASE_URL= new URL("http://localhost:8080/vectorial", false);
 
+
+URL* GEOVectorialLODTileRasterizer::builURLForVectorialTile(const Tile* tile) const {
+    
+    std::string baseUrl = BASE_URL->getPath();
+    
+    
+    return NULL;
+}
 
 void GEOVectorialLODTileRasterizer::initialize(const G3MContext* context) {
     _downloader = context->getDownloader();
-    //TODO: necesito conseguir el GEORenderer, para poder hacerle luego
-    // el add addGEOObject().
+    _threadUtils = context->getThreadUtils(); //always init for background rasterize
 }
 
-void GEOVectorialLODTileRasterizer::clear() {
-    //TODO
-    notifyChanges();
-}
-
-//void GEOVectorialLODTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
-//    
-//    const Sector* sector = symbol->getSector();
-//    
-//    if (sector == NULL) {
-//        //    ILogger::instance()->logError("Symbol %s has not sector, can't symbolize",
-//        //                                  symbol->description().c_str());
-//        delete symbol;
-//    }
-//    else {
-//        //const bool added = _quadTree.add(*sector, symbol);
-//        const bool added = true;
-//        
-//        if (added) {
-//            notifyChanges();
-//        }
-//        else {
-//            delete symbol;
-//        }
-//    }
+//void GEOVectorialLODTileRasterizer::clear() {
+//    //TODO: ??
+//    notifyChanges();
 //}
 
 
@@ -65,11 +51,11 @@ void GEOVectorialLODTileRasterizer::rawRasterize(const IImage* image,
                                      IImageListener* listener,
                                      bool autodelete) const {
     
-//    _downloader->requestBuffer(<#const URL &url#>, <#long long priority#>, <#const TimeInterval &timeToCache#>, <#bool readExpired#>, <#IBufferDownloadListener *listener#>, true);
+//    _downloader->requestBuffer(<#const URL &url#>, <#long long priority#>, <#const TimeInterval &timeToCache#>, , <#IBufferDownloadListener *listener#>, true);
     
     
     
-    //GEORenderer gr = trc->geoRenderer;
+   
     
 }
 
@@ -84,7 +70,7 @@ TileRasterizer_AsyncTask* GEOVectorialLODTileRasterizer::getRawRasterizeTask(con
 
 //---------------
 
-class GEOVectorialLODParserAsyncTask : public GAsyncTask {
+class GEOVectorialLODParser_AsyncTask : public GAsyncTask {
 private:
 #ifdef C_CODE
     const URL          _url;
@@ -94,7 +80,6 @@ private:
 #endif
     
     IByteBuffer*   _buffer;
-    GEORenderer*   _geoRenderer;
     GEORasterSymbolizer* _symbolizer;
     
     const bool _isBSON;
@@ -102,21 +87,19 @@ private:
     GEOObject* _geoObject;
     
 public:
-    GEOVectorialLODParserAsyncTask(const URL& url,
+    GEOVectorialLODParser_AsyncTask(const URL& url,
                                    IByteBuffer* buffer,
-                                   GEORenderer* geoRenderer,
                                    GEORasterSymbolizer* symbolizer,
                                    bool isBSON) :
     _url(url),
     _buffer(buffer),
-    _geoRenderer(geoRenderer),
     _symbolizer(symbolizer),
     _isBSON(isBSON),
     _geoObject(NULL)
     {
     }
     
-    ~GEOVectorialLODParserAsyncTask() {
+    ~GEOVectorialLODParser_AsyncTask() {
         delete _buffer;
         //    delete _geoObject;
     }
@@ -153,17 +136,15 @@ public:
 
 class GEOVectorialLODBufferDownloadListener : public IBufferDownloadListener {
 private:
-    GEORenderer*        _geoRenderer;
+
     GEORasterSymbolizer*      _symbolizer;
     const IThreadUtils* _threadUtils;
     const bool          _isBSON;
     
 public:
-    GEOVectorialLODBufferDownloadListener(GEORenderer* geoRenderer,
-                                                GEORasterSymbolizer* symbolizer,
+    GEOVectorialLODBufferDownloadListener(GEORasterSymbolizer* symbolizer,
                                                 const IThreadUtils* threadUtils,
                                                 bool isBSON) :
-    _geoRenderer(geoRenderer),
     _symbolizer(symbolizer),
     _threadUtils(threadUtils),
     _isBSON(isBSON)
@@ -177,9 +158,8 @@ public:
                                      url.getPath().c_str(),
                                      buffer->size());
         
-        _threadUtils->invokeAsyncTask(new GEOVectorialLODParserAsyncTask(url,
+        _threadUtils->invokeAsyncTask(new GEOVectorialLODParser_AsyncTask(url,
                                                                                buffer,
-                                                                               _geoRenderer,
                                                                                _symbolizer,
                                                                                _isBSON),
                                       true);

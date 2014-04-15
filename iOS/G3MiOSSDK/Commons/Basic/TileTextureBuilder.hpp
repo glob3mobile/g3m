@@ -39,8 +39,6 @@ private:
     int                    _stepsDone;
     
     TexturesHandler* _texturesHandler;
-//    mutable int _contador = 1;//fpulido
-//    mutable int _maxcontador = 1;//fpulido
     
 #ifdef C_CODE
     const Vector2I   _tileTextureResolution;

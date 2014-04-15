@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		349B025B18F545CA003EAA57 /* GEOVectorialLODRasterSymbolizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 349B025918F545CA003EAA57 /* GEOVectorialLODRasterSymbolizer.cpp */; };
 		34F1D31918D6F409004E1BBB /* GEOVectorialLODTileRasterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34F1D31718D6F409004E1BBB /* GEOVectorialLODTileRasterizer.cpp */; };
 		34F1D31C18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34F1D31A18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp */; };
 		34F1D32118E2E735004E1BBB /* TileTextureBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34F1D31F18E2E735004E1BBB /* TileTextureBuilder.cpp */; };
-		34F1D32318E5940B004E1BBB /* TileTextureBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34F1D32018E2E735004E1BBB /* TileTextureBuilder.hpp */; };
 		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
 		383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
@@ -283,7 +283,6 @@
 		CFAB754D17AC45CF00852FA7 /* SurfaceElevationProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAB754B17AC455300852FA7 /* SurfaceElevationProvider.hpp */; };
 		CFAB754E17AC510400852FA7 /* GLState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D80A28701746572E0058CEC3 /* GLState.hpp */; };
 		CFAC9E9F18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFAC9E9D18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp */; };
-		CFAC9EA018CE27A500EE57EF /* GEOLabelRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAC9E9E18CE277D00EE57EF /* GEOLabelRasterSymbol.hpp */; };
 		CFADEB6D17A42C75001914B2 /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFADEB6B17A42C75001914B2 /* ChangedListener.cpp */; };
 		CFADEB6E17A42D11001914B2 /* ChangedListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFADEB6C17A42C75001914B2 /* ChangedListener.hpp */; };
 		CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB5274E16D5607F008374C2 /* Interpolator.cpp */; };
@@ -680,8 +679,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				34F1D32318E5940B004E1BBB /* TileTextureBuilder.hpp in CopyFiles */,
-				CFAC9EA018CE27A500EE57EF /* GEOLabelRasterSymbol.hpp in CopyFiles */,
 				D8173ECB18A3A3AB001E7B57 /* TaitBryanAngles.hpp in CopyFiles */,
 				D856FBFD189BB5610053F514 /* CoordinateSystem.hpp in CopyFiles */,
 				CF6FE3F11899A2AC00C05775 /* G3MMeshParser.hpp in CopyFiles */,
@@ -1032,6 +1029,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		349B025918F545CA003EAA57 /* GEOVectorialLODRasterSymbolizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOVectorialLODRasterSymbolizer.cpp; sourceTree = "<group>"; };
+		349B025A18F545CA003EAA57 /* GEOVectorialLODRasterSymbolizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEOVectorialLODRasterSymbolizer.hpp; sourceTree = "<group>"; };
 		34F1D31718D6F409004E1BBB /* GEOVectorialLODTileRasterizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOVectorialLODTileRasterizer.cpp; path = Commons/GEO/GEOVectorialLODTileRasterizer.cpp; sourceTree = "<group>"; };
 		34F1D31818D6F409004E1BBB /* GEOVectorialLODTileRasterizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOVectorialLODTileRasterizer.hpp; path = Commons/GEO/GEOVectorialLODTileRasterizer.hpp; sourceTree = "<group>"; };
 		34F1D31A18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterSymbolizer.cpp; path = Commons/GEO/GEORasterSymbolizer.cpp; sourceTree = "<group>"; };
@@ -2426,6 +2425,8 @@
 				34F1D31818D6F409004E1BBB /* GEOVectorialLODTileRasterizer.hpp */,
 				34F1D31A18D6FFA5004E1BBB /* GEORasterSymbolizer.cpp */,
 				34F1D31B18D6FFA5004E1BBB /* GEORasterSymbolizer.hpp */,
+				349B025918F545CA003EAA57 /* GEOVectorialLODRasterSymbolizer.cpp */,
+				349B025A18F545CA003EAA57 /* GEOVectorialLODRasterSymbolizer.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -2904,6 +2905,7 @@
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
 				CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */,
 				CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */,
+				349B025B18F545CA003EAA57 /* GEOVectorialLODRasterSymbolizer.cpp in Sources */,
 				CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */,
 				CFD41F601875E59800889B7C /* DownloaderImageBuilder.cpp in Sources */,
 				CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */,

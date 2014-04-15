@@ -19,12 +19,12 @@ class GEORasterSymbol;
 class GEOTileRasterizer : public CanvasTileRasterizer {
 private:
   QuadTree _quadTree;
-  const GEOTileRasterizer* _geoTileRasterizer;
+  //const GEOTileRasterizer* _geoTileRasterizer;
     
 public:
   GEOTileRasterizer()
   {
-      _geoTileRasterizer = this;
+      //_geoTileRasterizer = this;
   }
 
   std::string getId() const {
