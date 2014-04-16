@@ -409,134 +409,134 @@ public:
   }
 
   bool composeAndUploadTexture() {
-#ifdef JAVA_CODE
-    synchronized (this) {
-#endif
+//#ifdef JAVA_CODE
+//    synchronized (this) {
+//#endif
 
-      if (_mesh == NULL) {
+    if (_mesh == NULL) {
+      return false;
+    }
+
+    std::vector<const IImage*>     images;
+    std::vector<RectangleF*> sourceRects;
+    std::vector<RectangleF*> destRects;
+    std::vector<float> transparencies;
+    std::string textureId = _tile->getKey().tinyDescription();
+
+    const Sector tileSector = _tile->_sector;
+
+    for (int i = 0; i < _petitionsCount; i++) {
+      const Petition* petition = _petitions[i];
+      IImage* image = petition->getImage();
+
+      if (image != NULL) {
+        const Sector imageSector = petition->getSector();
+        //Finding intersection image sector - tile sector = srcReq
+        const Sector intersectionSector = tileSector.intersection(imageSector);
+
+        RectangleF* sourceRect = NULL;
+        if (!intersectionSector.isEquals(imageSector)) {
+          sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
+                                         imageSector,
+                                         intersectionSector);
+        }
+        else {
+          sourceRect = new RectangleF(0, 0,
+                                      image->getWidth(), image->getHeight());
+        }
+
+        //Part of the image we are going to draw
+        sourceRects.push_back(sourceRect);
+
+        images.push_back(image);
+
+        //Where we are going to draw the image
+        destRects.push_back(getInnerRectangle(_tileTextureResolution._x,
+                                              _tileTextureResolution._y,
+                                              tileSector,
+                                              intersectionSector));
+        textureId += petition->getURL().getPath();
+        textureId += "_";
+
+        //Layer transparency set by user
+        transparencies.push_back(petition->getLayerTransparency());
+      }
+      else{
         return false;
       }
-
-      std::vector<const IImage*>     images;
-      std::vector<RectangleF*> sourceRects;
-      std::vector<RectangleF*> destRects;
-      std::vector<float> transparencies;
-      std::string textureId = _tile->getKey().tinyDescription();
-
-      const Sector tileSector = _tile->_sector;
-
-      for (int i = 0; i < _petitionsCount; i++) {
-        const Petition* petition = _petitions[i];
-        IImage* image = petition->getImage();
-
-        if (image != NULL) {
-          const Sector imageSector = petition->getSector();
-          //Finding intersection image sector - tile sector = srcReq
-          const Sector intersectionSector = tileSector.intersection(imageSector);
-
-          RectangleF* sourceRect = NULL;
-          if (!intersectionSector.isEquals(imageSector)) {
-            sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
-                                           imageSector,
-                                           intersectionSector);
-          }
-          else {
-            sourceRect = new RectangleF(0, 0,
-                                        image->getWidth(), image->getHeight());
-          }
-
-          //Part of the image we are going to draw
-          sourceRects.push_back(sourceRect);
-
-          images.push_back(image);
-
-          //Where we are going to draw the image
-          destRects.push_back(getInnerRectangle(_tileTextureResolution._x,
-                                                _tileTextureResolution._y,
-                                                tileSector,
-                                                intersectionSector));
-          textureId += petition->getURL().getPath();
-          textureId += "_";
-
-          //Layer transparency set by user
-          transparencies.push_back(petition->getLayerTransparency());
-        }
-        else{
-          return false;
-        }
-      }
-
-      if (images.size() > 0) {
-
-        if (_tileRasterizer != NULL) {
-          textureId += "_";
-          textureId += _tileRasterizer->getId();
-        }
-
-        if (images.size() != transparencies.size()) {
-          ILogger::instance()->logError("Wrong number of transparencies");
-        }
-
-        IImageUtils::combine(_tileTextureResolution,
-                             images,
-                             sourceRects,
-                             destRects,
-                             transparencies,
-                             new TextureUploader(this,
-                                                 _tile,
-                                                 _mercator,
-                                                 _tileRasterizer,
-                                                 sourceRects,
-                                                 destRects,
-                                                 textureId),
-                             true);
-        return true;
-      }
-
-      return false;
-
-#ifdef JAVA_CODE
     }
-#endif
+
+    if (images.size() > 0) {
+
+      if (_tileRasterizer != NULL) {
+        textureId += "_";
+        textureId += _tileRasterizer->getId();
+      }
+
+      if (images.size() != transparencies.size()) {
+        ILogger::instance()->logError("Wrong number of transparencies");
+      }
+
+      IImageUtils::combine(_tileTextureResolution,
+                           images,
+                           sourceRects,
+                           destRects,
+                           transparencies,
+                           new TextureUploader(this,
+                                               _tile,
+                                               _mercator,
+                                               _tileRasterizer,
+                                               sourceRects,
+                                               destRects,
+                                               textureId),
+                           true);
+      return true;
+    }
+
+    return false;
+
+//#ifdef JAVA_CODE
+//    }
+//#endif
   }
 
   void imageCreated(const IImage* image,
                     const std::vector<RectangleF*>& srcRects,
                     const std::vector<RectangleF*>& dstRects,
                     const std::string& textureId) {
-#ifdef JAVA_CODE
-    synchronized (this) {
-#endif
+//#ifdef JAVA_CODE
+//    synchronized (this) {
+//#endif
 
-      if (_mesh != NULL) {
-        const bool generateMipmap = true;
+    if (_mesh != NULL) {
+      const bool generateMipmap = true;
 
-        const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
-                                                                                        GLFormat::rgba(),
-                                                                                        textureId,
-                                                                                        generateMipmap);
+      const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
+                                                                                      GLFormat::rgba(),
+                                                                                      textureId,
+                                                                                      generateMipmap);
 
-        if (glTextureId != NULL) {
-          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
-            delete glTextureId;
-            //_texturesHandler->releaseGLTextureId(glTextureId);
-          }
+      if (glTextureId != NULL) {
+        if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
+          delete glTextureId;
+          //_texturesHandler->releaseGLTextureId(glTextureId);
         }
       }
-
-      IFactory::instance()->deleteImage(image);
-
-      for (int i = 0; i < srcRects.size(); i++) {
-        delete srcRects[i];
-      }
-
-      for (int i = 0; i < dstRects.size(); i++) {
-        delete dstRects[i];
-      }
-
-#ifdef JAVA_CODE
     }
-#endif
+
+    IFactory::instance()->deleteImage(image);
+
+    for (int i = 0; i < srcRects.size(); i++) {
+      delete srcRects[i];
+    }
+
+    for (int i = 0; i < dstRects.size(); i++) {
+      delete dstRects[i];
+    }
+
+//#ifdef JAVA_CODE
+//    }
+//#endif
   }
 
   void done() {
@@ -671,17 +671,13 @@ public:
   }
 
   void cleanMesh() {
-#ifdef JAVA_CODE
-    synchronized (this) {
-#endif
-
-      if (_mesh != NULL) {
-        _mesh = NULL;
-      }
-
-#ifdef JAVA_CODE
-    }
-#endif
+//#ifdef JAVA_CODE
+//    synchronized (this) {
+//#endif
+    _mesh = NULL;
+//#ifdef JAVA_CODE
+//    }
+//#endif
   }
 
   void cleanTile() {
