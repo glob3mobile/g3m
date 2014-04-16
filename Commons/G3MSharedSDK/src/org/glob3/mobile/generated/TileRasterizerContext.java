@@ -1,28 +1,22 @@
 package org.glob3.mobile.generated; 
 //
-//  TileRasterizer.cpp
+//  TileRasterizerContext.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 7/8/13.
+//  Created by Diego Gomez Deck on 4/16/14.
 //
 //
 
 //
-//  TileRasterizer.hpp
+//  TileRasterizerContext.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 7/8/13.
+//  Created by Diego Gomez Deck on 4/16/14.
 //
 //
 
 
-
-//class IImage;
 //class Tile;
-//class IImageListener;
-//class ChangedListener;
-//class G3MContext;
-
 
 public class TileRasterizerContext
 {
