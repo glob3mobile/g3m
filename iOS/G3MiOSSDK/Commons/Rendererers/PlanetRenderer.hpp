@@ -46,7 +46,7 @@ private:
   int _tilesVisibleByLevel[_maxLOD];
   int _tilesRenderedByLevel[_maxLOD];
 
-  int _splitsCountInFrame;
+//  int _splitsCountInFrame;
   int _buildersStartsInFrame;
 
   Sector* _renderedSector;
@@ -57,7 +57,7 @@ public:
   _tilesProcessed(0),
   _tilesVisible(0),
   _tilesRendered(0),
-  _splitsCountInFrame(0),
+//  _splitsCountInFrame(0),
   _buildersStartsInFrame(0),
   _renderedSector(NULL)
   {
@@ -76,7 +76,7 @@ public:
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _splitsCountInFrame = 0;
+//    _splitsCountInFrame = 0;
     _buildersStartsInFrame = 0;
     delete _renderedSector;
     _renderedSector = NULL;
@@ -87,13 +87,13 @@ public:
     }
   }
 
-  int getSplitsCountInFrame() const {
-    return _splitsCountInFrame;
-  }
-
-  void computeSplitInFrame() {
-    _splitsCountInFrame++;
-  }
+//  int getSplitsCountInFrame() const {
+//    return _splitsCountInFrame;
+//  }
+//
+//  void computeSplitInFrame() {
+//    _splitsCountInFrame++;
+//  }
 
   int getBuildersStartsInFrame() const {
     return _buildersStartsInFrame;

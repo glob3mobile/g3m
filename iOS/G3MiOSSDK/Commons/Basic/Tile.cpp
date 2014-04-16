@@ -309,12 +309,12 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   if (tilesRenderParameters->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
-      if (tilesStatistics->getSplitsCountInFrame() > 0) {
-        // there are not more splitsCount-budget to spend
-        return true;
-      }
+//      if (tilesStatistics->getSplitsCountInFrame() > 0) {
+//        // there are not more splitsCount-budget to spend
+//        return true;
+//      }
 
-      if (lastSplitTimer->elapsedTimeInMilliseconds() < 25) {
+      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
         // there are not more time-budget to spend
         return true;
       }
@@ -669,7 +669,7 @@ void Tile::render(const G3MRenderContext* rc,
       std::vector<Tile*>* subTiles = getSubTiles(layerTilesRenderParameters->_mercator);
       if (_justCreatedSubtiles) {
         lastSplitTimer->start();
-        tilesStatistics->computeSplitInFrame();
+//        tilesStatistics->computeSplitInFrame();
         _justCreatedSubtiles = false;
       }
 

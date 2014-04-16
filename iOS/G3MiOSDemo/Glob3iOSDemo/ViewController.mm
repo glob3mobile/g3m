@@ -409,7 +409,7 @@ public:
 }
 
 
-- (void)  initializeElevationDataProvider: (G3MBuilder_iOS&) builder
+- (void) initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
   float verticalExaggeration = 1.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
@@ -536,7 +536,7 @@ public:
   //                                  NULL)
   //                     );
 
-  bool useElevations = true;
+  bool useElevations = false;
   if (useElevations) {
     [self initializeElevationDataProvider: builder];
   }
@@ -546,13 +546,13 @@ public:
 //  builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
 //                                                               TimeInterval::fromSeconds(3));
 
-  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
-                                                                                Color::yellow(),
-                                                                                true,  // showIDLabel
-                                                                                false, // showSectorLabels,
-                                                                                true   // showTileBounds
-                                                                                ));
-  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
+//  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
+//                                                                                Color::yellow(),
+//                                                                                true,  // showIDLabel
+//                                                                                false, // showSectorLabels,
+//                                                                                true   // showTileBounds
+//                                                                                ));
+//  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
 
   ProtoRenderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
   builder.setBusyRenderer(busyRenderer);
@@ -978,8 +978,8 @@ public:
                                                                           planet: planet];
   builder.setInitializationTask(initializationTask, true);
 
-  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
-  builder.addPeriodicalTask(periodicalTask);
+//  PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
+//  builder.addPeriodicalTask(periodicalTask);
 
   const bool logFPS = false;
   builder.setLogFPS(logFPS);
@@ -1371,7 +1371,7 @@ public:
     layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
   }
 
-  const bool useMapBox = true;
+  const bool useMapBox = false;
   if (useMapBox) {
     //const std::string mapKey = "dgd.map-v93trj8v";
     //const std::string mapKey = "examples.map-cnkhv76j";
@@ -1393,11 +1393,11 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = false;
+  const bool useBingMaps = true;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
-                                          //BingMapType::AerialWithLabels(),
-                                          BingMapType::Aerial(),
+                                          BingMapType::AerialWithLabels(),
+                                          //BingMapType::Aerial(),
                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                           TimeInterval::fromDays(30)) );
   }
@@ -3004,7 +3004,8 @@ public:
         }
       }
 
-      if (true) {
+      if (false) {
+#warning Diego at work!
         //      NSString* geojsonName = @"geojson/countries";
         NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
