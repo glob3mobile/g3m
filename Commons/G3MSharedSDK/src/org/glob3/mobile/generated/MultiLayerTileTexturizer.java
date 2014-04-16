@@ -60,7 +60,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean isForcedFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
+  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
   {
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
   
@@ -71,7 +71,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     }
   
     TileTextureBuilder builder = builderHolder.get();
-    if (isForcedFullRender)
+    if (forceFullRender)
     {
       builder.start();
     }

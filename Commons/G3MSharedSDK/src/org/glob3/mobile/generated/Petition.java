@@ -27,11 +27,12 @@ package org.glob3.mobile.generated;
 
 public class Petition
 {
-  private final Sector _sector;
+//  const Sector* _sector;
+  private final Sector _sector ;
   private IImage _image;
   private final float _layerTransparency;
 
-  final private URL _url; //Conversor creates class "Url"
+  final private URL _url;
 
   private final long _timeToCacheInMS;
   private final boolean _readExpired;
@@ -46,6 +47,7 @@ public class Petition
 
 
   public Petition(Sector sector, URL url, TimeInterval timeToCache, boolean readExpired, boolean isTransparent, float layerTransparency)
+//  _sector(new Sector(sector)),
   {
      _sector = new Sector(sector);
      _url = url;
@@ -59,8 +61,7 @@ public class Petition
 
   public void dispose()
   {
-    if (_sector != null)
-       _sector.dispose();
+//    delete _sector;
     releaseImage();
   }
 
@@ -118,7 +119,7 @@ public class Petition
     isb.addString(_url.description());
     isb.addString(", sector=");
     isb.addString(_sector.description());
-    isb.addString(", buffer=");
+    isb.addString(", image=");
     if (_image == null)
     {
       isb.addString("NULL");
