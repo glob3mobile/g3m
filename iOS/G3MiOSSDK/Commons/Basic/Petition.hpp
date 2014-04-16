@@ -26,7 +26,6 @@ class MutableVector2D;
 
 class Petition {
 private:
-//  const Sector* _sector;
   const Sector _sector;
   IImage* _image;
   const float _layerTransparency;
@@ -40,22 +39,21 @@ private:
 
   const long long _timeToCacheInMS;
   const bool      _readExpired;
-  
+
   const bool _isTransparent;
-  
+
   Petition(const Petition& that);
-  
+
   void operator=(const Petition& that);
-  
+
 public:
-  
+
   Petition(const Sector& sector,
            const URL& url,
            const TimeInterval& timeToCache,
            bool readExpired,
            bool isTransparent,
            float layerTransparency):
-//  _sector(new Sector(sector)),
   _sector(sector),
   _url(url),
   _timeToCacheInMS(timeToCache._milliseconds),
@@ -64,33 +62,27 @@ public:
   _image(NULL),
   _layerTransparency(layerTransparency)
   {
-
   }
-  
+
   ~Petition() {
-//    delete _sector;
     releaseImage();
   }
-  
+
   void releaseImage();
-  
-  bool hasImage() const {
-    return (_image != NULL);
-  }
-  
+
   const URL getURL() const {
     return _url;
   }
-  
+
   const Sector getSector() const {
     return _sector;
   }
-  
+
   void setImage(IImage* image) {
     releaseImage();
     _image = image;
   }
-  
+
   IImage* getImage() const {
     return _image;
   }
