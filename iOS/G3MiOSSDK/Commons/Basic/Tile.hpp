@@ -128,7 +128,7 @@ private:
                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                         const LayerSet* layerSet,
                         const TilesRenderParameters* tilesRenderParameters,
-                        bool isForcedFullRender,
+                        bool forceFullRender,
                         long long texturePriority,
                         bool logTilesPetitions);
 
@@ -214,7 +214,7 @@ public:
                                const LayerTilesRenderParameters* layerTilesRenderParameters,
                                const LayerSet* layerSet,
                                const TilesRenderParameters* tilesRenderParameters,
-                               bool isForcedFullRender,
+                               bool forceFullRender,
                                long long texturePriority,
                                float verticalExaggeration,
                                bool logTilesPetitions);
@@ -237,7 +237,7 @@ public:
               TileRasterizer* tileRasterizer,
               const LayerSet* layerSet,
               const Sector* renderedSector,
-              bool isForcedFullRender,
+              bool forceFullRender,
               long long texturePriority,
               double texWidth,
               double texHeight,

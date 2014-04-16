@@ -813,7 +813,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                           TileRasterizer* tileRasterizer,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const LayerSet* layerSet,
-                                          bool isForcedFullRender,
+                                          bool forceFullRender,
                                           long long texturePriority,
                                           Tile* tile,
                                           Mesh* tessellatorMesh,
@@ -841,7 +841,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
   }
 
   TileTextureBuilder* builder = builderHolder->get();
-  if (isForcedFullRender) {
+  if (forceFullRender) {
     builder->start();
   }
   else {

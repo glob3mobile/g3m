@@ -42,7 +42,7 @@ public:
                   TileRasterizer* tileRasterizer,
                   const LayerTilesRenderParameters* layerTilesRenderParameters,
                   const LayerSet* layerSet,
-                  bool isForcedFullRender,
+                  bool forceFullRender,
                   long long texturePriority,
                   Tile* tile,
                   Mesh* tessellatorMesh,

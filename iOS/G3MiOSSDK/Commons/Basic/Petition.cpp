@@ -16,8 +16,8 @@ const std::string Petition::description() const {
   isb->addString("Petition(url=");
   isb->addString(_url.description());
   isb->addString(", sector=");
-  isb->addString(_sector->description());
-  isb->addString(", buffer=");
+  isb->addString(_sector.description());
+  isb->addString(", image=");
   if (_image == NULL) {
     isb->addString("NULL");
   }

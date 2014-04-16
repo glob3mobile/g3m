@@ -26,15 +26,16 @@ class MutableVector2D;
 
 class Petition {
 private:
-  const Sector* _sector;
+//  const Sector* _sector;
+  const Sector _sector;
   IImage* _image;
   const float _layerTransparency;
 
 #ifdef C_CODE
-  const URL     _url;
+  const URL _url;
 #endif
 #ifdef JAVA_CODE
-  final private URL _url; //Conversor creates class "Url"
+  final private URL _url;
 #endif
 
   const long long _timeToCacheInMS;
@@ -54,7 +55,8 @@ public:
            bool readExpired,
            bool isTransparent,
            float layerTransparency):
-  _sector(new Sector(sector)),
+//  _sector(new Sector(sector)),
+  _sector(sector),
   _url(url),
   _timeToCacheInMS(timeToCache._milliseconds),
   _readExpired(readExpired),
@@ -66,7 +68,7 @@ public:
   }
   
   ~Petition() {
-    delete _sector;
+//    delete _sector;
     releaseImage();
   }
   
@@ -80,8 +82,8 @@ public:
     return _url;
   }
   
-  Sector getSector() const {
-    return *_sector;
+  const Sector getSector() const {
+    return _sector;
   }
   
   void setImage(IImage* image) {

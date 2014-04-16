@@ -464,7 +464,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       layerTilesRenderParameters,
                                       _layerSet,
                                       _tilesRenderParameters,
-                                      true,
+                                      true, // forceFullRender
                                       _texturePriority,
                                       _verticalExaggeration,
                                       _logTilesPetitions);
@@ -706,7 +706,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _tileRasterizer,
                      _layerSet,
                      _renderedSector,
-                     _firstRender, /* if first render, force full render */
+                     _firstRender, /* if first render, forceFullRender */
                      _texturePriority,
                      texWidthSquared,     //SENDING SQUARED TEX SIZE
                      texHeightSquared,

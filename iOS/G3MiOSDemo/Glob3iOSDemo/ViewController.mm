@@ -143,15 +143,15 @@
 
 
 
-class TestVisibleSectorListener : public VisibleSectorListener {
-public:
-  void onVisibleSectorChange(const Sector& visibleSector,
-                             const Geodetic3D& cameraPosition) {
-    ILogger::instance()->logInfo("VisibleSector=%s, CameraPosition=%s",
-                                 visibleSector.description().c_str(),
-                                 cameraPosition.description().c_str());
-  }
-};
+//class TestVisibleSectorListener : public VisibleSectorListener {
+//public:
+//  void onVisibleSectorChange(const Sector& visibleSector,
+//                             const Geodetic3D& cameraPosition) {
+//    ILogger::instance()->logInfo("VisibleSector=%s, CameraPosition=%s",
+//                                 visibleSector.description().c_str(),
+//                                 cameraPosition.description().c_str());
+//  }
+//};
 
 
 Mesh* createSectorMesh(const Planet* planet,
@@ -483,16 +483,16 @@ public:
 };
 
 
-class SampleTileRenderingListener : public TileRenderingListener {
-public:
-  void startRendering(const Tile* tile) {
-    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-  }
-
-  void stopRendering(const Tile* tile) {
-    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
-  }
-};
+//class SampleTileRenderingListener : public TileRenderingListener {
+//public:
+//  void startRendering(const Tile* tile) {
+//    ILogger::instance()->logInfo("** Start rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+//  }
+//
+//  void stopRendering(const Tile* tile) {
+//    ILogger::instance()->logInfo("** Stop rendering tile %d/%d/%d", tile->_level, tile->_column, tile->_row);
+//  }
+//};
 
 
 - (void) initCustomizedWithBuilder
@@ -500,7 +500,7 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
 
 
-  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
+//  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
   GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
@@ -543,8 +543,8 @@ public:
 
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
-  builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
-                                                               TimeInterval::fromSeconds(3));
+//  builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
+//                                                               TimeInterval::fromSeconds(3));
 
   builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
                                                                                 Color::yellow(),
