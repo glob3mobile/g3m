@@ -59,29 +59,61 @@ public class SectorVec
       final List<SectorVec> subSectors = new ArrayList<SectorVec>(4);
       final int subLevel = this._level + 1;
 
-      int rowInc = this._row - 1;
-      int columnInc = this._column - 1;
-      final SectorVec s11 = new SectorVec(this._lower, this._center, this, subLevel, this._row + rowInc, this._column + columnInc);
+      int rowInc = this._row;
+      int columnInc = this._column;
+      final SectorVec s00 = new SectorVec(this._lower, this._center, this, subLevel, this._row + rowInc, this._column + columnInc);
 
-      rowInc = this._row - 1;
-      columnInc = this._column;
-      final SectorVec s12 = new SectorVec(new Geodetic2D(this._lower._latitude, this._center._longitude), new Geodetic2D(
+      rowInc = this._row;
+      columnInc = this._column + 1;
+      final SectorVec s01 = new SectorVec(new Geodetic2D(this._lower._latitude, this._center._longitude), new Geodetic2D(
                this._center._latitude, this._upper._longitude), this, subLevel, this._row + rowInc, this._column + columnInc);
-      rowInc = this._row;
-      columnInc = this._column - 1;
-      final SectorVec s21 = new SectorVec(new Geodetic2D(this._center._latitude, this._lower._longitude), new Geodetic2D(
-               this._upper._latitude, this._center._longitude), this, subLevel, this._row + rowInc, this._column + columnInc);
-      rowInc = this._row;
-      columnInc = this._column;
-      final SectorVec s22 = new SectorVec(this._center, this._upper, this, subLevel, this._row + rowInc, this._column + columnInc);
 
+      rowInc = this._row + 1;
+      columnInc = this._column;
+      final SectorVec s10 = new SectorVec(new Geodetic2D(this._center._latitude, this._lower._longitude), new Geodetic2D(
+               this._upper._latitude, this._center._longitude), this, subLevel, this._row + rowInc, this._column + columnInc);
+
+      rowInc = this._row + 1;
+      columnInc = this._column + 1;
+      final SectorVec s11 = new SectorVec(this._center, this._upper, this, subLevel, this._row + rowInc, this._column + columnInc);
+
+      subSectors.add(s00);
+      subSectors.add(s01);
+      subSectors.add(s10);
       subSectors.add(s11);
-      subSectors.add(s12);
-      subSectors.add(s21);
-      subSectors.add(s22);
 
       return subSectors;
    }
+
+
+   //   public List<SectorVec> getSubsectors() {
+   //
+   //      final List<SectorVec> subSectors = new ArrayList<SectorVec>(4);
+   //      final int subLevel = this._level + 1;
+   //
+   //      int rowInc = this._row - 1;
+   //      int columnInc = this._column - 1;
+   //      final SectorVec s11 = new SectorVec(this._lower, this._center, this, subLevel, this._row + rowInc, this._column + columnInc);
+   //
+   //      rowInc = this._row - 1;
+   //      columnInc = this._column;
+   //      final SectorVec s12 = new SectorVec(new Geodetic2D(this._lower._latitude, this._center._longitude), new Geodetic2D(
+   //               this._center._latitude, this._upper._longitude), this, subLevel, this._row + rowInc, this._column + columnInc);
+   //      rowInc = this._row;
+   //      columnInc = this._column - 1;
+   //      final SectorVec s21 = new SectorVec(new Geodetic2D(this._center._latitude, this._lower._longitude), new Geodetic2D(
+   //               this._upper._latitude, this._center._longitude), this, subLevel, this._row + rowInc, this._column + columnInc);
+   //      rowInc = this._row;
+   //      columnInc = this._column;
+   //      final SectorVec s22 = new SectorVec(this._center, this._upper, this, subLevel, this._row + rowInc, this._column + columnInc);
+   //
+   //      subSectors.add(s11);
+   //      subSectors.add(s12);
+   //      subSectors.add(s21);
+   //      subSectors.add(s22);
+   //
+   //      return subSectors;
+   //   }
 
 
    @Override

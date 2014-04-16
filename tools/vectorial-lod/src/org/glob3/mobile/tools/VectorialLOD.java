@@ -10,28 +10,35 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.Sector;
 
 
 public class VectorialLOD {
 
-   final static String                ROOT_DIRECTORY     = "LOD";
+   final static String                       ROOT_DIRECTORY     = "LOD";
 
-   final static int                   NUM_LEVELS         = 3;
-   //   final static long                  MAX_PROCESS_PER_GROUP = 10;
-   //   final static int                   MAX_PROCESS_GROUPS    = MAX_LEVELS + 1;
+   final static boolean                      MERCATOR           = false;
+   final static int                          FIRST_LEVEL        = 0;
+   final static int                          MAX_LEVEL          = 3;
+   final static int                          NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
 
-   final static int                   MAX_DB_CONNECTIONS = NUM_LEVELS;
+   final static int                          MAX_DB_CONNECTIONS = NUM_LEVELS;
+   final static int                          CONNECTION_TIMEOUT = 5;                            //seconds
 
-   final static boolean               VERBOSE            = false;
+   final static boolean                      VERBOSE            = false;
 
-   private static java.sql.Connection _conn              = null;
-   private static Statement           _st                = null;
-   private static DataBaseService     _dataBaseService   = null;
-   private static String              _lodFolder         = null;
-   private static GConcurrentService  _concurrentService;
+   //   private static java.sql.Connection _conn              = null;
+   //   private static Statement           _st                = null;
+   private static DataBaseService            _dataBaseService   = null;
+   private static String                     _lodFolder         = null;
+   private static GConcurrentService         _concurrentService;
+   private static LayerTilesRenderParameters _renderParameters;
 
    /*
     * For handling postgis database access and connections
@@ -107,10 +114,9 @@ public class VectorialLOD {
       public void releaseConnections() {
 
          try {
-            for (int i = 0; i < MAX_DB_CONNECTIONS; i++) {
-               _connectionPool[i].close();
+            for (final Connection conn : _connectionPool) {
+               conn.close();
             }
-
          }
          catch (final SQLException e) {
             // TODO Auto-generated catch block
@@ -121,10 +127,6 @@ public class VectorialLOD {
    }
 
 
-   //   private static void debug(final String msg) {
-   //      Logger.getLogger("Vectorial_LOD").info(msg);
-   //   }
-
    public static boolean createDataBaseService(final String host,
                                                final String port,
                                                final String user,
@@ -133,25 +135,17 @@ public class VectorialLOD {
 
       _dataBaseService = new DataBaseService(host, port, user, password, dataBaseName);
 
-      /* 
-       * Load the JDBC driver and establish a connection. 
-       */
+      // Check one of the service connections before return 
       try {
-         /* Create connection 
-          */
-         //_conn = DriverManager.getConnection(connectUrl, "postgres", "postgres1g0");
-         _conn = _dataBaseService.getConnection();
-
-         /* Create a statement 
-         */
-         _st = _conn.createStatement();
-
-         return true;
+         final Connection conn = _dataBaseService.getConnection();
+         if ((conn != null) && conn.isValid(CONNECTION_TIMEOUT)) {
+            return true;
+         }
       }
       catch (final SQLException e) {
-         // TODO Auto-generated catch block
          e.printStackTrace();
       }
+
       return false;
    }
 
@@ -357,24 +351,77 @@ public class VectorialLOD {
    private static String getTileFileName(final SectorVec sector) {
 
       final String folderName = _lodFolder + File.separatorChar + sector._level;
-      final String subFolderName = (sector._level == 0) ? folderName : folderName + File.separatorChar + sector._row;
+      final String subFolderName = folderName + File.separatorChar + sector._row;
+      //final String subFolderName = (sector._level == 0) ? folderName : folderName + File.separatorChar + sector._row;
+
       if (!new File(folderName).exists()) {
          new File(folderName).mkdir();
          System.out.println("LEVEL: " + sector._level);
       }
+
       if (!new File(subFolderName).exists()) {
          new File(subFolderName).mkdir();
       }
 
-      final String fileName = subFolderName + File.separatorChar + "tile" + "_" + sector._level + "_" + sector._row + "-"
-                              + sector._column + ".json";
-      return fileName;
+      return subFolderName + File.separatorChar + getTileName(sector);
    }
 
 
    private static String getTileName(final SectorVec sector) {
 
-      return "tile" + "_" + sector._level + "_" + sector._row + "-" + sector._column + ".json";
+      return sector._level + "_" + sector._row + "-" + sector._column + ".json";
+   }
+
+
+   private static void createFolderStructure(final DataSource dataSource) {
+
+      if (!new File(ROOT_DIRECTORY).exists()) {
+         new File(ROOT_DIRECTORY).mkdir();
+      }
+
+      final String projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
+      _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + projection;
+      if (!new File(_lodFolder).exists()) {
+         new File(_lodFolder).mkdir();
+      }
+   }
+
+
+   private static ArrayList<SectorVec> createFirstLevelSectorVec() {
+
+      final ArrayList<SectorVec> levelZeroSectorTiles = new ArrayList<SectorVec>();
+
+      final Angle fromLatitude = _renderParameters._topSector._lower._latitude;
+      final Angle fromLongitude = _renderParameters._topSector._lower._longitude;
+
+      final Angle deltaLan = _renderParameters._topSector._deltaLatitude;
+      final Angle deltaLon = _renderParameters._topSector._deltaLongitude;
+
+      final int topSectorSplitsByLatitude = _renderParameters._topSectorSplitsByLatitude;
+      final int topSectorSplitsByLongitude = _renderParameters._topSectorSplitsByLongitude;
+
+      final Angle tileHeight = deltaLan.div(topSectorSplitsByLatitude);
+      final Angle tileWidth = deltaLon.div(topSectorSplitsByLongitude);
+
+      for (int row = 0; row < topSectorSplitsByLatitude; row++) {
+         final Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
+         final Angle tileLatTo = tileLatFrom.add(tileHeight);
+
+         for (int col = 0; col < topSectorSplitsByLongitude; col++) {
+            final Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
+            final Angle tileLonTo = tileLonFrom.add(tileWidth);
+
+            final Geodetic2D tileLower = new Geodetic2D(tileLatFrom, tileLonFrom);
+            final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
+            final Sector sector = new Sector(tileLower, tileUpper);
+
+            final SectorVec sectorVec = new SectorVec(sector, null, 0, row, col);
+
+            levelZeroSectorTiles.add(sectorVec);
+         }
+      }
+
+      return levelZeroSectorTiles;
    }
 
 
@@ -383,20 +430,17 @@ public class VectorialLOD {
       final long start = System.currentTimeMillis();
       System.out.println("Starting vectorial LOD generation of " + dataSource._sourceTable + " source..");
 
-      if (!new File(ROOT_DIRECTORY).exists()) {
-         new File(ROOT_DIRECTORY).mkdir();
-      }
-      if (!new File(ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable).exists()) {
-         _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS";
-         new File(_lodFolder).mkdir();
-      }
+      createFolderStructure(dataSource);
 
-      final SectorVec initialSector = new SectorVec(Sector.fullSphere(), null, 0, 1, 1);
+      //assume full sphere topSector for tiles pyramid generation
+      final ArrayList<SectorVec> firstLevelSectorVec = createFirstLevelSectorVec();
 
-      generateVectorialLOD(initialSector, dataSource);
+      for (final SectorVec topSector : firstLevelSectorVec) {
+         generateVectorialLOD(topSector, dataSource);
+         //processSubSectors(topSector, dataSource);
+      }
 
       _concurrentService.awaitTermination();
-      //waitForProcessFinished();
 
       _dataBaseService.releaseConnections();
 
@@ -408,7 +452,7 @@ public class VectorialLOD {
    private static void generateVectorialLOD(final SectorVec sector,
                                             final DataSource dataSource) {
 
-      if (sector._level > NUM_LEVELS) {
+      if (sector._level >= NUM_LEVELS) {
          return;
       }
 
@@ -452,7 +496,7 @@ public class VectorialLOD {
                                          final DataSource dataSource) {
 
       final int subSectorLevel = sector._level;
-      if (subSectorLevel > NUM_LEVELS) {
+      if (subSectorLevel >= NUM_LEVELS) {
          return;
       }
 
@@ -469,7 +513,16 @@ public class VectorialLOD {
 
    private static void initializeConcurrentService() {
 
-      _concurrentService = GConcurrentService.createDefaultConcurrentService(NUM_LEVELS + 1, "G3m vectorial LOD");
+      _concurrentService = GConcurrentService.createDefaultConcurrentService(NUM_LEVELS, "G3m vectorial LOD");
+   }
+
+
+   private static void initilializeRenderParameters(final boolean mercator,
+                                                    final int firstLevel,
+                                                    final int maxLevel) {
+
+      _renderParameters = mercator ? LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel)
+                                  : LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
    }
 
 
@@ -481,20 +534,17 @@ public class VectorialLOD {
       if (createDataBaseService("igosoftware.dyndns.org", "5414", "postgres", "postgres1g0", "vectorial_test")) {
          System.out.println("done.");
 
+         initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
+
          initializeConcurrentService();
 
-         /*-- interface for geometries processing --
-                 String selectGeometries(final String dataSourceTable,
-                                         final Sector sector,
-                                         final float qualityFactor,
-                                         final String geomFilterCriteria,
-                                         final String... includeProperties)
-         */
+         final DataSource dataSource = new DataSource("ne_10m_admin_0_countries", "true", "continent", "pop_est");
+         //         final DataSource dataSource = new DataSource("ne_10m_admin_0_boundary_lines_land", "true", "adm0_left", "labelrank");
+         //         final DataSource dataSource = new DataSource("ne_10m_populated_places", "true", "NAMEASCII", "POP_MAX");
 
-         // batch mode to generate full LOD for a vectorial
-         launchVectorialLODProcessing(new DataSource("ne_10m_admin_0_countries", "true", "continent", "pop_est"));
-         //         launchVectorialLODProcessing(new DataSource("ne_10m_admin_0_boundary_lines_land", "true", "adm0_left", "labelrank"));
-         //         launchVectorialLODProcessing(new DataSource("ne_10m_populated_places", "true", "NAMEASCII", "POP_MAX"));
+         // batch mode to generate full LOD pyramid for a vectorial data source
+         launchVectorialLODProcessing(dataSource);
+
       }
       else {
          System.out.println("Error connecting to vectorial_test DB.");
