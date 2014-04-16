@@ -10,19 +10,19 @@ import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Sector;
 
 
-public class SectorVec
+public class TileSector
          extends
             Sector {
 
-   public SectorVec _parent;
+   public TileSector _parent;
    public int       _level;
    public int       _row;
    public int       _column;
 
 
-   public SectorVec(final Geodetic2D lower,
+   public TileSector(final Geodetic2D lower,
                     final Geodetic2D upper,
-                    final SectorVec parent,
+                    final TileSector parent,
                     final int level,
                     final int row,
                     final int column) {
@@ -35,8 +35,8 @@ public class SectorVec
    }
 
 
-   public SectorVec(final Sector sector,
-                    final SectorVec parent,
+   public TileSector(final Sector sector,
+                    final TileSector parent,
                     final int level,
                     final int row,
                     final int column) {
@@ -54,28 +54,28 @@ public class SectorVec
    }
 
 
-   public List<SectorVec> getSubsectors() {
+   public List<TileSector> getSubsectors() {
 
-      final List<SectorVec> subSectors = new ArrayList<SectorVec>(4);
+      final List<TileSector> subSectors = new ArrayList<TileSector>(4);
       final int subLevel = this._level + 1;
 
       int rowInc = this._row;
       int columnInc = this._column;
-      final SectorVec s00 = new SectorVec(this._lower, this._center, this, subLevel, this._row + rowInc, this._column + columnInc);
+      final TileSector s00 = new TileSector(this._lower, this._center, this, subLevel, this._row + rowInc, this._column + columnInc);
 
       rowInc = this._row;
       columnInc = this._column + 1;
-      final SectorVec s01 = new SectorVec(new Geodetic2D(this._lower._latitude, this._center._longitude), new Geodetic2D(
+      final TileSector s01 = new TileSector(new Geodetic2D(this._lower._latitude, this._center._longitude), new Geodetic2D(
                this._center._latitude, this._upper._longitude), this, subLevel, this._row + rowInc, this._column + columnInc);
 
       rowInc = this._row + 1;
       columnInc = this._column;
-      final SectorVec s10 = new SectorVec(new Geodetic2D(this._center._latitude, this._lower._longitude), new Geodetic2D(
+      final TileSector s10 = new TileSector(new Geodetic2D(this._center._latitude, this._lower._longitude), new Geodetic2D(
                this._upper._latitude, this._center._longitude), this, subLevel, this._row + rowInc, this._column + columnInc);
 
       rowInc = this._row + 1;
       columnInc = this._column + 1;
-      final SectorVec s11 = new SectorVec(this._center, this._upper, this, subLevel, this._row + rowInc, this._column + columnInc);
+      final TileSector s11 = new TileSector(this._center, this._upper, this, subLevel, this._row + rowInc, this._column + columnInc);
 
       subSectors.add(s00);
       subSectors.add(s01);

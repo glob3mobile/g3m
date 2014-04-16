@@ -348,7 +348,7 @@ public class VectorialLOD {
    }
 
 
-   private static String getTileFileName(final SectorVec sector) {
+   private static String getTileFileName(final TileSector sector) {
 
       final String folderName = _lodFolder + File.separatorChar + sector._level;
       final String subFolderName = folderName + File.separatorChar + sector._row;
@@ -367,7 +367,7 @@ public class VectorialLOD {
    }
 
 
-   private static String getTileName(final SectorVec sector) {
+   private static String getTileName(final TileSector sector) {
 
       return sector._level + "_" + sector._row + "-" + sector._column + ".json";
    }
@@ -387,9 +387,9 @@ public class VectorialLOD {
    }
 
 
-   private static ArrayList<SectorVec> createFirstLevelSectorVec() {
+   private static ArrayList<TileSector> createFirstLevelTileSectors() {
 
-      final ArrayList<SectorVec> levelZeroSectorTiles = new ArrayList<SectorVec>();
+      final ArrayList<TileSector> levelZeroSectorTiles = new ArrayList<TileSector>();
 
       final Angle fromLatitude = _renderParameters._topSector._lower._latitude;
       final Angle fromLongitude = _renderParameters._topSector._lower._longitude;
@@ -415,9 +415,9 @@ public class VectorialLOD {
             final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
             final Sector sector = new Sector(tileLower, tileUpper);
 
-            final SectorVec sectorVec = new SectorVec(sector, null, 0, row, col);
+            final TileSector tileSector = new TileSector(sector, null, 0, row, col);
 
-            levelZeroSectorTiles.add(sectorVec);
+            levelZeroSectorTiles.add(tileSector);
          }
       }
 
@@ -433,9 +433,9 @@ public class VectorialLOD {
       createFolderStructure(dataSource);
 
       //assume full sphere topSector for tiles pyramid generation
-      final ArrayList<SectorVec> firstLevelSectorVec = createFirstLevelSectorVec();
+      final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
 
-      for (final SectorVec topSector : firstLevelSectorVec) {
+      for (final TileSector topSector : firstLevelTileSectors) {
          generateVectorialLOD(topSector, dataSource);
          //processSubSectors(topSector, dataSource);
       }
@@ -449,7 +449,7 @@ public class VectorialLOD {
    }
 
 
-   private static void generateVectorialLOD(final SectorVec sector,
+   private static void generateVectorialLOD(final TileSector sector,
                                             final DataSource dataSource) {
 
       if (sector._level >= NUM_LEVELS) {
@@ -480,8 +480,8 @@ public class VectorialLOD {
          System.out.println("Exception while writting geoJson object ! ");
       }
 
-      final List<SectorVec> subSectors = sector.getSubsectors();
-      for (final SectorVec s : subSectors) {
+      final List<TileSector> subSectors = sector.getSubsectors();
+      for (final TileSector s : subSectors) {
          processSubSectors(s, dataSource);
       }
    }
@@ -492,7 +492,7 @@ public class VectorialLOD {
     * A new task will be created to process any subsector of the parent sector
     * 
     */
-   private static void processSubSectors(final SectorVec sector,
+   private static void processSubSectors(final TileSector sector,
                                          final DataSource dataSource) {
 
       final int subSectorLevel = sector._level;
