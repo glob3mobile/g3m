@@ -184,6 +184,8 @@ private:
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const TilesRenderParameters* tilesRenderParameters);
 
+  void setRendered(const bool rendered, TileRenderingListener* tileRenderingListener);
+
   bool _rendered;
 
 public:

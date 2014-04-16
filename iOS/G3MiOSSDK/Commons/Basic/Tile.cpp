@@ -730,6 +730,21 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   }
 }
 
+void Tile::setRendered(const bool rendered, TileRenderingListener* tileRenderingListener){
+  if (_rendered != rendered) {
+    _rendered = rendered;
+
+    if (tileRenderingListener != NULL) {
+      if (_rendered) {
+        tileRenderingListener->startRendering(this);
+      }
+      else {
+        tileRenderingListener->stopRendering(this);
+      }
+    }
+  }
+}
+
 bool Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
                   std::list<Tile*>* toVisitInNextIteration,
@@ -832,39 +847,24 @@ bool Tile::render(const G3MRenderContext* rc,
         _justCreatedSubtiles = false;
       }
 
-      const int subTilesSize = subTiles->size();
+      const int subTilesSize = (int)subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
         toVisitInNextIteration->push_back(subTile);
       }
     }
 
+    setRendered(rendered, tileRenderingListener);
 
     return isRawRender; //RETURN ISRAWRENDER
   }
-  else {
-    setIsVisible(false, texturizer);
 
-    prune(texturizer, elevationDataProvider);
-    //TODO: AVISAR CAMBIO DE TERRENO
+  //Not rendering, prunning will be performed
 
-
-    return false;   //RETURN ISRAWRENDER
-  }
-
-  if (_rendered != rendered) {
-    _rendered = rendered;
-
-    if (tileRenderingListener != NULL) {
-      if (_rendered) {
-        tileRenderingListener->startRendering(this);
-      }
-      else {
-        tileRenderingListener->stopRendering(this);
-      }
-    }
-  }
-  
+  setRendered(rendered, tileRenderingListener);
+  setIsVisible(false, texturizer);
+  prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
+  return false;
 }
 
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
