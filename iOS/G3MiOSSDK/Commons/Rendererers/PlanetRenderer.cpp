@@ -724,7 +724,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     _statistics.log( rc->getLogger() );
   }
 
-
   const Sector* renderedSector = _statistics.getRenderedSector();
   if (renderedSector != NULL) {
     if ( (_lastVisibleSector == NULL) || !renderedSector->isEquals(*_lastVisibleSector) ) {

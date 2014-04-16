@@ -46,7 +46,6 @@ private:
   int _tilesVisibleByLevel[_maxLOD];
   int _tilesRenderedByLevel[_maxLOD];
 
-//  int _splitsCountInFrame;
   int _buildersStartsInFrame;
 
   Sector* _renderedSector;
@@ -57,7 +56,6 @@ public:
   _tilesProcessed(0),
   _tilesVisible(0),
   _tilesRendered(0),
-//  _splitsCountInFrame(0),
   _buildersStartsInFrame(0),
   _renderedSector(NULL)
   {
@@ -76,7 +74,6 @@ public:
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-//    _splitsCountInFrame = 0;
     _buildersStartsInFrame = 0;
     delete _renderedSector;
     _renderedSector = NULL;
@@ -86,14 +83,6 @@ public:
       _tilesRenderedByLevel[i]  = 0;
     }
   }
-
-//  int getSplitsCountInFrame() const {
-//    return _splitsCountInFrame;
-//  }
-//
-//  void computeSplitInFrame() {
-//    _splitsCountInFrame++;
-//  }
 
   int getBuildersStartsInFrame() const {
     return _buildersStartsInFrame;
@@ -143,7 +132,7 @@ public:
     }
   }
 
-  void computePlanetRenderered(Tile* tile) {
+  void computeTileRenderered(Tile* tile) {
     _tilesRendered++;
 
     const int level = tile->_level;
@@ -155,23 +144,6 @@ public:
   const Sector* getRenderedSector() const {
     return _renderedSector;
   }
-
-  //  bool equalsTo(const TilesStatistics& that) const {
-  //    if (_tilesProcessed != that._tilesProcessed) {
-  //      return false;
-  //    }
-  //    if (_tilesRendered != that._tilesRendered) {
-  //      return false;
-  //    }
-  //    if (_tilesRenderedByLevel != that._tilesRenderedByLevel) {
-  //      return false;
-  //    }
-  //    if (_tilesProcessedByLevel != that._tilesProcessedByLevel) {
-  //      return false;
-  //    }
-  //    return true;
-  //  }
-
 
   static std::string asLogString(const int m[], const int nMax) {
     bool first = true;
@@ -186,7 +158,6 @@ public:
         else {
           isb->addString(",");
         }
-        //isb->addString("L");
         isb->addInt(level);
         isb->addString(":");
         isb->addInt(counter);
@@ -201,13 +172,10 @@ public:
   void log(const ILogger* logger) const {
     logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
                     _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
-                    _tilesVisible,   asLogString(_tilesVisibleByLevel, _maxLOD).c_str(),
-                    _tilesRendered,  asLogString(_tilesRenderedByLevel, _maxLOD).c_str());
-//    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
-//                    _tilesProcessed,
-//                    _tilesVisible,
-//                    _tilesRendered);
+                    _tilesVisible,   asLogString(_tilesVisibleByLevel,   _maxLOD).c_str(),
+                    _tilesRendered,  asLogString(_tilesRenderedByLevel,  _maxLOD).c_str());
   }
+
 
 };
 
