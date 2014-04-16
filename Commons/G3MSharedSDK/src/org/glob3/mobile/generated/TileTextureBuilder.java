@@ -176,120 +176,128 @@ public class TileTextureBuilder extends RCObject
 
   public final boolean composeAndUploadTexture()
   {
-    synchronized (this) {
+///#ifdef JAVA_CODE
+//    synchronized (this) {
+///#endif
 
-      if (_mesh == null)
+    if (_mesh == null)
+    {
+      return false;
+    }
+
+    final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
+    java.util.ArrayList<RectangleF> sourceRects = new java.util.ArrayList<RectangleF>();
+    java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
+    java.util.ArrayList<Float> transparencies = new java.util.ArrayList<Float>();
+    String textureId = _tile.getKey().tinyDescription();
+
+    final Sector tileSector = _tile._sector;
+
+    for (int i = 0; i < _petitionsCount; i++)
+    {
+      final Petition petition = _petitions.get(i);
+      IImage image = petition.getImage();
+
+      if (image != null)
       {
-        return false;
-      }
+        final Sector imageSector = petition.getSector();
+        //Finding intersection image sector - tile sector = srcReq
+        final Sector intersectionSector = tileSector.intersection(imageSector);
 
-      final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-      java.util.ArrayList<RectangleF> sourceRects = new java.util.ArrayList<RectangleF>();
-      java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
-      java.util.ArrayList<Float> transparencies = new java.util.ArrayList<Float>();
-      String textureId = _tile.getKey().tinyDescription();
-
-      final Sector tileSector = _tile._sector;
-
-      for (int i = 0; i < _petitionsCount; i++)
-      {
-        final Petition petition = _petitions.get(i);
-        IImage image = petition.getImage();
-
-        if (image != null)
+        RectangleF sourceRect = null;
+        if (!intersectionSector.isEquals(imageSector))
         {
-          final Sector imageSector = petition.getSector();
-          //Finding intersection image sector - tile sector = srcReq
-          final Sector intersectionSector = tileSector.intersection(imageSector);
-
-          RectangleF sourceRect = null;
-          if (!intersectionSector.isEquals(imageSector))
-          {
-            sourceRect = getInnerRectangle(image.getWidth(), image.getHeight(), imageSector, intersectionSector);
-          }
-          else
-          {
-            sourceRect = new RectangleF(0, 0, image.getWidth(), image.getHeight());
-          }
-
-          //Part of the image we are going to draw
-          sourceRects.add(sourceRect);
-
-          images.add(image);
-
-          //Where we are going to draw the image
-          destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
-          textureId += petition.getURL().getPath();
-          textureId += "_";
-
-          //Layer transparency set by user
-          transparencies.add(petition.getLayerTransparency());
+          sourceRect = getInnerRectangle(image.getWidth(), image.getHeight(), imageSector, intersectionSector);
         }
         else
         {
-          return false;
+          sourceRect = new RectangleF(0, 0, image.getWidth(), image.getHeight());
         }
-      }
 
-      if (images.size() > 0)
+        //Part of the image we are going to draw
+        sourceRects.add(sourceRect);
+
+        images.add(image);
+
+        //Where we are going to draw the image
+        destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
+        textureId += petition.getURL().getPath();
+        textureId += "_";
+
+        //Layer transparency set by user
+        transparencies.add(petition.getLayerTransparency());
+      }
+      else
       {
+        return false;
+      }
+    }
 
-        if (_tileRasterizer != null)
-        {
-          textureId += "_";
-          textureId += _tileRasterizer.getId();
-        }
+    if (images.size() > 0)
+    {
 
-        if (images.size() != transparencies.size())
-        {
-          ILogger.instance().logError("Wrong number of transparencies");
-        }
-
-        IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, transparencies, new TextureUploader(this, _tile, _mercator, _tileRasterizer, sourceRects, destRects, textureId), true);
-        return true;
+      if (_tileRasterizer != null)
+      {
+        textureId += "_";
+        textureId += _tileRasterizer.getId();
       }
 
-      return false;
+      if (images.size() != transparencies.size())
+      {
+        ILogger.instance().logError("Wrong number of transparencies");
+      }
 
+      IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, transparencies, new TextureUploader(this, _tile, _mercator, _tileRasterizer, sourceRects, destRects, textureId), true);
+      return true;
     }
+
+    return false;
+
+///#ifdef JAVA_CODE
+//    }
+///#endif
   }
 
   public final void imageCreated(IImage image, java.util.ArrayList<RectangleF> srcRects, java.util.ArrayList<RectangleF> dstRects, String textureId)
   {
-    synchronized (this) {
+///#ifdef JAVA_CODE
+//    synchronized (this) {
+///#endif
 
-      if (_mesh != null)
+    if (_mesh != null)
+    {
+      final boolean generateMipmap = true;
+
+      final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), textureId, generateMipmap);
+
+      if (glTextureId != null)
       {
-        final boolean generateMipmap = true;
-
-        final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), textureId, generateMipmap);
-
-        if (glTextureId != null)
+        if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
         {
-          if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
-          {
-            if (glTextureId != null)
-               glTextureId.dispose();
-            //_texturesHandler->releaseGLTextureId(glTextureId);
-          }
+          if (glTextureId != null)
+             glTextureId.dispose();
+          //_texturesHandler->releaseGLTextureId(glTextureId);
         }
       }
-
-      IFactory.instance().deleteImage(image);
-
-      for (int i = 0; i < srcRects.size(); i++)
-      {
-        if (srcRects.get(i) != null)
-           srcRects.get(i).dispose();
-      }
-
-      for (int i = 0; i < dstRects.size(); i++)
-      {
-        if (dstRects.get(i) != null)
-           dstRects.get(i).dispose();
-      }
-
     }
+
+    IFactory.instance().deleteImage(image);
+
+    for (int i = 0; i < srcRects.size(); i++)
+    {
+      if (srcRects.get(i) != null)
+         srcRects.get(i).dispose();
+    }
+
+    for (int i = 0; i < dstRects.size(); i++)
+    {
+      if (dstRects.get(i) != null)
+         dstRects.get(i).dispose();
+    }
+
+///#ifdef JAVA_CODE
+//    }
+///#endif
   }
 
   public final void done()
@@ -439,14 +447,13 @@ public class TileTextureBuilder extends RCObject
 
   public final void cleanMesh()
   {
-    synchronized (this) {
-
-      if (_mesh != null)
-      {
-        _mesh = null;
-      }
-
-    }
+///#ifdef JAVA_CODE
+//    synchronized (this) {
+///#endif
+    _mesh = null;
+///#ifdef JAVA_CODE
+//    }
+///#endif
   }
 
   public final void cleanTile()

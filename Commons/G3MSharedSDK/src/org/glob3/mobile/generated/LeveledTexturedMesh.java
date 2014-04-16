@@ -71,30 +71,34 @@ public class LeveledTexturedMesh extends Mesh
 
   public void dispose()
   {
-    synchronized (this) {
+  ///#ifdef JAVA_CODE
+  //  synchronized (this) {
+  ///#endif
   
-      if (_ownedMesh)
-      {
-        if (_mesh != null)
-           _mesh.dispose();
-      }
-  
-      if (_mappings != null)
-      {
-        for (int i = 0; i < _mappings.size(); i++)
-        {
-          LazyTextureMapping mapping = _mappings.get(i);
-          if (mapping != null)
-             mapping.dispose();
-        }
-  
-        _mappings = null;
-        _mappings = null;
-      }
-  
-      _glState._release();
-  
+    if (_ownedMesh)
+    {
+      if (_mesh != null)
+         _mesh.dispose();
     }
+  
+    if (_mappings != null)
+    {
+      for (int i = 0; i < _mappings.size(); i++)
+      {
+        LazyTextureMapping mapping = _mappings.get(i);
+        if (mapping != null)
+           mapping.dispose();
+      }
+  
+      _mappings = null;
+      _mappings = null;
+    }
+  
+    _glState._release();
+  
+  ///#ifdef JAVA_CODE
+  //  }
+  ///#endif
   
     super.dispose();
   }
