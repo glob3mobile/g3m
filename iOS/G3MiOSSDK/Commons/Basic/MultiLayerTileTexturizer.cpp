@@ -31,6 +31,8 @@
 #include "TileRasterizer.hpp"
 #include "ITileVisitor.hpp"
 #include "TextureIDReference.hpp"
+#include "TileRasterizerContext.hpp"
+
 
 #define TILE_DOWNLOAD_PRIORITY 1000000000
 

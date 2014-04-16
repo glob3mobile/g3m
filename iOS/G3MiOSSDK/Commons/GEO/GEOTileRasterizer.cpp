@@ -17,6 +17,7 @@
 #include "GFont.hpp"
 #include "IStringBuilder.hpp"
 #include "GEORasterProjection.hpp"
+#include "TileRasterizerContext.hpp"
 
 
 void GEOTileRasterizer::initialize(const G3MContext* context) {
