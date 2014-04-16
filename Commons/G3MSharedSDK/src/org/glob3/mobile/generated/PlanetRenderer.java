@@ -497,7 +497,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _statistics.log(rc.getLogger());
     }
   
-  
     final Sector renderedSector = _statistics.getRenderedSector();
     if (renderedSector != null)
     {

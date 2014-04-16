@@ -56,12 +56,11 @@ public class FrameTasksExecutor
   public FrameTasksExecutor()
   {
      _minimumExecutionsPerFrame = 1;
-     _maximumExecutionsPerFrame = 8;
+     _maximumExecutionsPerFrame = 2;
      _maximumQueuedTasks = 64;
      _maxTimePerFrameMS = 5;
-     _maxTimePerFrameStressedMS = 25;
+     _maxTimePerFrameStressedMS = 15;
      _stressed = false;
-
   }
 
   public final void addPreRenderTask(FrameTask preRenderTask)
@@ -139,7 +138,6 @@ public class FrameTasksExecutor
 
   public void dispose()
   {
-
   }
 
 }
