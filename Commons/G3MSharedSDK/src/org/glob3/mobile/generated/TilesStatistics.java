@@ -43,18 +43,18 @@ public class TilesStatistics
   private int[] _tilesVisibleByLevel = new int[_maxLOD];
   private int[] _tilesRenderedByLevel = new int[_maxLOD];
 
-  private int _splitsCountInFrame;
+//  int _splitsCountInFrame;
   private int _buildersStartsInFrame;
 
   private Sector _renderedSector;
 
 
   public TilesStatistics()
+//  _splitsCountInFrame(0),
   {
      _tilesProcessed = 0;
      _tilesVisible = 0;
      _tilesRendered = 0;
-     _splitsCountInFrame = 0;
      _buildersStartsInFrame = 0;
      _renderedSector = null;
     for (int i = 0; i < _maxLOD; i++)
@@ -76,7 +76,7 @@ public class TilesStatistics
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _splitsCountInFrame = 0;
+//    _splitsCountInFrame = 0;
     _buildersStartsInFrame = 0;
     if (_renderedSector != null)
        _renderedSector.dispose();
@@ -89,15 +89,13 @@ public class TilesStatistics
     }
   }
 
-  public final int getSplitsCountInFrame()
-  {
-    return _splitsCountInFrame;
-  }
-
-  public final void computeSplitInFrame()
-  {
-    _splitsCountInFrame++;
-  }
+//  int getSplitsCountInFrame() const {
+//    return _splitsCountInFrame;
+//  }
+//
+//  void computeSplitInFrame() {
+//    _splitsCountInFrame++;
+//  }
 
   public final int getBuildersStartsInFrame()
   {

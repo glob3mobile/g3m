@@ -302,21 +302,23 @@ public class TileTextureBuilder extends RCObject
 
   public final void done()
   {
-    if (!_finalized)
+    if (_finalized)
     {
-      _finalized = true;
-
-      if (!_canceled && (_tile != null) && (_mesh != null))
-      {
-        if (composeAndUploadTexture())
-        {
-          //If the image could be properly turn into texture
-          _tile.setTextureSolved(true);
-          deletePetitions(); //We must release the petitions so we can get rid off no longer needed images
-        }
-      }
-
+      return;
     }
+
+    _finalized = true;
+
+    if (!_canceled && (_tile != null) && (_mesh != null))
+    {
+      if (composeAndUploadTexture())
+      {
+        //If the image could be properly turn into texture
+        _tile.setTextureSolved(true);
+        deletePetitions(); //We must release the petitions so we can get rid off no longer needed images
+      }
+    }
+
   }
 
   public final void deletePetitions()

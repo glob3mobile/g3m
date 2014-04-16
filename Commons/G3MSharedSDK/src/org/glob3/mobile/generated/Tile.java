@@ -280,13 +280,12 @@ public class Tile
     {
       if (_subtiles == null) // the tile needs to create the subtiles
       {
-        if (tilesStatistics.getSplitsCountInFrame() > 0)
-        {
-          // there are not more splitsCount-budget to spend
-          return true;
-        }
+  //      if (tilesStatistics->getSplitsCountInFrame() > 0) {
+  //        // there are not more splitsCount-budget to spend
+  //        return true;
+  //      }
   
-        if (lastSplitTimer.elapsedTimeInMilliseconds() < 25)
+        if (lastSplitTimer.elapsedTimeInMilliseconds() < 67)
         {
           // there are not more time-budget to spend
           return true;
@@ -695,7 +694,7 @@ public class Tile
         if (_justCreatedSubtiles)
         {
           lastSplitTimer.start();
-          tilesStatistics.computeSplitInFrame();
+  //        tilesStatistics->computeSplitInFrame();
           _justCreatedSubtiles = false;
         }
   
