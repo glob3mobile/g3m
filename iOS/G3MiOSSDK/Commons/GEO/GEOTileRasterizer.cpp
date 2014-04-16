@@ -46,35 +46,6 @@ void GEOTileRasterizer::addSymbol(const GEORasterSymbol* symbol) {
   }
 }
 
-//class GEOTileRasterizer_QuadTreeVisitor : public QuadTreeVisitor {
-//private:
-//  ICanvas*                   _canvas;
-//  const GEORasterProjection* _projection;
-//  const int                  _tileLevel;
-//
-//public:
-//  GEOTileRasterizer_QuadTreeVisitor(ICanvas* canvas,
-//                                    const GEORasterProjection* projection,
-//                                    int tileLevel) :
-//  _canvas(canvas),
-//  _projection(projection),
-//  _tileLevel(tileLevel)
-//  {
-//  }
-//
-//  bool visitElement(const Sector&           sector,
-//                    const QuadTree_Content* content) const {
-//    GEORasterSymbol* symbol = (GEORasterSymbol*) content;
-//
-//    symbol->rasterize(_canvas, _projection, _tileLevel);
-//
-//    return false;
-//  }
-//
-//  void endVisit(bool aborted) const {
-//  }
-//};
-
 class GEOTileRasterizer_QuadTreeVisitor : public QuadTreeVisitor {
 private:
   const GEOTileRasterizer*     _geoTileRasterizer;
@@ -87,8 +58,6 @@ private:
   const TileRasterizerContext* _trc;
   IImageListener*              _listener;
   bool                         _autodelete;
-
-  const int                    _tileLevel;
 
   mutable ICanvas*             _canvas;
   mutable GEORasterProjection* _projection;
@@ -104,7 +73,6 @@ public:
   _trc(trc),
   _listener(listener),
   _autodelete(autodelete),
-  _tileLevel(trc->_tile->_level),
   _canvas(NULL),
   _projection(NULL)
   {
@@ -114,22 +82,22 @@ public:
                     const QuadTree_Content* content) const {
     GEORasterSymbol* symbol = (GEORasterSymbol*) content;
 
+    const Tile* tile = _trc->_tile;
+
     if (_canvas == NULL) {
       const int width  = _originalImage->getWidth();
       const int height = _originalImage->getHeight();
-
-      const Tile*   tile     = _trc->_tile;
-      const bool    mercator = _trc->_mercator;
 
       _canvas = _geoTileRasterizer->getCanvas(width, height);
 
       _canvas->drawImage(_originalImage, 0, 0);
 
-      _projection = new GEORasterProjection(tile->_sector, mercator,
+      _projection = new GEORasterProjection(tile->_sector,
+                                            _trc->_mercator,
                                             width, height);
     }
 
-    symbol->rasterize(_canvas, _projection, _tileLevel);
+    symbol->rasterize(_canvas, _projection, tile->_level);
 
     return false;
   }
@@ -156,38 +124,7 @@ void GEOTileRasterizer::rawRasterize(const IImage* image,
                                      const TileRasterizerContext& trc,
                                      IImageListener* listener,
                                      bool autodelete) const {
-  //  if (_quadTree.isEmpty()) {
-  //    listener->imageCreated(image);
-  //    if (autodelete) {
-  //      delete listener;
-  //    }
-  //  }
-  //  else {
-  //    const Tile*   tile     = trc._tile;
-  //    const bool    mercator = trc._mercator;
-  //
-  //    const int width  = image->getWidth();
-  //    const int height = image->getHeight();
-  //
-  //    GEORasterProjection* projection = new GEORasterProjection(tile->_sector, mercator,
-  //                                                              width, height);
-  //
-  //    ICanvas* canvas = getCanvas(width, height);
-  //
-  //    canvas->drawImage(image, 0, 0);
-  //
-  //    _quadTree.acceptVisitor(tile->_sector,
-  //                            GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile->_level));
-  //
-  //    canvas->createImage(listener, autodelete);
-  //
-  //    delete image;
-  //
-  //    delete projection;
-  //  }
-
-  const Tile* tile = trc._tile;
-  _quadTree.acceptVisitor(tile->_sector,
+  _quadTree.acceptVisitor(trc._tile->_sector,
                           GEOTileRasterizer_QuadTreeVisitor(this,
                                                             image,
                                                             &trc,

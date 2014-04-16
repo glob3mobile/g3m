@@ -618,7 +618,7 @@ public:
   //  meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
   //                             Color::newFromRGBA(1, 1, 0, 1));
 
-  meshRenderer->showNormals(true); //SHOWING NORMALS
+  //meshRenderer->showNormals(true); //SHOWING NORMALS
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
@@ -1375,8 +1375,8 @@ public:
   if (useMapBox) {
     //const std::string mapKey = "dgd.map-v93trj8v";
     //const std::string mapKey = "examples.map-cnkhv76j";
-    //const std::string mapKey = "examples.map-qogxobv1";
-    const std::string mapKey = "examples.map-qfyrx5r8";
+    const std::string mapKey = "examples.map-qogxobv1";
+    //const std::string mapKey = "examples.map-qfyrx5r8";
     layerSet->addLayer( new MapBoxLayer(mapKey, TimeInterval::fromDays(30)) );
   }
 
@@ -3006,9 +3006,9 @@ public:
 
       if (true) {
         //      NSString* geojsonName = @"geojson/countries";
-        //        NSString* geojsonName = @"geojson/countries-50m";
+        NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";
-        NSString* geojsonName = @"geojson/cities";
+        // NSString* geojsonName = @"geojson/cities";
         //      NSString* geojsonName = @"geojson/test";
 
         NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: geojsonName

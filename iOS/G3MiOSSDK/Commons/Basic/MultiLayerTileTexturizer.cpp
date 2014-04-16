@@ -501,8 +501,8 @@ public:
   }
 
   void imageCreated(const IImage* image,
-                    std::vector<RectangleF*> srcRects,
-                    std::vector<RectangleF*> dstRects,
+                    const std::vector<RectangleF*>& srcRects,
+                    const std::vector<RectangleF*>& dstRects,
                     const std::string& textureId) {
 #ifdef JAVA_CODE
     synchronized (this) {
