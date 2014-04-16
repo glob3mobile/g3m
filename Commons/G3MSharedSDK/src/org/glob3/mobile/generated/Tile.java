@@ -628,6 +628,26 @@ public class Tile
     return _boundingVolume;
   }
 
+  private void setRendered(boolean rendered, TileRenderingListener tileRenderingListener)
+  {
+    if (_rendered != rendered)
+    {
+      _rendered = rendered;
+  
+      if (tileRenderingListener != null)
+      {
+        if (_rendered)
+        {
+          tileRenderingListener.startRendering(this);
+        }
+        else
+        {
+          tileRenderingListener.stopRendering(this);
+        }
+      }
+    }
+  }
+
   private boolean _rendered;
 
   public final Sector _sector ;
@@ -875,7 +895,7 @@ public class Tile
           _justCreatedSubtiles = false;
         }
   
-        final int subTilesSize = subTiles.size();
+        final int subTilesSize = (int)subTiles.size();
         for (int i = 0; i < subTilesSize; i++)
         {
           Tile subTile = subTiles.get(i);
@@ -883,37 +903,17 @@ public class Tile
         }
       }
   
+      setRendered(rendered, tileRenderingListener);
   
       return isRawRender; //RETURN ISRAWRENDER
     }
-    else
-    {
-      setIsVisible(false, texturizer);
   
-      prune(texturizer, elevationDataProvider);
-      //TODO: AVISAR CAMBIO DE TERRENO
+    //Not rendering, prunning will be performed
   
-  
-      return false; //RETURN ISRAWRENDER
-    }
-  
-    if (_rendered != rendered)
-    {
-      _rendered = rendered;
-  
-      if (tileRenderingListener != null)
-      {
-        if (_rendered)
-        {
-          tileRenderingListener.startRendering(this);
-        }
-        else
-        {
-          tileRenderingListener.stopRendering(this);
-        }
-      }
-    }
-  
+    setRendered(rendered, tileRenderingListener);
+    setIsVisible(false, texturizer);
+    prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
+    return false;
   }
 
   public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS)
