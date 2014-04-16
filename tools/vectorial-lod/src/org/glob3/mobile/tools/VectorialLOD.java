@@ -11,30 +11,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.glob3.mobile.generated.Sector;
 
 
 public class VectorialLOD {
 
-   final static String        ROOT_DIRECTORY        = "LOD";
+   final static String                ROOT_DIRECTORY     = "LOD";
 
-   final static int           MAX_LEVELS            = 5;
-   final static long          MAX_PROCESS_PER_GROUP = 10;
-   final static int           MAX_PROCESS_GROUPS    = MAX_LEVELS + 1;
+   final static int                   NUM_LEVELS         = 3;
+   //   final static long                  MAX_PROCESS_PER_GROUP = 10;
+   //   final static int                   MAX_PROCESS_GROUPS    = MAX_LEVELS + 1;
 
-   final static int           MAX_DB_CONNECTIONS    = MAX_LEVELS;
+   final static int                   MAX_DB_CONNECTIONS = NUM_LEVELS;
 
-   final static boolean       DEBUG                 = false;
+   final static boolean               VERBOSE            = false;
 
-   private static AtomicLong  _tasksCountPool[]     = new AtomicLong[MAX_PROCESS_GROUPS];
-
-   static java.sql.Connection _conn                 = null;
-   static Statement           _st                   = null;
-   static DataBaseService     _dataBaseService      = null;
-   static String              _lodFolder            = null;
-
+   private static java.sql.Connection _conn              = null;
+   private static Statement           _st                = null;
+   private static DataBaseService     _dataBaseService   = null;
+   private static String              _lodFolder         = null;
+   private static GConcurrentService  _concurrentService;
 
    /*
     * For handling postgis database access and connections
@@ -148,10 +145,6 @@ public class VectorialLOD {
          /* Create a statement 
          */
          _st = _conn.createStatement();
-
-         for (int i = 0; i < MAX_PROCESS_GROUPS; i++) {
-            _tasksCountPool[i] = new AtomicLong(0);
-         }
 
          return true;
       }
@@ -293,7 +286,7 @@ public class VectorialLOD {
 
       final String result = Float.toString((float) sector._deltaLongitude._degrees / (qualityFactor * 1000f));
 
-      if (DEBUG) {
+      if (VERBOSE) {
          System.out.println("result: " + result);
       }
 
@@ -361,19 +354,6 @@ public class VectorialLOD {
    }
 
 
-   private static void waitForProcessFinished() {
-      try {
-         while (getTotalTaskCount() > 0) {
-            Thread.sleep(1000);
-         }
-      }
-      catch (final InterruptedException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-   }
-
-
    private static String getTileFileName(final SectorVec sector) {
 
       final String folderName = _lodFolder + File.separatorChar + sector._level;
@@ -407,14 +387,16 @@ public class VectorialLOD {
          new File(ROOT_DIRECTORY).mkdir();
       }
       if (!new File(ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable).exists()) {
-         _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + MAX_LEVELS + "-LEVELS";
+         _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS";
          new File(_lodFolder).mkdir();
       }
 
       final SectorVec initialSector = new SectorVec(Sector.fullSphere(), null, 0, 1, 1);
 
       generateVectorialLOD(initialSector, dataSource);
-      waitForProcessFinished();
+
+      _concurrentService.awaitTermination();
+      //waitForProcessFinished();
 
       _dataBaseService.releaseConnections();
 
@@ -426,7 +408,7 @@ public class VectorialLOD {
    private static void generateVectorialLOD(final SectorVec sector,
                                             final DataSource dataSource) {
 
-      if (sector._level > MAX_LEVELS) {
+      if (sector._level > NUM_LEVELS) {
          return;
       }
 
@@ -470,60 +452,24 @@ public class VectorialLOD {
                                          final DataSource dataSource) {
 
       final int subSectorLevel = sector._level;
-      if (subSectorLevel > MAX_LEVELS) {
+      if (subSectorLevel > NUM_LEVELS) {
          return;
       }
 
-      final Thread worker = new Thread("G3m vectorial LOD " + subSectorLevel + "-" + sector._row + "-" + sector._column) {
+      final Runnable task = new Runnable() {
          @Override
          public void run() {
             generateVectorialLOD(sector, dataSource);
-            decrementTaskPool(subSectorLevel);
-            //GConcurrentService.taskFinished(subSectorLevel);
-            System.out.println("Pending process at group[" + subSectorLevel + "]: " + getTaskCount(subSectorLevel));
          }
       };
-      worker.setDaemon(true);
-      worker.setPriority(Thread.NORM_PRIORITY);
 
-      try {
-         while (getTaskCount(subSectorLevel) >= MAX_PROCESS_PER_GROUP) {
-            Thread.sleep(100);
-         }
-      }
-      catch (final InterruptedException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-
-      incrementTaskPool(subSectorLevel);
-      worker.start();
-      System.out.println("Running process at group[" + subSectorLevel + "]: " + getTaskCount(subSectorLevel));
+      _concurrentService.execute(task, subSectorLevel);
    }
 
 
-   private static void incrementTaskPool(final int groupId) {
-      _tasksCountPool[groupId].incrementAndGet();
-   }
+   private static void initializeConcurrentService() {
 
-
-   private static void decrementTaskPool(final int groupId) {
-      _tasksCountPool[groupId].decrementAndGet();
-   }
-
-
-   private static long getTaskCount(final int groupId) {
-      return _tasksCountPool[groupId].get();
-   }
-
-
-   private static int getTotalTaskCount() {
-
-      int count = 0;
-      for (int i = 1; i < MAX_PROCESS_GROUPS; i++) {
-         count += _tasksCountPool[i].get();
-      }
-      return count;
+      _concurrentService = GConcurrentService.createDefaultConcurrentService(NUM_LEVELS + 1, "G3m vectorial LOD");
    }
 
 
@@ -531,9 +477,11 @@ public class VectorialLOD {
 
       System.out.print("Connect to POSTGIS DB vectorial_test.. ");
 
-      if (createDataBaseService("192.168.1.14", "5432", "postgres", "postgres1g0", "vectorial_test")) {
-         //      if (createDataBaseService("igosoftware.dyndns.org", "5414", "postgres", "postgres1g0", "vectorial_test")) {
+      //if (createDataBaseService("192.168.1.14", "5432", "postgres", "postgres1g0", "vectorial_test")) {
+      if (createDataBaseService("igosoftware.dyndns.org", "5414", "postgres", "postgres1g0", "vectorial_test")) {
          System.out.println("done.");
+
+         initializeConcurrentService();
 
          /*-- interface for geometries processing --
                  String selectGeometries(final String dataSourceTable,
