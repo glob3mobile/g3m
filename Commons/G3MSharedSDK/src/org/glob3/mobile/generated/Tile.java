@@ -280,11 +280,6 @@ public class Tile
     {
       if (_subtiles == null) // the tile needs to create the subtiles
       {
-  //      if (tilesStatistics->getSplitsCountInFrame() > 0) {
-  //        // there are not more splitsCount-budget to spend
-  //        return true;
-  //      }
-  
         if (lastSplitTimer.elapsedTimeInMilliseconds() < 67)
         {
           // there are not more time-budget to spend
@@ -683,7 +678,7 @@ public class Tile
           debugRender(rc, parentState, tessellator, layerTilesRenderParameters);
         }
   
-        tilesStatistics.computePlanetRenderered(this);
+        tilesStatistics.computeTileRenderered(this);
   
         prune(texturizer, elevationDataProvider);
         //TODO: AVISAR CAMBIO DE TERRENO
@@ -694,7 +689,6 @@ public class Tile
         if (_justCreatedSubtiles)
         {
           lastSplitTimer.start();
-  //        tilesStatistics->computeSplitInFrame();
           _justCreatedSubtiles = false;
         }
   
@@ -842,7 +836,6 @@ public class Tile
   {
     if (_subtiles != null)
     {
-  
       //Notifying elevation event when LOD decreases
       _planetRenderer.sectorElevationChanged(_elevationData);
   
@@ -865,7 +858,6 @@ public class Tile
   
       _subtiles = null;
       _subtiles = null;
-  
     }
   }
 

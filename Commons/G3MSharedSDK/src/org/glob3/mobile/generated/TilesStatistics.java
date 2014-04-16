@@ -43,14 +43,12 @@ public class TilesStatistics
   private int[] _tilesVisibleByLevel = new int[_maxLOD];
   private int[] _tilesRenderedByLevel = new int[_maxLOD];
 
-//  int _splitsCountInFrame;
   private int _buildersStartsInFrame;
 
   private Sector _renderedSector;
 
 
   public TilesStatistics()
-//  _splitsCountInFrame(0),
   {
      _tilesProcessed = 0;
      _tilesVisible = 0;
@@ -76,7 +74,6 @@ public class TilesStatistics
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-//    _splitsCountInFrame = 0;
     _buildersStartsInFrame = 0;
     if (_renderedSector != null)
        _renderedSector.dispose();
@@ -88,14 +85,6 @@ public class TilesStatistics
       _tilesRenderedByLevel[i] = 0;
     }
   }
-
-//  int getSplitsCountInFrame() const {
-//    return _splitsCountInFrame;
-//  }
-//
-//  void computeSplitInFrame() {
-//    _splitsCountInFrame++;
-//  }
 
   public final int getBuildersStartsInFrame()
   {
@@ -144,7 +133,7 @@ public class TilesStatistics
     }
   }
 
-  public final void computePlanetRenderered(Tile tile)
+  public final void computeTileRenderered(Tile tile)
   {
     _tilesRendered++;
 
@@ -158,23 +147,6 @@ public class TilesStatistics
   {
     return _renderedSector;
   }
-
-  //  bool equalsTo(const TilesStatistics& that) const {
-  //    if (_tilesProcessed != that._tilesProcessed) {
-  //      return false;
-  //    }
-  //    if (_tilesRendered != that._tilesRendered) {
-  //      return false;
-  //    }
-  //    if (_tilesRenderedByLevel != that._tilesRenderedByLevel) {
-  //      return false;
-  //    }
-  //    if (_tilesProcessedByLevel != that._tilesProcessedByLevel) {
-  //      return false;
-  //    }
-  //    return true;
-  //  }
-
 
   public static String asLogString(int[] m, int nMax)
   {
@@ -194,7 +166,6 @@ public class TilesStatistics
         {
           isb.addString(",");
         }
-        //isb->addString("L");
         isb.addInt(level);
         isb.addString(":");
         isb.addInt(counter);
@@ -210,10 +181,7 @@ public class TilesStatistics
   public final void log(ILogger logger)
   {
     logger.logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).", _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD), _tilesVisible, asLogString(_tilesVisibleByLevel, _maxLOD), _tilesRendered, asLogString(_tilesRenderedByLevel, _maxLOD));
-//    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
-//                    _tilesProcessed,
-//                    _tilesVisible,
-//                    _tilesRendered);
   }
+
 
 }
