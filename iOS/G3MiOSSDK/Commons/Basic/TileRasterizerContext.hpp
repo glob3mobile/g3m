@@ -17,8 +17,8 @@ private:
 
 public:
 #ifdef C_CODE
-  const Tile*   const _tile;
-  const bool          _mercator;
+  const Tile* const _tile;
+  const bool        _mercator;
 #endif
 #ifdef JAVA_CODE
   public final Tile    _tile;
