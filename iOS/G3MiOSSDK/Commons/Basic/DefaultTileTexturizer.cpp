@@ -341,32 +341,34 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        bool logTilesPetitions) {
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
 
+  DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {
-    builderHolder = new DTT_TileTextureBuilderHolder(new DTT_TileTextureBuilder(this,
-                                                                                tileRasterizer,
-                                                                                rc,
-                                                                                layerTilesRenderParameters,
-//                                                                                layerSet->createTileMapPetitions(rc,
-//                                                                                                                 layerTilesRenderParameters,
-//                                                                                                                 tile),
-                                                                                rc->getDownloader(),
-                                                                                tile,
-                                                                                tessellatorMesh,
-                                                                                tessellator,
-                                                                                texturePriority,
-                                                                                logTilesPetitions
-                                                                                )
-                                                     );
+    builder = new DTT_TileTextureBuilder(this,
+                                         tileRasterizer,
+                                         rc,
+                                         layerTilesRenderParameters,
+                                         // layerSet->createTileMapPetitions(rc,
+                                         //                                  layerTilesRenderParameters,
+                                         //                                  tile),
+                                         rc->getDownloader(),
+                                         tile,
+                                         tessellatorMesh,
+                                         tessellator,
+                                         texturePriority,
+                                         logTilesPetitions);
+    builderHolder = new DTT_TileTextureBuilderHolder(builder);
     tile->setTexturizerData(builderHolder);
   }
+  else {
+    builder = builderHolder->get();
+  }
 
-  DTT_TileTextureBuilder* builder = builderHolder->get();
   Mesh* texturizedMesh = builder->getTexturedMesh();
   if (forceFullRender) {
     builder->start();
   }
   else {
-    rc->getFrameTasksExecutor()->addPreRenderTask(new DTT_TileTextureBuilderStartTask(builder));
+    rc->getFrameTasksExecutor()->addPreRenderTask( new DTT_TileTextureBuilderStartTask(builder) );
   }
 
   tile->setTexturizerDirty(false);
