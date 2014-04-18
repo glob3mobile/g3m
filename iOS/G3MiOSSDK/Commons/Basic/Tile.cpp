@@ -33,6 +33,7 @@
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
            const Sector& sector,
+           const bool mercator,
            int level,
            int row,
            int column,
@@ -40,6 +41,7 @@ Tile::Tile(TileTexturizer* texturizer,
 _texturizer(texturizer),
 _parent(parent),
 _sector(sector),
+_mercator(mercator),
 _level(level),
 _row(row),
 _column(column),
@@ -187,7 +189,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      this,
                                                      NULL,
                                                      _verticalExaggeration,
-                                                     layerTilesRenderParameters->_mercator,
                                                      tilesRenderParameters->_renderDebug,
                                                      _tileTessellatorMeshData);
 
@@ -199,7 +200,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                           this,
                                                           _elevationData,
                                                           _verticalExaggeration,
-                                                          layerTilesRenderParameters->_mercator,
                                                           tilesRenderParameters->_renderDebug,
                                                           _tileTessellatorMeshData);
 
@@ -462,7 +462,7 @@ void Tile::debugRender(const G3MRenderContext* rc,
 }
 
 
-std::vector<Tile*>* Tile::getSubTiles(const bool mercator) {
+std::vector<Tile*>* Tile::getSubTiles() {
   if (_subtiles != NULL) {
     // quick check to avoid splitLongitude/splitLatitude calculation
     return _subtiles;
@@ -475,7 +475,7 @@ std::vector<Tile*>* Tile::getSubTiles(const bool mercator) {
                                                upper._longitude);
 
 
-  const Angle splitLatitude = mercator
+  const Angle splitLatitude = _mercator
   /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
                                                                               upper._latitude)
   /*                               */ : Angle::midAngle(lower._latitude,
@@ -659,7 +659,7 @@ void Tile::render(const G3MRenderContext* rc,
       //TODO: AVISAR CAMBIO DE TERRENO
     }
     else {
-      std::vector<Tile*>* subTiles = getSubTiles(layerTilesRenderParameters->_mercator);
+      std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
         lastSplitTimer->start();
         _justCreatedSubtiles = false;
@@ -705,6 +705,7 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
   return new Tile(_texturizer,
                   parent,
                   Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
+                  _mercator,
                   level,
                   row, column,
                   _planetRenderer);

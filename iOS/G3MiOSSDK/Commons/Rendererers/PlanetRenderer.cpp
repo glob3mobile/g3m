@@ -299,8 +299,7 @@ void PlanetRenderer::sortTiles(std::vector<Tile*>& tiles) const {
 
 void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                                            Tile* tile,
-                                           int firstLevel,
-                                           bool mercator) const {
+                                           int firstLevel) const {
 
   if (tile->_level == firstLevel) {
     firstLevelTiles.push_back(tile);
@@ -313,7 +312,7 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
     const Angle splitLongitude = Angle::midAngle(lower._longitude,
                                                  upper._longitude);
 
-    const Angle splitLatitude = (mercator
+    const Angle splitLatitude = (tile->_mercator
                                  ? MercatorUtils::calculateSplitLatitude(lower._latitude,
                                                                          upper._latitude)
                                  : Angle::midAngle(lower._latitude,
@@ -326,7 +325,7 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
     const int childrenSize = children->size();
     for (int i = 0; i < childrenSize; i++) {
       Tile* child = children->at(i);
-      createFirstLevelTiles(firstLevelTiles, child, firstLevel, mercator);
+      createFirstLevelTiles(firstLevelTiles, child, firstLevel);
     }
 
     delete children;
@@ -383,7 +382,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Sector sector(tileLower, tileUpper);
 
       if (_renderedSector == NULL || sector.touchesWith(*_renderedSector)) { //Do not create innecesary tiles
-        Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
+        Tile* tile = new Tile(_texturizer, NULL, sector, parameters->_mercator, 0, row, col, this);
         if (parameters->_firstLevel == 0) {
           _firstLevelTiles.push_back(tile);
         }
@@ -398,7 +397,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
     const int topLevelTilesSize = topLevelTiles.size();
     for (int i = 0; i < topLevelTilesSize; i++) {
       Tile* tile = topLevelTiles[i];
-      createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel, parameters->_mercator);
+      createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel);
     }
   }
 
@@ -569,7 +568,7 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                               const int topLevel,
                                               const int maxLevel) {
   if (tile->_level < maxLevel) {
-    std::vector<Tile*>* subTiles = tile->getSubTiles(getLayerTilesRenderParameters()->_mercator);
+    std::vector<Tile*>* subTiles = tile->getSubTiles();
 
     const int subTilesCount = subTiles->size();
     for (int i = 0; i < subTilesCount; i++) {

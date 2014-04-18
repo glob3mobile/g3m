@@ -109,7 +109,6 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             Tile* tile,
                                             const ElevationData* elevationData,
                                             float verticalExaggeration,
-                                            bool mercator,
                                             bool renderDebug,
                                             TileTessellatorMeshData& data) const {
 
@@ -126,7 +125,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                       meshResolution,
                                       elevationData,
                                       verticalExaggeration,
-                                      mercator,
+                                      tile->_mercator,
                                       vertices,
                                       indices,
                                       *textCoords,
@@ -204,12 +203,11 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
 
 const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
                                                    const Angle& latitude,
-                                                   const Angle& longitude,
-                                                   bool mercator) const {
+                                                   const Angle& longitude) const {
   const Sector sector = tile->_sector;
 
   const Vector2F linearUV = sector.getUVCoordinatesF(latitude, longitude);
-  if (!mercator) {
+  if (!tile->_mercator) {
     return linearUV;
   }
 
@@ -224,8 +222,7 @@ const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
 }
 
 IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolution,
-                                                      const Tile* tile,
-                                                      bool mercator) const {
+                                                      const Tile* tile) const {
 
   PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
   if (data == NULL || data->_textCoords == NULL) {

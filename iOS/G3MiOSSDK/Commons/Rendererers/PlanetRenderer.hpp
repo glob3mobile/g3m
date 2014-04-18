@@ -214,8 +214,7 @@ private:
   void createFirstLevelTiles(const G3MContext* context);
   void createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                              Tile* tile,
-                             int firstLevel,
-                             bool mercator) const;
+                             int firstLevel) const;
 
   void sortTiles(std::vector<Tile*>& firstLevelTiles) const;
 

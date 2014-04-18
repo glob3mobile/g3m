@@ -12,7 +12,6 @@
 #include "TilesRenderParameters.hpp"
 #include "Tile.hpp"
 #include "LeveledTexturedMesh.hpp"
-#include "RectangleI.hpp"
 #include "TexturesHandler.hpp"
 #include "PlanetRenderer.hpp"
 #include "TileTessellator.hpp"
@@ -88,14 +87,13 @@ private:
   private final Vector2I _resolution;
 #endif
 
-  const bool _mercator;
+//  const bool _mercator;
 
 public:
   LTMInitializer(const Vector2I& resolution,
                  const Tile* tile,
                  const Tile* ancestor,
-                 const TileTessellator* tessellator,
-                 bool mercator) :
+                 const TileTessellator* tessellator) :
   _resolution(resolution),
   _tile(tile),
   _ancestor(ancestor),
@@ -103,8 +101,7 @@ public:
   _translationU(0),
   _translationV(0),
   _scaleU(1),
-  _scaleV(1),
-  _mercator(mercator)
+  _scaleV(1)
   {
 
   }
@@ -122,18 +119,10 @@ public:
       const Sector tileSector = _tile->_sector;
 
       const Vector2F lowerTextCoordUV = _tessellator->getTextCoord(_ancestor,
-                                                                   tileSector._lower,
-                                                                   _mercator);
+                                                                   tileSector._lower);
 
       const Vector2F upperTextCoordUV = _tessellator->getTextCoord(_ancestor,
-                                                                   tileSector._upper,
-                                                                   _mercator);
-
-      //      _scale       = MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x,
-      //                                     lowerTextCoordUV._y - upperTextCoordUV._y);
-      //
-      //      _translation = MutableVector2D(lowerTextCoordUV._x,
-      //                                     upperTextCoordUV._y);
+                                                                   tileSector._upper);
 
       _translationU = lowerTextCoordUV._x;
       _translationV = upperTextCoordUV._y;
@@ -152,7 +141,7 @@ public:
   }
 
   IFloatBuffer* createTextCoords() const {
-    return _tessellator->createTextCoords(_resolution, _tile, _mercator);
+    return _tessellator->createTextCoords(_resolution, _tile);
   }
 
 };
@@ -189,7 +178,6 @@ class TextureUploader : public IImageListener {
 private:
   TileTextureBuilder* _builder;
   const Tile* _tile;
-  const bool  _mercator;
 
   TileRasterizer* _tileRasterizer;
 
@@ -207,14 +195,12 @@ private:
 public:
   TextureUploader(TileTextureBuilder* builder,
                   const Tile* tile,
-                  bool mercator,
                   TileRasterizer* tileRasterizer,
                   std::vector<RectangleF*> srcRects,
                   std::vector<RectangleF*> dstRects,
                   const std::string& textureId) :
   _builder(builder),
   _tile(tile),
-  _mercator(mercator),
   _tileRasterizer(tileRasterizer),
   _srcRects(srcRects),
   _dstRects(dstRects),
@@ -259,7 +245,6 @@ private:
   private final Vector2I _tileTextureResolution;
   private final Vector2I _tileMeshResolution;
 #endif
-  const bool       _mercator;
 
   IDownloader*     _downloader;
 
@@ -336,7 +321,6 @@ public:
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
   _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
-  _mercator( layerTilesRenderParameters->_mercator ),
   _downloader(downloader),
   _tile(tile),
   _tessellatorMesh(tessellatorMesh),
@@ -486,7 +470,6 @@ public:
                            transparencies,
                            new TextureUploader(this,
                                                _tile,
-                                               _mercator,
                                                _tileRasterizer,
                                                sourceRects,
                                                destRects,
@@ -644,8 +627,7 @@ public:
       LazyTextureMapping* mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution,
                                                                               _tile,
                                                                               ancestor,
-                                                                              _tessellator,
-                                                                              _mercator),
+                                                                              _tessellator),
                                                            ownedTexCoords,
                                                            transparent);
 
@@ -685,9 +667,7 @@ public:
   }
 
   void cleanTile() {
-    if (_tile != NULL) {
-      _tile = NULL;
-    }
+    _tile = NULL;
   }
 
 };
@@ -700,12 +680,11 @@ void TextureUploader::imageCreated(const IImage* image) {
                            _textureId);
   }
   else {
-    const TileRasterizerContext trc(_tile, _mercator);
+    const TileRasterizerContext trc(_tile);
     _tileRasterizer->rasterize(image,
                                trc,
                                new TextureUploader(_builder,
                                                    _tile,
-                                                   _mercator,
                                                    NULL,
                                                    _srcRects,
                                                    _dstRects,
@@ -778,7 +757,6 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
 
 void MultiLayerTileTexturizer::initialize(const G3MContext* context,
                                           const TilesRenderParameters* parameters) {
-  //  _layerSet->initialize(ic);
 }
 
 

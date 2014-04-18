@@ -142,6 +142,8 @@
 		CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF423A2B17F8874E00F50525 /* RenderState.cpp */; };
 		CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* AbstractMeshShape.cpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
+		CF47E0E91901965C00410BB5 /* TileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0E71901965C00410BB5 /* TileImageProvider.cpp */; };
+		CF47E0EF19019A1000410BB5 /* TileImageListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0ED19019A1000410BB5 /* TileImageListener.cpp */; };
 		CF485F8918511C250013795B /* AndTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF485F8718511C250013795B /* AndTileCondition.cpp */; };
 		CF485F8A18511C460013795B /* AndTileCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF485F8818511C250013795B /* AndTileCondition.hpp */; };
 		CF494C9A17FF0A1400D16D33 /* TerrainTouchListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF494C9817FF0A1400D16D33 /* TerrainTouchListener.cpp */; };
@@ -287,6 +289,7 @@
 		CFAC9EA018CE27A500EE57EF /* GEOLabelRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFAC9E9E18CE277D00EE57EF /* GEOLabelRasterSymbol.hpp */; };
 		CFADEB6D17A42C75001914B2 /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFADEB6B17A42C75001914B2 /* ChangedListener.cpp */; };
 		CFADEB6E17A42D11001914B2 /* ChangedListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFADEB6C17A42C75001914B2 /* ChangedListener.hpp */; };
+		CFADF22318FF1CDB00360565 /* DefaultTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFADF22118FF1CDB00360565 /* DefaultTileTexturizer.cpp */; };
 		CFB5275016D5607F008374C2 /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB5274E16D5607F008374C2 /* Interpolator.cpp */; };
 		CFB57DA61860E4EF00D5B094 /* HUDRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB57DA41860E4EF00D5B094 /* HUDRenderer.cpp */; };
 		CFB57DA71860E55500D5B094 /* HUDRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB57DA51860E4EF00D5B094 /* HUDRenderer.hpp */; };
@@ -1239,6 +1242,10 @@
 		CF45E024164851C5004746BB /* AbstractMeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AbstractMeshShape.hpp; path = Commons/Rendererers/AbstractMeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
+		CF47E0E71901965C00410BB5 /* TileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileImageProvider.cpp; path = Commons/Basic/TileImageProvider.cpp; sourceTree = "<group>"; };
+		CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileImageProvider.hpp; path = Commons/Basic/TileImageProvider.hpp; sourceTree = "<group>"; };
+		CF47E0ED19019A1000410BB5 /* TileImageListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileImageListener.cpp; path = Commons/Basic/TileImageListener.cpp; sourceTree = "<group>"; };
+		CF47E0EE19019A1000410BB5 /* TileImageListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileImageListener.hpp; path = Commons/Basic/TileImageListener.hpp; sourceTree = "<group>"; };
 		CF485F8718511C250013795B /* AndTileCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndTileCondition.cpp; sourceTree = "<group>"; };
 		CF485F8818511C250013795B /* AndTileCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AndTileCondition.hpp; sourceTree = "<group>"; };
 		CF494C9817FF0A1400D16D33 /* TerrainTouchListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainTouchListener.cpp; path = Commons/Rendererers/TerrainTouchListener.cpp; sourceTree = "<group>"; };
@@ -1426,6 +1433,8 @@
 		CFAC9E9E18CE277D00EE57EF /* GEOLabelRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOLabelRasterSymbol.hpp; path = Commons/GEO/GEOLabelRasterSymbol.hpp; sourceTree = "<group>"; };
 		CFADEB6B17A42C75001914B2 /* ChangedListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChangedListener.cpp; path = Commons/Basic/ChangedListener.cpp; sourceTree = "<group>"; };
 		CFADEB6C17A42C75001914B2 /* ChangedListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ChangedListener.hpp; path = Commons/Basic/ChangedListener.hpp; sourceTree = "<group>"; };
+		CFADF22118FF1CDB00360565 /* DefaultTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DefaultTileTexturizer.cpp; path = Commons/Basic/DefaultTileTexturizer.cpp; sourceTree = "<group>"; };
+		CFADF22218FF1CDB00360565 /* DefaultTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultTileTexturizer.hpp; path = Commons/Basic/DefaultTileTexturizer.hpp; sourceTree = "<group>"; };
 		CFB5274E16D5607F008374C2 /* Interpolator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Interpolator.cpp; path = Commons/Math/Interpolator.cpp; sourceTree = "<group>"; };
 		CFB5274F16D5607F008374C2 /* Interpolator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Interpolator.hpp; path = Commons/Math/Interpolator.hpp; sourceTree = "<group>"; };
 		CFB57DA41860E4EF00D5B094 /* HUDRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HUDRenderer.cpp; path = Commons/Rendererers/HUDRenderer.cpp; sourceTree = "<group>"; };
@@ -2085,6 +2094,12 @@
 				CF2ADB8618DC92F8001EF133 /* TileRenderingListener.hpp */,
 				CFA5292418FED6FD00631CB4 /* TileRasterizerContext.cpp */,
 				CFA5292518FED6FD00631CB4 /* TileRasterizerContext.hpp */,
+				CFADF22118FF1CDB00360565 /* DefaultTileTexturizer.cpp */,
+				CFADF22218FF1CDB00360565 /* DefaultTileTexturizer.hpp */,
+				CF47E0E71901965C00410BB5 /* TileImageProvider.cpp */,
+				CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */,
+				CF47E0ED19019A1000410BB5 /* TileImageListener.cpp */,
+				CF47E0EE19019A1000410BB5 /* TileImageListener.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2871,6 +2886,7 @@
 				D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */,
 				CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */,
 				CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */,
+				CF47E0E91901965C00410BB5 /* TileImageProvider.cpp in Sources */,
 				CF527E1F162E33F500E0BDE0 /* DefaultRenderer.cpp in Sources */,
 				CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */,
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
@@ -2970,6 +2986,7 @@
 				CF75C3A216EA54CC00F7EE9F /* MapBoxLayer.cpp in Sources */,
 				CF75C3A616EA621D00F7EE9F /* GoogleMapsLayer.cpp in Sources */,
 				CF0CE00518730A5D0067C594 /* Future.cpp in Sources */,
+				CF47E0EF19019A1000410BB5 /* TileImageListener.cpp in Sources */,
 				CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */,
 				E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */,
 				CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */,
@@ -3062,6 +3079,7 @@
 				CF290D55187F1695000BE644 /* TextureIDReference.cpp in Sources */,
 				CFDDDF9C17F8C9E100DD3499 /* URLTemplateLayer.cpp in Sources */,
 				CFAA530217AAFDCF002A9204 /* DecimatedSubviewElevationData.cpp in Sources */,
+				CFADF22318FF1CDB00360565 /* DefaultTileTexturizer.cpp in Sources */,
 				CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */,
 				CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */,
 				D8F0C70B17B52702002A89E0 /* GenericQuadTree.cpp in Sources */,

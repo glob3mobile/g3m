@@ -9,26 +9,16 @@
 #ifndef __G3MiOSSDK__Petition__
 #define __G3MiOSSDK__Petition__
 
-#include <string>
-#include <vector>
-
-#include "URL.hpp"
 #include "Sector.hpp"
-#include "IImage.hpp"
+#include "URL.hpp"
+class IImage;
 
-#include "TimeInterval.hpp"
-
-class Tile;
-class Rectangle;
-class Sector;
-class IFactory;
-class MutableVector2D;
 
 class Petition {
 private:
   const Sector _sector;
-  IImage* _image;
-  const float _layerTransparency;
+  IImage*      _image;
+  const float  _layerTransparency;
 
 #ifdef C_CODE
   const URL _url;

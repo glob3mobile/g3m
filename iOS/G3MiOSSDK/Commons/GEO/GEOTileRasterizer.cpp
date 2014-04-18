@@ -94,7 +94,7 @@ public:
       _canvas->drawImage(_originalImage, 0, 0);
 
       _projection = new GEORasterProjection(tile->_sector,
-                                            _trc->_mercator,
+                                            tile->_mercator,
                                             width, height);
     }
 

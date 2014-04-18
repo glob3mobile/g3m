@@ -181,6 +181,7 @@ private:
 
 public:
   const Sector    _sector;
+  const bool      _mercator;
   const int       _level;
   const int       _row;
   const int       _column;
@@ -188,6 +189,7 @@ public:
   Tile(TileTexturizer* texturizer,
        Tile* parent,
        const Sector& sector,
+       const bool mercator,
        int level,
        int row,
        int column,
@@ -196,7 +198,7 @@ public:
   ~Tile();
 
   //Change to public for TileCache
-  std::vector<Tile*>* getSubTiles(const bool mercator);
+  std::vector<Tile*>* getSubTiles();
 
   Mesh* getTexturizedMesh() const {
     return _texturizedMesh;

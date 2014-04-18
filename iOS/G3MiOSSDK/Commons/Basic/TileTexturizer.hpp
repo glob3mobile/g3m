@@ -65,7 +65,7 @@ public:
                                    const Geodetic3D& position,
                                    const Tile* tile,
                                    LayerSet* layerSet) = 0;
-
+  
 };
 
 #endif

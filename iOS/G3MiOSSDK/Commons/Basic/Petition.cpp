@@ -10,6 +10,7 @@
 
 #include "IStringBuilder.hpp"
 #include "IFactory.hpp"
+#include "IImage.hpp"
 
 const std::string Petition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -22,7 +23,7 @@ const std::string Petition::description() const {
     isb->addString("NULL");
   }
   else {
-    isb->addString( _image->description() );
+    isb->addString(_image->description());
   }
 
   const std::string s = isb->getString();

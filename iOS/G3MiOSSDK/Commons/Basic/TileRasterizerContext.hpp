@@ -18,17 +18,13 @@ private:
 public:
 #ifdef C_CODE
   const Tile* const _tile;
-  const bool        _mercator;
 #endif
 #ifdef JAVA_CODE
   public final Tile    _tile;
-  public final boolean _mercator;
 #endif
 
-  TileRasterizerContext(const Tile* tile,
-                        bool mercator) :
-  _tile(tile),
-  _mercator(mercator)
+  TileRasterizerContext(const Tile* tile) :
+  _tile(tile)
   {
   }
 
