@@ -94,7 +94,7 @@ public:
 
 class DTT_TileTextureBuilder : public RCObject {
 private:
-  LeveledTexturedMesh* _mesh;
+  LeveledTexturedMesh* _texturedMesh;
 
   DefaultTileTexturizer* _texturizer;
   TileRasterizer*        _tileRasterizer;
@@ -108,18 +108,18 @@ private:
 
 #ifdef C_CODE
   const Vector2I   _tileTextureResolution;
-  const Vector2I   _tileMeshResolution;
+//  const Vector2I   _tileMeshResolution;
 #endif
 #ifdef JAVA_CODE
   private final Vector2I _tileTextureResolution;
-  private final Vector2I _tileMeshResolution;
+//  private final Vector2I _tileMeshResolution;
 #endif
 
   IDownloader*     _downloader;
 
-  const Mesh* _tessellatorMesh;
+//  const Mesh* _tessellatorMesh;
 
-  const TileTessellator* _tessellator;
+//  const TileTessellator* _tessellator;
 
   const bool _logTilesPetitions;
 
@@ -135,28 +135,31 @@ private:
 
 
 
-  const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile) const {
+  static const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile) {
     LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizedMesh();
 
     return (mesh == NULL) ? NULL : mesh->getTopLevelTextureId();
   }
 
-  LeveledTexturedMesh* createMesh() const {
+  static LeveledTexturedMesh* createMesh(Tile* tile,
+                                         const Mesh* tessellatorMesh,
+                                         const Vector2I tileMeshResolution,
+                                         const TileTessellator* tessellator) {
     std::vector<LazyTextureMapping*>* mappings = new std::vector<LazyTextureMapping*>();
 
-    Tile* ancestor = _tile;
+    Tile* ancestor = tile;
     bool fallbackSolved = false;
     while (ancestor != NULL && !fallbackSolved) {
       const bool ownedTexCoords = true;
       const bool transparent    = false;
-      LazyTextureMapping* mapping = new LazyTextureMapping(new DTT_LTMInitializer(_tileMeshResolution,
-                                                                                  _tile,
+      LazyTextureMapping* mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution,
+                                                                                  tile,
                                                                                   ancestor,
-                                                                                  _tessellator),
+                                                                                  tessellator),
                                                            ownedTexCoords,
                                                            transparent);
 
-      if (ancestor != _tile) {
+      if (ancestor != tile) {
         const TextureIDReference* glTextureId = getTopLevelTextureIdForTile(ancestor);
         if (glTextureId != NULL) {
           TextureIDReference* glTextureIdRetainedCopy = glTextureId->createCopy();
@@ -171,7 +174,7 @@ private:
       ancestor = ancestor->getParent();
     }
 
-    return new LeveledTexturedMesh(_tessellatorMesh,
+    return new LeveledTexturedMesh(tessellatorMesh,
                                    false,
                                    mappings);
   }
@@ -193,28 +196,31 @@ public:
   _tileRasterizer(tileRasterizer),
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
-  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
+//  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
   _downloader(downloader),
   _tile(tile),
-  _tessellatorMesh(tessellatorMesh),
+//  _tessellatorMesh(tessellatorMesh),
 //  _stepsDone(0),
-  _mesh( NULL ),
-  _tessellator(tessellator),
+  _texturedMesh( NULL ),
+//  _tessellator(tessellator),
   _finalized(false),
   _canceled(false),
   _alreadyStarted(false),
   _texturePriority(texturePriority),
   _logTilesPetitions(logTilesPetitions)
   {
-    _mesh = createMesh();
+    _texturedMesh = createMesh(tile,
+                               tessellatorMesh,
+                               layerTilesRenderParameters->_tileMeshResolution,
+                               tessellator);
   }
 
-  LeveledTexturedMesh* getMesh() {
-    return _mesh;
+  LeveledTexturedMesh* getTexturedMesh() {
+    return _texturedMesh;
   }
 
-  void cleanMesh() {
-    _mesh = NULL;
+  void cleanTexturedMesh() {
+    _texturedMesh = NULL;
   }
 
   void cleanTile() {
@@ -223,10 +229,14 @@ public:
 
   void start() {
 #warning Diego at work!
+    if (_tile != NULL) {
+      _tile->setTextureSolved(true);
+    }
   }
 
   void cancel() {
 #warning Diego at work!
+    _canceled = true;
 //    if (!_canceled) {
 //      _canceled = true;
 //
@@ -302,7 +312,7 @@ public:
 
 LeveledTexturedMesh* DefaultTileTexturizer::getMesh(Tile* tile) const {
   DTT_TileTextureBuilderHolder* tileBuilderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
-  return (tileBuilderHolder == NULL) ? NULL : tileBuilderHolder->get()->getMesh();
+  return (tileBuilderHolder == NULL) ? NULL : tileBuilderHolder->get()->getTexturedMesh();
 }
 
 
@@ -351,6 +361,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
   }
 
   DTT_TileTextureBuilder* builder = builderHolder->get();
+  Mesh* texturizedMesh = builder->getTexturedMesh();
   if (forceFullRender) {
     builder->start();
   }
@@ -359,7 +370,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
   }
 
   tile->setTexturizerDirty(false);
-  return builder->getMesh();
+  return texturizedMesh;
 }
 
 void DefaultTileTexturizer::tileToBeDeleted(Tile* tile,
@@ -369,7 +380,7 @@ void DefaultTileTexturizer::tileToBeDeleted(Tile* tile,
     DTT_TileTextureBuilder* builder = builderHolder->get();
     builder->cancel();
     builder->cleanTile();
-    builder->cleanMesh();
+    builder->cleanTexturedMesh();
   }
 }
 
@@ -379,7 +390,7 @@ void DefaultTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   if (builderHolder != NULL) {
     DTT_TileTextureBuilder* builder = builderHolder->get();
     builder->cancel();
-    builder->cleanMesh();
+    builder->cleanTexturedMesh();
   }
 }
 

@@ -23,7 +23,6 @@ class TerrainTouchListener;
 #include "DefaultRenderer.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
-#include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
 #include "ITileVisitor.hpp"

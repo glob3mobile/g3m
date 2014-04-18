@@ -99,7 +99,7 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
     }
 
     delete _mappings;
-    _mappings = NULL;
+//    _mappings = NULL;
   }
 
   _glState->_release();
@@ -126,6 +126,10 @@ BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {
 }
 
 LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
+  if (_mappings == NULL) {
+    return NULL;
+  }
+
   if (_currentLevel < 0) {
     int newCurrentLevel = -1;
 
