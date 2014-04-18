@@ -267,9 +267,9 @@ public:
     }
   }
 
-  //#ifndef C_CODE
-  //  void unusedMethod() { }
-  //#endif
+#ifndef C_CODE
+  void unusedMethod() { }
+#endif
 };
 
 
