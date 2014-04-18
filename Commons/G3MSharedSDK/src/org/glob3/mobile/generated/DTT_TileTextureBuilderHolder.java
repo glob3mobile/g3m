@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class DTT_TileTextureBuilderHolder implements ITexturizerData
+public class DTT_TileTextureBuilderHolder implements ITexturizerData
 {
   private DTT_TileTextureBuilder _builder;
 
@@ -21,7 +21,10 @@ public abstract class DTT_TileTextureBuilderHolder implements ITexturizerData
     }
   }
 
-  ///#ifndef C_CODE
-  //  void unusedMethod() { }
-  ///#endif
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if ! C_CODE
+  public final void unusedMethod()
+  {
+  }
+//#endif
 }
