@@ -87,8 +87,6 @@ private:
   private final Vector2I _resolution;
 #endif
 
-//  const bool _mercator;
-
 public:
   LTMInitializer(const Vector2I& resolution,
                  const Tile* tile,
