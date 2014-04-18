@@ -12,8 +12,6 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private final TileTessellator _tessellator;
   private final Vector2I _resolution;
 
-//  const bool _mercator;
-
   public LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator)
   {
      _resolution = resolution;
