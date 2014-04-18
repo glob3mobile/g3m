@@ -65,10 +65,10 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-      _texturizer = new MultiLayerTileTexturizer();
+  //    _texturizer = new MultiLayerTileTexturizer();
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
-  //    _texturizer = new DefaultTileTexturizer();
+      _texturizer = new DefaultTileTexturizer();
     }
   
     return _texturizer;
@@ -266,7 +266,7 @@ public class PlanetRendererBuilder
   private TileRenderingListener _tileRenderingListener;
 
 
-  ///#include "DefaultTileTexturizer.hpp"
+  ///#include "MultiLayerTileTexturizer.hpp"
   
   
   public PlanetRendererBuilder()

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class DTT_TileTextureBuilder extends RCObject
 {
-  private LeveledTexturedMesh _mesh;
+  private LeveledTexturedMesh _texturedMesh;
 
   private DefaultTileTexturizer _texturizer;
   private TileRasterizer _tileRasterizer;
@@ -14,13 +14,13 @@ public class DTT_TileTextureBuilder extends RCObject
   private TexturesHandler _texturesHandler;
 
   private final Vector2I _tileTextureResolution;
-  private final Vector2I _tileMeshResolution;
+//  private final Vector2I _tileMeshResolution;
 
   private IDownloader _downloader;
 
-  private final Mesh _tessellatorMesh;
+//  const Mesh* _tessellatorMesh;
 
-  private final TileTessellator _tessellator;
+//  const TileTessellator* _tessellator;
 
   private final boolean _logTilesPetitions;
 
@@ -36,26 +36,26 @@ public class DTT_TileTextureBuilder extends RCObject
 
 
 
-  private TextureIDReference getTopLevelTextureIdForTile(Tile tile)
+  private static TextureIDReference getTopLevelTextureIdForTile(Tile tile)
   {
     LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizedMesh();
 
     return (mesh == null) ? null : mesh.getTopLevelTextureId();
   }
 
-  private LeveledTexturedMesh createMesh()
+  private static LeveledTexturedMesh createMesh(Tile tile, Mesh tessellatorMesh, Vector2I tileMeshResolution, TileTessellator tessellator)
   {
     java.util.ArrayList<LazyTextureMapping> mappings = new java.util.ArrayList<LazyTextureMapping>();
 
-    Tile ancestor = _tile;
+    Tile ancestor = tile;
     boolean fallbackSolved = false;
     while (ancestor != null && !fallbackSolved)
     {
       final boolean ownedTexCoords = true;
       final boolean transparent = false;
-      LazyTextureMapping mapping = new LazyTextureMapping(new DTT_LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator), ownedTexCoords, transparent);
+      LazyTextureMapping mapping = new LazyTextureMapping(new DTT_LTMInitializer(tileMeshResolution, tile, ancestor, tessellator), ownedTexCoords, transparent);
 
-      if (ancestor != _tile)
+      if (ancestor != tile)
       {
         final TextureIDReference glTextureId = getTopLevelTextureIdForTile(ancestor);
         if (glTextureId != null)
@@ -72,40 +72,40 @@ public class DTT_TileTextureBuilder extends RCObject
       ancestor = ancestor.getParent();
     }
 
-    return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);
+    return new LeveledTexturedMesh(tessellatorMesh, false, mappings);
   }
 
 
   public DTT_TileTextureBuilder(DefaultTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority, boolean logTilesPetitions)
 //                         const std::vector<Petition*>&     petitions,
+//  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
+//  _tessellatorMesh(tessellatorMesh),
 //  _stepsDone(0),
+//  _tessellator(tessellator),
   {
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
      _texturesHandler = rc.getTexturesHandler();
      _tileTextureResolution = layerTilesRenderParameters._tileTextureResolution;
-     _tileMeshResolution = layerTilesRenderParameters._tileMeshResolution;
      _downloader = downloader;
      _tile = tile;
-     _tessellatorMesh = tessellatorMesh;
-     _mesh = null;
-     _tessellator = tessellator;
+     _texturedMesh = null;
      _finalized = false;
      _canceled = false;
      _alreadyStarted = false;
      _texturePriority = texturePriority;
      _logTilesPetitions = logTilesPetitions;
-    _mesh = createMesh();
+    _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator);
   }
 
-  public final LeveledTexturedMesh getMesh()
+  public final LeveledTexturedMesh getTexturedMesh()
   {
-    return _mesh;
+    return _texturedMesh;
   }
 
-  public final void cleanMesh()
+  public final void cleanTexturedMesh()
   {
-    _mesh = null;
+    _texturedMesh = null;
   }
 
   public final void cleanTile()
@@ -117,12 +117,17 @@ public class DTT_TileTextureBuilder extends RCObject
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
+    if (_tile != null)
+    {
+      _tile.setTextureSolved(true);
+    }
   }
 
   public final void cancel()
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
+    _canceled = true;
 //    if (!_canceled) {
 //      _canceled = true;
 //

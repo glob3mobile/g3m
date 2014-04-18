@@ -25,7 +25,7 @@ public class DefaultTileTexturizer extends TileTexturizer
   private LeveledTexturedMesh getMesh(Tile tile)
   {
     DTT_TileTextureBuilderHolder tileBuilderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
-    return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getMesh();
+    return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getTexturedMesh();
   }
 
   public void dispose()
@@ -61,6 +61,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     }
   
     DTT_TileTextureBuilder builder = builderHolder.get();
+    Mesh texturizedMesh = builder.getTexturedMesh();
     if (forceFullRender)
     {
       builder.start();
@@ -71,7 +72,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     }
   
     tile.setTexturizerDirty(false);
-    return builder.getMesh();
+    return texturizedMesh;
   }
 
   public final void tileToBeDeleted(Tile tile, Mesh mesh)
@@ -82,7 +83,7 @@ public class DefaultTileTexturizer extends TileTexturizer
       DTT_TileTextureBuilder builder = builderHolder.get();
       builder.cancel();
       builder.cleanTile();
-      builder.cleanMesh();
+      builder.cleanTexturedMesh();
     }
   }
 
@@ -93,7 +94,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     {
       DTT_TileTextureBuilder builder = builderHolder.get();
       builder.cancel();
-      builder.cleanMesh();
+      builder.cleanTexturedMesh();
     }
   }
 

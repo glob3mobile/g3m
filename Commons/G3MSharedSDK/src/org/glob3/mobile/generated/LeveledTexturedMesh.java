@@ -9,6 +9,11 @@ public class LeveledTexturedMesh extends Mesh
 
   private LazyTextureMapping getCurrentTextureMapping()
   {
+    if (_mappings == null)
+    {
+      return null;
+    }
+  
     if (_currentLevel < 0)
     {
       int newCurrentLevel = -1;
@@ -63,9 +68,13 @@ public class LeveledTexturedMesh extends Mesh
      _mappings = mappings;
      _currentLevel = -1;
      _glState = new GLState();
+    if (_mappings == null)
+    {
+      throw new RuntimeException("LeveledTexturedMesh: mappings can't be NULL!");
+    }
     if (_mappings.size() <= 0)
     {
-      ILogger.instance().logError("LeveledTexturedMesh: empty mappings");
+      throw new RuntimeException("LeveledTexturedMesh: empty mappings");
     }
   }
 
@@ -91,7 +100,7 @@ public class LeveledTexturedMesh extends Mesh
       }
   
       _mappings = null;
-      _mappings = null;
+  //    _mappings = NULL;
     }
   
     _glState._release();
