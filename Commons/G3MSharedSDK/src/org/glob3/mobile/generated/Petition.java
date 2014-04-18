@@ -16,14 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//class IImage;
 
-
-
-//class Tile;
-//class Rectangle;
-//class Sector;
-//class IFactory;
-//class MutableVector2D;
 
 public class Petition
 {

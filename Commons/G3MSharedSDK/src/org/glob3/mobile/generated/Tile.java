@@ -194,13 +194,13 @@ public class Tile
       if (elevationDataProvider == null)
       {
         // no elevation data provider, just create a simple mesh without elevation
-        _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, layerTilesRenderParameters._mercator, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+        _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
   
         computeTileCorners(rc.getPlanet());
       }
       else
       {
-        Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, layerTilesRenderParameters._mercator, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
+        Mesh tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, _elevationData, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
   
         MeshHolder meshHolder = (MeshHolder) _tessellatorMesh;
         if (meshHolder == null)
@@ -365,7 +365,7 @@ public class Tile
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
     Tile parent = setParent ? this : null;
-    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column, _planetRenderer);
+    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), _mercator, level, row, column, _planetRenderer);
   }
 
 
@@ -474,15 +474,17 @@ public class Tile
   private TileRenderingListener _tileRenderingListener;
 
   public final Sector _sector ;
+  public final boolean _mercator;
   public final int _level;
   public final int _row;
   public final int _column;
 
-  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column, PlanetRenderer planetRenderer)
+  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer)
   {
      _texturizer = texturizer;
      _parent = parent;
      _sector = new Sector(sector);
+     _mercator = mercator;
      _level = level;
      _row = row;
      _column = column;
@@ -583,7 +585,7 @@ public class Tile
   }
 
   //Change to public for TileCache
-  public final java.util.ArrayList<Tile> getSubTiles(boolean mercator)
+  public final java.util.ArrayList<Tile> getSubTiles()
   {
     if (_subtiles != null)
     {
@@ -597,7 +599,7 @@ public class Tile
     final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
   
   
-    final Angle splitLatitude = mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
+    final Angle splitLatitude = _mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
     /*                               */
     /*                               */
   
@@ -685,7 +687,7 @@ public class Tile
       }
       else
       {
-        java.util.ArrayList<Tile> subTiles = getSubTiles(layerTilesRenderParameters._mercator);
+        java.util.ArrayList<Tile> subTiles = getSubTiles();
         if (_justCreatedSubtiles)
         {
           lastSplitTimer.start();

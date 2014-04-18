@@ -24,12 +24,10 @@ public class TileRasterizerContext
 //  TileRasterizerContext(TileRasterizerContext that);
 
   public final Tile    _tile;
-  public final boolean _mercator;
 
-  public TileRasterizerContext(Tile tile, boolean mercator)
+  public TileRasterizerContext(Tile tile)
   {
      _tile = tile;
-     _mercator = mercator;
   }
 
   public void dispose()

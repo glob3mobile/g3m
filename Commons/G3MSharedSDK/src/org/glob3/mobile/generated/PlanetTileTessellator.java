@@ -381,7 +381,7 @@ public class PlanetTileTessellator extends TileTessellator
   }
 
 
-  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean mercator, boolean renderDebug, TileTessellatorMeshData data)
+  public final Mesh createTileMesh(Planet planet, Vector2I rawResolution, Tile tile, ElevationData elevationData, float verticalExaggeration, boolean renderDebug, TileTessellatorMeshData data)
   {
   
     final Sector tileSector = tile._sector;
@@ -392,7 +392,7 @@ public class PlanetTileTessellator extends TileTessellator
     ShortBufferBuilder indices = new ShortBufferBuilder();
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
-    double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, mercator, vertices, indices, textCoords, data);
+    double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, tile._mercator, vertices, indices, textCoords, data);
   
     if (_skirted)
     {
@@ -489,7 +489,7 @@ public class PlanetTileTessellator extends TileTessellator
     return true;
   }
 
-  public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile, boolean mercator)
+  public final IFloatBuffer createTextCoords(Vector2I rawResolution, Tile tile)
   {
   
     PlanetTileTessellatorData data = (PlanetTileTessellatorData) tile.getTessellatorData();
@@ -501,12 +501,12 @@ public class PlanetTileTessellator extends TileTessellator
     return data._textCoords.create();
   }
 
-  public final Vector2F getTextCoord(Tile tile, Angle latitude, Angle longitude, boolean mercator)
+  public final Vector2F getTextCoord(Tile tile, Angle latitude, Angle longitude)
   {
     final Sector sector = tile._sector;
   
     final Vector2F linearUV = sector.getUVCoordinatesF(latitude, longitude);
-    if (!mercator)
+    if (!tile._mercator)
     {
       return linearUV;
     }

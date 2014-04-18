@@ -1,49 +1,36 @@
 package org.glob3.mobile.generated; 
 //
-//  MultiLayerTileTexturizer.cpp
+//  DefaultTileTexturizer.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 08/08/12.
+//  Created by Diego Gomez Deck on 4/16/14.
 //
 //
 
 //
-//  MultiLayerTileTexturizer.hpp
+//  DefaultTileTexturizer.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 08/08/12.
+//  Created by Diego Gomez Deck on 4/16/14.
 //
 //
 
 
-
-//class IGLTextureId;
-//class TileTextureBuilder;
-//class LayerSet;
-//class IDownloader;
 //class LeveledTexturedMesh;
-//class IFloatBuffer;
-//class TileRasterizer;
 //class TextureIDReference;
-//class G3MEventContext;
 
-public class MultiLayerTileTexturizer extends TileTexturizer
+
+public class DefaultTileTexturizer extends TileTexturizer
 {
   private LeveledTexturedMesh getMesh(Tile tile)
   {
-    TileTextureBuilderHolder tileBuilderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
+    DTT_TileTextureBuilderHolder tileBuilderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
     return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getMesh();
-  }
-
-  public MultiLayerTileTexturizer()
-  {
-  
   }
 
   public void dispose()
   {
     super.dispose();
-  
   }
 
   public final RenderState getRenderState(LayerSet layerSet)
@@ -57,26 +44,30 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
+    // do nothing
   }
 
   public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
   {
-    TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
+    DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, layerTilesRenderParameters, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions));
+      builderHolder = new DTT_TileTextureBuilderHolder(new DTT_TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions));
+  //                                                                                layerSet->createTileMapPetitions(rc,
+  //                                                                                                                 layerTilesRenderParameters,
+  //                                                                                                                 tile),
       tile.setTexturizerData(builderHolder);
     }
   
-    TileTextureBuilder builder = builderHolder.get();
+    DTT_TileTextureBuilder builder = builderHolder.get();
     if (forceFullRender)
     {
       builder.start();
     }
     else
     {
-      rc.getFrameTasksExecutor().addPreRenderTask(new TileTextureBuilderStartTask(builder));
+      rc.getFrameTasksExecutor().addPreRenderTask(new DTT_TileTextureBuilderStartTask(builder));
     }
   
     tile.setTexturizerDirty(false);
@@ -85,12 +76,23 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void tileToBeDeleted(Tile tile, Mesh mesh)
   {
-    TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
+    DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
     if (builderHolder != null)
     {
-      TileTextureBuilder builder = builderHolder.get();
+      DTT_TileTextureBuilder builder = builderHolder.get();
       builder.cancel();
       builder.cleanTile();
+      builder.cleanMesh();
+    }
+  }
+
+  public final void tileMeshToBeDeleted(Tile tile, Mesh mesh)
+  {
+    DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
+    if (builderHolder != null)
+    {
+      DTT_TileTextureBuilder builder = builderHolder.get();
+      builder.cancel();
       builder.cleanMesh();
     }
   }
@@ -102,6 +104,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
+    // do nothing
   }
 
   public final void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved)
@@ -134,23 +137,14 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-    //  _texturesHandler->retainGLTextureId(glTextureId);
     final TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
   
     final int level = tile._level - ancestorTile._level;
     if (!tileMesh.setGLTextureIdForLevel(level, glTextureIdRetainedCopy))
     {
-      //    _texturesHandler->releaseGLTextureId(glTextureId);
       if (glTextureIdRetainedCopy != null)
          glTextureIdRetainedCopy.dispose();
     }
-  }
-
-  public final TextureIDReference getTopLevelTextureIdForTile(Tile tile)
-  {
-    LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizedMesh();
-  
-    return (mesh == null) ? null : mesh.getTopLevelTextureId();
   }
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
@@ -163,15 +157,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
     return layerSet.onTerrainTouchEvent(ec, position, tile);
   }
 
-  public final void tileMeshToBeDeleted(Tile tile, Mesh mesh)
-  {
-    TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
-    if (builderHolder != null)
-    {
-      TileTextureBuilder builder = builderHolder.get();
-      builder.cancel();
-      builder.cleanMesh();
-    }
-  }
+//  const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile);
 
 }

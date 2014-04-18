@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class LTMInitializer extends LazyTextureMappingInitializer
+public class DTT_LTMInitializer extends LazyTextureMappingInitializer
 {
   private final Tile _tile;
   private final Tile _ancestor;
@@ -12,9 +12,7 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private final TileTessellator _tessellator;
   private final Vector2I _resolution;
 
-//  const bool _mercator;
-
-  public LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator)
+  public DTT_LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator)
   {
      _resolution = resolution;
      _tile = tile;

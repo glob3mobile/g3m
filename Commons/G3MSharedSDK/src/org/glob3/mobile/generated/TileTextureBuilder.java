@@ -26,7 +26,6 @@ public class TileTextureBuilder extends RCObject
 
   private final Vector2I _tileTextureResolution;
   private final Vector2I _tileMeshResolution;
-  private final boolean _mercator;
 
   private IDownloader _downloader;
 
@@ -102,7 +101,6 @@ public class TileTextureBuilder extends RCObject
      _texturesHandler = rc.getTexturesHandler();
      _tileTextureResolution = layerTilesRenderParameters._tileTextureResolution;
      _tileMeshResolution = layerTilesRenderParameters._tileMeshResolution;
-     _mercator = layerTilesRenderParameters._mercator;
      _downloader = downloader;
      _tile = tile;
      _tessellatorMesh = tessellatorMesh;
@@ -247,7 +245,7 @@ public class TileTextureBuilder extends RCObject
         ILogger.instance().logError("Wrong number of transparencies");
       }
 
-      IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, transparencies, new TextureUploader(this, _tile, _mercator, _tileRasterizer, sourceRects, destRects, textureId), true);
+      IImageUtils.combine(_tileTextureResolution, images, sourceRects, destRects, transparencies, new TextureUploader(this, _tile, _tileRasterizer, sourceRects, destRects, textureId), true);
       return true;
     }
 
@@ -419,7 +417,7 @@ public class TileTextureBuilder extends RCObject
     {
       final boolean ownedTexCoords = true;
       final boolean transparent = false;
-      LazyTextureMapping mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator, _mercator), ownedTexCoords, transparent);
+      LazyTextureMapping mapping = new LazyTextureMapping(new LTMInitializer(_tileMeshResolution, _tile, ancestor, _tessellator), ownedTexCoords, transparent);
 
       if (ancestor != _tile)
       {
@@ -460,10 +458,7 @@ public class TileTextureBuilder extends RCObject
 
   public final void cleanTile()
   {
-    if (_tile != null)
-    {
-      _tile = null;
-    }
+    _tile = null;
   }
 
 }

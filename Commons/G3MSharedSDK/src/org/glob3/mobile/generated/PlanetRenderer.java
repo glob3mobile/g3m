@@ -79,7 +79,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
         if (_renderedSector == null || sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
         {
-          Tile tile = new Tile(_texturizer, null, sector, 0, row, col, this);
+          Tile tile = new Tile(_texturizer, null, sector, parameters._mercator, 0, row, col, this);
           if (parameters._firstLevel == 0)
           {
             _firstLevelTiles.add(tile);
@@ -98,7 +98,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < topLevelTilesSize; i++)
       {
         Tile tile = topLevelTiles.get(i);
-        createFirstLevelTiles(_firstLevelTiles, tile, parameters._firstLevel, parameters._mercator);
+        createFirstLevelTiles(_firstLevelTiles, tile, parameters._firstLevel);
       }
     }
   
@@ -108,7 +108,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     _firstLevelTilesJustCreated = true;
   }
-  private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel, boolean mercator)
+  private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel)
   {
   
     if (tile._level == firstLevel)
@@ -123,7 +123,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
       final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
   
-      final Angle splitLatitude = (mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude));
+      final Angle splitLatitude = (tile._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude));
   
       java.util.ArrayList<Tile> children = tile.createSubTiles(splitLatitude, splitLongitude, false);
   
@@ -131,7 +131,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < childrenSize; i++)
       {
         Tile child = children.get(i);
-        createFirstLevelTiles(firstLevelTiles, child, firstLevel, mercator);
+        createFirstLevelTiles(firstLevelTiles, child, firstLevel);
       }
   
       children = null;
@@ -248,7 +248,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   {
     if (tile._level < maxLevel)
     {
-      java.util.ArrayList<Tile> subTiles = tile.getSubTiles(getLayerTilesRenderParameters()._mercator);
+      java.util.ArrayList<Tile> subTiles = tile.getSubTiles();
   
       final int subTilesCount = subTiles.size();
       for (int i = 0; i < subTilesCount; i++)

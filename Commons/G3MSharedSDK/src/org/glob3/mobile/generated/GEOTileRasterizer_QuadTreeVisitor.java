@@ -36,7 +36,7 @@ public class GEOTileRasterizer_QuadTreeVisitor extends QuadTreeVisitor
 
       _canvas.drawImage(_originalImage, 0, 0);
 
-      _projection = new GEORasterProjection(tile._sector, _trc._mercator, width, height);
+      _projection = new GEORasterProjection(tile._sector, tile._mercator, width, height);
     }
 
     symbol.rasterize(_canvas, _projection, tile._level);
