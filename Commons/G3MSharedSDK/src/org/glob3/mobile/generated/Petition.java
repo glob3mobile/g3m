@@ -27,7 +27,6 @@ package org.glob3.mobile.generated;
 
 public class Petition
 {
-//  const Sector* _sector;
   private final Sector _sector ;
   private IImage _image;
   private final float _layerTransparency;
@@ -47,7 +46,6 @@ public class Petition
 
 
   public Petition(Sector sector, URL url, TimeInterval timeToCache, boolean readExpired, boolean isTransparent, float layerTransparency)
-//  _sector(new Sector(sector)),
   {
      _sector = new Sector(sector);
      _url = url;
@@ -56,12 +54,10 @@ public class Petition
      _isTransparent = isTransparent;
      _image = null;
      _layerTransparency = layerTransparency;
-
   }
 
   public void dispose()
   {
-//    delete _sector;
     releaseImage();
   }
 
@@ -69,11 +65,6 @@ public class Petition
   {
     IFactory.instance().deleteImage(_image);
     _image = null;
-  }
-
-  public final boolean hasImage()
-  {
-    return (_image != null);
   }
 
   public final URL getURL()
