@@ -132,7 +132,7 @@ class DTT_TileTextureBuilder : public RCObject {
 private:
   LeveledTexturedMesh* _texturedMesh;
 
-  DefaultTileTexturizer* _texturizer;
+//  DefaultTileTexturizer* _texturizer;
 //  TileRasterizer*        _tileRasterizer;
   Tile*                  _tile;
 
@@ -165,9 +165,9 @@ private:
   //  std::vector<long long>                         _requestsIds;
 
 
-  bool _finalized;
+//  bool _finalized;
   bool _canceled;
-  bool _alreadyStarted;
+//  bool _alreadyStarted;
 
   long long _texturePriority;
 
@@ -219,7 +219,7 @@ private:
 
 public:
 
-  DTT_TileTextureBuilder(DefaultTileTexturizer*            texturizer,
+  DTT_TileTextureBuilder(//DefaultTileTexturizer*            texturizer,
 //                         TileRasterizer*                   tileRasterizer,
                          const G3MRenderContext*           rc,
                          const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -231,7 +231,7 @@ public:
                          const TileTessellator*            tessellator,
                          long long                         texturePriority,
                          bool                              logTilesPetitions) :
-  _texturizer(texturizer),
+//  _texturizer(texturizer),
   _tileImageProvider(tileImageProvider),
 //  _tileRasterizer(tileRasterizer),
   _texturesHandler(rc->getTexturesHandler()),
@@ -243,9 +243,9 @@ public:
 //  _stepsDone(0),
   _texturedMesh( NULL ),
 //  _tessellator(tessellator),
-  _finalized(false),
+//  _finalized(false),
   _canceled(false),
-  _alreadyStarted(false),
+//  _alreadyStarted(false),
   _texturePriority(texturePriority),
   _logTilesPetitions(logTilesPetitions)
   {
@@ -472,7 +472,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
 
   DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {
-    builder = new DTT_TileTextureBuilder(this,
+    builder = new DTT_TileTextureBuilder(//this,
 //                                         tileRasterizer,
                                          rc,
                                          layerTilesRenderParameters,
