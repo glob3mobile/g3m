@@ -27,7 +27,8 @@ CanvasTileImageProvider::~CanvasTileImageProvider() {
 }
 
 
-ICanvas* CanvasTileImageProvider::getCanvas(int width, int height) const {
+ICanvas* CanvasTileImageProvider::getCanvas(int width,
+                                            int height) const {
   if ((_canvas == NULL) ||
       (_canvasWidth  != width) ||
       (_canvasHeight != height)) {

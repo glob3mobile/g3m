@@ -26,7 +26,8 @@ protected:
 
   ~CanvasTileImageProvider();
 
-  ICanvas* getCanvas(int width, int height) const;
+  ICanvas* getCanvas(int width,
+                     int height) const;
 
 };
 
