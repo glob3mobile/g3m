@@ -58,7 +58,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     DTT_TileTextureBuilder builder;
     if (builderHolder == null)
     {
-      builder = new DTT_TileTextureBuilder(this, rc, layerTilesRenderParameters, tileImageProvider, rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions);
+      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions); //this,
   //                                         tileRasterizer,
                                            // layerSet->createTileMapPetitions(rc,
                                            //                                  layerTilesRenderParameters,

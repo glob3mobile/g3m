@@ -3,7 +3,7 @@ public class DTT_TileTextureBuilder extends RCObject
 {
   private LeveledTexturedMesh _texturedMesh;
 
-  private DefaultTileTexturizer _texturizer;
+//  DefaultTileTexturizer* _texturizer;
 //  TileRasterizer*        _tileRasterizer;
   private Tile _tile;
 
@@ -30,9 +30,9 @@ public class DTT_TileTextureBuilder extends RCObject
   //  std::vector<long long>                         _requestsIds;
 
 
-  private boolean _finalized;
+//  bool _finalized;
   private boolean _canceled;
-  private boolean _alreadyStarted;
+//  bool _alreadyStarted;
 
   private long _texturePriority;
 
@@ -78,25 +78,25 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(DefaultTileTexturizer texturizer, G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority, boolean logTilesPetitions)
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority, boolean logTilesPetitions) //DefaultTileTexturizer* texturizer,
 //                         TileRasterizer*                   tileRasterizer,
 //                         const std::vector<Petition*>&     petitions,
+//  _texturizer(texturizer),
 //  _tileRasterizer(tileRasterizer),
 //  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
 //  _tessellatorMesh(tessellatorMesh),
 //  _stepsDone(0),
 //  _tessellator(tessellator),
+//  _finalized(false),
+//  _alreadyStarted(false),
   {
-     _texturizer = texturizer;
      _tileImageProvider = tileImageProvider;
      _texturesHandler = rc.getTexturesHandler();
      _tileTextureResolution = layerTilesRenderParameters._tileTextureResolution;
      _downloader = downloader;
      _tile = tile;
      _texturedMesh = null;
-     _finalized = false;
      _canceled = false;
-     _alreadyStarted = false;
      _texturePriority = texturePriority;
      _logTilesPetitions = logTilesPetitions;
     _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator);
