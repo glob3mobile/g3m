@@ -29,7 +29,7 @@ CanvasTileImageProvider::~CanvasTileImageProvider() {
 
 ICanvas* CanvasTileImageProvider::getCanvas(int width,
                                             int height) const {
-  if ((_canvas == NULL) ||
+  if ((_canvas       == NULL)  ||
       (_canvasWidth  != width) ||
       (_canvasHeight != height)) {
     delete _canvas;
