@@ -91,9 +91,9 @@ public class DefaultTileTexturizer extends TileTexturizer
     if (builderHolder != null)
     {
       DTT_TileTextureBuilder builder = builderHolder.get();
-      builder.cancel();
-      builder.cleanTile();
-      builder.cleanTexturedMesh();
+      builder.cancel(true); // cleanTile
+  //    builder->cleanTile();
+  //    builder->cleanTexturedMesh();
     }
   }
 
@@ -103,8 +103,8 @@ public class DefaultTileTexturizer extends TileTexturizer
     if (builderHolder != null)
     {
       DTT_TileTextureBuilder builder = builderHolder.get();
-      builder.cancel();
-      builder.cleanTexturedMesh();
+      builder.cancel(false); // cleanTile
+  //    builder->cleanTexturedMesh();
     }
   }
 

@@ -107,15 +107,13 @@ public class DTT_TileTextureBuilder extends RCObject
     return _texturedMesh;
   }
 
-  public final void cleanTexturedMesh()
-  {
-    _texturedMesh = null;
-  }
+//  void cleanTexturedMesh() {
+//    _texturedMesh = NULL;
+//  }
 
-  public final void cleanTile()
-  {
-    _tile = null;
-  }
+//  void cleanTile() {
+//    _tile = NULL;
+//  }
 
   public final void start()
   {
@@ -140,10 +138,15 @@ public class DTT_TileTextureBuilder extends RCObject
     }
   }
 
-  public final void cancel()
+  public final void cancel(boolean cleanTile)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
+    _texturedMesh = null;
+    if (cleanTile)
+    {
+      _tile = null;
+    }
     if (!_canceled)
     {
       _canceled = true;
