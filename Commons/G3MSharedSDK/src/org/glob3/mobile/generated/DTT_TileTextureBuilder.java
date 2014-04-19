@@ -18,7 +18,7 @@ public class DTT_TileTextureBuilder extends RCObject
   private final Vector2I _tileTextureResolution;
 //  private final Vector2I _tileMeshResolution;
 
-  private IDownloader _downloader;
+//  IDownloader*     _downloader;
 
 //  const Mesh* _tessellatorMesh;
 
@@ -78,12 +78,14 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority, boolean logTilesPetitions) //DefaultTileTexturizer* texturizer,
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority, boolean logTilesPetitions) //DefaultTileTexturizer* texturizer,
 //                         TileRasterizer*                   tileRasterizer,
 //                         const std::vector<Petition*>&     petitions,
+//                         IDownloader*                      downloader,
 //  _texturizer(texturizer),
 //  _tileRasterizer(tileRasterizer),
 //  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
+//  _downloader(downloader),
 //  _tessellatorMesh(tessellatorMesh),
 //  _stepsDone(0),
 //  _tessellator(tessellator),
@@ -93,7 +95,6 @@ public class DTT_TileTextureBuilder extends RCObject
      _tileImageProvider = tileImageProvider;
      _texturesHandler = rc.getTexturesHandler();
      _tileTextureResolution = layerTilesRenderParameters._tileTextureResolution;
-     _downloader = downloader;
      _tile = tile;
      _texturedMesh = null;
      _canceled = false;
@@ -177,13 +178,13 @@ public class DTT_TileTextureBuilder extends RCObject
     super.dispose();
   }
 
-  public final boolean uploadTexture(IImage image, String textureId)
+  public final boolean uploadTexture(IImage image, String imageId)
   {
     if (_texturedMesh != null)
     {
       final boolean generateMipmap = true;
 
-      final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), textureId, generateMipmap);
+      final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageId, generateMipmap);
 
       if (glTextureId != null)
       {
@@ -200,15 +201,15 @@ public class DTT_TileTextureBuilder extends RCObject
     return true;
   }
 
-  public final void imageCreated(IImage image, Sector imageSector, RectangleF imageRectangle, float alpha)
+  public final void imageCreated(IImage image, String imageId, Sector imageSector, RectangleF imageRectangle, float alpha)
   {
     if (!_canceled && (_tile != null) && (_texturedMesh != null))
     {
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO calculate textureId
-      final String textureId = _tile.getKey().description();
-      if (uploadTexture(image, textureId))
+//      const std::string imageId = _tile->getKey().description();
+      if (uploadTexture(image, imageId))
       {
         //If the image could be properly turn into texture
         _tile.setTextureSolved(true);

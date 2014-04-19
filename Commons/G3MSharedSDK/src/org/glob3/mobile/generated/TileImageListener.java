@@ -27,7 +27,7 @@ public abstract class TileImageListener
   {
   }
 
-  public abstract void imageCreated(Tile tile, IImage image, Sector imageSector, RectangleF imageRectangle, float alpha);
+  public abstract void imageCreated(Tile tile, IImage image, String imageId, Sector imageSector, RectangleF imageRectangle, float alpha);
 
   public abstract void imageCreationError(Tile tile, String error);
 

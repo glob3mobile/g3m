@@ -15,9 +15,9 @@ public class DTT_TileImageListener extends TileImageListener
     super.dispose();
   }
 
-  public final void imageCreated(Tile tile, IImage image, Sector imageSector, RectangleF imageRectangle, float alpha)
+  public final void imageCreated(Tile tile, IImage image, String imageId, Sector imageSector, RectangleF imageRectangle, float alpha)
   {
-    _builder.imageCreated(image, imageSector, imageRectangle, alpha);
+    _builder.imageCreated(image, imageId, imageSector, imageRectangle, alpha);
   }
 
   public final void imageCreationError(Tile tile, String error)

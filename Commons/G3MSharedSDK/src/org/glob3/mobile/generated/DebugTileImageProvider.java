@@ -22,19 +22,36 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
 {
   private static class ImageListener extends IImageListener
   {
-    private Tile _tile;
+    private final Tile _tile;
     private TileImageListener _listener;
     private boolean _deleteListener;
 
+    private String getImageId(Tile tile)
+    {
+      IStringBuilder isb = IStringBuilder.newStringBuilder();
+      isb.addString("DebugTileImageProvider/");
+      isb.addInt(tile._level);
+      isb.addString("/");
+      isb.addInt(tile._column);
+      isb.addString("/");
+      isb.addInt(tile._row);
+      final String s = isb.getString();
+      if (isb != null)
+         isb.dispose();
+      return s;
+    }
+
     public ImageListener(Tile tile, TileImageListener listener, boolean deleteListener)
     {
+       _tile = tile;
        _listener = listener;
        _deleteListener = deleteListener;
     }
 
     public final void imageCreated(IImage image)
     {
-      _listener.imageCreated(_tile, image, _tile._sector, new RectangleF(0, 0, image.getWidth(), image.getHeight()), 1); // alpha
+      final String imageId = getImageId(_tile);
+      _listener.imageCreated(_tile, image, imageId, _tile._sector, new RectangleF(0, 0, image.getWidth(), image.getHeight()), 1); // alpha
       if (_deleteListener)
       {
         if (_listener != null)

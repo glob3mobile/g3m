@@ -52,17 +52,18 @@ public class DefaultTileTexturizer extends TileTexturizer
     DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
+//#warning TODO: creates the TileImageProvider from the LayerSet (&& Rasterizer?)
     TileImageProvider tileImageProvider = new DebugTileImageProvider();
   
     DTT_TileTextureBuilder builder;
     if (builderHolder == null)
     {
-      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions); //this,
-  //                                         tileRasterizer,
+      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions); // this,
+                                           // tileRasterizer,
                                            // layerSet->createTileMapPetitions(rc,
                                            //                                  layerTilesRenderParameters,
                                            //                                  tile),
+                                           // rc->getDownloader(),
       builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
     }
@@ -71,7 +72,10 @@ public class DefaultTileTexturizer extends TileTexturizer
       builder = builderHolder.get();
     }
   
+    // get the mesh just before calling start(), if not... the start(ed) task can finish immediately
+    // and as one consequence the builder got deleted and the "builder" pointer becomes a dangling pointer
     Mesh texturizedMesh = builder.getTexturedMesh();
+  
     if (forceFullRender)
     {
       builder.start();
@@ -82,6 +86,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     }
   
     tile.setTexturizerDirty(false);
+  
     return texturizedMesh;
   }
 

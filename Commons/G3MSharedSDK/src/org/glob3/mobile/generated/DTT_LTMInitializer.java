@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning REMOVE THIS
+///#warning REMOVE THIS
+///#include "TileKey.hpp"
 
 public class DTT_LTMInitializer extends LazyTextureMappingInitializer
 {
