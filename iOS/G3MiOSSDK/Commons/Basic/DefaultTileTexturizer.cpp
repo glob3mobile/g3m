@@ -14,7 +14,12 @@
 #include "TextureIDReference.hpp"
 #include "FrameTasksExecutor.hpp"
 #include "LayerTilesRenderParameters.hpp"
-
+#include "TileImageProvider.hpp"
+#include "DebugTileImageProvider.hpp"
+#include "TileImageListener.hpp"
+#include "TexturesHandler.hpp"
+#warning REMOVE THIS
+#include "TileKey.hpp"
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
@@ -92,17 +97,50 @@ public:
 };
 
 
+class DTT_TileTextureBuilder;
+
+class DTT_TileImageListener : public TileImageListener {
+private:
+  DTT_TileTextureBuilder* _builder;
+
+public:
+  DTT_TileImageListener(DTT_TileTextureBuilder* builder) :
+  _builder(builder)
+  {
+  }
+
+  virtual ~DTT_TileImageListener() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  void imageCreated(const Tile*       tile,
+                    const IImage*     image,
+                    const Sector&     imageSector,
+                    const RectangleF& imageRectangle,
+                    const float       alpha);
+
+  void imageCreationError(const Tile* tile,
+                          const std::string& error);
+
+  void imageCreationCanceled(const Tile* tile);
+};
+
+
 class DTT_TileTextureBuilder : public RCObject {
 private:
   LeveledTexturedMesh* _texturedMesh;
 
   DefaultTileTexturizer* _texturizer;
-  TileRasterizer*        _tileRasterizer;
+//  TileRasterizer*        _tileRasterizer;
   Tile*                  _tile;
 
 //  std::vector<Petition*> _petitions;
 //  int                    _petitionsCount;
 //  int                    _stepsDone;
+
+  TileImageProvider* _tileImageProvider;
 
   TexturesHandler* _texturesHandler;
 
@@ -182,9 +220,10 @@ private:
 public:
 
   DTT_TileTextureBuilder(DefaultTileTexturizer*            texturizer,
-                         TileRasterizer*                   tileRasterizer,
+//                         TileRasterizer*                   tileRasterizer,
                          const G3MRenderContext*           rc,
                          const LayerTilesRenderParameters* layerTilesRenderParameters,
+                         TileImageProvider*                tileImageProvider,
 //                         const std::vector<Petition*>&     petitions,
                          IDownloader*                      downloader,
                          Tile*                             tile,
@@ -193,7 +232,8 @@ public:
                          long long                         texturePriority,
                          bool                              logTilesPetitions) :
   _texturizer(texturizer),
-  _tileRasterizer(tileRasterizer),
+  _tileImageProvider(tileImageProvider),
+//  _tileRasterizer(tileRasterizer),
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
 //  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
@@ -229,14 +269,29 @@ public:
 
   void start() {
 #warning Diego at work!
-    if (_tile != NULL) {
-      _tile->setTextureSolved(true);
+    if (!_canceled) {
+      const TileImageContribution contribution = _tileImageProvider->contribution(_tile);
+      if (contribution == NONE) {
+        if (_tile != NULL) {
+#warning remove this!
+          _tile->setTextureSolved(true);
+        }
+      }
+      else {
+        _tileImageProvider->create(_tile,
+                                   _tileTextureResolution,
+                                   new DTT_TileImageListener(this),
+                                   true);
+      }
     }
   }
 
   void cancel() {
 #warning Diego at work!
-    _canceled = true;
+    if (!_canceled) {
+      _canceled = true;
+      _tileImageProvider->cancel(_tile);
+    }
 //    if (!_canceled) {
 //      _canceled = true;
 //
@@ -254,7 +309,78 @@ public:
     return _canceled;
   }
 
+  ~DTT_TileTextureBuilder() {
+    delete _tileImageProvider;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  bool uploadTexture(const IImage*      image,
+                     const std::string& textureId) {
+    if (_texturedMesh != NULL) {
+      const bool generateMipmap = true;
+
+      const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
+                                                                                      GLFormat::rgba(),
+                                                                                      textureId,
+                                                                                      generateMipmap);
+
+      if (glTextureId != NULL) {
+        if (!_texturedMesh->setGLTextureIdForLevel(0, glTextureId)) {
+          delete glTextureId;
+          //_texturesHandler->releaseGLTextureId(glTextureId);
+        }
+      }
+    }
+
+    IFactory::instance()->deleteImage(image);
+    return true;
+  }
+
+  void imageCreated(const IImage*     image,
+                    const Sector&     imageSector,
+                    const RectangleF& imageRectangle,
+                    const float       alpha) {
+    if (!_canceled && (_tile != NULL) && (_texturedMesh != NULL)) {
+
+#warning TODO calculate textureId
+      const std::string textureId = _tile->getKey().description();
+      if (uploadTexture(image, textureId)) {
+        //If the image could be properly turn into texture
+        _tile->setTextureSolved(true);
+      }
+    }
+  }
+
+  void imageCreationError(const std::string& error) {
+#warning Diego at work
+    ILogger::instance()->logError("%s", error.c_str());
+  }
+
+  void imageCreationCanceled() {
+#warning Diego at work
+  }
+  
 };
+
+
+void DTT_TileImageListener::imageCreated(const Tile*       tile,
+                                         const IImage*     image,
+                                         const Sector&     imageSector,
+                                         const RectangleF& imageRectangle,
+                                         const float       alpha) {
+  _builder->imageCreated(image, imageSector, imageRectangle, alpha);
+}
+
+void DTT_TileImageListener::imageCreationError(const Tile* tile,
+                                               const std::string& error) {
+  _builder->imageCreationError(error);
+}
+
+void DTT_TileImageListener::imageCreationCanceled(const Tile* tile) {
+  _builder->imageCreationCanceled();
+}
 
 
 class DTT_TileTextureBuilderHolder : public ITexturizerData {
@@ -341,12 +467,16 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        bool logTilesPetitions) {
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
 
+#warning Diego at work!
+  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
+
   DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {
     builder = new DTT_TileTextureBuilder(this,
-                                         tileRasterizer,
+//                                         tileRasterizer,
                                          rc,
                                          layerTilesRenderParameters,
+                                         tileImageProvider,
                                          // layerSet->createTileMapPetitions(rc,
                                          //                                  layerTilesRenderParameters,
                                          //                                  tile),

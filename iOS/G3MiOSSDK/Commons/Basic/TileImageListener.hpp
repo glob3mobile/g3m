@@ -21,7 +21,7 @@ public:
   }
 
   virtual void imageCreated(const Tile*       tile,
-                            IImage*           image,
+                            const IImage*     image,
                             const Sector&     imageSector,
                             const RectangleF& imageRectangle,
                             const float       alpha) = 0;

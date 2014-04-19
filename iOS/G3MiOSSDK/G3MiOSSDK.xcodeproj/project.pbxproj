@@ -144,6 +144,13 @@
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47E0E91901965C00410BB5 /* TileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0E71901965C00410BB5 /* TileImageProvider.cpp */; };
 		CF47E0EF19019A1000410BB5 /* TileImageListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0ED19019A1000410BB5 /* TileImageListener.cpp */; };
+		CF47E0F21901CA8C00410BB5 /* DebugTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0F01901CA8C00410BB5 /* DebugTileImageProvider.cpp */; };
+		CF47E0F51901D66F00410BB5 /* CanvasTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47E0F31901D66F00410BB5 /* CanvasTileImageProvider.cpp */; };
+		CF47E0F61901DB1500410BB5 /* DefaultTileTexturizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFADF22218FF1CDB00360565 /* DefaultTileTexturizer.hpp */; };
+		CF47E0F71901DB1500410BB5 /* TileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */; };
+		CF47E0F81901DB1500410BB5 /* TileImageListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF47E0EE19019A1000410BB5 /* TileImageListener.hpp */; };
+		CF47E0F91901DB1500410BB5 /* DebugTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF47E0F11901CA8C00410BB5 /* DebugTileImageProvider.hpp */; };
+		CF47E0FA1901DB1500410BB5 /* CanvasTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF47E0F41901D66F00410BB5 /* CanvasTileImageProvider.hpp */; };
 		CF485F8918511C250013795B /* AndTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF485F8718511C250013795B /* AndTileCondition.cpp */; };
 		CF485F8A18511C460013795B /* AndTileCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF485F8818511C250013795B /* AndTileCondition.hpp */; };
 		CF494C9A17FF0A1400D16D33 /* TerrainTouchListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF494C9817FF0A1400D16D33 /* TerrainTouchListener.cpp */; };
@@ -684,6 +691,11 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF47E0F61901DB1500410BB5 /* DefaultTileTexturizer.hpp in CopyFiles */,
+				CF47E0F71901DB1500410BB5 /* TileImageProvider.hpp in CopyFiles */,
+				CF47E0F81901DB1500410BB5 /* TileImageListener.hpp in CopyFiles */,
+				CF47E0F91901DB1500410BB5 /* DebugTileImageProvider.hpp in CopyFiles */,
+				CF47E0FA1901DB1500410BB5 /* CanvasTileImageProvider.hpp in CopyFiles */,
 				CFA5292718FED7AA00631CB4 /* TileRasterizerContext.hpp in CopyFiles */,
 				44D33CEE18DB07BC0027B892 /* ProtoRenderer.hpp in CopyFiles */,
 				CF2ADB8818DC9341001EF133 /* TileRenderingListener.hpp in CopyFiles */,
@@ -1246,6 +1258,10 @@
 		CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileImageProvider.hpp; path = Commons/Basic/TileImageProvider.hpp; sourceTree = "<group>"; };
 		CF47E0ED19019A1000410BB5 /* TileImageListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileImageListener.cpp; path = Commons/Basic/TileImageListener.cpp; sourceTree = "<group>"; };
 		CF47E0EE19019A1000410BB5 /* TileImageListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileImageListener.hpp; path = Commons/Basic/TileImageListener.hpp; sourceTree = "<group>"; };
+		CF47E0F01901CA8C00410BB5 /* DebugTileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DebugTileImageProvider.cpp; path = Commons/Basic/DebugTileImageProvider.cpp; sourceTree = "<group>"; };
+		CF47E0F11901CA8C00410BB5 /* DebugTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DebugTileImageProvider.hpp; path = Commons/Basic/DebugTileImageProvider.hpp; sourceTree = "<group>"; };
+		CF47E0F31901D66F00410BB5 /* CanvasTileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CanvasTileImageProvider.cpp; path = Commons/Basic/CanvasTileImageProvider.cpp; sourceTree = "<group>"; };
+		CF47E0F41901D66F00410BB5 /* CanvasTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CanvasTileImageProvider.hpp; path = Commons/Basic/CanvasTileImageProvider.hpp; sourceTree = "<group>"; };
 		CF485F8718511C250013795B /* AndTileCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndTileCondition.cpp; sourceTree = "<group>"; };
 		CF485F8818511C250013795B /* AndTileCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AndTileCondition.hpp; sourceTree = "<group>"; };
 		CF494C9817FF0A1400D16D33 /* TerrainTouchListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainTouchListener.cpp; path = Commons/Rendererers/TerrainTouchListener.cpp; sourceTree = "<group>"; };
@@ -2100,6 +2116,10 @@
 				CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */,
 				CF47E0ED19019A1000410BB5 /* TileImageListener.cpp */,
 				CF47E0EE19019A1000410BB5 /* TileImageListener.hpp */,
+				CF47E0F01901CA8C00410BB5 /* DebugTileImageProvider.cpp */,
+				CF47E0F11901CA8C00410BB5 /* DebugTileImageProvider.hpp */,
+				CF47E0F31901D66F00410BB5 /* CanvasTileImageProvider.cpp */,
+				CF47E0F41901D66F00410BB5 /* CanvasTileImageProvider.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2948,6 +2968,7 @@
 				CFD8E770184FB71D00228031 /* SectorTileCondition.cpp in Sources */,
 				CFBD42DB16AA151100663F21 /* IShortBuffer.cpp in Sources */,
 				CFBD42E016AA1A8900663F21 /* ShortBuffer_iOS.cpp in Sources */,
+				CF47E0F21901CA8C00410BB5 /* DebugTileImageProvider.cpp in Sources */,
 				CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */,
 				CFBA53EE16B9B76500256453 /* ICameraConstrainer.cpp in Sources */,
 				CFBA53F216B9B7CD00256453 /* SimpleCameraConstrainer.cpp in Sources */,
@@ -3053,6 +3074,7 @@
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
 				D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */,
+				CF47E0F51901D66F00410BB5 /* CanvasTileImageProvider.cpp in Sources */,
 				D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */,
 				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
 				FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */,

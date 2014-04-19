@@ -21,7 +21,7 @@ enum TileImageContribution {
 
 class Tile;
 class TileImageListener;
-
+class Vector2I;
 
 class TileImageProvider {
 public:
@@ -31,6 +31,7 @@ public:
   virtual TileImageContribution contribution(Tile* tile) = 0;
 
   virtual void create(Tile* tile,
+                      const Vector2I& resolution,
                       TileImageListener* listener,
                       bool deleteListener) = 0;
 
