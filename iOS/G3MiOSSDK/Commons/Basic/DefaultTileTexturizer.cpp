@@ -259,13 +259,13 @@ public:
     return _texturedMesh;
   }
 
-  void cleanTexturedMesh() {
-    _texturedMesh = NULL;
-  }
+//  void cleanTexturedMesh() {
+//    _texturedMesh = NULL;
+//  }
 
-  void cleanTile() {
-    _tile = NULL;
-  }
+//  void cleanTile() {
+//    _tile = NULL;
+//  }
 
   void start() {
 #warning Diego at work!
@@ -286,8 +286,12 @@ public:
     }
   }
 
-  void cancel() {
+  void cancel(bool cleanTile) {
 #warning Diego at work!
+    _texturedMesh = NULL;
+    if (cleanTile) {
+      _tile = NULL;
+    }
     if (!_canceled) {
       _canceled = true;
       _tileImageProvider->cancel(_tile);
@@ -510,9 +514,9 @@ void DefaultTileTexturizer::tileToBeDeleted(Tile* tile,
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
   if (builderHolder != NULL) {
     DTT_TileTextureBuilder* builder = builderHolder->get();
-    builder->cancel();
-    builder->cleanTile();
-    builder->cleanTexturedMesh();
+    builder->cancel(true /* cleanTile */);
+//    builder->cleanTile();
+//    builder->cleanTexturedMesh();
   }
 }
 
@@ -521,8 +525,8 @@ void DefaultTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
   if (builderHolder != NULL) {
     DTT_TileTextureBuilder* builder = builderHolder->get();
-    builder->cancel();
-    builder->cleanTexturedMesh();
+    builder->cancel(false /* cleanTile */);
+//    builder->cleanTexturedMesh();
   }
 }
 
