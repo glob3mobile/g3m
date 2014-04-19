@@ -51,16 +51,26 @@ public class DefaultTileTexturizer extends TileTexturizer
   {
     DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+    TileImageProvider tileImageProvider = new DebugTileImageProvider();
+  
+    DTT_TileTextureBuilder builder;
     if (builderHolder == null)
     {
-      builderHolder = new DTT_TileTextureBuilderHolder(new DTT_TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions));
-  //                                                                                layerSet->createTileMapPetitions(rc,
-  //                                                                                                                 layerTilesRenderParameters,
-  //                                                                                                                 tile),
+      builder = new DTT_TileTextureBuilder(this, rc, layerTilesRenderParameters, tileImageProvider, rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions);
+  //                                         tileRasterizer,
+                                           // layerSet->createTileMapPetitions(rc,
+                                           //                                  layerTilesRenderParameters,
+                                           //                                  tile),
+      builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
     }
+    else
+    {
+      builder = builderHolder.get();
+    }
   
-    DTT_TileTextureBuilder builder = builderHolder.get();
     Mesh texturizedMesh = builder.getTexturedMesh();
     if (forceFullRender)
     {
