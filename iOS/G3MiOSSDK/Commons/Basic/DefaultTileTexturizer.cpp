@@ -153,7 +153,7 @@ private:
 //  private final Vector2I _tileMeshResolution;
 #endif
 
-  IDownloader*     _downloader;
+//  IDownloader*     _downloader;
 
 //  const Mesh* _tessellatorMesh;
 
@@ -225,7 +225,7 @@ public:
                          const LayerTilesRenderParameters* layerTilesRenderParameters,
                          TileImageProvider*                tileImageProvider,
 //                         const std::vector<Petition*>&     petitions,
-                         IDownloader*                      downloader,
+//                         IDownloader*                      downloader,
                          Tile*                             tile,
                          const Mesh*                       tessellatorMesh,
                          const TileTessellator*            tessellator,
@@ -237,7 +237,7 @@ public:
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
 //  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
-  _downloader(downloader),
+//  _downloader(downloader),
   _tile(tile),
 //  _tessellatorMesh(tessellatorMesh),
 //  _stepsDone(0),
@@ -476,15 +476,15 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
 
   DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {
-    builder = new DTT_TileTextureBuilder(//this,
-//                                         tileRasterizer,
+    builder = new DTT_TileTextureBuilder(// this,
+                                         // tileRasterizer,
                                          rc,
                                          layerTilesRenderParameters,
                                          tileImageProvider,
                                          // layerSet->createTileMapPetitions(rc,
                                          //                                  layerTilesRenderParameters,
                                          //                                  tile),
-                                         rc->getDownloader(),
+                                         // rc->getDownloader(),
                                          tile,
                                          tessellatorMesh,
                                          tessellator,
