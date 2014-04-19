@@ -17,14 +17,17 @@ class DebugTileImageProvider : public CanvasTileImageProvider {
 private:
   class ImageListener : public IImageListener {
   private:
-    Tile*              _tile;
+    const Tile*        _tile;
     TileImageListener* _listener;
     bool               _deleteListener;
 
+    const std::string getImageId(const Tile* tile);
+
   public:
-    ImageListener(Tile* tile,
+    ImageListener(const Tile* tile,
                   TileImageListener* listener,
                   bool deleteListener) :
+    _tile(tile),
     _listener(listener),
     _deleteListener(deleteListener)
     {
@@ -41,14 +44,14 @@ public:
 #endif
   }
 
-  TileImageContribution contribution(Tile* tile);
+  TileImageContribution contribution(const Tile* tile);
 
-  void create(Tile* tile,
+  void create(const Tile* tile,
               const Vector2I& resolution,
               TileImageListener* listener,
               bool deleteListener);
 
-  void cancel(Tile* tile);
+  void cancel(const Tile* tile);
 
 };
 

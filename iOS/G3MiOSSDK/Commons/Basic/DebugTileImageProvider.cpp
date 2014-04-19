@@ -15,10 +15,26 @@
 #include "Tile.hpp"
 #include "IImage.hpp"
 #include "RectangleF.hpp"
+#include "IStringBuilder.hpp"
+
+const std::string DebugTileImageProvider::ImageListener::getImageId(const Tile* tile) {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("DebugTileImageProvider/");
+  isb->addInt(tile->_level);
+  isb->addString("/");
+  isb->addInt(tile->_column);
+  isb->addString("/");
+  isb->addInt(tile->_row);
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
 
 void DebugTileImageProvider::ImageListener::imageCreated(const IImage* image) {
+  const std::string imageId = getImageId(_tile);
   _listener->imageCreated(_tile,
                           image,
+                          imageId,
                           _tile->_sector,
                           RectangleF(0, 0, image->getWidth(), image->getHeight()),
                           1 /* alpha */);
@@ -27,11 +43,11 @@ void DebugTileImageProvider::ImageListener::imageCreated(const IImage* image) {
   }
 }
 
-TileImageContribution DebugTileImageProvider::contribution(Tile* tile) {
+TileImageContribution DebugTileImageProvider::contribution(const Tile* tile) {
   return FULL_COVERAGE_TRANSPARENT;
 }
 
-void DebugTileImageProvider::create(Tile* tile,
+void DebugTileImageProvider::create(const Tile* tile,
                                     const Vector2I& resolution,
                                     TileImageListener* listener,
                                     bool deleteListener) {
@@ -50,6 +66,6 @@ void DebugTileImageProvider::create(Tile* tile,
                       true);
 }
 
-void DebugTileImageProvider::cancel(Tile* tile) {
+void DebugTileImageProvider::cancel(const Tile* tile) {
   // do nothing, can't cancel
 }

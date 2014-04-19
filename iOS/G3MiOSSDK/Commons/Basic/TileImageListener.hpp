@@ -20,11 +20,12 @@ public:
   virtual ~TileImageListener() {
   }
 
-  virtual void imageCreated(const Tile*       tile,
-                            const IImage*     image,
-                            const Sector&     imageSector,
-                            const RectangleF& imageRectangle,
-                            const float       alpha) = 0;
+  virtual void imageCreated(const Tile*        tile,
+                            const IImage*      image,
+                            const std::string& imageId,
+                            const Sector&      imageSector,
+                            const RectangleF&  imageRectangle,
+                            const float        alpha) = 0;
 
   virtual void imageCreationError(const Tile* tile,
                                   const std::string& error) = 0;

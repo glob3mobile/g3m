@@ -28,14 +28,14 @@ public:
   virtual ~TileImageProvider() {
   }
 
-  virtual TileImageContribution contribution(Tile* tile) = 0;
+  virtual TileImageContribution contribution(const Tile* tile) = 0;
 
-  virtual void create(Tile* tile,
+  virtual void create(const Tile* tile,
                       const Vector2I& resolution,
                       TileImageListener* listener,
                       bool deleteListener) = 0;
 
-  virtual void cancel(Tile* tile) = 0;
+  virtual void cancel(const Tile* tile) = 0;
 
 };
 

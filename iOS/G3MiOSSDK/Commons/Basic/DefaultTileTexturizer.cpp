@@ -18,8 +18,8 @@
 #include "DebugTileImageProvider.hpp"
 #include "TileImageListener.hpp"
 #include "TexturesHandler.hpp"
-#warning REMOVE THIS
-#include "TileKey.hpp"
+//#warning REMOVE THIS
+//#include "TileKey.hpp"
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
@@ -115,11 +115,12 @@ public:
 #endif
   }
 
-  void imageCreated(const Tile*       tile,
-                    const IImage*     image,
-                    const Sector&     imageSector,
-                    const RectangleF& imageRectangle,
-                    const float       alpha);
+  void imageCreated(const Tile*        tile,
+                    const IImage*      image,
+                    const std::string& imageId,
+                    const Sector&      imageSector,
+                    const RectangleF&  imageRectangle,
+                    const float        alpha);
 
   void imageCreationError(const Tile* tile,
                           const std::string& error);
@@ -321,13 +322,13 @@ public:
   }
 
   bool uploadTexture(const IImage*      image,
-                     const std::string& textureId) {
+                     const std::string& imageId) {
     if (_texturedMesh != NULL) {
       const bool generateMipmap = true;
 
       const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
                                                                                       GLFormat::rgba(),
-                                                                                      textureId,
+                                                                                      imageId,
                                                                                       generateMipmap);
 
       if (glTextureId != NULL) {
@@ -342,15 +343,16 @@ public:
     return true;
   }
 
-  void imageCreated(const IImage*     image,
-                    const Sector&     imageSector,
-                    const RectangleF& imageRectangle,
-                    const float       alpha) {
+  void imageCreated(const IImage*      image,
+                    const std::string& imageId,
+                    const Sector&      imageSector,
+                    const RectangleF&  imageRectangle,
+                    const float        alpha) {
     if (!_canceled && (_tile != NULL) && (_texturedMesh != NULL)) {
 
 #warning TODO calculate textureId
-      const std::string textureId = _tile->getKey().description();
-      if (uploadTexture(image, textureId)) {
+//      const std::string imageId = _tile->getKey().description();
+      if (uploadTexture(image, imageId)) {
         //If the image could be properly turn into texture
         _tile->setTextureSolved(true);
       }
@@ -369,12 +371,13 @@ public:
 };
 
 
-void DTT_TileImageListener::imageCreated(const Tile*       tile,
-                                         const IImage*     image,
-                                         const Sector&     imageSector,
-                                         const RectangleF& imageRectangle,
-                                         const float       alpha) {
-  _builder->imageCreated(image, imageSector, imageRectangle, alpha);
+void DTT_TileImageListener::imageCreated(const Tile*        tile,
+                                         const IImage*      image,
+                                         const std::string& imageId,
+                                         const Sector&      imageSector,
+                                         const RectangleF&  imageRectangle,
+                                         const float        alpha) {
+  _builder->imageCreated(image, imageId, imageSector, imageRectangle, alpha);
 }
 
 void DTT_TileImageListener::imageCreationError(const Tile* tile,
@@ -471,7 +474,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        bool logTilesPetitions) {
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
 
-#warning Diego at work!
+#warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
   TileImageProvider* tileImageProvider = new DebugTileImageProvider();
 
   DTT_TileTextureBuilder* builder;
@@ -497,7 +500,10 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
     builder = builderHolder->get();
   }
 
+  // get the mesh just before calling start(), if not... the start(ed) task can finish immediately
+  // and as one consequence the builder got deleted and the "builder" pointer becomes a dangling pointer
   Mesh* texturizedMesh = builder->getTexturedMesh();
+
   if (forceFullRender) {
     builder->start();
   }
@@ -506,6 +512,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
   }
 
   tile->setTexturizerDirty(false);
+
   return texturizedMesh;
 }
 
