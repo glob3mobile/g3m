@@ -26,7 +26,6 @@
 #include "TileElevationDataRequest.hpp"
 #include "Vector2F.hpp"
 #include "FlatColorMesh.hpp"
-#include "PlanetRenderer.hpp"
 #include "PlanetTileTessellator.hpp"
 #include "TileRenderingListener.hpp"
 
