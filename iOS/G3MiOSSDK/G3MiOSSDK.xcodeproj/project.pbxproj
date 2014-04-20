@@ -366,6 +366,7 @@
 		CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBAA164AFDB000910037 /* JSONString.cpp */; };
 		CFE6046319043BEF00E6C78B /* ErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */; };
 		CFE6046519043E3200E6C78B /* IImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046419043E3200E6C78B /* IImageBuilder.cpp */; };
+		CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE604661904411900E6C78B /* ChangedListener.cpp */; };
 		CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */; };
 		CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */; };
 		CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AD175E04FA00046B96 /* Sphere.hpp */; };
@@ -1523,6 +1524,7 @@
 		CFE3DBAA164AFDB000910037 /* JSONString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONString.cpp; sourceTree = "<group>"; };
 		CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorRenderer.cpp; path = Commons/Rendererers/ErrorRenderer.cpp; sourceTree = "<group>"; };
 		CFE6046419043E3200E6C78B /* IImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageBuilder.cpp; path = Commons/Basic/IImageBuilder.cpp; sourceTree = "<group>"; };
+		CFE604661904411900E6C78B /* ChangedListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChangedListener.cpp; path = Commons/Basic/ChangedListener.cpp; sourceTree = "<group>"; };
 		CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingMapsLayer.cpp; sourceTree = "<group>"; };
 		CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingMapsLayer.hpp; sourceTree = "<group>"; };
 		CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MercatorUtils.cpp; path = Commons/Basic/MercatorUtils.cpp; sourceTree = "<group>"; };
@@ -2024,6 +2026,7 @@
 				CF2A47BF178EF92B00901857 /* CanvasTileRasterizer.cpp */,
 				CF2A47C0178EF92B00901857 /* CanvasTileRasterizer.hpp */,
 				CFADEB6C17A42C75001914B2 /* ChangedListener.hpp */,
+				CFE604661904411900E6C78B /* ChangedListener.cpp */,
 				CFAA530017AAFDCE002A9204 /* DecimatedSubviewElevationData.cpp */,
 				CFAA530117AAFDCE002A9204 /* DecimatedSubviewElevationData.hpp */,
 				CFAA530317AAFE3C002A9204 /* InterpolatedSubviewElevationData.cpp */,
@@ -2867,6 +2870,7 @@
 				E705123C165E782C00AEADB9 /* PlanetRendererBuilder.cpp in Sources */,
 				E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */,
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
+				CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */,
 				CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */,
 				CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */,
 				CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */,
