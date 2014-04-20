@@ -10,7 +10,6 @@
 
 #include "ILogger.hpp"
 #include "Downloader_iOS.hpp"
-#include "IFactory.hpp"
 #include "IStringUtils.hpp"
 
 #import "NSString_CppAdditions.h"

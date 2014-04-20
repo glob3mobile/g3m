@@ -18,7 +18,6 @@
 #include "GLConstants.hpp"
 #include "Color.hpp"
 #include "Planet.hpp"
-#include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "ElevationData.hpp"
 #include "MercatorUtils.hpp"

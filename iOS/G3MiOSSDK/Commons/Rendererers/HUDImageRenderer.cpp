@@ -24,6 +24,7 @@
 #include "ICanvas.hpp"
 #include "IStringUtils.hpp"
 #include "SimpleTextureMapping.hpp"
+#include "IFactory.hpp"
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 

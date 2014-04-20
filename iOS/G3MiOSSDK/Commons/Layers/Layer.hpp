@@ -12,7 +12,6 @@
 #include <string>
 
 #include "Sector.hpp"
-#include "IFactory.hpp"
 #include "Context.hpp"
 #include "URL.hpp"
 #include "LayerTouchEventListener.hpp"

@@ -10,15 +10,12 @@
 #ifndef G3MiOSSDK_Camera
 #define G3MiOSSDK_Camera
 
-#include <math.h>
-
 #include "CoordinateSystem.hpp"
 #include "TaitBryanAngles.hpp"
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "Context.hpp"
-#include "IFactory.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"

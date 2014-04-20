@@ -9,9 +9,8 @@
 #include "Context.hpp"
 
 #include "ITimer.hpp"
-#include "IFactory.hpp"
-
 #include "OrderedRenderable.hpp"
+
 
 G3MRenderContext::~G3MRenderContext() {
   delete _frameStartTimer;

@@ -22,6 +22,7 @@
 #include "DirectMesh.hpp"
 #include "IShortBuffer.hpp"
 #include "IndexedMesh.hpp"
+#include "IFactory.hpp"
 
 
 void MeshRenderer::clearMeshes() {

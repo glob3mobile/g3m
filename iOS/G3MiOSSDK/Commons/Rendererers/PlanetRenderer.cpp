@@ -29,7 +29,7 @@
 #include "IDeviceInfo.hpp"
 #include "Sector.hpp"
 #include "TileRenderingListener.hpp"
-
+#include "IFactory.hpp"
 #include <algorithm>
 
 class VisibleSectorListenerEntry {

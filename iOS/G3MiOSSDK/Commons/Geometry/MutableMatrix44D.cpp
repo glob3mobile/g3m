@@ -10,10 +10,8 @@
 
 #include "Frustum.hpp"
 #include "MutableVector3D.hpp"
-
 #include "Vector2D.hpp"
 #include "IFloatBuffer.hpp"
-#include "IFactory.hpp"
 #include "Vector3F.hpp"
 #include "Vector2F.hpp"
 

@@ -13,7 +13,6 @@
 #include "Planet.hpp"
 #include "GLConstants.hpp"
 #include "GLGlobalState.hpp"
-#include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"

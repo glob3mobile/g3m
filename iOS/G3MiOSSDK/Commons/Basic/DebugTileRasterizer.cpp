@@ -8,7 +8,6 @@
 
 #include "DebugTileRasterizer.hpp"
 
-#include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "IImage.hpp"
 #include "IImageListener.hpp"

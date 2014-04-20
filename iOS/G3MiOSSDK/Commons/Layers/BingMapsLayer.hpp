@@ -10,6 +10,8 @@
 #define __G3MiOSSDK__BingMapsLayer__
 
 #include "Layer.hpp"
+class IByteBuffer;
+
 
 class BingMapType {
 public:
