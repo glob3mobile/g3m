@@ -76,9 +76,7 @@ bool SGLayerNode::isReadyToRender(const G3MRenderContext* rc) {
 }
 
 void SGLayerNode::onImageDownload(const IImage* image) {
-  if (_downloadedImage != NULL) {
-    IFactory::instance()->deleteImage(_downloadedImage);
-  }
+  delete _downloadedImage;
   _downloadedImage = image;
 }
 
@@ -114,7 +112,7 @@ const TextureIDReference* SGLayerNode::getTextureId(const G3MRenderContext* rc) 
                                                                    getURL().getPath(),
                                                                    generateMipmap);
 
-      IFactory::instance()->deleteImage(_downloadedImage);
+      delete _downloadedImage;
       _downloadedImage = NULL;
     }
   }

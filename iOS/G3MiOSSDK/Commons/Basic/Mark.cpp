@@ -38,10 +38,8 @@ public:
   }
 
   void imageCreated(const IImage* image) {
-    if (_iconImage != NULL) {
-      IFactory::instance()->deleteImage(_iconImage);
-      _iconImage = NULL;
-    }
+    delete _iconImage;
+    _iconImage = NULL;
 
     if (image == NULL) {
       _mark->onTextureDownloadError();
@@ -381,9 +379,8 @@ Mark::~Mark() {
   if (_autoDeleteUserData) {
     delete _userData;
   }
-  if (_textureImage != NULL) {
-    IFactory::instance()->deleteImage(_textureImage);
-  }
+
+  delete _textureImage;
 
   if (_glState != NULL) {
     _glState->_release();
@@ -501,7 +498,7 @@ void Mark::render(const G3MRenderContext* rc,
                                                                      _imageID,
                                                                      false);
 
-        rc->getFactory()->deleteImage(_textureImage);
+        delete _textureImage;
         _textureImage = NULL;
       }
 

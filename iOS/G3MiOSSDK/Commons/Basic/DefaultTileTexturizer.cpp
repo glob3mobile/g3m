@@ -18,8 +18,7 @@
 #include "DebugTileImageProvider.hpp"
 #include "TileImageListener.hpp"
 #include "TexturesHandler.hpp"
-//#warning REMOVE THIS
-//#include "TileKey.hpp"
+
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
@@ -323,23 +322,20 @@ public:
 
   bool uploadTexture(const IImage*      image,
                      const std::string& imageId) {
-    if (_texturedMesh != NULL) {
-      const bool generateMipmap = true;
+    const bool generateMipmap = true;
 
-      const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
-                                                                                      GLFormat::rgba(),
-                                                                                      imageId,
-                                                                                      generateMipmap);
-
-      if (glTextureId != NULL) {
-        if (!_texturedMesh->setGLTextureIdForLevel(0, glTextureId)) {
-          delete glTextureId;
-          //_texturesHandler->releaseGLTextureId(glTextureId);
-        }
-      }
+    const TextureIDReference* glTextureId = _texturesHandler->getTextureIDReference(image,
+                                                                                    GLFormat::rgba(),
+                                                                                    imageId,
+                                                                                    generateMipmap);
+    if (glTextureId == NULL) {
+      return false;
     }
 
-    IFactory::instance()->deleteImage(image);
+    if (!_texturedMesh->setGLTextureIdForLevel(0, glTextureId)) {
+      delete glTextureId;
+    }
+
     return true;
   }
 
@@ -349,14 +345,12 @@ public:
                     const RectangleF&  imageRectangle,
                     const float        alpha) {
     if (!_canceled && (_tile != NULL) && (_texturedMesh != NULL)) {
-
-#warning TODO calculate textureId
-//      const std::string imageId = _tile->getKey().description();
       if (uploadTexture(image, imageId)) {
-        //If the image could be properly turn into texture
         _tile->setTextureSolved(true);
       }
     }
+
+    delete image;
   }
 
   void imageCreationError(const std::string& error) {

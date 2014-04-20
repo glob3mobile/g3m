@@ -241,7 +241,7 @@ CachedDownloader::~CachedDownloader() {
   delete _downloader;
 
   if (_lastImageResult != NULL) {
-    IFactory::instance()->deleteImage(_lastImageResult->_image);
+    delete _lastImageResult->_image;
     delete _lastImageResult;
   }
   delete _lastImageURL;
@@ -316,7 +316,7 @@ IImageResult CachedDownloader::getCachedImageResult(const URL& url,
 
   if (cachedImage != NULL) {
     if (_lastImageResult != NULL) {
-      IFactory::instance()->deleteImage(_lastImageResult->_image);
+      delete _lastImageResult->_image;
       delete _lastImageResult;
     }
     _lastImageResult = new IImageResult(cachedImage->shallowCopy(),

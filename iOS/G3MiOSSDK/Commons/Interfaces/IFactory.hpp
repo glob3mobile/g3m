@@ -56,11 +56,11 @@ public:
   virtual ~IFactory() {
   }
 
-  virtual void deleteImage(const IImage* image) const = 0;
+//  virtual void deleteImage(const IImage* image) const = 0;
 
   virtual ITimer* createTimer() const = 0;
 
-  virtual void deleteTimer(const ITimer* timer) const = 0;
+//  virtual void deleteTimer(const ITimer* timer) const = 0;
 
   virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
 

@@ -100,11 +100,7 @@ public:
 
   ~VisibleSectorListenerEntry() {
     delete _listener;
-
-    if (_timer != NULL) {
-      IFactory::instance()->deleteTimer(_timer);
-    }
-
+    delete _timer;
     delete _lastSector;
   }
 };

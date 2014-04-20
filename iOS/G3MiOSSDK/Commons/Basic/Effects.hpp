@@ -234,7 +234,7 @@ public:
   void initialize(const G3MContext* context);
 
   virtual ~EffectsScheduler() {
-    _factory->deleteTimer(_timer);
+    delete _timer;
 
     for (unsigned int i = 0; i < _effectsRuns.size(); i++) {
       EffectRun* effectRun = _effectsRuns[i];

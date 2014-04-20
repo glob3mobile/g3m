@@ -9,7 +9,6 @@
 #include "Petition.hpp"
 
 #include "IStringBuilder.hpp"
-#include "IFactory.hpp"
 #include "IImage.hpp"
 
 const std::string Petition::description() const {
@@ -32,6 +31,6 @@ const std::string Petition::description() const {
 }
 
 void Petition::releaseImage() {
-  IFactory::instance()->deleteImage(_image);
+  delete _image;
   _image = NULL;
 }

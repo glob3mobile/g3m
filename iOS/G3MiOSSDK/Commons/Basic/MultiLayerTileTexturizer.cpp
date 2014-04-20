@@ -507,7 +507,7 @@ public:
       }
     }
 
-    IFactory::instance()->deleteImage(image);
+    delete image;
 
     for (int i = 0; i < srcRects.size(); i++) {
       delete srcRects[i];
@@ -591,7 +591,7 @@ public:
   void stepDownloaded(int position,
                       IImage* image) {
     if (_canceled) {
-      IFactory::instance()->deleteImage(image);
+      delete image;
       return;
     }
     //checkIsPending(position);

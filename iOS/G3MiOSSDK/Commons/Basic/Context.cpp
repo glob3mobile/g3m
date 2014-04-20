@@ -14,8 +14,7 @@
 #include "OrderedRenderable.hpp"
 
 G3MRenderContext::~G3MRenderContext() {
-  //  delete _frameStartTimer;
-  IFactory::instance()->deleteTimer(_frameStartTimer);
+  delete _frameStartTimer;
   delete _orderedRenderables;
 
 #ifdef JAVA_CODE

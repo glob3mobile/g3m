@@ -10,7 +10,6 @@
 
 #include "IGLTextureId.hpp"
 #include "IImage.hpp"
-#include "IFactory.hpp"
 #include "TexturesHandler.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "ShortBufferBuilder.hpp"
@@ -33,7 +32,7 @@ const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
                                                                                     _textureURL.getPath(),
                                                                                     false);
 
-  rc->getFactory()->deleteImage(_textureImage);
+  delete _textureImage;
   _textureImage = NULL;
 
   if (texId == NULL) {
