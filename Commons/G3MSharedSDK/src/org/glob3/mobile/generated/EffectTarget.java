@@ -19,11 +19,11 @@ package org.glob3.mobile.generated;
 
 
 
-
-
+//class IFactory;
 
 //class G3MRenderContext;
 //class G3MContext;
+
 
 public interface EffectTarget
 {
@@ -31,7 +31,4 @@ public interface EffectTarget
   
 
   void dispose();
-
-
-
 }
