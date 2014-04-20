@@ -368,6 +368,7 @@
 		CFE6046519043E3200E6C78B /* IImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046419043E3200E6C78B /* IImageBuilder.cpp */; };
 		CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE604661904411900E6C78B /* ChangedListener.cpp */; };
 		CFE60469190442FE00E6C78B /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE60468190442FE00E6C78B /* TextureMapping.cpp */; };
+		CFE6046B1904442700E6C78B /* TerrainTouchListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046A1904442700E6C78B /* TerrainTouchListener.cpp */; };
 		CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */; };
 		CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */; };
 		CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AD175E04FA00046B96 /* Sphere.hpp */; };
@@ -1527,6 +1528,7 @@
 		CFE6046419043E3200E6C78B /* IImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageBuilder.cpp; path = Commons/Basic/IImageBuilder.cpp; sourceTree = "<group>"; };
 		CFE604661904411900E6C78B /* ChangedListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChangedListener.cpp; path = Commons/Basic/ChangedListener.cpp; sourceTree = "<group>"; };
 		CFE60468190442FE00E6C78B /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
+		CFE6046A1904442700E6C78B /* TerrainTouchListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainTouchListener.cpp; path = Commons/Rendererers/TerrainTouchListener.cpp; sourceTree = "<group>"; };
 		CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingMapsLayer.cpp; sourceTree = "<group>"; };
 		CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingMapsLayer.hpp; sourceTree = "<group>"; };
 		CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MercatorUtils.cpp; path = Commons/Basic/MercatorUtils.cpp; sourceTree = "<group>"; };
@@ -2304,6 +2306,7 @@
 				CF423A2617F7A0A000F50525 /* HUDErrorRenderer.cpp */,
 				CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */,
 				CF494C9917FF0A1400D16D33 /* TerrainTouchListener.hpp */,
+				CFE6046A1904442700E6C78B /* TerrainTouchListener.cpp */,
 				CFB57DA41860E4EF00D5B094 /* HUDRenderer.cpp */,
 				CFB57DA51860E4EF00D5B094 /* HUDRenderer.hpp */,
 				CFB57DA81860E6D800D5B094 /* HUDWidget.cpp */,
@@ -2982,6 +2985,7 @@
 				CFC3F8FA17510DA800986630 /* MapBooBuilder.cpp in Sources */,
 				CFC3F8FE175110FE00986630 /* MapBooBuilder_iOS.mm in Sources */,
 				CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */,
+				CFE6046B1904442700E6C78B /* TerrainTouchListener.cpp in Sources */,
 				CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */,
 				D8D894ED17731870007E41A5 /* GPUVariable.cpp in Sources */,
 				D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */,
