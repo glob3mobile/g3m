@@ -26,8 +26,7 @@ package org.glob3.mobile.generated;
 //class IImageBuilder;
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class HUDQuadWidget extends HUDWidget, ChangedListener
+public class HUDQuadWidget extends HUDWidget implements ChangedListener
 {
   private IImageBuilder _imageBuilder;
   private IImageBuilder _backgroundImageBuilder;
