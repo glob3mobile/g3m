@@ -55,7 +55,8 @@ public class TexturedMesh extends Mesh
     }
     if (_ownedTexMapping)
     {
-      _textureMapping = null;
+      if (_textureMapping != null)
+         _textureMapping.dispose();
     }
 
     _glState._release();
