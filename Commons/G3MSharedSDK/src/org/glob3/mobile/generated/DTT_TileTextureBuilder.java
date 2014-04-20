@@ -123,7 +123,7 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!_canceled)
     {
       final TileImageContribution contribution = _tileImageProvider.contribution(_tile);
-      if (contribution == NONE)
+      if (contribution == TileImageContribution.NONE)
       {
         if (_tile != null)
         {
@@ -173,7 +173,8 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public void dispose()
   {
-    _tileImageProvider = null;
+    if (_tileImageProvider != null)
+       _tileImageProvider.dispose();
     super.dispose();
   }
 

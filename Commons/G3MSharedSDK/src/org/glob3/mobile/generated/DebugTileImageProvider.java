@@ -54,7 +54,8 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
       _listener.imageCreated(_tile, image, imageId, _tile._sector, new RectangleF(0, 0, image.getWidth(), image.getHeight()), 1); // alpha
       if (_deleteListener)
       {
-        _listener = null;
+        if (_listener != null)
+           _listener.dispose();
       }
     }
 
@@ -67,7 +68,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
 
   public final TileImageContribution contribution(Tile tile)
   {
-    return FULL_COVERAGE_TRANSPARENT;
+    return TileImageContribution.FULL_COVERAGE_TRANSPARENT;
   }
 
   public final void create(Tile tile, Vector2I resolution, TileImageListener listener, boolean deleteListener)

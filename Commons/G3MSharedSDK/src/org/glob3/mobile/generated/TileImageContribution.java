@@ -8,6 +8,15 @@ package org.glob3.mobile.generated;
 //
 
 
+//
+//  TileImageProvider.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 4/18/14.
+//
+//
+
+
 
 public enum TileImageContribution
 {

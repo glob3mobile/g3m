@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 //class Color;
 //class ICanvas;
 
-public class CanvasTileImageProvider extends TileImageProvider
+public abstract class CanvasTileImageProvider extends TileImageProvider
 {
   private ICanvas _canvas;
   private int _canvasWidth;
