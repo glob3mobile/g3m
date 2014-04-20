@@ -50,7 +50,6 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
     }
   
     super.dispose();
-  
   }
 
   public final java.util.ArrayList<GEO2DPolygonData> getPolygonsData()

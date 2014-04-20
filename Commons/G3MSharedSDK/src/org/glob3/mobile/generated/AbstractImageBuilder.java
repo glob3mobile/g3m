@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class AbstractImageBuilder implements IImageBuilder
+public class AbstractImageBuilder implements IImageBuilder
 {
   private ChangedListener _listener;
 

@@ -18,15 +18,13 @@ public class LabelImageBuilder_ImageListener extends IImageListener
     _listener.imageCreated(image, _imageName);
     if (_deleteListener)
     {
-      if (_listener != null)
-         _listener.dispose();
+      _listener = null;
     }
     _listener = null;
   }
 
   public void dispose()
   {
-    if (_listener != null)
-       _listener.dispose();
+    _listener = null;
   }
 }

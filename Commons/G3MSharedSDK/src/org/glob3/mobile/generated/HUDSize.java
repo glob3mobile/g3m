@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  HUDSize.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 12/26/13.
-//
-//
-
-//
 //  HUDSize.hpp
 //  G3MiOSSDK
 //

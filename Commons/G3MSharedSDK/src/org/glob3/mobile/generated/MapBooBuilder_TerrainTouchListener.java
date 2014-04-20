@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class MapBooBuilder_TerrainTouchListener implements TerrainTouchListener
+public class MapBooBuilder_TerrainTouchListener extends TerrainTouchListener
 {
   private MapBooBuilder _mapBooBuilder;
 

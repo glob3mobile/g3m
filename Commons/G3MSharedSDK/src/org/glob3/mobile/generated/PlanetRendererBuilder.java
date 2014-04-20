@@ -32,7 +32,7 @@ public class PlanetRendererBuilder
   private boolean _useTilesSplitBudget;
   private boolean _forceFirstLevelTilesRenderOnStart;
   private boolean _incrementalTileQuality;
-  private Quality _quality;
+  private Quality _quality = new Quality();
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
   private long _texturePriority;
@@ -276,7 +276,7 @@ public class PlanetRendererBuilder
      _useTilesSplitBudget = true;
      _forceFirstLevelTilesRenderOnStart = true;
      _incrementalTileQuality = false;
-     _quality = Quality.QUALITY_LOW;
+     _quality = QUALITY_LOW;
      _parameters = null;
      _layerSet = null;
      _texturizer = null;

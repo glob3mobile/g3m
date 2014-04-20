@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  TileImageListener.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 4/18/14.
-//
-//
-
-//
 //  TileImageListener.hpp
 //  G3MiOSSDK
 //

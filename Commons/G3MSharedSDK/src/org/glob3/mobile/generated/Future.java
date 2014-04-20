@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  Future.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 12/31/13.
-//
-//
-
-//
 //  Future.hpp
 //  G3MiOSSDK
 //

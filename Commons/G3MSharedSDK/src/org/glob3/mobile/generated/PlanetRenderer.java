@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class PlanetRenderer extends DefaultRenderer implements ChangedListener, SurfaceElevationProvider
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class PlanetRenderer extends DefaultRenderer, ChangedListener implements SurfaceElevationProvider
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
