@@ -80,7 +80,8 @@ public class EffectsScheduler
 
   public void dispose()
   {
-    _factory.deleteTimer(_timer);
+    if (_timer != null)
+       _timer.dispose();
 
     for (int i = 0; i < _effectsRuns.size(); i++)
     {

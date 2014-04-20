@@ -57,7 +57,8 @@ public class Petition
 
   public final void releaseImage()
   {
-    IFactory.instance().deleteImage(_image);
+    if (_image != null)
+       _image.dispose();
     _image = null;
   }
 

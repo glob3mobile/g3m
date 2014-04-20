@@ -164,7 +164,8 @@ public class EllipsoidShape extends AbstractMeshShape
   
       _texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
   
-      rc.getFactory().deleteImage(_textureImage);
+      if (_textureImage != null)
+         _textureImage.dispose();
       _textureImage = null;
     }
   

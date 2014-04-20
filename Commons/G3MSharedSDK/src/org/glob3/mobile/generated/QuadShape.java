@@ -42,7 +42,7 @@ public class QuadShape extends AbstractMeshShape
   
     final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
   
-    rc.getFactory().deleteImage(_textureImage);
+    _textureImage = null;
     _textureImage = null;
   
     if (texId == null)

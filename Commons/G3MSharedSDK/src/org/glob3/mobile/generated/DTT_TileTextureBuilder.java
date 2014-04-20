@@ -180,24 +180,20 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public final boolean uploadTexture(IImage image, String imageId)
   {
-    if (_texturedMesh != null)
+    final boolean generateMipmap = true;
+
+    final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageId, generateMipmap);
+    if (glTextureId == null)
     {
-      final boolean generateMipmap = true;
-
-      final TextureIDReference glTextureId = _texturesHandler.getTextureIDReference(image, GLFormat.rgba(), imageId, generateMipmap);
-
-      if (glTextureId != null)
-      {
-        if (!_texturedMesh.setGLTextureIdForLevel(0, glTextureId))
-        {
-          if (glTextureId != null)
-             glTextureId.dispose();
-          //_texturesHandler->releaseGLTextureId(glTextureId);
-        }
-      }
+      return false;
     }
 
-    IFactory.instance().deleteImage(image);
+    if (!_texturedMesh.setGLTextureIdForLevel(0, glTextureId))
+    {
+      if (glTextureId != null)
+         glTextureId.dispose();
+    }
+
     return true;
   }
 
@@ -205,16 +201,14 @@ public class DTT_TileTextureBuilder extends RCObject
   {
     if (!_canceled && (_tile != null) && (_texturedMesh != null))
     {
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO calculate textureId
-//      const std::string imageId = _tile->getKey().description();
       if (uploadTexture(image, imageId))
       {
-        //If the image could be properly turn into texture
         _tile.setTextureSolved(true);
       }
     }
+
+    if (image != null)
+       image.dispose();
   }
 
   public final void imageCreationError(String error)

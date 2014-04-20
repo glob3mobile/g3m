@@ -379,10 +379,8 @@ public class Mark implements SurfaceElevationListener
       if (_userData != null)
          _userData.dispose();
     }
-    if (_textureImage != null)
-    {
-      IFactory.instance().deleteImage(_textureImage);
-    }
+  
+    _textureImage = null;
   
     if (_glState != null)
     {
@@ -595,7 +593,7 @@ public class Mark implements SurfaceElevationListener
         {
           _textureId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false);
   
-          rc.getFactory().deleteImage(_textureImage);
+          _textureImage = null;
           _textureImage = null;
         }
   

@@ -1,7 +1,4 @@
 package org.glob3.mobile.generated; 
-///#warning REMOVE THIS
-///#include "TileKey.hpp"
-
 public class DTT_LTMInitializer extends LazyTextureMappingInitializer
 {
   private final Tile _tile;

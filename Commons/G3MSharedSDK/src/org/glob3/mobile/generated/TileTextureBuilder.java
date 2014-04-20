@@ -279,7 +279,8 @@ public class TileTextureBuilder extends RCObject
       }
     }
 
-    IFactory.instance().deleteImage(image);
+    if (image != null)
+       image.dispose();
 
     for (int i = 0; i < srcRects.size(); i++)
     {
@@ -382,7 +383,8 @@ public class TileTextureBuilder extends RCObject
   {
     if (_canceled)
     {
-      IFactory.instance().deleteImage(image);
+      if (image != null)
+         image.dispose();
       return;
     }
     //checkIsPending(position);
