@@ -364,6 +364,7 @@
 		CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */; };
 		CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */; };
 		CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBAA164AFDB000910037 /* JSONString.cpp */; };
+		CFE6046319043BEF00E6C78B /* ErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */; };
 		CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */; };
 		CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */; };
 		CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AD175E04FA00046B96 /* Sphere.hpp */; };
@@ -1519,6 +1520,7 @@
 		CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSShapesParser.hpp; path = Commons/Rendererers/SceneJSShapesParser.hpp; sourceTree = "<group>"; };
 		CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONBoolean.cpp; sourceTree = "<group>"; };
 		CFE3DBAA164AFDB000910037 /* JSONString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONString.cpp; sourceTree = "<group>"; };
+		CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorRenderer.cpp; path = Commons/Rendererers/ErrorRenderer.cpp; sourceTree = "<group>"; };
 		CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingMapsLayer.cpp; sourceTree = "<group>"; };
 		CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingMapsLayer.hpp; sourceTree = "<group>"; };
 		CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MercatorUtils.cpp; path = Commons/Basic/MercatorUtils.cpp; sourceTree = "<group>"; };
@@ -1831,6 +1833,7 @@
 				CFB5274D16D5605C008374C2 /* Math */,
 				D8A5601915AEF47300035086 /* Mesh */,
 				CCC2A01A15CA6B8200923850 /* Renderers */,
+				CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */,
 			);
 			name = Commons;
 			sourceTree = "<group>";
@@ -2760,6 +2763,7 @@
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
 				D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */,
 				D87EC5C715BEB12F00E38C36 /* LayerSet.cpp in Sources */,
+				CFE6046319043BEF00E6C78B /* ErrorRenderer.cpp in Sources */,
 				D87EC5C915BEB12F00E38C36 /* WMSLayer.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
 				CF423A2D17F8874E00F50525 /* RenderState.cpp in Sources */,
