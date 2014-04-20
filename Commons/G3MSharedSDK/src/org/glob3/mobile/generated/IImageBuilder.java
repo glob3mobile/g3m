@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  IImageBuilder.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 1/2/14.
+//
+//
+
+//
 //  IImageBuilder.hpp
 //  G3MiOSSDK
 //

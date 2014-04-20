@@ -14,7 +14,8 @@ public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownload
   {
     if (_deleteListener)
     {
-      _listener = null;
+      if (_listener != null)
+         _listener.dispose();
     }
   }
 
@@ -23,7 +24,8 @@ public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownload
     _listener.imageCreated(image, url.getPath());
     if (_deleteListener)
     {
-      _listener = null;
+      if (_listener != null)
+         _listener.dispose();
       _listener = null;
     }
   }
@@ -33,7 +35,8 @@ public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownload
     _listener.onError("Error downloading image from \"" + url.getPath() + "\"");
     if (_deleteListener)
     {
-      _listener = null;
+      if (_listener != null)
+         _listener.dispose();
       _listener = null;
     }
   }
@@ -43,7 +46,8 @@ public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownload
     _listener.onError("Canceled download image from \"" + url.getPath() + "\"");
     if (_deleteListener)
     {
-      _listener = null;
+      if (_listener != null)
+         _listener.dispose();
       _listener = null;
     }
   }

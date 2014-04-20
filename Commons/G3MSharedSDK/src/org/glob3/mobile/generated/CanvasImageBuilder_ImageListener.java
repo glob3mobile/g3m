@@ -17,7 +17,8 @@ public class CanvasImageBuilder_ImageListener extends IImageListener
   {
     if (_deleteListener)
     {
-      _listener = null;
+      if (_listener != null)
+         _listener.dispose();
     }
   }
 
@@ -27,7 +28,8 @@ public class CanvasImageBuilder_ImageListener extends IImageListener
 
     if (_deleteListener)
     {
-      _listener = null;
+      if (_listener != null)
+         _listener.dispose();
     }
     _listener = null;
   }
