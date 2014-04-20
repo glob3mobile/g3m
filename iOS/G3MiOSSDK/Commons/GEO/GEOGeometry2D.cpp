@@ -6,4 +6,3 @@
 //
 //
 
-#include "GEOGeometry2D.hpp"

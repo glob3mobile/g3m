@@ -24,7 +24,6 @@ GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 

@@ -6,4 +6,3 @@
 //
 //
 
-#include "BoundingArea.hpp"

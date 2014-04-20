@@ -6,5 +6,4 @@
 //
 //
 
-#include "IImageBuilder.hpp"
 

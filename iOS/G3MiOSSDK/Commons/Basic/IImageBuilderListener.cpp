@@ -6,4 +6,3 @@
 //
 //
 
-#include "IImageBuilderListener.hpp"
