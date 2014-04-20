@@ -27,8 +27,7 @@ public class ImageSaverDownloadListener extends IImageDownloadListener
   {
     if (_deleteListener)
     {
-      if (_listener != null)
-         _listener.dispose();
+      _listener = null;
       _listener = null;
     }
   }

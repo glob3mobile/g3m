@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  TilesRenderParameters.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 08/08/12.
-//
-//
-
-//
 //  TilesRenderParameters.hpp
 //  G3MiOSSDK
 //

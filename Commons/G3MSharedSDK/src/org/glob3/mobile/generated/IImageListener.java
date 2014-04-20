@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  IImageListener.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 12/5/12.
-//
-//
-
-//
 //  IImageListener.hpp
 //  G3MiOSSDK
 //

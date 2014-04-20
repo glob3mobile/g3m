@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  TileImageProvider.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 4/18/14.
-//
-//
-
-//
 //  TileImageProvider.hpp
 //  G3MiOSSDK
 //

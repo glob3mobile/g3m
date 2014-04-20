@@ -436,8 +436,7 @@ public class Tile
          _texturizedMesh.dispose();
       _texturizedMesh = null;
   
-      if (_texturizerData != null)
-         _texturizerData.dispose();
+      _texturizerData = null;
       _texturizerData = null;
   
       setTexturizerDirty(true);
@@ -551,8 +550,7 @@ public class Tile
        _tessellatorMesh.dispose();
     _tessellatorMesh = null;
   
-    if (_texturizerData != null)
-       _texturizerData.dispose();
+    _texturizerData = null;
     _texturizerData = null;
   
     if (_texturizedMesh != null)
@@ -744,8 +742,7 @@ public class Tile
   
       if (_textureSolved)
       {
-        if (_texturizerData != null)
-           _texturizerData.dispose();
+        _texturizerData = null;
         _texturizerData = null;
       }
   
@@ -790,8 +787,7 @@ public class Tile
   {
     if (texturizerData != _texturizerData)
     {
-      if (_texturizerData != null)
-         _texturizerData.dispose();
+      _texturizerData = null;
       _texturizerData = texturizerData;
     }
   }

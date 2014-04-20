@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  TileRenderingListener.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 3/21/14.
-//
-//
-
-//
 //  TileRenderingListener.hpp
 //  G3MiOSSDK
 //

@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class TransformableTextureMapping extends TextureMapping
+public class TransformableTextureMapping extends TextureMapping
 {
   protected float _translationU;
   protected float _translationV;

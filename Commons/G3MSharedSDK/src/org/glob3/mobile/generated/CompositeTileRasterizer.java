@@ -18,7 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class CompositeTileRasterizer extends CanvasTileRasterizer implements ChangedListener
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class CompositeTileRasterizer extends CanvasTileRasterizer, ChangedListener
 {
   private java.util.ArrayList<TileRasterizer> _children = new java.util.ArrayList<TileRasterizer>();
 
