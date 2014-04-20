@@ -365,6 +365,7 @@
 		CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */; };
 		CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBAA164AFDB000910037 /* JSONString.cpp */; };
 		CFE6046319043BEF00E6C78B /* ErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */; };
+		CFE6046519043E3200E6C78B /* IImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046419043E3200E6C78B /* IImageBuilder.cpp */; };
 		CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */; };
 		CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */; };
 		CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AD175E04FA00046B96 /* Sphere.hpp */; };
@@ -1521,6 +1522,7 @@
 		CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONBoolean.cpp; sourceTree = "<group>"; };
 		CFE3DBAA164AFDB000910037 /* JSONString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONString.cpp; sourceTree = "<group>"; };
 		CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorRenderer.cpp; path = Commons/Rendererers/ErrorRenderer.cpp; sourceTree = "<group>"; };
+		CFE6046419043E3200E6C78B /* IImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IImageBuilder.cpp; path = Commons/Basic/IImageBuilder.cpp; sourceTree = "<group>"; };
 		CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingMapsLayer.cpp; sourceTree = "<group>"; };
 		CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingMapsLayer.hpp; sourceTree = "<group>"; };
 		CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MercatorUtils.cpp; path = Commons/Basic/MercatorUtils.cpp; sourceTree = "<group>"; };
@@ -1833,7 +1835,6 @@
 				CFB5274D16D5605C008374C2 /* Math */,
 				D8A5601915AEF47300035086 /* Mesh */,
 				CCC2A01A15CA6B8200923850 /* Renderers */,
-				CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */,
 			);
 			name = Commons;
 			sourceTree = "<group>";
@@ -2040,6 +2041,7 @@
 				CF423A2B17F8874E00F50525 /* RenderState.cpp */,
 				CF423A2C17F8874E00F50525 /* RenderState.hpp */,
 				CFD41F591875E3F600889B7C /* IImageBuilder.hpp */,
+				CFE6046419043E3200E6C78B /* IImageBuilder.cpp */,
 				CFD41F5C1875E4E900889B7C /* IImageBuilderListener.hpp */,
 				CFD41F5E1875E59800889B7C /* DownloaderImageBuilder.cpp */,
 				CFD41F5F1875E59800889B7C /* DownloaderImageBuilder.hpp */,
@@ -2292,6 +2294,7 @@
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
 				CF024DC616A84F330051255C /* VisibleSectorListener.hpp */,
+				CFE6046219043BEF00E6C78B /* ErrorRenderer.cpp */,
 				CF423A2417F799DD00F50525 /* ErrorRenderer.hpp */,
 				CF423A2617F7A0A000F50525 /* HUDErrorRenderer.cpp */,
 				CF423A2717F7A0A000F50525 /* HUDErrorRenderer.hpp */,
@@ -2793,6 +2796,7 @@
 				CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */,
 				CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */,
 				CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */,
+				CFE6046519043E3200E6C78B /* IImageBuilder.cpp in Sources */,
 				CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */,
 				CF290D50187F1543000BE644 /* TransformableTextureMapping.cpp in Sources */,
 				CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */,
