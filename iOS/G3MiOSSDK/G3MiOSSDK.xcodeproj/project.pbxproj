@@ -369,6 +369,7 @@
 		CFE604671904411900E6C78B /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE604661904411900E6C78B /* ChangedListener.cpp */; };
 		CFE60469190442FE00E6C78B /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE60468190442FE00E6C78B /* TextureMapping.cpp */; };
 		CFE6046B1904442700E6C78B /* TerrainTouchListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046A1904442700E6C78B /* TerrainTouchListener.cpp */; };
+		CFE6046D1904448900E6C78B /* TileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE6046C1904448900E6C78B /* TileImageProvider.cpp */; };
 		CFE676B216ECDA7C00CB93B9 /* BingMapsLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */; };
 		CFE676B316ECDA9100CB93B9 /* BingMapsLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */; };
 		CFE7B4781785B7E200C57DEA /* Sphere.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B749AD175E04FA00046B96 /* Sphere.hpp */; };
@@ -1529,6 +1530,7 @@
 		CFE604661904411900E6C78B /* ChangedListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChangedListener.cpp; path = Commons/Basic/ChangedListener.cpp; sourceTree = "<group>"; };
 		CFE60468190442FE00E6C78B /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
 		CFE6046A1904442700E6C78B /* TerrainTouchListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainTouchListener.cpp; path = Commons/Rendererers/TerrainTouchListener.cpp; sourceTree = "<group>"; };
+		CFE6046C1904448900E6C78B /* TileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileImageProvider.cpp; path = Commons/Basic/TileImageProvider.cpp; sourceTree = "<group>"; };
 		CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingMapsLayer.cpp; sourceTree = "<group>"; };
 		CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingMapsLayer.hpp; sourceTree = "<group>"; };
 		CFEBDF1C16E8C9C70063B49F /* MercatorUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MercatorUtils.cpp; path = Commons/Basic/MercatorUtils.cpp; sourceTree = "<group>"; };
@@ -2066,6 +2068,7 @@
 				CFADF22118FF1CDB00360565 /* DefaultTileTexturizer.cpp */,
 				CFADF22218FF1CDB00360565 /* DefaultTileTexturizer.hpp */,
 				CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */,
+				CFE6046C1904448900E6C78B /* TileImageProvider.cpp */,
 				CF47E0EE19019A1000410BB5 /* TileImageListener.hpp */,
 				CF47E0F01901CA8C00410BB5 /* DebugTileImageProvider.cpp */,
 				CF47E0F11901CA8C00410BB5 /* DebugTileImageProvider.hpp */,
@@ -3042,6 +3045,7 @@
 				CF1E85BB17E799F8005BDE80 /* CartoCSSSymbolizer.cpp in Sources */,
 				CF22263C17E8F47000280C66 /* CartoCSSTokens.cpp in Sources */,
 				CFA2EEEE17EA0B1100EB4526 /* CartoCSSLexer.cpp in Sources */,
+				CFE6046D1904448900E6C78B /* TileImageProvider.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
