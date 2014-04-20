@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class HUDImageRenderer;
 
 
-public class HUDErrorRenderer extends ErrorRenderer
+public class HUDErrorRenderer implements ErrorRenderer
 {
   private HUDImageRenderer _hudImageRenderer;
 
