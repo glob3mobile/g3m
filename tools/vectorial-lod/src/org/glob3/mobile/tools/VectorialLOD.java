@@ -15,15 +15,17 @@ import java.util.List;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 
 
 public class VectorialLOD {
 
    final static String                       ROOT_DIRECTORY     = "LOD";
 
-   final static boolean                      MERCATOR           = false;
+   final static boolean                      MERCATOR           = true;
    final static int                          FIRST_LEVEL        = 0;
    final static int                          MAX_LEVEL          = 3;
    final static int                          NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
@@ -33,8 +35,6 @@ public class VectorialLOD {
 
    final static boolean                      VERBOSE            = false;
 
-   //   private static java.sql.Connection _conn              = null;
-   //   private static Statement           _st                = null;
    private static DataBaseService            _dataBaseService   = null;
    private static String                     _lodFolder         = null;
    private static GConcurrentService         _concurrentService;
@@ -223,13 +223,13 @@ public class VectorialLOD {
                                   + baseQuery2 + dataSourceTable + baseQuery4 + geomFilterCriteria + baseQuery3 + theGeom + ","
                                   + bboxQuery + baseQuery5;
 
-         //       System.out.println("fullQuery: " + fullQuery);
+         //         System.out.println("fullQuery: " + fullQuery);
 
          final ResultSet rs = st.executeQuery(fullQuery);
 
          if (!rs.next()) {
             st.close();
-            return null; // null tolerance means no data on this bbox
+            return null; //no data on this bbox
          }
          geoJsonResult = rs.getString(1);
          st.close();
@@ -296,8 +296,28 @@ public class VectorialLOD {
                     + Double.toString(sector._upper._longitude._degrees) + ","
                     + Double.toString(sector._upper._latitude._degrees) + ")),4326)";
 
+      //      System.out.println("BOX QUERY: " + resultQuery);
 
       return resultQuery;
+
+      // MERCATOR: EPSG:3857, EPSG:900913 (Google)
+
+      //      SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features 
+      //      FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,
+      //      ST_SetSRID(ST_MakeBox2D(ST_Point(123.74999999999999,33.75), ST_Point(135.0,45.0)),4326)),0.005625))::
+      //      json As geometry, row_to_json((SELECT l FROM (SELECT "continent", "pop_est") As l)) As properties FROM 
+      //      (SELECT * FROM ne_10m_admin_0_countries WHERE (true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(
+      //      ST_MakeBox2D(ST_Point(123.74999999999999,33.75), ST_Point(135.0,45.0)),4326))) As f ) As fc;
+
+      //      String resultQuery = "ST_Transform(ST_SetSRID(ST_MakeBox2D(ST_Point(";
+      //      resultQuery = resultQuery + Double.toString(sector._lower._longitude._degrees) + ","
+      //                    + Double.toString(sector._lower._latitude._degrees) + "), ST_Point("
+      //                    + Double.toString(sector._upper._longitude._degrees) + ","
+      //                    + Double.toString(sector._upper._latitude._degrees) + ")),4326),3857)";
+
+      //      System.out.println("BOX QUERY: " + resultQuery);
+
+      //      return resultQuery;
    }
 
 
@@ -480,7 +500,8 @@ public class VectorialLOD {
          System.out.println("Exception while writting geoJson object ! ");
       }
 
-      final List<TileSector> subSectors = sector.getSubsectors();
+      //final List<TileSector> subSectors = sector.getSubTileSectors();
+      final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
       for (final TileSector s : subSectors) {
          processSubSectors(s, dataSource);
       }
@@ -523,6 +544,27 @@ public class VectorialLOD {
 
       _renderParameters = mercator ? LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel)
                                   : LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
+
+
+   }
+
+
+   private static void initializeMathUtils() {
+
+      if (IMathUtils.instance() == null) {
+         IMathUtils.setInstance(new MathUtils_JavaDesktop());
+      }
+   }
+
+
+   private static void initialize() {
+
+      initializeMathUtils();
+
+      initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
+
+      initializeConcurrentService();
+
    }
 
 
@@ -530,13 +572,11 @@ public class VectorialLOD {
 
       System.out.print("Connect to POSTGIS DB vectorial_test.. ");
 
-      //if (createDataBaseService("192.168.1.14", "5432", "postgres", "postgres1g0", "vectorial_test")) {
-      if (createDataBaseService("igosoftware.dyndns.org", "5414", "postgres", "postgres1g0", "vectorial_test")) {
+      if (createDataBaseService("192.168.1.14", "5432", "postgres", "postgres1g0", "vectorial_test")) {
+         //      if (createDataBaseService("igosoftware.dyndns.org", "5414", "postgres", "postgres1g0", "vectorial_test")) {
          System.out.println("done.");
 
-         initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
-
-         initializeConcurrentService();
+         initialize();
 
          final DataSource dataSource = new DataSource("ne_10m_admin_0_countries", "true", "continent", "pop_est");
          //         final DataSource dataSource = new DataSource("ne_10m_admin_0_boundary_lines_land", "true", "adm0_left", "labelrank");
