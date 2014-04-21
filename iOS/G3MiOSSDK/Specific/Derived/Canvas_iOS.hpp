@@ -50,7 +50,7 @@ protected:
 
   void _setLineDash(float lengths[],
                     int count,
-                    int phase);
+                    float phase);
 
   void _setShadow(const Color& color,
                   float blur,

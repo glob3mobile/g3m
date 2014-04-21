@@ -58,7 +58,7 @@ protected:
 
   virtual void _setLineDash(float lengths[],
                             int count,
-                            int phase) = 0;
+                            float phase) = 0;
 
   virtual void _fillRectangle(float left, float top,
                               float width, float height) = 0;
