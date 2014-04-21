@@ -49,7 +49,7 @@ public abstract class MapBooBuilder
     final boolean useTilesSplitBudget = true;
     final boolean forceFirstLevelTilesRenderOnStart = true;
     final boolean incrementalTileQuality = false;
-    final Quality quality = QUALITY_LOW;
+    final Quality quality = Quality.QUALITY_LOW;
   
     final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
   
