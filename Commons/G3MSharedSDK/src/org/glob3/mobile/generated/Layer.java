@@ -45,8 +45,6 @@ public abstract class Layer
 
   protected boolean _enable;
 
-  protected final String _name;
-
   protected LayerTilesRenderParameters _parameters;
 
   protected final long _timeToCacheMS;
@@ -64,10 +62,9 @@ public abstract class Layer
 
   protected final float _transparency;
 
-  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  protected Layer(LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
      _condition = condition;
-     _name = name;
      _layerSet = null;
      _timeToCacheMS = timeToCache._milliseconds;
      _readExpired = readExpired;
@@ -199,11 +196,6 @@ public abstract class Layer
     _layerSet = null;
   }
 
-  public final String getName()
-  {
-    return _name;
-  }
-
   public final LayerTilesRenderParameters getLayerTilesRenderParameters()
   {
     return _parameters;
@@ -253,11 +245,6 @@ public abstract class Layer
     }
   
     if (_enable != that._enable)
-    {
-      return false;
-    }
-  
-    if (!(_name.equals(that._name)))
     {
       return false;
     }

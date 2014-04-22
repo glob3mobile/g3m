@@ -34,9 +34,9 @@ public class MapQuestLayer extends MercatorTiledLayer
     return result;
   }
 
-  private MapQuestLayer(String name, String domain, java.util.ArrayList<String> subdomains, int initialLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition)
+  private MapQuestLayer(String domain, java.util.ArrayList<String> subdomains, int initialLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition)
   {
-     super(name, "http://", domain, subdomains, "jpg", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, condition);
+     super("http://", domain, subdomains, "jpg", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, condition);
 
   }
 
@@ -68,7 +68,7 @@ public class MapQuestLayer extends MercatorTiledLayer
   }
   public static MapQuestLayer newOSM(TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
-    return new MapQuestLayer("MapQuest-OSM", "mqcdn.com/tiles/1.0.0/map", getSubdomains(), initialLevel, 19, timeToCache, readExpired, condition);
+    return new MapQuestLayer("mqcdn.com/tiles/1.0.0/map", getSubdomains(), initialLevel, 19, timeToCache, readExpired, condition);
   }
 
 
@@ -86,7 +86,7 @@ public class MapQuestLayer extends MercatorTiledLayer
   }
   public static MapQuestLayer newOpenAerial(TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
-    return new MapQuestLayer("MapQuest-OpenAerial", "mqcdn.com/tiles/1.0.0/sat", getSubdomains(), initialLevel, 11, timeToCache, readExpired, condition);
+    return new MapQuestLayer("mqcdn.com/tiles/1.0.0/sat", getSubdomains(), initialLevel, 11, timeToCache, readExpired, condition);
   }
 
   public final String description()
@@ -96,7 +96,7 @@ public class MapQuestLayer extends MercatorTiledLayer
 
   public final MapQuestLayer copy()
   {
-    return new MapQuestLayer(_name, _domain, _subdomains, _initialLevel, _maxLevel, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy());
+    return new MapQuestLayer(_domain, _subdomains, _initialLevel, _maxLevel, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

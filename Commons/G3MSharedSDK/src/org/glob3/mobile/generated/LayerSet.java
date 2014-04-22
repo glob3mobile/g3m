@@ -218,18 +218,6 @@ public class LayerSet
     return null;
   }
 
-  public final Layer getLayerByName(String name)
-  {
-    final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++)
-    {
-      if (name.equals(_layers.get(i).getName()))
-      {
-        return _layers.get(i);
-      }
-    }
-    return null;
-  }
   public final Layer getLayerByTitle(String title)
   {
     final int layersCount = _layers.size();

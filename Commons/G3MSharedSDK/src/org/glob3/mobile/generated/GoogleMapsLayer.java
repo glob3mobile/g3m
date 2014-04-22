@@ -63,7 +63,7 @@ public class GoogleMapsLayer extends Layer
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
   {
-     super(condition, "GoogleMaps", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
+     super(condition, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
      _key = key;
      _initialLevel = initialLevel;
   

@@ -66,7 +66,7 @@ public class MapBoxLayer extends MercatorTiledLayer
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, LayerCondition condition)
   {
-     super("MapBoxLayer", "http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, condition);
+     super("http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, condition);
      _mapKey = mapKey;
 
   }

@@ -39,7 +39,7 @@ public abstract class TMSLayer extends Layer
   }
   public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector) : parameters, transparency);
+     super(condition, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector) : parameters, transparency);
      _mapServerURL = mapServerURL;
      _mapLayer = mapLayer;
      _sector = new Sector(sector);

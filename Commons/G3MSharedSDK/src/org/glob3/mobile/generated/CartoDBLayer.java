@@ -57,7 +57,7 @@ public class CartoDBLayer extends MercatorTiledLayer
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, LayerCondition condition)
                //int initialCartoDBLevel = 1,
   {
-     super("CartoDBLayer", "http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, condition);
+     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, condition);
      _userName = userName;
      _table = table;
 

@@ -135,7 +135,7 @@ public class URLTemplateLayer extends Layer
   }
   public URLTemplateLayer(String urlTemplate, Sector sector, boolean isTransparent, TimeInterval timeToCache, boolean readExpired, LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
   {
-     super(condition, "URLTemplate", timeToCache, readExpired, parameters, transparency);
+     super(condition, timeToCache, readExpired, parameters, transparency);
      _urlTemplate = urlTemplate;
      _sector = new Sector(sector);
      _isTransparent = isTransparent;
