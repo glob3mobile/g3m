@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public interface ErrorRenderer extends ProtoRenderer
+public interface ErrorRenderer implements ProtoRenderer
 {
   void dispose();
 
