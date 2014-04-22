@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//class ChangedInfoListener;
+
 
 
 //class GPUProgramState;
@@ -26,6 +28,10 @@ public abstract class DefaultRenderer implements Renderer
 
   private boolean _enable;
 
+
+  protected ChangedRendererInfoListener _changedInfoListener = null;
+
+  protected int _rendererIdentifier = -1;
 
   protected G3MContext _context;
 
@@ -44,6 +50,7 @@ public abstract class DefaultRenderer implements Renderer
   public void dispose()
   {
     _context = null;
+    _changedInfoListener = null;
   }
 
 
@@ -129,4 +136,14 @@ public abstract class DefaultRenderer implements Renderer
     return false;
   }
 
+  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
+  {
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logError("Changed Renderer Info Listener of DefaultRenderer already set");
+    }
+    _changedInfoListener = changedInfoListener;
+    _rendererIdentifier = rendererIdentifier;
+    ILogger.instance().logInfo("Changed Renderer Info Listener of DefaultRenderer set ok");
+  }
 }

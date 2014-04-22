@@ -17,9 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
-public class CompositeRenderer implements Renderer
+public class CompositeRenderer implements Renderer implements ChangedRendererInfoListener
 {
-  private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
+  private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+  private java.util.ArrayList<ChildRenderer> _renderers = new java.util.ArrayList<ChildRenderer>();
   private int _renderersSize;
 
   private G3MContext _context;
@@ -28,11 +29,28 @@ public class CompositeRenderer implements Renderer
 
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
+  private ChangedRendererInfoListener _changedInfoListener;
+
+  private java.util.ArrayList<String> getInfo()
+  {
+    _info.clear();
+  
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      ChildRenderer child = _renderers.get(i);
+      final java.util.ArrayList<String> childInfo = child.getInfo();
+      _info.addAll(childInfo);
+  
+    }
+  
+    return _info;
+  }
   public CompositeRenderer()
   {
      _context = null;
      _enable = true;
      _renderersSize = 0;
+     _changedInfoListener = null;
     //    _renderers = std::vector<Renderer*>();
   }
 
@@ -50,7 +68,7 @@ public class CompositeRenderer implements Renderer
   
     for (int i = 0; i < _renderersSize; i++)
     {
-      if (_renderers.get(i).isEnable())
+      if (_renderers.get(i).getRenderer().isEnable())
       {
         return true;
       }
@@ -69,7 +87,7 @@ public class CompositeRenderer implements Renderer
   
     for (int i = 0; i < _renderersSize; i++)
     {
-      _renderers.get(i).initialize(context);
+      _renderers.get(i).getRenderer().initialize(context);
     }
   }
 
@@ -81,7 +99,7 @@ public class CompositeRenderer implements Renderer
   
     for (int i = 0; i < _renderersSize; i++)
     {
-      Renderer child = _renderers.get(i);
+      Renderer child = _renderers.get(i).getRenderer();
       if (child.isEnable())
       {
         final RenderState childRenderState = child.getRenderState(rc);
@@ -122,7 +140,7 @@ public class CompositeRenderer implements Renderer
   
     for (int i = 0; i < _renderersSize; i++)
     {
-      Renderer renderer = _renderers.get(i);
+      Renderer renderer = _renderers.get(i).getRenderer();
       if (renderer.isEnable())
       {
         renderer.render(rc, glState);
@@ -135,7 +153,7 @@ public class CompositeRenderer implements Renderer
     // the events are processed bottom to top
     for (int i = _renderersSize - 1; i >= 0; i--)
     {
-      Renderer renderer = _renderers.get(i);
+      Renderer renderer = _renderers.get(i).getRenderer();
       if (renderer.isEnable())
       {
         if (renderer.onTouchEvent(ec, touchEvent))
@@ -152,26 +170,38 @@ public class CompositeRenderer implements Renderer
     // the events are processed bottom to top
     for (int i = _renderersSize - 1; i >= 0; i--)
     {
-      _renderers.get(i).onResizeViewportEvent(ec, width, height);
+      _renderers.get(i).getRenderer().onResizeViewportEvent(ec, width, height);
     }
   }
 
   public final void addRenderer(Renderer renderer)
+  {
+    addChildRenderer(new ChildRenderer(renderer));
+  }
+
+  public final void addRenderer(Renderer renderer, java.util.ArrayList<String> info)
+  {
+    addChildRenderer(new ChildRenderer(renderer, info));
+  }
+
+  public final void addChildRenderer(ChildRenderer renderer)
   {
     _renderers.add(renderer);
     _renderersSize = _renderers.size();
   
     if (_context != null)
     {
-      renderer.initialize(_context);
+      renderer.getRenderer().initialize(_context);
     }
+  
+    renderer.getRenderer().setChangedRendererInfoListener(this, (_renderers.size() - 1));
   }
 
   public final void start(G3MRenderContext rc)
   {
     for (int i = 0; i < _renderersSize; i++)
     {
-      _renderers.get(i).start(rc);
+      _renderers.get(i).getRenderer().start(rc);
     }
   }
 
@@ -179,7 +209,7 @@ public class CompositeRenderer implements Renderer
   {
     for (int i = 0; i < _renderersSize; i++)
     {
-      _renderers.get(i).stop(rc);
+      _renderers.get(i).getRenderer().stop(rc);
     }
   }
 
@@ -187,7 +217,7 @@ public class CompositeRenderer implements Renderer
   {
     for (int i = 0; i < _renderersSize; i++)
     {
-      _renderers.get(i).onResume(context);
+      _renderers.get(i).getRenderer().onResume(context);
     }
   }
 
@@ -195,7 +225,7 @@ public class CompositeRenderer implements Renderer
   {
     for (int i = 0; i < _renderersSize; i++)
     {
-      _renderers.get(i).onPause(context);
+      _renderers.get(i).getRenderer().onPause(context);
     }
   }
 
@@ -203,7 +233,7 @@ public class CompositeRenderer implements Renderer
   {
     for (int i = 0; i < _renderersSize; i++)
     {
-      _renderers.get(i).onDestroy(context);
+      _renderers.get(i).getRenderer().onDestroy(context);
     }
   }
 
@@ -213,7 +243,7 @@ public class CompositeRenderer implements Renderer
   
     for (int i = 0; i < _renderersSize; i++)
     {
-      Renderer renderer = _renderers.get(i);
+      Renderer renderer = _renderers.get(i).getRenderer();
       SurfaceElevationProvider childSurfaceElevationProvider = renderer.getSurfaceElevationProvider();
       if (childSurfaceElevationProvider != null)
       {
@@ -237,7 +267,7 @@ public class CompositeRenderer implements Renderer
   
     for (int i = 0; i < _renderersSize; i++)
     {
-      Renderer renderer = _renderers.get(i);
+      Renderer renderer = _renderers.get(i).getRenderer();
       PlanetRenderer planetRenderer = renderer.getPlanetRenderer();
       if (planetRenderer != null)
       {
@@ -258,6 +288,34 @@ public class CompositeRenderer implements Renderer
   public boolean isPlanetRenderer()
   {
     return false;
+  }
+
+  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
+  {
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logError("Changed Renderer Info Listener of CompositeRenderer already set");
+    }
+    _changedInfoListener = changedInfoListener;
+    ILogger.instance().logInfo("Changed Renderer Info Listener of CompositeRenderer set ok");
+  }
+
+  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info)
+  {
+    if(_renderersSize > rendererIdentifier > 0)
+    {
+      _renderers.get(rendererIdentifier).setInfo(info);
+    }
+    else
+    {
+      ILogger.instance().logWarning("Child Render not found: %d", rendererIdentifier);
+    }
+  
+  
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedRendererInfo(-1, getInfo());
+    }
   }
 
 }

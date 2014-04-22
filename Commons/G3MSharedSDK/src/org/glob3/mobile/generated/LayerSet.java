@@ -23,20 +23,22 @@ package org.glob3.mobile.generated;
 
 //class ChangedListener;
 
-public class LayerSet
+public class LayerSet implements ChangedInfoListener
 {
   private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
 
   private ChangedListener _listener;
 
+  private ChangedInfoListener _changedInfoListener;
+
 //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
 
   private void layersChanged()
   {
   //  delete _layerTilesRenderParameters;
   //  _layerTilesRenderParameters = NULL;
-  
     if (_listener != null)
     {
       _listener.changed();
@@ -50,6 +52,7 @@ public class LayerSet
   {
      _listener = null;
      _context = null;
+     _changedInfoListener = null;
 
   }
 
@@ -474,4 +477,37 @@ public class LayerSet
     }
   }
 
+  public final void setChangedInfoListener(ChangedInfoListener changedInfoListener)
+  {
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logError("Changed Info Listener of LayerSet already set");
+    }
+    ILogger.instance().logError("Changed Info Listener of LayerSet set ok");
+    _changedInfoListener = changedInfoListener;
+  }
+
+  public final java.util.ArrayList<String> getInfo()
+  {
+    _infos.clear();
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      Layer layer = _layers.get(i);
+      if (layer.isEnable())
+      {
+        final String layerInfo = layer.getInfo();
+        _infos.add(layerInfo);
+      }
+    }
+    return _infos;
+  }
+
+  public final void changedInfo(java.util.ArrayList<String> info)
+  {
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedInfo(getInfo());
+    }
+  }
 }

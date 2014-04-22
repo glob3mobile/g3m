@@ -37,6 +37,10 @@ public abstract class Layer
 
   protected final String _name;
 
+  protected String _disclaimerInfo;
+
+  protected java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+
   protected LayerTilesRenderParameters _parameters;
 
   protected final long _timeToCacheMS;
@@ -47,6 +51,7 @@ public abstract class Layer
     if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
+      _layerSet.changedInfo(_info);
     }
   }
 
@@ -285,5 +290,34 @@ public abstract class Layer
   {
     _title = title;
   }
+
+  public final String getInfo()
+  {
+    return _disclaimerInfo;
+  }
+
+  public final void setInfo(String disclaimerInfo)
+  {
+    if (!_disclaimerInfo.equals(disclaimerInfo))
+    {
+      _disclaimerInfo = disclaimerInfo;
+      if (_layerSet != null)
+      {
+        _layerSet.changedInfo(getInfos());
+      }
+    }
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO BETTER
+  public final java.util.ArrayList<String> getInfos()
+  {
+    _info.clear();
+    final String layerInfo = getInfo();
+    _info.add(_disclaimerInfo);
+
+    return _info;
+  }
+
 
 }

@@ -43,6 +43,7 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MarksRenderer;
 //class ErrorRenderer;
+//class InfoDisplay;
 
 
 public abstract class IG3MBuilder
@@ -69,6 +70,7 @@ public abstract class IG3MBuilder
   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
   private SceneLighting _sceneLighting;
   private Sector _shownSector;
+  private InfoDisplay _infoDisplay;
 
 
   /**
@@ -330,6 +332,10 @@ public abstract class IG3MBuilder
     }
     return _shownSector;
   }
+  private InfoDisplay getInfoDisplay()
+  {
+    return _infoDisplay;
+  }
 
   private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
   {
@@ -404,17 +410,26 @@ public abstract class IG3MBuilder
      *    The renderers contained in the list, will be added to the main renderer.
      * If not, the main renderer will be made up of an only renderer (planetRenderer).
      */
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning VTP->TODO DELETE INFO VECTORS, THIS IS ONLY FOR TEST
     Renderer mainRenderer = null;
     if (getRenderers().size() > 0)
     {
       mainRenderer = new CompositeRenderer();
       if (!containsPlanetRenderer(getRenderers()))
       {
-        ((CompositeRenderer) mainRenderer).addRenderer(getPlanetRendererBuilder().create());
+        java.util.ArrayList<String> info = new java.util.ArrayList<String>();
+        info.add("This is PlanetRender ");
+        ((CompositeRenderer) mainRenderer).addRenderer(getPlanetRendererBuilder().create(), info);
       }
       for (int i = 0; i < getRenderers().size(); i++)
       {
-        ((CompositeRenderer) mainRenderer).addRenderer(getRenderers().get(i));
+        IStringBuilder sb = IStringBuilder.newStringBuilder();
+        sb.addString("Render ");
+        sb.addInt(i);
+        java.util.ArrayList<String> info = new java.util.ArrayList<String>();
+        info.add(sb.getString());
+        ((CompositeRenderer) mainRenderer).addRenderer(getRenderers().get(i), info);
       }
     }
     else
@@ -427,9 +442,12 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp);
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, getInfoDisplay());
   
     g3mWidget.setUserData(getUserData());
+  
+  
+    //mainRenderer->getPlanetRenderer()->initializeChangedInfoListener(g3mWidget);
   
     _gl = null;
     _storage = null;
@@ -486,6 +504,7 @@ public abstract class IG3MBuilder
      _userData = null;
      _sceneLighting = null;
      _shownSector = null;
+     _infoDisplay = null;
   }
 
   public void dispose()
@@ -1065,6 +1084,16 @@ public abstract class IG3MBuilder
     MarksRenderer marksRenderer = new MarksRenderer(false);
     addRenderer(marksRenderer);
     return marksRenderer;
+  }
+
+  public final void setInfoDisplay(InfoDisplay infoDisplay)
+  {
+    if (_infoDisplay != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: infoDisplay already initialized");
+      return;
+    }
+    _infoDisplay = infoDisplay;
   }
 
 }
