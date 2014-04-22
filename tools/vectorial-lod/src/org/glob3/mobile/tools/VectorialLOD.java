@@ -24,11 +24,12 @@ import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 public class VectorialLOD {
 
    final static String                       ROOT_DIRECTORY     = "LOD";
-   // MERCATOR: EPSG:3857, EPSG:900913 (Google)
-   final static boolean                      MERCATOR           = true;
+
+   final static boolean                      MERCATOR           = false;                        // MERCATOR: EPSG:3857, EPSG:900913 (Google)
    final static int                          FIRST_LEVEL        = 0;
    final static int                          MAX_LEVEL          = 3;
    final static int                          NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
+   final static double                       TOLERANCE          = 0.1;
 
    final static int                          MAX_DB_CONNECTIONS = NUM_LEVELS;
    final static int                          CONNECTION_TIMEOUT = 5;                            //seconds
@@ -393,7 +394,7 @@ public class VectorialLOD {
 
    private static ArrayList<TileSector> createFirstLevelTileSectors() {
 
-      final ArrayList<TileSector> levelZeroSectorTiles = new ArrayList<TileSector>();
+      final ArrayList<TileSector> levelZeroTileSectors = new ArrayList<TileSector>();
 
       final Angle fromLatitude = _renderParameters._topSector._lower._latitude;
       final Angle fromLongitude = _renderParameters._topSector._lower._longitude;
@@ -421,12 +422,30 @@ public class VectorialLOD {
 
             final TileSector tileSector = new TileSector(sector, null, 0, row, col);
 
-            levelZeroSectorTiles.add(tileSector);
+            levelZeroTileSectors.add(tileSector);
          }
       }
 
-      return levelZeroSectorTiles;
+      return levelZeroTileSectors;
    }
+
+
+   //   private static ArrayList<TileSector> createFirstLevelExtendedTileSectors(final double tolerance) {
+   //
+   //      final ArrayList<TileSector> levelZeroTileSectors = createFirstLevelTileSectors();
+   //      final ArrayList<TileSector> levelZeroExtendedTileSectors = new ArrayList<TileSector>();
+   //
+   //      for (final TileSector s : levelZeroTileSectors) {
+   //
+   //         final Geodetic2D geodeticDelta = new Geodetic2D(s._deltaLatitude.times(tolerance), s._deltaLongitude.times(tolerance));
+   //         final Geodetic2D extendLower = s._lower.sub(geodeticDelta);
+   //         final Geodetic2D extendUpper = s._upper.add(geodeticDelta);
+   //
+   //         levelZeroExtendedTileSectors.add(new TileSector(extendLower, extendUpper, s._parent, s._level, s._row, s._column));
+   //      }
+   //
+   //      return levelZeroExtendedTileSectors;
+   //   }
 
 
    private static void launchVectorialLODProcessing(final DataSource dataSource) {
@@ -463,7 +482,8 @@ public class VectorialLOD {
       try {
 
          final String geoJson = selectGeometries(dataSource._sourceTable, //
-                  sector.getSector(), //
+                  //sector.getSector(), //
+                  sector.getExtendedSector(TOLERANCE),//
                   2.0f, // qualityFactor
                   dataSource._geomFilterCriteria, //
                   dataSource._includeProperties);

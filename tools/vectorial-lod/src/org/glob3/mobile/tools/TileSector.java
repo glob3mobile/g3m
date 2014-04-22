@@ -54,6 +54,21 @@ public class TileSector
    }
 
 
+   public Sector getExtendedSector(final double tolerance) {
+
+      final Geodetic2D geodeticDelta = new Geodetic2D(this._deltaLatitude.times(tolerance), this._deltaLongitude.times(tolerance));
+      final Geodetic2D extendedLower = this._lower.sub(geodeticDelta);
+      final Geodetic2D extendedUpper = this._upper.add(geodeticDelta);
+
+      return new Sector(extendedLower, extendedUpper);
+
+      //      final TileSector result = new TileSector(extendedLower, extendedUpper, this._parent, this._level, this._row, this._column);
+      //      System.out.println("SECTOR: " + this.toString());
+      //      System.out.println("EXTENDED SECTOR: " + result.toString());
+      //      return result;
+   }
+
+
    public final ArrayList<TileSector> getSubTileSectors(final boolean mercator) {
 
       final Angle splitLongitude = Angle.midAngle(_lower._longitude, _upper._longitude);
@@ -169,11 +184,18 @@ public class TileSector
    //      return subSectors;
    //   }
 
+   //   @Override
+   //   public String toString() {
+   //      return "SectorVec [_parent=" + _parent + ", _level=" + _level + ", _row=" + _row + ", _column=" + _column + ", _lower="
+   //             + toStringGeodetic2D(_lower) + ", _upper=" + toStringGeodetic2D(_upper) + ", _center=" + toStringGeodetic2D(_center)
+   //             + ", _deltaLatitude=" + toStringAngle(_deltaLatitude) + ", _deltaLongitude=" + toStringAngle(_deltaLongitude) + "]";
+   //   }
+
    @Override
    public String toString() {
-      return "SectorVec [_parent=" + _parent + ", _level=" + _level + ", _row=" + _row + ", _column=" + _column + ", _lower="
-             + toStringGeodetic2D(_lower) + ", _upper=" + toStringGeodetic2D(_upper) + ", _center=" + toStringGeodetic2D(_center)
-             + ", _deltaLatitude=" + toStringAngle(_deltaLatitude) + ", _deltaLongitude=" + toStringAngle(_deltaLongitude) + "]";
+      return "SectorVec [_level=" + _level + ", _row=" + _row + ", _column=" + _column + ", _lower=" + toStringGeodetic2D(_lower)
+             + ", _upper=" + toStringGeodetic2D(_upper) + ", _center=" + toStringGeodetic2D(_center) + ", _deltaLatitude="
+             + toStringAngle(_deltaLatitude) + ", _deltaLongitude=" + toStringAngle(_deltaLongitude) + "]";
    }
 
 
