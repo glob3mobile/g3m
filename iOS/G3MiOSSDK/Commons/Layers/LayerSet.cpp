@@ -199,7 +199,6 @@ void LayerSet::layerChanged(const Layer* layer) const {
 void LayerSet::layersChanged() const {
 //  delete _layerTilesRenderParameters;
 //  _layerTilesRenderParameters = NULL;
-
   if (_listener != NULL) {
     _listener->changed();
   }
@@ -389,3 +388,28 @@ void LayerSet::takeLayersFrom(LayerSet* that) {
     addLayer( thatLayers[i] );
   }
 }
+
+std::vector<std::string> LayerSet::getInfo() {
+  _infos.clear();
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    Layer* layer = _layers[i];
+    if (layer->isEnable()) {
+      const std::string layerInfo = layer->getInfo();
+#ifdef C_CODE
+      _infos.insert(_infos.end(),layerInfo);
+#endif
+#ifdef JAVA_CODE
+      _infos.add(layerInfo);
+#endif
+    }
+  }
+  return _infos;
+}
+
+void LayerSet::changedInfo(const std::vector<std::string>& info) {
+  if (_changedInfoListener != NULL) {
+    _changedInfoListener->changedInfo(getInfo());
+  }
+}
+

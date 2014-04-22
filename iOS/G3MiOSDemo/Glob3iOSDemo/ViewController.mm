@@ -141,6 +141,11 @@
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
 #import <G3MiOSSDK/TileRenderingListener.hpp>
 
+#import <G3MiOSSDK/ChangedInfoListener.hpp>
+#import <G3MiOSSDK/ChangedRendererInfoListener.hpp>
+#import <G3MiOSSDK/InfoDisplay.hpp>
+
+
 
 
 class TestVisibleSectorListener : public VisibleSectorListener {
@@ -377,8 +382,8 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
 
   LayerSet* layerSet = new LayerSet();
-  //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
-  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10));
+  
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
 
@@ -641,7 +646,7 @@ public:
 
   builder.setBackgroundColor(bgColor);
 
-  LayerSet* layerSet = [self createLayerSet];
+  LayerSet* layerSet = [self createLayerSetVtp];
 
   //  layerSet->addLayer(new WMSLayer("precipitation", //
   //                                  URL("http://wms.openweathermap.org/service", false), //
@@ -681,6 +686,8 @@ public:
 
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder.addRenderer( meshRenderer );
+  
+  
 
   if (false) { //Testing Reference System
 
@@ -756,6 +763,83 @@ public:
     builder.setSceneLighting(light);
   }
 
+  if(true){
+#warning "here"
+    builder.addPeriodicalTask([self createSamplePeriodicalTaskAlternatingLayers:layerSet]);
+    
+    
+    class MyHUDRenderer : public HUDRenderer {
+      public:
+     
+      void updateWigets(const std::vector<std::string>& info) {
+        removeAllWidgets();
+        const int size = info.size();
+        for(int i = 0; i < size; i++) {
+          std::string inf = info.at(i);
+          LabelImageBuilder* labelBuilder = new LabelImageBuilder(inf,               // text
+                                                                  GFont::monospaced(14), // font
+                                                                  3,                     // margin
+                                                                  Color::yellow(),       // color
+                                                                  Color::black(),        // shadowColor
+                                                                  2,                     // shadowBlur
+                                                                  1,                     // shadowOffsetX
+                                                                  -1,                    // shadowOffsetY
+                                                                  Color::transparent(),          // backgroundColor
+                                                                  4,                     // cornerRadius
+                                                                  true                   // mutable
+                                                                  );
+          
+          HUDQuadWidget* label = new HUDQuadWidget(labelBuilder,
+                                                   new HUDAbsolutePosition(5),
+                                                   new HUDAbsolutePosition(10*i),
+                                                   new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+                                                   new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
+          
+          addWidget(label);
+        }
+      }
+    };
+    
+    class MyHUDRendererInfoDisplay : public InfoDisplay {
+    private:
+      MyHUDRenderer* _hudRenderer;
+    public:
+      
+      MyHUDRendererInfoDisplay(MyHUDRenderer* hudRenderer):
+        _hudRenderer(hudRenderer)
+      {
+        
+      }
+      
+      void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info){
+        _hudRenderer->updateWigets(info);
+
+      }
+      
+      void showDisplay() {
+        _hudRenderer->setEnable(true);
+      }
+      
+      void hideDisplay() {
+        _hudRenderer->setEnable(false);
+      }
+      
+      bool isShowing() {
+        return _hudRenderer->isEnable();
+      }
+
+    };
+    
+    
+    MyHUDRenderer* hudRenderer = new MyHUDRenderer();
+    InfoDisplay* infoDisplay = new MyHUDRendererInfoDisplay(hudRenderer);
+    
+    builder.setInfoDisplay(infoDisplay);
+    
+    builder.setHUDRenderer(hudRenderer);
+    //hudRenderer->setInfo(layerSet->getInfo());
+  }
+  
   if (false) { //HUD
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
@@ -1388,7 +1472,75 @@ public:
   return cameraConstraints;
 }
 
+- (LayerSet*) createLayerSetVtp
+{
+  LayerSet* layerSet = new LayerSet();
+  
+  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                      URL("http://www.nasa.network.com/wms?", false),
+                                      WMS_1_1_0,
+                                      Sector::fullSphere(),
+                                      "image/jpeg",
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      new LevelTileCondition(0, 6),
+                                      //NULL,
+                                      TimeInterval::fromDays(30),
+                                      true,
+                                      new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                     2, 4,
+                                                                     0, 6,
+                                                                     LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                     false)
+                                      );
+  blueMarble->setInfo("Blue Marble");
+  
+  layerSet->addLayer(blueMarble);
+  
+  WMSLayer* i3Landsat = new WMSLayer("esat",
+                                     URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+                                     WMS_1_1_0,
+                                     Sector::fullSphere(),
+                                     "image/jpeg",
+                                     "EPSG:4326",
+                                     "",
+                                     false,
+                                     new LevelTileCondition(7, 100),
+                                     TimeInterval::fromDays(30),
+                                     true,
+                                     new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                    2, 4,
+                                                                    0, 12,
+                                                                    LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                                                    LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                    false));
+  i3Landsat->setInfo("I3 Landsat");
 
+  
+  layerSet->addLayer(i3Landsat);
+  
+  WMSLayer *pnoa = new WMSLayer("PNOA",
+                                URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                WMS_1_1_0,
+                                Sector::fromDegrees(21, -18, 45, 6),
+                                "image/png",
+                                "EPSG:4326",
+                                "",
+                                true,
+                                NULL,
+                                TimeInterval::fromDays(30),
+                                true,
+                                NULL,
+                                0.5);
+  pnoa->setInfo("PNOA");
+  
+  layerSet->addLayer(pnoa);
+
+  
+  return layerSet;
+}
 
 
 - (LayerSet*) createLayerSet
@@ -3291,6 +3443,28 @@ public:
 
   return initializationTask;
 }
+
+
+- (PeriodicalTask*) createSamplePeriodicalTaskAlternatingLayers: (LayerSet*) layerSet
+{
+  class TestAlternatingLayersTask : public GTask {
+  private:
+    LayerSet* _layerSet;
+  public:
+    TestAlternatingLayersTask(LayerSet* layerSet) :
+    _layerSet(layerSet)    {
+    }
+    
+    void run(const G3MContext* context) {
+      _layerSet->getLayer(2)->setEnable(!_layerSet->getLayer(2)->isEnable());
+    }
+  };
+  
+  PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(10),
+                                                      new TestAlternatingLayersTask(layerSet));
+  return periodicalTask;
+}
+
 
 - (PeriodicalTask*) createSamplePeriodicalTask: (G3MBuilder_iOS*) builder
 {

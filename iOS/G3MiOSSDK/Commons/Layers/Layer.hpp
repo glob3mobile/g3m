@@ -37,6 +37,10 @@ protected:
   bool _enable;
 
   const std::string _name;
+  
+  std::string _disclaimerInfo;
+  
+  std::vector<std::string> _info;
 
 #ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
@@ -167,6 +171,27 @@ public:
 
   void setTitle(const std::string& title);
   
+  const std::string getInfo() const {
+    return _disclaimerInfo;
+  }
+  
+  void setInfo(const std::string& disclaimerInfo);
+  
+#warning TODO BETTER
+  std::vector<std::string> getInfos() {
+    _info.clear();
+    const std::string layerInfo = getInfo();
+#ifdef C_CODE
+    _info.insert(_info.end(),layerInfo);
+#endif
+#ifdef JAVA_CODE
+    _info.add(_disclaimerInfo);
+#endif
+    
+    return _info;
+  }
+
+
 };
 
 #endif

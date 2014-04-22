@@ -56,7 +56,8 @@ _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
-_shownSector(NULL)
+_shownSector(NULL),
+_infoDisplay(NULL)
 {
 }
 
@@ -678,14 +679,22 @@ G3MWidget* IG3MBuilder::create() {
    *    The renderers contained in the list, will be added to the main renderer.
    * If not, the main renderer will be made up of an only renderer (planetRenderer).
    */
+#warning VTP->TODO DELETE INFO VECTORS, THIS IS ONLY FOR TEST
   Renderer* mainRenderer = NULL;
   if (getRenderers()->size() > 0) {
     mainRenderer = new CompositeRenderer();
     if (!containsPlanetRenderer(*getRenderers())) {
-      ((CompositeRenderer *) mainRenderer)->addRenderer(getPlanetRendererBuilder()->create());
+      std::vector<std::string> info;
+      info.push_back("This is PlanetRender ");
+      ((CompositeRenderer *) mainRenderer)->addRenderer(getPlanetRendererBuilder()->create(), info);
     }
     for (unsigned int i = 0; i < getRenderers()->size(); i++) {
-      ((CompositeRenderer *) mainRenderer)->addRenderer(getRenderers()->at(i));
+      IStringBuilder* sb = IStringBuilder::newStringBuilder();
+      sb->addString("Render ");
+      sb->addInt(i);
+      std::vector<std::string> info;
+      info.push_back(sb->getString());
+      ((CompositeRenderer *) mainRenderer)->addRenderer(getRenderers()->at(i), info);
     }
   }
   else {
@@ -697,7 +706,7 @@ G3MWidget* IG3MBuilder::create() {
                                                           initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-
+  
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -718,9 +727,13 @@ G3MWidget* IG3MBuilder::create() {
                                             *getPeriodicalTasks(),
                                             getGPUProgramManager(),
                                             getSceneLighting(),
-                                            icpp);
+                                            icpp,
+                                            getInfoDisplay());
   
   g3mWidget->setUserData(getUserData());
+  
+  
+  //mainRenderer->getPlanetRenderer()->initializeChangedInfoListener(g3mWidget);
 
   _gl = NULL;
   _storage = NULL;
@@ -873,3 +886,18 @@ GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
 
   return geoRenderer;
 }
+
+
+void IG3MBuilder::setInfoDisplay(InfoDisplay *infoDisplay) {
+  if (_infoDisplay != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: infoDisplay already initialized");
+    return;
+  }
+  _infoDisplay = infoDisplay;
+}
+
+InfoDisplay* IG3MBuilder::getInfoDisplay() const {
+  return _infoDisplay;
+}
+
+

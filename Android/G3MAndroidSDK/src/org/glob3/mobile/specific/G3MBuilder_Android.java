@@ -83,8 +83,8 @@ public class G3MBuilder_Android
 
    @Override
    protected IDownloader createDefaultDownloader() {
-      final TimeInterval connectTimeout = TimeInterval.fromSeconds(10);
-      final TimeInterval readTimeout = TimeInterval.fromSeconds(15);
+      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
+      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
       final boolean saveInBackground = true;
       return new CachedDownloader( //
                new Downloader_Android(4, connectTimeout, readTimeout, _nativeWidget.getContext()), //

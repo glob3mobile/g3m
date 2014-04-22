@@ -513,6 +513,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool logTilesPetitions = false;
 
   TileRenderingListener* tileRenderingListener = NULL;
+  
+  ChangedRendererInfoListener* changedRendererInfoListener = NULL;
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
@@ -527,7 +529,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               renderedSector,
                                               renderTileMeshes,
                                               logTilesPetitions,
-                                              tileRenderingListener);
+                                              tileRenderingListener,
+                                              changedRendererInfoListener);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
@@ -1522,6 +1525,9 @@ G3MWidget* MapBooBuilder::create() {
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
   Renderer* hudRenderer = NULL;
+  
+#warning "TODO THIS"
+  const InfoDisplay* infoDisplay = NULL;
 
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
@@ -1543,7 +1549,8 @@ G3MWidget* MapBooBuilder::create() {
                                  *periodicalTasks,
                                  getGPUProgramManager(),
                                  createSceneLighting(),
-                                 icpp);
+                                 icpp,
+                                 infoDisplay);
   delete cameraConstraints;
   delete periodicalTasks;
 

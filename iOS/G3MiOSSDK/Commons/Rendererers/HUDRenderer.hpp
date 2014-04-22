@@ -32,6 +32,8 @@ public:
   ~HUDRenderer();
 
   void addWidget(HUDWidget* widget);
+  
+  void removeAllWidgets();
 
   void onChangedContext();
 

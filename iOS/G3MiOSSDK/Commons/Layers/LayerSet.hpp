@@ -12,6 +12,7 @@
 #include <vector>
 #include "Layer.hpp"
 #include "Renderer.hpp"
+#include "ChangedInfoListener.hpp"
 
 class Petition;
 class Vector2I;
@@ -19,14 +20,17 @@ class LayerTilesRenderParameters;
 
 class ChangedListener;
 
-class LayerSet {
+class LayerSet : public ChangedInfoListener {
 private:
   std::vector<Layer*> _layers;
   
   ChangedListener* _listener;
   
+  ChangedInfoListener* _changedInfoListener;
+  
 //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   std::vector<std::string> _errors;
+  std::vector<std::string> _infos;
   
   void layersChanged() const;
 
@@ -41,7 +45,8 @@ public:
   LayerSet() :
   _listener(NULL),
 //  _layerTilesRenderParameters(NULL),
-  _context(NULL)
+  _context(NULL),
+  _changedInfoListener(NULL)
   {
     
   }
@@ -90,6 +95,17 @@ public:
 
   void disableAllLayers();
   
+  void setChangedInfoListener(ChangedInfoListener* changedInfoListener) {
+    if (_changedInfoListener != NULL) {
+      ILogger::instance()->logError("Changed Info Listener of LayerSet already set");
+    }
+    ILogger::instance()->logError("Changed Info Listener of LayerSet set ok");
+    _changedInfoListener = changedInfoListener;
+  }
+  
+  std::vector<std::string> getInfo();
+  
+  void changedInfo(const std::vector<std::string>& info);
 };
 
 #endif

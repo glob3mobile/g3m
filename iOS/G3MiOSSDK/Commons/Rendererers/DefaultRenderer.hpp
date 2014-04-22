@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_DefaultRenderer
 #define G3MiOSSDK_DefaultRenderer
 
+class ChangedInfoListener;
+
 #include "Renderer.hpp"
 #include <stddef.h>
 
@@ -19,11 +21,13 @@ class DefaultRenderer : public Renderer {
   
 private:
   
-  std::vector<std::string> _infos;
-  
   bool _enable;
   
 protected:
+  
+  ChangedRendererInfoListener* _changedInfoListener = NULL;
+  
+  int _rendererIdentifier = -1;
   
 #ifdef C_CODE
   const G3MContext* _context;
@@ -34,7 +38,7 @@ protected:
   DefaultRenderer() :
   _enable(true)
   {
-    
+
   }
   
   DefaultRenderer(bool enable) :
@@ -45,6 +49,7 @@ protected:
   
   ~DefaultRenderer() {
     _context = NULL;
+    _changedInfoListener = NULL;
   }
   
 public:
@@ -117,10 +122,7 @@ public:
     return false;
   }
   
-  virtual std::vector<std::string> getInfo() {
-    return _infos;
-  }
-  
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
 };
 
 #endif

@@ -55,6 +55,7 @@ void Layer::removeLayerSet(LayerSet* layerSet) {
 void Layer::notifyChanges() const {
   if (_layerSet != NULL) {
     _layerSet->layerChanged(this);
+    _layerSet->changedInfo(_info);
   }
 }
 
@@ -129,3 +130,13 @@ bool Layer::isEquals(const Layer* that) const {
 
   return rawIsEquals(that);
 }
+
+void Layer::setInfo(const std::string& disclaimerInfo) {
+  if (_disclaimerInfo != disclaimerInfo) {
+    _disclaimerInfo = disclaimerInfo;
+    if (_layerSet != NULL) {
+      _layerSet->changedInfo(getInfos());
+    }
+  }
+}
+

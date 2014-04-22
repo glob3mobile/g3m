@@ -53,6 +53,16 @@ void HUDRenderer::addWidget(HUDWidget* widget) {
   }
 }
 
+void HUDRenderer::removeAllWidgets() {
+#warning TODO FOR JAVA
+  for (int i = 0; i < _widgetsSize; i++) {
+    HUDWidget* widget = _widgets[i];
+    delete widget;
+  }
+  
+  _widgets.clear();
+}
+
 RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
   if (_widgetsSize == 0) {
     return RenderState::ready();
