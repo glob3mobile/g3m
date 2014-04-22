@@ -24,7 +24,7 @@ import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 public class VectorialLOD {
 
    final static String                       ROOT_DIRECTORY     = "LOD";
-
+   // MERCATOR: EPSG:3857, EPSG:900913 (Google)
    final static boolean                      MERCATOR           = true;
    final static int                          FIRST_LEVEL        = 0;
    final static int                          MAX_LEVEL          = 3;
@@ -203,7 +203,7 @@ public class VectorialLOD {
       final String baseQuery4 = " WHERE (";
       final String baseQuery5 = ")) As f ) As fc;";
 
-      String geoJsonResult = "";
+      String geoJsonResult = null;
       Connection conn = null;
       Statement st = null;
       try {
@@ -233,6 +233,9 @@ public class VectorialLOD {
          }
          geoJsonResult = rs.getString(1);
          st.close();
+         if (geoJsonResult.contains("null")) {
+            return null;
+         }
       }
       catch (final SQLException e) {
          // TODO Auto-generated catch block
@@ -299,25 +302,6 @@ public class VectorialLOD {
       //      System.out.println("BOX QUERY: " + resultQuery);
 
       return resultQuery;
-
-      // MERCATOR: EPSG:3857, EPSG:900913 (Google)
-
-      //      SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features 
-      //      FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,
-      //      ST_SetSRID(ST_MakeBox2D(ST_Point(123.74999999999999,33.75), ST_Point(135.0,45.0)),4326)),0.005625))::
-      //      json As geometry, row_to_json((SELECT l FROM (SELECT "continent", "pop_est") As l)) As properties FROM 
-      //      (SELECT * FROM ne_10m_admin_0_countries WHERE (true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(
-      //      ST_MakeBox2D(ST_Point(123.74999999999999,33.75), ST_Point(135.0,45.0)),4326))) As f ) As fc;
-
-      //      String resultQuery = "ST_Transform(ST_SetSRID(ST_MakeBox2D(ST_Point(";
-      //      resultQuery = resultQuery + Double.toString(sector._lower._longitude._degrees) + ","
-      //                    + Double.toString(sector._lower._latitude._degrees) + "), ST_Point("
-      //                    + Double.toString(sector._upper._longitude._degrees) + ","
-      //                    + Double.toString(sector._upper._latitude._degrees) + ")),4326),3857)";
-
-      //      System.out.println("BOX QUERY: " + resultQuery);
-
-      //      return resultQuery;
    }
 
 
@@ -492,7 +476,7 @@ public class VectorialLOD {
             file.flush();
          }
          else {
-            System.out.println("Generated empty tile: " + getTileName(sector));
+            System.out.println("Skip empty tile: " + getTileName(sector));
          }
          file.close();
       }
