@@ -9,37 +9,31 @@
 #ifndef G3MiOSSDK_Sector
 #define G3MiOSSDK_Sector
 
-#include <vector>
-#include <math.h>
-
 #include "Geodetic2D.hpp"
-#include "Context.hpp"
+#include "Vector3D.hpp"
 #include "Vector2D.hpp"
 #include "Vector2F.hpp"
-#include "Geodetic3D.hpp"
-#include "Vector3D.hpp"
-#include "Color.hpp"
-
-class GEORasterSymbol;
+class G3MRenderContext;
+class Planet;
 class ICanvas;
 class GEORasterProjection;
+class GEORasterSymbol;
+class Color;
 
 
 class Sector {
-
 private:
-  
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
   // this value is only used in the method Sector::isBackOriented
   mutable double _deltaRadiusInRadians;
-  
+
   mutable Vector3D* _normalizedCartesianCenter;
 
 public:
   const Geodetic2D _lower;
   const Geodetic2D _upper;
-  
+
   const Geodetic2D _center;
 
   const Angle _deltaLatitude;
@@ -59,12 +53,12 @@ public:
   _deltaRadiusInRadians(-1.0),
   _normalizedCartesianCenter(NULL)
   {
-//    if (_deltaLatitude._degrees < 0) {
-//      printf("break point\n");
-//    }
-//    if (_deltaLongitude._degrees < 0) {
-//      printf("break point\n");
-//    }
+    //    if (_deltaLatitude._degrees < 0) {
+    //      printf("break point\n");
+    //    }
+    //    if (_deltaLongitude._degrees < 0) {
+    //      printf("break point\n");
+    //    }
   }
 
 
@@ -108,7 +102,7 @@ public:
 
   bool contains(const Angle& latitude,
                 const Angle& longitude) const;
-  
+
   bool contains(const Geodetic2D& position) const {
     return contains(position._latitude,
                     position._longitude);
@@ -157,7 +151,7 @@ public:
   }
 
   Vector2F getUVCoordinatesF(const Angle& latitude,
-                            const Angle& longitude) const {
+                             const Angle& longitude) const {
     return Vector2F((float) ((longitude._radians        - _lower._longitude._radians) / _deltaLongitude._radians),
                     (float) ((_upper._latitude._radians - latitude._radians         ) / _deltaLatitude._radians));
   }
@@ -178,7 +172,7 @@ public:
                       double cameraAngle2HorizonInRadians) const;
 
   const Geodetic2D clamp(const Geodetic2D& pos) const;
-  
+
   const Geodetic2D clamp(const Angle& latitude,
                          const Angle& longitude) const;
 
@@ -216,11 +210,11 @@ public:
   bool isEquals(const Sector& that) const {
     return _lower.isEquals(that._lower) && _upper.isEquals(that._upper);
   }
-  
+
   bool touchesNorthPole() const {
     return (_upper._latitude._degrees >= 89.9);
   }
-  
+
   bool touchesSouthPole() const {
     return (_lower._latitude._degrees <= -89.9);
   }
@@ -256,7 +250,7 @@ public:
     }
     return _deltaRadiusInRadians;
   }
-  
+
   const Vector3D getNormalizedCartesianCenter(const Planet* planet) const;
 
   const double getAngularAreaInSquaredDegrees() const{
@@ -310,7 +304,7 @@ public:
     return true;
   }
 #endif
-
+  
 };
 
 #endif

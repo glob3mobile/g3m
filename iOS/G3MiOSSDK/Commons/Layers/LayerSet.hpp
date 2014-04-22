@@ -10,14 +10,20 @@
 #define G3MiOSSDK_LayerSet
 
 #include <vector>
-#include "Layer.hpp"
-#include "Renderer.hpp"
+#include <string>
 
-class Petition;
-class Vector2I;
-class LayerTilesRenderParameters;
-
+class Layer;
 class ChangedListener;
+class G3MContext;
+class TileImageProvider;
+class G3MRenderContext;
+class LayerTilesRenderParameters;
+class Tile;
+class G3MEventContext;
+class Geodetic3D;
+class RenderState;
+class Petition;
+
 
 class LayerSet {
 private:
@@ -25,7 +31,6 @@ private:
   
   ChangedListener* _listener;
   
-//  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   std::vector<std::string> _errors;
   
   void layersChanged() const;
@@ -37,13 +42,18 @@ private:
   private G3MContext _context;
 #endif
 
+  mutable TileImageProvider* _tileImageProvider;
+
+  TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
+                                             const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                             const Tile* tile) const;
+
 public:
   LayerSet() :
   _listener(NULL),
-//  _layerTilesRenderParameters(NULL),
-  _context(NULL)
+  _context(NULL),
+  _tileImageProvider(NULL)
   {
-    
   }
   
   ~LayerSet();
@@ -51,11 +61,7 @@ public:
   void removeAllLayers(const bool deleteLayers);
   
   void addLayer(Layer* layer);
-  
-  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                const Tile* tile) const;
-  
+
   bool onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
@@ -70,12 +76,7 @@ public:
   
   void layerChanged(const Layer* layer) const;
   
-  void setChangeListener(ChangedListener* listener) {
-    if (_listener != NULL) {
-      ILogger::instance()->logError("Listener already set");
-    }
-    _listener = listener;
-  }
+  void setChangeListener(ChangedListener* listener);
 
   Layer* getLayer(int index) const;
 
@@ -89,7 +90,15 @@ public:
   void takeLayersFrom(LayerSet* that);
 
   void disableAllLayers();
-  
+
+  std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                const Tile* tile) const;
+
+  TileImageProvider* getTileImageProvider(const G3MRenderContext* rc,
+                                          const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                          const Tile* tile) const;
+
 };
 
 #endif

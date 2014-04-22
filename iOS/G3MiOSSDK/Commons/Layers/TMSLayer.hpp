@@ -10,6 +10,8 @@
 #define __G3MiOSSDK__TMSLayer__
 
 #include "Layer.hpp"
+#include "URL.hpp"
+#include "Sector.hpp"
 
 
 class TMSLayer: public Layer {
@@ -23,7 +25,7 @@ private:
 #endif
 
   const std::string   _mapLayer;
-  Sector              _sector;
+  const Sector        _sector;
   const std::string   _format;
   const bool          _isTransparent;
 

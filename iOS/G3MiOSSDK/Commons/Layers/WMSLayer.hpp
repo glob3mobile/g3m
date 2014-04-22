@@ -10,7 +10,8 @@
 #define G3MiOSSDK_WMSLayer
 
 #include "Layer.hpp"
-#include "Tile.hpp"
+#include "URL.hpp"
+#include "Sector.hpp"
 
 enum WMSServerVersion {
   WMS_1_1_0,

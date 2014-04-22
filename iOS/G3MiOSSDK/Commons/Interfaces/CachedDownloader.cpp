@@ -13,7 +13,7 @@
 #include "ILogger.hpp"
 #include "IStorage.hpp"
 #include "TimeInterval.hpp"
-
+#include "IImage.hpp"
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:

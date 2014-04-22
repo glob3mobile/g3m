@@ -14,6 +14,9 @@
 #include "IStringBuilder.hpp"
 #include "Petition.hpp"
 #include "LayerCondition.hpp"
+#include "TimeInterval.hpp"
+#include "RenderState.hpp"
+
 
 /*
  Implementation details: http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames

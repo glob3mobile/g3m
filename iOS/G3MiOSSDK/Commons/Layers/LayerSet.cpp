@@ -7,59 +7,19 @@
 //
 
 #include "LayerSet.hpp"
+#include "Layer.hpp"
+#include "LayerTouchEventListener.hpp"
 #include "Tile.hpp"
-#include "TileKey.hpp"
-#include "LayerTilesRenderParameters.hpp"
+#include "RenderState.hpp"
 #include "ChangedListener.hpp"
+#include "LayerTilesRenderParameters.hpp"
+#include "TileKey.hpp"
+#include "Context.hpp"
 
 LayerSet::~LayerSet() {
-//  delete _layerTilesRenderParameters;
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
-}
-
-std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const {
-  std::vector<Petition*> petitions;
-
-  const int layersSize = _layers.size();
-  for (int i = 0; i < layersSize; i++) {
-    Layer* layer = _layers[i];
-    if (layer->isAvailable(rc, tile)) {
-
-#ifdef C_CODE
-      const Tile* petitionTile = tile;
-#else
-      Tile* petitionTile = tile;
-#endif
-      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
-      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
-        petitionTile = petitionTile->getParent();
-      }
-
-      if (petitionTile == NULL) {
-        ILogger::instance()->logError("Can't find a valid tile for petitions");
-      }
-
-      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc,
-                                                                           layerTilesRenderParameters,
-                                                                           petitionTile);
-
-      const int tilePetitionsSize = tilePetitions.size();
-      for (int j = 0; j < tilePetitionsSize; j++) {
-        petitions.push_back( tilePetitions[j] );
-      }
-    }
-  }
-
-  if (petitions.empty()) {
-    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
-                                tile->getKey().description().c_str());
-  }
-
-  return petitions;
 }
 
 bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
@@ -88,6 +48,14 @@ void LayerSet::initialize(const G3MContext* context) const {
     _layers[i]->initialize(context);
   }
 }
+
+void LayerSet::setChangeListener(ChangedListener* listener) {
+  if (_listener != NULL) {
+    ILogger::instance()->logError("Listener already set");
+  }
+  _listener = listener;
+}
+
 
 RenderState LayerSet::getRenderState() {
   _errors.clear();
@@ -197,20 +165,10 @@ void LayerSet::layerChanged(const Layer* layer) const {
 }
 
 void LayerSet::layersChanged() const {
-//  delete _layerTilesRenderParameters;
-//  _layerTilesRenderParameters = NULL;
-
   if (_listener != NULL) {
     _listener->changed();
   }
 }
-
-//const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters(std::vector<std::string>& errors) const {
-//  if (_layerTilesRenderParameters == NULL) {
-//    _layerTilesRenderParameters = createLayerTilesRenderParameters(errors);
-//  }
-//  return _layerTilesRenderParameters;
-//}
 
 bool LayerSet::isEquals(const LayerSet* that) const {
   if (that == NULL) {
@@ -388,4 +346,73 @@ void LayerSet::takeLayersFrom(LayerSet* that) {
   for (int i = 0; i < thatSize; i++) {
     addLayer( thatLayers[i] );
   }
+}
+
+std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                        const Tile* tile) const {
+  std::vector<Petition*> petitions;
+
+  const int layersSize = _layers.size();
+  for (int i = 0; i < layersSize; i++) {
+    Layer* layer = _layers[i];
+    if (layer->isAvailable(rc, tile)) {
+
+#ifdef C_CODE
+      const Tile* petitionTile = tile;
+#else
+      Tile* petitionTile = tile;
+#endif
+      const int maxLevel = layer->getLayerTilesRenderParameters()->_maxLevel;
+      while ((petitionTile->_level > maxLevel) && (petitionTile != NULL)) {
+        petitionTile = petitionTile->getParent();
+      }
+
+      if (petitionTile == NULL) {
+        ILogger::instance()->logError("Can't find a valid tile for petitions");
+      }
+
+      std::vector<Petition*> tilePetitions = layer->createTileMapPetitions(rc,
+                                                                           layerTilesRenderParameters,
+                                                                           petitionTile);
+
+      const int tilePetitionsSize = tilePetitions.size();
+      for (int j = 0; j < tilePetitionsSize; j++) {
+        petitions.push_back( tilePetitions[j] );
+      }
+    }
+  }
+
+  if (petitions.empty()) {
+    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
+                                tile->getKey().description().c_str());
+  }
+  
+  return petitions;
+}
+
+TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
+                                                     const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                     const Tile* tile) const {
+//  const int layersSize = _layers.size();
+//  if (layersSize == 0) {
+//    return NULL;
+//  }
+//
+//  if (layersSize == 1) {
+//    Layer* layer = _layers[0];
+//    return layer->isAvailable(rc, tile) ? layer->createTileImageProvider(rc, layerTilesRenderParameters, tile) : NULL;
+//  }
+
+#warning TODO
+  return NULL;
+}
+
+TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
+                                                  const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                  const Tile* tile) const {
+  if (_tileImageProvider == NULL) {
+    _tileImageProvider = createTileImageProvider(rc, layerTilesRenderParameters, tile);
+  }
+  return _tileImageProvider;
 }

@@ -10,6 +10,28 @@
 
 #include "IStringBuilder.hpp"
 #include "IImage.hpp"
+#include "TimeInterval.hpp"
+
+Petition::Petition(const Sector& sector,
+                   const URL& url,
+                   const TimeInterval& timeToCache,
+                   bool readExpired,
+                   bool isTransparent,
+                   float layerTransparency):
+_sector(sector),
+_url(url),
+_timeToCacheInMS(timeToCache._milliseconds),
+_readExpired(readExpired),
+_isTransparent(isTransparent),
+_image(NULL),
+_layerTransparency(layerTransparency)
+{
+}
+
+const TimeInterval Petition::getTimeToCache() const {
+  return TimeInterval::fromMilliseconds(_timeToCacheInMS);
+}
+
 
 const std::string Petition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

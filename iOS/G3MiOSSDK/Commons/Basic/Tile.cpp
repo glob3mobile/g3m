@@ -7,27 +7,22 @@
 //
 
 #include "Tile.hpp"
-#include "Mesh.hpp"
-#include "Camera.hpp"
-#include "ITimer.hpp"
-#include "TileTessellator.hpp"
-#include "TileTexturizer.hpp"
-#include "PlanetRenderer.hpp"
-#include "TilesRenderParameters.hpp"
-#include "TileKey.hpp"
-#include "Box.hpp"
-#include "ElevationDataProvider.hpp"
-#include "MeshHolder.hpp"
-#include "ElevationData.hpp"
-#include "LayerTilesRenderParameters.hpp"
-#include "IStringBuilder.hpp"
-#include "MercatorUtils.hpp"
-#include "DecimatedSubviewElevationData.hpp"
-#include "TileElevationDataRequest.hpp"
-#include "Vector2F.hpp"
-#include "FlatColorMesh.hpp"
-#include "PlanetTileTessellator.hpp"
+
 #include "TileRenderingListener.hpp"
+#include "Mesh.hpp"
+#include "ITexturizerData.hpp"
+#include "ElevationData.hpp"
+#include "TileElevationDataRequest.hpp"
+#include "PlanetTileTessellator.hpp"
+#include "TileTexturizer.hpp"
+#include "LayerTilesRenderParameters.hpp"
+#include "TilesRenderParameters.hpp"
+#include "MeshHolder.hpp"
+#include "PlanetRenderer.hpp"
+#include "FlatColorMesh.hpp"
+#include "MercatorUtils.hpp"
+#include "TileKey.hpp"
+#include "DecimatedSubviewElevationData.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -124,6 +119,14 @@ Tile::~Tile() {
   delete _southWestPoint;
   delete _southEastPoint;
 }
+
+void Tile::setTexturizerData(ITexturizerData* texturizerData) {
+  if (texturizerData != _texturizerData) {
+    delete _texturizerData;
+    _texturizerData = texturizerData;
+  }
+}
+
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
                                          bool textureSolved) {

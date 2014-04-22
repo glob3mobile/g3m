@@ -7,17 +7,13 @@
 //
 
 #include "Sector.hpp"
-#include "Camera.hpp"
+
 #include "Planet.hpp"
-
-#include "IStringBuilder.hpp"
-
 #include "GEORasterProjection.hpp"
 #include "ICanvas.hpp"
-
-#include "GEOSymbol.hpp"
 #include "GEO2DLineRasterStyle.hpp"
 #include "GEOLineRasterSymbol.hpp"
+
 
 bool Sector::contains(const Angle& latitude,
                       const Angle& longitude) const {
@@ -36,14 +32,14 @@ bool Sector::touchesWith(const Sector &that) const {
   //   page 79
 
   // Exit with no intersection if separated along an axis
-//  if (_upper._latitude.lowerThan(that._lower._latitude) ||
-//      _lower._latitude.greaterThan(that._upper._latitude)) {
-//    return false;
-//  }
-//  if (_upper._longitude.lowerThan(that._lower._longitude) ||
-//      _lower._longitude.greaterThan(that._upper._longitude)) {
-//    return false;
-//  }
+  //  if (_upper._latitude.lowerThan(that._lower._latitude) ||
+  //      _lower._latitude.greaterThan(that._upper._latitude)) {
+  //    return false;
+  //  }
+  //  if (_upper._longitude.lowerThan(that._lower._longitude) ||
+  //      _lower._longitude.greaterThan(that._upper._longitude)) {
+  //    return false;
+  //  }
   if ((_upper._latitude._radians < that._lower._latitude._radians) ||
       (_lower._latitude._radians > that._upper._latitude._radians)) {
     return false;
@@ -290,6 +286,6 @@ Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const{
       lon = _lower._longitude._degrees;
     }
   }
-
+  
   return Geodetic2D::fromDegrees(lat, lon);
 }

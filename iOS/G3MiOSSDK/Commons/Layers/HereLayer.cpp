@@ -14,6 +14,8 @@
 #include "IStringBuilder.hpp"
 #include "Petition.hpp"
 #include "LayerCondition.hpp"
+#include "TimeInterval.hpp"
+#include "RenderState.hpp"
 
 HereLayer::HereLayer(const std::string& appId,
                      const std::string& appCode,

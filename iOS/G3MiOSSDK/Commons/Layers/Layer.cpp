@@ -7,13 +7,38 @@
 //
 
 #include "Layer.hpp"
+
+#include "TimeInterval.hpp"
 #include "LayerCondition.hpp"
 #include "LayerSet.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "LayerTouchEventListener.hpp"
+
+Layer::Layer(LayerCondition* condition,
+             const std::string& name,
+             const TimeInterval& timeToCache,
+             bool readExpired,
+             const LayerTilesRenderParameters* parameters,
+             float transparency) :
+_condition(condition),
+_name(name),
+_layerSet(NULL),
+_timeToCacheMS(timeToCache._milliseconds),
+_readExpired(readExpired),
+_enable(true),
+_parameters(parameters),
+_title(""),
+_transparency(transparency)
+{
+}
 
 Layer::~Layer() {
   delete _condition;
   delete _parameters;
+}
+
+const TimeInterval Layer::getTimeToCache() const {
+  return TimeInterval::fromMilliseconds(_timeToCacheMS);
 }
 
 bool Layer::isAvailable(const G3MRenderContext* rc,
@@ -129,3 +154,18 @@ bool Layer::isEquals(const Layer* that) const {
 
   return rawIsEquals(that);
 }
+
+bool Layer::onLayerTouchEventListener(const G3MEventContext* ec,
+                                      const LayerTouchEvent& tte) const {
+  const int listenersSize = _listeners.size();
+  for (int i = 0; i < listenersSize; i++) {
+    LayerTouchEventListener* listener = _listeners[i];
+    if (listener != NULL) {
+      if (listener->onTerrainTouch(ec, tte)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+

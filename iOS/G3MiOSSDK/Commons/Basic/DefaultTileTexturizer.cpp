@@ -18,6 +18,7 @@
 #include "DebugTileImageProvider.hpp"
 #include "TileImageListener.hpp"
 #include "TexturesHandler.hpp"
+#include "ITexturizerData.hpp"
 
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
@@ -469,7 +470,16 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
 
 #warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
-  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
+//  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
+
+  TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc, layerTilesRenderParameters, tile);
+
+  if (tileImageProvider == NULL) {
+#warning TODO
+    tile->setTextureSolved(true);
+    tile->setTexturizerDirty(false);
+    return NULL;
+  }
 
   DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {

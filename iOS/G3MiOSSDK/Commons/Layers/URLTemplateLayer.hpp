@@ -11,6 +11,10 @@
 
 #include "Layer.hpp"
 
+#include "Sector.hpp"
+class IStringUtils;
+
+
 class URLTemplateLayer : public Layer {
 private:
   const std::string _urlTemplate;

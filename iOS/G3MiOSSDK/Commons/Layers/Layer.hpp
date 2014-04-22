@@ -10,20 +10,25 @@
 #define G3MiOSSDK_Layer
 
 #include <string>
+#include <vector>
 
-#include "Sector.hpp"
-#include "Context.hpp"
-#include "URL.hpp"
-#include "LayerTouchEventListener.hpp"
-#include "TimeInterval.hpp"
-#include "Renderer.hpp"
-
-class Petition;
-class Tile;
 class LayerCondition;
+class LayerTouchEventListener;
 class LayerSet;
-class Vector2I;
 class LayerTilesRenderParameters;
+class TimeInterval;
+class G3MRenderContext;
+class G3MEventContext;
+class Tile;
+class URL;
+class RenderState;
+class Geodetic2D;
+class G3MContext;
+class Sector;
+class LayerTouchEvent;
+class Petition;
+class TileImageProvider;
+
 
 class Layer {
 protected:
@@ -58,19 +63,7 @@ protected:
         const TimeInterval& timeToCache,
         bool readExpired,
         const LayerTilesRenderParameters* parameters,
-        float transparency) :
-  _condition(condition),
-  _name(name),
-  _layerSet(NULL),
-  _timeToCacheMS(timeToCache._milliseconds),
-  _readExpired(readExpired),
-  _enable(true),
-  _parameters(parameters),
-  _title(""),
-  _transparency(transparency)
-  {
-
-  }
+        float transparency);
 
   void setParameters(const LayerTilesRenderParameters* parameters);
 
@@ -80,9 +73,7 @@ protected:
 
 public:
 
-  const TimeInterval getTimeToCache() const {
-    return TimeInterval::fromMilliseconds(_timeToCacheMS);
-  }
+  const TimeInterval getTimeToCache() const;
 
   bool getReadExpired() const {
     return _readExpired;
@@ -100,10 +91,6 @@ public:
   }
 
   virtual ~Layer();
-
-  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
-                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                        const Tile* tile) const = 0;
 
   virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const;
@@ -126,18 +113,7 @@ public:
   }
 
   bool onLayerTouchEventListener(const G3MEventContext* ec,
-                                 const LayerTouchEvent& tte) const {
-    const int listenersSize = _listeners.size();
-    for (int i = 0; i < listenersSize; i++) {
-      LayerTouchEventListener* listener = _listeners[i];
-      if (listener != NULL) {
-        if (listener->onTerrainTouch(ec, tte)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
+                                 const LayerTouchEvent& tte) const;
 
   void setLayerSet(LayerSet* layerSet);
 
@@ -165,7 +141,16 @@ public:
   const std::string getTitle() const;
 
   void setTitle(const std::string& title);
-  
+
+  virtual std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
+                                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                                        const Tile* tile) const = 0;
+
+#warning TODO
+//  virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
+//                                                     const LayerTilesRenderParameters* layerTilesRenderParameters,
+//                                                     const Tile* tile) const = 0;
+
 };
 
 #endif

@@ -9,7 +9,8 @@
 #include "CartoDBLayer.hpp"
 
 #include "LayerCondition.hpp"
-
+#include "TimeInterval.hpp"
+#include "RenderState.hpp"
 
 const std::string CartoDBLayer::description() const {
   return "[CartoDBLayer]";

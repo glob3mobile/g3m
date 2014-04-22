@@ -112,23 +112,23 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             TileTessellatorMeshData& data) const {
 
   const Sector tileSector = tile->_sector;
-  const Sector meshSector = getRenderedSectorForTile(tile);// tile->getSector();
+  const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, meshSector._center);
   ShortBufferBuilder indices;
   FloatBufferBuilderFromCartesian2D* textCoords = new FloatBufferBuilderFromCartesian2D();
 
-  double minElevation = createSurface(tileSector,
-                                      meshSector,
-                                      meshResolution,
-                                      elevationData,
-                                      verticalExaggeration,
-                                      tile->_mercator,
-                                      vertices,
-                                      indices,
-                                      *textCoords,
-                                      data);
+  const double minElevation = createSurface(tileSector,
+                                            meshSector,
+                                            meshResolution,
+                                            elevationData,
+                                            verticalExaggeration,
+                                            tile->_mercator,
+                                            vertices,
+                                            indices,
+                                            *textCoords,
+                                            data);
 
   if (_skirted) {
     const double relativeSkirtHeight = minElevation - skirtDepthForSector(planet, tileSector);
@@ -136,10 +136,10 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     double absoluteSkirtHeight = 0;
     if (_renderedSector != NULL) {
 #ifdef C_CODE
-      absoluteSkirtHeight = - skirtDepthForSector(planet, *_renderedSector);
+      absoluteSkirtHeight = -skirtDepthForSector(planet, *_renderedSector);
 #endif
 #ifdef JAVA_CODE
-      absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
+      absoluteSkirtHeight = -skirtDepthForSector(planet, _renderedSector);
 #endif
     }
 
@@ -147,7 +147,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                     tileSector,
                     meshSector,
                     meshResolution,
-                    needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                    needsEastSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight,
                     vertices,
                     indices,
                     *textCoords);
@@ -156,7 +156,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                      tileSector,
                      meshSector,
                      meshResolution,
-                     needsNorthSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                     needsNorthSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight,
                      vertices,
                      indices,
                      *textCoords);
@@ -165,7 +165,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                     tileSector,
                     meshSector,
                     meshResolution,
-                    needsWestSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                    needsWestSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight,
                     vertices,
                     indices,
                     *textCoords);
@@ -174,7 +174,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                      tileSector,
                      meshSector,
                      meshResolution,
-                     needsSouthSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                     needsSouthSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight,
                      vertices,
                      indices,
                      *textCoords);

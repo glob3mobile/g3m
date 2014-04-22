@@ -10,6 +10,8 @@
 #define __G3MiOSSDK__MercatorTiledLayer__
 
 #include "Layer.hpp"
+#include "Sector.hpp"
+
 
 class MercatorTiledLayer : public Layer {
 protected:

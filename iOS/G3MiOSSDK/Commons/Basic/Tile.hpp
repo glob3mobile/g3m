@@ -9,39 +9,32 @@
 #ifndef G3MiOSSDK_Tile
 #define G3MiOSSDK_Tile
 
-#include "Sector.hpp"
+#include <vector>
 #include <list>
-
 #include "TileTessellator.hpp"
+#include "Sector.hpp"
 
-class G3MRenderContext;
-class Mesh;
-class TileTessellator;
 class TileTexturizer;
-class TilesRenderParameters;
-class ITimer;
-class TilesStatistics;
-class TileKey;
-class Vector3D;
-class GLState;
-class BoundingVolume;
-class ElevationDataProvider;
-class ElevationData;
-class MeshHolder;
-class Vector2I;
-class GPUProgramState;
+class Mesh;
 class TileElevationDataRequest;
-class Frustum;
-class Box;
-class PlanetRenderer;
-class GLState;
-class PlanetTileTessellatorData;
+class BoundingVolume;
+class Vector3D;
+class TilesRenderParameters;
 class LayerTilesRenderParameters;
+class Frustum;
+class TilesStatistics;
+class ElevationDataProvider;
+class ITimer;
+class GLState;
 class TileRasterizer;
 class LayerSet;
+class ITexturizerData;
+class PlanetTileTessellatorData;
+class PlanetRenderer;
 class TileRenderingListener;
+class TileKey;
+class Geodetic3D;
 
-#include "ITexturizerData.hpp"
 
 class Tile {
 private:
@@ -272,12 +265,7 @@ public:
     return _texturizerData;
   }
 
-  void setTexturizerData(ITexturizerData* texturizerData) {
-    if (texturizerData != _texturizerData) {
-      delete _texturizerData;
-      _texturizerData = texturizerData;
-    }
-  }
+  void setTexturizerData(ITexturizerData* texturizerData);
 
   PlanetTileTessellatorData* getTessellatorData() const {
     return _tessellatorData;

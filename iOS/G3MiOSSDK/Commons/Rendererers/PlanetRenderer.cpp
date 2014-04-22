@@ -30,6 +30,7 @@
 #include "Sector.hpp"
 #include "TileRenderingListener.hpp"
 #include "IFactory.hpp"
+#include "Layer.hpp"
 #include <algorithm>
 
 class VisibleSectorListenerEntry {

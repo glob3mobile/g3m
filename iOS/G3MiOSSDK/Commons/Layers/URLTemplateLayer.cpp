@@ -16,6 +16,9 @@
 #include "IMathUtils.hpp"
 #include "MercatorUtils.hpp"
 #include "LevelTileCondition.hpp"
+#include "TimeInterval.hpp"
+#include "RenderState.hpp"
+
 
 URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate,
                                    const Sector&                     sector,

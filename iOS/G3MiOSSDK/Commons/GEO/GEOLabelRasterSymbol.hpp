@@ -14,6 +14,7 @@
 #include <string>
 
 #include "GFont.hpp"
+#include "Color.hpp"
 
 
 class GEOLabelRasterSymbol : public GEORasterSymbol {

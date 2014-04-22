@@ -9,7 +9,8 @@
 #include "MapBoxLayer.hpp"
 
 #include "LayerCondition.hpp"
-
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 const std::string MapBoxLayer::description() const {
   return "[MapBoxLayer]";

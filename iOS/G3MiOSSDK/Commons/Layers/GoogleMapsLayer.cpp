@@ -14,6 +14,8 @@
 #include "IStringBuilder.hpp"
 #include "Petition.hpp"
 #include "LayerCondition.hpp"
+#include "TimeInterval.hpp"
+#include "RenderState.hpp"
 
 GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  const TimeInterval& timeToCache,

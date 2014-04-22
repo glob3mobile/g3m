@@ -120,7 +120,6 @@
 #import <G3MiOSSDK/URLTemplateLayer.hpp>
 #import <G3MiOSSDK/JSONArray.hpp>
 #import <G3MiOSSDK/SceneLighting.hpp>
-
 #import <G3MiOSSDK/HUDRenderer.hpp>
 #import <G3MiOSSDK/HUDQuadWidget.hpp>
 #import <G3MiOSSDK/HUDAbsolutePosition.hpp>
@@ -131,16 +130,14 @@
 #import <G3MiOSSDK/DownloaderImageBuilder.hpp>
 #import <G3MiOSSDK/LabelImageBuilder.hpp>
 #import <G3MiOSSDK/CanvasImageBuilder.hpp>
-
 #import <G3MiOSSDK/TerrainTouchListener.hpp>
 #import <G3MiOSSDK/PlanetRenderer.hpp>
 #import <G3MiOSSDK/G3MMeshParser.hpp>
-
 #import <G3MiOSSDK/CoordinateSystem.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
 #import <G3MiOSSDK/TileRenderingListener.hpp>
-
+#import <G3MiOSSDK/LayerTouchEventListener.hpp>
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {

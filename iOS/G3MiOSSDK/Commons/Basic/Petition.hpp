@@ -12,7 +12,7 @@
 #include "Sector.hpp"
 #include "URL.hpp"
 class IImage;
-
+class TimeInterval;
 
 class Petition {
 private:
@@ -43,16 +43,7 @@ public:
            const TimeInterval& timeToCache,
            bool readExpired,
            bool isTransparent,
-           float layerTransparency):
-  _sector(sector),
-  _url(url),
-  _timeToCacheInMS(timeToCache._milliseconds),
-  _readExpired(readExpired),
-  _isTransparent(isTransparent),
-  _image(NULL),
-  _layerTransparency(layerTransparency)
-  {
-  }
+           float layerTransparency);
 
   ~Petition() {
     releaseImage();
@@ -77,9 +68,7 @@ public:
     return _image;
   }
 
-  const TimeInterval getTimeToCache() const {
-    return TimeInterval::fromMilliseconds(_timeToCacheInMS);
-  }
+  const TimeInterval getTimeToCache() const;
 
   bool getReadExpired() const {
     return _readExpired;

@@ -9,7 +9,8 @@
 #include "MapQuestLayer.hpp"
 
 #include "LayerCondition.hpp"
-
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 const std::string MapQuestLayer::description() const {
   return "[MapQuestLayer]";

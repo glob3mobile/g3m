@@ -8,13 +8,11 @@
 
 #include "TMSLayer.hpp"
 
-
 #include "LayerTilesRenderParameters.hpp"
-#include "IStringBuilder.hpp"
-#include "Petition.hpp"
 #include "Tile.hpp"
-#include "ILogger.hpp"
-#include "IStringUtils.hpp"
+#include "Petition.hpp"
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 
 TMSLayer::TMSLayer(const std::string& mapLayer,

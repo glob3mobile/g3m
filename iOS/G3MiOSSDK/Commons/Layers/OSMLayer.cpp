@@ -9,6 +9,8 @@
 #include "OSMLayer.hpp"
 
 #include "LayerCondition.hpp"
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 
 const std::string OSMLayer::description() const {

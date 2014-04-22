@@ -7,13 +7,14 @@
 //
 
 #include "WMSLayer.hpp"
-#include "Tile.hpp"
-#include "Petition.hpp"
 
-#include "IStringBuilder.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "MercatorUtils.hpp"
+#include "Tile.hpp"
+#include "Petition.hpp"
 #include "LayerCondition.hpp"
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 WMSLayer::WMSLayer(const std::string& mapLayer,
                    const URL& mapServerURL,

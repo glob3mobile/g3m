@@ -22,6 +22,8 @@
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
 #include "LayerCondition.hpp"
+#include "Context.hpp"
+#include "RenderState.hpp"
 
 BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              const std::string& key,
