@@ -17,13 +17,23 @@ package org.glob3.mobile.generated;
 
 
 
-
-//class Petition;
-//class Tile;
 //class LayerCondition;
+//class LayerTouchEventListener;
 //class LayerSet;
-//class Vector2I;
 //class LayerTilesRenderParameters;
+//class TimeInterval;
+//class G3MRenderContext;
+//class G3MEventContext;
+//class Tile;
+//class URL;
+//class RenderState;
+//class Geodetic2D;
+//class G3MContext;
+//class Sector;
+//class LayerTouchEvent;
+//class Petition;
+//class TileImageProvider;
+
 
 public abstract class Layer
 {
@@ -65,7 +75,6 @@ public abstract class Layer
      _parameters = parameters;
      _title = "";
      _transparency = transparency;
-
   }
 
   protected final void setParameters(LayerTilesRenderParameters parameters)
@@ -113,8 +122,6 @@ public abstract class Layer
        _condition.dispose();
     _parameters = null;
   }
-
-  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
 
   public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {
@@ -285,5 +292,13 @@ public abstract class Layer
   {
     _title = title;
   }
+
+  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO
+//  virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
+//                                                     const LayerTilesRenderParameters* layerTilesRenderParameters,
+//                                                     const Tile* tile) const = 0;
 
 }

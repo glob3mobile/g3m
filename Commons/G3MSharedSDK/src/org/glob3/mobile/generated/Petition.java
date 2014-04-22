@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class IImage;
-
+//class TimeInterval;
 
 public class Petition
 {

@@ -24,7 +24,7 @@ public abstract class TMSLayer extends Layer
   private final URL _mapServerURL;
 
   private final String _mapLayer;
-  private Sector _sector ;
+  private final Sector _sector ;
   private final String _format;
   private final boolean _isTransparent;
 

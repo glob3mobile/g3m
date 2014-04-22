@@ -392,7 +392,7 @@ public class PlanetTileTessellator extends TileTessellator
     ShortBufferBuilder indices = new ShortBufferBuilder();
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
-    double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, tile._mercator, vertices, indices, textCoords, data);
+    final double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, verticalExaggeration, tile._mercator, vertices, indices, textCoords, data);
   
     if (_skirted)
     {
@@ -401,16 +401,16 @@ public class PlanetTileTessellator extends TileTessellator
       double absoluteSkirtHeight = 0;
       if (_renderedSector != null)
       {
-        absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
+        absoluteSkirtHeight = -skirtDepthForSector(planet, _renderedSector);
       }
   
-      createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
+      createEastSkirt(planet, tileSector, meshSector, meshResolution, needsEastSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
   
-      createNorthSkirt(planet, tileSector, meshSector, meshResolution, needsNorthSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
+      createNorthSkirt(planet, tileSector, meshSector, meshResolution, needsNorthSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
   
-      createWestSkirt(planet, tileSector, meshSector, meshResolution, needsWestSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
+      createWestSkirt(planet, tileSector, meshSector, meshResolution, needsWestSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
   
-      createSouthSkirt(planet, tileSector, meshSector, meshResolution, needsSouthSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
+      createSouthSkirt(planet, tileSector, meshSector, meshResolution, needsSouthSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight, vertices, indices, textCoords);
     }
   
     //Storing textCoords in Tile

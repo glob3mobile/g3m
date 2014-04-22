@@ -17,6 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
+//class IStringUtils;
+
+
 public class URLTemplateLayer extends Layer
 {
   private final String _urlTemplate;

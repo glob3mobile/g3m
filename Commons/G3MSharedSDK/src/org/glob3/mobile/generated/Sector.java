@@ -16,17 +16,16 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
-//class GEORasterSymbol;
+//class G3MRenderContext;
+//class Planet;
 //class ICanvas;
 //class GEORasterProjection;
+//class GEORasterSymbol;
+//class Color;
 
 
 public class Sector
 {
-
-
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
   // this value is only used in the method Sector::isBackOriented
@@ -58,12 +57,12 @@ public class Sector
      _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
      _deltaRadiusInRadians = -1.0;
      _normalizedCartesianCenter = null;
-//    if (_deltaLatitude._degrees < 0) {
-//      printf("break point\n");
-//    }
-//    if (_deltaLongitude._degrees < 0) {
-//      printf("break point\n");
-//    }
+    //    if (_deltaLatitude._degrees < 0) {
+    //      printf("break point\n");
+    //    }
+    //    if (_deltaLongitude._degrees < 0) {
+    //      printf("break point\n");
+    //    }
   }
 
 
@@ -160,14 +159,14 @@ public class Sector
     //   page 79
   
     // Exit with no intersection if separated along an axis
-  //  if (_upper._latitude.lowerThan(that._lower._latitude) ||
-  //      _lower._latitude.greaterThan(that._upper._latitude)) {
-  //    return false;
-  //  }
-  //  if (_upper._longitude.lowerThan(that._lower._longitude) ||
-  //      _lower._longitude.greaterThan(that._upper._longitude)) {
-  //    return false;
-  //  }
+    //  if (_upper._latitude.lowerThan(that._lower._latitude) ||
+    //      _lower._latitude.greaterThan(that._upper._latitude)) {
+    //    return false;
+    //  }
+    //  if (_upper._longitude.lowerThan(that._lower._longitude) ||
+    //      _lower._longitude.greaterThan(that._upper._longitude)) {
+    //    return false;
+    //  }
     if ((_upper._latitude._radians < that._lower._latitude._radians) || (_lower._latitude._radians > that._upper._latitude._radians))
     {
       return false;

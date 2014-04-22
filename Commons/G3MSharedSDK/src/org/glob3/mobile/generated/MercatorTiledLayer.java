@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class MercatorTiledLayer extends Layer
 {
   protected final String _protocol;

@@ -53,7 +53,18 @@ public class DefaultTileTexturizer extends TileTexturizer
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: creates the TileImageProvider from the LayerSet (&& Rasterizer?)
-    TileImageProvider tileImageProvider = new DebugTileImageProvider();
+  //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
+  
+    TileImageProvider tileImageProvider = layerSet.getTileImageProvider(rc, layerTilesRenderParameters, tile);
+  
+    if (tileImageProvider == null)
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO
+      tile.setTextureSolved(true);
+      tile.setTexturizerDirty(false);
+      return null;
+    }
   
     DTT_TileTextureBuilder builder;
     if (builderHolder == null)

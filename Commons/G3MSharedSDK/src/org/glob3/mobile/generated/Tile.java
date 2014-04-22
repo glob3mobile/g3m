@@ -17,33 +17,26 @@ package org.glob3.mobile.generated;
 
 
 
-
-//class G3MRenderContext;
-//class Mesh;
-//class TileTessellator;
 //class TileTexturizer;
-//class TilesRenderParameters;
-//class ITimer;
-//class TilesStatistics;
-//class TileKey;
-//class Vector3D;
-//class GLState;
-//class BoundingVolume;
-//class ElevationDataProvider;
-//class ElevationData;
-//class MeshHolder;
-//class Vector2I;
-//class GPUProgramState;
+//class Mesh;
 //class TileElevationDataRequest;
-//class Frustum;
-//class Box;
-//class PlanetRenderer;
-//class GLState;
-//class PlanetTileTessellatorData;
+//class BoundingVolume;
+//class Vector3D;
+//class TilesRenderParameters;
 //class LayerTilesRenderParameters;
+//class Frustum;
+//class TilesStatistics;
+//class ElevationDataProvider;
+//class ITimer;
+//class GLState;
 //class TileRasterizer;
 //class LayerSet;
+//class ITexturizerData;
+//class PlanetTileTessellatorData;
+//class PlanetRenderer;
 //class TileRenderingListener;
+//class TileKey;
+//class Geodetic3D;
 
 
 public class Tile
@@ -436,7 +429,8 @@ public class Tile
          _texturizedMesh.dispose();
       _texturizedMesh = null;
   
-      _texturizerData = null;
+      if (_texturizerData != null)
+         _texturizerData.dispose();
       _texturizerData = null;
   
       setTexturizerDirty(true);
@@ -550,7 +544,8 @@ public class Tile
        _tessellatorMesh.dispose();
     _tessellatorMesh = null;
   
-    _texturizerData = null;
+    if (_texturizerData != null)
+       _texturizerData.dispose();
     _texturizerData = null;
   
     if (_texturizedMesh != null)
@@ -742,7 +737,8 @@ public class Tile
   
       if (_textureSolved)
       {
-        _texturizerData = null;
+        if (_texturizerData != null)
+           _texturizerData.dispose();
         _texturizerData = null;
       }
   
@@ -787,7 +783,8 @@ public class Tile
   {
     if (texturizerData != _texturizerData)
     {
-      _texturizerData = null;
+      if (_texturizerData != null)
+         _texturizerData.dispose();
       _texturizerData = texturizerData;
     }
   }
