@@ -47,7 +47,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     // do nothing
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
+  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long tileDownloadPriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
   {
     DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   
@@ -55,7 +55,7 @@ public class DefaultTileTexturizer extends TileTexturizer
 //#warning TODO: creates the TileImageProvider from the LayerSet (&& Rasterizer?)
   //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
   
-    TileImageProvider tileImageProvider = layerSet.getTileImageProvider(rc, layerTilesRenderParameters, tile);
+    TileImageProvider tileImageProvider = layerSet.getTileImageProvider(rc, layerTilesRenderParameters);
   
     if (tileImageProvider == null)
     {
@@ -69,7 +69,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     DTT_TileTextureBuilder builder;
     if (builderHolder == null)
     {
-      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions); // this,
+      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, tessellator, tileDownloadPriority, logTilesPetitions); // this,
                                            // tileRasterizer,
                                            // layerSet->createTileMapPetitions(rc,
                                            //                                  layerTilesRenderParameters,

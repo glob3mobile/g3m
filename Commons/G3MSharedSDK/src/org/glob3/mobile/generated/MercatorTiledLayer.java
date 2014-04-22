@@ -89,6 +89,11 @@ public class MercatorTiledLayer extends RasterLayer
     return true;
   }
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    return TileImageContribution.FULL_COVERAGE_OPAQUE;
+  }
+
 
   /*
    Implementation details: http: //wiki.openstreetmap.org/wiki/Slippy_map_tilenames

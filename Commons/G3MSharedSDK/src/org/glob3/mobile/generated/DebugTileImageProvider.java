@@ -71,7 +71,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
     return TileImageContribution.FULL_COVERAGE_TRANSPARENT;
   }
 
-  public final void create(Tile tile, Vector2I resolution, TileImageListener listener, boolean deleteListener)
+  public final void create(Tile tile, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
   {
     final int width = resolution._x;
     final int height = resolution._y;

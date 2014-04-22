@@ -50,20 +50,23 @@ public class LayerSet
 
   private TileImageProvider _tileImageProvider;
 
-  private TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  private TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
-  //  const int layersSize = _layers.size();
-  //  if (layersSize == 0) {
-  //    return NULL;
-  //  }
-  //
-  //  if (layersSize == 1) {
-  //    Layer* layer = _layers[0];
-  //    return layer->isAvailable(rc, tile) ? layer->createTileImageProvider(rc, layerTilesRenderParameters, tile) : NULL;
-  //  }
+    final int layersSize = _layers.size();
+    if (layersSize == 0)
+    {
+      return null;
+    }
+  
+    if (layersSize == 1)
+    {
+      Layer layer = _layers.get(0);
+  //    return layer->isAvailable(rc, tile) ? layer->createTileImageProvider(rc, layerTilesRenderParameters) : NULL;
+      return layer.isEnable() ? layer.createTileImageProvider(rc, layerTilesRenderParameters) : null;
+    }
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
+//#warning TODO composite TileImageProvider
     return null;
   }
 
@@ -123,7 +126,7 @@ public class LayerSet
     for (int i = _layers.size()-1; i >= 0; i--)
     {
       Layer layer = _layers.get(i);
-      if (layer.isAvailable(ec, tile))
+      if (layer.isAvailable(tile))
       {
         LayerTouchEvent tte = new LayerTouchEvent(position, tile._sector, layer);
   
@@ -441,9 +444,8 @@ public class LayerSet
     for (int i = 0; i < layersSize; i++)
     {
       Layer layer = _layers.get(i);
-      if (layer.isAvailable(rc, tile))
+      if (layer.isAvailable(tile))
       {
-  
         Tile petitionTile = tile;
         final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
         while ((petitionTile._level > maxLevel) && (petitionTile != null))
@@ -474,11 +476,11 @@ public class LayerSet
     return petitions;
   }
 
-  public final TileImageProvider getTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  public final TileImageProvider getTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
     if (_tileImageProvider == null)
     {
-      _tileImageProvider = createTileImageProvider(rc, layerTilesRenderParameters, tile);
+      _tileImageProvider = createTileImageProvider(rc, layerTilesRenderParameters);
     }
     return _tileImageProvider;
   }

@@ -40,6 +40,11 @@ public class OSMLayer extends MercatorTiledLayer
     return true;
   }
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    return TileImageContribution.FULL_COVERAGE_OPAQUE;
+  }
+
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
      this(timeToCache, readExpired, initialLevel, null);

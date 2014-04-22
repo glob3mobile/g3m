@@ -1,21 +1,19 @@
 package org.glob3.mobile.generated; 
 //
-//  TileImageProvider.hpp
+//  TileImageContribution.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 4/18/14.
+//  Created by Diego Gomez Deck on 4/22/14.
 //
 //
 
-
 //
-//  TileImageProvider.hpp
+//  TileImageContribution.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 4/18/14.
+//  Created by Diego Gomez Deck on 4/22/14.
 //
 //
-
 
 
 public enum TileImageContribution

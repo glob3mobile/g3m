@@ -34,7 +34,7 @@ public class DTT_TileTextureBuilder extends RCObject
   private boolean _canceled;
 //  bool _alreadyStarted;
 
-  private long _texturePriority;
+  private long _tileDownloadPriority;
 
 
 
@@ -78,7 +78,7 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority, boolean logTilesPetitions) //DefaultTileTexturizer* texturizer,
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions) //DefaultTileTexturizer* texturizer,
 //                         TileRasterizer*                   tileRasterizer,
 //                         const std::vector<Petition*>&     petitions,
 //                         IDownloader*                      downloader,
@@ -98,7 +98,7 @@ public class DTT_TileTextureBuilder extends RCObject
      _tile = tile;
      _texturedMesh = null;
      _canceled = false;
-     _texturePriority = texturePriority;
+     _tileDownloadPriority = tileDownloadPriority;
      _logTilesPetitions = logTilesPetitions;
     _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator);
   }
@@ -134,7 +134,7 @@ public class DTT_TileTextureBuilder extends RCObject
       }
       else
       {
-        _tileImageProvider.create(_tile, _tileTextureResolution, new DTT_TileImageListener(this), true);
+        _tileImageProvider.create(_tile, _tileTextureResolution, _tileDownloadPriority, new DTT_TileImageListener(this), true);
       }
     }
   }

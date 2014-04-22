@@ -54,7 +54,7 @@ public abstract class MapBooBuilder
     final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
   
     final boolean showStatistics = false;
-    long texturePriority = DownloadPriority.HIGHER;
+    long tileDownloadPriority = DownloadPriority.HIGHER;
   
     final Sector renderedSector = Sector.fullSphere();
     final boolean renderTileMeshes = true;
@@ -63,7 +63,7 @@ public abstract class MapBooBuilder
   
     TileRenderingListener tileRenderingListener = null;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener);
   
     if (_enableNotifications)
     {

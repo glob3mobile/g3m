@@ -95,6 +95,24 @@ public class URLTemplateLayer extends RasterLayer
     return (_sector.isEquals(t._sector));
   }
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    final Sector tileSector = tile._sector;
+  
+    if (!_sector.touchesWith(tileSector))
+    {
+      return TileImageContribution.NONE;
+    }
+    else if (_sector.fullContains(tileSector))
+    {
+      return _isTransparent ? TileImageContribution.FULL_COVERAGE_TRANSPARENT : TileImageContribution.FULL_COVERAGE_OPAQUE;
+    }
+    else
+    {
+      return _isTransparent ? TileImageContribution.PARTIAL_COVERAGE_TRANSPARENT : TileImageContribution.PARTIAL_COVERAGE_OPAQUE;
+    }
+  }
+
   public static URLTemplateLayer newMercator(String urlTemplate, Sector sector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition)
   {
      return newMercator(urlTemplate, sector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, condition, (float)1.0);

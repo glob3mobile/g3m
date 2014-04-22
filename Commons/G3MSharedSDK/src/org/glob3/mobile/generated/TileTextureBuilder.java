@@ -43,7 +43,7 @@ public class TileTextureBuilder extends RCObject
   private boolean _canceled;
   private boolean _alreadyStarted;
 
-  private long _texturePriority;
+  private long _tileDownloadPriority;
 
 
   private java.util.ArrayList<Petition> cleanUpPetitions(java.util.ArrayList<Petition> petitions)
@@ -94,7 +94,7 @@ public class TileTextureBuilder extends RCObject
 
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, java.util.ArrayList<Petition> petitions, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long texturePriority, boolean logTilesPetitions)
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, TileRasterizer tileRasterizer, G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, java.util.ArrayList<Petition> petitions, IDownloader downloader, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions)
   {
      _texturizer = texturizer;
      _tileRasterizer = tileRasterizer;
@@ -110,7 +110,7 @@ public class TileTextureBuilder extends RCObject
      _finalized = false;
      _canceled = false;
      _alreadyStarted = false;
-     _texturePriority = texturePriority;
+     _tileDownloadPriority = tileDownloadPriority;
      _logTilesPetitions = logTilesPetitions;
     _petitions = cleanUpPetitions(petitions);
 
@@ -141,8 +141,6 @@ public class TileTextureBuilder extends RCObject
       return;
     }
 
-//    const long long priority = _texturePriority + _tile->_level;
-
     for (int i = 0; i < _petitionsCount; i++)
     {
       final Petition petition = _petitions.get(i);
@@ -152,7 +150,7 @@ public class TileTextureBuilder extends RCObject
         ILogger.instance().logInfo("Tile petition \"%s\"", petition.getURL().getPath());
       }
 
-      final long requestId = _downloader.requestImage(new URL(petition.getURL()), _texturePriority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true); // priority,
+      final long requestId = _downloader.requestImage(new URL(petition.getURL()), _tileDownloadPriority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true); // priority,
       if (requestId >= 0)
       {
         _requestsIds.add(requestId);

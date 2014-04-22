@@ -95,4 +95,5 @@ public class MapBoxLayer extends MercatorTiledLayer
     }
     return RenderState.ready();
   }
+
 }

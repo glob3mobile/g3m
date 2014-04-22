@@ -21,7 +21,6 @@ package org.glob3.mobile.generated;
 //class LayerTouchEventListener;
 //class LayerSet;
 //class LayerTilesRenderParameters;
-//class TimeInterval;
 //class G3MRenderContext;
 //class G3MEventContext;
 //class Tile;
@@ -47,9 +46,6 @@ public abstract class Layer
 
   protected LayerTilesRenderParameters _parameters;
 
-  protected final long _timeToCacheMS;
-  protected final boolean _readExpired;
-
   protected final void notifyChanges()
   {
     if (_layerSet != null)
@@ -62,12 +58,10 @@ public abstract class Layer
 
   protected final float _transparency;
 
-  protected Layer(LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  protected Layer(LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
   {
      _condition = condition;
      _layerSet = null;
-     _timeToCacheMS = timeToCache._milliseconds;
-     _readExpired = readExpired;
      _enable = true;
      _parameters = parameters;
      _title = "";
@@ -89,15 +83,6 @@ public abstract class Layer
   protected abstract boolean rawIsEquals(Layer that);
 
 
-  public final TimeInterval getTimeToCache()
-  {
-    return TimeInterval.fromMilliseconds(_timeToCacheMS);
-  }
-
-  public final boolean getReadExpired()
-  {
-    return _readExpired;
-  }
 
   public void setEnable(boolean enable)
   {
@@ -120,7 +105,7 @@ public abstract class Layer
     _parameters = null;
   }
 
-  public boolean isAvailable(G3MRenderContext rc, Tile tile)
+  public boolean isAvailable(Tile tile)
   {
     if (!isEnable())
     {
@@ -130,20 +115,7 @@ public abstract class Layer
     {
       return true;
     }
-    return _condition.isAvailable(rc, tile);
-  }
-
-  public boolean isAvailable(G3MEventContext ec, Tile tile)
-  {
-    if (!isEnable())
-    {
-      return false;
-    }
-    if (_condition == null)
-    {
-      return true;
-    }
-    return _condition.isAvailable(ec, tile);
+    return _condition.isAvailable(tile);
   }
 
   //  virtual bool isTransparent() const = 0;
@@ -207,7 +179,7 @@ public abstract class Layer
     return description();
   }
 
-  public final boolean isEquals(Layer that)
+  public boolean isEquals(Layer that)
   {
     if (this == that)
     {
@@ -254,16 +226,6 @@ public abstract class Layer
       return false;
     }
   
-    if (_timeToCacheMS != that._timeToCacheMS)
-    {
-      return false;
-    }
-  
-    if (_readExpired != that._readExpired)
-    {
-      return false;
-    }
-  
     return rawIsEquals(that);
   }
 
@@ -282,10 +244,6 @@ public abstract class Layer
 
   public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
-//  virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
-//                                                     const LayerTilesRenderParameters* layerTilesRenderParameters,
-//                                                     const Tile* tile) const = 0;
+  public abstract TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters);
 
 }

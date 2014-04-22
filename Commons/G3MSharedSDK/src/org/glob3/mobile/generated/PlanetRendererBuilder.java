@@ -35,7 +35,7 @@ public class PlanetRendererBuilder
   private Quality _quality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
-  private long _texturePriority;
+  private long _tileDownloadPriority;
 
   private ElevationDataProvider _elevationDataProvider;
   private float _verticalExaggeration;
@@ -65,10 +65,10 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-      _texturizer = new MultiLayerTileTexturizer();
+  //    _texturizer = new MultiLayerTileTexturizer();
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
-  //    _texturizer = new DefaultTileTexturizer();
+      _texturizer = new DefaultTileTexturizer();
     }
   
     return _texturizer;
@@ -203,13 +203,13 @@ public class PlanetRendererBuilder
   }
 
   /**
-   * Returns the _texturePriority.
+   * Returns the _tileDownloadPriority.
    *
-   * @return _texturePriority: long long
+   * @return _tileDownloadPriority: long long
    */
-  private long getTexturePriority()
+  private long getTileDownloadPriority()
   {
-    return _texturePriority;
+    return _tileDownloadPriority;
   }
 
   private boolean _logTilesPetitions;
@@ -266,7 +266,7 @@ public class PlanetRendererBuilder
   private TileRenderingListener _tileRenderingListener;
 
 
-  ///#include "DefaultTileTexturizer.hpp"
+  ///#include "MultiLayerTileTexturizer.hpp"
   
   
   public PlanetRendererBuilder()
@@ -283,7 +283,7 @@ public class PlanetRendererBuilder
      _tileTessellator = null;
      _visibleSectorListeners = null;
      _stabilizationMilliSeconds = null;
-     _texturePriority = DownloadPriority.HIGHER;
+     _tileDownloadPriority = DownloadPriority.HIGHER;
      _elevationDataProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
@@ -321,7 +321,7 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -418,9 +418,9 @@ public class PlanetRendererBuilder
   {
     addVisibleSectorListener(listener, TimeInterval.zero());
   }
-  public final void setTexturePriority(long texturePriority)
+  public final void setTileDownloadPriority(long tileDownloadPriority)
   {
-    _texturePriority = texturePriority;
+    _tileDownloadPriority = tileDownloadPriority;
   }
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider)

@@ -45,6 +45,12 @@ public class GoogleMapsLayer extends RasterLayer
   }
 
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    return TileImageContribution.FULL_COVERAGE_OPAQUE;
+  }
+
+
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
      this(key, timeToCache, readExpired, initialLevel, condition, (float)1.0);

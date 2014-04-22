@@ -103,6 +103,24 @@ public class WMSLayer extends RasterLayer
   }
 
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    final Sector tileSector = tile._sector;
+  
+    if (!_sector.touchesWith(tileSector))
+    {
+      return TileImageContribution.NONE;
+    }
+    else if (_sector.fullContains(tileSector))
+    {
+      return _isTransparent ? TileImageContribution.FULL_COVERAGE_TRANSPARENT : TileImageContribution.FULL_COVERAGE_OPAQUE;
+    }
+    else
+    {
+      return _isTransparent ? TileImageContribution.PARTIAL_COVERAGE_TRANSPARENT : TileImageContribution.PARTIAL_COVERAGE_OPAQUE;
+    }
+  }
+
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {

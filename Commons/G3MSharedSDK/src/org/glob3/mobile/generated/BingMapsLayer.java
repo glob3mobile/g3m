@@ -83,6 +83,11 @@ public class BingMapsLayer extends RasterLayer
     return true;
   }
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    return TileImageContribution.FULL_COVERAGE_OPAQUE;
+  }
+
 
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.

@@ -53,6 +53,12 @@ public class HereLayer extends RasterLayer
   }
 
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    return TileImageContribution.FULL_COVERAGE_OPAQUE;
+  }
+
+
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
      this(appId, appCode, timeToCache, readExpired, initialLevel, condition, (float)1.0);
