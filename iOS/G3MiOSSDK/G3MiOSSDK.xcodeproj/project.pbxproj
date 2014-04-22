@@ -27,6 +27,8 @@
 		4435E3D11905714A0064A7D7 /* ChangedRendererInfoListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4435E3CF19056ED70064A7D7 /* ChangedRendererInfoListener.hpp */; };
 		4435E3D41906B8070064A7D7 /* ChildRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4435E3D21906B8070064A7D7 /* ChildRenderer.cpp */; };
 		4435E3D61906D39C0064A7D7 /* InfoDisplay.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4435E3CC19052B860064A7D7 /* InfoDisplay.hpp */; };
+		4435E3D919072EDA0064A7D7 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4435E3D719072EDA0064A7D7 /* Renderer.cpp */; };
+		4435E3DC19072F140064A7D7 /* ProtoRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */; };
 		4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4436A81E18ED518100CB6792 /* ChangedInfoListener.cpp */; };
 		4436A82118ED7B8F00CB6792 /* ChangedInfoListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4436A81F18ED518100CB6792 /* ChangedInfoListener.hpp */; };
 		44A00493175500B900C6686D /* ICameraActivityListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44A00491175500B900C6686D /* ICameraActivityListener.cpp */; };
@@ -1082,6 +1084,8 @@
 		4435E3CF19056ED70064A7D7 /* ChangedRendererInfoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ChangedRendererInfoListener.hpp; path = Commons/Rendererers/ChangedRendererInfoListener.hpp; sourceTree = "<group>"; };
 		4435E3D21906B8070064A7D7 /* ChildRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChildRenderer.cpp; path = Commons/Rendererers/ChildRenderer.cpp; sourceTree = "<group>"; };
 		4435E3D31906B8070064A7D7 /* ChildRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ChildRenderer.hpp; path = Commons/Rendererers/ChildRenderer.hpp; sourceTree = "<group>"; };
+		4435E3D719072EDA0064A7D7 /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = Commons/Rendererers/Renderer.cpp; sourceTree = "<group>"; };
+		4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ProtoRenderer.cpp; path = Commons/Rendererers/ProtoRenderer.cpp; sourceTree = "<group>"; };
 		4436A81E18ED518100CB6792 /* ChangedInfoListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChangedInfoListener.cpp; path = Commons/Basic/ChangedInfoListener.cpp; sourceTree = "<group>"; };
 		4436A81F18ED518100CB6792 /* ChangedInfoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ChangedInfoListener.hpp; path = Commons/Basic/ChangedInfoListener.hpp; sourceTree = "<group>"; };
 		44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITileVisitor.hpp; path = Commons/Interfaces/ITileVisitor.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2364,6 +2368,8 @@
 				4435E3CF19056ED70064A7D7 /* ChangedRendererInfoListener.hpp */,
 				4435E3D21906B8070064A7D7 /* ChildRenderer.cpp */,
 				4435E3D31906B8070064A7D7 /* ChildRenderer.hpp */,
+				4435E3D719072EDA0064A7D7 /* Renderer.cpp */,
+				4435E3DA19072F140064A7D7 /* ProtoRenderer.cpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -2902,10 +2908,12 @@
 				CF45E025164851C5004746BB /* AbstractMeshShape.cpp in Sources */,
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
 				CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */,
+				4435E3DC19072F140064A7D7 /* ProtoRenderer.cpp in Sources */,
 				CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */,
 				CF15759A1864C0E10059312A /* HUDAbsolutePosition.cpp in Sources */,
 				CF708F301836A43500AAB0B1 /* NormalsUtils.cpp in Sources */,
 				CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */,
+				4435E3D919072EDA0064A7D7 /* Renderer.cpp in Sources */,
 				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
 				CF485F8918511C250013795B /* AndTileCondition.cpp in Sources */,
 				CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */,

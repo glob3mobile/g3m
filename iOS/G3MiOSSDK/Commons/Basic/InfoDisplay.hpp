@@ -15,13 +15,6 @@ class InfoDisplay : public ChangedRendererInfoListener {
   
 public:
   
-#ifdef C_CODE
-  virtual ~InfoDisplay() { }
-#endif
-#ifdef JAVA_CODE
-  void dispose();
-#endif
-  
   virtual void showDisplay() = 0;
   
   virtual void hideDisplay() = 0;

@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  InfoDisplay.cpp
 //  G3MiOSSDK
@@ -16,16 +19,20 @@ package org.glob3.mobile.generated;
 //
 
 
+public interface InfoDisplay
+         extends
+            ChangedRendererInfoListener {
 
-public abstract class InfoDisplay implements ChangedRendererInfoListener
-{
+
+   @Override
+   void dispose();
 
 
-  void dispose();
+   public abstract void showDisplay();
 
-  public abstract void showDisplay();
 
-  public abstract void hideDisplay();
+   public abstract void hideDisplay();
 
-  public abstract boolean isShowing();
+
+   public abstract boolean isShowing();
 }

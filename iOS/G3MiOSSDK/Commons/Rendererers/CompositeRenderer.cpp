@@ -226,7 +226,7 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
 }
 
 void CompositeRenderer::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
-  if(_renderersSize > rendererIdentifier > 0) {
+  if(rendererIdentifier >= 0 && rendererIdentifier < _renderersSize) {
     _renderers[rendererIdentifier]->setInfo(info);
   }else {
     ILogger::instance()->logWarning("Child Render not found: %d", rendererIdentifier);
