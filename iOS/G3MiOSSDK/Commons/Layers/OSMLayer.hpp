@@ -30,8 +30,6 @@ protected:
 
   bool rawIsEquals(const Layer* that) const;
 
-  TileImageContribution rawContribution(const Tile* tile) const;
-
 public:
   OSMLayer(const TimeInterval& timeToCache,
            bool readExpired = true,
