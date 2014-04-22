@@ -29,7 +29,6 @@ URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate
                                    const LayerTilesRenderParameters* parameters,
                                    float transparency) :
 Layer(condition,
-      "URLTemplate",
       timeToCache,
       readExpired,
       parameters,

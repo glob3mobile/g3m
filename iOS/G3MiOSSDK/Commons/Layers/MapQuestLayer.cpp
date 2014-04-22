@@ -22,8 +22,7 @@ bool MapQuestLayer::rawIsEquals(const Layer* that) const {
 }
 
 MapQuestLayer* MapQuestLayer::copy() const {
-  return new MapQuestLayer(_name,
-                           _domain,
+  return new MapQuestLayer(_domain,
                            _subdomains,
                            _initialLevel,
                            _maxLevel,

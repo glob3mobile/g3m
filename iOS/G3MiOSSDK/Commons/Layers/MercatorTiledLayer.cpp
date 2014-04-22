@@ -22,8 +22,7 @@
  Implementation details: http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
  */
 
-MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
-                                       const std::string&              protocol,
+MercatorTiledLayer::MercatorTiledLayer(const std::string&              protocol,
                                        const std::string&              domain,
                                        const std::vector<std::string>& subdomains,
                                        const std::string&              imageFormat,
@@ -35,7 +34,6 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
                                        LayerCondition*                 condition,
                                        float transparency) :
 Layer(condition,
-      name,
       timeToCache,
       readExpired,
       new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -137,8 +135,7 @@ const std::string MercatorTiledLayer::description() const {
 }
 
 MercatorTiledLayer* MercatorTiledLayer::copy() const {
-  return new MercatorTiledLayer(_name,
-                                _protocol,
+  return new MercatorTiledLayer(_protocol,
                                 _domain,
                                 _subdomains,
                                 _imageFormat,

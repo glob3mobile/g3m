@@ -40,8 +40,6 @@ protected:
 
   bool _enable;
 
-  const std::string _name;
-
 #ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
 #endif
@@ -59,7 +57,6 @@ protected:
   const float _transparency;
 
   Layer(LayerCondition* condition,
-        const std::string& name,
         const TimeInterval& timeToCache,
         bool readExpired,
         const LayerTilesRenderParameters* parameters,
@@ -118,8 +115,6 @@ public:
   void setLayerSet(LayerSet* layerSet);
 
   void removeLayerSet(LayerSet* layerSet);
-
-  const std::string getName();
 
   const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
     return _parameters;

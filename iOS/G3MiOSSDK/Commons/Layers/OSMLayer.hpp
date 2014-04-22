@@ -35,8 +35,7 @@ public:
            bool readExpired = true,
            int initialLevel = 2,
            LayerCondition* condition = NULL) :
-  MercatorTiledLayer("OpenStreetMap",
-                     "http://",
+  MercatorTiledLayer("http://",
                      "tile.openstreetmap.org",
                      getSubdomains(),
                      "png",

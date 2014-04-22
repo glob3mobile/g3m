@@ -15,13 +15,11 @@
 #include "LayerTouchEventListener.hpp"
 
 Layer::Layer(LayerCondition* condition,
-             const std::string& name,
              const TimeInterval& timeToCache,
              bool readExpired,
              const LayerTilesRenderParameters* parameters,
              float transparency) :
 _condition(condition),
-_name(name),
 _layerSet(NULL),
 _timeToCacheMS(timeToCache._milliseconds),
 _readExpired(readExpired),
@@ -83,10 +81,6 @@ void Layer::notifyChanges() const {
   }
 }
 
-const std::string Layer::getName() {
-  return _name;
-}
-
 const std::string Layer::getTitle() const {
   return _title;
 }
@@ -133,10 +127,6 @@ bool Layer::isEquals(const Layer* that) const {
   }
 
   if (_enable != that->_enable) {
-    return false;
-  }
-
-  if (!(_name == that->_name)) {
     return false;
   }
 

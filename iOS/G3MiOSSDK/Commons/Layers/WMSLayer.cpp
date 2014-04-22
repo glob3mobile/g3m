@@ -33,7 +33,6 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    const LayerTilesRenderParameters* parameters,
                    float transparency):
 Layer(condition,
-      mapLayer,
       timeToCache,
       readExpired,
       (parameters == NULL)
@@ -70,7 +69,6 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    const LayerTilesRenderParameters* parameters,
                    float transparency):
 Layer(condition,
-      mapLayer,
       timeToCache,
       readExpired,
       (parameters == NULL)

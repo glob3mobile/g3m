@@ -25,7 +25,6 @@ HereLayer::HereLayer(const std::string& appId,
                      LayerCondition* condition,
                      float transparency) :
 Layer(condition,
-      "here",
       timeToCache,
       readExpired,
       new LayerTilesRenderParameters(Sector::fullSphere(),

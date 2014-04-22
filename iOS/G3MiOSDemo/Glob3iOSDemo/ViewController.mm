@@ -1409,8 +1409,7 @@ public:
     subdomains.push_back("c.");
     subdomains.push_back("d.");
 
-    MercatorTiledLayer* osmEditMapLayer = new MercatorTiledLayer("osm-edit-map",
-                                                                 "http://",
+    MercatorTiledLayer* osmEditMapLayer = new MercatorTiledLayer("http://",
                                                                  "tiles.mapbox.com/v3/enf.osm-edit-date",
                                                                  subdomains,
                                                                  "png",

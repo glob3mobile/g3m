@@ -44,8 +44,7 @@ public:
               int initialLevel = 1,
               int maxLevel = 19,
               LayerCondition* condition = NULL) :
-  MercatorTiledLayer("MapBoxLayer",
-                     "http://",
+  MercatorTiledLayer("http://",
                      "tiles.mapbox.com/v3/" + mapKey,
                      getSubdomains(),
                      "png",

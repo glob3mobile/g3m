@@ -42,8 +42,7 @@ public:
                bool readExpired = true,
                //int initialCartoDBLevel = 1,
                LayerCondition* condition = NULL) :
-  MercatorTiledLayer("CartoDBLayer",
-                     "http://",
+  MercatorTiledLayer("http://",
                      "tiles.cartocdn.com/" + userName + "/tiles/" + table,
                      getSubdomains(),
                      "png",

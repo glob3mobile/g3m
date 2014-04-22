@@ -27,16 +27,14 @@ private:
     return result;
   }
 
-  MapQuestLayer(const std::string& name,
-                const std::string& domain,
+  MapQuestLayer(const std::string& domain,
                 const std::vector<std::string>& subdomains,
                 int initialLevel,
                 int maxLevel,
                 const TimeInterval& timeToCache,
                 bool readExpired,
                 LayerCondition* condition) :
-  MercatorTiledLayer(name,
-                     "http://",
+  MercatorTiledLayer("http://",
                      domain,
                      subdomains,
                      "jpg",
@@ -65,8 +63,7 @@ public:
                                bool readExpired = true,
                                int initialLevel = 2,
                                LayerCondition* condition = NULL) {
-    return new MapQuestLayer("MapQuest-OSM",
-                             "mqcdn.com/tiles/1.0.0/map",
+    return new MapQuestLayer("mqcdn.com/tiles/1.0.0/map",
                              getSubdomains(),
                              initialLevel,
                              19,
@@ -80,8 +77,7 @@ public:
                                       bool readExpired = true,
                                       int initialLevel = 2,
                                       LayerCondition* condition = NULL) {
-    return new MapQuestLayer("MapQuest-OpenAerial",
-                             "mqcdn.com/tiles/1.0.0/sat",
+    return new MapQuestLayer("mqcdn.com/tiles/1.0.0/sat",
                              getSubdomains(),
                              initialLevel,
                              11,

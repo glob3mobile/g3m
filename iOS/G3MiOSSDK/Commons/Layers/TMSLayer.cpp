@@ -27,7 +27,6 @@ TMSLayer::TMSLayer(const std::string& mapLayer,
                    float transparency):
 
 Layer(condition,
-      mapLayer,
       timeToCache,
       readExpired,
       (parameters == NULL)

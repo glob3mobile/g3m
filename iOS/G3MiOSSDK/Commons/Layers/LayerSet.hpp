@@ -80,7 +80,6 @@ public:
 
   Layer* getLayer(int index) const;
 
-  Layer* getLayerByName(const std::string& name) const;
   Layer* getLayerByTitle(const std::string& title) const;
 
   LayerTilesRenderParameters* createLayerTilesRenderParameters(std::vector<std::string>& errors) const;

@@ -36,8 +36,7 @@ protected:
   virtual bool rawIsEquals(const Layer* that) const;
 
 public:
-  MercatorTiledLayer(const std::string&              name,
-                     const std::string&              protocol,
+  MercatorTiledLayer(const std::string&              protocol,
                      const std::string&              domain,
                      const std::vector<std::string>& subdomains,
                      const std::string&              imageFormat,

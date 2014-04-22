@@ -24,7 +24,6 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  LayerCondition* condition,
                                  float transparency) :
 Layer(condition,
-      "GoogleMaps",
       timeToCache,
       readExpired,
       new LayerTilesRenderParameters(Sector::fullSphere(),
