@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__BingMapsLayer__
 #define __G3MiOSSDK__BingMapsLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 class IByteBuffer;
 
 
@@ -39,7 +39,7 @@ public:
 };
 
 
-class BingMapsLayer : public Layer {
+class BingMapsLayer : public RasterLayer {
 private:
   const std::string _imagerySet;
   const std::string _culture;

@@ -28,11 +28,11 @@ URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate
                                    LayerCondition*                   condition,
                                    const LayerTilesRenderParameters* parameters,
                                    float transparency) :
-Layer(condition,
-      timeToCache,
-      readExpired,
-      parameters,
-      transparency),
+RasterLayer(condition,
+            timeToCache,
+            readExpired,
+            parameters,
+            transparency),
 _urlTemplate(urlTemplate),
 _sector(sector),
 _isTransparent(isTransparent),
@@ -183,7 +183,7 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
                                     _readExpired,
                                     _isTransparent,
                                     _transparency) );
-  
+
   return petitions;
 }
 
@@ -193,7 +193,7 @@ RenderState URLTemplateLayer::getRenderState() {
   if (_urlTemplate.compare("") == 0) {
     _errors.push_back("Missing layer parameter: urlTemplate");
   }
-  
+
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }

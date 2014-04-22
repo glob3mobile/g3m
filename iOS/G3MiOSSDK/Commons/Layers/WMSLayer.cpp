@@ -32,13 +32,13 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
                    float transparency):
-Layer(condition,
-      timeToCache,
-      readExpired,
-      (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
-      : parameters,
-      transparency),
+RasterLayer(condition,
+            timeToCache,
+            readExpired,
+            (parameters == NULL)
+            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
+            : parameters,
+            transparency),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -68,13 +68,13 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
                    float transparency):
-Layer(condition,
-      timeToCache,
-      readExpired,
-      (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
-      : parameters,
-      transparency),
+RasterLayer(condition,
+            timeToCache,
+            readExpired,
+            (parameters == NULL)
+            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
+            : parameters,
+            transparency),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),

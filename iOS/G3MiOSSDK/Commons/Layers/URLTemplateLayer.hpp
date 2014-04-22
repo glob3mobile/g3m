@@ -9,13 +9,13 @@
 #ifndef __G3MiOSSDK__URLTemplateLayer__
 #define __G3MiOSSDK__URLTemplateLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 
 #include "Sector.hpp"
 class IStringUtils;
 
 
-class URLTemplateLayer : public Layer {
+class URLTemplateLayer : public RasterLayer {
 private:
   const std::string _urlTemplate;
   const Sector      _sector;

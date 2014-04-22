@@ -26,13 +26,13 @@ TMSLayer::TMSLayer(const std::string& mapLayer,
                    const LayerTilesRenderParameters* parameters,
                    float transparency):
 
-Layer(condition,
-      timeToCache,
-      readExpired,
-      (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultWGS84(sector)
-      : parameters,
-      transparency),
+RasterLayer(condition,
+            timeToCache,
+            readExpired,
+            (parameters == NULL)
+            ? LayerTilesRenderParameters::createDefaultWGS84(sector)
+            : parameters,
+            transparency),
 _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),
 _sector(sector),
@@ -102,7 +102,7 @@ RenderState TMSLayer::getRenderState() {
   if (_format.compare("") == 0) {
     _errors.push_back("Missing layer parameter: format");
   }
-  
+
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }

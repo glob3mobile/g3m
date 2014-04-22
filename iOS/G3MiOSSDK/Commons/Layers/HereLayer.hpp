@@ -9,12 +9,12 @@
 #ifndef __G3MiOSSDK__HereLayer__
 #define __G3MiOSSDK__HereLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 
 #include <string>
 
 
-class HereLayer : public Layer {
+class HereLayer : public RasterLayer {
 private:
   const std::string _appId;
   const std::string _appCode;

@@ -23,18 +23,18 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  int initialLevel,
                                  LayerCondition* condition,
                                  float transparency) :
-Layer(condition,
-      timeToCache,
-      readExpired,
-      new LayerTilesRenderParameters(Sector::fullSphere(),
-                                     1,
-                                     1,
-                                     initialLevel,
-                                     20,
-                                     Vector2I(256, 256),
-                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                     true),
-      transparency),
+RasterLayer(condition,
+            timeToCache,
+            readExpired,
+            new LayerTilesRenderParameters(Sector::fullSphere(),
+                                           1,
+                                           1,
+                                           initialLevel,
+                                           20,
+                                           Vector2I(256, 256),
+                                           LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                           true),
+            transparency),
 _key(key),
 _initialLevel(initialLevel)
 {
@@ -88,10 +88,10 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
   isb->addString("&format=jpg");
 
 
-//  isb->addString("&maptype=roadmap);
-//  isb->addString("&maptype=satellite");
+  //  isb->addString("&maptype=roadmap);
+  //  isb->addString("&maptype=satellite");
   isb->addString("&maptype=hybrid");
-//  isb->addString("&maptype=terrain");
+  //  isb->addString("&maptype=terrain");
 
 
   isb->addString("&key=");
@@ -108,7 +108,7 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
                                     getReadExpired(),
                                     true,
                                     _transparency) );
-  
+
   return petitions;
 }
 
@@ -126,7 +126,7 @@ GoogleMapsLayer* GoogleMapsLayer::copy() const {
 
 bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {
   GoogleMapsLayer* t = (GoogleMapsLayer*) that;
-  
+
   if (_key != t->_key) {
     return false;
   }
@@ -143,7 +143,7 @@ RenderState GoogleMapsLayer::getRenderState() {
   if (_key.compare("") == 0) {
     _errors.push_back("Missing layer parameter: key");
   }
-  
+
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }

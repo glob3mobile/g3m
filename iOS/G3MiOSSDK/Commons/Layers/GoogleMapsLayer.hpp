@@ -9,9 +9,9 @@
 #ifndef __G3MiOSSDK__GoogleMapsLayer__
 #define __G3MiOSSDK__GoogleMapsLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 
-class GoogleMapsLayer : public Layer {
+class GoogleMapsLayer : public RasterLayer {
 private:
   const std::string _key;
   const int         _initialLevel;

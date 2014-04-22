@@ -8,8 +8,8 @@
 
 #include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
-//#include "MultiLayerTileTexturizer.hpp"
-#include "DefaultTileTexturizer.hpp"
+#include "MultiLayerTileTexturizer.hpp"
+//#include "DefaultTileTexturizer.hpp"
 #include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
@@ -99,9 +99,9 @@ TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
  */
 TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
-//    _texturizer = new MultiLayerTileTexturizer();
+    _texturizer = new MultiLayerTileTexturizer();
 #warning Diego at work!
-    _texturizer = new DefaultTileTexturizer();
+//    _texturizer = new DefaultTileTexturizer();
   }
 
   return _texturizer;

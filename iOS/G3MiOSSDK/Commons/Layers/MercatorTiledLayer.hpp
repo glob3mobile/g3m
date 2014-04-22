@@ -9,11 +9,11 @@
 #ifndef __G3MiOSSDK__MercatorTiledLayer__
 #define __G3MiOSSDK__MercatorTiledLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 #include "Sector.hpp"
 
 
-class MercatorTiledLayer : public Layer {
+class MercatorTiledLayer : public RasterLayer {
 protected:
   const std::string _protocol;
   const std::string _domain;

@@ -9,12 +9,12 @@
 #ifndef __G3MiOSSDK__TMSLayer__
 #define __G3MiOSSDK__TMSLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 #include "URL.hpp"
 #include "Sector.hpp"
 
 
-class TMSLayer: public Layer {
+class TMSLayer: public RasterLayer {
 private:
 
 #ifdef C_CODE

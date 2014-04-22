@@ -32,11 +32,11 @@ BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              int initialLevel,
                              LayerCondition* condition,
                              float transparency) :
-Layer(condition,
-      timeToCache,
-      readExpired,
-      NULL,
-      transparency),
+RasterLayer(condition,
+            timeToCache,
+            readExpired,
+            NULL,
+            transparency),
 _imagerySet(imagerySet),
 _culture("en-US"),
 _key(key),
@@ -54,11 +54,11 @@ BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              int initialLevel,
                              LayerCondition* condition,
                              float transparency) :
-Layer(condition,
-      timeToCache,
-      readExpired,
-      NULL,
-      transparency),
+RasterLayer(condition,
+            timeToCache,
+            readExpired,
+            NULL,
+            transparency),
 _imagerySet(imagerySet),
 _culture(culture),
 _key(key),
@@ -73,7 +73,7 @@ _isInitialized(false)
 class BingMapsLayer_MetadataBufferDownloadListener : public IBufferDownloadListener {
 private:
   BingMapsLayer* _bingMapsLayer;
-  
+
 public:
   BingMapsLayer_MetadataBufferDownloadListener(BingMapsLayer* bingMapsLayer) :
   _bingMapsLayer(bingMapsLayer)
@@ -203,7 +203,7 @@ void BingMapsLayer::onDowloadMetadata(IByteBuffer* buffer) {
                   imageWidth, imageHeight,
                   zoomMin, zoomMax);
 
-//  http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1180&mkt={culture}
+  //  http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1180&mkt={culture}
 
 
   parser->deleteJSONData(jsonBaseObject);
@@ -276,7 +276,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   std::vector<Petition*> petitions;
 
   const IStringUtils* su = IStringUtils::instance();
-  
+
   const int level   = tile->_level;
   const int column  = tile->_column;
   const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
@@ -303,7 +303,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
                                     getReadExpired(),
                                     true,
                                     _transparency) );
-  
+
   return petitions;
 }
 
@@ -346,7 +346,7 @@ RenderState BingMapsLayer::getRenderState() {
   if (_key.compare("") == 0) {
     _errors.push_back("Missing layer parameter: key");
   }
-  
+
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }

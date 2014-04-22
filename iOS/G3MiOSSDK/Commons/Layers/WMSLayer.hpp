@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_WMSLayer
 #define G3MiOSSDK_WMSLayer
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 #include "URL.hpp"
 #include "Sector.hpp"
 
@@ -19,7 +19,7 @@ enum WMSServerVersion {
 };
 
 
-class WMSLayer: public Layer {
+class WMSLayer: public RasterLayer {
 private:
 
 #ifdef C_CODE
