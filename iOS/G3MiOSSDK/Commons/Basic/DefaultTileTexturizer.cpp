@@ -170,7 +170,7 @@ private:
   bool _canceled;
 //  bool _alreadyStarted;
 
-  long long _texturePriority;
+  long long _tileDownloadPriority;
 
 
 
@@ -230,7 +230,7 @@ public:
                          Tile*                             tile,
                          const Mesh*                       tessellatorMesh,
                          const TileTessellator*            tessellator,
-                         long long                         texturePriority,
+                         long long                         tileDownloadPriority,
                          bool                              logTilesPetitions) :
 //  _texturizer(texturizer),
   _tileImageProvider(tileImageProvider),
@@ -247,7 +247,7 @@ public:
 //  _finalized(false),
   _canceled(false),
 //  _alreadyStarted(false),
-  _texturePriority(texturePriority),
+  _tileDownloadPriority(tileDownloadPriority),
   _logTilesPetitions(logTilesPetitions)
   {
     _texturedMesh = createMesh(tile,
@@ -281,6 +281,7 @@ public:
       else {
         _tileImageProvider->create(_tile,
                                    _tileTextureResolution,
+                                   _tileDownloadPriority,
                                    new DTT_TileImageListener(this),
                                    true);
       }
@@ -462,7 +463,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        const LayerTilesRenderParameters* layerTilesRenderParameters,
                                        const LayerSet* layerSet,
                                        bool forceFullRender,
-                                       long long texturePriority,
+                                       long long tileDownloadPriority,
                                        Tile* tile,
                                        Mesh* tessellatorMesh,
                                        Mesh* previousMesh,
@@ -472,7 +473,8 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
 #warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
 //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
 
-  TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc, layerTilesRenderParameters, tile);
+  TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
+                                                                        layerTilesRenderParameters);
 
   if (tileImageProvider == NULL) {
 #warning TODO
@@ -495,7 +497,7 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                          tile,
                                          tessellatorMesh,
                                          tessellator,
-                                         texturePriority,
+                                         tileDownloadPriority,
                                          logTilesPetitions);
     builderHolder = new DTT_TileTextureBuilderHolder(builder);
     tile->setTexturizerData(builderHolder);

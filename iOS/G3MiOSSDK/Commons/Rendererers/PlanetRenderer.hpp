@@ -235,7 +235,7 @@ private:
                                 const int topLevel,
                                 const int maxLevel);
 
-  long long _texturePriority;
+  long long _tileDownloadPriority;
 
   float _verticalExaggeration;
 
@@ -273,7 +273,7 @@ public:
                  LayerSet*                    layerSet,
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
-                 long long                    texturePriority,
+                 long long                    tileDownloadPriority,
                  const Sector&                renderedSector,
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
@@ -359,19 +359,19 @@ public:
   /**
    * Set the download-priority used by Tiles (for downloading textures).
    *
-   * @param texturePriority: new value for download priority of textures
+   * @param tileDownloadPriority: new value for download priority of textures
    */
-  void setTexturePriority(long long texturePriority) {
-    _texturePriority = texturePriority;
+  void setTileDownloadPriority(long long tileDownloadPriority) {
+    _tileDownloadPriority = tileDownloadPriority;
   }
 
   /**
    * Return the current value for the download priority of textures
    *
-   * @return _texturePriority: long
+   * @return _tileDownloadPriority: long
    */
-  long long getTexturePriority() const {
-    return _texturePriority;
+  long long getTileDownloadPriority() const {
+    return _tileDownloadPriority;
   }
 
   /**

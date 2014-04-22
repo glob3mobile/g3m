@@ -149,3 +149,7 @@ RenderState GoogleMapsLayer::getRenderState() {
   }
   return RenderState::ready();
 }
+
+TileImageContribution GoogleMapsLayer::rawContribution(const Tile* tile) const {
+  return FULL_COVERAGE_OPAQUE;
+}

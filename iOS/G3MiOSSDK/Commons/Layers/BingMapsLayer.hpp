@@ -82,6 +82,8 @@ protected:
 
   bool rawIsEquals(const Layer* that) const;
 
+  TileImageContribution rawContribution(const Tile* tile) const;
+
 public:
 
   /**

@@ -28,7 +28,7 @@ bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
 
   for (int i = _layers.size()-1; i >= 0; i--) {
     Layer* layer = _layers[i];
-    if (layer->isAvailable(ec, tile)) {
+    if (layer->isAvailable(tile)) {
       LayerTouchEvent tte(position, tile->_sector, layer);
 
       if (layer->onLayerTouchEventListener(ec, tte)) {
@@ -346,8 +346,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
   const int layersSize = _layers.size();
   for (int i = 0; i < layersSize; i++) {
     Layer* layer = _layers[i];
-    if (layer->isAvailable(rc, tile)) {
-
+    if (layer->isAvailable(tile)) {
 #ifdef C_CODE
       const Tile* petitionTile = tile;
 #else
@@ -382,27 +381,26 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
 }
 
 TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
-                                                     const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                     const Tile* tile) const {
-//  const int layersSize = _layers.size();
-//  if (layersSize == 0) {
-//    return NULL;
-//  }
-//
-//  if (layersSize == 1) {
-//    Layer* layer = _layers[0];
-//    return layer->isAvailable(rc, tile) ? layer->createTileImageProvider(rc, layerTilesRenderParameters, tile) : NULL;
-//  }
+                                                     const LayerTilesRenderParameters* layerTilesRenderParameters) const {
+  const int layersSize = _layers.size();
+  if (layersSize == 0) {
+    return NULL;
+  }
 
-#warning TODO
+  if (layersSize == 1) {
+    Layer* layer = _layers[0];
+//    return layer->isAvailable(rc, tile) ? layer->createTileImageProvider(rc, layerTilesRenderParameters) : NULL;
+    return layer->isEnable() ? layer->createTileImageProvider(rc, layerTilesRenderParameters) : NULL;
+  }
+
+#warning TODO composite TileImageProvider
   return NULL;
 }
 
 TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
-                                                  const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                                  const Tile* tile) const {
+                                                  const LayerTilesRenderParameters* layerTilesRenderParameters) const {
   if (_tileImageProvider == NULL) {
-    _tileImageProvider = createTileImageProvider(rc, layerTilesRenderParameters, tile);
+    _tileImageProvider = createTileImageProvider(rc, layerTilesRenderParameters);
   }
   return _tileImageProvider;
 }

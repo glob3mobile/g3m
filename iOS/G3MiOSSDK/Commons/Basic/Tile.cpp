@@ -358,7 +358,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    const LayerSet* layerSet,
                                    const TilesRenderParameters* tilesRenderParameters,
                                    bool forceFullRender,
-                                   long long texturePriority,
+                                   long long tileDownloadPriority,
                                    float verticalExaggeration,
                                    bool logTilesPetitions) {
 
@@ -388,7 +388,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               layerTilesRenderParameters,
                                               layerSet,
                                               forceFullRender,
-                                              texturePriority,
+                                              tileDownloadPriority,
                                               this,
                                               tessellatorMesh,
                                               _texturizedMesh,
@@ -407,7 +407,7 @@ void Tile::rawRender(const G3MRenderContext* rc,
                      const LayerSet* layerSet,
                      const TilesRenderParameters* tilesRenderParameters,
                      bool forceFullRender,
-                     long long texturePriority,
+                     long long tileDownloadPriority,
                      bool logTilesPetitions) {
 
   Mesh* tessellatorMesh = getTessellatorMesh(rc,
@@ -432,7 +432,7 @@ void Tile::rawRender(const G3MRenderContext* rc,
                                               layerTilesRenderParameters,
                                               layerSet,
                                               forceFullRender,
-                                              texturePriority,
+                                              tileDownloadPriority,
                                               this,
                                               tessellatorMesh,
                                               _texturizedMesh,
@@ -585,7 +585,7 @@ void Tile::render(const G3MRenderContext* rc,
                   const LayerSet* layerSet,
                   const Sector* renderedSector,
                   bool forceFullRender,
-                  long long texturePriority,
+                  long long tileDownloadPriority,
                   double texWidthSquared,
                   double texHeightSquared,
                   double nowInMS,
@@ -633,8 +633,8 @@ void Tile::render(const G3MRenderContext* rc,
     if (isRawRender) {
 
       const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
-                                             ? texturePriority + layerTilesRenderParameters->_maxLevel - _level
-                                             : texturePriority + _level);
+                                             ? tileDownloadPriority + layerTilesRenderParameters->_maxLevel - _level
+                                             : tileDownloadPriority + _level);
 
       rendered = true;
       if (renderTileMeshes) {

@@ -470,3 +470,17 @@ RenderState WMSLayer::getRenderState() {
   }
   return RenderState::ready();
 }
+
+TileImageContribution WMSLayer::rawContribution(const Tile* tile) const {
+  const Sector tileSector = tile->_sector;
+
+  if (!_sector.touchesWith(tileSector)) {
+    return NONE;
+  }
+  else if (_sector.fullContains(tileSector)) {
+    return _isTransparent ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
+  }
+  else {
+    return _isTransparent ? PARTIAL_COVERAGE_TRANSPARENT : PARTIAL_COVERAGE_OPAQUE;
+  }
+}

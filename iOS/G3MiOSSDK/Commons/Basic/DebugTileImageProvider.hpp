@@ -48,6 +48,7 @@ public:
 
   void create(const Tile* tile,
               const Vector2I& resolution,
+              long long tileDownloadPriority,
               TileImageListener* listener,
               bool deleteListener);
 

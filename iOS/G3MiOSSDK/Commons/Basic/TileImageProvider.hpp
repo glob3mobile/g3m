@@ -9,15 +9,7 @@
 #ifndef __G3MiOSSDK__TileImageProvider__
 #define __G3MiOSSDK__TileImageProvider__
 
-
-enum TileImageContribution {
-  NONE,
-  FULL_COVERAGE_OPAQUE,
-  FULL_COVERAGE_TRANSPARENT,
-  PARTIAL_COVERAGE_OPAQUE,
-  PARTIAL_COVERAGE_TRANSPARENT
-};
-
+#include "TileImageContribution.hpp"
 
 class Tile;
 class TileImageListener;
@@ -32,6 +24,7 @@ public:
 
   virtual void create(const Tile* tile,
                       const Vector2I& resolution,
+                      long long tileDownloadPriority,
                       TileImageListener* listener,
                       bool deleteListener) = 0;
 

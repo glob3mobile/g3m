@@ -49,6 +49,7 @@ TileImageContribution DebugTileImageProvider::contribution(const Tile* tile) {
 
 void DebugTileImageProvider::create(const Tile* tile,
                                     const Vector2I& resolution,
+                                    long long tileDownloadPriority,
                                     TileImageListener* listener,
                                     bool deleteListener) {
   const int width  = resolution._x;

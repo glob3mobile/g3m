@@ -11,20 +11,36 @@
 
 #include "Layer.hpp"
 
+#include "TileImageContribution.hpp"
+class TimeInterval;
+
+
 class RasterLayer : public Layer {
 protected:
+  const long long _timeToCacheMS;
+  const bool      _readExpired;
+
   RasterLayer(LayerCondition* condition,
               const TimeInterval& timeToCache,
               bool readExpired,
               const LayerTilesRenderParameters* parameters,
-              float transparency) :
-  Layer(condition,
-        timeToCache,
-        readExpired,
-        parameters,
-        transparency)
-  {
+              float transparency);
+
+  const TimeInterval getTimeToCache() const;
+
+  bool getReadExpired() const {
+    return _readExpired;
   }
+
+  virtual TileImageContribution rawContribution(const Tile* tile) const = 0;
+
+public:
+  bool isEquals(const Layer* that) const;
+
+  TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
+                                             const LayerTilesRenderParameters* layerTilesRenderParameters) const;
+
+  TileImageContribution contribution(const Tile* tile) const;
 
 };
 

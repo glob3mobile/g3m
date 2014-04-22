@@ -31,3 +31,7 @@ OSMLayer* OSMLayer::copy() const {
 RenderState OSMLayer::getRenderState() {
   return RenderState::ready();
 }
+
+TileImageContribution OSMLayer::rawContribution(const Tile* tile) const {
+  return FULL_COVERAGE_OPAQUE;
+}

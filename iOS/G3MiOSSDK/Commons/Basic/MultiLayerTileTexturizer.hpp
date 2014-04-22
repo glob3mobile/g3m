@@ -43,7 +43,7 @@ public:
                   const LayerTilesRenderParameters* layerTilesRenderParameters,
                   const LayerSet* layerSet,
                   bool forceFullRender,
-                  long long texturePriority,
+                  long long tileDownloadPriority,
                   Tile* tile,
                   Mesh* tessellatorMesh,
                   Mesh* previousMesh,

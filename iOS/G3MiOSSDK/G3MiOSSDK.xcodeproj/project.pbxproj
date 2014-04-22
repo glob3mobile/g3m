@@ -317,6 +317,10 @@
 		CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */; };
 		CFCBA3BE1906F3C200FD2A2F /* RasterLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCBA3BC1906F3C200FD2A2F /* RasterLayer.cpp */; };
 		CFCBA3BF1906F55200FD2A2F /* RasterLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCBA3BD1906F3C200FD2A2F /* RasterLayer.hpp */; };
+		CFCBA3C2190706C900FD2A2F /* RasterLayerTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCBA3C0190706C900FD2A2F /* RasterLayerTileImageProvider.cpp */; };
+		CFCBA3C51907086C00FD2A2F /* TileImageContribution.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCBA3C31907086C00FD2A2F /* TileImageContribution.cpp */; };
+		CFCBA3C619070A4900FD2A2F /* TileImageContribution.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCBA3C41907086C00FD2A2F /* TileImageContribution.hpp */; };
+		CFCBA3C719070A4900FD2A2F /* RasterLayerTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCBA3C1190706C900FD2A2F /* RasterLayerTileImageProvider.hpp */; };
 		CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
@@ -677,6 +681,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFCBA3C619070A4900FD2A2F /* TileImageContribution.hpp in CopyFiles */,
+				CFCBA3C719070A4900FD2A2F /* RasterLayerTileImageProvider.hpp in CopyFiles */,
 				CFCBA3BF1906F55200FD2A2F /* RasterLayer.hpp in CopyFiles */,
 				CF47E0F61901DB1500410BB5 /* DefaultTileTexturizer.hpp in CopyFiles */,
 				CF47E0F71901DB1500410BB5 /* TileImageProvider.hpp in CopyFiles */,
@@ -1469,6 +1475,10 @@
 		CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CompositeMesh.hpp; path = Commons/Mesh/CompositeMesh.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFCBA3BC1906F3C200FD2A2F /* RasterLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RasterLayer.cpp; sourceTree = "<group>"; };
 		CFCBA3BD1906F3C200FD2A2F /* RasterLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RasterLayer.hpp; sourceTree = "<group>"; };
+		CFCBA3C0190706C900FD2A2F /* RasterLayerTileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RasterLayerTileImageProvider.cpp; path = Commons/Basic/RasterLayerTileImageProvider.cpp; sourceTree = "<group>"; };
+		CFCBA3C1190706C900FD2A2F /* RasterLayerTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RasterLayerTileImageProvider.hpp; path = Commons/Basic/RasterLayerTileImageProvider.hpp; sourceTree = "<group>"; };
+		CFCBA3C31907086C00FD2A2F /* TileImageContribution.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileImageContribution.cpp; path = Commons/Basic/TileImageContribution.cpp; sourceTree = "<group>"; };
+		CFCBA3C41907086C00FD2A2F /* TileImageContribution.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileImageContribution.hpp; path = Commons/Basic/TileImageContribution.hpp; sourceTree = "<group>"; };
 		CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NativeGL2_iOS.mm; path = Specific/GL/NativeGL2_iOS.mm; sourceTree = "<group>"; };
 		CFCCFE0A16F506210082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
@@ -2076,6 +2086,10 @@
 				CFADF22218FF1CDB00360565 /* DefaultTileTexturizer.hpp */,
 				CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */,
 				CFE6046C1904448900E6C78B /* TileImageProvider.cpp */,
+				CFCBA3C31907086C00FD2A2F /* TileImageContribution.cpp */,
+				CFCBA3C41907086C00FD2A2F /* TileImageContribution.hpp */,
+				CFCBA3C0190706C900FD2A2F /* RasterLayerTileImageProvider.cpp */,
+				CFCBA3C1190706C900FD2A2F /* RasterLayerTileImageProvider.hpp */,
 				CF47E0EE19019A1000410BB5 /* TileImageListener.hpp */,
 				CF47E0F01901CA8C00410BB5 /* DebugTileImageProvider.cpp */,
 				CF47E0F11901CA8C00410BB5 /* DebugTileImageProvider.hpp */,
@@ -2821,6 +2835,7 @@
 				CFE6046519043E3200E6C78B /* IImageBuilder.cpp in Sources */,
 				CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */,
 				CF290D50187F1543000BE644 /* TransformableTextureMapping.cpp in Sources */,
+				CFCBA3C2190706C900FD2A2F /* RasterLayerTileImageProvider.cpp in Sources */,
 				CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */,
 				CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */,
 				CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */,
@@ -3005,6 +3020,7 @@
 				D8765D041779C3AE004B62F4 /* AbstractGeometryMesh.cpp in Sources */,
 				D8765D051779C3AE004B62F4 /* IndexedGeometryMesh.cpp in Sources */,
 				CFAC9E9F18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp in Sources */,
+				CFCBA3C51907086C00FD2A2F /* TileImageContribution.cpp in Sources */,
 				D8765D061779C3AE004B62F4 /* LeveledMesh.cpp in Sources */,
 				D8765D071779C3AE004B62F4 /* FlatColorMesh.cpp in Sources */,
 				CF4027CF1770DCB400D5A80C /* IWebSocket.cpp in Sources */,

@@ -507,7 +507,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                                                       quality);
 
   const bool showStatistics = false;
-  long long texturePriority = DownloadPriority::HIGHER;
+  long long tileDownloadPriority = DownloadPriority::HIGHER;
 
   const Sector renderedSector = Sector::fullSphere();
   const bool renderTileMeshes = true;
@@ -525,7 +525,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               _layerSet,
                                               parameters,
                                               showStatistics,
-                                              texturePriority,
+                                              tileDownloadPriority,
                                               renderedSector,
                                               renderTileMeshes,
                                               logTilesPetitions,

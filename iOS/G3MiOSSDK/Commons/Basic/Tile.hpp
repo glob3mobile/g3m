@@ -122,7 +122,7 @@ private:
                         const LayerSet* layerSet,
                         const TilesRenderParameters* tilesRenderParameters,
                         bool forceFullRender,
-                        long long texturePriority,
+                        long long tileDownloadPriority,
                         bool logTilesPetitions);
 
   void debugRender(const G3MRenderContext* rc,
@@ -210,7 +210,7 @@ public:
                                const LayerSet* layerSet,
                                const TilesRenderParameters* tilesRenderParameters,
                                bool forceFullRender,
-                               long long texturePriority,
+                               long long tileDownloadPriority,
                                float verticalExaggeration,
                                bool logTilesPetitions);
 
@@ -233,7 +233,7 @@ public:
               const LayerSet* layerSet,
               const Sector* renderedSector,
               bool forceFullRender,
-              long long texturePriority,
+              long long tileDownloadPriority,
               double texWidth,
               double texHeight,
               double nowInMS,

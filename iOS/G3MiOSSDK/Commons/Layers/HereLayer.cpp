@@ -199,3 +199,8 @@ RenderState HereLayer::getRenderState() {
   }
   return RenderState::ready();
 }
+
+
+TileImageContribution HereLayer::rawContribution(const Tile* tile) const {
+  return FULL_COVERAGE_OPAQUE;
+}

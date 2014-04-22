@@ -260,7 +260,7 @@ private:
   bool _canceled;
   bool _alreadyStarted;
 
-  long long _texturePriority;
+  long long _tileDownloadPriority;
 
 
   const std::vector<Petition*> cleanUpPetitions(const std::vector<Petition*>& petitions) const {
@@ -312,7 +312,7 @@ public:
                      Tile*                             tile,
                      const Mesh*                       tessellatorMesh,
                      const TileTessellator*            tessellator,
-                     long long                         texturePriority,
+                     long long                         tileDownloadPriority,
                      bool                              logTilesPetitions) :
   _texturizer(texturizer),
   _tileRasterizer(tileRasterizer),
@@ -328,7 +328,7 @@ public:
   _finalized(false),
   _canceled(false),
   _alreadyStarted(false),
-  _texturePriority(texturePriority),
+  _tileDownloadPriority(tileDownloadPriority),
   _logTilesPetitions(logTilesPetitions)
   {
     _petitions = cleanUpPetitions( petitions );
@@ -355,8 +355,6 @@ public:
       return;
     }
 
-//    const long long priority = _texturePriority + _tile->_level;
-
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
 
@@ -365,7 +363,7 @@ public:
       }
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
-                                                            _texturePriority, // priority,
+                                                            _tileDownloadPriority, // priority,
                                                             petition->getTimeToCache(),
                                                             petition->getReadExpired(),
                                                             new BuilderDownloadStepDownloadListener(this, i),
@@ -792,7 +790,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                                           const LayerSet* layerSet,
                                           bool forceFullRender,
-                                          long long texturePriority,
+                                          long long tileDownloadPriority,
                                           Tile* tile,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh,
@@ -811,7 +809,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                                                         tile,
                                                                         tessellatorMesh,
                                                                         tessellator,
-                                                                        texturePriority,
+                                                                        tileDownloadPriority,
                                                                         logTilesPetitions
                                                                         )
                                                  );

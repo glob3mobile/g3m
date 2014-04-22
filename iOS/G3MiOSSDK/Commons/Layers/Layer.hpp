@@ -16,7 +16,6 @@ class LayerCondition;
 class LayerTouchEventListener;
 class LayerSet;
 class LayerTilesRenderParameters;
-class TimeInterval;
 class G3MRenderContext;
 class G3MEventContext;
 class Tile;
@@ -47,9 +46,6 @@ protected:
   protected LayerTilesRenderParameters _parameters;
 #endif
 
-  const long long _timeToCacheMS;
-  const bool      _readExpired;
-
   void notifyChanges() const;
 
   std::string _title;
@@ -57,8 +53,6 @@ protected:
   const float _transparency;
 
   Layer(LayerCondition* condition,
-        const TimeInterval& timeToCache,
-        bool readExpired,
         const LayerTilesRenderParameters* parameters,
         float transparency);
 
@@ -70,11 +64,6 @@ protected:
 
 public:
 
-  const TimeInterval getTimeToCache() const;
-
-  bool getReadExpired() const {
-    return _readExpired;
-  }
 
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
@@ -89,11 +78,7 @@ public:
 
   virtual ~Layer();
 
-  virtual bool isAvailable(const G3MRenderContext* rc,
-                           const Tile* tile) const;
-
-  virtual bool isAvailable(const G3MEventContext* ec,
-                           const Tile* tile) const;
+  virtual bool isAvailable(const Tile* tile) const;
 
   //  virtual bool isTransparent() const = 0;
 
@@ -128,8 +113,8 @@ public:
   }
 #endif
 
-  bool isEquals(const Layer* that) const;
-  
+  virtual bool isEquals(const Layer* that) const;
+
   virtual Layer* copy() const = 0;
 
 
@@ -141,10 +126,8 @@ public:
                                                         const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                         const Tile* tile) const = 0;
 
-#warning TODO
-//  virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
-//                                                     const LayerTilesRenderParameters* layerTilesRenderParameters,
-//                                                     const Tile* tile) const = 0;
+  virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
+                                                     const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
 
 };
 

@@ -8,21 +8,16 @@
 
 #include "Layer.hpp"
 
-#include "TimeInterval.hpp"
 #include "LayerCondition.hpp"
 #include "LayerSet.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "LayerTouchEventListener.hpp"
 
 Layer::Layer(LayerCondition* condition,
-             const TimeInterval& timeToCache,
-             bool readExpired,
              const LayerTilesRenderParameters* parameters,
              float transparency) :
 _condition(condition),
 _layerSet(NULL),
-_timeToCacheMS(timeToCache._milliseconds),
-_readExpired(readExpired),
 _enable(true),
 _parameters(parameters),
 _title(""),
@@ -35,30 +30,14 @@ Layer::~Layer() {
   delete _parameters;
 }
 
-const TimeInterval Layer::getTimeToCache() const {
-  return TimeInterval::fromMilliseconds(_timeToCacheMS);
-}
-
-bool Layer::isAvailable(const G3MRenderContext* rc,
-                        const Tile* tile) const {
+bool Layer::isAvailable(const Tile* tile) const {
   if (!isEnable()) {
     return false;
   }
   if (_condition == NULL) {
     return true;
   }
-  return _condition->isAvailable(rc, tile);
-}
-
-bool Layer::isAvailable(const G3MEventContext* ec,
-                        const Tile* tile) const {
-  if (!isEnable()) {
-    return false;
-  }
-  if (_condition == NULL) {
-    return true;
-  }
-  return _condition->isAvailable(ec, tile);
+  return _condition->isAvailable(tile);
 }
 
 void Layer::setLayerSet(LayerSet* layerSet) {
@@ -131,14 +110,6 @@ bool Layer::isEquals(const Layer* that) const {
   }
 
   if (!_parameters->isEquals(that->_parameters)) {
-    return false;
-  }
-
-  if (_timeToCacheMS != that->_timeToCacheMS) {
-    return false;
-  }
-
-  if (_readExpired != that->_readExpired) {
     return false;
   }
 

@@ -201,3 +201,7 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
 RenderState MercatorTiledLayer::getRenderState() {
   return RenderState::ready();
 }
+
+TileImageContribution MercatorTiledLayer::rawContribution(const Tile* tile) const {
+  return FULL_COVERAGE_OPAQUE;
+}

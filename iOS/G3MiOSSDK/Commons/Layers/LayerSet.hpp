@@ -45,8 +45,7 @@ private:
   mutable TileImageProvider* _tileImageProvider;
 
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
-                                             const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                             const Tile* tile) const;
+                                             const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
 public:
   LayerSet() :
@@ -95,8 +94,7 @@ public:
                                                 const Tile* tile) const;
 
   TileImageProvider* getTileImageProvider(const G3MRenderContext* rc,
-                                          const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                          const Tile* tile) const;
+                                          const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
 };
 
