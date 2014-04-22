@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 //class IStringUtils;
 
 
-public class URLTemplateLayer extends Layer
+public class URLTemplateLayer extends RasterLayer
 {
   private final String _urlTemplate;
   private final Sector _sector ;

@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class HereLayer extends Layer
+public class HereLayer extends RasterLayer
 {
   private final String _appId;
   private final String _appCode;
@@ -108,21 +108,21 @@ public class HereLayer extends Layer
     isb.addString(",");
     isb.addDouble(tileSector._center._longitude._degrees);
   
-  //  isb->addString("&poi=");
-  //  isb->addDouble(tileSector._lower._latitude._degrees);
-  //  isb->addString(",");
-  //  isb->addDouble(tileSector._lower._longitude._degrees);
-  //  isb->addString(",");
-  //  isb->addDouble(tileSector._upper._latitude._degrees);
-  //  isb->addString(",");
-  //  isb->addDouble(tileSector._upper._longitude._degrees);
-  //  isb->addString("&nomrk");
+    //  isb->addString("&poi=");
+    //  isb->addDouble(tileSector._lower._latitude._degrees);
+    //  isb->addString(",");
+    //  isb->addDouble(tileSector._lower._longitude._degrees);
+    //  isb->addString(",");
+    //  isb->addDouble(tileSector._upper._latitude._degrees);
+    //  isb->addString(",");
+    //  isb->addDouble(tileSector._upper._longitude._degrees);
+    //  isb->addString("&nomrk");
   
     isb.addString("&z=");
     final int level = tile._level;
     isb.addInt(level);
   
-  //  isb->addString("&t=3");
+    //  isb->addString("&t=3");
   
     /*
      0 (normal.day)
@@ -165,7 +165,7 @@ public class HereLayer extends Layer
      Normal grey map view for small screen devices in day light mode (used for background maps).
   
      By default normal map view in day light mode (0) is used for non-mobile clients. For mobile clients the default is normal map view for small screen devices in day light mode (6).
-    
+  
   
      */
   

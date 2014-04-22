@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class BingMapsLayer extends Layer
+public class BingMapsLayer extends RasterLayer
 {
   private final String _imagerySet;
   private final String _culture;
@@ -291,7 +291,7 @@ public class BingMapsLayer extends Layer
   
     processMetadata(brandLogoUri, copyright, imageUrl, imageUrlSubdomains, imageWidth, imageHeight, zoomMin, zoomMax);
   
-  //  http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1180&mkt={culture}
+    //  http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1180&mkt={culture}
   
   
     parser.deleteJSONData(jsonBaseObject);

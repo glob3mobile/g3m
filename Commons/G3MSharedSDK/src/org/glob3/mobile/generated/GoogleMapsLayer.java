@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GoogleMapsLayer extends Layer
+public class GoogleMapsLayer extends RasterLayer
 {
   private final String _key;
   private final int _initialLevel;
@@ -113,10 +113,10 @@ public class GoogleMapsLayer extends Layer
     isb.addString("&format=jpg");
   
   
-  //  isb->addString("&maptype=roadmap);
-  //  isb->addString("&maptype=satellite");
+    //  isb->addString("&maptype=roadmap);
+    //  isb->addString("&maptype=satellite");
     isb.addString("&maptype=hybrid");
-  //  isb->addString("&maptype=terrain");
+    //  isb->addString("&maptype=terrain");
   
   
     isb.addString("&key=");

@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class MercatorTiledLayer extends Layer
+public class MercatorTiledLayer extends RasterLayer
 {
   protected final String _protocol;
   protected final String _domain;
