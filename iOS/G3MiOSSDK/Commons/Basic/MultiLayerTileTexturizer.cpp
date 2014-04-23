@@ -399,12 +399,12 @@ public:
       return false;
     }
 
-    std::vector<const IImage*>     images;
-    std::vector<RectangleF*> sourceRects;
-    std::vector<RectangleF*> destRects;
-    std::vector<float> transparencies;
-    std::string textureId = _tile->_id;
+    std::vector<const IImage*> images;
+    std::vector<RectangleF*>   sourceRects;
+    std::vector<RectangleF*>   destRects;
+    std::vector<float>         transparencies;
 
+    std::string  textureId  = _tile->_id;
     const Sector tileSector = _tile->_sector;
 
     for (int i = 0; i < _petitionsCount; i++) {
