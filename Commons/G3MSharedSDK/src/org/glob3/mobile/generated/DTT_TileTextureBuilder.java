@@ -211,18 +211,11 @@ public class DTT_TileTextureBuilder extends RCObject
        image.dispose();
   }
 
-  public final void imageCreationError(std.set<String> errors)
+  public final void imageCreationError(String error)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work
-//    ILogger::instance()->logError("%s", error.c_str());
-
-    std.set<String>.iterator it = new std.set<String>.iterator();
-    for (it = errors.begin(); it != errors.end(); ++it)
-    {
-      final String error = *it;
-      ILogger.instance().logError("%s", error);
-    }
+    ILogger.instance().logError("%s", error);
   }
 
   public final void imageCreationCanceled()

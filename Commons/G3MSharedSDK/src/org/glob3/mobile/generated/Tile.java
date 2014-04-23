@@ -468,16 +468,7 @@ public class Tile
 
   private static String createTileId(int level, int row, int column)
   {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addInt(level);
-    isb.addString("/");
-    isb.addInt(row);
-    isb.addString("/");
-    isb.addInt(column);
-    String s = isb.getString();
-    if (isb != null)
-       isb.dispose();
-    return s;
+    return level + "/" + row + "/" + column;
   }
 
   public final Sector _sector ;
