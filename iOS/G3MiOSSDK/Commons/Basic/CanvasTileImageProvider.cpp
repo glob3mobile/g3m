@@ -13,6 +13,7 @@
 #include "Color.hpp"
 
 CanvasTileImageProvider::CanvasTileImageProvider() :
+_canvas(NULL),
 _transparent(Color::newFromRGBA(0, 0, 0, 0))
 {
 }
