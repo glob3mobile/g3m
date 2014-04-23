@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 
-public class ChessboardTileImageProvider extends TileImageProvider
+public abstract class ChessboardTileImageProvider extends TileImageProvider
 {
   private final int _splits;
 
@@ -43,11 +43,11 @@ public class ChessboardTileImageProvider extends TileImageProvider
 
   public final TileImageContribution contribution(Tile tile)
   {
-    //return FULL_COVERAGE_TRANSPARENT;
-    return TileImageContribution.fullCoverageTransparent(1);
+    //return FULL_COVERAGE_OPAQUE;
+    return TileImageContribution.fullCoverageOpaque();
   }
 
-  public final void create(Tile tile, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
   {
     if (_image == null)
     {
@@ -95,8 +95,8 @@ public class ChessboardTileImageProvider extends TileImageProvider
           final float y = row * yInterval;
           final float y2 = (row + 1) * yInterval;
   
-          canvas.fillRoundedRectangle(x + 1, y + 1, xInterval - 2, yInterval - 2, 4);
-          canvas.fillRoundedRectangle(x2 + 1, y2 + 1, xInterval - 2, yInterval - 2, 4);
+          canvas.fillRoundedRectangle(x + 2, y + 2, xInterval - 4, yInterval - 4, 4);
+          canvas.fillRoundedRectangle(x2 + 2, y2 + 2, xInterval - 4, yInterval - 4, 4);
         }
       }
   
@@ -111,7 +111,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
     else
     {
       IImage image = _image.shallowCopy();
-      listener.imageCreated(tile, image, "ChessboardTileImageProvider_image", tile._sector, new RectangleF(0, 0, image.getWidth(), image.getHeight()), 1);
+      listener.imageCreated(tile._id, image, "ChessboardTileImageProvider_image", contribution);
       if (deleteListener)
       {
         if (listener != null)
@@ -129,7 +129,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
   {
     _image = image.shallowCopy();
   
-    listener.imageCreated(tile, image, "ChessboardTileImageProvider_image", tile._sector, new RectangleF(0, 0, image.getWidth(), image.getHeight()), 1);
+    listener.imageCreated(tile._id, image, "ChessboardTileImageProvider_image", TileImageContribution.fullCoverageOpaque());
   
     if (deleteListener)
     {

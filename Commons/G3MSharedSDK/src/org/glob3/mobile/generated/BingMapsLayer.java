@@ -89,6 +89,34 @@ public class BingMapsLayer extends RasterLayer
     return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
   }
 
+  protected final URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  {
+    final IStringUtils su = IStringUtils.instance();
+  
+    final int level = tile._level;
+    final int column = tile._column;
+    final int numRows = (int) IMathUtils.instance().pow(2.0, level);
+    final int row = numRows - tile._row - 1;
+  
+    final int subdomainsSize = _imageUrlSubdomains.size();
+    String subdomain = "";
+    if (subdomainsSize > 0)
+    {
+      // select subdomain based on fixed data (instead of round-robin) to be cache friendly
+      final int subdomainsIndex = IMathUtils.instance().abs(level + column + row) % subdomainsSize;
+      subdomain = _imageUrlSubdomains.get(subdomainsIndex);
+    }
+  
+    final String quadkey = getQuadkey(level, column, row);
+  
+    String path = _imageUrl;
+    path = su.replaceSubstring(path, "{subdomain}", subdomain);
+    path = su.replaceSubstring(path, "{quadkey}", quadkey);
+    path = su.replaceSubstring(path, "{culture}", _culture);
+  
+    return new URL(path, false);
+  }
+
 
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.

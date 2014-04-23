@@ -132,6 +132,151 @@ public class WMSLayer extends RasterLayer
     }
   }
 
+  protected final URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  {
+  
+    final String path = _mapServerURL.getPath();
+  //  if (path.empty()) {
+  //    return petitions;
+  //  }
+  
+    final Sector tileSector = tile._sector;
+  //  if (!_sector.touchesWith(tileSector)) {
+  //    return petitions;
+  //  }
+  //
+    final Sector sector = tileSector.intersection(_sector);
+  //  if (sector._deltaLatitude.isZero() ||
+  //      sector._deltaLongitude.isZero() ) {
+  //    return petitions;
+  //  }
+  
+    //TODO: MUST SCALE WIDTH,HEIGHT
+  
+    final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
+  
+     //Server name
+    String req = path;
+     if (req.charAt(req.length() - 1) != '?')
+     {
+        req += '?';
+     }
+  
+    //  //If the server refer to itself as localhost...
+    //  const int localhostPos = req.find("localhost");
+    //  if (localhostPos != -1) {
+    //    req = req.substr(localhostPos+9);
+    //
+    //    const int slashPos = req.find("/", 8);
+    //    std::string newHost = req.substr(0, slashPos);
+    //
+    //    req = newHost + req;
+    //  }
+  
+    req += "REQUEST=GetMap&SERVICE=WMS";
+  
+  
+    switch (_mapServerVersion)
+    {
+      case WMS_1_3_0:
+      {
+        req += "&VERSION=1.3.0";
+  
+        IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+        isb.addString("&WIDTH=");
+        isb.addInt(tileTextureResolution._x);
+        isb.addString("&HEIGHT=");
+        isb.addInt(tileTextureResolution._y);
+  
+        isb.addString("&BBOX=");
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
+  
+        req += isb.getString();
+        if (isb != null)
+           isb.dispose();
+  
+        req += "&CRS=EPSG:4326";
+  
+        break;
+      }
+      case WMS_1_1_0:
+      default:
+      {
+        // default is 1.1.1
+        req += "&VERSION=1.1.1";
+  
+        IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+        isb.addString("&WIDTH=");
+        isb.addInt(tileTextureResolution._x);
+        isb.addString("&HEIGHT=");
+        isb.addInt(tileTextureResolution._y);
+  
+        isb.addString("&BBOX=");
+        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
+        isb.addString(",");
+        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
+  
+        req += isb.getString();
+        if (isb != null)
+           isb.dispose();
+        break;
+      }
+    }
+  
+    req += "&LAYERS=" + _mapLayer;
+  
+     req += "&FORMAT=" + _format;
+  
+    if (!_srs.equals(""))
+    {
+      req += "&SRS=" + _srs;
+    }
+     else
+     {
+      req += "&SRS=EPSG:4326";
+    }
+  
+    //Style
+    if (!_style.equals(""))
+    {
+      req += "&STYLES=" + _style;
+    }
+     else
+     {
+      req += "&STYLES=";
+    }
+  
+    //ASKING TRANSPARENCY
+    if (_isTransparent)
+    {
+      req += "&TRANSPARENT=TRUE";
+    }
+    else
+    {
+      req += "&TRANSPARENT=FALSE";
+    }
+  
+    if (_extraParameter.compareTo("") != 0)
+    {
+      req += "&";
+      req += _extraParameter;
+    }
+  
+    return new URL(req, false);
+  }
+
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
@@ -346,7 +491,7 @@ public class WMSLayer extends RasterLayer
       return URL.nullURL();
     }
   
-    final Sector sector = tileSector.intersection(_sector);
+    final Sector intersectionSector = tileSector.intersection(_sector);
   
      //Server name
     String req = _queryServerURL.getPath();
@@ -393,13 +538,13 @@ public class WMSLayer extends RasterLayer
         isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
+        isb.addDouble(toBBOXLatitude(intersectionSector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
+        isb.addDouble(toBBOXLongitude(intersectionSector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
+        isb.addDouble(toBBOXLatitude(intersectionSector._upper._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
+        isb.addDouble(toBBOXLongitude(intersectionSector._upper._longitude));
   
         req += isb.getString();
   
@@ -424,13 +569,13 @@ public class WMSLayer extends RasterLayer
         isb.addInt(_parameters._tileTextureResolution._y);
   
         isb.addString("&BBOX=");
-        isb.addDouble(toBBOXLongitude(sector._lower._longitude));
+        isb.addDouble(toBBOXLongitude(intersectionSector._lower._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector._lower._latitude));
+        isb.addDouble(toBBOXLatitude(intersectionSector._lower._latitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLongitude(sector._upper._longitude));
+        isb.addDouble(toBBOXLongitude(intersectionSector._upper._longitude));
         isb.addString(",");
-        isb.addDouble(toBBOXLatitude(sector._upper._latitude));
+        isb.addDouble(toBBOXLatitude(intersectionSector._upper._latitude));
   
         req += isb.getString();
   
@@ -450,12 +595,12 @@ public class WMSLayer extends RasterLayer
     double v;
     if (_parameters._mercator)
     {
-      u = sector.getUCoordinate(position._longitude);
+      u = intersectionSector.getUCoordinate(position._longitude);
       v = MercatorUtils.getMercatorV(position._latitude);
     }
     else
     {
-      final Vector2D uv = sector.getUVCoordinates(position);
+      final Vector2D uv = intersectionSector.getUVCoordinates(position);
       u = uv._x;
       v = uv._y;
     }

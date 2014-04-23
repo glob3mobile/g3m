@@ -124,6 +124,55 @@ public class URLTemplateLayer extends RasterLayer
     }
   }
 
+  protected final URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  {
+  
+    if (_mu == null)
+    {
+      _mu = IMathUtils.instance();
+    }
+  
+    if (_su == null)
+    {
+      _su = IStringUtils.instance();
+    }
+  
+    final Sector sector = tile._sector;
+  
+    final Vector2I tileTextureResolution = _parameters._tileTextureResolution;
+  
+    final int level = tile._level;
+    final int column = tile._column;
+  //  const int numRows = (int) (layerTilesRenderParameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
+    final int numRows = (int)(_parameters._topSectorSplitsByLatitude * _mu.pow(2.0, level));
+    final int row = numRows - tile._row - 1;
+  
+    final double north = MercatorUtils.latitudeToMeters(sector._upper._latitude);
+    final double south = MercatorUtils.latitudeToMeters(sector._lower._latitude);
+    final double east = MercatorUtils.longitudeToMeters(sector._upper._longitude);
+    final double west = MercatorUtils.longitudeToMeters(sector._lower._longitude);
+  
+    String path = _urlTemplate;
+    path = _su.replaceSubstring(path, "{width}", _su.toString(tileTextureResolution._x));
+    path = _su.replaceSubstring(path, "{height}", _su.toString(tileTextureResolution._y));
+    path = _su.replaceSubstring(path, "{x}", _su.toString(column));
+    path = _su.replaceSubstring(path, "{y}", _su.toString(row));
+    path = _su.replaceSubstring(path, "{y2}", _su.toString(tile._row));
+    path = _su.replaceSubstring(path, "{level}", _su.toString(level));
+    path = _su.replaceSubstring(path, "{lowerLatitude}", _su.toString(sector._lower._latitude._degrees));
+    path = _su.replaceSubstring(path, "{lowerLongitude}", _su.toString(sector._lower._longitude._degrees));
+    path = _su.replaceSubstring(path, "{upperLatitude}", _su.toString(sector._upper._latitude._degrees));
+    path = _su.replaceSubstring(path, "{upperLongitude}", _su.toString(sector._upper._longitude._degrees));
+    path = _su.replaceSubstring(path, "{north}", _su.toString(north));
+    path = _su.replaceSubstring(path, "{south}", _su.toString(south));
+    path = _su.replaceSubstring(path, "{west}", _su.toString(west));
+    path = _su.replaceSubstring(path, "{east}", _su.toString(east));
+  
+    return path;
+  
+    return new URL(path, false);
+  }
+
   public static URLTemplateLayer newMercator(String urlTemplate, Sector sector, boolean isTransparent, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, LayerCondition condition)
   {
      return newMercator(urlTemplate, sector, isTransparent, firstLevel, maxLevel, timeToCache, readExpired, condition, (float)1.0);

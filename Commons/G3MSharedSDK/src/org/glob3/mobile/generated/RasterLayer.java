@@ -18,7 +18,8 @@ package org.glob3.mobile.generated;
 
 
 //class TimeInterval;
-
+//class IDownloader;
+//class IImageDownloadListener;
 
 public abstract class RasterLayer extends Layer
 {
@@ -43,6 +44,8 @@ public abstract class RasterLayer extends Layer
   }
 
   protected abstract TileImageContribution rawContribution(Tile tile);
+
+  protected abstract URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
 
   public final boolean isEquals(Layer that)
   {
@@ -77,8 +80,13 @@ public abstract class RasterLayer extends Layer
     {
       return rawContribution(tile);
     }
-  //  return NONE;
+    //  return NONE;
     return TileImageContribution.none();
+  }
+
+  public final long requestImage(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, IDownloader downloader, long tileDownloadPriority, IImageDownloadListener listener, boolean deleteListener)
+  {
+    return downloader.requestImage(createURL(layerTilesRenderParameters, tile), tileDownloadPriority, getTimeToCache(), _readExpired, listener, deleteListener);
   }
 
 }

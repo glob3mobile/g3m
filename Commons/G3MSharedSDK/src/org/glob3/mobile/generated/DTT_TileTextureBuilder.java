@@ -135,7 +135,10 @@ public class DTT_TileTextureBuilder extends RCObject
       }
       else
       {
-        _tileImageProvider.create(_tile, _tileTextureResolution, _tileDownloadPriority, new DTT_TileImageListener(this), true);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO
+        final LayerTilesRenderParameters layerTilesRenderParameters = null;
+        _tileImageProvider.create(layerTilesRenderParameters, _tile, contribution, _tileTextureResolution, _tileDownloadPriority, new DTT_TileImageListener(this), true);
       }
     }
   }
@@ -174,8 +177,7 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public void dispose()
   {
-    if (_tileImageProvider != null)
-       _tileImageProvider.dispose();
+//    delete _tileImageProvider;
     super.dispose();
   }
 
@@ -198,7 +200,7 @@ public class DTT_TileTextureBuilder extends RCObject
     return true;
   }
 
-  public final void imageCreated(IImage image, String imageId, Sector imageSector, RectangleF imageRectangle, float alpha)
+  public final void imageCreated(IImage image, String imageId, TileImageContribution contribution)
   {
     if (!_canceled && (_tile != null) && (_texturedMesh != null))
     {

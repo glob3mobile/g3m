@@ -95,6 +95,48 @@ public class MercatorTiledLayer extends RasterLayer
     return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
   }
 
+  protected final URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final int level = tile._level;
+    final int column = tile._column;
+    final int numRows = (int) mu.pow(2.0, level);
+    final int row = numRows - tile._row - 1;
+  
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    isb.addString(_protocol);
+  
+    final int subdomainsSize = _subdomains.size();
+    if (subdomainsSize > 0)
+    {
+      // select subdomain based on fixed data (instead of round-robin) to be cache friendly
+      final int subdomainsIndex = mu.abs(level + column + row) % subdomainsSize;
+      isb.addString(_subdomains.get(subdomainsIndex));
+    }
+  
+    isb.addString(_domain);
+    isb.addString("/");
+  
+    isb.addInt(level);
+    isb.addString("/");
+  
+    isb.addInt(column);
+    isb.addString("/");
+  
+    isb.addInt(row);
+    isb.addString(".");
+    isb.addString(_imageFormat);
+  
+    final String path = isb.getString();
+  
+    if (isb != null)
+       isb.dispose();
+  
+    return new URL(path, false);
+  }
+
 
   /*
    Implementation details: http: //wiki.openstreetmap.org/wiki/Slippy_map_tilenames

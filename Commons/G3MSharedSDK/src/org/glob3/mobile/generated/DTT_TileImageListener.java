@@ -8,24 +8,26 @@ public class DTT_TileImageListener extends TileImageListener
   public DTT_TileImageListener(DTT_TileTextureBuilder builder)
   {
      _builder = builder;
+    _builder._retain();
   }
 
   public void dispose()
   {
+    _builder._release();
     super.dispose();
   }
 
-  public final void imageCreated(Tile tile, IImage image, String imageId, Sector imageSector, RectangleF imageRectangle, float alpha)
+  public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution)
   {
-    _builder.imageCreated(image, imageId, imageSector, imageRectangle, alpha);
+    _builder.imageCreated(image, imageId, contribution);
   }
 
-  public final void imageCreationError(Tile tile, String error)
+  public final void imageCreationError(String tileId, String error)
   {
     _builder.imageCreationError(error);
   }
 
-  public final void imageCreationCanceled(Tile tile)
+  public final void imageCreationCanceled(String tileId)
   {
     _builder.imageCreationCanceled();
   }

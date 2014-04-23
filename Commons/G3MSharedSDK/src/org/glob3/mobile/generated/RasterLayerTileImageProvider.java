@@ -37,35 +37,22 @@ public class RasterLayerTileImageProvider extends TileImageProvider
     return _layer.contribution(tile);
   }
 
-  public final void create(Tile tile, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
+  public final void create(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
   
-    /*
-    const URL          url;
-    const TimeInterval timeToCache;
-    const bool         readExpired;
-    const float        layerAlpha;
-    const Sector&      imageSector;
-    const RectangleF&  imageRectangle;
-     */
+    final String tileId = tile._id;
   
-  //  const long long requestId = _downloader->requestImage(url,
-  //                                                        tileDownloadPriority,
-  //                                                        timeToCache,
-  //                                                        readExpired,
-  //                                                        new RLTIP_ImageDownloadListener(listener,
-  //                                                                                        deleteListener,
-  //                                                                                        layerAlpha),
-  //                                                        true /* deleteListener */);
+    final long requestId = _layer.requestImage(layerTilesRenderParameters, tile, _downloader, tileDownloadPriority, new RLTIP_ImageDownloadListener(tileId, contribution, listener, deleteListener), true); // deleteListener
   
-    listener.imageCreationError(tile, "Not yet implemented");
-    if (deleteListener)
-    {
-      if (listener != null)
-         listener.dispose();
-    }
+  
+  //  aa;
+  
+  //  listener->imageCreationError(tile->_id, "Not yet implemented");
+  //  if (deleteListener) {
+  //    delete listener;
+  //  }
   
   }
 

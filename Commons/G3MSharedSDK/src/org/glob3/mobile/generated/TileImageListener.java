@@ -8,10 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 
-//class Tile;
 //class IImage;
-//class Sector;
-//class RectangleF;
 
 public abstract class TileImageListener
 {
@@ -19,10 +16,10 @@ public abstract class TileImageListener
   {
   }
 
-  public abstract void imageCreated(Tile tile, IImage image, String imageId, Sector imageSector, RectangleF imageRectangle, float alpha);
+  public abstract void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution);
 
-  public abstract void imageCreationError(Tile tile, String error);
+  public abstract void imageCreationError(String tileId, String error);
 
-  public abstract void imageCreationCanceled(Tile tile);
+  public abstract void imageCreationCanceled(String tileId);
 
 }
