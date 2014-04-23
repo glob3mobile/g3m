@@ -14,6 +14,7 @@
 class Tile;
 class TileImageListener;
 class Vector2I;
+class LayerTilesRenderParameters;
 
 class TileImageProvider {
 public:
@@ -22,7 +23,9 @@ public:
 
   virtual TileImageContribution contribution(const Tile* tile) = 0;
 
-  virtual void create(const Tile* tile,
+  virtual void create(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                      const Tile* tile,
+                      const TileImageContribution& contribution,
                       const Vector2I& resolution,
                       long long tileDownloadPriority,
                       TileImageListener* listener,

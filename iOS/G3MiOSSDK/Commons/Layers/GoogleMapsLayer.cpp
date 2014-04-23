@@ -112,6 +112,58 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
   return petitions;
 }
 
+const URL GoogleMapsLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                     const Tile* tile) const {
+  const Sector tileSector = tile->_sector;
+
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  // http://maps.googleapis.com/maps/api/staticmap?center=New+York,NY&zoom=13&size=600x300&key=AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc&sensor=false
+
+  /*
+   http://maps.googleapis.com/maps/api/staticmap
+   ?center=New+York,NY
+   &zoom=13
+   &size=600x300
+   &key=AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc
+   &sensor=false
+   */
+
+  isb->addString("http://maps.googleapis.com/maps/api/staticmap?sensor=false");
+
+  isb->addString("&center=");
+  isb->addDouble(tileSector._center._latitude._degrees);
+  isb->addString(",");
+  isb->addDouble(tileSector._center._longitude._degrees);
+
+  const int level = tile->_level;
+  isb->addString("&zoom=");
+  isb->addInt(level);
+
+  isb->addString("&size=");
+  isb->addInt(_parameters->_tileTextureResolution._x);
+  isb->addString("x");
+  isb->addInt(_parameters->_tileTextureResolution._y);
+
+  isb->addString("&format=jpg");
+
+
+  //  isb->addString("&maptype=roadmap);
+  //  isb->addString("&maptype=satellite");
+  isb->addString("&maptype=hybrid");
+  //  isb->addString("&maptype=terrain");
+
+
+  isb->addString("&key=");
+  isb->addString(_key);
+
+
+  const std::string path = isb->getString();
+  
+  delete isb;
+  return URL(path, false);
+}
+
 const std::string GoogleMapsLayer::description() const {
   return "[GoogleMapsLayer]";
 }

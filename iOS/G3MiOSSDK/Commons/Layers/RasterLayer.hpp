@@ -13,7 +13,8 @@
 
 #include "TileImageContribution.hpp"
 class TimeInterval;
-
+class IDownloader;
+class IImageDownloadListener;
 
 class RasterLayer : public Layer {
 protected:
@@ -34,6 +35,9 @@ protected:
 
   virtual const TileImageContribution rawContribution(const Tile* tile) const = 0;
 
+  virtual const URL createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                              const Tile* tile) const = 0;
+
 public:
   bool isEquals(const Layer* that) const;
 
@@ -41,6 +45,13 @@ public:
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
   const TileImageContribution contribution(const Tile* tile) const;
+
+  long long requestImage(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                         const Tile* tile,
+                         IDownloader* downloader,
+                         long long tileDownloadPriority,
+                         IImageDownloadListener* listener,
+                         bool deleteListener) const;
 
 };
 

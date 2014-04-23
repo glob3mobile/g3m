@@ -307,6 +307,33 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   return petitions;
 }
 
+const URL BingMapsLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                   const Tile* tile) const {
+  const IStringUtils* su = IStringUtils::instance();
+
+  const int level   = tile->_level;
+  const int column  = tile->_column;
+  const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
+  const int row     = numRows - tile->_row - 1;
+
+  const int subdomainsSize = _imageUrlSubdomains.size();
+  std::string subdomain = "";
+  if (subdomainsSize > 0) {
+    // select subdomain based on fixed data (instead of round-robin) to be cache friendly
+    const int subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
+    subdomain = _imageUrlSubdomains[subdomainsIndex];
+  }
+
+  const std::string quadkey = getQuadkey(level, column, row);
+
+  std::string path = _imageUrl;
+  path = su->replaceSubstring(path, "{subdomain}", subdomain);
+  path = su->replaceSubstring(path, "{quadkey}",   quadkey);
+  path = su->replaceSubstring(path, "{culture}",   _culture);
+
+  return URL(path, false);
+}
+
 const std::string BingMapsLayer::description() const {
   return "[BingMapsLayer]";
 }

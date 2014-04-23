@@ -17,27 +17,21 @@
 #include "RectangleF.hpp"
 #include "IStringBuilder.hpp"
 
-const std::string DebugTileImageProvider::ImageListener::getImageId(const Tile* tile) {
+const std::string DebugTileImageProvider::ImageListener::getImageId(const std::string& tileId) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("DebugTileImageProvider/");
-  isb->addInt(tile->_level);
-  isb->addString("/");
-  isb->addInt(tile->_column);
-  isb->addString("/");
-  isb->addInt(tile->_row);
+  isb->addString(tileId);
   const std::string s = isb->getString();
   delete isb;
   return s;
 }
 
 void DebugTileImageProvider::ImageListener::imageCreated(const IImage* image) {
-  const std::string imageId = getImageId(_tile);
-  _listener->imageCreated(_tile,
+  const std::string imageId = getImageId(_tileId);
+  _listener->imageCreated(_tileId,
                           image,
                           imageId,
-                          _tile->_sector,
-                          RectangleF(0, 0, image->getWidth(), image->getHeight()),
-                          1 /* alpha */);
+                          _contribution);
   if (_deleteListener) {
     delete _listener;
   }
@@ -49,6 +43,7 @@ TileImageContribution DebugTileImageProvider::contribution(const Tile* tile) {
 }
 
 void DebugTileImageProvider::create(const Tile* tile,
+                                    const TileImageContribution& contribution,
                                     const Vector2I& resolution,
                                     long long tileDownloadPriority,
                                     TileImageListener* listener,
@@ -62,7 +57,8 @@ void DebugTileImageProvider::create(const Tile* tile,
   canvas->setLineWidth(1);
   canvas->strokeRectangle(0, 0, width, height);
 
-  canvas->createImage(new DebugTileImageProvider::ImageListener(tile,
+  canvas->createImage(new DebugTileImageProvider::ImageListener(tile->_id,
+                                                                contribution,
                                                                 listener,
                                                                 deleteListener),
                       true);

@@ -10,25 +10,29 @@
 
 #include "RasterLayer.hpp"
 #include "TileImageListener.hpp"
-#include "IDownloader.hpp"
+//#include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "URL.hpp"
 #include "TimeInterval.hpp"
-
+#include "Tile.hpp"
 
 class RLTIP_ImageDownloadListener : public IImageDownloadListener {
 private:
+  const std::string           _tileId;
+  const TileImageContribution _contribution;
+
   TileImageListener* _listener;
   const bool         _deleteListener;
-  const float        _layerAlpha;
 
 public:
-  RLTIP_ImageDownloadListener(TileImageListener* listener,
-                              bool               deleteListener,
-                              float              layerAlpha) :
+  RLTIP_ImageDownloadListener(const std::string&           tileId,
+                              const TileImageContribution& contribution,
+                              TileImageListener*           listener,
+                              bool                         deleteListener) :
+  _tileId(tileId),
+  _contribution(contribution),
   _listener(listener),
-  _deleteListener(deleteListener),
-  _layerAlpha(layerAlpha)
+  _deleteListener(deleteListener)
   {
   }
 
@@ -41,67 +45,60 @@ public:
   void onDownload(const URL& url,
                   IImage* image,
                   bool expired) {
-#warning Diego at work
-//    _listener->imageCreated(<#const Tile *tile#>,
-//                            image,
-//                            url.getPath(),
-//                            <#const Sector &imageSector#>,
-//                            <#const RectangleF &imageRectangle#>,
-//                            _layerAlpha);
+    _listener->imageCreated(_tileId,
+                            image,
+                            url.getPath(),
+                            _contribution);
   }
 
   void onError(const URL& url) {
-#warning Diego at work
-//    _listener->imageCreationError(<#const Tile *tile#>,
-//                                  "Download error - " + url.getPath());
+    _listener->imageCreationError(_tileId,
+                                  "Download error - " + url.getPath());
   }
 
   void onCancel(const URL& url) {
-#warning Diego at work
-//    _listener->imageCreationCanceled(const Tile *tile);
+    _listener->imageCreationCanceled(_tileId);
   }
 
   void onCanceledDownload(const URL& url,
                           IImage* image,
                           bool expired) {
-#warning Diego at work
+    // do nothing
   }
-
 };
 
 TileImageContribution RasterLayerTileImageProvider::contribution(const Tile* tile) {
   return _layer->contribution(tile);
 }
 
-void RasterLayerTileImageProvider::create(const Tile* tile,
+void RasterLayerTileImageProvider::create(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                          const Tile* tile,
+                                          const TileImageContribution& contribution,
                                           const Vector2I& resolution,
                                           long long tileDownloadPriority,
                                           TileImageListener* listener,
                                           bool deleteListener) {
 #warning Diego at work!
 
-  /*
-  const URL          url;
-  const TimeInterval timeToCache;
-  const bool         readExpired;
-  const float        layerAlpha;
-  const Sector&      imageSector;
-  const RectangleF&  imageRectangle;
-   */
+  const std::string tileId = tile->_id;
 
-//  const long long requestId = _downloader->requestImage(url,
-//                                                        tileDownloadPriority,
-//                                                        timeToCache,
-//                                                        readExpired,
-//                                                        new RLTIP_ImageDownloadListener(listener,
-//                                                                                        deleteListener,
-//                                                                                        layerAlpha),
-//                                                        true /* deleteListener */);
+  const long long requestId = _layer->requestImage(layerTilesRenderParameters,
+                                                   tile,
+                                                   _downloader,
+                                                   tileDownloadPriority,
+                                                   new RLTIP_ImageDownloadListener(tileId,
+                                                                                   contribution,
+                                                                                   listener,
+                                                                                   deleteListener),
+                                                   true /* deleteListener */);
 
-  listener->imageCreationError(tile, "Not yet implemented");
-  if (deleteListener) {
-    delete listener;
-  }
+
+//  aa;
+
+//  listener->imageCreationError(tile->_id, "Not yet implemented");
+//  if (deleteListener) {
+//    delete listener;
+//  }
 
 }
 

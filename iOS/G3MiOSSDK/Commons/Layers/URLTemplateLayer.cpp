@@ -156,6 +156,53 @@ const std::string URLTemplateLayer::getPath(const LayerTilesRenderParameters* la
   return path;
 }
 
+const URL URLTemplateLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                      const Tile* tile) const {
+
+  if (_mu == NULL) {
+    _mu = IMathUtils::instance();
+  }
+
+  if (_su == NULL) {
+    _su = IStringUtils::instance();
+  }
+
+  const Sector sector = tile->_sector;
+
+  const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
+
+  const int level   = tile->_level;
+  const int column  = tile->_column;
+//  const int numRows = (int) (layerTilesRenderParameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
+  const int numRows = (int) (_parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
+  const int row     = numRows - tile->_row - 1;
+
+  const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
+  const double south = MercatorUtils::latitudeToMeters( sector._lower._latitude );
+  const double east  = MercatorUtils::longitudeToMeters( sector._upper._longitude );
+  const double west  = MercatorUtils::longitudeToMeters( sector._lower._longitude );
+
+  std::string path = _urlTemplate;
+  path = _su->replaceSubstring(path, "{width}",          _su->toString( tileTextureResolution._x          ) );
+  path = _su->replaceSubstring(path, "{height}",         _su->toString( tileTextureResolution._y          ) );
+  path = _su->replaceSubstring(path, "{x}",              _su->toString( column                            ) );
+  path = _su->replaceSubstring(path, "{y}",              _su->toString( row                               ) );
+  path = _su->replaceSubstring(path, "{y2}",             _su->toString( tile->_row                        ) );
+  path = _su->replaceSubstring(path, "{level}",          _su->toString( level                             ) );
+  path = _su->replaceSubstring(path, "{lowerLatitude}",  _su->toString( sector._lower._latitude._degrees  ) );
+  path = _su->replaceSubstring(path, "{lowerLongitude}", _su->toString( sector._lower._longitude._degrees ) );
+  path = _su->replaceSubstring(path, "{upperLatitude}",  _su->toString( sector._upper._latitude._degrees  ) );
+  path = _su->replaceSubstring(path, "{upperLongitude}", _su->toString( sector._upper._longitude._degrees ) );
+  path = _su->replaceSubstring(path, "{north}",          _su->toString( north                             ) );
+  path = _su->replaceSubstring(path, "{south}",          _su->toString( south                             ) );
+  path = _su->replaceSubstring(path, "{west}",           _su->toString( west                              ) );
+  path = _su->replaceSubstring(path, "{east}",           _su->toString( east                              ) );
+
+  return path;
+
+  return URL(path, false);
+}
+
 std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderContext* rc,
                                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,
                                                                 const Tile* tile) const {

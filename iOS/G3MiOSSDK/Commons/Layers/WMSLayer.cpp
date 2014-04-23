@@ -245,13 +245,147 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
 	return petitions;
 }
 
+const URL WMSLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                              const Tile* tile) const {
+
+  const std::string path = _mapServerURL.getPath();
+//  if (path.empty()) {
+//    return petitions;
+//  }
+
+  const Sector tileSector = tile->_sector;
+//  if (!_sector.touchesWith(tileSector)) {
+//    return petitions;
+//  }
+//
+  const Sector sector = tileSector.intersection(_sector);
+//  if (sector._deltaLatitude.isZero() ||
+//      sector._deltaLongitude.isZero() ) {
+//    return petitions;
+//  }
+
+  //TODO: MUST SCALE WIDTH,HEIGHT
+
+  const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
+
+	//Server name
+  std::string req = path;
+	if (req[req.size() - 1] != '?') {
+		req += '?';
+	}
+
+  //  //If the server refer to itself as localhost...
+  //  const int localhostPos = req.find("localhost");
+  //  if (localhostPos != -1) {
+  //    req = req.substr(localhostPos+9);
+  //
+  //    const int slashPos = req.find("/", 8);
+  //    std::string newHost = req.substr(0, slashPos);
+  //
+  //    req = newHost + req;
+  //  }
+
+  req += "REQUEST=GetMap&SERVICE=WMS";
+
+
+  switch (_mapServerVersion) {
+    case WMS_1_3_0:
+    {
+      req += "&VERSION=1.3.0";
+
+      IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+      isb->addString("&WIDTH=");
+      isb->addInt(tileTextureResolution._x);
+      isb->addString("&HEIGHT=");
+      isb->addInt(tileTextureResolution._y);
+
+      isb->addString("&BBOX=");
+      isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
+
+      req += isb->getString();
+      delete isb;
+
+      req += "&CRS=EPSG:4326";
+
+      break;
+    }
+    case WMS_1_1_0:
+    default:
+    {
+      // default is 1.1.1
+      req += "&VERSION=1.1.1";
+
+      IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+      isb->addString("&WIDTH=");
+      isb->addInt(tileTextureResolution._x);
+      isb->addString("&HEIGHT=");
+      isb->addInt(tileTextureResolution._y);
+
+      isb->addString("&BBOX=");
+      isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
+      isb->addString(",");
+      isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+
+      req += isb->getString();
+      delete isb;
+      break;
+    }
+  }
+
+  req += "&LAYERS=" + _mapLayer;
+
+	req += "&FORMAT=" + _format;
+
+  if (_srs != "") {
+    req += "&SRS=" + _srs;
+  }
+	else {
+    req += "&SRS=EPSG:4326";
+  }
+
+  //Style
+  if (_style != "") {
+    req += "&STYLES=" + _style;
+  }
+	else {
+    req += "&STYLES=";
+  }
+
+  //ASKING TRANSPARENCY
+  if (_isTransparent) {
+    req += "&TRANSPARENT=TRUE";
+  }
+  else {
+    req += "&TRANSPARENT=FALSE";
+  }
+
+  if (_extraParameter.compare("") != 0) {
+    req += "&";
+    req += _extraParameter;
+  }
+
+  return URL(req, false);
+}
+
 URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
                                 const Sector& tileSector) const {
   if (!_sector.touchesWith(tileSector)) {
     return URL::nullURL();
   }
 
-  const Sector sector = tileSector.intersection(_sector);
+  const Sector intersectionSector = tileSector.intersection(_sector);
 
 	//Server name
   std::string req = _queryServerURL.getPath();
@@ -293,13 +427,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       isb->addInt(_parameters->_tileTextureResolution._y);
 
       isb->addString("&BBOX=");
-      isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
+      isb->addDouble( toBBOXLatitude( intersectionSector._lower._latitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
+      isb->addDouble( toBBOXLongitude( intersectionSector._lower._longitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+      isb->addDouble( toBBOXLatitude( intersectionSector._upper._latitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
+      isb->addDouble( toBBOXLongitude( intersectionSector._upper._longitude ) );
 
       req += isb->getString();
 
@@ -323,13 +457,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
       isb->addInt(_parameters->_tileTextureResolution._y);
 
       isb->addString("&BBOX=");
-      isb->addDouble( toBBOXLongitude( sector._lower._longitude ) );
+      isb->addDouble( toBBOXLongitude( intersectionSector._lower._longitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLatitude( sector._lower._latitude ) );
+      isb->addDouble( toBBOXLatitude( intersectionSector._lower._latitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLongitude( sector._upper._longitude ) );
+      isb->addDouble( toBBOXLongitude( intersectionSector._upper._longitude ) );
       isb->addString(",");
-      isb->addDouble( toBBOXLatitude( sector._upper._latitude ) );
+      isb->addDouble( toBBOXLatitude( intersectionSector._upper._latitude ) );
 
       req += isb->getString();
 
@@ -347,11 +481,11 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   double u;
   double v;
   if (_parameters->_mercator) {
-    u = sector.getUCoordinate(position._longitude);
+    u = intersectionSector.getUCoordinate(position._longitude);
     v = MercatorUtils::getMercatorV(position._latitude);
   }
   else {
-    const Vector2D uv = sector.getUVCoordinates(position);
+    const Vector2D uv = intersectionSector.getUVCoordinates(position);
     u = uv._x;
     v = uv._y;
   }

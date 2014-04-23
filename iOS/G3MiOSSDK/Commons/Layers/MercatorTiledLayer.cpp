@@ -130,6 +130,51 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   return petitions;
 }
 
+const URL MercatorTiledLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                        const Tile* tile) const {
+  const IMathUtils* mu = IMathUtils::instance();
+
+  const int level   = tile->_level;
+  const int column  = tile->_column;
+  const int numRows = (int) mu->pow(2.0, level);
+  const int row     = numRows - tile->_row - 1;
+
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+
+  isb->addString(_protocol);
+
+  const int subdomainsSize = _subdomains.size();
+  if (subdomainsSize > 0) {
+    // select subdomain based on fixed data (instead of round-robin) to be cache friendly
+    const int subdomainsIndex =  mu->abs(level + column + row) % subdomainsSize;
+#ifdef C_CODE
+    isb->addString(_subdomains[subdomainsIndex]);
+#endif
+#ifdef JAVA_CODE
+    isb.addString(_subdomains.get(subdomainsIndex));
+#endif
+  }
+
+  isb->addString(_domain);
+  isb->addString("/");
+
+  isb->addInt(level);
+  isb->addString("/");
+
+  isb->addInt(column);
+  isb->addString("/");
+
+  isb->addInt(row);
+  isb->addString(".");
+  isb->addString(_imageFormat);
+
+  const std::string path = isb->getString();
+  
+  delete isb;
+
+  return URL(path, false);
+}
+
 const std::string MercatorTiledLayer::description() const {
   return "[MercatorTiledLayer]";
 }

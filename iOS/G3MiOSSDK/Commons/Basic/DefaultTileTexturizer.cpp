@@ -107,28 +107,19 @@ private:
   DTT_TileTextureBuilder* _builder;
 
 public:
-  DTT_TileImageListener(DTT_TileTextureBuilder* builder) :
-  _builder(builder)
-  {
-  }
+  DTT_TileImageListener(DTT_TileTextureBuilder* builder);
 
-  virtual ~DTT_TileImageListener() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-  }
+  virtual ~DTT_TileImageListener();
 
-  void imageCreated(const Tile*        tile,
-                    const IImage*      image,
-                    const std::string& imageId,
-                    const Sector&      imageSector,
-                    const RectangleF&  imageRectangle,
-                    const float        alpha);
+  void imageCreated(const std::string&           tileId,
+                    const IImage*                image,
+                    const std::string&           imageId,
+                    const TileImageContribution& contribution);
 
-  void imageCreationError(const Tile*        tile,
+  void imageCreationError(const std::string& tileId,
                           const std::string& error);
 
-  void imageCreationCanceled(const Tile* tile);
+  void imageCreationCanceled(const std::string& tileId);
 };
 
 
@@ -283,7 +274,11 @@ public:
         }
       }
       else {
-        _tileImageProvider->create(_tile,
+#warning TODO
+        const LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
+        _tileImageProvider->create(layerTilesRenderParameters,
+                                   _tile,
+                                   contribution,
                                    _tileTextureResolution,
                                    _tileDownloadPriority,
                                    new DTT_TileImageListener(this),
@@ -320,7 +315,7 @@ public:
   }
 
   ~DTT_TileTextureBuilder() {
-    delete _tileImageProvider;
+//    delete _tileImageProvider;
 #ifdef JAVA_CODE
     super.dispose();
 #endif
@@ -345,11 +340,9 @@ public:
     return true;
   }
 
-  void imageCreated(const IImage*      image,
-                    const std::string& imageId,
-                    const Sector&      imageSector,
-                    const RectangleF&  imageRectangle,
-                    const float        alpha) {
+  void imageCreated(const IImage*                image,
+                    const std::string&           imageId,
+                    const TileImageContribution& contribution) {
     if (!_canceled && (_tile != NULL) && (_texturedMesh != NULL)) {
       if (uploadTexture(image, imageId)) {
         _tile->setTextureSolved(true);
@@ -371,21 +364,32 @@ public:
 };
 
 
-void DTT_TileImageListener::imageCreated(const Tile*        tile,
-                                         const IImage*      image,
-                                         const std::string& imageId,
-                                         const Sector&      imageSector,
-                                         const RectangleF&  imageRectangle,
-                                         const float        alpha) {
-  _builder->imageCreated(image, imageId, imageSector, imageRectangle, alpha);
+DTT_TileImageListener::DTT_TileImageListener(DTT_TileTextureBuilder* builder) :
+_builder(builder)
+{
+  _builder->_retain();
 }
 
-void DTT_TileImageListener::imageCreationError(const Tile*        tile,
+DTT_TileImageListener::~DTT_TileImageListener() {
+  _builder->_release();
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+void DTT_TileImageListener::imageCreated(const std::string&           tileId,
+                                         const IImage*                image,
+                                         const std::string&           imageId,
+                                         const TileImageContribution& contribution) {
+  _builder->imageCreated(image, imageId, contribution);
+}
+
+void DTT_TileImageListener::imageCreationError(const std::string& tileId,
                                                const std::string& error) {
   _builder->imageCreationError(error);
 }
 
-void DTT_TileImageListener::imageCreationCanceled(const Tile* tile) {
+void DTT_TileImageListener::imageCreationCanceled(const std::string& tileId) {
   _builder->imageCreationCanceled();
 }
 
@@ -476,10 +480,10 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
 
 #warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
 //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
-  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
+//  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
 
-//  TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
-//                                                                        layerTilesRenderParameters);
+  TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
+                                                                        layerTilesRenderParameters);
 
   if (tileImageProvider == NULL) {
 #warning TODO

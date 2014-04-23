@@ -17,17 +17,20 @@ class DebugTileImageProvider : public CanvasTileImageProvider {
 private:
   class ImageListener : public IImageListener {
   private:
-    const Tile*        _tile;
-    TileImageListener* _listener;
-    bool               _deleteListener;
+    const std::string           _tileId;
+    const TileImageContribution _contribution;
+    TileImageListener*          _listener;
+    bool                        _deleteListener;
 
-    const std::string getImageId(const Tile* tile);
+    static const std::string getImageId(const std::string& tileId);
 
   public:
-    ImageListener(const Tile* tile,
-                  TileImageListener* listener,
-                  bool deleteListener) :
-    _tile(tile),
+    ImageListener(const std::string&           tileId,
+                  const TileImageContribution& contribution,
+                  TileImageListener*           listener,
+                  bool                         deleteListener) :
+    _tileId(tileId),
+    _contribution(contribution),
     _listener(listener),
     _deleteListener(deleteListener)
     {
@@ -47,6 +50,7 @@ public:
   TileImageContribution contribution(const Tile* tile);
 
   void create(const Tile* tile,
+              const TileImageContribution& contribution,
               const Vector2I& resolution,
               long long tileDownloadPriority,
               TileImageListener* listener,

@@ -11,7 +11,8 @@
 #include "RasterLayerTileImageProvider.hpp"
 #include "LayerCondition.hpp"
 #include "Context.hpp"
-
+#include "IDownloader.hpp"
+#include "URL.hpp"
 
 RasterLayer::RasterLayer(LayerCondition* condition,
                          const TimeInterval& timeToCache,
@@ -58,6 +59,21 @@ const TileImageContribution RasterLayer::contribution(const Tile* tile) const {
   if ((_condition == NULL) || _condition->isAvailable(tile)) {
     return rawContribution(tile);
   }
-//  return NONE;
+  //  return NONE;
   return TileImageContribution::none();
+}
+
+long long RasterLayer::requestImage(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                    const Tile* tile,
+                                    IDownloader* downloader,
+                                    long long tileDownloadPriority,
+                                    IImageDownloadListener* listener,
+                                    bool deleteListener) const {
+  return downloader->requestImage(createURL(layerTilesRenderParameters,
+                                            tile),
+                                  tileDownloadPriority,
+                                  getTimeToCache(),
+                                  _readExpired,
+                                  listener,
+                                  deleteListener);
 }

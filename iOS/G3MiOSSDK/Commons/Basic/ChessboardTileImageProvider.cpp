@@ -60,12 +60,10 @@ void ChessboardTileImageProvider::imageCreated(const IImage* image,
                                                bool deleteListener) {
   _image = image->shallowCopy();
 
-  listener->imageCreated(tile,
+  listener->imageCreated(tile->_id,
                          image,
                          "ChessboardTileImageProvider_image",
-                         tile->_sector,
-                         RectangleF(0, 0, image->getWidth(), image->getHeight()),
-                         1);
+                         TileImageContribution::fullCoverageOpaque());
 
   if (deleteListener) {
     delete listener;
@@ -73,6 +71,7 @@ void ChessboardTileImageProvider::imageCreated(const IImage* image,
 }
 
 void ChessboardTileImageProvider::create(const Tile* tile,
+                                         const TileImageContribution& contribution,
                                          const Vector2I& resolution,
                                          long long tileDownloadPriority,
                                          TileImageListener* listener,
@@ -146,12 +145,10 @@ void ChessboardTileImageProvider::create(const Tile* tile,
   }
   else {
     IImage* image = _image->shallowCopy();
-    listener->imageCreated(tile,
+    listener->imageCreated(tile->_id,
                            image,
                            "ChessboardTileImageProvider_image",
-                           tile->_sector,
-                           RectangleF(0, 0, image->getWidth(), image->getHeight()),
-                           1);
+                           contribution);
     if (deleteListener) {
       delete listener;
     }
