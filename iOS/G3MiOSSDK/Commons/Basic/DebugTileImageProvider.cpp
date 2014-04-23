@@ -44,7 +44,8 @@ void DebugTileImageProvider::ImageListener::imageCreated(const IImage* image) {
 }
 
 TileImageContribution DebugTileImageProvider::contribution(const Tile* tile) {
-  return FULL_COVERAGE_TRANSPARENT;
+  //return FULL_COVERAGE_TRANSPARENT;
+  return TileImageContribution::fullCoverageTransparent(1);
 }
 
 void DebugTileImageProvider::create(const Tile* tile,

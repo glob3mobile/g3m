@@ -15,10 +15,13 @@
 #include "FrameTasksExecutor.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "TileImageProvider.hpp"
-#include "DebugTileImageProvider.hpp"
 #include "TileImageListener.hpp"
 #include "TexturesHandler.hpp"
 #include "ITexturizerData.hpp"
+
+#warning remove include
+#include "DebugTileImageProvider.hpp"
+#include "ChessboardTileImageProvider.hpp"
 
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
@@ -272,7 +275,8 @@ public:
 #warning Diego at work!
     if (!_canceled) {
       const TileImageContribution contribution = _tileImageProvider->contribution(_tile);
-      if (contribution == NONE) {
+      //if (contribution == NONE) {
+      if (contribution.isNone()) {
         if (_tile != NULL) {
 #warning remove this!
           _tile->setTextureSolved(true);
@@ -472,9 +476,10 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
 
 #warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
 //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
+  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
 
-  TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
-                                                                        layerTilesRenderParameters);
+//  TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
+//                                                                        layerTilesRenderParameters);
 
   if (tileImageProvider == NULL) {
 #warning TODO

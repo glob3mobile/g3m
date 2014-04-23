@@ -39,9 +39,7 @@ _isTransparent(isTransparent),
 _su(NULL),
 _mu(NULL)
 {
-
 }
-
 
 URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                                                 const Sector&       sector,
@@ -81,7 +79,6 @@ URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
                               LayerTilesRenderParameters::createDefaultWGS84(sector, firstLevel, maxLevel),
                               transparency);
 }
-
 
 bool URLTemplateLayer::rawIsEquals(const Layer* that) const {
   URLTemplateLayer* t = (URLTemplateLayer*) that;
@@ -187,7 +184,6 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
   return petitions;
 }
 
-
 RenderState URLTemplateLayer::getRenderState() {
   _errors.clear();
   if (_urlTemplate.compare("") == 0) {
@@ -200,16 +196,31 @@ RenderState URLTemplateLayer::getRenderState() {
   return RenderState::ready();
 }
 
-TileImageContribution URLTemplateLayer::rawContribution(const Tile* tile) const {
+const TileImageContribution URLTemplateLayer::rawContribution(const Tile* tile) const {
   const Sector tileSector = tile->_sector;
 
+//  if (!_sector.touchesWith(tileSector)) {
+//    return NONE;
+//  }
+//  else if (_sector.fullContains(tileSector)) {
+//    return (_isTransparent || (_transparency < 1)) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
+//  }
+//  else {
+//    return (_isTransparent || (_transparency < 1)) ? PARTIAL_COVERAGE_TRANSPARENT : PARTIAL_COVERAGE_OPAQUE;
+//  }
+
   if (!_sector.touchesWith(tileSector)) {
-    return NONE;
+    return TileImageContribution::none();
   }
   else if (_sector.fullContains(tileSector)) {
-    return _isTransparent ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::fullCoverageTransparent(_transparency)
+            : TileImageContribution::fullCoverageOpaque());
   }
   else {
-    return _isTransparent ? PARTIAL_COVERAGE_TRANSPARENT : PARTIAL_COVERAGE_OPAQUE;
+    const Sector contributionSector = _sector.intersection(tileSector);
+    return ((_isTransparent || (_transparency < 1))
+            ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
+            : TileImageContribution::partialCoverageOpaque(contributionSector));
   }
 }

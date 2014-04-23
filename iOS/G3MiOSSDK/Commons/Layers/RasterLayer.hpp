@@ -32,7 +32,7 @@ protected:
     return _readExpired;
   }
 
-  virtual TileImageContribution rawContribution(const Tile* tile) const = 0;
+  virtual const TileImageContribution rawContribution(const Tile* tile) const = 0;
 
 public:
   bool isEquals(const Layer* that) const;
@@ -40,7 +40,7 @@ public:
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
-  TileImageContribution contribution(const Tile* tile) const;
+  const TileImageContribution contribution(const Tile* tile) const;
 
 };
 

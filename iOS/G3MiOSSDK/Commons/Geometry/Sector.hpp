@@ -23,6 +23,8 @@ class Color;
 
 class Sector {
 private:
+  static const Sector FULL_SPHERE;
+
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
   // this value is only used in the method Sector::isBackOriented
@@ -95,11 +97,8 @@ public:
 
   Sector mergedWith(const Sector& that) const;
 
-  static Sector fullSphere() {
-    return Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
-                  Geodetic2D(Angle::fromDegrees( 90), Angle::fromDegrees( 180)));
-  }
-
+  static Sector fullSphere();
+  
   bool contains(const Angle& latitude,
                 const Angle& longitude) const;
 

@@ -41,7 +41,7 @@ protected:
 
   bool rawIsEquals(const Layer* that) const;
 
-  TileImageContribution rawContribution(const Tile* tile) const;
+  const TileImageContribution rawContribution(const Tile* tile) const;
 
 public:
   static URLTemplateLayer* newMercator(const std::string&  urlTemplate,
