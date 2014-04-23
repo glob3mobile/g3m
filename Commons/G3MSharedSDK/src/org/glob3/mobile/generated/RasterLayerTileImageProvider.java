@@ -55,7 +55,10 @@ public class RasterLayerTileImageProvider extends TileImageProvider
   //
   ////  aa;
   
-    listener.imageCreationError(tile, "NOT YET IMPLEMENTED");
+    std.set<String> errors = new std.set<String>();
+    errors.insert("Not yet implemented");
+  
+    listener.imageCreationError(tile, errors);
     if (deleteListener)
     {
       if (listener != null)

@@ -470,7 +470,7 @@ public class LayerSet
   
     if (petitions.isEmpty())
     {
-      rc.getLogger().logWarning("Can't create map petitions for tile %s", tile.getKey().description());
+      rc.getLogger().logWarning("Can't create map petitions for tile %s", tile._id);
     }
   
     return petitions;

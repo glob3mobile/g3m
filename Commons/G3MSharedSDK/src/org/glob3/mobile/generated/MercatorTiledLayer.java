@@ -187,7 +187,6 @@ public class MercatorTiledLayer extends RasterLayer
     return "[MercatorTiledLayer]";
   }
 
-
   public MercatorTiledLayer copy()
   {
     return new MercatorTiledLayer(_protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
@@ -197,4 +196,5 @@ public class MercatorTiledLayer extends RasterLayer
   {
     return RenderState.ready();
   }
+
 }
