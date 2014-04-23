@@ -14,8 +14,7 @@
 #include "GEO2DLineRasterStyle.hpp"
 #include "GEOLineRasterSymbol.hpp"
 
-const Sector Sector::FULL_SPHERE = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
-                                          Geodetic2D(Angle::fromDegrees( 90), Angle::fromDegrees( 180)));
+const Sector Sector::FULL_SPHERE = Sector::fromDegrees(-90, -180, 90, 180);
 
 Sector Sector::fullSphere() {
   return FULL_SPHERE;
