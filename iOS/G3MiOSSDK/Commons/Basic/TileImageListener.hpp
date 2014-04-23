@@ -14,6 +14,7 @@ class IImage;
 class Sector;
 class RectangleF;
 #include <string>
+#include <set>
 
 class TileImageListener {
 public:
@@ -28,7 +29,7 @@ public:
                             const float        alpha) = 0;
 
   virtual void imageCreationError(const Tile* tile,
-                                  const std::string& error) = 0;
+                                  const std::set<std::string>& errors) = 0;
 
   virtual void imageCreationCanceled(const Tile* tile) = 0;
 

@@ -13,7 +13,6 @@
 #include "RenderState.hpp"
 #include "ChangedListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
-#include "TileKey.hpp"
 #include "Context.hpp"
 
 LayerSet::~LayerSet() {
@@ -374,7 +373,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
 
   if (petitions.empty()) {
     rc->getLogger()->logWarning("Can't create map petitions for tile %s",
-                                tile->getKey().description().c_str());
+                                tile->_id.c_str());
   }
   
   return petitions;

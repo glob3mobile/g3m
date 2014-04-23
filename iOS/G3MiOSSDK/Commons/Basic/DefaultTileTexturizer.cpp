@@ -123,7 +123,7 @@ public:
                     const float        alpha);
 
   void imageCreationError(const Tile* tile,
-                          const std::string& error);
+                          const std::set<std::string>& errors);
 
   void imageCreationCanceled(const Tile* tile);
 };
@@ -355,9 +355,15 @@ public:
     delete image;
   }
 
-  void imageCreationError(const std::string& error) {
+  void imageCreationError(const std::set<std::string>& errors) {
 #warning Diego at work
-    ILogger::instance()->logError("%s", error.c_str());
+//    ILogger::instance()->logError("%s", error.c_str());
+
+    std::set<std::string>::iterator it;
+    for (it = errors.begin(); it != errors.end(); ++it) {
+      const std::string error = *it;
+      ILogger::instance()->logError("%s", error.c_str());
+    }
   }
 
   void imageCreationCanceled() {
@@ -377,8 +383,8 @@ void DTT_TileImageListener::imageCreated(const Tile*        tile,
 }
 
 void DTT_TileImageListener::imageCreationError(const Tile* tile,
-                                               const std::string& error) {
-  _builder->imageCreationError(error);
+                                               const std::set<std::string>& errors) {
+  _builder->imageCreationError(errors);
 }
 
 void DTT_TileImageListener::imageCreationCanceled(const Tile* tile) {

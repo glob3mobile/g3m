@@ -403,7 +403,7 @@ public:
     std::vector<RectangleF*> sourceRects;
     std::vector<RectangleF*> destRects;
     std::vector<float> transparencies;
-    std::string textureId = _tile->getKey().tinyDescription();
+    std::string textureId = _tile->_id;
 
     const Sector tileSector = _tile->_sector;
 

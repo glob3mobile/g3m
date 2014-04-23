@@ -10,7 +10,6 @@
 #define G3MiOSSDK_MultiLayerTileTexturizer
 
 #include "TileTexturizer.hpp"
-#include "TileKey.hpp"
 #include "Geodetic3D.hpp"
 
 class IGLTextureId;

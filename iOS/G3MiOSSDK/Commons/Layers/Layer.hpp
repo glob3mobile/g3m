@@ -80,8 +80,6 @@ public:
 
   virtual bool isAvailable(const Tile* tile) const;
 
-  //  virtual bool isTransparent() const = 0;
-
   virtual URL getFeatureInfoURL(const Geodetic2D& position,
                                 const Sector& sector) const = 0;
 
@@ -116,7 +114,6 @@ public:
   virtual bool isEquals(const Layer* that) const;
 
   virtual Layer* copy() const = 0;
-
 
   const std::string getTitle() const;
 

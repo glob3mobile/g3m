@@ -21,8 +21,21 @@
 #include "PlanetRenderer.hpp"
 #include "FlatColorMesh.hpp"
 #include "MercatorUtils.hpp"
-#include "TileKey.hpp"
 #include "DecimatedSubviewElevationData.hpp"
+
+std::string Tile::createTileId(int level,
+                               int row,
+                               int column) {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addInt(level);
+  isb->addString("/");
+  isb->addInt(row);
+  isb->addString("/");
+  isb->addInt(column);
+  std::string s = isb->getString();
+  delete isb;
+  return s;
+}
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -69,7 +82,8 @@ _southArcSegmentRatioSquared(0),
 _eastArcSegmentRatioSquared(0),
 _westArcSegmentRatioSquared(0),
 _rendered(false),
-_tileRenderingListener(NULL)
+_tileRenderingListener(NULL),
+_id( createTileId(level, row, column) )
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -771,9 +785,9 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   return subTiles;
 }
 
-const TileKey Tile::getKey() const {
-  return TileKey(_level, _row, _column);
-}
+//const TileKey Tile::getKey() const {
+//  return TileKey(_level, _row, _column);
+//}
 
 const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
   if (_sector.contains(position._latitude, position._longitude)) {

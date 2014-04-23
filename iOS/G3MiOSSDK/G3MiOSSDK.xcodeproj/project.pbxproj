@@ -325,7 +325,6 @@
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
 		CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */; };
-		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFD15C4416E78C7D004DC360 /* OSMLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD15C4216E78C7D004DC360 /* OSMLayer.cpp */; };
 		CFD15C4516E7930A004DC360 /* OSMLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD15C4316E78C7D004DC360 /* OSMLayer.hpp */; };
 		CFD15C4616E793A7004DC360 /* Interpolator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFB5274F16D5607F008374C2 /* Interpolator.hpp */; };
@@ -528,7 +527,6 @@
 		E780A53416D3AE37000F0395 /* LayerTouchEventListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFE0844015E27A310004EC0E /* LayerTouchEventListener.hpp */; };
 		E780A53616D3AE37000F0395 /* TexturesHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */; };
 		E780A53716D3AE37000F0395 /* Tile.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 38D786E41587B3DD003BBC75 /* Tile.hpp */; };
-		E780A53816D3AE37000F0395 /* TileKey.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; };
 		E780A53916D3AE37000F0395 /* PlanetRendererBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = E705123B165E782C00AEADB9 /* PlanetRendererBuilder.hpp */; };
 		E780A53A16D3AE37000F0395 /* TileTessellator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */; };
 		E780A53B16D3AE37000F0395 /* TileTexturizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; };
@@ -1012,7 +1010,6 @@
 				E780A53416D3AE37000F0395 /* LayerTouchEventListener.hpp in CopyFiles */,
 				E780A53616D3AE37000F0395 /* TexturesHandler.hpp in CopyFiles */,
 				E780A53716D3AE37000F0395 /* Tile.hpp in CopyFiles */,
-				E780A53816D3AE37000F0395 /* TileKey.hpp in CopyFiles */,
 				E780A53916D3AE37000F0395 /* PlanetRendererBuilder.hpp in CopyFiles */,
 				E780A53A16D3AE37000F0395 /* TileTessellator.hpp in CopyFiles */,
 				E780A53B16D3AE37000F0395 /* TileTexturizer.hpp in CopyFiles */,
@@ -1487,8 +1484,6 @@
 		CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleI.hpp; path = Commons/Geometry/RectangleI.hpp; sourceTree = "<group>"; };
 		CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TrailsRenderer.cpp; path = Commons/Rendererers/TrailsRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TrailsRenderer.hpp; path = Commons/Rendererers/TrailsRenderer.hpp; sourceTree = "<group>"; };
-		CFD0021915D3C94C00735FD8 /* TileKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileKey.cpp; path = Commons/Basic/TileKey.cpp; sourceTree = "<group>"; };
-		CFD0021A15D3C94C00735FD8 /* TileKey.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileKey.hpp; path = Commons/Basic/TileKey.hpp; sourceTree = "<group>"; };
 		CFD15C4216E78C7D004DC360 /* OSMLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OSMLayer.cpp; sourceTree = "<group>"; };
 		CFD15C4316E78C7D004DC360 /* OSMLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OSMLayer.hpp; sourceTree = "<group>"; };
 		CFD1A47316602B050039EFA9 /* ShapeScaleEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapeScaleEffect.cpp; path = Commons/Rendererers/ShapeScaleEffect.cpp; sourceTree = "<group>"; };
@@ -2011,8 +2006,6 @@
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
 				D89D9CC6172E95370058CA9D /* TileElevationDataRequest.cpp */,
 				D89D9CC7172E95370058CA9D /* TileElevationDataRequest.hpp */,
-				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
-				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
 				CF5363DD178B3D1900EE3D49 /* TileRasterizer.cpp */,
 				CF5363DE178B3D1900EE3D49 /* TileRasterizer.hpp */,
 				D80D525815EE698E00ACEA16 /* TileTessellator.cpp */,
@@ -2827,7 +2820,6 @@
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */,
 				CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */,
-				CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */,
 				CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */,
 				CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */,
 				CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */,

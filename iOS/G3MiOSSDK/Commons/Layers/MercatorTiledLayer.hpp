@@ -24,7 +24,7 @@ protected:
   protected final java.util.ArrayList<String> _subdomains;
 #endif
   const std::string _imageFormat;
-  
+
   const Sector _sector;
   const int    _initialLevel;
   const int    _maxLevel;
@@ -59,10 +59,10 @@ public:
 
   virtual const std::string description() const;
 
-
   virtual MercatorTiledLayer* copy() const;
 
   virtual RenderState getRenderState();
+  
 };
 
 #endif

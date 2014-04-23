@@ -172,12 +172,17 @@ private:
   bool _rendered;
   TileRenderingListener* _tileRenderingListener;
 
+  static std::string createTileId(int level,
+                                  int row,
+                                  int column);
+
 public:
-  const Sector    _sector;
-  const bool      _mercator;
-  const int       _level;
-  const int       _row;
-  const int       _column;
+  const Sector      _sector;
+  const bool        _mercator;
+  const int         _level;
+  const int         _row;
+  const int         _column;
+  const std::string _id;
 
   Tile(TileTexturizer* texturizer,
        Tile* parent,
@@ -241,7 +246,8 @@ public:
               bool logTilesPetitions,
               TileRenderingListener* tileRenderingListener);
 
-  const TileKey getKey() const;
+//  const TileKey getKey() const;
+//  const std::string getId() const;
 
   void setTextureSolved(bool textureSolved);
 
