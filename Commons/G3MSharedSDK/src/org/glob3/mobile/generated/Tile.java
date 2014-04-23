@@ -466,11 +466,26 @@ public class Tile
   private boolean _rendered;
   private TileRenderingListener _tileRenderingListener;
 
+  private static String createTileId(int level, int row, int column)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addInt(level);
+    isb.addString("/");
+    isb.addInt(row);
+    isb.addString("/");
+    isb.addInt(column);
+    String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
   public final Sector _sector ;
   public final boolean _mercator;
   public final int _level;
   public final int _row;
   public final int _column;
+  public final String _id;
 
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer)
   {
@@ -512,6 +527,7 @@ public class Tile
      _westArcSegmentRatioSquared = 0;
      _rendered = false;
      _tileRenderingListener = null;
+     _id = createTileId(level, row, column);
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -724,10 +740,8 @@ public class Tile
   
   }
 
-  public final TileKey getKey()
-  {
-    return new TileKey(_level, _row, _column);
-  }
+//  const TileKey getKey() const;
+//  const std::string getId() const;
 
   public final void setTextureSolved(boolean textureSolved)
   {
@@ -804,6 +818,11 @@ public class Tile
     }
   }
 
+
+  //const TileKey Tile::getKey() const {
+  //  return TileKey(_level, _row, _column);
+  //}
+  
   public final Tile getDeepestTileContaining(Geodetic3D position)
   {
     if (_sector.contains(position._latitude, position._longitude))

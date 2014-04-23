@@ -185,7 +185,7 @@ public class TileTextureBuilder extends RCObject
     java.util.ArrayList<RectangleF> sourceRects = new java.util.ArrayList<RectangleF>();
     java.util.ArrayList<RectangleF> destRects = new java.util.ArrayList<RectangleF>();
     java.util.ArrayList<Float> transparencies = new java.util.ArrayList<Float>();
-    String textureId = _tile.getKey().tinyDescription();
+    String textureId = _tile._id;
 
     final Sector tileSector = _tile._sector;
 

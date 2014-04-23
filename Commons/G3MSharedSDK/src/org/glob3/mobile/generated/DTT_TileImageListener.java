@@ -20,9 +20,9 @@ public class DTT_TileImageListener extends TileImageListener
     _builder.imageCreated(image, imageId, imageSector, imageRectangle, alpha);
   }
 
-  public final void imageCreationError(Tile tile, String error)
+  public final void imageCreationError(Tile tile, std.set<String> errors)
   {
-    _builder.imageCreationError(error);
+    _builder.imageCreationError(errors);
   }
 
   public final void imageCreationCanceled(Tile tile)

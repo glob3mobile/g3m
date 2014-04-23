@@ -118,8 +118,6 @@ public abstract class Layer
     return _condition.isAvailable(tile);
   }
 
-  //  virtual bool isTransparent() const = 0;
-
   public abstract URL getFeatureInfoURL(Geodetic2D position, Sector sector);
 
   public abstract RenderState getRenderState();
@@ -230,7 +228,6 @@ public abstract class Layer
   }
 
   public abstract Layer copy();
-
 
   public final String getTitle()
   {
