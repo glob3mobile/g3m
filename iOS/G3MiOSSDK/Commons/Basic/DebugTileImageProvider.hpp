@@ -49,7 +49,8 @@ public:
 
   TileImageContribution contribution(const Tile* tile);
 
-  void create(const Tile* tile,
+  void create(const LayerTilesRenderParameters* layerTilesRenderParameters,
+              const Tile* tile,
               const TileImageContribution& contribution,
               const Vector2I& resolution,
               long long tileDownloadPriority,

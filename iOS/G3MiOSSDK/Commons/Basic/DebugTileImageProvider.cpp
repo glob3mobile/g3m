@@ -42,7 +42,8 @@ TileImageContribution DebugTileImageProvider::contribution(const Tile* tile) {
   return TileImageContribution::fullCoverageTransparent(1);
 }
 
-void DebugTileImageProvider::create(const Tile* tile,
+void DebugTileImageProvider::create(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                    const Tile* tile,
                                     const TileImageContribution& contribution,
                                     const Vector2I& resolution,
                                     long long tileDownloadPriority,

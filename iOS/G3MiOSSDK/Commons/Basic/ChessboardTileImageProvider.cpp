@@ -70,7 +70,8 @@ void ChessboardTileImageProvider::imageCreated(const IImage* image,
   }
 }
 
-void ChessboardTileImageProvider::create(const Tile* tile,
+void ChessboardTileImageProvider::create(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                         const Tile* tile,
                                          const TileImageContribution& contribution,
                                          const Vector2I& resolution,
                                          long long tileDownloadPriority,

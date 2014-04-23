@@ -46,15 +46,15 @@ public:
 
   /**
    Creates an URL.
-   
+
    @param escapePath Escape the given path (true) or take it as it is given (false)
    */
-  URL(const std::string& path,
-      const bool escapePath=false) :
+  explicit URL(const std::string& path,
+               const bool escapePath=false) :
   _path(  escapePath ? escape(path) : path  )
   {
   }
-
+  
   URL(const URL& parent,
       const std::string& path) :
   _path( concatenatePath(parent, path) )

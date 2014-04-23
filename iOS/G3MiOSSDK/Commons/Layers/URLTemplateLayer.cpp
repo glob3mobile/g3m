@@ -198,8 +198,6 @@ const URL URLTemplateLayer::createURL(const LayerTilesRenderParameters* layerTil
   path = _su->replaceSubstring(path, "{west}",           _su->toString( west                              ) );
   path = _su->replaceSubstring(path, "{east}",           _su->toString( east                              ) );
 
-  return path;
-
   return URL(path, false);
 }
 
