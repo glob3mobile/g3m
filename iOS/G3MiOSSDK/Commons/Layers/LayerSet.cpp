@@ -14,11 +14,15 @@
 #include "ChangedListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "Context.hpp"
+#include "TileImageProvider.hpp"
+#include "CompositeTileImageProvider.hpp"
 
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
+
+  delete _tileImageProvider;
 }
 
 bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
@@ -154,6 +158,8 @@ void LayerSet::layerChanged(const Layer* layer) const {
 }
 
 void LayerSet::layersChanged() const {
+  delete _tileImageProvider;
+  _tileImageProvider = NULL;
   if (_listener != NULL) {
     _listener->changed();
   }
@@ -381,19 +387,31 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* 
 
 TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const {
+  TileImageProvider*          singleTileImageProvider    = NULL;
+  CompositeTileImageProvider* compositeTileImageProvider = NULL;
+
   const int layersSize = _layers.size();
-  if (layersSize == 0) {
-    return NULL;
+  for (int i = 0; i < layersSize; i++) {
+    Layer* layer = _layers[i];
+    if (layer->isEnable()) {
+      TileImageProvider* layerTileImageProvider = layer->createTileImageProvider(rc, layerTilesRenderParameters);
+      if (layerTileImageProvider != NULL) {
+        if (compositeTileImageProvider != NULL) {
+          compositeTileImageProvider->addProvider(layerTileImageProvider);
+        }
+        else if (singleTileImageProvider == NULL) {
+          singleTileImageProvider = layerTileImageProvider;
+        }
+        else {
+          compositeTileImageProvider = new CompositeTileImageProvider();
+          compositeTileImageProvider->addProvider(singleTileImageProvider);
+          compositeTileImageProvider->addProvider(layerTileImageProvider);
+        }
+      }
+    }
   }
 
-  if (layersSize == 1) {
-    Layer* layer = _layers[0];
-//    return layer->isAvailable(rc, tile) ? layer->createTileImageProvider(rc, layerTilesRenderParameters) : NULL;
-    return layer->isEnable() ? layer->createTileImageProvider(rc, layerTilesRenderParameters) : NULL;
-  }
-
-#warning TODO composite TileImageProvider
-  return NULL;
+  return (compositeTileImageProvider == NULL) ? singleTileImageProvider : compositeTileImageProvider;
 }
 
 TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,

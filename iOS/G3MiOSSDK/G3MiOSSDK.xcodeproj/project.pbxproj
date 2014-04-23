@@ -389,6 +389,9 @@
 		CFF76BE5168614AD00F658CC /* MeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF76BE3168614AD00F658CC /* MeshRenderer.cpp */; };
 		CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */; };
 		CFF9643D19082C570044F06D /* ChessboardTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF9643B19082C570044F06D /* ChessboardTileImageProvider.cpp */; };
+		CFF96441190885210044F06D /* CompositeTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF9643F190885210044F06D /* CompositeTileImageProvider.cpp */; };
+		CFF964421908870F0044F06D /* CompositeTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF96440190885210044F06D /* CompositeTileImageProvider.hpp */; };
+		CFF964431908870F0044F06D /* ChessboardTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF9643C19082C570044F06D /* ChessboardTileImageProvider.hpp */; };
 		CFFAFD6F169F2C1500BCE129 /* ITextUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */; };
 		CFFAFD73169F2E3000BCE129 /* TextUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
@@ -680,6 +683,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFF964421908870F0044F06D /* CompositeTileImageProvider.hpp in CopyFiles */,
+				CFF964431908870F0044F06D /* ChessboardTileImageProvider.hpp in CopyFiles */,
 				CFCBA3C619070A4900FD2A2F /* TileImageContribution.hpp in CopyFiles */,
 				CFCBA3C719070A4900FD2A2F /* RasterLayerTileImageProvider.hpp in CopyFiles */,
 				CFCBA3BF1906F55200FD2A2F /* RasterLayer.hpp in CopyFiles */,
@@ -1558,6 +1563,8 @@
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFF9643B19082C570044F06D /* ChessboardTileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChessboardTileImageProvider.cpp; path = Commons/Basic/ChessboardTileImageProvider.cpp; sourceTree = "<group>"; };
 		CFF9643C19082C570044F06D /* ChessboardTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ChessboardTileImageProvider.hpp; path = Commons/Basic/ChessboardTileImageProvider.hpp; sourceTree = "<group>"; };
+		CFF9643F190885210044F06D /* CompositeTileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeTileImageProvider.cpp; path = Commons/Basic/CompositeTileImageProvider.cpp; sourceTree = "<group>"; };
+		CFF96440190885210044F06D /* CompositeTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CompositeTileImageProvider.hpp; path = Commons/Basic/CompositeTileImageProvider.hpp; sourceTree = "<group>"; };
 		CFFAFD6D169F2C1500BCE129 /* ITextUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ITextUtils.cpp; path = Commons/Interfaces/ITextUtils.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFFAFD6E169F2C1500BCE129 /* ITextUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITextUtils.hpp; path = Commons/Interfaces/ITextUtils.hpp; sourceTree = "<group>"; };
 		CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = TextUtils_iOS.mm; path = Specific/Derived/TextUtils_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2082,6 +2089,8 @@
 				CFADF22218FF1CDB00360565 /* DefaultTileTexturizer.hpp */,
 				CF47E0E81901965C00410BB5 /* TileImageProvider.hpp */,
 				CFE6046C1904448900E6C78B /* TileImageProvider.cpp */,
+				CFF9643F190885210044F06D /* CompositeTileImageProvider.cpp */,
+				CFF96440190885210044F06D /* CompositeTileImageProvider.hpp */,
 				CFCBA3C31907086C00FD2A2F /* TileImageContribution.cpp */,
 				CFCBA3C41907086C00FD2A2F /* TileImageContribution.hpp */,
 				CFCBA3C0190706C900FD2A2F /* RasterLayerTileImageProvider.cpp */,
@@ -3027,6 +3036,7 @@
 				CF4027DE1770E7B900D5A80C /* NSData+SRB64Additions.m in Sources */,
 				CF4027DF1770E7B900D5A80C /* SRWebSocket.m in Sources */,
 				CF60500317724C5C00EB48A6 /* JSONNull.cpp in Sources */,
+				CFF96441190885210044F06D /* CompositeTileImageProvider.cpp in Sources */,
 				D8A6C0D41781D807007BC175 /* Matrix44D.cpp in Sources */,
 				D8B8CE88178D636000EE1B97 /* GLFeature.cpp in Sources */,
 				D8B8CE8B178D63C400EE1B97 /* GLFeatureGroup.cpp in Sources */,
