@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 
 public class Sector
 {
-  private static final Sector FULL_SPHERE = new Sector(Geodetic2D(Angle.fromDegrees(-90), Angle.fromDegrees(-180)), Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(180)));
+  private static final Sector FULL_SPHERE = Sector.fromDegrees(-90, -180, 90, 180);
 
   // this lazy value represent the half diagonal of the sector, measured in radians
   // it's stored in double instead of Angle class to optimize performance in android
