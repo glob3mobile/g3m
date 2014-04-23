@@ -132,7 +132,7 @@ public class WMSLayer extends RasterLayer
     }
   }
 
-  protected final URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  protected final URL createURL(Tile tile)
   {
   
     final String path = _mapServerURL.getPath();

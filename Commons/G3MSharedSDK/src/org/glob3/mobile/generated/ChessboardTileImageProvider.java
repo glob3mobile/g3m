@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 
-public abstract class ChessboardTileImageProvider extends TileImageProvider
+public class ChessboardTileImageProvider extends TileImageProvider
 {
   private final int _splits;
 

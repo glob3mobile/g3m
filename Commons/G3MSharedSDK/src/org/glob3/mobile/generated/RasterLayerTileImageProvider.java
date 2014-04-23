@@ -37,14 +37,14 @@ public class RasterLayerTileImageProvider extends TileImageProvider
     return _layer.contribution(tile);
   }
 
-  public final void create(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
   
     final String tileId = tile._id;
   
-    final long requestId = _layer.requestImage(layerTilesRenderParameters, tile, _downloader, tileDownloadPriority, new RLTIP_ImageDownloadListener(tileId, contribution, listener, deleteListener), true); // deleteListener
+    final long requestId = _layer.requestImage(tile, _downloader, tileDownloadPriority, new RLTIP_ImageDownloadListener(tileId, contribution, listener, deleteListener), true); // deleteListener
   
   
   //  aa;

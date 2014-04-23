@@ -45,7 +45,7 @@ public abstract class RasterLayer extends Layer
 
   protected abstract TileImageContribution rawContribution(Tile tile);
 
-  protected abstract URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
+  protected abstract URL createURL(Tile tile);
 
   public final boolean isEquals(Layer that)
   {
@@ -84,9 +84,9 @@ public abstract class RasterLayer extends Layer
     return TileImageContribution.none();
   }
 
-  public final long requestImage(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, IDownloader downloader, long tileDownloadPriority, IImageDownloadListener listener, boolean deleteListener)
+  public final long requestImage(Tile tile, IDownloader downloader, long tileDownloadPriority, IImageDownloadListener listener, boolean deleteListener)
   {
-    return downloader.requestImage(createURL(layerTilesRenderParameters, tile), tileDownloadPriority, getTimeToCache(), _readExpired, listener, deleteListener);
+    return downloader.requestImage(createURL(tile), tileDownloadPriority, getTimeToCache(), _readExpired, listener, deleteListener);
   }
 
 }

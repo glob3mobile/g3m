@@ -124,7 +124,7 @@ public class URLTemplateLayer extends RasterLayer
     }
   }
 
-  protected final URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  protected final URL createURL(Tile tile)
   {
   
     if (_mu == null)
@@ -167,8 +167,6 @@ public class URLTemplateLayer extends RasterLayer
     path = _su.replaceSubstring(path, "{south}", _su.toString(south));
     path = _su.replaceSubstring(path, "{west}", _su.toString(west));
     path = _su.replaceSubstring(path, "{east}", _su.toString(east));
-  
-    return path;
   
     return new URL(path, false);
   }

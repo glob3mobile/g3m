@@ -49,7 +49,7 @@ public class URL
 
   /**
    Creates an URL.
-   
+
    @param escapePath Escape the given path (true) or take it as it is given (false)
    */
   public URL(String path)

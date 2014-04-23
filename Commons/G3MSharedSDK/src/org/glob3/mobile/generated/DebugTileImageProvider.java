@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class DebugTileImageProvider extends CanvasTileImageProvider
+public class DebugTileImageProvider extends CanvasTileImageProvider
 {
   private static class ImageListener extends IImageListener
   {

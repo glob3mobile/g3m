@@ -21,7 +21,6 @@ package org.glob3.mobile.generated;
 //class Tile;
 //class TileImageListener;
 //class Vector2I;
-//class LayerTilesRenderParameters;
 
 public abstract class TileImageProvider
 {
@@ -31,7 +30,7 @@ public abstract class TileImageProvider
 
   public abstract TileImageContribution contribution(Tile tile);
 
-  public abstract void create(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener);
+  public abstract void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener);
 
   public abstract void cancel(Tile tile);
 

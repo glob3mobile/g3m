@@ -89,7 +89,7 @@ public class BingMapsLayer extends RasterLayer
     return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
   }
 
-  protected final URL createURL(LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  protected final URL createURL(Tile tile)
   {
     final IStringUtils su = IStringUtils.instance();
   
