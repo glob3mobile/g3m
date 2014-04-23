@@ -50,8 +50,8 @@ ChessboardTileImageProvider::~ChessboardTileImageProvider() {
 }
 
 TileImageContribution ChessboardTileImageProvider::contribution(const Tile* tile) {
-  //return FULL_COVERAGE_TRANSPARENT;
-  return TileImageContribution::fullCoverageTransparent(1);
+  //return FULL_COVERAGE_OPAQUE;
+  return TileImageContribution::fullCoverageOpaque();
 }
 
 void ChessboardTileImageProvider::imageCreated(const IImage* image,
@@ -120,15 +120,15 @@ void ChessboardTileImageProvider::create(const Tile* tile,
         const float y  = row * yInterval;
         const float y2 = (row + 1) * yInterval;
 
-        canvas->fillRoundedRectangle(x + 1,
-                                     y + 1,
-                                     xInterval - 2,
-                                     yInterval - 2,
+        canvas->fillRoundedRectangle(x + 2,
+                                     y + 2,
+                                     xInterval - 4,
+                                     yInterval - 4,
                                      4);
-        canvas->fillRoundedRectangle(x2 + 1,
-                                     y2 + 1,
-                                     xInterval - 2,
-                                     yInterval - 2,
+        canvas->fillRoundedRectangle(x2 + 2,
+                                     y2 + 2,
+                                     xInterval - 4,
+                                     yInterval - 4,
                                      4);
       }
     }
