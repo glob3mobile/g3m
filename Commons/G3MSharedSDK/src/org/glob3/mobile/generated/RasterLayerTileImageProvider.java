@@ -42,18 +42,23 @@ public class RasterLayerTileImageProvider extends TileImageProvider
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
   
-  ////const URL& url
-  ////const TimeInterval& timeToCache
-  ////bool readExpired
-  //
-  //  const long long requestId = _downloader->requestImage(const URL& url,
+    /*
+    const URL          url;
+    const TimeInterval timeToCache;
+    const bool         readExpired;
+    const float        layerAlpha;
+    const Sector&      imageSector;
+    const RectangleF&  imageRectangle;
+     */
+  
+  //  const long long requestId = _downloader->requestImage(url,
   //                                                        tileDownloadPriority,
-  //                                                        const TimeInterval& timeToCache,
-  //                                                        bool readExpired,
-  //                                                        new RasterLayerTileImageProvider_IImageDownloadListener(),
+  //                                                        timeToCache,
+  //                                                        readExpired,
+  //                                                        new RLTIP_ImageDownloadListener(listener,
+  //                                                                                        deleteListener,
+  //                                                                                        layerAlpha),
   //                                                        true /* deleteListener */);
-  //
-  ////  aa;
   
     listener.imageCreationError(tile, "Not yet implemented");
     if (deleteListener)
@@ -61,11 +66,11 @@ public class RasterLayerTileImageProvider extends TileImageProvider
       if (listener != null)
          listener.dispose();
     }
+  
   }
 
   public final void cancel(Tile tile)
   {
-  //  aa;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
   }

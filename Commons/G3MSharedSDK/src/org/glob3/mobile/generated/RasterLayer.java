@@ -77,7 +77,8 @@ public abstract class RasterLayer extends Layer
     {
       return rawContribution(tile);
     }
-    return TileImageContribution.NONE;
+  //  return NONE;
+    return TileImageContribution.none();
   }
 
 }

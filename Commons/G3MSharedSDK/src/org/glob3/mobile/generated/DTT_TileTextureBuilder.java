@@ -123,7 +123,8 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!_canceled)
     {
       final TileImageContribution contribution = _tileImageProvider.contribution(_tile);
-      if (contribution == TileImageContribution.NONE)
+      //if (contribution == NONE) {
+      if (contribution.isNone())
       {
         if (_tile != null)
         {

@@ -107,17 +107,28 @@ public class WMSLayer extends RasterLayer
   {
     final Sector tileSector = tile._sector;
   
+  //  if (!_sector.touchesWith(tileSector)) {
+  //    return NONE;
+  //  }
+  //  else if (_sector.fullContains(tileSector)) {
+  //    return (_isTransparent || (_transparency < 1)) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
+  //  }
+  //  else {
+  //    return (_isTransparent || (_transparency < 1)) ? PARTIAL_COVERAGE_TRANSPARENT : PARTIAL_COVERAGE_OPAQUE;
+  //  }
+  
     if (!_sector.touchesWith(tileSector))
     {
-      return TileImageContribution.NONE;
+      return TileImageContribution.none();
     }
     else if (_sector.fullContains(tileSector))
     {
-      return _isTransparent ? TileImageContribution.FULL_COVERAGE_TRANSPARENT : TileImageContribution.FULL_COVERAGE_OPAQUE;
+      return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
     }
     else
     {
-      return _isTransparent ? TileImageContribution.PARTIAL_COVERAGE_TRANSPARENT : TileImageContribution.PARTIAL_COVERAGE_OPAQUE;
+      final Sector contributionSector = _sector.intersection(tileSector);
+      return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(contributionSector, _transparency) : TileImageContribution.partialCoverageOpaque(contributionSector));
     }
   }
 

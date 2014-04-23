@@ -91,7 +91,8 @@ public class MercatorTiledLayer extends RasterLayer
 
   protected final TileImageContribution rawContribution(Tile tile)
   {
-    return TileImageContribution.FULL_COVERAGE_OPAQUE;
+    //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
+    return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
   }
 
 
