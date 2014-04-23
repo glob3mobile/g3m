@@ -63,14 +63,12 @@ const TileImageContribution RasterLayer::contribution(const Tile* tile) const {
   return TileImageContribution::none();
 }
 
-long long RasterLayer::requestImage(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                    const Tile* tile,
+long long RasterLayer::requestImage(const Tile* tile,
                                     IDownloader* downloader,
                                     long long tileDownloadPriority,
                                     IImageDownloadListener* listener,
                                     bool deleteListener) const {
-  return downloader->requestImage(createURL(layerTilesRenderParameters,
-                                            tile),
+  return downloader->requestImage(createURL(tile),
                                   tileDownloadPriority,
                                   getTimeToCache(),
                                   _readExpired,

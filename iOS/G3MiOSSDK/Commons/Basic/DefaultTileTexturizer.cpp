@@ -275,9 +275,7 @@ public:
       }
       else {
 #warning TODO
-        const LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
-        _tileImageProvider->create(layerTilesRenderParameters,
-                                   _tile,
+        _tileImageProvider->create(_tile,
                                    contribution,
                                    _tileTextureResolution,
                                    _tileDownloadPriority,

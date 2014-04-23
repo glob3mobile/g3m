@@ -156,8 +156,7 @@ const std::string URLTemplateLayer::getPath(const LayerTilesRenderParameters* la
   return path;
 }
 
-const URL URLTemplateLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                      const Tile* tile) const {
+const URL URLTemplateLayer::createURL(const Tile* tile) const {
 
   if (_mu == NULL) {
     _mu = IMathUtils::instance();

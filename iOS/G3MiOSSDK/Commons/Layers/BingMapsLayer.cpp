@@ -307,8 +307,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   return petitions;
 }
 
-const URL BingMapsLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                   const Tile* tile) const {
+const URL BingMapsLayer::createURL(const Tile* tile) const {
   const IStringUtils* su = IStringUtils::instance();
 
   const int level   = tile->_level;

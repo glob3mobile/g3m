@@ -35,8 +35,7 @@ protected:
 
   virtual const TileImageContribution rawContribution(const Tile* tile) const = 0;
 
-  virtual const URL createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                              const Tile* tile) const = 0;
+  virtual const URL createURL(const Tile* tile) const = 0;
 
 public:
   bool isEquals(const Layer* that) const;
@@ -46,8 +45,7 @@ public:
 
   const TileImageContribution contribution(const Tile* tile) const;
 
-  long long requestImage(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                         const Tile* tile,
+  long long requestImage(const Tile* tile,
                          IDownloader* downloader,
                          long long tileDownloadPriority,
                          IImageDownloadListener* listener,

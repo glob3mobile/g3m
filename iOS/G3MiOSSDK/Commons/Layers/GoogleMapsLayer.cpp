@@ -112,8 +112,7 @@ std::vector<Petition*> GoogleMapsLayer::createTileMapPetitions(const G3MRenderCo
   return petitions;
 }
 
-const URL GoogleMapsLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                     const Tile* tile) const {
+const URL GoogleMapsLayer::createURL(const Tile* tile) const {
   const Sector tileSector = tile->_sector;
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

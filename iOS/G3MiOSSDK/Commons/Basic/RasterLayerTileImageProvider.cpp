@@ -71,8 +71,7 @@ TileImageContribution RasterLayerTileImageProvider::contribution(const Tile* til
   return _layer->contribution(tile);
 }
 
-void RasterLayerTileImageProvider::create(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                          const Tile* tile,
+void RasterLayerTileImageProvider::create(const Tile* tile,
                                           const TileImageContribution& contribution,
                                           const Vector2I& resolution,
                                           long long tileDownloadPriority,
@@ -82,8 +81,7 @@ void RasterLayerTileImageProvider::create(const LayerTilesRenderParameters* laye
 
   const std::string tileId = tile->_id;
 
-  const long long requestId = _layer->requestImage(layerTilesRenderParameters,
-                                                   tile,
+  const long long requestId = _layer->requestImage(tile,
                                                    _downloader,
                                                    tileDownloadPriority,
                                                    new RLTIP_ImageDownloadListener(tileId,

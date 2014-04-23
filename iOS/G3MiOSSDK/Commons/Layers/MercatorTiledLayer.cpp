@@ -130,8 +130,7 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   return petitions;
 }
 
-const URL MercatorTiledLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                                        const Tile* tile) const {
+const URL MercatorTiledLayer::createURL(const Tile* tile) const {
   const IMathUtils* mu = IMathUtils::instance();
 
   const int level   = tile->_level;

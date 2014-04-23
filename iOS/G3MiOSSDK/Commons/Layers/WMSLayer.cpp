@@ -245,8 +245,7 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
 	return petitions;
 }
 
-const URL WMSLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                              const Tile* tile) const {
+const URL WMSLayer::createURL(const Tile* tile) const {
 
   const std::string path = _mapServerURL.getPath();
 //  if (path.empty()) {

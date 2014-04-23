@@ -154,8 +154,7 @@ std::vector<Petition*> HereLayer::createTileMapPetitions(const G3MRenderContext*
   return petitions;
 }
 
-const URL HereLayer::createURL(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                               const Tile* tile) const {
+const URL HereLayer::createURL(const Tile* tile) const {
   const Sector tileSector = tile->_sector;
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
