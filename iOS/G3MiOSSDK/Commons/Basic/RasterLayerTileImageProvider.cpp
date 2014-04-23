@@ -41,10 +41,7 @@ void RasterLayerTileImageProvider::create(const Tile* tile,
 //
 ////  aa;
 
-  std::set<std::string> errors;
-  errors.insert("Not yet implemented");
-
-  listener->imageCreationError(tile, errors);
+  listener->imageCreationError(tile, "Not yet implemented");
   if (deleteListener) {
     delete listener;
   }

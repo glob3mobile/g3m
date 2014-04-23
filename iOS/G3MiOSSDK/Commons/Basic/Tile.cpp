@@ -26,6 +26,7 @@
 std::string Tile::createTileId(int level,
                                int row,
                                int column) {
+#ifdef C_CODE
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addInt(level);
   isb->addString("/");
@@ -35,6 +36,10 @@ std::string Tile::createTileId(int level,
   std::string s = isb->getString();
   delete isb;
   return s;
+#endif
+#ifdef JAVA_CODE
+  return level + "/" + row + "/" + column;
+#endif
 }
 
 Tile::Tile(TileTexturizer* texturizer,
