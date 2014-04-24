@@ -43,12 +43,12 @@ public class VectorialLOD {
    private static boolean                    MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
    private static int                        FIRST_LEVEL        = 0;
    private static int                        MAX_LEVEL          = 3;
+   private static int                        NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
+   private static int                        MAX_DB_CONNECTIONS = NUM_LEVELS;
 
    //-- Internal constants definition ------------------------------------------------------------------
    final static float                        QUALITY_FACTOR     = 2.0f;
    final static double                       OVERLAP_PERCENTAGE = 10;
-   final static int                          NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
-   final static int                          MAX_DB_CONNECTIONS = NUM_LEVELS;
    final static int                          CONNECTION_TIMEOUT = 5;                            //seconds
 
    final static boolean                      VERBOSE            = false;
@@ -631,7 +631,7 @@ public class VectorialLOD {
    }
 
 
-   private static void initializeWithArguments(final String[] args) {
+   private static void initializeFromArguments(final String[] args) {
 
       System.out.println("Initializing from parameters.. ");
       System.out.println("NUM parameters: " + args.length);
@@ -642,6 +642,7 @@ public class VectorialLOD {
       }
       else {
          System.err.println("Invalid HOST argument. Using default HOST.");
+         System.exit(1);
       }
 
       if ((args[1] != null) && (!args[1].equals(""))) {
@@ -650,6 +651,7 @@ public class VectorialLOD {
       }
       else {
          System.err.println("Invalid PORT argument. Using default PORT.");
+         System.exit(1);
       }
 
       if ((args[2] != null) && (!args[2].equals(""))) {
@@ -658,6 +660,7 @@ public class VectorialLOD {
       }
       else {
          System.err.println("Invalid USER argument. Using default USER.");
+         System.exit(1);
       }
 
       if ((args[3] != null) && (!args[3].equals(""))) {
@@ -666,6 +669,7 @@ public class VectorialLOD {
       }
       else {
          System.err.println("Invalid PASSWORD argument. Using default PASSWORD.");
+         System.exit(1);
       }
 
       if ((args[4] != null) && (!args[4].equals(""))) {
@@ -674,6 +678,7 @@ public class VectorialLOD {
       }
       else {
          System.err.println("Invalid DATABASE_NAME argument. Using default DATABASE_NAME.");
+         System.exit(1);
       }
 
       //      if ((args[5] != null) && (!args[5].equals(""))) {
@@ -695,6 +700,7 @@ public class VectorialLOD {
       }
       else {
          System.err.println("Invalid PROJECTION specification.");
+         System.exit(1);
       }
 
       if ((args[6] != null) && (!args[6].equals(""))) {
@@ -703,14 +709,18 @@ public class VectorialLOD {
       }
       else {
          System.err.println("Invalid FIRST_LEVEL argument. Using default FIRST_LEVEL.");
+         System.exit(1);
       }
 
       if ((args[7] != null) && (!args[7].equals(""))) {
          MAX_LEVEL = Integer.parseInt(args[7]);
          System.out.println("MAX_LEVEL: " + MAX_LEVEL);
+         NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
+         MAX_DB_CONNECTIONS = NUM_LEVELS;
       }
       else {
          System.err.println("Invalid MAX_LEVEL argument. Using default MAX_LEVEL.");
+         System.exit(1);
       }
 
       if ((args[8] != null) && (!args[8].equals(""))) {
@@ -756,10 +766,10 @@ public class VectorialLOD {
 
    public static void main(final String[] args) {
 
-      initializeWithArguments(args);
-
-      //command line:
-      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test 2.0 false 0 3 ne_10m_admin_0_countries true continent pop_est
+      //COMMAND LINE:
+      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test false 0 3 ne_10m_admin_0_countries true continent pop_est
+      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test false 0 6 ne_10m_admin_0_countries true continent mapcolor7 scalerank
+      initializeFromArguments(args);
 
       System.out.print("Connect to POSTGIS DB " + DATABASE_NAME + ".. ");
 
@@ -770,7 +780,7 @@ public class VectorialLOD {
          initialize();
 
          final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, PROPERTIES);
-         //final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, "continent", "pop_est");
+         //         final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, "continent", "pop_est");
          //         final DataSource dataSource = new DataSource("ne_10m_admin_0_boundary_lines_land", "true", "adm0_left", "labelrank");
          //         final DataSource dataSource = new DataSource("ne_10m_populated_places", "true", "NAMEASCII", "POP_MAX");
 
