@@ -40,6 +40,9 @@ public class LayerSet
 
   private void layersChanged()
   {
+    if (_tileImageProvider != null)
+       _tileImageProvider.dispose();
+    _tileImageProvider = null;
     if (_listener != null)
     {
       _listener.changed();
@@ -52,22 +55,37 @@ public class LayerSet
 
   private TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
+    TileImageProvider singleTileImageProvider = null;
+    CompositeTileImageProvider compositeTileImageProvider = null;
+  
     final int layersSize = _layers.size();
-    if (layersSize == 0)
+    for (int i = 0; i < layersSize; i++)
     {
-      return null;
+      Layer layer = _layers.get(i);
+      if (layer.isEnable())
+      {
+        TileImageProvider layerTileImageProvider = layer.createTileImageProvider(rc, layerTilesRenderParameters);
+        if (layerTileImageProvider != null)
+        {
+          if (compositeTileImageProvider != null)
+          {
+            compositeTileImageProvider.addProvider(layerTileImageProvider);
+          }
+          else if (singleTileImageProvider == null)
+          {
+            singleTileImageProvider = layerTileImageProvider;
+          }
+          else
+          {
+            compositeTileImageProvider = new CompositeTileImageProvider();
+            compositeTileImageProvider.addProvider(singleTileImageProvider);
+            compositeTileImageProvider.addProvider(layerTileImageProvider);
+          }
+        }
+      }
     }
   
-    if (layersSize == 1)
-    {
-      Layer layer = _layers.get(0);
-  //    return layer->isAvailable(rc, tile) ? layer->createTileImageProvider(rc, layerTilesRenderParameters) : NULL;
-      return layer.isEnable() ? layer.createTileImageProvider(rc, layerTilesRenderParameters) : null;
-    }
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO composite TileImageProvider
-    return null;
+    return (compositeTileImageProvider == null) ? singleTileImageProvider : compositeTileImageProvider;
   }
 
   public LayerSet()
@@ -84,6 +102,9 @@ public class LayerSet
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
+  
+    if (_tileImageProvider != null)
+       _tileImageProvider.dispose();
   }
 
   public final void removeAllLayers(boolean deleteLayers)

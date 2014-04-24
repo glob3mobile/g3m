@@ -29,6 +29,7 @@ public abstract class CanvasTileImageProvider extends TileImageProvider
 
   protected CanvasTileImageProvider()
   {
+     _canvas = null;
      _transparent = Color.newFromRGBA(0, 0, 0, 0);
   }
 
