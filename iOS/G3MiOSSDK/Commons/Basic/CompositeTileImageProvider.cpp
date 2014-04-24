@@ -13,7 +13,8 @@
 CompositeTileImageProvider::~CompositeTileImageProvider() {
   for (int i = 0; i < _childrenSize; i++) {
     TileImageProvider* child = _children[i];
-    delete child;
+//    delete child;
+    child->_release();
   }
 
 #ifdef JAVA_CODE

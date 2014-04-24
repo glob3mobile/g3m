@@ -15,10 +15,17 @@ class Tile;
 class TileImageListener;
 class Vector2I;
 
-class TileImageProvider {
-public:
+#include "RCObject.hpp"
+
+class TileImageProvider : public RCObject {
+protected:
   virtual ~TileImageProvider() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
+
+public:
 
   virtual TileImageContribution contribution(const Tile* tile) = 0;
 

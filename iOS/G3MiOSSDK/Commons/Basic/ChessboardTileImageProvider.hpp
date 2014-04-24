@@ -19,14 +19,15 @@ private:
 
   IImage* _image;
 
+protected:
+  ~ChessboardTileImageProvider();
+
 public:
   ChessboardTileImageProvider(int splits = 8) :
   _splits(splits),
   _image(NULL)
   {
   }
-
-  ~ChessboardTileImageProvider();
 
   TileImageContribution contribution(const Tile* tile);
 

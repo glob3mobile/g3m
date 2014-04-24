@@ -25,6 +25,9 @@ private:
 
   std::map<std::string, long long> _requestsIdsPerTile;
 
+protected:
+  ~RasterLayerTileImageProvider();
+
 public:
 
   RasterLayerTileImageProvider(const RasterLayer* layer,

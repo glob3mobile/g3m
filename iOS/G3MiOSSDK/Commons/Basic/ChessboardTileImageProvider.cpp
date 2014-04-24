@@ -47,6 +47,9 @@ public:
 
 ChessboardTileImageProvider::~ChessboardTileImageProvider() {
   delete _image;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 TileImageContribution ChessboardTileImageProvider::contribution(const Tile* tile) {

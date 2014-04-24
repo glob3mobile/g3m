@@ -17,13 +17,14 @@ private:
   std::vector<TileImageProvider*> _children;
   int                             _childrenSize;
 
+protected:
+  ~CompositeTileImageProvider();
+
 public:
   CompositeTileImageProvider() :
   _childrenSize(0)
   {
   }
-
-  ~CompositeTileImageProvider();
 
   void addProvider(TileImageProvider* child) {
     _children.push_back(child);

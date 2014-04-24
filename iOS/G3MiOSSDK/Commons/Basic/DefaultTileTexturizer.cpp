@@ -244,6 +244,8 @@ public:
   _tileDownloadPriority(tileDownloadPriority),
   _logTilesPetitions(logTilesPetitions)
   {
+    _tileImageProvider->_retain();
+
     _texturedMesh = createMesh(tile,
                                tessellatorMesh,
                                layerTilesRenderParameters->_tileMeshResolution,
@@ -314,6 +316,7 @@ public:
 
   ~DTT_TileTextureBuilder() {
 //    delete _tileImageProvider;
+    _tileImageProvider->_release();
 #ifdef JAVA_CODE
     super.dispose();
 #endif

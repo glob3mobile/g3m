@@ -46,12 +46,14 @@ private:
 
   };
 
-public:
+protected:
   virtual ~DebugTileImageProvider() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
+
+public:
 
   TileImageContribution contribution(const Tile* tile);
 

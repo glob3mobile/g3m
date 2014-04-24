@@ -77,6 +77,21 @@ public:
   }
 };
 
+RasterLayerTileImageProvider::~RasterLayerTileImageProvider() {
+  std::map<std::string, long long>::iterator iter;
+
+  for (iter = _requestsIdsPerTile.begin();
+       iter != _requestsIdsPerTile.end();
+       ++iter) {
+    const long long requestId = iter->second;
+    _downloader->cancelRequest(requestId);
+  }
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
 TileImageContribution RasterLayerTileImageProvider::contribution(const Tile* tile) {
   return _layer->contribution(tile);
 }
@@ -106,6 +121,7 @@ void RasterLayerTileImageProvider::create(const Tile* tile,
 
 void RasterLayerTileImageProvider::cancel(const Tile* tile) {
   const std::string tileId = tile->_id;
+#ifdef C_CODE
   if (_requestsIdsPerTile.find(tileId) != _requestsIdsPerTile.end()) {
     const long long requestId = _requestsIdsPerTile[tileId];
 
@@ -113,6 +129,13 @@ void RasterLayerTileImageProvider::cancel(const Tile* tile) {
 
     _requestsIdsPerTile.erase(tileId);
   }
+#endif
+#ifdef JAVA_CODE
+  final Long requestId = _requestsIdsPerTile.remove(tileId);
+  if (requestId != null) {
+    _downloader.cancelRequest(requestId);
+  }
+#endif
 }
 
 void RasterLayerTileImageProvider::requestFinish(const std::string& tileId) {

@@ -22,7 +22,8 @@ LayerSet::~LayerSet() {
     delete _layers[i];
   }
 
-  delete _tileImageProvider;
+//  delete _tileImageProvider;
+  _tileImageProvider->_release();
 }
 
 bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
@@ -158,8 +159,11 @@ void LayerSet::layerChanged(const Layer* layer) const {
 }
 
 void LayerSet::layersChanged() const {
-  delete _tileImageProvider;
-  _tileImageProvider = NULL;
+//  delete _tileImageProvider;
+  if (_tileImageProvider != NULL) {
+    _tileImageProvider->_release();
+    _tileImageProvider = NULL;
+  }
   if (_listener != NULL) {
     _listener->changed();
   }
