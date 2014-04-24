@@ -40,9 +40,12 @@ public class LayerSet
 
   private void layersChanged()
   {
+  //  delete _tileImageProvider;
     if (_tileImageProvider != null)
-       _tileImageProvider.dispose();
-    _tileImageProvider = null;
+    {
+      _tileImageProvider._release();
+      _tileImageProvider = null;
+    }
     if (_listener != null)
     {
       _listener.changed();
@@ -103,8 +106,8 @@ public class LayerSet
          _layers.get(i).dispose();
     }
   
-    if (_tileImageProvider != null)
-       _tileImageProvider.dispose();
+  //  delete _tileImageProvider;
+    _tileImageProvider._release();
   }
 
   public final void removeAllLayers(boolean deleteLayers)

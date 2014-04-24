@@ -100,6 +100,8 @@ public class DTT_TileTextureBuilder extends RCObject
      _canceled = false;
      _tileDownloadPriority = tileDownloadPriority;
      _logTilesPetitions = logTilesPetitions;
+    _tileImageProvider._retain();
+
     _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator);
   }
 
@@ -177,6 +179,7 @@ public class DTT_TileTextureBuilder extends RCObject
   public void dispose()
   {
 //    delete _tileImageProvider;
+    _tileImageProvider._release();
     super.dispose();
   }
 

@@ -29,6 +29,19 @@ public class RasterLayerTileImageProvider extends TileImageProvider
 
   private java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
 
+  public void dispose()
+  {
+    java.util.Iterator<String, Long> iter;
+  
+    for (iter = _requestsIdsPerTile.iterator(); iter.hasNext();)
+    {
+      final long requestId = iter.next().getValue();
+      _downloader.cancelRequest(requestId);
+    }
+  
+    super.dispose();
+  }
+
 
   public RasterLayerTileImageProvider(RasterLayer layer, IDownloader downloader)
   {
@@ -56,13 +69,9 @@ public class RasterLayerTileImageProvider extends TileImageProvider
   public final void cancel(Tile tile)
   {
     final String tileId = tile._id;
-    if (_requestsIdsPerTile.containsKey(tileId))
-    {
-      final long requestId = _requestsIdsPerTile.get(tileId);
-  
+    final Long requestId = _requestsIdsPerTile.remove(tileId);
+    if (requestId != null) {
       _downloader.cancelRequest(requestId);
-  
-      _requestsIdsPerTile.remove(tileId);
     }
   }
 

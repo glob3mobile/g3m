@@ -22,21 +22,21 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   private java.util.ArrayList<TileImageProvider> _children = new java.util.ArrayList<TileImageProvider>();
   private int _childrenSize;
 
-  public CompositeTileImageProvider()
-  {
-     _childrenSize = 0;
-  }
-
   public void dispose()
   {
     for (int i = 0; i < _childrenSize; i++)
     {
       TileImageProvider child = _children.get(i);
-      if (child != null)
-         child.dispose();
+  //    delete child;
+      child._release();
     }
   
     super.dispose();
+  }
+
+  public CompositeTileImageProvider()
+  {
+     _childrenSize = 0;
   }
 
   public final void addProvider(TileImageProvider child)

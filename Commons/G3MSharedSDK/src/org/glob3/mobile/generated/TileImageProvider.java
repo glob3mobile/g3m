@@ -22,11 +22,14 @@ package org.glob3.mobile.generated;
 //class TileImageListener;
 //class Vector2I;
 
-public abstract class TileImageProvider
+
+public abstract class TileImageProvider extends RCObject
 {
   public void dispose()
   {
+    super.dispose();
   }
+
 
   public abstract TileImageContribution contribution(Tile tile);
 

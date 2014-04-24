@@ -65,6 +65,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
     super.dispose();
   }
 
+
   public final TileImageContribution contribution(Tile tile)
   {
     //return FULL_COVERAGE_TRANSPARENT;

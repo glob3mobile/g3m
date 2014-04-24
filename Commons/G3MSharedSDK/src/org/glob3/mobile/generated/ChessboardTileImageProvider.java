@@ -25,6 +25,13 @@ public class ChessboardTileImageProvider extends TileImageProvider
 
   private IImage _image;
 
+  public void dispose()
+  {
+    if (_image != null)
+       _image.dispose();
+    super.dispose();
+  }
+
   public ChessboardTileImageProvider()
   {
      this(8);
@@ -33,12 +40,6 @@ public class ChessboardTileImageProvider extends TileImageProvider
   {
      _splits = splits;
      _image = null;
-  }
-
-  public void dispose()
-  {
-    if (_image != null)
-       _image.dispose();
   }
 
   public final TileImageContribution contribution(Tile tile)
