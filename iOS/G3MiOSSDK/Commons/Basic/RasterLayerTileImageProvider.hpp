@@ -11,13 +11,19 @@
 
 #include "TileImageProvider.hpp"
 
+#include <map>
+#include <string>
+
 class RasterLayer;
 class IDownloader;
+
 
 class RasterLayerTileImageProvider : public TileImageProvider {
 private:
   const RasterLayer* _layer;
   IDownloader*       _downloader;
+
+  std::map<std::string, long long> _requestsIdsPerTile;
 
 public:
 
@@ -38,6 +44,9 @@ public:
               bool deleteListener);
 
   void cancel(const Tile* tile);
+
+
+  void requestFinish(const std::string& tileId);
 
 };
 

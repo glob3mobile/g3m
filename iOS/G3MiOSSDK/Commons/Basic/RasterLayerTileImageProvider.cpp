@@ -8,19 +8,20 @@
 
 #include "RasterLayerTileImageProvider.hpp"
 
-#include "RasterLayer.hpp"
-#include "TileImageListener.hpp"
-//#include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
+#include "TileImageListener.hpp"
 #include "URL.hpp"
-#include "TimeInterval.hpp"
+#include "RasterLayer.hpp"
 #include "Tile.hpp"
+#include "IDownloader.hpp"
+
 
 class RLTIP_ImageDownloadListener : public IImageDownloadListener {
 private:
-  const std::string           _tileId;
+  RasterLayerTileImageProvider* _rasterLayerTileImageProvider;
+  const std::string             _tileId;
 #ifdef C_CODE
-  const TileImageContribution _contribution;
+  const TileImageContribution   _contribution;
 #endif
 #ifdef JAVA_CODE
   private final TileImageContribution _contribution;
@@ -30,10 +31,12 @@ private:
   const bool         _deleteListener;
 
 public:
-  RLTIP_ImageDownloadListener(const std::string&           tileId,
-                              const TileImageContribution& contribution,
-                              TileImageListener*           listener,
-                              bool                         deleteListener) :
+  RLTIP_ImageDownloadListener(RasterLayerTileImageProvider* rasterLayerTileImageProvider,
+                              const std::string&            tileId,
+                              const TileImageContribution&  contribution,
+                              TileImageListener*            listener,
+                              bool                          deleteListener) :
+  _rasterLayerTileImageProvider(rasterLayerTileImageProvider),
   _tileId(tileId),
   _contribution(contribution),
   _listener(listener),
@@ -42,6 +45,8 @@ public:
   }
 
   ~RLTIP_ImageDownloadListener() {
+    _rasterLayerTileImageProvider->requestFinish(_tileId);
+
     if (_deleteListener) {
       delete _listener;
     }
@@ -82,29 +87,34 @@ void RasterLayerTileImageProvider::create(const Tile* tile,
                                           long long tileDownloadPriority,
                                           TileImageListener* listener,
                                           bool deleteListener) {
-#warning Diego at work!
-
   const std::string tileId = tile->_id;
 
   const long long requestId = _layer->requestImage(tile,
                                                    _downloader,
                                                    tileDownloadPriority,
-                                                   new RLTIP_ImageDownloadListener(tileId,
+                                                   new RLTIP_ImageDownloadListener(this,
+                                                                                   tileId,
                                                                                    contribution,
                                                                                    listener,
                                                                                    deleteListener),
                                                    true /* deleteListener */);
 
-
-//  aa;
-
-//  listener->imageCreationError(tile->_id, "Not yet implemented");
-//  if (deleteListener) {
-//    delete listener;
-//  }
-
+  if (requestId >= 0) {
+    _requestsIdsPerTile[tileId] = requestId;
+  }
 }
 
 void RasterLayerTileImageProvider::cancel(const Tile* tile) {
-#warning Diego at work!
+  const std::string tileId = tile->_id;
+  if (_requestsIdsPerTile.find(tileId) != _requestsIdsPerTile.end()) {
+    const long long requestId = _requestsIdsPerTile[tileId];
+
+    _downloader->cancelRequest(requestId);
+
+    _requestsIdsPerTile.erase(tileId);
+  }
+}
+
+void RasterLayerTileImageProvider::requestFinish(const std::string& tileId) {
+  _requestsIdsPerTile.erase(tileId);
 }
