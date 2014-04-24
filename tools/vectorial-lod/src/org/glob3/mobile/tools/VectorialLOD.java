@@ -26,10 +26,10 @@ public class VectorialLOD {
    final static String                       ROOT_DIRECTORY     = "LOD";
 
    //-- Data base connection parameters ----------------------------------------------------------------
-   //   private static String                             HOST               = "igosoftware.dyndns.org";
-   //   private static String                             PORT               = "5414";
-   private static String                     HOST               = "192.168.1.14";
-   private static String                     PORT               = "5432";
+   private static String                     HOST               = "igosoftware.dyndns.org";
+   private static String                     PORT               = "5414";
+   //   private static String                     HOST               = "192.168.1.14";
+   //   private static String                     PORT               = "5432";
    private static String                     USER               = "postgres";
    private static String                     PASSWORD           = "postgres1g0";
    private static String                     DATABASE_NAME      = "vectorial_test";
@@ -37,16 +37,16 @@ public class VectorialLOD {
    //-- Data source and filter parameters --------------------------------------------------------------
    private static String                     DATABASE_TABLE     = "ne_10m_admin_0_countries";
    private static String                     FILTER_CRITERIA    = "true";
-   private static String                     PROPERTIES         = "";
+   private static String[]                   PROPERTIES;
 
    //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
-   final static boolean                      MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
-   final static int                          FIRST_LEVEL        = 0;
-   final static int                          MAX_LEVEL          = 3;
-   final static float                        QUALITY_FACTOR     = 2.0f;
-   final static double                       OVERLAP_PERCENTAGE = 10;
+   private static boolean                    MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
+   private static int                        FIRST_LEVEL        = 0;
+   private static int                        MAX_LEVEL          = 3;
 
    //-- Internal constants definition ------------------------------------------------------------------
+   final static float                        QUALITY_FACTOR     = 2.0f;
+   final static double                       OVERLAP_PERCENTAGE = 10;
    final static int                          NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
    final static int                          MAX_DB_CONNECTIONS = NUM_LEVELS;
    final static int                          CONNECTION_TIMEOUT = 5;                            //seconds
@@ -228,6 +228,12 @@ public class VectorialLOD {
       final String baseQuery4 = " WHERE (";
       final String baseQuery5 = ")) As f ) As fc;";
 
+      //      if (propsQuery == "") {
+      //         propsQuery = getQuotedString("");
+      //         baseQuery1 = "))::json As geometry, ";
+      //         baseQuery2 = " As properties FROM (SELECT * FROM ";
+      //      }
+
       String geoJsonResult = null;
       Connection conn = null;
       Statement st = null;
@@ -248,7 +254,7 @@ public class VectorialLOD {
                                   + baseQuery2 + dataSourceTable + baseQuery4 + geomFilterCriteria + baseQuery3 + theGeom + ","
                                   + bboxQuery + baseQuery5;
 
-         //         System.out.println("fullQuery: " + fullQuery);
+         //System.out.println("fullQuery: " + fullQuery);
 
          final ResultSet rs = st.executeQuery(fullQuery);
 
@@ -272,6 +278,10 @@ public class VectorialLOD {
 
 
    private static String buildPropertiesQuery(final String... includeProperties) {
+
+      if (includeProperties == null) {
+         return "false";
+      }
 
       String result = "";
       boolean first = true;
@@ -534,17 +544,20 @@ public class VectorialLOD {
                   dataSource._geomFilterCriteria, //
                   dataSource._includeProperties);
 
-         final String fileName = getTileFileName(sector);
-         final FileWriter file = new FileWriter(fileName);
+         //         final String fileName = getTileFileName(sector);
+         //         final FileWriter file = new FileWriter(fileName);
          if (geoJson != null) {
+            final String fileName = getTileFileName(sector);
+            final FileWriter file = new FileWriter(fileName);
             System.out.println("Generating: " + getTileName(sector));
             file.write(geoJson);
             file.flush();
+            file.close();
          }
          else {
             System.out.println("Skip empty tile: " + getTileName(sector));
          }
-         file.close();
+         //         file.close();
       }
       catch (final IOException e) {
          System.out.println("Exception while writting geoJson object ! ");
@@ -620,59 +633,133 @@ public class VectorialLOD {
 
    private static void initializeWithArguments(final String[] args) {
 
-      System.out.println("Starting layer tiles generation.. ");
+      System.out.println("Initializing from parameters.. ");
+      System.out.println("NUM parameters: " + args.length);
 
-      if (args.length == 5) {
-         if ((args[0] != null) && (!args[0].equals(""))) {
-            HOST = args[0];
-            System.out.println("HOST: " + HOST);
+      if ((args[0] != null) && (!args[0].equals(""))) {
+         HOST = args[0];
+         System.out.println("HOST: " + HOST);
+      }
+      else {
+         System.err.println("Invalid HOST argument. Using default HOST.");
+      }
+
+      if ((args[1] != null) && (!args[1].equals(""))) {
+         PORT = args[1];
+         System.out.println("PORT: " + PORT);
+      }
+      else {
+         System.err.println("Invalid PORT argument. Using default PORT.");
+      }
+
+      if ((args[2] != null) && (!args[2].equals(""))) {
+         USER = args[2];
+         System.out.println("USER: " + USER);
+      }
+      else {
+         System.err.println("Invalid USER argument. Using default USER.");
+      }
+
+      if ((args[3] != null) && (!args[3].equals(""))) {
+         PASSWORD = args[3];
+         System.out.println("PASSWORD: " + PASSWORD);
+      }
+      else {
+         System.err.println("Invalid PASSWORD argument. Using default PASSWORD.");
+      }
+
+      if ((args[4] != null) && (!args[4].equals(""))) {
+         DATABASE_NAME = args[4];
+         System.out.println("DATABASE_NAME: " + DATABASE_NAME);
+      }
+      else {
+         System.err.println("Invalid DATABASE_NAME argument. Using default DATABASE_NAME.");
+      }
+
+      //      if ((args[5] != null) && (!args[5].equals(""))) {
+      //         QUALITY_FACTOR = Float.parseFloat(args[5]);
+      //         System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
+      //      }
+      //      else {
+      //         System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR.");
+      //      }
+
+      if ((args[5] != null) && (!args[5].equals(""))) {
+         MERCATOR = Boolean.parseBoolean(args[5]);
+         if (MERCATOR) {
+            System.out.println("MERCATOR projection");
          }
          else {
-            System.err.println("Invalid HOST argument. Using default HOST.");
-         }
-
-         if ((args[1] != null) && (!args[1].equals(""))) {
-            PORT = args[1];
-            System.out.println("PORT: " + PORT);
-         }
-         else {
-            System.err.println("Invalid PORT argument. Using default PORT.");
-         }
-
-         if ((args[2] != null) && (!args[2].equals(""))) {
-            USER = args[2];
-            System.out.println("USER: " + USER);
-         }
-         else {
-            System.err.println("Invalid USER argument. Using default USER.");
-         }
-
-         if ((args[3] != null) && (!args[3].equals(""))) {
-            PASSWORD = args[3];
-            System.out.println("PASSWORD: " + PASSWORD);
-         }
-         else {
-            System.err.println("Invalid PASSWORD argument. Using default PASSWORD.");
-         }
-
-         if ((args[4] != null) && (!args[4].equals(""))) {
-            DATABASE_NAME = args[4];
-            System.out.println("DATABASE_NAME: " + DATABASE_NAME);
-         }
-         else {
-            System.err.println("Invalid DATABASE_NAME argument. Using default DATABASE_NAME.");
+            System.out.println("WGS84 projection");
          }
       }
       else {
-         System.err.println("FAIL: Invalid number of arguments (" + args.length + ").");
-         //System.exit(1);
+         System.err.println("Invalid PROJECTION specification.");
       }
+
+      if ((args[6] != null) && (!args[6].equals(""))) {
+         FIRST_LEVEL = Integer.parseInt(args[6]);
+         System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
+      }
+      else {
+         System.err.println("Invalid FIRST_LEVEL argument. Using default FIRST_LEVEL.");
+      }
+
+      if ((args[7] != null) && (!args[7].equals(""))) {
+         MAX_LEVEL = Integer.parseInt(args[7]);
+         System.out.println("MAX_LEVEL: " + MAX_LEVEL);
+      }
+      else {
+         System.err.println("Invalid MAX_LEVEL argument. Using default MAX_LEVEL.");
+      }
+
+      if ((args[8] != null) && (!args[8].equals(""))) {
+         DATABASE_TABLE = args[8];
+         System.out.println("DATABASE_TABLE: " + DATABASE_TABLE);
+      }
+      else {
+         System.err.println("Invalid DATABASE_TABLE argument.");
+         System.exit(1);
+      }
+
+      if ((args[9] != null) && (!args[9].equals(""))) {
+         FILTER_CRITERIA = args[9];
+         System.out.println("FILTER_CRITERIA: " + FILTER_CRITERIA);
+      }
+      else {
+         System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
+      }
+
+      final int numProperties = args.length - 10;
+      if (numProperties > 0) {
+         PROPERTIES = new String[numProperties];
+         System.out.print("PROPERTIES: ");
+         for (int i = 0; i < numProperties; i++) {
+            PROPERTIES[i] = args[10 + i];
+            System.out.print(PROPERTIES[i]);
+            if (i == (numProperties - 1)) {
+               System.out.println(".");
+            }
+            else {
+               System.out.print(", ");
+            }
+         }
+         System.out.println();
+      }
+      else {
+         System.err.println("Non PROPERTIES argument. No property included from datasource.");
+      }
+
+
    }
 
 
    public static void main(final String[] args) {
 
       initializeWithArguments(args);
+
+      //command line:
+      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test 2.0 false 0 3 ne_10m_admin_0_countries true continent pop_est
 
       System.out.print("Connect to POSTGIS DB " + DATABASE_NAME + ".. ");
 
@@ -682,7 +769,8 @@ public class VectorialLOD {
 
          initialize();
 
-         final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, "continent", "pop_est");
+         final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, PROPERTIES);
+         //final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, "continent", "pop_est");
          //         final DataSource dataSource = new DataSource("ne_10m_admin_0_boundary_lines_land", "true", "adm0_left", "labelrank");
          //         final DataSource dataSource = new DataSource("ne_10m_populated_places", "true", "NAMEASCII", "POP_MAX");
 
