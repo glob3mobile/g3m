@@ -78,16 +78,20 @@ public:
 };
 
 RasterLayerTileImageProvider::~RasterLayerTileImageProvider() {
+#ifdef C_CODE
   std::map<std::string, long long>::iterator iter;
-
   for (iter = _requestsIdsPerTile.begin();
        iter != _requestsIdsPerTile.end();
        ++iter) {
     const long long requestId = iter->second;
     _downloader->cancelRequest(requestId);
   }
-
+#endif
 #ifdef JAVA_CODE
+  for (java.util.Map.Entry<String, Long> entry : _requestsIdsPerTile.entrySet()) {
+    _downloader.cancelRequest(entry.getValue());
+  }
+
   super.dispose();
 #endif
 }
