@@ -18,7 +18,13 @@ private:
   class ImageListener : public IImageListener {
   private:
     const std::string           _tileId;
+#ifdef C_CODE
     const TileImageContribution _contribution;
+#endif
+#ifdef JAVA_CODE
+    private final TileImageContribution _contribution;
+#endif
+
     TileImageListener*          _listener;
     bool                        _deleteListener;
 

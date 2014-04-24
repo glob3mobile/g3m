@@ -19,7 +19,12 @@
 class RLTIP_ImageDownloadListener : public IImageDownloadListener {
 private:
   const std::string           _tileId;
+#ifdef C_CODE
   const TileImageContribution _contribution;
+#endif
+#ifdef JAVA_CODE
+  private final TileImageContribution _contribution;
+#endif
 
   TileImageListener* _listener;
   const bool         _deleteListener;
