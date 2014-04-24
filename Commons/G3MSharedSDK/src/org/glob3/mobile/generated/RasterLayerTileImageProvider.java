@@ -31,12 +31,8 @@ public class RasterLayerTileImageProvider extends TileImageProvider
 
   public void dispose()
   {
-    java.util.Iterator<String, Long> iter;
-  
-    for (iter = _requestsIdsPerTile.iterator(); iter.hasNext();)
-    {
-      final long requestId = iter.next().getValue();
-      _downloader.cancelRequest(requestId);
+    for (java.util.Map.Entry<String, Long> entry : _requestsIdsPerTile.entrySet()) {
+      _downloader.cancelRequest(entry.getValue());
     }
   
     super.dispose();
