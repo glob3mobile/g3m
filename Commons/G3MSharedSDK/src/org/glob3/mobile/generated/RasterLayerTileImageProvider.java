@@ -17,13 +17,17 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class RasterLayer;
 //class IDownloader;
+
 
 public class RasterLayerTileImageProvider extends TileImageProvider
 {
   private final RasterLayer _layer;
   private IDownloader _downloader;
+
+  private java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
 
 
   public RasterLayerTileImageProvider(RasterLayer layer, IDownloader downloader)
@@ -39,27 +43,33 @@ public class RasterLayerTileImageProvider extends TileImageProvider
 
   public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
-  
     final String tileId = tile._id;
   
-    final long requestId = _layer.requestImage(tile, _downloader, tileDownloadPriority, new RLTIP_ImageDownloadListener(tileId, contribution, listener, deleteListener), true); // deleteListener
+    final long requestId = _layer.requestImage(tile, _downloader, tileDownloadPriority, new RLTIP_ImageDownloadListener(this, tileId, contribution, listener, deleteListener), true); // deleteListener
   
-  
-  //  aa;
-  
-  //  listener->imageCreationError(tile->_id, "Not yet implemented");
-  //  if (deleteListener) {
-  //    delete listener;
-  //  }
-  
+    if (requestId >= 0)
+    {
+      _requestsIdsPerTile.put(tileId, requestId);
+    }
   }
 
   public final void cancel(Tile tile)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
+    final String tileId = tile._id;
+    if (_requestsIdsPerTile.containsKey(tileId))
+    {
+      final long requestId = _requestsIdsPerTile.get(tileId);
+  
+      _downloader.cancelRequest(requestId);
+  
+      _requestsIdsPerTile.remove(tileId);
+    }
+  }
+
+
+  public final void requestFinish(String tileId)
+  {
+    _requestsIdsPerTile.remove(tileId);
   }
 
 }

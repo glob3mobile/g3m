@@ -1,16 +1,16 @@
 package org.glob3.mobile.generated; 
-///#include "IDownloader.hpp"
-
 public class RLTIP_ImageDownloadListener extends IImageDownloadListener
 {
+  private RasterLayerTileImageProvider _rasterLayerTileImageProvider;
   private final String _tileId;
   private final TileImageContribution _contribution;
 
   private TileImageListener _listener;
   private final boolean _deleteListener;
 
-  public RLTIP_ImageDownloadListener(String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
+  public RLTIP_ImageDownloadListener(RasterLayerTileImageProvider rasterLayerTileImageProvider, String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
   {
+     _rasterLayerTileImageProvider = rasterLayerTileImageProvider;
      _tileId = tileId;
      _contribution = contribution;
      _listener = listener;
@@ -19,6 +19,8 @@ public class RLTIP_ImageDownloadListener extends IImageDownloadListener
 
   public void dispose()
   {
+    _rasterLayerTileImageProvider.requestFinish(_tileId);
+
     if (_deleteListener)
     {
       if (_listener != null)
