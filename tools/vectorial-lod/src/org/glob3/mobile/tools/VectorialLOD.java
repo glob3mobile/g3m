@@ -25,12 +25,29 @@ public class VectorialLOD {
 
    final static String                       ROOT_DIRECTORY     = "LOD";
 
-   final static boolean                      MERCATOR           = false;                        // MERCATOR: EPSG:3857, EPSG:900913 (Google)
+   //-- Data base connection parameters ----------------------------------------------------------------
+   //   private static String                             HOST               = "igosoftware.dyndns.org";
+   //   private static String                             PORT               = "5414";
+   private static String                     HOST               = "192.168.1.14";
+   private static String                     PORT               = "5432";
+   private static String                     USER               = "postgres";
+   private static String                     PASSWORD           = "postgres1g0";
+   private static String                     DATABASE_NAME      = "vectorial_test";
+
+   //-- Data source and filter parameters --------------------------------------------------------------
+   private static String                     DATABASE_TABLE     = "ne_10m_admin_0_countries";
+   private static String                     FILTER_CRITERIA    = "true";
+   private static String                     PROPERTIES         = "";
+
+   //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
+   final static boolean                      MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
    final static int                          FIRST_LEVEL        = 0;
    final static int                          MAX_LEVEL          = 3;
-   final static int                          NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
-   final static double                       TOLERANCE          = 0.1;
+   final static float                        QUALITY_FACTOR     = 2.0f;
+   final static double                       OVERLAP_PERCENTAGE = 10;
 
+   //-- Internal constants definition ------------------------------------------------------------------
+   final static int                          NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
    final static int                          MAX_DB_CONNECTIONS = NUM_LEVELS;
    final static int                          CONNECTION_TIMEOUT = 5;                            //seconds
 
@@ -194,7 +211,14 @@ public class VectorialLOD {
                                          final String geomFilterCriteria,
                                          final String... includeProperties) {
 
-      final String bboxQuery = buildSectorQuery(sector);
+
+      //final String bboxQuery = buildSectorQuery(sector);
+      final String bboxQuery = buildSectorQuery(TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE));
+
+      if (bboxQuery == null) {
+         return null;
+      }
+
       final String propsQuery = buildPropertiesQuery(includeProperties);
 
       final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.";
@@ -289,6 +313,29 @@ public class VectorialLOD {
       }
 
       return result;
+   }
+
+
+   private static String buildSectorQuery(final List<Sector> sectorList) {
+
+      //SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326))),0.027))::json As geometry, row_to_json((SELECT l FROM (SELECT "continent", "pop_est") As l)) As properties FROM (SELECT * FROM ne_10m_admin_0_countries WHERE (true)) As lg WHERE ST_Intersects(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326)))) As f ) As fc;
+
+      //ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326))
+
+      if ((sectorList.size() < 1) || (sectorList.size() > 2)) {
+         return null;
+      }
+
+      if (sectorList.size() == 1) {
+
+         return buildSectorQuery(sectorList.get(0));
+      }
+
+      final String resultQuery = "ST_Union(" + buildSectorQuery(sectorList.get(0)) + "," + buildSectorQuery(sectorList.get(1))
+                                 + ")";
+
+      return resultQuery;
+
    }
 
 
@@ -480,11 +527,10 @@ public class VectorialLOD {
       }
 
       try {
-
          final String geoJson = selectGeometries(dataSource._sourceTable, //
-                  //sector.getSector(), //
-                  sector.getExtendedSector(TOLERANCE),//
-                  2.0f, // qualityFactor
+                  sector.getSector(), //
+                  //sector.getExtendedSector(OVERLAP_PERCENTAGE),//
+                  QUALITY_FACTOR, // qualityFactor
                   dataSource._geomFilterCriteria, //
                   dataSource._includeProperties);
 
@@ -572,17 +618,71 @@ public class VectorialLOD {
    }
 
 
+   private static void initializeWithArguments(final String[] args) {
+
+      System.out.println("Starting layer tiles generation.. ");
+
+      if (args.length == 5) {
+         if ((args[0] != null) && (!args[0].equals(""))) {
+            HOST = args[0];
+            System.out.println("HOST: " + HOST);
+         }
+         else {
+            System.err.println("Invalid HOST argument. Using default HOST.");
+         }
+
+         if ((args[1] != null) && (!args[1].equals(""))) {
+            PORT = args[1];
+            System.out.println("PORT: " + PORT);
+         }
+         else {
+            System.err.println("Invalid PORT argument. Using default PORT.");
+         }
+
+         if ((args[2] != null) && (!args[2].equals(""))) {
+            USER = args[2];
+            System.out.println("USER: " + USER);
+         }
+         else {
+            System.err.println("Invalid USER argument. Using default USER.");
+         }
+
+         if ((args[3] != null) && (!args[3].equals(""))) {
+            PASSWORD = args[3];
+            System.out.println("PASSWORD: " + PASSWORD);
+         }
+         else {
+            System.err.println("Invalid PASSWORD argument. Using default PASSWORD.");
+         }
+
+         if ((args[4] != null) && (!args[4].equals(""))) {
+            DATABASE_NAME = args[4];
+            System.out.println("DATABASE_NAME: " + DATABASE_NAME);
+         }
+         else {
+            System.err.println("Invalid DATABASE_NAME argument. Using default DATABASE_NAME.");
+         }
+      }
+      else {
+         System.err.println("FAIL: Invalid number of arguments (" + args.length + ").");
+         //System.exit(1);
+      }
+   }
+
+
    public static void main(final String[] args) {
 
-      System.out.print("Connect to POSTGIS DB vectorial_test.. ");
+      initializeWithArguments(args);
 
-      if (createDataBaseService("192.168.1.14", "5432", "postgres", "postgres1g0", "vectorial_test")) {
+      System.out.print("Connect to POSTGIS DB " + DATABASE_NAME + ".. ");
+
+      if (createDataBaseService(HOST, PORT, USER, PASSWORD, DATABASE_NAME)) {
          //      if (createDataBaseService("igosoftware.dyndns.org", "5414", "postgres", "postgres1g0", "vectorial_test")) {
          System.out.println("done.");
 
          initialize();
 
-         final DataSource dataSource = new DataSource("ne_10m_admin_0_countries", "true", "continent", "pop_est");
+         final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, "continent", "pop_est");
          //         final DataSource dataSource = new DataSource("ne_10m_admin_0_boundary_lines_land", "true", "adm0_left", "labelrank");
          //         final DataSource dataSource = new DataSource("ne_10m_populated_places", "true", "NAMEASCII", "POP_MAX");
 

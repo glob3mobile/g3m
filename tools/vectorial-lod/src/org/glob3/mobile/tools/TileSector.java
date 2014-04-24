@@ -3,6 +3,7 @@
 package org.glob3.mobile.tools;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -14,10 +15,14 @@ public class TileSector
          extends
             Sector {
 
-   public TileSector _parent;
-   public int        _level;
-   public int        _row;
-   public int        _column;
+   private final static Angle POS180 = Angle.fromDegrees(180.0);
+   private final static Angle NEG180 = Angle.fromDegrees(-180.0);
+   private final static Angle POS360 = Angle.fromDegrees(360.0);
+
+   public TileSector          _parent;
+   public int                 _level;
+   public int                 _row;
+   public int                 _column;
 
 
    public TileSector(final Geodetic2D lower,
@@ -54,18 +59,73 @@ public class TileSector
    }
 
 
-   public Sector getExtendedSector(final double tolerance) {
+   //   public Sector getExtendedSector(final double tolerance) {
+   //
+   //      final Geodetic2D geodeticDelta = new Geodetic2D(this._deltaLatitude.times(tolerance), this._deltaLongitude.times(tolerance));
+   //      final Geodetic2D extendedLower = this._lower.sub(geodeticDelta);
+   //      final Geodetic2D extendedUpper = this._upper.add(geodeticDelta);
+   //
+   //      return new Sector(extendedLower, extendedUpper);
+   //
+   //      //      final TileSector result = new TileSector(extendedLower, extendedUpper, this._parent, this._level, this._row, this._column);
+   //      //      System.out.println("SECTOR: " + this.toString());
+   //      //      System.out.println("EXTENDED SECTOR: " + result.toString());
+   //      //      return result;
+   //   }
 
-      final Geodetic2D geodeticDelta = new Geodetic2D(this._deltaLatitude.times(tolerance), this._deltaLongitude.times(tolerance));
-      final Geodetic2D extendedLower = this._lower.sub(geodeticDelta);
-      final Geodetic2D extendedUpper = this._upper.add(geodeticDelta);
+   public List<Sector> getExtendedSector(final double overlapPercentage) {
 
-      return new Sector(extendedLower, extendedUpper);
+      return TileSector.getExtendedSector(this, overlapPercentage);
+   }
 
-      //      final TileSector result = new TileSector(extendedLower, extendedUpper, this._parent, this._level, this._row, this._column);
-      //      System.out.println("SECTOR: " + this.toString());
-      //      System.out.println("EXTENDED SECTOR: " + result.toString());
-      //      return result;
+
+   public static List<Sector> getExtendedSector(final Sector sector,
+                                                final double overlapPercentage) {
+
+      final ArrayList<Sector> sectorList = new ArrayList<Sector>();
+
+      if (overlapPercentage == 0) {
+         sectorList.add(sector);
+         return sectorList;
+      }
+
+      final Geodetic2D geodeticDelta = new Geodetic2D(sector._deltaLatitude.times(overlapPercentage / 100.0),
+               sector._deltaLongitude.times(overlapPercentage / 100.0));
+      final Geodetic2D extendedLower = sector._lower.sub(geodeticDelta);
+      final Geodetic2D extendedUpper = sector._upper.add(geodeticDelta);
+
+      if (extendedLower._longitude.lowerThan(NEG180)) {
+         final Angle extendedLowerLon1 = POS360.add(extendedLower._longitude);
+
+         final Geodetic2D extendedLower1 = new Geodetic2D(extendedLower._latitude, extendedLowerLon1);
+         final Geodetic2D extendedUpper1 = new Geodetic2D(extendedUpper._latitude, POS180);
+         final Sector extendSector1 = new Sector(extendedLower1, extendedUpper1);
+         sectorList.add(extendSector1);
+
+         final Geodetic2D extendedLower2 = new Geodetic2D(extendedLower._latitude, NEG180);
+         final Geodetic2D extendedUpper2 = new Geodetic2D(extendedUpper._latitude, extendedUpper._longitude);
+         final Sector extendSector2 = new Sector(extendedLower2, extendedUpper2);
+         sectorList.add(extendSector2);
+      }
+      else if (extendedUpper._longitude.greaterThan(POS180)) {
+         final Angle extendedUpperLon2 = extendedUpper._longitude.sub(POS360);
+
+         final Geodetic2D extendedLower1 = new Geodetic2D(extendedLower._latitude, extendedLower._longitude);
+         final Geodetic2D extendedUpper1 = new Geodetic2D(extendedUpper._latitude, POS180);
+         final Sector extendedSector1 = new Sector(extendedLower1, extendedUpper1);
+         sectorList.add(extendedSector1);
+
+         final Geodetic2D extendedLower2 = new Geodetic2D(extendedLower._latitude, NEG180);
+         final Geodetic2D extendedUpper2 = new Geodetic2D(extendedUpper._latitude, extendedUpperLon2);
+         final Sector extendedSector2 = new Sector(extendedLower2, extendedUpper2);
+         sectorList.add(extendedSector2);
+      }
+      else {
+         final Sector extendedSector = new Sector(extendedLower, extendedUpper);
+         sectorList.add(extendedSector);
+      }
+
+      return sectorList;
    }
 
 
