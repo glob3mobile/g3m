@@ -23,7 +23,8 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   private static class ImageListener extends IImageListener
   {
     private final String _tileId;
-    private final TileImageContribution _contribution = new TileImageContribution();
+    private final TileImageContribution _contribution;
+
     private TileImageListener _listener;
     private boolean _deleteListener;
 
@@ -41,7 +42,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
     public ImageListener(String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
     {
        _tileId = tileId;
-       _contribution = new TileImageContribution(contribution);
+       _contribution = contribution;
        _listener = listener;
        _deleteListener = deleteListener;
     }

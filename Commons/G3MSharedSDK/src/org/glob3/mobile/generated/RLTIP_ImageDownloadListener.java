@@ -4,7 +4,7 @@ package org.glob3.mobile.generated;
 public class RLTIP_ImageDownloadListener extends IImageDownloadListener
 {
   private final String _tileId;
-  private final TileImageContribution _contribution = new TileImageContribution();
+  private final TileImageContribution _contribution;
 
   private TileImageListener _listener;
   private final boolean _deleteListener;
@@ -12,7 +12,7 @@ public class RLTIP_ImageDownloadListener extends IImageDownloadListener
   public RLTIP_ImageDownloadListener(String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
   {
      _tileId = tileId;
-     _contribution = new TileImageContribution(contribution);
+     _contribution = contribution;
      _listener = listener;
      _deleteListener = deleteListener;
   }
