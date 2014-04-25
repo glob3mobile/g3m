@@ -297,6 +297,12 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
       ILogger.instance().logError("Changed Renderer Info Listener of CompositeRenderer already set");
     }
     _changedInfoListener = changedInfoListener;
+  
+    if(_changedInfoListener != null)
+    {
+      _changedInfoListener.changedRendererInfo(-1, getInfo());
+    }
+  
     ILogger.instance().logInfo("Changed Renderer Info Listener of CompositeRenderer set ok");
   }
 

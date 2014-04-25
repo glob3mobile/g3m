@@ -410,26 +410,17 @@ public abstract class IG3MBuilder
      *    The renderers contained in the list, will be added to the main renderer.
      * If not, the main renderer will be made up of an only renderer (planetRenderer).
      */
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning VTP->TODO DELETE INFO VECTORS, THIS IS ONLY FOR TEST
     Renderer mainRenderer = null;
     if (getRenderers().size() > 0)
     {
       mainRenderer = new CompositeRenderer();
       if (!containsPlanetRenderer(getRenderers()))
       {
-        java.util.ArrayList<String> info = new java.util.ArrayList<String>();
-        info.add("This is PlanetRender ");
-        ((CompositeRenderer) mainRenderer).addRenderer(getPlanetRendererBuilder().create(), info);
+        ((CompositeRenderer) mainRenderer).addRenderer(getPlanetRendererBuilder().create());
       }
       for (int i = 0; i < getRenderers().size(); i++)
       {
-        IStringBuilder sb = IStringBuilder.newStringBuilder();
-        sb.addString("Render ");
-        sb.addInt(i);
-        java.util.ArrayList<String> info = new java.util.ArrayList<String>();
-        info.add(sb.getString());
-        ((CompositeRenderer) mainRenderer).addRenderer(getRenderers().get(i), info);
+        ((CompositeRenderer) mainRenderer).addRenderer(getRenderers().get(i));
       }
     }
     else

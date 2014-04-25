@@ -195,8 +195,12 @@ public abstract class DefaultRenderer implements Renderer
     {
       ILogger.instance().logError("Changed Renderer Info Listener of DefaultRenderer already set");
     }
-    _changedInfoListener = changedInfoListener;
-    _rendererIdentifier = rendererIdentifier;
-    ILogger.instance().logInfo("Changed Renderer Info Listener of DefaultRenderer set ok");
+    else
+    {
+      _changedInfoListener = changedInfoListener;
+      _rendererIdentifier = rendererIdentifier;
+      notifyChangedInfo(_info);
+      ILogger.instance().logInfo("Changed Renderer Info Listener of DefaultRenderer set ok");
+    }
   }
 }

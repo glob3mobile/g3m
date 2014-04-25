@@ -503,11 +503,11 @@ public class PlanetRendererBuilder
     if (_changedInfoListener != null)
     {
       ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
-      return;
     }
-  
-    _changedInfoListener = changedInfoListener;
-    ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder set OK");
-  
+    else
+    {
+      _changedInfoListener = changedInfoListener;
+      ILogger.instance().logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
+    }
   }
 }
