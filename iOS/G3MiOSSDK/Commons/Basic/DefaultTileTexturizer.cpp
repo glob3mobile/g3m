@@ -271,12 +271,10 @@ public:
       //if (contribution == NONE) {
       if (contribution.isNone()) {
         if (_tile != NULL) {
-#warning remove this!
           _tile->setTextureSolved(true);
         }
       }
       else {
-#warning TODO
         _tileImageProvider->create(_tile,
                                    contribution,
                                    _tileTextureResolution,
@@ -298,17 +296,6 @@ public:
       _canceled = true;
       _tileImageProvider->cancel(_tile);
     }
-//    if (!_canceled) {
-//      _canceled = true;
-//
-//      if (!_finalized) {
-//        for (int i = 0; i < _requestsIds.size(); i++) {
-//          const long long requestId = _requestsIds[i];
-//          _downloader->cancelRequest(requestId);
-//        }
-//      }
-//      _requestsIds.clear();
-//    }
   }
 
   bool isCanceled() const {
@@ -480,15 +467,15 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        bool logTilesPetitions) {
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
 
-#warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
 //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
 //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
 
+#warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
   TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
                                                                         layerTilesRenderParameters);
 
   if (tileImageProvider == NULL) {
-#warning TODO
+#warning TODO: error callback
     tile->setTextureSolved(true);
     tile->setTexturizerDirty(false);
     return NULL;
