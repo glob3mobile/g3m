@@ -93,8 +93,8 @@ public class HUDImageRenderer extends DefaultRenderer
   
           final Camera camera = rc.getCurrentCamera();
   
-          final int width = camera.getWidth();
-          final int height = camera.getHeight();
+          final int width = camera.getViewPortWidth();
+          final int height = camera.getViewPortHeight();
   
           _imageFactory.create(rc, width, height, new HUDImageRenderer.ImageListener(this), true);
         }
@@ -136,8 +136,8 @@ public class HUDImageRenderer extends DefaultRenderer
   
     final Camera camera = rc.getCurrentCamera();
   
-    final double halfWidth = camera.getWidth() / 2.0;
-    final double halfHeight = camera.getHeight() / 2.0;
+    final double halfWidth = camera.getViewPortWidth() / 2.0;
+    final double halfHeight = camera.getViewPortHeight() / 2.0;
   
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
     vertices.add(-halfWidth, halfHeight, 0);

@@ -60,18 +60,13 @@ private:
   std::vector<Tile*>* _subtiles;
   bool _justCreatedSubtiles;
 
-  bool _texturizerDirty;    //Texturizer needs to be called
+  bool _texturizerDirty;
 
   float _verticalExaggeration;
   TileTessellatorMeshData _tileTessellatorMeshData;
 
   BoundingVolume* _boundingVolume;
 
-  //LOD TEST DATA
-//  Vector3D* _middleNorthPoint;
-//  Vector3D* _middleSouthPoint;
-//  Vector3D* _middleEastPoint;
-//  Vector3D* _middleWestPoint;
   Vector3D* _northWestPoint;
   Vector3D* _northEastPoint;
   Vector3D* _southWestPoint;
@@ -82,8 +77,6 @@ private:
 
   void computeTileCorners(const Planet* planet);
 
-//  double _latitudeArcSegmentRatioSquared;
-//  double _longitudeArcSegmentRatioSquared;
   double _northArcSegmentRatioSquared;
   double _southArcSegmentRatioSquared;
   double _eastArcSegmentRatioSquared;
@@ -91,7 +84,6 @@ private:
 
 
   void prepareTestLODData(const Planet* planet);
-  //////////////////////////////////////////
 
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   ElevationDataProvider* elevationDataProvider,
@@ -205,22 +197,6 @@ public:
 
   //Change to public for TileCache
   std::vector<Tile*>* getSubTiles(const bool mercator);
-
-  //  const Sector getSector() const {
-  //    return _sector;
-  //  }
-  //
-  //  int getLevel() const {
-  //    return _level;
-  //  }
-  //
-  //  int getRow() const {
-  //    return _row;
-  //  }
-  //
-  //  int getColumn() const {
-  //    return _column;
-  //  }
 
   Mesh* getTexturizedMesh() const {
     return _texturizedMesh;

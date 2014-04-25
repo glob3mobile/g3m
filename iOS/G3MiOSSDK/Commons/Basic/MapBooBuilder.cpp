@@ -188,7 +188,8 @@ MapBooBuilder::MapBooBuilder(const URL& serverURL,
                              const std::string& applicationId,
                              MapBoo_ViewType viewType,
                              MapBooApplicationChangeListener* applicationListener,
-                             bool enableNotifications) :
+                             bool enableNotifications,
+                             const std::string& token) :
 _serverURL(serverURL),
 _tubesURL(tubesURL),
 _applicationId(applicationId),
@@ -199,6 +200,7 @@ _applicationEMail(""),
 _applicationAbout(""),
 _applicationTimestamp(-1),
 _applicationEventId(-1),
+_token(token),
 _gl(NULL),
 _g3mWidget(NULL),
 _storage(NULL),
@@ -1436,12 +1438,14 @@ public:
   }
 };
 
-const URL MapBooBuilder::createApplicationRestURL() const {
+const URL MapBooBuilder::createApplicationPollURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_serverURL.getPath());
-  isb->addString("/REST/1/applications/");
+  isb->addString("/poll/");
   isb->addString(_applicationId);
-  isb->addString("?view=runtime&eventId=");
+  isb->addString("?view=");
+  isb->addString(getViewAsString());
+  isb->addString("&eventId=");
   isb->addInt(_applicationEventId);
   const std::string path = isb->getString();
   delete isb;
@@ -1678,6 +1682,34 @@ void MapBooBuilder::changeScene(const MapBoo_Scene* scene) {
   }
 }
 
+class MapBooBuilder_DummyListener : public IBufferDownloadListener {
+public:
+  MapBooBuilder_DummyListener()
+  {
+  }
+  
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+    // do nothing
+    delete buffer;
+  }
+  
+  void onError(const URL& url) {
+    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+  }
+  
+  void onCancel(const URL& url) {
+    // do nothing
+  }
+  
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    // do nothing
+  }
+};
+
 void MapBooBuilder::changedCurrentScene() {
   recreateLayerSet();
 
@@ -1709,19 +1741,26 @@ void MapBooBuilder::changedCurrentScene() {
   }
 
   if (_viewType == VIEW_EDITION_PREVIEW) {
-    if ((_webSocket != NULL) && _isApplicationTubeOpen) {
-      if (_applicationCurrentSceneId.compare(_lastApplicationCurrentSceneId) != 0) {
-        if (_lastApplicationCurrentSceneId.compare("-1") != 0) {
+    if (_applicationCurrentSceneId.compare(_lastApplicationCurrentSceneId) != 0) {
+      if (_lastApplicationCurrentSceneId.compare("-1") != 0) {
+        if (_webSocket != NULL && _isApplicationTubeOpen) {
           _webSocket->send( getApplicationCurrentSceneCommand() );
         }
-        _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
+        else if (_token.length() > 0) {
+            _g3mWidget->getG3MContext()->getDownloader()->requestBuffer(createApplicationCurrentSceneURL(), //
+                                                                        DownloadPriority::HIGHEST, //
+                                                                        TimeInterval::zero(), //
+                                                                        false, // readExpired
+                                                                        new MapBooBuilder_DummyListener(), //
+                                                                        false);
+        }
+        else {
+            ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+        }
       }
-    }
-    else {
-      ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+      _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
     }
   }
-  
 }
 
 const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
@@ -1731,6 +1770,22 @@ const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+const URL MapBooBuilder::createApplicationCurrentSceneURL() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_serverURL.getPath());
+  isb->addString("/REST/1/applications/");
+  isb->addString(_applicationId);
+  isb->addString("/_POST_?");
+  isb->addString("currentSceneId=");
+  isb->addString(_applicationCurrentSceneId);
+  isb->addString("&token=");
+  isb->addString(_token);
+  const std::string path = isb->getString();
+  delete isb;
+
+  return URL(path, false);
 }
 
 void MapBooBuilder::updateVisibleScene(const bool cameraPositionChanged) {
@@ -1892,12 +1947,25 @@ const MapBoo_Notification* MapBooBuilder::createNotification(const Geodetic2D&  
 
 void MapBooBuilder::pollApplicationDataFromServer(const G3MContext *context) {
   IDownloader* downloader = context->getDownloader();
-  downloader->requestBuffer(createApplicationRestURL(),
+  downloader->requestBuffer(createApplicationPollURL(),
                             DownloadPriority::HIGHEST,
                             TimeInterval::zero(),
                             false, // readExpired
                             new MapBooBuilder_RestJSON(this),
                             true);
+}
+
+
+const std::string MapBooBuilder::getViewAsString() const {
+  switch (_viewType) {
+    case VIEW_EDITION_PREVIEW:
+      return "edition-preview";
+    case VIEW_PRESENTATION:
+      return "presentation";
+    case VIEW_RUNTIME:
+    default:
+      return "runtime";
+  }
 }
 
 const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,

@@ -308,6 +308,52 @@ public class Sector
     return Geodetic2D.fromDegrees(latitudeInDegrees, longitudeInDegrees);
   }
 
+  public final Geodetic2D clamp(Angle latitude, Angle longitude)
+  {
+    if (contains(latitude, longitude))
+    {
+      return new Geodetic2D(latitude, longitude);
+    }
+  
+    double latitudeInDegrees = latitude._degrees;
+    double longitudeInDegrees = longitude._degrees;
+  
+    final double upperLatitudeInDegrees = _upper._latitude._degrees;
+    if (latitudeInDegrees > upperLatitudeInDegrees)
+    {
+      latitudeInDegrees = upperLatitudeInDegrees;
+    }
+  
+    final double upperLongitudeInDegrees = _upper._longitude._degrees;
+    if (longitudeInDegrees > upperLongitudeInDegrees)
+    {
+      longitudeInDegrees = upperLongitudeInDegrees;
+    }
+  
+    final double lowerLatitudeInDegrees = _lower._latitude._degrees;
+    if (latitudeInDegrees < lowerLatitudeInDegrees)
+    {
+      latitudeInDegrees = lowerLatitudeInDegrees;
+    }
+  
+    final double lowerLongitudeInDegrees = _lower._longitude._degrees;
+    if (longitudeInDegrees < lowerLongitudeInDegrees)
+    {
+      longitudeInDegrees = lowerLongitudeInDegrees;
+    }
+  
+    return Geodetic2D.fromDegrees(latitudeInDegrees, longitudeInDegrees);
+  }
+
+  public final Angle clampLatitude(Angle latitude)
+  {
+    return latitude.clampedTo(_lower._latitude, _upper._latitude);
+  }
+  public final Angle clampLongitude(Angle longitude)
+  {
+    return longitude.clampedTo(_lower._longitude, _upper._longitude);
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

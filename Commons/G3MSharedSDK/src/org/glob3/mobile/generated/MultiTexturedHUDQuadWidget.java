@@ -72,8 +72,8 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
     }
   
     final Camera camera = rc.getCurrentCamera();
-    final int viewPortWidth = camera.getWidth();
-    final int viewPortHeight = camera.getHeight();
+    final int viewPortWidth = camera.getViewPortWidth();
+    final int viewPortHeight = camera.getViewPortHeight();
   
     final float width = _width;
     final float height = _height;
