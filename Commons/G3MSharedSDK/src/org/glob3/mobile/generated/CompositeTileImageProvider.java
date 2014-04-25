@@ -78,10 +78,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         final int childrenContributionsSize = childrenContributions.size();
         if ((childrenContributionsSize > 0) && childContribution.isFullCoverageAndOpaque())
         {
-          for (int i = 0; i < childrenContributionsSize; i++)
+          for (int j = 0; j < childrenContributionsSize; j++)
           {
-            if (childrenContributions.get(i) != null)
-               childrenContributions.get(i).dispose();
+            if (childrenContributions.get(j) != null)
+               childrenContributions.get(j).dispose();
           }
           childrenContributions.clear();
         }

@@ -64,6 +64,10 @@ public class TileImageContribution
      _alpha = that._alpha;
   }
 
+  public void dispose()
+  {
+  }
+
 
   //TileImageContribution* TileImageContribution::lastFullCoverageTransparent  = NULL;
   
@@ -107,14 +111,7 @@ public class TileImageContribution
 
   public static TileImageContribution partialCoverageTransparent(Sector sector, float alpha)
   {
-    if (alpha <= 0.01)
-    {
-      return NONE;
-    }
-    else
-    {
-      return new TileImageContribution(sector, true, alpha);
-    }
+    return (alpha <= 0.01) ? NONE : new TileImageContribution(sector, true, alpha);
   }
 
   public final boolean isNone()
