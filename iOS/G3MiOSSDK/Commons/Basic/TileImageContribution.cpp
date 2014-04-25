@@ -46,10 +46,5 @@ const TileImageContribution TileImageContribution::partialCoverageOpaque(const S
 
 const TileImageContribution TileImageContribution::partialCoverageTransparent(const Sector& sector,
                                                                               float alpha) {
-  if (alpha <= 0.01) {
-    return NONE;
-  }
-  else {
-    return TileImageContribution(sector, true, alpha);
-  }
+  return (alpha <= 0.01) ? NONE : TileImageContribution(sector, true, alpha);
 }

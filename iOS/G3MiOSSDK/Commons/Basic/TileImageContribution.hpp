@@ -62,6 +62,9 @@ public:
   {
   }
 
+  ~TileImageContribution() {
+  }
+
   static const TileImageContribution none();
 
   static const TileImageContribution fullCoverageOpaque();

@@ -124,8 +124,8 @@ TileImageContribution CompositeTileImageProvider::contribution(const Tile* tile)
       const int childrenContributionsSize = childrenContributions.size();
       if ((childrenContributionsSize > 0) &&
           childContribution.isFullCoverageAndOpaque()) {
-        for (int i = 0; i < childrenContributionsSize; i++) {
-          delete childrenContributions[i];
+        for (int j = 0; j < childrenContributionsSize; j++) {
+          delete childrenContributions[j];
         }
         childrenContributions.clear();
       }
