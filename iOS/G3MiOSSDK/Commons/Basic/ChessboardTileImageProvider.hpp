@@ -35,6 +35,7 @@ public:
               const TileImageContribution& contribution,
               const Vector2I& resolution,
               long long tileDownloadPriority,
+              bool logDownloadActivity,
               TileImageListener* listener,
               bool deleteListener);
 

@@ -66,9 +66,14 @@ const TileImageContribution RasterLayer::contribution(const Tile* tile) const {
 long long RasterLayer::requestImage(const Tile* tile,
                                     IDownloader* downloader,
                                     long long tileDownloadPriority,
+                                    bool logDownloadActivity,
                                     IImageDownloadListener* listener,
                                     bool deleteListener) const {
-  return downloader->requestImage(createURL(tile),
+  const URL url = createURL(tile);
+  if (logDownloadActivity) {
+    ILogger::instance()->logInfo("Downloading %s", url.getPath().c_str());
+  }
+  return downloader->requestImage(url,
                                   tileDownloadPriority,
                                   getTimeToCache(),
                                   _readExpired,

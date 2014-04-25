@@ -281,6 +281,7 @@ public:
                                    contribution,
                                    _tileTextureResolution,
                                    _tileDownloadPriority,
+                                   _logTilesPetitions,
                                    new DTT_TileImageListener(this),
                                    true);
       }

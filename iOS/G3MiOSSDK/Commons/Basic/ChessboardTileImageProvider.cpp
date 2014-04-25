@@ -77,6 +77,7 @@ void ChessboardTileImageProvider::create(const Tile* tile,
                                          const TileImageContribution& contribution,
                                          const Vector2I& resolution,
                                          long long tileDownloadPriority,
+                                         bool logDownloadActivity,
                                          TileImageListener* listener,
                                          bool deleteListener) {
   if (_image == NULL) {
