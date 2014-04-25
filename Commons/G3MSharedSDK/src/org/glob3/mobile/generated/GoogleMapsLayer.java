@@ -105,25 +105,25 @@ public class GoogleMapsLayer extends RasterLayer
   }
 
 
-  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
   {
-     this(key, timeToCache, readExpired, initialLevel, condition, (float)1.0);
+     this(key, timeToCache, readExpired, initialLevel, transparency, null);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(key, timeToCache, readExpired, initialLevel, null, (float)1.0);
+     this(key, timeToCache, readExpired, initialLevel, 1, null);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired)
   {
-     this(key, timeToCache, readExpired, 2, null, (float)1.0);
+     this(key, timeToCache, readExpired, 2, 1, null);
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache)
   {
-     this(key, timeToCache, true, 2, null, (float)1.0);
+     this(key, timeToCache, true, 2, 1, null);
   }
-  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
   {
-     super(condition, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition);
      _key = key;
      _initialLevel = initialLevel;
   
@@ -200,7 +200,7 @@ public class GoogleMapsLayer extends RasterLayer
 
   public final GoogleMapsLayer copy()
   {
-    return new GoogleMapsLayer(_key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
+    return new GoogleMapsLayer(_key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

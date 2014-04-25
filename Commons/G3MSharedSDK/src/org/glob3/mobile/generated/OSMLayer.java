@@ -40,21 +40,25 @@ public class OSMLayer extends MercatorTiledLayer
     return true;
   }
 
+  public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
+  {
+     this(timeToCache, readExpired, initialLevel, transparency, null);
+  }
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(timeToCache, readExpired, initialLevel, null);
+     this(timeToCache, readExpired, initialLevel, 1, null);
   }
   public OSMLayer(TimeInterval timeToCache, boolean readExpired)
   {
-     this(timeToCache, readExpired, 2, null);
+     this(timeToCache, readExpired, 2, 1, null);
   }
   public OSMLayer(TimeInterval timeToCache)
   {
-     this(timeToCache, true, 2, null);
+     this(timeToCache, true, 2, 1, null);
   }
-  public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition) // isTransparent
   {
-     super("http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, 18, condition);
+     super("http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, 18, false, transparency, condition);
 
   }
 
@@ -65,7 +69,7 @@ public class OSMLayer extends MercatorTiledLayer
 
   public final OSMLayer copy()
   {
-    return new OSMLayer(TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
+    return new OSMLayer(TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

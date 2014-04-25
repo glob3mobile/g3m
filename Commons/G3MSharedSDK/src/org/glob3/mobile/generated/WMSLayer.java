@@ -280,15 +280,15 @@ public class WMSLayer extends RasterLayer
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, (float)1.0);
+     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, 1);
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, (float)1.0);
+     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, 1);
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
-     super(condition, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters, transparency);
+     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters, transparency, condition);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
@@ -306,15 +306,15 @@ public class WMSLayer extends RasterLayer
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, (float)1.0);
+     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, 1);
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, (float)1.0);
+     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, 1);
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
-     super(condition, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters, transparency);
+     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters, transparency, condition);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;

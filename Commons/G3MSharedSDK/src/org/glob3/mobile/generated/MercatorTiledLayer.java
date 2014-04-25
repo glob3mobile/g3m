@@ -28,6 +28,7 @@ public class MercatorTiledLayer extends RasterLayer
   protected final Sector _sector ;
   protected final int _initialLevel;
   protected final int _maxLevel;
+  protected final boolean _isTransparent;
 
   protected String getLayerType()
   {
@@ -91,8 +92,10 @@ public class MercatorTiledLayer extends RasterLayer
 
   protected final TileImageContribution rawContribution(Tile tile)
   {
-    //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
-    return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
+  //  return ((_transparency < 1)
+  //          ? TileImageContribution::fullCoverageTransparent(_transparency)
+  //          : TileImageContribution::fullCoverageOpaque());
+    return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
   }
 
   protected final URL createURL(Tile tile)
@@ -142,13 +145,17 @@ public class MercatorTiledLayer extends RasterLayer
    Implementation details: http: //wiki.openstreetmap.org/wiki/Slippy_map_tilenames
    */
   
-  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition)
+  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, boolean isTransparent, float transparency)
   {
-     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, condition, (float)1.0);
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, isTransparent, transparency, null);
   }
-  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition, float transparency)
+  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, boolean isTransparent)
   {
-     super(condition, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, isTransparent, 1, null);
+  }
+  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, boolean isTransparent, float transparency, LayerCondition condition)
+  {
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition);
      _protocol = protocol;
      _domain = domain;
      _subdomains = subdomains;
@@ -156,6 +163,7 @@ public class MercatorTiledLayer extends RasterLayer
      _sector = new Sector(sector);
      _initialLevel = initialLevel;
      _maxLevel = maxLevel;
+     _isTransparent = isTransparent;
   
   }
 
@@ -232,7 +240,7 @@ public class MercatorTiledLayer extends RasterLayer
 
   public MercatorTiledLayer copy()
   {
-    return new MercatorTiledLayer(_protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
+    return new MercatorTiledLayer(_protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, _isTransparent, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public RenderState getRenderState()

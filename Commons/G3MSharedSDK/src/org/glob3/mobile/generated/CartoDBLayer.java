@@ -46,18 +46,21 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   // http://0.tiles.cartocdn.com/mdelacalle/tiles/tm_world_borders_simpl_0_3/2/0/1.png
 
+  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency)
+  {
+     this(userName, table, timeToCache, readExpired, transparency, null);
+  }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired)
   {
-     this(userName, table, timeToCache, readExpired, null);
+     this(userName, table, timeToCache, readExpired, 1, null);
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache)
   {
-     this(userName, table, timeToCache, true, null);
+     this(userName, table, timeToCache, true, 1, null);
   }
-  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, LayerCondition condition)
-               //int initialCartoDBLevel = 1,
+  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition) // isTransparent
   {
-     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, condition);
+     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, false, transparency, condition);
      _userName = userName;
      _table = table;
 
@@ -75,7 +78,7 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   public final CartoDBLayer copy()
   {
-    return new CartoDBLayer(_userName, _table, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy());
+    return new CartoDBLayer(_userName, _table, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

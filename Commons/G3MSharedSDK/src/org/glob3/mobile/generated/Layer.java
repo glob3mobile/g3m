@@ -36,7 +36,6 @@ package org.glob3.mobile.generated;
 
 public abstract class Layer
 {
-  protected LayerCondition _condition;
   protected java.util.ArrayList<LayerTouchEventListener> _listeners = new java.util.ArrayList<LayerTouchEventListener>();
   protected java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
@@ -45,6 +44,9 @@ public abstract class Layer
   protected boolean _enable;
 
   protected LayerTilesRenderParameters _parameters;
+
+  protected final float _transparency;
+  protected final LayerCondition _condition;
 
   protected final void notifyChanges()
   {
@@ -56,9 +58,8 @@ public abstract class Layer
 
   protected String _title;
 
-  protected final float _transparency;
 
-  protected Layer(LayerCondition condition, LayerTilesRenderParameters parameters, float transparency)
+  protected Layer(LayerTilesRenderParameters parameters, float transparency, LayerCondition condition)
   {
      _condition = condition;
      _layerSet = null;

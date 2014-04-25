@@ -26,9 +26,9 @@ public abstract class RasterLayer extends Layer
   protected final long _timeToCacheMS;
   protected final boolean _readExpired;
 
-  protected RasterLayer(LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  protected RasterLayer(TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition)
   {
-     super(condition, parameters, transparency);
+     super(parameters, transparency, condition);
      _timeToCacheMS = timeToCache._milliseconds;
      _readExpired = readExpired;
   }
@@ -80,7 +80,6 @@ public abstract class RasterLayer extends Layer
     {
       return rawContribution(tile);
     }
-    //  return NONE;
     return TileImageContribution.none();
   }
 

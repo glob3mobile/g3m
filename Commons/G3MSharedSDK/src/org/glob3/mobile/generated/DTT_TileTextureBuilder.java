@@ -130,15 +130,11 @@ public class DTT_TileTextureBuilder extends RCObject
       {
         if (_tile != null)
         {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning remove this!
           _tile.setTextureSolved(true);
         }
       }
       else
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO
         _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this), true);
       }
     }
@@ -158,17 +154,6 @@ public class DTT_TileTextureBuilder extends RCObject
       _canceled = true;
       _tileImageProvider.cancel(_tile);
     }
-//    if (!_canceled) {
-//      _canceled = true;
-//
-//      if (!_finalized) {
-//        for (int i = 0; i < _requestsIds.size(); i++) {
-//          const long long requestId = _requestsIds[i];
-//          _downloader->cancelRequest(requestId);
-//        }
-//      }
-//      _requestsIds.clear();
-//    }
   }
 
   public final boolean isCanceled()
