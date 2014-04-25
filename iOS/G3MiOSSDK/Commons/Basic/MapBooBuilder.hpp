@@ -432,6 +432,7 @@ private:
   std::string                _lastApplicationCurrentSceneId;
   
   int                        _applicationEventId;
+  const std::string          _token;
 
   GL* _gl;
   G3MWidget* _g3mWidget;
@@ -548,6 +549,10 @@ private:
   
   void setCameraPosition(const MapBoo_CameraPosition* cameraPosition, const bool animated);
   void setCameraPosition(const MapBoo_CameraPosition* cameraPosition);
+  
+  const std::string getViewAsString() const;
+  
+  const URL createApplicationCurrentSceneURL() const;
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -555,7 +560,8 @@ protected:
                 const std::string& applicationId,
                 MapBoo_ViewType viewType,
                 MapBooApplicationChangeListener* applicationListener,
-                bool enableNotifications);
+                bool enableNotifications,
+                const std::string& token);
 
   virtual ~MapBooBuilder();
 
@@ -579,7 +585,7 @@ protected:
 
   SceneLighting* createSceneLighting();
 
-  const URL createApplicationRestURL() const;
+  const URL createApplicationPollURL() const;
 
 public:
   /** Private to MapbooBuilder, don't call it */

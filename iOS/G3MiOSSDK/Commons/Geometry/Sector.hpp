@@ -178,6 +178,12 @@ public:
                       double cameraAngle2HorizonInRadians) const;
 
   const Geodetic2D clamp(const Geodetic2D& pos) const;
+  
+  const Geodetic2D clamp(const Angle& latitude,
+                         const Angle& longitude) const;
+
+  const Angle clampLatitude(const Angle& latitude) const;
+  const Angle clampLongitude(const Angle& longitude) const;
 
   const std::string description() const;
 #ifdef JAVA_CODE

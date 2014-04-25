@@ -3,8 +3,8 @@ public class Camera
 {
   public Camera(Camera that)
   {
-     _width = that._width;
-     _height = that._height;
+     _viewPortWidth = that._viewPortWidth;
+     _viewPortHeight = that._viewPortHeight;
      _planet = that._planet;
      _position = new MutableVector3D(that._position);
      _center = new MutableVector3D(that._center);
@@ -70,8 +70,8 @@ public class Camera
   public final void copyFrom(Camera that)
   {
     //TODO: IMPROVE PERFORMANCE
-    _width = that._width;
-    _height = that._height;
+    _viewPortWidth = that._viewPortWidth;
+    _viewPortHeight = that._viewPortHeight;
   
     _planet = that._planet;
   
@@ -119,8 +119,8 @@ public class Camera
 
   public final void resizeViewport(int width, int height)
   {
-    _width = width;
-    _height = height;
+    _viewPortWidth = width;
+    _viewPortHeight = height;
   
     _dirtyFlags.setAll(true);
   }
@@ -128,10 +128,10 @@ public class Camera
   public final Vector3D pixel2Ray(Vector2I pixel)
   {
     final int px = pixel._x;
-    final int py = _height - pixel._y;
+    final int py = _viewPortHeight - pixel._y;
     final Vector3D pixel3D = new Vector3D(px, py, 0);
   
-    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
       return obj;
@@ -147,29 +147,29 @@ public class Camera
 
   public final Vector2F point2Pixel(Vector3D point)
   {
-    final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
+    final Vector2D p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
-    return new Vector2F((float) p._x, (float)(_height - p._y));
+    return new Vector2F((float) p._x, (float)(_viewPortHeight - p._y));
   }
   public final Vector2F point2Pixel(Vector3F point)
   {
-    final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
+    final Vector2F p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
-    return new Vector2F(p._x, (_height - p._y));
+    return new Vector2F(p._x, (_viewPortHeight - p._y));
   }
 
-  public final int getWidth()
+  public final int getViewPortWidth()
   {
-     return _width;
+     return _viewPortWidth;
   }
-  public final int getHeight()
+  public final int getViewPortHeight()
   {
-     return _height;
+     return _viewPortHeight;
   }
 
   public final float getViewPortRatio()
   {
-    return (float) _width / _height;
+    return (float) _viewPortWidth / _viewPortHeight;
   }
 
   public final EffectTarget getEffectTarget()
@@ -253,7 +253,7 @@ public class Camera
     getModelMatrix().print("Model Matrix", ILogger.instance());
     getProjectionMatrix().print("Projection Matrix", ILogger.instance());
     getModelViewMatrix().print("ModelView Matrix", ILogger.instance());
-    ILogger.instance().logInfo("Width: %d, Height %d\n", _width, _height);
+    ILogger.instance().logInfo("Viewport width: %d, height %d\n", _viewPortWidth, _viewPortHeight);
   }
 
   public final Frustum getFrustumInModelCoordinates()
@@ -451,7 +451,7 @@ public class Camera
     // this implementation is not right exact, but it's faster.
     final double z = sphere._center.distanceTo(getCartesianPosition());
     final double rWorld = sphere._radius * _frustumData._znear / z;
-    final double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
+    final double rScreen = rWorld * _viewPortHeight / (_frustumData._top - _frustumData._bottom);
     return DefineConstants.PI * rScreen * rScreen;
   }
 
@@ -538,14 +538,14 @@ public class Camera
     final double angleInRadians = ray1.angleInRadiansBetween(ray0);
     final FrustumData frustumData = getFrustumData();
     final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
-    return distanceInMeters * _height / frustumData._top;
+    return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
-  private int _width;
-  private int _height;
+  private int _viewPortWidth;
+  private int _viewPortHeight;
   private Planet _planet;
   private MutableVector3D _position = new MutableVector3D(); // position
   private MutableVector3D _center = new MutableVector3D(); // point where camera is looking at
@@ -681,7 +681,7 @@ public class Camera
   
     if ((tanHalfHFOV != tanHalfHFOV) || (tanHalfVFOV != tanHalfVFOV))
     {
-      final double ratioScreen = (double) _height / _width;
+      final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
   
       if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
       {

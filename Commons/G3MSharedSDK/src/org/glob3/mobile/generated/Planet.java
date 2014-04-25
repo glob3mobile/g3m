@@ -110,7 +110,7 @@ public abstract class Planet
 
   public abstract void applyCameraConstrainers(Camera previousCamera, Camera nextCamera);
 
-  public abstract Geodetic3D getDefaultCameraPosition(Sector shownSector);
+  public abstract Geodetic3D getDefaultCameraPosition(Sector rendereSector);
 
   public final CoordinateSystem getCoordinateSystemAt(Geodetic3D geo)
   {

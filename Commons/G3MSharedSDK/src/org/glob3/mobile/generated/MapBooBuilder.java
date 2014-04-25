@@ -22,6 +22,7 @@ public abstract class MapBooBuilder
   private String _lastApplicationCurrentSceneId;
 
   private int _applicationEventId;
+  private final String _token;
 
   private GL _gl;
   private G3MWidget _g3mWidget;
@@ -540,23 +541,26 @@ public abstract class MapBooBuilder
   
     if (_viewType == MapBoo_ViewType.VIEW_EDITION_PREVIEW)
     {
-      if ((_webSocket != null) && _isApplicationTubeOpen)
+      if (_applicationCurrentSceneId.compareTo(_lastApplicationCurrentSceneId) != 0)
       {
-        if (_applicationCurrentSceneId.compareTo(_lastApplicationCurrentSceneId) != 0)
+        if (_lastApplicationCurrentSceneId.compareTo("-1") != 0)
         {
-          if (_lastApplicationCurrentSceneId.compareTo("-1") != 0)
+          if (_webSocket != null && _isApplicationTubeOpen)
           {
             _webSocket.send(getApplicationCurrentSceneCommand());
           }
-          _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
+          else if (_token.length() > 0)
+          {
+              _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_DummyListener(), false); // readExpired
+          }
+          else
+          {
+              ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+          }
         }
-      }
-      else
-      {
-        ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+        _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
       }
     }
-  
   }
 
   private void updateVisibleScene(boolean cameraPositionChanged)
@@ -905,7 +909,39 @@ public abstract class MapBooBuilder
     }
   }
 
-  protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications)
+  private String getViewAsString()
+  {
+    switch (_viewType)
+    {
+      case VIEW_EDITION_PREVIEW:
+        return "edition-preview";
+      case VIEW_PRESENTATION:
+        return "presentation";
+      case VIEW_RUNTIME:
+      default:
+        return "runtime";
+    }
+  }
+
+  private URL createApplicationCurrentSceneURL()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_serverURL.getPath());
+    isb.addString("/REST/1/applications/");
+    isb.addString(_applicationId);
+    isb.addString("/_POST_?");
+    isb.addString("currentSceneId=");
+    isb.addString(_applicationCurrentSceneId);
+    isb.addString("&token=");
+    isb.addString(_token);
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    return new URL(path, false);
+  }
+
+  protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications, String token)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -917,6 +953,7 @@ public abstract class MapBooBuilder
      _applicationAbout = "";
      _applicationTimestamp = -1;
      _applicationEventId = -1;
+     _token = token;
      _gl = null;
      _g3mWidget = null;
      _storage = null;
@@ -1037,13 +1074,15 @@ public abstract class MapBooBuilder
     return new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0), Color.yellow());
   }
 
-  protected final URL createApplicationRestURL()
+  protected final URL createApplicationPollURL()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_serverURL.getPath());
-    isb.addString("/REST/1/applications/");
+    isb.addString("/poll/");
     isb.addString(_applicationId);
-    isb.addString("?view=runtime&eventId=");
+    isb.addString("?view=");
+    isb.addString(getViewAsString());
+    isb.addString("&eventId=");
     isb.addInt(_applicationEventId);
     final String path = isb.getString();
     if (isb != null)
@@ -1757,6 +1796,6 @@ public abstract class MapBooBuilder
   public final void pollApplicationDataFromServer(G3MContext context)
   {
     IDownloader downloader = context.getDownloader();
-    downloader.requestBuffer(createApplicationRestURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+    downloader.requestBuffer(createApplicationPollURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
   }
 }
