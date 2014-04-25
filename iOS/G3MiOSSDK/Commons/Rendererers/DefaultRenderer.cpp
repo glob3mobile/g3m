@@ -28,10 +28,12 @@ void DefaultRenderer::setEnable(bool enable) {
 void DefaultRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("Changed Renderer Info Listener of DefaultRenderer already set");
+  } else {
+    _changedInfoListener = changedInfoListener;
+    _rendererIdentifier = rendererIdentifier;
+    notifyChangedInfo(_info);
+    ILogger::instance()->logInfo("Changed Renderer Info Listener of DefaultRenderer set ok");
   }
-  _changedInfoListener = changedInfoListener;
-  _rendererIdentifier = rendererIdentifier;
-  ILogger::instance()->logInfo("Changed Renderer Info Listener of DefaultRenderer set ok");
 }
 
 void DefaultRenderer::setInfo(const std::vector<std::string>& info){

@@ -646,7 +646,7 @@ public:
   }
 
   if(true){
-    
+    //INFODISPLAY
     
     class MyHUDRenderer : public HUDRenderer {
       public:
@@ -716,8 +716,6 @@ public:
     geoRenderer->getMeshRenderer()->addInfo("Mesh Renderer");
     geoRenderer->getShapesRenderer()->addInfo("Shapes Renderer");
 
-
-#warning "here"
     builder.addPeriodicalTask([self createSamplePeriodicalTaskAlternatingLayers:layerSet
                                                                     infoDisplay:infoDisplay
                                                                     georenderer:geoRenderer]);

@@ -333,12 +333,10 @@ ChangedRendererInfoListener* PlanetRendererBuilder::getChangedRendererInfoListen
 void PlanetRendererBuilder::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
-    return;
+  } else {
+    _changedInfoListener = changedInfoListener;
+    ILogger::instance()->logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
   }
-  
-  _changedInfoListener = changedInfoListener;
-  ILogger::instance()->logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder set OK");
-
 }
 
 TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
