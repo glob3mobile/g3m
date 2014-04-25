@@ -1787,6 +1787,39 @@ public:
   //    layerSet->addLayer( new URLTemplateLayer() );
   //  }
 
+  bool testSplitsByLatLon = false;
+  if(testSplitsByLatLon) {
+    // chile
+    const Sector sector = Sector::fromDegrees(-56, -80, -17, -66);
+    // spain
+//    const Sector sector = Sector::fromDegrees(27.64, -18.16, 43.80, 4.34);
+    // antartic
+//    const Sector sector = Sector::fromDegrees(-80, 0, -66, 90);
+    // madrid
+//    const Sector sector = Sector::fromDegrees(39.82, -4.72, 41.21, -2.94);
+    // indonesia
+//    const Sector sector = Sector::fromDegrees(-10, 80, 10, 180);
+    // europe-asia
+//    const Sector sector = Sector::fromDegrees(27.64, -18.16, 80, 150);
+    // full sphere
+//    const Sector sector = Sector::fullSphere();
+    
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?", false),
+                                        WMS_1_1_0,
+                                        sector,
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        NULL,
+                                        TimeInterval::fromDays(30),
+                                        true,
+                                        LayerTilesRenderParameters::createDefaultWGS84(sector, 0, 17),
+                                        false);
+    layerSet->addLayer(blueMarble);
+  }
+  
   return layerSet;
 }
 
