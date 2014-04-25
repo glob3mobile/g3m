@@ -19,7 +19,14 @@ package org.glob3.mobile.generated;
 
 public abstract class GInitializationTask extends GTask
 {
-  public abstract void run(G3MContext context);
+///#ifdef C_CODE
+//  virtual ~GInitializationTask() { }
+///#endif
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning vtp ask Dgd: GInitializationTask no debería ser una interfaz pura??
+
+  //virtual void run(const G3MContext* context) = 0;
 
   public abstract boolean isDone(G3MContext context);
 }

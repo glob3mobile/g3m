@@ -18,9 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
-public interface ErrorRenderer implements ProtoRenderer
+public interface ErrorRenderer extends ProtoRenderer
 {
-  void dispose();
 
   public abstract void setErrors(java.util.ArrayList<String> errors);
 
