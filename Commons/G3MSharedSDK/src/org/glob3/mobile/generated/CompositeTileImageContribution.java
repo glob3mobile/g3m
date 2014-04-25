@@ -59,7 +59,6 @@ public class CompositeTileImageContribution extends TileImageContribution
       deleteContributions(contributions);
   
       return new CompositeTileImageContribution(contribution0, contribution1);
-  
     }
     else if (contributionsSize == 3)
     {

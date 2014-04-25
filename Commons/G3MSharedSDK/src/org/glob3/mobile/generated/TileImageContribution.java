@@ -30,7 +30,7 @@ public class TileImageContribution
   private static final TileImageContribution NONE = new TileImageContribution(false, 0);
   private static final TileImageContribution FULL_COVERAGE_OPAQUE = new TileImageContribution(false, 1);
 
-//  static TileImageContribution* lastFullCoverageTransparent;
+  private static TileImageContribution lastFullCoverageTransparent = null;
 
   private final boolean _isFullCoverage;
   private final Sector _sector ;
@@ -68,9 +68,6 @@ public class TileImageContribution
   {
   }
 
-
-  //TileImageContribution* TileImageContribution::lastFullCoverageTransparent  = NULL;
-  
   public static TileImageContribution none()
   {
     return NONE;
@@ -91,16 +88,17 @@ public class TileImageContribution
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO saves the last created alpha-contribution to try to reuse (&& avoid barbage)
-      return new TileImageContribution(true, alpha);
+      // return TileImageContribution(true, alpha);
   
-      //  if ((lastFullCoverageTransparent == NULL) ||
-      //      (lastFullCoverageTransparent->_alpha != alpha)) {
-      //    delete lastFullCoverageTransparent;
-      //
-      //    lastFullCoverageTransparent = new TileImageContribution(true, alpha);
-      //  }
-      //
-      //  return *lastFullCoverageTransparent;
+      if ((lastFullCoverageTransparent == null) || (lastFullCoverageTransparent._alpha != alpha))
+      {
+        if (lastFullCoverageTransparent != null)
+           lastFullCoverageTransparent.dispose();
+  
+        lastFullCoverageTransparent = new TileImageContribution(true, alpha);
+      }
+  
+      return lastFullCoverageTransparent;
     }
   }
 
