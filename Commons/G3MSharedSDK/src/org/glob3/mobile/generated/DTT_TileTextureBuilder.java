@@ -139,7 +139,7 @@ public class DTT_TileTextureBuilder extends RCObject
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO
-        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, new DTT_TileImageListener(this), true);
+        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this), true);
       }
     }
   }

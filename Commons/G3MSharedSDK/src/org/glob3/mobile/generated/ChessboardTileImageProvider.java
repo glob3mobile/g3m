@@ -48,7 +48,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
     return TileImageContribution.fullCoverageOpaque();
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, TileImageListener listener, boolean deleteListener)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener)
   {
     if (_image == null)
     {

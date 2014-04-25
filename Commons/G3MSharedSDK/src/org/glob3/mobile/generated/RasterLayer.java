@@ -84,9 +84,14 @@ public abstract class RasterLayer extends Layer
     return TileImageContribution.none();
   }
 
-  public final long requestImage(Tile tile, IDownloader downloader, long tileDownloadPriority, IImageDownloadListener listener, boolean deleteListener)
+  public final long requestImage(Tile tile, IDownloader downloader, long tileDownloadPriority, boolean logDownloadActivity, IImageDownloadListener listener, boolean deleteListener)
   {
-    return downloader.requestImage(createURL(tile), tileDownloadPriority, getTimeToCache(), _readExpired, listener, deleteListener);
+    final URL url = createURL(tile);
+    if (logDownloadActivity)
+    {
+      ILogger.instance().logInfo("Downloading %s", url.getPath());
+    }
+    return downloader.requestImage(url, tileDownloadPriority, getTimeToCache(), _readExpired, listener, deleteListener);
   }
 
 }
