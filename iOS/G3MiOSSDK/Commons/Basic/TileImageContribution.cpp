@@ -11,7 +11,7 @@
 const TileImageContribution TileImageContribution::NONE                  = TileImageContribution(false, 0);
 const TileImageContribution TileImageContribution::FULL_COVERAGE_OPAQUE  = TileImageContribution(false, 1);
 
-//TileImageContribution* TileImageContribution::lastFullCoverageTransparent  = NULL;
+TileImageContribution* TileImageContribution::lastFullCoverageTransparent  = NULL;
 
 const TileImageContribution TileImageContribution::none() {
   return NONE;
@@ -27,16 +27,16 @@ const TileImageContribution TileImageContribution::fullCoverageTransparent(float
   }
   else {
 #warning TODO saves the last created alpha-contribution to try to reuse (and avoid barbage)
-    return TileImageContribution(true, alpha);
+    // return TileImageContribution(true, alpha);
 
-    //  if ((lastFullCoverageTransparent == NULL) ||
-    //      (lastFullCoverageTransparent->_alpha != alpha)) {
-    //    delete lastFullCoverageTransparent;
-    //
-    //    lastFullCoverageTransparent = new TileImageContribution(true, alpha);
-    //  }
-    //
-    //  return *lastFullCoverageTransparent;
+    if ((lastFullCoverageTransparent == NULL) ||
+        (lastFullCoverageTransparent->_alpha != alpha)) {
+      delete lastFullCoverageTransparent;
+
+      lastFullCoverageTransparent = new TileImageContribution(true, alpha);
+    }
+
+    return *lastFullCoverageTransparent;
   }
 }
 

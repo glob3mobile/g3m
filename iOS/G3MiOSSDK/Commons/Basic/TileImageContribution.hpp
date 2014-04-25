@@ -24,7 +24,7 @@ private:
   static const TileImageContribution NONE;
   static const TileImageContribution FULL_COVERAGE_OPAQUE;
 
-//  static TileImageContribution* lastFullCoverageTransparent;
+  static TileImageContribution* lastFullCoverageTransparent;
 
   const bool   _isFullCoverage;
   const Sector _sector;

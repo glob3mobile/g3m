@@ -81,7 +81,6 @@ TileImageContribution CompositeTileImageContribution::create(const std::vector<T
 
     return CompositeTileImageContribution(contribution0,
                                           contribution1);
-
   }
   else if (contributionsSize == 3) {
     const TileImageContribution contribution0( *(contributions[0]) );
