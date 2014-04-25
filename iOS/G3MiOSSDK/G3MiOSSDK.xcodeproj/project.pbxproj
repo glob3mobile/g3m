@@ -20,6 +20,7 @@
 		383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A91577EE5A0012AC53 /* Vector3D.cpp */; };
 		385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */; };
 		38D786E61587B446003BBC75 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E51587B446003BBC75 /* Tile.cpp */; };
+		44131129190A504600C83A00 /* NullStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44131127190A504600C83A00 /* NullStorage.cpp */; };
 		441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 441C28BB1733D413007DC83F /* ShapeFullPositionEffect.cpp */; };
 		441C28BE1733DA3D007DC83F /* ShapeFullPositionEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 441C28BC1733D413007DC83F /* ShapeFullPositionEffect.hpp */; };
 		4435E3CD19052B860064A7D7 /* InfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4435E3CB19052B860064A7D7 /* InfoDisplay.cpp */; };
@@ -1076,6 +1077,7 @@
 		38D786E41587B3DD003BBC75 /* Tile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Tile.hpp; path = Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		38D786E71587B52F003BBC75 /* Sector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Sector.hpp; path = Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
+		44131127190A504600C83A00 /* NullStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NullStorage.cpp; path = Commons/Downloader/NullStorage.cpp; sourceTree = "<group>"; };
 		441C28BB1733D413007DC83F /* ShapeFullPositionEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapeFullPositionEffect.cpp; path = Commons/Rendererers/ShapeFullPositionEffect.cpp; sourceTree = "<group>"; };
 		441C28BC1733D413007DC83F /* ShapeFullPositionEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapeFullPositionEffect.hpp; path = Commons/Rendererers/ShapeFullPositionEffect.hpp; sourceTree = "<group>"; };
 		4435E3CB19052B860064A7D7 /* InfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InfoDisplay.cpp; path = Commons/Basic/InfoDisplay.cpp; sourceTree = "<group>"; };
@@ -2638,6 +2640,7 @@
 				CF4027CB1770DC8400D5A80C /* IWebSocketListener.hpp */,
 				CF4027CD1770DCB300D5A80C /* IWebSocket.cpp */,
 				CF4027CE1770DCB400D5A80C /* IWebSocket.hpp */,
+				44131127190A504600C83A00 /* NullStorage.cpp */,
 			);
 			name = Downloader;
 			sourceTree = "<group>";
@@ -2898,6 +2901,7 @@
 				CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */,
 				CF527E1F162E33F500E0BDE0 /* DefaultRenderer.cpp in Sources */,
 				CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */,
+				44131129190A504600C83A00 /* NullStorage.cpp in Sources */,
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
 				CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */,
