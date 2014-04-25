@@ -339,6 +339,13 @@ public final class Downloader_Android_Handler {
             _image = null;
          }
       }
+
+
+      @Override
+      public void dispose() {
+         // TODO Auto-generated method stub
+
+      }
    }
 
 
