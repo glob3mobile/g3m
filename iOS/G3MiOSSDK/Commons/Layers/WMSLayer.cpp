@@ -36,7 +36,7 @@ Layer(condition,
       timeToCache,
       readExpired,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
+      ? LayerTilesRenderParameters::createDefaultWGS84(0, 17)
       : parameters,
       transparency),
 _mapLayer(mapLayer),
@@ -73,7 +73,7 @@ Layer(condition,
       timeToCache,
       readExpired,
       (parameters == NULL)
-      ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
+      ? LayerTilesRenderParameters::createDefaultWGS84(0, 17)
       : parameters,
       transparency),
 _mapLayer(mapLayer),
