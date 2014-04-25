@@ -46,34 +46,34 @@ protected:
   const URL createURL(const Tile* tile) const;
 
 public:
-  static URLTemplateLayer* newMercator(const std::string&  urlTemplate,
-                                       const Sector&       sector,
-                                       bool                isTransparent,
-                                       const int           firstLevel,
-                                       const int           maxLevel,
-                                       const TimeInterval& timeToCache,
-                                       bool                readExpired = true,
-                                       LayerCondition*     condition = NULL,
-                                       float transparency = (float)1.0);
+  static URLTemplateLayer* newMercator(const std::string&    urlTemplate,
+                                       const Sector&         sector,
+                                       const bool            isTransparent,
+                                       const int             firstLevel,
+                                       const int             maxLevel,
+                                       const TimeInterval&   timeToCache,
+                                       const bool            readExpired  = true,
+                                       const float           transparency = 1,
+                                       const LayerCondition* condition    = NULL);
 
-  static URLTemplateLayer* newWGS84(const std::string&  urlTemplate,
-                                    const Sector&       sector,
-                                    bool                isTransparent,
-                                    const int           firstLevel,
-                                    const int           maxLevel,
-                                    const TimeInterval& timeToCache,
-                                    bool                readExpired = true,
-                                    LayerCondition*     condition = NULL,
-                                    float transparency = (float)1.0);
+  static URLTemplateLayer* newWGS84(const std::string&    urlTemplate,
+                                    const Sector&         sector,
+                                    const bool            isTransparent,
+                                    const int             firstLevel,
+                                    const int             maxLevel,
+                                    const TimeInterval&   timeToCache,
+                                    const bool            readExpired  = true,
+                                    const LayerCondition* condition    = NULL,
+                                    const float           transparency = 1);
 
   URLTemplateLayer(const std::string&                urlTemplate,
                    const Sector&                     sector,
-                   bool                              isTransparent,
+                   const bool                        isTransparent,
                    const TimeInterval&               timeToCache,
-                   bool                              readExpired,
-                   LayerCondition*                   condition,
+                   const bool                        readExpired,
+                   const LayerCondition*             condition,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency = (float)1.0);
+                   const float                       transparency = 1);
 
   const std::string description() const;
 

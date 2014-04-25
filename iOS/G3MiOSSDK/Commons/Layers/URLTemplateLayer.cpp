@@ -22,17 +22,17 @@
 
 URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate,
                                    const Sector&                     sector,
-                                   bool                              isTransparent,
+                                   const bool                        isTransparent,
                                    const TimeInterval&               timeToCache,
-                                   bool                              readExpired,
-                                   LayerCondition*                   condition,
+                                   const bool                        readExpired,
+                                   const LayerCondition*             condition,
                                    const LayerTilesRenderParameters* parameters,
-                                   float transparency) :
-RasterLayer(condition,
-            timeToCache,
+                                   const float                       transparency) :
+RasterLayer(timeToCache,
             readExpired,
             parameters,
-            transparency),
+            transparency,
+            condition),
 _urlTemplate(urlTemplate),
 _sector(sector),
 _isTransparent(isTransparent),
@@ -41,15 +41,15 @@ _mu(NULL)
 {
 }
 
-URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
-                                                const Sector&       sector,
-                                                bool                isTransparent,
-                                                const int           firstLevel,
-                                                const int           maxLevel,
-                                                const TimeInterval& timeToCache,
-                                                bool                readExpired,
-                                                LayerCondition*     condition,
-                                                float transparency) {
+URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&    urlTemplate,
+                                                const Sector&         sector,
+                                                const bool            isTransparent,
+                                                const int             firstLevel,
+                                                const int             maxLevel,
+                                                const TimeInterval&   timeToCache,
+                                                const bool            readExpired,
+                                                const float           transparency,
+                                                const LayerCondition* condition) {
   return new URLTemplateLayer(urlTemplate,
                               sector,
                               isTransparent,
@@ -61,15 +61,15 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                               transparency);
 }
 
-URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
-                                             const Sector&       sector,
-                                             bool                isTransparent,
-                                             const int           firstLevel,
-                                             const int           maxLevel,
-                                             const TimeInterval& timeToCache,
-                                             bool                readExpired,
-                                             LayerCondition*     condition,
-                                             float transparency) {
+URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&    urlTemplate,
+                                             const Sector&         sector,
+                                             const bool            isTransparent,
+                                             const int             firstLevel,
+                                             const int             maxLevel,
+                                             const TimeInterval&   timeToCache,
+                                             const bool            readExpired,
+                                             const LayerCondition* condition,
+                                             const float           transparency) {
   return new URLTemplateLayer(urlTemplate,
                               sector,
                               isTransparent,

@@ -121,7 +121,8 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
                                                                Sector::fullSphere(),
                                                                2,
                                                                17,
-                                                               NULL);
+                                                               true // isTransparent
+                                                               );
   meteoritesLayer->setTitle("CartoDB Meteorites");
   meteoritesLayer->setEnable(false);
   layerSet->addLayer(meteoritesLayer);
@@ -134,6 +135,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
                                                                            18,
                                                                            TimeInterval::fromDays(30),
                                                                            true,
+                                                                           1,
                                                                            new LevelTileCondition(12, 18));
   arcGISOverlayLayerTest->setTitle("ESRI ArcGis Online");
   arcGISOverlayLayerTest->setEnable(false);

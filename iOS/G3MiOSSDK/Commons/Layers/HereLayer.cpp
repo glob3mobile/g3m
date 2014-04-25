@@ -17,15 +17,14 @@
 #include "TimeInterval.hpp"
 #include "RenderState.hpp"
 
-HereLayer::HereLayer(const std::string& appId,
-                     const std::string& appCode,
-                     const TimeInterval& timeToCache,
-                     bool readExpired,
-                     int initialLevel,
-                     LayerCondition* condition,
-                     float transparency) :
-RasterLayer(condition,
-            timeToCache,
+HereLayer::HereLayer(const std::string&    appId,
+                     const std::string&    appCode,
+                     const TimeInterval&   timeToCache,
+                     const bool            readExpired,
+                     const int             initialLevel,
+                     const float           transparency,
+                     const LayerCondition* condition) :
+RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
                                            1,
@@ -35,7 +34,8 @@ RasterLayer(condition,
                                            Vector2I(256, 256),
                                            LayerTilesRenderParameters::defaultTileMeshResolution(),
                                            true),
-            transparency),
+            transparency,
+            condition),
 _appId(appId),
 _appCode(appCode),
 _initialLevel(initialLevel)
@@ -259,6 +259,7 @@ HereLayer* HereLayer::copy() const {
                        TimeInterval::fromMilliseconds(_timeToCacheMS),
                        _readExpired,
                        _initialLevel,
+                       _transparency,
                        (_condition == NULL) ? NULL : _condition->copy());
 }
 

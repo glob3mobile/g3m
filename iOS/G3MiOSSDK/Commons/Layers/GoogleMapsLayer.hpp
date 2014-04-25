@@ -30,12 +30,12 @@ protected:
 
 public:
 
-  GoogleMapsLayer(const std::string& key,
-                  const TimeInterval& timeToCache,
-                  bool readExpired = true,
-                  int initialLevel = 2,
-                  LayerCondition* condition = NULL,
-                  float transparency = (float)1.0);
+  GoogleMapsLayer(const std::string&    key,
+                  const TimeInterval&   timeToCache,
+                  const bool            readExpired  = true,
+                  const int             initialLevel = 2,
+                  const float           transparency = 1,
+                  const LayerCondition* condition    = NULL);
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

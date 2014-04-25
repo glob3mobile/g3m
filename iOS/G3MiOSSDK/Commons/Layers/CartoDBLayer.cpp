@@ -26,6 +26,7 @@ CartoDBLayer* CartoDBLayer::copy() const {
                           _table,
                           TimeInterval::fromMilliseconds(_timeToCacheMS),
                           _readExpired,
+                          _transparency,
                           (_condition == NULL) ? NULL : _condition->copy());
 }
 

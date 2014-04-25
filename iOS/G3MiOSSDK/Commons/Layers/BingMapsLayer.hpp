@@ -92,22 +92,22 @@ public:
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http://msdn.microsoft.com/en-us/library/gg650598.aspx
    */
-  BingMapsLayer(const std::string& imagerySet,
-                const std::string& key,
-                const TimeInterval& timeToCache,
-                bool readExpired = true,
-                int initialLevel = 2,
-                LayerCondition* condition = NULL,
-                float transparency = (float)1.0);
+  BingMapsLayer(const std::string&    imagerySet,
+                const std::string&    key,
+                const TimeInterval&   timeToCache,
+                const bool            readExpired  = true,
+                const int             initialLevel = 2,
+                const float           transparency = 1,
+                const LayerCondition* condition    = NULL);
 
-  BingMapsLayer(const std::string& imagerySet,
-                const std::string& culture,
-                const std::string& key,
-                const TimeInterval& timeToCache,
-                bool readExpired = true,
-                int initialLevel = 2,
-                LayerCondition* condition = NULL,
-                float transparency = (float)1.0);
+  BingMapsLayer(const std::string&    imagerySet,
+                const std::string&    culture,
+                const std::string&    key,
+                const TimeInterval&   timeToCache,
+                const bool            readExpired  = true,
+                const int             initialLevel = 2,
+                const float           transparency = 1,
+                const LayerCondition* condition    = NULL);
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

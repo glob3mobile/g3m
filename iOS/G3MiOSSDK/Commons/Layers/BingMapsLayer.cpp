@@ -25,18 +25,18 @@
 #include "Context.hpp"
 #include "RenderState.hpp"
 
-BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
-                             const std::string& key,
-                             const TimeInterval& timeToCache,
-                             bool readExpired,
-                             int initialLevel,
-                             LayerCondition* condition,
-                             float transparency) :
-RasterLayer(condition,
-            timeToCache,
+BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
+                             const std::string&    key,
+                             const TimeInterval&   timeToCache,
+                             const bool            readExpired,
+                             const int             initialLevel,
+                             const float           transparency,
+                             const LayerCondition* condition) :
+RasterLayer(timeToCache,
             readExpired,
             NULL,
-            transparency),
+            transparency,
+            condition),
 _imagerySet(imagerySet),
 _culture("en-US"),
 _key(key),
@@ -46,19 +46,19 @@ _isInitialized(false)
 
 }
 
-BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
-                             const std::string& culture,
-                             const std::string& key,
-                             const TimeInterval& timeToCache,
-                             bool readExpired,
-                             int initialLevel,
-                             LayerCondition* condition,
-                             float transparency) :
-RasterLayer(condition,
-            timeToCache,
+BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
+                             const std::string&    culture,
+                             const std::string&    key,
+                             const TimeInterval&   timeToCache,
+                             const bool            readExpired,
+                             const int             initialLevel,
+                             const float           transparency,
+                             const LayerCondition* condition) :
+RasterLayer(timeToCache,
             readExpired,
             NULL,
-            transparency),
+            transparency,
+            condition),
 _imagerySet(imagerySet),
 _culture(culture),
 _key(key),
@@ -361,6 +361,7 @@ BingMapsLayer* BingMapsLayer::copy() const {
                            TimeInterval::fromMilliseconds(_timeToCacheMS),
                            _readExpired,
                            _initialLevel,
+                           _transparency,
                            (_condition == NULL) ? NULL : _condition->copy());
 }
 

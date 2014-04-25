@@ -8,7 +8,7 @@
 
 #include "TileImageContribution.hpp"
 
-const TileImageContribution TileImageContribution::NONE                  = TileImageContribution(true, 0);
+const TileImageContribution TileImageContribution::NONE                  = TileImageContribution(false, 0);
 const TileImageContribution TileImageContribution::FULL_COVERAGE_OPAQUE  = TileImageContribution(false, 1);
 
 //TileImageContribution* TileImageContribution::lastFullCoverageTransparent  = NULL;
@@ -22,17 +22,22 @@ const TileImageContribution TileImageContribution::fullCoverageOpaque() {
 }
 
 const TileImageContribution TileImageContribution::fullCoverageTransparent(float alpha) {
+  if (alpha <= 0.01) {
+    return NONE;
+  }
+  else {
 #warning TODO saves the last created alpha-contribution to try to reuse (and avoid barbage)
-  return TileImageContribution(true, alpha);
+    return TileImageContribution(true, alpha);
 
-//  if ((lastFullCoverageTransparent == NULL) ||
-//      (lastFullCoverageTransparent->_alpha != alpha)) {
-//    delete lastFullCoverageTransparent;
-//
-//    lastFullCoverageTransparent = new TileImageContribution(true, alpha);
-//  }
-//
-//  return *lastFullCoverageTransparent;
+    //  if ((lastFullCoverageTransparent == NULL) ||
+    //      (lastFullCoverageTransparent->_alpha != alpha)) {
+    //    delete lastFullCoverageTransparent;
+    //
+    //    lastFullCoverageTransparent = new TileImageContribution(true, alpha);
+    //  }
+    //
+    //  return *lastFullCoverageTransparent;
+  }
 }
 
 const TileImageContribution TileImageContribution::partialCoverageOpaque(const Sector& sector) {
@@ -41,5 +46,10 @@ const TileImageContribution TileImageContribution::partialCoverageOpaque(const S
 
 const TileImageContribution TileImageContribution::partialCoverageTransparent(const Sector& sector,
                                                                               float alpha) {
-  return TileImageContribution(sector, true, alpha);
+  if (alpha <= 0.01) {
+    return NONE;
+  }
+  else {
+    return TileImageContribution(sector, true, alpha);
+  }
 }

@@ -32,9 +32,10 @@ protected:
 
 public:
   OSMLayer(const TimeInterval& timeToCache,
-           bool readExpired = true,
-           int initialLevel = 2,
-           LayerCondition* condition = NULL) :
+           const bool          readExpired  = true,
+           const int           initialLevel = 2,
+           const float         transparency = 1,
+           LayerCondition*     condition    = NULL) :
   MercatorTiledLayer("http://",
                      "tile.openstreetmap.org",
                      getSubdomains(),
@@ -44,6 +45,8 @@ public:
                      Sector::fullSphere(),
                      initialLevel,
                      18,
+                     false, // isTransparent
+                     transparency,
                      condition)
   {
 

@@ -14,8 +14,17 @@
 
 class CompositeTileImageProvider : public CanvasTileImageProvider {
 private:
+
+//  class ChildContribution {
+//  public:
+//    ChildContribution(const TileImageContribution& contribution);
+//  };
+
   std::vector<TileImageProvider*> _children;
   int                             _childrenSize;
+
+//  static const int MAX_CHILDREN_CONTRIBUTIONS = 4;
+//  ChildContribution _childrenContributions[MAX_CHILDREN_CONTRIBUTIONS];
 
 protected:
   ~CompositeTileImageProvider();

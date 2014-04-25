@@ -21,11 +21,11 @@ protected:
   const long long _timeToCacheMS;
   const bool      _readExpired;
 
-  RasterLayer(LayerCondition* condition,
-              const TimeInterval& timeToCache,
-              bool readExpired,
+  RasterLayer(const TimeInterval&               timeToCache,
+              const bool                        readExpired,
               const LayerTilesRenderParameters* parameters,
-              float transparency);
+              const float                       transparency,
+              const LayerCondition*             condition);
 
   const TimeInterval getTimeToCache() const;
 

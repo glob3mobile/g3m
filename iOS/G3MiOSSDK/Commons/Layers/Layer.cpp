@@ -13,9 +13,9 @@
 #include "LayerTilesRenderParameters.hpp"
 #include "LayerTouchEventListener.hpp"
 
-Layer::Layer(LayerCondition* condition,
-             const LayerTilesRenderParameters* parameters,
-             float transparency) :
+Layer::Layer(const LayerTilesRenderParameters* parameters,
+             const float                       transparency,
+             const LayerCondition*             condition) :
 _condition(condition),
 _layerSet(NULL),
 _enable(true),

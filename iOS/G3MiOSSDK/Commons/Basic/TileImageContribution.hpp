@@ -24,34 +24,40 @@ private:
   static const TileImageContribution NONE;
   static const TileImageContribution FULL_COVERAGE_OPAQUE;
 
-  //  static TileImageContribution* lastFullCoverageTransparent;
+//  static TileImageContribution* lastFullCoverageTransparent;
 
-
+  const bool   _isFullCoverage;
   const Sector _sector;
-  const bool   _transparent;
+  const bool   _isTransparent;
   const float  _alpha;
 
-  TileImageContribution(bool transparent,
+  TileImageContribution(const Sector& sector,
+                        bool isTransparent,
                         float alpha) :
-  _sector(Sector::fullSphere()),
-  _transparent(transparent),
+  _isFullCoverage(false),
+  _sector(sector),
+  _isTransparent(isTransparent),
   _alpha(alpha)
   {
   }
 
-  TileImageContribution(const Sector& sector,
-                        bool transparent,
+  TileImageContribution& operator=(const TileImageContribution& that);
+
+protected:
+  TileImageContribution(bool isTransparent,
                         float alpha) :
-  _sector(sector),
-  _transparent(transparent),
+  _isFullCoverage(true),
+  _sector(Sector::fullSphere()),
+  _isTransparent(isTransparent),
   _alpha(alpha)
   {
   }
 
 public:
   TileImageContribution(const TileImageContribution& that) :
+  _isFullCoverage(that._isFullCoverage),
   _sector(that._sector),
-  _transparent(that._transparent),
+  _isTransparent(that._isTransparent),
   _alpha(that._alpha)
   {
   }
@@ -68,8 +74,28 @@ public:
                                                                 float alpha);
 
   bool isNone() const {
-    return (_alpha == 0);
+    return (_alpha <= 0.01);
   }
+
+  bool isFullCoverageAndOpaque() const {
+    return _isFullCoverage && !_isTransparent && (_alpha >= 0.99);
+  }
+
+  bool isFullCoverage() const {
+    return _isFullCoverage;
+  }
+
+//  const Sector getSector() const {
+//    return _sector;
+//  }
+
+  bool isOpaque() const {
+    return (_alpha >= 0.99);
+  }
+
+//  bool isTransparent() const {
+//    return _isTransparent;
+//  }
   
 };
 

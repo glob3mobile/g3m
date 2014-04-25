@@ -27,14 +27,14 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              protocol,
                                        const std::vector<std::string>& subdomains,
                                        const std::string&              imageFormat,
                                        const TimeInterval&             timeToCache,
-                                       bool                            readExpired,
+                                       const bool                      readExpired,
                                        const Sector&                   sector,
-                                       int                             initialLevel,
-                                       int                             maxLevel,
-                                       LayerCondition*                 condition,
-                                       float transparency) :
-RasterLayer(condition,
-            timeToCache,
+                                       const int                       initialLevel,
+                                       const int                       maxLevel,
+                                       const bool                      isTransparent,
+                                       const float                     transparency,
+                                       const LayerCondition*           condition) :
+RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
                                            1,
@@ -44,14 +44,16 @@ RasterLayer(condition,
                                            Vector2I(256, 256),
                                            LayerTilesRenderParameters::defaultTileMeshResolution(),
                                            true),
-            transparency),
+            transparency,
+            condition),
 _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
 _imageFormat(imageFormat),
 _sector(sector),
 _initialLevel(initialLevel),
-_maxLevel(maxLevel)
+_maxLevel(maxLevel),
+_isTransparent(isTransparent)
 {
 
 }
@@ -188,6 +190,8 @@ MercatorTiledLayer* MercatorTiledLayer::copy() const {
                                 _sector,
                                 _initialLevel,
                                 _maxLevel,
+                                _isTransparent,
+                                _transparency,
                                 (_condition == NULL) ? NULL : _condition->copy());
 }
 
@@ -247,8 +251,10 @@ RenderState MercatorTiledLayer::getRenderState() {
 }
 
 const TileImageContribution MercatorTiledLayer::rawContribution(const Tile* tile) const {
-  //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
-  return ((_transparency < 1)
+//  return ((_transparency < 1)
+//          ? TileImageContribution::fullCoverageTransparent(_transparency)
+//          : TileImageContribution::fullCoverageOpaque());
+  return ((_isTransparent || (_transparency < 1))
           ? TileImageContribution::fullCoverageTransparent(_transparency)
           : TileImageContribution::fullCoverageOpaque());
 }

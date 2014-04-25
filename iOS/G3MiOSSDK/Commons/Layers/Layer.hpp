@@ -31,7 +31,6 @@ class TileImageProvider;
 
 class Layer {
 protected:
-  LayerCondition*                       _condition;
   std::vector<LayerTouchEventListener*> _listeners;
   std::vector<std::string>              _errors;
 
@@ -46,15 +45,17 @@ protected:
   protected LayerTilesRenderParameters _parameters;
 #endif
 
+  const float           _transparency;
+  const LayerCondition* _condition;
+
   void notifyChanges() const;
 
   std::string _title;
 
-  const float _transparency;
 
-  Layer(LayerCondition* condition,
-        const LayerTilesRenderParameters* parameters,
-        float transparency);
+  Layer(const LayerTilesRenderParameters* parameters,
+        const float                       transparency,
+        const LayerCondition*             condition);
 
   void setParameters(const LayerTilesRenderParameters* parameters);
 

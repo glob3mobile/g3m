@@ -34,13 +34,13 @@ protected:
 
 public:
 
-  HereLayer(const std::string& appId,
-            const std::string& appCode,
-            const TimeInterval& timeToCache,
-            bool readExpired = true,
-            int initialLevel = 2,
-            LayerCondition* condition = NULL,
-            float transparency = (float)1.0);
+  HereLayer(const std::string&    appId,
+            const std::string&    appCode,
+            const TimeInterval&   timeToCache,
+            const bool            readExpired  = true,
+            const int             initialLevel = 2,
+            const float           transparency = 1,
+            const LayerCondition* condition    = NULL);
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,

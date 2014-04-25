@@ -28,6 +28,7 @@ MapQuestLayer* MapQuestLayer::copy() const {
                            _maxLevel,
                            TimeInterval::fromMilliseconds(_timeToCacheMS),
                            _readExpired,
+                           _transparency,
                            (_condition == NULL) ? NULL : _condition->copy());
 }
 

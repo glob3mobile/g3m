@@ -14,14 +14,14 @@
 #include "IDownloader.hpp"
 #include "URL.hpp"
 
-RasterLayer::RasterLayer(LayerCondition* condition,
-                         const TimeInterval& timeToCache,
-                         bool readExpired,
+RasterLayer::RasterLayer(const TimeInterval&               timeToCache,
+                         const bool                        readExpired,
                          const LayerTilesRenderParameters* parameters,
-                         float transparency) :
-Layer(condition,
-      parameters,
-      transparency),
+                         const float                       transparency,
+                         const LayerCondition*             condition) :
+Layer(parameters,
+      transparency,
+      condition),
 _timeToCacheMS(timeToCache._milliseconds),
 _readExpired(readExpired)
 {
@@ -59,7 +59,6 @@ const TileImageContribution RasterLayer::contribution(const Tile* tile) const {
   if ((_condition == NULL) || _condition->isAvailable(tile)) {
     return rawContribution(tile);
   }
-  //  return NONE;
   return TileImageContribution::none();
 }
 
