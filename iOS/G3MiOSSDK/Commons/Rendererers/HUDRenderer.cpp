@@ -54,7 +54,6 @@ void HUDRenderer::addWidget(HUDWidget* widget) {
 }
 
 void HUDRenderer::removeAllWidgets() {
-#warning TODO FOR JAVA
   for (int i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     delete widget;

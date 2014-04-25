@@ -1531,7 +1531,7 @@ G3MWidget* MapBooBuilder::create() {
   Renderer* hudRenderer = NULL;
   
 #warning "TODO THIS"
-  const InfoDisplay* infoDisplay = NULL;
+  InfoDisplay* infoDisplay = NULL;
 
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),

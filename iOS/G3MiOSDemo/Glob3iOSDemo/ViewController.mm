@@ -646,8 +646,6 @@ public:
   }
 
   if(true){
-#warning "here"
-    builder.addPeriodicalTask([self createSamplePeriodicalTaskAlternatingLayers:layerSet]);
     
     
     class MyHUDRenderer : public HUDRenderer {
@@ -693,7 +691,7 @@ public:
         
       }
       
-      void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info){
+      void changedInfo(const std::vector<std::string>& info){
         _hudRenderer->updateWigets(info);
 
       }
@@ -712,9 +710,20 @@ public:
 
     };
     
-    
     MyHUDRenderer* hudRenderer = new MyHUDRenderer();
     InfoDisplay* infoDisplay = new MyHUDRendererInfoDisplay(hudRenderer);
+    geoRenderer->getMarksRenderer()->addInfo("Marks Renderer");
+    geoRenderer->getMeshRenderer()->addInfo("Mesh Renderer");
+    geoRenderer->getShapesRenderer()->addInfo("Shapes Renderer");
+
+
+#warning "here"
+    builder.addPeriodicalTask([self createSamplePeriodicalTaskAlternatingLayers:layerSet
+                                                                    infoDisplay:infoDisplay
+                                                                    georenderer:geoRenderer]);
+    
+
+    
     
     builder.setInfoDisplay(infoDisplay);
     
@@ -3338,22 +3347,79 @@ public:
 
 
 - (PeriodicalTask*) createSamplePeriodicalTaskAlternatingLayers: (LayerSet*) layerSet
+                                                    infoDisplay: (InfoDisplay*) infoDisplay
+                                                    georenderer: (GEORenderer*) geoRenderer
 {
   class TestAlternatingLayersTask : public GTask {
   private:
+    int step = 0;
     LayerSet* _layerSet;
+    InfoDisplay* _infoDisplay;
+    GEORenderer* _geoRenderer;
+    
   public:
-    TestAlternatingLayersTask(LayerSet* layerSet) :
-    _layerSet(layerSet)    {
+    TestAlternatingLayersTask(LayerSet* layerSet, InfoDisplay* infoDisplay, GEORenderer* geoRenderer) :
+    _layerSet(layerSet),
+    _infoDisplay(infoDisplay),
+    _geoRenderer(geoRenderer)
+    {
     }
     
     void run(const G3MContext* context) {
       _layerSet->getLayer(2)->setEnable(!_layerSet->getLayer(2)->isEnable());
+      
+      
+      if(step == 0){
+        _infoDisplay->showDisplay();
+      }
+      if(step == 1){
+        //disable MarksRenderer
+        _geoRenderer->getMarksRenderer()->setEnable(false);
+        _geoRenderer->getMarksRenderer()->addInfo("Step 1 passed");
+      }
+      
+      if(step == 2){
+        //enable MarksRenderer and disable MeshRenderer
+
+        _geoRenderer->getMarksRenderer()->setEnable(true);
+        _geoRenderer->getMeshRenderer()->setEnable(false);
+      }
+      if(step == 3){
+        //enable MeshRenderer and disable ShapesRenderer
+
+        _geoRenderer->getMeshRenderer()->setEnable(true);
+        _geoRenderer->getShapesRenderer()->setEnable(false);
+      }
+      if(step == 4){
+        //Disable all
+        _geoRenderer->getMarksRenderer()->setEnable(false);
+        _geoRenderer->getMeshRenderer()->setEnable(false);
+        _geoRenderer->getShapesRenderer()->setEnable(false);
+      }
+      if(step ==5){
+        //Enable all
+        _geoRenderer->getMarksRenderer()->setEnable(true);
+        _geoRenderer->getMeshRenderer()->setEnable(true);
+        _geoRenderer->getShapesRenderer()->setEnable(true);
+      }
+      if(step == 6){
+        //Nothing
+      }
+      
+      if(step == 7){
+        //hide infodisplay
+        if(_infoDisplay->isShowing()){
+          _infoDisplay->hideDisplay();
+        }
+      }
+      
+      
+      step++;
     }
   };
   
   PeriodicalTask* periodicalTask = new PeriodicalTask(TimeInterval::fromSeconds(10),
-                                                      new TestAlternatingLayersTask(layerSet));
+                                                      new TestAlternatingLayersTask(layerSet, infoDisplay, geoRenderer));
   return periodicalTask;
 }
 

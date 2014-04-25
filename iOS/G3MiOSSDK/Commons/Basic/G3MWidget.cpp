@@ -80,7 +80,7 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      GPUProgramManager*                   gpuProgramManager,
                      SceneLighting*                       sceneLighting,
                      const InitialCameraPositionProvider* initialCameraPositionProvider,
-                     const InfoDisplay* infoDisplay):
+                     InfoDisplay* infoDisplay):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -165,9 +165,8 @@ _infoDisplay(infoDisplay)
   for (int i = 0; i < periodicalTasks.size(); i++) {
     addPeriodicalTask(periodicalTasks[i]);
   }
-  if (_infoDisplay != NULL) {
-    _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)_infoDisplay, -1);
-  }
+  _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)this, -1);
+
 
   _renderContext = new G3MRenderContext(_frameTasksExecutor,
                                         IFactory::instance(),
@@ -212,7 +211,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              GPUProgramManager*                   gpuProgramManager,
                              SceneLighting*                       sceneLighting,
                              const InitialCameraPositionProvider* initialCameraPositionProvider,
-                             const InfoDisplay* infoDisplay) {
+                             InfoDisplay* infoDisplay) {
 
   return new G3MWidget(gl,
                        storage,
@@ -821,24 +820,31 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
   return changed;
 }
 
-void G3MWidget::notifyChangedInfo() const {
+//void G3MWidget::notifyChangedInfo() const {
+//
+//  if(_hudRenderer != NULL){
+//    const RenderState_Type renderStateType = _rendererState->_type;
+//    switch (renderStateType) {
+//      case RENDER_READY:
+//      //_hudRenderer->setInfo(_mainRenderer->getInfo());
+//      break;
+//      
+//      case RENDER_BUSY:
+//      break;
+//      
+//      default:
+//      break;
+//      
+//    }
+//  }
+//}
 
-  if(_hudRenderer != NULL){
-    const RenderState_Type renderStateType = _rendererState->_type;
-    switch (renderStateType) {
-      case RENDER_READY:
-      //_hudRenderer->setInfo(_mainRenderer->getInfo());
-      break;
-      
-      case RENDER_BUSY:
-      break;
-      
-      default:
-      break;
-      
-    }
-
-    
+void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
+  if(_infoDisplay != NULL){
+    _infoDisplay->changedInfo(info);
+  } else {
+    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
   }
 }
+
 

@@ -57,6 +57,7 @@ class G3MRenderContext;
 #include "InitialCameraPositionProvider.hpp"
 #include "RenderState.hpp"
 #include "InfoDisplay.hpp"
+#include "ChangedRendererInfoListener.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -89,7 +90,7 @@ public:
 };
 
 
-class G3MWidget {
+class G3MWidget : public ChangedRendererInfoListener {
 public:
 
   static void initSingletons(ILogger*            logger,
@@ -121,7 +122,7 @@ public:
                            GPUProgramManager*                   gpuProgramManager,
                            SceneLighting*                       sceneLighting,
                            const InitialCameraPositionProvider* initialCameraPositionProvider,
-                           const InfoDisplay* infoDisplay);
+                           InfoDisplay* infoDisplay);
 
   ~G3MWidget();
 
@@ -232,7 +233,17 @@ public:
     _forceBusyRenderer = forceBusyRenderer;
   }
   
-  void notifyChangedInfo() const;
+  //void notifyChangedInfo() const;
+  
+  void setInfoDisplay(InfoDisplay* infoDisplay) {
+    _infoDisplay = infoDisplay;
+  }
+  
+  InfoDisplay*  getInfoDisplay() const {
+    return _infoDisplay;
+  }
+  
+  void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
   
 private:
   IStorage*                _storage;
@@ -304,7 +315,7 @@ private:
 
   bool _forceBusyRenderer;
   
-  const InfoDisplay* _infoDisplay;
+  InfoDisplay* _infoDisplay;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -327,7 +338,7 @@ private:
             GPUProgramManager*               gpuProgramManager,
             SceneLighting*                   sceneLighting,
             const InitialCameraPositionProvider* initialCameraPositionProvider,
-            const InfoDisplay* infoDisplay);
+            InfoDisplay* infoDisplay);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

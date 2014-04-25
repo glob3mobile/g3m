@@ -13,13 +13,6 @@
 
 class GInitializationTask : public GTask {
 public:
-//#ifdef C_CODE
-//  virtual ~GInitializationTask() { }
-//#endif
-  
-#warning vtp ask Dgd: GInitializationTask no debería ser una interfaz pura??
-  
-  //virtual void run(const G3MContext* context) = 0;
 
   virtual bool isDone(const G3MContext* context) = 0;
 };

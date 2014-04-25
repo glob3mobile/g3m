@@ -9,9 +9,9 @@
 #ifndef __G3MiOSSDK__InfoDisplay__
 #define __G3MiOSSDK__InfoDisplay__
 
-#include "ChangedRendererInfoListener.hpp"
+#include "ChangedInfoListener.hpp"
 
-class InfoDisplay : public ChangedRendererInfoListener {
+class InfoDisplay : public ChangedInfoListener {
   
 public:
   

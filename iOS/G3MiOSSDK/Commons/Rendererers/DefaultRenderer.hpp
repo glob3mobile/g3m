@@ -23,6 +23,10 @@ private:
   
   bool _enable;
   
+  std::vector<std::string> _info;
+  
+  void notifyChangedInfo(const std::vector<std::string>& info);
+  
 protected:
   
   ChangedRendererInfoListener* _changedInfoListener = NULL;
@@ -58,9 +62,7 @@ public:
     return _enable;
   }
 
-  virtual void setEnable(bool enable) {
-    _enable = enable;
-  }
+  virtual void setEnable(bool enable);
   
   virtual void initialize(const G3MContext* context) {
     _context = context;
@@ -121,6 +123,15 @@ public:
   virtual bool isPlanetRenderer() {
     return false;
   }
+  
+  void setInfo(const std::vector<std::string>& info);
+  
+  void addInfo(const std::vector<std::string>& info);
+  
+  void addInfo(const std::string info);
+
+  
+  
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
 };

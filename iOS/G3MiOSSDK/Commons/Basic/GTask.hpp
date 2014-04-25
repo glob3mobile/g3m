@@ -14,14 +14,7 @@ class G3MContext;
 
 class GTask {
 public:
-//#ifdef C_CODE
-//  virtual ~GTask() { }
-//#endif
-//#ifdef JAVA_CODE
-//  void dispose();
-//#endif
-
-#warning vtp ask Dgd: GTask no debería ser una interfaz pura??
+  
   virtual ~GTask() { }
 
   
