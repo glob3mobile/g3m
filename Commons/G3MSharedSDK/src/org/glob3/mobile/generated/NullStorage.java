@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  NullStorage.cpp
+//  G3MiOSSDK
+//
+//  Created by Vidal Toboso on 25/04/14.
+//
+//
+
+//
 //  NullStorage.hpp
 //  G3MiOSSDK
 //

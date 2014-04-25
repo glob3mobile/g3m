@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class InfoDisplay implements ChangedRendererInfoListener
+public abstract class InfoDisplay implements ChangedInfoListener
 {
 
 

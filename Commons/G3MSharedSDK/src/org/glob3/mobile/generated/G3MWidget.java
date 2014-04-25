@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class G3MWidget
+public class G3MWidget implements ChangedRendererInfoListener
 {
 
   public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
@@ -647,27 +647,47 @@ public class G3MWidget
     _forceBusyRenderer = forceBusyRenderer;
   }
 
-  public final void notifyChangedInfo()
+  //void notifyChangedInfo() const;
+
+  public final void setInfoDisplay(InfoDisplay infoDisplay)
   {
+    _infoDisplay = infoDisplay;
+  }
+
+  public final InfoDisplay getInfoDisplay()
+  {
+    return _infoDisplay;
+  }
+
+
+  //void G3MWidget::notifyChangedInfo() const {
+  //
+  //  if(_hudRenderer != NULL){
+  //    const RenderState_Type renderStateType = _rendererState->_type;
+  //    switch (renderStateType) {
+  //      case RENDER_READY:
+  //      //_hudRenderer->setInfo(_mainRenderer->getInfo());
+  //      break;
+  //      
+  //      case RENDER_BUSY:
+  //      break;
+  //      
+  //      default:
+  //      break;
+  //      
+  //    }
+  //  }
+  //}
   
-    if(_hudRenderer != null)
+  public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info)
+  {
+    if(_infoDisplay != null)
     {
-      final RenderState_Type renderStateType = _rendererState._type;
-      switch (renderStateType)
-      {
-        case RENDER_READY:
-        //_hudRenderer->setInfo(_mainRenderer->getInfo());
-        break;
-  
-        case RENDER_BUSY:
-        break;
-  
-        default:
-        break;
-  
-      }
-  
-  
+      _infoDisplay.changedInfo(info);
+    }
+    else
+    {
+      ILogger.instance().logWarning("Render Infos are changing and InfoDisplay is NULL");
     }
   }
 
@@ -740,7 +760,7 @@ public class G3MWidget
 
   private boolean _forceBusyRenderer;
 
-  private final InfoDisplay _infoDisplay;
+  private InfoDisplay _infoDisplay;
 
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
   {
@@ -821,10 +841,8 @@ public class G3MWidget
     {
       addPeriodicalTask(periodicalTasks.get(i));
     }
-    if (_infoDisplay != null)
-    {
-      _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)_infoDisplay, -1);
-    }
+    _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)this, -1);
+  
   
     _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   

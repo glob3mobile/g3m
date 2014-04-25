@@ -28,6 +28,19 @@ public abstract class DefaultRenderer implements Renderer
 
   private boolean _enable;
 
+  private java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+
+  private void notifyChangedInfo(java.util.ArrayList<String> info)
+  {
+    if(_changedInfoListener!= null)
+    {
+      if(isEnable())
+      {
+        _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
+      }
+    }
+  }
+
 
   protected ChangedRendererInfoListener _changedInfoListener = null;
 
@@ -61,7 +74,25 @@ public abstract class DefaultRenderer implements Renderer
 
   public void setEnable(boolean enable)
   {
-    _enable = enable;
+    if(enable != _enable)
+    {
+      _enable = enable;
+      if(_changedInfoListener!= null)
+      {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning vtp ask dgd: empty vector?
+        if(isEnable())
+        {
+          notifyChangedInfo(_info);
+        }
+        else
+        {
+          final java.util.ArrayList<String> info = new java.util.ArrayList<String>();
+          _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
+        }
+  
+      }
+    }
   }
 
   public void initialize(G3MContext context)
@@ -135,6 +166,28 @@ public abstract class DefaultRenderer implements Renderer
   {
     return false;
   }
+
+  public final void setInfo(java.util.ArrayList<String> info)
+  {
+    _info.clear();
+    _info.addAll(info);
+    notifyChangedInfo(_info);
+  }
+
+  public final void addInfo(java.util.ArrayList<String> info)
+  {
+    _info.addAll(info);
+    notifyChangedInfo(_info);
+  }
+
+  public final void addInfo(String info)
+  {
+    _info.add(info);
+    notifyChangedInfo(_info);
+  }
+
+
+
 
   public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
   {

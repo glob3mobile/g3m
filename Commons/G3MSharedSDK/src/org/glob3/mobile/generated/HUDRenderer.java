@@ -70,8 +70,6 @@ public class HUDRenderer extends DefaultRenderer
 
   public final void removeAllWidgets()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO FOR JAVA
     for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
