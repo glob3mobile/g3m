@@ -37,6 +37,7 @@ public class VectorialLOD {
    //-- Data source and filter parameters --------------------------------------------------------------
    private static String                     DATABASE_TABLE     = "ne_10m_admin_0_countries";
    private static String                     FILTER_CRITERIA    = "true";
+   //private static String                     FILTER_CRITERIA    = "\"continent\" like 'Euro%' AND \"pop_est\" > 10000000";
    private static String[]                   PROPERTIES;
 
    //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
@@ -228,12 +229,6 @@ public class VectorialLOD {
       final String baseQuery4 = " WHERE (";
       final String baseQuery5 = ")) As f ) As fc;";
 
-      //      if (propsQuery == "") {
-      //         propsQuery = getQuotedString("");
-      //         baseQuery1 = "))::json As geometry, ";
-      //         baseQuery2 = " As properties FROM (SELECT * FROM ";
-      //      }
-
       String geoJsonResult = null;
       Connection conn = null;
       Statement st = null;
@@ -275,6 +270,17 @@ public class VectorialLOD {
 
       return geoJsonResult;
    }
+
+
+   //   public static String batchSelectGeometries(final String dataSourceTable,
+   //                                              final TileSector sector,
+   //                                              final float qualityFactor,
+   //                                              final String geomFilterCriteria,
+   //                                              final String... includeProperties) {
+   //
+   //      return selectGeometries(dataSourceTable, sector.getExtendedSector(OVERLAP_PERCENTAGE), qualityFactor, geomFilterCriteria,
+   //               includeProperties);
+   //   }
 
 
    private static String buildPropertiesQuery(final String... includeProperties) {
@@ -766,7 +772,7 @@ public class VectorialLOD {
 
    public static void main(final String[] args) {
 
-      //COMMAND LINE:
+      //COMMAND LINE example:
       // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test false 0 3 ne_10m_admin_0_countries true continent pop_est
       // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test false 0 6 ne_10m_admin_0_countries true continent mapcolor7 scalerank
       initializeFromArguments(args);
