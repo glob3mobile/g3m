@@ -110,6 +110,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   }
   private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel, boolean mercator)
   {
+  
     if (tile._level == firstLevel)
     {
       firstLevelTiles.add(tile);
@@ -122,10 +123,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
       final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
   
-      final Angle splitLatitude = mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
-      /*                               */
-      /*                               */
-  
+      final Angle splitLatitude = (mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude));
   
       java.util.ArrayList<Tile> children = tile.createSubTiles(splitLatitude, splitLongitude, false);
   

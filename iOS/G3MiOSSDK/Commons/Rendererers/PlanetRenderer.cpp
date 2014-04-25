@@ -296,10 +296,12 @@ void PlanetRenderer::sortTiles(std::vector<Tile*>& tiles) const {
 #endif
 }
 
+
 void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                                            Tile* tile,
                                            int firstLevel,
                                            bool mercator) const {
+
   if (tile->_level == firstLevel) {
     firstLevelTiles.push_back(tile);
   }
@@ -311,12 +313,11 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
     const Angle splitLongitude = Angle::midAngle(lower._longitude,
                                                  upper._longitude);
 
-    const Angle splitLatitude = mercator
-    /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
-                                                                                upper._latitude)
-    /*                               */ : Angle::midAngle(lower._latitude,
-                                                          upper._latitude);
-
+    const Angle splitLatitude = (mercator
+                                 ? MercatorUtils::calculateSplitLatitude(lower._latitude,
+                                                                         upper._latitude)
+                                 : Angle::midAngle(lower._latitude,
+                                                   upper._latitude));
 
     std::vector<Tile*>* children = tile->createSubTiles(splitLatitude,
                                                         splitLongitude,

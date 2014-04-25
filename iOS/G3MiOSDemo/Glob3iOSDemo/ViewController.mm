@@ -279,14 +279,14 @@ Mesh* createSectorMesh(const Planet* planet,
 
   //  [self initWithMapBooBuilder];
 
-  //  [self initWithBuilderAndSegmentedWorld];
+//  [self initWithBuilderAndSegmentedWorld];
 
-  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                                       Geodetic3D::fromDegrees(25.743467472995700263,
-                                                                               -5.3656762990500403987,
-                                                                               1664155.1381164737977),
-                                                       Angle::fromDegrees(-0.145718),
-                                                       Angle::fromDegrees(-52.117699));
+//  [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                       Geodetic3D::fromDegrees(25.743467472995700263,
+//                                                                               -5.3656762990500403987,
+//                                                                               1664155.1381164737977),
+//                                                       Angle::fromDegrees(-0.145718),
+//                                                       Angle::fromDegrees(-52.117699));
 
 
 //#warning Buggy mark
@@ -379,8 +379,6 @@ public:
 //};
 
 
-
-
 - (void) initWithBuilderAndSegmentedWorld
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -390,140 +388,19 @@ public:
   layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
 
+  // builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
+  //                                                                               Color::red(),
+  //                                                                               false,
+  //                                                                               true));
 
-  //  GEORenderer* geoRenderer = builder.createGEORenderer( new SampleSymbolizer(builder.getPlanet()) );
-  //
-  //  geoRenderer->loadJSON(URL("file:///geojson/countries-50m.geojson", false),
-  //                        new SampleSymbolizer(builder.getPlanet()));
-
-  //  builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromSeconds(5),
-  //                                               new ToggleGEORendererTask(geoRenderer)));
-
-  //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
-
-  //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
-  //                                                                                Color::red(),
-  //                                                                                false,
-  //                                                                                true));
-  //  builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(),
-  //                                                                                Color::yellow(),
-  //                                                                                true,
-  //                                                                                false));
-
-
-  //  const Sector sector = Sector::fromDegrees(-17.2605373678851670, 145.4760907919427950,
-  //                                            -17.2423142646939311, 145.4950606689779420);
   const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
                                             40.3423148480663158, -5.5116079822178570);
 
-  //  final Geodetic2D lower = new Geodetic2D( //
-  //                                          Angle.fromDegrees(40.1540143280790858), //
-  //                                          Angle.fromDegrees(-5.8664874640814313));
-  //  final Geodetic2D upper = new Geodetic2D( //
-  //                                          Angle.fromDegrees(40.3423148480663158), //
-  //                                          Angle.fromDegrees(-5.5116079822178570));
-  //
-  //  final Sector demSector = new Sector(lower, upper);
-
   builder.setShownSector(sector);
-
-  //  builder.setPlanet(Planet::createSphericalEarth());
-  //  builder.setPlanet(Planet::createFlatEarth());
-
-  //  int _DIEGO_AT_WORK;
-  //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
-
-  //  MeshRenderer* meshRenderer = new MeshRenderer();
-  //  builder.addRenderer(meshRenderer);
-  //  meshRenderer->addMesh( createSectorMesh(builder.getPlanet(), 32, sector, Color::red(), 2) );
-
-  builder.setInitializationTask(new MoveCameraInitializationTask([self G3MWidget], sector),
-                                true);
-
-  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///aus4326.bil", false),
-                                                                                    sector,
-                                                                                    Vector2I(2083, 2001),
-                                                                                    -758.905);
-
-  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(3);
-
 
   builder.initializeWidget();
 }
 
-
-//class SampleMapBooApplicationChangeListener : public MapBooApplicationChangeListener {
-//public:
-//  void onNameChanged(const G3MContext* context,
-//                     const std::string& name) {
-//    ILogger::instance()->logInfo("MapBoo application name=\"%s\"",
-//                                 name.c_str());
-//  }
-//
-//  void onIconChanged(const G3MContext* context,
-//                     const std::string& icon) {
-//    ILogger::instance()->logInfo("MapBoo application icon=\"%s\"",
-//                                 icon.c_str());
-//  }
-//
-//  void onScenesChanged(const G3MContext* context,
-//                       const std::vector<MapBoo_Scene*>& scenes) {
-//    const int scenesSize = scenes.size();
-//    for (int i = 0; i < scenesSize; i++) {
-//      ILogger::instance()->logInfo("MapBoo application scene #%d %s",
-//                                   i,
-//                                   scenes[i]->description().c_str());
-//    }
-//  }
-//
-//  void onSceneChanged(const G3MContext* context,
-//                      int sceneIndex,
-//                      const MapBoo_Scene* scene) {
-//    ILogger::instance()->logInfo("MapBoo application current scene=%l",
-//                                 sceneIndex);
-//  }
-//
-//  void onWebsiteChanged(const G3MContext* context,
-//                        const std::string& website) {}
-//
-//  void onEMailChanged(const G3MContext* context,
-//                      const std::string& eMail) {}
-//
-//  void onAboutChanged(const G3MContext* context,
-//                      const std::string& about) {}
-//
-//  void onWebSocketOpen(const G3MContext* context) {}
-//
-//  void onWebSocketClose(const G3MContext* context) {}
-//
-//  void onTerrainTouch(MapBooBuilder*         builder,
-//                      const G3MEventContext* ec,
-//                      const Vector2I&        pixel,
-//                      const Camera*          camera,
-//                      const Geodetic3D&      position,
-//                      const Tile*            tile) { }
-//};
-
-
-//- (void) initWithMapBooBuilder
-//{
-//  MapBooApplicationChangeListener* applicationListener = new SampleMapBooApplicationChangeListener();
-//
-//  const std::string applicationId = "2glgs5j2mq5i9nxx68q";
-//
-//  bool enableNotifications = false;
-//
-//  _g3mcBuilder = new MapBooBuilder_iOS([self G3MWidget],
-//                                       URL("http://192.168.1.2:8080/web", false),
-//                                       URL("ws://192.168.1.2:8888/tube", false),
-//                                       "",
-//                                       VIEW_RUNTIME,
-//                                       applicationListener,
-//                                       enableNotifications);
-//
-//  _g3mcBuilder->initializeWidget();
-//}
 
 - (void) initWithDefaultBuilder
 {
@@ -536,10 +413,6 @@ public:
 {
   float verticalExaggeration = 1.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
-
-  //ElevationDataProvider* elevationDataProvider = NULL;
-  //builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-
 
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil", false),
                                                                                     Sector::fullSphere(),

@@ -111,7 +111,7 @@ public:
   virtual void applyCameraConstrainers(const Camera* previousCamera,
                                        Camera* nextCamera) const = 0;
 
-  virtual Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const = 0;
+  virtual Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const = 0;
 
   CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
 };

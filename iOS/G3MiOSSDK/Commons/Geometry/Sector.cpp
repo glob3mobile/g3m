@@ -132,6 +132,46 @@ Sector Sector::mergedWith(const Sector& that) const {
   return Sector(low, up);
 }
 
+const Angle Sector::clampLatitude(const Angle& latitude) const {
+  return latitude.clampedTo(_lower._latitude, _upper._latitude);
+}
+
+const Angle Sector::clampLongitude(const Angle& longitude) const {
+  return longitude.clampedTo(_lower._longitude, _upper._longitude);
+}
+
+const Geodetic2D Sector::clamp(const Angle& latitude,
+                               const Angle& longitude) const {
+  if (contains(latitude, longitude)) {
+    return Geodetic2D(latitude, longitude);
+  }
+
+  double latitudeInDegrees  = latitude._degrees;
+  double longitudeInDegrees = longitude._degrees;
+
+  const double upperLatitudeInDegrees  = _upper._latitude._degrees;
+  if (latitudeInDegrees > upperLatitudeInDegrees) {
+    latitudeInDegrees = upperLatitudeInDegrees;
+  }
+
+  const double upperLongitudeInDegrees = _upper._longitude._degrees;
+  if (longitudeInDegrees > upperLongitudeInDegrees) {
+    longitudeInDegrees = upperLongitudeInDegrees;
+  }
+
+  const double lowerLatitudeInDegrees  = _lower._latitude._degrees;
+  if (latitudeInDegrees < lowerLatitudeInDegrees) {
+    latitudeInDegrees = lowerLatitudeInDegrees;
+  }
+
+  const double lowerLongitudeInDegrees  = _lower._longitude._degrees;
+  if (longitudeInDegrees < lowerLongitudeInDegrees) {
+    longitudeInDegrees = lowerLongitudeInDegrees;
+  }
+
+  return Geodetic2D::fromDegrees(latitudeInDegrees, longitudeInDegrees);
+}
+
 const Geodetic2D Sector::clamp(const Geodetic2D& position) const {
   if (contains(position)) {
     return position;

@@ -25,7 +25,6 @@ bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
 
   if (invalidHeight || invalidPosition) {
     nextCamera->copyFrom(*previousCamera);
-
   }
 
   return true;
@@ -34,42 +33,32 @@ bool SectorAndHeightCameraConstrainer::onCameraChange(const Planet* planet,
 bool RenderedSectorCameraConstrainer::onCameraChange(const Planet* planet,
                                                      const Camera* previousCamera,
                                                      Camera* nextCamera) const{
-
   const Sector* sector = _planetRenderer->getRenderedSector();
-
   const Geodetic3D position = nextCamera->getGeodeticPosition();
-  const double height = position._height;
+  const bool isValidHeight = (position._height <= _maxHeight);
 
-  const Geodetic3D center = nextCamera->getGeodeticCenterOfView();
-
-  const bool invalidHeight   = (height > _maxHeight);
-  const bool invalidPosition = sector== NULL?
-                                              false :
-                                              !sector->contains(center._latitude, center._longitude);
-
-  if (invalidHeight && !invalidPosition) {
-    Geodetic3D newPos(position._latitude, position._longitude, _maxHeight);
-    nextCamera->setGeodeticPosition(newPos);
-    return true;
+  if (sector == NULL) {
+    if (!isValidHeight) {
+      nextCamera->setGeodeticPosition(Geodetic3D(position._latitude,
+                                                 position._longitude,
+                                                 _maxHeight));
+    }
   }
+  else {
+    const Geodetic3D center = nextCamera->getGeodeticCenterOfView();
+    const bool isValidPosition = sector->contains(center._latitude, center._longitude);
 
-  if (invalidPosition) {
-
-#warning check with JM
-//    bool previousCameraWasValid = previousCamera->getHeight() < _maxHeight;
-    bool previousCameraWasValid = previousCamera->getGeodeticPosition()._height < _maxHeight;
-    if (previousCameraWasValid && sector != NULL) {
-      const Geodetic3D centerPosition = previousCamera->getGeodeticCenterOfView();
-      previousCameraWasValid = sector->contains(centerPosition._latitude, centerPosition._longitude);
+    if (isValidPosition) {
+      if (!isValidHeight) {
+        nextCamera->setGeodeticPosition(Geodetic3D(position._latitude,
+                                                   position._longitude,
+                                                   _maxHeight));
+      }
     }
-
-    if (previousCameraWasValid) {
+    else {
       nextCamera->copyFrom(*previousCamera);
-      return true;
     }
-    return false;
   }
 
   return true;
-  
 }
