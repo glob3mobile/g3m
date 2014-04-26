@@ -91,17 +91,17 @@ public:
     return _isFullCoverage;
   }
 
-//  const Sector getSector() const {
-//    return _sector;
-//  }
+  //  const Sector getSector() const {
+  //    return _sector;
+  //  }
 
   bool isOpaque() const {
     return (_alpha >= 0.99);
   }
 
-//  bool isTransparent() const {
-//    return _isTransparent;
-//  }
+  //  bool isTransparent() const {
+  //    return _isTransparent;
+  //  }
   
 };
 

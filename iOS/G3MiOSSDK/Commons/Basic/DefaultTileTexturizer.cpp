@@ -269,7 +269,6 @@ public:
 #warning Diego at work!
     if (!_canceled) {
       const TileImageContribution* contribution = _tileImageProvider->contribution(_tile);
-#warning DELETE contribution;
       if (contribution->isNone()) {
         if (_tile != NULL) {
           _tile->setTextureSolved(true);

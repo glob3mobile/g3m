@@ -11,7 +11,7 @@
 const TileImageContribution* TileImageContribution::NONE                  = new TileImageContribution(false, 0);
 const TileImageContribution* TileImageContribution::FULL_COVERAGE_OPAQUE  = new TileImageContribution(false, 1);
 
-TileImageContribution* TileImageContribution::_lastFullCoverageTransparent  = NULL;
+TileImageContribution* TileImageContribution::_lastFullCoverageTransparent = NULL;
 
 const TileImageContribution* TileImageContribution::none() {
   return NONE;
@@ -25,19 +25,15 @@ const TileImageContribution* TileImageContribution::fullCoverageTransparent(floa
   if (alpha <= 0.01) {
     return NONE;
   }
-  else {
-#warning TODO saves the last created alpha-contribution to try to reuse (and avoid barbage)
-    // return TileImageContribution(true, alpha);
 
-    if ((_lastFullCoverageTransparent == NULL) ||
-        (_lastFullCoverageTransparent->_alpha != alpha)) {
-      delete _lastFullCoverageTransparent;
+  // return TileImageContribution(true, alpha);
+  if ((_lastFullCoverageTransparent == NULL) ||
+      (_lastFullCoverageTransparent->_alpha != alpha)) {
+    delete _lastFullCoverageTransparent;
 
-      _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
-    }
-
-    return _lastFullCoverageTransparent;
+    _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
   }
+  return _lastFullCoverageTransparent;
 }
 
 const TileImageContribution* TileImageContribution::partialCoverageOpaque(const Sector& sector) {
@@ -45,25 +41,11 @@ const TileImageContribution* TileImageContribution::partialCoverageOpaque(const 
 }
 
 const TileImageContribution* TileImageContribution::partialCoverageTransparent(const Sector& sector,
-                                                                              float alpha) {
+                                                                               float alpha) {
   return (alpha <= 0.01) ? NONE : new TileImageContribution(sector, true, alpha);
 }
 
 void TileImageContribution::deleteContribution(const TileImageContribution* contribution) {
-#warning remove debug code
-//  if (contribution == NULL) {
-//    printf("break point\n");
-//  }
-//  if (contribution == NONE) {
-//    printf("break point\n");
-//  }
-//  if (contribution == FULL_COVERAGE_OPAQUE) {
-//    printf("break point\n");
-//  }
-//  if (contribution == _lastFullCoverageTransparent) {
-//    printf("break point\n");
-//  }
-
   if ((contribution != NULL) &&
       (contribution != NONE) &&
       (contribution != FULL_COVERAGE_OPAQUE) &&

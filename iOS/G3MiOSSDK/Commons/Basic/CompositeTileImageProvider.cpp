@@ -14,7 +14,7 @@
 CompositeTileImageProvider::~CompositeTileImageProvider() {
   for (int i = 0; i < _childrenSize; i++) {
     TileImageProvider* child = _children[i];
-//    delete child;
+    //    delete child;
     child->_release();
   }
 
@@ -31,7 +31,6 @@ private:
   TileImageContribution(false, 1),
   _contributions(contributions)
   {
-#warning Diego at work!
   }
 
 protected:
@@ -84,19 +83,6 @@ const TileImageContribution* CompositeTileImageProvider::contribution(const Tile
   }
 
   return CompositeTileImageContribution::create(childrenContributions);
-
-//  bool hasContribution = false;
-//  for (int i = 0; i < _childrenSize; i++) {
-//    TileImageProvider* child = _children[i];
-//    TileImageContribution childContribution = child->contribution(tile);
-//    if (!childContribution.isNone()) {
-//      hasContribution = true;
-//      break;
-//    }
-//  }
-//
-//#warning Diego at work!
-//  return hasContribution ? TileImageContribution::fullCoverageOpaque() : TileImageContribution::none();
 }
 
 void CompositeTileImageProvider::create(const Tile* tile,
@@ -108,6 +94,10 @@ void CompositeTileImageProvider::create(const Tile* tile,
                                         bool deleteListener) {
 #warning Diego at work!
 
+  const CompositeTileImageContribution* compositeContribution = (const CompositeTileImageContribution*) contribution;
+
+
+  // temporary error code
   TileImageContribution::deleteContribution( contribution );
   listener->imageCreationError(tile->_id, "Not yet implemented");
   if (deleteListener) {
