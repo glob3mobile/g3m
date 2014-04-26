@@ -18,6 +18,7 @@
 #include "TileImageListener.hpp"
 #include "TexturesHandler.hpp"
 #include "ITexturizerData.hpp"
+#include "TileImageContribution.hpp"
 
 #warning remove include
 #include "DebugTileImageProvider.hpp"
@@ -114,7 +115,7 @@ public:
   void imageCreated(const std::string&           tileId,
                     const IImage*                image,
                     const std::string&           imageId,
-                    const TileImageContribution& contribution);
+                    const TileImageContribution* contribution);
 
   void imageCreationError(const std::string& tileId,
                           const std::string& error);
@@ -267,12 +268,13 @@ public:
   void start() {
 #warning Diego at work!
     if (!_canceled) {
-      const TileImageContribution contribution = _tileImageProvider->contribution(_tile);
-      //if (contribution == NONE) {
-      if (contribution.isNone()) {
+      const TileImageContribution* contribution = _tileImageProvider->contribution(_tile);
+#warning DELETE contribution;
+      if (contribution->isNone()) {
         if (_tile != NULL) {
           _tile->setTextureSolved(true);
         }
+        TileImageContribution::deleteContribution( contribution );
       }
       else {
         _tileImageProvider->create(_tile,
@@ -331,7 +333,7 @@ public:
 
   void imageCreated(const IImage*                image,
                     const std::string&           imageId,
-                    const TileImageContribution& contribution) {
+                    const TileImageContribution* contribution) {
     if (!_canceled && (_tile != NULL) && (_texturedMesh != NULL)) {
       if (uploadTexture(image, imageId)) {
         _tile->setTextureSolved(true);
@@ -339,6 +341,7 @@ public:
     }
 
     delete image;
+    TileImageContribution::deleteContribution( contribution );
   }
 
   void imageCreationError(const std::string& error) {
@@ -369,7 +372,7 @@ DTT_TileImageListener::~DTT_TileImageListener() {
 void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                          const IImage*                image,
                                          const std::string&           imageId,
-                                         const TileImageContribution& contribution) {
+                                         const TileImageContribution* contribution) {
   _builder->imageCreated(image, imageId, contribution);
 }
 

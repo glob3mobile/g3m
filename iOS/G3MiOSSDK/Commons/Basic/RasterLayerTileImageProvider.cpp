@@ -20,12 +20,7 @@ class RLTIP_ImageDownloadListener : public IImageDownloadListener {
 private:
   RasterLayerTileImageProvider* _rasterLayerTileImageProvider;
   const std::string             _tileId;
-#ifdef C_CODE
-  const TileImageContribution   _contribution;
-#endif
-#ifdef JAVA_CODE
-  private final TileImageContribution _contribution;
-#endif
+  const TileImageContribution*  _contribution;
 
   TileImageListener* _listener;
   const bool         _deleteListener;
@@ -33,7 +28,7 @@ private:
 public:
   RLTIP_ImageDownloadListener(RasterLayerTileImageProvider* rasterLayerTileImageProvider,
                               const std::string&            tileId,
-                              const TileImageContribution&  contribution,
+                              const TileImageContribution*  contribution,
                               TileImageListener*            listener,
                               bool                          deleteListener) :
   _rasterLayerTileImageProvider(rasterLayerTileImageProvider),
@@ -96,12 +91,12 @@ RasterLayerTileImageProvider::~RasterLayerTileImageProvider() {
 #endif
 }
 
-TileImageContribution RasterLayerTileImageProvider::contribution(const Tile* tile) {
+const TileImageContribution* RasterLayerTileImageProvider::contribution(const Tile* tile) {
   return _layer->contribution(tile);
 }
 
 void RasterLayerTileImageProvider::create(const Tile* tile,
-                                          const TileImageContribution& contribution,
+                                          const TileImageContribution* contribution,
                                           const Vector2I& resolution,
                                           long long tileDownloadPriority,
                                           bool logDownloadActivity,

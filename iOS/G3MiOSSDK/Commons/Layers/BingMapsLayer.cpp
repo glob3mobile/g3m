@@ -383,7 +383,7 @@ RenderState BingMapsLayer::getRenderState() {
   return RenderState::ready();
 }
 
-const TileImageContribution BingMapsLayer::rawContribution(const Tile* tile) const {
+const TileImageContribution* BingMapsLayer::rawContribution(const Tile* tile) const {
   //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
   return ((_transparency < 1)
           ? TileImageContribution::fullCoverageTransparent(_transparency)

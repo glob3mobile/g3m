@@ -604,7 +604,7 @@ RenderState WMSLayer::getRenderState() {
   return RenderState::ready();
 }
 
-const TileImageContribution WMSLayer::rawContribution(const Tile* tile) const {
+const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
   const Sector tileSector = tile->_sector;
 
 //  if (!_sector.touchesWith(tileSector)) {

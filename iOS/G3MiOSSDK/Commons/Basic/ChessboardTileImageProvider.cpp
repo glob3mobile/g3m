@@ -16,6 +16,7 @@
 #include "ICanvas.hpp"
 #include "Color.hpp"
 #include "IImageListener.hpp"
+#include "TileImageContribution.hpp"
 
 class ChessboardTileImageProvider_IImageListener : public IImageListener {
 private:
@@ -52,8 +53,7 @@ ChessboardTileImageProvider::~ChessboardTileImageProvider() {
 #endif
 }
 
-TileImageContribution ChessboardTileImageProvider::contribution(const Tile* tile) {
-  //return FULL_COVERAGE_OPAQUE;
+const TileImageContribution* ChessboardTileImageProvider::contribution(const Tile* tile) {
   return TileImageContribution::fullCoverageOpaque();
 }
 
@@ -74,7 +74,7 @@ void ChessboardTileImageProvider::imageCreated(const IImage* image,
 }
 
 void ChessboardTileImageProvider::create(const Tile* tile,
-                                         const TileImageContribution& contribution,
+                                         const TileImageContribution* contribution,
                                          const Vector2I& resolution,
                                          long long tileDownloadPriority,
                                          bool logDownloadActivity,

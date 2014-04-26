@@ -20,7 +20,7 @@ public:
   virtual void imageCreated(const std::string&           tileId,
                             const IImage*                image,
                             const std::string&           imageId,
-                            const TileImageContribution& contribution) = 0;
+                            const TileImageContribution* contribution) = 0;
 
   virtual void imageCreationError(const std::string& tileId,
                                   const std::string& error) = 0;

@@ -19,7 +19,7 @@ private:
   private:
     const std::string           _tileId;
 #ifdef C_CODE
-    const TileImageContribution _contribution;
+    const TileImageContribution* _contribution;
 #endif
 #ifdef JAVA_CODE
     private final TileImageContribution _contribution;
@@ -32,7 +32,7 @@ private:
 
   public:
     ImageListener(const std::string&           tileId,
-                  const TileImageContribution& contribution,
+                  const TileImageContribution* contribution,
                   TileImageListener*           listener,
                   bool                         deleteListener) :
     _tileId(tileId),
@@ -55,10 +55,10 @@ protected:
 
 public:
 
-  TileImageContribution contribution(const Tile* tile);
+  const TileImageContribution* contribution(const Tile* tile);
 
   void create(const Tile* tile,
-              const TileImageContribution& contribution,
+              const TileImageContribution* contribution,
               const Vector2I& resolution,
               long long tileDownloadPriority,
               bool logDownloadActivity,

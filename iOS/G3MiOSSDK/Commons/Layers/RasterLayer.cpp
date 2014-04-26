@@ -55,7 +55,7 @@ TileImageProvider* RasterLayer::createTileImageProvider(const G3MRenderContext* 
   return new RasterLayerTileImageProvider(this, rc->getDownloader());
 }
 
-const TileImageContribution RasterLayer::contribution(const Tile* tile) const {
+const TileImageContribution* RasterLayer::contribution(const Tile* tile) const {
   if ((_condition == NULL) || _condition->isAvailable(tile)) {
     return rawContribution(tile);
   }

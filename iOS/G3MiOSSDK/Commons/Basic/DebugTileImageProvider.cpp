@@ -16,6 +16,7 @@
 #include "IImage.hpp"
 #include "RectangleF.hpp"
 #include "IStringBuilder.hpp"
+#include "TileImageContribution.hpp"
 
 const std::string DebugTileImageProvider::ImageListener::getImageId(const std::string& tileId) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -37,13 +38,12 @@ void DebugTileImageProvider::ImageListener::imageCreated(const IImage* image) {
   }
 }
 
-TileImageContribution DebugTileImageProvider::contribution(const Tile* tile) {
-  //return FULL_COVERAGE_TRANSPARENT;
+const TileImageContribution* DebugTileImageProvider::contribution(const Tile* tile) {
   return TileImageContribution::fullCoverageTransparent(1);
 }
 
 void DebugTileImageProvider::create(const Tile* tile,
-                                    const TileImageContribution& contribution,
+                                    const TileImageContribution* contribution,
                                     const Vector2I& resolution,
                                     long long tileDownloadPriority,
                                     bool logDownloadActivity,

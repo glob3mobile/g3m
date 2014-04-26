@@ -36,7 +36,7 @@ protected:
 
   virtual bool rawIsEquals(const Layer* that) const;
 
-  const TileImageContribution rawContribution(const Tile* tile) const;
+  const TileImageContribution* rawContribution(const Tile* tile) const;
 
   const URL createURL(const Tile* tile) const;
 

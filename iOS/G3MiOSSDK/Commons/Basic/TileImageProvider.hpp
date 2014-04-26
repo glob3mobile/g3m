@@ -9,11 +9,10 @@
 #ifndef __G3MiOSSDK__TileImageProvider__
 #define __G3MiOSSDK__TileImageProvider__
 
-#include "TileImageContribution.hpp"
-
+class TileImageContribution;
 class Tile;
-class TileImageListener;
 class Vector2I;
+class TileImageListener;
 
 #include "RCObject.hpp"
 
@@ -27,10 +26,10 @@ protected:
 
 public:
 
-  virtual TileImageContribution contribution(const Tile* tile) = 0;
+  virtual const TileImageContribution* contribution(const Tile* tile) = 0;
 
   virtual void create(const Tile* tile,
-                      const TileImageContribution& contribution,
+                      const TileImageContribution* contribution,
                       const Vector2I& resolution,
                       long long tileDownloadPriority,
                       bool logDownloadActivity,

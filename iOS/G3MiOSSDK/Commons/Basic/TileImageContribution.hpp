@@ -21,10 +21,10 @@
 
 class TileImageContribution {
 private:
-  static const TileImageContribution NONE;
-  static const TileImageContribution FULL_COVERAGE_OPAQUE;
+  static const TileImageContribution* NONE;
+  static const TileImageContribution* FULL_COVERAGE_OPAQUE;
 
-  static TileImageContribution* lastFullCoverageTransparent;
+  static TileImageContribution* _lastFullCoverageTransparent;
 
   const bool   _isFullCoverage;
   const Sector _sector;
@@ -53,6 +53,9 @@ protected:
   {
   }
 
+  virtual ~TileImageContribution() {
+  }
+
 public:
   TileImageContribution(const TileImageContribution& that) :
   _isFullCoverage(that._isFullCoverage),
@@ -62,19 +65,19 @@ public:
   {
   }
 
-  ~TileImageContribution() {
-  }
 
-  static const TileImageContribution none();
+  static const TileImageContribution* none();
 
-  static const TileImageContribution fullCoverageOpaque();
+  static const TileImageContribution* fullCoverageOpaque();
 
-  static const TileImageContribution fullCoverageTransparent(float alpha);
+  static const TileImageContribution* fullCoverageTransparent(float alpha);
 
-  static const TileImageContribution partialCoverageOpaque(const Sector& sector);
+  static const TileImageContribution* partialCoverageOpaque(const Sector& sector);
 
-  static const TileImageContribution partialCoverageTransparent(const Sector& sector,
-                                                                float alpha);
+  static const TileImageContribution* partialCoverageTransparent(const Sector& sector,
+                                                                 float alpha);
+
+  static void deleteContribution(const TileImageContribution* contribution);
 
   bool isNone() const {
     return (_alpha <= 0.01);
