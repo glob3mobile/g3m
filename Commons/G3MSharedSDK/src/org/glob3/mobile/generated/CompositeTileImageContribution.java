@@ -7,8 +7,6 @@ public class CompositeTileImageContribution extends TileImageContribution
   {
      super(false, 1);
      _contributions = contributions;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
   }
 
   public void dispose()

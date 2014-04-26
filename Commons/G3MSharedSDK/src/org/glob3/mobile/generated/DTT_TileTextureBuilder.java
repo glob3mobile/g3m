@@ -125,8 +125,6 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!_canceled)
     {
       final TileImageContribution contribution = _tileImageProvider.contribution(_tile);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DELETE contribution;
       if (contribution.isNone())
       {
         if (_tile != null)

@@ -36,7 +36,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     for (int i = 0; i < _childrenSize; i++)
     {
       TileImageProvider child = _children.get(i);
-  //    delete child;
+      //    delete child;
       child._release();
     }
   
@@ -84,19 +84,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     }
   
     return CompositeTileImageContribution.create(childrenContributions);
-  
-  //  bool hasContribution = false;
-  //  for (int i = 0; i < _childrenSize; i++) {
-  //    TileImageProvider* child = _children[i];
-  //    TileImageContribution childContribution = child->contribution(tile);
-  //    if (!childContribution.isNone()) {
-  //      hasContribution = true;
-  //      break;
-  //    }
-  //  }
-  //
-  ///#warning Diego at work!
-  //  return hasContribution ? TileImageContribution::fullCoverageOpaque() : TileImageContribution::none();
   }
 
   public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener)
@@ -104,6 +91,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
   
+    final CompositeTileImageContribution compositeContribution = (CompositeTileImageContribution) contribution;
+  
+  
+    // temporary error code
     TileImageContribution.deleteContribution(contribution);
     listener.imageCreationError(tile._id, "Not yet implemented");
     if (deleteListener)

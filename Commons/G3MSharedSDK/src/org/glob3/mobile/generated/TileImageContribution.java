@@ -85,22 +85,16 @@ public class TileImageContribution
     {
       return NONE;
     }
-    else
+  
+    // return TileImageContribution(true, alpha);
+    if ((_lastFullCoverageTransparent == null) || (_lastFullCoverageTransparent._alpha != alpha))
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO saves the last created alpha-contribution to try to reuse (&& avoid barbage)
-      // return TileImageContribution(true, alpha);
+      if (_lastFullCoverageTransparent != null)
+         _lastFullCoverageTransparent.dispose();
   
-      if ((_lastFullCoverageTransparent == null) || (_lastFullCoverageTransparent._alpha != alpha))
-      {
-        if (_lastFullCoverageTransparent != null)
-           _lastFullCoverageTransparent.dispose();
-  
-        _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
-      }
-  
-      return _lastFullCoverageTransparent;
+      _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
     }
+    return _lastFullCoverageTransparent;
   }
 
   public static TileImageContribution partialCoverageOpaque(Sector sector)
@@ -115,21 +109,6 @@ public class TileImageContribution
 
   public static void deleteContribution(TileImageContribution contribution)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning remove debug code
-  //  if (contribution == NULL) {
-  //    printf("break point\n");
-  //  }
-  //  if (contribution == NONE) {
-  //    printf("break point\n");
-  //  }
-  //  if (contribution == FULL_COVERAGE_OPAQUE) {
-  //    printf("break point\n");
-  //  }
-  //  if (contribution == _lastFullCoverageTransparent) {
-  //    printf("break point\n");
-  //  }
-  
     if ((contribution != null) && (contribution != NONE) && (contribution != FULL_COVERAGE_OPAQUE) && (contribution != _lastFullCoverageTransparent))
     {
       if (contribution != null)
@@ -152,17 +131,17 @@ public class TileImageContribution
     return _isFullCoverage;
   }
 
-//  const Sector getSector() const {
-//    return _sector;
-//  }
+  //  const Sector getSector() const {
+  //    return _sector;
+  //  }
 
   public final boolean isOpaque()
   {
     return (_alpha >= 0.99);
   }
 
-//  bool isTransparent() const {
-//    return _isTransparent;
-//  }
+  //  bool isTransparent() const {
+  //    return _isTransparent;
+  //  }
 
 }
