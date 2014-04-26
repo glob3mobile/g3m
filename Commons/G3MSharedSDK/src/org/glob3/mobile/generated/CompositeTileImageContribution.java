@@ -61,7 +61,7 @@ public class CompositeTileImageContribution extends TileImageContribution
   }
 
 
-  private final java.util.ArrayList<ChildContribution> _contributions = new java.util.ArrayList<ChildContribution>();
+  private final java.util.ArrayList<ChildContribution> _contributions;
 
   private CompositeTileImageContribution(java.util.ArrayList<ChildContribution> contributions)
   {
@@ -74,8 +74,7 @@ public class CompositeTileImageContribution extends TileImageContribution
     final int size = _contributions.size();
     for (int i = 0; i < size; i++)
     {
-      if (_contributions.get(i) != null)
-         _contributions.get(i).dispose();
+      _contributions[i] = null;
     }
   }
 
