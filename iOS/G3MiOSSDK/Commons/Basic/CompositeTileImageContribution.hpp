@@ -32,7 +32,12 @@ public:
 
 
 private:
+#ifdef C_CODE
   const std::vector<ChildContribution*> _contributions;
+#endif
+#ifdef JAVA_CODE
+  private final java.util.ArrayList<ChildContribution> _contributions;
+#endif
 
   CompositeTileImageContribution(const std::vector<ChildContribution*>& contributions) :
   TileImageContribution(false, 1),
