@@ -9,13 +9,16 @@
 #include "CompositeTileImageContribution.hpp"
 
 
-const TileImageContribution* CompositeTileImageContribution::create(const std::vector<const TileImageContribution*>& contributions) {
+const TileImageContribution* CompositeTileImageContribution::create(const std::vector<ChildContribution*>& contributions) {
   const int contributionsSize = contributions.size();
   if (contributionsSize == 0) {
     return TileImageContribution::none();
   }
   else if (contributionsSize == 1) {
-    return contributions[0];
+    const ChildContribution* singleContribution = contributions[0];
+    const TileImageContribution* result = singleContribution->_contribution;
+    delete singleContribution;
+    return result;
   }
   else {
     return new CompositeTileImageContribution(contributions);
