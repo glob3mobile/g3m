@@ -19,17 +19,8 @@ package org.glob3.mobile.generated;
 
 public class CompositeTileImageProvider extends CanvasTileImageProvider
 {
-
-//  class ChildContribution {
-//  public:
-//    ChildContribution(const TileImageContribution& contribution);
-//  };
-
   private java.util.ArrayList<TileImageProvider> _children = new java.util.ArrayList<TileImageProvider>();
   private int _childrenSize;
-
-//  static const int MAX_CHILDREN_CONTRIBUTIONS = 4;
-//  ChildContribution _childrenContributions[MAX_CHILDREN_CONTRIBUTIONS];
 
   public void dispose()
   {
@@ -39,7 +30,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       //    delete child;
       child._release();
     }
-  
     super.dispose();
   }
 
@@ -56,7 +46,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
   public final TileImageContribution contribution(Tile tile)
   {
-    final java.util.ArrayList<TileImageContribution> childrenContributions = new java.util.ArrayList<TileImageContribution>();
+    java.util.ArrayList<CompositeTileImageContribution.ChildContribution> childrenContributions = new java.util.ArrayList<CompositeTileImageContribution.ChildContribution>();
   
     for (int i = 0; i < _childrenSize; i++)
     {
@@ -74,12 +64,13 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         {
           for (int j = 0; j < childrenContributionsSize; j++)
           {
-            TileImageContribution.deleteContribution(childrenContributions.get(j));
+            CompositeTileImageContribution.ChildContribution previousContribution = childrenContributions.get(j);
+            previousContribution = null;
           }
           childrenContributions.clear();
         }
   
-        childrenContributions.add(childContribution);
+        childrenContributions.add(new CompositeTileImageContribution.ChildContribution(i, childContribution));
       }
     }
   

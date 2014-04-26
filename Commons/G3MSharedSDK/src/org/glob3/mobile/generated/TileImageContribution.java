@@ -86,7 +86,7 @@ public class TileImageContribution
       return NONE;
     }
   
-    // return TileImageContribution(true, alpha);
+    // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
     if ((_lastFullCoverageTransparent == null) || (_lastFullCoverageTransparent._alpha != alpha))
     {
       if (_lastFullCoverageTransparent != null)
