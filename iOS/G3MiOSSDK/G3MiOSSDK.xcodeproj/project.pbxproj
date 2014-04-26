@@ -113,6 +113,8 @@
 		CF35A20716D3D44E00D795D8 /* BilParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35A20516D3D44E00D795D8 /* BilParser.cpp */; };
 		CF35DD4C16C6995D002EFC96 /* Vector3F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4A16C6995C002EFC96 /* Vector3F.cpp */; };
 		CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */; };
+		CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3C7E53190C138B00ED051F /* CompositeTileImageContribution.cpp */; };
+		CF3C7E56190C13FE00ED051F /* CompositeTileImageContribution.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF3C7E54190C138B00ED051F /* CompositeTileImageContribution.hpp */; };
 		CF3C992D17C2713300937BD3 /* NSString_CppAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3C992C17C2713300937BD3 /* NSString_CppAdditions.mm */; };
 		CF3C992E17C274A500937BD3 /* NSString_CppAdditions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF3C992B17C270D800937BD3 /* NSString_CppAdditions.h */; };
 		CF3CCC6417B53A4100581468 /* GenericQuadTree.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8F0C70917B52701002A89E0 /* GenericQuadTree.hpp */; };
@@ -683,6 +685,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF3C7E56190C13FE00ED051F /* CompositeTileImageContribution.hpp in CopyFiles */,
 				CFF964421908870F0044F06D /* CompositeTileImageProvider.hpp in CopyFiles */,
 				CFF964431908870F0044F06D /* ChessboardTileImageProvider.hpp in CopyFiles */,
 				CFCBA3C619070A4900FD2A2F /* TileImageContribution.hpp in CopyFiles */,
@@ -1211,6 +1214,8 @@
 		CF35DD4B16C6995C002EFC96 /* Vector3F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3F.hpp; path = Commons/Geometry/Vector3F.hpp; sourceTree = "<group>"; };
 		CF35DD4E16C69B08002EFC96 /* Vector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2F.cpp; path = Commons/Geometry/Vector2F.cpp; sourceTree = "<group>"; };
 		CF35DD4F16C69B08002EFC96 /* Vector2F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector2F.hpp; path = Commons/Geometry/Vector2F.hpp; sourceTree = "<group>"; };
+		CF3C7E53190C138B00ED051F /* CompositeTileImageContribution.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeTileImageContribution.cpp; path = Commons/Basic/CompositeTileImageContribution.cpp; sourceTree = "<group>"; };
+		CF3C7E54190C138B00ED051F /* CompositeTileImageContribution.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CompositeTileImageContribution.hpp; path = Commons/Basic/CompositeTileImageContribution.hpp; sourceTree = "<group>"; };
 		CF3C992B17C270D800937BD3 /* NSString_CppAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NSString_CppAdditions.h; path = Specific/NSString_CppAdditions.h; sourceTree = "<group>"; };
 		CF3C992C17C2713300937BD3 /* NSString_CppAdditions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NSString_CppAdditions.mm; path = Specific/NSString_CppAdditions.mm; sourceTree = "<group>"; };
 		CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CompositeShape.cpp; path = Commons/Rendererers/CompositeShape.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2091,6 +2096,8 @@
 				CFE6046C1904448900E6C78B /* TileImageProvider.cpp */,
 				CFF9643F190885210044F06D /* CompositeTileImageProvider.cpp */,
 				CFF96440190885210044F06D /* CompositeTileImageProvider.hpp */,
+				CF3C7E53190C138B00ED051F /* CompositeTileImageContribution.cpp */,
+				CF3C7E54190C138B00ED051F /* CompositeTileImageContribution.hpp */,
 				CFCBA3C31907086C00FD2A2F /* TileImageContribution.cpp */,
 				CFCBA3C41907086C00FD2A2F /* TileImageContribution.hpp */,
 				CFCBA3C0190706C900FD2A2F /* RasterLayerTileImageProvider.cpp */,
@@ -3060,6 +3067,7 @@
 				CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */,
 				CFBD67AD179DBB7F0056A2BD /* GEO2DLineRasterStyle.cpp in Sources */,
 				CFBD67B2179F04160056A2BD /* GEO2DPolygonGeometry.cpp in Sources */,
+				CF3C7E55190C138B00ED051F /* CompositeTileImageContribution.cpp in Sources */,
 				CFBD67B9179F09380056A2BD /* GEOPolygonRasterSymbol.cpp in Sources */,
 				CFBD67BD179F0C3E0056A2BD /* GEO2DSurfaceRasterStyle.cpp in Sources */,
 				CFA1FDA017A1966D00DAEAB2 /* GEO2DPolygonData.cpp in Sources */,
