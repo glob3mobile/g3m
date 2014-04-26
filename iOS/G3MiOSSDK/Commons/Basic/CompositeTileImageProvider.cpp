@@ -10,6 +10,8 @@
 #include "TileImageListener.hpp"
 #include "Tile.hpp"
 
+#include "TileImageContribution.hpp"
+
 //class CompositeTileImageProvider_ChildContribution {
 //
 //};
