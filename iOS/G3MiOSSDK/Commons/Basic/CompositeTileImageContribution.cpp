@@ -9,6 +9,18 @@
 #include "CompositeTileImageContribution.hpp"
 
 
+CompositeTileImageContribution::ChildContribution::ChildContribution(const int                    childIndex,
+                                                                     const TileImageContribution* contribution) :
+_childIndex(childIndex),
+_contribution(contribution)
+{
+}
+
+CompositeTileImageContribution::ChildContribution::~ChildContribution() {
+  TileImageContribution::deleteContribution( _contribution );
+}
+
+
 const TileImageContribution* CompositeTileImageContribution::create(const std::vector<ChildContribution*>& contributions) {
   const int contributionsSize = contributions.size();
   if (contributionsSize == 0) {

@@ -37,7 +37,6 @@ const TileImageContribution* CompositeTileImageProvider::contribution(const Tile
       if ((childrenContributionsSize > 0) &&
           childContribution->isFullCoverageAndOpaque()) {
         for (int j = 0; j < childrenContributionsSize; j++) {
-//          TileImageContribution::deleteContribution( childrenContributions[j] );
           CompositeTileImageContribution::ChildContribution* previousContribution = childrenContributions[j];
           delete previousContribution;
         }
