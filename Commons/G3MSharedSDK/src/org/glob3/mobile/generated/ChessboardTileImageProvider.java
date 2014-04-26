@@ -44,7 +44,6 @@ public class ChessboardTileImageProvider extends TileImageProvider
 
   public final TileImageContribution contribution(Tile tile)
   {
-    //return FULL_COVERAGE_OPAQUE;
     return TileImageContribution.fullCoverageOpaque();
   }
 

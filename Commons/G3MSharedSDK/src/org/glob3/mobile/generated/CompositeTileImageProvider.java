@@ -31,15 +31,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 //  static const int MAX_CHILDREN_CONTRIBUTIONS = 4;
 //  ChildContribution _childrenContributions[MAX_CHILDREN_CONTRIBUTIONS];
 
-
-  //class CompositeTileImageProvider_ChildContribution {
-  //
-  //};
-  
-  //CompositeTileImageProvider::ChildContribution(const TileImageContribution& contribution) {
-  //
-  //}
-  
   public void dispose()
   {
     for (int i = 0; i < _childrenSize; i++)
@@ -65,28 +56,30 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
   public final TileImageContribution contribution(Tile tile)
   {
-    java.util.ArrayList<TileImageContribution> childrenContributions = new java.util.ArrayList<TileImageContribution>();
+    final java.util.ArrayList<TileImageContribution> childrenContributions = new java.util.ArrayList<TileImageContribution>();
   
     for (int i = 0; i < _childrenSize; i++)
     {
       TileImageProvider child = _children.get(i);
-      TileImageContribution childContribution = child.contribution(tile);
-      if (!childContribution.isNone())
+      final TileImageContribution childContribution = child.contribution(tile);
+      if (childContribution.isNone())
       {
-  
+        TileImageContribution.deleteContribution(childContribution);
+      }
+      else
+      {
         // ignore previous contributions, they are covered by the current fullCoverage & Opaque contribution.
         final int childrenContributionsSize = childrenContributions.size();
         if ((childrenContributionsSize > 0) && childContribution.isFullCoverageAndOpaque())
         {
           for (int j = 0; j < childrenContributionsSize; j++)
           {
-            if (childrenContributions.get(j) != null)
-               childrenContributions.get(j).dispose();
+            TileImageContribution.deleteContribution(childrenContributions.get(j));
           }
           childrenContributions.clear();
         }
   
-        childrenContributions.add( childContribution );
+        childrenContributions.add(childContribution);
       }
     }
   
@@ -111,6 +104,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
   
+    TileImageContribution.deleteContribution(contribution);
     listener.imageCreationError(tile._id, "Not yet implemented");
     if (deleteListener)
     {

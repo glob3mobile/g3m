@@ -125,13 +125,15 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!_canceled)
     {
       final TileImageContribution contribution = _tileImageProvider.contribution(_tile);
-      //if (contribution == NONE) {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DELETE contribution;
       if (contribution.isNone())
       {
         if (_tile != null)
         {
           _tile.setTextureSolved(true);
         }
+        TileImageContribution.deleteContribution(contribution);
       }
       else
       {
@@ -199,6 +201,7 @@ public class DTT_TileTextureBuilder extends RCObject
 
     if (image != null)
        image.dispose();
+    TileImageContribution.deleteContribution(contribution);
   }
 
   public final void imageCreationError(String error)

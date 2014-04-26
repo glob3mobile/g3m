@@ -30,7 +30,7 @@ public class TileImageContribution
   private static final TileImageContribution NONE = new TileImageContribution(false, 0);
   private static final TileImageContribution FULL_COVERAGE_OPAQUE = new TileImageContribution(false, 1);
 
-  private static TileImageContribution lastFullCoverageTransparent = null;
+  private static TileImageContribution _lastFullCoverageTransparent = null;
 
   private final boolean _isFullCoverage;
   private final Sector _sector ;
@@ -56,6 +56,10 @@ public class TileImageContribution
      _alpha = alpha;
   }
 
+  public void dispose()
+  {
+  }
+
   public TileImageContribution(TileImageContribution that)
   {
      _isFullCoverage = that._isFullCoverage;
@@ -64,9 +68,6 @@ public class TileImageContribution
      _alpha = that._alpha;
   }
 
-  public void dispose()
-  {
-  }
 
   public static TileImageContribution none()
   {
@@ -90,15 +91,15 @@ public class TileImageContribution
 //#warning TODO saves the last created alpha-contribution to try to reuse (&& avoid barbage)
       // return TileImageContribution(true, alpha);
   
-      if ((lastFullCoverageTransparent == null) || (lastFullCoverageTransparent._alpha != alpha))
+      if ((_lastFullCoverageTransparent == null) || (_lastFullCoverageTransparent._alpha != alpha))
       {
-        if (lastFullCoverageTransparent != null)
-           lastFullCoverageTransparent.dispose();
+        if (_lastFullCoverageTransparent != null)
+           _lastFullCoverageTransparent.dispose();
   
-        lastFullCoverageTransparent = new TileImageContribution(true, alpha);
+        _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
       }
   
-      return lastFullCoverageTransparent;
+      return _lastFullCoverageTransparent;
     }
   }
 
@@ -110,6 +111,30 @@ public class TileImageContribution
   public static TileImageContribution partialCoverageTransparent(Sector sector, float alpha)
   {
     return (alpha <= 0.01) ? NONE : new TileImageContribution(sector, true, alpha);
+  }
+
+  public static void deleteContribution(TileImageContribution contribution)
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning remove debug code
+  //  if (contribution == NULL) {
+  //    printf("break point\n");
+  //  }
+  //  if (contribution == NONE) {
+  //    printf("break point\n");
+  //  }
+  //  if (contribution == FULL_COVERAGE_OPAQUE) {
+  //    printf("break point\n");
+  //  }
+  //  if (contribution == _lastFullCoverageTransparent) {
+  //    printf("break point\n");
+  //  }
+  
+    if ((contribution != null) && (contribution != NONE) && (contribution != FULL_COVERAGE_OPAQUE) && (contribution != _lastFullCoverageTransparent))
+    {
+      if (contribution != null)
+         contribution.dispose();
+    }
   }
 
   public final boolean isNone()
