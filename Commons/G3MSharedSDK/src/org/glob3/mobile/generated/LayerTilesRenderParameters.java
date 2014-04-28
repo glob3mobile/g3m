@@ -17,8 +17,38 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class LayerTilesRenderParameters
 {
+
+  /*
+   return ( topSectorSplitsByLatitude, topSectorSplitsByLongitude )
+   */
+  private static Vector2I calculateTopSectorSplitsParametersWGS84(Sector topSector)
+  {
+    IMathUtils math = IMathUtils.instance();
+    final double maxTile = 90;
+    double sLat;
+    double sLon;
+  
+    final double ratio = topSector._deltaLatitude.div(topSector._deltaLongitude);
+    if (ratio > 1)
+    {
+      sLat = ratio;
+      sLon = 1;
+    }
+    else
+    {
+      sLat = 1;
+      sLon = 1 / ratio;
+    }
+  
+    final double tileDeltaLat = topSector._deltaLatitude.div(sLat)._degrees;
+    final double factorLat = tileDeltaLat / maxTile;
+    double factor = math.max(factorLat, 1);
+  
+    return new Vector2I((int) math.round(sLat * factor), (int) math.round(sLon * factor));
+  }
   public final Sector _topSector ;
   public final int _topSectorSplitsByLatitude;
   public final int _topSectorSplitsByLongitude;
@@ -54,21 +84,34 @@ public class LayerTilesRenderParameters
   }
 
 
-  public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)
+  public static LayerTilesRenderParameters createDefaultWGS84(int firstLevel, int maxLevel)
   {
-    final int topSectorSplitsByLatitude = 2;
-    final int topSectorSplitsByLongitude = 4;
+    final Sector topSector = Sector.fullSphere();
+    final Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
+    final int topSectorSplitsByLatitude = splitsParameters._x;
+    final int topSectorSplitsByLongitude = splitsParameters._y;
+//    const int  topSectorSplitsByLatitude  = 2;
+//    const int  topSectorSplitsByLongitude = 4;
     final boolean mercator = false;
 
     return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
   }
 
-  public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector)
+  public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)
   {
-    final int firstLevel = 0;
-    final int maxLevel = 17;
+    final Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
+    final int topSectorSplitsByLatitude = splitsParameters._x;
+    final int topSectorSplitsByLongitude = splitsParameters._y;
+    final boolean mercator = false;
 
-    return createDefaultWGS84(topSector, firstLevel, maxLevel);
+    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
+  }
+
+  public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel)
+  {
+    final boolean mercator = false;
+
+    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
   }
 
   public static LayerTilesRenderParameters createDefaultMercator(int firstLevel, int maxLevel)

@@ -622,17 +622,12 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
   const std::string style = jsonLayer->getAsString("style", "");
   const URL queryServerURL = URL("", false);
   const WMSServerVersion queryServerVersion = mapServerVersion;
-  const double lowerLat = jsonLayer->getAsNumber("lowerLat", -90.0);
-  const double lowerLon = jsonLayer->getAsNumber("lowerLon", -180.0);
-  const double upperLat = jsonLayer->getAsNumber("upperLat", 90.0);
-  const double upperLon = jsonLayer->getAsNumber("upperLon", 180.0);
-  const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
-                               Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
+  const Sector sector = parseSector(jsonLayer, "validSector");
   std::string imageFormat = jsonLayer->getAsString("imageFormat", "image/png");
   const std::string srs = jsonLayer->getAsString("projection", "EPSG:4326");
   LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
   if (srs.compare("EPSG:4326") == 0) {
-    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere());
+    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(0, 17);
   }
   else if (srs.compare("EPSG:3857") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
@@ -671,13 +666,7 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
   const std::string projection = jsonLayer->getAsString("projection", "EPSG:3857");
   const bool mercator = (projection == "EPSG:3857");
 
-  const double lowerLat = jsonLayer->getAsNumber("lowerLat", -90.0);
-  const double lowerLon = jsonLayer->getAsNumber("lowerLon", -180.0);
-  const double upperLat = jsonLayer->getAsNumber("upperLat", 90.0);
-  const double upperLon = jsonLayer->getAsNumber("upperLon", 180.0);
-
-  const Sector sector = Sector::fromDegrees(lowerLat, lowerLon,
-                                            upperLat, upperLon);
+  const Sector sector = parseSector(jsonLayer, "validSector");
 
   URLTemplateLayer* result;
   if (mercator) {
@@ -854,9 +843,30 @@ Sector* MapBooBuilder::parseSector(const JSONBaseObject* jsonBaseObjectLayer) co
   const double lowerLon = jsonObject->getAsNumber("lowerLon", -180.0);
   const double upperLat = jsonObject->getAsNumber("upperLat",   90.0);
   const double upperLon = jsonObject->getAsNumber("upperLon",  180.0);
-
+  
   return new Sector(Geodetic2D::fromDegrees(lowerLat, lowerLon),
                     Geodetic2D::fromDegrees(upperLat, upperLon));
+}
+
+const Sector MapBooBuilder::parseSector(const JSONObject* jsonObject, const std::string& paramName) const {
+ 
+  const JSONObject* sector = jsonObject->getAsObject(paramName);
+  
+  if (sector == NULL) {
+    return Sector::fullSphere();
+  }
+  
+  if (sector->asNull() != NULL) {
+    return Sector::fullSphere();
+  }
+  
+  const double lowerLat = sector->getAsNumber("lowerLat",  -90.0);
+  const double lowerLon = sector->getAsNumber("lowerLon", -180.0);
+  const double upperLat = sector->getAsNumber("upperLat",   90.0);
+  const double upperLon = sector->getAsNumber("upperLon",  180.0);
+  
+  return Sector(Geodetic2D::fromDegrees(lowerLat, lowerLon),
+                Geodetic2D::fromDegrees(upperLat, upperLon));
 }
 
 MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
