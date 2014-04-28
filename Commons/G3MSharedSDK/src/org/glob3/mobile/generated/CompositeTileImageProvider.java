@@ -396,7 +396,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     final int contributionsSize = compositeContribution.size();
   
     // store all the indexes before calling child->cancel().
-    // child->cancel() can force the instance termination of the builder (and the compositeContribution)
+    // child->cancel() can force the deletion of the builder (and in order the deletion of compositeContribution)
     int[] indexes = new int[contributionsSize];
     for (int i = 0; i < contributionsSize; i++)
     {
