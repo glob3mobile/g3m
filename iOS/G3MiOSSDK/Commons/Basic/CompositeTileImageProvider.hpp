@@ -38,9 +38,7 @@ private:
 
     static const ChildResult* cancelation();
 
-    ~ChildResult() {
-#warning delete something?
-    }
+    ~ChildResult();
 
   private:
 
@@ -81,6 +79,7 @@ private:
 
     bool _anyError;
     bool _anyCancelation;
+    bool _canceled;
 
     void cleanUp();
 
@@ -114,7 +113,7 @@ private:
 
     void imageCreationCanceled(const int index);
 
-    void cancel();
+    void cancel(const Tile* tile);
 
     void imageCreated(const IImage* image);
 
@@ -179,6 +178,9 @@ public:
   void cancel(const Tile* tile);
 
   void composerDone(Composer* composer);
+
+  void cancelChildren(const Tile* tile,
+                      const CompositeTileImageContribution* compositeContribution);
 };
 
 #endif

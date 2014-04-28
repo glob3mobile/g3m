@@ -266,7 +266,6 @@ public:
 //  }
 
   void start() {
-#warning Diego at work!
     if (!_canceled) {
       const TileImageContribution* contribution = _tileImageProvider->contribution(_tile);
       if (contribution == NULL) {
@@ -287,7 +286,6 @@ public:
   }
 
   void cancel(bool cleanTile) {
-#warning Diego at work!
     _texturedMesh = NULL;
     if (cleanTile) {
       _tile = NULL;

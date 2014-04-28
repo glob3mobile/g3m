@@ -344,7 +344,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
       (_southArcSegmentRatioSquared == 0) ||
       (_eastArcSegmentRatioSquared  == 0) ||
       (_westArcSegmentRatioSquared  == 0)) {
-#warning CHECK IT
     prepareTestLODData( rc->getPlanet() );
   }
 
