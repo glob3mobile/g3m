@@ -319,7 +319,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
   public final TileImageContribution contribution(Tile tile)
   {
-    java.util.ArrayList<CompositeTileImageContribution.ChildContribution> childrenContributions = new java.util.ArrayList<CompositeTileImageContribution.ChildContribution>();
+    final java.util.ArrayList<CompositeTileImageContribution.ChildContribution> childrenContributions = new java.util.ArrayList<CompositeTileImageContribution.ChildContribution>();
   
     for (int i = 0; i < _childrenSize; i++)
     {
@@ -337,7 +337,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         {
           for (int j = 0; j < childrenContributionsSize; j++)
           {
-            CompositeTileImageContribution.ChildContribution previousContribution = childrenContributions.get(j);
+            final CompositeTileImageContribution.ChildContribution previousContribution = childrenContributions.get(j);
             previousContribution = null;
           }
           childrenContributions.clear();
