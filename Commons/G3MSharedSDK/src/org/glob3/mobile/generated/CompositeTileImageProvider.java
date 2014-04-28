@@ -47,6 +47,12 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       return new CompositeTileImageProvider.ChildResult(false, true, null, "", null, ""); // error -  contribution -  imageId -  image -  isCanceled -  isError
     }
 
+    public void dispose()
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning delete something?
+    }
+
 
     private ChildResult(boolean isError, boolean isCanceled, IImage image, String imageId, TileImageContribution contribution, String error)
     {
@@ -57,6 +63,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
        _contribution = contribution;
        _error = error;
     }
+
   }
 
   private static class Composer
@@ -102,7 +109,31 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
              _listener.dispose();
           _listener = null;
         }
+    
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning delete this (CompositeTileImageProvider)
       }
+    //  else {
+    //    if (_anyError) {
+    //      _listener->imageCreationError(_tileId,
+    //                                    composedError);
+    //
+    //      if (_deleteListener) {
+    //        delete _listener;
+    //        _listener = NULL;
+    //      }
+    //    }
+    //    else if (_anyCancelation) {
+    //      _listener->imageCreationCanceled(_tileId);
+    //      if (_deleteListener) {
+    //        delete _listener;
+    //        _listener = NULL;
+    //      }
+    //    }
+    //    else {
+    //
+    //    }
+    //  }
     
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODODODODODODO
@@ -138,8 +169,16 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       }
     }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//    void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution, int index);
+    public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution, int index)
+    {
+      if (_results.get(index) != null)
+      {
+        System.out.print("Logic error 1\n");
+      }
+    
+      _results.set(index, ChildResult.image(image, imageId, contribution));
+      stepDone();
+    }
 
     public final void imageCreationError(String error, int index)
     {
@@ -265,10 +304,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     Composer composer = new Composer(tile._id, listener, deleteListener, compositeContribution);
     for (int i = 0; i < contributionsSize; i++)
     {
-      final CompositeTileImageContribution.ChildContribution singleContribution = compositeContribution.get(i);
+      final CompositeTileImageContribution.ChildContribution eachContribution = compositeContribution.get(i);
   
-      TileImageProvider child = _children.get(singleContribution._childIndex);
-      final TileImageContribution childContribution = singleContribution._contribution;
+      TileImageProvider child = _children.get(eachContribution._childIndex);
+      final TileImageContribution childContribution = eachContribution._contribution;
   
       child.create(tile, childContribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true);
     }
