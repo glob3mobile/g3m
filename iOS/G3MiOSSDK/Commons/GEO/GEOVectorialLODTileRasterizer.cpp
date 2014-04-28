@@ -22,17 +22,43 @@
 #include "GEORasterSymbolizer.hpp"
 #include "GEOJSONParser.hpp"
 #include "IThreadUtils.hpp"
+#include "GEOFeatureCollection.hpp"
+#include "GEOFeature.hpp"
+#include "GEOGeometry2D.hpp"
+#include "GEOVectorialLODRasterSymbolizer.hpp"
+
+class GEOVectorialLODBufferDownloadListener;
 
 
-const URL* BASE_URL= new URL("http://localhost:8080/vectorial", false);
+const URL* TEST_URL= new URL("http://192.168.1.26/vectorial/ne_10m_admin_0_countries_6-LEVELS_WGS84", false);
 
 
-URL* GEOVectorialLODTileRasterizer::builURLForVectorialTile(const Tile* tile) const {
+URL* GEOVectorialLODTileRasterizer::builURLForVectorialTile(const URL* baseUrl, const Tile* tile) const {
     
-    std::string baseUrl = BASE_URL->getPath();
-    //TODO:
+    const IStringUtils* iu = IStringUtils::instance();
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
     
-    return NULL;
+    std::string level = iu->toString(tile->_level/3); // for 18 levels of tiles and only 6 of vectorial data
+    std::string row = iu->toString(tile->_row);
+    std::string column = iu->toString(tile->_column);
+    
+    isb->addString(baseUrl->getPath());
+    isb->addString("/");
+    isb->addString(level);
+    isb->addString("/");
+    isb->addString(row);
+    isb->addString("/");
+    isb->addString(level);
+    isb->addString("_");
+    isb->addString(row);
+    isb->addString("-");
+    isb->addString(column);
+    isb->addString(".json");
+
+    const std::string tileUrl = isb->getString();
+    ILogger::instance()->logInfo(tileUrl);
+    
+    return new URL(tileUrl,false);
 }
 
 void GEOVectorialLODTileRasterizer::initialize(const G3MContext* context) {
@@ -51,11 +77,14 @@ void GEOVectorialLODTileRasterizer::rawRasterize(const IImage* image,
                                      IImageListener* listener,
                                      bool autodelete) const {
     
-//    _downloader->requestBuffer(<#const URL &url#>, <#long long priority#>, <#const TimeInterval &timeToCache#>, , <#IBufferDownloadListener *listener#>, true);
+    const URL* tileUrl = builURLForVectorialTile(TEST_URL, trc._tile);
     
+//    const GEOVectorialLODRasterSymbolizer* rasterSymbolizer = new GEOVectorialLODRasterSymbolizer();
+//    const GEOVectorialLODBufferDownloadListener* l = new GEOVectorialLODBufferDownloadListener(rasterSymbolizer, _threadUtils, false);
+//    
+//    
+//    _downloader->requestBuffer(tileUrl, 1000000, TimeInterval::fromDays(30), l, true);
     
-    
-   
     
 }
 
@@ -112,6 +141,17 @@ public:
         else {
             _geoObject = GEOJSONParser::parseJSON(_buffer);
         }
+        
+        GEOFeatureCollection* fc = (GEOFeatureCollection*) _geoObject;
+        
+        
+//        for (int i = 0; i < fc->size(); i++) {
+//            GEOGeometry2D* g = fc->get(i)->getGeometry();
+//            //fc->get(i)->getGeometry()->createSymbols(_symbolizer);
+//            
+//            GEORasterSymbol* symbol = _symbolizer->createSymbols(g);
+//            symbol->rasterize(<#ICanvas *canvas#>, <#const GEORasterProjection *projection#>, <#int tileLevel#>);
+//        }
         
         delete _buffer;
         _buffer = NULL;

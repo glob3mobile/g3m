@@ -20,7 +20,7 @@ class GEOVectorialLODTileRasterizer : public CanvasTileRasterizer {
 private:
     IDownloader *_downloader;
     
-    URL* builURLForVectorialTile(const Tile* tile) const;
+    URL* builURLForVectorialTile(const URL* baseUrl, const Tile* tile) const;
     
 public:
     GEOVectorialLODTileRasterizer()
