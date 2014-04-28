@@ -300,7 +300,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     for (int i = 0; i < _childrenSize; i++)
     {
       TileImageProvider child = _children.get(i);
-      //    delete child;
       child._release();
     }
     super.dispose();
@@ -325,10 +324,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     {
       TileImageProvider child = _children.get(i);
       final TileImageContribution childContribution = child.contribution(tile);
-  //    if (childContribution->isNone()) {
-  //      TileImageContribution::deleteContribution( childContribution );
-  //    }
-  //    else {
       if (childContribution != null)
       {
         // ignore previous contributions, they are covered by the current fullCoverage & Opaque contribution.
@@ -338,7 +333,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           for (int j = 0; j < childrenContributionsSize; j++)
           {
             final CompositeTileImageContribution.ChildContribution previousContribution = childrenContributions.get(j);
-            previousContribution = null;
+            previousContribution.dispose();
           }
           childrenContributions.clear();
         }

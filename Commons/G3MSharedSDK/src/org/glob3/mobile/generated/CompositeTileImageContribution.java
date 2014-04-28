@@ -47,16 +47,7 @@ public class CompositeTileImageContribution extends TileImageContribution
       //return TileImageContribution::none();
       return null;
     }
-  //  else if (contributionsSize == 1) {
-  //    const ChildContribution* singleContribution = contributions[0];
-  //    const TileImageContribution* result = singleContribution->_contribution;
-  //    delete singleContribution;
-  //    return result;
-  //  }
-    else
-    {
-      return new CompositeTileImageContribution(contributions);
-    }
+    return new CompositeTileImageContribution(contributions);
   }
 
 

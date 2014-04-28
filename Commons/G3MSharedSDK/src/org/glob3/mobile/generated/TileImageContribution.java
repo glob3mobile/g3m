@@ -16,18 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
-//enum TileImageContribution {
-//  NONE,
-//  FULL_COVERAGE_OPAQUE,
-//  FULL_COVERAGE_TRANSPARENT,
-//  PARTIAL_COVERAGE_OPAQUE,
-//  PARTIAL_COVERAGE_TRANSPARENT
-//};
-
 
 public class TileImageContribution
 {
-//  static const TileImageContribution* NONE;
   private static final TileImageContribution FULL_COVERAGE_OPAQUE = new TileImageContribution(false, 1);
 
   private static TileImageContribution _lastFullCoverageTransparent = null;
@@ -60,7 +51,7 @@ public class TileImageContribution
   {
   }
 
-  public TileImageContribution(TileImageContribution that)
+  protected TileImageContribution(TileImageContribution that)
   {
      _isFullCoverage = that._isFullCoverage;
      _sector = new Sector(that._sector);
@@ -69,16 +60,6 @@ public class TileImageContribution
   }
 
 
-//  static const TileImageContribution* none();
-
-
-  //const TileImageContribution* TileImageContribution::NONE                  = new TileImageContribution(false, 0);
-  
-  
-  //const TileImageContribution* TileImageContribution::none() {
-  //  return NONE;
-  //}
-  
   public static TileImageContribution fullCoverageOpaque()
   {
     return FULL_COVERAGE_OPAQUE;
@@ -88,7 +69,6 @@ public class TileImageContribution
   {
     if (alpha <= 0.01)
     {
-      //return NONE;
       return null;
     }
   
@@ -110,23 +90,17 @@ public class TileImageContribution
 
   public static TileImageContribution partialCoverageTransparent(Sector sector, float alpha)
   {
-    // return (alpha <= 0.01) ? NONE : new TileImageContribution(sector, true, alpha);
     return (alpha <= 0.01) ? null : new TileImageContribution(sector, true, alpha);
   }
 
   public static void deleteContribution(TileImageContribution contribution)
   {
     if ((contribution != null) && (contribution != FULL_COVERAGE_OPAQUE) && (contribution != _lastFullCoverageTransparent))
-        //(contribution != NONE) &&
     {
       if (contribution != null)
          contribution.dispose();
     }
   }
-
-//  bool isNone() const {
-//    return (_alpha <= 0.01);
-//  }
 
   public final boolean isFullCoverageAndOpaque()
   {
