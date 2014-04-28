@@ -71,7 +71,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     private CompositeTileImageProvider _compositeTileImageProvider;
     private TileImageListener _listener;
     private final boolean _deleteListener;
-    private final CompositeTileImageContribution _compositeContribution;
+    private CompositeTileImageContribution _compositeContribution;
     private final java.util.ArrayList<ChildResult> _results = new java.util.ArrayList<ChildResult>();
     private final int _contributionsSize;
 
@@ -109,7 +109,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       {
         if (_anyError)
         {
-          String composedError;
+          String composedError = "";
           for (int i = 0; i < _contributionsSize; i++)
           {
             final ChildResult childResult = _results.get(i);
@@ -134,7 +134,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     
           canvas.initialize(_width, _height);
     
-          String imageId;
+          String imageId = "";
     
           for (int i = 0; i < _contributionsSize; i++)
           {
@@ -209,8 +209,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
            result.dispose();
       }
     
-      if (_compositeContribution != null)
-         _compositeContribution.dispose();
+      _compositeContribution = null;
     }
 
     public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution, int index)
@@ -405,26 +404,16 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   public final void cancel(Tile tile)
   {
     final String tileId = tile._id;
-    if (_composers.containsKey(tileId))
-    {
-      Composer composer = _composers.get(tileId);
-  
+    final Composer composer = _composers.remove(tileId);
+    if (composer != null) {
       composer.cancel();
-  
-      _composers.remove(tileId);
     }
   }
 
   public final void composerDone(Composer composer)
   {
     final String tileId = composer._tileId;
-    if (_composers.containsKey(tileId))
-    {
-      //Composer* composer = _composers[tileId];
-  
-      _composers.remove(tileId);
-    }
-  
+    _composers.remove(tileId);
     if (composer != null)
        composer.dispose();
   }
