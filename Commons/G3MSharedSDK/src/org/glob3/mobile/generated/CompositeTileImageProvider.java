@@ -108,6 +108,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         {
           _listener.imageCreated(singleResult._imageId, singleResult._image.shallowCopy(), singleResult._imageId, singleResult._contribution);
         }
+    
         cleanUp();
       }
       else
@@ -156,9 +157,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
              canvas.dispose();
         }
       }
-    
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODODODODODODO
     }
 
     private boolean _anyError;
@@ -207,13 +205,22 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public void dispose()
     {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning remove debug printf
+    //  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
+    //         this,
+    //         _stepsDone,
+    //         _anyError       ? "true" : "false",
+    //         _anyCancelation ? "true" : "false",
+    //         _canceled       ? "true" : "false",
+    //         _compositeContribution
+    //         );
       for (int i = 0; i < _contributionsSize; i++)
       {
         final ChildResult result = _results.get(i);
         if (result != null)
            result.dispose();
       }
-    
       _compositeContribution = null;
     }
 
@@ -248,8 +255,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final void cancel(Tile tile)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO cancel children
       _canceled = true;
       _compositeTileImageProvider.cancelChildren(tile, _compositeContribution);
     }
@@ -257,7 +262,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     public final void imageCreated(IImage image)
     {
       _listener.imageCreated(_tileId, image, _imageId, _compositeContribution);
-      _compositeContribution = null;
+      _compositeContribution = null; // the _compositeContribution ownership moved to the listener
       cleanUp();
     }
 
@@ -381,8 +386,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
   public final void composerDone(Composer composer)
   {
-    final String tileId = composer._tileId;
-    _composers.remove(tileId);
+    _composers.remove(composer._tileId);
     if (composer != null)
        composer.dispose();
   }
@@ -390,12 +394,21 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   public final void cancelChildren(Tile tile, CompositeTileImageContribution compositeContribution)
   {
     final int contributionsSize = compositeContribution.size();
+  
+    // store all the indexes before calling child->cancel().
+    // child->cancel() can force the instance termination of the builder (and the compositeContribution)
+    int[] indexes = new int[contributionsSize];
     for (int i = 0; i < contributionsSize; i++)
     {
-      final CompositeTileImageContribution.ChildContribution childContribution = compositeContribution.get(i);
+      indexes[i] = compositeContribution.get(i)._childIndex;
+    }
   
-      TileImageProvider child = _children.get(childContribution._childIndex);
+    for (int i = 0; i < contributionsSize; i++)
+    {
+      TileImageProvider child = _children.get(indexes[i]);
       child.cancel(tile);
     }
+  
+    indexes = null;
   }
 }
