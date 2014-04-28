@@ -30,10 +30,6 @@ const TileImageContribution* CompositeTileImageProvider::contribution(const Tile
   for (int i = 0; i < _childrenSize; i++) {
     TileImageProvider* child = _children[i];
     const TileImageContribution* childContribution = child->contribution(tile);
-//    if (childContribution->isNone()) {
-//      TileImageContribution::deleteContribution( childContribution );
-//    }
-//    else {
     if (childContribution != NULL) {
       // ignore previous contributions, they are covered by the current fullCoverage & Opaque contribution.
       const int childrenContributionsSize = childrenContributions.size();

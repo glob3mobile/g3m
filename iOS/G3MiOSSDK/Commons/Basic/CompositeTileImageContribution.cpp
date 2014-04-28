@@ -27,13 +27,5 @@ const TileImageContribution* CompositeTileImageContribution::create(const std::v
     //return TileImageContribution::none();
     return NULL;
   }
-//  else if (contributionsSize == 1) {
-//    const ChildContribution* singleContribution = contributions[0];
-//    const TileImageContribution* result = singleContribution->_contribution;
-//    delete singleContribution;
-//    return result;
-//  }
-  else {
-    return new CompositeTileImageContribution(contributions);
-  }
+  return new CompositeTileImageContribution(contributions);
 }

@@ -9,19 +9,10 @@
 #ifndef __G3MiOSSDK__TileImageContribution__
 #define __G3MiOSSDK__TileImageContribution__
 
-//enum TileImageContribution {
-//  NONE,
-//  FULL_COVERAGE_OPAQUE,
-//  FULL_COVERAGE_TRANSPARENT,
-//  PARTIAL_COVERAGE_OPAQUE,
-//  PARTIAL_COVERAGE_TRANSPARENT
-//};
-
 #include "Sector.hpp"
 
 class TileImageContribution {
 private:
-//  static const TileImageContribution* NONE;
   static const TileImageContribution* FULL_COVERAGE_OPAQUE;
 
   static TileImageContribution* _lastFullCoverageTransparent;
@@ -56,7 +47,6 @@ protected:
   virtual ~TileImageContribution() {
   }
 
-public:
   TileImageContribution(const TileImageContribution& that) :
   _isFullCoverage(that._isFullCoverage),
   _sector(that._sector),
@@ -65,8 +55,7 @@ public:
   {
   }
 
-
-//  static const TileImageContribution* none();
+public:
 
   static const TileImageContribution* fullCoverageOpaque();
 
@@ -78,10 +67,6 @@ public:
                                                                  float alpha);
 
   static void deleteContribution(const TileImageContribution* contribution);
-
-//  bool isNone() const {
-//    return (_alpha <= 0.01);
-//  }
 
   bool isFullCoverageAndOpaque() const {
     return _isFullCoverage && !_isTransparent && (_alpha >= 0.99);
