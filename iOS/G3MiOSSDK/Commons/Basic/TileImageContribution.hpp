@@ -21,7 +21,7 @@
 
 class TileImageContribution {
 private:
-  static const TileImageContribution* NONE;
+//  static const TileImageContribution* NONE;
   static const TileImageContribution* FULL_COVERAGE_OPAQUE;
 
   static TileImageContribution* _lastFullCoverageTransparent;
@@ -66,7 +66,7 @@ public:
   }
 
 
-  static const TileImageContribution* none();
+//  static const TileImageContribution* none();
 
   static const TileImageContribution* fullCoverageOpaque();
 
@@ -79,9 +79,9 @@ public:
 
   static void deleteContribution(const TileImageContribution* contribution);
 
-  bool isNone() const {
-    return (_alpha <= 0.01);
-  }
+//  bool isNone() const {
+//    return (_alpha <= 0.01);
+//  }
 
   bool isFullCoverageAndOpaque() const {
     return _isFullCoverage && !_isTransparent && (_alpha >= 0.99);

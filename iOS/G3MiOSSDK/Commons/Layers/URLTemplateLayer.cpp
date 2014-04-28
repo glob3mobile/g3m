@@ -244,7 +244,8 @@ const TileImageContribution* URLTemplateLayer::rawContribution(const Tile* tile)
   const Sector tileSector = tile->_sector;
 
   if (!_sector.touchesWith(tileSector)) {
-    return TileImageContribution::none();
+    //return TileImageContribution::none();
+    return NULL;
   }
   else if (_sector.fullContains(tileSector)) {
     return ((_isTransparent || (_transparency < 1))

@@ -112,6 +112,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   subdomains.push_back("1.");
   subdomains.push_back("2.");
   subdomains.push_back("3.");
+#warning PUT TRANSPARENT
   MercatorTiledLayer* meteoritesLayer = new MercatorTiledLayer("http://",
                                                                "tiles.cartocdn.com/osm2/tiles/meteoritessize",
                                                                subdomains,
@@ -121,7 +122,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
                                                                Sector::fullSphere(),
                                                                2,
                                                                17,
-                                                               true // isTransparent
+                                                               false // isTransparent
                                                                );
   meteoritesLayer->setTitle("CartoDB Meteorites");
   meteoritesLayer->setEnable(false);

@@ -269,11 +269,12 @@ public:
 #warning Diego at work!
     if (!_canceled) {
       const TileImageContribution* contribution = _tileImageProvider->contribution(_tile);
-      if (contribution->isNone()) {
+      //if (contribution->isNone()) {
+      if (contribution == NULL) {
         if (_tile != NULL) {
           _tile->setTextureSolved(true);
         }
-        TileImageContribution::deleteContribution( contribution );
+        //TileImageContribution::deleteContribution( contribution );
       }
       else {
         _tileImageProvider->create(_tile,

@@ -23,7 +23,7 @@ private:
   const RasterLayer* _layer;
   IDownloader*       _downloader;
 
-  std::map<std::string, long long> _requestsIdsPerTile;
+  std::map<const std::string, long long> _requestsIdsPerTile;
 
 protected:
   ~RasterLayerTileImageProvider();

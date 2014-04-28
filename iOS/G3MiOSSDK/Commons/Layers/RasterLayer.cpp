@@ -59,7 +59,8 @@ const TileImageContribution* RasterLayer::contribution(const Tile* tile) const {
   if ((_condition == NULL) || _condition->isAvailable(tile)) {
     return rawContribution(tile);
   }
-  return TileImageContribution::none();
+  //return TileImageContribution::none();
+  return NULL;
 }
 
 long long RasterLayer::requestImage(const Tile* tile,

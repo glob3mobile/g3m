@@ -52,6 +52,15 @@ protected:
       delete _contributions[i];
     }
   }
+
+public:
+  const int size() const {
+    return _contributions.size();
+  }
+
+  const ChildContribution* get(int index) const {
+    return _contributions[index];
+  }
   
 };
 
