@@ -149,7 +149,7 @@ void CompositeTileImageProvider::Composer::done() {
   }
   else {
     if (_anyError) {
-      std::string composedError;
+      std::string composedError = "";
       for (int i = 0; i < _contributionsSize; i++) {
         const ChildResult* childResult = _results[i];
         if (childResult->_isError) {
@@ -171,7 +171,7 @@ void CompositeTileImageProvider::Composer::done() {
 
       canvas->initialize(_width, _height);
 
-      std::string imageId;
+      std::string imageId = "";
 
       for (int i = 0; i < _contributionsSize; i++) {
        const ChildResult* result = _results[i];
@@ -326,6 +326,7 @@ void CompositeTileImageProvider::create(const Tile* tile,
 
 void CompositeTileImageProvider::cancel(const Tile* tile) {
   const std::string tileId = tile->_id;
+#ifdef C_CODE
   if (_composers.find(tileId) != _composers.end()) {
     Composer* composer = _composers[tileId];
 
@@ -333,15 +334,26 @@ void CompositeTileImageProvider::cancel(const Tile* tile) {
 
     _composers.erase(tileId);
   }
+#endif
+#ifdef JAVA_CODE
+  final Composer composer = _composers.remove(tileId);
+  if (composer != null) {
+    composer.cancel();
+  }
+#endif
 }
 
 void CompositeTileImageProvider::composerDone(Composer* composer) {
   const std::string tileId = composer->_tileId;
+#ifdef C_CODE
   if (_composers.find(tileId) != _composers.end()) {
     //Composer* composer = _composers[tileId];
 
     _composers.erase(tileId);
   }
-
+#endif
+#ifdef JAVA_CODE
+  _composers.remove(tileId);
+#endif
   delete composer;
 }

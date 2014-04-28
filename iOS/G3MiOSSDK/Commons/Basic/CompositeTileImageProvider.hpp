@@ -66,7 +66,12 @@ private:
     CompositeTileImageProvider*           _compositeTileImageProvider;
     TileImageListener*                    _listener;
     const bool                            _deleteListener;
+#ifdef C_CODE
     const CompositeTileImageContribution* _compositeContribution;
+#endif
+#ifdef JAVA_CODE
+    private CompositeTileImageContribution _compositeContribution;
+#endif
     std::vector<const ChildResult*>       _results;
     const int                             _contributionsSize;
 
@@ -86,7 +91,7 @@ private:
 
 
   public:
-    const std::string                     _tileId;
+    const std::string _tileId;
 
     Composer(int width,
              int height,
@@ -95,7 +100,7 @@ private:
              TileImageListener* listener,
              bool deleteListener,
              const CompositeTileImageContribution* compositeContribution);
-
+    
     ~Composer();
 
     void imageCreated(const std::string&           tileId,
