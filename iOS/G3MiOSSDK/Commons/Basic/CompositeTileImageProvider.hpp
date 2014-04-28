@@ -19,7 +19,7 @@ class CompositeTileImageContribution;
 class CompositeTileImageProvider : public CanvasTileImageProvider {
 private:
 
-  class ChildContribution {
+  class ChildResult {
   public:
     const bool                   _isError;
     const bool                   _isCanceled;
@@ -28,22 +28,22 @@ private:
     const TileImageContribution* _contribution;
     const std::string            _error;
 
-    static const ChildContribution* image(const IImage*                image,
-                                          const std::string&           imageId,
-                                          const TileImageContribution* contribution);
+    static const ChildResult* image(const IImage*                image,
+                                    const std::string&           imageId,
+                                    const TileImageContribution* contribution);
 
-    static const ChildContribution* error(const std::string& error);
+    static const ChildResult* error(const std::string& error);
 
-    static const ChildContribution* cancelation();
+    static const ChildResult* cancelation();
 
   private:
 
-    ChildContribution(const bool                   isError,
-                      const bool                   isCanceled,
-                      const IImage*                image,
-                      const std::string&           imageId,
-                      const TileImageContribution* contribution,
-                      const std::string&           error) :
+    ChildResult(const bool                   isError,
+                const bool                   isCanceled,
+                const IImage*                image,
+                const std::string&           imageId,
+                const TileImageContribution* contribution,
+                const std::string&           error) :
     _isError(isError),
     _isCanceled(isCanceled),
     _image(image),
@@ -53,14 +53,14 @@ private:
     {
     }
   };
-  
+
   class Composer {
   private:
     const std::string                     _tileId;
     TileImageListener*                    _listener;
     const bool                            _deleteListener;
     const CompositeTileImageContribution* _compositeContribution;
-    std::vector<const ChildContribution*> _contributions;
+    std::vector<const ChildResult*>       _results;
     const int                             _contributionsSize;
 
     int _stepsDone;

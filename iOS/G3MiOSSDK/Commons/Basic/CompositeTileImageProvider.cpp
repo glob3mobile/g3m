@@ -51,35 +51,35 @@ const TileImageContribution* CompositeTileImageProvider::contribution(const Tile
   return CompositeTileImageContribution::create(childrenContributions);
 }
 
-const CompositeTileImageProvider::ChildContribution* CompositeTileImageProvider::ChildContribution::image(const IImage*                image,
-                                                                                                          const std::string&           imageId,
-                                                                                                          const TileImageContribution* contribution) {
-  return new CompositeTileImageProvider::ChildContribution(false ,        // isError
-                                                           false,         // isCanceled
-                                                           image,
-                                                           imageId,
-                                                           contribution,
-                                                           ""             // error
-                                                           );
+const CompositeTileImageProvider::ChildResult* CompositeTileImageProvider::ChildResult::image(const IImage*                image,
+                                                                                              const std::string&           imageId,
+                                                                                              const TileImageContribution* contribution) {
+  return new CompositeTileImageProvider::ChildResult(false ,        // isError
+                                                     false,         // isCanceled
+                                                     image,
+                                                     imageId,
+                                                     contribution,
+                                                     ""             // error
+                                                     );
 }
 
-const CompositeTileImageProvider::ChildContribution* CompositeTileImageProvider::ChildContribution::error(const std::string& error) {
-  return new CompositeTileImageProvider::ChildContribution(true,  // isError
-                                                           false, // isCanceled
-                                                           NULL,  // image
-                                                           "",    // imageId
-                                                           NULL,  // contribution
-                                                           error);
+const CompositeTileImageProvider::ChildResult* CompositeTileImageProvider::ChildResult::error(const std::string& error) {
+  return new CompositeTileImageProvider::ChildResult(true,  // isError
+                                                     false, // isCanceled
+                                                     NULL,  // image
+                                                     "",    // imageId
+                                                     NULL,  // contribution
+                                                     error);
 }
 
-const CompositeTileImageProvider::ChildContribution* CompositeTileImageProvider::ChildContribution::cancelation() {
-  return new CompositeTileImageProvider::ChildContribution(false, // isError
-                                                           true,  // isCanceled
-                                                           NULL,  // image
-                                                           "",    // imageId
-                                                           NULL,  // contribution
-                                                           ""     // error
-                                                           );
+const CompositeTileImageProvider::ChildResult* CompositeTileImageProvider::ChildResult::cancelation() {
+  return new CompositeTileImageProvider::ChildResult(false, // isError
+                                                     true,  // isCanceled
+                                                     NULL,  // image
+                                                     "",    // imageId
+                                                     NULL,  // contribution
+                                                     ""     // error
+                                                     );
 }
 
 CompositeTileImageProvider::Composer::Composer(const std::string& tileId,
@@ -96,35 +96,35 @@ _anyError(false),
 _anyCancelation(false)
 {
   for (int i = 0; i < _contributionsSize; i++) {
-    _contributions.push_back( NULL );
+    _results.push_back( NULL );
   }
 }
 
 CompositeTileImageProvider::Composer::~Composer() {
 #warning Diego at work!
   for (int i = 0; i < _contributionsSize; i++) {
-    const ChildContribution* contribution = _contributions[i];
-    delete contribution;
+    const ChildResult* result = _results[i];
+    delete result;
   }
 }
 
 void CompositeTileImageProvider::Composer::done() {
 
   if (_contributionsSize == 1) {
-    const ChildContribution* singleContribution = _contributions[0];
+    const ChildResult* singleResult = _results[0];
 
-    if (singleContribution->_isError) {
+    if (singleResult->_isError) {
       _listener->imageCreationError(_tileId,
-                                    singleContribution->_error);
+                                    singleResult->_error);
     }
-    else if (singleContribution->_isCanceled) {
+    else if (singleResult->_isCanceled) {
       _listener->imageCreationCanceled(_tileId);
     }
     else {
-      _listener->imageCreated(singleContribution->_imageId,
-                              singleContribution->_image,
-                              singleContribution->_imageId,
-                              singleContribution->_contribution);
+      _listener->imageCreated(singleResult->_imageId,
+                              singleResult->_image,
+                              singleResult->_imageId,
+                              singleResult->_contribution);
     }
     if (_deleteListener) {
       delete _listener;
@@ -147,29 +147,29 @@ void CompositeTileImageProvider::Composer::imageCreated(const std::string&      
                                                         const std::string&           imageId,
                                                         const TileImageContribution* contribution,
                                                         int                          index) {
-  if (_contributions[index] != NULL) {
+  if (_results[index] != NULL) {
     printf("Logic error 1\n");
   }
 
-  _contributions[index] = ChildContribution::image(image, imageId, contribution);
+  _results[index] = ChildResult::image(image, imageId, contribution);
   stepDone();
 }
 
 void CompositeTileImageProvider::Composer::imageCreationError(const std::string& error,
                                                               const int          index) {
-  if (_contributions[index] != NULL) {
+  if (_results[index] != NULL) {
     printf("Logic error 2\n");
   }
-  _contributions[index] = ChildContribution::error(error);
+  _results[index] = ChildResult::error(error);
   _anyError = true;
   stepDone();
 }
 
 void CompositeTileImageProvider::Composer::imageCreationCanceled(const int index) {
-  if (_contributions[index] != NULL) {
+  if (_results[index] != NULL) {
     printf("Logic error 3\n");
   }
-  _contributions[index] = ChildContribution::cancelation();
+  _results[index] = ChildResult::cancelation();
   _anyCancelation = true;
   stepDone();
 }
@@ -211,10 +211,10 @@ void CompositeTileImageProvider::create(const Tile* tile,
     const CompositeTileImageContribution::ChildContribution* singleContribution = compositeContribution->get(i);
 
     TileImageProvider* child = _children[ singleContribution->_childIndex ];
-    const TileImageContribution* contribution = singleContribution->_contribution;
+    const TileImageContribution* childContribution = singleContribution->_contribution;
 
     child->create(tile,
-                  contribution,
+                  childContribution,
                   resolution,
                   tileDownloadPriority,
                   logDownloadActivity,
