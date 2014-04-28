@@ -49,7 +49,12 @@ public:
   ~CompositeTileImageContribution() {
     const int size = _contributions.size();
     for (int i = 0; i < size; i++) {
+#ifdef C_CODE
       const ChildContribution* contribution = _contributions[i];
+#endif
+#ifdef JAVA_CODE
+      final ChildContribution contribution = _contributions.get(i);
+#endif
       delete contribution;
     }
   }
@@ -59,7 +64,12 @@ public:
   }
 
   const ChildContribution* get(int index) const {
+#ifdef C_CODE
     return _contributions[index];
+#endif
+#ifdef JAVA_CODE
+    return _contributions.get(index);
+#endif
   }
   
 };
