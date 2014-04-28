@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 public class CompositeTileImageProvider extends CanvasTileImageProvider
 {
 
-  private static class ChildContribution
+  private static class ChildResult
   {
     public final boolean _isError;
     public final boolean _isCanceled;
@@ -32,23 +32,23 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     public final TileImageContribution _contribution;
     public final String _error;
 
-    public static CompositeTileImageProvider.ChildContribution image(IImage image, String imageId, TileImageContribution contribution)
+    public static CompositeTileImageProvider.ChildResult image(IImage image, String imageId, TileImageContribution contribution)
     {
-      return new CompositeTileImageProvider.ChildContribution(false, false, image, imageId, contribution, ""); // error -  isCanceled -  isError
+      return new CompositeTileImageProvider.ChildResult(false, false, image, imageId, contribution, ""); // error -  isCanceled -  isError
     }
 
-    public static CompositeTileImageProvider.ChildContribution error(String error)
+    public static CompositeTileImageProvider.ChildResult error(String error)
     {
-      return new CompositeTileImageProvider.ChildContribution(true, false, null, "", null, error); // contribution -  imageId -  image -  isCanceled -  isError
+      return new CompositeTileImageProvider.ChildResult(true, false, null, "", null, error); // contribution -  imageId -  image -  isCanceled -  isError
     }
 
-    public static CompositeTileImageProvider.ChildContribution cancelation()
+    public static CompositeTileImageProvider.ChildResult cancelation()
     {
-      return new CompositeTileImageProvider.ChildContribution(false, true, null, "", null, ""); // error -  contribution -  imageId -  image -  isCanceled -  isError
+      return new CompositeTileImageProvider.ChildResult(false, true, null, "", null, ""); // error -  contribution -  imageId -  image -  isCanceled -  isError
     }
 
 
-    private ChildContribution(boolean isError, boolean isCanceled, IImage image, String imageId, TileImageContribution contribution, String error)
+    private ChildResult(boolean isError, boolean isCanceled, IImage image, String imageId, TileImageContribution contribution, String error)
     {
        _isError = isError;
        _isCanceled = isCanceled;
@@ -65,7 +65,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     private TileImageListener _listener;
     private final boolean _deleteListener;
     private final CompositeTileImageContribution _compositeContribution;
-    private final java.util.ArrayList<ChildContribution> _contributions = new java.util.ArrayList<ChildContribution>();
+    private final java.util.ArrayList<ChildResult> _results = new java.util.ArrayList<ChildResult>();
     private final int _contributionsSize;
 
     private int _stepsDone;
@@ -82,19 +82,19 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     
       if (_contributionsSize == 1)
       {
-        final ChildContribution singleContribution = _contributions.get(0);
+        final ChildResult singleResult = _results.get(0);
     
-        if (singleContribution._isError)
+        if (singleResult._isError)
         {
-          _listener.imageCreationError(_tileId, singleContribution._error);
+          _listener.imageCreationError(_tileId, singleResult._error);
         }
-        else if (singleContribution._isCanceled)
+        else if (singleResult._isCanceled)
         {
           _listener.imageCreationCanceled(_tileId);
         }
         else
         {
-          _listener.imageCreated(singleContribution._imageId, singleContribution._image, singleContribution._imageId, singleContribution._contribution);
+          _listener.imageCreated(singleResult._imageId, singleResult._image, singleResult._imageId, singleResult._contribution);
         }
         if (_deleteListener)
         {
@@ -116,9 +116,9 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 //#warning Diego at work!
       for (int i = 0; i < _contributionsSize; i++)
       {
-        final ChildContribution contribution = _contributions.get(i);
-        if (contribution != null)
-           contribution.dispose();
+        final ChildResult result = _results.get(i);
+        if (result != null)
+           result.dispose();
       }
     }
 
@@ -134,7 +134,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
        _anyCancelation = false;
       for (int i = 0; i < _contributionsSize; i++)
       {
-        _contributions.add(null);
+        _results.add(null);
       }
     }
 
@@ -143,22 +143,22 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final void imageCreationError(String error, int index)
     {
-      if (_contributions.get(index) != null)
+      if (_results.get(index) != null)
       {
         System.out.print("Logic error 2\n");
       }
-      _contributions.set(index, ChildContribution.error(error));
+      _results.set(index, ChildResult.error(error));
       _anyError = true;
       stepDone();
     }
 
     public final void imageCreationCanceled(int index)
     {
-      if (_contributions.get(index) != null)
+      if (_results.get(index) != null)
       {
         System.out.print("Logic error 3\n");
       }
-      _contributions.set(index, ChildContribution.cancelation());
+      _results.set(index, ChildResult.cancelation());
       _anyCancelation = true;
       stepDone();
     }
@@ -241,8 +241,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           for (int j = 0; j < childrenContributionsSize; j++)
           {
             CompositeTileImageContribution.ChildContribution previousContribution = childrenContributions.get(j);
-            if (previousContribution != null)
-               previousContribution.dispose();
+            previousContribution = null;
           }
           childrenContributions.clear();
         }
@@ -269,9 +268,9 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       final CompositeTileImageContribution.ChildContribution singleContribution = compositeContribution.get(i);
   
       TileImageProvider child = _children.get(singleContribution._childIndex);
-      final TileImageContribution contribution = singleContribution._contribution;
+      final TileImageContribution childContribution = singleContribution._contribution;
   
-      child.create(tile, contribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true);
+      child.create(tile, childContribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true);
     }
   
   
