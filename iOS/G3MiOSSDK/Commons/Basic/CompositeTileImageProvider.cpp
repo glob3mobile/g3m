@@ -25,7 +25,7 @@ CompositeTileImageProvider::~CompositeTileImageProvider() {
 }
 
 const TileImageContribution* CompositeTileImageProvider::contribution(const Tile* tile) {
-  std::vector<CompositeTileImageContribution::ChildContribution*> childrenContributions;
+  std::vector<const CompositeTileImageContribution::ChildContribution*> childrenContributions;
 
   for (int i = 0; i < _childrenSize; i++) {
     TileImageProvider* child = _children[i];
@@ -40,7 +40,7 @@ const TileImageContribution* CompositeTileImageProvider::contribution(const Tile
       if ((childrenContributionsSize > 0) &&
           childContribution->isFullCoverageAndOpaque()) {
         for (int j = 0; j < childrenContributionsSize; j++) {
-          CompositeTileImageContribution::ChildContribution* previousContribution = childrenContributions[j];
+          const CompositeTileImageContribution::ChildContribution* previousContribution = childrenContributions[j];
           delete previousContribution;
         }
         childrenContributions.clear();
@@ -347,8 +347,6 @@ void CompositeTileImageProvider::composerDone(Composer* composer) {
   const std::string tileId = composer->_tileId;
 #ifdef C_CODE
   if (_composers.find(tileId) != _composers.end()) {
-    //Composer* composer = _composers[tileId];
-
     _composers.erase(tileId);
   }
 #endif

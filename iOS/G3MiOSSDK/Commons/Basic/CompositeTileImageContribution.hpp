@@ -28,18 +28,18 @@ public:
   };
 
 
-  static const TileImageContribution* create(const std::vector<ChildContribution*>& contributions);
+  static const TileImageContribution* create(const std::vector<const ChildContribution*>& contributions);
 
 
 private:
 #ifdef C_CODE
-  const std::vector<ChildContribution*> _contributions;
+  const std::vector<const ChildContribution*> _contributions;
 #endif
 #ifdef JAVA_CODE
   private final java.util.ArrayList<ChildContribution> _contributions;
 #endif
 
-  CompositeTileImageContribution(const std::vector<ChildContribution*>& contributions) :
+  CompositeTileImageContribution(const std::vector<const ChildContribution*>& contributions) :
   TileImageContribution(false, 1),
   _contributions(contributions)
   {
@@ -49,7 +49,8 @@ public:
   ~CompositeTileImageContribution() {
     const int size = _contributions.size();
     for (int i = 0; i < size; i++) {
-      delete _contributions[i];
+      const ChildContribution* contribution = _contributions[i];
+      delete contribution;
     }
   }
 
