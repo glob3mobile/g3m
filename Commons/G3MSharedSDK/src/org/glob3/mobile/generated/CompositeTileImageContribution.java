@@ -64,9 +64,8 @@ public class CompositeTileImageContribution extends TileImageContribution
     final int size = _contributions.size();
     for (int i = 0; i < size; i++)
     {
-      final ChildContribution contribution = _contributions[i];
-      if (contribution != null)
-         contribution.dispose();
+      final ChildContribution contribution = _contributions.get(i);
+      contribution = null;
     }
   }
 
@@ -77,7 +76,7 @@ public class CompositeTileImageContribution extends TileImageContribution
 
   public final ChildContribution get(int index)
   {
-    return _contributions[index];
+    return _contributions.get(index);
   }
 
 }
