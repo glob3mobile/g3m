@@ -586,6 +586,8 @@ protected:
   SceneLighting* createSceneLighting();
 
   const URL createApplicationPollURL() const;
+  
+  const Sector parseSector(const JSONObject* jsonObject, const std::string& paramName) const;
 
 public:
   /** Private to MapbooBuilder, don't call it */

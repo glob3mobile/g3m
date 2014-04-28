@@ -279,17 +279,13 @@ public abstract class MapBooBuilder
     final String style = jsonLayer.getAsString("style", "");
     final URL queryServerURL = new URL("", false);
     final WMSServerVersion queryServerVersion = mapServerVersion;
-    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
-    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
-    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
-    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
-    final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
+    final Sector sector = parseSector(jsonLayer, "validSector");
     String imageFormat = jsonLayer.getAsString("imageFormat", "image/png");
     final String srs = jsonLayer.getAsString("projection", "EPSG:4326");
     LayerTilesRenderParameters layerTilesRenderParameters = null;
     if (srs.compareTo("EPSG:4326") == 0)
     {
-      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere());
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(0, 17);
     }
     else if (srs.compareTo("EPSG:3857") == 0)
     {
@@ -316,12 +312,7 @@ public abstract class MapBooBuilder
     final String projection = jsonLayer.getAsString("projection", "EPSG:3857");
     final boolean mercator = (projection.equals("EPSG:3857"));
   
-    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
-    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
-    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
-    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
-  
-    final Sector sector = Sector.fromDegrees(lowerLat, lowerLon, upperLat, upperLon);
+    final Sector sector = parseSector(jsonLayer, "validSector");
   
     URLTemplateLayer result;
     if (mercator)
@@ -1089,6 +1080,29 @@ public abstract class MapBooBuilder
        isb.dispose();
   
     return new URL(path, false);
+  }
+
+  protected final Sector parseSector(JSONObject jsonObject, String paramName)
+  {
+  
+    final JSONObject sector = jsonObject.getAsObject(paramName);
+  
+    if (sector == null)
+    {
+      return Sector.fullSphere();
+    }
+  
+    if (sector.asNull() != null)
+    {
+      return Sector.fullSphere();
+    }
+  
+    final double lowerLat = sector.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = sector.getAsNumber("lowerLon", -180.0);
+    final double upperLat = sector.getAsNumber("upperLat", 90.0);
+    final double upperLon = sector.getAsNumber("upperLon", 180.0);
+  
+    return new Sector(Geodetic2D.fromDegrees(lowerLat, lowerLon), Geodetic2D.fromDegrees(upperLat, upperLon));
   }
 
   /** Private to MapbooBuilder, don't call it */
