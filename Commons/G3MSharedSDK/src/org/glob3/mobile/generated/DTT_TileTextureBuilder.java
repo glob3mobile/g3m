@@ -120,8 +120,6 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public final void start()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
     if (!_canceled)
     {
       final TileImageContribution contribution = _tileImageProvider.contribution(_tile);
@@ -141,8 +139,6 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public final void cancel(boolean cleanTile)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
     _texturedMesh = null;
     if (cleanTile)
     {
