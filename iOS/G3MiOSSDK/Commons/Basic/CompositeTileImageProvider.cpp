@@ -115,11 +115,19 @@ _canceled(false)
 }
 
 CompositeTileImageProvider::Composer::~Composer() {
+#warning remove debug printf
+//  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
+//         this,
+//         _stepsDone,
+//         _anyError       ? "true" : "false",
+//         _anyCancelation ? "true" : "false",
+//         _canceled       ? "true" : "false",
+//         _compositeContribution
+//         );
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
     delete result;
   }
-
   delete _compositeContribution;
 }
 
@@ -154,6 +162,7 @@ void CompositeTileImageProvider::Composer::done() {
                               singleResult->_imageId,
                               singleResult->_contribution);
     }
+
     cleanUp();
   }
   else {
@@ -195,8 +204,6 @@ void CompositeTileImageProvider::Composer::done() {
       delete canvas;
     }
   }
-
-#warning TODODODODODODO
 }
 
 void CompositeTileImageProvider::Composer::imageCreated(const IImage* image) {
@@ -204,7 +211,7 @@ void CompositeTileImageProvider::Composer::imageCreated(const IImage* image) {
                           image,
                           _imageId,
                           _compositeContribution);
-  _compositeContribution = NULL;
+  _compositeContribution = NULL; // the _compositeContribution ownership moved to the listener
   cleanUp();
 }
 
@@ -247,7 +254,6 @@ void CompositeTileImageProvider::Composer::imageCreationCanceled(const int index
 }
 
 void CompositeTileImageProvider::Composer::cancel(const Tile* tile) {
-#warning TODO cancel children
   _canceled = true;
   _compositeTileImageProvider->cancelChildren(tile, _compositeContribution);
 }
@@ -326,25 +332,25 @@ void CompositeTileImageProvider::cancel(const Tile* tile) {
 }
 
 void CompositeTileImageProvider::composerDone(Composer* composer) {
-  const std::string tileId = composer->_tileId;
-#ifdef C_CODE
-  if (_composers.find(tileId) != _composers.end()) {
-    _composers.erase(tileId);
-  }
-#endif
-#ifdef JAVA_CODE
-  _composers.remove(tileId);
-#endif
+  _composers.erase( composer->_tileId );
   delete composer;
 }
 
 void CompositeTileImageProvider::cancelChildren(const Tile* tile,
                                                 const CompositeTileImageContribution* compositeContribution) {
   const int contributionsSize = compositeContribution->size();
-  for (int i = 0; i < contributionsSize; i++) {
-    const CompositeTileImageContribution::ChildContribution* childContribution = compositeContribution->get(i);
 
-    TileImageProvider* child = _children[ childContribution->_childIndex ];
+  // store all the indexes before calling child->cancel().
+  // child->cancel() can force the instance termination of the builder (and the compositeContribution)
+  int* indexes = new int[contributionsSize];
+  for (int i = 0; i < contributionsSize; i++) {
+    indexes[i] = compositeContribution->get(i)->_childIndex;
+  }
+
+  for (int i = 0; i < contributionsSize; i++) {
+    TileImageProvider* child = _children[ indexes[i] ];
     child->cancel(tile);
   }
+
+  delete [] indexes;
 }
