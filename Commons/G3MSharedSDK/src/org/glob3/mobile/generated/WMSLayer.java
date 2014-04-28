@@ -119,7 +119,8 @@ public class WMSLayer extends RasterLayer
   
     if (!_sector.touchesWith(tileSector))
     {
-      return TileImageContribution.none();
+      //return TileImageContribution::none();
+      return null;
     }
     else if (_sector.fullContains(tileSector))
     {

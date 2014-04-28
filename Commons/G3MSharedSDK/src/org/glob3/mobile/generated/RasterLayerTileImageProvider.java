@@ -27,7 +27,7 @@ public class RasterLayerTileImageProvider extends TileImageProvider
   private final RasterLayer _layer;
   private IDownloader _downloader;
 
-  private java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
+  private final java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
 
   public void dispose()
   {

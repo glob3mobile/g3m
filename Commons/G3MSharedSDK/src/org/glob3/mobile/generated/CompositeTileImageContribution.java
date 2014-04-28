@@ -44,16 +44,15 @@ public class CompositeTileImageContribution extends TileImageContribution
     final int contributionsSize = contributions.size();
     if (contributionsSize == 0)
     {
-      return TileImageContribution.none();
+      //return TileImageContribution::none();
+      return null;
     }
-    else if (contributionsSize == 1)
-    {
-      final ChildContribution singleContribution = contributions.get(0);
-      final TileImageContribution result = singleContribution._contribution;
-      if (singleContribution != null)
-         singleContribution.dispose();
-      return result;
-    }
+  //  else if (contributionsSize == 1) {
+  //    const ChildContribution* singleContribution = contributions[0];
+  //    const TileImageContribution* result = singleContribution->_contribution;
+  //    delete singleContribution;
+  //    return result;
+  //  }
     else
     {
       return new CompositeTileImageContribution(contributions);
@@ -76,6 +75,16 @@ public class CompositeTileImageContribution extends TileImageContribution
     {
       _contributions[i] = null;
     }
+  }
+
+  public final int size()
+  {
+    return _contributions.size();
+  }
+
+  public final ChildContribution get(int index)
+  {
+    return _contributions[index];
   }
 
 }

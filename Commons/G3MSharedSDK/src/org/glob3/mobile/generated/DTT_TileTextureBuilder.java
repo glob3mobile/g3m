@@ -125,13 +125,14 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!_canceled)
     {
       final TileImageContribution contribution = _tileImageProvider.contribution(_tile);
-      if (contribution.isNone())
+      //if (contribution->isNone()) {
+      if (contribution == null)
       {
         if (_tile != null)
         {
           _tile.setTextureSolved(true);
         }
-        TileImageContribution.deleteContribution(contribution);
+        //TileImageContribution::deleteContribution( contribution );
       }
       else
       {

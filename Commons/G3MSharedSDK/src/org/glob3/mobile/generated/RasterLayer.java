@@ -80,7 +80,8 @@ public abstract class RasterLayer extends Layer
     {
       return rawContribution(tile);
     }
-    return TileImageContribution.none();
+    //return TileImageContribution::none();
+    return null;
   }
 
   public final long requestImage(Tile tile, IDownloader downloader, long tileDownloadPriority, boolean logDownloadActivity, IImageDownloadListener listener, boolean deleteListener)
