@@ -45,7 +45,7 @@ private:
   {
   }
 
-protected:
+public:
   ~CompositeTileImageContribution() {
     const int size = _contributions.size();
     for (int i = 0; i < size; i++) {
@@ -53,7 +53,6 @@ protected:
     }
   }
 
-public:
   const int size() const {
     return _contributions.size();
   }

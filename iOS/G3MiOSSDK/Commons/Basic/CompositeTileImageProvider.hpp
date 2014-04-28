@@ -12,6 +12,8 @@
 #include "CanvasTileImageProvider.hpp"
 #include <vector>
 #include "TileImageListener.hpp"
+#include <map>
+#include "IImageListener.hpp"
 
 class CompositeTileImageContribution;
 
@@ -59,9 +61,9 @@ private:
 
   };
 
-  class Composer {
+  class Composer : public IImageListener {
   private:
-    const std::string                     _tileId;
+    CompositeTileImageProvider*           _compositeTileImageProvider;
     TileImageListener*                    _listener;
     const bool                            _deleteListener;
     const CompositeTileImageContribution* _compositeContribution;
@@ -74,13 +76,27 @@ private:
 
     bool _anyError;
     bool _anyCancelation;
-    ~Composer();
+
+    void cleanUp();
+
+    const int _width;
+    const int _height;
+
+    std::string _imageId;
+
 
   public:
-    Composer(const std::string& tileId,
+    const std::string                     _tileId;
+
+    Composer(int width,
+             int height,
+             CompositeTileImageProvider* compositeTileImageProvider,
+             const std::string& tileId,
              TileImageListener* listener,
              bool deleteListener,
              const CompositeTileImageContribution* compositeContribution);
+
+    ~Composer();
 
     void imageCreated(const std::string&           tileId,
                       const IImage*                image,
@@ -92,7 +108,11 @@ private:
                             const int          index);
 
     void imageCreationCanceled(const int index);
-    
+
+    void cancel();
+
+    void imageCreated(const IImage* image);
+
   };
   
 
@@ -125,6 +145,8 @@ private:
   std::vector<TileImageProvider*> _children;
   int                             _childrenSize;
 
+  std::map<const std::string, Composer*> _composers;
+
 protected:
   ~CompositeTileImageProvider();
 
@@ -150,7 +172,8 @@ public:
               bool deleteListener);
 
   void cancel(const Tile* tile);
-  
+
+  void composerDone(Composer* composer);
 };
 
 #endif

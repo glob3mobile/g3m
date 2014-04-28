@@ -122,7 +122,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
                                                                Sector::fullSphere(),
                                                                2,
                                                                17,
-                                                               false // isTransparent
+                                                               true // isTransparent
                                                                );
   meteoritesLayer->setTitle("CartoDB Meteorites");
   meteoritesLayer->setEnable(false);
