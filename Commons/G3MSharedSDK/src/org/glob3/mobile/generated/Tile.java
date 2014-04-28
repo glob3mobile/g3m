@@ -286,8 +286,6 @@ public class Tile
   
     if ((_northArcSegmentRatioSquared == 0) || (_southArcSegmentRatioSquared == 0) || (_eastArcSegmentRatioSquared == 0) || (_westArcSegmentRatioSquared == 0))
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning CHECK IT
       prepareTestLODData(rc.getPlanet());
     }
   
