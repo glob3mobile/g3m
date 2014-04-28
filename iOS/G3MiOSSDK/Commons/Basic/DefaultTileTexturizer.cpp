@@ -303,7 +303,6 @@ public:
   }
 
   ~DTT_TileTextureBuilder() {
-//    delete _tileImageProvider;
     _tileImageProvider->_release();
 #ifdef JAVA_CODE
     super.dispose();

@@ -16,7 +16,6 @@
 CompositeTileImageProvider::~CompositeTileImageProvider() {
   for (int i = 0; i < _childrenSize; i++) {
     TileImageProvider* child = _children[i];
-    //    delete child;
     child->_release();
   }
 #ifdef JAVA_CODE
@@ -37,7 +36,12 @@ const TileImageContribution* CompositeTileImageProvider::contribution(const Tile
           childContribution->isFullCoverageAndOpaque()) {
         for (int j = 0; j < childrenContributionsSize; j++) {
           const CompositeTileImageContribution::ChildContribution* previousContribution = childrenContributions[j];
+#ifdef C_CODE
           delete previousContribution;
+#endif
+#ifdef JAVA_CODE
+          previousContribution.dispose();
+#endif
         }
         childrenContributions.clear();
       }
