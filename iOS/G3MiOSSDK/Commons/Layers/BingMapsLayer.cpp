@@ -29,13 +29,15 @@ BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              bool readExpired,
                              int initialLevel,
                              LayerCondition* condition,
-                             float transparency) :
+                             float transparency,
+                             const std::string& disclaimerInfo) :
 Layer(condition,
       "BingMaps",
       timeToCache,
       readExpired,
       NULL,
-      transparency),
+      transparency,
+      disclaimerInfo),
 _imagerySet(imagerySet),
 _culture("en-US"),
 _key(key),
@@ -52,13 +54,15 @@ BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
                              bool readExpired,
                              int initialLevel,
                              LayerCondition* condition,
-                             float transparency) :
+                             float transparency,
+                             const std::string& disclaimerInfo) :
 Layer(condition,
       "BingMaps",
       timeToCache,
       readExpired,
       NULL,
-      transparency),
+      transparency,
+      disclaimerInfo),
 _imagerySet(imagerySet),
 _culture(culture),
 _key(key),
@@ -335,7 +339,9 @@ BingMapsLayer* BingMapsLayer::copy() const {
                            TimeInterval::fromMilliseconds(_timeToCacheMS),
                            _readExpired,
                            _initialLevel,
-                           (_condition == NULL) ? NULL : _condition->copy());
+                           (_condition == NULL) ? NULL : _condition->copy(),
+                           _transparency,
+                           _disclaimerInfo);
 }
 
 RenderState BingMapsLayer::getRenderState() {

@@ -50,6 +50,10 @@
 #include "Mark.hpp"
 #include "URLTemplateLayer.hpp"
 #include "ErrorHandling.hpp"
+#include "LabelImageBuilder.hpp"
+#include "HUDQuadWidget.hpp"
+#include "HUDAbsolutePosition.hpp"
+#include "HUDRelativeSize.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -710,32 +714,39 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
   }
 
   const std::string layerType = jsonLayer->getAsString("layer", "<layer not present>");
+  Layer* layer;
   if (layerType.compare("OSM") == 0) {
-    return new OSMLayer(defaultTimeToCache);
+    layer = new OSMLayer(defaultTimeToCache);
   }
   else if (layerType.compare("MapQuest") == 0) {
-    return parseMapQuestLayer(jsonLayer, defaultTimeToCache);
+    layer = parseMapQuestLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("BingMaps") == 0) {
-    return parseBingMapsLayer(jsonLayer, defaultTimeToCache);
+    layer = parseBingMapsLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("CartoDB") == 0) {
-    return parseCartoDBLayer(jsonLayer, defaultTimeToCache);
+    layer = parseCartoDBLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("MapBox") == 0) {
-    return parseMapBoxLayer(jsonLayer, defaultTimeToCache);
+    layer = parseMapBoxLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("WMS") == 0) {
-    return parseWMSLayer(jsonLayer);
+    layer = parseWMSLayer(jsonLayer);
   }
   else if (layerType.compare("URLTemplate") == 0) {
-    return parseURLTemplateLayer(jsonLayer);
+    layer = parseURLTemplateLayer(jsonLayer);
   }
   else {
     ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
     ILogger::instance()->logError("%s", jsonBaseObjectLayer->description().c_str());
     return NULL;
   }
+  
+  const std::string layerAttribution = jsonLayer->getAsString("attribution", "");
+  if (layerAttribution.compare("") != 0) {
+    layer->setInfo(layerAttribution);
+  }
+  return layer;
 }
 
 Color MapBooBuilder::parseColor(const JSONString* jsonColor) const {
@@ -1538,10 +1549,9 @@ G3MWidget* MapBooBuilder::create() {
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
-  Renderer* hudRenderer = NULL;
-  
-#warning "TODO THIS"
-  InfoDisplay* infoDisplay = NULL;
+  MapBoo_HUDRenderer* hudRenderer = new MapBoo_HUDRenderer();
+  InfoDisplay* infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
+  infoDisplay->showDisplay();
 
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
@@ -2050,3 +2060,30 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
   
 }
 
+void MapBoo_HUDRenderer::updateInfo(const std::vector<std::string> &info) {
+  removeAllWidgets();
+  const int size = info.size();
+  for(int i = 0; i < size; i++) {
+    std::string inf = info.at(i);
+    LabelImageBuilder* labelBuilder = new LabelImageBuilder(inf,               // text
+                                                            GFont::monospaced(14), // font
+                                                            3,                     // margin
+                                                            Color::white(),       // color
+                                                            Color::black(),        // shadowColor
+                                                            2,                     // shadowBlur
+                                                            1,                     // shadowOffsetX
+                                                            -1,                    // shadowOffsetY
+                                                            Color::transparent(),          // backgroundColor
+                                                            4,                     // cornerRadius
+                                                            true                   // mutable
+                                                            );
+    
+    HUDQuadWidget* label = new HUDQuadWidget(labelBuilder,
+                                             new HUDAbsolutePosition(5),
+                                             new HUDAbsolutePosition(10*i),
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
+                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
+    
+    addWidget(label);
+  }
+}

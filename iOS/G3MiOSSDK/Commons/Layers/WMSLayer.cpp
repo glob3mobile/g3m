@@ -30,7 +30,8 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    const TimeInterval& timeToCache,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency):
+                   float transparency,
+                   const std::string& disclaimerInfo):
 Layer(condition,
       mapLayer,
       timeToCache,
@@ -38,7 +39,8 @@ Layer(condition,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultWGS84(0, 17)
       : parameters,
-      transparency),
+      transparency,
+      disclaimerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -67,7 +69,8 @@ WMSLayer::WMSLayer(const std::string& mapLayer,
                    const TimeInterval& timeToCache,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency):
+                   float transparency,
+                   const std::string& disclaimerInfo):
 Layer(condition,
       mapLayer,
       timeToCache,
@@ -75,7 +78,8 @@ Layer(condition,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultWGS84(0, 17)
       : parameters,
-      transparency),
+      transparency,
+      disclaimerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
@@ -450,7 +454,9 @@ WMSLayer* WMSLayer::copy() const {
                       (_condition == NULL) ? NULL : _condition->copy(),
                       TimeInterval::fromMilliseconds(_timeToCacheMS),
                       _readExpired,
-                      (_parameters == NULL) ? NULL : _parameters->copy());
+                      (_parameters == NULL) ? NULL : _parameters->copy(),
+                      _transparency,
+                      _disclaimerInfo);
 }
 
 RenderState WMSLayer::getRenderState() {

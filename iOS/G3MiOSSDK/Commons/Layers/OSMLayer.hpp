@@ -34,7 +34,8 @@ public:
   OSMLayer(const TimeInterval& timeToCache,
            bool readExpired = true,
            int initialLevel = 2,
-           LayerCondition* condition = NULL) :
+           LayerCondition* condition = NULL,
+           const std::string& disclaimerInfo = "") :
   MercatorTiledLayer("OpenStreetMap",
                      "http://",
                      "tile.openstreetmap.org",
@@ -45,7 +46,9 @@ public:
                      Sector::fullSphere(),
                      initialLevel,
                      18,
-                     condition)
+                     condition,
+                     (float)1.0,
+                     disclaimerInfo)
   {
 
   }

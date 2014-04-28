@@ -24,13 +24,15 @@ URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate
                                    bool                              readExpired,
                                    LayerCondition*                   condition,
                                    const LayerTilesRenderParameters* parameters,
-                                   float transparency) :
+                                   float                             transparency,
+                                   const std::string&                disclaimerInfo) :
 Layer(condition,
       "URLTemplate",
       timeToCache,
       readExpired,
       parameters,
-      transparency),
+      transparency,
+      disclaimerInfo),
 _urlTemplate(urlTemplate),
 _sector(sector),
 _isTransparent(isTransparent),
@@ -49,7 +51,8 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                                                 const TimeInterval& timeToCache,
                                                 bool                readExpired,
                                                 LayerCondition*     condition,
-                                                float transparency) {
+                                                float               transparency,
+                                                const std::string&  disclaimerInfo) {
   return new URLTemplateLayer(urlTemplate,
                               sector,
                               isTransparent,
@@ -58,7 +61,8 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                               (condition == NULL) ? new LevelTileCondition(firstLevel, maxLevel) : condition,
                               LayerTilesRenderParameters::createDefaultMercator(2,
                                                                                 maxLevel),
-                              transparency);
+                              transparency,
+                              disclaimerInfo);
 }
 
 URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
@@ -69,7 +73,8 @@ URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
                                              const TimeInterval& timeToCache,
                                              bool                readExpired,
                                              LayerCondition*     condition,
-                                             float transparency) {
+                                             float               transparency,
+                                             const std::string&  disclaimerInfo) {
   return new URLTemplateLayer(urlTemplate,
                               sector,
                               isTransparent,
@@ -77,7 +82,8 @@ URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
                               readExpired,
                               (condition == NULL) ? new LevelTileCondition(firstLevel, maxLevel) : condition,
                               LayerTilesRenderParameters::createDefaultWGS84(sector, firstLevel, maxLevel),
-                              transparency);
+                              transparency,
+                              disclaimerInfo);
 }
 
 
@@ -106,7 +112,9 @@ URLTemplateLayer* URLTemplateLayer::copy() const {
                               TimeInterval::fromMilliseconds(_timeToCacheMS),
                               _readExpired,
                               (_condition == NULL) ? NULL : _condition->copy(),
-                              _parameters->copy());
+                              _parameters->copy(),
+                              _transparency,
+                              _disclaimerInfo);
 }
 
 URL URLTemplateLayer::getFeatureInfoURL(const Geodetic2D& position,

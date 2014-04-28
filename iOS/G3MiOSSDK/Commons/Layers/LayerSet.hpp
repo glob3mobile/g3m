@@ -98,9 +98,11 @@ public:
   void setChangedInfoListener(ChangedInfoListener* changedInfoListener) {
     if (_changedInfoListener != NULL) {
       ILogger::instance()->logError("Changed Info Listener of LayerSet already set");
+      return;
     }
     ILogger::instance()->logError("Changed Info Listener of LayerSet set ok");
     _changedInfoListener = changedInfoListener;
+    changedInfo(getInfo());
   }
   
   std::vector<std::string> getInfo();

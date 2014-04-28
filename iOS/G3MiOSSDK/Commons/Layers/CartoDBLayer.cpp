@@ -25,7 +25,8 @@ CartoDBLayer* CartoDBLayer::copy() const {
                           _table,
                           TimeInterval::fromMilliseconds(_timeToCacheMS),
                           _readExpired,
-                          (_condition == NULL) ? NULL : _condition->copy());
+                          (_condition == NULL) ? NULL : _condition->copy(),
+                          _disclaimerInfo);
 }
 
 RenderState CartoDBLayer::getRenderState() {

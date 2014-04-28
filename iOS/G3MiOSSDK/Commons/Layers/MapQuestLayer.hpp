@@ -34,7 +34,8 @@ private:
                 int maxLevel,
                 const TimeInterval& timeToCache,
                 bool readExpired,
-                LayerCondition* condition) :
+                LayerCondition* condition,
+                const std::string& disclaimerInfo = "") :
   MercatorTiledLayer(name,
                      "http://",
                      domain,
@@ -45,7 +46,9 @@ private:
                      Sector::fullSphere(),
                      initialLevel,
                      maxLevel,
-                     condition)
+                     condition,
+                     (float)1.0,
+                     disclaimerInfo)
   {
 
   }

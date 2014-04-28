@@ -127,6 +127,14 @@ bool Layer::isEquals(const Layer* that) const {
   if (_readExpired != that->_readExpired) {
     return false;
   }
+  
+  if (!(_info == that->_info)) {
+    return false;
+  }
+  
+  if (!(_disclaimerInfo == that->_disclaimerInfo)) {
+    return false;
+  }
 
   return rawIsEquals(that);
 }

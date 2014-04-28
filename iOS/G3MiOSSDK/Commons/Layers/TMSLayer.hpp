@@ -38,7 +38,8 @@ public:
            const TimeInterval& timeToCache,
            bool readExpired,
            const LayerTilesRenderParameters* parameters = NULL,
-           float transparency = (float)1.0);
+           float transparency = (float)1.0,
+           const std::string& disclaimerInfo = "");
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,

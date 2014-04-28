@@ -30,7 +30,8 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
                                        int                             initialLevel,
                                        int                             maxLevel,
                                        LayerCondition*                 condition,
-                                       float transparency) :
+                                       float transparency,
+                                       const std::string& disclaimerInfo) :
 Layer(condition,
       name,
       timeToCache,
@@ -43,7 +44,8 @@ Layer(condition,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true),
-      transparency),
+      transparency,
+      disclaimerInfo),
 _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
@@ -144,7 +146,9 @@ MercatorTiledLayer* MercatorTiledLayer::copy() const {
                                 _sector,
                                 _initialLevel,
                                 _maxLevel,
-                                (_condition == NULL) ? NULL : _condition->copy());
+                                (_condition == NULL) ? NULL : _condition->copy(),
+                                _transparency,
+                                _disclaimerInfo);
 }
 
 bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {

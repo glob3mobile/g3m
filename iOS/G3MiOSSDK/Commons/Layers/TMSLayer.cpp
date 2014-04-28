@@ -26,7 +26,8 @@ TMSLayer::TMSLayer(const std::string& mapLayer,
                    const TimeInterval& timeToCache,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency):
+                   float transparency,
+                   const std::string& disclaimerInfo):
 
 Layer(condition,
       mapLayer,
@@ -35,7 +36,8 @@ Layer(condition,
       (parameters == NULL)
       ? LayerTilesRenderParameters::createDefaultWGS84(sector, 0, 17)
       : parameters,
-      transparency),
+      transparency,
+      disclaimerInfo),
 _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),
 _sector(sector),

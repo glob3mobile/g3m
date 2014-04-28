@@ -20,7 +20,8 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string& key,
                                  bool readExpired,
                                  int initialLevel,
                                  LayerCondition* condition,
-                                 float transparency) :
+                                 float transparency,
+                                 const std::string& disclaimerInfo) :
 Layer(condition,
       "GoogleMaps",
       timeToCache,
@@ -33,7 +34,8 @@ Layer(condition,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true),
-      transparency),
+      transparency,
+      disclaimerInfo),
 _key(key),
 _initialLevel(initialLevel)
 {
@@ -120,7 +122,9 @@ GoogleMapsLayer* GoogleMapsLayer::copy() const {
                              TimeInterval::fromMilliseconds(_timeToCacheMS),
                              _readExpired,
                              _initialLevel,
-                             (_condition == NULL) ? NULL : _condition->copy() );
+                             (_condition == NULL) ? NULL : _condition->copy(),
+                             _transparency,
+                             _disclaimerInfo);
 }
 
 bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {

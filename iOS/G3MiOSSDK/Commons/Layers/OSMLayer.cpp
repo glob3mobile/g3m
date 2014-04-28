@@ -23,7 +23,8 @@ OSMLayer* OSMLayer::copy() const {
   return new OSMLayer(TimeInterval::fromMilliseconds(_timeToCacheMS),
                       _readExpired,
                       _initialLevel,
-                      (_condition == NULL) ? NULL : _condition->copy());
+                      (_condition == NULL) ? NULL : _condition->copy(),
+                      _disclaimerInfo);
 }
 
 RenderState OSMLayer::getRenderState() {

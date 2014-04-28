@@ -46,7 +46,8 @@ public:
                                        const TimeInterval& timeToCache,
                                        bool                readExpired = true,
                                        LayerCondition*     condition = NULL,
-                                       float transparency = (float)1.0);
+                                       float transparency = (float)1.0,
+                                       const std::string&  disclaimerInfo = "");
 
   static URLTemplateLayer* newWGS84(const std::string&  urlTemplate,
                                     const Sector&       sector,
@@ -56,7 +57,8 @@ public:
                                     const TimeInterval& timeToCache,
                                     bool                readExpired = true,
                                     LayerCondition*     condition = NULL,
-                                    float transparency = (float)1.0);
+                                    float transparency = (float)1.0,
+                                    const std::string&  disclaimerInfo = "");
 
   URLTemplateLayer(const std::string&                urlTemplate,
                    const Sector&                     sector,
@@ -65,7 +67,8 @@ public:
                    bool                              readExpired,
                    LayerCondition*                   condition,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency = (float)1.0);
+                   float                             transparency = (float)1.0,
+                   const std::string&                disclaimerInfo = "");
 
   const std::string description() const;
 

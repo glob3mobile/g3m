@@ -63,7 +63,8 @@ protected:
         const TimeInterval& timeToCache,
         bool readExpired,
         const LayerTilesRenderParameters* parameters,
-        float transparency) :
+        float transparency,
+        const std::string& disclaimerInfo) :
   _condition(condition),
   _name(name),
   _layerSet(NULL),
@@ -72,7 +73,8 @@ protected:
   _enable(true),
   _parameters(parameters),
   _title(""),
-  _transparency(transparency)
+  _transparency(transparency),
+  _disclaimerInfo(disclaimerInfo)
   {
 
   }
@@ -181,13 +183,7 @@ public:
   std::vector<std::string> getInfos() {
     _info.clear();
     const std::string layerInfo = getInfo();
-#ifdef C_CODE
-    _info.insert(_info.end(),layerInfo);
-#endif
-#ifdef JAVA_CODE
-    _info.add(_disclaimerInfo);
-#endif
-    
+    _info.push_back(layerInfo);
     return _info;
   }
 

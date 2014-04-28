@@ -41,7 +41,8 @@ public:
                const TimeInterval& timeToCache,
                bool readExpired = true,
                //int initialCartoDBLevel = 1,
-               LayerCondition* condition = NULL) :
+               LayerCondition* condition = NULL,
+               const std::string& disclaimerInfo = "") :
   MercatorTiledLayer("CartoDBLayer",
                      "http://",
                      "tiles.cartocdn.com/" + userName + "/tiles/" + table,
@@ -52,7 +53,9 @@ public:
                      Sector::fullSphere(),
                      2,
                      17,
-                     condition),
+                     condition,
+                     (float)1.0,
+                     disclaimerInfo),
   _userName(userName),
   _table(table)
   {

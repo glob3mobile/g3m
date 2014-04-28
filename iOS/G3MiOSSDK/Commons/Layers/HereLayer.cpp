@@ -21,7 +21,8 @@ HereLayer::HereLayer(const std::string& appId,
                      bool readExpired,
                      int initialLevel,
                      LayerCondition* condition,
-                     float transparency) :
+                     float transparency,
+                     const std::string& disclaimerInfo) :
 Layer(condition,
       "here",
       timeToCache,
@@ -34,7 +35,8 @@ Layer(condition,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true),
-      transparency),
+      transparency,
+      disclaimerInfo),
 _appId(appId),
 _appCode(appCode),
 _initialLevel(initialLevel)
@@ -163,7 +165,9 @@ HereLayer* HereLayer::copy() const {
                        TimeInterval::fromMilliseconds(_timeToCacheMS),
                        _readExpired,
                        _initialLevel,
-                       (_condition == NULL) ? NULL : _condition->copy());
+                       (_condition == NULL) ? NULL : _condition->copy(),
+                       _transparency,
+                       _disclaimerInfo);
 }
 
 bool HereLayer::rawIsEquals(const Layer* that) const {

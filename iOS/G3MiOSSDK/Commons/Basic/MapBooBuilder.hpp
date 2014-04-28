@@ -56,6 +56,8 @@ class Sector;
 #include "URL.hpp"
 #include "Color.hpp"
 #include "Geodetic3D.hpp"
+#include "HUDRenderer.hpp"
+#include "InfoDisplay.hpp"
 
 
 class MapBooApplicationChangeListener {
@@ -402,6 +404,42 @@ public:
 
 };
 
+
+class MapBoo_HUDRenderer : public HUDRenderer {
+public:
+  void updateInfo(const std::vector<std::string>& info);
+};
+
+
+class MapBoo_HUDRendererInfoDisplay : public InfoDisplay {
+private:
+  MapBoo_HUDRenderer* _mapBooHUDRenderer;
+public:
+  
+  MapBoo_HUDRendererInfoDisplay(MapBoo_HUDRenderer* mapBooHUDRenderer):
+  _mapBooHUDRenderer(mapBooHUDRenderer)
+  {
+    
+  }
+  
+  void changedInfo(const std::vector<std::string>& info){
+    _mapBooHUDRenderer->updateInfo(info);
+    
+  }
+  
+  void showDisplay() {
+    _mapBooHUDRenderer->setEnable(true);
+  }
+  
+  void hideDisplay() {
+    _mapBooHUDRenderer->setEnable(false);
+  }
+  
+  bool isShowing() {
+    return _mapBooHUDRenderer->isEnable();
+  }
+  
+};
 
 class MapBooBuilder {
 private:

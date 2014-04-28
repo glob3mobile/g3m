@@ -43,7 +43,8 @@ public:
               bool readExpired = true,
               int initialLevel = 1,
               int maxLevel = 19,
-              LayerCondition* condition = NULL) :
+              LayerCondition* condition = NULL,
+              const std::string& disclaimerInfo = "") :
   MercatorTiledLayer("MapBoxLayer",
                      "http://",
                      "tiles.mapbox.com/v3/" + mapKey,
@@ -54,7 +55,9 @@ public:
                      Sector::fullSphere(),
                      initialLevel,
                      maxLevel,
-                     condition),
+                     condition,
+                     (float)1.0,
+                     disclaimerInfo),
   _mapKey(mapKey)
   {
 

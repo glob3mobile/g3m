@@ -60,6 +60,8 @@ void HUDRenderer::removeAllWidgets() {
   }
   
   _widgets.clear();
+  _widgetsSize = _widgets.size();
+
 }
 
 RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {

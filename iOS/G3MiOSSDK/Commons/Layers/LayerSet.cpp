@@ -174,6 +174,7 @@ void LayerSet::addLayer(Layer* layer) {
   }
 
   layersChanged();
+  changedInfo(layer->getInfos());
 }
 
 void LayerSet::removeAllLayers(const bool deleteLayers) {
@@ -189,6 +190,7 @@ void LayerSet::removeAllLayers(const bool deleteLayers) {
     _layers.clear();
 
     layersChanged();
+    changedInfo(getInfo());
   }
 }
 
@@ -396,12 +398,7 @@ std::vector<std::string> LayerSet::getInfo() {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
       const std::string layerInfo = layer->getInfo();
-#ifdef C_CODE
-      _infos.insert(_infos.end(),layerInfo);
-#endif
-#ifdef JAVA_CODE
-      _infos.add(layerInfo);
-#endif
+      _infos.push_back(layerInfo);
     }
   }
   return _infos;

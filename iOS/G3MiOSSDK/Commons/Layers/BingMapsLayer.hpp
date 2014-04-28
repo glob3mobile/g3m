@@ -92,7 +92,8 @@ public:
                 bool readExpired = true,
                 int initialLevel = 2,
                 LayerCondition* condition = NULL,
-                float transparency = (float)1.0);
+                float transparency = (float)1.0,
+                const std::string& disclaimerInfo = "");
 
   BingMapsLayer(const std::string& imagerySet,
                 const std::string& culture,
@@ -101,7 +102,8 @@ public:
                 bool readExpired = true,
                 int initialLevel = 2,
                 LayerCondition* condition = NULL,
-                float transparency = (float)1.0);
+                float transparency = (float)1.0,
+                const std::string& disclaimerInfo = "");
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
