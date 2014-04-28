@@ -36,6 +36,10 @@ private:
 
     static const ChildResult* cancelation();
 
+    ~ChildResult() {
+#warning delete something?
+    }
+
   private:
 
     ChildResult(const bool                   isError,
@@ -52,6 +56,7 @@ private:
     _error(error)
     {
     }
+
   };
 
   class Composer {

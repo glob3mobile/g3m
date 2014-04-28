@@ -130,7 +130,30 @@ void CompositeTileImageProvider::Composer::done() {
       delete _listener;
       _listener = NULL;
     }
+
+#warning delete this (CompositeTileImageProvider)
   }
+//  else {
+//    if (_anyError) {
+//      _listener->imageCreationError(_tileId,
+//                                    composedError);
+//
+//      if (_deleteListener) {
+//        delete _listener;
+//        _listener = NULL;
+//      }
+//    }
+//    else if (_anyCancelation) {
+//      _listener->imageCreationCanceled(_tileId);
+//      if (_deleteListener) {
+//        delete _listener;
+//        _listener = NULL;
+//      }
+//    }
+//    else {
+//
+//    }
+//  }
 
 #warning TODODODODODODO
 }
@@ -146,7 +169,7 @@ void CompositeTileImageProvider::Composer::imageCreated(const std::string&      
                                                         const IImage*                image,
                                                         const std::string&           imageId,
                                                         const TileImageContribution* contribution,
-                                                        int                          index) {
+                                                        const int                    index) {
   if (_results[index] != NULL) {
     printf("Logic error 1\n");
   }
@@ -208,10 +231,10 @@ void CompositeTileImageProvider::create(const Tile* tile,
                                     deleteListener,
                                     compositeContribution);
   for (int i = 0; i < contributionsSize; i++) {
-    const CompositeTileImageContribution::ChildContribution* singleContribution = compositeContribution->get(i);
+    const CompositeTileImageContribution::ChildContribution* eachContribution = compositeContribution->get(i);
 
-    TileImageProvider* child = _children[ singleContribution->_childIndex ];
-    const TileImageContribution* childContribution = singleContribution->_contribution;
+    TileImageProvider* child = _children[ eachContribution->_childIndex ];
+    const TileImageContribution* childContribution = eachContribution->_contribution;
 
     child->create(tile,
                   childContribution,
