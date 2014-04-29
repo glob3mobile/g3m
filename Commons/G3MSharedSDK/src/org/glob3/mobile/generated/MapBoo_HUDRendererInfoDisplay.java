@@ -30,7 +30,7 @@ public class MapBoo_HUDRendererInfoDisplay implements InfoDisplay
     return _mapBooHUDRenderer.isEnable();
   }
 
-  void dispose() { }
+  public void dispose() { }
 
 
 }
