@@ -78,6 +78,8 @@ public class HUDRenderer extends DefaultRenderer
     }
   
     _widgets.clear();
+    _widgetsSize = _widgets.size();
+  
   }
 
   public final void onChangedContext()

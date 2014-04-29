@@ -93,13 +93,17 @@ public class MercatorTiledLayer extends Layer
    Implementation details: http: //wiki.openstreetmap.org/wiki/Slippy_map_tilenames
    */
   
-  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition)
-  {
-     this(name, protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, condition, (float)1.0);
-  }
   public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition, float transparency)
   {
-     super(condition, name, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
+     this(name, protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, condition, transparency, "");
+  }
+  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition)
+  {
+     this(name, protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, condition, (float)1.0, "");
+  }
+  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition, float transparency, String disclaimerInfo)
+  {
+     super(condition, name, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, disclaimerInfo);
      _protocol = protocol;
      _domain = domain;
      _subdomains = subdomains;
@@ -184,7 +188,7 @@ public class MercatorTiledLayer extends Layer
 
   public MercatorTiledLayer copy()
   {
-    return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy());
+    return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy(), _transparency, _disclaimerInfo);
   }
 
   public RenderState getRenderState()

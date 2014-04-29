@@ -59,7 +59,7 @@ public abstract class Layer
 
   protected final float _transparency;
 
-  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, String disclaimerInfo)
   {
      _condition = condition;
      _name = name;
@@ -70,6 +70,7 @@ public abstract class Layer
      _parameters = parameters;
      _title = "";
      _transparency = transparency;
+     _disclaimerInfo = disclaimerInfo;
 
   }
 
@@ -275,6 +276,16 @@ public abstract class Layer
       return false;
     }
   
+    if (!(_info == that._info))
+    {
+      return false;
+    }
+  
+    if (!(_disclaimerInfo.equals(that._disclaimerInfo)))
+    {
+      return false;
+    }
+  
     return rawIsEquals(that);
   }
 
@@ -314,8 +325,7 @@ public abstract class Layer
   {
     _info.clear();
     final String layerInfo = getInfo();
-    _info.add(_disclaimerInfo);
-
+    _info.add(layerInfo);
     return _info;
   }
 

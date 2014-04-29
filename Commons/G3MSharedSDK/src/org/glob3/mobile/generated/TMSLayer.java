@@ -29,17 +29,21 @@ public abstract class TMSLayer extends Layer
   private final boolean _isTransparent;
 
 
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  {
+     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, parameters, transparency, "");
+  }
   public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, parameters, (float)1.0);
+     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, parameters, (float)1.0, "");
   }
   public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, null, (float)1.0);
+     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, null, (float)1.0, "");
   }
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, String disclaimerInfo)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector, 0, 17) : parameters, transparency);
+     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector, 0, 17) : parameters, transparency, disclaimerInfo);
      _mapServerURL = mapServerURL;
      _mapLayer = mapLayer;
      _sector = new Sector(sector);

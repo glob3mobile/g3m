@@ -192,33 +192,34 @@ public abstract class MapBooBuilder
     }
   
     final String layerType = jsonLayer.getAsString("layer", "<layer not present>");
+    Layer layer;
     if (layerType.compareTo("OSM") == 0)
     {
-      return new OSMLayer(defaultTimeToCache);
+      layer = new OSMLayer(defaultTimeToCache);
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
-      return parseMapQuestLayer(jsonLayer, defaultTimeToCache);
+      layer = parseMapQuestLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("BingMaps") == 0)
     {
-      return parseBingMapsLayer(jsonLayer, defaultTimeToCache);
+      layer = parseBingMapsLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("CartoDB") == 0)
     {
-      return parseCartoDBLayer(jsonLayer, defaultTimeToCache);
+      layer = parseCartoDBLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("MapBox") == 0)
     {
-      return parseMapBoxLayer(jsonLayer, defaultTimeToCache);
+      layer = parseMapBoxLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("WMS") == 0)
     {
-      return parseWMSLayer(jsonLayer);
+      layer = parseWMSLayer(jsonLayer);
     }
     else if (layerType.compareTo("URLTemplate") == 0)
     {
-      return parseURLTemplateLayer(jsonLayer);
+      layer = parseURLTemplateLayer(jsonLayer);
     }
     else
     {
@@ -226,6 +227,13 @@ public abstract class MapBooBuilder
       ILogger.instance().logError("%s", jsonBaseObjectLayer.description());
       return null;
     }
+  
+    final String layerAttribution = jsonLayer.getAsString("attribution", "");
+    if (layerAttribution.compareTo("") != 0)
+    {
+      layer.setInfo(layerAttribution);
+    }
+    return layer;
   }
 
   private MapQuestLayer parseMapQuestLayer(JSONObject jsonLayer, TimeInterval timeToCache)
@@ -1024,11 +1032,9 @@ public abstract class MapBooBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    Renderer hudRenderer = null;
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning "TODO THIS"
-    InfoDisplay infoDisplay = null;
+    MapBoo_HUDRenderer hudRenderer = new MapBoo_HUDRenderer();
+    InfoDisplay infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
+    infoDisplay.showDisplay();
   
     _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;

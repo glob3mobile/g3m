@@ -84,6 +84,7 @@ public class LayerSet implements ChangedInfoListener
       _layers.clear();
   
       layersChanged();
+      changedInfo(getInfo());
     }
   }
 
@@ -98,6 +99,7 @@ public class LayerSet implements ChangedInfoListener
     }
   
     layersChanged();
+    changedInfo(layer.getInfos());
   }
 
   public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
@@ -482,9 +484,11 @@ public class LayerSet implements ChangedInfoListener
     if (_changedInfoListener != null)
     {
       ILogger.instance().logError("Changed Info Listener of LayerSet already set");
+      return;
     }
     ILogger.instance().logError("Changed Info Listener of LayerSet set ok");
     _changedInfoListener = changedInfoListener;
+    changedInfo(getInfo());
   }
 
   public final java.util.ArrayList<String> getInfo()

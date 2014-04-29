@@ -53,25 +53,29 @@ public class HereLayer extends Layer
   }
 
 
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
+  {
+     this(appId, appCode, timeToCache, readExpired, initialLevel, condition, transparency, "");
+  }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, condition, (float)1.0);
+     this(appId, appCode, timeToCache, readExpired, initialLevel, condition, (float)1.0, "");
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, null, (float)1.0);
+     this(appId, appCode, timeToCache, readExpired, initialLevel, null, (float)1.0, "");
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired)
   {
-     this(appId, appCode, timeToCache, readExpired, 2, null, (float)1.0);
+     this(appId, appCode, timeToCache, readExpired, 2, null, (float)1.0, "");
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, true, 2, null, (float)1.0);
+     this(appId, appCode, timeToCache, true, 2, null, (float)1.0, "");
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency, String disclaimerInfo)
   {
-     super(condition, "here", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency);
+     super(condition, "here", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, disclaimerInfo);
      _appId = appId;
      _appCode = appCode;
      _initialLevel = initialLevel;
@@ -191,7 +195,7 @@ public class HereLayer extends Layer
 
   public final HereLayer copy()
   {
-    return new HereLayer(_appId, _appCode, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
+    return new HereLayer(_appId, _appCode, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy(), _transparency, _disclaimerInfo);
   }
 
   public final RenderState getRenderState()
