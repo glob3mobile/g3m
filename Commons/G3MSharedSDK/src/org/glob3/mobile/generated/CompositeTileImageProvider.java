@@ -156,7 +156,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     //
     //      delete canvas;
     
-    
           _frameTasksExecutor.addPreRenderTask(new ComposerFrameTask(this));
         }
       }
@@ -196,6 +195,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     //         _canceled       ? "true" : "false",
     //         _compositeContribution
     //         );
+    
       for (int i = 0; i < _contributionsSize; i++)
       {
         final ChildResult result = _results.get(i);
@@ -203,6 +203,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
            result.dispose();
       }
       _compositeContribution = null;
+    
+      super.dispose();
     }
 
     public final String _tileId;
@@ -278,6 +280,13 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final void mixResult()
     {
+      if (_canceled)
+      {
+        cleanUp();
+        return;
+      }
+    
+    
       ICanvas canvas = IFactory.instance().createCanvas();
     
       canvas.initialize(_width, _height);
@@ -343,7 +352,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final boolean isCanceled(G3MRenderContext rc)
     {
-      return _composer.isCanceled();
+      return false;
+      //return _composer->isCanceled();
     }
 
     public final void execute(G3MRenderContext rc)
