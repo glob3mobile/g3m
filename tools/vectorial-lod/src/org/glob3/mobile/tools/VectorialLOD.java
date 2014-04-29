@@ -490,7 +490,7 @@ public class VectorialLOD {
             final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
             final Sector sector = new Sector(tileLower, tileUpper);
 
-            final TileSector tileSector = new TileSector(sector, null, 0, row, col);
+            final TileSector tileSector = new TileSector(sector, null, FIRST_LEVEL, row, col);
 
             levelZeroTileSectors.add(tileSector);
          }
@@ -545,7 +545,7 @@ public class VectorialLOD {
    private static void generateVectorialLOD(final TileSector sector,
                                             final DataSource dataSource) {
 
-      if (sector._level >= NUM_LEVELS) {
+      if (sector._level > MAX_LEVEL) {
          return;
       }
 
@@ -593,7 +593,7 @@ public class VectorialLOD {
                                          final DataSource dataSource) {
 
       final int subSectorLevel = sector._level;
-      if (subSectorLevel >= NUM_LEVELS) {
+      if (subSectorLevel > MAX_LEVEL) {
          return;
       }
 
@@ -604,7 +604,8 @@ public class VectorialLOD {
          }
       };
 
-      _concurrentService.execute(task, subSectorLevel);
+      final int groupId = subSectorLevel - FIRST_LEVEL;
+      _concurrentService.execute(task, groupId);
    }
 
 
