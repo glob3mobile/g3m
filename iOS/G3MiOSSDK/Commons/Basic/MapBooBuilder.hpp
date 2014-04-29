@@ -443,7 +443,7 @@ public:
   virtual ~MapBoo_HUDRendererInfoDisplay() { }
 #endif
 #ifdef JAVA_CODE
-  void dispose() { }
+  public void dispose() { }
 #endif
 
   
