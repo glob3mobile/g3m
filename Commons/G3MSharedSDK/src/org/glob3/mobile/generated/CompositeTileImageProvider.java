@@ -273,11 +273,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       cleanUp();
     }
 
-    public final boolean isCanceled()
-    {
-      return _canceled;
-    }
-
     public final void mixResult()
     {
       if (_canceled)
