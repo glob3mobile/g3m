@@ -2,40 +2,13 @@ package org.glob3.mobile.generated;
 public class DTT_TileTextureBuilder extends RCObject
 {
   private LeveledTexturedMesh _texturedMesh;
-
-//  DefaultTileTexturizer* _texturizer;
-//  TileRasterizer*        _tileRasterizer;
   private Tile _tile;
-
-//  std::vector<Petition*> _petitions;
-//  int                    _petitionsCount;
-//  int                    _stepsDone;
-
   private TileImageProvider _tileImageProvider;
-
   private TexturesHandler _texturesHandler;
-
   private final Vector2I _tileTextureResolution;
-//  private final Vector2I _tileMeshResolution;
-
-//  IDownloader*     _downloader;
-
-//  const Mesh* _tessellatorMesh;
-
-//  const TileTessellator* _tessellator;
-
   private final boolean _logTilesPetitions;
-
-  //  std::vector<TileTextureBuilder_PetitionStatus> _status;
-  //  std::vector<long long>                         _requestsIds;
-
-
-//  bool _finalized;
+  private final long _tileDownloadPriority;
   private boolean _canceled;
-//  bool _alreadyStarted;
-
-  private long _tileDownloadPriority;
-
   private FrameTasksExecutor _frameTasksExecutor;
 
 
@@ -79,19 +52,7 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor) //DefaultTileTexturizer* texturizer,
-//                         TileRasterizer*                   tileRasterizer,
-//                         const std::vector<Petition*>&     petitions,
-//                         IDownloader*                      downloader,
-//  _texturizer(texturizer),
-//  _tileRasterizer(tileRasterizer),
-//  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
-//  _downloader(downloader),
-//  _tessellatorMesh(tessellatorMesh),
-//  _stepsDone(0),
-//  _tessellator(tessellator),
-//  _finalized(false),
-//  _alreadyStarted(false),
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor)
   {
      _tileImageProvider = tileImageProvider;
      _texturesHandler = rc.getTexturesHandler();
@@ -111,14 +72,6 @@ public class DTT_TileTextureBuilder extends RCObject
   {
     return _texturedMesh;
   }
-
-//  void cleanTexturedMesh() {
-//    _texturedMesh = NULL;
-//  }
-
-//  void cleanTile() {
-//    _tile = NULL;
-//  }
 
   public final void start()
   {

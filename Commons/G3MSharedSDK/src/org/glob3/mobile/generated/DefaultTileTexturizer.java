@@ -51,8 +51,8 @@ public class DefaultTileTexturizer extends TileTexturizer
   {
     DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   
-  //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
-  //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
+    //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
+    //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: creates the TileImageProvider from the LayerSet (&& Rasterizer?)
@@ -109,8 +109,6 @@ public class DefaultTileTexturizer extends TileTexturizer
     {
       DTT_TileTextureBuilder builder = builderHolder.get();
       builder.cancel(true); // cleanTile
-  //    builder->cleanTile();
-  //    builder->cleanTexturedMesh();
     }
   }
 
@@ -121,7 +119,6 @@ public class DefaultTileTexturizer extends TileTexturizer
     {
       DTT_TileTextureBuilder builder = builderHolder.get();
       builder.cancel(false); // cleanTile
-  //    builder->cleanTexturedMesh();
     }
   }
 
@@ -177,14 +174,7 @@ public class DefaultTileTexturizer extends TileTexturizer
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
   {
-    if (layerSet == null)
-    {
-      return false;
-    }
-  
-    return layerSet.onTerrainTouchEvent(ec, position, tile);
+    return (layerSet == null) ? false : layerSet.onTerrainTouchEvent(ec, position, tile);
   }
-
-//  const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile);
 
 }

@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class CompositeTileImageContribution;
 
 
@@ -233,18 +234,12 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution, int index)
     {
-    //  if (_results[index] != NULL) {
-    //    printf("Logic error 1\n");
-    //  }
       _results.set(index, ChildResult.image(image, imageId, contribution));
       stepDone();
     }
 
     public final void imageCreationError(String error, int index)
     {
-    //  if (_results[index] != NULL) {
-    //    printf("Logic error 2\n");
-    //  }
       _results.set(index, ChildResult.error(error));
       _anyError = true;
       stepDone();
@@ -252,9 +247,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final void imageCreationCanceled(int index)
     {
-    //  if (_results[index] != NULL) {
-    //    printf("Logic error 3\n");
-    //  }
       _results.set(index, ChildResult.cancelation());
       _anyCancelation = true;
       stepDone();
@@ -348,7 +340,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     public final boolean isCanceled(G3MRenderContext rc)
     {
       return false;
-      //return _composer->isCanceled();
     }
 
     public final void execute(G3MRenderContext rc)
@@ -500,4 +491,5 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   
     indexes = null;
   }
+
 }
