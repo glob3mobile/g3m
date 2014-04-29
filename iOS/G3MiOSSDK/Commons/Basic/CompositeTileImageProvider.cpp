@@ -115,7 +115,7 @@ _canceled(false)
 }
 
 CompositeTileImageProvider::Composer::~Composer() {
-#warning remove debug printf
+//#warning remove debug printf
 //  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
 //         this,
 //         _stepsDone,
