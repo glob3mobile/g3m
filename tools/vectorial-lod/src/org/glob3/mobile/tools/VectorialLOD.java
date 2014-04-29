@@ -2,7 +2,10 @@
 
 package org.glob3.mobile.tools;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,7 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
+import java.util.Properties;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -24,6 +29,7 @@ import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 public class VectorialLOD {
 
    final static String                       ROOT_DIRECTORY     = "LOD";
+   final static String                       PARAMETERS_FILE    = "parameters.xml";
 
    //-- Data base connection parameters ----------------------------------------------------------------
    private static String                     HOST               = "igosoftware.dyndns.org";
@@ -640,6 +646,9 @@ public class VectorialLOD {
 
    private static void initializeFromArguments(final String[] args) {
 
+      //COMMAND LINE example:
+      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test 2.0 false 0 3 ne_10m_admin_0_countries true continent pop_est
+      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test 2.0 false 0 6 ne_10m_admin_0_countries true continent mapcolor7 scalerank
       System.out.println("Initializing from parameters.. ");
       //System.out.println("NUM parameters: " + args.length);
 
@@ -772,16 +781,190 @@ public class VectorialLOD {
          System.err.println("Non PROPERTIES argument. No property included from datasource.");
       }
 
+   }
 
+
+   private static String[] parsePropertiesFromFile(final String propList) {
+
+      if ((propList == null) || propList.trim().equals("")) {
+         return null;
+      }
+
+      final String[] properties = propList.split(",");
+
+      for (int i = 0; i < properties.length; i++) {
+         properties[i] = properties[i].trim();
+      }
+
+      return properties;
+   }
+
+
+   private static boolean initializeFromFile(final String fileName) {
+
+      if (new File(fileName).exists()) {
+
+         System.out.println("Initializing from file.. ");
+
+         final Properties properties = new Properties();
+         properties.clear();
+         try {
+            final BufferedInputStream stream = new BufferedInputStream(new FileInputStream(fileName));
+            properties.loadFromXML(stream);
+
+            String tmp;
+            HOST = properties.getProperty("HOST");
+
+            if ((HOST != null) && (!HOST.equals(""))) {
+               System.out.println("HOST: " + HOST);
+            }
+            else {
+               System.err.println("Invalid HOST argument.");
+               System.exit(1);
+            }
+
+            PORT = properties.getProperty("PORT");
+            if ((PORT != null) && (!PORT.equals(""))) {
+               System.out.println("PORT: " + PORT);
+            }
+            else {
+               System.err.println("Invalid PORT argument.");
+               System.exit(1);
+            }
+
+            USER = properties.getProperty("USER");
+            if ((USER != null) && (!USER.equals(""))) {
+               System.out.println("USER: " + USER);
+            }
+            else {
+               System.err.println("Invalid USER argument.");
+               System.exit(1);
+            }
+
+            PASSWORD = properties.getProperty("PASSWORD");
+            if ((PASSWORD != null) && (!PASSWORD.equals(""))) {
+               System.out.println("PASSWORD: " + PASSWORD);
+            }
+            else {
+               System.err.println("Invalid PASSWORD argument.");
+               System.exit(1);
+            }
+
+            DATABASE_NAME = properties.getProperty("DATABASE_NAME");
+            if ((DATABASE_NAME != null) && (!DATABASE_NAME.equals(""))) {
+               System.out.println("DATABASE_NAME: " + DATABASE_NAME);
+            }
+            else {
+               System.err.println("Invalid DATABASE_NAME argument.");
+               System.exit(1);
+            }
+
+            tmp = properties.getProperty("QUALITY_FACTOR");
+            if ((tmp != null) && (!tmp.equals(""))) {
+               QUALITY_FACTOR = Float.parseFloat(tmp);
+               System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
+            }
+            else {
+               System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR.");
+            }
+
+            tmp = properties.getProperty("MERCATOR");
+            if ((tmp != null) && (!tmp.equals(""))) {
+               MERCATOR = Boolean.parseBoolean(tmp);
+               if (MERCATOR) {
+                  System.out.println("MERCATOR projection");
+               }
+               else {
+                  System.out.println("WGS84 projection");
+               }
+            }
+            else {
+               System.err.println("Invalid PROJECTION specification.");
+               System.exit(1);
+            }
+
+            tmp = properties.getProperty("FIRST_LEVEL");
+            if ((tmp != null) && (!tmp.equals(""))) {
+               FIRST_LEVEL = Integer.parseInt(tmp);
+               System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
+            }
+            else {
+               System.err.println("Invalid FIRST_LEVEL argument.");
+               System.exit(1);
+            }
+
+            tmp = properties.getProperty("MAX_LEVEL");
+            if ((tmp != null) && (!tmp.equals(""))) {
+               MAX_LEVEL = Integer.parseInt(tmp);
+               System.out.println("MAX_LEVEL: " + MAX_LEVEL);
+               NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
+               MAX_DB_CONNECTIONS = NUM_LEVELS;
+            }
+            else {
+               System.err.println("Invalid MAX_LEVEL argument.");
+               System.exit(1);
+            }
+
+            DATABASE_TABLE = properties.getProperty("DATABASE_TABLE");
+            if ((DATABASE_TABLE != null) && (!DATABASE_TABLE.equals(""))) {
+               System.out.println("DATABASE_TABLE: " + DATABASE_TABLE);
+            }
+            else {
+               System.err.println("Invalid DATABASE_TABLE argument.");
+               System.exit(1);
+            }
+
+            FILTER_CRITERIA = properties.getProperty("FILTER_CRITERIA");
+            if ((FILTER_CRITERIA != null) && (!FILTER_CRITERIA.equals(""))) {
+               System.out.println("FILTER_CRITERIA: " + FILTER_CRITERIA);
+            }
+            else {
+               System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
+            }
+
+            PROPERTIES = parsePropertiesFromFile(properties.getProperty("PROPERTIES"));
+            if ((PROPERTIES != null) && (PROPERTIES.length > 0)) {
+               System.out.print("PROPERTIES: ");
+               for (int i = 0; i < PROPERTIES.length; i++) {
+                  System.out.print(PROPERTIES[i]);
+                  if (i == (PROPERTIES.length - 1)) {
+                     System.out.println(".");
+                  }
+                  else {
+                     System.out.print(", ");
+                  }
+               }
+               System.out.println();
+            }
+            else {
+               System.err.println("Non PROPERTIES argument. No property included from datasource.");
+            }
+
+            return true;
+         }
+         catch (final FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+         }
+         catch (final InvalidPropertiesFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+         }
+         catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+         }
+
+      }
+      return false;
    }
 
 
    public static void main(final String[] args) {
 
-      //COMMAND LINE example:
-      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test false 0 3 ne_10m_admin_0_countries true continent pop_est
-      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test false 0 6 ne_10m_admin_0_countries true continent mapcolor7 scalerank
-      initializeFromArguments(args);
+      if (!initializeFromFile(PARAMETERS_FILE)) {
+         initializeFromArguments(args);
+      }
 
       System.out.print("Connecting to " + DATABASE_NAME + " postGIS database.. ");
 

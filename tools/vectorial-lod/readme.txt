@@ -10,7 +10,12 @@ DESCRIPTION:
 
 The purpose of this tool is the generation of a complete pyramid for the target vectorial data, in order to be used for the Level Of Detail (LOD) management on Glob3 mobile virtual globe. Full pyramid of vectorial data shall be generated in geojson format.
 
-The selection of the target data, number of levels, projection type, and other configuration parameters shall be performed through runtime parameters as described below.
+The selection of the target data, number of levels, projection type, and other configuration parameters can be performed in two different ways:
+  1) Using the file of properties: parameters.xml
+  2) Using runtime parameters as described below. 
+
+If the file parameters.xml exits, the tool try to initialize from its values, otherwise try to initialize from
+command line arguments.
 
 The tool include a runnable jar (vectorialLOD.jar) and a script (run.sh) including all the parameters required. Other scripts can be used for specific parameters handling (runAgainstDB.sh).
 
