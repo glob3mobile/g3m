@@ -439,6 +439,14 @@ public:
     return _mapBooHUDRenderer->isEnable();
   }
   
+#ifdef C_CODE
+  virtual ~MapBoo_HUDRendererInfoDisplay() { }
+#endif
+#ifdef JAVA_CODE
+  void dispose() { }
+#endif
+
+  
 };
 
 class MapBooBuilder {
