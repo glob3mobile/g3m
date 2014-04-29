@@ -123,10 +123,6 @@ private:
 
     void imageCreated(const IImage* image);
 
-    bool isCanceled() const {
-      return _canceled;
-    }
-
     void mixResult();
 
   };
