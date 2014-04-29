@@ -14,6 +14,7 @@
 #include "TileImageListener.hpp"
 #include <map>
 #include "IImageListener.hpp"
+#include "FrameTasksExecutor.hpp"
 
 class CompositeTileImageContribution;
 
@@ -122,12 +123,19 @@ private:
 
     void imageCreated(const IImage* image);
 
+    bool isCanceled() const {
+      return _canceled;
+    }
+
+    void mixResult();
+
   };
 
 
   class ComposerImageListener : public IImageListener {
   private:
     Composer* _composer;
+
   public:
     ComposerImageListener(Composer* composer) :
     _composer(composer)
@@ -143,7 +151,28 @@ private:
       _composer->imageCreated(image);
     }
   };
-  
+
+
+  class ComposerFrameTask : public FrameTask {
+  private:
+    Composer* _composer;
+
+  public:
+    ComposerFrameTask(Composer* composer) :
+    _composer(composer)
+    {
+      _composer->_retain();
+    }
+
+    ~ComposerFrameTask() {
+      _composer->_release();
+    }
+
+    bool isCanceled(const G3MRenderContext* rc);
+
+    void execute(const G3MRenderContext* rc);
+  };
+
 
   class ChildTileImageListener : public TileImageListener {
   private:

@@ -187,26 +187,58 @@ void CompositeTileImageProvider::Composer::done() {
       cleanUp();
     }
     else {
-      ICanvas* canvas = IFactory::instance()->createCanvas();
+//      ICanvas* canvas = IFactory::instance()->createCanvas();
+//
+//      canvas->initialize(_width, _height);
+//
+//      std::string imageId = "";
+//
+//      for (int i = 0; i < _contributionsSize; i++) {
+//       const ChildResult* result = _results[i];
+//
+//        imageId += result->_imageId + "|";
+//#warning JM: consider sector and transparency
+//        canvas->drawImage(result->_image, 0, 0);
+//      }
+//      _imageId = imageId;
+//
+//      canvas->createImage(new ComposerImageListener(this), true);
+//
+//      delete canvas;
 
-      canvas->initialize(_width, _height);
 
-      std::string imageId = "";
-
-      for (int i = 0; i < _contributionsSize; i++) {
-       const ChildResult* result = _results[i];
-
-        imageId += result->_imageId + "|";
-#warning JM: consider sector and transparency
-        canvas->drawImage(result->_image, 0, 0);
-      }
-      _imageId = imageId;
-
-      canvas->createImage(new ComposerImageListener(this), true);
-
-      delete canvas;
+      _frameTasksExecutor->addPreRenderTask(new ComposerFrameTask(this));
     }
   }
+}
+
+void CompositeTileImageProvider::Composer::mixResult() {
+  ICanvas* canvas = IFactory::instance()->createCanvas();
+
+  canvas->initialize(_width, _height);
+
+  std::string imageId = "";
+
+  for (int i = 0; i < _contributionsSize; i++) {
+    const ChildResult* result = _results[i];
+
+    imageId += result->_imageId + "|";
+#warning JM: consider sector and transparency
+    canvas->drawImage(result->_image, 0, 0);
+  }
+  _imageId = imageId;
+
+  canvas->createImage(new ComposerImageListener(this), true);
+
+  delete canvas;
+}
+
+bool CompositeTileImageProvider::ComposerFrameTask::isCanceled(const G3MRenderContext* rc) {
+  return _composer->isCanceled();
+}
+
+void CompositeTileImageProvider::ComposerFrameTask::execute(const G3MRenderContext* rc) {
+  _composer->mixResult();
 }
 
 void CompositeTileImageProvider::Composer::imageCreated(const IImage* image) {
