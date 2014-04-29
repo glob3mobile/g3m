@@ -66,7 +66,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
   }
 
-  private static class Composer extends IImageListener
+
+  private static class Composer extends RCObject
   {
     private CompositeTileImageProvider _compositeTileImageProvider;
     private TileImageListener _listener;
@@ -153,7 +154,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           }
           _imageId = imageId;
     
-          canvas.createImage(this, false);
+          canvas.createImage(new ComposerImageListener(this), true);
     
           if (canvas != null)
              canvas.dispose();
@@ -182,28 +183,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     private String _imageId;
 
-
-    public final String _tileId;
-
-    public Composer(int width, int height, CompositeTileImageProvider compositeTileImageProvider, String tileId, TileImageListener listener, boolean deleteListener, CompositeTileImageContribution compositeContribution)
-    {
-       _width = width;
-       _height = height;
-       _compositeTileImageProvider = compositeTileImageProvider;
-       _tileId = tileId;
-       _listener = listener;
-       _deleteListener = deleteListener;
-       _compositeContribution = compositeContribution;
-       _contributionsSize = compositeContribution.size();
-       _stepsDone = 0;
-       _anyError = false;
-       _anyCancelation = false;
-       _canceled = false;
-      for (int i = 0; i < _contributionsSize; i++)
-      {
-        _results.add(null);
-      }
-    }
+    private FrameTasksExecutor _frameTasksExecutor;
 
     public void dispose()
     {
@@ -224,6 +204,30 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       }
       _compositeContribution = null;
     }
+
+    public final String _tileId;
+
+    public Composer(int width, int height, CompositeTileImageProvider compositeTileImageProvider, String tileId, TileImageListener listener, boolean deleteListener, CompositeTileImageContribution compositeContribution, FrameTasksExecutor frameTasksExecutor)
+    {
+       _width = width;
+       _height = height;
+       _compositeTileImageProvider = compositeTileImageProvider;
+       _tileId = tileId;
+       _listener = listener;
+       _deleteListener = deleteListener;
+       _compositeContribution = compositeContribution;
+       _contributionsSize = compositeContribution.size();
+       _frameTasksExecutor = frameTasksExecutor;
+       _stepsDone = 0;
+       _anyError = false;
+       _anyCancelation = false;
+       _canceled = false;
+      for (int i = 0; i < _contributionsSize; i++)
+      {
+        _results.add(null);
+      }
+    }
+
 
     public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution, int index)
     {
@@ -267,6 +271,27 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       cleanUp();
     }
 
+  }
+
+
+  private static class ComposerImageListener extends IImageListener
+  {
+    private Composer _composer;
+    public ComposerImageListener(Composer composer)
+    {
+       _composer = composer;
+      _composer._retain();
+    }
+
+    public void dispose()
+    {
+      _composer._release();
+    }
+
+    public final void imageCreated(IImage image)
+    {
+      _composer.imageCreated(image);
+    }
   }
 
 
@@ -354,14 +379,14 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     return CompositeTileImageContribution.create(childrenContributions);
   }
 
-  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener)
+  public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
   
     final CompositeTileImageContribution compositeContribution = (CompositeTileImageContribution) contribution;
   
     final String tileId = tile._id;
   
-    Composer composer = new Composer(resolution._x, resolution._y, this, tileId, listener, deleteListener, compositeContribution);
+    Composer composer = new Composer(resolution._x, resolution._y, this, tileId, listener, deleteListener, compositeContribution, frameTasksExecutor);
   
     _composers.put(tileId, composer);
   
@@ -372,7 +397,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   
       TileImageProvider child = _children.get(childContribution._childIndex);
   
-      child.create(tile, childContribution._contribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true);
+      child.create(tile, childContribution._contribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true, frameTasksExecutor);
     }
   }
 
@@ -388,8 +413,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   public final void composerDone(Composer composer)
   {
     _composers.remove(composer._tileId);
-    if (composer != null)
-       composer.dispose();
+  //  delete composer;
+    composer._release();
   }
 
   public final void cancelChildren(Tile tile, CompositeTileImageContribution compositeContribution)

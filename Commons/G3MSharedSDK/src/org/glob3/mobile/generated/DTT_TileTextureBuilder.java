@@ -36,6 +36,7 @@ public class DTT_TileTextureBuilder extends RCObject
 
   private long _tileDownloadPriority;
 
+  private FrameTasksExecutor _frameTasksExecutor;
 
 
   private static TextureIDReference getTopLevelTextureIdForTile(Tile tile)
@@ -78,7 +79,7 @@ public class DTT_TileTextureBuilder extends RCObject
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions) //DefaultTileTexturizer* texturizer,
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor) //DefaultTileTexturizer* texturizer,
 //                         TileRasterizer*                   tileRasterizer,
 //                         const std::vector<Petition*>&     petitions,
 //                         IDownloader*                      downloader,
@@ -100,6 +101,7 @@ public class DTT_TileTextureBuilder extends RCObject
      _canceled = false;
      _tileDownloadPriority = tileDownloadPriority;
      _logTilesPetitions = logTilesPetitions;
+     _frameTasksExecutor = frameTasksExecutor;
     _tileImageProvider._retain();
 
     _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator);
@@ -132,7 +134,7 @@ public class DTT_TileTextureBuilder extends RCObject
       }
       else
       {
-        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this), true);
+        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this), true, _frameTasksExecutor);
       }
     }
   }
