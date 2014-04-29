@@ -14,18 +14,19 @@
 #include "IDownloader.hpp"
 
 class GEORasterSymbol;
+class GEOVectorialLODRasterSymbolizer;
 
 
 class GEOVectorialLODTileRasterizer : public CanvasTileRasterizer {
 private:
     IDownloader *_downloader;
+    const GEOVectorialLODRasterSymbolizer* _symbolizer;
     
     URL* builURLForVectorialTile(const URL* baseUrl, const Tile* tile) const;
     
 public:
-    GEOVectorialLODTileRasterizer()
-    {
-    }
+    
+    GEOVectorialLODTileRasterizer();
     
     std::string getId() const {
         return "GEOVectorialLODTileRasterizer";

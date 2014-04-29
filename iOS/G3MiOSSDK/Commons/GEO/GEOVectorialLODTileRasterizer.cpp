@@ -27,10 +27,134 @@
 #include "GEOGeometry2D.hpp"
 #include "GEOVectorialLODRasterSymbolizer.hpp"
 
-class GEOVectorialLODBufferDownloadListener;
+//class GEOVectorialLODBufferDownloadListener;
 
 
 const URL* TEST_URL= new URL("http://192.168.1.26/vectorial/ne_10m_admin_0_countries_6-LEVELS_WGS84", false);
+
+
+class GEOVectorialLODParser_AsyncTask : public GAsyncTask {
+private:
+#ifdef C_CODE
+    const URL          _url;
+#endif
+#ifdef JAVA_CODE
+    public final URL _url;
+#endif
+    
+    IByteBuffer*   _buffer;
+    const GEORasterSymbolizer* _symbolizer;
+    
+    const bool _isBSON;
+    
+    GEOObject* _geoObject;
+    
+public:
+    GEOVectorialLODParser_AsyncTask(const URL& url,
+                                    IByteBuffer* buffer,
+                                    const GEORasterSymbolizer* symbolizer,
+                                    bool isBSON) :
+    _url(url),
+    _buffer(buffer),
+    _symbolizer(symbolizer),
+    _isBSON(isBSON),
+    _geoObject(NULL)
+    {
+    }
+    
+    ~GEOVectorialLODParser_AsyncTask() {
+        delete _buffer;
+        //    delete _geoObject;
+    }
+    
+    void runInBackground(const G3MContext* context) {
+        
+        if (_isBSON) {
+            _geoObject = GEOJSONParser::parseBSON(_buffer);
+        }
+        else {
+            _geoObject = GEOJSONParser::parseJSON(_buffer);
+        }
+        
+        GEOFeatureCollection* fc = (GEOFeatureCollection*) _geoObject;
+        
+        
+                for (int i = 0; i < fc->size(); i++) {
+                    GEOGeometry2D* g = (GEOGeometry2D*)fc->get(i)->getGeometry();
+                    //fc->get(i)->getGeometry()->createSymbols(_symbolizer);
+        
+                    std::vector<GEOSymbol*>* symbols = _symbolizer->createSymbols(g);
+                    
+                    
+                    symbol->rasterize(<#ICanvas *canvas#>, <#const GEORasterProjection *projection#>, <#int tileLevel#>);
+                }
+        
+        delete _buffer;
+        _buffer = NULL;
+    }
+    
+    void onPostExecute(const G3MContext* context) {
+        if (_geoObject == NULL) {
+            ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
+        }
+        else {
+            
+            _geoObject = NULL;
+        }
+    }
+};
+
+
+
+class GEOVectorialLODBufferDownloadListener : public IBufferDownloadListener {
+private:
+    
+    const GEORasterSymbolizer*      _symbolizer;
+    const IThreadUtils* _threadUtils;
+    const bool          _isBSON;
+    
+public:
+    GEOVectorialLODBufferDownloadListener(const GEORasterSymbolizer* symbolizer,
+                                          const IThreadUtils* threadUtils,
+                                          bool isBSON) :
+    _symbolizer(symbolizer),
+    _threadUtils(threadUtils),
+    _isBSON(isBSON)
+    {
+    }
+    
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired) {
+        ILogger::instance()->logInfo("Downloaded GEOObject buffer from \"%s\" (%db)",
+                                     url.getPath().c_str(),
+                                     buffer->size());
+        
+        _threadUtils->invokeAsyncTask(new GEOVectorialLODParser_AsyncTask(url,
+                                                                          buffer,
+                                                                          _symbolizer,
+                                                                          _isBSON),
+                                      true);
+    }
+    
+    void onError(const URL& url) {
+        ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    }
+    
+    void onCancel(const URL& url) {
+        ILogger::instance()->logInfo("Canceled download of \"%s\"", url.getPath().c_str());
+    }
+    
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* buffer,
+                            bool expired) {
+        // do nothing
+        //TODO
+    }
+};
+
+
+//---------------
 
 
 URL* GEOVectorialLODTileRasterizer::builURLForVectorialTile(const URL* baseUrl, const Tile* tile) const {
@@ -61,6 +185,12 @@ URL* GEOVectorialLODTileRasterizer::builURLForVectorialTile(const URL* baseUrl, 
     return new URL(tileUrl,false);
 }
 
+GEOVectorialLODTileRasterizer::GEOVectorialLODTileRasterizer()
+{
+    _symbolizer = new GEOVectorialLODRasterSymbolizer();
+}
+
+
 void GEOVectorialLODTileRasterizer::initialize(const G3MContext* context) {
     _downloader = context->getDownloader();
     _threadUtils = context->getThreadUtils(); //always init for background rasterize
@@ -79,14 +209,12 @@ void GEOVectorialLODTileRasterizer::rawRasterize(const IImage* image,
     
     const URL* tileUrl = builURLForVectorialTile(TEST_URL, trc._tile);
     
-//    const GEOVectorialLODRasterSymbolizer* rasterSymbolizer = new GEOVectorialLODRasterSymbolizer();
-//    const GEOVectorialLODBufferDownloadListener* l = new GEOVectorialLODBufferDownloadListener(rasterSymbolizer, _threadUtils, false);
-//    
-//    
-//    _downloader->requestBuffer(tileUrl, 1000000, TimeInterval::fromDays(30), l, true);
+    GEOVectorialLODBufferDownloadListener* dl = new GEOVectorialLODBufferDownloadListener(_symbolizer, _threadUtils, false);
     
+    _downloader->requestBuffer(*tileUrl, 1000000, TimeInterval::fromDays(30), false, dl, true);
     
 }
+
 
 TileRasterizer_AsyncTask* GEOVectorialLODTileRasterizer::getRawRasterizeTask(const IImage* image,
                                                                        const TileRasterizerContext& trc,
@@ -97,124 +225,8 @@ TileRasterizer_AsyncTask* GEOVectorialLODTileRasterizer::getRawRasterizeTask(con
 }
 
 
-//---------------
-
-class GEOVectorialLODParser_AsyncTask : public GAsyncTask {
-private:
-#ifdef C_CODE
-    const URL          _url;
-#endif
-#ifdef JAVA_CODE
-    public final URL _url;
-#endif
-    
-    IByteBuffer*   _buffer;
-    GEORasterSymbolizer* _symbolizer;
-    
-    const bool _isBSON;
-    
-    GEOObject* _geoObject;
-    
-public:
-    GEOVectorialLODParser_AsyncTask(const URL& url,
-                                   IByteBuffer* buffer,
-                                   GEORasterSymbolizer* symbolizer,
-                                   bool isBSON) :
-    _url(url),
-    _buffer(buffer),
-    _symbolizer(symbolizer),
-    _isBSON(isBSON),
-    _geoObject(NULL)
-    {
-    }
-    
-    ~GEOVectorialLODParser_AsyncTask() {
-        delete _buffer;
-        //    delete _geoObject;
-    }
-    
-    void runInBackground(const G3MContext* context) {
-        
-        if (_isBSON) {
-            _geoObject = GEOJSONParser::parseBSON(_buffer);
-        }
-        else {
-            _geoObject = GEOJSONParser::parseJSON(_buffer);
-        }
-        
-        GEOFeatureCollection* fc = (GEOFeatureCollection*) _geoObject;
-        
-        
-//        for (int i = 0; i < fc->size(); i++) {
-//            GEOGeometry2D* g = fc->get(i)->getGeometry();
-//            //fc->get(i)->getGeometry()->createSymbols(_symbolizer);
-//            
-//            GEORasterSymbol* symbol = _symbolizer->createSymbols(g);
-//            symbol->rasterize(<#ICanvas *canvas#>, <#const GEORasterProjection *projection#>, <#int tileLevel#>);
-//        }
-        
-        delete _buffer;
-        _buffer = NULL;
-    }
-    
-    void onPostExecute(const G3MContext* context) {
-        if (_geoObject == NULL) {
-            ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
-        }
-        else {
-            
-            _geoObject = NULL;
-        }
-    }
-};
 
 
-
-class GEOVectorialLODBufferDownloadListener : public IBufferDownloadListener {
-private:
-
-    GEORasterSymbolizer*      _symbolizer;
-    const IThreadUtils* _threadUtils;
-    const bool          _isBSON;
-    
-public:
-    GEOVectorialLODBufferDownloadListener(GEORasterSymbolizer* symbolizer,
-                                                const IThreadUtils* threadUtils,
-                                                bool isBSON) :
-    _symbolizer(symbolizer),
-    _threadUtils(threadUtils),
-    _isBSON(isBSON)
-    {
-    }
-    
-    void onDownload(const URL& url,
-                    IByteBuffer* buffer,
-                    bool expired) {
-        ILogger::instance()->logInfo("Downloaded GEOObject buffer from \"%s\" (%db)",
-                                     url.getPath().c_str(),
-                                     buffer->size());
-        
-        _threadUtils->invokeAsyncTask(new GEOVectorialLODParser_AsyncTask(url,
-                                                                               buffer,
-                                                                               _symbolizer,
-                                                                               _isBSON),
-                                      true);
-    }
-    
-    void onError(const URL& url) {
-        ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
-    }
-    
-    void onCancel(const URL& url) {
-        ILogger::instance()->logInfo("Canceled download of \"%s\"", url.getPath().c_str());
-    }
-    
-    void onCanceledDownload(const URL& url,
-                            IByteBuffer* buffer,
-                            bool expired) {
-        // do nothing
-    }
-};
 
 
 
