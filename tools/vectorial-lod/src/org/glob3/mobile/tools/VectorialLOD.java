@@ -41,6 +41,7 @@ public class VectorialLOD {
    private static String[]                   PROPERTIES;
 
    //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
+   private static float                      QUALITY_FACTOR     = 2.0f;
    private static boolean                    MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
    private static int                        FIRST_LEVEL        = 0;
    private static int                        MAX_LEVEL          = 3;
@@ -48,7 +49,7 @@ public class VectorialLOD {
    private static int                        MAX_DB_CONNECTIONS = NUM_LEVELS;
 
    //-- Internal constants definition ------------------------------------------------------------------
-   final static float                        QUALITY_FACTOR     = 2.0f;
+   //final static float                        QUALITY_FACTOR     = 2.0f;
    final static double                       OVERLAP_PERCENTAGE = 10;
    final static int                          CONNECTION_TIMEOUT = 5;                            //seconds
 
@@ -640,14 +641,19 @@ public class VectorialLOD {
    private static void initializeFromArguments(final String[] args) {
 
       System.out.println("Initializing from parameters.. ");
-      System.out.println("NUM parameters: " + args.length);
+      //System.out.println("NUM parameters: " + args.length);
+
+      if (args.length < 11) {
+         System.err.println("FAIL: Invalid number of parameters [" + args.length + "].");
+         System.exit(1);
+      }
 
       if ((args[0] != null) && (!args[0].equals(""))) {
          HOST = args[0];
          System.out.println("HOST: " + HOST);
       }
       else {
-         System.err.println("Invalid HOST argument. Using default HOST.");
+         System.err.println("Invalid HOST argument.");
          System.exit(1);
       }
 
@@ -656,7 +662,7 @@ public class VectorialLOD {
          System.out.println("PORT: " + PORT);
       }
       else {
-         System.err.println("Invalid PORT argument. Using default PORT.");
+         System.err.println("Invalid PORT argument.");
          System.exit(1);
       }
 
@@ -665,7 +671,7 @@ public class VectorialLOD {
          System.out.println("USER: " + USER);
       }
       else {
-         System.err.println("Invalid USER argument. Using default USER.");
+         System.err.println("Invalid USER argument.");
          System.exit(1);
       }
 
@@ -674,7 +680,7 @@ public class VectorialLOD {
          System.out.println("PASSWORD: " + PASSWORD);
       }
       else {
-         System.err.println("Invalid PASSWORD argument. Using default PASSWORD.");
+         System.err.println("Invalid PASSWORD argument.");
          System.exit(1);
       }
 
@@ -683,20 +689,20 @@ public class VectorialLOD {
          System.out.println("DATABASE_NAME: " + DATABASE_NAME);
       }
       else {
-         System.err.println("Invalid DATABASE_NAME argument. Using default DATABASE_NAME.");
+         System.err.println("Invalid DATABASE_NAME argument.");
          System.exit(1);
       }
 
-      //      if ((args[5] != null) && (!args[5].equals(""))) {
-      //         QUALITY_FACTOR = Float.parseFloat(args[5]);
-      //         System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
-      //      }
-      //      else {
-      //         System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR.");
-      //      }
-
       if ((args[5] != null) && (!args[5].equals(""))) {
-         MERCATOR = Boolean.parseBoolean(args[5]);
+         QUALITY_FACTOR = Float.parseFloat(args[5]);
+         System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
+      }
+      else {
+         System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR.");
+      }
+
+      if ((args[6] != null) && (!args[6].equals(""))) {
+         MERCATOR = Boolean.parseBoolean(args[6]);
          if (MERCATOR) {
             System.out.println("MERCATOR projection");
          }
@@ -709,28 +715,28 @@ public class VectorialLOD {
          System.exit(1);
       }
 
-      if ((args[6] != null) && (!args[6].equals(""))) {
-         FIRST_LEVEL = Integer.parseInt(args[6]);
+      if ((args[7] != null) && (!args[7].equals(""))) {
+         FIRST_LEVEL = Integer.parseInt(args[7]);
          System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
       }
       else {
-         System.err.println("Invalid FIRST_LEVEL argument. Using default FIRST_LEVEL.");
+         System.err.println("Invalid FIRST_LEVEL argument.");
          System.exit(1);
       }
 
-      if ((args[7] != null) && (!args[7].equals(""))) {
-         MAX_LEVEL = Integer.parseInt(args[7]);
+      if ((args[8] != null) && (!args[8].equals(""))) {
+         MAX_LEVEL = Integer.parseInt(args[8]);
          System.out.println("MAX_LEVEL: " + MAX_LEVEL);
          NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
          MAX_DB_CONNECTIONS = NUM_LEVELS;
       }
       else {
-         System.err.println("Invalid MAX_LEVEL argument. Using default MAX_LEVEL.");
+         System.err.println("Invalid MAX_LEVEL argument.");
          System.exit(1);
       }
 
-      if ((args[8] != null) && (!args[8].equals(""))) {
-         DATABASE_TABLE = args[8];
+      if ((args[9] != null) && (!args[9].equals(""))) {
+         DATABASE_TABLE = args[9];
          System.out.println("DATABASE_TABLE: " + DATABASE_TABLE);
       }
       else {
@@ -738,20 +744,20 @@ public class VectorialLOD {
          System.exit(1);
       }
 
-      if ((args[9] != null) && (!args[9].equals(""))) {
-         FILTER_CRITERIA = args[9];
+      if ((args[10] != null) && (!args[10].equals(""))) {
+         FILTER_CRITERIA = args[10];
          System.out.println("FILTER_CRITERIA: " + FILTER_CRITERIA);
       }
       else {
          System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
       }
 
-      final int numProperties = args.length - 10;
+      final int numProperties = args.length - 11;
       if (numProperties > 0) {
          PROPERTIES = new String[numProperties];
          System.out.print("PROPERTIES: ");
          for (int i = 0; i < numProperties; i++) {
-            PROPERTIES[i] = args[10 + i];
+            PROPERTIES[i] = args[11 + i];
             System.out.print(PROPERTIES[i]);
             if (i == (numProperties - 1)) {
                System.out.println(".");
@@ -777,7 +783,7 @@ public class VectorialLOD {
       // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test false 0 6 ne_10m_admin_0_countries true continent mapcolor7 scalerank
       initializeFromArguments(args);
 
-      System.out.print("Connect to POSTGIS DB " + DATABASE_NAME + ".. ");
+      System.out.print("Connecting to " + DATABASE_NAME + " postGIS database.. ");
 
       if (createDataBaseService(HOST, PORT, USER, PASSWORD, DATABASE_NAME)) {
          //      if (createDataBaseService("igosoftware.dyndns.org", "5414", "postgres", "postgres1g0", "vectorial_test")) {
@@ -795,7 +801,7 @@ public class VectorialLOD {
 
       }
       else {
-         System.out.println("Error connecting to vectorial_test DB.");
+         System.out.println("Failed. Error connecting to database.");
       }
    }
 
