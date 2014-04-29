@@ -137,27 +137,27 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         }
         else
         {
-          ICanvas canvas = IFactory.instance().createCanvas();
+    //      ICanvas* canvas = IFactory::instance()->createCanvas();
+    //
+    //      canvas->initialize(_width, _height);
+    //
+    //      std::string imageId = "";
+    //
+    //      for (int i = 0; i < _contributionsSize; i++) {
+    //       const ChildResult* result = _results[i];
+    //
+    //        imageId += result->_imageId + "|";
+    ///#warning JM: consider sector and transparency
+    //        canvas->drawImage(result->_image, 0, 0);
+    //      }
+    //      _imageId = imageId;
+    //
+    //      canvas->createImage(new ComposerImageListener(this), true);
+    //
+    //      delete canvas;
     
-          canvas.initialize(_width, _height);
     
-          String imageId = "";
-    
-          for (int i = 0; i < _contributionsSize; i++)
-          {
-           final ChildResult result = _results.get(i);
-    
-            imageId += result._imageId + "|";
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning JM: consider sector && transparency
-            canvas.drawImage(result._image, 0, 0);
-          }
-          _imageId = imageId;
-    
-          canvas.createImage(new ComposerImageListener(this), true);
-    
-          if (canvas != null)
-             canvas.dispose();
+          _frameTasksExecutor.addPreRenderTask(new ComposerFrameTask(this));
         }
       }
     }
@@ -271,12 +271,43 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       cleanUp();
     }
 
+    public final boolean isCanceled()
+    {
+      return _canceled;
+    }
+
+    public final void mixResult()
+    {
+      ICanvas canvas = IFactory.instance().createCanvas();
+    
+      canvas.initialize(_width, _height);
+    
+      String imageId = "";
+    
+      for (int i = 0; i < _contributionsSize; i++)
+      {
+        final ChildResult result = _results.get(i);
+    
+        imageId += result._imageId + "|";
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning JM: consider sector && transparency
+        canvas.drawImage(result._image, 0, 0);
+      }
+      _imageId = imageId;
+    
+      canvas.createImage(new ComposerImageListener(this), true);
+    
+      if (canvas != null)
+         canvas.dispose();
+    }
+
   }
 
 
   private static class ComposerImageListener extends IImageListener
   {
     private Composer _composer;
+
     public ComposerImageListener(Composer composer)
     {
        _composer = composer;
@@ -291,6 +322,33 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     public final void imageCreated(IImage image)
     {
       _composer.imageCreated(image);
+    }
+  }
+
+
+  private static class ComposerFrameTask extends FrameTask
+  {
+    private Composer _composer;
+
+    public ComposerFrameTask(Composer composer)
+    {
+       _composer = composer;
+      _composer._retain();
+    }
+
+    public void dispose()
+    {
+      _composer._release();
+    }
+
+    public final boolean isCanceled(G3MRenderContext rc)
+    {
+      return _composer.isCanceled();
+    }
+
+    public final void execute(G3MRenderContext rc)
+    {
+      _composer.mixResult();
     }
   }
 
