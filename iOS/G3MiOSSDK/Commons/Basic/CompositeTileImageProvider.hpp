@@ -172,7 +172,7 @@ private:
 
     void execute(const G3MRenderContext* rc);
   };
-
+  
 
   class ChildTileImageListener : public TileImageListener {
   private:

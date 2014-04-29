@@ -126,11 +126,16 @@ CompositeTileImageProvider::Composer::~Composer() {
 //         _canceled       ? "true" : "false",
 //         _compositeContribution
 //         );
+
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
     delete result;
   }
   delete _compositeContribution;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void CompositeTileImageProvider::Composer::cleanUp() {
@@ -206,13 +211,18 @@ void CompositeTileImageProvider::Composer::done() {
 //
 //      delete canvas;
 
-
       _frameTasksExecutor->addPreRenderTask(new ComposerFrameTask(this));
     }
   }
 }
 
 void CompositeTileImageProvider::Composer::mixResult() {
+  if (_canceled) {
+    cleanUp();
+    return;
+  }
+
+
   ICanvas* canvas = IFactory::instance()->createCanvas();
 
   canvas->initialize(_width, _height);
@@ -234,7 +244,8 @@ void CompositeTileImageProvider::Composer::mixResult() {
 }
 
 bool CompositeTileImageProvider::ComposerFrameTask::isCanceled(const G3MRenderContext* rc) {
-  return _composer->isCanceled();
+  return false;
+  //return _composer->isCanceled();
 }
 
 void CompositeTileImageProvider::ComposerFrameTask::execute(const G3MRenderContext* rc) {
