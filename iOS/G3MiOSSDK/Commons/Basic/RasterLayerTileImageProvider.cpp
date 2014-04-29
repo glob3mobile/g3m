@@ -101,7 +101,8 @@ void RasterLayerTileImageProvider::create(const Tile* tile,
                                           long long tileDownloadPriority,
                                           bool logDownloadActivity,
                                           TileImageListener* listener,
-                                          bool deleteListener) {
+                                          bool deleteListener,
+                                          FrameTasksExecutor* frameTasksExecutor) {
   const std::string tileId = tile->_id;
 
   const long long requestId = _layer->requestImage(tile,

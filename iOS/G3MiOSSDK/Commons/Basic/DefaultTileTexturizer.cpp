@@ -167,6 +167,7 @@ private:
 
   long long _tileDownloadPriority;
 
+  FrameTasksExecutor* _frameTasksExecutor;
 
 
   static const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile) {
@@ -226,7 +227,8 @@ public:
                          const Mesh*                       tessellatorMesh,
                          const TileTessellator*            tessellator,
                          long long                         tileDownloadPriority,
-                         bool                              logTilesPetitions) :
+                         bool                              logTilesPetitions,
+                         FrameTasksExecutor*               frameTasksExecutor) :
 //  _texturizer(texturizer),
   _tileImageProvider(tileImageProvider),
 //  _tileRasterizer(tileRasterizer),
@@ -243,7 +245,8 @@ public:
   _canceled(false),
 //  _alreadyStarted(false),
   _tileDownloadPriority(tileDownloadPriority),
-  _logTilesPetitions(logTilesPetitions)
+  _logTilesPetitions(logTilesPetitions),
+  _frameTasksExecutor(frameTasksExecutor)
   {
     _tileImageProvider->_retain();
 
@@ -280,7 +283,8 @@ public:
                                    _tileDownloadPriority,
                                    _logTilesPetitions,
                                    new DTT_TileImageListener(this),
-                                   true);
+                                   true,
+                                   _frameTasksExecutor);
       }
     }
   }
@@ -494,7 +498,8 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                          tessellatorMesh,
                                          tessellator,
                                          tileDownloadPriority,
-                                         logTilesPetitions);
+                                         logTilesPetitions,
+                                         rc->getFrameTasksExecutor() );
     builderHolder = new DTT_TileTextureBuilderHolder(builder);
     tile->setTexturizerData(builderHolder);
   }

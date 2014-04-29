@@ -79,7 +79,8 @@ void ChessboardTileImageProvider::create(const Tile* tile,
                                          long long tileDownloadPriority,
                                          bool logDownloadActivity,
                                          TileImageListener* listener,
-                                         bool deleteListener) {
+                                         bool deleteListener,
+                                         FrameTasksExecutor* frameTasksExecutor) {
   if (_image == NULL) {
     const int width = resolution._x;
     const int height = resolution._y;

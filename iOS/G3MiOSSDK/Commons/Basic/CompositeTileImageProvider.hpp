@@ -59,7 +59,8 @@ private:
 
   };
 
-  class Composer : public IImageListener {
+
+  class Composer : public RCObject {
   private:
     CompositeTileImageProvider*           _compositeTileImageProvider;
     TileImageListener*                    _listener;
@@ -88,6 +89,10 @@ private:
 
     std::string _imageId;
 
+    FrameTasksExecutor* _frameTasksExecutor;
+
+  protected:
+    ~Composer();
 
   public:
     const std::string _tileId;
@@ -98,9 +103,9 @@ private:
              const std::string& tileId,
              TileImageListener* listener,
              bool deleteListener,
-             const CompositeTileImageContribution* compositeContribution);
+             const CompositeTileImageContribution* compositeContribution,
+             FrameTasksExecutor* frameTasksExecutor);
     
-    ~Composer();
 
     void imageCreated(const std::string&           tileId,
                       const IImage*                image,
@@ -117,6 +122,26 @@ private:
 
     void imageCreated(const IImage* image);
 
+  };
+
+
+  class ComposerImageListener : public IImageListener {
+  private:
+    Composer* _composer;
+  public:
+    ComposerImageListener(Composer* composer) :
+    _composer(composer)
+    {
+      _composer->_retain();
+    }
+
+    ~ComposerImageListener() {
+      _composer->_release();
+    }
+
+    void imageCreated(const IImage* image) {
+      _composer->imageCreated(image);
+    }
   };
   
 
@@ -173,7 +198,8 @@ public:
               long long tileDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,
-              bool deleteListener);
+              bool deleteListener,
+              FrameTasksExecutor* frameTasksExecutor);
 
   void cancel(const Tile* tile);
 

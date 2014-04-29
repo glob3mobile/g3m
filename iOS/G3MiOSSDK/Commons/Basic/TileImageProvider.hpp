@@ -16,6 +16,8 @@ class TileImageListener;
 
 #include "RCObject.hpp"
 
+class FrameTasksExecutor;
+
 class TileImageProvider : public RCObject {
 protected:
   virtual ~TileImageProvider() {
@@ -34,7 +36,8 @@ public:
                       long long tileDownloadPriority,
                       bool logDownloadActivity,
                       TileImageListener* listener,
-                      bool deleteListener) = 0;
+                      bool deleteListener,
+                      FrameTasksExecutor* frameTasksExecutor) = 0;
 
   virtual void cancel(const Tile* tile) = 0;
 

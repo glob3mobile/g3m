@@ -48,7 +48,8 @@ void DebugTileImageProvider::create(const Tile* tile,
                                     long long tileDownloadPriority,
                                     bool logDownloadActivity,
                                     TileImageListener* listener,
-                                    bool deleteListener) {
+                                    bool deleteListener,
+                                    FrameTasksExecutor* frameTasksExecutor) {
   const int width  = resolution._x;
   const int height = resolution._y;
 

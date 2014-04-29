@@ -95,7 +95,8 @@ CompositeTileImageProvider::Composer::Composer(int width,
                                                const std::string& tileId,
                                                TileImageListener* listener,
                                                bool deleteListener,
-                                               const CompositeTileImageContribution* compositeContribution) :
+                                               const CompositeTileImageContribution* compositeContribution,
+                                               FrameTasksExecutor* frameTasksExecutor) :
 _width(width),
 _height(height),
 _compositeTileImageProvider(compositeTileImageProvider),
@@ -104,6 +105,7 @@ _listener(listener),
 _deleteListener(deleteListener),
 _compositeContribution(compositeContribution),
 _contributionsSize( compositeContribution->size() ),
+_frameTasksExecutor(frameTasksExecutor),
 _stepsDone(0),
 _anyError(false),
 _anyCancelation(false),
@@ -200,7 +202,7 @@ void CompositeTileImageProvider::Composer::done() {
       }
       _imageId = imageId;
 
-      canvas->createImage(this, false);
+      canvas->createImage(new ComposerImageListener(this), true);
 
       delete canvas;
     }
@@ -281,7 +283,8 @@ void CompositeTileImageProvider::create(const Tile* tile,
                                         long long tileDownloadPriority,
                                         bool logDownloadActivity,
                                         TileImageListener* listener,
-                                        bool deleteListener) {
+                                        bool deleteListener,
+                                        FrameTasksExecutor* frameTasksExecutor) {
 
   const CompositeTileImageContribution* compositeContribution = (const CompositeTileImageContribution*) contribution;
 
@@ -293,7 +296,8 @@ void CompositeTileImageProvider::create(const Tile* tile,
                                     tileId,
                                     listener,
                                     deleteListener,
-                                    compositeContribution);
+                                    compositeContribution,
+                                    frameTasksExecutor);
 
   _composers[ tileId ] = composer;
 
@@ -309,7 +313,8 @@ void CompositeTileImageProvider::create(const Tile* tile,
                   tileDownloadPriority,
                   logDownloadActivity,
                   new ChildTileImageListener(composer, i),
-                  true);
+                  true,
+                  frameTasksExecutor);
   }
 }
 
@@ -334,7 +339,8 @@ void CompositeTileImageProvider::cancel(const Tile* tile) {
 
 void CompositeTileImageProvider::composerDone(Composer* composer) {
   _composers.erase( composer->_tileId );
-  delete composer;
+//  delete composer;
+  composer->_release();
 }
 
 void CompositeTileImageProvider::cancelChildren(const Tile* tile,

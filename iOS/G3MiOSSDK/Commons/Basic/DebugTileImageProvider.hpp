@@ -63,7 +63,8 @@ public:
               long long tileDownloadPriority,
               bool logDownloadActivity,
               TileImageListener* listener,
-              bool deleteListener);
+              bool deleteListener,
+              FrameTasksExecutor* frameTasksExecutor);
 
   void cancel(const Tile* tile);
 
