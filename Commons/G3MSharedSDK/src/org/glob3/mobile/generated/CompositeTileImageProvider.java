@@ -147,6 +147,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
            final ChildResult result = _results.get(i);
     
             imageId += result._imageId + "|";
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning JM: consider sector && transparency
             canvas.drawImage(result._image, 0, 0);
           }
           _imageId = imageId;
@@ -205,8 +207,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public void dispose()
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning remove debug printf
+    ///#warning remove debug printf
     //  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
     //         this,
     //         _stepsDone,
