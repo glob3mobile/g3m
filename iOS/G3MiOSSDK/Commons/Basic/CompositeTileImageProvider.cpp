@@ -245,7 +245,6 @@ void CompositeTileImageProvider::Composer::mixResult() {
 
 bool CompositeTileImageProvider::ComposerFrameTask::isCanceled(const G3MRenderContext* rc) {
   return false;
-  //return _composer->isCanceled();
 }
 
 void CompositeTileImageProvider::ComposerFrameTask::execute(const G3MRenderContext* rc) {
@@ -273,27 +272,18 @@ void CompositeTileImageProvider::Composer::imageCreated(const std::string&      
                                                         const std::string&           imageId,
                                                         const TileImageContribution* contribution,
                                                         const int                    index) {
-//  if (_results[index] != NULL) {
-//    printf("Logic error 1\n");
-//  }
   _results[index] = ChildResult::image(image, imageId, contribution);
   stepDone();
 }
 
 void CompositeTileImageProvider::Composer::imageCreationError(const std::string& error,
                                                               const int          index) {
-//  if (_results[index] != NULL) {
-//    printf("Logic error 2\n");
-//  }
   _results[index] = ChildResult::error(error);
   _anyError = true;
   stepDone();
 }
 
 void CompositeTileImageProvider::Composer::imageCreationCanceled(const int index) {
-//  if (_results[index] != NULL) {
-//    printf("Logic error 3\n");
-//  }
   _results[index] = ChildResult::cancelation();
   _anyCancelation = true;
   stepDone();

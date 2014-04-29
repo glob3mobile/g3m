@@ -9,10 +9,11 @@
 #ifndef __G3MiOSSDK__CompositeTileImageProvider__
 #define __G3MiOSSDK__CompositeTileImageProvider__
 
-#include "CanvasTileImageProvider.hpp"
 #include <vector>
-#include "TileImageListener.hpp"
 #include <map>
+
+#include "CanvasTileImageProvider.hpp"
+#include "TileImageListener.hpp"
 #include "IImageListener.hpp"
 #include "FrameTasksExecutor.hpp"
 
@@ -106,7 +107,7 @@ private:
              bool deleteListener,
              const CompositeTileImageContribution* compositeContribution,
              FrameTasksExecutor* frameTasksExecutor);
-    
+
 
     void imageCreated(const std::string&           tileId,
                       const IImage*                image,
@@ -168,7 +169,7 @@ private:
 
     void execute(const G3MRenderContext* rc);
   };
-  
+
 
   class ChildTileImageListener : public TileImageListener {
   private:
@@ -229,9 +230,10 @@ public:
   void cancel(const Tile* tile);
 
   void composerDone(Composer* composer);
-
+  
   void cancelChildren(const Tile* tile,
                       const CompositeTileImageContribution* compositeContribution);
+  
 };
 
 #endif

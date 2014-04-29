@@ -20,10 +20,6 @@
 #include "ITexturizerData.hpp"
 #include "TileImageContribution.hpp"
 
-#warning remove include
-#include "DebugTileImageProvider.hpp"
-#include "ChessboardTileImageProvider.hpp"
-
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
@@ -127,46 +123,18 @@ public:
 class DTT_TileTextureBuilder : public RCObject {
 private:
   LeveledTexturedMesh* _texturedMesh;
-
-//  DefaultTileTexturizer* _texturizer;
-//  TileRasterizer*        _tileRasterizer;
-  Tile*                  _tile;
-
-//  std::vector<Petition*> _petitions;
-//  int                    _petitionsCount;
-//  int                    _stepsDone;
-
-  TileImageProvider* _tileImageProvider;
-
-  TexturesHandler* _texturesHandler;
-
+  Tile*                _tile;
+  TileImageProvider*   _tileImageProvider;
+  TexturesHandler*     _texturesHandler;
 #ifdef C_CODE
-  const Vector2I   _tileTextureResolution;
-//  const Vector2I   _tileMeshResolution;
+  const Vector2I       _tileTextureResolution;
 #endif
 #ifdef JAVA_CODE
   private final Vector2I _tileTextureResolution;
-//  private final Vector2I _tileMeshResolution;
 #endif
-
-//  IDownloader*     _downloader;
-
-//  const Mesh* _tessellatorMesh;
-
-//  const TileTessellator* _tessellator;
-
-  const bool _logTilesPetitions;
-
-  //  std::vector<TileTextureBuilder_PetitionStatus> _status;
-  //  std::vector<long long>                         _requestsIds;
-
-
-//  bool _finalized;
-  bool _canceled;
-//  bool _alreadyStarted;
-
-  long long _tileDownloadPriority;
-
+  const bool          _logTilesPetitions;
+  const long long     _tileDownloadPriority;
+  bool                _canceled;
   FrameTasksExecutor* _frameTasksExecutor;
 
 
@@ -216,34 +184,21 @@ private:
 
 public:
 
-  DTT_TileTextureBuilder(//DefaultTileTexturizer*            texturizer,
-//                         TileRasterizer*                   tileRasterizer,
-                         const G3MRenderContext*           rc,
+  DTT_TileTextureBuilder(const G3MRenderContext*           rc,
                          const LayerTilesRenderParameters* layerTilesRenderParameters,
                          TileImageProvider*                tileImageProvider,
-//                         const std::vector<Petition*>&     petitions,
-//                         IDownloader*                      downloader,
                          Tile*                             tile,
                          const Mesh*                       tessellatorMesh,
                          const TileTessellator*            tessellator,
                          long long                         tileDownloadPriority,
                          bool                              logTilesPetitions,
                          FrameTasksExecutor*               frameTasksExecutor) :
-//  _texturizer(texturizer),
   _tileImageProvider(tileImageProvider),
-//  _tileRasterizer(tileRasterizer),
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
-//  _tileMeshResolution( layerTilesRenderParameters->_tileMeshResolution ),
-//  _downloader(downloader),
   _tile(tile),
-//  _tessellatorMesh(tessellatorMesh),
-//  _stepsDone(0),
   _texturedMesh( NULL ),
-//  _tessellator(tessellator),
-//  _finalized(false),
   _canceled(false),
-//  _alreadyStarted(false),
   _tileDownloadPriority(tileDownloadPriority),
   _logTilesPetitions(logTilesPetitions),
   _frameTasksExecutor(frameTasksExecutor)
@@ -259,14 +214,6 @@ public:
   LeveledTexturedMesh* getTexturedMesh() {
     return _texturedMesh;
   }
-
-//  void cleanTexturedMesh() {
-//    _texturedMesh = NULL;
-//  }
-
-//  void cleanTile() {
-//    _tile = NULL;
-//  }
 
   void start() {
     if (!_canceled) {
@@ -351,7 +298,7 @@ public:
   void imageCreationCanceled() {
 #warning Diego at work
   }
-  
+
 };
 
 
@@ -469,8 +416,8 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
                                        bool logTilesPetitions) {
   DTT_TileTextureBuilderHolder* builderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();
 
-//  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
-//  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
+  //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
+  //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
 
 #warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
   TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
@@ -529,8 +476,6 @@ void DefaultTileTexturizer::tileToBeDeleted(Tile* tile,
   if (builderHolder != NULL) {
     DTT_TileTextureBuilder* builder = builderHolder->get();
     builder->cancel(true /* cleanTile */);
-//    builder->cleanTile();
-//    builder->cleanTexturedMesh();
   }
 }
 
@@ -540,7 +485,6 @@ void DefaultTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   if (builderHolder != NULL) {
     DTT_TileTextureBuilder* builder = builderHolder->get();
     builder->cancel(false /* cleanTile */);
-//    builder->cleanTexturedMesh();
   }
 }
 
@@ -592,9 +536,5 @@ bool DefaultTileTexturizer::onTerrainTouchEvent(const G3MEventContext* ec,
                                                 const Geodetic3D& position,
                                                 const Tile* tile,
                                                 LayerSet* layerSet) {
-  if (layerSet == NULL) {
-    return false;
-  }
-  
-  return layerSet->onTerrainTouchEvent(ec, position, tile);
+  return (layerSet == NULL) ? false : layerSet->onTerrainTouchEvent(ec, position, tile);
 }

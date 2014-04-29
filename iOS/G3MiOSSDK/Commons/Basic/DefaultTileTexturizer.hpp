@@ -62,9 +62,7 @@ public:
                            const Geodetic3D& position,
                            const Tile* tile,
                            LayerSet* layerSet);
-
-//  const TextureIDReference* getTopLevelTextureIdForTile(Tile* tile);
-
+  
 };
 
 #endif
