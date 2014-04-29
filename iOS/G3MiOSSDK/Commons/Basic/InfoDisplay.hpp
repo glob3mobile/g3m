@@ -12,8 +12,11 @@
 #include "ChangedInfoListener.hpp"
 
 class InfoDisplay : public ChangedInfoListener {
-  
 public:
+  
+#ifdef C_CODE
+  virtual ~InfoDisplay() { }
+#endif
   
   virtual void showDisplay() = 0;
   
