@@ -195,6 +195,7 @@ void CompositeTileImageProvider::Composer::done() {
        const ChildResult* result = _results[i];
 
         imageId += result->_imageId + "|";
+#warning JM: consider sector and transparency
         canvas->drawImage(result->_image, 0, 0);
       }
       _imageId = imageId;
