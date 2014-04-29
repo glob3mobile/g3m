@@ -490,7 +490,7 @@ public class VectorialLOD {
             final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
             final Sector sector = new Sector(tileLower, tileUpper);
 
-            final TileSector tileSector = new TileSector(sector, null, FIRST_LEVEL, row, col);
+            final TileSector tileSector = new TileSector(sector, null, 0, row, col);
 
             levelZeroTileSectors.add(tileSector);
          }
@@ -549,31 +549,33 @@ public class VectorialLOD {
          return;
       }
 
-      try {
-         final String geoJson = selectGeometries(dataSource._sourceTable, //
-                  sector.getSector(), //
-                  //sector.getExtendedSector(OVERLAP_PERCENTAGE),//
-                  QUALITY_FACTOR, // qualityFactor
-                  dataSource._geomFilterCriteria, //
-                  dataSource._includeProperties);
+      if (sector._level >= FIRST_LEVEL) {
+         try {
+            final String geoJson = selectGeometries(dataSource._sourceTable, //
+                     sector.getSector(), //
+                     //sector.getExtendedSector(OVERLAP_PERCENTAGE),//
+                     QUALITY_FACTOR, // qualityFactor
+                     dataSource._geomFilterCriteria, //
+                     dataSource._includeProperties);
 
-         //         final String fileName = getTileFileName(sector);
-         //         final FileWriter file = new FileWriter(fileName);
-         if (geoJson != null) {
-            final String fileName = getTileFileName(sector);
-            final FileWriter file = new FileWriter(fileName);
-            System.out.println("Generating: " + getTileName(sector));
-            file.write(geoJson);
-            file.flush();
-            file.close();
+            //         final String fileName = getTileFileName(sector);
+            //         final FileWriter file = new FileWriter(fileName);
+            if (geoJson != null) {
+               final String fileName = getTileFileName(sector);
+               final FileWriter file = new FileWriter(fileName);
+               System.out.println("Generating: " + getTileName(sector));
+               file.write(geoJson);
+               file.flush();
+               file.close();
+            }
+            else {
+               System.out.println("Skip empty tile: " + getTileName(sector));
+            }
+            //         file.close();
          }
-         else {
-            System.out.println("Skip empty tile: " + getTileName(sector));
+         catch (final IOException e) {
+            System.out.println("Exception while writting geoJson object ! ");
          }
-         //         file.close();
-      }
-      catch (final IOException e) {
-         System.out.println("Exception while writting geoJson object ! ");
       }
 
       //final List<TileSector> subSectors = sector.getSubTileSectors();
@@ -604,14 +606,13 @@ public class VectorialLOD {
          }
       };
 
-      final int groupId = subSectorLevel - FIRST_LEVEL;
-      _concurrentService.execute(task, groupId);
+      _concurrentService.execute(task, subSectorLevel);
    }
 
 
    private static void initializeConcurrentService() {
 
-      _concurrentService = GConcurrentService.createDefaultConcurrentService(NUM_LEVELS, "G3m vectorial LOD");
+      _concurrentService = GConcurrentService.createDefaultConcurrentService(MAX_LEVEL + 1, "G3m vectorial LOD");
    }
 
 

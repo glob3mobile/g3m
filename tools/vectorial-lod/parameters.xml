@@ -8,9 +8,11 @@
 
    <!-- Url address for postgis database host access -->
    <entry key="HOST">192.168.1.14</entry>
+   <!-- <entry key="HOST">igosoftware.dyndns.org</entry> -->
    
    <!-- Port number for postgis database access -->
    <entry key="PORT">5432</entry>
+   <!-- <entry key="PORT">5414</entry> -->
    
    <!-- User name for postgis database access -->
    <entry key="USER">postgres</entry>
@@ -29,7 +31,7 @@
    <entry key="QUALITY_FACTOR">2.0</entry>
    
    <!-- Projection selection. true=MERCATOR (epsg:900913 Google) / false=WGS84 (epsg:4326) -->
-   <entry key="MERCATOR">true</entry>
+   <entry key="MERCATOR">false</entry>
    
    <!-- first level of tiles to be generated -->
    <entry key="FIRST_LEVEL">0</entry>
