@@ -24,9 +24,14 @@ private:
   private:
     TiledVectorLayerTileImageProvider* _tiledVectorLayerTileImageProvider;
     const std::string                  _tileId;
-    const TileImageContribution*       _contribution;
     TileImageListener*                 _listener;
     const bool                         _deleteListener;
+#ifdef C_CODE
+    const TileImageContribution*       _contribution;
+#endif
+#ifdef JAVA_CODE
+    private TileImageContribution _contribution;
+#endif
 
   public:
     GEOJSONBufferDownloadListener(TiledVectorLayerTileImageProvider* tiledVectorLayerTileImageProvider,

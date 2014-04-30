@@ -20,10 +20,14 @@ class RLTIP_ImageDownloadListener : public IImageDownloadListener {
 private:
   RasterLayerTileImageProvider* _rasterLayerTileImageProvider;
   const std::string             _tileId;
+  TileImageListener*            _listener;
+  const bool                    _deleteListener;
+#ifdef C_CODE
   const TileImageContribution*  _contribution;
-
-  TileImageListener* _listener;
-  const bool         _deleteListener;
+#endif
+#ifdef JAVA_CODE
+  private TileImageContribution _contribution;
+#endif
 
 public:
   RLTIP_ImageDownloadListener(RasterLayerTileImageProvider* rasterLayerTileImageProvider,
