@@ -28,9 +28,9 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   {
     private TiledVectorLayerTileImageProvider _tiledVectorLayerTileImageProvider;
     private final String _tileId;
-    private final TileImageContribution _contribution;
     private TileImageListener _listener;
     private final boolean _deleteListener;
+    private TileImageContribution _contribution;
 
     public GEOJSONBufferDownloadListener(TiledVectorLayerTileImageProvider tiledVectorLayerTileImageProvider, String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
     {
