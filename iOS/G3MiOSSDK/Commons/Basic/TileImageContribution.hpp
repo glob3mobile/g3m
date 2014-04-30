@@ -76,9 +76,9 @@ public:
     return _isFullCoverage;
   }
 
-  //  const Sector getSector() const {
-  //    return _sector;
-  //  }
+  const Sector* getSector() const {
+      return &_sector;
+  }
 
   bool isOpaque() const {
     return (_alpha >= 0.99);

@@ -93,6 +93,7 @@ CompositeTileImageProvider::Composer::Composer(int width,
                                                int height,
                                                CompositeTileImageProvider* compositeTileImageProvider,
                                                const std::string& tileId,
+                                               const Sector& tileSector,
                                                TileImageListener* listener,
                                                bool deleteListener,
                                                const CompositeTileImageContribution* compositeContribution,
@@ -109,7 +110,8 @@ _frameTasksExecutor(frameTasksExecutor),
 _stepsDone(0),
 _anyError(false),
 _anyCancelation(false),
-_canceled(false)
+_canceled(false),
+_tileSector(tileSector)
 {
   for (int i = 0; i < _contributionsSize; i++) {
     _results.push_back( NULL );
@@ -117,15 +119,15 @@ _canceled(false)
 }
 
 CompositeTileImageProvider::Composer::~Composer() {
-//#warning remove debug printf
-//  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
-//         this,
-//         _stepsDone,
-//         _anyError       ? "true" : "false",
-//         _anyCancelation ? "true" : "false",
-//         _canceled       ? "true" : "false",
-//         _compositeContribution
-//         );
+  //#warning remove debug printf
+  //  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
+  //         this,
+  //         _stepsDone,
+  //         _anyError       ? "true" : "false",
+  //         _anyCancelation ? "true" : "false",
+  //         _canceled       ? "true" : "false",
+  //         _compositeContribution
+  //         );
 
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
@@ -192,36 +194,99 @@ void CompositeTileImageProvider::Composer::done() {
       cleanUp();
     }
     else {
-//      ICanvas* canvas = IFactory::instance()->createCanvas();
-//
-//      canvas->initialize(_width, _height);
-//
-//      std::string imageId = "";
-//
-//      for (int i = 0; i < _contributionsSize; i++) {
-//       const ChildResult* result = _results[i];
-//
-//        imageId += result->_imageId + "|";
-//#warning JM: consider sector and transparency
-//        canvas->drawImage(result->_image, 0, 0);
-//      }
-//      _imageId = imageId;
-//
-//      canvas->createImage(new ComposerImageListener(this), true);
-//
-//      delete canvas;
+      //      ICanvas* canvas = IFactory::instance()->createCanvas();
+      //
+      //      canvas->initialize(_width, _height);
+      //
+      //      std::string imageId = "";
+      //
+      //      for (int i = 0; i < _contributionsSize; i++) {
+      //       const ChildResult* result = _results[i];
+      //
+      //        imageId += result->_imageId + "|";
+      //#warning JM: consider sector and transparency
+      //        canvas->drawImage(result->_image, 0, 0);
+      //      }
+      //      _imageId = imageId;
+      //
+      //      canvas->createImage(new ComposerImageListener(this), true);
+      //
+      //      delete canvas;
 
       _frameTasksExecutor->addPreRenderTask(new ComposerFrameTask(this));
     }
   }
 }
 
+/*   for (int i = 0; i < _petitionsCount; i++) {
+ const Petition* petition = _petitions[i];
+ IImage* image = petition->getImage();
+
+ if (image != NULL) {
+ const Sector imageSector = petition->getSector();
+ //Finding intersection image sector - tile sector = srcReq
+ const Sector intersectionSector = tileSector.intersection(imageSector);
+
+ RectangleF* sourceRect = NULL;
+ if (!intersectionSector.isEquals(imageSector)) {
+ sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
+ imageSector,
+ intersectionSector);
+ }
+ else {
+ sourceRect = new RectangleF(0, 0,
+ image->getWidth(), image->getHeight());
+ }
+
+ //Part of the image we are going to draw
+ sourceRects.push_back(sourceRect);
+
+ images.push_back(image);
+
+ //Where we are going to draw the image
+ destRects.push_back(getInnerRectangle(_tileTextureResolution._x,
+ _tileTextureResolution._y,
+ tileSector,
+ intersectionSector));
+ textureId += petition->getURL().getPath();
+ textureId += "_";
+
+ //Layer transparency set by user
+ transparencies.push_back(petition->getLayerTransparency());
+ }
+ else{
+ return false;
+ }
+ }
+
+ */
+
+RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight,
+                                                                    const Sector& wholeSector,
+                                                                    const Sector& innerSector) const {
+  //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
+
+  if (wholeSector.isEquals(innerSector)){
+    return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
+  }
+
+  const double widthFactor  = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
+  const double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
+
+  const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
+
+  return new RectangleF((float) (lowerUV._x   * wholeSectorWidth),
+                        (float) (lowerUV._y   * wholeSectorHeight),
+                        (float) (widthFactor  * wholeSectorWidth),
+                        (float) (heightFactor * wholeSectorHeight));
+}
+
+
 void CompositeTileImageProvider::Composer::mixResult() {
   if (_canceled) {
     cleanUp();
     return;
   }
-
 
   ICanvas* canvas = IFactory::instance()->createCanvas();
 
@@ -232,9 +297,34 @@ void CompositeTileImageProvider::Composer::mixResult() {
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
 
-    imageId += result->_imageId + "|";
+    const IImage* image = result->_image;
+
+    if (result->_contribution->isFullCoverage()){
+      canvas->drawImage(image, 0, 0);
+    } else{
+
+      const Sector* imageSector = result->_contribution->getSector();
+
+      RectangleF* rect = getInnerRectangle(_width, _height,
+                                           _tileSector,
+                                           *imageSector);
+
+      if (_tileSector.contains(Angle::fromDegrees(40.41677540051771), Angle::fromDegrees(-3.7037901976145804))){
+      printf("TS: %s\nIS: %s\nR: %s\n",_tileSector.description().c_str(),
+             imageSector->description().c_str(),
+             rect->description().c_str());
+      }
+
 #warning JM: consider sector and transparency
-    canvas->drawImage(result->_image, 0, 0);
+      //    canvas->drawImage(image, 0, 0);
+
+      //    void ICanvas::drawImage(const IImage* image,
+      //                            float destLeft, float destTop, float destWidth, float destHeight) {
+
+      canvas->drawImage(image, rect->_x, _height - rect->_y - rect->_height, rect->_width, rect->_height);
+
+    }
+    imageId += result->_imageId + "|";
   }
   _imageId = imageId;
 
@@ -327,6 +417,7 @@ void CompositeTileImageProvider::create(const Tile* tile,
                                     resolution._y,
                                     this,
                                     tileId,
+                                    tile->_sector,
                                     listener,
                                     deleteListener,
                                     compositeContribution,
@@ -372,7 +463,7 @@ void CompositeTileImageProvider::cancel(const Tile* tile) {
 
 void CompositeTileImageProvider::composerDone(Composer* composer) {
   _composers.erase( composer->_tileId );
-//  delete composer;
+  //  delete composer;
   composer->_release();
 }
 
@@ -386,11 +477,11 @@ void CompositeTileImageProvider::cancelChildren(const Tile* tile,
   for (int i = 0; i < contributionsSize; i++) {
     indexes[i] = compositeContribution->get(i)->_childIndex;
   }
-
+  
   for (int i = 0; i < contributionsSize; i++) {
     TileImageProvider* child = _children[ indexes[i] ];
     child->cancel(tile);
   }
-
+  
   delete [] indexes;
 }

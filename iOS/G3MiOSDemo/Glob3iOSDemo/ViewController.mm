@@ -1297,7 +1297,7 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = false;
+  bool testingTransparencies = true;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1338,7 +1338,7 @@ public:
                                                                       LayerTilesRenderParameters::defaultTileTextureResolution(),
                                                                       LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                                       false));
-    layerSet->addLayer(i3Landsat);
+    //layerSet->addLayer(i3Landsat);
 
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -1390,7 +1390,7 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
 
-  const bool useBingMaps = true;
+  const bool useBingMaps = false;
   if (useBingMaps) {
     layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
                                           BingMapType::AerialWithLabels(),
@@ -1788,7 +1788,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;

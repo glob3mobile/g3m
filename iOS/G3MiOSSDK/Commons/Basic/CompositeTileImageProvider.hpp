@@ -16,6 +16,8 @@
 #include "TileImageListener.hpp"
 #include "IImageListener.hpp"
 #include "FrameTasksExecutor.hpp"
+#include "RectangleF.hpp"
+#include "Sector.hpp"
 
 class CompositeTileImageContribution;
 
@@ -93,6 +95,12 @@ private:
 
     FrameTasksExecutor* _frameTasksExecutor;
 
+    RectangleF* getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight,
+                                 const Sector& wholeSector,
+                                 const Sector& innerSector) const;
+
+    const Sector _tileSector;
+
   protected:
     ~Composer();
 
@@ -103,6 +111,7 @@ private:
              int height,
              CompositeTileImageProvider* compositeTileImageProvider,
              const std::string& tileId,
+             const Sector& tileSector,
              TileImageListener* listener,
              bool deleteListener,
              const CompositeTileImageContribution* compositeContribution,

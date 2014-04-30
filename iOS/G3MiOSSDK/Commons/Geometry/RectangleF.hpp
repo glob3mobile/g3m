@@ -9,6 +9,9 @@
 #ifndef G3MiOSSDK_RectangleF
 #define G3MiOSSDK_RectangleF
 
+#include "IMathUtils.hpp"
+#include "IStringBuilder.hpp"
+
 
 class RectangleF {
 private:
@@ -95,6 +98,21 @@ public:
 
   bool contains(float x, float y) const {
     return (x >= _x) && (y >= _y) && (x <= (_x + _width)) && (y <= (_y + _height));
+  }
+
+  const std::string description() const {
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("Rectangle: X:");
+    isb->addDouble(_x);
+    isb->addString(" Y:");
+    isb->addDouble(_y);
+    isb->addString(" WIDTH:");
+    isb->addDouble(_width);
+    isb->addString(" HEIGHT:");
+    isb->addDouble(_height);
+    const std::string s = isb->getString();
+    delete isb;
+    return s;
   }
 
 
