@@ -441,7 +441,8 @@ public class G3MWidget_WebGL
                periodicalTasks, //
                createGPUProgramManager(), //
                sceneLighting, //
-               initialCameraPositionProvider);
+               initialCameraPositionProvider,
+               null);
 
       _g3mWidget.setUserData(userData);
 
