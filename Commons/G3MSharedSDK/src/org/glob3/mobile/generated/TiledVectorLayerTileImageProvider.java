@@ -20,9 +20,14 @@ package org.glob3.mobile.generated;
 //class TiledVectorLayer;
 //class IDownloader;
 
-
 public class TiledVectorLayerTileImageProvider extends TileImageProvider
 {
+
+  private abstract static class GEOJSONBufferParser extends GAsyncTask
+  {
+
+  }
+
 
   private static class GEOJSONBufferDownloadListener extends IBufferDownloadListener
   {
@@ -92,14 +97,16 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
   private final TiledVectorLayer _layer;
   private IDownloader _downloader;
+  private final IThreadUtils _threadUtils;
 
   private final java.util.HashMap<String, Long> _requestsIdsPerTile = new java.util.HashMap<String, Long>();
 
 
-  public TiledVectorLayerTileImageProvider(TiledVectorLayer layer, IDownloader downloader)
+  public TiledVectorLayerTileImageProvider(TiledVectorLayer layer, IDownloader downloader, IThreadUtils threadUtils)
   {
      _layer = layer;
      _downloader = downloader;
+     _threadUtils = threadUtils;
   }
 
 

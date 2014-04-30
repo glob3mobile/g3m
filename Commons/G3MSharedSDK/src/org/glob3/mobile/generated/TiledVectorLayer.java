@@ -160,7 +160,7 @@ public class TiledVectorLayer extends VectorLayer
 
   public final TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
-    return new TiledVectorLayerTileImageProvider(this, rc.getDownloader());
+    return new TiledVectorLayerTileImageProvider(this, rc.getDownloader(), rc.getThreadUtils());
   }
 
   public final long requestGEOJSONBuffer(Tile tile, IDownloader downloader, long tileDownloadPriority, boolean logDownloadActivity, IBufferDownloadListener listener, boolean deleteListener)
