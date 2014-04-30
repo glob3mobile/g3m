@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class GEORenderer_GEOObjectParserAsyncTask implements GAsyncTask
+public class GEORenderer_GEOObjectParserAsyncTask extends GAsyncTask
 {
   public final URL _url;
 
@@ -26,6 +26,7 @@ public class GEORenderer_GEOObjectParserAsyncTask implements GAsyncTask
     if (_buffer != null)
        _buffer.dispose();
 //    delete _geoObject;
+    super.dispose();
   }
 
   public final void runInBackground(G3MContext context)

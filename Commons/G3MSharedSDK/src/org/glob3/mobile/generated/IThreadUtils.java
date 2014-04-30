@@ -9,7 +9,6 @@ public abstract class IThreadUtils
   public IThreadUtils()
   {
      _context = null;
-
   }
 
   public abstract void onResume(G3MContext context);

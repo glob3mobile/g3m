@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class MeshRenderer_MeshParserAsyncTask implements GAsyncTask
+public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
 {
   private G3MContext _context;
 
@@ -253,6 +253,7 @@ public class MeshRenderer_MeshParserAsyncTask implements GAsyncTask
     if (_buffer != null)
        _buffer.dispose();
     _color = null;
+    super.dispose();
   }
 
   public final void onPostExecute(G3MContext context)

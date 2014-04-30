@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 public class TiledVectorLayerTileImageProvider extends TileImageProvider
 {
 
-  private static class GEOJSONBufferParser implements GAsyncTask
+  private static class GEOJSONBufferParser extends GAsyncTask
   {
     private IByteBuffer _buffer;
     private GEOObject _geoObject;
@@ -41,6 +41,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
          _buffer.dispose();
       if (_geoObject != null)
          _geoObject.dispose();
+      super.dispose();
     }
 
     public final void runInBackground(G3MContext context)

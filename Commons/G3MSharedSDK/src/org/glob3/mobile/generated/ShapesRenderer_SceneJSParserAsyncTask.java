@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class ShapesRenderer_SceneJSParserAsyncTask implements GAsyncTask
+public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
 {
   private ShapesRenderer _shapesRenderer;
   private final URL _url;
@@ -54,6 +54,7 @@ public class ShapesRenderer_SceneJSParserAsyncTask implements GAsyncTask
     }
     if (_buffer != null)
        _buffer.dispose();
+    super.dispose();
   }
 
   public final void onPostExecute(G3MContext context)
