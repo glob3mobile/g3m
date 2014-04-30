@@ -7,12 +7,12 @@
 <!-- Postgis database parameters -->  
 
    <!-- Url address for postgis database host access -->
-   <entry key="HOST">192.168.1.14</entry>
-   <!-- <entry key="HOST">igosoftware.dyndns.org</entry> -->
+   <!-- <entry key="HOST">192.168.1.14</entry> -->
+   <entry key="HOST">igosoftware.dyndns.org</entry>
    
    <!-- Port number for postgis database access -->
-   <entry key="PORT">5432</entry>
-   <!-- <entry key="PORT">5414</entry> -->
+   <!-- <entry key="PORT">5432</entry> -->
+   <entry key="PORT">5414</entry>
    
    <!-- User name for postgis database access -->
    <entry key="USER">postgres</entry>
@@ -37,7 +37,7 @@
    <entry key="FIRST_LEVEL">0</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">5</entry>
+   <entry key="MAX_LEVEL">3</entry>
 
 <!-- Parameters for specific vectorial data -->  
 
@@ -45,7 +45,7 @@
    <entry key="DATABASE_TABLE">ne_10m_admin_0_countries</entry>
 
    <!-- filter criteria using pure database query format that will be included in a where clause -->
-   <!-- i.e. "\"continent\" like 'Euro%' AND \"pop_est\" > 10000000" -->
+   <!-- i.e. "continent" like 'Euro%' AND "pop_est" > 10000000 -->
    <entry key="FILTER_CRITERIA">true</entry>
    
    <!-- list of fields/columns associated to the vectorial data that shall be included as feature -->

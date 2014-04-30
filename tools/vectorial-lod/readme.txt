@@ -65,7 +65,7 @@ between 1.0 to 10.0
 * Parameters for specific vectorial data
 - DATABASE_TABLE: name of the table in the database with the target vectorial data
 - FILTER_CRITERIA: filter criteria using pure database query format that will be included in a where clause. i.e.
-   "\"continent\" like 'Euro%' AND \"pop_est\" > 10000000".
+   "continent" like 'Euro%' AND "pop_est" > 10000000.
    Important: If non filter criteria is used, value "true" must be selected for this parameter.
 - PROPERTIES: list of fields/columns associated to the vectorial data that shall be included as feature properties in the resultant geoJson file.
 
@@ -93,7 +93,9 @@ Example 3) LOD of type point data: ne_10m_populated_places, 4 levels (0 - 3), WG
 
 ./runAgainstDB.sh 2.0 false 0 3 ne_10m_populated_places true SCALERANK LATITUDE LONGITUDE
 
+Example 4) When using the parameters.xml file, simply run the script:
 
+./run.sh
 
 
 
