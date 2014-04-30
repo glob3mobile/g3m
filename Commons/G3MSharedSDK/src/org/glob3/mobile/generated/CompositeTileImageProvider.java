@@ -272,10 +272,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       stepDone();
     }
 
-    public final void cancel(Tile tile)
+    public final void cancel(String tileId)
     {
       _canceled = true;
-      _compositeTileImageProvider.cancelChildren(tile, _compositeContribution);
+      _compositeTileImageProvider.cancelChildren(tileId, _compositeContribution);
     }
 
     public final void imageCreated(IImage image)
@@ -325,7 +325,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           {
             final Sector imageSector = result._contribution.getSector();
     
-            RectangleF destRect = getInnerRectangle(_width, _height, _tileSector, imageSector);
+            final RectangleF destRect = getInnerRectangle(_width, _height, _tileSector, imageSector);
     
             //TEST MADRID
             //      if (_tileSector.contains(Angle::fromDegrees(40.41677540051771), Angle::fromDegrees(-3.7037901976145804))){
@@ -509,9 +509,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     }
   }
 
-  public final void cancel(Tile tile)
+  public final void cancel(String tileId)
   {
-    final String tileId = tile._id;
     final Composer composer = _composers.remove(tileId);
     if (composer != null) {
       composer.cancel(tile);
@@ -525,7 +524,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     composer._release();
   }
 
-  public final void cancelChildren(Tile tile, CompositeTileImageContribution compositeContribution)
+  public final void cancelChildren(String tileId, CompositeTileImageContribution compositeContribution)
   {
     final int contributionsSize = compositeContribution.size();
   
@@ -540,7 +539,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     for (int i = 0; i < contributionsSize; i++)
     {
       TileImageProvider child = _children.get(indexes[i]);
-      child.cancel(tile);
+      child.cancel(tileId);
     }
   
     indexes = null;

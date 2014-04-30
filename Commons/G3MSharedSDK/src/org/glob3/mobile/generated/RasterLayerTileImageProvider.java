@@ -62,9 +62,8 @@ public class RasterLayerTileImageProvider extends TileImageProvider
     }
   }
 
-  public final void cancel(Tile tile)
+  public final void cancel(String tileId)
   {
-    final String tileId = tile._id;
     final Long requestId = _requestsIdsPerTile.remove(tileId);
     if (requestId != null) {
       _downloader.cancelRequest(requestId);

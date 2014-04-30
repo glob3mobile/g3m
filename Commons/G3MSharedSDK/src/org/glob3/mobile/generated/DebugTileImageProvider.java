@@ -85,7 +85,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
     canvas.createImage(new DebugTileImageProvider.ImageListener(tile._id, contribution, listener, deleteListener), true);
   }
 
-  public final void cancel(Tile tile)
+  public final void cancel(String tileId)
   {
     // do nothing, can't cancel
   }

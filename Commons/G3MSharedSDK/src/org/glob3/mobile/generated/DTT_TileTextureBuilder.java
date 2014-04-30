@@ -3,6 +3,7 @@ public class DTT_TileTextureBuilder extends RCObject
 {
   private LeveledTexturedMesh _texturedMesh;
   private Tile _tile;
+  private final String _tileId;
   private TileImageProvider _tileImageProvider;
   private TexturesHandler _texturesHandler;
   private final Vector2I _tileTextureResolution;
@@ -58,6 +59,7 @@ public class DTT_TileTextureBuilder extends RCObject
      _texturesHandler = rc.getTexturesHandler();
      _tileTextureResolution = layerTilesRenderParameters._tileTextureResolution;
      _tile = tile;
+     _tileId = tile._id;
      _texturedMesh = null;
      _canceled = false;
      _tileDownloadPriority = tileDownloadPriority;
@@ -102,7 +104,7 @@ public class DTT_TileTextureBuilder extends RCObject
     if (!_canceled)
     {
       _canceled = true;
-      _tileImageProvider.cancel(_tile);
+      _tileImageProvider.cancel(_tileId);
     }
   }
 

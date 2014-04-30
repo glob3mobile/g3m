@@ -37,6 +37,6 @@ public abstract class TileImageProvider extends RCObject
 
   public abstract void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor);
 
-  public abstract void cancel(Tile tile);
+  public abstract void cancel(String tileId);
 
 }
