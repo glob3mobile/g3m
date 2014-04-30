@@ -540,6 +540,9 @@ public:
     }
     delete _buffer;
     delete _color;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void onPostExecute(const G3MContext* context) {

@@ -125,6 +125,9 @@ public:
   ~GEORenderer_GEOObjectParserAsyncTask() {
     delete _buffer;
 //    delete _geoObject;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void runInBackground(const G3MContext* context) {

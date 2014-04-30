@@ -431,6 +431,9 @@ public:
       delete _listener;
     }
     delete _buffer;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void onPostExecute(const G3MContext* context) {

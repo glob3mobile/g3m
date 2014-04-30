@@ -18,6 +18,9 @@
 TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
   delete _buffer;
   delete _geoObject;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::runInBackground(const G3MContext* context) {
