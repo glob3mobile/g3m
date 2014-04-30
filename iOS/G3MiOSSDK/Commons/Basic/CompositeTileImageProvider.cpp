@@ -218,7 +218,8 @@ void CompositeTileImageProvider::Composer::done() {
   }
 }
 
-RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight,
+RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSectorWidth,
+                                                                    int wholeSectorHeight,
                                                                     const Sector& wholeSector,
                                                                     const Sector& innerSector) const {
   //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
@@ -238,7 +239,6 @@ RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSec
                         (float) (heightFactor * wholeSectorHeight));
 }
 
-
 void CompositeTileImageProvider::Composer::mixResult() {
   if (_canceled) {
     cleanUp();
@@ -253,29 +253,27 @@ void CompositeTileImageProvider::Composer::mixResult() {
 
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
+    imageId += result->_imageId + "|";
 
 #warning //For now, we consider the whole image will appear on the tile (no source rect needed)
     const IImage* image = result->_image;
-    const float alpha = result->_contribution->_alpha;
+    const float   alpha = result->_contribution->_alpha;
 
-    if (result->_contribution->isFullCoverageAndOpaque()){
+    if (result->_contribution->isFullCoverageAndOpaque()) {
       canvas->drawImage(image, 0, 0);
-    } else{
-
-      if (result->_contribution->isFullCoverage()){
+    }
+    else {
+      if (result->_contribution->isFullCoverage()) {
         canvas->drawImage(image,
-
                           //SRC RECT
                           0,0,
                           image->getWidth(), image->getHeight(),
-
                           //DEST RECT
                           0, 0,
                           _width, _height,
-
                           alpha);
-      } else{
-
+      }
+      else {
         const Sector* imageSector = result->_contribution->getSector();
 
         RectangleF* destRect = getInnerRectangle(_width, _height,
@@ -290,26 +288,22 @@ void CompositeTileImageProvider::Composer::mixResult() {
         //      }
 
         canvas->drawImage(image,
-
                           //SRC RECT
                           0,0,
                           image->getWidth(), image->getHeight(),
-
                           //DEST RECT
                           destRect->_x, destRect->_y,
                           destRect->_width, destRect->_height,
-
                           alpha);
 
         delete destRect;
       }
     }
-    imageId += result->_imageId + "|";
   }
   _imageId = imageId;
 
   canvas->createImage(new ComposerImageListener(this), true);
-
+  
   delete canvas;
 }
 

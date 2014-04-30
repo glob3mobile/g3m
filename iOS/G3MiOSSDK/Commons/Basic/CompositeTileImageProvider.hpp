@@ -95,9 +95,10 @@ private:
 
     FrameTasksExecutor* _frameTasksExecutor;
 
-    RectangleF* getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight,
-                                 const Sector& wholeSector,
-                                 const Sector& innerSector) const;
+    RectangleF* getInnerRectangle(int wholeSectorWidth,
+                                  int wholeSectorHeight,
+                                  const Sector& wholeSector,
+                                  const Sector& innerSector) const;
 
     const Sector _tileSector;
 
