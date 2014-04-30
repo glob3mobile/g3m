@@ -513,7 +513,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   {
     final Composer composer = _composers.remove(tileId);
     if (composer != null) {
-      composer.cancel(tile);
+      composer.cancel(tileId);
     }
   }
 

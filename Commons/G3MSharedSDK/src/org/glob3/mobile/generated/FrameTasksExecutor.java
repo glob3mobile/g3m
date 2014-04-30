@@ -83,6 +83,46 @@ public class FrameTasksExecutor
 
   private boolean _stressed;
 
+  private void showDebugInfo(G3MRenderContext rc, int executedCounter, int canceledCounter)
+  {
+    final int preRenderTasksSize = _tasks.size();
+    if ((executedCounter > 0) || (canceledCounter > 0) || (preRenderTasksSize > 0))
+    {
+  
+      IStringBuilder isb = IStringBuilder.newStringBuilder();
+      isb.addString("FTE: Tasks");
+  
+      if (canceledCounter > 0)
+      {
+        isb.addString(" canceled=");
+        isb.addInt(canceledCounter);
+      }
+  
+      if (executedCounter > 0)
+      {
+        isb.addString(" executed=");
+        isb.addInt(executedCounter);
+        isb.addString(" in ");
+        isb.addLong(rc.getFrameStartTimer().elapsedTimeInMilliseconds());
+        isb.addString("ms");
+      }
+  
+      isb.addString(" queued=");
+      isb.addInt(preRenderTasksSize);
+  
+      if (_stressed)
+      {
+        isb.addString(" *Stressed*");
+      }
+  
+      final String msg = isb.getString();
+      if (isb != null)
+         isb.dispose();
+  
+      rc.getLogger().logInfo(msg);
+    }
+  }
+
   public FrameTasksExecutor()
   {
      _minimumExecutionsPerFrame = 1;
@@ -149,44 +189,8 @@ public class FrameTasksExecutor
   
     if (_debug)
     {
-      final int preRenderTasksSize = _tasks.size();
-      if ((executedCounter > 0) || (canceledCounter > 0) || (preRenderTasksSize > 0))
-      {
-  
-        IStringBuilder isb = IStringBuilder.newStringBuilder();
-        isb.addString("FTE: Tasks");
-  
-        if (canceledCounter > 0)
-        {
-          isb.addString(" canceled=");
-          isb.addInt(canceledCounter);
-        }
-  
-        if (executedCounter > 0)
-        {
-          isb.addString(" executed=");
-          isb.addInt(executedCounter);
-          isb.addString(" in ");
-          isb.addLong(rc.getFrameStartTimer().elapsedTimeInMilliseconds());
-          isb.addString("ms");
-        }
-  
-        isb.addString(" queued=");
-        isb.addInt(preRenderTasksSize);
-  
-        if (_stressed)
-        {
-          isb.addString(" *Stressed*");
-        }
-  
-        final String msg = isb.getString();
-        if (isb != null)
-           isb.dispose();
-  
-        rc.getLogger().logInfo(msg);
-      }
+      showDebugInfo(rc, executedCounter, canceledCounter);
     }
-  
   }
 
   public void dispose()
