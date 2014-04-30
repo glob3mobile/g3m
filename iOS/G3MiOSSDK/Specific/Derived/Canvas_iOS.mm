@@ -342,6 +342,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
+#warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
                                 destTop,
                                 image->getWidth(),
                                 image->getHeight()),
@@ -356,6 +357,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
+#warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
                                 destTop,
                                 destWidth,
                                 destHeight),

@@ -218,49 +218,6 @@ void CompositeTileImageProvider::Composer::done() {
   }
 }
 
-/*   for (int i = 0; i < _petitionsCount; i++) {
- const Petition* petition = _petitions[i];
- IImage* image = petition->getImage();
-
- if (image != NULL) {
- const Sector imageSector = petition->getSector();
- //Finding intersection image sector - tile sector = srcReq
- const Sector intersectionSector = tileSector.intersection(imageSector);
-
- RectangleF* sourceRect = NULL;
- if (!intersectionSector.isEquals(imageSector)) {
- sourceRect = getInnerRectangle(image->getWidth(), image->getHeight(),
- imageSector,
- intersectionSector);
- }
- else {
- sourceRect = new RectangleF(0, 0,
- image->getWidth(), image->getHeight());
- }
-
- //Part of the image we are going to draw
- sourceRects.push_back(sourceRect);
-
- images.push_back(image);
-
- //Where we are going to draw the image
- destRects.push_back(getInnerRectangle(_tileTextureResolution._x,
- _tileTextureResolution._y,
- tileSector,
- intersectionSector));
- textureId += petition->getURL().getPath();
- textureId += "_";
-
- //Layer transparency set by user
- transparencies.push_back(petition->getLayerTransparency());
- }
- else{
- return false;
- }
- }
-
- */
-
 RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight,
                                                                     const Sector& wholeSector,
                                                                     const Sector& innerSector) const {
@@ -297,32 +254,55 @@ void CompositeTileImageProvider::Composer::mixResult() {
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
 
+#warning //For now, we consider the whole image will appear on the tile (no source rect needed)
     const IImage* image = result->_image;
+    const float alpha = result->_contribution->_alpha;
 
-    if (result->_contribution->isFullCoverage()){
+    if (result->_contribution->isFullCoverageAndOpaque()){
       canvas->drawImage(image, 0, 0);
     } else{
 
-      const Sector* imageSector = result->_contribution->getSector();
+      if (result->_contribution->isFullCoverage()){
+        canvas->drawImage(image,
 
-      RectangleF* rect = getInnerRectangle(_width, _height,
-                                           _tileSector,
-                                           *imageSector);
+                          //SRC RECT
+                          0,0,
+                          image->getWidth(), image->getHeight(),
 
-      if (_tileSector.contains(Angle::fromDegrees(40.41677540051771), Angle::fromDegrees(-3.7037901976145804))){
-      printf("TS: %s\nIS: %s\nR: %s\n",_tileSector.description().c_str(),
-             imageSector->description().c_str(),
-             rect->description().c_str());
+                          //DEST RECT
+                          0, 0,
+                          _width, _height,
+
+                          alpha);
+      } else{
+
+        const Sector* imageSector = result->_contribution->getSector();
+
+        RectangleF* destRect = getInnerRectangle(_width, _height,
+                                                 _tileSector,
+                                                 *imageSector);
+
+        //TEST MADRID
+        //      if (_tileSector.contains(Angle::fromDegrees(40.41677540051771), Angle::fromDegrees(-3.7037901976145804))){
+        //      printf("TS: %s\nIS: %s\nR: %s\n",_tileSector.description().c_str(),
+        //             imageSector->description().c_str(),
+        //             rect->description().c_str());
+        //      }
+
+        canvas->drawImage(image,
+
+                          //SRC RECT
+                          0,0,
+                          image->getWidth(), image->getHeight(),
+
+                          //DEST RECT
+                          destRect->_x, destRect->_y,
+                          destRect->_width, destRect->_height,
+
+                          alpha);
+
+        delete destRect;
       }
-
-#warning JM: consider sector and transparency
-      //    canvas->drawImage(image, 0, 0);
-
-      //    void ICanvas::drawImage(const IImage* image,
-      //                            float destLeft, float destTop, float destWidth, float destHeight) {
-
-      canvas->drawImage(image, rect->_x, _height - rect->_y - rect->_height, rect->_width, rect->_height);
-
     }
     imageId += result->_imageId + "|";
   }

@@ -20,7 +20,6 @@ private:
   const bool   _isFullCoverage;
   const Sector _sector;
   const bool   _isTransparent;
-  const float  _alpha;
 
   TileImageContribution(const Sector& sector,
                         bool isTransparent,
@@ -56,6 +55,8 @@ protected:
   }
 
 public:
+
+  const float  _alpha;
 
   static const TileImageContribution* fullCoverageOpaque();
 
