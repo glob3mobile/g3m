@@ -12,6 +12,25 @@
 #include "IDownloader.hpp"
 #include "TileImageListener.hpp"
 #include "TileImageContribution.hpp"
+#include "GEOJSONParser.hpp"
+#include "GEOObject.hpp"
+
+TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
+  delete _buffer;
+  delete _geoObject;
+}
+
+void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::runInBackground(const G3MContext* context) {
+  _geoObject = GEOJSONParser::parseJSON(_buffer);
+  delete _buffer;
+  _buffer = NULL;
+}
+
+void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::onPostExecute(const G3MContext* context) {
+#warning Diego at work!
+  ILogger::instance()->logInfo("Parsed geojson");
+}
+
 
 TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::~GEOJSONBufferDownloadListener() {
   _tiledVectorLayerTileImageProvider->requestFinish(_tileId);
@@ -35,11 +54,16 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::onDownloa
 //                          url.getPath(),
 //                          _contribution);
 //  _contribution = NULL;
+
+  _threadUtils->invokeAsyncTask(new GEOJSONBufferParser(buffer),
+                                true);
+
+
 #warning Diego at work!
   _listener->imageCreationError(_tileId,
                                 "NOT YET IMPLEMENTED");
 
-  delete buffer;
+//  delete buffer;
   TileImageContribution::deleteContribution(_contribution);
   _contribution = NULL;
 }
@@ -76,7 +100,8 @@ void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                                                              tileId,
                                                                                              contribution,
                                                                                              listener,
-                                                                                             deleteListener),
+                                                                                             deleteListener,
+                                                                                             _threadUtils),
                                                            true /* deleteListener */);
 
   if (requestId >= 0) {

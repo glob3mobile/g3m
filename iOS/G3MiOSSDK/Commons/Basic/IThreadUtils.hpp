@@ -15,8 +15,13 @@
 
 class GAsyncTask {
 public:
+#ifdef C_CODE
   virtual ~GAsyncTask() {
   }
+#endif
+#ifdef JAVA_CODE
+  void dispose();
+#endif
 
   virtual void runInBackground(const G3MContext* context) = 0;
 

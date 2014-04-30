@@ -16,11 +16,28 @@ class TiledVectorLayer;
 class IDownloader;
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
+class GEOObject;
 
 class TiledVectorLayerTileImageProvider : public TileImageProvider {
 private:
 
   class GEOJSONBufferParser : public GAsyncTask {
+  private:
+    IByteBuffer* _buffer;
+    GEOObject*   _geoObject;
+
+  public:
+    GEOJSONBufferParser(IByteBuffer* buffer) :
+    _buffer(buffer),
+    _geoObject(NULL)
+    {
+    }
+
+    ~GEOJSONBufferParser();
+
+    void runInBackground(const G3MContext* context);
+
+    void onPostExecute(const G3MContext* context);
 
   };
 
@@ -31,6 +48,7 @@ private:
     const std::string                  _tileId;
     TileImageListener*                 _listener;
     const bool                         _deleteListener;
+    const IThreadUtils*                _threadUtils;
 #ifdef C_CODE
     const TileImageContribution*       _contribution;
 #endif
@@ -43,12 +61,14 @@ private:
                                   const std::string&                 tileId,
                                   const TileImageContribution*       contribution,
                                   TileImageListener*                 listener,
-                                  bool                               deleteListener) :
+                                  bool                               deleteListener,
+                                  const IThreadUtils*                threadUtils) :
     _tiledVectorLayerTileImageProvider(tiledVectorLayerTileImageProvider),
     _tileId(tileId),
     _contribution(contribution),
     _listener(listener),
-    _deleteListener(deleteListener)
+    _deleteListener(deleteListener),
+    _threadUtils(threadUtils)
     {
     }
 
