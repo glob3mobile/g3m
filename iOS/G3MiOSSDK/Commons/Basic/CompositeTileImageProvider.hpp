@@ -15,7 +15,7 @@
 #include "CanvasTileImageProvider.hpp"
 #include "TileImageListener.hpp"
 #include "IImageListener.hpp"
-#include "FrameTasksExecutor.hpp"
+#include "FrameTask.hpp"
 #include "RectangleF.hpp"
 #include "Sector.hpp"
 
@@ -130,7 +130,7 @@ private:
 
     void imageCreationCanceled(const int index);
 
-    void cancel(const Tile* tile);
+    void cancel(const std::string& tileId);
 
     void imageCreated(const IImage* image);
 
@@ -237,11 +237,11 @@ public:
               bool deleteListener,
               FrameTasksExecutor* frameTasksExecutor);
 
-  void cancel(const Tile* tile);
+  void cancel(const std::string& tileId);
 
   void composerDone(Composer* composer);
   
-  void cancelChildren(const Tile* tile,
+  void cancelChildren(const std::string& tileId,
                       const CompositeTileImageContribution* compositeContribution);
   
 };

@@ -39,7 +39,7 @@ public:
                       bool deleteListener,
                       FrameTasksExecutor* frameTasksExecutor) = 0;
 
-  virtual void cancel(const Tile* tile) = 0;
+  virtual void cancel(const std::string& tileId) = 0;
 
 };
 

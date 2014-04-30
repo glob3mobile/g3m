@@ -13,6 +13,7 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "IImage.hpp"
+#include "FrameTasksExecutor.hpp"
 
 CompositeTileImageProvider::~CompositeTileImageProvider() {
   for (int i = 0; i < _childrenSize; i++) {
@@ -276,9 +277,9 @@ void CompositeTileImageProvider::Composer::mixResult() {
       else {
         const Sector* imageSector = result->_contribution->getSector();
 
-        RectangleF* destRect = getInnerRectangle(_width, _height,
-                                                 _tileSector,
-                                                 *imageSector);
+        const RectangleF* destRect = getInnerRectangle(_width, _height,
+                                                       _tileSector,
+                                                       *imageSector);
 
         //TEST MADRID
         //      if (_tileSector.contains(Angle::fromDegrees(40.41677540051771), Angle::fromDegrees(-3.7037901976145804))){
@@ -353,9 +354,9 @@ void CompositeTileImageProvider::Composer::imageCreationCanceled(const int index
   stepDone();
 }
 
-void CompositeTileImageProvider::Composer::cancel(const Tile* tile) {
+void CompositeTileImageProvider::Composer::cancel(const std::string& tileId) {
   _canceled = true;
-  _compositeTileImageProvider->cancelChildren(tile, _compositeContribution);
+  _compositeTileImageProvider->cancelChildren(tileId, _compositeContribution);
 }
 
 void CompositeTileImageProvider::ChildTileImageListener::imageCreated(const std::string&           tileId,
@@ -416,13 +417,12 @@ void CompositeTileImageProvider::create(const Tile* tile,
   }
 }
 
-void CompositeTileImageProvider::cancel(const Tile* tile) {
-  const std::string tileId = tile->_id;
+void CompositeTileImageProvider::cancel(const std::string& tileId) {
 #ifdef C_CODE
   if (_composers.find(tileId) != _composers.end()) {
     Composer* composer = _composers[tileId];
 
-    composer->cancel(tile);
+    composer->cancel(tileId);
 
     _composers.erase(tileId);
   }
@@ -441,7 +441,7 @@ void CompositeTileImageProvider::composerDone(Composer* composer) {
   composer->_release();
 }
 
-void CompositeTileImageProvider::cancelChildren(const Tile* tile,
+void CompositeTileImageProvider::cancelChildren(const std::string& tileId,
                                                 const CompositeTileImageContribution* compositeContribution) {
   const int contributionsSize = compositeContribution->size();
 
@@ -454,7 +454,7 @@ void CompositeTileImageProvider::cancelChildren(const Tile* tile,
   
   for (int i = 0; i < contributionsSize; i++) {
     TileImageProvider* child = _children[ indexes[i] ];
-    child->cancel(tile);
+    child->cancel(tileId);
   }
   
   delete [] indexes;

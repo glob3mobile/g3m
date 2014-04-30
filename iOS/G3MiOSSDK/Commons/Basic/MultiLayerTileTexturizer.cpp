@@ -19,6 +19,7 @@
 #include "RCObject.hpp"
 #include "ITimer.hpp"
 #include "FrameTasksExecutor.hpp"
+#include "FrameTask.hpp"
 #include "IImageDownloadListener.hpp"
 #include "IDownloader.hpp"
 #include "Petition.hpp"

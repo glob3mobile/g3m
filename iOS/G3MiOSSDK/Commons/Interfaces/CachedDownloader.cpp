@@ -296,7 +296,6 @@ void CachedDownloader::initialize(const G3MContext* context,
   _downloader->initialize(context, frameTasksExecutor);
 }
 
-
 IImageResult CachedDownloader::getCachedImageResult(const URL& url,
                                                     bool readExpired) {
   if ( (_lastImageResult != NULL) && (_lastImageURL != NULL) ) {

@@ -324,6 +324,8 @@
 		CFCBA3C619070A4900FD2A2F /* TileImageContribution.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCBA3C41907086C00FD2A2F /* TileImageContribution.hpp */; };
 		CFCBA3C719070A4900FD2A2F /* RasterLayerTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCBA3C1190706C900FD2A2F /* RasterLayerTileImageProvider.hpp */; };
 		CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */; };
+		CFCDFCB51911677800D711FC /* FrameTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCDFCB31911677800D711FC /* FrameTask.cpp */; };
+		CFCDFCB61911682500D711FC /* FrameTask.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCDFCB41911677800D711FC /* FrameTask.hpp */; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
 		CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */; };
@@ -685,6 +687,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFCDFCB61911682500D711FC /* FrameTask.hpp in CopyFiles */,
 				CF3C7E56190C13FE00ED051F /* CompositeTileImageContribution.hpp in CopyFiles */,
 				CFF964421908870F0044F06D /* CompositeTileImageProvider.hpp in CopyFiles */,
 				CFF964431908870F0044F06D /* ChessboardTileImageProvider.hpp in CopyFiles */,
@@ -1319,7 +1322,7 @@
 		CF6FE3EF1899852300C05775 /* G3MMeshMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MMeshMaterial.hpp; path = Commons/Mesh/G3MMeshMaterial.hpp; sourceTree = "<group>"; };
 		CF708F2E1836A43500AAB0B1 /* NormalsUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NormalsUtils.cpp; path = Commons/Geometry/NormalsUtils.cpp; sourceTree = "<group>"; };
 		CF708F2F1836A43500AAB0B1 /* NormalsUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NormalsUtils.hpp; path = Commons/Geometry/NormalsUtils.hpp; sourceTree = "<group>"; };
-		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
+		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
 		CF75C39316E92CDF00F7EE9F /* HereLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HereLayer.cpp; sourceTree = "<group>"; };
 		CF75C39416E92CDF00F7EE9F /* HereLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HereLayer.hpp; sourceTree = "<group>"; };
@@ -1489,6 +1492,8 @@
 		CFCBA3C41907086C00FD2A2F /* TileImageContribution.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileImageContribution.hpp; path = Commons/Basic/TileImageContribution.hpp; sourceTree = "<group>"; };
 		CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NativeGL2_iOS.mm; path = Specific/GL/NativeGL2_iOS.mm; sourceTree = "<group>"; };
 		CFCCFE0A16F506210082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		CFCDFCB31911677800D711FC /* FrameTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTask.cpp; path = Commons/Basic/FrameTask.cpp; sourceTree = "<group>"; };
+		CFCDFCB41911677800D711FC /* FrameTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTask.hpp; path = Commons/Basic/FrameTask.hpp; sourceTree = "<group>"; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
 		CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IThreadUtils.hpp; path = Commons/Basic/IThreadUtils.hpp; sourceTree = "<group>"; };
 		CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RectangleI.cpp; path = Commons/Geometry/RectangleI.cpp; sourceTree = "<group>"; };
@@ -1949,6 +1954,8 @@
 				CFDA835816D6698700295F96 /* FloatBufferElevationData.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
+				CFCDFCB31911677800D711FC /* FrameTask.cpp */,
+				CFCDFCB41911677800D711FC /* FrameTask.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
 				D8F0C70A17B52701002A89E0 /* GenericQuadTree.cpp */,
@@ -2985,6 +2992,7 @@
 				E720E8C616EE470300103F20 /* SceneJSParserStatistics.cpp in Sources */,
 				CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */,
 				D8B17F5B16F7693A007A9E43 /* GLGlobalState.cpp in Sources */,
+				CFCDFCB51911677800D711FC /* FrameTask.cpp in Sources */,
 				FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */,
 				CF8AE0061702049F00FE9F56 /* GEOLine2DStyle.cpp in Sources */,
 				CF8AE0071702049F00FE9F56 /* GEOLine2DMeshSymbol.cpp in Sources */,

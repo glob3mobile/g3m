@@ -66,6 +66,6 @@ void DebugTileImageProvider::create(const Tile* tile,
                       true);
 }
 
-void DebugTileImageProvider::cancel(const Tile* tile) {
+void DebugTileImageProvider::cancel(const std::string& tileId) {
   // do nothing, can't cancel
 }

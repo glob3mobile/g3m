@@ -13,6 +13,7 @@
 #include "LeveledTexturedMesh.hpp"
 #include "TextureIDReference.hpp"
 #include "FrameTasksExecutor.hpp"
+#include "FrameTask.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "TileImageProvider.hpp"
 #include "TileImageListener.hpp"
@@ -124,6 +125,7 @@ class DTT_TileTextureBuilder : public RCObject {
 private:
   LeveledTexturedMesh* _texturedMesh;
   Tile*                _tile;
+  const std::string    _tileId;
   TileImageProvider*   _tileImageProvider;
   TexturesHandler*     _texturesHandler;
 #ifdef C_CODE
@@ -197,6 +199,7 @@ public:
   _texturesHandler(rc->getTexturesHandler()),
   _tileTextureResolution( layerTilesRenderParameters->_tileTextureResolution ),
   _tile(tile),
+  _tileId(tile->_id),
   _texturedMesh( NULL ),
   _canceled(false),
   _tileDownloadPriority(tileDownloadPriority),
@@ -243,7 +246,7 @@ public:
     }
     if (!_canceled) {
       _canceled = true;
-      _tileImageProvider->cancel(_tile);
+      _tileImageProvider->cancel(_tileId);
     }
   }
 

@@ -121,8 +121,7 @@ void RasterLayerTileImageProvider::create(const Tile* tile,
   }
 }
 
-void RasterLayerTileImageProvider::cancel(const Tile* tile) {
-  const std::string tileId = tile->_id;
+void RasterLayerTileImageProvider::cancel(const std::string& tileId) {
 #ifdef C_CODE
   if (_requestsIdsPerTile.find(tileId) != _requestsIdsPerTile.end()) {
     const long long requestId = _requestsIdsPerTile[tileId];
