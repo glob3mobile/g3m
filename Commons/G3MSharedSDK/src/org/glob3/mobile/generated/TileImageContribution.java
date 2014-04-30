@@ -26,7 +26,6 @@ public class TileImageContribution
   private final boolean _isFullCoverage;
   private final Sector _sector ;
   private final boolean _isTransparent;
-  private final float _alpha;
 
   private TileImageContribution(Sector sector, boolean isTransparent, float alpha)
   {
@@ -59,6 +58,8 @@ public class TileImageContribution
      _alpha = that._alpha;
   }
 
+
+  public final float _alpha;
 
   public static TileImageContribution fullCoverageOpaque()
   {
@@ -112,9 +113,10 @@ public class TileImageContribution
     return _isFullCoverage;
   }
 
-  //  const Sector getSector() const {
-  //    return _sector;
-  //  }
+  public final Sector getSector()
+  {
+      return _sector;
+  }
 
   public final boolean isOpaque()
   {

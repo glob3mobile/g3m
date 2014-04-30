@@ -138,24 +138,24 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         }
         else
         {
-    //      ICanvas* canvas = IFactory::instance()->createCanvas();
-    //
-    //      canvas->initialize(_width, _height);
-    //
-    //      std::string imageId = "";
-    //
-    //      for (int i = 0; i < _contributionsSize; i++) {
-    //       const ChildResult* result = _results[i];
-    //
-    //        imageId += result->_imageId + "|";
-    ///#warning JM: consider sector and transparency
-    //        canvas->drawImage(result->_image, 0, 0);
-    //      }
-    //      _imageId = imageId;
-    //
-    //      canvas->createImage(new ComposerImageListener(this), true);
-    //
-    //      delete canvas;
+          //      ICanvas* canvas = IFactory::instance()->createCanvas();
+          //
+          //      canvas->initialize(_width, _height);
+          //
+          //      std::string imageId = "";
+          //
+          //      for (int i = 0; i < _contributionsSize; i++) {
+          //       const ChildResult* result = _results[i];
+          //
+          //        imageId += result->_imageId + "|";
+          ///#warning JM: consider sector and transparency
+          //        canvas->drawImage(result->_image, 0, 0);
+          //      }
+          //      _imageId = imageId;
+          //
+          //      canvas->createImage(new ComposerImageListener(this), true);
+          //
+          //      delete canvas;
     
           _frameTasksExecutor.addPreRenderTask(new ComposerFrameTask(this));
         }
@@ -185,17 +185,36 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     private FrameTasksExecutor _frameTasksExecutor;
 
+    private RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
+    {
+      //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
+    
+      if (wholeSector.isEquals(innerSector))
+      {
+        return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
+      }
+    
+      final double widthFactor = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
+      final double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
+    
+      final Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
+    
+      return new RectangleF((float)(lowerUV._x * wholeSectorWidth), (float)(lowerUV._y * wholeSectorHeight), (float)(widthFactor * wholeSectorWidth), (float)(heightFactor * wholeSectorHeight));
+    }
+
+    private final Sector _tileSector ;
+
     public void dispose()
     {
-    ///#warning remove debug printf
-    //  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
-    //         this,
-    //         _stepsDone,
-    //         _anyError       ? "true" : "false",
-    //         _anyCancelation ? "true" : "false",
-    //         _canceled       ? "true" : "false",
-    //         _compositeContribution
-    //         );
+      ///#warning remove debug printf
+      //  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
+      //         this,
+      //         _stepsDone,
+      //         _anyError       ? "true" : "false",
+      //         _anyCancelation ? "true" : "false",
+      //         _canceled       ? "true" : "false",
+      //         _compositeContribution
+      //         );
     
       for (int i = 0; i < _contributionsSize; i++)
       {
@@ -210,7 +229,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final String _tileId;
 
-    public Composer(int width, int height, CompositeTileImageProvider compositeTileImageProvider, String tileId, TileImageListener listener, boolean deleteListener, CompositeTileImageContribution compositeContribution, FrameTasksExecutor frameTasksExecutor)
+    public Composer(int width, int height, CompositeTileImageProvider compositeTileImageProvider, String tileId, Sector tileSector, TileImageListener listener, boolean deleteListener, CompositeTileImageContribution compositeContribution, FrameTasksExecutor frameTasksExecutor)
     {
        _width = width;
        _height = height;
@@ -225,6 +244,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
        _anyError = false;
        _anyCancelation = false;
        _canceled = false;
+       _tileSector = new Sector(tileSector);
       for (int i = 0; i < _contributionsSize; i++)
       {
         _results.add(null);
@@ -273,7 +293,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         return;
       }
     
-    
       ICanvas canvas = IFactory.instance().createCanvas();
     
       canvas.initialize(_width, _height);
@@ -283,11 +302,46 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       for (int i = 0; i < _contributionsSize; i++)
       {
         final ChildResult result = _results.get(i);
-    
         imageId += result._imageId + "|";
+    
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning JM: consider sector && transparency
-        canvas.drawImage(result._image, 0, 0);
+//#warning
+        final IImage image = result._image;
+        final float alpha = result._contribution._alpha;
+    
+        if (result._contribution.isFullCoverageAndOpaque())
+        {
+          canvas.drawImage(image, 0, 0);
+        }
+        else
+        {
+          if (result._contribution.isFullCoverage())
+          {
+            canvas.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), 0, 0, _width, _height, alpha);
+                              //SRC RECT
+                              //DEST RECT
+          }
+          else
+          {
+            final Sector imageSector = result._contribution.getSector();
+    
+            RectangleF destRect = getInnerRectangle(_width, _height, _tileSector, imageSector);
+    
+            //TEST MADRID
+            //      if (_tileSector.contains(Angle::fromDegrees(40.41677540051771), Angle::fromDegrees(-3.7037901976145804))){
+            //      printf("TS: %s\nIS: %s\nR: %s\n",_tileSector.description().c_str(),
+            //             imageSector->description().c_str(),
+            //             rect->description().c_str());
+            //      }
+    
+            canvas.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), destRect._x, destRect._y, destRect._width, destRect._height, alpha);
+                              //SRC RECT
+                              //DEST RECT
+    
+            if (destRect != null)
+               destRect.dispose();
+          }
+        }
       }
       _imageId = imageId;
     
@@ -440,7 +494,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   
     final String tileId = tile._id;
   
-    Composer composer = new Composer(resolution._x, resolution._y, this, tileId, listener, deleteListener, compositeContribution, frameTasksExecutor);
+    Composer composer = new Composer(resolution._x, resolution._y, this, tileId, tile._sector, listener, deleteListener, compositeContribution, frameTasksExecutor);
   
     _composers.put(tileId, composer);
   
@@ -467,7 +521,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   public final void composerDone(Composer composer)
   {
     _composers.remove(composer._tileId);
-  //  delete composer;
+    //  delete composer;
     composer._release();
   }
 
