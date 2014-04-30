@@ -107,19 +107,8 @@ public class WMSLayer extends RasterLayer
   {
     final Sector tileSector = tile._sector;
   
-  //  if (!_sector.touchesWith(tileSector)) {
-  //    return NONE;
-  //  }
-  //  else if (_sector.fullContains(tileSector)) {
-  //    return (_isTransparent || (_transparency < 1)) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
-  //  }
-  //  else {
-  //    return (_isTransparent || (_transparency < 1)) ? PARTIAL_COVERAGE_TRANSPARENT : PARTIAL_COVERAGE_OPAQUE;
-  //  }
-  
     if (!_sector.touchesWith(tileSector))
     {
-      //return TileImageContribution::none();
       return null;
     }
     else if (_sector.fullContains(tileSector))

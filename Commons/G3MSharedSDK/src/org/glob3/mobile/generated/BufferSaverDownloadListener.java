@@ -36,7 +36,8 @@ public class BufferSaverDownloadListener extends IBufferDownloadListener
   {
     if (_deleteListener)
     {
-      _listener = null;
+      if (_listener != null)
+         _listener.dispose();
       _listener = null;
     }
   }

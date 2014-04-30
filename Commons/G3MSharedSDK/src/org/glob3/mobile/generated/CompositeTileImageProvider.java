@@ -187,8 +187,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     private RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
     {
-      //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
-    
       if (wholeSector.isEquals(innerSector))
       {
         return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
@@ -206,16 +204,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public void dispose()
     {
-      ///#warning remove debug printf
-      //  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
-      //         this,
-      //         _stepsDone,
-      //         _anyError       ? "true" : "false",
-      //         _anyCancelation ? "true" : "false",
-      //         _canceled       ? "true" : "false",
-      //         _compositeContribution
-      //         );
-    
       for (int i = 0; i < _contributionsSize; i++)
       {
         final ChildResult result = _results.get(i);
@@ -520,7 +508,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   public final void composerDone(Composer composer)
   {
     _composers.remove(composer._tileId);
-    //  delete composer;
     composer._release();
   }
 

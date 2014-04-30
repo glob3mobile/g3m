@@ -118,7 +118,8 @@ public class CachedDownloader extends IDownloader
   
       if (deleteListener)
       {
-        listener = null;
+        if (listener != null)
+           listener.dispose();
       }
   
       return -1;

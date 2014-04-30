@@ -44,7 +44,6 @@ public class CompositeTileImageContribution extends TileImageContribution
     final int contributionsSize = contributions.size();
     if (contributionsSize == 0)
     {
-      //return TileImageContribution::none();
       return null;
     }
     return new CompositeTileImageContribution(contributions);

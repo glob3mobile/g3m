@@ -80,7 +80,6 @@ public abstract class RasterLayer extends Layer
     {
       return rawContribution(tile);
     }
-    //return TileImageContribution::none();
     return null;
   }
 

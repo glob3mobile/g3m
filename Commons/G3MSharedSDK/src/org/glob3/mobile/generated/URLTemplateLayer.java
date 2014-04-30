@@ -101,7 +101,6 @@ public class URLTemplateLayer extends RasterLayer
   
     if (!_sector.touchesWith(tileSector))
     {
-      //return TileImageContribution::none();
       return null;
     }
     else if (_sector.fullContains(tileSector))
@@ -134,7 +133,6 @@ public class URLTemplateLayer extends RasterLayer
   
     final int level = tile._level;
     final int column = tile._column;
-  //  const int numRows = (int) (layerTilesRenderParameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
     final int numRows = (int)(_parameters._topSectorSplitsByLatitude * _mu.pow(2.0, level));
     final int row = numRows - tile._row - 1;
   
