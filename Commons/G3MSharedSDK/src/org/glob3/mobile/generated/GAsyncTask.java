@@ -18,14 +18,12 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class GAsyncTask
+public interface GAsyncTask
 {
-  public void dispose()
-  {
-  }
+  void dispose();
 
-  public abstract void runInBackground(G3MContext context);
+  void runInBackground(G3MContext context);
 
-  public abstract void onPostExecute(G3MContext context);
+  void onPostExecute(G3MContext context);
 
 }

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
+public class ShapesRenderer_SceneJSParserAsyncTask implements GAsyncTask
 {
   private ShapesRenderer _shapesRenderer;
   private final URL _url;

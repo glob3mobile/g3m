@@ -19,12 +19,44 @@ package org.glob3.mobile.generated;
 
 //class TiledVectorLayer;
 //class IDownloader;
+//class GEOObject;
 
 public class TiledVectorLayerTileImageProvider extends TileImageProvider
 {
 
-  private abstract static class GEOJSONBufferParser extends GAsyncTask
+  private static class GEOJSONBufferParser implements GAsyncTask
   {
+    private IByteBuffer _buffer;
+    private GEOObject _geoObject;
+
+    public GEOJSONBufferParser(IByteBuffer buffer)
+    {
+       _buffer = buffer;
+       _geoObject = null;
+    }
+
+    public void dispose()
+    {
+      if (_buffer != null)
+         _buffer.dispose();
+      if (_geoObject != null)
+         _geoObject.dispose();
+    }
+
+    public final void runInBackground(G3MContext context)
+    {
+      _geoObject = GEOJSONParser.parseJSON(_buffer);
+      if (_buffer != null)
+         _buffer.dispose();
+      _buffer = null;
+    }
+
+    public final void onPostExecute(G3MContext context)
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work!
+      ILogger.instance().logInfo("Parsed geojson");
+    }
 
   }
 
@@ -35,15 +67,17 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private final String _tileId;
     private TileImageListener _listener;
     private final boolean _deleteListener;
+    private final IThreadUtils _threadUtils;
     private TileImageContribution _contribution;
 
-    public GEOJSONBufferDownloadListener(TiledVectorLayerTileImageProvider tiledVectorLayerTileImageProvider, String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
+    public GEOJSONBufferDownloadListener(TiledVectorLayerTileImageProvider tiledVectorLayerTileImageProvider, String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener, IThreadUtils threadUtils)
     {
        _tiledVectorLayerTileImageProvider = tiledVectorLayerTileImageProvider;
        _tileId = tileId;
        _contribution = contribution;
        _listener = listener;
        _deleteListener = deleteListener;
+       _threadUtils = threadUtils;
     }
 
     public void dispose()
@@ -68,12 +102,15 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     //                          url.getPath(),
     //                          _contribution);
     //  _contribution = NULL;
+    
+      _threadUtils.invokeAsyncTask(new GEOJSONBufferParser(buffer), true);
+    
+    
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
       _listener.imageCreationError(_tileId, "NOT YET IMPLEMENTED");
     
-      if (buffer != null)
-         buffer.dispose();
+    //  delete buffer;
       TileImageContribution.deleteContribution(_contribution);
       _contribution = null;
     }
@@ -119,7 +156,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   {
     final String tileId = tile._id;
   
-    final long requestId = _layer.requestGEOJSONBuffer(tile, _downloader, tileDownloadPriority, logDownloadActivity, new GEOJSONBufferDownloadListener(this, tileId, contribution, listener, deleteListener), true); // deleteListener
+    final long requestId = _layer.requestGEOJSONBuffer(tile, _downloader, tileDownloadPriority, logDownloadActivity, new GEOJSONBufferDownloadListener(this, tileId, contribution, listener, deleteListener, _threadUtils), true); // deleteListener
   
     if (requestId >= 0)
     {

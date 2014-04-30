@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
+public class MeshRenderer_MeshParserAsyncTask implements GAsyncTask
 {
   private G3MContext _context;
 
