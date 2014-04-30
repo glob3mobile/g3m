@@ -103,6 +103,8 @@
 		CF2A47C5178F211200901857 /* GEORasterProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2A47C3178F211200901857 /* GEORasterProjection.cpp */; };
 		CF2A47C6178F213A00901857 /* GEORasterProjection.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2A47C4178F211200901857 /* GEORasterProjection.hpp */; };
 		CF2ADB8818DC9341001EF133 /* TileRenderingListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2ADB8618DC92F8001EF133 /* TileRenderingListener.hpp */; };
+		CF2B32691911A5A500B4AC52 /* VectorLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2B32671911A5A500B4AC52 /* VectorLayer.cpp */; };
+		CF2B326A1911A5B200B4AC52 /* VectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2B32681911A5A500B4AC52 /* VectorLayer.hpp */; };
 		CF2D85E21753B4B600F4BEC9 /* CartoDBLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2D85E01753B4B600F4BEC9 /* CartoDBLayer.cpp */; };
 		CF2D85E31753B4F200F4BEC9 /* CartoDBLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2D85E11753B4B600F4BEC9 /* CartoDBLayer.hpp */; };
 		CF2DF7CE178DE79200FF5FF0 /* GEOTileRasterizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2DF7CC178DE79200FF5FF0 /* GEOTileRasterizer.cpp */; };
@@ -691,6 +693,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF2B326A1911A5B200B4AC52 /* VectorLayer.hpp in CopyFiles */,
 				CF02302919119B2C00FD85E0 /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */,
 				CF02302A19119B2C00FD85E0 /* TiledVectorLayer.hpp in CopyFiles */,
 				CFCDFCB61911682500D711FC /* FrameTask.hpp in CopyFiles */,
@@ -1206,6 +1209,8 @@
 		CF2A47C3178F211200901857 /* GEORasterProjection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterProjection.cpp; path = Commons/GEO/GEORasterProjection.cpp; sourceTree = "<group>"; };
 		CF2A47C4178F211200901857 /* GEORasterProjection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GEORasterProjection.hpp; path = Commons/GEO/GEORasterProjection.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF2ADB8618DC92F8001EF133 /* TileRenderingListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileRenderingListener.hpp; path = Commons/Basic/TileRenderingListener.hpp; sourceTree = "<group>"; };
+		CF2B32671911A5A500B4AC52 /* VectorLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VectorLayer.cpp; sourceTree = "<group>"; };
+		CF2B32681911A5A500B4AC52 /* VectorLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VectorLayer.hpp; sourceTree = "<group>"; };
 		CF2CDD981678292E002A78A9 /* GInitializationTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GInitializationTask.hpp; path = Commons/Basic/GInitializationTask.hpp; sourceTree = "<group>"; };
 		CF2D85E01753B4B600F4BEC9 /* CartoDBLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CartoDBLayer.cpp; sourceTree = "<group>"; };
 		CF2D85E11753B4B600F4BEC9 /* CartoDBLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CartoDBLayer.hpp; sourceTree = "<group>"; };
@@ -2526,6 +2531,8 @@
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
+				CF2B32671911A5A500B4AC52 /* VectorLayer.cpp */,
+				CF2B32681911A5A500B4AC52 /* VectorLayer.hpp */,
 				CF02302119119B0100FD85E0 /* TiledVectorLayer.cpp */,
 				CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */,
 				CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */,
@@ -2860,6 +2867,7 @@
 				CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */,
 				CF02302519119B0100FD85E0 /* TiledVectorLayer.cpp in Sources */,
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
+				CF2B32691911A5A500B4AC52 /* VectorLayer.cpp in Sources */,
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */,
 				CF4F78471804AD4B00550409 /* IDeviceInfo.cpp in Sources */,

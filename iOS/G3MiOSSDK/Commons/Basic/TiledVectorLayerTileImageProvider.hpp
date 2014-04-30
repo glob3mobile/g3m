@@ -15,11 +15,16 @@
 class TiledVectorLayer;
 class IDownloader;
 #include "IBufferDownloadListener.hpp"
-
+#include "IThreadUtils.hpp"
 
 class TiledVectorLayerTileImageProvider : public TileImageProvider {
 private:
 
+  class GEOJSONBufferParser : public GAsyncTask {
+
+  };
+
+  
   class GEOJSONBufferDownloadListener : public IBufferDownloadListener {
   private:
     TiledVectorLayerTileImageProvider* _tiledVectorLayerTileImageProvider;
@@ -67,15 +72,18 @@ private:
 
   const TiledVectorLayer* _layer;
   IDownloader*            _downloader;
+  const IThreadUtils*     _threadUtils;
 
   std::map<const std::string, long long> _requestsIdsPerTile;
 
 public:
 
   TiledVectorLayerTileImageProvider(const TiledVectorLayer* layer,
-                                    IDownloader* downloader) :
+                                    IDownloader*            downloader,
+                                    const IThreadUtils*     threadUtils) :
   _layer(layer),
-  _downloader(downloader)
+  _downloader(downloader),
+  _threadUtils(threadUtils)
   {
   }
 

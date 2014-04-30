@@ -96,7 +96,9 @@ std::vector<Petition*> TiledVectorLayer::createTileMapPetitions(const G3MRenderC
 
 TileImageProvider* TiledVectorLayer::createTileImageProvider(const G3MRenderContext* rc,
                                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const {
-  return new TiledVectorLayerTileImageProvider(this, rc->getDownloader());
+  return new TiledVectorLayerTileImageProvider(this,
+                                               rc->getDownloader(),
+                                               rc->getThreadUtils());
 }
 
 const TileImageContribution* TiledVectorLayer::contribution(const Tile* tile) const {
