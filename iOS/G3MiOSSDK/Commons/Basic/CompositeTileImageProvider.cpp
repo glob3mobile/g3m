@@ -430,7 +430,7 @@ void CompositeTileImageProvider::cancel(const std::string& tileId) {
 #ifdef JAVA_CODE
   final Composer composer = _composers.remove(tileId);
   if (composer != null) {
-    composer.cancel(tile);
+    composer.cancel(tileId);
   }
 #endif
 }

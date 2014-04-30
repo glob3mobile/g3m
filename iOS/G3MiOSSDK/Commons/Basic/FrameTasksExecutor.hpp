@@ -31,6 +31,10 @@ private:
 
   bool _stressed;
 
+  void showDebugInfo(const G3MRenderContext* rc,
+                     int executedCounter,
+                     int canceledCounter);
+
 public:
   FrameTasksExecutor() :
   _minimumExecutionsPerFrame(1),

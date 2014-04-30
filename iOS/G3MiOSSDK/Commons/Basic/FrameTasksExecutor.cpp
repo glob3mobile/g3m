@@ -102,39 +102,45 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
 
 
   if (_debug) {
-    const int preRenderTasksSize = _tasks.size();
-    if ((executedCounter > 0) ||
-        (canceledCounter > 0) ||
-        (preRenderTasksSize > 0)) {
-
-      IStringBuilder* isb = IStringBuilder::newStringBuilder();
-      isb->addString("FTE: Tasks");
-
-      if (canceledCounter > 0) {
-        isb->addString(" canceled=");
-        isb->addInt(canceledCounter);
-      }
-
-      if (executedCounter > 0) {
-        isb->addString(" executed=");
-        isb->addInt(executedCounter);
-        isb->addString(" in ");
-        isb->addLong(rc->getFrameStartTimer()->elapsedTimeInMilliseconds());
-        isb->addString("ms");
-      }
-
-      isb->addString(" queued=");
-      isb->addInt(preRenderTasksSize);
-
-      if (_stressed) {
-        isb->addString(" *Stressed*");
-      }
-
-      const std::string msg = isb->getString();
-      delete isb;
-      
-      rc->getLogger()->logInfo(msg);
-    }
+    showDebugInfo(rc, executedCounter, canceledCounter);
   }
-  
+}
+
+
+void FrameTasksExecutor::showDebugInfo(const G3MRenderContext* rc,
+                                       int executedCounter,
+                                       int canceledCounter) {
+  const int preRenderTasksSize = _tasks.size();
+  if ((executedCounter > 0) ||
+      (canceledCounter > 0) ||
+      (preRenderTasksSize > 0)) {
+
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("FTE: Tasks");
+
+    if (canceledCounter > 0) {
+      isb->addString(" canceled=");
+      isb->addInt(canceledCounter);
+    }
+
+    if (executedCounter > 0) {
+      isb->addString(" executed=");
+      isb->addInt(executedCounter);
+      isb->addString(" in ");
+      isb->addLong(rc->getFrameStartTimer()->elapsedTimeInMilliseconds());
+      isb->addString("ms");
+    }
+
+    isb->addString(" queued=");
+    isb->addInt(preRenderTasksSize);
+
+    if (_stressed) {
+      isb->addString(" *Stressed*");
+    }
+
+    const std::string msg = isb->getString();
+    delete isb;
+    
+    rc->getLogger()->logInfo(msg);
+  }
 }
