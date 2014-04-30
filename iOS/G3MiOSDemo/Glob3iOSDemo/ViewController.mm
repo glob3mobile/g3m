@@ -1359,7 +1359,8 @@ public:
 
   if (true) {
 #warning Diego at work!
-    const std::string urlTemplate = "file:///ne_10m_admin_0_countries/{level}/{x}/{y}/{level}_{x}-{y}.json";
+    // const std::string urlTemplate = "file:///ne_10m_admin_0_countries/{level}/{x}/{y}/{level}_{x}-{y}.json";
+    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{x}/{level}_{x}-{y}.json";
 
     layerSet->addLayer(TiledVectorLayer::newMercator(urlTemplate,
                                                      Sector::fullSphere(),       // sector
