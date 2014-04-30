@@ -3,10 +3,9 @@ public class RLTIP_ImageDownloadListener extends IImageDownloadListener
 {
   private RasterLayerTileImageProvider _rasterLayerTileImageProvider;
   private final String _tileId;
-  private final TileImageContribution _contribution;
-
   private TileImageListener _listener;
   private final boolean _deleteListener;
+  private TileImageContribution _contribution;
 
   public RLTIP_ImageDownloadListener(RasterLayerTileImageProvider rasterLayerTileImageProvider, String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
   {
