@@ -50,6 +50,12 @@
 		CCF45F541743AD420037CA28 /* EllipsoidalPlanet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCF45F501743A6030037CA28 /* EllipsoidalPlanet.hpp */; };
 		CCF45F551743AE620037CA28 /* SphericalPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCF45F511743AB0A0037CA28 /* SphericalPlanet.cpp */; };
 		CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF022384166836F500024B73 /* GEOJSONParser.cpp */; };
+		CF02302419119B0100FD85E0 /* TiledVectorLayerTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF02302019119B0100FD85E0 /* TiledVectorLayerTileImageProvider.cpp */; };
+		CF02302519119B0100FD85E0 /* TiledVectorLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF02302119119B0100FD85E0 /* TiledVectorLayer.cpp */; };
+		CF02302819119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF02302619119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp */; };
+		CF02302919119B2C00FD85E0 /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302719119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.hpp */; };
+		CF02302A19119B2C00FD85E0 /* TiledVectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */; };
+		CF02302B19119B2C00FD85E0 /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF02302319119B0100FD85E0 /* TiledVectorLayerTileImageProvider.hpp */; };
 		CF0755961715B9120084CC14 /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0755941715B9120084CC14 /* GFont.cpp */; };
 		CF0755971715B9570084CC14 /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF0755951715B9120084CC14 /* GFont.hpp */; };
 		CF07DD0D175D32CC00839F5D /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF07DD0B175D32CC00839F5D /* Color.cpp */; };
@@ -687,6 +693,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF02302919119B2C00FD85E0 /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */,
+				CF02302A19119B2C00FD85E0 /* TiledVectorLayer.hpp in CopyFiles */,
+				CF02302B19119B2C00FD85E0 /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */,
 				CFCDFCB61911682500D711FC /* FrameTask.hpp in CopyFiles */,
 				CF3C7E56190C13FE00ED051F /* CompositeTileImageContribution.hpp in CopyFiles */,
 				CFF964421908870F0044F06D /* CompositeTileImageProvider.hpp in CopyFiles */,
@@ -1141,6 +1150,12 @@
 		CF00E443166FD77E0098CABD /* IImageListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageListener.hpp; path = Commons/Interfaces/IImageListener.hpp; sourceTree = "<group>"; };
 		CF022384166836F500024B73 /* GEOJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = GEOJSONParser.cpp; path = Commons/GEO/GEOJSONParser.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF022385166836F500024B73 /* GEOJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GEOJSONParser.hpp; path = Commons/GEO/GEOJSONParser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF02302019119B0100FD85E0 /* TiledVectorLayerTileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TiledVectorLayerTileImageProvider.cpp; sourceTree = "<group>"; };
+		CF02302119119B0100FD85E0 /* TiledVectorLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TiledVectorLayer.cpp; sourceTree = "<group>"; };
+		CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TiledVectorLayer.hpp; sourceTree = "<group>"; };
+		CF02302319119B0100FD85E0 /* TiledVectorLayerTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TiledVectorLayerTileImageProvider.hpp; sourceTree = "<group>"; };
+		CF02302619119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TiledVectorLayerTileImageProvider.cpp; path = Commons/Basic/TiledVectorLayerTileImageProvider.cpp; sourceTree = "<group>"; };
+		CF02302719119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TiledVectorLayerTileImageProvider.hpp; path = Commons/Basic/TiledVectorLayerTileImageProvider.hpp; sourceTree = "<group>"; };
 		CF024DC616A84F330051255C /* VisibleSectorListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = VisibleSectorListener.hpp; path = Commons/Rendererers/VisibleSectorListener.hpp; sourceTree = "<group>"; };
 		CF03683416A499F0006CE160 /* LabelPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabelPosition.h; path = Commons/Basic/LabelPosition.h; sourceTree = "<group>"; };
 		CF0755941715B9120084CC14 /* GFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GFont.cpp; path = Commons/Basic/GFont.cpp; sourceTree = "<group>"; };
@@ -1882,6 +1897,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				CF02302619119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp */,
+				CF02302719119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.hpp */,
 				D874D08F18900B1E00610F85 /* SingleBilElevationDataProvider.hpp */,
 				D874D08D18900B1600610F85 /* SingleBilElevationDataProvider.cpp */,
 				D895CA1D1861C33A00AE8291 /* IImageUtils.cpp */,
@@ -2514,6 +2531,10 @@
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
+				CF02302019119B0100FD85E0 /* TiledVectorLayerTileImageProvider.cpp */,
+				CF02302119119B0100FD85E0 /* TiledVectorLayer.cpp */,
+				CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */,
+				CF02302319119B0100FD85E0 /* TiledVectorLayerTileImageProvider.hpp */,
 				CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */,
 				CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */,
 				CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */,
@@ -2844,6 +2865,7 @@
 				CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */,
 				FB2B1B2717F880B5006307EC /* Quadric.cpp in Sources */,
 				CCC2A03F15CA6C7D00923850 /* PlanetRenderer.cpp in Sources */,
+				CF02302519119B0100FD85E0 /* TiledVectorLayer.cpp in Sources */,
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */,
@@ -2882,6 +2904,7 @@
 				CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */,
 				A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */,
 				A7EE001C161B245600C77604 /* JSONBaseObject.cpp in Sources */,
+				CF02302819119B1E00FD85E0 /* TiledVectorLayerTileImageProvider.cpp in Sources */,
 				CF4F784A1804ADFC00550409 /* DeviceInfo_iOS.mm in Sources */,
 				CF9F74DF18805470008D65F7 /* CanvasImageBuilder.cpp in Sources */,
 				CF1F55E318772FC80019E8A5 /* AbstractImageBuilder.cpp in Sources */,
@@ -2967,6 +2990,7 @@
 				CF35DD5016C69B08002EFC96 /* Vector2F.cpp in Sources */,
 				FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */,
 				CFD3D8A116CFDD0000CE9242 /* FloatBufferBuilderFromGeodetic.cpp in Sources */,
+				CF02302419119B0100FD85E0 /* TiledVectorLayerTileImageProvider.cpp in Sources */,
 				CFD3D8A516D15BC900CE9242 /* MeshHolder.cpp in Sources */,
 				CFD3D8A916D15ED000CE9242 /* ElevationDataProvider.cpp in Sources */,
 				CFD3D8AD16D1686900CE9242 /* ElevationData.cpp in Sources */,

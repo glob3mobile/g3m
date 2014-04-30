@@ -24,7 +24,6 @@ CompositeTileImageContribution::ChildContribution::~ChildContribution() {
 const TileImageContribution* CompositeTileImageContribution::create(const std::vector<const ChildContribution*>& contributions) {
   const int contributionsSize = contributions.size();
   if (contributionsSize == 0) {
-    //return TileImageContribution::none();
     return NULL;
   }
   return new CompositeTileImageContribution(contributions);

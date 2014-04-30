@@ -120,16 +120,6 @@ _tileSector(tileSector)
 }
 
 CompositeTileImageProvider::Composer::~Composer() {
-  //#warning remove debug printf
-  //  printf("**** deleted CompositeTileImageProvider::Composer %p (_stepsDone=%d, _anyError=%s, _anyCancelation=%s, _canceled=%s, _compositeContribution=%p)\n",
-  //         this,
-  //         _stepsDone,
-  //         _anyError       ? "true" : "false",
-  //         _anyCancelation ? "true" : "false",
-  //         _canceled       ? "true" : "false",
-  //         _compositeContribution
-  //         );
-
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
     delete result;
@@ -223,8 +213,6 @@ RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSec
                                                                     int wholeSectorHeight,
                                                                     const Sector& wholeSector,
                                                                     const Sector& innerSector) const {
-  //printf("%s - %s\n", wholeSector.description().c_str(), innerSector.description().c_str());
-
   if (wholeSector.isEquals(innerSector)){
     return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
   }
@@ -421,9 +409,7 @@ void CompositeTileImageProvider::cancel(const std::string& tileId) {
 #ifdef C_CODE
   if (_composers.find(tileId) != _composers.end()) {
     Composer* composer = _composers[tileId];
-
     composer->cancel(tileId);
-
     _composers.erase(tileId);
   }
 #endif
@@ -437,7 +423,6 @@ void CompositeTileImageProvider::cancel(const std::string& tileId) {
 
 void CompositeTileImageProvider::composerDone(Composer* composer) {
   _composers.erase( composer->_tileId );
-  //  delete composer;
   composer->_release();
 }
 

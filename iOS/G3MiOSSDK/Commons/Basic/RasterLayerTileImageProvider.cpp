@@ -45,6 +45,11 @@ public:
     if (_deleteListener) {
       delete _listener;
     }
+
+    TileImageContribution::deleteContribution(_contribution);
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void onDownload(const URL& url,
@@ -54,6 +59,7 @@ public:
                             image,
                             url.getPath(),
                             _contribution);
+    _contribution = NULL; // moves ownership of _contribution to _listener
   }
 
   void onError(const URL& url) {

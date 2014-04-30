@@ -138,6 +138,7 @@
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
 #import <G3MiOSSDK/TileRenderingListener.hpp>
 #import <G3MiOSSDK/LayerTouchEventListener.hpp>
+#import <G3MiOSSDK/TiledVectorLayer.hpp>
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
@@ -1297,7 +1298,7 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = true;
+  bool testingTransparencies = false;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1321,24 +1322,24 @@ public:
                                         );
     layerSet->addLayer(blueMarble);
 
-    WMSLayer* i3Landsat = new WMSLayer("esat",
-                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
-                                       WMS_1_1_0,
-                                       Sector::fullSphere(),
-                                       "image/jpeg",
-                                       "EPSG:4326",
-                                       "",
-                                       false,
-                                       new LevelTileCondition(7, 100),
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       new LayerTilesRenderParameters(Sector::fullSphere(),
-                                                                      2, 4,
-                                                                      0, 12,
-                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
-                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                                                      false));
-    //layerSet->addLayer(i3Landsat);
+//    WMSLayer* i3Landsat = new WMSLayer("esat",
+//                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
+//                                       WMS_1_1_0,
+//                                       Sector::fullSphere(),
+//                                       "image/jpeg",
+//                                       "EPSG:4326",
+//                                       "",
+//                                       false,
+//                                       new LevelTileCondition(7, 100),
+//                                       TimeInterval::fromDays(30),
+//                                       true,
+//                                       new LayerTilesRenderParameters(Sector::fullSphere(),
+//                                                                      2, 4,
+//                                                                      0, 12,
+//                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
+//                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
+//                                                                      false));
+//    //layerSet->addLayer(i3Landsat);
 
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -1356,6 +1357,20 @@ public:
     layerSet->addLayer(pnoa);
   }
 
+  if (true) {
+#warning Diego at work!
+    const std::string urlTemplate = "file:///ne_10m_admin_0_countries/{level}/{x}/{y}/{level}_{x}-{y}.json";
+
+    layerSet->addLayer(TiledVectorLayer::newMercator(urlTemplate,
+                                                     Sector::fullSphere(),       // sector
+                                                     2,                          // firstLevel
+                                                     6,                          // maxLevel
+                                                     TimeInterval::fromDays(30), // timeToCache
+                                                     true,                       // readExpired
+                                                     1,                          // transparency
+                                                     NULL                        // condition
+                                                     ));
+  }
 
   const bool useCartoDB = false;
   if (useCartoDB) {

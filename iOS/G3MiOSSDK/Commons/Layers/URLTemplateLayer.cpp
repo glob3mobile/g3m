@@ -172,7 +172,6 @@ const URL URLTemplateLayer::createURL(const Tile* tile) const {
 
   const int level   = tile->_level;
   const int column  = tile->_column;
-//  const int numRows = (int) (layerTilesRenderParameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int numRows = (int) (_parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int row     = numRows - tile->_row - 1;
 
@@ -244,7 +243,6 @@ const TileImageContribution* URLTemplateLayer::rawContribution(const Tile* tile)
   const Sector tileSector = tile->_sector;
 
   if (!_sector.touchesWith(tileSector)) {
-    //return TileImageContribution::none();
     return NULL;
   }
   else if (_sector.fullContains(tileSector)) {
