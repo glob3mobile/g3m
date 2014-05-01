@@ -95,6 +95,14 @@ void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                FrameTasksExecutor* frameTasksExecutor) {
   const std::string tileId = tile->_id;
 
+//  ImageAssembler* assembler = new ImageAssembler(this,
+//                                                 tileId,
+//                                                 contribution,
+//                                                 listener,
+//                                                 deleteListener,
+//                                                 _threadUtils);
+//  aa;
+  
   const long long requestId = _layer->requestGEOJSONBuffer(tile,
                                                            _downloader,
                                                            tileDownloadPriority,

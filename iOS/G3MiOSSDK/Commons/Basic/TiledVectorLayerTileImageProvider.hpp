@@ -90,6 +90,44 @@ private:
 
   };
 
+
+//  class ImageAssembler {
+//  private:
+//    TiledVectorLayerTileImageProvider* _tiledVectorLayerTileImageProvider;
+//    const std::string                  _tileId;
+//    TileImageListener*                 _listener;
+//    const bool                         _deleteListener;
+//    const IThreadUtils*                _threadUtils;
+//#ifdef C_CODE
+//    const TileImageContribution*       _contribution;
+//#endif
+//#ifdef JAVA_CODE
+//    private TileImageContribution _contribution;
+//#endif
+//
+//
+//    GEOJSONBufferDownloadListener* _downloadListener;
+//    GEOJSONBufferParser*           _parser;
+//  public:
+//    ImageAssembler(TiledVectorLayerTileImageProvider* tiledVectorLayerTileImageProvider,
+//                                  const std::string&                 tileId,
+//                                  const TileImageContribution*       contribution,
+//                                  TileImageListener*                 listener,
+//                                  bool                               deleteListener,
+//                                  const IThreadUtils*                threadUtils) :
+//    _tiledVectorLayerTileImageProvider(tiledVectorLayerTileImageProvider),
+//    _tileId(tileId),
+//    _contribution(contribution),
+//    _listener(listener),
+//    _deleteListener(deleteListener),
+//    _threadUtils(threadUtils)
+//    {
+//      _downloadListener =
+//    }
+//
+//  };
+
+
   const TiledVectorLayer* _layer;
   IDownloader*            _downloader;
   const IThreadUtils*     _threadUtils;

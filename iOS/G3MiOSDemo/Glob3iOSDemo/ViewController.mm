@@ -139,6 +139,8 @@
 #import <G3MiOSSDK/TileRenderingListener.hpp>
 #import <G3MiOSSDK/LayerTouchEventListener.hpp>
 #import <G3MiOSSDK/TiledVectorLayer.hpp>
+#import <G3MiOSSDK/GEORasterSymbolizer.hpp>
+
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
@@ -1269,6 +1271,33 @@ public:
 }
 
 
+class SampleRasterSymbolizer : public GEORasterSymbolizer {
+public:
+  GEORasterSymbolizer* copy() const {
+    return new SampleRasterSymbolizer();
+  }
+
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const {
+    return NULL;
+  }
+
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
+    return NULL;
+  }
+
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
+    return NULL;
+  }
+
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
+    return NULL;
+  }
+
+  std::vector<GEORasterSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const {
+    return NULL;
+  }
+
+};
 
 
 - (LayerSet*) createLayerSet
@@ -1359,10 +1388,12 @@ public:
 
   if (true) {
 #warning Diego at work!
-    // const std::string urlTemplate = "file:///ne_10m_admin_0_countries/{level}/{x}/{y}/{level}_{x}-{y}.json";
     const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{x}/{level}_{x}-{y}.json";
 
-    layerSet->addLayer(TiledVectorLayer::newMercator(urlTemplate,
+    const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
+
+    layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
+                                                     urlTemplate,
                                                      Sector::fullSphere(),       // sector
                                                      2,                          // firstLevel
                                                      6,                          // maxLevel

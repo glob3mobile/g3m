@@ -18,8 +18,10 @@
 #include "TileImageContribution.hpp"
 #include "IDownloader.hpp"
 #include "MercatorUtils.hpp"
+#include "GEORasterSymbolizer.hpp"
 
-TiledVectorLayer::TiledVectorLayer(const std::string&                urlTemplate,
+TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*        symbolizer,
+                                   const std::string&                urlTemplate,
                                    const Sector&                     sector,
                                    const LayerTilesRenderParameters* parameters,
                                    const TimeInterval&               timeToCache,
@@ -27,6 +29,7 @@ TiledVectorLayer::TiledVectorLayer(const std::string&                urlTemplate
                                    const float                       transparency,
                                    const LayerCondition*             condition) :
 VectorLayer(parameters, transparency, condition),
+_symbolizer(symbolizer),
 _urlTemplate(urlTemplate),
 _sector(sector),
 _timeToCacheMS(timeToCache._milliseconds),
@@ -36,16 +39,24 @@ _mu(NULL)
 {
 }
 
+TiledVectorLayer::~TiledVectorLayer() {
+  delete _symbolizer;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
 
-TiledVectorLayer* TiledVectorLayer::newMercator(const std::string&    urlTemplate,
-                                                const Sector&         sector,
-                                                const int             firstLevel,
-                                                const int             maxLevel,
-                                                const TimeInterval&   timeToCache,
-                                                const bool            readExpired,
-                                                const float           transparency,
-                                                const LayerCondition* condition) {
-  return new TiledVectorLayer(urlTemplate,
+TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer* symbolizer,
+                                                const std::string&         urlTemplate,
+                                                const Sector&              sector,
+                                                const int                  firstLevel,
+                                                const int                  maxLevel,
+                                                const TimeInterval&        timeToCache,
+                                                const bool                 readExpired,
+                                                const float                transparency,
+                                                const LayerCondition*      condition) {
+  return new TiledVectorLayer(symbolizer,
+                              urlTemplate,
                               sector,
                               LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel),
                               timeToCache,
@@ -78,7 +89,8 @@ const std::string TiledVectorLayer::description() const {
 }
 
 TiledVectorLayer* TiledVectorLayer::copy() const {
-  return new TiledVectorLayer(_urlTemplate,
+  return new TiledVectorLayer(_symbolizer->copy(),
+                              _urlTemplate,
                               _sector,
                               _parameters->copy(),
                               TimeInterval::fromMilliseconds(_timeToCacheMS),

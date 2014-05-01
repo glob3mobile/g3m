@@ -16,13 +16,15 @@ class IDownloader;
 class IBufferDownloadListener;
 class TimeInterval;
 class IStringUtils;
+class GEORasterSymbolizer;
 
 class TiledVectorLayer : public VectorLayer {
 private:
-  const std::string _urlTemplate;
-  const Sector      _sector;
-  const long long   _timeToCacheMS;
-  const bool        _readExpired;
+  const GEORasterSymbolizer* _symbolizer;
+  const std::string          _urlTemplate;
+  const Sector               _sector;
+  const long long            _timeToCacheMS;
+  const bool                 _readExpired;
 
 #ifdef C_CODE
   mutable const IMathUtils*   _mu;
@@ -33,7 +35,8 @@ private:
   private IStringUtils _su;
 #endif
 
-  TiledVectorLayer(const std::string&                urlTemplate,
+  TiledVectorLayer(const GEORasterSymbolizer*        symbolizer,
+                   const std::string&                urlTemplate,
                    const Sector&                     sector,
                    const LayerTilesRenderParameters* parameters,
                    const TimeInterval&               timeToCache,
@@ -52,14 +55,17 @@ protected:
 
 
 public:
-  static TiledVectorLayer* newMercator(const std::string&    urlTemplate,
-                                       const Sector&         sector,
-                                       const int             firstLevel,
-                                       const int             maxLevel,
-                                       const TimeInterval&   timeToCache,
-                                       const bool            readExpired,
-                                       const float           transparency = 1,
-                                       const LayerCondition* condition    = NULL);
+  static TiledVectorLayer* newMercator(const GEORasterSymbolizer* symbolizer,
+                                       const std::string&         urlTemplate,
+                                       const Sector&              sector,
+                                       const int                  firstLevel,
+                                       const int                  maxLevel,
+                                       const TimeInterval&        timeToCache,
+                                       const bool                 readExpired,
+                                       const float                transparency = 1,
+                                       const LayerCondition*      condition    = NULL);
+
+  ~TiledVectorLayer();
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

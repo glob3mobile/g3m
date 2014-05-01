@@ -332,6 +332,8 @@
 		CFCCFE0916F504590082F383 /* NativeGL2_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */; };
 		CFCDFCB51911677800D711FC /* FrameTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCDFCB31911677800D711FC /* FrameTask.cpp */; };
 		CFCDFCB61911682500D711FC /* FrameTask.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCDFCB41911677800D711FC /* FrameTask.hpp */; };
+		CFCE391219129D0D00E3EBE1 /* GEORasterSymbolizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE391019129D0D00E3EBE1 /* GEORasterSymbolizer.cpp */; };
+		CFCE391319129EF800E3EBE1 /* GEORasterSymbolizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFCE391119129D0D00E3EBE1 /* GEORasterSymbolizer.hpp */; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
 		CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */; };
@@ -693,6 +695,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CFCE391319129EF800E3EBE1 /* GEORasterSymbolizer.hpp in CopyFiles */,
 				CF2B326A1911A5B200B4AC52 /* VectorLayer.hpp in CopyFiles */,
 				CF02302919119B2C00FD85E0 /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */,
 				CF02302A19119B2C00FD85E0 /* TiledVectorLayer.hpp in CopyFiles */,
@@ -1509,6 +1512,8 @@
 		CFCCFE0A16F506210082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CFCDFCB31911677800D711FC /* FrameTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTask.cpp; path = Commons/Basic/FrameTask.cpp; sourceTree = "<group>"; };
 		CFCDFCB41911677800D711FC /* FrameTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTask.hpp; path = Commons/Basic/FrameTask.hpp; sourceTree = "<group>"; };
+		CFCE391019129D0D00E3EBE1 /* GEORasterSymbolizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORasterSymbolizer.cpp; path = Commons/GEO/GEORasterSymbolizer.cpp; sourceTree = "<group>"; };
+		CFCE391119129D0D00E3EBE1 /* GEORasterSymbolizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORasterSymbolizer.hpp; path = Commons/GEO/GEORasterSymbolizer.hpp; sourceTree = "<group>"; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
 		CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IThreadUtils.hpp; path = Commons/Basic/IThreadUtils.hpp; sourceTree = "<group>"; };
 		CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RectangleI.cpp; path = Commons/Geometry/RectangleI.cpp; sourceTree = "<group>"; };
@@ -2443,6 +2448,8 @@
 				CF8AE0031702049F00FE9F56 /* GEOSymbol.hpp */,
 				CF8AE0041702049F00FE9F56 /* GEOSymbolizer.cpp */,
 				CF8AE0051702049F00FE9F56 /* GEOSymbolizer.hpp */,
+				CFCE391019129D0D00E3EBE1 /* GEORasterSymbolizer.cpp */,
+				CFCE391119129D0D00E3EBE1 /* GEORasterSymbolizer.hpp */,
 				CF5C1197178C7E33000ED715 /* GEOGeometry2D.cpp */,
 				CF5C1198178C7E33000ED715 /* GEOGeometry2D.hpp */,
 				CF5C119B178CA746000ED715 /* GEORasterSymbol.cpp */,
@@ -3027,6 +3034,7 @@
 				D8715C1E17032AC700CF7BE2 /* GPUProgram.cpp in Sources */,
 				D80E59B2170B12CD00E7C799 /* GPUProgramFactory.cpp in Sources */,
 				D80E59B5170B155C00E7C799 /* GPUProgramManager.cpp in Sources */,
+				CFCE391219129D0D00E3EBE1 /* GEORasterSymbolizer.cpp in Sources */,
 				CF1871B71703534200092888 /* GEO2DPointGeometry.cpp in Sources */,
 				CF1871BF17036DD800092888 /* GEOMeshSymbol.cpp in Sources */,
 				CF1F55DF1876F5E70019E8A5 /* LabelImageBuilder.cpp in Sources */,
