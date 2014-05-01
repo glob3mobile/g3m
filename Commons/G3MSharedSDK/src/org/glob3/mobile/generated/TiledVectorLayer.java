@@ -21,9 +21,11 @@ package org.glob3.mobile.generated;
 //class IBufferDownloadListener;
 //class TimeInterval;
 //class IStringUtils;
+//class GEORasterSymbolizer;
 
 public class TiledVectorLayer extends VectorLayer
 {
+  private final GEORasterSymbolizer _symbolizer;
   private final String _urlTemplate;
   private final Sector _sector ;
   private final long _timeToCacheMS;
@@ -32,9 +34,10 @@ public class TiledVectorLayer extends VectorLayer
   private IMathUtils   _mu;
   private IStringUtils _su;
 
-  private TiledVectorLayer(String urlTemplate, Sector sector, LayerTilesRenderParameters parameters, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
+  private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector sector, LayerTilesRenderParameters parameters, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
   {
      super(parameters, transparency, condition);
+     _symbolizer = symbolizer;
      _urlTemplate = urlTemplate;
      _sector = new Sector(sector);
      _timeToCacheMS = timeToCache._milliseconds;
@@ -110,17 +113,24 @@ public class TiledVectorLayer extends VectorLayer
   }
 
 
-  public static TiledVectorLayer newMercator(String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency)
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency)
   {
-     return newMercator(urlTemplate, sector, firstLevel, maxLevel, timeToCache, readExpired, transparency, null);
+     return newMercator(symbolizer, urlTemplate, sector, firstLevel, maxLevel, timeToCache, readExpired, transparency, null);
   }
-  public static TiledVectorLayer newMercator(String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired)
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired)
   {
-     return newMercator(urlTemplate, sector, firstLevel, maxLevel, timeToCache, readExpired, 1, null);
+     return newMercator(symbolizer, urlTemplate, sector, firstLevel, maxLevel, timeToCache, readExpired, 1, null);
   }
-  public static TiledVectorLayer newMercator(String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
   {
-    return new TiledVectorLayer(urlTemplate, sector, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), timeToCache, readExpired, transparency, condition);
+    return new TiledVectorLayer(symbolizer, urlTemplate, sector, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), timeToCache, readExpired, transparency, condition);
+  }
+
+  public void dispose()
+  {
+    if (_symbolizer != null)
+       _symbolizer.dispose();
+    super.dispose();
   }
 
   public final URL getFeatureInfoURL(Geodetic2D position, Sector sector)
@@ -140,7 +150,7 @@ public class TiledVectorLayer extends VectorLayer
 
   public final TiledVectorLayer copy()
   {
-    return new TiledVectorLayer(_urlTemplate, _sector, _parameters.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
+    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _sector, _parameters.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final TileImageContribution contribution(Tile tile)

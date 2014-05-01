@@ -133,6 +133,44 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
   }
 
+
+//  class ImageAssembler {
+//  private:
+//    TiledVectorLayerTileImageProvider* _tiledVectorLayerTileImageProvider;
+//    const std::string                  _tileId;
+//    TileImageListener*                 _listener;
+//    const bool                         _deleteListener;
+//    const IThreadUtils*                _threadUtils;
+///#ifdef C_CODE
+//    const TileImageContribution*       _contribution;
+///#endif
+///#ifdef JAVA_CODE
+//    private TileImageContribution _contribution;
+///#endif
+//
+//
+//    GEOJSONBufferDownloadListener* _downloadListener;
+//    GEOJSONBufferParser*           _parser;
+//  public:
+//    ImageAssembler(TiledVectorLayerTileImageProvider* tiledVectorLayerTileImageProvider,
+//                                  const std::string&                 tileId,
+//                                  const TileImageContribution*       contribution,
+//                                  TileImageListener*                 listener,
+//                                  bool                               deleteListener,
+//                                  const IThreadUtils*                threadUtils) :
+//    _tiledVectorLayerTileImageProvider(tiledVectorLayerTileImageProvider),
+//    _tileId(tileId),
+//    _contribution(contribution),
+//    _listener(listener),
+//    _deleteListener(deleteListener),
+//    _threadUtils(threadUtils)
+//    {
+//      _downloadListener =
+//    }
+//
+//  };
+
+
   private final TiledVectorLayer _layer;
   private IDownloader _downloader;
   private final IThreadUtils _threadUtils;
@@ -156,6 +194,14 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
     final String tileId = tile._id;
+  
+  //  ImageAssembler* assembler = new ImageAssembler(this,
+  //                                                 tileId,
+  //                                                 contribution,
+  //                                                 listener,
+  //                                                 deleteListener,
+  //                                                 _threadUtils);
+  //  aa;
   
     final long requestId = _layer.requestGEOJSONBuffer(tile, _downloader, tileDownloadPriority, logDownloadActivity, new GEOJSONBufferDownloadListener(this, tileId, contribution, listener, deleteListener, _threadUtils), true); // deleteListener
   
