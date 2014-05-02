@@ -48,3 +48,15 @@ void GEOFeature::symbolize(const G3MRenderContext* rc,
                          geoTileRasterizer);
   }
 }
+
+void GEOFeature::rasterize(const GEORasterSymbolizer* symbolizer,
+                           ICanvas* canvas,
+                           const GEORasterProjection* projection,
+                           int tileLevel) const {
+  if (_geometry != NULL) {
+    _geometry->rasterize(symbolizer,
+                         canvas,
+                         projection,
+                         tileLevel);
+  }
+}

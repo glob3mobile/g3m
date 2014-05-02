@@ -91,7 +91,8 @@ public:
                                  bool logDownloadActivity,
                                  IBufferDownloadListener* listener,
                                  bool deleteListener) const;
-  
+
+  const GEORasterSymbolizer*  symbolizerCopy() const;
 };
 
 #endif

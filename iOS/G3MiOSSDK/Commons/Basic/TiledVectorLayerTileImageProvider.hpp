@@ -17,17 +17,24 @@ class IDownloader;
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
 class GEOObject;
+class GEORasterSymbolizer;
+#include "Vector2I.hpp"
 
 class TiledVectorLayerTileImageProvider : public TileImageProvider {
 private:
 
+  class ImageAssembler;
+
   class GEOJSONBufferParser : public GAsyncTask {
   private:
-    IByteBuffer* _buffer;
-    GEOObject*   _geoObject;
+    ImageAssembler* _imageAssembler;
+    IByteBuffer*    _buffer;
+    GEOObject*      _geoObject;
 
   public:
-    GEOJSONBufferParser(IByteBuffer* buffer) :
+    GEOJSONBufferParser(ImageAssembler* imageAssembler,
+                        IByteBuffer* buffer) :
+    _imageAssembler(imageAssembler),
     _buffer(buffer),
     _geoObject(NULL)
     {
@@ -39,40 +46,20 @@ private:
 
     void onPostExecute(const G3MContext* context);
 
+    void cancel();
+
   };
 
-  
+
   class GEOJSONBufferDownloadListener : public IBufferDownloadListener {
   private:
-    TiledVectorLayerTileImageProvider* _tiledVectorLayerTileImageProvider;
-    const std::string                  _tileId;
-    TileImageListener*                 _listener;
-    const bool                         _deleteListener;
-    const IThreadUtils*                _threadUtils;
-#ifdef C_CODE
-    const TileImageContribution*       _contribution;
-#endif
-#ifdef JAVA_CODE
-    private TileImageContribution _contribution;
-#endif
+    ImageAssembler* _imageAssembler;
 
   public:
-    GEOJSONBufferDownloadListener(TiledVectorLayerTileImageProvider* tiledVectorLayerTileImageProvider,
-                                  const std::string&                 tileId,
-                                  const TileImageContribution*       contribution,
-                                  TileImageListener*                 listener,
-                                  bool                               deleteListener,
-                                  const IThreadUtils*                threadUtils) :
-    _tiledVectorLayerTileImageProvider(tiledVectorLayerTileImageProvider),
-    _tileId(tileId),
-    _contribution(contribution),
-    _listener(listener),
-    _deleteListener(deleteListener),
-    _threadUtils(threadUtils)
+    GEOJSONBufferDownloadListener(ImageAssembler* imageAssembler) :
+    _imageAssembler(imageAssembler)
     {
     }
-
-    ~GEOJSONBufferDownloadListener();
 
     void onDownload(const URL& url,
                     IByteBuffer* buffer,
@@ -91,48 +78,66 @@ private:
   };
 
 
-//  class ImageAssembler {
-//  private:
-//    TiledVectorLayerTileImageProvider* _tiledVectorLayerTileImageProvider;
-//    const std::string                  _tileId;
-//    TileImageListener*                 _listener;
-//    const bool                         _deleteListener;
-//    const IThreadUtils*                _threadUtils;
-//#ifdef C_CODE
-//    const TileImageContribution*       _contribution;
-//#endif
-//#ifdef JAVA_CODE
-//    private TileImageContribution _contribution;
-//#endif
-//
-//
-//    GEOJSONBufferDownloadListener* _downloadListener;
-//    GEOJSONBufferParser*           _parser;
-//  public:
-//    ImageAssembler(TiledVectorLayerTileImageProvider* tiledVectorLayerTileImageProvider,
-//                                  const std::string&                 tileId,
-//                                  const TileImageContribution*       contribution,
-//                                  TileImageListener*                 listener,
-//                                  bool                               deleteListener,
-//                                  const IThreadUtils*                threadUtils) :
-//    _tiledVectorLayerTileImageProvider(tiledVectorLayerTileImageProvider),
-//    _tileId(tileId),
-//    _contribution(contribution),
-//    _listener(listener),
-//    _deleteListener(deleteListener),
-//    _threadUtils(threadUtils)
-//    {
-//      _downloadListener =
-//    }
-//
-//  };
+  class ImageAssembler {
+  private:
+    TiledVectorLayerTileImageProvider* _tileImageProvider;
+    const std::string                  _tileId;
+    TileImageListener*                 _listener;
+    const bool                         _deleteListener;
+    IDownloader*                       _downloader;
+    const IThreadUtils*                _threadUtils;
+    const Vector2I                     _imageResolution;
+
+#ifdef C_CODE
+    const TileImageContribution*       _contribution;
+#endif
+#ifdef JAVA_CODE
+    private TileImageContribution _contribution;
+#endif
+
+
+    bool _canceled;
+
+    GEOJSONBufferDownloadListener* _downloadListener;
+    long long _downloadRequestId;
+
+    GEOJSONBufferParser* _parser;
+
+    const GEORasterSymbolizer* _symbolizer;
+
+  public:
+    ImageAssembler(TiledVectorLayerTileImageProvider* tileImageProvider,
+                   const std::string&                 tileId,
+                   const TileImageContribution*       contribution,
+                   TileImageListener*                 listener,
+                   bool                               deleteListener,
+                   const Vector2I&                    imageResolution,
+                   IDownloader*                       downloader,
+                   const IThreadUtils*                threadUtils);
+
+    ~ImageAssembler();
+
+    void start(const TiledVectorLayer* layer,
+               const Tile*             tile,
+               long long               tileDownloadPriority,
+               bool                    logDownloadActivity);
+
+    void cancel();
+
+    void bufferDownloaded(IByteBuffer* buffer);
+    void bufferDownloadError(const URL& url);
+    void bufferDownloadCanceled();
+
+    void parsedGEOObject(GEOObject* geoObject);
+    void deletedParser();
+  };
 
 
   const TiledVectorLayer* _layer;
   IDownloader*            _downloader;
   const IThreadUtils*     _threadUtils;
 
-  std::map<const std::string, long long> _requestsIdsPerTile;
+  std::map<const std::string, ImageAssembler*> _assemblers;
 
 public:
 

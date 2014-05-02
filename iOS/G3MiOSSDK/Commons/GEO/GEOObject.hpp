@@ -15,13 +15,19 @@ class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
 class GEOTileRasterizer;
-
+class GEORasterSymbolizer;
+class ICanvas;
+class GEORasterProjection;
 
 class GEOObject {
 public:
   virtual ~GEOObject() {
-
   }
+
+  virtual void rasterize(const GEORasterSymbolizer* symbolizer,
+                         ICanvas* canvas,
+                         const GEORasterProjection* projection,
+                         int tileLevel) const = 0;
 
   virtual void symbolize(const G3MRenderContext* rc,
                          const GEOSymbolizer*    symbolizer,

@@ -26,6 +26,9 @@ private:
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer*    symbolizer) const;
 
+
+  std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
+
 public:
 //  GEO2DPolygonGeometry(std::vector<Geodetic2D*>* coordinates,
 //                       std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray) :

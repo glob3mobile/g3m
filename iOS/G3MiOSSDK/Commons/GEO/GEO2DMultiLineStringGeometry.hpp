@@ -21,6 +21,8 @@ private:
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
 
+  std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
+
 public:
 
   GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) :

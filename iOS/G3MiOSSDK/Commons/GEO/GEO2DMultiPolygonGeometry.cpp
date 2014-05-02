@@ -10,6 +10,7 @@
 
 #include "GEOSymbolizer.hpp"
 #include "GEO2DPolygonData.hpp"
+#include "GEORasterSymbolizer.hpp"
 
 GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
   if (_polygonsData != NULL) {
@@ -28,5 +29,9 @@ GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
 
 
 std::vector<GEOSymbol*>* GEO2DMultiPolygonGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
+}
+
+std::vector<GEORasterSymbol*>* GEO2DMultiPolygonGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
 }

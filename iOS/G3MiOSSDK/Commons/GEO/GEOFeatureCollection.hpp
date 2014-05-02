@@ -41,6 +41,11 @@ public:
   GEOFeature* get(int i) const{ return _features[i];}
   int size() const{ return _features.size();}
 
+  void rasterize(const GEORasterSymbolizer* symbolizer,
+                 ICanvas* canvas,
+                 const GEORasterProjection* projection,
+                 int tileLevel) const;
+
 };
 
 #endif

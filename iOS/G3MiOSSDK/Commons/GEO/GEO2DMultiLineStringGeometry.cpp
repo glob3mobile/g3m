@@ -10,6 +10,7 @@
 
 #include "Geodetic2D.hpp"
 #include "GEOSymbolizer.hpp"
+#include "GEORasterSymbolizer.hpp"
 
 GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
   const int coordinatesArrayCount = _coordinatesArray->size();
@@ -32,5 +33,9 @@ GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
 }
 
 std::vector<GEOSymbol*>* GEO2DMultiLineStringGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
+}
+
+std::vector<GEORasterSymbol*>* GEO2DMultiLineStringGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
 }

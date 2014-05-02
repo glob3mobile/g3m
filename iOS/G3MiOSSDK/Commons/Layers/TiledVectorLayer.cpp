@@ -185,3 +185,7 @@ long long TiledVectorLayer::requestGEOJSONBuffer(const Tile* tile,
                                    listener,
                                    deleteListener);
 }
+
+const GEORasterSymbolizer*  TiledVectorLayer::symbolizerCopy() const {
+  return _symbolizer->copy();
+}

@@ -41,3 +41,17 @@ void GEOFeatureCollection::symbolize(const G3MRenderContext* rc,
                        geoTileRasterizer);
   }
 }
+
+void GEOFeatureCollection::rasterize(const GEORasterSymbolizer* symbolizer,
+                                     ICanvas* canvas,
+                                     const GEORasterProjection* projection,
+                                     int tileLevel) const {
+  const int featuresCount = _features.size();
+  for (int i = 0; i < featuresCount; i++) {
+    GEOFeature* feature = _features[i];
+    feature->rasterize(symbolizer,
+                       canvas,
+                       projection,
+                       tileLevel);
+  }
+}

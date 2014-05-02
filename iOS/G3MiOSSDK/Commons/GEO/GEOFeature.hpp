@@ -32,7 +32,7 @@ public:
              const JSONObject* properties);
 
   ~GEOFeature();
-  
+
   const JSONObject* getProperties() const {
     return _properties;
   }
@@ -47,6 +47,11 @@ public:
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
                  GEOTileRasterizer*      geoTileRasterizer) const;
+
+  void rasterize(const GEORasterSymbolizer* symbolizer,
+                 ICanvas* canvas,
+                 const GEORasterProjection* projection,
+                 int tileLevel) const;
 
 };
 

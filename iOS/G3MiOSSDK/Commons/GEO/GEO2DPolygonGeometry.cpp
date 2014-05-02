@@ -10,6 +10,7 @@
 
 #include "GEOSymbolizer.hpp"
 #include "GEO2DPolygonData.hpp"
+#include "GEORasterSymbolizer.hpp"
 
 const std::vector<Geodetic2D*>* GEO2DPolygonGeometry::getCoordinates() const {
   return _polygonData->getCoordinates();
@@ -50,10 +51,12 @@ GEO2DPolygonGeometry::~GEO2DPolygonGeometry() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
-
 std::vector<GEOSymbol*>* GEO2DPolygonGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
+}
+
+std::vector<GEORasterSymbol*>* GEO2DPolygonGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
 }
