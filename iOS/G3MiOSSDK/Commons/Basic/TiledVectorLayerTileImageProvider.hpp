@@ -86,7 +86,8 @@ private:
     const bool                         _deleteListener;
     IDownloader*                       _downloader;
     const IThreadUtils*                _threadUtils;
-    const Vector2I                     _imageResolution;
+    const int                          _imageWidth;
+    const int                          _imageHeight;
 
 #ifdef C_CODE
     const TileImageContribution*       _contribution;

@@ -79,7 +79,8 @@ _tileId(tileId),
 _contribution(contribution),
 _listener(listener),
 _deleteListener(deleteListener),
-_imageResolution(imageResolution),
+_imageWidth(imageResolution._x),
+_imageHeight(imageResolution._y),
 _downloader(downloader),
 _threadUtils(threadUtils),
 _canceled(false),
@@ -174,7 +175,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
 
     ICanvas* canvas = IFactory::instance()->createCanvas();
 
-    canvas->initialize(_imageResolution._x, _imageResolution._y);
+    canvas->initialize(_imageWidth, _imageHeight);
 
     const GEORasterProjection* projection;
     int tileLevel;
