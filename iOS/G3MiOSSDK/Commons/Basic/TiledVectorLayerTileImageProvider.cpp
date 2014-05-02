@@ -50,8 +50,9 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::runInBackground(con
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::onPostExecute(const G3MContext* context) {
   if (_imageAssembler != NULL) {
-    _imageAssembler->parsedGEOObject(_geoObject);
+    GEOObject* geoObject = _geoObject;
     _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
+    _imageAssembler->parsedGEOObject(geoObject);
   }
 }
 

@@ -305,11 +305,12 @@ void CompositeTileImageProvider::ComposerFrameTask::execute(const G3MRenderConte
 }
 
 void CompositeTileImageProvider::Composer::imageCreated(const IImage* image) {
+  const CompositeTileImageContribution* compositeContribution = _compositeContribution;
+  _compositeContribution = NULL; // the _compositeContribution ownership moved to the listener
   _listener->imageCreated(_tileId,
                           image,
                           _imageId,
-                          _compositeContribution);
-  _compositeContribution = NULL; // the _compositeContribution ownership moved to the listener
+                          compositeContribution);
   cleanUp();
 }
 

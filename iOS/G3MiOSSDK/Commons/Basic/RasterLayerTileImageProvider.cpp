@@ -59,11 +59,12 @@ public:
   void onDownload(const URL& url,
                   IImage* image,
                   bool expired) {
+    const TileImageContribution* contribution = _contribution;
+    _contribution = NULL; // moves ownership of _contribution to _listener
     _listener->imageCreated(_tileId,
                             image,
                             url.getPath(),
-                            _contribution);
-    _contribution = NULL; // moves ownership of _contribution to _listener
+                            contribution);
   }
 
   void onError(const URL& url) {
