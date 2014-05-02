@@ -120,7 +120,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private final boolean _deleteListener;
     private IDownloader _downloader;
     private final IThreadUtils _threadUtils;
-    private final Vector2I _imageResolution = new Vector2I();
+    private final int _imageWidth;
+    private final int _imageHeight;
 
     private TileImageContribution _contribution;
 
@@ -141,7 +142,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _contribution = contribution;
        _listener = listener;
        _deleteListener = deleteListener;
-       _imageResolution = new Vector2I(imageResolution);
+       _imageWidth = imageResolution._x;
+       _imageHeight = imageResolution._y;
        _downloader = downloader;
        _threadUtils = threadUtils;
        _canceled = false;
@@ -243,7 +245,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     
         ICanvas canvas = IFactory.instance().createCanvas();
     
-        canvas.initialize(_imageResolution._x, _imageResolution._y);
+        canvas.initialize(_imageWidth, _imageHeight);
     
         final GEORasterProjection projection;
         int tileLevel;
