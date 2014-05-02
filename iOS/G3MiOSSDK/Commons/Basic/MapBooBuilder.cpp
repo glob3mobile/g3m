@@ -16,7 +16,6 @@
 #include "TilesRenderParameters.hpp"
 #include "DownloadPriority.hpp"
 #include "G3MWidget.hpp"
-//#include "SimpleCameraConstrainer.hpp"
 #include "SectorAndHeightCameraConstrainer.hpp"
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
@@ -50,10 +49,8 @@
 #include "Mark.hpp"
 #include "URLTemplateLayer.hpp"
 #include "ErrorHandling.hpp"
-#include "LabelImageBuilder.hpp"
-#include "HUDQuadWidget.hpp"
-#include "HUDAbsolutePosition.hpp"
-#include "HUDRelativeSize.hpp"
+#include "ICanvas.hpp"
+#include "GFont.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -2060,30 +2057,131 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
   
 }
 
-void MapBoo_HUDRenderer::updateInfo(const std::vector<std::string> &info) {
-  removeAllWidgets();
-  const int size = info.size();
-  for(int i = 0; i < size; i++) {
-    std::string inf = info.at(i);
-    LabelImageBuilder* labelBuilder = new LabelImageBuilder(inf,               // text
-                                                            GFont::monospaced(14), // font
-                                                            3,                     // margin
-                                                            Color::white(),       // color
-                                                            Color::black(),        // shadowColor
-                                                            2,                     // shadowBlur
-                                                            1,                     // shadowOffsetX
-                                                            -1,                    // shadowOffsetY
-                                                            Color::transparent(),          // backgroundColor
-                                                            4,                     // cornerRadius
-                                                            true                   // mutable
-                                                            );
-    
-    HUDQuadWidget* label = new HUDQuadWidget(labelBuilder,
-                                             new HUDAbsolutePosition(5),
-                                             new HUDAbsolutePosition(10*i),
-                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_WIDTH),
-                                             new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGTH) );
-    
-    addWidget(label);
+
+void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
+                                          int width,
+                                          int height) {
+  int longestTextIndex = 0;
+  int maxLength = _infos.at(longestTextIndex).length();
+  const int infosSize = _infos.size();
+  for (int i = 1; i < infosSize; i++) {
+    const int itemLength = _infos.at(i).length();
+    if (maxLength < itemLength) {
+      maxLength = itemLength;
+      longestTextIndex = i;
+    }
   }
+  
+  int fontSize = 11;
+  int textHeight = 0;
+  const int padding = 2;
+  const int maxWidth = width - (2 * padding);
+  bool fit = false;
+  while (!fit && fontSize > 2) {
+    GFont labelFont = GFont::sansSerif(fontSize);
+    const std::string longestText = _infos.at(longestTextIndex);
+    canvas->setFont(labelFont);
+    const Vector2F extent = canvas->textExtent(longestText);
+    if (extent._x <= maxWidth) {
+      fit = true;
+      textHeight = (int) extent._y;
+    }
+    else {
+      fontSize--;
+    }
+  }
+
+  canvas->setFillColor(Color::white());
+  canvas->setShadow(Color::black(), 1.0, 1.0, -1.0);
+  int cursor = textHeight + padding;
+  for (int i = 0; i < infosSize; i++) {
+    canvas->fillText(_infos.at(i), 2, height - cursor);
+    cursor += textHeight;
+  }
+}
+
+bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
+                                            const std::vector<std::string>& v2) const {
+  const int size1 = v1.size();
+  const int size2 = v2.size();
+  if (size1 != size2) {
+    return false;
+  }
+  
+  for (int i = 0; i < size1; i++) {
+    const std::string str1 = v1[i];
+    const std::string str2 = v2[i];
+    if (str1 != str2) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool HUDInfoRenderer_ImageFactory::setInfos(const std::vector<std::string>& infos) {
+  if ( isEquals(_infos, infos) ) {
+    return false;
+  }
+  
+  _infos.clear();
+#ifdef C_CODE
+  _infos.insert(_infos.end(),
+                 infos.begin(),
+                 infos.end());
+#endif
+#ifdef JAVA_CODE
+  _infos.addAll(infos);
+#endif
+
+  return true;
+}
+
+MapBoo_HUDRenderer::MapBoo_HUDRenderer() {
+  _hudImageRenderer = new HUDImageRenderer(new HUDInfoRenderer_ImageFactory());
+}
+
+MapBoo_HUDRenderer::~MapBoo_HUDRenderer() {
+  delete _hudImageRenderer;
+}
+
+void MapBoo_HUDRenderer::updateInfo(const std::vector<std::string> &info) {
+  HUDInfoRenderer_ImageFactory* factory = (HUDInfoRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
+  if (factory->setInfos(info)) {
+    _hudImageRenderer->recreateImage();
+  }
+}
+
+void MapBoo_HUDRenderer::initialize(const G3MContext* context) {
+  _hudImageRenderer->initialize(context);
+}
+
+void MapBoo_HUDRenderer::render(const G3MRenderContext* rc,
+                              GLState* glState) {
+  _hudImageRenderer->render(rc, glState);
+}
+
+void MapBoo_HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                                             int width, int height) {
+  _hudImageRenderer->onResizeViewportEvent(ec,
+                                           width, height);
+}
+
+void MapBoo_HUDRenderer::start(const G3MRenderContext* rc) {
+  _hudImageRenderer->start(rc);
+}
+
+void MapBoo_HUDRenderer::stop(const G3MRenderContext* rc) {
+  _hudImageRenderer->stop(rc);
+}
+
+void MapBoo_HUDRenderer::onResume(const G3MContext* context) {
+  _hudImageRenderer->onResume(context);
+}
+
+void MapBoo_HUDRenderer::onPause(const G3MContext* context) {
+  _hudImageRenderer->onPause(context);
+}
+
+void MapBoo_HUDRenderer::onDestroy(const G3MContext* context) {
+  _hudImageRenderer->onDestroy(context);
 }

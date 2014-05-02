@@ -58,6 +58,7 @@ class Sector;
 #include "Geodetic3D.hpp"
 #include "HUDRenderer.hpp"
 #include "InfoDisplay.hpp"
+#include "HUDImageRenderer.hpp"
 
 
 class MapBooApplicationChangeListener {
@@ -405,9 +406,51 @@ public:
 };
 
 
-class MapBoo_HUDRenderer : public HUDRenderer {
+class HUDInfoRenderer_ImageFactory : public HUDImageRenderer::CanvasImageFactory {
+private:
+  std::vector<std::string> _infos;
+  
+protected:
+  
+  void drawOn(ICanvas* canvas,
+              int width,
+              int height);
+  
+  bool isEquals(const std::vector<std::string>& v1,
+                const std::vector<std::string>& v2) const;
+  
 public:
+  ~HUDInfoRenderer_ImageFactory() {
+  }
+  
+  bool setInfos(const std::vector<std::string>& infos);
+};
+
+class MapBoo_HUDRenderer : public HUDRenderer {
+private:
+  HUDImageRenderer* _hudImageRenderer;
+public:
+  MapBoo_HUDRenderer();
+  ~MapBoo_HUDRenderer();
   void updateInfo(const std::vector<std::string>& info);
+  void initialize(const G3MContext* context);
+  
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
+  
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height);
+  
+  void start(const G3MRenderContext* rc);
+  
+  void stop(const G3MRenderContext* rc);
+  
+  
+  void onResume(const G3MContext* context);
+  
+  void onPause(const G3MContext* context);
+  
+  void onDestroy(const G3MContext* context);
 };
 
 
