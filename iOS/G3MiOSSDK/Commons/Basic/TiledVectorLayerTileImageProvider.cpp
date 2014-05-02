@@ -249,7 +249,7 @@ void TiledVectorLayerTileImageProvider::cancel(const std::string& tileId) {
 #ifdef JAVA_CODE
   final ImageAssembler assembler = _assemblers.get(tileId);
   if (assembler != null) {
-    _assembler.cancelRequest();
+    assembler.cancelRequest();
   }
 #endif
 }
@@ -267,7 +267,7 @@ void TiledVectorLayerTileImageProvider::requestFinish(const std::string& tileId)
 #ifdef JAVA_CODE
   final ImageAssembler assembler = _assemblers.remove(tileId);
   if (assembler != null) {
-    _assembler.dispose();
+    assembler.dispose();
   }
 #endif
 }

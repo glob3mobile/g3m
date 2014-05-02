@@ -104,7 +104,12 @@ private:
 
     GEOJSONBufferParser* _parser;
 
+#ifdef C_CODE
     const GEORasterSymbolizer* _symbolizer;
+#endif
+#ifdef JAVA_CODE
+    private GEORasterSymbolizer _symbolizer;
+#endif
 
   public:
     ImageAssembler(TiledVectorLayerTileImageProvider* tileImageProvider,
