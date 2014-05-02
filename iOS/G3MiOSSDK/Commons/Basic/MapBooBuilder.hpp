@@ -426,7 +426,7 @@ public:
   bool setInfos(const std::vector<std::string>& infos);
 };
 
-class MapBoo_HUDRenderer : public HUDRenderer {
+class MapBoo_HUDRenderer : public DefaultRenderer {
 private:
   HUDImageRenderer* _hudImageRenderer;
 public:

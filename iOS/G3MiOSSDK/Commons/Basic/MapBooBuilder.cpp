@@ -2092,7 +2092,7 @@ void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
   }
 
   canvas->setFillColor(Color::white());
-  canvas->setShadow(Color::black(), 1.0, 1.0, -1.0);
+  canvas->setShadow(Color::black(), 1.0f, 1.0f, -1.0f);
   int cursor = textHeight + padding;
   for (int i = 0; i < infosSize; i++) {
     canvas->fillText(_infos.at(i), 2, height - cursor);
