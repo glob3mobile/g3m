@@ -36,7 +36,6 @@ public class GEO2DPointGeometry extends GEOGeometry2D
   public GEO2DPointGeometry(Geodetic2D position)
   {
      _position = new Geodetic2D(position);
-
   }
 
   public final Geodetic2D getPosition()
