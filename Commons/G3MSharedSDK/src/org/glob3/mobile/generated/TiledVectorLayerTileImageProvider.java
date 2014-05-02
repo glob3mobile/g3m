@@ -70,8 +70,9 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       if (_imageAssembler != null)
       {
-        _imageAssembler.parsedGEOObject(_geoObject);
+        GEOObject geoObject = _geoObject;
         _geoObject = null; // moves ownership of _geoObject to _imageAssembler
+        _imageAssembler.parsedGEOObject(geoObject);
       }
     }
 
