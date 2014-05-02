@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class MapBoo_HUDRenderer extends HUDRenderer
+public class MapBoo_HUDRenderer extends DefaultRenderer
 {
   private HUDImageRenderer _hudImageRenderer;
   public MapBoo_HUDRenderer()

@@ -42,7 +42,7 @@ public class HUDInfoRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFa
     }
   
     canvas.setFillColor(Color.white());
-    canvas.setShadow(Color.black(), 1.0, 1.0, -1.0);
+    canvas.setShadow(Color.black(), 1.0f, 1.0f, -1.0f);
     int cursor = textHeight + padding;
     for (int i = 0; i < infosSize; i++)
     {
