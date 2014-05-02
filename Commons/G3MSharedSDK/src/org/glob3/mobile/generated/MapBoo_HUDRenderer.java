@@ -1,18 +1,62 @@
 package org.glob3.mobile.generated; 
 public class MapBoo_HUDRenderer extends HUDRenderer
 {
+  private HUDImageRenderer _hudImageRenderer;
+  public MapBoo_HUDRenderer()
+  {
+    _hudImageRenderer = new HUDImageRenderer(new HUDInfoRenderer_ImageFactory());
+  }
+  public void dispose()
+  {
+    if (_hudImageRenderer != null)
+       _hudImageRenderer.dispose();
+  }
   public final void updateInfo(java.util.ArrayList<String> info)
   {
-    removeAllWidgets();
-    final int size = info.size();
-    for(int i = 0; i < size; i++)
+    HUDInfoRenderer_ImageFactory factory = (HUDInfoRenderer_ImageFactory)(_hudImageRenderer.getImageFactory());
+    if (factory.setInfos(info))
     {
-      String inf = info.get(i);
-      LabelImageBuilder labelBuilder = new LabelImageBuilder(inf, GFont.monospaced(14), 3, Color.white(), Color.black(), 2, 1, -1, Color.transparent(), 4, true); // mutable -  cornerRadius -  backgroundColor -  shadowOffsetY -  shadowOffsetX -  shadowBlur -  shadowColor -  color -  margin -  font -  text
-  
-      HUDQuadWidget label = new HUDQuadWidget(labelBuilder, new HUDAbsolutePosition(5), new HUDAbsolutePosition(10 *i), new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_WIDTH), new HUDRelativeSize(1, HUDRelativeSize.Reference.BITMAP_HEIGTH));
-  
-      addWidget(label);
+      _hudImageRenderer.recreateImage();
     }
+  }
+  public final void initialize(G3MContext context)
+  {
+    _hudImageRenderer.initialize(context);
+  }
+
+  public final void render(G3MRenderContext rc, GLState glState)
+  {
+    _hudImageRenderer.render(rc, glState);
+  }
+
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
+  {
+    _hudImageRenderer.onResizeViewportEvent(ec, width, height);
+  }
+
+  public final void start(G3MRenderContext rc)
+  {
+    _hudImageRenderer.start(rc);
+  }
+
+  public final void stop(G3MRenderContext rc)
+  {
+    _hudImageRenderer.stop(rc);
+  }
+
+
+  public final void onResume(G3MContext context)
+  {
+    _hudImageRenderer.onResume(context);
+  }
+
+  public final void onPause(G3MContext context)
+  {
+    _hudImageRenderer.onPause(context);
+  }
+
+  public final void onDestroy(G3MContext context)
+  {
+    _hudImageRenderer.onDestroy(context);
   }
 }
