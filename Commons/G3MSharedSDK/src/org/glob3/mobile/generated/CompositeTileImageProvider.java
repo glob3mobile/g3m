@@ -268,8 +268,9 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final void imageCreated(IImage image)
     {
-      _listener.imageCreated(_tileId, image, _imageId, _compositeContribution);
+      final CompositeTileImageContribution compositeContribution = _compositeContribution;
       _compositeContribution = null; // the _compositeContribution ownership moved to the listener
+      _listener.imageCreated(_tileId, image, _imageId, compositeContribution);
       cleanUp();
     }
 

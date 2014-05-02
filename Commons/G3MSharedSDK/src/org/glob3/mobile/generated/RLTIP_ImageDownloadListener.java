@@ -32,8 +32,9 @@ public class RLTIP_ImageDownloadListener extends IImageDownloadListener
 
   public final void onDownload(URL url, IImage image, boolean expired)
   {
-    _listener.imageCreated(_tileId, image, url.getPath(), _contribution);
+    final TileImageContribution contribution = _contribution;
     _contribution = null; // moves ownership of _contribution to _listener
+    _listener.imageCreated(_tileId, image, url.getPath(), contribution);
   }
 
   public final void onError(URL url)
