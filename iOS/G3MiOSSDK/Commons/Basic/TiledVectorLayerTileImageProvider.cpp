@@ -17,12 +17,15 @@
 #include "GEORasterSymbolizer.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
+#include "GEORasterProjection.hpp"
 
 
 TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
   _imageAssembler->deletedParser();
 
+  if (_buffer) printf("    ****** (2) Deleting buffer=%p\n", _buffer);
   delete _buffer;
+  if (_geoObject) printf("    ****** (2) Deleting geoObject=%p\n", _geoObject);
   delete _geoObject;
 #ifdef JAVA_CODE
   super.dispose();
@@ -31,22 +34,25 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::cancel() {
   _imageAssembler = NULL;
-  delete _buffer;
-  _buffer = NULL;
-}
 
+//  printf("    ****** (1) Deleting buffer=%p\n", _buffer);
+//  delete _buffer;
+//  _buffer = NULL;
+}
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::runInBackground(const G3MContext* context) {
   if ((_imageAssembler != NULL) && (_buffer != NULL)) {
+    printf("    ****** Parsing buffer=%p\n", _buffer);
     _geoObject = GEOJSONParser::parseJSON(_buffer);
+    printf("    ****** Parsed geoObject=%p\n", _geoObject);
   }
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::onPostExecute(const G3MContext* context) {
   if (_imageAssembler != NULL) {
     _imageAssembler->parsedGEOObject(_geoObject);
+    _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
   }
-  _geoObject = NULL;
 }
 
 
@@ -67,7 +73,7 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::onCancel(
 
 
 TiledVectorLayerTileImageProvider::ImageAssembler::ImageAssembler(TiledVectorLayerTileImageProvider* tileImageProvider,
-                                                                  const std::string&                 tileId,
+                                                                  const Tile*                        tile,
                                                                   const TileImageContribution*       contribution,
                                                                   TileImageListener*                 listener,
                                                                   bool                               deleteListener,
@@ -75,7 +81,10 @@ TiledVectorLayerTileImageProvider::ImageAssembler::ImageAssembler(TiledVectorLay
                                                                   IDownloader*                       downloader,
                                                                   const IThreadUtils*                threadUtils) :
 _tileImageProvider(tileImageProvider),
-_tileId(tileId),
+_tileId(tile->_id),
+_tileSector(tile->_sector),
+_tileIsMercator(tile->_mercator),
+_tileLevel(tile->_level),
 _contribution(contribution),
 _listener(listener),
 _deleteListener(deleteListener),
@@ -172,24 +181,35 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
   }
   else {
 #warning Diego at work!
+    //ILogger::instance()->logInfo("Parsed geojson");
+
+    if (_canceled) {
+      printf("    ****** <<CANCELED>> Rasterizing geoObject=%p\n", geoObject);
+    }
+    else {
+      printf("    ****** Rasterizing geoObject=%p\n", geoObject);
+    }
 
     ICanvas* canvas = IFactory::instance()->createCanvas();
 
     canvas->initialize(_imageWidth, _imageHeight);
 
-    const GEORasterProjection* projection;
-    int tileLevel;
-    geoObject->rasterize(_symbolizer, canvas, projection, tileLevel);
+    const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
+                                                                    _tileIsMercator,
+                                                                    _imageWidth,
+                                                                    _imageHeight);;
+    geoObject->rasterize(_symbolizer,
+                         canvas,
+                         projection,
+                         _tileLevel);
 
-//    void rasterize(ICanvas*                   canvas,
-//                   const GEORasterProjection* projection,
-//                   int tileLevel) const;
-
+    delete projection;
     delete canvas;
 
+    printf("    ****** (1) Deleting geoObject=%p\n", geoObject);
+    delete geoObject;
 
-    ILogger::instance()->logInfo("Parsed geojson");
-
+#warning remove this
     _listener->imageCreationError(_tileId,
                                   "NOT YET IMPLEMENTED");
 
@@ -197,8 +217,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
     _contribution = NULL;
 
     _tileImageProvider->requestFinish(_tileId);
-
-    delete geoObject;
   }
 }
 
@@ -219,10 +237,8 @@ void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                bool deleteListener,
                                                FrameTasksExecutor* frameTasksExecutor) {
 
-  const std::string tileId = tile->_id;
-
   ImageAssembler* assembler = new ImageAssembler(this,
-                                                 tileId,
+                                                 tile,
                                                  contribution,
                                                  listener,
                                                  deleteListener,
@@ -230,7 +246,7 @@ void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                  _downloader,
                                                  _threadUtils);
 
-  _assemblers[tileId] = assembler;
+  _assemblers[tile->_id] = assembler;
 
   assembler->start(_layer,
                    tile,

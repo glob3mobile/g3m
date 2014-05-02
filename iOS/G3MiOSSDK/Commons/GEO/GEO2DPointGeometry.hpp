@@ -27,7 +27,6 @@ public:
   GEO2DPointGeometry(const Geodetic2D& position) :
   _position(position)
   {
-
   }
 
   const Geodetic2D getPosition() const {

@@ -19,6 +19,7 @@ class GEORasterSymbolizer;
 class ICanvas;
 class GEORasterProjection;
 
+
 class GEOObject {
 public:
   virtual ~GEOObject() {

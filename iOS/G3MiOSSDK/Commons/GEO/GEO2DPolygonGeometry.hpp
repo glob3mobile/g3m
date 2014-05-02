@@ -19,30 +19,19 @@ class GEO2DPolygonData;
 
 class GEO2DPolygonGeometry : public GEOGeometry2D {
 private:
-//  std::vector<Geodetic2D*>*               _coordinates;
-//  std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
   const GEO2DPolygonData* _polygonData;
 
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer*    symbolizer) const;
 
-
   std::vector<GEORasterSymbol*>* createRasterSymbols(const GEORasterSymbolizer* symbolizer) const;
 
 public:
-//  GEO2DPolygonGeometry(std::vector<Geodetic2D*>* coordinates,
-//                       std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray) :
-//  _coordinates(coordinates),
-//  _holesCoordinatesArray(holesCoordinatesArray)
-//  {
-//  }
-
   GEO2DPolygonGeometry(const GEO2DPolygonData* polygonData) :
   _polygonData(polygonData)
   {
   }
   
-
   ~GEO2DPolygonGeometry();
 
   const GEO2DPolygonData* getPolygonData() const {

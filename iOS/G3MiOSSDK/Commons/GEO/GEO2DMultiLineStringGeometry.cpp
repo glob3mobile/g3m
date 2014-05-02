@@ -29,7 +29,6 @@ GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 std::vector<GEOSymbol*>* GEO2DMultiLineStringGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {

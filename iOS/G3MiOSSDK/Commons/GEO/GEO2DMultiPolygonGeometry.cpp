@@ -17,7 +17,10 @@ GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
     const int polygonsDataSize = _polygonsData->size();
     for (int i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = _polygonsData->at(i);
-      delete polygonData;
+//      delete polygonData;
+      if (polygonData != NULL) {
+        polygonData->_release();
+      }
     }
     delete _polygonsData;
   }

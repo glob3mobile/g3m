@@ -1272,6 +1272,38 @@ public:
 
 
 class SampleRasterSymbolizer : public GEORasterSymbolizer {
+private:
+  static GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
+
+    float dashLengths[] = {};
+    int dashCount = 0;
+
+    return GEO2DLineRasterStyle(color,
+                                2,
+                                CAP_ROUND,
+                                JOIN_ROUND,
+                                1,
+                                dashLengths,
+                                dashCount,
+                                0);
+  }
+
+  static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
+
+    return GEO2DSurfaceRasterStyle( color );
+  }
+
+
 public:
   GEORasterSymbolizer* copy() const {
     return new SampleRasterSymbolizer();
@@ -1290,11 +1322,33 @@ public:
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
-    return NULL;
+    std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
+
+    symbols->push_back( new GEOPolygonRasterSymbol(geometry->getPolygonData(),
+                                                   createPolygonLineRasterStyle(geometry),
+                                                   createPolygonSurfaceRasterStyle(geometry)) );
+
+    return symbols;
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const {
-    return NULL;
+    std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
+
+    const GEO2DLineRasterStyle    lineStyle    = createPolygonLineRasterStyle(geometry);
+    const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
+
+    const std::vector<GEO2DPolygonData*>* polygonsData = geometry->getPolygonsData();
+    const int polygonsDataSize = polygonsData->size();
+
+    for (int i = 0; i < polygonsDataSize; i++) {
+      GEO2DPolygonData* polygonData = polygonsData->at(i);
+      symbols->push_back( new GEOPolygonRasterSymbol(polygonData,
+                                                     lineStyle,
+                                                     surfaceStyle) );
+
+    }
+
+    return symbols;
   }
 
 };

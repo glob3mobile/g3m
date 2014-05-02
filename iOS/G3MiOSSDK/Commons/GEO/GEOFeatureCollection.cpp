@@ -49,9 +49,11 @@ void GEOFeatureCollection::rasterize(const GEORasterSymbolizer* symbolizer,
   const int featuresCount = _features.size();
   for (int i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
-    feature->rasterize(symbolizer,
-                       canvas,
-                       projection,
-                       tileLevel);
+    if (feature != NULL) {
+      feature->rasterize(symbolizer,
+                         canvas,
+                         projection,
+                         tileLevel);
+    }
   }
 }

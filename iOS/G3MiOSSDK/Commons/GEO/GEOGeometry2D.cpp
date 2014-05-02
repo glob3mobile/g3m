@@ -28,5 +28,4 @@ void GEOGeometry2D::rasterize(const GEORasterSymbolizer* symbolizer,
 
     delete symbols;
   }
-
 }

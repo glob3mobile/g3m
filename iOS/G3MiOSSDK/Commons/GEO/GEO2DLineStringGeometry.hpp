@@ -28,7 +28,6 @@ public:
   GEO2DLineStringGeometry(std::vector<Geodetic2D*>* coordinates) :
   _coordinates(coordinates)
   {
-
   }
 
   ~GEO2DLineStringGeometry();
@@ -36,7 +35,6 @@ public:
   const std::vector<Geodetic2D*>* getCoordinates() const {
     return _coordinates;
   }
-
 
 };
 

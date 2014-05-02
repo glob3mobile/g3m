@@ -17,57 +17,70 @@ GEOPolygonRasterSymbol::GEOPolygonRasterSymbol(const GEO2DPolygonData*        po
                                                const int minTileLevel,
                                                const int maxTileLevel) :
 GEORasterSymbol( calculateSectorFromCoordinates(polygonData->getCoordinates()), minTileLevel, maxTileLevel ),
-_coordinates( copyCoordinates(polygonData->getCoordinates()) ),
-_holesCoordinatesArray( copyCoordinatesArray(polygonData->getHolesCoordinatesArray()) ),
+//_coordinates( copyCoordinates(polygonData->getCoordinates()) ),
+//_holesCoordinatesArray( copyCoordinatesArray(polygonData->getHolesCoordinatesArray()) ),
+_polygonData(polygonData),
 _lineStyle(lineStyle),
 _surfaceStyle(surfaceStyle)
 {
-
+  _polygonData->_retain();
 }
 
 GEOPolygonRasterSymbol::~GEOPolygonRasterSymbol() {
-#ifdef C_CODE
-  if (_coordinates != NULL) {
-    const int coordinatesSize = _coordinates->size();
-    for (int i = 0; i < coordinatesSize; i++) {
-      Geodetic2D* coordinate = _coordinates->at(i);
-      delete coordinate;
-    }
-    delete _coordinates;
-  }
-
-  if (_holesCoordinatesArray != NULL) {
-    const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
-    for (int j = 0; j < holesCoordinatesArraySize; j++) {
-      const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
-
-      const int holeCoordinatesCount = holeCoordinates->size();
-      for (int i = 0; i < holeCoordinatesCount; i++) {
-        const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
-
-        delete holeCoordinate;
-      }
-
-      delete holeCoordinates;
-    }
-    delete _holesCoordinatesArray;
-  }
-#endif
+//#ifdef C_CODE
+//  if (_coordinates != NULL) {
+//    const int coordinatesSize = _coordinates->size();
+//    for (int i = 0; i < coordinatesSize; i++) {
+//      Geodetic2D* coordinate = _coordinates->at(i);
+//      delete coordinate;
+//    }
+//    delete _coordinates;
+//  }
+//
+//  if (_holesCoordinatesArray != NULL) {
+//    const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
+//    for (int j = 0; j < holesCoordinatesArraySize; j++) {
+//      const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
+//
+//      const int holeCoordinatesCount = holeCoordinates->size();
+//      for (int i = 0; i < holeCoordinatesCount; i++) {
+//        const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
+//        delete holeCoordinate;
+//      }
+//
+//      delete holeCoordinates;
+//    }
+//    delete _holesCoordinatesArray;
+//  }
+//#endif
+  _polygonData->_release();
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
-
 
 void GEOPolygonRasterSymbol::rawRasterize(ICanvas*                   canvas,
                                           const GEORasterProjection* projection) const {
   const bool rasterSurface  = _surfaceStyle.apply(canvas);
   const bool rasterBoundary = _lineStyle.apply(canvas);
 
-  rasterPolygon(_coordinates,
-                _holesCoordinatesArray,
+//  rasterPolygon(_coordinates,
+//                _holesCoordinatesArray,
+//                rasterSurface,
+//                rasterBoundary,
+//                canvas,
+//                projection);
+
+//#warning TODO pass _polygonData
+//  rasterPolygon(_polygonData->getCoordinates(),
+//                _polygonData->getHolesCoordinatesArray(),
+//                rasterSurface,
+//                rasterBoundary,
+//                canvas,
+//                projection);
+
+  rasterPolygon(_polygonData,
                 rasterSurface,
                 rasterBoundary,
                 canvas,

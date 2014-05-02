@@ -19,6 +19,7 @@ class IDownloader;
 class GEOObject;
 class GEORasterSymbolizer;
 #include "Vector2I.hpp"
+#include "Sector.hpp"
 
 class TiledVectorLayerTileImageProvider : public TileImageProvider {
 private:
@@ -111,9 +112,13 @@ private:
     private GEORasterSymbolizer _symbolizer;
 #endif
 
+    const Sector _tileSector;
+    const bool   _tileIsMercator;
+    const int    _tileLevel;
+
   public:
     ImageAssembler(TiledVectorLayerTileImageProvider* tileImageProvider,
-                   const std::string&                 tileId,
+                   const Tile*                        tile,
                    const TileImageContribution*       contribution,
                    TileImageListener*                 listener,
                    bool                               deleteListener,

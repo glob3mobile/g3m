@@ -11,7 +11,7 @@
 #include "GEOTileRasterizer.hpp"
 #include "ICanvas.hpp"
 #include "GEORasterProjection.hpp"
-
+#include "GEO2DPolygonData.hpp"
 
 std::vector<Geodetic2D*>* GEORasterSymbol::copyCoordinates(const std::vector<Geodetic2D*>* coordinates) {
 #ifdef C_CODE
@@ -211,16 +211,13 @@ void GEORasterSymbol::rasterLine(const std::vector<Geodetic2D*>* coordinates,
   }
 }
 
-int __REMOVE_INCLUDE;
-#include "Color.hpp"
-
-void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
-                                    const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-                                    bool                                          rasterSurface,
-                                    bool                                          rasterBoundary,
-                                    ICanvas*                                      canvas,
-                                    const GEORasterProjection*                    projection) const {
+void GEORasterSymbol::rasterPolygon(const GEO2DPolygonData*    polygonData,
+                                    bool                       rasterSurface,
+                                    bool                       rasterBoundary,
+                                    ICanvas*                   canvas,
+                                    const GEORasterProjection* projection) const {
   if (rasterSurface || rasterBoundary) {
+    const std::vector<Geodetic2D*>* coordinates = polygonData->getCoordinates();
     const int coordinatesCount = coordinates->size();
     if (coordinatesCount > 1) {
       canvas->beginPath();
@@ -235,6 +232,7 @@ void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*             
 
       canvas->closePath();
 
+      const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray = polygonData->getHolesCoordinatesArray();
       if (holesCoordinatesArray != NULL) {
         const int holesCoordinatesArraySize = holesCoordinatesArray->size();
         for (int j = 0; j < holesCoordinatesArraySize; j++) {
@@ -269,7 +267,65 @@ void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*             
       }
     }
   }
+
 }
+
+//void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
+//                                    const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
+//                                    bool                                          rasterSurface,
+//                                    bool                                          rasterBoundary,
+//                                    ICanvas*                                      canvas,
+//                                    const GEORasterProjection*                    projection) const {
+//  if (rasterSurface || rasterBoundary) {
+//    const int coordinatesCount = coordinates->size();
+//    if (coordinatesCount > 1) {
+//      canvas->beginPath();
+//
+//      canvas->moveTo( projection->project(coordinates->at(0)) );
+//
+//      for (int i = 1; i < coordinatesCount; i++) {
+//        const Geodetic2D* coordinate = coordinates->at(i);
+//
+//        canvas->lineTo( projection->project(coordinate) );
+//      }
+//
+//      canvas->closePath();
+//
+//      if (holesCoordinatesArray != NULL) {
+//        const int holesCoordinatesArraySize = holesCoordinatesArray->size();
+//        for (int j = 0; j < holesCoordinatesArraySize; j++) {
+//          const std::vector<Geodetic2D*>* holeCoordinates = holesCoordinatesArray->at(j);
+//
+//          const int holeCoordinatesCount = holeCoordinates->size();
+//          if (holeCoordinatesCount > 1) {
+//            canvas->moveTo( projection->project(holeCoordinates->at(0)) );
+//
+//            for (int i = 1; i < holeCoordinatesCount; i++) {
+//              const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
+//
+//              canvas->lineTo( projection->project(holeCoordinate) );
+//            }
+//
+//            canvas->closePath();
+//          }
+//        }
+//      }
+//
+//
+//      if (rasterBoundary) {
+//        if (rasterSurface) {
+//          canvas->fillAndStroke();
+//        }
+//        else {
+//          canvas->stroke();
+//        }
+//      }
+//      else {
+//        canvas->fill();
+//      }
+//    }
+//  }
+//}
 
 void GEORasterSymbol::rasterize(ICanvas*                   canvas,
                                 const GEORasterProjection* projection,

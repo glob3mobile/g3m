@@ -26,8 +26,8 @@ protected:
 public:
 
   GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) :
-  _coordinatesArray(coordinatesArray) {
-
+  _coordinatesArray(coordinatesArray)
+  {
   }
 
   ~GEO2DMultiLineStringGeometry();
@@ -35,7 +35,6 @@ public:
   const std::vector<std::vector<Geodetic2D*>*>* getCoordinatesArray() const {
     return _coordinatesArray;
   }
-
   
 };
 

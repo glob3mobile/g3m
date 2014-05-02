@@ -16,7 +16,7 @@
 #include "Vector2F.hpp"
 class GEORasterProjection;
 class ICanvas;
-
+class GEO2DPolygonData;
 #include "QuadTree.hpp"
 
 class GEORasterSymbol : public GEOSymbol, public QuadTree_Content {
@@ -29,6 +29,7 @@ private:
 protected:
   const Sector* _sector;
 
+#warning remove copyCoordinates method
   static std::vector<Geodetic2D*>* copyCoordinates(const std::vector<Geodetic2D*>* coordinates);
   static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
@@ -51,12 +52,19 @@ protected:
                   ICanvas*                        canvas,
                   const GEORasterProjection*      projection) const;
 
-  void rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
-                     const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-                     bool                                          rasterSurface,
-                     bool                                          rasterBoundary,
-                     ICanvas*                                      canvas,
-                     const GEORasterProjection*                    projection) const;
+//  void rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
+//                     const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
+//                     bool                                          rasterSurface,
+//                     bool                                          rasterBoundary,
+//                     ICanvas*                                      canvas,
+//                     const GEORasterProjection*                    projection) const;
+
+  void rasterPolygon(const GEO2DPolygonData*    polygonData,
+                     bool                       rasterSurface,
+                     bool                       rasterBoundary,
+                     ICanvas*                   canvas,
+                     const GEORasterProjection* projection) const;
+
 
   virtual void rawRasterize(ICanvas*                   canvas,
                             const GEORasterProjection* projection) const = 0;
