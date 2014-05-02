@@ -28,6 +28,10 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
     return symbolizer.createSymbols(this);
   }
 
+  protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
+  {
+    return symbolizer.createSymbols(this);
+  }
 
 
   public GEO2DLineStringGeometry(java.util.ArrayList<Geodetic2D> coordinates)

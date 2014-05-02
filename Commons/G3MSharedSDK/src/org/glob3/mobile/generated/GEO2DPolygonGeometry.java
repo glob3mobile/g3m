@@ -33,6 +33,12 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
     return symbolizer.createSymbols(this);
   }
 
+
+  protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
+  {
+    return symbolizer.createSymbols(this);
+  }
+
 //  GEO2DPolygonGeometry(std::vector<Geodetic2D*>* coordinates,
 //                       std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray) :
 //  _coordinates(coordinates),
@@ -77,7 +83,6 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
   //  }
   
     super.dispose();
-  
   }
 
   public final GEO2DPolygonData getPolygonData()

@@ -27,6 +27,11 @@ public class GEO2DPointGeometry extends GEOGeometry2D
     return symbolizer.createSymbols(this);
   }
 
+  protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
+  {
+    return symbolizer.createSymbols(this);
+  }
+
 
   public GEO2DPointGeometry(Geodetic2D position)
   {

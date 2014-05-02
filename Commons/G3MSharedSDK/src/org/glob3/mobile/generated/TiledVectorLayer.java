@@ -183,4 +183,8 @@ public class TiledVectorLayer extends VectorLayer
     return downloader.requestBuffer(url, tileDownloadPriority, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, listener, deleteListener);
   }
 
+  public final GEORasterSymbolizer symbolizerCopy()
+  {
+    return _symbolizer.copy();
+  }
 }

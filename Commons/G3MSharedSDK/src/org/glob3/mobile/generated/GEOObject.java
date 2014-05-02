@@ -14,14 +14,17 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MarksRenderer;
 //class GEOTileRasterizer;
-
+//class GEORasterSymbolizer;
+//class ICanvas;
+//class GEORasterProjection;
 
 public abstract class GEOObject
 {
   public void dispose()
   {
-
   }
+
+  public abstract void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel);
 
   public abstract void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer);
 

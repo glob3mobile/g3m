@@ -66,4 +66,14 @@ public class GEOFeatureCollection extends GEOObject
      return _features.size();
   }
 
+  public final void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel)
+  {
+    final int featuresCount = _features.size();
+    for (int i = 0; i < featuresCount; i++)
+    {
+      GEOFeature feature = _features.get(i);
+      feature.rasterize(symbolizer, canvas, projection, tileLevel);
+    }
+  }
+
 }

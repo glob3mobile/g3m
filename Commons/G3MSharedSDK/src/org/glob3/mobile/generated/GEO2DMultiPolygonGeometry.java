@@ -30,6 +30,12 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
   }
 
 
+  protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
+  {
+    return symbolizer.createSymbols(this);
+  }
+
+
   public GEO2DMultiPolygonGeometry(java.util.ArrayList<GEO2DPolygonData> polygonsData)
   {
      _polygonsData = polygonsData;
