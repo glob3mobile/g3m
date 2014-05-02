@@ -23,9 +23,7 @@
 TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
   _imageAssembler->deletedParser();
 
-  if (_buffer) printf("    ****** (2) Deleting buffer=%p\n", _buffer);
   delete _buffer;
-  if (_geoObject) printf("    ****** (2) Deleting geoObject=%p\n", _geoObject);
   delete _geoObject;
 #ifdef JAVA_CODE
   super.dispose();
@@ -35,16 +33,13 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::cancel() {
   _imageAssembler = NULL;
 
-//  printf("    ****** (1) Deleting buffer=%p\n", _buffer);
 //  delete _buffer;
 //  _buffer = NULL;
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::runInBackground(const G3MContext* context) {
   if ((_imageAssembler != NULL) && (_buffer != NULL)) {
-    printf("    ****** Parsing buffer=%p\n", _buffer);
     _geoObject = GEOJSONParser::parseJSON(_buffer);
-    printf("    ****** Parsed geoObject=%p\n", _geoObject);
   }
 }
 
@@ -184,13 +179,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
 #warning Diego at work!
     //ILogger::instance()->logInfo("Parsed geojson");
 
-    if (_canceled) {
-      printf("    ****** <<CANCELED>> Rasterizing geoObject=%p\n", geoObject);
-    }
-    else {
-      printf("    ****** Rasterizing geoObject=%p\n", geoObject);
-    }
-
     ICanvas* canvas = IFactory::instance()->createCanvas();
 
     canvas->initialize(_imageWidth, _imageHeight);
@@ -207,7 +195,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
     delete projection;
     delete canvas;
 
-    printf("    ****** (1) Deleting geoObject=%p\n", geoObject);
     delete geoObject;
 
 #warning remove this
