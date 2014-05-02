@@ -133,7 +133,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     private GEOJSONBufferParser _parser;
 
-    private final GEORasterSymbolizer _symbolizer;
+    private GEORasterSymbolizer _symbolizer;
 
     public ImageAssembler(TiledVectorLayerTileImageProvider tileImageProvider, String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener, Vector2I imageResolution, IDownloader downloader, IThreadUtils threadUtils)
     {
@@ -162,8 +162,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
            _listener.dispose();
       }
       TileImageContribution.deleteContribution(_contribution);
-      if (_symbolizer != null)
-         _symbolizer.dispose();
+      _symbolizer = null;
     }
 
     public final void start(TiledVectorLayer layer, Tile tile, long tileDownloadPriority, boolean logDownloadActivity)
@@ -315,7 +314,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   {
     final ImageAssembler assembler = _assemblers.get(tileId);
     if (assembler != null) {
-      _assembler.cancelRequest();
+      assembler.cancelRequest();
     }
   }
 
@@ -323,7 +322,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   {
     final ImageAssembler assembler = _assemblers.remove(tileId);
     if (assembler != null) {
-      _assembler.dispose();
+      assembler.dispose();
     }
   }
 
