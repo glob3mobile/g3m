@@ -29,7 +29,6 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
     return symbolizer.createSymbols(this);
   }
 
-
   protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
@@ -49,8 +48,11 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
       for (int i = 0; i < polygonsDataSize; i++)
       {
         GEO2DPolygonData polygonData = _polygonsData.get(i);
+  //      delete polygonData;
         if (polygonData != null)
-           polygonData.dispose();
+        {
+          polygonData._release();
+        }
       }
       _polygonsData = null;
     }

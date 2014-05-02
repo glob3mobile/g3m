@@ -37,7 +37,6 @@ public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
   public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {
      _coordinatesArray = coordinatesArray;
-
   }
 
   public void dispose()
@@ -59,13 +58,11 @@ public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
     _coordinatesArray = null;
   
     super.dispose();
-  
   }
 
   public final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> getCoordinatesArray()
   {
     return _coordinatesArray;
   }
-
 
 }

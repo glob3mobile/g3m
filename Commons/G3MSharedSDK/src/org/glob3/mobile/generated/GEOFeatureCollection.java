@@ -72,7 +72,10 @@ public class GEOFeatureCollection extends GEOObject
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
-      feature.rasterize(symbolizer, canvas, projection, tileLevel);
+      if (feature != null)
+      {
+        feature.rasterize(symbolizer, canvas, projection, tileLevel);
+      }
     }
   }
 

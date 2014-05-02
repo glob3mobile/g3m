@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class GEORasterProjection;
 //class ICanvas;
-
+//class GEO2DPolygonData;
 
 public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Content
 {
@@ -31,6 +31,8 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
 
   protected final Sector _sector;
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning remove copyCoordinates method
   protected static java.util.ArrayList<Geodetic2D> copyCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
   {
     return coordinates;
@@ -190,10 +192,18 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     }
   }
 
-  protected final void rasterPolygon(java.util.ArrayList<Geodetic2D> coordinates, java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray, boolean rasterSurface, boolean rasterBoundary, ICanvas canvas, GEORasterProjection projection)
+//  void rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
+//                     const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
+//                     bool                                          rasterSurface,
+//                     bool                                          rasterBoundary,
+//                     ICanvas*                                      canvas,
+//                     const GEORasterProjection*                    projection) const;
+
+  protected final void rasterPolygon(GEO2DPolygonData polygonData, boolean rasterSurface, boolean rasterBoundary, ICanvas canvas, GEORasterProjection projection)
   {
     if (rasterSurface || rasterBoundary)
     {
+      final java.util.ArrayList<Geodetic2D> coordinates = polygonData.getCoordinates();
       final int coordinatesCount = coordinates.size();
       if (coordinatesCount > 1)
       {
@@ -210,6 +220,7 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
   
         canvas.closePath();
   
+        final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray = polygonData.getHolesCoordinatesArray();
         if (holesCoordinatesArray != null)
         {
           final int holesCoordinatesArraySize = holesCoordinatesArray.size();
@@ -252,7 +263,9 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
         }
       }
     }
+  
   }
+
 
   protected abstract void rawRasterize(ICanvas canvas, GEORasterProjection projection);
 
@@ -284,6 +297,64 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     return _sector;
   }
 
+
+  //void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
+  //                                    const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
+  //                                    bool                                          rasterSurface,
+  //                                    bool                                          rasterBoundary,
+  //                                    ICanvas*                                      canvas,
+  //                                    const GEORasterProjection*                    projection) const {
+  //  if (rasterSurface || rasterBoundary) {
+  //    const int coordinatesCount = coordinates->size();
+  //    if (coordinatesCount > 1) {
+  //      canvas->beginPath();
+  //
+  //      canvas->moveTo( projection->project(coordinates->at(0)) );
+  //
+  //      for (int i = 1; i < coordinatesCount; i++) {
+  //        const Geodetic2D* coordinate = coordinates->at(i);
+  //
+  //        canvas->lineTo( projection->project(coordinate) );
+  //      }
+  //
+  //      canvas->closePath();
+  //
+  //      if (holesCoordinatesArray != NULL) {
+  //        const int holesCoordinatesArraySize = holesCoordinatesArray->size();
+  //        for (int j = 0; j < holesCoordinatesArraySize; j++) {
+  //          const std::vector<Geodetic2D*>* holeCoordinates = holesCoordinatesArray->at(j);
+  //
+  //          const int holeCoordinatesCount = holeCoordinates->size();
+  //          if (holeCoordinatesCount > 1) {
+  //            canvas->moveTo( projection->project(holeCoordinates->at(0)) );
+  //
+  //            for (int i = 1; i < holeCoordinatesCount; i++) {
+  //              const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
+  //
+  //              canvas->lineTo( projection->project(holeCoordinate) );
+  //            }
+  //
+  //            canvas->closePath();
+  //          }
+  //        }
+  //      }
+  //
+  //
+  //      if (rasterBoundary) {
+  //        if (rasterSurface) {
+  //          canvas->fillAndStroke();
+  //        }
+  //        else {
+  //          canvas->stroke();
+  //        }
+  //      }
+  //      else {
+  //        canvas->fill();
+  //      }
+  //    }
+  //  }
+  //}
+  
   public final void rasterize(ICanvas canvas, GEORasterProjection projection, int tileLevel)
   {
     if (((_minTileLevel < 0) || (tileLevel >= _minTileLevel)) && ((_maxTileLevel < 0) || (tileLevel <= _maxTileLevel)))

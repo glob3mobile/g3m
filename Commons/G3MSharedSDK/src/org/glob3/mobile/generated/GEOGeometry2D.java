@@ -48,7 +48,6 @@ public abstract class GEOGeometry2D extends GEOGeometry
   
       symbols = null;
     }
-  
   }
 
 }

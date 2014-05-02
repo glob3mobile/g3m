@@ -46,7 +46,11 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _imageAssembler.deletedParser();
     
       if (_buffer != null)
+         System.out.printf("    ****** (2) Deleting buffer=%p\n", _buffer);
+      if (_buffer != null)
          _buffer.dispose();
+      if (_geoObject != null)
+         System.out.printf("    ****** (2) Deleting geoObject=%p\n", _geoObject);
       if (_geoObject != null)
          _geoObject.dispose();
       super.dispose();
@@ -56,7 +60,9 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       if ((_imageAssembler != null) && (_buffer != null))
       {
+        System.out.printf("    ****** Parsing buffer=%p\n", _buffer);
         _geoObject = GEOJSONParser.parseJSON(_buffer);
+        System.out.printf("    ****** Parsed geoObject=%p\n", _geoObject);
       }
     }
 
@@ -65,16 +71,17 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       if (_imageAssembler != null)
       {
         _imageAssembler.parsedGEOObject(_geoObject);
+        _geoObject = null; // moves ownership of _geoObject to _imageAssembler
       }
-      _geoObject = null;
     }
 
     public final void cancel()
     {
       _imageAssembler = null;
-      if (_buffer != null)
-         _buffer.dispose();
-      _buffer = null;
+    
+    //  printf("    ****** (1) Deleting buffer=%p\n", _buffer);
+    //  delete _buffer;
+    //  _buffer = NULL;
     }
 
   }
@@ -135,10 +142,17 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     private GEORasterSymbolizer _symbolizer;
 
-    public ImageAssembler(TiledVectorLayerTileImageProvider tileImageProvider, String tileId, TileImageContribution contribution, TileImageListener listener, boolean deleteListener, Vector2I imageResolution, IDownloader downloader, IThreadUtils threadUtils)
+    private final Sector _tileSector ;
+    private final boolean _tileIsMercator;
+    private final int _tileLevel;
+
+    public ImageAssembler(TiledVectorLayerTileImageProvider tileImageProvider, Tile tile, TileImageContribution contribution, TileImageListener listener, boolean deleteListener, Vector2I imageResolution, IDownloader downloader, IThreadUtils threadUtils)
     {
        _tileImageProvider = tileImageProvider;
-       _tileId = tileId;
+       _tileId = tile._id;
+       _tileSector = new Sector(tile._sector);
+       _tileIsMercator = tile._mercator;
+       _tileLevel = tile._level;
        _contribution = contribution;
        _listener = listener;
        _deleteListener = deleteListener;
@@ -241,34 +255,41 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
+        //ILogger::instance()->logInfo("Parsed geojson");
+    
+        if (_canceled)
+        {
+          System.out.printf("    ****** <<CANCELED>> Rasterizing geoObject=%p\n", geoObject);
+        }
+        else
+        {
+          System.out.printf("    ****** Rasterizing geoObject=%p\n", geoObject);
+        }
     
         ICanvas canvas = IFactory.instance().createCanvas();
     
         canvas.initialize(_imageWidth, _imageHeight);
     
-        final GEORasterProjection projection;
-        int tileLevel;
-        geoObject.rasterize(_symbolizer, canvas, projection, tileLevel);
+        final GEORasterProjection projection = new GEORasterProjection(_tileSector, _tileIsMercator, _imageWidth, _imageHeight);
+        geoObject.rasterize(_symbolizer, canvas, projection, _tileLevel);
     
-    //    void rasterize(ICanvas*                   canvas,
-    //                   const GEORasterProjection* projection,
-    //                   int tileLevel) const;
-    
+        if (projection != null)
+           projection.dispose();
         if (canvas != null)
            canvas.dispose();
     
+        System.out.printf("    ****** (1) Deleting geoObject=%p\n", geoObject);
+        if (geoObject != null)
+           geoObject.dispose();
     
-        ILogger.instance().logInfo("Parsed geojson");
-    
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning remove this
         _listener.imageCreationError(_tileId, "NOT YET IMPLEMENTED");
     
         TileImageContribution.deleteContribution(_contribution);
         _contribution = null;
     
         _tileImageProvider.requestFinish(_tileId);
-    
-        if (geoObject != null)
-           geoObject.dispose();
       }
     }
     public final void deletedParser()
@@ -301,11 +322,9 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   public final void create(Tile tile, TileImageContribution contribution, Vector2I resolution, long tileDownloadPriority, boolean logDownloadActivity, TileImageListener listener, boolean deleteListener, FrameTasksExecutor frameTasksExecutor)
   {
   
-    final String tileId = tile._id;
+    ImageAssembler assembler = new ImageAssembler(this, tile, contribution, listener, deleteListener, resolution, _downloader, _threadUtils);
   
-    ImageAssembler assembler = new ImageAssembler(this, tileId, contribution, listener, deleteListener, resolution, _downloader, _threadUtils);
-  
-    _assemblers.put(tileId, assembler);
+    _assemblers.put(tile._id, assembler);
   
     assembler.start(_layer, tile, tileDownloadPriority, logDownloadActivity);
   }
@@ -314,7 +333,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   {
     final ImageAssembler assembler = _assemblers.get(tileId);
     if (assembler != null) {
-      assembler.cancelRequest();
+      assembler.cancel();
     }
   }
 

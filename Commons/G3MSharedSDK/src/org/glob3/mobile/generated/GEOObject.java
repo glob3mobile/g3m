@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 //class ICanvas;
 //class GEORasterProjection;
 
+
 public abstract class GEOObject
 {
   public void dispose()
