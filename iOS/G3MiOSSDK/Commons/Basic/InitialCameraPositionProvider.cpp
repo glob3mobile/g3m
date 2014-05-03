@@ -14,9 +14,7 @@
 Geodetic3D SimpleInitialCameraPositionProvider::getCameraPosition(const Planet* planet,
                                                                   const PlanetRenderer* planetRenderer) const {
   const Sector* sector = (planetRenderer == NULL) ? NULL : planetRenderer->getRenderedSector();
-  if (sector == NULL) {
-    return planet->getDefaultCameraPosition(Sector::fullSphere());
-  }
-
-  return planet->getDefaultCameraPosition(*sector);
+  return ((sector == NULL)
+          ? planet->getDefaultCameraPosition(Sector::fullSphere())
+          : planet->getDefaultCameraPosition(*sector));
 }
