@@ -6,11 +6,6 @@ public class SimpleInitialCameraPositionProvider extends InitialCameraPositionPr
   public final Geodetic3D getCameraPosition(Planet planet, PlanetRenderer planetRenderer)
   {
     final Sector sector = (planetRenderer == null) ? null : planetRenderer.getRenderedSector();
-    if (sector == null)
-    {
-      return planet.getDefaultCameraPosition(Sector.fullSphere());
-    }
-  
-    return planet.getDefaultCameraPosition(sector);
+    return ((sector == null) ? planet.getDefaultCameraPosition(Sector.fullSphere()) : planet.getDefaultCameraPosition(sector));
   }
 }
