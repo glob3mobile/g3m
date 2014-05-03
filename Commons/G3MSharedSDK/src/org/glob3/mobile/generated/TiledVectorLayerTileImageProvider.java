@@ -28,6 +28,20 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class ImageAssembler;
 
+  private static class CanvasImageListener extends IImageListener
+  {
+    private ImageAssembler _imageAssembler;
+    public CanvasImageListener(ImageAssembler imageAssembler)
+    {
+       _imageAssembler = imageAssembler;
+    }
+
+    public final void imageCreated(IImage image)
+    {
+      _imageAssembler.imageCreated(image);
+    }
+  }
+
   private static class GEOJSONBufferParser extends GAsyncTask
   {
     private ImageAssembler _imageAssembler;
@@ -43,14 +57,13 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     public void dispose()
     {
-      _imageAssembler.deletedParser();
+      if (_imageAssembler != null)
+      {
+        _imageAssembler.deletedParser();
+      }
     
       if (_buffer != null)
-         System.out.printf("    ****** (2) Deleting buffer=%p\n", _buffer);
-      if (_buffer != null)
          _buffer.dispose();
-      if (_geoObject != null)
-         System.out.printf("    ****** (2) Deleting geoObject=%p\n", _geoObject);
       if (_geoObject != null)
          _geoObject.dispose();
       super.dispose();
@@ -60,9 +73,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       if ((_imageAssembler != null) && (_buffer != null))
       {
-        System.out.printf("    ****** Parsing buffer=%p\n", _buffer);
         _geoObject = GEOJSONParser.parseJSON(_buffer);
-        System.out.printf("    ****** Parsed geoObject=%p\n", _geoObject);
       }
     }
 
@@ -80,9 +91,13 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       _imageAssembler = null;
     
-    //  printf("    ****** (1) Deleting buffer=%p\n", _buffer);
     //  delete _buffer;
     //  _buffer = NULL;
+    }
+
+    public final void deletedImageAssembler()
+    {
+      _imageAssembler = null;
     }
 
   }
@@ -99,22 +114,36 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-      _imageAssembler.bufferDownloaded(buffer);
+      if (_imageAssembler != null)
+      {
+        _imageAssembler.bufferDownloaded(buffer);
+      }
     }
 
     public final void onError(URL url)
     {
-      _imageAssembler.bufferDownloadError(url);
+      if (_imageAssembler != null)
+      {
+        _imageAssembler.bufferDownloadError(url);
+      }
     }
 
     public final void onCancel(URL url)
     {
-      _imageAssembler.bufferDownloadCanceled();
+      if (_imageAssembler != null)
+      {
+        _imageAssembler.bufferDownloadCanceled();
+      }
     }
 
     public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
     {
       // do nothing
+    }
+
+    public final void deletedImageAssembler()
+    {
+      _imageAssembler = null;
     }
 
   }
@@ -171,6 +200,14 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     public void dispose()
     {
+      if (_downloadListener != null)
+      {
+        _downloadListener.deletedImageAssembler();
+      }
+      if (_parser != null)
+      {
+        _parser.deletedImageAssembler();
+      }
       if (_deleteListener)
       {
         if (_listener != null)
@@ -258,15 +295,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 //#warning Diego at work!
         //ILogger::instance()->logInfo("Parsed geojson");
     
-        if (_canceled)
-        {
-          System.out.printf("    ****** <<CANCELED>> Rasterizing geoObject=%p\n", geoObject);
-        }
-        else
-        {
-          System.out.printf("    ****** Rasterizing geoObject=%p\n", geoObject);
-        }
-    
         ICanvas canvas = IFactory.instance().createCanvas();
     
         canvas.initialize(_imageWidth, _imageHeight);
@@ -276,26 +304,45 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     
         if (projection != null)
            projection.dispose();
-        if (canvas != null)
-           canvas.dispose();
-    
-        System.out.printf("    ****** (1) Deleting geoObject=%p\n", geoObject);
         if (geoObject != null)
            geoObject.dispose();
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning remove this
-        _listener.imageCreationError(_tileId, "NOT YET IMPLEMENTED");
+        canvas.createImage(new CanvasImageListener(this), true); // autodelete
     
-        TileImageContribution.deleteContribution(_contribution);
-        _contribution = null;
+        if (canvas != null)
+           canvas.dispose();
     
-        _tileImageProvider.requestFinish(_tileId);
+    ///#warning remove this
+    //    _listener->imageCreationError(_tileId,
+    //                                  "NOT YET IMPLEMENTED");
+    //
+    //    TileImageContribution::deleteContribution(_contribution);
+    //    _contribution = NULL;
+    //    aa;
+    //    _tileImageProvider->requestFinish(_tileId);
       }
     }
     public final void deletedParser()
     {
       _parser = null;
+    }
+
+    public final void imageCreated(IImage image)
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning compose imageId
+    
+    
+    
+      if (_canceled)
+      {
+        System.out.print("**** break point\n");
+      }
+    
+      final TileImageContribution contribution = _contribution;
+      _contribution = null; // moves ownership to _listener
+      _listener.imageCreated(_tileId, image, "VectorTiles" + _tileId, contribution);
+      _tileImageProvider.requestFinish(_tileId);
     }
   }
 
