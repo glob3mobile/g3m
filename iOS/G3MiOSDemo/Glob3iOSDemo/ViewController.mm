@@ -1442,7 +1442,8 @@ public:
 
   if (true) {
 #warning Diego at work!
-    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{x}/{level}_{x}-{y}.json";
+    //const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{x}/{level}_{x}-{y}.json";
+    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{y2}/{level}_{y2}-{x}.json";
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
 
@@ -1889,7 +1890,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;

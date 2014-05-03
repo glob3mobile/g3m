@@ -21,7 +21,9 @@
 
 
 TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
-  _imageAssembler->deletedParser();
+  if (_imageAssembler != NULL) {
+    _imageAssembler->deletedParser();
+  }
 
   delete _buffer;
   delete _geoObject;
@@ -55,15 +57,21 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::onPostExecute(const
 void TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::onDownload(const URL& url,
                                                                                   IByteBuffer* buffer,
                                                                                   bool expired) {
-  _imageAssembler->bufferDownloaded(buffer);
+  if (_imageAssembler != NULL) {
+    _imageAssembler->bufferDownloaded(buffer);
+  }
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::onError(const URL& url) {
-  _imageAssembler->bufferDownloadError(url);
+  if (_imageAssembler != NULL) {
+    _imageAssembler->bufferDownloadError(url);
+  }
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::onCancel(const URL& url) {
-  _imageAssembler->bufferDownloadCanceled();
+  if (_imageAssembler != NULL) {
+    _imageAssembler->bufferDownloadCanceled();
+  }
 }
 
 
@@ -115,6 +123,12 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
 }
 
 TiledVectorLayerTileImageProvider::ImageAssembler::~ImageAssembler() {
+  if (_downloadListener != NULL) {
+    _downloadListener->deletedImageAssembler();
+  }
+  if (_parser != NULL) {
+    _parser->deletedImageAssembler();
+  }
   if (_deleteListener) {
     delete _listener;
   }
@@ -168,6 +182,28 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadCanceled()
 //  _tileImageProvider->requestFinish(_tileId);
 }
 
+void TiledVectorLayerTileImageProvider::CanvasImageListener::imageCreated(const IImage* image) {
+  _imageAssembler->imageCreated(image);
+}
+
+void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImage* image) {
+#warning compose imageId
+
+  
+
+  if (_canceled) {
+    printf("**** break point\n");
+  }
+
+  const TileImageContribution* contribution = _contribution;
+  _contribution = NULL; // moves ownership to _listener
+  _listener->imageCreated(_tileId,
+                          image,
+                          "VectorTiles" + _tileId,
+                          contribution);
+  _tileImageProvider->requestFinish(_tileId);
+}
+
 void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObject* geoObject) {
   if (geoObject == NULL) {
     _listener->imageCreationError(_tileId, "GEOJSON parser error");
@@ -193,18 +229,21 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
                          _tileLevel);
 
     delete projection;
-    delete canvas;
-
     delete geoObject;
 
-#warning remove this
-    _listener->imageCreationError(_tileId,
-                                  "NOT YET IMPLEMENTED");
+    canvas->createImage(new CanvasImageListener(this),
+                        true /* autodelete */);
 
-    TileImageContribution::deleteContribution(_contribution);
-    _contribution = NULL;
+    delete canvas;
 
-    _tileImageProvider->requestFinish(_tileId);
+//#warning remove this
+//    _listener->imageCreationError(_tileId,
+//                                  "NOT YET IMPLEMENTED");
+//
+//    TileImageContribution::deleteContribution(_contribution);
+//    _contribution = NULL;
+//    aa;
+//    _tileImageProvider->requestFinish(_tileId);
   }
 }
 
@@ -263,9 +302,9 @@ void TiledVectorLayerTileImageProvider::requestFinish(const std::string& tileId)
   if (_assemblers.find(tileId) != _assemblers.end()) {
     ImageAssembler* assembler = _assemblers[tileId];
 
-    delete assembler;
-
     _assemblers.erase(tileId);
+
+    delete assembler;
   }
 #endif
 #ifdef JAVA_CODE

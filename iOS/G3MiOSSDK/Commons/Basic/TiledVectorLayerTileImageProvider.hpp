@@ -20,11 +20,24 @@ class GEOObject;
 class GEORasterSymbolizer;
 #include "Vector2I.hpp"
 #include "Sector.hpp"
+#include "IImageListener.hpp"
 
 class TiledVectorLayerTileImageProvider : public TileImageProvider {
 private:
 
   class ImageAssembler;
+
+  class CanvasImageListener : public IImageListener {
+  private:
+    ImageAssembler* _imageAssembler;
+  public:
+    CanvasImageListener(ImageAssembler* imageAssembler) :
+    _imageAssembler(imageAssembler)
+    {
+    }
+
+    void imageCreated(const IImage* image);
+  };
 
   class GEOJSONBufferParser : public GAsyncTask {
   private:
@@ -48,6 +61,10 @@ private:
     void onPostExecute(const G3MContext* context);
 
     void cancel();
+
+    void deletedImageAssembler() {
+      _imageAssembler = NULL;
+    }
 
   };
 
@@ -74,6 +91,10 @@ private:
                             IByteBuffer* buffer,
                             bool expired) {
       // do nothing
+    }
+
+    void deletedImageAssembler() {
+      _imageAssembler = NULL;
     }
 
   };
@@ -141,6 +162,8 @@ private:
 
     void parsedGEOObject(GEOObject* geoObject);
     void deletedParser();
+
+    void imageCreated(const IImage* image);
   };
 
 
