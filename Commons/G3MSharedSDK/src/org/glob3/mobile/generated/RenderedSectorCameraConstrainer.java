@@ -17,23 +17,13 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
 
   public boolean onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera)
   {
-    final Sector sector = _planetRenderer.getRenderedSector();
-    final Geodetic3D position = nextCamera.getGeodeticPosition();
-    final boolean isValidHeight = (position._height <= _maxHeight);
-  
-    if (sector == null)
+    if (_planetRenderer != null)
     {
-      if (!isValidHeight)
-      {
-        nextCamera.setGeodeticPosition(new Geodetic3D(position._latitude, position._longitude, _maxHeight));
-      }
-    }
-    else
-    {
-      final Geodetic3D center = nextCamera.getGeodeticCenterOfView();
-      final boolean isValidPosition = sector.contains(center._latitude, center._longitude);
+      final Sector sector = _planetRenderer.getRenderedSector();
+      final Geodetic3D position = nextCamera.getGeodeticPosition();
+      final boolean isValidHeight = (position._height <= _maxHeight);
   
-      if (isValidPosition)
+      if (sector == null)
       {
         if (!isValidHeight)
         {
@@ -42,7 +32,20 @@ public class RenderedSectorCameraConstrainer implements ICameraConstrainer
       }
       else
       {
-        nextCamera.copyFrom(previousCamera);
+        final Geodetic3D center = nextCamera.getGeodeticCenterOfView();
+        final boolean isValidPosition = sector.contains(center._latitude, center._longitude);
+  
+        if (isValidPosition)
+        {
+          if (!isValidHeight)
+          {
+            nextCamera.setGeodeticPosition(new Geodetic3D(position._latitude, position._longitude, _maxHeight));
+          }
+        }
+        else
+        {
+          nextCamera.copyFrom(previousCamera);
+        }
       }
     }
   
