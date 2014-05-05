@@ -37,7 +37,7 @@
    <entry key="FIRST_LEVEL">0</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">3</entry>
+   <entry key="MAX_LEVEL">2</entry>
 
 <!-- Parameters for specific vectorial data -->  
 

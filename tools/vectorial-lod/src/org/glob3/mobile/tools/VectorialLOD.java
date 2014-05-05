@@ -426,7 +426,7 @@ public class VectorialLOD {
    private static String getTileFileName(final TileSector sector) {
 
       final String folderName = _lodFolder + File.separatorChar + sector._level;
-      final String subFolderName = folderName + File.separatorChar + sector._row;
+      final String subFolderName = folderName + File.separatorChar + getRow(sector);
       //final String subFolderName = (sector._level == 0) ? folderName : folderName + File.separatorChar + sector._row;
 
       if (!new File(folderName).exists()) {
@@ -444,7 +444,23 @@ public class VectorialLOD {
 
    private static String getTileName(final TileSector sector) {
 
-      return sector._level + "_" + sector._row + "-" + sector._column + ".json";
+      return sector._column + ".geojson";
+      //return sector._level + "_" + sector._row + "-" + sector._column + ".json";
+   }
+
+
+   private static int getRow(final TileSector sector) {
+
+      int row = sector._row;
+      if (_renderParameters._mercator) {
+         final int numRows = (int) (_renderParameters._topSectorSplitsByLatitude * IMathUtils.instance().pow(2.0, sector._level));
+         row = numRows - sector._row - 1;
+         //         System.out.println("COLUMN: " + sector._column);
+         //         System.out.println("TILE ROW: " + sector._row);
+         //         System.out.println("numRows: " + numRows);
+         //         System.out.println("ROW: " + row);
+      }
+      return row;
    }
 
 
@@ -563,13 +579,13 @@ public class VectorialLOD {
             if (geoJson != null) {
                final String fileName = getTileFileName(sector);
                final FileWriter file = new FileWriter(fileName);
-               System.out.println("Generating: " + getTileName(sector));
+               System.out.println("Generating: ../" + sector._level + "/" + getRow(sector) + "/" + getTileName(sector));
                file.write(geoJson);
                file.flush();
                file.close();
             }
             else {
-               System.out.println("Skip empty tile: " + getTileName(sector));
+               System.out.println("Skip empty tile: ../" + sector._level + "/" + getRow(sector) + "/" + getTileName(sector));
             }
             //         file.close();
          }
