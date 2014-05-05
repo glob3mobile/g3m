@@ -150,7 +150,7 @@ public class DTT_TileTextureBuilder extends RCObject
 
     if (image != null)
        image.dispose();
-    TileImageContribution.deleteContribution(contribution);
+    TileImageContribution.releaseContribution(contribution);
   }
 
   public final void imageCreationError(String error)

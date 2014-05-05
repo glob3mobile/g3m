@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class TileImageContribution
+public class TileImageContribution extends RCObject
 {
   private static final TileImageContribution FULL_COVERAGE_OPAQUE = new TileImageContribution(false, 1);
 
@@ -38,6 +38,17 @@ public class TileImageContribution
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TileImageContribution operator =(TileImageContribution that);
 
+  private void _retain()
+  {
+    super._retain();
+  }
+
+  private void _release()
+  {
+    super._release();
+  }
+
+
   protected TileImageContribution(boolean isTransparent, float alpha)
   {
      _isFullCoverage = true;
@@ -48,6 +59,8 @@ public class TileImageContribution
 
   public void dispose()
   {
+    System.out.printf("******* deleting contribution %p\n", this);
+    super.dispose();
   }
 
   protected TileImageContribution(TileImageContribution that)
@@ -59,11 +72,15 @@ public class TileImageContribution
   }
 
 
+
   public final float _alpha;
 
   public static TileImageContribution fullCoverageOpaque()
   {
-    return FULL_COVERAGE_OPAQUE;
+  //  FULL_COVERAGE_OPAQUE->_retain();
+  //  return FULL_COVERAGE_OPAQUE;
+  
+    return new TileImageContribution(false, 1);
   }
 
   public static TileImageContribution fullCoverageTransparent(float alpha)
@@ -73,15 +90,20 @@ public class TileImageContribution
       return null;
     }
   
-    // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
-    if ((_lastFullCoverageTransparent == null) || (_lastFullCoverageTransparent._alpha != alpha))
-    {
-      if (_lastFullCoverageTransparent != null)
-         _lastFullCoverageTransparent.dispose();
+  //  // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
+  //  if ((_lastFullCoverageTransparent == NULL) ||
+  //      (_lastFullCoverageTransparent->_alpha != alpha)) {
+  ////    delete _lastFullCoverageTransparent;
+  //    if (_lastFullCoverageTransparent != NULL) {
+  //      _lastFullCoverageTransparent->_release();
+  //    }
+  //
+  //    _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
+  //  }
+  //  _lastFullCoverageTransparent->_retain();
+  //  return _lastFullCoverageTransparent;
   
-      _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
-    }
-    return _lastFullCoverageTransparent;
+    return new TileImageContribution(true, alpha);
   }
 
   public static TileImageContribution partialCoverageOpaque(Sector sector)
@@ -94,12 +116,27 @@ public class TileImageContribution
     return (alpha <= 0.01) ? null : new TileImageContribution(sector, true, alpha);
   }
 
-  public static void deleteContribution(TileImageContribution contribution)
+  public static void retainContribution(TileImageContribution contribution)
   {
-    if ((contribution != null) && (contribution != FULL_COVERAGE_OPAQUE) && (contribution != _lastFullCoverageTransparent))
+    if (contribution != null)
     {
-      if (contribution != null)
-         contribution.dispose();
+      System.out.printf("**** retaining contribution %p\n", contribution);
+      contribution._retain();
+    }
+  }
+  public static void releaseContribution(TileImageContribution contribution)
+  {
+  //  if ((contribution != NULL) &&
+  //      (contribution != FULL_COVERAGE_OPAQUE) &&
+  //      (contribution != _lastFullCoverageTransparent)) {
+  ///#warning remove debug pring
+  //    printf("**** deleting contribution %p\n", contribution);
+  //    delete contribution;
+  //  }
+    if (contribution != null)
+    {
+      System.out.printf("**** releasing contribution %p\n", contribution);
+      contribution._release();
     }
   }
 

@@ -195,7 +195,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _downloadRequestId = -1;
        _parser = null;
        _symbolizer = null;
-    
+      TileImageContribution.retainContribution(_contribution);
     }
 
     public void dispose()
@@ -213,7 +213,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         if (_listener != null)
            _listener.dispose();
       }
-      TileImageContribution.deleteContribution(_contribution);
+      TileImageContribution.releaseContribution(_contribution);
       _symbolizer = null;
     }
 
@@ -316,7 +316,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     //    _listener->imageCreationError(_tileId,
     //                                  "NOT YET IMPLEMENTED");
     //
-    //    TileImageContribution::deleteContribution(_contribution);
+    //    TileImageContribution::releaseContribution(_contribution);
     //    _contribution = NULL;
     //    aa;
     //    _tileImageProvider->requestFinish(_tileId);
@@ -340,7 +340,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
     
       final TileImageContribution contribution = _contribution;
-      _contribution = null; // moves ownership to _listener
+    //  _contribution = NULL; // moves ownership to _listener
       _listener.imageCreated(_tileId, image, "VectorTiles" + _tileId, contribution);
       _tileImageProvider.requestFinish(_tileId);
     }

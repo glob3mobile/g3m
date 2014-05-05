@@ -45,6 +45,13 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
        _contribution = contribution;
        _listener = listener;
        _deleteListener = deleteListener;
+      TileImageContribution.retainContribution(_contribution);
+    }
+
+    public void dispose()
+    {
+      TileImageContribution.releaseContribution(_contribution);
+      super.dispose();
     }
 
     public final void imageCreated(IImage image)

@@ -14,6 +14,7 @@ public class RLTIP_ImageDownloadListener extends IImageDownloadListener
      _contribution = contribution;
      _listener = listener;
      _deleteListener = deleteListener;
+//    TileImageContribution::retainContribution(_contribution);
   }
 
   public void dispose()
@@ -26,7 +27,7 @@ public class RLTIP_ImageDownloadListener extends IImageDownloadListener
          _listener.dispose();
     }
 
-    TileImageContribution.deleteContribution(_contribution);
+    TileImageContribution.releaseContribution(_contribution);
     super.dispose();
   }
 

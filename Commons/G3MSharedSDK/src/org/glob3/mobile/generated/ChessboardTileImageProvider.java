@@ -60,7 +60,6 @@ public class ChessboardTileImageProvider extends TileImageProvider
       canvas.setFillColor(Color.white());
       canvas.fillRectangle(0, 0, width, height);
   
-  
   //    canvas->setFillColor(Color::gray());
   
       canvas.setFillColor(Color.fromRGBA(0.9f, 0.9f, 0.35f, 1));

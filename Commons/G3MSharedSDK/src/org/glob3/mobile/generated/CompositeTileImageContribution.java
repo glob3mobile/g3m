@@ -30,23 +30,21 @@ public class CompositeTileImageContribution extends TileImageContribution
     {
        _childIndex = childIndex;
        _contribution = contribution;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning MEMORY AT WORK
+    //  TileImageContribution::retainContribution(_contribution);
     }
 
     public void dispose()
     {
-      TileImageContribution.deleteContribution(_contribution);
+      TileImageContribution.releaseContribution(_contribution);
     }
   }
 
 
   public static TileImageContribution create(java.util.ArrayList<ChildContribution> contributions)
   {
-    final int contributionsSize = contributions.size();
-    if (contributionsSize == 0)
-    {
-      return null;
-    }
-    return new CompositeTileImageContribution(contributions);
+    return (contributions.size() == 0) ? null : new CompositeTileImageContribution(contributions);
   }
 
 
@@ -60,13 +58,15 @@ public class CompositeTileImageContribution extends TileImageContribution
 
   public void dispose()
   {
-    final int size = _contributions.size();
-    for (int i = 0; i < size; i++)
+    final int contributionsSize = _contributions.size();
+    for (int i = 0; i < contributionsSize; i++)
     {
       final ChildContribution contribution = _contributions.get(i);
       contribution.dispose();
     }
+    super.dispose();
   }
+
 
   public final int size()
   {
