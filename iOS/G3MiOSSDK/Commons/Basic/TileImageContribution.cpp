@@ -13,7 +13,10 @@ const TileImageContribution* TileImageContribution::FULL_COVERAGE_OPAQUE  = new 
 TileImageContribution* TileImageContribution::_lastFullCoverageTransparent = NULL;
 
 const TileImageContribution* TileImageContribution::fullCoverageOpaque() {
-  return FULL_COVERAGE_OPAQUE;
+//  FULL_COVERAGE_OPAQUE->_retain();
+//  return FULL_COVERAGE_OPAQUE;
+
+  return new TileImageContribution(false, 1);
 }
 
 const TileImageContribution* TileImageContribution::fullCoverageTransparent(float alpha) {
@@ -21,14 +24,20 @@ const TileImageContribution* TileImageContribution::fullCoverageTransparent(floa
     return NULL;
   }
 
-  // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
-  if ((_lastFullCoverageTransparent == NULL) ||
-      (_lastFullCoverageTransparent->_alpha != alpha)) {
-    delete _lastFullCoverageTransparent;
+//  // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
+//  if ((_lastFullCoverageTransparent == NULL) ||
+//      (_lastFullCoverageTransparent->_alpha != alpha)) {
+////    delete _lastFullCoverageTransparent;
+//    if (_lastFullCoverageTransparent != NULL) {
+//      _lastFullCoverageTransparent->_release();
+//    }
+//
+//    _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
+//  }
+//  _lastFullCoverageTransparent->_retain();
+//  return _lastFullCoverageTransparent;
 
-    _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
-  }
-  return _lastFullCoverageTransparent;
+  return new TileImageContribution(true, alpha);;
 }
 
 const TileImageContribution* TileImageContribution::partialCoverageOpaque(const Sector& sector) {
@@ -40,10 +49,23 @@ const TileImageContribution* TileImageContribution::partialCoverageTransparent(c
   return (alpha <= 0.01) ? NULL : new TileImageContribution(sector, true, alpha);
 }
 
-void TileImageContribution::deleteContribution(const TileImageContribution* contribution) {
-  if ((contribution != NULL) &&
-      (contribution != FULL_COVERAGE_OPAQUE) &&
-      (contribution != _lastFullCoverageTransparent)) {
-    delete contribution;
+void TileImageContribution::retainContribution(const TileImageContribution* contribution) {
+  if (contribution != NULL) {
+    printf("**** retaining contribution %p\n", contribution);
+    contribution->_retain();
+  }
+}
+
+void TileImageContribution::releaseContribution(const TileImageContribution* contribution) {
+//  if ((contribution != NULL) &&
+//      (contribution != FULL_COVERAGE_OPAQUE) &&
+//      (contribution != _lastFullCoverageTransparent)) {
+//#warning remove debug pring
+//    printf("**** deleting contribution %p\n", contribution);
+//    delete contribution;
+//  }
+  if (contribution != NULL) {
+    printf("**** releasing contribution %p\n", contribution);
+    contribution->_release();
   }
 }

@@ -34,13 +34,9 @@ private:
     ImageListener(const std::string&           tileId,
                   const TileImageContribution* contribution,
                   TileImageListener*           listener,
-                  bool                         deleteListener) :
-    _tileId(tileId),
-    _contribution(contribution),
-    _listener(listener),
-    _deleteListener(deleteListener)
-    {
-    }
+                  bool                         deleteListener);
+
+    ~ImageListener();
 
     void imageCreated(const IImage* image);
 

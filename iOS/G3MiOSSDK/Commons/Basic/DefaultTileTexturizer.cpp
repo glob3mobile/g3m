@@ -21,7 +21,6 @@
 #include "ITexturizerData.hpp"
 #include "TileImageContribution.hpp"
 
-
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
   const Tile* _tile;
@@ -290,7 +289,7 @@ public:
     }
 
     delete image;
-    TileImageContribution::deleteContribution( contribution );
+    TileImageContribution::releaseContribution( contribution );
   }
 
   void imageCreationError(const std::string& error) {

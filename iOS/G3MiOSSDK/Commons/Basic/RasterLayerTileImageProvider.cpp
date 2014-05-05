@@ -41,6 +41,7 @@ public:
   _listener(listener),
   _deleteListener(deleteListener)
   {
+//    TileImageContribution::retainContribution(_contribution);
   }
 
   ~RLTIP_ImageDownloadListener() {
@@ -50,7 +51,7 @@ public:
       delete _listener;
     }
 
-    TileImageContribution::deleteContribution(_contribution);
+    TileImageContribution::releaseContribution(_contribution);
 #ifdef JAVA_CODE
     super.dispose();
 #endif

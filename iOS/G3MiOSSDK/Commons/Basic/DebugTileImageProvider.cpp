@@ -18,6 +18,25 @@
 #include "IStringBuilder.hpp"
 #include "TileImageContribution.hpp"
 
+DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileId,
+                                                     const TileImageContribution* contribution,
+                                                     TileImageListener*           listener,
+                                                     bool                         deleteListener) :
+_tileId(tileId),
+_contribution(contribution),
+_listener(listener),
+_deleteListener(deleteListener)
+{
+  TileImageContribution::retainContribution(_contribution);
+}
+
+DebugTileImageProvider::ImageListener::~ImageListener() {
+  TileImageContribution::releaseContribution(_contribution);
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
 const std::string DebugTileImageProvider::ImageListener::getImageId(const std::string& tileId) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("DebugTileImageProvider/");

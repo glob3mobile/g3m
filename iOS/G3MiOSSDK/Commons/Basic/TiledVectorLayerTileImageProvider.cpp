@@ -102,7 +102,7 @@ _downloadRequestId(-1),
 _parser(NULL),
 _symbolizer(NULL)
 {
-
+  TileImageContribution::retainContribution(_contribution);
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorLayer* layer,
@@ -132,7 +132,7 @@ TiledVectorLayerTileImageProvider::ImageAssembler::~ImageAssembler() {
   if (_deleteListener) {
     delete _listener;
   }
-  TileImageContribution::deleteContribution(_contribution);
+  TileImageContribution::releaseContribution(_contribution);
   delete _symbolizer;
 }
 
@@ -196,7 +196,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
   }
 
   const TileImageContribution* contribution = _contribution;
-  _contribution = NULL; // moves ownership to _listener
+//  _contribution = NULL; // moves ownership to _listener
   _listener->imageCreated(_tileId,
                           image,
                           "VectorTiles" + _tileId,
@@ -240,7 +240,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
 //    _listener->imageCreationError(_tileId,
 //                                  "NOT YET IMPLEMENTED");
 //
-//    TileImageContribution::deleteContribution(_contribution);
+//    TileImageContribution::releaseContribution(_contribution);
 //    _contribution = NULL;
 //    aa;
 //    _tileImageProvider->requestFinish(_tileId);

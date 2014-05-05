@@ -14,17 +14,32 @@ CompositeTileImageContribution::ChildContribution::ChildContribution(const int  
 _childIndex(childIndex),
 _contribution(contribution)
 {
+#warning MEMORY AT WORK
+//  TileImageContribution::retainContribution(_contribution);
 }
 
 CompositeTileImageContribution::ChildContribution::~ChildContribution() {
-  TileImageContribution::deleteContribution( _contribution );
+  TileImageContribution::releaseContribution(_contribution);
+}
+
+CompositeTileImageContribution::~CompositeTileImageContribution() {
+  const int contributionsSize = _contributions.size();
+  for (int i = 0; i < contributionsSize; i++) {
+#ifdef C_CODE
+    const ChildContribution* contribution = _contributions[i];
+    delete contribution;
+#endif
+#ifdef JAVA_CODE
+    final ChildContribution contribution = _contributions.get(i);
+    contribution.dispose();
+#endif
+  }
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 
 const TileImageContribution* CompositeTileImageContribution::create(const std::vector<const ChildContribution*>& contributions) {
-  const int contributionsSize = contributions.size();
-  if (contributionsSize == 0) {
-    return NULL;
-  }
-  return new CompositeTileImageContribution(contributions);
+  return (contributions.size() == 0) ? NULL : new CompositeTileImageContribution(contributions);
 }

@@ -51,15 +51,7 @@ private:
                 const IImage*                image,
                 const std::string&           imageId,
                 const TileImageContribution* contribution,
-                const std::string&           error) :
-    _isError(isError),
-    _isCanceled(isCanceled),
-    _image(image),
-    _imageId(imageId),
-    _contribution(contribution),
-    _error(error)
-    {
-    }
+                const std::string&           error);
 
   };
 
@@ -192,6 +184,14 @@ private:
     _composer(composer),
     _index(index)
     {
+      _composer->_retain();
+    }
+
+    ~ChildTileImageListener() {
+      _composer->_release();
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
     }
 
     void imageCreated(const std::string&           tileId,

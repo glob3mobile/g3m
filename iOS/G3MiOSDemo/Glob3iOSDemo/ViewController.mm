@@ -1381,7 +1381,7 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = false;
+  bool testingTransparencies = true;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1405,25 +1405,6 @@ public:
                                         );
     layerSet->addLayer(blueMarble);
 
-//    WMSLayer* i3Landsat = new WMSLayer("esat",
-//                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
-//                                       WMS_1_1_0,
-//                                       Sector::fullSphere(),
-//                                       "image/jpeg",
-//                                       "EPSG:4326",
-//                                       "",
-//                                       false,
-//                                       new LevelTileCondition(7, 100),
-//                                       TimeInterval::fromDays(30),
-//                                       true,
-//                                       new LayerTilesRenderParameters(Sector::fullSphere(),
-//                                                                      2, 4,
-//                                                                      0, 12,
-//                                                                      LayerTilesRenderParameters::defaultTileTextureResolution(),
-//                                                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
-//                                                                      false));
-//    //layerSet->addLayer(i3Landsat);
-
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                   WMS_1_1_0,
@@ -1440,9 +1421,8 @@ public:
     layerSet->addLayer(pnoa);
   }
 
-  if (true) {
+  if (false) {
 #warning Diego at work!
-    //const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{x}/{level}_{x}-{y}.json";
     const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{y2}/{level}_{y2}-{x}.json";
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();

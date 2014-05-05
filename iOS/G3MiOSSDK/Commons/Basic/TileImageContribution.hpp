@@ -10,8 +10,9 @@
 #define __G3MiOSSDK__TileImageContribution__
 
 #include "Sector.hpp"
+#include "RCObject.hpp"
 
-class TileImageContribution {
+class TileImageContribution : public RCObject {
 private:
   static const TileImageContribution* FULL_COVERAGE_OPAQUE;
 
@@ -33,6 +34,15 @@ private:
 
   TileImageContribution& operator=(const TileImageContribution& that);
 
+  void _retain() const {
+    RCObject::_retain();
+  }
+
+  void _release() const {
+    RCObject::_release();
+  }
+
+
 protected:
   TileImageContribution(bool isTransparent,
                         float alpha) :
@@ -44,6 +54,10 @@ protected:
   }
 
   virtual ~TileImageContribution() {
+    printf("******* deleting contribution %p\n", this);
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   TileImageContribution(const TileImageContribution& that) :
@@ -53,6 +67,7 @@ protected:
   _alpha(that._alpha)
   {
   }
+
 
 public:
 
@@ -67,7 +82,8 @@ public:
   static const TileImageContribution* partialCoverageTransparent(const Sector& sector,
                                                                  float alpha);
 
-  static void deleteContribution(const TileImageContribution* contribution);
+  static void retainContribution(const TileImageContribution* contribution);
+  static void releaseContribution(const TileImageContribution* contribution);
 
   bool isFullCoverageAndOpaque() const {
     return _isFullCoverage && !_isTransparent && (_alpha >= 0.99);
