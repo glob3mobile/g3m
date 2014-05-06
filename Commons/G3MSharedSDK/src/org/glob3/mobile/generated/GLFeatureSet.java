@@ -5,6 +5,11 @@ public class GLFeatureSet
   protected final GLFeature[] _features = new GLFeature[MAX_CONCURRENT_FEATURES_PER_GROUP];
   protected int _nFeatures;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLFeatureSet(GLFeatureSet that);
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GLFeatureSet operator =(GLFeatureSet that);
+
 
   public GLFeatureSet()
   {

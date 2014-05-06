@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class Matrix44DMultiplicationHolder extends Matrix44DProvider
 {
-  private final Matrix44D[] _matrix;
+  private final Matrix44D[] _matrices;
   private final Matrix44DProvider[] _providers;
   private int _nMatrix;
   private Matrix44D _modelview;
@@ -12,15 +12,15 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
     {
       final Matrix44D newMatrix = _providers[j].getMatrix();
   
-      if (newMatrix != _matrix[j])
+      if (newMatrix != _matrices[j])
       {
-        if (_matrix[j] != null)
+        if (_matrices[j] != null)
         {
-          _matrix[j]._release();
+          _matrices[j]._release();
         }
   
-        _matrix[j] = newMatrix;
-        _matrix[j]._retain();
+        _matrices[j] = newMatrix;
+        _matrices[j]._retain();
       }
     }
   }
@@ -30,9 +30,9 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
   
     for (int j = 0; j < _nMatrix; j++)
     {
-      if (_matrix[j] != null)
+      if (_matrices[j] != null)
       {
-        _matrix[j]._release();
+        _matrices[j]._release();
       }
       _providers[j]._release();
     }
@@ -56,7 +56,7 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
     _providers = new Matrix44DProvider[nMatrix];
     for (int i = 0; i < _nMatrix; i++)
     {
-      _matrix[i] = null;
+      _matrices[i] = null;
       _providers[i] = providers[i];
       _providers[i]._retain();
     }
@@ -77,7 +77,7 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
           ILogger.instance().logError("Modelview multiplication failure");
         }
   
-        if (_matrix[i] != m)
+        if (_matrices[i] != m)
         {
           //If one matrix differs we have to raplace all matrixes on Holders and recalculate modelview
           _modelview._release(); //NEW MODELVIEW NEEDED
@@ -91,10 +91,10 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
   
     if (_modelview == null)
     {
-      _modelview = new Matrix44D(_matrix[0]);
+      _modelview = new Matrix44D(_matrices[0]);
       for (int i = 1; i < _nMatrix; i++)
       {
-        final Matrix44D m2 = _matrix[i];
+        final Matrix44D m2 = _matrices[i];
         Matrix44D m3 = _modelview.createMultiplication(m2);
         _modelview._release();
         _modelview = m3;
