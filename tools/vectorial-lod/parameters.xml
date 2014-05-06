@@ -28,16 +28,16 @@
    <!-- value used to adjust simplification tolerance for Douglas-Peucker simplification. -->
    <!-- Greater values entail less tolerance, and so on less vertex filtered and more vertex generate -->
    <!-- for the resultant geometry. Usual values between 1.0 to 10.0 -->
-   <entry key="QUALITY_FACTOR">2.0</entry>
+   <entry key="QUALITY_FACTOR">1.0</entry>
    
    <!-- Projection selection. true=MERCATOR (epsg:900913 Google) / false=WGS84 (epsg:4326) -->
-   <entry key="MERCATOR">false</entry>
+   <entry key="MERCATOR">true</entry>
    
    <!-- first level of tiles to be generated -->
    <entry key="FIRST_LEVEL">0</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">2</entry>
+   <entry key="MAX_LEVEL">9</entry>
 
 <!-- Parameters for specific vectorial data -->  
 
@@ -50,6 +50,7 @@
    
    <!-- list of fields/columns associated to the vectorial data that shall be included as feature -->
    <!-- properties in the resultant geoJson file. Use a comma separated list -->
-   <entry key="PROPERTIES">continent, mapcolor7, scalerank</entry>
+   <!-- <entry key="PROPERTIES">continent, mapcolor7, scalerank</entry> -->
+   <entry key="PROPERTIES">mapcolor7</entry>
    
 </properties>

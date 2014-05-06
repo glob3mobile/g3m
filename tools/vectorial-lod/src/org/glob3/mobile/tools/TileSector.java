@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.IMathUtils;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.MercatorUtils;
 import org.glob3.mobile.generated.Sector;
 
@@ -56,6 +58,21 @@ public class TileSector
 
    public Sector getSector() {
       return this;
+   }
+
+
+   public int getRow(final LayerTilesRenderParameters renderParameters) {
+
+      int row = this._row;
+      if (renderParameters._mercator) {
+         final int numRows = (int) (renderParameters._topSectorSplitsByLatitude * IMathUtils.instance().pow(2.0, this._level));
+         row = numRows - this._row - 1;
+         //         System.out.println("COLUMN: " + this._column);
+         //         System.out.println("TILE ROW: " + this._row);
+         //         System.out.println("numRows: " + numRows);
+         //         System.out.println("ROW: " + row);
+      }
+      return row;
    }
 
 
