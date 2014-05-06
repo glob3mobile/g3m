@@ -54,7 +54,7 @@ protected:
   }
 
   virtual ~TileImageContribution() {
-    printf("******* deleting contribution %p\n", this);
+//    printf("******* deleting contribution %p\n", this);
 #ifdef JAVA_CODE
     super.dispose();
 #endif
