@@ -17,7 +17,7 @@
 #include <vector>
 
 
-class Matrix44DProvider: public RCObject{
+class Matrix44DProvider: public RCObject {
 protected:
   virtual ~Matrix44DProvider() {
 #ifdef JAVA_CODE
@@ -75,7 +75,7 @@ public:
 
 class Matrix44DMultiplicationHolder : public Matrix44DProvider {
 private:
-  const Matrix44D** _matrix;
+  const Matrix44D**         _matrices;
   const Matrix44DProvider** _providers;
   int _nMatrix;
   mutable Matrix44D* _modelview;
