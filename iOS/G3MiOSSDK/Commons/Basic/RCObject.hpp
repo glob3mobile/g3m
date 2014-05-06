@@ -32,7 +32,6 @@ protected:
   RCObject():
   _referenceCounter(1) // the object starts retained
   {
-
   }
 
   virtual ~RCObject();
