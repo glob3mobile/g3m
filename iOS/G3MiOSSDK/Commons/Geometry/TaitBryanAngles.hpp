@@ -1,5 +1,5 @@
 //
-//  TaitBryanAngles.h
+//  TaitBryanAngles.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 06/02/14.
@@ -8,8 +8,6 @@
 
 #ifndef __G3MiOSSDK__TaitBryanAngles__
 #define __G3MiOSSDK__TaitBryanAngles__
-
-#include <iostream>
 
 #include "Angle.hpp"
 

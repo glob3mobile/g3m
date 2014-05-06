@@ -392,8 +392,8 @@ private:
   mutable const Matrix44D* _lastModelSet;
 #endif
 #ifdef JAVA_CODE
-  protected Matrix44DProvider _provider = null;
-  protected  Matrix44D _lastModelSet;
+  private Matrix44DProvider _provider;
+  private Matrix44D         _lastModelSet;
 #endif
 
   ~GPUUniformValueMatrix4() {
@@ -432,7 +432,6 @@ public:
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
-
     if (_lastModelSet != NULL) {
       _lastModelSet->_release();
     }
