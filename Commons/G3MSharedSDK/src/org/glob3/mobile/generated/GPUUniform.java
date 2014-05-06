@@ -34,9 +34,6 @@ public class GPUUniform extends GPUVariable
     super.dispose();
   }
 
-//  const std::string getName() const { return _name; }
-//  const IGLUniformID* getID() const { return _id; }
-//  int getType() const { return _type; }
   public final boolean wasSet()
   {
      return _value != null;
@@ -45,7 +42,6 @@ public class GPUUniform extends GPUVariable
   {
      return _value;
   }
-//  GPUUniformKey getKey() const { return _key;}
 
 
   public final int getIndex()
@@ -53,17 +49,6 @@ public class GPUUniform extends GPUVariable
     return _key.getValue();
   }
 
-
-  //void GPUUniformValue::setValueToLinkedUniform() const {
-  //  if (_uniform == NULL) {
-  //    ILogger::instance()->logError("Uniform value unlinked");
-  //  }
-  //  else {
-  //    //_uniform->set((GPUUniformValue*)this);
-  //    _uniform->set(this);
-  //  }
-  //}
-  
   public final void unset()
   {
     if (_value != null)

@@ -37,12 +37,6 @@ public class RCObject {
    //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
    //  RCObject operator =(RCObject that);
 
-   protected RCObject() // the object starts retained
-   {
-      _referenceCounter = 1;
-
-   }
-
 
    public void dispose() {
       _disposed = true;
@@ -54,6 +48,12 @@ public class RCObject {
 
    public final void _retain() {
       _referenceCounter++;
+   }
+
+
+   protected RCObject() // the object starts retained
+   {
+      _referenceCounter = 1;
    }
 
 

@@ -56,8 +56,9 @@ public:
   _group(group),
   _id(id)
   {
+    _values = new GPUVariableValueSet();
   }
-
+  
   const GPUVariableValueSet* getGPUVariableValueSet() const{
     return _values;
   }

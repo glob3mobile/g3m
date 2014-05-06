@@ -27,6 +27,11 @@ public class GPUVariableValueSet
   private int _uniformsCode;
   private int _attributeCode;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GPUVariableValueSet(GPUVariableValueSet that);
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  GPUVariableValueSet operator =(GPUVariableValueSet that);
+
 
   public GPUVariableValueSet()
   {
@@ -80,10 +85,17 @@ public class GPUVariableValueSet
   {
     final int index = key.getValue();
 
+    if (_uniformValues[index] != null)
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning remove debug print
+      System.out.print("break point on me\n");
+    }
+
     _uniformValues[index] = v;
     if (mustRetain)
     {
-    v._retain();
+      v._retain();
     }
     if (index > _highestUniformKey)
     {
@@ -124,32 +136,6 @@ public class GPUVariableValueSet
     }
   }
 
-//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v) {
-///#ifdef C_CODE
-//    const int index = key;
-///#endif
-///#ifdef JAVA_CODE
-//    final int index = key.getValue();
-///#endif
-//    _attributeValues[key] = v;
-//    if (key > _highestAttributeKey) {
-//      _highestAttributeKey = key;
-//    }
-//  }
-//
-//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v) {
-///#ifdef C_CODE
-//    const int index = key;
-///#endif
-///#ifdef JAVA_CODE
-//    final int index = key.getValue();
-///#endif
-//    _uniformValues[key] = v;
-//    if (key > _highestUniformKey) {
-//      _highestUniformKey = key;
-//    }
-//  }
-
   public final GPUAttributeValue getAttributeValue(int key)
   {
     return _attributeValues[key];
@@ -162,33 +148,31 @@ public class GPUVariableValueSet
 
   public final void combineWith(GPUVariableValueSet vs)
   {
-  
-      for (int i = 0; i <= vs._highestUniformKey; i++)
+    for (int i = 0; i <= vs._highestUniformKey; i++)
+    {
+      if (vs._uniformValues[i] != null)
       {
-        if (vs._uniformValues[i] != null)
+        _uniformValues[i] = vs._uniformValues[i];
+        _uniformValues[i]._retain();
+        if (i > _highestUniformKey)
         {
-          _uniformValues[i] = vs._uniformValues[i];
-          _uniformValues[i]._retain();
-          if (i > _highestUniformKey)
-          {
-            _highestUniformKey = i;
-          }
+          _highestUniformKey = i;
         }
       }
+    }
   
-      for (int i = 0; i <= vs._highestAttributeKey; i++)
+    for (int i = 0; i <= vs._highestAttributeKey; i++)
+    {
+      if (vs._attributeValues[i] != null)
       {
-        if (vs._attributeValues[i] != null)
+        _attributeValues[i] = vs._attributeValues[i];
+        _attributeValues[i]._retain();
+        if (i > _highestAttributeKey)
         {
-          _attributeValues[i] = vs._attributeValues[i];
-          _attributeValues[i]._retain();
-          if (i > _highestAttributeKey)
-          {
-            _highestAttributeKey = i;
-          }
+          _highestAttributeKey = i;
         }
       }
-  
+    }
   }
 
   public final void applyValuesToProgram(GPUProgram prog)
