@@ -51,7 +51,7 @@ const TileImageContribution* TileImageContribution::partialCoverageTransparent(c
 
 void TileImageContribution::retainContribution(const TileImageContribution* contribution) {
   if (contribution != NULL) {
-    printf("**** retaining contribution %p\n", contribution);
+//    printf("**** retaining contribution %p\n", contribution);
     contribution->_retain();
   }
 }
@@ -65,7 +65,7 @@ void TileImageContribution::releaseContribution(const TileImageContribution* con
 //    delete contribution;
 //  }
   if (contribution != NULL) {
-    printf("**** releasing contribution %p\n", contribution);
+//    printf("**** releasing contribution %p\n", contribution);
     contribution->_release();
   }
 }

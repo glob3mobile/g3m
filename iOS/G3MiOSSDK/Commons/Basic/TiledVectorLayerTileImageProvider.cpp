@@ -191,9 +191,9 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
 
   
 
-  if (_canceled) {
-    printf("**** break point\n");
-  }
+//  if (_canceled) {
+//    printf("**** break point\n");
+//  }
 
   const TileImageContribution* contribution = _contribution;
 //  _contribution = NULL; // moves ownership to _listener
