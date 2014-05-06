@@ -57,7 +57,7 @@ public class TileImageContribution extends RCObject
 
   public void dispose()
   {
-    System.out.printf("******* deleting contribution %p\n", this);
+//    printf("******* deleting contribution %p\n", this);
     super.dispose();
   }
 
