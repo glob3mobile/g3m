@@ -35,7 +35,6 @@ public class RCObject
   protected RCObject() // the object starts retained
   {
      _referenceCounter = 1;
-
   }
 
   public void dispose()

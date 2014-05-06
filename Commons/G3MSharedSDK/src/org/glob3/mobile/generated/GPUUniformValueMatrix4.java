@@ -4,15 +4,12 @@ package org.glob3.mobile.generated;
 
 public class GPUUniformValueMatrix4 extends GPUUniformValue
 {
-//  const bool _ownsProvider;
   protected Matrix44DProvider _provider = null;
   protected  Matrix44D _lastModelSet;
 
   public void dispose()
   {
-    //    if (_ownsProvider) {
     _provider._release();
-    //    }
     if (_lastModelSet != null)
     {
       _lastModelSet._release();
@@ -23,7 +20,6 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
 
 
   public GPUUniformValueMatrix4(Matrix44DProvider[] providers, int nMatrix)
-//  _ownsProvider(true)
   {
      super(GLType.glMatrix4Float());
      _provider = new Matrix44DMultiplicationHolder(providers, nMatrix);
@@ -31,7 +27,6 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
   }
 
   public GPUUniformValueMatrix4(Matrix44DProvider provider)
-//  _ownsProvider(ownsProvider)
   {
      super(GLType.glMatrix4Float());
      _provider = provider;
@@ -40,7 +35,6 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
   }
 
   public GPUUniformValueMatrix4(Matrix44D m)
-//  _ownsProvider(true)
   {
      super(GLType.glMatrix4Float());
      _provider = new Matrix44DHolder(m);
@@ -81,6 +75,4 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
        isb.dispose();
     return s;
   }
-
-  //  const Matrix44D* getMatrix() const { return _m;}
 }

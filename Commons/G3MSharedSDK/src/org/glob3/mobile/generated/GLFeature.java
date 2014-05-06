@@ -3,10 +3,12 @@ public abstract class GLFeature extends RCObject
 {
   public void dispose()
   {
+    if (_values != null)
+       _values.dispose();
     super.dispose();
   }
 
-  protected GPUVariableValueSet _values = new GPUVariableValueSet();
+  protected GPUVariableValueSet _values;
 
   public final GLFeatureGroupName _group;
   public final GLFeatureID _id;
