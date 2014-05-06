@@ -334,10 +334,9 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     
     
     
-      if (_canceled)
-      {
-        System.out.print("**** break point\n");
-      }
+    //  if (_canceled) {
+    //    printf("**** break point\n");
+    //  }
     
       final TileImageContribution contribution = _contribution;
     //  _contribution = NULL; // moves ownership to _listener

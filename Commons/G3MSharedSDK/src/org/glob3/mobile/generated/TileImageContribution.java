@@ -118,7 +118,7 @@ public class TileImageContribution extends RCObject
   {
     if (contribution != null)
     {
-      System.out.printf("**** retaining contribution %p\n", contribution);
+  //    printf("**** retaining contribution %p\n", contribution);
       contribution._retain();
     }
   }
@@ -133,7 +133,7 @@ public class TileImageContribution extends RCObject
   //  }
     if (contribution != null)
     {
-      System.out.printf("**** releasing contribution %p\n", contribution);
+  //    printf("**** releasing contribution %p\n", contribution);
       contribution._release();
     }
   }
