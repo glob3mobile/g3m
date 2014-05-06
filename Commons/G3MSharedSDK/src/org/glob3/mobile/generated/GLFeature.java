@@ -17,6 +17,7 @@ public abstract class GLFeature extends RCObject
   {
      _group = group;
      _id = id;
+    _values = new GPUVariableValueSet();
   }
 
   public final GPUVariableValueSet getGPUVariableValueSet()
