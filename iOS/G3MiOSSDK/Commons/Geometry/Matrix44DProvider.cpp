@@ -28,15 +28,15 @@ _nMatrix(nMatrix),
 _modelview(NULL)
 {
 #ifdef C_CODE
-  _matrices = new const Matrix44D*[nMatrix];
+  _matrices  = new const Matrix44D*[nMatrix];
   _providers = new const Matrix44DProvider*[nMatrix];
 #endif
 #ifdef JAVA_CODE
-  _matrix = new Matrix44D[nMatrix];
+  _matrices  = new Matrix44D[nMatrix];
   _providers = new Matrix44DProvider[nMatrix];
 #endif
   for (int i = 0; i < _nMatrix; i++) {
-    _matrices[i] = NULL;
+    _matrices[i]  = NULL;
     _providers[i] = providers[i];
     _providers[i]->_retain();
   }
