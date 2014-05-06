@@ -350,8 +350,7 @@ public class VectorialLOD {
    private static String getAreaFilterCriterium(final Sector sector,
                                                 final float qualityFactor) {
 
-
-      final String filter = "ST_Area(the_geom)>" + Float.toString((10.0f * getMaxVertexTolerance(sector, qualityFactor)));
+      final String filter = "ST_Area(the_geom)>" + Float.toString((40.0f * getMaxVertexTolerance(sector, qualityFactor)));
 
       if (VERBOSE) {
          System.out.println("filter: " + filter);
@@ -658,14 +657,16 @@ public class VectorialLOD {
       if (sector._level >= FIRST_LEVEL) {
 
          //-- hardcoded for levels 0 and 1 ---------------
-         final float qf = (sector._level > 1) ? QUALITY_FACTOR : 0.5f;
-         final String filterCriteria = (sector._level > 1) ? dataSource._geomFilterCriteria : getAreaFilterCriterium(sector, qf);
+         //         final float qf = (sector._level > 1) ? QUALITY_FACTOR : 0.5f;
+         //         final String filterCriteria = (sector._level > 1) ? dataSource._geomFilterCriteria : getAreaFilterCriterium(sector, qf);
          //-----------------------------------------------
+
+         final String filterCriteria = dataSource._geomFilterCriteria + " and " + getAreaFilterCriterium(sector, QUALITY_FACTOR);
 
          final String geoJson = selectGeometries(dataSource._sourceTable, //
                   sector.getSector(), //
                   //sector.getExtendedSector(OVERLAP_PERCENTAGE),//
-                  qf, //QUALITY_FACTOR, // qualityFactor
+                  QUALITY_FACTOR, // qualityFactor
                   filterCriteria, //dataSource._geomFilterCriteria, //
                   dataSource._includeProperties);
 
@@ -684,65 +685,6 @@ public class VectorialLOD {
       for (final TileSector s : subSectors) {
          processSubSectors(s, dataSource);
       }
-   }
-
-
-   private static void writeOutputFile(final String geoJson,
-                                       final TileSector sector) {
-
-      try {
-
-         String fileName = "";
-
-         if (generateGeojson()) {
-            fileName = getGeojsonFileName(sector);
-            //System.out.println("GEOJSON FILE: " + fileName);
-            System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
-         }
-         else {
-            fileName = _lodFolder + File.separatorChar + getTileGeojsonName(sector);
-         }
-         final FileWriter file = new FileWriter(fileName);
-         file.write(geoJson);
-         file.flush();
-         file.close();
-
-         if (generateBson()) {
-            final File bsonFile = new File(getBsonFileName(sector));
-            bsonFile.createNewFile();
-            final File geojsonFile = new File(fileName);
-
-            try {
-               JBson2BJson.instance().transform(geojsonFile, bsonFile, true);
-            }
-            catch (final JBson2BJsonException e) {
-               ILogger.instance().logError(e.getMessage());
-            }
-
-            if (!generateGeojson()) {
-               //System.out.println("BSON FILE: " + getBsonFileName(sector));
-               System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
-               new File(fileName).delete();
-            }
-         }
-
-      }
-      catch (final IOException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-   }
-
-
-   private static boolean generateGeojson() {
-
-      return (OUTPUT_FORMAT.equalsIgnoreCase("geojson") || OUTPUT_FORMAT.equalsIgnoreCase("both"));
-   }
-
-
-   private static boolean generateBson() {
-
-      return (OUTPUT_FORMAT.equalsIgnoreCase("bson") || OUTPUT_FORMAT.equalsIgnoreCase("both"));
    }
 
 
@@ -767,6 +709,63 @@ public class VectorialLOD {
       };
 
       _concurrentService.execute(task, subSectorLevel);
+   }
+
+
+   private static void writeOutputFile(final String geoJson,
+                                       final TileSector sector) {
+
+      try {
+
+         String fileName = "";
+
+         if (generateGeojson()) {
+            fileName = getGeojsonFileName(sector);
+            System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
+         }
+         else {
+            fileName = _lodFolder + File.separatorChar + getTileGeojsonName(sector);
+         }
+         final FileWriter file = new FileWriter(fileName);
+         file.write(geoJson);
+         file.flush();
+         file.close();
+
+         if (generateBson()) {
+            final File bsonFile = new File(getBsonFileName(sector));
+            bsonFile.createNewFile();
+            final File geojsonFile = new File(fileName);
+
+            try {
+               JBson2BJson.instance().transform(geojsonFile, bsonFile, true);
+            }
+            catch (final JBson2BJsonException e) {
+               ILogger.instance().logError(e.getMessage());
+            }
+
+            if (!generateGeojson()) {
+               System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
+               new File(fileName).delete();
+            }
+         }
+
+      }
+      catch (final IOException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+   }
+
+
+   private static boolean generateGeojson() {
+
+      return (OUTPUT_FORMAT.equalsIgnoreCase("geojson") || OUTPUT_FORMAT.equalsIgnoreCase("both"));
+   }
+
+
+   private static boolean generateBson() {
+
+      return (OUTPUT_FORMAT.equalsIgnoreCase("bson") || OUTPUT_FORMAT.equalsIgnoreCase("both"));
    }
 
 
