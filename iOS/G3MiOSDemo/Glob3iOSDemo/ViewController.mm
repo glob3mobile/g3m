@@ -1381,7 +1381,7 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = true;
+  bool testingTransparencies = false;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1421,17 +1421,22 @@ public:
     layerSet->addLayer(pnoa);
   }
 
-  if (false) {
+  if (true) {
 #warning Diego at work!
-    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{y2}/{level}_{y2}-{x}.json";
+//    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{y2}/{level}_{y2}-{x}.json";
+//    const int firstLevel = 2;
+//    const int maxLevel = 6;
+    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+    const int firstLevel = 2;
+    const int maxLevel = 10;
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
 
     layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
                                                      urlTemplate,
                                                      Sector::fullSphere(),       // sector
-                                                     2,                          // firstLevel
-                                                     6,                          // maxLevel
+                                                     firstLevel,
+                                                     maxLevel,
                                                      TimeInterval::fromDays(30), // timeToCache
                                                      true,                       // readExpired
                                                      1,                          // transparency

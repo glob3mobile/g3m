@@ -34,13 +34,13 @@ private:
 
   TileImageContribution& operator=(const TileImageContribution& that);
 
-  void _retain() const {
-    RCObject::_retain();
-  }
-
-  void _release() const {
-    RCObject::_release();
-  }
+//  void _retain() const {
+//    RCObject::_retain();
+//  }
+//
+//  void _release() const {
+//    RCObject::_release();
+//  }
 
 
 protected:
