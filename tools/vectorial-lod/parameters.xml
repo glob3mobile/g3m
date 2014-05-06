@@ -7,12 +7,12 @@
 <!-- Postgis database parameters -->  
 
    <!-- Url address for postgis database host access -->
-   <!-- <entry key="HOST">192.168.1.14</entry> -->
-   <entry key="HOST">igosoftware.dyndns.org</entry>
+   <entry key="HOST">192.168.1.14</entry> 
+   <!-- <entry key="HOST">igosoftware.dyndns.org</entry> -->
    
    <!-- Port number for postgis database access -->
-   <!-- <entry key="PORT">5432</entry> -->
-   <entry key="PORT">5414</entry>
+   <entry key="PORT">5432</entry>
+   <!-- <entry key="PORT">5414</entry> -->
    
    <!-- User name for postgis database access -->
    <entry key="USER">postgres</entry>
@@ -28,7 +28,7 @@
    <!-- value used to adjust simplification tolerance for Douglas-Peucker simplification. -->
    <!-- Greater values entail less tolerance, and so on less vertex filtered and more vertex generate -->
    <!-- for the resultant geometry. Usual values between 1.0 to 10.0 -->
-   <entry key="QUALITY_FACTOR">1.0</entry>
+   <entry key="QUALITY_FACTOR">2.0</entry>
    
    <!-- Projection selection. true=MERCATOR (epsg:900913 Google) / false=WGS84 (epsg:4326) -->
    <entry key="MERCATOR">true</entry>
@@ -37,7 +37,10 @@
    <entry key="FIRST_LEVEL">0</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">9</entry>
+   <entry key="MAX_LEVEL">2</entry>
+   
+   <!-- valid output format: geojson, bson, both -->
+   <entry key="OUTPUT_FORMAT">both</entry>
 
 <!-- Parameters for specific vectorial data -->  
 
@@ -46,7 +49,8 @@
 
    <!-- filter criteria using pure database query format that will be included in a where clause -->
    <!-- i.e. "continent" like 'Euro%' AND "pop_est" > 10000000 -->
-   <entry key="FILTER_CRITERIA">true</entry>
+   <entry key="FILTER_CRITERIA">true</entry> 
+   <!-- <entry key="FILTER_CRITERIA">ST_Area(the_geom)>7</entry> -->
    
    <!-- list of fields/columns associated to the vectorial data that shall be included as feature -->
    <!-- properties in the resultant geoJson file. Use a comma separated list -->

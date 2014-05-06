@@ -20,10 +20,13 @@ import java.util.Properties;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
+import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJson;
+import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 
 public class VectorialLOD {
@@ -53,6 +56,7 @@ public class VectorialLOD {
    private static int                        MAX_LEVEL          = 3;
    private static int                        NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
    private static int                        MAX_DB_CONNECTIONS = NUM_LEVELS;
+   private static String                     OUTPUT_FORMAT      = "geojson";                    // valid values: geojson, bson, both
 
    //-- Internal constants definition ------------------------------------------------------------------
    //final static float                        QUALITY_FACTOR     = 2.0f;
@@ -63,6 +67,8 @@ public class VectorialLOD {
 
    private static DataBaseService            _dataBaseService   = null;
    private static String                     _lodFolder         = null;
+   private static String                     _geojsonFolder     = null;
+   private static String                     _bsonFolder        = null;
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
 
@@ -244,7 +250,7 @@ public class VectorialLOD {
          st = conn.createStatement();
 
          final String theGeom = getGeometryColumnName(st, dataSourceTable);
-         final String simplifyTolerance = getMaxVertexTolerance(sector, qualityFactor);
+         final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
 
          if ((theGeom == null) || (simplifyTolerance == null)) {
             st.close();
@@ -256,7 +262,7 @@ public class VectorialLOD {
                                   + baseQuery2 + dataSourceTable + baseQuery4 + geomFilterCriteria + baseQuery3 + theGeom + ","
                                   + bboxQuery + baseQuery5;
 
-         //System.out.println("fullQuery: " + fullQuery);
+         //         System.out.println("fullQuery: " + fullQuery);
 
          final ResultSet rs = st.executeQuery(fullQuery);
 
@@ -326,16 +332,32 @@ public class VectorialLOD {
     *   greater values entail less tolerance on Douglas-Peuker algorithm and 
     *   so on less simplification and more vertex generated as result.
     */
-   private static String getMaxVertexTolerance(final Sector sector,
-                                               final float qualityFactor) {
+   private static float getMaxVertexTolerance(final Sector sector,
+                                              final float qualityFactor) {
 
-      final String result = Float.toString((float) sector._deltaLongitude._degrees / (qualityFactor * 1000f));
+      //final float tolerance = (float) (sector._deltaLongitude._degrees / (qualityFactor * 1000f));
+      final double delta = Math.sqrt(Math.pow(sector._deltaLatitude._degrees, 2) + Math.pow(sector._deltaLongitude._degrees, 2));
+      final float tolerance = (float) (delta / (qualityFactor * 1000f));
 
       if (VERBOSE) {
-         System.out.println("result: " + result);
+         System.out.println("tolerance: " + tolerance);
       }
 
-      return result;
+      return tolerance;
+   }
+
+
+   private static String getAreaFilterCriterium(final Sector sector,
+                                                final float qualityFactor) {
+
+
+      final String filter = "ST_Area(the_geom)>" + Float.toString((10.0f * getMaxVertexTolerance(sector, qualityFactor)));
+
+      if (VERBOSE) {
+         System.out.println("filter: " + filter);
+      }
+
+      return filter;
    }
 
 
@@ -423,51 +445,99 @@ public class VectorialLOD {
    }
 
 
-   private static String getTileFileName(final TileSector sector) {
+   //   private static String getGeojsonFileName(final TileSector sector) {
+   //
+   //      final String folderName = _geojsonFolder + File.separatorChar + sector._level;
+   //      final String subFolderName = folderName + File.separatorChar + sector.getRow(_renderParameters);
+   //
+   //      if (!new File(folderName).exists()) {
+   //         new File(folderName).mkdir();
+   //         if (VERBOSE) {
+   //            System.out.println("LEVEL: " + sector._level);
+   //         }
+   //      }
+   //
+   //      if (!new File(subFolderName).exists()) {
+   //         new File(subFolderName).mkdir();
+   //      }
+   //
+   //      return subFolderName + File.separatorChar + getTileGeojsonName(sector);
+   //   }
+   //
+   //
+   //   private static String getBsonFileName(final TileSector sector) {
+   //
+   //      final String folderName = _bsonFolder + File.separatorChar + sector._level;
+   //      final String subFolderName = folderName + File.separatorChar + sector.getRow(_renderParameters);
+   //
+   //      if (!new File(folderName).exists()) {
+   //         new File(folderName).mkdir();
+   //         //System.out.println("LEVEL: " + sector._level);
+   //      }
+   //
+   //      if (!new File(subFolderName).exists()) {
+   //         new File(subFolderName).mkdir();
+   //      }
+   //
+   //      return subFolderName + File.separatorChar + getTileBsonName(sector);
+   //   }
 
-      final String folderName = _lodFolder + File.separatorChar + sector._level;
-      final String subFolderName = folderName + File.separatorChar + sector.getRow(_renderParameters);
-      //final String subFolderName = (sector._level == 0) ? folderName : folderName + File.separatorChar + sector._row;
+   private static String getGeojsonFileName(final TileSector sector) {
+
+      final String folderName = _geojsonFolder + File.separatorChar + sector._level;
+      final String subFolderName = folderName + File.separatorChar + sector._column;
 
       if (!new File(folderName).exists()) {
          new File(folderName).mkdir();
-         System.out.println("LEVEL: " + sector._level);
+         if (VERBOSE) {
+            System.out.println("LEVEL: " + sector._level);
+         }
       }
 
       if (!new File(subFolderName).exists()) {
          new File(subFolderName).mkdir();
       }
 
-      return subFolderName + File.separatorChar + getTileName(sector);
+      return subFolderName + File.separatorChar + getTileGeojsonName(sector);
    }
 
 
-   private static String getTileName(final TileSector sector) {
+   private static String getBsonFileName(final TileSector sector) {
 
-      return sector._column + ".geojson";
-      //return sector._level + "_" + sector._row + "-" + sector._column + ".json";
+      final String folderName = _bsonFolder + File.separatorChar + sector._level;
+      final String subFolderName = folderName + File.separatorChar + sector._column;
+
+      if (!new File(folderName).exists()) {
+         new File(folderName).mkdir();
+         //System.out.println("LEVEL: " + sector._level);
+      }
+
+      if (!new File(subFolderName).exists()) {
+         new File(subFolderName).mkdir();
+      }
+
+      return subFolderName + File.separatorChar + getTileBsonName(sector);
+   }
+
+
+   private static String getTileGeojsonName(final TileSector sector) {
+
+      //return sector._column + ".geojson";
+      return sector.getRow(_renderParameters) + ".geojson";
+   }
+
+
+   private static String getTileBsonName(final TileSector sector) {
+
+      //return sector._column + ".bson";
+      return sector.getRow(_renderParameters) + ".bson";
    }
 
 
    private static String getTileLabel(final TileSector sector) {
 
-      return sector._level + "/" + sector.getRow(_renderParameters) + "/" + getTileName(sector);
+      return sector._level + "/" + sector.getRow(_renderParameters) + "/" + sector._column;
    }
-
-
-   //   private static int getRow(final TileSector sector) {
-   //
-   //      int row = sector._row;
-   //      if (_renderParameters._mercator) {
-   //         final int numRows = (int) (_renderParameters._topSectorSplitsByLatitude * IMathUtils.instance().pow(2.0, sector._level));
-   //         row = numRows - sector._row - 1;
-   //         //         System.out.println("COLUMN: " + sector._column);
-   //         //         System.out.println("TILE ROW: " + sector._row);
-   //         //         System.out.println("numRows: " + numRows);
-   //         //         System.out.println("ROW: " + row);
-   //      }
-   //      return row;
-   //   }
 
 
    private static void createFolderStructure(final DataSource dataSource) {
@@ -480,6 +550,20 @@ public class VectorialLOD {
       _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + projection;
       if (!new File(_lodFolder).exists()) {
          new File(_lodFolder).mkdir();
+      }
+
+      if (generateGeojson()) {
+         _geojsonFolder = _lodFolder + File.separatorChar + "GEOJSON";
+         if (!new File(_geojsonFolder).exists()) {
+            new File(_geojsonFolder).mkdir();
+         }
+      }
+
+      if (generateBson()) {
+         _bsonFolder = _lodFolder + File.separatorChar + "BSON";
+         if (!new File(_bsonFolder).exists()) {
+            new File(_bsonFolder).mkdir();
+         }
       }
    }
 
@@ -572,33 +656,27 @@ public class VectorialLOD {
       }
 
       if (sector._level >= FIRST_LEVEL) {
-         try {
-            final float qf = ((sector._level == 0) || (sector._level == 1)) ? 0.5f : QUALITY_FACTOR;
-            final String geoJson = selectGeometries(dataSource._sourceTable, //
-                     sector.getSector(), //
-                     //sector.getExtendedSector(OVERLAP_PERCENTAGE),//
-                     qf, // qualityFactor
-                     dataSource._geomFilterCriteria, //
-                     dataSource._includeProperties);
 
-            //         final String fileName = getTileFileName(sector);
-            //         final FileWriter file = new FileWriter(fileName);
-            if (geoJson != null) {
-               final String fileName = getTileFileName(sector);
-               final FileWriter file = new FileWriter(fileName);
-               System.out.println("Generating: ../" + getTileLabel(sector));
-               file.write(geoJson);
-               file.flush();
-               file.close();
-            }
-            else {
-               System.out.println("Skip empty tile: ../" + getTileLabel(sector));
-            }
-            //         file.close();
+         //-- hardcoded for levels 0 and 1 ---------------
+         final float qf = (sector._level > 1) ? QUALITY_FACTOR : 0.5f;
+         final String filterCriteria = (sector._level > 1) ? dataSource._geomFilterCriteria : getAreaFilterCriterium(sector, qf);
+         //-----------------------------------------------
+
+         final String geoJson = selectGeometries(dataSource._sourceTable, //
+                  sector.getSector(), //
+                  //sector.getExtendedSector(OVERLAP_PERCENTAGE),//
+                  qf, //QUALITY_FACTOR, // qualityFactor
+                  filterCriteria, //dataSource._geomFilterCriteria, //
+                  dataSource._includeProperties);
+
+         if (geoJson != null) {
+            //System.out.println("Generating: ../" + getTileLabel(sector));
+            writeOutputFile(geoJson, sector);
          }
-         catch (final IOException e) {
-            System.out.println("Exception while writting geoJson object ! ");
+         else {
+            System.out.println("Skip empty tile: ../" + getTileLabel(sector));
          }
+
       }
 
       //final List<TileSector> subSectors = sector.getSubTileSectors();
@@ -606,6 +684,65 @@ public class VectorialLOD {
       for (final TileSector s : subSectors) {
          processSubSectors(s, dataSource);
       }
+   }
+
+
+   private static void writeOutputFile(final String geoJson,
+                                       final TileSector sector) {
+
+      try {
+
+         String fileName = "";
+
+         if (generateGeojson()) {
+            fileName = getGeojsonFileName(sector);
+            //System.out.println("GEOJSON FILE: " + fileName);
+            System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
+         }
+         else {
+            fileName = _lodFolder + File.separatorChar + getTileGeojsonName(sector);
+         }
+         final FileWriter file = new FileWriter(fileName);
+         file.write(geoJson);
+         file.flush();
+         file.close();
+
+         if (generateBson()) {
+            final File bsonFile = new File(getBsonFileName(sector));
+            bsonFile.createNewFile();
+            final File geojsonFile = new File(fileName);
+
+            try {
+               JBson2BJson.instance().transform(geojsonFile, bsonFile, true);
+            }
+            catch (final JBson2BJsonException e) {
+               ILogger.instance().logError(e.getMessage());
+            }
+
+            if (!generateGeojson()) {
+               //System.out.println("BSON FILE: " + getBsonFileName(sector));
+               System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
+               new File(fileName).delete();
+            }
+         }
+
+      }
+      catch (final IOException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+   }
+
+
+   private static boolean generateGeojson() {
+
+      return (OUTPUT_FORMAT.equalsIgnoreCase("geojson") || OUTPUT_FORMAT.equalsIgnoreCase("both"));
+   }
+
+
+   private static boolean generateBson() {
+
+      return (OUTPUT_FORMAT.equalsIgnoreCase("bson") || OUTPUT_FORMAT.equalsIgnoreCase("both"));
    }
 
 
@@ -927,6 +1064,15 @@ public class VectorialLOD {
             }
             else {
                System.err.println("Invalid MAX_LEVEL argument.");
+               System.exit(1);
+            }
+
+            OUTPUT_FORMAT = properties.getProperty("OUTPUT_FORMAT");
+            if ((OUTPUT_FORMAT != null) && (!OUTPUT_FORMAT.equals(""))) {
+               System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
+            }
+            else {
+               System.err.println("Invalid OUTPUT_FORMAT argument.");
                System.exit(1);
             }
 
