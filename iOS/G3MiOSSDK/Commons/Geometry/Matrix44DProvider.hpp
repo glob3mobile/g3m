@@ -85,7 +85,8 @@ private:
   ~Matrix44DMultiplicationHolder();
 
 public:
-  Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[], int nMatrix);
+  Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
+                                int nMatrix);
 
   Matrix44D* getMatrix() const;
   
