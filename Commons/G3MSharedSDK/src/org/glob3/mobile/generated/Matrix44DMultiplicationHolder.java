@@ -52,7 +52,7 @@ public class Matrix44DMultiplicationHolder extends Matrix44DProvider
   {
      _nMatrix = nMatrix;
      _modelview = null;
-    _matrix = new Matrix44D[nMatrix];
+    _matrices  = new Matrix44D[nMatrix];
     _providers = new Matrix44DProvider[nMatrix];
     for (int i = 0; i < _nMatrix; i++)
     {
