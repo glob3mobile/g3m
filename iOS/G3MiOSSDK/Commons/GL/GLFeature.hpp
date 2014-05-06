@@ -38,13 +38,14 @@ enum GLFeatureID{
 class GLFeature: public RCObject {
 protected:
   ~GLFeature() {
+    delete _values;
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
 protected:
-  GPUVariableValueSet _values;
+  GPUVariableValueSet* _values;
 
 public:
   const GLFeatureGroupName _group;
@@ -58,7 +59,7 @@ public:
   }
 
   const GPUVariableValueSet* getGPUVariableValueSet() const{
-    return &_values;
+    return _values;
   }
 
   virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;

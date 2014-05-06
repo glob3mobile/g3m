@@ -14,9 +14,9 @@ ViewportExtentGLFeature::ViewportExtentGLFeature(int viewportWidth,
                                                  int viewportHeight) :
 GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
-  _values.addUniformValue(VIEWPORT_EXTENT,
-                          new GPUUniformValueVec2Float(viewportWidth, viewportHeight),
-                          false);
+  _values->addUniformValue(VIEWPORT_EXTENT,
+                           new GPUUniformValueVec2Float(viewportWidth, viewportHeight),
+                           false);
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
@@ -24,16 +24,16 @@ BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
                                        int textureHeight) :
 GLFeature(NO_GROUP, GLF_BILLBOARD)
 {
-  _values.addUniformValue(TEXTURE_EXTENT,
-                          new GPUUniformValueVec2Float(textureWidth, textureHeight),
-                          false);
+  _values->addUniformValue(TEXTURE_EXTENT,
+                           new GPUUniformValueVec2Float(textureWidth, textureHeight),
+                           false);
 
-  _values.addUniformValue(BILLBOARD_POSITION,
-                          new GPUUniformValueVec4Float((float) position._x,
-                                                       (float) position._y,
-                                                       (float) position._z,
-                                                       1),
-                          false);
+  _values->addUniformValue(BILLBOARD_POSITION,
+                           new GPUUniformValueVec4Float((float) position._x,
+                                                        (float) position._y,
+                                                        (float) position._z,
+                                                        1),
+                           false);
 }
 
 void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
@@ -66,10 +66,10 @@ _lineWidth(lineWidth)
 {
 
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
-  _values.addAttributeValue(POSITION, _position, false);
+  _values->addAttributeValue(POSITION, _position, false);
 
   if (needsPointSize) {
-    _values.addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
+    _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
   }
 }
 
@@ -122,18 +122,18 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
 
   switch (_target) {
     case 0:
-      _values.addUniformValue(SAMPLER, texUnit, false);
-      _values.addAttributeValue(TEXTURE_COORDS, value, false);
+      _values->addUniformValue(SAMPLER, texUnit, false);
+      _values->addAttributeValue(TEXTURE_COORDS, value, false);
       break;
 
     case 1:
-      _values.addUniformValue(SAMPLER2, texUnit, false);
-      _values.addAttributeValue(TEXTURE_COORDS_2, value, false);
+      _values->addUniformValue(SAMPLER2, texUnit, false);
+      _values->addAttributeValue(TEXTURE_COORDS_2, value, false);
       break;
 
     case 2:
-      _values.addUniformValue(SAMPLER3, texUnit, false);
-      _values.addAttributeValue(TEXTURE_COORDS_3, value, false);
+      _values->addUniformValue(SAMPLER3, texUnit, false);
+      _values->addAttributeValue(TEXTURE_COORDS_3, value, false);
       break;
 
     default:
@@ -204,12 +204,12 @@ void TextureGLFeature::setTranslation(float u, float v) {
   if (_translation == NULL) {
     _translation = new GPUUniformValueVec2FloatMutable(u, v);
 
-    _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
-                            _translation,
-                            false);
+    _values->addUniformValue(TRANSLATION_TEXTURE_COORDS,
+                             _translation,
+                             false);
   } else{
     if (u == 0.0 && v == 0.0) {
-      _values.removeUniformValue(TRANSLATION_TEXTURE_COORDS);
+      _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
     }
     else{
       _translation->changeValue(u, v);
@@ -220,13 +220,13 @@ void TextureGLFeature::setScale(float u, float v) {
   if (_scale == NULL) {
     _scale = new GPUUniformValueVec2FloatMutable(u, v);
 
-    _values.addUniformValue(SCALE_TEXTURE_COORDS,
-                            _scale,
-                            false);
+    _values->addUniformValue(SCALE_TEXTURE_COORDS,
+                             _scale,
+                             false);
   } else{
 
     if (u == 1.0 && v == 1.0) {
-      _values.removeUniformValue(SCALE_TEXTURE_COORDS);
+      _values->removeUniformValue(SCALE_TEXTURE_COORDS);
     }
     else{
       _scale->changeValue(u, v);
@@ -241,20 +241,20 @@ void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, f
     if (angle != 0.0) {
       _rotationCenter = new GPUUniformValueVec2FloatMutable(u, v);
 
-      _values.addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
-                              _rotationCenter,
-                              false);
+      _values->addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
+                               _rotationCenter,
+                               false);
 
       _rotationAngle = new GPUUniformValueFloatMutable(angle);
 
-      _values.addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS,
-                              _rotationAngle,
-                              false);
+      _values->addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS,
+                               _rotationAngle,
+                               false);
     }
   } else{
     if (angle == 0.0) {
-      _values.removeUniformValue(ROTATION_CENTER_TEXTURE_COORDS);
-      _values.removeUniformValue(ROTATION_ANGLE_TEXTURE_COORDS);
+      _values->removeUniformValue(ROTATION_CENTER_TEXTURE_COORDS);
+      _values->removeUniformValue(ROTATION_ANGLE_TEXTURE_COORDS);
     } else{
       _rotationCenter->changeValue(u, v);
       _rotationAngle->changeValue(angle);
@@ -272,17 +272,17 @@ ColorGLFeature::ColorGLFeature(IFloatBuffer* colors, int arrayElementSize, int i
 GLColorGroupFeature(GLF_COLOR, 3, blend, sFactor, dFactor)
 {
   GPUAttributeValueVec4Float* value = new GPUAttributeValueVec4Float(colors, arrayElementSize, index, stride, normalized);
-  _values.addAttributeValue(COLOR, value, false);
+  _values->addAttributeValue(COLOR, value, false);
 }
 
 FlatColorGLFeature::FlatColorGLFeature(const Color& color,
                                        bool blend, int sFactor, int dFactor):
 GLColorGroupFeature(GLF_FLATCOLOR, 2, blend, sFactor, dFactor)
 {
-  _values.addUniformValue(FLAT_COLOR, new GPUUniformValueVec4Float(color._red,
-                                                                   color._green,
-                                                                   color._blue,
-                                                                   color._alpha), false);
+  _values->addUniformValue(FLAT_COLOR, new GPUUniformValueVec4Float(color._red,
+                                                                    color._green,
+                                                                    color._blue,
+                                                                    color._alpha), false);
 }
 
 
@@ -322,21 +322,21 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
                                                                      index,
                                                                      stride,
                                                                      normalized);
-  _values.addAttributeValue(TEXTURE_COORDS, value, false);
+  _values->addAttributeValue(TEXTURE_COORDS, value, false);
 
 #warning ONLY TARGET 0 FOR SGNODES
   GPUUniformValueInt* texUnit = new GPUUniformValueInt(0);
-  _values.addUniformValue(SAMPLER, texUnit, false);
+  _values->addUniformValue(SAMPLER, texUnit, false);
 
   if (coordsTransformed) {
-    _values.addUniformValue(TRANSLATION_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float(translate._x,
-                                                         translate._y),
-                            false);
-    _values.addUniformValue(SCALE_TEXTURE_COORDS,
-                            new GPUUniformValueVec2Float(scale._x,
-                                                         scale._y),
-                            false);
+    _values->addUniformValue(TRANSLATION_TEXTURE_COORDS,
+                             new GPUUniformValueVec2Float(translate._x,
+                                                          translate._y),
+                             false);
+    _values->addUniformValue(SCALE_TEXTURE_COORDS,
+                             new GPUUniformValueVec2Float(scale._x,
+                                                          scale._y),
+                             false);
   }
 
 }
@@ -357,8 +357,8 @@ DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& diffuseLightDir
                                                  const Color& diffuseLightColor,
                                                  const Color& ambientLightColor):
 GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
-  _values.addUniformValue(AMBIENT_LIGHT_COLOR,
-                          new GPUUniformValueVec3Float(ambientLightColor), false);
+  _values->addUniformValue(AMBIENT_LIGHT_COLOR,
+                           new GPUUniformValueVec3Float(ambientLightColor), false);
 
   Vector3D dirN = diffuseLightDirection.normalized();
 
@@ -366,12 +366,12 @@ GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
                                                                     (float) dirN._y,
                                                                     (float) dirN._z);
 
-  _values.addUniformValue(DIFFUSE_LIGHT_DIRECTION,
-                          _lightDirectionUniformValue,
-                          false);
-  _values.addUniformValue(DIFFUSE_LIGHT_COLOR,
-                          new GPUUniformValueVec3Float(diffuseLightColor),
-                          false);
+  _values->addUniformValue(DIFFUSE_LIGHT_DIRECTION,
+                           _lightDirectionUniformValue,
+                           false);
+  _values->addUniformValue(DIFFUSE_LIGHT_COLOR,
+                           new GPUUniformValueVec3Float(diffuseLightColor),
+                           false);
 
 }
 
@@ -385,8 +385,8 @@ void DirectionLightGLFeature::setLightDirection(const Vector3D& lightDir) {
 VertexNormalGLFeature::VertexNormalGLFeature(IFloatBuffer* buffer, int arrayElementSize, int index, bool normalized, int stride):
 GLFeature(LIGHTING_GROUP, GLF_VERTEX_NORMAL)
 {
-  _values.addAttributeValue(NORMAL,
-                            new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized),
-                            false);
+  _values->addAttributeValue(NORMAL,
+                             new GPUAttributeValueVec3Float(buffer, arrayElementSize, index, stride, normalized),
+                             false);
   
 }

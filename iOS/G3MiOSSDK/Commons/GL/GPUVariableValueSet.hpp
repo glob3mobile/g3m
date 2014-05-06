@@ -14,13 +14,16 @@
 
 class GPUVariableValueSet {
 private:
-  GPUUniformValue* _uniformValues[32];
+  GPUUniformValue*   _uniformValues[32];
   GPUAttributeValue* _attributeValues[32];
   int _highestUniformKey;
   int _highestAttributeKey;
 
   mutable int _uniformsCode;
   mutable int _attributeCode;
+
+  GPUVariableValueSet(const GPUVariableValueSet& that);
+  GPUVariableValueSet& operator=(const GPUVariableValueSet& that);
 
 public:
 
@@ -30,11 +33,11 @@ public:
   _uniformsCode(0),
   _attributeCode(0) {
     for (int i = 0; i < 32; i++) {
-      _uniformValues[i] = NULL;
+      _uniformValues[i]   = NULL;
       _attributeValues[i] = NULL;
     }
   }
-  
+
   ~GPUVariableValueSet();
 
   bool containsUniform(GPUUniformKey key) const{
@@ -59,7 +62,9 @@ public:
     return _attributeValues[index] != NULL;
   }
 
-  void addUniformValue(GPUUniformKey key, GPUUniformValue* v, bool mustRetain) {
+  void addUniformValue(GPUUniformKey key,
+                       GPUUniformValue* v,
+                       bool mustRetain) {
 #ifdef C_CODE
     const int index = key;
 #endif
@@ -67,9 +72,14 @@ public:
     final int index = key.getValue();
 #endif
 
+    if (_uniformValues[index] != NULL) {
+#warning remove debug print
+      printf("break point on me\n");
+    }
+
     _uniformValues[index] = v;
     if (mustRetain) {
-    v->_retain();
+      v->_retain();
     }
     if (index > _highestUniformKey) {
       _highestUniformKey = index;
@@ -111,32 +121,6 @@ public:
       _highestAttributeKey = index;
     }
   }
-
-//  void addNewAttributeValue(GPUAttributeKey key, GPUAttributeValue* v) {
-//#ifdef C_CODE
-//    const int index = key;
-//#endif
-//#ifdef JAVA_CODE
-//    final int index = key.getValue();
-//#endif
-//    _attributeValues[key] = v;
-//    if (key > _highestAttributeKey) {
-//      _highestAttributeKey = key;
-//    }
-//  }
-//
-//  void addNewUniformValue(GPUUniformKey key, GPUUniformValue* v) {
-//#ifdef C_CODE
-//    const int index = key;
-//#endif
-//#ifdef JAVA_CODE
-//    final int index = key.getValue();
-//#endif
-//    _uniformValues[key] = v;
-//    if (key > _highestUniformKey) {
-//      _highestUniformKey = key;
-//    }
-//  }
 
   GPUAttributeValue* getAttributeValue(int key) const{
     return _attributeValues[key];
