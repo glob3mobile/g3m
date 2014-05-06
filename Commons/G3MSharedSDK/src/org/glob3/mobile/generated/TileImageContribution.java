@@ -38,15 +38,13 @@ public class TileImageContribution extends RCObject
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  TileImageContribution operator =(TileImageContribution that);
 
-  private void _retain()
-  {
-    super._retain();
-  }
-
-  private void _release()
-  {
-    super._release();
-  }
+//  void _retain() const {
+//    RCObject::_retain();
+//  }
+//
+//  void _release() const {
+//    RCObject::_release();
+//  }
 
 
   protected TileImageContribution(boolean isTransparent, float alpha)
