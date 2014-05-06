@@ -58,7 +58,7 @@ public:
   {
     _values = new GPUVariableValueSet();
   }
-  
+
   const GPUVariableValueSet* getGPUVariableValueSet() const{
     return _values;
   }
@@ -140,7 +140,7 @@ class GLCameraGroupFeature: public GLFeature {
 private:
 
 #ifdef C_CODE
-  Matrix44DHolder *_matrixHolder;
+  Matrix44DHolder* _matrixHolder;
 #endif
 #ifdef JAVA_CODE
   private Matrix44DHolder _matrixHolder = null;
