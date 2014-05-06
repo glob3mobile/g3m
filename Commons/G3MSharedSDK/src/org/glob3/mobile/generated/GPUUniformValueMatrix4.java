@@ -4,8 +4,8 @@ package org.glob3.mobile.generated;
 
 public class GPUUniformValueMatrix4 extends GPUUniformValue
 {
-  protected Matrix44DProvider _provider = null;
-  protected  Matrix44D _lastModelSet;
+  private Matrix44DProvider _provider;
+  private Matrix44D         _lastModelSet;
 
   public void dispose()
   {
@@ -43,7 +43,6 @@ public class GPUUniformValueMatrix4 extends GPUUniformValue
 
   public final void setUniform(GL gl, IGLUniformID id)
   {
-
     if (_lastModelSet != null)
     {
       _lastModelSet._release();

@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class PlanetRenderer;
 
 public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
