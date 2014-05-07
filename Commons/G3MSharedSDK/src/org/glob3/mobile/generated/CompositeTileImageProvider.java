@@ -510,6 +510,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   
       TileImageProvider child = _children.get(childContribution._childIndex);
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DEBUG MEMORY
+      childContribution._contribution._retain();
+  
       child.create(tile, childContribution._contribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true, frameTasksExecutor);
     }
   }
