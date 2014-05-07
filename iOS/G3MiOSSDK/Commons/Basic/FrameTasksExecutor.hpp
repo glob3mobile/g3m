@@ -43,7 +43,7 @@ public:
   _maxTimePerFrameMS(10),
   _maxTimePerFrameStressedMS(20),
   _stressed(false),
-  _debug(true)
+  _debug(false)
   {
   }
 
