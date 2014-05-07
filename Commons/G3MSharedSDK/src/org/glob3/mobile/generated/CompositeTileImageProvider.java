@@ -115,7 +115,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning MEMORY
-          singleResult._contribution._retain();
+    //      singleResult->_contribution->_retain();
           _listener.imageCreated(singleResult._imageId, singleResult._image.shallowCopy(), singleResult._imageId, singleResult._contribution);
         }
     
@@ -146,25 +146,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         }
         else
         {
-          //      ICanvas* canvas = IFactory::instance()->createCanvas();
-          //
-          //      canvas->initialize(_width, _height);
-          //
-          //      std::string imageId = "";
-          //
-          //      for (int i = 0; i < _contributionsSize; i++) {
-          //       const ChildResult* result = _results[i];
-          //
-          //        imageId += result->_imageId + "|";
-          ///#warning JM: consider sector and transparency
-          //        canvas->drawImage(result->_image, 0, 0);
-          //      }
-          //      _imageId = imageId;
-          //
-          //      canvas->createImage(new ComposerImageListener(this), true);
-          //
-          //      delete canvas;
-    
           _frameTasksExecutor.addPreRenderTask(new ComposerFrameTask(this));
         }
       }
@@ -522,7 +503,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning DEBUG MEMORY
-  //    childContribution->_contribution->_retain();
+      childContribution._contribution._retain();
   
       child.create(tile, childContribution._contribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true, frameTasksExecutor);
     }
