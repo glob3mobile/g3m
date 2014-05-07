@@ -335,7 +335,7 @@ void CompositeTileImageProvider::Composer::imageCreated(const std::string&      
                                                         const TileImageContribution* contribution,
                                                         const int                    index) {
 #warning DEBUG MEMORY - DIEGO AT WORK -> moves to ChildResult::image()
-  TileImageContribution::retainContribution(contribution);
+//  TileImageContribution::retainContribution(contribution);
 
   _results[index] = ChildResult::image(image, imageId, contribution);
   stepDone();
