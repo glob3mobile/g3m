@@ -181,7 +181,7 @@ void CompositeTileImageProvider::Composer::done() {
     }
     else {
 #warning MEMORY
-      singleResult->_contribution->_retain();
+//      singleResult->_contribution->_retain();
       _listener->imageCreated(singleResult->_imageId,
                               singleResult->_image->shallowCopy(),
                               singleResult->_imageId,
@@ -210,25 +210,6 @@ void CompositeTileImageProvider::Composer::done() {
       cleanUp();
     }
     else {
-      //      ICanvas* canvas = IFactory::instance()->createCanvas();
-      //
-      //      canvas->initialize(_width, _height);
-      //
-      //      std::string imageId = "";
-      //
-      //      for (int i = 0; i < _contributionsSize; i++) {
-      //       const ChildResult* result = _results[i];
-      //
-      //        imageId += result->_imageId + "|";
-      //#warning JM: consider sector and transparency
-      //        canvas->drawImage(result->_image, 0, 0);
-      //      }
-      //      _imageId = imageId;
-      //
-      //      canvas->createImage(new ComposerImageListener(this), true);
-      //
-      //      delete canvas;
-
       _frameTasksExecutor->addPreRenderTask(new ComposerFrameTask(this));
     }
   }
@@ -426,7 +407,7 @@ void CompositeTileImageProvider::create(const Tile* tile,
     TileImageProvider* child = _children[ childContribution->_childIndex ];
 
 #warning DEBUG MEMORY
-//    childContribution->_contribution->_retain();
+    childContribution->_contribution->_retain();
 
     child->create(tile,
                   childContribution->_contribution,
