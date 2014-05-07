@@ -180,6 +180,8 @@ void CompositeTileImageProvider::Composer::done() {
       _listener->imageCreationCanceled(_tileId);
     }
     else {
+#warning MEMORY
+      singleResult->_contribution->_retain();
       _listener->imageCreated(singleResult->_imageId,
                               singleResult->_image->shallowCopy(),
                               singleResult->_imageId,
@@ -311,6 +313,8 @@ void CompositeTileImageProvider::Composer::mixResult() {
         delete destRect;
       }
     }
+#warning MEMORY
+//    result->_contribution->_release();
   }
   _imageId = imageId;
 
@@ -349,8 +353,9 @@ void CompositeTileImageProvider::Composer::imageCreated(const std::string&      
                                                         const std::string&           imageId,
                                                         const TileImageContribution* contribution,
                                                         const int                    index) {
-#warning DEBUG MEMORY
+#warning DEBUG MEMORY - DIEGO AT WORK -> moves to ChildResult::image()
   TileImageContribution::retainContribution(contribution);
+
   _results[index] = ChildResult::image(image, imageId, contribution);
   stepDone();
 }
@@ -421,7 +426,7 @@ void CompositeTileImageProvider::create(const Tile* tile,
     TileImageProvider* child = _children[ childContribution->_childIndex ];
 
 #warning DEBUG MEMORY
-    childContribution->_contribution->_retain();
+//    childContribution->_contribution->_retain();
 
     child->create(tile,
                   childContribution->_contribution,
