@@ -63,7 +63,6 @@ MultiTextureMapping::~MultiTextureMapping() {
 }
 
 void MultiTextureMapping::modifyGLState(GLState& state) const{
-#warning ASK JM
   GLFeatureSet* tglfs = state.getGLFeatures(GLF_TEXTURE);
 
   for (int i = 0; i < tglfs->size(); i++) {

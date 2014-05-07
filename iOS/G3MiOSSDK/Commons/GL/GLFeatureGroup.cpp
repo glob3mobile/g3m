@@ -177,6 +177,7 @@ void GLFeatureCameraGroup::apply(const GLFeatureSet& features,
                                  GPUVariableValueSet& vs,
                                  GLGlobalState& state) {
 
+#warning RCDebug
   Matrix44DMultiplicationHolderBuilder modelViewHolderBuilder;
   Matrix44DMultiplicationHolderBuilder modelTransformHolderBuilder;
 
@@ -226,6 +227,11 @@ void GLFeatureCameraGroup::apply(const GLFeatureSet& features,
                      false);
 
   modelViewProvider->_release();
+
+#ifdef JAVA_CODE
+  modelViewHolderBuilder.dispose();
+  modelTransformHolderBuilder.dispose();
+#endif
 }
 
 void GLFeatureLightingGroup::apply(const GLFeatureSet& features, GPUVariableValueSet& vs, GLGlobalState& state) {
