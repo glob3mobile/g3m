@@ -72,11 +72,6 @@ public:
     final int index = key.getValue();
 #endif
 
-    if (_uniformValues[index] != NULL) {
-#warning remove debug print
-      printf("break point on me\n");
-    }
-
     _uniformValues[index] = v;
     if (mustRetain) {
       v->_retain();
