@@ -85,13 +85,6 @@ public class GPUVariableValueSet
   {
     final int index = key.getValue();
 
-    if (_uniformValues[index] != null)
-    {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning remove debug print
-      System.out.print("break point on me\n");
-    }
-
     _uniformValues[index] = v;
     if (mustRetain)
     {
