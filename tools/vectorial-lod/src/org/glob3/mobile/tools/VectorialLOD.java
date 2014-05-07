@@ -251,6 +251,7 @@ public class VectorialLOD {
 
          final String theGeom = getGeometryColumnName(st, dataSourceTable);
          final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
+         final String filterCriteria = buildFilterCriterium(geomFilterCriteria, simplifyTolerance);
 
          if ((theGeom == null) || (simplifyTolerance == null)) {
             st.close();
@@ -259,7 +260,7 @@ public class VectorialLOD {
 
          //-- full query where first cut, second simplify
          final String fullQuery = baseQuery0 + theGeom + "," + bboxQuery + ")," + simplifyTolerance + baseQuery1 + propsQuery
-                                  + baseQuery2 + dataSourceTable + baseQuery4 + geomFilterCriteria + baseQuery3 + theGeom + ","
+                                  + baseQuery2 + dataSourceTable + baseQuery4 + filterCriteria + baseQuery3 + theGeom + ","
                                   + bboxQuery + baseQuery5;
 
          //         System.out.println("fullQuery: " + fullQuery);
@@ -326,8 +327,8 @@ public class VectorialLOD {
 
 
    /*
-    * version 0.12: 
-    * - tolerance obtained from the sector deltaLongitude downscaled by 1000. 
+    * version 0.13: 
+    * - tolerance obtained from the sector deltaLongitude downscaled by 500. 
     * - qualityFactor to adjust tolerance (usual values: from 1.0 to 10.0)
     *   greater values entail less tolerance on Douglas-Peuker algorithm and 
     *   so on less simplification and more vertex generated as result.
@@ -337,7 +338,7 @@ public class VectorialLOD {
 
       //final float tolerance = (float) (sector._deltaLongitude._degrees / (qualityFactor * 1000f));
       final double delta = Math.sqrt(Math.pow(sector._deltaLatitude._degrees, 2) + Math.pow(sector._deltaLongitude._degrees, 2));
-      final float tolerance = (float) (delta / (qualityFactor * 1000f));
+      final float tolerance = (float) (delta / (qualityFactor * 500f));
 
       if (VERBOSE) {
          System.out.println("tolerance: " + tolerance);
@@ -347,17 +348,25 @@ public class VectorialLOD {
    }
 
 
-   private static String getAreaFilterCriterium(final Sector sector,
-                                                final float qualityFactor) {
+   private static String buildFilterCriterium(final String filterCriteria,
+                                              final String tolerance) {
 
-      final String filter = "ST_Area(the_geom)>" + Float.toString((40.0f * getMaxVertexTolerance(sector, qualityFactor)));
+      return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
 
-      if (VERBOSE) {
-         System.out.println("filter: " + filter);
-      }
-
-      return filter;
    }
+
+
+   //   private static String getAreaFilterCriterium(final Sector sector,
+   //                                                final float qualityFactor) {
+   //
+   //      final String filter = "ST_Area(the_geom)>" + Float.toString((1.0f * getMaxVertexTolerance(sector, qualityFactor)));
+   //
+   //      if (VERBOSE) {
+   //         System.out.println("filter: " + filter);
+   //      }
+   //
+   //      return filter;
+   //   }
 
 
    private static String buildSectorQuery(final List<Sector> sectorList) {
@@ -660,14 +669,13 @@ public class VectorialLOD {
          //         final float qf = (sector._level > 1) ? QUALITY_FACTOR : 0.5f;
          //         final String filterCriteria = (sector._level > 1) ? dataSource._geomFilterCriteria : getAreaFilterCriterium(sector, qf);
          //-----------------------------------------------
-
-         final String filterCriteria = dataSource._geomFilterCriteria + " and " + getAreaFilterCriterium(sector, QUALITY_FACTOR);
+         //final String filterCriteria = dataSource._geomFilterCriteria + " and " + getAreaFilterCriterium(sector, QUALITY_FACTOR);
 
          final String geoJson = selectGeometries(dataSource._sourceTable, //
                   sector.getSector(), //
                   //sector.getExtendedSector(OVERLAP_PERCENTAGE),//
                   QUALITY_FACTOR, // qualityFactor
-                  filterCriteria, //dataSource._geomFilterCriteria, //
+                  dataSource._geomFilterCriteria, //
                   dataSource._includeProperties);
 
          if (geoJson != null) {
