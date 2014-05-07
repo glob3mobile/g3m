@@ -67,10 +67,6 @@ public class TileSector
       if (renderParameters._mercator) {
          final int numRows = (int) (renderParameters._topSectorSplitsByLatitude * IMathUtils.instance().pow(2.0, this._level));
          row = numRows - this._row - 1;
-         //         System.out.println("COLUMN: " + this._column);
-         //         System.out.println("TILE ROW: " + this._row);
-         //         System.out.println("numRows: " + numRows);
-         //         System.out.println("ROW: " + row);
       }
       return row;
    }
