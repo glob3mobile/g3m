@@ -74,7 +74,9 @@ _error(error)
 
 CompositeTileImageProvider::ChildResult::~ChildResult() {
   delete _image;
-  //  TileImageContribution::releaseContribution(_contribution);
+
+#warning DEBUG MEMORY
+  TileImageContribution::releaseContribution(_contribution);
 }
 
 const CompositeTileImageProvider::ChildResult* CompositeTileImageProvider::ChildResult::image(const IImage*                image,
@@ -348,7 +350,7 @@ void CompositeTileImageProvider::Composer::imageCreated(const std::string&      
                                                         const TileImageContribution* contribution,
                                                         const int                    index) {
 #warning DEBUG MEMORY
-  //  TileImageContribution::retainContribution(contribution);
+  TileImageContribution::retainContribution(contribution);
   _results[index] = ChildResult::image(image, imageId, contribution);
   stepDone();
 }
