@@ -418,6 +418,9 @@ void CompositeTileImageProvider::create(const Tile* tile,
 
     TileImageProvider* child = _children[ childContribution->_childIndex ];
 
+#warning DEBUG MEMORY
+    childContribution->_contribution->_retain();
+
     child->create(tile,
                   childContribution->_contribution,
                   resolution,
