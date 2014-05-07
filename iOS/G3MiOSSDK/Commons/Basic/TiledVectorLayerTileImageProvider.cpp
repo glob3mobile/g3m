@@ -102,6 +102,7 @@ _downloadRequestId(-1),
 _parser(NULL),
 _symbolizer(NULL)
 {
+#warning MEMORY
   TileImageContribution::retainContribution(_contribution);
 }
 
