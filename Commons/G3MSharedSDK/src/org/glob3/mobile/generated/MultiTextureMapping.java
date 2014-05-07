@@ -117,8 +117,6 @@ public class MultiTextureMapping extends TransformableTextureMapping
 
   public final void modifyGLState(GLState state)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ASK JM
     GLFeatureSet tglfs = state.getGLFeatures(GLFeatureID.GLF_TEXTURE);
   
     for (int i = 0; i < tglfs.size(); i++)
