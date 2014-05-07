@@ -237,7 +237,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning DEBUG MEMORY - DIEGO AT WORK->moves to ChildResult::image()
-      TileImageContribution.retainContribution(contribution);
+    //  TileImageContribution::retainContribution(contribution);
     
       _results.set(index, ChildResult.image(image, imageId, contribution));
       stepDone();
