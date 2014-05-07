@@ -52,7 +52,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     {
       if (_image != null)
          _image.dispose();
-      //  TileImageContribution::releaseContribution(_contribution);
+    
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DEBUG MEMORY
+      TileImageContribution.releaseContribution(_contribution);
     }
 
 
@@ -250,7 +253,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning DEBUG MEMORY
-      //  TileImageContribution::retainContribution(contribution);
+      TileImageContribution.retainContribution(contribution);
       _results.set(index, ChildResult.image(image, imageId, contribution));
       stepDone();
     }
