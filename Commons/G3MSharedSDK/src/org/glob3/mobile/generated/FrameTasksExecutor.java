@@ -131,7 +131,7 @@ public class FrameTasksExecutor
      _maxTimePerFrameMS = 10;
      _maxTimePerFrameStressedMS = 20;
      _stressed = false;
-     _debug = true;
+     _debug = false;
   }
 
   public final void addPreRenderTask(FrameTask task)
