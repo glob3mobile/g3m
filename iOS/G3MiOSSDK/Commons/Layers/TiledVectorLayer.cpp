@@ -153,8 +153,6 @@ const URL TiledVectorLayer::createURL(const Tile* tile) const {
   path = _su->replaceSubstring(path, "{y}",              _su->toString( row                               ) );
   path = _su->replaceSubstring(path, "{y2}",             _su->toString( tile->_row                        ) );
   path = _su->replaceSubstring(path, "{level}",          _su->toString( level                             ) );
-#warning temporary hack, check why {level} is not replaced more than one time
-  path = _su->replaceSubstring(path, "{level}",          _su->toString( level                             ) );
   path = _su->replaceSubstring(path, "{lowerLatitude}",  _su->toString( sector._lower._latitude._degrees  ) );
   path = _su->replaceSubstring(path, "{lowerLongitude}", _su->toString( sector._lower._longitude._degrees ) );
   path = _su->replaceSubstring(path, "{upperLatitude}",  _su->toString( sector._upper._latitude._degrees  ) );

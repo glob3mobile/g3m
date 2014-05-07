@@ -14,8 +14,6 @@ CompositeTileImageContribution::ChildContribution::ChildContribution(const int  
 _childIndex(childIndex),
 _contribution(contribution)
 {
-#warning MEMORY AT WORK
-//  TileImageContribution::retainContribution(_contribution);
 }
 
 CompositeTileImageContribution::ChildContribution::~ChildContribution() {

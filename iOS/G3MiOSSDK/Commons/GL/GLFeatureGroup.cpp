@@ -176,8 +176,6 @@ void GLFeatureColorGroup::apply(const GLFeatureSet& features,
 void GLFeatureCameraGroup::apply(const GLFeatureSet& features,
                                  GPUVariableValueSet& vs,
                                  GLGlobalState& state) {
-
-#warning RCDebug
   Matrix44DMultiplicationHolderBuilder modelViewHolderBuilder;
   Matrix44DMultiplicationHolderBuilder modelTransformHolderBuilder;
 

@@ -41,7 +41,6 @@ public:
   _listener(listener),
   _deleteListener(deleteListener)
   {
-//    TileImageContribution::retainContribution(_contribution);
   }
 
   ~RLTIP_ImageDownloadListener() {

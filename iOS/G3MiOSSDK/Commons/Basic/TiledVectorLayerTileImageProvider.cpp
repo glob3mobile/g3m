@@ -189,8 +189,6 @@ void TiledVectorLayerTileImageProvider::CanvasImageListener::imageCreated(const 
 void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImage* image) {
 #warning compose imageId
 
-  
-
 //  if (_canceled) {
 //    printf("**** break point\n");
 //  }
