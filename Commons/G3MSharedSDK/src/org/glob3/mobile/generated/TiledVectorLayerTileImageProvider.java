@@ -195,6 +195,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _downloadRequestId = -1;
        _parser = null;
        _symbolizer = null;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning MEMORY
       TileImageContribution.retainContribution(_contribution);
     }
 
