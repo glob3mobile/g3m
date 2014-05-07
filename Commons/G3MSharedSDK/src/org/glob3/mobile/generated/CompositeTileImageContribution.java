@@ -30,9 +30,6 @@ public class CompositeTileImageContribution extends TileImageContribution
     {
        _childIndex = childIndex;
        _contribution = contribution;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning MEMORY AT WORK
-    //  TileImageContribution::retainContribution(_contribution);
     }
 
     public void dispose()

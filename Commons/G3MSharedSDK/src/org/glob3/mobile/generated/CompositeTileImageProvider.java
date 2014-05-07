@@ -52,9 +52,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     {
       if (_image != null)
          _image.dispose();
-    
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DEBUG MEMORY
       TileImageContribution.releaseContribution(_contribution);
     }
 
@@ -67,7 +64,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
        _imageId = imageId;
        _contribution = contribution;
        _error = error;
-      //  TileImageContribution::retainContribution(_contribution);
     }
 
   }
@@ -113,9 +109,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         }
         else
         {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning MEMORY
-    //      singleResult->_contribution->_retain();
           _listener.imageCreated(singleResult._imageId, singleResult._image.shallowCopy(), singleResult._imageId, singleResult._contribution);
         }
     
@@ -223,9 +216,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
        _anyCancelation = false;
        _canceled = false;
        _tileSector = new Sector(tileSector);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DEBUG MEMORY
-      //  TileImageContribution::retainContribution(_compositeContribution);
       for (int i = 0; i < _contributionsSize; i++)
       {
         _results.add(null);
@@ -235,10 +225,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution, int index)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DEBUG MEMORY - DIEGO AT WORK->moves to ChildResult::image()
-    //  TileImageContribution::retainContribution(contribution);
-    
       _results.set(index, ChildResult.image(image, imageId, contribution));
       stepDone();
     }
@@ -328,9 +314,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
                destRect.dispose();
           }
         }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning MEMORY
-    //    result->_contribution->_release();
       }
       _imageId = imageId;
     
@@ -501,8 +484,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   
       TileImageProvider child = _children.get(childContribution._childIndex);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DEBUG MEMORY
+      // retain the childContribution before calling the child, as the child take full ownership of the contribution
       childContribution._contribution._retain();
   
       child.create(tile, childContribution._contribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true, frameTasksExecutor);

@@ -3,9 +3,6 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
 {
   public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning RCDebug
     Matrix44DMultiplicationHolderBuilder modelViewHolderBuilder = new Matrix44DMultiplicationHolderBuilder();
     Matrix44DMultiplicationHolderBuilder modelTransformHolderBuilder = new Matrix44DMultiplicationHolderBuilder();
   

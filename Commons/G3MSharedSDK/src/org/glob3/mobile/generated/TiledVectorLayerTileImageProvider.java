@@ -332,8 +332,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning compose imageId
     
-    
-    
     //  if (_canceled) {
     //    printf("**** break point\n");
     //  }
