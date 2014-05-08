@@ -103,7 +103,7 @@ _parser(NULL),
 _symbolizer(NULL)
 {
 #warning MEMORY
-  TileImageContribution::retainContribution(_contribution);
+ // TileImageContribution::retainContribution(_contribution);
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorLayer* layer,
@@ -194,12 +194,16 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
 //    printf("**** break point\n");
 //  }
 
-  const TileImageContribution* contribution = _contribution;
+//  const TileImageContribution* contribution = _contribution;
 //  _contribution = NULL; // moves ownership to _listener
+
+  // retain the _contribution before calling the child, as the child take full ownership of the contribution
+  TileImageContribution::retainContribution(_contribution);
+
   _listener->imageCreated(_tileId,
                           image,
                           "VectorTiles" + _tileId,
-                          contribution);
+                          _contribution);
   _tileImageProvider->requestFinish(_tileId);
 }
 
