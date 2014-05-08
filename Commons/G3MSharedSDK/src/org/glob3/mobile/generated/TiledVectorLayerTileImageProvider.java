@@ -197,7 +197,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _symbolizer = null;
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning MEMORY
-      TileImageContribution.retainContribution(_contribution);
+     // TileImageContribution::retainContribution(_contribution);
     }
 
     public void dispose()
@@ -338,9 +338,13 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     //    printf("**** break point\n");
     //  }
     
-      final TileImageContribution contribution = _contribution;
+    //  const TileImageContribution* contribution = _contribution;
     //  _contribution = NULL; // moves ownership to _listener
-      _listener.imageCreated(_tileId, image, "VectorTiles" + _tileId, contribution);
+    
+      // retain the _contribution before calling the child, as the child take full ownership of the contribution
+      TileImageContribution.retainContribution(_contribution);
+    
+      _listener.imageCreated(_tileId, image, "VectorTiles" + _tileId, _contribution);
       _tileImageProvider.requestFinish(_tileId);
     }
   }
