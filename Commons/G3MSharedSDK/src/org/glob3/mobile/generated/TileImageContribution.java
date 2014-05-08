@@ -57,7 +57,6 @@ public class TileImageContribution extends RCObject
 
   public void dispose()
   {
-//    printf("******* deleting contribution %p\n", this);
     super.dispose();
   }
 
@@ -91,7 +90,6 @@ public class TileImageContribution extends RCObject
   //  // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
   //  if ((_lastFullCoverageTransparent == NULL) ||
   //      (_lastFullCoverageTransparent->_alpha != alpha)) {
-  ////    delete _lastFullCoverageTransparent;
   //    if (_lastFullCoverageTransparent != NULL) {
   //      _lastFullCoverageTransparent->_release();
   //    }
@@ -118,22 +116,13 @@ public class TileImageContribution extends RCObject
   {
     if (contribution != null)
     {
-  //    printf("**** retaining contribution %p\n", contribution);
       contribution._retain();
     }
   }
   public static void releaseContribution(TileImageContribution contribution)
   {
-  //  if ((contribution != NULL) &&
-  //      (contribution != FULL_COVERAGE_OPAQUE) &&
-  //      (contribution != _lastFullCoverageTransparent)) {
-  ///#warning remove debug pring
-  //    printf("**** deleting contribution %p\n", contribution);
-  //    delete contribution;
-  //  }
     if (contribution != null)
     {
-  //    printf("**** releasing contribution %p\n", contribution);
       contribution._release();
     }
   }
