@@ -90,9 +90,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     public final void cancel()
     {
       _imageAssembler = null;
-    
-    //  delete _buffer;
-    //  _buffer = NULL;
     }
 
     public final void deletedImageAssembler()
@@ -200,9 +197,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _downloadRequestId = -1;
        _parser = null;
        _symbolizer = null;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning MEMORY
-     // TileImageContribution::retainContribution(_contribution);
     }
 
     public void dispose()
@@ -268,9 +262,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         _parser = new GEOJSONBufferParser(this, buffer);
         _threadUtils.invokeAsyncTask(_parser, true);
       }
-    
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work!
     }
     public final void bufferDownloadError(URL url)
     {
@@ -284,10 +275,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       _downloadListener = null;
       _downloadRequestId = -1;
-    
-      // do nothing here, the cancel() method already notified the listener
-    //  _listener->imageCreationCanceled(_tileId);
-    //  _tileImageProvider->requestFinish(_tileId);
     }
 
     public final void parsedGEOObject(GEOObject geoObject)
@@ -305,8 +292,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
-        //ILogger::instance()->logInfo("Parsed geojson");
-    
         ICanvas canvas = IFactory.instance().createCanvas();
     
         canvas.initialize(_imageWidth, _imageHeight);
@@ -324,14 +309,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         if (canvas != null)
            canvas.dispose();
     
-    ///#warning remove this
-    //    _listener->imageCreationError(_tileId,
-    //                                  "NOT YET IMPLEMENTED");
-    //
-    //    TileImageContribution::releaseContribution(_contribution);
-    //    _contribution = NULL;
-    //    aa;
-    //    _tileImageProvider->requestFinish(_tileId);
       }
     }
     public final void deletedParser()
@@ -347,9 +324,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     //  if (_canceled) {
     //    printf("**** break point\n");
     //  }
-    
-    //  const TileImageContribution* contribution = _contribution;
-    //  _contribution = NULL; // moves ownership to _listener
     
       // retain the _contribution before calling the child, as the child take full ownership of the contribution
       TileImageContribution.retainContribution(_contribution);
