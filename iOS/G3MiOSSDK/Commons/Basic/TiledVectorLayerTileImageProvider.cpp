@@ -57,7 +57,10 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::onPostExecute(const
 void TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::onDownload(const URL& url,
                                                                                   IByteBuffer* buffer,
                                                                                   bool expired) {
-  if (_imageAssembler != NULL) {
+  if (_imageAssembler == NULL) {
+    delete buffer;
+  }
+  else {
     _imageAssembler->bufferDownloaded(buffer);
   }
 }
@@ -156,7 +159,10 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBu
   _downloadListener = NULL;
   _downloadRequestId = -1;
 
-  if (!_canceled) {
+  if (_canceled) {
+    delete buffer;
+  }
+  else {
     _parser = new GEOJSONBufferParser(this, buffer);
     _threadUtils->invokeAsyncTask(_parser,
                                   true);
