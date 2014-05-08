@@ -27,7 +27,6 @@ const TileImageContribution* TileImageContribution::fullCoverageTransparent(floa
 //  // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
 //  if ((_lastFullCoverageTransparent == NULL) ||
 //      (_lastFullCoverageTransparent->_alpha != alpha)) {
-////    delete _lastFullCoverageTransparent;
 //    if (_lastFullCoverageTransparent != NULL) {
 //      _lastFullCoverageTransparent->_release();
 //    }
@@ -51,21 +50,12 @@ const TileImageContribution* TileImageContribution::partialCoverageTransparent(c
 
 void TileImageContribution::retainContribution(const TileImageContribution* contribution) {
   if (contribution != NULL) {
-//    printf("**** retaining contribution %p\n", contribution);
     contribution->_retain();
   }
 }
 
 void TileImageContribution::releaseContribution(const TileImageContribution* contribution) {
-//  if ((contribution != NULL) &&
-//      (contribution != FULL_COVERAGE_OPAQUE) &&
-//      (contribution != _lastFullCoverageTransparent)) {
-//#warning remove debug pring
-//    printf("**** deleting contribution %p\n", contribution);
-//    delete contribution;
-//  }
   if (contribution != NULL) {
-//    printf("**** releasing contribution %p\n", contribution);
     contribution->_release();
   }
 }
