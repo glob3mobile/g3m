@@ -114,7 +114,12 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
     {
-      if (_imageAssembler != null)
+      if (_imageAssembler == null)
+      {
+        if (buffer != null)
+           buffer.dispose();
+      }
+      else
       {
         _imageAssembler.bufferDownloaded(buffer);
       }
@@ -253,7 +258,12 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _downloadListener = null;
       _downloadRequestId = -1;
     
-      if (!_canceled)
+      if (_canceled)
+      {
+        if (buffer != null)
+           buffer.dispose();
+      }
+      else
       {
         _parser = new GEOJSONBufferParser(this, buffer);
         _threadUtils.invokeAsyncTask(_parser, true);
