@@ -186,12 +186,12 @@ void Canvas_iOS::drawRoundedRectangle(float left, float top,
   CGRect rrect = CGRectMake(left, _canvasHeight - top,
                             width, -height);
 
-	const float minx = CGRectGetMinX(rrect);
-  const float midx = CGRectGetMidX(rrect);
-  const float maxx = CGRectGetMaxX(rrect);
-	const float miny = CGRectGetMinY(rrect);
-  const float midy = CGRectGetMidY(rrect);
-  const float maxy = CGRectGetMaxY(rrect);
+	const CGFloat minx = CGRectGetMinX(rrect);
+  const CGFloat midx = CGRectGetMidX(rrect);
+  const CGFloat maxx = CGRectGetMaxX(rrect);
+	const CGFloat miny = CGRectGetMinY(rrect);
+  const CGFloat midy = CGRectGetMidY(rrect);
+  const CGFloat maxy = CGRectGetMaxY(rrect);
 
 	CGContextMoveToPoint(_context, minx, midy);
 	CGContextAddArcToPoint(_context, minx, miny, midx, miny, radius);
