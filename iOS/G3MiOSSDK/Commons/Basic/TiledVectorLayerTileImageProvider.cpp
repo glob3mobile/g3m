@@ -34,9 +34,6 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::cancel() {
   _imageAssembler = NULL;
-
-//  delete _buffer;
-//  _buffer = NULL;
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::runInBackground(const G3MContext* context) {
@@ -105,8 +102,6 @@ _downloadRequestId(-1),
 _parser(NULL),
 _symbolizer(NULL)
 {
-#warning MEMORY
- // TileImageContribution::retainContribution(_contribution);
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorLayer* layer,
@@ -167,8 +162,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBu
     _threadUtils->invokeAsyncTask(_parser,
                                   true);
   }
-
-#warning Diego at work!
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadError(const URL& url) {
@@ -183,10 +176,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadError(cons
 void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadCanceled() {
   _downloadListener = NULL;
   _downloadRequestId = -1;
-
-  // do nothing here, the cancel() method already notified the listener
-//  _listener->imageCreationCanceled(_tileId);
-//  _tileImageProvider->requestFinish(_tileId);
 }
 
 void TiledVectorLayerTileImageProvider::CanvasImageListener::imageCreated(const IImage* image) {
@@ -199,9 +188,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
 //  if (_canceled) {
 //    printf("**** break point\n");
 //  }
-
-//  const TileImageContribution* contribution = _contribution;
-//  _contribution = NULL; // moves ownership to _listener
 
   // retain the _contribution before calling the child, as the child take full ownership of the contribution
   TileImageContribution::retainContribution(_contribution);
@@ -222,8 +208,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
   }
   else {
 #warning Diego at work!
-    //ILogger::instance()->logInfo("Parsed geojson");
-
     ICanvas* canvas = IFactory::instance()->createCanvas();
 
     canvas->initialize(_imageWidth, _imageHeight);
@@ -245,14 +229,6 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
 
     delete canvas;
 
-//#warning remove this
-//    _listener->imageCreationError(_tileId,
-//                                  "NOT YET IMPLEMENTED");
-//
-//    TileImageContribution::releaseContribution(_contribution);
-//    _contribution = NULL;
-//    aa;
-//    _tileImageProvider->requestFinish(_tileId);
   }
 }
 
