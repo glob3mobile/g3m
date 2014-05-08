@@ -485,7 +485,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       TileImageProvider child = _children.get(childContribution._childIndex);
   
       // retain the childContribution before calling the child, as the child take full ownership of the contribution
-      childContribution._contribution._retain();
+      TileImageContribution.retainContribution(childContribution._contribution);
   
       child.create(tile, childContribution._contribution, resolution, tileDownloadPriority, logDownloadActivity, new ChildTileImageListener(composer, i), true, frameTasksExecutor);
     }
