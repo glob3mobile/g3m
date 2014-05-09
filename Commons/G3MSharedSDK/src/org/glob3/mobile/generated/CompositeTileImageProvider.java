@@ -109,6 +109,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         }
         else
         {
+          // retain the singleResult->_contribution as the _listener take full ownership of the contribution
+          TileImageContribution.retainContribution(singleResult._contribution);
           _listener.imageCreated(singleResult._imageId, singleResult._image.shallowCopy(), singleResult._imageId, singleResult._contribution);
         }
     
@@ -298,13 +300,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
             final Sector imageSector = result._contribution.getSector();
     
             final RectangleF destRect = getInnerRectangle(_width, _height, _tileSector, imageSector);
-    
-            //TEST MADRID
-            //      if (_tileSector.contains(Angle::fromDegrees(40.41677540051771), Angle::fromDegrees(-3.7037901976145804))){
-            //      printf("TS: %s\nIS: %s\nR: %s\n",_tileSector.description().c_str(),
-            //             imageSector->description().c_str(),
-            //             rect->description().c_str());
-            //      }
     
             canvas.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), destRect._x, destRect._y, destRect._width, destRect._height, alpha);
                               //SRC RECT
