@@ -558,7 +558,6 @@ public:
   builder.setBusyRenderer(busyRenderer);
 
   ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
-
   builder.addRenderer(shapesRenderer);
 
   MeshRenderer* meshRenderer = new MeshRenderer();
@@ -1423,9 +1422,10 @@ public:
 
   if (true) {
 #warning Diego at work!
-//    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries/{level}/{y2}/{level}_{y2}-{x}.json";
-//    const int firstLevel = 2;
-//    const int maxLevel = 6;
+    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
+                                       TimeInterval::fromDays(30)));
+
+
     const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
     const int firstLevel = 2;
     const int maxLevel = 10;
@@ -1734,7 +1734,7 @@ public:
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
-        printf ("PNOA touched. Feature info = %s\n", url.getPath().c_str());
+        printf ("PNOA touched. Feature info = %s\n", url._path.c_str());
 
         return true;
       }
@@ -1804,7 +1804,7 @@ public:
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
-        ILogger::instance()->logInfo("%s", url.getPath().c_str());
+        ILogger::instance()->logInfo("%s", url._path.c_str());
 
         return true;
       }
@@ -1841,7 +1841,7 @@ public:
         const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
                                                             event.getSector());
 
-        printf ("touched Temperature. Feature info = %s\n", url.getPath().c_str());
+        printf ("touched Temperature. Feature info = %s\n", url._path.c_str());
 
         return true;
       }
@@ -2715,7 +2715,7 @@ public:
   }
 
   void onError(const URL& url) {
-    printf("Error downloading %s\n", url.getPath().c_str());
+    printf("Error downloading %s\n", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
@@ -2747,7 +2747,7 @@ public:
 //
 //    const JSONObject* jsonObject = jsonBaseObject->asObject();
 //    if (jsonObject == NULL) {
-//      ILogger::instance()->logError("Invalid format for \"%s\"", url.getPath().c_str());
+//      ILogger::instance()->logError("Invalid format for \"%s\"", url._path.c_str());
 //    }
 //    else {
 //      const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
@@ -2803,7 +2803,7 @@ public:
 //  }
 //
 //  void onError(const URL& url) {
-//    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+//    ILogger::instance()->logError("Can't download %s", url._path.c_str());
 //  }
 //
 //  void onCancel(const URL& url) {
@@ -2906,7 +2906,7 @@ public:
         }
 
         void onError(const URL& url) {
-          ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+          ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
         }
 
         void onCancel(const URL& url) {
@@ -3088,7 +3088,7 @@ public:
       }
 
       if (false) {
-#warning Diego at work!
+//#warning Diego at work!
         //      NSString* geojsonName = @"geojson/countries";
         NSString* geojsonName = @"geojson/countries-50m";
         //      NSString* geojsonName = @"geojson/boundary_lines_land";

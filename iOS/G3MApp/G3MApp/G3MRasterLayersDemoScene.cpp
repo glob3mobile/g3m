@@ -112,7 +112,6 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   subdomains.push_back("1.");
   subdomains.push_back("2.");
   subdomains.push_back("3.");
-#warning PUT TRANSPARENT
   MercatorTiledLayer* meteoritesLayer = new MercatorTiledLayer("http://",
                                                                "tiles.cartocdn.com/osm2/tiles/meteoritessize",
                                                                subdomains,
