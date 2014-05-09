@@ -93,21 +93,23 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
         GEOObject geoObject = GEOJSONParser.parseJSON(_buffer);
     
-        if (_imageAssembler != null)
-        {
-          _canvas = IFactory.instance().createCanvas();
-    
-          _canvas.initialize(_imageWidth, _imageHeight);
-    
-          final GEORasterProjection projection = new GEORasterProjection(_tileSector, _tileIsMercator, _imageWidth, _imageHeight);
-          geoObject.rasterize(_symbolizer, _canvas, projection, _tileLevel);
-    
-          if (projection != null)
-             projection.dispose();
-    //      delete geoObject;
-        }
         if (geoObject != null)
-           geoObject.dispose();
+        {
+          if (_imageAssembler != null)
+          {
+            _canvas = IFactory.instance().createCanvas();
+    
+            _canvas.initialize(_imageWidth, _imageHeight);
+    
+            final GEORasterProjection projection = new GEORasterProjection(_tileSector, _tileIsMercator, _imageWidth, _imageHeight);
+            geoObject.rasterize(_symbolizer, _canvas, projection, _tileLevel);
+    
+            if (projection != null)
+               projection.dispose();
+          }
+          if (geoObject != null)
+             geoObject.dispose();
+        }
       }
     }
 
