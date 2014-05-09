@@ -189,7 +189,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
 //    printf("**** break point\n");
 //  }
 
-  // retain the _contribution before calling the child, as the child take full ownership of the contribution
+  // retain the _contribution before calling the listener, as it takes full ownership of the contribution
   TileImageContribution::retainContribution(_contribution);
 
   _listener->imageCreated(_tileId,

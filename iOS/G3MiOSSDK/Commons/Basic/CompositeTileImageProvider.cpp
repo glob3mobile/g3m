@@ -175,6 +175,8 @@ void CompositeTileImageProvider::Composer::done() {
       _listener->imageCreationCanceled(_tileId);
     }
     else {
+      // retain the singleResult->_contribution as the _listener take full ownership of the contribution
+      TileImageContribution::retainContribution(singleResult->_contribution);
       _listener->imageCreated(singleResult->_imageId,
                               singleResult->_image->shallowCopy(),
                               singleResult->_imageId,
@@ -267,13 +269,6 @@ void CompositeTileImageProvider::Composer::mixResult() {
         const RectangleF* destRect = getInnerRectangle(_width, _height,
                                                        _tileSector,
                                                        *imageSector);
-
-        //TEST MADRID
-        //      if (_tileSector.contains(Angle::fromDegrees(40.41677540051771), Angle::fromDegrees(-3.7037901976145804))){
-        //      printf("TS: %s\nIS: %s\nR: %s\n",_tileSector.description().c_str(),
-        //             imageSector->description().c_str(),
-        //             rect->description().c_str());
-        //      }
 
         canvas->drawImage(image,
                           //SRC RECT
