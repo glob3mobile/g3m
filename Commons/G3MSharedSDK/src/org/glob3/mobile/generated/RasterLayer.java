@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class TimeInterval;
 //class IDownloader;
 //class IImageDownloadListener;
 
