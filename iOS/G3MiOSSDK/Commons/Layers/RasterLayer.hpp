@@ -18,8 +18,13 @@ class IImageDownloadListener;
 
 class RasterLayer : public Layer {
 protected:
+#ifdef C_CODE
   const TimeInterval _timeToCache;
-  const bool         _readExpired;
+#endif
+#ifdef JAVA_CODE
+  private final TimeInterval _timeToCache;
+#endif
+  const bool _readExpired;
 
   RasterLayer(const TimeInterval&               timeToCache,
               const bool                        readExpired,
