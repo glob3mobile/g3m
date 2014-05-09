@@ -497,24 +497,13 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _statistics.log(rc.getLogger());
     }
   
-    final Sector visibleSector = _statistics.getVisibleSector();
-    if (visibleSector != null)
-    {
-      if ((_lastVisibleSector == null) || !visibleSector.isEquals(_lastVisibleSector))
-      {
-        if (_lastVisibleSector != null)
-           _lastVisibleSector.dispose();
-        _lastVisibleSector = new Sector(visibleSector);
-      }
-    }
-  
+    _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
     if (_lastVisibleSector != null)
     {
       final int visibleSectorListenersCount = _visibleSectorListeners.size();
       for (int i = 0; i < visibleSectorListenersCount; i++)
       {
         VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
-  
         entry.tryToNotifyListener(_lastVisibleSector, rc);
       }
     }

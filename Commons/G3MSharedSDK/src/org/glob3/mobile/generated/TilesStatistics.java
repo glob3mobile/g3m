@@ -45,28 +45,19 @@ public class TilesStatistics
 
   private int _buildersStartsInFrame;
 
-  private Sector _visibleSector;
+  private double _visibleLowerLatitudeDegrees;
+  private double _visibleLowerLongitudeDegrees;
+  private double _visibleUpperLatitudeDegrees;
+  private double _visibleUpperLongitudeDegrees;
 
 
   public TilesStatistics()
   {
-     _tilesProcessed = 0;
-     _tilesVisible = 0;
-     _tilesRendered = 0;
-     _buildersStartsInFrame = 0;
-     _visibleSector = null;
-    for (int i = 0; i < _maxLOD; i++)
-    {
-      _tilesProcessedByLevel[i] = 0;
-      _tilesVisibleByLevel[i] = 0;
-      _tilesRenderedByLevel[i] = 0;
-    }
+    clear();
   }
 
   public void dispose()
   {
-    if (_visibleSector != null)
-       _visibleSector.dispose();
   }
 
   public final void clear()
@@ -75,9 +66,13 @@ public class TilesStatistics
     _tilesVisible = 0;
     _tilesRendered = 0;
     _buildersStartsInFrame = 0;
-    if (_visibleSector != null)
-       _visibleSector.dispose();
-    _visibleSector = null;
+
+    final IMathUtils mu = IMathUtils.instance();
+    _visibleLowerLatitudeDegrees = mu.maxDouble();
+    _visibleLowerLongitudeDegrees = mu.maxDouble();
+    _visibleUpperLatitudeDegrees = mu.minDouble();
+    _visibleUpperLongitudeDegrees = mu.minDouble();
+
     for (int i = 0; i < _maxLOD; i++)
     {
       _tilesProcessedByLevel[i] = 0;
@@ -115,21 +110,44 @@ public class TilesStatistics
   public final void computeRenderedSector(Tile tile)
   {
     final Sector sector = tile._sector;
-    if (_visibleSector == null)
+
+    final double lowerLatitudeDegrees = sector._lower._latitude._degrees;
+    final double lowerLongitudeDegrees = sector._lower._longitude._degrees;
+    final double upperLatitudeDegrees = sector._upper._latitude._degrees;
+    final double upperLongitudeDegrees = sector._upper._longitude._degrees;
+
+    if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees)
     {
-      _visibleSector = sector;
+      _visibleLowerLatitudeDegrees = lowerLatitudeDegrees;
     }
-    else
+    if (upperLatitudeDegrees < _visibleLowerLatitudeDegrees)
     {
-      if (!_visibleSector.fullContains(sector))
-      {
-        Sector previous = _visibleSector;
+      _visibleLowerLatitudeDegrees = upperLatitudeDegrees;
+    }
+    if (lowerLatitudeDegrees >_visibleUpperLatitudeDegrees)
+    {
+      _visibleUpperLatitudeDegrees = lowerLatitudeDegrees;
+    }
+    if (upperLatitudeDegrees > _visibleUpperLatitudeDegrees)
+    {
+      _visibleUpperLatitudeDegrees = upperLatitudeDegrees;
+    }
 
-        _visibleSector = _visibleSector.mergedWith(sector);
-
-        if (previous != null)
-           previous.dispose();
-      }
+    if (lowerLongitudeDegrees < _visibleLowerLongitudeDegrees)
+    {
+      _visibleLowerLongitudeDegrees = lowerLongitudeDegrees;
+    }
+    if (upperLongitudeDegrees < _visibleLowerLongitudeDegrees)
+    {
+      _visibleLowerLongitudeDegrees = upperLongitudeDegrees;
+    }
+    if (lowerLongitudeDegrees > _visibleUpperLongitudeDegrees)
+    {
+      _visibleUpperLongitudeDegrees = lowerLongitudeDegrees;
+    }
+    if (upperLongitudeDegrees > _visibleUpperLongitudeDegrees)
+    {
+      _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
   }
 
@@ -143,9 +161,21 @@ public class TilesStatistics
     computeRenderedSector(tile);
   }
 
-  public final Sector getVisibleSector()
+  public final Sector updateVisibleSector(Sector visibleSector)
   {
-    return _visibleSector;
+    if ((visibleSector == null) || (visibleSector._lower._latitude._degrees != _visibleLowerLatitudeDegrees) || (visibleSector._lower._longitude._degrees != _visibleLowerLongitudeDegrees) || (visibleSector._upper._latitude._degrees != _visibleUpperLatitudeDegrees) || (visibleSector._upper._longitude._degrees != _visibleUpperLongitudeDegrees))
+    {
+      if (visibleSector != null)
+         visibleSector.dispose();
+
+      if ((_visibleLowerLatitudeDegrees > _visibleUpperLatitudeDegrees) || (_visibleLowerLongitudeDegrees > _visibleUpperLongitudeDegrees))
+      {
+        return null;
+      }
+
+      return new Sector(Geodetic2D.fromDegrees(_visibleLowerLatitudeDegrees, _visibleLowerLongitudeDegrees), Geodetic2D.fromDegrees(_visibleUpperLatitudeDegrees, _visibleUpperLongitudeDegrees));
+    }
+    return visibleSector;
   }
 
   public static String asLogString(int[] m, int nMax)
