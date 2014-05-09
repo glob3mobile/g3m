@@ -10,7 +10,7 @@
 
 #include "ITimer.hpp"
 #include "OrderedRenderable.hpp"
-
+#include <algorithm>
 
 G3MRenderContext::~G3MRenderContext() {
   delete _frameStartTimer;

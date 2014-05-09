@@ -720,11 +720,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     _statistics.log( rc->getLogger() );
   }
 
-  const Sector* renderedSector = _statistics.getRenderedSector();
-  if (renderedSector != NULL) {
-    if ( (_lastVisibleSector == NULL) || !renderedSector->isEquals(*_lastVisibleSector) ) {
+  const Sector* visibleSector = _statistics.getVisibleSector();
+  if (visibleSector != NULL) {
+    if ( (_lastVisibleSector == NULL) || !visibleSector->isEquals(*_lastVisibleSector) ) {
       delete _lastVisibleSector;
-      _lastVisibleSector = new Sector(*renderedSector);
+      _lastVisibleSector = new Sector(*visibleSector);
     }
   }
 

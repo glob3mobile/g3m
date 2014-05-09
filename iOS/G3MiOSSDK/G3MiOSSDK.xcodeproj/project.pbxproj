@@ -251,6 +251,7 @@
 		CF8BE69017E0C68A0072273A /* SectorAndHeightCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0125517E09ECA00AD743A /* SectorAndHeightCameraConstrainer.hpp */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
+		CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */; };
 		CF923CA416AB126D00D04301 /* ShortBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */; };
 		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
@@ -1406,6 +1407,7 @@
 		CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTexturizer.cpp; path = Commons/Basic/TileTexturizer.cpp; sourceTree = "<group>"; };
 		CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeveledTexturedMesh.cpp; path = Commons/Mesh/LeveledTexturedMesh.cpp; sourceTree = "<group>"; };
 		CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
+		CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimeInterval.cpp; path = Commons/Basic/TimeInterval.cpp; sourceTree = "<group>"; };
 		CF90F6C016C4069C00B309C2 /* ITexturizerData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ITexturizerData.hpp; path = Commons/Basic/ITexturizerData.hpp; sourceTree = "<group>"; };
 		CF923CA216AB126D00D04301 /* ShortBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ShortBufferBuilder.cpp; path = Commons/Basic/ShortBufferBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF923CA316AB126D00D04301 /* ShortBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBufferBuilder.hpp; path = Commons/Basic/ShortBufferBuilder.hpp; sourceTree = "<group>"; };
@@ -2057,6 +2059,7 @@
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */,
+				CF906EF7191D79DC00EFB950 /* TimeInterval.cpp */,
 				383BD3931577EE500012AC53 /* TouchEvent.cpp */,
 				383BD3941577EE500012AC53 /* TouchEvent.hpp */,
 				CFFEC12515C2EBA6003FA986 /* URL.cpp */,
@@ -2963,6 +2966,7 @@
 				CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */,
 				CFD41F601875E59800889B7C /* DownloaderImageBuilder.cpp in Sources */,
 				CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */,
+				CF906EF8191D79DC00EFB950 /* TimeInterval.cpp in Sources */,
 				CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */,
 				CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */,
 				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,

@@ -47,7 +47,7 @@ private:
 
   int _buildersStartsInFrame;
 
-  Sector* _renderedSector;
+  Sector* _visibleSector;
 
 public:
 
@@ -56,7 +56,7 @@ public:
   _tilesVisible(0),
   _tilesRendered(0),
   _buildersStartsInFrame(0),
-  _renderedSector(NULL)
+  _visibleSector(NULL)
   {
     for (int i = 0; i < _maxLOD; i++) {
       _tilesProcessedByLevel[i] = 0;
@@ -66,7 +66,7 @@ public:
   }
 
   ~TilesStatistics() {
-    delete _renderedSector;
+    delete _visibleSector;
   }
 
   void clear() {
@@ -74,8 +74,8 @@ public:
     _tilesVisible = 0;
     _tilesRendered = 0;
     _buildersStartsInFrame = 0;
-    delete _renderedSector;
-    _renderedSector = NULL;
+    delete _visibleSector;
+    _visibleSector = NULL;
     for (int i = 0; i < _maxLOD; i++) {
       _tilesProcessedByLevel[i] = 0;
       _tilesVisibleByLevel[i]   = 0;
@@ -107,23 +107,23 @@ public:
 
   void computeRenderedSector(Tile* tile) {
     const Sector sector = tile->_sector;
-    if (_renderedSector == NULL) {
+    if (_visibleSector == NULL) {
 #ifdef C_CODE
-      _renderedSector = new Sector( sector );
+      _visibleSector = new Sector( sector );
 #endif
 #ifdef JAVA_CODE
-      _renderedSector = sector;
+      _visibleSector = sector;
 #endif
     }
     else {
-      if (!_renderedSector->fullContains(sector)) {
-        Sector* previous = _renderedSector;
+      if (!_visibleSector->fullContains(sector)) {
+        Sector* previous = _visibleSector;
 
 #ifdef C_CODE
-        _renderedSector = new Sector( _renderedSector->mergedWith(sector) );
+        _visibleSector = new Sector( _visibleSector->mergedWith(sector) );
 #endif
 #ifdef JAVA_CODE
-        _renderedSector = _renderedSector.mergedWith(sector);
+        _visibleSector = _visibleSector.mergedWith(sector);
 #endif
 
         delete previous;
@@ -140,8 +140,8 @@ public:
     computeRenderedSector(tile);
   }
 
-  const Sector* getRenderedSector() const {
-    return _renderedSector;
+  const Sector* getVisibleSector() const {
+    return _visibleSector;
   }
 
   static std::string asLogString(const int m[], const int nMax) {
