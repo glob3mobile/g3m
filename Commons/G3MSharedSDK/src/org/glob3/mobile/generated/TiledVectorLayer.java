@@ -27,7 +27,7 @@ public class TiledVectorLayer extends VectorLayer
   private final GEORasterSymbolizer _symbolizer;
   private final String _urlTemplate;
   private final Sector _sector ;
-  private final TimeInterval _timeToCache = new TimeInterval();
+  private final TimeInterval _timeToCache;
   private final boolean _readExpired;
 
   private IMathUtils   _mu;
@@ -39,7 +39,7 @@ public class TiledVectorLayer extends VectorLayer
      _symbolizer = symbolizer;
      _urlTemplate = urlTemplate;
      _sector = new Sector(sector);
-     _timeToCache = new TimeInterval(timeToCache);
+     _timeToCache = timeToCache;
      _readExpired = readExpired;
      _su = null;
      _mu = null;
