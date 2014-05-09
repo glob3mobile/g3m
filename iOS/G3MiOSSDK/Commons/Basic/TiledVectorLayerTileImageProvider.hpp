@@ -43,14 +43,41 @@ private:
   private:
     ImageAssembler* _imageAssembler;
     IByteBuffer*    _buffer;
-    GEOObject*      _geoObject;
+//    GEOObject*      _geoObject;
+    ICanvas* _canvas;
+
+    const int                          _imageWidth;
+    const int                          _imageHeight;
+
+#ifdef C_CODE
+    const GEORasterSymbolizer* _symbolizer;
+#endif
+#ifdef JAVA_CODE
+    private GEORasterSymbolizer _symbolizer;
+#endif
+    const Sector _tileSector;
+    const bool   _tileIsMercator;
+    const int    _tileLevel;
 
   public:
     GEOJSONBufferParser(ImageAssembler* imageAssembler,
-                        IByteBuffer* buffer) :
+                        IByteBuffer* buffer,
+                        const int imageWidth,
+                        const int imageHeight,
+                        const GEORasterSymbolizer* symbolizer,
+                        const Sector& tileSector,
+                        const bool   tileIsMercator,
+                        const int    tileLevel) :
     _imageAssembler(imageAssembler),
     _buffer(buffer),
-    _geoObject(NULL)
+//    _geoObject(NULL),
+    _imageWidth(imageWidth),
+    _imageHeight(imageHeight),
+    _symbolizer(symbolizer),
+    _tileSector(tileSector),
+    _tileIsMercator(tileIsMercator),
+    _tileLevel(tileLevel),
+    _canvas(NULL)
     {
     }
 
@@ -160,7 +187,7 @@ private:
     void bufferDownloadError(const URL& url);
     void bufferDownloadCanceled();
 
-    void parsedGEOObject(GEOObject* geoObject);
+    void parsedGEOObject(ICanvas* canvas);
     void deletedParser();
 
     void imageCreated(const IImage* image);

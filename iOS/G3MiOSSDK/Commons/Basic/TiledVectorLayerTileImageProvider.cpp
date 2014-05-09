@@ -26,7 +26,8 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
   }
 
   delete _buffer;
-  delete _geoObject;
+//  delete _geoObject;
+  delete _canvas;
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -38,15 +39,39 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::cancel() {
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::runInBackground(const G3MContext* context) {
   if ((_imageAssembler != NULL) && (_buffer != NULL)) {
-    _geoObject = GEOJSONParser::parseJSON(_buffer);
+    GEOObject*  geoObject = GEOJSONParser::parseJSON(_buffer);
+
+    if (_imageAssembler != NULL) {
+      _canvas = IFactory::instance()->createCanvas();
+
+      _canvas->initialize(_imageWidth, _imageHeight);
+
+      const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
+                                                                      _tileIsMercator,
+                                                                      _imageWidth,
+                                                                      _imageHeight);;
+      geoObject->rasterize(_symbolizer,
+                           _canvas,
+                           projection,
+                           _tileLevel);
+
+      delete projection;
+//      delete geoObject;
+    }
+    delete geoObject;
   }
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::onPostExecute(const G3MContext* context) {
   if (_imageAssembler != NULL) {
-    GEOObject* geoObject = _geoObject;
-    _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
-    _imageAssembler->parsedGEOObject(geoObject);
+//    GEOObject* geoObject = _geoObject;
+//    _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
+
+//    _imageAssembler->parsedGEOObject(geoObject);
+
+    ICanvas* canvas = _canvas;
+    _canvas = NULL;  // moves ownership of _canvas to _imageAssembler
+    _imageAssembler->parsedGEOObject(canvas);
   }
 }
 
@@ -158,7 +183,14 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBu
     delete buffer;
   }
   else {
-    _parser = new GEOJSONBufferParser(this, buffer);
+    _parser = new GEOJSONBufferParser(this,
+                                      buffer,
+                                      _imageWidth,
+                                      _imageHeight,
+                                      _symbolizer,
+                                      _tileSector,
+                                      _tileIsMercator,
+                                      _tileLevel);
     _threadUtils->invokeAsyncTask(_parser,
                                   true);
   }
@@ -199,8 +231,8 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
   _tileImageProvider->requestFinish(_tileId);
 }
 
-void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObject* geoObject) {
-  if (geoObject == NULL) {
+void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(ICanvas* canvas) {
+  if (canvas == NULL) {
     _listener->imageCreationError(_tileId, "GEOJSON parser error");
     if (_deleteListener) {
       delete _listener;
@@ -208,27 +240,26 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(GEOObjec
   }
   else {
 #warning Diego at work!
-    ICanvas* canvas = IFactory::instance()->createCanvas();
-
-    canvas->initialize(_imageWidth, _imageHeight);
-
-    const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
-                                                                    _tileIsMercator,
-                                                                    _imageWidth,
-                                                                    _imageHeight);;
-    geoObject->rasterize(_symbolizer,
-                         canvas,
-                         projection,
-                         _tileLevel);
-
-    delete projection;
-    delete geoObject;
+//    ICanvas* canvas = IFactory::instance()->createCanvas();
+//
+//    canvas->initialize(_imageWidth, _imageHeight);
+//
+//    const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
+//                                                                    _tileIsMercator,
+//                                                                    _imageWidth,
+//                                                                    _imageHeight);;
+//    geoObject->rasterize(_symbolizer,
+//                         canvas,
+//                         projection,
+//                         _tileLevel);
+//
+//    delete projection;
+//    delete geoObject;
 
     canvas->createImage(new CanvasImageListener(this),
                         true /* autodelete */);
 
     delete canvas;
-
   }
 }
 
