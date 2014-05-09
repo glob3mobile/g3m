@@ -23,19 +23,19 @@ package org.glob3.mobile.generated;
 
 public abstract class RasterLayer extends Layer
 {
-  protected final long _timeToCacheMS;
+  protected final TimeInterval _timeToCache = new TimeInterval();
   protected final boolean _readExpired;
 
   protected RasterLayer(TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition)
   {
      super(parameters, transparency, condition);
-     _timeToCacheMS = timeToCache._milliseconds;
+     _timeToCache = new TimeInterval(timeToCache);
      _readExpired = readExpired;
   }
 
   protected final TimeInterval getTimeToCache()
   {
-    return TimeInterval.fromMilliseconds(_timeToCacheMS);
+    return _timeToCache;
   }
 
   protected final boolean getReadExpired()
@@ -66,7 +66,7 @@ public abstract class RasterLayer extends Layer
   
     RasterLayer rasterThat = (RasterLayer) that;
   
-    return ((_timeToCacheMS == rasterThat._timeToCacheMS) && (_readExpired == rasterThat._readExpired));
+    return ((_timeToCache.milliseconds() == rasterThat._timeToCache.milliseconds()) && (_readExpired == rasterThat._readExpired));
   }
 
   public final TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
@@ -88,9 +88,9 @@ public abstract class RasterLayer extends Layer
     final URL url = createURL(tile);
     if (logDownloadActivity)
     {
-      ILogger.instance().logInfo("Downloading %s", url.getPath());
+      ILogger.instance().logInfo("Downloading %s", url._path);
     }
-    return downloader.requestImage(url, tileDownloadPriority, getTimeToCache(), _readExpired, listener, deleteListener);
+    return downloader.requestImage(url, tileDownloadPriority, _timeToCache, _readExpired, listener, deleteListener);
   }
 
 }

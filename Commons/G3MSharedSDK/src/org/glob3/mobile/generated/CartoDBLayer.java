@@ -78,7 +78,7 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   public final CartoDBLayer copy()
   {
-    return new CartoDBLayer(_userName, _table, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
+    return new CartoDBLayer(_userName, _table, _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

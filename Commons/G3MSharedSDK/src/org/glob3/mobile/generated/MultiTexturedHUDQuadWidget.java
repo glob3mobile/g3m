@@ -55,7 +55,7 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1.getPath(), false);
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_image1, GLFormat.rgba(), _imageURL1._path, false);
   
     if (texId == null)
     {
@@ -63,7 +63,7 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
       return null;
     }
   
-    final TextureIDReference texId2 = rc.getTexturesHandler().getTextureIDReference(_image2, GLFormat.rgba(), _imageURL2.getPath(), false);
+    final TextureIDReference texId2 = rc.getTexturesHandler().getTextureIDReference(_image2, GLFormat.rgba(), _imageURL2._path, false);
   
     if (texId2 == null)
     {
@@ -259,7 +259,7 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
   /** private, do not call */
   public final void onImageDownloadError(URL url)
   {
-    _errors.add("MultiTexturedHUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
+    _errors.add("MultiTexturedHUDQuadWidget: Error downloading \"" + url._path + "\"");
   }
 
 }

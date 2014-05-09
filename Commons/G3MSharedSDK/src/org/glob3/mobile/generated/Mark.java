@@ -168,7 +168,7 @@ public class Mark implements SurfaceElevationListener
      _minDistanceToCamera = minDistanceToCamera;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
-     _imageID = iconURL.getPath() + "_" + label;
+     _imageID = iconURL._path + "_" + label;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
@@ -288,7 +288,7 @@ public class Mark implements SurfaceElevationListener
      _minDistanceToCamera = minDistanceToCamera;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
-     _imageID = iconURL.getPath() + "_";
+     _imageID = iconURL._path + "_";
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
@@ -415,7 +415,7 @@ public class Mark implements SurfaceElevationListener
   
     if (!_textureSolved)
     {
-      final boolean hasIconURL = (_iconURL.getPath().length() != 0);
+      final boolean hasIconURL = (_iconURL._path.length() != 0);
       if (hasIconURL)
       {
         IDownloader downloader = context.getDownloader();
@@ -459,7 +459,7 @@ public class Mark implements SurfaceElevationListener
     if (_labelShadowColor != null)
        _labelShadowColor.dispose();
   
-    ILogger.instance().logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")", _iconURL.getPath(), _label);
+    ILogger.instance().logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")", _iconURL._path, _label);
   }
 
   public final void onTextureDownload(IImage image)

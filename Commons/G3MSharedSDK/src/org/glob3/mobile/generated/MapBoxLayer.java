@@ -82,7 +82,7 @@ public class MapBoxLayer extends MercatorTiledLayer
 
   public final MapBoxLayer copy()
   {
-    return new MapBoxLayer(_mapKey, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _maxLevel, _transparency, (_condition == null) ? null : _condition.copy());
+    return new MapBoxLayer(_mapKey, _timeToCache, _readExpired, _initialLevel, _maxLevel, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

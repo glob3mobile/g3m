@@ -155,7 +155,7 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
     final JSONObject jsonObject = jsonBaseObject.asObject();
     if (jsonObject == null)
     {
-      ILogger.instance().logError("Invalid format for \"%s\"", _url.getPath());
+      ILogger.instance().logError("Invalid format for \"%s\"", _url._path);
     }
     else
     {
@@ -260,7 +260,7 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
   {
     if (_mesh == null)
     {
-      ILogger.instance().logError("Error parsing Mesh from \"%s\"", _url.getPath());
+      ILogger.instance().logError("Error parsing Mesh from \"%s\"", _url._path);
     }
     else
     {

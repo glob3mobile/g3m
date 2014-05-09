@@ -627,7 +627,7 @@ public abstract class MapBooBuilder
     {
       isb.addString(",\"iconURL\":");
       isb.addString("\"");
-      isb.addString(escapeString(iconURL.getPath()));
+      isb.addString(escapeString(iconURL._path));
       isb.addString("\"");
     }
   
@@ -665,7 +665,7 @@ public abstract class MapBooBuilder
     {
       isb.addString(",\"iconURL\":");
       isb.addString("\"");
-      isb.addString(escapeString(iconURL.getPath()));
+      isb.addString(escapeString(iconURL._path));
       isb.addString("\"");
     }
   
@@ -924,7 +924,7 @@ public abstract class MapBooBuilder
   private URL createApplicationCurrentSceneURL()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL.getPath());
+    isb.addString(_serverURL._path);
     isb.addString("/REST/1/applications/");
     isb.addString(_applicationId);
     isb.addString("/_POST_?");
@@ -1071,7 +1071,7 @@ public abstract class MapBooBuilder
   protected final URL createApplicationPollURL()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL.getPath());
+    isb.addString(_serverURL._path);
     isb.addString("/poll/");
     isb.addString(_applicationId);
     isb.addString("?view=");
@@ -1242,7 +1242,7 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final URL createApplicationTubeURL()
   {
-    final String tubesPath = _tubesURL.getPath();
+    final String tubesPath = _tubesURL._path;
   
     String view;
     switch (_viewType)
@@ -1267,7 +1267,7 @@ public abstract class MapBooBuilder
   
     if (jsonBaseObject == null)
     {
-      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url._path);
     }
     else
     {
@@ -1427,7 +1427,7 @@ public abstract class MapBooBuilder
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
     if (jsonBaseObject == null)
     {
-      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url._path);
     }
     else
     {
@@ -1725,7 +1725,7 @@ public abstract class MapBooBuilder
   public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL.getPath());
+    isb.addString(_serverURL._path);
   
     isb.addString("/Public/applications/");
     isb.addString(_applicationId);

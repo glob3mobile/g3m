@@ -69,7 +69,7 @@ public class OSMLayer extends MercatorTiledLayer
 
   public final OSMLayer copy()
   {
-    return new OSMLayer(TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
+    return new OSMLayer(_timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

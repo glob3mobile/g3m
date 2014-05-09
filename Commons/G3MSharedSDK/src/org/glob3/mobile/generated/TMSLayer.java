@@ -59,7 +59,7 @@ public abstract class TMSLayer extends RasterLayer
     }
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_mapServerURL.getPath());
+    isb.addString(_mapServerURL._path);
     isb.addString(_mapLayer);
     isb.addString("/");
     isb.addInt(tile._level);
@@ -72,7 +72,7 @@ public abstract class TMSLayer extends RasterLayer
   
     ILogger.instance().logInfo(isb.getString());
   
-    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), getTimeToCache(), getReadExpired(), _isTransparent, _transparency);
+    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), _timeToCache, _readExpired, _isTransparent, _transparency);
     petitions.add(petition);
   
      return petitions;
@@ -97,7 +97,7 @@ public abstract class TMSLayer extends RasterLayer
     {
       _errors.add("Missing layer parameter: mapLayer");
     }
-    final String mapServerUrl = _mapServerURL.getPath();
+    final String mapServerUrl = _mapServerURL._path;
     if (mapServerUrl.compareTo("") == 0)
     {
       _errors.add("Missing layer parameter: mapServerURL");

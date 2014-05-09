@@ -215,7 +215,7 @@ public class URLTemplateLayer extends RasterLayer
 
   public final URLTemplateLayer copy()
   {
-    return new URLTemplateLayer(_urlTemplate, _sector, _isTransparent, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_condition == null) ? null : _condition.copy(), _parameters.copy());
+    return new URLTemplateLayer(_urlTemplate, _sector, _isTransparent, _timeToCache, _readExpired, (_condition == null) ? null : _condition.copy(), _parameters.copy());
   }
 
   public final URL getFeatureInfoURL(Geodetic2D position, Sector sector)
@@ -241,7 +241,7 @@ public class URLTemplateLayer extends RasterLayer
   
     final String path = getPath(layerTilesRenderParameters, tile, sector);
   
-    petitions.add(new Petition(sector, new URL(path, false), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _isTransparent, _transparency));
+    petitions.add(new Petition(sector, new URL(path, false), _timeToCache, _readExpired, _isTransparent, _transparency));
   
     return petitions;
   }

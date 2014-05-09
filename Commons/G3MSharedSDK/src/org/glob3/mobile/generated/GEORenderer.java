@@ -94,7 +94,7 @@ public class GEORenderer extends DefaultRenderer
 
   private void requestBuffer(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired, boolean isBSON)
   {
-  //  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url.getPath().c_str());
+  //  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url._path.c_str());
     IDownloader downloader = _context.getDownloader();
     downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils(), isBSON), true);
   }

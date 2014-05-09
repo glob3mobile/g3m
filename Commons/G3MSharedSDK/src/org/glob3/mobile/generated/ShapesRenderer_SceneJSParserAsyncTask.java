@@ -61,7 +61,7 @@ public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
   {
     if (_sgShape == null)
     {
-      ILogger.instance().logError("Error parsing SceneJS from \"%s\"", _url.getPath());
+      ILogger.instance().logError("Error parsing SceneJS from \"%s\"", _url._path);
       if (_position != null)
          _position.dispose();
       _position = null;

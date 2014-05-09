@@ -147,7 +147,7 @@ public class TileTextureBuilder extends RCObject
 
       if (_logTilesPetitions)
       {
-        ILogger.instance().logInfo("Tile petition \"%s\"", petition.getURL().getPath());
+        ILogger.instance().logInfo("Tile petition \"%s\"", petition.getURL()._path);
       }
 
       final long requestId = _downloader.requestImage(new URL(petition.getURL()), _tileDownloadPriority, petition.getTimeToCache(), petition.getReadExpired(), new BuilderDownloadStepDownloadListener(this, i), true); // priority,
@@ -217,7 +217,7 @@ public class TileTextureBuilder extends RCObject
 
         //Where we are going to draw the image
         destRects.add(getInnerRectangle(_tileTextureResolution._x, _tileTextureResolution._y, tileSector, intersectionSector));
-        textureId += petition.getURL().getPath();
+        textureId += petition.getURL()._path;
         textureId += "_";
 
         //Layer transparency set by user

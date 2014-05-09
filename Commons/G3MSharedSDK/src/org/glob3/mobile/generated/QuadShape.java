@@ -40,14 +40,14 @@ public class QuadShape extends AbstractMeshShape
       return null;
     }
   
-    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
+    final TextureIDReference texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false);
   
     _textureImage = null;
     _textureImage = null;
   
     if (texId == null)
     {
-      rc.getLogger().logError("Can't load texture %s", _textureURL.getPath());
+      rc.getLogger().logError("Can't load texture %s", _textureURL._path);
     }
   
     return texId;
@@ -60,7 +60,7 @@ public class QuadShape extends AbstractMeshShape
     if (!_textureRequested)
     {
       _textureRequested = true;
-      if (_textureURL.getPath().length() != 0)
+      if (_textureURL._path.length() != 0)
       {
         rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), true, new QuadShape_IImageDownloadListener(this), true);
       }

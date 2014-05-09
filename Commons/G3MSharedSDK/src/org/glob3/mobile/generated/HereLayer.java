@@ -295,7 +295,7 @@ public class HereLayer extends RasterLayer
 
   public final HereLayer copy()
   {
-    return new HereLayer(_appId, _appCode, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
+    return new HereLayer(_appId, _appCode, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

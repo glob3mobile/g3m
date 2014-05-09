@@ -348,7 +348,7 @@ public class BingMapsLayer extends RasterLayer
 
   public final BingMapsLayer copy()
   {
-    return new BingMapsLayer(_imagerySet, _key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
+    return new BingMapsLayer(_imagerySet, _key, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

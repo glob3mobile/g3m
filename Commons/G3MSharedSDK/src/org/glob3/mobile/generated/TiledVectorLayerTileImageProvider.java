@@ -268,7 +268,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _downloadListener = null;
       _downloadRequestId = -1;
     
-      _listener.imageCreationError(_tileId, "Download error - " + url.getPath());
+      _listener.imageCreationError(_tileId, "Download error - " + url._path);
       _tileImageProvider.requestFinish(_tileId);
     }
     public final void bufferDownloadCanceled()

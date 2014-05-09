@@ -125,7 +125,7 @@ public class WMSLayer extends RasterLayer
   protected final URL createURL(Tile tile)
   {
   
-    final String path = _mapServerURL.getPath();
+    final String path = _mapServerURL._path;
   //  if (path.empty()) {
   //    return petitions;
   //  }
@@ -325,7 +325,7 @@ public class WMSLayer extends RasterLayer
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
-    final String path = _mapServerURL.getPath();
+    final String path = _mapServerURL._path;
     if (path.length() == 0)
     {
       return petitions;
@@ -484,7 +484,7 @@ public class WMSLayer extends RasterLayer
     final Sector intersectionSector = tileSector.intersection(_sector);
   
      //Server name
-    String req = _queryServerURL.getPath();
+    String req = _queryServerURL._path;
      if (req.charAt(req.length()-1) != '?')
      {
         req += '?';
@@ -626,7 +626,7 @@ public class WMSLayer extends RasterLayer
 
   public final WMSLayer copy()
   {
-    return new WMSLayer(_mapLayer, _mapServerURL, _mapServerVersion, _queryLayer, _queryServerURL, _queryServerVersion, _sector, _format, _srs, _style, _isTransparent, (_condition == null) ? null : _condition.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_parameters == null) ? null : _parameters.copy());
+    return new WMSLayer(_mapLayer, _mapServerURL, _mapServerVersion, _queryLayer, _queryServerURL, _queryServerVersion, _sector, _format, _srs, _style, _isTransparent, (_condition == null) ? null : _condition.copy(), _timeToCache, _readExpired, (_parameters == null) ? null : _parameters.copy());
   }
 
   public final RenderState getRenderState()
@@ -636,7 +636,7 @@ public class WMSLayer extends RasterLayer
     {
       _errors.add("Missing layer parameter: mapLayer");
     }
-    final String mapServerUrl = _mapServerURL.getPath();
+    final String mapServerUrl = _mapServerURL._path;
     if (mapServerUrl.compareTo("") == 0)
     {
       _errors.add("Missing layer parameter: mapServerURL");

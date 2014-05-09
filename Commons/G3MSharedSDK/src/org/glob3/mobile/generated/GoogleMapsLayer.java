@@ -200,7 +200,7 @@ public class GoogleMapsLayer extends RasterLayer
 
   public final GoogleMapsLayer copy()
   {
-    return new GoogleMapsLayer(_key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
+    return new GoogleMapsLayer(_key, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

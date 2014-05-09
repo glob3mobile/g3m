@@ -240,7 +240,7 @@ public class MercatorTiledLayer extends RasterLayer
 
   public MercatorTiledLayer copy()
   {
-    return new MercatorTiledLayer(_protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, _isTransparent, _transparency, (_condition == null) ? null : _condition.copy());
+    return new MercatorTiledLayer(_protocol, _domain, _subdomains, _imageFormat, _timeToCache, _readExpired, _sector, _initialLevel, _maxLevel, _isTransparent, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public RenderState getRenderState()

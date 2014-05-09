@@ -104,7 +104,7 @@ public class MapQuestLayer extends MercatorTiledLayer
 
   public final MapQuestLayer copy()
   {
-    return new MapQuestLayer(_domain, _subdomains, _initialLevel, _maxLevel, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
+    return new MapQuestLayer(_domain, _subdomains, _initialLevel, _maxLevel, _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()

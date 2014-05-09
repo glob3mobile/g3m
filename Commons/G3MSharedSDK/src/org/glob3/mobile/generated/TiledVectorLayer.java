@@ -175,7 +175,7 @@ public class TiledVectorLayer extends VectorLayer
     final URL url = createURL(tile);
     if (logDownloadActivity)
     {
-      ILogger.instance().logInfo("Downloading %s", url.getPath());
+      ILogger.instance().logInfo("Downloading %s", url._path);
     }
     return downloader.requestBuffer(url, tileDownloadPriority, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, listener, deleteListener);
   }

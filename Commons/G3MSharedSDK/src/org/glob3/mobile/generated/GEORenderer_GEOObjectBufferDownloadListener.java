@@ -16,19 +16,19 @@ public class GEORenderer_GEOObjectBufferDownloadListener extends IBufferDownload
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    ILogger.instance().logInfo("Downloaded GEOObject buffer from \"%s\" (%db)", url.getPath(), buffer.size());
+    ILogger.instance().logInfo("Downloaded GEOObject buffer from \"%s\" (%db)", url._path, buffer.size());
 
     _threadUtils.invokeAsyncTask(new GEORenderer_GEOObjectParserAsyncTask(url, buffer, _geoRenderer, _symbolizer, _isBSON), true);
   }
 
   public final void onError(URL url)
   {
-    ILogger.instance().logError("Error downloading \"%s\"", url.getPath());
+    ILogger.instance().logError("Error downloading \"%s\"", url._path);
   }
 
   public final void onCancel(URL url)
   {
-    ILogger.instance().logInfo("Canceled download of \"%s\"", url.getPath());
+    ILogger.instance().logInfo("Canceled download of \"%s\"", url._path);
   }
 
   public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
