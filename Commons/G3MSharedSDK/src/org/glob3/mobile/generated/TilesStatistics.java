@@ -45,7 +45,7 @@ public class TilesStatistics
 
   private int _buildersStartsInFrame;
 
-  private Sector _renderedSector;
+  private Sector _visibleSector;
 
 
   public TilesStatistics()
@@ -54,7 +54,7 @@ public class TilesStatistics
      _tilesVisible = 0;
      _tilesRendered = 0;
      _buildersStartsInFrame = 0;
-     _renderedSector = null;
+     _visibleSector = null;
     for (int i = 0; i < _maxLOD; i++)
     {
       _tilesProcessedByLevel[i] = 0;
@@ -65,8 +65,8 @@ public class TilesStatistics
 
   public void dispose()
   {
-    if (_renderedSector != null)
-       _renderedSector.dispose();
+    if (_visibleSector != null)
+       _visibleSector.dispose();
   }
 
   public final void clear()
@@ -75,9 +75,9 @@ public class TilesStatistics
     _tilesVisible = 0;
     _tilesRendered = 0;
     _buildersStartsInFrame = 0;
-    if (_renderedSector != null)
-       _renderedSector.dispose();
-    _renderedSector = null;
+    if (_visibleSector != null)
+       _visibleSector.dispose();
+    _visibleSector = null;
     for (int i = 0; i < _maxLOD; i++)
     {
       _tilesProcessedByLevel[i] = 0;
@@ -115,17 +115,17 @@ public class TilesStatistics
   public final void computeRenderedSector(Tile tile)
   {
     final Sector sector = tile._sector;
-    if (_renderedSector == null)
+    if (_visibleSector == null)
     {
-      _renderedSector = sector;
+      _visibleSector = sector;
     }
     else
     {
-      if (!_renderedSector.fullContains(sector))
+      if (!_visibleSector.fullContains(sector))
       {
-        Sector previous = _renderedSector;
+        Sector previous = _visibleSector;
 
-        _renderedSector = _renderedSector.mergedWith(sector);
+        _visibleSector = _visibleSector.mergedWith(sector);
 
         if (previous != null)
            previous.dispose();
@@ -143,9 +143,9 @@ public class TilesStatistics
     computeRenderedSector(tile);
   }
 
-  public final Sector getRenderedSector()
+  public final Sector getVisibleSector()
   {
-    return _renderedSector;
+    return _visibleSector;
   }
 
   public static String asLogString(int[] m, int nMax)
