@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 //class TileImageContribution;
 //class IDownloader;
 //class IBufferDownloadListener;
-//class TimeInterval;
 //class IStringUtils;
 //class GEORasterSymbolizer;
 
@@ -28,7 +27,7 @@ public class TiledVectorLayer extends VectorLayer
   private final GEORasterSymbolizer _symbolizer;
   private final String _urlTemplate;
   private final Sector _sector ;
-  private final long _timeToCacheMS;
+  private final TimeInterval _timeToCache = new TimeInterval();
   private final boolean _readExpired;
 
   private IMathUtils   _mu;
@@ -40,7 +39,7 @@ public class TiledVectorLayer extends VectorLayer
      _symbolizer = symbolizer;
      _urlTemplate = urlTemplate;
      _sector = new Sector(sector);
-     _timeToCacheMS = timeToCache._milliseconds;
+     _timeToCache = new TimeInterval(timeToCache);
      _readExpired = readExpired;
      _su = null;
      _mu = null;
@@ -147,7 +146,7 @@ public class TiledVectorLayer extends VectorLayer
 
   public final TiledVectorLayer copy()
   {
-    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _sector, _parameters.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
+    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _sector, _parameters.copy(), _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
   }
 
   public final TileImageContribution contribution(Tile tile)
@@ -177,7 +176,7 @@ public class TiledVectorLayer extends VectorLayer
     {
       ILogger.instance().logInfo("Downloading %s", url._path);
     }
-    return downloader.requestBuffer(url, tileDownloadPriority, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, listener, deleteListener);
+    return downloader.requestBuffer(url, tileDownloadPriority, _timeToCache, _readExpired, listener, deleteListener);
   }
 
   public final GEORasterSymbolizer symbolizerCopy()

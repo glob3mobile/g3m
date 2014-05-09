@@ -22,13 +22,13 @@ package org.glob3.mobile.generated;
 
 public abstract class RasterLayer extends Layer
 {
-  protected final TimeInterval _timeToCache = new TimeInterval();
+  private final TimeInterval _timeToCache;
   protected final boolean _readExpired;
 
   protected RasterLayer(TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition)
   {
      super(parameters, transparency, condition);
-     _timeToCache = new TimeInterval(timeToCache);
+     _timeToCache = timeToCache;
      _readExpired = readExpired;
   }
 
