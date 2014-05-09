@@ -17,14 +17,17 @@ public class TileSector
          extends
             Sector {
 
-   private final static Angle POS180 = Angle.fromDegrees(180.0);
-   private final static Angle NEG180 = Angle.fromDegrees(-180.0);
-   private final static Angle POS360 = Angle.fromDegrees(360.0);
+   private final static Angle     POS180       = Angle.fromDegrees(180.0);
+   private final static Angle     NEG180       = Angle.fromDegrees(-180.0);
+   private final static Angle     POS360       = Angle.fromDegrees(360.0);
 
-   public TileSector          _parent;
-   public int                 _level;
-   public int                 _row;
-   public int                 _column;
+   public final static TileSector FULL_SPHERE  = new TileSector(Sector.fullSphere(), null, 0, 0, 0);
+   private final static Sector    EMPTY_SECTOR = Sector.fromDegrees(0, 0, 0, 0);
+
+   public TileSector              _parent;
+   public int                     _level;
+   public int                     _row;
+   public int                     _column;
 
 
    public TileSector(final Geodetic2D lower,
@@ -69,6 +72,12 @@ public class TileSector
          row = numRows - this._row - 1;
       }
       return row;
+   }
+
+
+   public boolean intersects(final TileSector thatSector) {
+
+      return (!this.intersection(thatSector).equals(EMPTY_SECTOR));
    }
 
 

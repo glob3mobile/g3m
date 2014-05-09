@@ -15,7 +15,7 @@ public class GConcurrentService {
    public static final int     DEFAULT_MAX_PRIORITY  = Thread.MAX_PRIORITY;
    public static final int     DEFAULT_MIN_PRIORITY  = Thread.MIN_PRIORITY;
 
-   public static final int     DEFAULT_MAX_POOL_SIZE = 10;
+   public static final int     DEFAULT_MAX_POOL_SIZE = 5;
 
    public static final long    TASK_WAIT_PERIOD      = 100;
    public static final long    ALIVE_PERIOD          = 2000;

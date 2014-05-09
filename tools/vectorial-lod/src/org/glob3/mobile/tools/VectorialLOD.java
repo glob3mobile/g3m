@@ -20,11 +20,17 @@ import java.util.Properties;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
+import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
+import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.specific.Factory_JavaDesktop;
+import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
+import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJson;
 import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
@@ -50,7 +56,7 @@ public class VectorialLOD {
    private static String[]                   PROPERTIES;
 
    //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
-   private static float                      QUALITY_FACTOR     = 2.0f;
+   private static float                      QUALITY_FACTOR     = 1.0f;
    private static boolean                    MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
    private static int                        FIRST_LEVEL        = 0;
    private static int                        MAX_LEVEL          = 3;
@@ -71,6 +77,7 @@ public class VectorialLOD {
    private static String                     _bsonFolder        = null;
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
+   private static TileSector                 _boundSector       = TileSector.FULL_SPHERE;
 
    /*
     * For handling postgis database access and connections
@@ -258,13 +265,21 @@ public class VectorialLOD {
             return null; // null tolerance means no data on this bbox
          }
 
-         //-- full query where first cut, second simplify
+         //-- full query final where first cut, second simplify
          final String fullQuery = baseQuery0 + theGeom + "," + bboxQuery + ")," + simplifyTolerance + baseQuery1 + propsQuery
                                   + baseQuery2 + dataSourceTable + baseQuery4 + filterCriteria + baseQuery3 + theGeom + ","
                                   + bboxQuery + baseQuery5;
 
-         //         System.out.println("fullQuery: " + fullQuery);
+         //System.out.println("fullQuery: " + fullQuery);
 
+         //-- PRUEBA => QUITAR ------------------------------------------------------
+         //         final String fullQuery = "select type, count(*) from roads group by type";
+         //         final ResultSet rs = st.executeQuery(fullQuery);
+         //         while (rs.next()) {
+         //            System.out.println(rs.getString(1) + ", " + rs.getInt(2));
+         //         }
+         //         System.exit(1);
+         //--------------------------------------------------------------------------
          final ResultSet rs = st.executeQuery(fullQuery);
 
          if (!rs.next()) {
@@ -294,6 +309,106 @@ public class VectorialLOD {
    //
    //      return selectGeometries(dataSourceTable, sector.getExtendedSector(OVERLAP_PERCENTAGE), qualityFactor, geomFilterCriteria,
    //               includeProperties);
+   //   }
+
+
+   public static TileSector getGeometriesBound(final String dataSourceTable) {
+
+      TileSector boundSector = TileSector.FULL_SPHERE;
+      Connection conn = null;
+      Statement st = null;
+      try {
+         conn = _dataBaseService.getConnection();
+         st = conn.createStatement();
+
+         final String theGeom = getGeometryColumnName(st, dataSourceTable);
+
+         if (theGeom == null) {
+            st.close();
+            return TileSector.FULL_SPHERE;
+         }
+
+         final String bboxQuery = "SELECT Box2D(ST_Extent(" + theGeom + ")) from " + dataSourceTable;
+         //System.out.println("bboxQuery: " + bboxQuery);
+
+         final ResultSet rs = st.executeQuery(bboxQuery);
+
+         if (!rs.next()) {
+            st.close();
+            return TileSector.FULL_SPHERE;
+         }
+
+         final String bboxStr = rs.getString(1);
+         st.close();
+
+         boundSector = parseBoundSectorFromBbox(bboxStr);
+
+      }
+      catch (final SQLException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+
+      return boundSector;
+   }
+
+
+   private static TileSector parseBoundSectorFromBbox(final String bbox) {
+
+      if ((bbox == null) || bbox.equals("")) {
+         return TileSector.FULL_SPHERE;
+      }
+
+      System.out.println("Source data bound: " + bbox);
+
+      final int begin = bbox.indexOf("(") + 1;
+      final int end = bbox.indexOf(")") - 1;
+      final String subBbox = bbox.substring(begin, end);
+      final String[] points = subBbox.split(",");
+      final String[] lowerStr = points[0].split(" ");
+      final String[] upperStr = points[1].split(" ");
+
+      final Geodetic2D lower = new Geodetic2D(Angle.fromDegrees(Double.parseDouble(lowerStr[1])),
+               Angle.fromDegrees(Double.parseDouble(lowerStr[0])));
+      final Geodetic2D upper = new Geodetic2D(Angle.fromDegrees(Double.parseDouble(upperStr[1])),
+               Angle.fromDegrees(Double.parseDouble(upperStr[0])));
+
+      return new TileSector(lower, upper, null, 0, 0, 0);
+   }
+
+
+   //   public static String getGeometriesType(final String dataSourceTable) {
+   //
+   //      String geomType = "";
+   //      Connection conn = null;
+   //      Statement st = null;
+   //      try {
+   //         conn = _dataBaseService.getConnection();
+   //         st = conn.createStatement();
+   //
+   //         final String theGeom = getGeometryColumnName(st, dataSourceTable);
+   //
+   //         final String typeQuery = "SELECT GeometryType(" + theGeom + ")) from " + dataSourceTable + " where GID=1";
+   //         //System.out.println("typeQuery: " + typeQuery);
+   //
+   //         final ResultSet rs = st.executeQuery(typeQuery);
+   //
+   //         if (!rs.next()) {
+   //            st.close();
+   //            return geomType;
+   //         }
+   //
+   //         geomType = rs.getString(1);
+   //         st.close();
+   //
+   //         geomType = geomType.trim();
+   //      }
+   //      catch (final SQLException e) {
+   //         // TODO Auto-generated catch block
+   //         e.printStackTrace();
+   //      }
+   //
+   //      return geomType;
    //   }
 
 
@@ -351,8 +466,9 @@ public class VectorialLOD {
    private static String buildFilterCriterium(final String filterCriteria,
                                               final String tolerance) {
 
-      return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
-
+      //return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
+      //return filterCriteria;
+      return "ST_Length(the_geom)>" + tolerance + " and " + filterCriteria;
    }
 
 
@@ -453,78 +569,66 @@ public class VectorialLOD {
    }
 
 
-   //   private static String getGeojsonFileName(final TileSector sector) {
-   //
-   //      final String folderName = _geojsonFolder + File.separatorChar + sector._level;
-   //      final String subFolderName = folderName + File.separatorChar + sector.getRow(_renderParameters);
-   //
-   //      if (!new File(folderName).exists()) {
-   //         new File(folderName).mkdir();
-   //         if (VERBOSE) {
-   //            System.out.println("LEVEL: " + sector._level);
-   //         }
-   //      }
-   //
-   //      if (!new File(subFolderName).exists()) {
-   //         new File(subFolderName).mkdir();
-   //      }
-   //
-   //      return subFolderName + File.separatorChar + getTileGeojsonName(sector);
-   //   }
-   //
-   //
-   //   private static String getBsonFileName(final TileSector sector) {
-   //
-   //      final String folderName = _bsonFolder + File.separatorChar + sector._level;
-   //      final String subFolderName = folderName + File.separatorChar + sector.getRow(_renderParameters);
-   //
-   //      if (!new File(folderName).exists()) {
-   //         new File(folderName).mkdir();
-   //         //System.out.println("LEVEL: " + sector._level);
-   //      }
-   //
-   //      if (!new File(subFolderName).exists()) {
-   //         new File(subFolderName).mkdir();
-   //      }
-   //
-   //      return subFolderName + File.separatorChar + getTileBsonName(sector);
-   //   }
-
    private static String getGeojsonFileName(final TileSector sector) {
 
-      final String folderName = _geojsonFolder + File.separatorChar + sector._level;
-      final String subFolderName = folderName + File.separatorChar + sector._column;
+      //      final String folderName = _geojsonFolder + File.separatorChar + sector._level;
+      //      final String subFolderName = folderName + File.separatorChar + sector._column;
+      //
+      //      if (!new File(folderName).exists()) {
+      //         new File(folderName).mkdir();
+      //         if (VERBOSE) {
+      //            System.out.println("LEVEL: " + sector._level);
+      //         }
+      //      }
+      //
+      //      if (!new File(subFolderName).exists()) {
+      //         new File(subFolderName).mkdir();
+      //      }
+      //
+      //      return subFolderName + File.separatorChar + getTileGeojsonName(sector);
 
-      if (!new File(folderName).exists()) {
-         new File(folderName).mkdir();
-         if (VERBOSE) {
-            System.out.println("LEVEL: " + sector._level);
-         }
-      }
-
-      if (!new File(subFolderName).exists()) {
-         new File(subFolderName).mkdir();
-      }
-
-      return subFolderName + File.separatorChar + getTileGeojsonName(sector);
+      return getFileName(sector, false);
    }
 
 
    private static String getBsonFileName(final TileSector sector) {
 
-      final String folderName = _bsonFolder + File.separatorChar + sector._level;
-      final String subFolderName = folderName + File.separatorChar + sector._column;
+      //      final String folderName = _bsonFolder + File.separatorChar + sector._level;
+      //      final String subFolderName = folderName + File.separatorChar + sector._column;
+      //
+      //      if (!new File(folderName).exists()) {
+      //         new File(folderName).mkdir();
+      //         //System.out.println("LEVEL: " + sector._level);
+      //      }
+      //
+      //      if (!new File(subFolderName).exists()) {
+      //         new File(subFolderName).mkdir();
+      //      }
+      //
+      //      return subFolderName + File.separatorChar + getTileBsonName(sector);
+      return getFileName(sector, true);
+   }
 
+
+   private static String getFileName(final TileSector sector,
+                                     final boolean isBson) {
+
+      final String baseFolder = (isBson) ? _bsonFolder : _geojsonFolder;
+
+      final String folderName = baseFolder + File.separatorChar + sector._level;
       if (!new File(folderName).exists()) {
          new File(folderName).mkdir();
-         //System.out.println("LEVEL: " + sector._level);
       }
 
+      final String subFolderName = folderName + File.separatorChar + sector._column;
       if (!new File(subFolderName).exists()) {
          new File(subFolderName).mkdir();
       }
 
-      return subFolderName + File.separatorChar + getTileBsonName(sector);
+      final String fileName = (isBson) ? subFolderName + File.separatorChar + getTileBsonName(sector)
+                                      : subFolderName + File.separatorChar + getTileGeojsonName(sector);
+
+      return fileName;
    }
 
 
@@ -540,6 +644,12 @@ public class VectorialLOD {
       //return sector._column + ".bson";
       return sector.getRow(_renderParameters) + ".bson";
    }
+
+
+   //   private static String getTmpGeojsonName(final TileSector sector) {
+   //
+   //      return sector._level + "-" + sector._column + "-" + sector.getRow(_renderParameters) + ".geojson";
+   //   }
 
 
    private static String getTileLabel(final TileSector sector) {
@@ -606,7 +716,9 @@ public class VectorialLOD {
 
             final TileSector tileSector = new TileSector(sector, null, 0, row, col);
 
-            levelZeroTileSectors.add(tileSector);
+            if (tileSector.intersects(_boundSector)) {
+               levelZeroTileSectors.add(tileSector);
+            }
          }
       }
 
@@ -639,6 +751,9 @@ public class VectorialLOD {
 
       createFolderStructure(dataSource);
 
+      _boundSector = getGeometriesBound(dataSource._sourceTable);
+      //System.out.println(_boundSector.toString());
+
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
 
@@ -660,6 +775,11 @@ public class VectorialLOD {
                                             final DataSource dataSource) {
 
       if (sector._level > MAX_LEVEL) {
+         return;
+      }
+
+      if (!_boundSector.intersects(sector)) {
+         //System.out.println("Paso del sector: " + sector._level + "-" + sector._row + "-" + sector._column);
          return;
       }
 
@@ -720,43 +840,76 @@ public class VectorialLOD {
    }
 
 
+   //   private static void writeOutputFile(final String geoJson,
+   //                                       final TileSector sector) {
+   //
+   //      try {
+   //
+   //         String fileName = "";
+   //
+   //         if (generateGeojson()) {
+   //            fileName = getGeojsonFileName(sector);
+   //            System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
+   //         }
+   //         else {
+   //            fileName = _lodFolder + File.separatorChar + getTmpGeojsonName(sector);
+   //         }
+   //         final FileWriter file = new FileWriter(fileName);
+   //         file.write(geoJson);
+   //         file.flush();
+   //         file.close();
+   //
+   //         if (generateBson()) {
+   //            final File bsonFile = new File(getBsonFileName(sector));
+   //            bsonFile.createNewFile();
+   //            final File geojsonFile = new File(fileName);
+   //
+   //            try {
+   //               JBson2BJson.instance().transform(geojsonFile, bsonFile, true);
+   //            }
+   //            catch (final JBson2BJsonException e) {
+   //               ILogger.instance().logError(e.getMessage());
+   //            }
+   //
+   //            if (!generateGeojson()) {
+   //               System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
+   //               new File(fileName).delete();
+   //            }
+   //         }
+   //
+   //      }
+   //      catch (final IOException e) {
+   //         // TODO Auto-generated catch block
+   //         e.printStackTrace();
+   //      }
+   //   }
+
    private static void writeOutputFile(final String geoJson,
                                        final TileSector sector) {
 
       try {
-
-         String fileName = "";
-
          if (generateGeojson()) {
-            fileName = getGeojsonFileName(sector);
             System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
+            final FileWriter file = new FileWriter(getGeojsonFileName(sector));
+            file.write(geoJson);
+            file.flush();
+            file.close();
          }
-         else {
-            fileName = _lodFolder + File.separatorChar + getTileGeojsonName(sector);
-         }
-         final FileWriter file = new FileWriter(fileName);
-         file.write(geoJson);
-         file.flush();
-         file.close();
 
          if (generateBson()) {
             final File bsonFile = new File(getBsonFileName(sector));
             bsonFile.createNewFile();
-            final File geojsonFile = new File(fileName);
 
             try {
-               JBson2BJson.instance().transform(geojsonFile, bsonFile, true);
+               JBson2BJson.instance().json2bson(geoJson, bsonFile, true);
+               if (!generateGeojson()) {
+                  System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
+               }
             }
             catch (final JBson2BJsonException e) {
                ILogger.instance().logError(e.getMessage());
             }
-
-            if (!generateGeojson()) {
-               System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
-               new File(fileName).delete();
-            }
          }
-
       }
       catch (final IOException e) {
          // TODO Auto-generated catch block
@@ -794,17 +947,27 @@ public class VectorialLOD {
    }
 
 
-   private static void initializeMathUtils() {
+   private static void initializeUtils() {
+
+      if (ILogger.instance() == null) {
+         ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
+      }
+
+      if (IFactory.instance() == null) {
+         IFactory.setInstance(new Factory_JavaDesktop());
+      }
 
       if (IMathUtils.instance() == null) {
          IMathUtils.setInstance(new MathUtils_JavaDesktop());
       }
+
+      IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
    }
 
 
    private static void initialize() {
 
-      initializeMathUtils();
+      initializeUtils();
 
       initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
 
