@@ -37,8 +37,16 @@ import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 public class VectorialLOD {
 
-   final static String                       ROOT_DIRECTORY     = "LOD";
-   final static String                       PARAMETERS_FILE    = "parameters.xml";
+   final static String ROOT_DIRECTORY  = "LOD";
+   final static String PARAMETERS_FILE = "parameters.xml";
+
+   private enum GeomType {
+      POINT,
+      LINESTRING,
+      MULTILINESTRING,
+      POLYGON,
+      MULTIPOLYGON
+   };
 
    //-- Data base connection parameters ----------------------------------------------------------------
    private static String                     HOST               = "igosoftware.dyndns.org";
@@ -78,6 +86,7 @@ public class VectorialLOD {
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
    private static TileSector                 _boundSector       = TileSector.FULL_SPHERE;
+   private static GeomType                   _geomType;
 
    /*
     * For handling postgis database access and connections
@@ -377,39 +386,51 @@ public class VectorialLOD {
    }
 
 
-   //   public static String getGeometriesType(final String dataSourceTable) {
-   //
-   //      String geomType = "";
-   //      Connection conn = null;
-   //      Statement st = null;
-   //      try {
-   //         conn = _dataBaseService.getConnection();
-   //         st = conn.createStatement();
-   //
-   //         final String theGeom = getGeometryColumnName(st, dataSourceTable);
-   //
-   //         final String typeQuery = "SELECT GeometryType(" + theGeom + ")) from " + dataSourceTable + " where GID=1";
-   //         //System.out.println("typeQuery: " + typeQuery);
-   //
-   //         final ResultSet rs = st.executeQuery(typeQuery);
-   //
-   //         if (!rs.next()) {
-   //            st.close();
-   //            return geomType;
-   //         }
-   //
-   //         geomType = rs.getString(1);
-   //         st.close();
-   //
-   //         geomType = geomType.trim();
-   //      }
-   //      catch (final SQLException e) {
-   //         // TODO Auto-generated catch block
-   //         e.printStackTrace();
-   //      }
-   //
-   //      return geomType;
-   //   }
+   private static GeomType getGeometriesType(final String dataSourceTable) {
+
+      final String geomQuery = "SELECT type FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
+
+      try {
+         final Connection conn = _dataBaseService.getConnection();
+         final Statement st = conn.createStatement();
+
+         final ResultSet rs = st.executeQuery(geomQuery);
+
+         if (!rs.next()) {
+            return null;
+         }
+         return parseGeometryType(rs.getString(1));
+      }
+      catch (final SQLException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+      return null;
+   }
+
+
+   private static GeomType parseGeometryType(final String type) {
+
+      GeomType geomType = null;
+
+      if (type.equalsIgnoreCase("POLYGON")) {
+         geomType = GeomType.POLYGON;
+      }
+      else if (type.equalsIgnoreCase("MULTIPOLYGON")) {
+         geomType = GeomType.MULTIPOLYGON;
+      }
+      else if (type.equalsIgnoreCase("LINESTRING")) {
+         geomType = GeomType.LINESTRING;
+      }
+      else if (type.equalsIgnoreCase("MULTILINESTRING")) {
+         geomType = GeomType.MULTILINESTRING;
+      }
+      else if (type.equalsIgnoreCase("POINT")) {
+         geomType = GeomType.POINT;
+      }
+
+      return geomType;
+   }
 
 
    private static String buildPropertiesQuery(final String... includeProperties) {
@@ -468,7 +489,16 @@ public class VectorialLOD {
 
       //return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
       //return filterCriteria;
-      return "ST_Length(the_geom)>" + tolerance + " and " + filterCriteria;
+      //return "ST_Length(the_geom)>" + tolerance + " and " + filterCriteria;
+
+      if ((_geomType == GeomType.POLYGON) || (_geomType == GeomType.MULTIPOLYGON)) {
+         return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
+      }
+      else if ((_geomType == GeomType.LINESTRING) || (_geomType == GeomType.MULTILINESTRING)) {
+         return "ST_Length(the_geom)>" + tolerance + " and " + filterCriteria;
+      }
+
+      return filterCriteria;
    }
 
 
@@ -753,6 +783,9 @@ public class VectorialLOD {
 
       _boundSector = getGeometriesBound(dataSource._sourceTable);
       //System.out.println(_boundSector.toString());
+
+      _geomType = getGeometriesType(dataSource._sourceTable);
+      System.out.println(_geomType.toString());
 
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
