@@ -23,7 +23,12 @@ private:
   const GEORasterSymbolizer* _symbolizer;
   const std::string          _urlTemplate;
   const Sector               _sector;
-  const TimeInterval         _timeToCache;
+#ifdef C_CODE
+  const TimeInterval _timeToCache;
+#endif
+#ifdef JAVA_CODE
+  private final TimeInterval _timeToCache;
+#endif
   const bool                 _readExpired;
 
 #ifdef C_CODE

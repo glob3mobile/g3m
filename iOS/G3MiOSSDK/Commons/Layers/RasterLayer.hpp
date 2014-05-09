@@ -22,7 +22,7 @@ protected:
   const TimeInterval _timeToCache;
 #endif
 #ifdef JAVA_CODE
-  private final TimeInterval _timeToCache;
+  protected final TimeInterval _timeToCache;
 #endif
   const bool _readExpired;
 
