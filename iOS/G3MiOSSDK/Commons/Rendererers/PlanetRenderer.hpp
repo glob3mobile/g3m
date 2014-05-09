@@ -47,26 +47,19 @@ private:
 
   int _buildersStartsInFrame;
 
-  Sector* _visibleSector;
+  double _visibleLowerLatitudeDegrees;
+  double _visibleLowerLongitudeDegrees;
+  double _visibleUpperLatitudeDegrees;
+  double _visibleUpperLongitudeDegrees;
 
 public:
 
-  TilesStatistics() :
-  _tilesProcessed(0),
-  _tilesVisible(0),
-  _tilesRendered(0),
-  _buildersStartsInFrame(0),
-  _visibleSector(NULL)
+  TilesStatistics()
   {
-    for (int i = 0; i < _maxLOD; i++) {
-      _tilesProcessedByLevel[i] = 0;
-      _tilesVisibleByLevel[i]   = 0;
-      _tilesRenderedByLevel[i]  = 0;
-    }
+    clear();
   }
 
   ~TilesStatistics() {
-    delete _visibleSector;
   }
 
   void clear() {
@@ -74,8 +67,13 @@ public:
     _tilesVisible = 0;
     _tilesRendered = 0;
     _buildersStartsInFrame = 0;
-    delete _visibleSector;
-    _visibleSector = NULL;
+
+    const IMathUtils* mu = IMathUtils::instance();
+    _visibleLowerLatitudeDegrees  = mu->maxDouble();
+    _visibleLowerLongitudeDegrees = mu->maxDouble();
+    _visibleUpperLatitudeDegrees  = mu->minDouble();
+    _visibleUpperLongitudeDegrees = mu->minDouble();
+
     for (int i = 0; i < _maxLOD; i++) {
       _tilesProcessedByLevel[i] = 0;
       _tilesVisibleByLevel[i]   = 0;
@@ -107,27 +105,36 @@ public:
 
   void computeRenderedSector(Tile* tile) {
     const Sector sector = tile->_sector;
-    if (_visibleSector == NULL) {
-#ifdef C_CODE
-      _visibleSector = new Sector( sector );
-#endif
-#ifdef JAVA_CODE
-      _visibleSector = sector;
-#endif
+
+    const double lowerLatitudeDegrees  = sector._lower._latitude._degrees;
+    const double lowerLongitudeDegrees = sector._lower._longitude._degrees;
+    const double upperLatitudeDegrees  = sector._upper._latitude._degrees;
+    const double upperLongitudeDegrees = sector._upper._longitude._degrees;
+
+    if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees) {
+      _visibleLowerLatitudeDegrees = lowerLatitudeDegrees;
     }
-    else {
-      if (!_visibleSector->fullContains(sector)) {
-        Sector* previous = _visibleSector;
+    if (upperLatitudeDegrees < _visibleLowerLatitudeDegrees) {
+      _visibleLowerLatitudeDegrees = upperLatitudeDegrees;
+    }
+    if (lowerLatitudeDegrees >_visibleUpperLatitudeDegrees) {
+      _visibleUpperLatitudeDegrees = lowerLatitudeDegrees;
+    }
+    if (upperLatitudeDegrees > _visibleUpperLatitudeDegrees) {
+      _visibleUpperLatitudeDegrees = upperLatitudeDegrees;
+    }
 
-#ifdef C_CODE
-        _visibleSector = new Sector( _visibleSector->mergedWith(sector) );
-#endif
-#ifdef JAVA_CODE
-        _visibleSector = _visibleSector.mergedWith(sector);
-#endif
-
-        delete previous;
-      }
+    if (lowerLongitudeDegrees < _visibleLowerLongitudeDegrees) {
+      _visibleLowerLongitudeDegrees = lowerLongitudeDegrees;
+    }
+    if (upperLongitudeDegrees < _visibleLowerLongitudeDegrees) {
+      _visibleLowerLongitudeDegrees = upperLongitudeDegrees;
+    }
+    if (lowerLongitudeDegrees > _visibleUpperLongitudeDegrees) {
+      _visibleUpperLongitudeDegrees = lowerLongitudeDegrees;
+    }
+    if (upperLongitudeDegrees > _visibleUpperLongitudeDegrees) {
+      _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
   }
 
@@ -140,8 +147,25 @@ public:
     computeRenderedSector(tile);
   }
 
-  const Sector* getVisibleSector() const {
-    return _visibleSector;
+  Sector* updateVisibleSector(Sector* visibleSector) const {
+    if ((visibleSector == NULL) ||
+        (visibleSector->_lower._latitude._degrees  != _visibleLowerLatitudeDegrees)  ||
+        (visibleSector->_lower._longitude._degrees != _visibleLowerLongitudeDegrees) ||
+        (visibleSector->_upper._latitude._degrees  != _visibleUpperLatitudeDegrees)  ||
+        (visibleSector->_upper._longitude._degrees != _visibleUpperLongitudeDegrees) ) {
+      delete visibleSector;
+
+      if ((_visibleLowerLatitudeDegrees  > _visibleUpperLatitudeDegrees) ||
+          (_visibleLowerLongitudeDegrees > _visibleUpperLongitudeDegrees)) {
+        return NULL;
+      }
+
+      return new Sector(Geodetic2D::fromDegrees(_visibleLowerLatitudeDegrees,
+                                                _visibleLowerLongitudeDegrees),
+                        Geodetic2D::fromDegrees(_visibleUpperLatitudeDegrees,
+                                                _visibleUpperLongitudeDegrees));
+    }
+    return visibleSector;
   }
 
   static std::string asLogString(const int m[], const int nMax) {
