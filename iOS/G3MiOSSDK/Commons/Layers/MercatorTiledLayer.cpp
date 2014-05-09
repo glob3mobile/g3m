@@ -185,7 +185,7 @@ MercatorTiledLayer* MercatorTiledLayer::copy() const {
                                 _domain,
                                 _subdomains,
                                 _imageFormat,
-                                TimeInterval::fromMilliseconds(_timeToCacheMS),
+                                _timeToCache,
                                 _readExpired,
                                 _sector,
                                 _initialLevel,

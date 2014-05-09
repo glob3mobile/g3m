@@ -256,7 +256,7 @@ const std::string HereLayer::description() const {
 HereLayer* HereLayer::copy() const {
   return new HereLayer(_appId,
                        _appCode,
-                       TimeInterval::fromMilliseconds(_timeToCacheMS),
+                       _timeToCache,
                        _readExpired,
                        _initialLevel,
                        _transparency,

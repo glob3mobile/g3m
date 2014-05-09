@@ -180,7 +180,7 @@
     if (_url->isFileProtocol()) {
       const IStringUtils* su = IStringUtils::instance();
 
-      const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->getPath(),
+      const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->_path,
                                                                                   URL::FILE_PROTOCOL,
                                                                                   "");
       const int dotPos = su->indexOf(fileFullName, ".");

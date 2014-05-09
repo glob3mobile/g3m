@@ -169,7 +169,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadError(cons
   _downloadRequestId = -1;
 
   _listener->imageCreationError(_tileId,
-                                "Download error - " + url.getPath());
+                                "Download error - " + url._path);
   _tileImageProvider->requestFinish(_tileId);
 }
 

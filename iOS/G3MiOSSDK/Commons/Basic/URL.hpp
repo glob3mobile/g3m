@@ -14,14 +14,13 @@
 
 class URL {
 private:
-  const std::string _path;
   URL& operator=(const URL& that);
 
   static const std::string concatenatePath(const URL& parent,
                                            const std::string& path) {
     const IStringUtils* iu = IStringUtils::instance();
 
-    std::string result = iu->replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+    std::string result = iu->replaceSubstring(parent._path + "/" + path, "//", "/");
     if (iu->beginsWith(result, "http:/")) {
 #ifdef C_CODE
       result = "http://" + iu->substring(result, 6);
@@ -35,6 +34,7 @@ private:
   }
 
 public:
+  const std::string _path;
 
   URL(const URL& that) :
   _path(that._path)

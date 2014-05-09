@@ -169,7 +169,7 @@ const std::string GoogleMapsLayer::description() const {
 
 GoogleMapsLayer* GoogleMapsLayer::copy() const {
   return new GoogleMapsLayer(_key,
-                             TimeInterval::fromMilliseconds(_timeToCacheMS),
+                             _timeToCache,
                              _readExpired,
                              _initialLevel,
                              _transparency,

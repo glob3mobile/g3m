@@ -102,7 +102,7 @@ URLTemplateLayer* URLTemplateLayer::copy() const {
   return new URLTemplateLayer(_urlTemplate,
                               _sector,
                               _isTransparent,
-                              TimeInterval::fromMilliseconds(_timeToCacheMS),
+                              _timeToCache,
                               _readExpired,
                               (_condition == NULL) ? NULL : _condition->copy(),
                               _parameters->copy());
@@ -219,7 +219,7 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
 
   petitions.push_back( new Petition(sector,
                                     URL(path, false),
-                                    TimeInterval::fromMilliseconds(_timeToCacheMS),
+                                    _timeToCache,
                                     _readExpired,
                                     _isTransparent,
                                     _transparency) );

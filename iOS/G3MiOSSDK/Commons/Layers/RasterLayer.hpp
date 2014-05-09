@@ -15,11 +15,12 @@
 class TimeInterval;
 class IDownloader;
 class IImageDownloadListener;
+#include "TimeInterval.hpp"
 
 class RasterLayer : public Layer {
 protected:
-  const long long _timeToCacheMS;
-  const bool      _readExpired;
+  const TimeInterval _timeToCache;
+  const bool         _readExpired;
 
   RasterLayer(const TimeInterval&               timeToCache,
               const bool                        readExpired,
@@ -27,7 +28,9 @@ protected:
               const float                       transparency,
               const LayerCondition*             condition);
 
-  const TimeInterval getTimeToCache() const;
+  const TimeInterval getTimeToCache() const {
+    return _timeToCache;
+  }
 
   bool getReadExpired() const {
     return _readExpired;

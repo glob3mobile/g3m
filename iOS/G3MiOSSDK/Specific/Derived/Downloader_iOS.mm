@@ -198,9 +198,9 @@ long long Downloader_iOS::request(const URL &url,
                                   long long priority,
                                   Downloader_iOS_Listener* iosListener) {
 
-  //printf("URL=%s\n", url.getPath().c_str());
+  //printf("URL=%s\n", url._path.c_str());
 
-  NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: url.getPath()] ];
+  NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: url._path] ];
 
   if (!nsURL) {
     [iosListener onErrorURL:url];

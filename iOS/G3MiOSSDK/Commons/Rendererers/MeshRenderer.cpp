@@ -431,7 +431,7 @@ private:
   void parseMesh(const JSONBaseObject* jsonBaseObject) {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
     if (jsonObject == NULL) {
-      ILogger::instance()->logError("Invalid format for \"%s\"", _url.getPath().c_str());
+      ILogger::instance()->logError("Invalid format for \"%s\"", _url._path.c_str());
     }
     else {
       const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
@@ -547,7 +547,7 @@ public:
 
   void onPostExecute(const G3MContext* context) {
     if (_mesh == NULL) {
-      ILogger::instance()->logError("Error parsing Mesh from \"%s\"", _url.getPath().c_str());
+      ILogger::instance()->logError("Error parsing Mesh from \"%s\"", _url._path.c_str());
     }
     else {
       if (_listener != NULL) {
@@ -620,7 +620,7 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     ILogger::instance()->logInfo("Downloaded Mesh buffer from \"%s\" (%db)",
-                                 url.getPath().c_str(),
+                                 url._path.c_str(),
                                  buffer->size());
 
     _threadUtils->invokeAsyncTask(new MeshRenderer_MeshParserAsyncTask(_meshRenderer,
@@ -639,7 +639,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
 
     if (_deleteListener) {
       delete _listener;
@@ -648,7 +648,7 @@ public:
   }
 
   void onCancel(const URL& url) {
-    ILogger::instance()->logInfo("Canceled download of \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logInfo("Canceled download of \"%s\"", url._path.c_str());
 
     if (_deleteListener) {
       delete _listener;

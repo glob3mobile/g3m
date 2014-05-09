@@ -110,12 +110,12 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error trying to download image \"%s\"", url._path.c_str());
     _mark->onTextureDownloadError();
   }
 
   void onCancel(const URL& url) {
-    // ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
+    // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
     _mark->onTextureDownloadError();
   }
 
@@ -162,7 +162,7 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" + label ),
+_imageID( iconURL._path + "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
@@ -241,7 +241,7 @@ _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
-_imageID( iconURL.getPath() + "_" ),
+_imageID( iconURL._path + "_" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
@@ -300,7 +300,7 @@ void Mark::initialize(const G3MContext* context,
   }
 
   if (!_textureSolved) {
-    const bool hasIconURL = ( _iconURL.getPath().length() != 0 );
+    const bool hasIconURL = ( _iconURL._path.length() != 0 );
     if (hasIconURL) {
       IDownloader* downloader = context->getDownloader();
 
@@ -341,7 +341,7 @@ void Mark::onTextureDownloadError() {
   delete _labelShadowColor;
 
   ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
-                                _iconURL.getPath().c_str(),
+                                _iconURL._path.c_str(),
                                 _label.c_str());
 }
 

@@ -26,7 +26,7 @@ MapQuestLayer* MapQuestLayer::copy() const {
                            _subdomains,
                            _initialLevel,
                            _maxLevel,
-                           TimeInterval::fromMilliseconds(_timeToCacheMS),
+                           _timeToCache,
                            _readExpired,
                            _transparency,
                            (_condition == NULL) ? NULL : _condition->copy());

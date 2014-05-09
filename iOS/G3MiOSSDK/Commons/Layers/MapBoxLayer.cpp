@@ -23,7 +23,7 @@ bool MapBoxLayer::rawIsEquals(const Layer* that) const {
 
 MapBoxLayer* MapBoxLayer::copy() const {
   return new MapBoxLayer(_mapKey,
-                         TimeInterval::fromMilliseconds(_timeToCacheMS),
+                         _timeToCache,
                          _readExpired,
                          _initialLevel,
                          _maxLevel,

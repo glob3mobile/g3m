@@ -360,7 +360,7 @@ public:
       const Petition* petition = _petitions[i];
 
       if (_logTilesPetitions) {
-        ILogger::instance()->logInfo("Tile petition \"%s\"", petition->getURL().getPath().c_str());
+        ILogger::instance()->logInfo("Tile petition \"%s\"", petition->getURL()._path.c_str());
       }
 
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
@@ -438,7 +438,7 @@ public:
                                               _tileTextureResolution._y,
                                               tileSector,
                                               intersectionSector));
-        textureId += petition->getURL().getPath();
+        textureId += petition->getURL()._path;
         textureId += "_";
 
         //Layer transparency set by user
@@ -732,7 +732,7 @@ void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
 void BuilderDownloadStepDownloadListener::onError(const URL& url) {
   //  _onError++;
   _builder->stepCanceled(_position);
-  ILogger::instance()->logError("Error downloading tile texture from \"%s\"", url.getPath().c_str());
+  ILogger::instance()->logError("Error downloading tile texture from \"%s\"", url._path.c_str());
 }
 
 void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {

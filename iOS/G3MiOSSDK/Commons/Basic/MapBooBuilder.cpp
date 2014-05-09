@@ -386,7 +386,7 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&   
   if (iconURL != NULL) {
     isb->addString(",\"iconURL\":");
     isb->addString("\"");
-    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString( escapeString(iconURL->_path) );
     isb->addString("\"");
   }
 
@@ -424,7 +424,7 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&  p
   if (iconURL != NULL) {
     isb->addString(",\"iconURL\":");
     isb->addString("\"");
-    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString( escapeString(iconURL->_path) );
     isb->addString("\"");
   }
 
@@ -927,7 +927,7 @@ void MapBooBuilder::parseApplicationEventsJSON(const std::string& json,
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
-                                  url.getPath().c_str());
+                                  url._path.c_str());
   }
   else {
     const JSONArray* jsonArray = jsonBaseObject->asArray();
@@ -1069,7 +1069,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
-                                  url.getPath().c_str());
+                                  url._path.c_str());
   }
   else {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
@@ -1276,7 +1276,7 @@ void MapBooBuilder::recreateLayerSet() {
 }
 
 const URL MapBooBuilder::createApplicationTubeURL() const {
-  const std::string tubesPath = _tubesURL.getPath();
+  const std::string tubesPath = _tubesURL._path;
 
   std::string view;
   switch (_viewType) {
@@ -1353,7 +1353,7 @@ public:
 
   void onOpen(IWebSocket* ws) {
     ILogger::instance()->logInfo("Tube '%s' opened!",
-                                 ws->getURL().getPath().c_str());
+                                 ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(true);
   }
 
@@ -1361,7 +1361,7 @@ public:
                const std::string& error) {
     ILogger::instance()->logError("Error '%s' on Tube '%s'",
                                   error.c_str(),
-                                  ws->getURL().getPath().c_str());
+                                  ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(false);
   }
 
@@ -1373,7 +1373,7 @@ public:
 
   void onClose(IWebSocket* ws) {
     ILogger::instance()->logError("Tube '%s' closed!",
-                                  ws->getURL().getPath().c_str());
+                                  ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(false);
   }
 };
@@ -1424,7 +1424,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+    ILogger::instance()->logError("Can't download %s", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
@@ -1440,7 +1440,7 @@ public:
 
 const URL MapBooBuilder::createApplicationPollURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_serverURL.getPath());
+  isb->addString(_serverURL._path);
   isb->addString("/poll/");
   isb->addString(_applicationId);
   isb->addString("?view=");
@@ -1696,7 +1696,7 @@ public:
   }
   
   void onError(const URL& url) {
-    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+    ILogger::instance()->logError("Can't download %s", url._path.c_str());
   }
   
   void onCancel(const URL& url) {
@@ -1774,7 +1774,7 @@ const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
 
 const URL MapBooBuilder::createApplicationCurrentSceneURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_serverURL.getPath());
+  isb->addString(_serverURL._path);
   isb->addString("/REST/1/applications/");
   isb->addString(_applicationId);
   isb->addString("/_POST_?");
@@ -1973,7 +1973,7 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
                                                      const Vector2I& pixelPosition,
                                                      const Geodetic3D& position) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_serverURL.getPath());
+  isb->addString(_serverURL._path);
 
   isb->addString("/Public/applications/");
   isb->addString(_applicationId);

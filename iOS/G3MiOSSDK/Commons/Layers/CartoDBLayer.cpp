@@ -24,7 +24,7 @@ bool CartoDBLayer::rawIsEquals(const Layer* that) const {
 CartoDBLayer* CartoDBLayer::copy() const {
   return new CartoDBLayer(_userName,
                           _table,
-                          TimeInterval::fromMilliseconds(_timeToCacheMS),
+                          _timeToCache,
                           _readExpired,
                           _transparency,
                           (_condition == NULL) ? NULL : _condition->copy());

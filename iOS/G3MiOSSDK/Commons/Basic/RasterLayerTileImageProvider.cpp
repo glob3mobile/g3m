@@ -63,13 +63,13 @@ public:
     _contribution = NULL; // moves ownership of _contribution to _listener
     _listener->imageCreated(_tileId,
                             image,
-                            url.getPath(),
+                            url._path,
                             contribution);
   }
 
   void onError(const URL& url) {
     _listener->imageCreationError(_tileId,
-                                  "Download error - " + url.getPath());
+                                  "Download error - " + url._path);
   }
 
   void onCancel(const URL& url) {

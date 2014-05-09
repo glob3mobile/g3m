@@ -53,7 +53,7 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
   }
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_mapServerURL.getPath());
+  isb->addString(_mapServerURL._path);
   isb->addString(_mapLayer);
   isb->addString("/");
   isb->addInt(tile->_level);
@@ -68,8 +68,8 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
 
   Petition *petition = new Petition(tileSector,
                                     URL(isb->getString(), false),
-                                    getTimeToCache(),
-                                    getReadExpired(),
+                                    _timeToCache,
+                                    _readExpired,
                                     _isTransparent,
                                     _transparency);
   petitions.push_back(petition);
@@ -94,7 +94,7 @@ RenderState TMSLayer::getRenderState() {
   if (_mapLayer.compare("") == 0) {
     _errors.push_back("Missing layer parameter: mapLayer");
   }
-  const std::string mapServerUrl = _mapServerURL.getPath();
+  const std::string mapServerUrl = _mapServerURL._path;
   if (mapServerUrl.compare("") == 0) {
     _errors.push_back("Missing layer parameter: mapServerURL");
   }

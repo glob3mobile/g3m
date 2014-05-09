@@ -104,7 +104,7 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
                                                         const Tile* tile) const {
   std::vector<Petition*> petitions;
 
-  const std::string path = _mapServerURL.getPath();
+  const std::string path = _mapServerURL._path;
   if (path.empty()) {
     return petitions;
   }
@@ -247,7 +247,7 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
 
 const URL WMSLayer::createURL(const Tile* tile) const {
 
-  const std::string path = _mapServerURL.getPath();
+  const std::string path = _mapServerURL._path;
 //  if (path.empty()) {
 //    return petitions;
 //  }
@@ -387,7 +387,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   const Sector intersectionSector = tileSector.intersection(_sector);
 
 	//Server name
-  std::string req = _queryServerURL.getPath();
+  std::string req = _queryServerURL._path;
 	if (req[req.size()-1] != '?') {
 		req += '?';
 	}
@@ -580,7 +580,7 @@ WMSLayer* WMSLayer::copy() const {
                       _style,
                       _isTransparent,
                       (_condition == NULL) ? NULL : _condition->copy(),
-                      TimeInterval::fromMilliseconds(_timeToCacheMS),
+                      _timeToCache,
                       _readExpired,
                       (_parameters == NULL) ? NULL : _parameters->copy());
 }
@@ -590,7 +590,7 @@ RenderState WMSLayer::getRenderState() {
   if (_mapLayer.compare("") == 0) {
     _errors.push_back("Missing layer parameter: mapLayer");
   }
-  const std::string mapServerUrl = _mapServerURL.getPath();
+  const std::string mapServerUrl = _mapServerURL._path;
   if (mapServerUrl.compare("") == 0) {
     _errors.push_back("Missing layer parameter: mapServerURL");
   }

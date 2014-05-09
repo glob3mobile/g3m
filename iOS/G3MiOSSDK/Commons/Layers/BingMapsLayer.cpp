@@ -358,7 +358,7 @@ bool BingMapsLayer::rawIsEquals(const Layer* that) const {
 BingMapsLayer* BingMapsLayer::copy() const {
   return new BingMapsLayer(_imagerySet,
                            _key,
-                           TimeInterval::fromMilliseconds(_timeToCacheMS),
+                           _timeToCache,
                            _readExpired,
                            _initialLevel,
                            _transparency,

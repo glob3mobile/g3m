@@ -22,13 +22,9 @@ RasterLayer::RasterLayer(const TimeInterval&               timeToCache,
 Layer(parameters,
       transparency,
       condition),
-_timeToCacheMS(timeToCache._milliseconds),
+_timeToCache(timeToCache),
 _readExpired(readExpired)
 {
-}
-
-const TimeInterval RasterLayer::getTimeToCache() const {
-  return TimeInterval::fromMilliseconds(_timeToCacheMS);
 }
 
 bool RasterLayer::isEquals(const Layer* that) const {
@@ -46,8 +42,8 @@ bool RasterLayer::isEquals(const Layer* that) const {
 
   RasterLayer* rasterThat = (RasterLayer*) that;
 
-  return ((_timeToCacheMS == rasterThat->_timeToCacheMS) &&
-          (_readExpired   == rasterThat->_readExpired));
+  return ((_timeToCache.milliseconds() == rasterThat->_timeToCache.milliseconds()) &&
+          (_readExpired                == rasterThat->_readExpired));
 }
 
 TileImageProvider* RasterLayer::createTileImageProvider(const G3MRenderContext* rc,
@@ -70,11 +66,11 @@ long long RasterLayer::requestImage(const Tile* tile,
                                     bool deleteListener) const {
   const URL url = createURL(tile);
   if (logDownloadActivity) {
-    ILogger::instance()->logInfo("Downloading %s", url.getPath().c_str());
+    ILogger::instance()->logInfo("Downloading %s", url._path.c_str());
   }
   return downloader->requestImage(url,
                                   tileDownloadPriority,
-                                  getTimeToCache(),
+                                  _timeToCache,
                                   _readExpired,
                                   listener,
                                   deleteListener);
