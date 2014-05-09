@@ -12,7 +12,6 @@
 #include "Layer.hpp"
 
 #include "TileImageContribution.hpp"
-class TimeInterval;
 class IDownloader;
 class IImageDownloadListener;
 #include "TimeInterval.hpp"
