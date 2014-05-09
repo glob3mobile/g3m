@@ -74,10 +74,10 @@ public class TileImageContribution extends RCObject
 
   public static TileImageContribution fullCoverageOpaque()
   {
-  //  FULL_COVERAGE_OPAQUE->_retain();
-  //  return FULL_COVERAGE_OPAQUE;
+    FULL_COVERAGE_OPAQUE._retain();
+    return FULL_COVERAGE_OPAQUE;
   
-    return new TileImageContribution(false, 1);
+  //  return new TileImageContribution(false, 1);
   }
 
   public static TileImageContribution fullCoverageTransparent(float alpha)
@@ -87,19 +87,20 @@ public class TileImageContribution extends RCObject
       return null;
     }
   
-  //  // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
-  //  if ((_lastFullCoverageTransparent == NULL) ||
-  //      (_lastFullCoverageTransparent->_alpha != alpha)) {
-  //    if (_lastFullCoverageTransparent != NULL) {
-  //      _lastFullCoverageTransparent->_release();
-  //    }
-  //
-  //    _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
-  //  }
-  //  _lastFullCoverageTransparent->_retain();
-  //  return _lastFullCoverageTransparent;
+    // try to reuse the contribution between calls to avoid too much garbage. Android, in your face!
+    if ((_lastFullCoverageTransparent == null) || (_lastFullCoverageTransparent._alpha != alpha))
+    {
+      if (_lastFullCoverageTransparent != null)
+      {
+        _lastFullCoverageTransparent._release();
+      }
   
-    return new TileImageContribution(true, alpha);
+      _lastFullCoverageTransparent = new TileImageContribution(true, alpha);
+    }
+    _lastFullCoverageTransparent._retain();
+    return _lastFullCoverageTransparent;
+  
+  //  return new TileImageContribution(true, alpha);
   }
 
   public static TileImageContribution partialCoverageOpaque(Sector sector)
