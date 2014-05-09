@@ -32,7 +32,7 @@ VectorLayer(parameters, transparency, condition),
 _symbolizer(symbolizer),
 _urlTemplate(urlTemplate),
 _sector(sector),
-_timeToCacheMS(timeToCache._milliseconds),
+_timeToCache(timeToCache),
 _readExpired(readExpired),
 _su(NULL),
 _mu(NULL)
@@ -93,7 +93,7 @@ TiledVectorLayer* TiledVectorLayer::copy() const {
                               _urlTemplate,
                               _sector,
                               _parameters->copy(),
-                              TimeInterval::fromMilliseconds(_timeToCacheMS),
+                              _timeToCache,
                               _readExpired,
                               _transparency,
                               (_condition == NULL) ? NULL : _condition->copy());
@@ -178,7 +178,7 @@ long long TiledVectorLayer::requestGEOJSONBuffer(const Tile* tile,
   }
   return downloader->requestBuffer(url,
                                    tileDownloadPriority,
-                                   TimeInterval::fromMilliseconds(_timeToCacheMS),
+                                   _timeToCache,
                                    _readExpired,
                                    listener,
                                    deleteListener);

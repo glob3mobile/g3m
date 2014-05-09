@@ -11,10 +11,10 @@
 
 #include "VectorLayer.hpp"
 #include "Sector.hpp"
+#include "TimeInterval.hpp"
 class TileImageContribution;
 class IDownloader;
 class IBufferDownloadListener;
-class TimeInterval;
 class IStringUtils;
 class GEORasterSymbolizer;
 
@@ -23,7 +23,7 @@ private:
   const GEORasterSymbolizer* _symbolizer;
   const std::string          _urlTemplate;
   const Sector               _sector;
-  const long long            _timeToCacheMS;
+  const TimeInterval         _timeToCache;
   const bool                 _readExpired;
 
 #ifdef C_CODE
