@@ -25,6 +25,7 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferParser::~GEOJSONBufferParser() {
     _imageAssembler->deletedParser();
   }
 
+  delete _symbolizer;
   delete _buffer;
 //  delete _geoObject;
   delete _canvas;
@@ -183,11 +184,13 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBu
     delete buffer;
   }
   else {
+    const GEORasterSymbolizer* symbolizer = _symbolizer;
+    _symbolizer = NULL; // moves ownership of _symbolizer to GEOJSONBufferParser
     _parser = new GEOJSONBufferParser(this,
                                       buffer,
                                       _imageWidth,
                                       _imageHeight,
-                                      _symbolizer,
+                                      symbolizer,
                                       _tileSector,
                                       _tileIsMercator,
                                       _tileLevel);
