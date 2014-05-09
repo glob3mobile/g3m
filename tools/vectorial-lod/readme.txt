@@ -73,6 +73,9 @@ between 1.0 to 10.0
 -------------------------------------------------------------------------------
 EXAMPLES OF USE:
 
+Example 0) Execution using parameters.xml file:
+./run.sh
+
 Example 1) LOD of type polygons data: ne_10m_admin_0_countries table, 6 levels (0 - 5), WGS84, properties: continent, mapcolor7, scalerank
 
 * Using run.sh script:
