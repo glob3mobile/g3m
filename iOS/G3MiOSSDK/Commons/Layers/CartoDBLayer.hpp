@@ -39,9 +39,10 @@ public:
   CartoDBLayer(const std::string&    userName,
                const std::string&    table,
                const TimeInterval&   timeToCache,
-               const bool            readExpired  = true,
-               const float           transparency = 1,
-               const LayerCondition* condition    = NULL) :
+               const bool            readExpired   = true,
+               const float           transparency  = 1,
+               const bool            isTransparent = false,
+               const LayerCondition* condition     = NULL) :
   MercatorTiledLayer("http://",
                      "tiles.cartocdn.com/" + userName + "/tiles/" + table,
                      getSubdomains(),
@@ -51,7 +52,7 @@ public:
                      Sector::fullSphere(),
                      2,
                      17,
-                     false, // isTransparent
+                     isTransparent,
                      transparency,
                      condition),
   _userName(userName),
