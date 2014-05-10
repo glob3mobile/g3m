@@ -46,21 +46,25 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   // http://0.tiles.cartocdn.com/mdelacalle/tiles/tm_world_borders_simpl_0_3/2/0/1.png
 
+  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent)
+  {
+     this(userName, table, timeToCache, readExpired, transparency, isTransparent, null);
+  }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency)
   {
-     this(userName, table, timeToCache, readExpired, transparency, null);
+     this(userName, table, timeToCache, readExpired, transparency, false, null);
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired)
   {
-     this(userName, table, timeToCache, readExpired, 1, null);
+     this(userName, table, timeToCache, readExpired, 1, false, null);
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache)
   {
-     this(userName, table, timeToCache, true, 1, null);
+     this(userName, table, timeToCache, true, 1, false, null);
   }
-  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition) // isTransparent
+  public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent, LayerCondition condition)
   {
-     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, false, transparency, condition);
+     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, isTransparent, transparency, condition);
      _userName = userName;
      _table = table;
 
@@ -78,7 +82,7 @@ public class CartoDBLayer extends MercatorTiledLayer
 
   public final CartoDBLayer copy()
   {
-    return new CartoDBLayer(_userName, _table, _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
+    return new CartoDBLayer(_userName, _table, _timeToCache, _readExpired, _transparency, _isTransparent, (_condition == null) ? null : _condition.copy());
   }
 
   public final RenderState getRenderState()
