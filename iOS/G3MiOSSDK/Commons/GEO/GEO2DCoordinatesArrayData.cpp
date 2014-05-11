@@ -40,7 +40,9 @@ GEO2DCoordinatesArrayData::~GEO2DCoordinatesArrayData() {
         coordinates->_release();
       //}
     }
+#ifdef C_CODE
     delete _coordinatesArray;
+#endif
   }
 
   delete _sector;

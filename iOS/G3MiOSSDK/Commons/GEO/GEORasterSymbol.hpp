@@ -12,7 +12,6 @@
 #include "GEOSymbol.hpp"
 #include <vector>
 
-//#include "Sector.hpp"
 #include "Vector2F.hpp"
 class GEORasterProjection;
 class ICanvas;
@@ -29,37 +28,16 @@ private:
   const int _maxTileLevel;
 
 protected:
-//  const Sector* _sector;
-
-#warning remove copyCoordinates method
-//  static std::vector<Geodetic2D*>* copyCoordinates(const std::vector<Geodetic2D*>* coordinates);
-//  static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
-//
-//  static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
-//  static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
-
-  GEORasterSymbol(//const Sector* sector,
-                  const int minTileLevel,
+  GEORasterSymbol(const int minTileLevel,
                   const int maxTileLevel) :
-//  _sector(sector),
   _minTileLevel(minTileLevel),
   _maxTileLevel(maxTileLevel)
   {
-//    if (_sector == NULL) {
-//      printf("break point on me\n");
-//    }
   }
 
   void rasterLine(const GEO2DCoordinatesData* coordinates,
                   ICanvas*                    canvas,
                   const GEORasterProjection*  projection) const;
-
-//  void rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
-//                     const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
-//                     bool                                          rasterSurface,
-//                     bool                                          rasterBoundary,
-//                     ICanvas*                                      canvas,
-//                     const GEORasterProjection*                    projection) const;
 
   void rasterPolygon(const GEO2DPolygonData*    polygonData,
                      bool                       rasterSurface,
