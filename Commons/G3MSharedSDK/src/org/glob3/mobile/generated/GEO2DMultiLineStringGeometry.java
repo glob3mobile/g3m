@@ -16,13 +16,11 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include <vector>
 //class Geodetic2D;
 //class GEO2DCoordinatesArrayData;
 
 public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
 {
-//  std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
   private final GEO2DCoordinatesArrayData _coordinatesArrayData;
 
   protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
@@ -43,19 +41,6 @@ public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
 
   public void dispose()
   {
-  //  const int coordinatesArrayCount = _coordinatesArray->size();
-  //  for (int i = 0; i < coordinatesArrayCount; i++) {
-  //    std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
-  //    const int coordinatesCount = coordinates->size();
-  //    for (int j = 0; j < coordinatesCount; j++) {
-  //      Geodetic2D* coordinate = coordinates->at(j);
-  //      delete coordinate;
-  //    }
-  //    delete coordinates;
-  //  }
-  //
-  //  delete _coordinatesArray;
-  
     if (_coordinatesArrayData != null)
     {
       _coordinatesArrayData._release();

@@ -46,9 +46,6 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
     final float left = pixelPosition._x - textExtent._x/2;
     final float top = pixelPosition._y - textExtent._y/2;
   
-    //  canvas->setFillColor(Color::fromRGBA(0, 1, 0, 0.8f));
-    //  canvas->fillRectangle(left, top, textExtent._x, textExtent._y);
-  
     canvas.setFillColor(_color);
     canvas.fillText(_label, left, top);
   }
@@ -70,7 +67,6 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
      _font = font;
      _color = new Color(color);
      _sector = null;
-  
   }
 
   public void dispose()

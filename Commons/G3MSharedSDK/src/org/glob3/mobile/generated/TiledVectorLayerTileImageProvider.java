@@ -83,7 +83,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _symbolizer = null;
       if (_buffer != null)
          _buffer.dispose();
-    //  delete _geoObject;
       if (_canvas != null)
          _canvas.dispose();
       super.dispose();
@@ -93,7 +92,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       if ((_imageAssembler != null) && (_buffer != null))
       {
-        GEOObject geoObject = GEOJSONParser.parseJSON(_buffer);
+        boolean showStatistics = false;
+        GEOObject geoObject = GEOJSONParser.parseJSON(_buffer, showStatistics);
     
         if (geoObject != null)
         {
@@ -119,11 +119,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
       if (_imageAssembler != null)
       {
-    //    GEOObject* geoObject = _geoObject;
-    //    _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
-    
-    //    _imageAssembler->parsedGEOObject(geoObject);
-    
         ICanvas canvas = _canvas;
         _canvas = null; // moves ownership of _canvas to _imageAssembler
         _imageAssembler.rasterizedGEOObject(canvas, _imageId);
@@ -346,10 +341,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     public final void imageCreated(IImage image, String imageId)
     {
-    //  if (_canceled) {
-    //    printf("**** break point\n");
-    //  }
-    
       // retain the _contribution before calling the listener, as it takes full ownership of the contribution
       TileImageContribution.retainContribution(_contribution);
     

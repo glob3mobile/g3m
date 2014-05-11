@@ -22,7 +22,6 @@ package org.glob3.mobile.generated;
 public class GEOLineRasterSymbol extends GEORasterSymbol
 {
   private final GEO2DCoordinatesData _coordinates;
-  //private java.util.ArrayList<Geodetic2D> _coordinates;
   private final GEO2DLineRasterStyle      _style;
 
   protected final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
@@ -56,14 +55,6 @@ public class GEOLineRasterSymbol extends GEORasterSymbol
   {
     if (_coordinates != null)
     {
-  //    const int size = _coordinates->size();
-  //
-  //    for (int i = 0; i < size; i++) {
-  //      const Geodetic2D* coordinate = _coordinates->at(i);
-  //      delete coordinate;
-  //    }
-  //
-  //    delete _coordinates;
       _coordinates._release();
     }
     super.dispose();
@@ -73,6 +64,5 @@ public class GEOLineRasterSymbol extends GEORasterSymbol
   {
     return (_coordinates == null) ? null : _coordinates.getSector();
   }
-
 
 }

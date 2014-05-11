@@ -48,7 +48,6 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
       for (int i = 0; i < polygonsDataSize; i++)
       {
         GEO2DPolygonData polygonData = _polygonsData.get(i);
-  //      delete polygonData;
         if (polygonData != null)
         {
           polygonData._release();

@@ -17,8 +17,6 @@ package org.glob3.mobile.generated;
 
 
 //class Geodetic2D;
-///#include <vector>
-//class Geodetic2D;
 
 //class GEO2DPolygonData;
 
@@ -43,7 +41,6 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
 
   public void dispose()
   {
-  //  delete _polygonData;
     if (_polygonData != null)
     {
       _polygonData._release();

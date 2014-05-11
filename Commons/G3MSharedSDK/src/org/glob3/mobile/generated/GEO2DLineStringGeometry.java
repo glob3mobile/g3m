@@ -40,19 +40,12 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
 
   public void dispose()
   {
-  //  const int coordinatesCount = _coordinates->size();
-  //  for (int i = 0; i < coordinatesCount; i++) {
-  //    Geodetic2D* coordinate = _coordinates->at(i);
-  //    delete coordinate;
-  //  }
-  //  delete _coordinates;
     if (_coordinatesData != null)
     {
       _coordinatesData._release();
     }
   
     super.dispose();
-  
   }
 
   public final GEO2DCoordinatesData getCoordinates()
