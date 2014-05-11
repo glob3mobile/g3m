@@ -31,14 +31,16 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   private static class CanvasImageListener extends IImageListener
   {
     private ImageAssembler _imageAssembler;
-    public CanvasImageListener(ImageAssembler imageAssembler)
+    private final String _imageId;
+    public CanvasImageListener(ImageAssembler imageAssembler, String imageId)
     {
        _imageAssembler = imageAssembler;
+       _imageId = imageId;
     }
 
     public final void imageCreated(IImage image)
     {
-      _imageAssembler.imageCreated(image);
+      _imageAssembler.imageCreated(image, _imageId);
     }
   }
 
@@ -57,7 +59,9 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private final boolean _tileIsMercator;
     private final int _tileLevel;
 
-    public GEOJSONBufferParser(ImageAssembler imageAssembler, IByteBuffer buffer, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, Sector tileSector, boolean tileIsMercator, int tileLevel)
+    private final String _imageId;
+
+    public GEOJSONBufferParser(ImageAssembler imageAssembler, IByteBuffer buffer, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, Sector tileSector, boolean tileIsMercator, int tileLevel, String imageId)
 //    _geoObject(NULL),
     {
        _imageAssembler = imageAssembler;
@@ -68,6 +72,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _tileSector = new Sector(tileSector);
        _tileIsMercator = tileIsMercator;
        _tileLevel = tileLevel;
+       _imageId = imageId;
        _canvas = null;
     }
 
@@ -124,7 +129,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     
         ICanvas canvas = _canvas;
         _canvas = null; // moves ownership of _canvas to _imageAssembler
-        _imageAssembler.parsedGEOObject(canvas);
+        _imageAssembler.parsedGEOObject(canvas, _imageId);
       }
     }
 
@@ -159,7 +164,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
       else
       {
-        _imageAssembler.bufferDownloaded(buffer);
+        _imageAssembler.bufferDownloaded(buffer, url._path);
       }
     }
 
@@ -282,13 +287,11 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         _parser.cancel();
       }
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO call listener cancel
       _listener.imageCreationCanceled(_tileId);
       _tileImageProvider.requestFinish(_tileId);
     }
 
-    public final void bufferDownloaded(IByteBuffer buffer)
+    public final void bufferDownloaded(IByteBuffer buffer, String imageId)
     {
       _downloadListener = null;
       _downloadRequestId = -1;
@@ -302,7 +305,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
         final GEORasterSymbolizer symbolizer = _symbolizer;
         _symbolizer = null; // moves ownership of _symbolizer to GEOJSONBufferParser
-        _parser = new GEOJSONBufferParser(this, buffer, _imageWidth, _imageHeight, symbolizer, _tileSector, _tileIsMercator, _tileLevel);
+        _parser = new GEOJSONBufferParser(this, buffer, _imageWidth, _imageHeight, symbolizer, _tileSector, _tileIsMercator, _tileLevel, imageId);
         _threadUtils.invokeAsyncTask(_parser, true);
       }
     }
@@ -320,7 +323,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _downloadRequestId = -1;
     }
 
-    public final void parsedGEOObject(ICanvas canvas)
+    public final void parsedGEOObject(ICanvas canvas, String imageId)
     {
       if (canvas == null)
       {
@@ -351,7 +354,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     //    delete projection;
     //    delete geoObject;
     
-        canvas.createImage(new CanvasImageListener(this), true); // autodelete
+        canvas.createImage(new CanvasImageListener(this, imageId), true); // autodelete
     
         if (canvas != null)
            canvas.dispose();
@@ -362,11 +365,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _parser = null;
     }
 
-    public final void imageCreated(IImage image)
+    public final void imageCreated(IImage image, String imageId)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning compose imageId
-    
     //  if (_canceled) {
     //    printf("**** break point\n");
     //  }
@@ -374,7 +374,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       // retain the _contribution before calling the listener, as it takes full ownership of the contribution
       TileImageContribution.retainContribution(_contribution);
     
-      _listener.imageCreated(_tileId, image, "VectorTiles" + _tileId, _contribution);
+      _listener.imageCreated(_tileId, image, imageId, _contribution);
       _tileImageProvider.requestFinish(_tileId);
     }
   }
