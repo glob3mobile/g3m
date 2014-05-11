@@ -11,7 +11,7 @@
 #include "ICanvas.hpp"
 #include "GEORasterProjection.hpp"
 
-const Sector* GEOLabelRasterSymbol::calculateSectorFromPosition(const Geodetic2D& position) {
+Sector* GEOLabelRasterSymbol::calculateSectorFromPosition(const Geodetic2D& position) {
   const double delta = 2;
   return new Sector(Geodetic2D::fromDegrees(position._latitude._degrees  - delta,
                                             position._longitude._degrees - delta),
@@ -25,15 +25,23 @@ GEOLabelRasterSymbol::GEOLabelRasterSymbol(const std::string& label,
                                            const Color& color,
                                            const int minTileLevel,
                                            const int maxTileLevel) :
-GEORasterSymbol(calculateSectorFromPosition(position),
+GEORasterSymbol(//calculateSectorFromPosition(position),
                 minTileLevel,
                 maxTileLevel),
 _position(position),
 _label(label),
 _font(font),
-_color(color)
+_color(color),
+_sector(NULL)
 {
 
+}
+
+GEOLabelRasterSymbol::~GEOLabelRasterSymbol() {
+  delete _sector;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void GEOLabelRasterSymbol::rawRasterize(ICanvas*                   canvas,
@@ -52,4 +60,11 @@ void GEOLabelRasterSymbol::rawRasterize(ICanvas*                   canvas,
 
   canvas->setFillColor(_color);
   canvas->fillText(_label, left, top);
+}
+
+const Sector* GEOLabelRasterSymbol::getSector() const {
+  if (_sector == NULL) {
+    _sector = calculateSectorFromPosition(_position);
+  }
+  return _sector;
 }

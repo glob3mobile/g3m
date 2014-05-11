@@ -25,7 +25,6 @@ private:
   }
 
   RCObject(const RCObject& that);
-
   RCObject& operator=(const RCObject& that);
 
 protected:

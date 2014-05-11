@@ -16,14 +16,18 @@ GEOPolygonRasterSymbol::GEOPolygonRasterSymbol(const GEO2DPolygonData*        po
                                                const GEO2DSurfaceRasterStyle& surfaceStyle,
                                                const int minTileLevel,
                                                const int maxTileLevel) :
-GEORasterSymbol( calculateSectorFromCoordinates(polygonData->getCoordinates()), minTileLevel, maxTileLevel ),
+GEORasterSymbol(// calculateSectorFromCoordinates(polygonData->getCoordinates()),
+                minTileLevel,
+                maxTileLevel ),
 //_coordinates( copyCoordinates(polygonData->getCoordinates()) ),
 //_holesCoordinatesArray( copyCoordinatesArray(polygonData->getHolesCoordinatesArray()) ),
 _polygonData(polygonData),
 _lineStyle(lineStyle),
 _surfaceStyle(surfaceStyle)
 {
-  _polygonData->_retain();
+  if (_polygonData != NULL) {
+    _polygonData->_retain();
+  }
 }
 
 GEOPolygonRasterSymbol::~GEOPolygonRasterSymbol() {
@@ -53,7 +57,9 @@ GEOPolygonRasterSymbol::~GEOPolygonRasterSymbol() {
 //    delete _holesCoordinatesArray;
 //  }
 //#endif
-  _polygonData->_release();
+  if (_polygonData != NULL) {
+    _polygonData->_release();
+  }
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -85,4 +91,8 @@ void GEOPolygonRasterSymbol::rawRasterize(ICanvas*                   canvas,
                 rasterBoundary,
                 canvas,
                 projection);
+}
+
+const Sector* GEOPolygonRasterSymbol::getSector() const {
+  return (_polygonData == NULL) ? NULL : _polygonData->getSector();
 }

@@ -10,47 +10,49 @@
 
 #include "GEO2DLineRasterStyle.hpp"
 #include "ICanvas.hpp"
+#include "GEO2DCoordinatesArrayData.hpp"
 
-GEOMultiLineRasterSymbol::GEOMultiLineRasterSymbol(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray,
+GEOMultiLineRasterSymbol::GEOMultiLineRasterSymbol(const GEO2DCoordinatesArrayData* coordinatesArrayData,
                                                    const GEO2DLineRasterStyle& style,
                                                    const int minTileLevel,
                                                    const int maxTileLevel) :
-GEORasterSymbol( calculateSectorFromCoordinatesArray(coordinatesArray), minTileLevel, maxTileLevel ),
-_coordinatesArray( copyCoordinatesArray(coordinatesArray) ),
+GEORasterSymbol(minTileLevel,
+                maxTileLevel),
+_coordinatesArrayData(coordinatesArrayData),
 _style(style)
 {
+  if (_coordinatesArrayData != NULL) {
+    _coordinatesArrayData->_retain();
+  }
 }
 
 GEOMultiLineRasterSymbol::~GEOMultiLineRasterSymbol() {
-  if (_coordinatesArray != NULL) {
-    const int coordinatesArrayCount = _coordinatesArray->size();
-    for (int i = 0; i < coordinatesArrayCount; i++) {
-      std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
-      const int coordinatesCount = coordinates->size();
-      for (int j = 0; j < coordinatesCount; j++) {
-        const Geodetic2D* coordinate = coordinates->at(j);
-        delete coordinate;
-      }
-      delete coordinates;
-    }
-    delete _coordinatesArray;
+  if (_coordinatesArrayData != NULL) {
+    _coordinatesArrayData->_release();
   }
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
+}
 
+const Sector* GEOMultiLineRasterSymbol::getSector() const {
+  return (_coordinatesArrayData == NULL) ? NULL : _coordinatesArrayData->getSector();
 }
 
 void GEOMultiLineRasterSymbol::rawRasterize(ICanvas*                   canvas,
                                             const GEORasterProjection* projection) const {
-  if (_style.apply(canvas)) {
-    const int coordinatesArrayCount = _coordinatesArray->size();
-    for (int i = 0; i < coordinatesArrayCount; i++) {
-      std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
-      rasterLine(coordinates,
-                 canvas,
-                 projection);
+  if (_coordinatesArrayData != NULL) {
+    if (_style.apply(canvas)) {
+      const int coordinatesArrayCount = _coordinatesArrayData->size();
+      for (int i = 0; i < coordinatesArrayCount; i++) {
+        const GEO2DCoordinatesData* coordinates = _coordinatesArrayData->get(i);
+        if (coordinates != NULL) {
+          rasterLine(coordinates,
+                     canvas,
+                     projection);
+        }
+      }
     }
   }
 }

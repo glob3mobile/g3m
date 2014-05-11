@@ -19,6 +19,7 @@ class GEO2DPolygonData;
 
 class GEOPolygonRasterSymbol : public GEORasterSymbol {
 private:
+  const GEO2DPolygonData* _polygonData;
 #ifdef C_CODE
 //  const std::vector<Geodetic2D*>* _coordinates;
   const GEO2DLineRasterStyle      _lineStyle;
@@ -29,8 +30,6 @@ private:
   private final GEO2DLineRasterStyle      _lineStyle;
   private final GEO2DSurfaceRasterStyle   _surfaceStyle;
 #endif
-
-  const GEO2DPolygonData* _polygonData;
 
 //  const std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
 
@@ -47,6 +46,8 @@ public:
                          const int maxTileLevel = -1);
 
   ~GEOPolygonRasterSymbol();
+
+  const Sector* getSector() const;
 
 };
 

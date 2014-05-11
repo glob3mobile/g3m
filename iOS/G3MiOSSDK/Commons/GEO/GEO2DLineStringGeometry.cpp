@@ -13,12 +13,15 @@
 #include "GEORasterSymbolizer.hpp"
 
 GEO2DLineStringGeometry::~GEO2DLineStringGeometry() {
-  const int coordinatesCount = _coordinates->size();
-  for (int i = 0; i < coordinatesCount; i++) {
-    Geodetic2D* coordinate = _coordinates->at(i);
-    delete coordinate;
+//  const int coordinatesCount = _coordinates->size();
+//  for (int i = 0; i < coordinatesCount; i++) {
+//    Geodetic2D* coordinate = _coordinates->at(i);
+//    delete coordinate;
+//  }
+//  delete _coordinates;
+  if (_coordinatesData != NULL) {
+    _coordinatesData->_release();
   }
-  delete _coordinates;
 
 #ifdef JAVA_CODE
   super.dispose();

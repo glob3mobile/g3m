@@ -13,14 +13,6 @@
 
 GEO2DPolygonData::~GEO2DPolygonData() {
 #ifdef C_CODE
-  const int coordinatesCount = _coordinates->size();
-  for (int i = 0; i < coordinatesCount; i++) {
-    Geodetic2D* coordinate = _coordinates->at(i);
-    delete coordinate;
-  }
-  delete _coordinates;
-
-
   if (_holesCoordinatesArray != NULL) {
     const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
     for (int j = 0; j < holesCoordinatesArraySize; j++) {

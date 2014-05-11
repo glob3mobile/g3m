@@ -12,12 +12,14 @@
 #include "GEOSymbol.hpp"
 #include <vector>
 
-#include "Sector.hpp"
+//#include "Sector.hpp"
 #include "Vector2F.hpp"
 class GEORasterProjection;
 class ICanvas;
 class GEO2DPolygonData;
 #include "QuadTree.hpp"
+
+class GEO2DCoordinatesData;
 
 class GEORasterSymbol : public GEOSymbol, public QuadTree_Content {
 private:
@@ -27,19 +29,19 @@ private:
   const int _maxTileLevel;
 
 protected:
-  const Sector* _sector;
+//  const Sector* _sector;
 
 #warning remove copyCoordinates method
-  static std::vector<Geodetic2D*>* copyCoordinates(const std::vector<Geodetic2D*>* coordinates);
-  static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+//  static std::vector<Geodetic2D*>* copyCoordinates(const std::vector<Geodetic2D*>* coordinates);
+//  static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+//
+//  static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
+//  static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
-  static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
-  static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
-
-  GEORasterSymbol(const Sector* sector,
+  GEORasterSymbol(//const Sector* sector,
                   const int minTileLevel,
                   const int maxTileLevel) :
-  _sector(sector),
+//  _sector(sector),
   _minTileLevel(minTileLevel),
   _maxTileLevel(maxTileLevel)
   {
@@ -48,9 +50,9 @@ protected:
 //    }
   }
 
-  void rasterLine(const std::vector<Geodetic2D*>* coordinates,
-                  ICanvas*                        canvas,
-                  const GEORasterProjection*      projection) const;
+  void rasterLine(const GEO2DCoordinatesData* coordinates,
+                  ICanvas*                    canvas,
+                  const GEORasterProjection*  projection) const;
 
 //  void rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,
 //                     const std::vector<std::vector<Geodetic2D*>*>* holesCoordinatesArray,
@@ -80,9 +82,7 @@ public:
                  MarksRenderer*          marksRenderer,
                  GEOTileRasterizer*      geoTileRasterizer) const;
 
-  const Sector* getSector() const {
-    return _sector;
-  }
+  virtual const Sector* getSector() const = 0;
 
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection,

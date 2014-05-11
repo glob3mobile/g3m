@@ -10,13 +10,14 @@
 #define __G3MiOSSDK__GEO2DMultiLineStringGeometry__
 
 #include "GEOGeometry2D.hpp"
-#include <vector>
+//#include <vector>
 class Geodetic2D;
-
+class GEO2DCoordinatesArrayData;
 
 class GEO2DMultiLineStringGeometry : public GEOGeometry2D {
 private:
-  std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
+//  std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
+  const GEO2DCoordinatesArrayData* _coordinatesArrayData;
 
 protected:
   std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const;
@@ -25,15 +26,12 @@ protected:
 
 public:
 
-  GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) :
-  _coordinatesArray(coordinatesArray)
-  {
-  }
+  GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
   ~GEO2DMultiLineStringGeometry();
 
-  const std::vector<std::vector<Geodetic2D*>*>* getCoordinatesArray() const {
-    return _coordinatesArray;
+  const GEO2DCoordinatesArrayData* getCoordinatesArray() const {
+    return _coordinatesArrayData;
   }
   
 };

@@ -30,7 +30,8 @@ private:
   const Color        _color;
 
 
-  static const Sector* calculateSectorFromPosition(const Geodetic2D& position);
+  mutable Sector* _sector;
+  static Sector* calculateSectorFromPosition(const Geodetic2D& position);
 
 protected:
   void rawRasterize(ICanvas*                   canvas,
@@ -44,6 +45,10 @@ public:
                        const Color& color,
                        const int minTileLevel = -1,
                        const int maxTileLevel = -1);
+
+  ~GEOLabelRasterSymbol();
+
+  const Sector* getSector() const;
 
 };
 
