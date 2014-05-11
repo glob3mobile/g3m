@@ -70,12 +70,7 @@ public class DefaultTileTexturizer extends TileTexturizer
     DTT_TileTextureBuilder builder;
     if (builderHolder == null)
     {
-      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, tessellator, tileDownloadPriority, logTilesPetitions, rc.getFrameTasksExecutor()); // this,
-                                           // tileRasterizer,
-                                           // layerSet->createTileMapPetitions(rc,
-                                           //                                  layerTilesRenderParameters,
-                                           //                                  tile),
-                                           // rc->getDownloader(),
+      builder = new DTT_TileTextureBuilder(rc, layerTilesRenderParameters, tileImageProvider, tile, tessellatorMesh, tessellator, tileDownloadPriority, logTilesPetitions, rc.getFrameTasksExecutor());
       builderHolder = new DTT_TileTextureBuilderHolder(builder);
       tile.setTexturizerData(builderHolder);
     }
