@@ -42,15 +42,13 @@ private:
     void imageCreated(const IImage* image);
   };
 
-  class GEOJSONBufferParser : public GAsyncTask {
+  class GEOJSONBufferRasterizer : public GAsyncTask {
   private:
     ImageAssembler* _imageAssembler;
     IByteBuffer*    _buffer;
-//    GEOObject*      _geoObject;
-    ICanvas* _canvas;
-
-    const int                          _imageWidth;
-    const int                          _imageHeight;
+    ICanvas*        _canvas;
+    const int       _imageWidth;
+    const int       _imageHeight;
 
 #ifdef C_CODE
     const GEORasterSymbolizer* _symbolizer;
@@ -65,18 +63,17 @@ private:
     const std::string _imageId;
 
   public:
-    GEOJSONBufferParser(ImageAssembler* imageAssembler,
-                        IByteBuffer* buffer,
-                        const int imageWidth,
-                        const int imageHeight,
-                        const GEORasterSymbolizer* symbolizer,
-                        const Sector& tileSector,
-                        const bool   tileIsMercator,
-                        const int    tileLevel,
-                        const std::string& imageId) :
+    GEOJSONBufferRasterizer(ImageAssembler* imageAssembler,
+                            IByteBuffer* buffer,
+                            const int imageWidth,
+                            const int imageHeight,
+                            const GEORasterSymbolizer* symbolizer,
+                            const Sector& tileSector,
+                            const bool   tileIsMercator,
+                            const int    tileLevel,
+                            const std::string& imageId) :
     _imageAssembler(imageAssembler),
     _buffer(buffer),
-//    _geoObject(NULL),
     _imageWidth(imageWidth),
     _imageHeight(imageHeight),
     _symbolizer(symbolizer),
@@ -88,7 +85,7 @@ private:
     {
     }
 
-    ~GEOJSONBufferParser();
+    ~GEOJSONBufferRasterizer();
 
     void runInBackground(const G3MContext* context);
 
@@ -158,7 +155,7 @@ private:
     GEOJSONBufferDownloadListener* _downloadListener;
     long long _downloadRequestId;
 
-    GEOJSONBufferParser* _parser;
+    GEOJSONBufferRasterizer* _rasterizer;
 
 #ifdef C_CODE
     const GEORasterSymbolizer* _symbolizer;
@@ -195,9 +192,9 @@ private:
     void bufferDownloadError(const URL& url);
     void bufferDownloadCanceled();
 
-    void parsedGEOObject(ICanvas* canvas,
-                         const std::string& imageId);
-    void deletedParser();
+    void rasterizedGEOObject(ICanvas* canvas,
+                             const std::string& imageId);
+    void deletedRasterizer();
 
     void imageCreated(const IImage* image,
                       const std::string& imageId);
