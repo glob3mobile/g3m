@@ -17,9 +17,12 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "Sector.hpp"
 //class GEORasterProjection;
 //class ICanvas;
 //class GEO2DPolygonData;
+
+//class GEO2DCoordinatesData;
 
 public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Content
 {
@@ -29,142 +32,19 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
   private final int _minTileLevel;
   private final int _maxTileLevel;
 
-  protected final Sector _sector;
+//  const Sector* _sector;
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning remove copyCoordinates method
-  protected static java.util.ArrayList<Geodetic2D> copyCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
-  {
-    return coordinates;
-  }
-  protected static java.util.ArrayList<java.util.ArrayList<Geodetic2D>> copyCoordinatesArray(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
-  {
-    return coordinatesArray;
-  }
+//  static std::vector<Geodetic2D*>* copyCoordinates(const std::vector<Geodetic2D*>* coordinates);
+//  static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+//
+//  static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
+//  static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
-  protected static Sector calculateSectorFromCoordinates(java.util.ArrayList<Geodetic2D> coordinates)
+  protected GEORasterSymbol(int minTileLevel, int maxTileLevel) //const Sector* sector,
+//  _sector(sector),
   {
-    final int size = coordinates.size();
-    if (size == 0)
-    {
-      return null;
-    }
-  
-    final Geodetic2D coordinate0 = coordinates.get(0);
-  
-    double minLatInRadians = coordinate0._latitude._radians;
-    double maxLatInRadians = minLatInRadians;
-  
-    double minLonInRadians = coordinate0._longitude._radians;
-    double maxLonInRadians = minLonInRadians;
-  
-    for (int i = 1; i < size; i++)
-    {
-      final Geodetic2D coordinate = coordinates.get(i);
-  
-      final double latInRadians = coordinate._latitude._radians;
-      if (latInRadians < minLatInRadians)
-      {
-        minLatInRadians = latInRadians;
-      }
-      if (latInRadians > maxLatInRadians)
-      {
-        maxLatInRadians = latInRadians;
-      }
-  
-      final double lonInRadians = coordinate._longitude._radians;
-      if (lonInRadians < minLonInRadians)
-      {
-        minLonInRadians = lonInRadians;
-      }
-      if (lonInRadians > maxLonInRadians)
-      {
-        maxLonInRadians = lonInRadians;
-      }
-    }
-  
-    Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
-  
-    //  int __REMOVE_DEBUG_CODE;
-    //  for (int i = 0; i < size; i++) {
-    //    const Geodetic2D* coordinate = coordinates->at(i);
-    //    if (!result->contains(*coordinate)) {
-    //      printf("xxx\n");
-    //    }
-    //  }
-  
-    return result;
-  }
-  protected static Sector calculateSectorFromCoordinatesArray(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
-  {
-  
-    final IMathUtils mu = IMathUtils.instance();
-  
-    final double maxDouble = mu.maxDouble();
-    final double minDouble = mu.minDouble();
-  
-    double minLatInRadians = maxDouble;
-    double maxLatInRadians = minDouble;
-  
-    double minLonInRadians = maxDouble;
-    double maxLonInRadians = minDouble;
-  
-    final int coordinatesArrayCount = coordinatesArray.size();
-    for (int i = 0; i < coordinatesArrayCount; i++)
-    {
-      java.util.ArrayList<Geodetic2D> coordinates = coordinatesArray.get(i);
-      final int coordinatesCount = coordinates.size();
-      for (int j = 0; j < coordinatesCount; j++)
-      {
-        final Geodetic2D coordinate = coordinates.get(j);
-  
-        final double latInRadians = coordinate._latitude._radians;
-        if (latInRadians < minLatInRadians)
-        {
-          minLatInRadians = latInRadians;
-        }
-        if (latInRadians > maxLatInRadians)
-        {
-          maxLatInRadians = latInRadians;
-        }
-  
-        final double lonInRadians = coordinate._longitude._radians;
-        if (lonInRadians < minLonInRadians)
-        {
-          minLonInRadians = lonInRadians;
-        }
-        if (lonInRadians > maxLonInRadians)
-        {
-          maxLonInRadians = lonInRadians;
-        }
-      }
-    }
-  
-    if ((minLatInRadians == maxDouble) || (maxLatInRadians == minDouble) || (minLonInRadians == maxDouble) || (maxLonInRadians == minDouble))
-    {
-      return null;
-    }
-  
-    Sector result = new Sector(Geodetic2D.fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001), Geodetic2D.fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
-  
-    //  int __REMOVE_DEBUG_CODE;
-    //  for (int i = 0; i < coordinatesArrayCount; i++) {
-    //    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
-    //    const int coordinatesCount = coordinates->size();
-    //    for (int j = 0; j < coordinatesCount; j++) {
-    //      const Geodetic2D* coordinate = coordinates->at(j);
-    //      if (!result->contains(*coordinate)) {
-    //        printf("xxx\n");
-    //      }
-    //    }
-    //  }
-  
-    return result;
-  }
-
-  protected GEORasterSymbol(Sector sector, int minTileLevel, int maxTileLevel)
-  {
-     _sector = sector;
      _minTileLevel = minTileLevel;
      _maxTileLevel = maxTileLevel;
 //    if (_sector == NULL) {
@@ -172,23 +52,28 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
 //    }
   }
 
-  protected final void rasterLine(java.util.ArrayList<Geodetic2D> coordinates, ICanvas canvas, GEORasterProjection projection)
+  protected final void rasterLine(GEO2DCoordinatesData coordinatesData, ICanvas canvas, GEORasterProjection projection)
   {
-    final int coordinatesCount = coordinates.size();
-    if (coordinatesCount > 0)
+    if (coordinatesData != null)
     {
-      canvas.beginPath();
+      final java.util.ArrayList<Geodetic2D> coordinates = coordinatesData.getCoordinates();
   
-      canvas.moveTo(projection.project(coordinates.get(0)));
-  
-      for (int i = 1; i < coordinatesCount; i++)
+      final int coordinatesCount = coordinates.size();
+      if (coordinatesCount > 0)
       {
-        final Geodetic2D coordinate = coordinates.get(i);
+        canvas.beginPath();
   
-        canvas.lineTo(projection.project(coordinate));
+        canvas.moveTo(projection.project(coordinates.get(0)));
+  
+        for (int i = 1; i < coordinatesCount; i++)
+        {
+          final Geodetic2D coordinate = coordinates.get(i);
+  
+          canvas.lineTo(projection.project(coordinate));
+        }
+  
+        canvas.stroke();
       }
-  
-      canvas.stroke();
     }
   }
 
@@ -272,13 +157,167 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
 
   public void dispose()
   {
-    if (_sector != null)
-       _sector.dispose();
+  //  delete _sector;
   
     super.dispose();
   
   }
 
+
+  //std::vector<Geodetic2D*>* GEORasterSymbol::copyCoordinates(const std::vector<Geodetic2D*>* coordinates) {
+  ///#ifdef C_CODE
+  //  if (coordinates == NULL) {
+  //    return NULL;
+  //  }
+  //
+  //  std::vector<Geodetic2D*>* result = new std::vector<Geodetic2D*>();
+  //
+  //  const int size = coordinates->size();
+  //  for (int i = 0; i < size; i++) {
+  //    const Geodetic2D* coordinate = coordinates->at(i);
+  //    result->push_back( new Geodetic2D(*coordinate) );
+  //  }
+  //  return result;
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  return coordinates;
+  ///#endif
+  //}
+  //
+  //std::vector<std::vector<Geodetic2D*>*>* GEORasterSymbol::copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) {
+  ///#ifdef C_CODE
+  //  if (coordinatesArray == NULL) {
+  //    return NULL;
+  //  }
+  //
+  //  std::vector<std::vector<Geodetic2D*>*>* result = new std::vector<std::vector<Geodetic2D*>*>();
+  //  const int coordinatesArrayCount = coordinatesArray->size();
+  //  for (int i = 0; i < coordinatesArrayCount; i++) {
+  //    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
+  //    result->push_back( copyCoordinates(coordinates) );
+  //  }
+  //
+  //  return result;
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  return coordinatesArray;
+  ///#endif
+  //}
+  //
+  //
+  //Sector* GEORasterSymbol::calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray) {
+  //
+  //  const IMathUtils* mu = IMathUtils::instance();
+  //
+  //  const double maxDouble = mu->maxDouble();
+  //  const double minDouble = mu->minDouble();
+  //
+  //  double minLatInRadians = maxDouble;
+  //  double maxLatInRadians = minDouble;
+  //
+  //  double minLonInRadians = maxDouble;
+  //  double maxLonInRadians = minDouble;
+  //
+  //  const int coordinatesArrayCount = coordinatesArray->size();
+  //  for (int i = 0; i < coordinatesArrayCount; i++) {
+  //    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
+  //    const int coordinatesCount = coordinates->size();
+  //    for (int j = 0; j < coordinatesCount; j++) {
+  //      const Geodetic2D* coordinate = coordinates->at(j);
+  //
+  //      const double latInRadians = coordinate->_latitude._radians;
+  //      if (latInRadians < minLatInRadians) {
+  //        minLatInRadians = latInRadians;
+  //      }
+  //      if (latInRadians > maxLatInRadians) {
+  //        maxLatInRadians = latInRadians;
+  //      }
+  //
+  //      const double lonInRadians = coordinate->_longitude._radians;
+  //      if (lonInRadians < minLonInRadians) {
+  //        minLonInRadians = lonInRadians;
+  //      }
+  //      if (lonInRadians > maxLonInRadians) {
+  //        maxLonInRadians = lonInRadians;
+  //      }
+  //    }
+  //  }
+  //
+  //  if ((minLatInRadians == maxDouble) ||
+  //      (maxLatInRadians == minDouble) ||
+  //      (minLonInRadians == maxDouble) ||
+  //      (maxLonInRadians == minDouble)) {
+  //    return NULL;
+  //  }
+  //
+  //  Sector* result = new Sector(Geodetic2D::fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001),
+  //                              Geodetic2D::fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
+  //
+  //  //  int __REMOVE_DEBUG_CODE;
+  //  //  for (int i = 0; i < coordinatesArrayCount; i++) {
+  //  //    std::vector<Geodetic2D*>* coordinates = coordinatesArray->at(i);
+  //  //    const int coordinatesCount = coordinates->size();
+  //  //    for (int j = 0; j < coordinatesCount; j++) {
+  //  //      const Geodetic2D* coordinate = coordinates->at(j);
+  //  //      if (!result->contains(*coordinate)) {
+  //  //        printf("xxx\n");
+  //  //      }
+  //  //    }
+  //  //  }
+  //
+  //  return result;
+  //}
+  //
+  //Sector* GEORasterSymbol::calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates) {
+  //  const int size = coordinates->size();
+  //  if (size == 0) {
+  //    return NULL;
+  //  }
+  //
+  //  const Geodetic2D* coordinate0 = coordinates->at(0);
+  //
+  //  double minLatInRadians = coordinate0->_latitude._radians;
+  //  double maxLatInRadians = minLatInRadians;
+  //
+  //  double minLonInRadians = coordinate0->_longitude._radians;
+  //  double maxLonInRadians = minLonInRadians;
+  //
+  //  for (int i = 1; i < size; i++) {
+  //    const Geodetic2D* coordinate = coordinates->at(i);
+  //
+  //    const double latInRadians = coordinate->_latitude._radians;
+  //    if (latInRadians < minLatInRadians) {
+  //      minLatInRadians = latInRadians;
+  //    }
+  //    if (latInRadians > maxLatInRadians) {
+  //      maxLatInRadians = latInRadians;
+  //    }
+  //
+  //    const double lonInRadians = coordinate->_longitude._radians;
+  //    if (lonInRadians < minLonInRadians) {
+  //      minLonInRadians = lonInRadians;
+  //    }
+  //    if (lonInRadians > maxLonInRadians) {
+  //      maxLonInRadians = lonInRadians;
+  //    }
+  //  }
+  //
+  //  Sector* result = new Sector(Geodetic2D::fromRadians(minLatInRadians - 0.0001, minLonInRadians - 0.0001),
+  //                              Geodetic2D::fromRadians(maxLatInRadians + 0.0001, maxLonInRadians + 0.0001));
+  //
+  //  //  int __REMOVE_DEBUG_CODE;
+  //  //  for (int i = 0; i < size; i++) {
+  //  //    const Geodetic2D* coordinate = coordinates->at(i);
+  //  //    if (!result->contains(*coordinate)) {
+  //  //      printf("xxx\n");
+  //  //    }
+  //  //  }
+  //
+  //  return result;
+  //}
+  
+  
+  
   public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
   {
     if (geoTileRasterizer == null)
@@ -292,10 +331,7 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     return false;
   }
 
-  public final Sector getSector()
-  {
-    return _sector;
-  }
+  public abstract Sector getSector();
 
 
   //void GEORasterSymbol::rasterPolygon(const std::vector<Geodetic2D*>*               coordinates,

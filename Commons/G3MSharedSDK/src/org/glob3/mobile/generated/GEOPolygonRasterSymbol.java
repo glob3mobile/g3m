@@ -23,11 +23,10 @@ package org.glob3.mobile.generated;
 
 public class GEOPolygonRasterSymbol extends GEORasterSymbol
 {
+  private final GEO2DPolygonData _polygonData;
 //  private java.util.ArrayList<Geodetic2D> _coordinates;
   private final GEO2DLineRasterStyle      _lineStyle;
   private final GEO2DSurfaceRasterStyle   _surfaceStyle;
-
-  private final GEO2DPolygonData _polygonData;
 
 //  const std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
 
@@ -67,11 +66,14 @@ public class GEOPolygonRasterSymbol extends GEORasterSymbol
   //_coordinates( copyCoordinates(polygonData->getCoordinates()) ),
   //_holesCoordinatesArray( copyCoordinatesArray(polygonData->getHolesCoordinatesArray()) ),
   {
-     super(calculateSectorFromCoordinates(polygonData.getCoordinates()), minTileLevel, maxTileLevel);
+     super(minTileLevel, maxTileLevel);
      _polygonData = polygonData;
      _lineStyle = lineStyle;
      _surfaceStyle = surfaceStyle;
-    _polygonData._retain();
+    if (_polygonData != null)
+    {
+      _polygonData._retain();
+    }
   }
 
   public void dispose()
@@ -102,9 +104,17 @@ public class GEOPolygonRasterSymbol extends GEORasterSymbol
   //    delete _holesCoordinatesArray;
   //  }
   ///#endif
-    _polygonData._release();
+    if (_polygonData != null)
+    {
+      _polygonData._release();
+    }
   
     super.dispose();
+  }
+
+  public final Sector getSector()
+  {
+    return (_polygonData == null) ? null : _polygonData.getSector();
   }
 
 }

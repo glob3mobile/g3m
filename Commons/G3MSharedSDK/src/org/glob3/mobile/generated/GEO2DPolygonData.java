@@ -16,19 +16,13 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include <vector>
+///#include "RCObject.hpp"
 //class Geodetic2D;
 
-
-public class GEO2DPolygonData extends RCObject
+public class GEO2DPolygonData extends GEO2DCoordinatesData
 {
-  private final java.util.ArrayList<Geodetic2D> _coordinates;
   private final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _holesCoordinatesArray;
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  GEO2DPolygonData(GEO2DPolygonData that);
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  GEO2DPolygonData operator =(GEO2DPolygonData that);
 
   public void dispose()
   {
@@ -37,14 +31,8 @@ public class GEO2DPolygonData extends RCObject
 
   public GEO2DPolygonData(java.util.ArrayList<Geodetic2D> coordinates, java.util.ArrayList<java.util.ArrayList<Geodetic2D>> holesCoordinatesArray)
   {
-     _coordinates = coordinates;
+     super(coordinates);
      _holesCoordinatesArray = holesCoordinatesArray;
-  }
-
-
-  public final java.util.ArrayList<Geodetic2D> getCoordinates()
-  {
-    return _coordinates;
   }
 
   public final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> getHolesCoordinatesArray()

@@ -28,6 +28,7 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
   private final Color _color ;
 
 
+  private Sector _sector;
   private static Sector calculateSectorFromPosition(Geodetic2D position)
   {
     final double delta = 2;
@@ -63,12 +64,29 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
   }
   public GEOLabelRasterSymbol(String label, Geodetic2D position, GFont font, Color color, int minTileLevel, int maxTileLevel)
   {
-     super(calculateSectorFromPosition(position), minTileLevel, maxTileLevel);
+     super(minTileLevel, maxTileLevel);
      _position = new Geodetic2D(position);
      _label = label;
      _font = font;
      _color = new Color(color);
+     _sector = null;
   
+  }
+
+  public void dispose()
+  {
+    if (_sector != null)
+       _sector.dispose();
+    super.dispose();
+  }
+
+  public final Sector getSector()
+  {
+    if (_sector == null)
+    {
+      _sector = calculateSectorFromPosition(_position);
+    }
+    return _sector;
   }
 
 }

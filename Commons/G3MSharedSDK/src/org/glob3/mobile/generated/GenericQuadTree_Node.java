@@ -424,13 +424,13 @@ public class GenericQuadTree_Node
   
     if (_elements.size() > 0)
     {
-      java.util.ArrayList<Geodetic2D> line = new java.util.ArrayList<Geodetic2D>();
+      java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
   
-      line.add(new Geodetic2D(_sector.getSW()));
-      line.add(new Geodetic2D(_sector.getNW()));
-      line.add(new Geodetic2D(_sector.getNE()));
-      line.add(new Geodetic2D(_sector.getSE()));
-      line.add(new Geodetic2D(_sector.getSW()));
+      coordinates.add(new Geodetic2D(_sector.getSW()));
+      coordinates.add(new Geodetic2D(_sector.getNW()));
+      coordinates.add(new Geodetic2D(_sector.getNE()));
+      coordinates.add(new Geodetic2D(_sector.getSE()));
+      coordinates.add(new Geodetic2D(_sector.getSW()));
   
       //    printf("RESTERIZING: %s\n", _sector->description().c_str());
   
@@ -442,7 +442,9 @@ public class GenericQuadTree_Node
       GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
   
   
-      GEOLineRasterSymbol symbol = new GEOLineRasterSymbol(line, ls);
+      final GEO2DCoordinatesData coordinatesData = new GEO2DCoordinatesData(coordinates);
+      GEOLineRasterSymbol symbol = new GEOLineRasterSymbol(coordinatesData, ls);
+      coordinatesData._release();
   
       geoTileRasterizer.addSymbol(symbol);
     }

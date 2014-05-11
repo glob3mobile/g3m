@@ -473,13 +473,13 @@ public class Sector
   public final GEORasterSymbol createGEOSymbol(Color c)
   {
   
-    java.util.ArrayList<Geodetic2D> line = new java.util.ArrayList<Geodetic2D>();
+    java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
   
-    line.add(new Geodetic2D(getSW()));
-    line.add(new Geodetic2D(getNW()));
-    line.add(new Geodetic2D(getNE()));
-    line.add(new Geodetic2D(getSE()));
-    line.add(new Geodetic2D(getSW()));
+    coordinates.add(new Geodetic2D(getSW()));
+    coordinates.add(new Geodetic2D(getNW()));
+    coordinates.add(new Geodetic2D(getNE()));
+    coordinates.add(new Geodetic2D(getSE()));
+    coordinates.add(new Geodetic2D(getSW()));
   
     //    printf("RESTERIZING: %s\n", _sector->description().c_str());
   
@@ -489,8 +489,10 @@ public class Sector
     GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
   
   
-    return new GEOLineRasterSymbol(line, ls);
-  
+    final GEO2DCoordinatesData coordinatesData = new GEO2DCoordinatesData(coordinates);
+    final GEOLineRasterSymbol result = new GEOLineRasterSymbol(coordinatesData, ls);
+    coordinatesData._release();
+    return result;
   }
 
   public final Geodetic2D getClosesInnerPoint(Geodetic2D g)
