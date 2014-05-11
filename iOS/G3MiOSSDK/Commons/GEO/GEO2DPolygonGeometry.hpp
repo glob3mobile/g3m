@@ -10,8 +10,6 @@
 #define __G3MiOSSDK__GEO2DPolygonGeometry__
 
 #include "GEOGeometry2D.hpp"
-//class Geodetic2D;
-//#include <vector>
 class Geodetic2D;
 #include <vector>
 

@@ -20,13 +20,9 @@ class GEOLineRasterSymbol : public GEORasterSymbol {
 private:
   const GEO2DCoordinatesData* _coordinates;
 #ifdef C_CODE
-//  const std::vector<Geodetic2D*>* _coordinates;
   const GEO2DLineRasterStyle      _style;
-//#else
-//  std::vector<Geodetic2D*>* _coordinates;
 #endif
 #ifdef JAVA_CODE
-  //private java.util.ArrayList<Geodetic2D> _coordinates;
   private final GEO2DLineRasterStyle      _style;
 #endif
 
@@ -43,7 +39,6 @@ public:
   ~GEOLineRasterSymbol();
 
   const Sector* getSector() const;
-
 
 };
 

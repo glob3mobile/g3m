@@ -21,7 +21,6 @@ const std::vector<std::vector<Geodetic2D*>*>* GEO2DPolygonGeometry::getHolesCoor
 }
 
 GEO2DPolygonGeometry::~GEO2DPolygonGeometry() {
-//  delete _polygonData;
   if (_polygonData) {
     _polygonData->_release();
   }

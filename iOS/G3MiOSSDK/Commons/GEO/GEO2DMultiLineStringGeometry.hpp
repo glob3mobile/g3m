@@ -10,13 +10,11 @@
 #define __G3MiOSSDK__GEO2DMultiLineStringGeometry__
 
 #include "GEOGeometry2D.hpp"
-//#include <vector>
 class Geodetic2D;
 class GEO2DCoordinatesArrayData;
 
 class GEO2DMultiLineStringGeometry : public GEOGeometry2D {
 private:
-//  std::vector<std::vector<Geodetic2D*>*>* _coordinatesArray;
   const GEO2DCoordinatesArrayData* _coordinatesArrayData;
 
 protected:
