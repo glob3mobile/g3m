@@ -434,15 +434,9 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
 
   DTT_TileTextureBuilder* builder;
   if (builderHolder == NULL) {
-    builder = new DTT_TileTextureBuilder(// this,
-                                         // tileRasterizer,
-                                         rc,
+    builder = new DTT_TileTextureBuilder(rc,
                                          layerTilesRenderParameters,
                                          tileImageProvider,
-                                         // layerSet->createTileMapPetitions(rc,
-                                         //                                  layerTilesRenderParameters,
-                                         //                                  tile),
-                                         // rc->getDownloader(),
                                          tile,
                                          tessellatorMesh,
                                          tessellator,
