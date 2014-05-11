@@ -27,7 +27,6 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
   private final GFont _font;
   private final Color _color ;
 
-
   private Sector _sector;
   private static Sector calculateSectorFromPosition(Geodetic2D position)
   {

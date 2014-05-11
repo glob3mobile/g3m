@@ -128,7 +128,6 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     }
   }
 
-
   protected abstract void rawRasterize(ICanvas canvas, GEORasterProjection projection);
 
 
@@ -159,4 +158,5 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
       rawRasterize(canvas, projection);
     }
   }
+
 }
