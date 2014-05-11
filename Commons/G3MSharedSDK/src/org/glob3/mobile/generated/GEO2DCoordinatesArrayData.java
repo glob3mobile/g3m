@@ -103,7 +103,6 @@ public class GEO2DCoordinatesArrayData extends RCObject
           coordinates._release();
         //}
       }
-      _coordinatesArray = null;
     }
   
     if (_sector != null)
