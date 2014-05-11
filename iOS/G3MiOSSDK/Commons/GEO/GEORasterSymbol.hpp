@@ -45,7 +45,6 @@ protected:
                      ICanvas*                   canvas,
                      const GEORasterProjection* projection) const;
 
-
   virtual void rawRasterize(ICanvas*                   canvas,
                             const GEORasterProjection* projection) const = 0;
 
@@ -65,6 +64,7 @@ public:
   void rasterize(ICanvas*                   canvas,
                  const GEORasterProjection* projection,
                  int tileLevel) const;
+  
 };
 
 #endif

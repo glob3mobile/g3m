@@ -16,7 +16,7 @@ GEOPolygonRasterSymbol::GEOPolygonRasterSymbol(const GEO2DPolygonData*        po
                                                const GEO2DSurfaceRasterStyle& surfaceStyle,
                                                const int minTileLevel,
                                                const int maxTileLevel) :
-GEORasterSymbol(minTileLevel, maxTileLevel ),
+GEORasterSymbol(minTileLevel, maxTileLevel),
 _polygonData(polygonData),
 _lineStyle(lineStyle),
 _surfaceStyle(surfaceStyle)

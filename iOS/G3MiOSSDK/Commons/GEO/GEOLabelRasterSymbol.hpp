@@ -19,16 +19,15 @@
 
 class GEOLabelRasterSymbol : public GEORasterSymbol {
 private:
-  const std::string  _label;
-  const Geodetic2D   _position;
+  const std::string _label;
+  const Geodetic2D  _position;
 #ifdef C_CODE
-  const GFont        _font;
+  const GFont _font;
 #endif
 #ifdef JAVA_CODE
   private final GFont _font;
 #endif
-  const Color        _color;
-
+  const Color _color;
 
   mutable Sector* _sector;
   static Sector* calculateSectorFromPosition(const Geodetic2D& position);

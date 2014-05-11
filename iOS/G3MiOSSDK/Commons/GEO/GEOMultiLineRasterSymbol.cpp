@@ -16,8 +16,7 @@ GEOMultiLineRasterSymbol::GEOMultiLineRasterSymbol(const GEO2DCoordinatesArrayDa
                                                    const GEO2DLineRasterStyle& style,
                                                    const int minTileLevel,
                                                    const int maxTileLevel) :
-GEORasterSymbol(minTileLevel,
-                maxTileLevel),
+GEORasterSymbol(minTileLevel, maxTileLevel),
 _coordinatesArrayData(coordinatesArrayData),
 _style(style)
 {
