@@ -27,7 +27,6 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRaster
 
   delete _symbolizer;
   delete _buffer;
-//  delete _geoObject;
   delete _canvas;
 #ifdef JAVA_CODE
   super.dispose();
@@ -40,7 +39,8 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::cancel() {
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground(const G3MContext* context) {
   if ((_imageAssembler != NULL) && (_buffer != NULL)) {
-    GEOObject* geoObject = GEOJSONParser::parseJSON(_buffer);
+    bool showStatistics = false;
+    GEOObject* geoObject = GEOJSONParser::parseJSON(_buffer, showStatistics);
 
     if (geoObject != NULL) {
       if (_imageAssembler != NULL) {
@@ -66,11 +66,6 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::onPostExecute(const G3MContext* context) {
   if (_imageAssembler != NULL) {
-//    GEOObject* geoObject = _geoObject;
-//    _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
-
-//    _imageAssembler->parsedGEOObject(geoObject);
-
     ICanvas* canvas = _canvas;
     _canvas = NULL;  // moves ownership of _canvas to _imageAssembler
     _imageAssembler->rasterizedGEOObject(canvas,
@@ -224,10 +219,6 @@ void TiledVectorLayerTileImageProvider::CanvasImageListener::imageCreated(const 
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImage* image,
                                                                      const std::string& imageId) {
-//  if (_canceled) {
-//    printf("**** break point\n");
-//  }
-
   // retain the _contribution before calling the listener, as it takes full ownership of the contribution
   TileImageContribution::retainContribution(_contribution);
 
