@@ -73,7 +73,8 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferParser::onPostExecute(const
 
     ICanvas* canvas = _canvas;
     _canvas = NULL;  // moves ownership of _canvas to _imageAssembler
-    _imageAssembler->parsedGEOObject(canvas);
+    _imageAssembler->parsedGEOObject(canvas,
+                                     _imageId);
   }
 }
 
@@ -85,7 +86,8 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::onDownloa
     delete buffer;
   }
   else {
-    _imageAssembler->bufferDownloaded(buffer);
+    _imageAssembler->bufferDownloaded(buffer,
+                                      url._path);
   }
 }
 
@@ -172,12 +174,12 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::cancel() {
     _parser->cancel();
   }
 
-#warning TODO call listener cancel
   _listener->imageCreationCanceled(_tileId);
   _tileImageProvider->requestFinish(_tileId);
 }
 
-void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBuffer* buffer) {
+void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBuffer* buffer,
+                                                                         const std::string& imageId) {
   _downloadListener = NULL;
   _downloadRequestId = -1;
 
@@ -194,7 +196,8 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBu
                                       symbolizer,
                                       _tileSector,
                                       _tileIsMercator,
-                                      _tileLevel);
+                                      _tileLevel,
+                                      imageId);
     _threadUtils->invokeAsyncTask(_parser,
                                   true);
   }
@@ -215,12 +218,12 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadCanceled()
 }
 
 void TiledVectorLayerTileImageProvider::CanvasImageListener::imageCreated(const IImage* image) {
-  _imageAssembler->imageCreated(image);
+  _imageAssembler->imageCreated(image,
+                                _imageId);
 }
 
-void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImage* image) {
-#warning compose imageId
-
+void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImage* image,
+                                                                     const std::string& imageId) {
 //  if (_canceled) {
 //    printf("**** break point\n");
 //  }
@@ -230,12 +233,13 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
 
   _listener->imageCreated(_tileId,
                           image,
-                          "VectorTiles" + _tileId,
+                          imageId,
                           _contribution);
   _tileImageProvider->requestFinish(_tileId);
 }
 
-void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(ICanvas* canvas) {
+void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(ICanvas* canvas,
+                                                                        const std::string& imageId) {
   if (canvas == NULL) {
     _listener->imageCreationError(_tileId, "GEOJSON parser error");
     if (_deleteListener) {
@@ -260,7 +264,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::parsedGEOObject(ICanvas*
 //    delete projection;
 //    delete geoObject;
 
-    canvas->createImage(new CanvasImageListener(this),
+    canvas->createImage(new CanvasImageListener(this, imageId),
                         true /* autodelete */);
 
     delete canvas;

@@ -29,10 +29,13 @@ private:
 
   class CanvasImageListener : public IImageListener {
   private:
-    ImageAssembler* _imageAssembler;
+    ImageAssembler*   _imageAssembler;
+    const std::string _imageId;
   public:
-    CanvasImageListener(ImageAssembler* imageAssembler) :
-    _imageAssembler(imageAssembler)
+    CanvasImageListener(ImageAssembler* imageAssembler,
+                        const std::string& imageId) :
+    _imageAssembler(imageAssembler),
+    _imageId(imageId)
     {
     }
 
@@ -59,6 +62,8 @@ private:
     const bool   _tileIsMercator;
     const int    _tileLevel;
 
+    const std::string _imageId;
+
   public:
     GEOJSONBufferParser(ImageAssembler* imageAssembler,
                         IByteBuffer* buffer,
@@ -67,7 +72,8 @@ private:
                         const GEORasterSymbolizer* symbolizer,
                         const Sector& tileSector,
                         const bool   tileIsMercator,
-                        const int    tileLevel) :
+                        const int    tileLevel,
+                        const std::string& imageId) :
     _imageAssembler(imageAssembler),
     _buffer(buffer),
 //    _geoObject(NULL),
@@ -77,6 +83,7 @@ private:
     _tileSector(tileSector),
     _tileIsMercator(tileIsMercator),
     _tileLevel(tileLevel),
+    _imageId(imageId),
     _canvas(NULL)
     {
     }
@@ -183,14 +190,17 @@ private:
 
     void cancel();
 
-    void bufferDownloaded(IByteBuffer* buffer);
+    void bufferDownloaded(IByteBuffer* buffer,
+                          const std::string& imageId);
     void bufferDownloadError(const URL& url);
     void bufferDownloadCanceled();
 
-    void parsedGEOObject(ICanvas* canvas);
+    void parsedGEOObject(ICanvas* canvas,
+                         const std::string& imageId);
     void deletedParser();
 
-    void imageCreated(const IImage* image);
+    void imageCreated(const IImage* image,
+                      const std::string& imageId);
   };
 
 

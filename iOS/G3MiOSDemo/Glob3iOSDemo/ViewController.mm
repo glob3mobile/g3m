@@ -1324,13 +1324,12 @@ public:
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
     std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
 
-#warning Diego at work!
-//    symbols->push_back( new GEOPolygonRasterSymbol(geometry->getPolygonData(),
-//                                                   createPolygonLineRasterStyle(geometry),
-//                                                   createPolygonSurfaceRasterStyle(geometry)) );
+    symbols->push_back( new GEOPolygonRasterSymbol(geometry->getPolygonData(),
+                                                   createPolygonLineRasterStyle(geometry),
+                                                   createPolygonSurfaceRasterStyle(geometry)) );
 
-    symbols->push_back( new GEOLineRasterSymbol(geometry->getPolygonData(),
-                                                createPolygonLineRasterStyle(geometry)) );
+//    symbols->push_back( new GEOLineRasterSymbol(geometry->getPolygonData(),
+//                                                createPolygonLineRasterStyle(geometry)) );
 
     return symbols;
   }
@@ -1338,22 +1337,21 @@ public:
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DMultiPolygonGeometry* geometry) const {
     std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
 
-#warning Diego at work!
 
     const GEO2DLineRasterStyle    lineStyle    = createPolygonLineRasterStyle(geometry);
-//    const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
+    const GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
 
     const std::vector<GEO2DPolygonData*>* polygonsData = geometry->getPolygonsData();
     const int polygonsDataSize = polygonsData->size();
 
     for (int i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = polygonsData->at(i);
-//      symbols->push_back( new GEOPolygonRasterSymbol(polygonData,
-//                                                     lineStyle,
-//                                                     surfaceStyle) );
+      symbols->push_back( new GEOPolygonRasterSymbol(polygonData,
+                                                     lineStyle,
+                                                     surfaceStyle) );
 
-      symbols->push_back( new GEOLineRasterSymbol(polygonData,
-                                                  lineStyle) );
+//      symbols->push_back( new GEOLineRasterSymbol(polygonData,
+//                                                  lineStyle) );
     }
 
     return symbols;
