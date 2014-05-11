@@ -24,8 +24,8 @@ package org.glob3.mobile.generated;
 public class GEOPolygonRasterSymbol extends GEORasterSymbol
 {
   private final GEO2DPolygonData _polygonData;
-  private final GEO2DLineRasterStyle      _lineStyle;
-  private final GEO2DSurfaceRasterStyle   _surfaceStyle;
+  private final GEO2DLineRasterStyle    _lineStyle;
+  private final GEO2DSurfaceRasterStyle _surfaceStyle;
 
   protected final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
   {

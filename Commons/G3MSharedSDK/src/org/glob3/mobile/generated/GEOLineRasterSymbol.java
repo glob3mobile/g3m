@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 public class GEOLineRasterSymbol extends GEORasterSymbol
 {
   private final GEO2DCoordinatesData _coordinates;
-  private final GEO2DLineRasterStyle      _style;
+  private final GEO2DLineRasterStyle _style;
 
   protected final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
   {
