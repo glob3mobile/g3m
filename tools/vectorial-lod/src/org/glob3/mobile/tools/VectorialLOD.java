@@ -789,7 +789,7 @@ public class VectorialLOD {
       //System.out.println(_boundSector.toString());
 
       _geomType = getGeometriesType(dataSource._sourceTable);
-      System.out.println(_geomType.toString());
+      System.out.println("Source data type: " + _geomType.toString());
 
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
