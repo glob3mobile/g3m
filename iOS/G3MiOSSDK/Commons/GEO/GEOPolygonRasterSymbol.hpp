@@ -21,12 +21,12 @@ class GEOPolygonRasterSymbol : public GEORasterSymbol {
 private:
   const GEO2DPolygonData* _polygonData;
 #ifdef C_CODE
-  const GEO2DLineRasterStyle      _lineStyle;
-  const GEO2DSurfaceRasterStyle   _surfaceStyle;
+  const GEO2DLineRasterStyle    _lineStyle;
+  const GEO2DSurfaceRasterStyle _surfaceStyle;
 #endif
 #ifdef JAVA_CODE
-  private final GEO2DLineRasterStyle      _lineStyle;
-  private final GEO2DSurfaceRasterStyle   _surfaceStyle;
+  private final GEO2DLineRasterStyle    _lineStyle;
+  private final GEO2DSurfaceRasterStyle _surfaceStyle;
 #endif
 
 protected:

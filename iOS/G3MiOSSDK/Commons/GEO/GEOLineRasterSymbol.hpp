@@ -20,10 +20,10 @@ class GEOLineRasterSymbol : public GEORasterSymbol {
 private:
   const GEO2DCoordinatesData* _coordinates;
 #ifdef C_CODE
-  const GEO2DLineRasterStyle      _style;
+  const GEO2DLineRasterStyle _style;
 #endif
 #ifdef JAVA_CODE
-  private final GEO2DLineRasterStyle      _style;
+  private final GEO2DLineRasterStyle _style;
 #endif
 
 protected:
