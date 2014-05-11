@@ -491,6 +491,10 @@ public class VectorialLOD {
       //return filterCriteria;
       //return "ST_Length(the_geom)>" + tolerance + " and " + filterCriteria;
 
+      if (_geomType == null) {
+         return filterCriteria;
+      }
+
       if ((_geomType == GeomType.POLYGON) || (_geomType == GeomType.MULTIPOLYGON)) {
          return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
       }
@@ -684,7 +688,7 @@ public class VectorialLOD {
 
    private static String getTileLabel(final TileSector sector) {
 
-      return sector._level + "/" + sector.getRow(_renderParameters) + "/" + sector._column;
+      return sector._level + "/" + sector._column + "/" + sector.getRow(_renderParameters);
    }
 
 
