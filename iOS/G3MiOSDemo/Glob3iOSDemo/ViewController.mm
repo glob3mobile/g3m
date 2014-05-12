@@ -1448,7 +1448,7 @@ public:
                                                      true,                       // readExpired
                                                      1,                          // transparency
                                                      NULL,                       // condition
-                                                     "" // disclaimerInfo
+                                                     ""                          // disclaimerInfo
                                                      ));
   }
 
