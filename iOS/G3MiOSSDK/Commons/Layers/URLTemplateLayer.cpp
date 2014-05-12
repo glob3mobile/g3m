@@ -18,7 +18,7 @@
 #include "LevelTileCondition.hpp"
 
 URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate,
-                                   const Sector&                     sector,
+                                   const Sector&                     dataSector,
                                    bool                              isTransparent,
                                    const TimeInterval&               timeToCache,
                                    bool                              readExpired,
@@ -31,10 +31,10 @@ Layer(condition,
       timeToCache,
       readExpired,
       parameters,
+      dataSector,
       transparency,
       disclaimerInfo),
 _urlTemplate(urlTemplate),
-_sector(sector),
 _isTransparent(isTransparent),
 _su(NULL),
 _mu(NULL)
@@ -44,7 +44,7 @@ _mu(NULL)
 
 
 URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
-                                                const Sector&       sector,
+                                                const Sector&       dataSector,
                                                 bool                isTransparent,
                                                 const int           firstLevel,
                                                 const int           maxLevel,
@@ -54,7 +54,7 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
                                                 float               transparency,
                                                 const std::string&  disclaimerInfo) {
   return new URLTemplateLayer(urlTemplate,
-                              sector,
+                              dataSector,
                               isTransparent,
                               timeToCache,
                               readExpired,
@@ -66,7 +66,7 @@ URLTemplateLayer* URLTemplateLayer::newMercator(const std::string&  urlTemplate,
 }
 
 URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
-                                             const Sector&       sector,
+                                             const Sector&       dataSector,
                                              bool                isTransparent,
                                              const int           firstLevel,
                                              const int           maxLevel,
@@ -76,12 +76,12 @@ URLTemplateLayer* URLTemplateLayer::newWGS84(const std::string&  urlTemplate,
                                              float               transparency,
                                              const std::string&  disclaimerInfo) {
   return new URLTemplateLayer(urlTemplate,
-                              sector,
+                              dataSector,
                               isTransparent,
                               timeToCache,
                               readExpired,
                               (condition == NULL) ? new LevelTileCondition(firstLevel, maxLevel) : condition,
-                              LayerTilesRenderParameters::createDefaultWGS84(sector, firstLevel, maxLevel),
+                              LayerTilesRenderParameters::createDefaultWGS84(dataSector, firstLevel, maxLevel),
                               transparency,
                               disclaimerInfo);
 }
@@ -98,7 +98,7 @@ bool URLTemplateLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
-  return (_sector.isEquals(t->_sector));
+  return (_dataSector.isEquals(t->_dataSector));
 }
 
 const std::string URLTemplateLayer::description() const {
@@ -107,7 +107,7 @@ const std::string URLTemplateLayer::description() const {
 
 URLTemplateLayer* URLTemplateLayer::copy() const {
   return new URLTemplateLayer(_urlTemplate,
-                              _sector,
+                              _dataSector,
                               _isTransparent,
                               TimeInterval::fromMilliseconds(_timeToCacheMS),
                               _readExpired,
@@ -171,11 +171,11 @@ std::vector<Petition*> URLTemplateLayer::createTileMapPetitions(const G3MRenderC
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->_sector;
-  if (!_sector.touchesWith(tileSector)) {
+  if (!_dataSector.touchesWith(tileSector)) {
     return petitions;
   }
 
-  const Sector sector = tileSector.intersection(_sector);
+  const Sector sector = tileSector.intersection(_dataSector);
   if (sector._deltaLatitude.isZero() ||
       sector._deltaLongitude.isZero() ) {
     return petitions;

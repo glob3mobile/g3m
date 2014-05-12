@@ -237,7 +237,7 @@ bool LayerSet::isEquals(const LayerSet* that) const {
   return true;
 }
 
-LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vector<std::string>& errors) const {
+LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart, std::vector<std::string>& errors) const {
   Sector* topSector                  = NULL;
   int     topSectorSplitsByLatitude  = 0;
   int     topSectorSplitsByLongitude = 0;
@@ -248,10 +248,44 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
   int     tileMeshWidth              = 0;
   int     tileMeshHeight             = 0;
   bool    mercator                   = false;
+  Sector* biggestDataSector          = NULL;
 
   bool layerSetNotReadyFlag = false;
   bool first = true;
   const int layersCount = _layers.size();
+  
+  if (forceFirstLevelTilesRenderOnStart && layersCount > 0) {
+    double biggestArea = 0;
+    for (int i = 0; i < layersCount; i++) {
+      Layer* layer = _layers[i];
+      if (layer->isEnable()) {
+        const double layerArea = layer->getDataSector().getAngularAreaInSquaredDegrees();
+        if (layerArea > biggestArea) {
+          delete biggestDataSector;
+          biggestDataSector = new Sector(layer->getDataSector());
+          biggestArea = layerArea;
+        }
+      }
+    }
+    if (biggestDataSector != NULL) {
+      bool dataSectorsInconsistency = false;
+      for (int i = 0; i < layersCount; i++) {
+        Layer* layer = _layers[i];
+        if (layer->isEnable()) {
+          if (!biggestDataSector->fullContains(layer->getDataSector())) {
+            dataSectorsInconsistency = true;
+            break;
+          }
+        }
+      }
+      if (dataSectorsInconsistency) {
+        errors.push_back("Inconsistency in layers data sectors");
+        return NULL;
+      }
+    }
+    delete biggestDataSector;
+  }
+
   for (int i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
 

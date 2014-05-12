@@ -14,7 +14,6 @@
 class URLTemplateLayer : public Layer {
 private:
   const std::string _urlTemplate;
-  const Sector      _sector;
   const bool        _isTransparent;
 
 #ifdef C_CODE

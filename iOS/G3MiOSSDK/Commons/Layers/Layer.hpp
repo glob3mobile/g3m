@@ -57,12 +57,15 @@ protected:
   std::string _title;
 
   const float _transparency;
+  
+  const Sector _dataSector;
 
   Layer(LayerCondition* condition,
         const std::string& name,
         const TimeInterval& timeToCache,
         bool readExpired,
         const LayerTilesRenderParameters* parameters,
+        const Sector& dataSector,
         float transparency,
         const std::string& disclaimerInfo) :
   _condition(condition),
@@ -73,6 +76,7 @@ protected:
   _enable(true),
   _parameters(parameters),
   _title(""),
+  _dataSector(dataSector),
   _transparency(transparency),
   _disclaimerInfo(disclaimerInfo)
   {
@@ -93,6 +97,10 @@ public:
 
   bool getReadExpired() const {
     return _readExpired;
+  }
+  
+  const Sector getDataSector() const {
+    return _dataSector;
   }
 
   virtual void setEnable(bool enable) {

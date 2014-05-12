@@ -344,7 +344,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
   if (_layerTilesRenderParametersDirty) {
     _errors.clear();
     delete _layerTilesRenderParameters;
-    _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_errors);
+    _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart, _errors);
     if (_layerTilesRenderParameters == NULL) {
       ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
     }

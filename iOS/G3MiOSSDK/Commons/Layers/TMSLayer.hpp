@@ -23,7 +23,6 @@ private:
 #endif
 
   const std::string   _mapLayer;
-  Sector              _sector;
   const std::string   _format;
   const bool          _isTransparent;
 

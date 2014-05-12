@@ -23,7 +23,6 @@ protected:
 #endif
   const std::string _imageFormat;
   
-  const Sector _sector;
   const int    _initialLevel;
   const int    _maxLevel;
 

@@ -34,7 +34,6 @@ private:
   const WMSServerVersion _mapServerVersion;
   const std::string      _queryLayer;
   const WMSServerVersion _queryServerVersion;
-  const Sector           _sector;
   const std::string      _format;
   const std::string      _srs;
   const std::string      _style;
@@ -60,7 +59,7 @@ public:
            const std::string& queryLayer,
            const URL& queryServerURL,
            const WMSServerVersion queryServerVersion,
-           const Sector& sector,
+           const Sector& dataSector,
            const std::string& format,
            const std::string& srs,
            const std::string& style,
@@ -75,7 +74,7 @@ public:
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const WMSServerVersion mapServerVersion,
-           const Sector& sector,
+           const Sector& dataSector,
            const std::string& format,
            const std::string& srs,
            const std::string& style,

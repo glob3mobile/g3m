@@ -26,7 +26,7 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              name,
                                        const std::string&              imageFormat,
                                        const TimeInterval&             timeToCache,
                                        bool                            readExpired,
-                                       const Sector&                   sector,
+                                       const Sector&                   dataSector,
                                        int                             initialLevel,
                                        int                             maxLevel,
                                        LayerCondition*                 condition,
@@ -44,13 +44,13 @@ Layer(condition,
                                      Vector2I(256, 256),
                                      LayerTilesRenderParameters::defaultTileMeshResolution(),
                                      true),
+      dataSector,
       transparency,
       disclaimerInfo),
 _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
 _imageFormat(imageFormat),
-_sector(sector),
 _initialLevel(initialLevel),
 _maxLevel(maxLevel)
 {
@@ -70,11 +70,11 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->_sector;
-  if (!_sector.touchesWith(tileSector)) {
+  if (!_dataSector.touchesWith(tileSector)) {
     return petitions;
   }
 
-  const Sector sector = tileSector.intersection(_sector);
+  const Sector sector = tileSector.intersection(_dataSector);
   if (sector._deltaLatitude.isZero() ||
       sector._deltaLongitude.isZero() ) {
     return petitions;
@@ -143,7 +143,7 @@ MercatorTiledLayer* MercatorTiledLayer::copy() const {
                                 _imageFormat,
                                 TimeInterval::fromMilliseconds(_timeToCacheMS),
                                 _readExpired,
-                                _sector,
+                                _dataSector,
                                 _initialLevel,
                                 _maxLevel,
                                 (_condition == NULL) ? NULL : _condition->copy(),
@@ -166,7 +166,7 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
-  if (!_sector.isEquals(t->_sector)) {
+  if (!_dataSector.isEquals(t->_dataSector)) {
     return false;
   }
 

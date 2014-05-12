@@ -87,7 +87,7 @@ public:
   Layer* getLayerByName(const std::string& name) const;
   Layer* getLayerByTitle(const std::string& title) const;
 
-  LayerTilesRenderParameters* createLayerTilesRenderParameters(std::vector<std::string>& errors) const;
+  LayerTilesRenderParameters* createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart, std::vector<std::string>& errors) const;
 
   bool isEquals(const LayerSet* that) const;
 
