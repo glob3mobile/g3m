@@ -17,6 +17,7 @@ import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbolizer;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
@@ -55,10 +56,13 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
+
       _g3mWidget = createWidget();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       placeHolder.addView(_g3mWidget);
+
+      ILogger.instance().logError("processors:" + Runtime.getRuntime().availableProcessors());
    }
 
 
