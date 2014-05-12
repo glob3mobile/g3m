@@ -51,10 +51,10 @@ public:
                      const Sector&                   dataSector,
                      const int                       initialLevel,
                      const int                       maxLevel,
-                     const bool                      isTransparent,
-                     const float                     transparency,
-                     const LayerCondition*           condition,
-                     const std::string&              disclaimerInfo);
+                     const bool                      isTransparent  = false,
+                     const float                     transparency   = 1,
+                     const LayerCondition*           condition      = NULL,
+                     const std::string&              disclaimerInfo = "");
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

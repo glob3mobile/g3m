@@ -22,12 +22,12 @@
 
 URLTemplateLayer::URLTemplateLayer(const std::string&                urlTemplate,
                                    const Sector&                     dataSector,
-                                   bool                              isTransparent,
+                                   const bool                        isTransparent,
                                    const TimeInterval&               timeToCache,
                                    const bool                        readExpired,
                                    const LayerCondition*             condition,
                                    const LayerTilesRenderParameters* parameters,
-                                   const float                       transparency,
+                                   float                             transparency,
                                    const std::string&                disclaimerInfo) :
 RasterLayer(timeToCache,
             readExpired,
