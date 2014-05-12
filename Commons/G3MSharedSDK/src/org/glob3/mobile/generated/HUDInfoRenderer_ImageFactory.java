@@ -6,7 +6,7 @@ public class HUDInfoRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFa
 
   protected final void drawOn(ICanvas canvas, int width, int height)
   {
-    ICanvasUtils.drawStringsOn(_infos, canvas, width, height, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
+    ICanvasUtils.drawStringsOn(_infos, canvas, width, height, HorizontalAlignment.Left, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
   }
 
   protected final boolean isEquals(java.util.ArrayList<String> v1, java.util.ArrayList<String> v2)
