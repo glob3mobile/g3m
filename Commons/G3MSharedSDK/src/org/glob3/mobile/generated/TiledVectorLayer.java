@@ -109,6 +109,26 @@ public class TiledVectorLayer extends VectorLayer
   }
 
 
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
+  {
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, transparency, condition, "");
+  }
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency)
+  {
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, transparency, null, "");
+  }
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired)
+  {
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, 1, null, "");
+  }
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache)
+  {
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, true, 1, null, "");
+  }
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel)
+  {
+     return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, TimeInterval.fromDays(30), true, 1, null, "");
+  }
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
   {
     return new TiledVectorLayer(symbolizer, urlTemplate, dataSector, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), timeToCache, readExpired, transparency, condition, disclaimerInfo);
