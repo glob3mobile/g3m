@@ -1449,6 +1449,27 @@ public:
                                                      1,                          // transparency
                                                      NULL                        // condition
                                                      ));
+
+//    const std::string urlTemplate = "http://192.168.1.2/catastro-10-16/{level}/{x}/{y}.geojson";
+//    const int firstLevel = 2;
+//    const int maxLevel = 18;
+//
+//    const Sector sector = Sector::fromDegrees(40.315, -3.840,
+//                                              40.609, -3.518);
+//
+//    const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
+//
+//    layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
+//                                                     urlTemplate,
+//                                                     sector,
+//                                                     firstLevel,
+//                                                     maxLevel,
+//                                                     TimeInterval::fromDays(30),    // timeToCache
+//                                                     true,                          // readExpired
+//                                                     1,                             // transparency
+//                                                     new LevelTileCondition(15, 18) // condition
+//                                                     ));
+
   }
 
   const bool useCartoDB = false;
