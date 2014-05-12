@@ -59,6 +59,8 @@ class Sector;
 #include "HUDRenderer.hpp"
 #include "InfoDisplay.hpp"
 #include "HUDImageRenderer.hpp"
+#include "GroupCanvasElement.hpp"
+
 
 class MapBooApplicationChangeListener {
 public:

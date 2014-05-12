@@ -13,18 +13,19 @@
 #include "TextCanvasElement.hpp"
 
 Vector2F ICanvasUtils::drawStringsOn(const std::vector<std::string> &strings,
-                                 ICanvas *canvas,
-                                 const int width,
-                                 const int height,
-                                 const VerticalAlignment vAlign,
-                                 const HorizontalAlignment hAlign,
-                                 const Color& color,
-                                 const int maxFontSize,
-                                 const int minFontSize,
-                                 const Color& backgroundColor,
-                                 const Color& shadowColor,
-                                 const int padding,
-                                 const int cornerRadius) {
+                                     ICanvas *canvas,
+                                     const int width,
+                                     const int height,
+                                     const HorizontalAlignment hAlign,
+                                     const VerticalAlignment vAlign,
+                                     const HorizontalAlignment textAlign,
+                                     const Color& color,
+                                     const int maxFontSize,
+                                     const int minFontSize,
+                                     const Color& backgroundColor,
+                                     const Color& shadowColor,
+                                     const int padding,
+                                     const int cornerRadius) {
   int longestTextIndex = 0;
   int maxLength = strings.at(longestTextIndex).length();
   const int stringsSize = strings.size();
@@ -57,39 +58,54 @@ Vector2F ICanvasUtils::drawStringsOn(const std::vector<std::string> &strings,
   ColumnCanvasElement column(backgroundColor,
                              0,  /* margin */
                              padding,
-                             cornerRadius);
+                             cornerRadius,
+                             textAlign);
   const GFont labelFont  = GFont::sansSerif(fontSize);
   for (int i = 0; i < stringsSize; i++) {
     column.add( new TextCanvasElement(strings[i], labelFont, color) );
   }
   
-  float top;
-  float left;
   const Vector2F extent = column.getExtent(canvas);
-  switch (vAlign) {
-    case Top:
-      top = 0;
-      break;
-    case Bottom:
-      top = height - extent._y;
-      break;
-    case Middle:
-    default:
-      top = (height / 2) - (extent._y / 2);
-  }
+  const Vector2F position = getPosition(extent,
+                                        width,
+                                        height,
+                                        hAlign,
+                                        vAlign);
+  column.drawAt(position._x, position._y, canvas);
+  
+  return extent;
+}
+
+
+Vector2F ICanvasUtils::getPosition(const Vector2F extent,
+                                   const int canvasWidth,
+                                   const int canvasHeight,
+                                   const HorizontalAlignment hAlign,
+                                   const VerticalAlignment vAlign) {
+  float left;
+  float top;
   switch (hAlign) {
     case Left:
       left = 0;
       break;
     case Right:
-      left = width - extent._x;
+      left = canvasWidth - extent._x;
       break;
     case Center:
     default:
-      left = (width / 2) - (extent._x / 2);
+      left = (canvasWidth / 2) - (extent._x / 2);
   }
-
-  column.drawAt(left, top, canvas);
+  switch (vAlign) {
+    case Top:
+      top = 0;
+      break;
+    case Bottom:
+      top = canvasHeight - extent._y;
+      break;
+    case Middle:
+    default:
+      top = (canvasHeight / 2) - (extent._y / 2);
+  }
   
-  return extent;
+  return Vector2F(left, top);
 }

@@ -33,18 +33,25 @@ enum HorizontalAlignment {
 class ICanvasUtils {
 public:
   static Vector2F drawStringsOn(const std::vector<std::string> &strings,
-                            ICanvas *canvas,
-                            const int width,
-                            const int height,
-                            const VerticalAlignment vAlign,
-                            const HorizontalAlignment hAlign,
-                            const Color& color,
-                            const int maxFontSize=18,
-                            const int minFontSize=2,
-                            const Color& backgroundColor=Color::transparent(),
-                            const Color& shadowColor=Color::black(),
-                            const int padding=16,
-                            const int cornerRadius=8);
+                                ICanvas *canvas,
+                                const int width,
+                                const int height,
+                                const HorizontalAlignment hAlign,
+                                const VerticalAlignment vAlign,
+                                const HorizontalAlignment textAlign,
+                                const Color& color,
+                                const int maxFontSize=18,
+                                const int minFontSize=2,
+                                const Color& backgroundColor=Color::transparent(),
+                                const Color& shadowColor=Color::black(),
+                                const int padding=16,
+                                const int cornerRadius=8);
+  
+  static Vector2F getPosition(const Vector2F extent,
+                              const int canvasWidth,
+                              const int canvasHeight,
+                              const HorizontalAlignment hAlign,
+                              const VerticalAlignment vAlign);
 };
 
 
