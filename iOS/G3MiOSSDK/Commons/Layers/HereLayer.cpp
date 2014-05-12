@@ -23,7 +23,8 @@ HereLayer::HereLayer(const std::string&    appId,
                      const bool            readExpired,
                      const int             initialLevel,
                      const float           transparency,
-                     const LayerCondition* condition) :
+                     const LayerCondition* condition,
+                     const std::string&    disclaimerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -35,12 +36,12 @@ RasterLayer(timeToCache,
                                            LayerTilesRenderParameters::defaultTileMeshResolution(),
                                            true),
             transparency,
-            condition),
+            condition,
+            disclaimerInfo),
 _appId(appId),
 _appCode(appCode),
 _initialLevel(initialLevel)
 {
-
 }
 
 URL HereLayer::getFeatureInfoURL(const Geodetic2D& position,
@@ -260,7 +261,8 @@ HereLayer* HereLayer::copy() const {
                        _readExpired,
                        _initialLevel,
                        _transparency,
-                       (_condition == NULL) ? NULL : _condition->copy());
+                       (_condition == NULL) ? NULL : _condition->copy(),
+                       _disclaimerInfo);
 }
 
 bool HereLayer::rawIsEquals(const Layer* that) const {
@@ -298,7 +300,6 @@ RenderState HereLayer::getRenderState() {
 
 
 const TileImageContribution* HereLayer::rawContribution(const Tile* tile) const {
-  //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
   return ((_transparency < 1)
           ? TileImageContribution::fullCoverageTransparent(_transparency)
           : TileImageContribution::fullCoverageOpaque());

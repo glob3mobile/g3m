@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class PlanetRenderer extends DefaultRenderer implements ChangedListener, SurfaceElevationProvider
+public class PlanetRenderer extends DefaultRenderer implements ChangedListener, ChangedInfoListener, SurfaceElevationProvider
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -305,7 +305,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _errors.clear();
       _layerTilesRenderParameters = null;
-      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
+      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, _errors);
       if (_layerTilesRenderParameters == null)
       {
         ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
@@ -317,7 +317,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -345,10 +345,13 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _tileRenderingListener = tileRenderingListener;
     _context = null;
     _layerSet.setChangeListener(this);
+    _layerSet.setChangedInfoListener(this);
     if (_tileRasterizer != null)
     {
       _tileRasterizer.setChangeListener(this);
     }
+  
+    _changedInfoListener = changedInfoListener;
   }
 
   public void dispose()
@@ -898,6 +901,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final boolean getRenderTileMeshes()
   {
     return _renderTileMeshes;
+  }
+
+  public final void changedInfo(java.util.ArrayList<String> info)
+  {
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
+    }
   }
 
 }

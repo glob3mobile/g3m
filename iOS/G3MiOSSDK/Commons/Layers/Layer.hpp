@@ -38,6 +38,10 @@ protected:
 
   bool _enable;
 
+  std::string _disclaimerInfo;
+
+  std::vector<std::string> _info;
+
 #ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
 #endif
@@ -52,10 +56,10 @@ protected:
 
   std::string _title;
 
-
   Layer(const LayerTilesRenderParameters* parameters,
         const float                       transparency,
-        const LayerCondition*             condition);
+        const LayerCondition*             condition,
+        const std::string&                disclaimerInfo);
 
   void setParameters(const LayerTilesRenderParameters* parameters);
 
@@ -64,7 +68,6 @@ protected:
   virtual bool rawIsEquals(const Layer* that) const = 0;
 
 public:
-
 
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
@@ -85,7 +88,7 @@ public:
                                 const Sector& sector) const = 0;
 
   virtual RenderState getRenderState() = 0;
-  
+
   virtual void initialize(const G3MContext* context) {
   }
 
@@ -116,6 +119,8 @@ public:
 
   virtual Layer* copy() const = 0;
 
+  virtual const Sector getDataSector() const = 0;
+
   const std::string getTitle() const;
 
   void setTitle(const std::string& title);
@@ -127,6 +132,14 @@ public:
   virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
 
+  const std::string getInfo() const {
+    return _disclaimerInfo;
+  }
+
+  void setInfo(const std::string& disclaimerInfo);
+  
+  std::vector<std::string> getInfos();
+  
 };
 
 #endif

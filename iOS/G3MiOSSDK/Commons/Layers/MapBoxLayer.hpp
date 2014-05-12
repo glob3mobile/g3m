@@ -40,11 +40,12 @@ public:
 
   MapBoxLayer(const std::string&    mapKey,
               const TimeInterval&   timeToCache,
-              const bool            readExpired  = true,
-              const int             initialLevel = 1,
-              const int             maxLevel     = 19,
-              const float           transparency = 1,
-              const LayerCondition* condition    = NULL) :
+              const bool            readExpired    = true,
+              const int             initialLevel   = 1,
+              const int             maxLevel       = 19,
+              const float           transparency   = 1,
+              const LayerCondition* condition      = NULL,
+              const std::string&    disclaimerInfo = "") :
   MercatorTiledLayer("http://",
                      "tiles.mapbox.com/v3/" + mapKey,
                      getSubdomains(),
@@ -56,10 +57,10 @@ public:
                      maxLevel,
                      false, // isTransparent
                      transparency,
-                     condition),
+                     condition,
+                     disclaimerInfo),
   _mapKey(mapKey)
   {
-
   }
 
   const std::string description() const;

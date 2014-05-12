@@ -56,7 +56,8 @@ _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
-_shownSector(NULL)
+_shownSector(NULL),
+_infoDisplay(NULL)
 {
 }
 
@@ -697,7 +698,7 @@ G3MWidget* IG3MBuilder::create() {
                                                           initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-
+  
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -718,9 +719,13 @@ G3MWidget* IG3MBuilder::create() {
                                             *getPeriodicalTasks(),
                                             getGPUProgramManager(),
                                             getSceneLighting(),
-                                            icpp);
+                                            icpp,
+                                            getInfoDisplay());
   
   g3mWidget->setUserData(getUserData());
+  
+  
+  //mainRenderer->getPlanetRenderer()->initializeChangedInfoListener(g3mWidget);
 
   _gl = NULL;
   _storage = NULL;
@@ -873,3 +878,18 @@ GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
 
   return geoRenderer;
 }
+
+
+void IG3MBuilder::setInfoDisplay(InfoDisplay *infoDisplay) {
+  if (_infoDisplay != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: infoDisplay already initialized");
+    return;
+  }
+  _infoDisplay = infoDisplay;
+}
+
+InfoDisplay* IG3MBuilder::getInfoDisplay() const {
+  return _infoDisplay;
+}
+
+

@@ -35,6 +35,7 @@ class PeriodicalTask;
 class GInitializationTask;
 class TimeInterval;
 class ErrorRenderer;
+class InfoDisplay;
 
 // This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
 // The view content is basically an EAGL surface you render your OpenGL scene into.
@@ -79,7 +80,8 @@ class ErrorRenderer;
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition;
+       initialCameraPosition: (Geodetic3D) initialCameraPosition
+                 infoDisplay: (InfoDisplay*) infoDisplay;
 
 - (GL*)getGL;
 

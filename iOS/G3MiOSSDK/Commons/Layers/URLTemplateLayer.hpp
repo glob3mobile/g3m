@@ -18,7 +18,6 @@ class IStringUtils;
 class URLTemplateLayer : public RasterLayer {
 private:
   const std::string _urlTemplate;
-  const Sector      _sector;
   const bool        _isTransparent;
 
 #ifdef C_CODE
@@ -29,6 +28,8 @@ private:
   private IMathUtils   _mu;
   private IStringUtils _su;
 #endif
+
+  const Sector _dataSector;
 
 protected:
   std::string getLayerType() const {
@@ -47,33 +48,36 @@ protected:
 
 public:
   static URLTemplateLayer* newMercator(const std::string&    urlTemplate,
-                                       const Sector&         sector,
+                                       const Sector&         dataSector,
                                        const bool            isTransparent,
                                        const int             firstLevel,
                                        const int             maxLevel,
                                        const TimeInterval&   timeToCache,
-                                       const bool            readExpired  = true,
-                                       const float           transparency = 1,
-                                       const LayerCondition* condition    = NULL);
+                                       const bool            readExpired    = true,
+                                       const float           transparency   = 1,
+                                       const LayerCondition* condition      = NULL,
+                                       const std::string&    disclaimerInfo = "");
 
   static URLTemplateLayer* newWGS84(const std::string&    urlTemplate,
-                                    const Sector&         sector,
+                                    const Sector&         dataSector,
                                     const bool            isTransparent,
                                     const int             firstLevel,
                                     const int             maxLevel,
                                     const TimeInterval&   timeToCache,
-                                    const bool            readExpired  = true,
-                                    const LayerCondition* condition    = NULL,
-                                    const float           transparency = 1);
+                                    const bool            readExpired    = true,
+                                    const LayerCondition* condition      = NULL,
+                                    const float           transparency   = 1,
+                                    const std::string&    disclaimerInfo = "");
 
   URLTemplateLayer(const std::string&                urlTemplate,
-                   const Sector&                     sector,
+                   const Sector&                     dataSector,
                    const bool                        isTransparent,
                    const TimeInterval&               timeToCache,
                    const bool                        readExpired,
                    const LayerCondition*             condition,
                    const LayerTilesRenderParameters* parameters,
-                   const float                       transparency = 1);
+                   float                             transparency   = 1,
+                   const std::string&                disclaimerInfo = "");
 
   const std::string description() const;
 
@@ -87,6 +91,11 @@ public:
                                                 const Tile* tile) const;
   
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return _dataSector;
+  }
+
 };
 
 #endif

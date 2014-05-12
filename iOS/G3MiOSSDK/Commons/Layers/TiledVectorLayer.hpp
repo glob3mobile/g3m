@@ -22,7 +22,7 @@ class TiledVectorLayer : public VectorLayer {
 private:
   const GEORasterSymbolizer* _symbolizer;
   const std::string          _urlTemplate;
-  const Sector               _sector;
+  const Sector               _dataSector;
 #ifdef C_CODE
   const TimeInterval _timeToCache;
 #endif
@@ -42,12 +42,13 @@ private:
 
   TiledVectorLayer(const GEORasterSymbolizer*        symbolizer,
                    const std::string&                urlTemplate,
-                   const Sector&                     sector,
+                   const Sector&                     dataSector,
                    const LayerTilesRenderParameters* parameters,
                    const TimeInterval&               timeToCache,
                    const bool                        readExpired,
                    const float                       transparency,
-                   const LayerCondition*             condition);
+                   const LayerCondition*             condition,
+                   const std::string&                disclaimerInfo);
 
   const URL createURL(const Tile* tile) const;
 
@@ -62,13 +63,14 @@ protected:
 public:
   static TiledVectorLayer* newMercator(const GEORasterSymbolizer* symbolizer,
                                        const std::string&         urlTemplate,
-                                       const Sector&              sector,
+                                       const Sector&              dataSector,
                                        const int                  firstLevel,
                                        const int                  maxLevel,
-                                       const TimeInterval&        timeToCache,
-                                       const bool                 readExpired,
-                                       const float                transparency = 1,
-                                       const LayerCondition*      condition    = NULL);
+                                       const TimeInterval&        timeToCache    = TimeInterval::fromDays(30),
+                                       const bool                 readExpired    = true,
+                                       const float                transparency   = 1,
+                                       const LayerCondition*      condition      = NULL,
+                                       const std::string&         disclaimerInfo = "");
 
   ~TiledVectorLayer();
 
@@ -98,6 +100,11 @@ public:
                                  bool deleteListener) const;
 
   const GEORasterSymbolizer*  symbolizerCopy() const;
+
+  const Sector getDataSector() const {
+    return _dataSector;
+  }
+  
 };
 
 #endif

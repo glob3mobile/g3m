@@ -30,7 +30,8 @@ protected:
               const bool                        readExpired,
               const LayerTilesRenderParameters* parameters,
               const float                       transparency,
-              const LayerCondition*             condition);
+              const LayerCondition*             condition,
+              const std::string&                disclaimerInfo);
 
   const TimeInterval getTimeToCache() const {
     return _timeToCache;

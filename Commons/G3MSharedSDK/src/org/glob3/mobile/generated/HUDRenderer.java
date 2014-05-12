@@ -68,6 +68,20 @@ public class HUDRenderer extends DefaultRenderer
     }
   }
 
+  public final void removeAllWidgets()
+  {
+    for (int i = 0; i < _widgetsSize; i++)
+    {
+      HUDWidget widget = _widgets.get(i);
+      if (widget != null)
+         widget.dispose();
+    }
+  
+    _widgets.clear();
+    _widgetsSize = _widgets.size();
+  
+  }
+
   public final void onChangedContext()
   {
     for (int i = 0; i < _widgetsSize; i++)

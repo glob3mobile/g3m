@@ -15,13 +15,15 @@
 
 Layer::Layer(const LayerTilesRenderParameters* parameters,
              const float                       transparency,
-             const LayerCondition*             condition) :
+             const LayerCondition*             condition,
+             const std::string&                disclaimerInfo) :
+_parameters(parameters),
+_transparency(transparency),
 _condition(condition),
+_disclaimerInfo(disclaimerInfo),
 _layerSet(NULL),
 _enable(true),
-_parameters(parameters),
-_title(""),
-_transparency(transparency)
+_title("")
 {
 }
 
@@ -57,6 +59,7 @@ void Layer::removeLayerSet(LayerSet* layerSet) {
 void Layer::notifyChanges() const {
   if (_layerSet != NULL) {
     _layerSet->layerChanged(this);
+    _layerSet->changedInfo(_info);
   }
 }
 
@@ -113,6 +116,15 @@ bool Layer::isEquals(const Layer* that) const {
     return false;
   }
 
+
+  if (!(_info == that->_info)) {
+    return false;
+  }
+
+  if (!(_disclaimerInfo == that->_disclaimerInfo)) {
+    return false;
+  }
+
   return rawIsEquals(that);
 }
 
@@ -130,3 +142,19 @@ bool Layer::onLayerTouchEventListener(const G3MEventContext* ec,
   return false;
 }
 
+void Layer::setInfo(const std::string& disclaimerInfo) {
+  if (_disclaimerInfo != disclaimerInfo) {
+    _disclaimerInfo = disclaimerInfo;
+    if (_layerSet != NULL) {
+      _layerSet->changedInfo(getInfos());
+    }
+  }
+}
+
+std::vector<std::string> Layer::getInfos() {
+#warning TODO BETTER
+  _info.clear();
+  const std::string layerInfo = getInfo();
+  _info.push_back(layerInfo);
+  return _info;
+}

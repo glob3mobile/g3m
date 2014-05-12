@@ -30,17 +30,20 @@ package org.glob3.mobile.generated;
 //class Petition;
 
 
-public class LayerSet
+public class LayerSet implements ChangedInfoListener
 {
   private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
 
   private ChangedListener _listener;
 
+  private ChangedInfoListener _changedInfoListener;
+
+  //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
 
   private void layersChanged()
   {
-  //  delete _tileImageProvider;
     if (_tileImageProvider != null)
     {
       _tileImageProvider._release();
@@ -92,10 +95,12 @@ public class LayerSet
   }
 
   public LayerSet()
+  //  _layerTilesRenderParameters(NULL),
   {
      _listener = null;
      _context = null;
      _tileImageProvider = null;
+     _changedInfoListener = null;
   }
 
   public void dispose()
@@ -105,8 +110,6 @@ public class LayerSet
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
-  
-  //  delete _tileImageProvider;
     _tileImageProvider._release();
   }
 
@@ -128,6 +131,7 @@ public class LayerSet
       _layers.clear();
   
       layersChanged();
+      changedInfo(getInfo());
     }
   }
 
@@ -142,6 +146,7 @@ public class LayerSet
     }
   
     layersChanged();
+    changedInfo(layer.getInfos());
   }
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
@@ -258,7 +263,7 @@ public class LayerSet
     return null;
   }
 
-  public final LayerTilesRenderParameters createLayerTilesRenderParameters(java.util.ArrayList<String> errors)
+  public final LayerTilesRenderParameters createLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<String> errors)
   {
     Sector topSector = null;
     int topSectorSplitsByLatitude = 0;
@@ -270,10 +275,55 @@ public class LayerSet
     int tileMeshWidth = 0;
     int tileMeshHeight = 0;
     boolean mercator = false;
+    Sector biggestDataSector = null;
   
     boolean layerSetNotReadyFlag = false;
     boolean first = true;
     final int layersCount = _layers.size();
+  
+    if (forceFirstLevelTilesRenderOnStart && layersCount > 0)
+    {
+      double biggestArea = 0;
+      for (int i = 0; i < layersCount; i++)
+      {
+        Layer layer = _layers.get(i);
+        if (layer.isEnable())
+        {
+          final double layerArea = layer.getDataSector().getAngularAreaInSquaredDegrees();
+          if (layerArea > biggestArea)
+          {
+            if (biggestDataSector != null)
+               biggestDataSector.dispose();
+            biggestDataSector = new Sector(layer.getDataSector());
+            biggestArea = layerArea;
+          }
+        }
+      }
+      if (biggestDataSector != null)
+      {
+        boolean dataSectorsInconsistency = false;
+        for (int i = 0; i < layersCount; i++)
+        {
+          Layer layer = _layers.get(i);
+          if (layer.isEnable())
+          {
+            if (!biggestDataSector.fullContains(layer.getDataSector()))
+            {
+              dataSectorsInconsistency = true;
+              break;
+            }
+          }
+        }
+        if (dataSectorsInconsistency)
+        {
+          errors.add("Inconsistency in layers data sectors");
+          return null;
+        }
+      }
+      if (biggestDataSector != null)
+         biggestDataSector.dispose();
+    }
+  
     for (int i = 0; i < layersCount; i++)
     {
       Layer layer = _layers.get(i);
@@ -507,6 +557,43 @@ public class LayerSet
       _tileImageProvider = createTileImageProvider(rc, layerTilesRenderParameters);
     }
     return _tileImageProvider;
+  }
+
+
+  public final void setChangedInfoListener(ChangedInfoListener changedInfoListener)
+  {
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logError("Changed Info Listener of LayerSet already set");
+      return;
+    }
+    ILogger.instance().logError("Changed Info Listener of LayerSet set ok");
+    _changedInfoListener = changedInfoListener;
+    changedInfo(getInfo());
+  }
+
+  public final java.util.ArrayList<String> getInfo()
+  {
+    _infos.clear();
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      Layer layer = _layers.get(i);
+      if (layer.isEnable())
+      {
+        final String layerInfo = layer.getInfo();
+        _infos.add(layerInfo);
+      }
+    }
+    return _infos;
+  }
+
+  public final void changedInfo(java.util.ArrayList<String> info)
+  {
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedInfo(getInfo());
+    }
   }
 
 }

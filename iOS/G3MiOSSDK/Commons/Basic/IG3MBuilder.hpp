@@ -37,6 +37,7 @@ class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
 class ErrorRenderer;
+class InfoDisplay;
 
 
 class IG3MBuilder {
@@ -67,6 +68,7 @@ private:
   std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
+  InfoDisplay*                      _infoDisplay;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
@@ -91,6 +93,7 @@ private:
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
+  InfoDisplay*                      getInfoDisplay() const;
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
@@ -204,6 +207,8 @@ public:
   ShapesRenderer* createShapesRenderer();
 
   MarksRenderer* createMarksRenderer();
+  
+  void setInfoDisplay(InfoDisplay* infoDisplay);
   
 };
 

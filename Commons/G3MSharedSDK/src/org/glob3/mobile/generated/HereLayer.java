@@ -55,7 +55,6 @@ public class HereLayer extends RasterLayer
 
   protected final TileImageContribution rawContribution(Tile tile)
   {
-    //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
     return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
   }
 
@@ -157,29 +156,32 @@ public class HereLayer extends RasterLayer
   }
 
 
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
+  {
+     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, condition, "");
+  }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, null);
+     this(appId, appCode, timeToCache, readExpired, initialLevel, transparency, null, "");
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(appId, appCode, timeToCache, readExpired, initialLevel, 1, null);
+     this(appId, appCode, timeToCache, readExpired, initialLevel, 1, null, "");
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired)
   {
-     this(appId, appCode, timeToCache, readExpired, 2, 1, null);
+     this(appId, appCode, timeToCache, readExpired, 2, 1, null, "");
   }
   public HereLayer(String appId, String appCode, TimeInterval timeToCache)
   {
-     this(appId, appCode, timeToCache, true, 2, 1, null);
+     this(appId, appCode, timeToCache, true, 2, 1, null, "");
   }
-  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
+  public HereLayer(String appId, String appCode, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition);
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, disclaimerInfo);
      _appId = appId;
      _appCode = appCode;
      _initialLevel = initialLevel;
-  
   }
 
   public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
@@ -295,7 +297,7 @@ public class HereLayer extends RasterLayer
 
   public final HereLayer copy()
   {
-    return new HereLayer(_appId, _appCode, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
+    return new HereLayer(_appId, _appCode, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
   }
 
   public final RenderState getRenderState()
@@ -316,4 +318,10 @@ public class HereLayer extends RasterLayer
     }
     return RenderState.ready();
   }
+
+  public final Sector getDataSector()
+  {
+    return Sector.fullSphere();
+  }
+
 }

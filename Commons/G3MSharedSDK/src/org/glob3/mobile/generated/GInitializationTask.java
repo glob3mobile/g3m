@@ -11,7 +11,6 @@ package org.glob3.mobile.generated;
 
 public abstract class GInitializationTask extends GTask
 {
-  public abstract void run(G3MContext context);
 
   public abstract boolean isDone(G3MContext context);
 }

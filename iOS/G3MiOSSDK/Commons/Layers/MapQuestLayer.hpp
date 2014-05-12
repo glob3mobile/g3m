@@ -34,7 +34,8 @@ private:
                 const TimeInterval&             timeToCache,
                 const bool                      readExpired,
                 const float                     transparency,
-                const LayerCondition*           condition) :
+                const LayerCondition*           condition,
+                const std::string& disclaimerInfo = "") :
   MercatorTiledLayer("http://",
                      domain,
                      subdomains,
@@ -46,9 +47,9 @@ private:
                      maxLevel,
                      false, // isTransparent
                      transparency,
-                     condition)
+                     condition,
+                     disclaimerInfo)
   {
-
   }
 
 

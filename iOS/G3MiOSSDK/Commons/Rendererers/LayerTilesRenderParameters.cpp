@@ -8,6 +8,32 @@
 
 #include "LayerTilesRenderParameters.hpp"
 
+/*
+ return ( topSectorSplitsByLatitude, topSectorSplitsByLongitude )
+ */
+const Vector2I LayerTilesRenderParameters::calculateTopSectorSplitsParametersWGS84(const Sector& topSector) {
+  IMathUtils* math = IMathUtils::instance();
+  const double maxTile = 90;
+  double sLat;
+  double sLon;
+  
+  const double ratio = topSector._deltaLatitude.div(topSector._deltaLongitude);
+  if (ratio > 1) {
+    sLat = ratio;
+    sLon = 1;
+  }
+  else {
+    sLat = 1;
+    sLon = 1 / ratio;
+  }
+  
+  const double tileDeltaLat = topSector._deltaLatitude.div(sLat)._degrees;
+  const double factorLat = tileDeltaLat / maxTile;
+  double factor = math->max(factorLat, 1L);
+  
+  return Vector2I((int) math->round(sLat * factor), (int) math->round(sLon * factor));
+}
+
 bool LayerTilesRenderParameters::isEquals(const LayerTilesRenderParameters* that) const {
   if (that == NULL) {
     return false;

@@ -120,7 +120,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const Sector&                renderedSector,
                                const bool                   renderTileMeshes,
                                const bool                   logTilesPetitions,
-                               TileRenderingListener*       tileRenderingListener) :
+                               TileRenderingListener*       tileRenderingListener,
+                               ChangedRendererInfoListener*         changedInfoListener) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -148,9 +149,12 @@ _tileRenderingListener(tileRenderingListener)
 {
   _context = NULL;
   _layerSet->setChangeListener(this);
+  _layerSet->setChangedInfoListener(this);
   if (_tileRasterizer != NULL) {
     _tileRasterizer->setChangeListener(this);
   }
+  
+  _changedInfoListener = changedInfoListener;
 }
 
 void PlanetRenderer::recreateTiles() {
@@ -335,7 +339,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
   if (_layerTilesRenderParametersDirty) {
     _errors.clear();
     delete _layerTilesRenderParameters;
-    _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_errors);
+    _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart, _errors);
     if (_layerTilesRenderParameters == NULL) {
       ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
     }
@@ -871,3 +875,18 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
     changed();
   }
 }
+
+//std::vector<std::string> PlanetRenderer::getInfo() {
+//  _info.clear();
+//  std::vector<std::string> info = _layerSet->getInfo();
+//  
+//#ifdef C_CODE
+//      _info.insert(_info.end(),info.begin(), info.end());
+//#endif
+//#ifdef JAVA_CODE
+//      _infos.add(info);
+//#endif
+//  
+//  return _info;
+//}
+

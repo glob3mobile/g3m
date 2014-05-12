@@ -25,7 +25,8 @@ protected:
 #endif
   const std::string _imageFormat;
 
-  const Sector _sector;
+  const Sector _dataSector;
+
   const int    _initialLevel;
   const int    _maxLevel;
   const bool   _isTransparent;
@@ -47,12 +48,13 @@ public:
                      const std::string&              imageFormat,
                      const TimeInterval&             timeToCache,
                      const bool                      readExpired,
-                     const Sector&                   sector,
+                     const Sector&                   dataSector,
                      const int                       initialLevel,
                      const int                       maxLevel,
-                     const bool                      isTransparent,
-                     const float                     transparency = 1,
-                     const LayerCondition*           condition    = NULL);
+                     const bool                      isTransparent  = false,
+                     const float                     transparency   = 1,
+                     const LayerCondition*           condition      = NULL,
+                     const std::string&              disclaimerInfo = "");
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
@@ -66,7 +68,11 @@ public:
   virtual MercatorTiledLayer* copy() const;
 
   virtual RenderState getRenderState();
-  
+
+  const Sector getDataSector() const {
+    return _dataSector;
+  }
+
 };
 
 #endif

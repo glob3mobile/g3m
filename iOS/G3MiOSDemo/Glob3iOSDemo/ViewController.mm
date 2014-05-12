@@ -1447,7 +1447,8 @@ public:
                                                      TimeInterval::fromDays(30), // timeToCache
                                                      true,                       // readExpired
                                                      1,                          // transparency
-                                                     NULL                        // condition
+                                                     NULL,                       // condition
+                                                     ""                          // disclaimerInfo
                                                      ));
   }
 
@@ -1512,7 +1513,11 @@ public:
                                                                  Sector::fullSphere(),
                                                                  2,
                                                                  11,
-                                                                 NULL);
+                                                                 false, // isTransparent
+                                                                 1,     // transparency
+                                                                 NULL,  // condition
+                                                                 ""     // disclaimerInfo
+                                                                 );
     layerSet->addLayer(osmEditMapLayer);
   }
 

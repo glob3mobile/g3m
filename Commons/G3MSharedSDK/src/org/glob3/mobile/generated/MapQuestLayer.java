@@ -34,10 +34,13 @@ public class MapQuestLayer extends MercatorTiledLayer
     return result;
   }
 
-  private MapQuestLayer(String domain, java.util.ArrayList<String> subdomains, int initialLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition) // isTransparent
+  private MapQuestLayer(String domain, java.util.ArrayList<String> subdomains, int initialLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
   {
-     super("http://", domain, subdomains, "jpg", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, false, transparency, condition);
-
+     this(domain, subdomains, initialLevel, maxLevel, timeToCache, readExpired, transparency, condition, "");
+  }
+  private MapQuestLayer(String domain, java.util.ArrayList<String> subdomains, int initialLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo) // isTransparent
+  {
+     super("http://", domain, subdomains, "jpg", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, false, transparency, condition, disclaimerInfo);
   }
 
 
@@ -104,7 +107,7 @@ public class MapQuestLayer extends MercatorTiledLayer
 
   public final MapQuestLayer copy()
   {
-    return new MapQuestLayer(_domain, _subdomains, _initialLevel, _maxLevel, _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
+    return new MapQuestLayer(_domain, _subdomains, _initialLevel, _maxLevel, _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
   }
 
   public final RenderState getRenderState()

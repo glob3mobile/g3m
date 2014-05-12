@@ -47,6 +47,7 @@ class GLState;
 class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
+//class InfoDisplay;
 
 #include <vector>
 #include <string>
@@ -55,6 +56,8 @@ class G3MRenderContext;
 #include "Angle.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "RenderState.hpp"
+#include "InfoDisplay.hpp"
+#include "ChangedRendererInfoListener.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -87,7 +90,7 @@ public:
 };
 
 
-class G3MWidget {
+class G3MWidget : public ChangedRendererInfoListener {
 public:
 
   static void initSingletons(ILogger*            logger,
@@ -118,7 +121,8 @@ public:
                            std::vector<PeriodicalTask*>         periodicalTasks,
                            GPUProgramManager*                   gpuProgramManager,
                            SceneLighting*                       sceneLighting,
-                           const InitialCameraPositionProvider* initialCameraPositionProvider);
+                           const InitialCameraPositionProvider* initialCameraPositionProvider,
+                           InfoDisplay* infoDisplay);
 
   ~G3MWidget();
 
@@ -229,6 +233,18 @@ public:
     _forceBusyRenderer = forceBusyRenderer;
   }
   
+  //void notifyChangedInfo() const;
+  
+  void setInfoDisplay(InfoDisplay* infoDisplay) {
+    _infoDisplay = infoDisplay;
+  }
+  
+  InfoDisplay*  getInfoDisplay() const {
+    return _infoDisplay;
+  }
+  
+  void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
+  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -245,7 +261,7 @@ private:
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
-  ProtoRenderer*           _selectedRenderer;
+  ProtoRenderer*      _selectedRenderer;
 
   EffectsScheduler*   _effectsScheduler;
 
@@ -298,6 +314,8 @@ private:
   G3MRenderContext* _renderContext;
 
   bool _forceBusyRenderer;
+  
+  InfoDisplay* _infoDisplay;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -319,7 +337,8 @@ private:
             std::vector<PeriodicalTask*>     periodicalTasks,
             GPUProgramManager*               gpuProgramManager,
             SceneLighting*                   sceneLighting,
-            const InitialCameraPositionProvider* initialCameraPositionProvider);
+            const InitialCameraPositionProvider* initialCameraPositionProvider,
+            InfoDisplay* infoDisplay);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

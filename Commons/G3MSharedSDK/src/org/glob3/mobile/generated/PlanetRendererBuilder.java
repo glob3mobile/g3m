@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//class LayerSet;
+
 
 
 public class PlanetRendererBuilder
@@ -265,6 +267,8 @@ public class PlanetRendererBuilder
 
   private TileRenderingListener _tileRenderingListener;
 
+  private ChangedRendererInfoListener _changedInfoListener;
+
 
   ///#include "MultiLayerTileTexturizer.hpp"
   
@@ -290,6 +294,7 @@ public class PlanetRendererBuilder
      _renderTileMeshes = true;
      _logTilesPetitions = false;
      _tileRenderingListener = null;
+     _changedInfoListener = null;
   }
   public void dispose()
   {
@@ -321,7 +326,7 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -495,4 +500,21 @@ public class PlanetRendererBuilder
     return _tileRenderingListener;
   }
 
+  public final ChangedRendererInfoListener getChangedRendererInfoListener()
+  {
+    return _changedInfoListener;
+  }
+
+  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener)
+  {
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+    }
+    else
+    {
+      _changedInfoListener = changedInfoListener;
+      ILogger.instance().logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
+    }
+  }
 }

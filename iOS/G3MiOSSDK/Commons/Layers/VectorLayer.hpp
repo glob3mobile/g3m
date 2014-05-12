@@ -15,8 +15,9 @@ class VectorLayer : public Layer {
 protected:
   VectorLayer(const LayerTilesRenderParameters* parameters,
               const float                       transparency,
-              const LayerCondition*             condition) :
-  Layer(parameters, transparency, condition)
+              const LayerCondition*             condition,
+              const std::string&                disclaimerInfo) :
+  Layer(parameters, transparency, condition, disclaimerInfo)
   {
   }
 
