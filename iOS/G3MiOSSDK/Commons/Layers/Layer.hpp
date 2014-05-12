@@ -137,14 +137,8 @@ public:
   }
 
   void setInfo(const std::string& disclaimerInfo);
-
-#warning TODO BETTER
-  std::vector<std::string> getInfos() {
-    _info.clear();
-    const std::string layerInfo = getInfo();
-    _info.push_back(layerInfo);
-    return _info;
-  }
+  
+  std::vector<std::string> getInfos();
   
 };
 

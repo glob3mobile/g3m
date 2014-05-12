@@ -173,7 +173,8 @@ public class MainActivity
                TimeInterval.fromDays(30), // timeToCache
                true, // readExpired
                1, // transparency
-               null // condition
+               null, // condition
+               "" // disclaimerInfo
       );
       layerSet.addLayer(tiledVectorLayer);
 

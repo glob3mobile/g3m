@@ -150,3 +150,11 @@ void Layer::setInfo(const std::string& disclaimerInfo) {
     }
   }
 }
+
+std::vector<std::string> Layer::getInfos() {
+#warning TODO BETTER
+  _info.clear();
+  const std::string layerInfo = getInfo();
+  _info.push_back(layerInfo);
+  return _info;
+}
