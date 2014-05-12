@@ -22,7 +22,6 @@ import org.glob3.mobile.generated.URL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.SystemClock;
 import android.util.Log;
 
 
@@ -198,8 +197,8 @@ public final class Downloader_Android_Handler {
             }
          }
          else {
-            final long s = SystemClock.currentThreadTimeMillis();
-            ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod started.");
+            //            final long s = SystemClock.currentThreadTimeMillis();
+            //            ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod started.");
 
             connection = (HttpURLConnection) _javaURL.openConnection();
             // connection.setConnectTimeout((int) downloader.getConnectTimeout().milliseconds());
@@ -210,8 +209,8 @@ public final class Downloader_Android_Handler {
 
             if (statusCode == 200) {
                data = getData(connection.getInputStream(), connection.getContentLength());
-               final long e = SystemClock.currentThreadTimeMillis();
-               ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod: " + (e - s) + " miliseconds");
+               //               final long e = SystemClock.currentThreadTimeMillis();
+               //               ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod: " + (e - s) + " miliseconds");
             }
          }
       }
