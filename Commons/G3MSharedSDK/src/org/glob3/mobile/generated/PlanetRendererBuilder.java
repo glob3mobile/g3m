@@ -267,15 +267,12 @@ public class PlanetRendererBuilder
 
   private TileRenderingListener _tileRenderingListener;
 
-<<<<<<< HEAD
+  private ChangedRendererInfoListener _changedInfoListener;
+
 
   ///#include "MultiLayerTileTexturizer.hpp"
   
   
-=======
-  private ChangedRendererInfoListener _changedInfoListener;
-
->>>>>>> purgatory
   public PlanetRendererBuilder()
   {
      _showStatistics = false;
@@ -329,11 +326,7 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-<<<<<<< HEAD
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener());
-=======
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener());
->>>>>>> purgatory
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {

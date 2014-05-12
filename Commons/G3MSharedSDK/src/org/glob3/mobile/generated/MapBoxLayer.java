@@ -48,57 +48,34 @@ public class MapBoxLayer extends MercatorTiledLayer
   // TODO: parse json of layer metadata
   // http://a.tiles.mapbox.com/v3/examples.map-qfyrx5r8.json
 
-<<<<<<< HEAD
+  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition)
+  {
+     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, transparency, condition, "");
+  }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency)
   {
-     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, transparency, null);
+     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, transparency, null, "");
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel)
   {
-     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, 1, null);
+     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, 1, null, "");
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(mapKey, timeToCache, readExpired, initialLevel, 19, 1, null);
+     this(mapKey, timeToCache, readExpired, initialLevel, 19, 1, null, "");
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired)
   {
-     this(mapKey, timeToCache, readExpired, 1, 19, 1, null);
+     this(mapKey, timeToCache, readExpired, 1, 19, 1, null, "");
   }
   public MapBoxLayer(String mapKey, TimeInterval timeToCache)
   {
-     this(mapKey, timeToCache, true, 1, 19, 1, null);
+     this(mapKey, timeToCache, true, 1, 19, 1, null, "");
   }
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition) // isTransparent
+  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition, String disclaimerInfo) // isTransparent
   {
-     super("http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, false, transparency, condition);
-=======
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, LayerCondition condition)
-  {
-     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, condition, "");
-  }
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel)
-  {
-     this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, null, "");
-  }
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel)
-  {
-     this(mapKey, timeToCache, readExpired, initialLevel, 19, null, "");
-  }
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired)
-  {
-     this(mapKey, timeToCache, readExpired, 1, 19, null, "");
-  }
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache)
-  {
-     this(mapKey, timeToCache, true, 1, 19, null, "");
-  }
-  public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, LayerCondition condition, String disclaimerInfo)
-  {
-     super("MapBoxLayer", "http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, condition, (float)1.0, disclaimerInfo);
->>>>>>> purgatory
+     super("http://", "tiles.mapbox.com/v3/" + mapKey, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, false, transparency, condition, disclaimerInfo);
      _mapKey = mapKey;
-
   }
 
   public final String description()
@@ -108,11 +85,7 @@ public class MapBoxLayer extends MercatorTiledLayer
 
   public final MapBoxLayer copy()
   {
-<<<<<<< HEAD
-    return new MapBoxLayer(_mapKey, _timeToCache, _readExpired, _initialLevel, _maxLevel, _transparency, (_condition == null) ? null : _condition.copy());
-=======
-    return new MapBoxLayer(_mapKey, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
->>>>>>> purgatory
+    return new MapBoxLayer(_mapKey, _timeToCache, _readExpired, _initialLevel, _maxLevel, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
   }
 
   public final RenderState getRenderState()

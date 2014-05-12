@@ -19,9 +19,9 @@ package org.glob3.mobile.generated;
 
 public abstract class VectorLayer extends Layer
 {
-  protected VectorLayer(LayerTilesRenderParameters parameters, float transparency, LayerCondition condition)
+  protected VectorLayer(LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(parameters, transparency, condition);
+     super(parameters, transparency, condition, disclaimerInfo);
   }
 
 }

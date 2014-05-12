@@ -9,6 +9,7 @@ public class WMSLayer extends RasterLayer
   private final WMSServerVersion _mapServerVersion;
   private final String _queryLayer;
   private final WMSServerVersion _queryServerVersion;
+  private final Sector _dataSector ;
   private final String _format;
   private final String _srs;
   private final String _style;
@@ -106,17 +107,17 @@ public class WMSLayer extends RasterLayer
   {
     final Sector tileSector = tile._sector;
   
-    if (!_sector.touchesWith(tileSector))
+    if (!_dataSector.touchesWith(tileSector))
     {
       return null;
     }
-    else if (_sector.fullContains(tileSector))
+    else if (_dataSector.fullContains(tileSector))
     {
       return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
     }
     else
     {
-      final Sector contributionSector = _sector.intersection(tileSector);
+      final Sector contributionSector = _dataSector.intersection(tileSector);
       return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(contributionSector, _transparency) : TileImageContribution.partialCoverageOpaque(contributionSector));
     }
   }
@@ -134,7 +135,7 @@ public class WMSLayer extends RasterLayer
   //    return petitions;
   //  }
   //
-    final Sector sector = tileSector.intersection(_sector);
+    final Sector sector = tileSector.intersection(_dataSector);
   //  if (sector._deltaLatitude.isZero() ||
   //      sector._deltaLongitude.isZero() ) {
   //    return petitions;
@@ -269,34 +270,23 @@ public class WMSLayer extends RasterLayer
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
-<<<<<<< HEAD
-     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, 1);
-=======
      this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, transparency, "");
->>>>>>> purgatory
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-<<<<<<< HEAD
-     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, 1);
-=======
-     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, (float)1.0, "");
->>>>>>> purgatory
+     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, 1, "");
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-<<<<<<< HEAD
-     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters, transparency, condition);
-=======
-     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, (float)1.0, "");
+     this(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, 1, "");
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, String disclaimerInfo)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(0, 17) : parameters, dataSector, transparency, disclaimerInfo);
->>>>>>> purgatory
+     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), 0, 17) : parameters, transparency, condition, disclaimerInfo);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
+     _dataSector = new Sector(dataSector);
      _queryLayer = queryLayer;
      _queryServerURL = queryServerURL;
      _queryServerVersion = queryServerVersion;
@@ -305,7 +295,6 @@ public class WMSLayer extends RasterLayer
      _style = style;
      _isTransparent = isTransparent;
      _extraParameter = "";
-  
   }
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
@@ -314,30 +303,19 @@ public class WMSLayer extends RasterLayer
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-<<<<<<< HEAD
-     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, 1);
-=======
-     this(mapLayer, mapServerURL, mapServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, (float)1.0, "");
->>>>>>> purgatory
+     this(mapLayer, mapServerURL, mapServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, parameters, 1, "");
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-<<<<<<< HEAD
-     this(mapLayer, mapServerURL, mapServerVersion, sector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, 1);
-=======
-     this(mapLayer, mapServerURL, mapServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, (float)1.0, "");
->>>>>>> purgatory
+     this(mapLayer, mapServerURL, mapServerVersion, dataSector, format, srs, style, isTransparent, condition, timeToCache, readExpired, null, 1, "");
   }
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector dataSector, String format, String srs, String style, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, String disclaimerInfo)
   {
-<<<<<<< HEAD
-     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere()) : parameters, transparency, condition);
-=======
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(0, 17) : parameters, dataSector, transparency, disclaimerInfo);
->>>>>>> purgatory
+     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), 0, 17) : parameters, transparency, condition, disclaimerInfo);
      _mapLayer = mapLayer;
      _mapServerURL = mapServerURL;
      _mapServerVersion = mapServerVersion;
+     _dataSector = new Sector(dataSector);
      _queryLayer = mapLayer;
      _queryServerURL = mapServerURL;
      _queryServerVersion = mapServerVersion;
@@ -348,7 +326,6 @@ public class WMSLayer extends RasterLayer
      _extraParameter = "";
   
   }
-
 
   public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
@@ -510,11 +487,7 @@ public class WMSLayer extends RasterLayer
       return URL.nullURL();
     }
   
-<<<<<<< HEAD
-    final Sector intersectionSector = tileSector.intersection(_sector);
-=======
-    final Sector sector = tileSector.intersection(_dataSector);
->>>>>>> purgatory
+    final Sector intersectionSector = tileSector.intersection(_dataSector);
   
      //Server name
     String req = _queryServerURL._path;
@@ -659,11 +632,7 @@ public class WMSLayer extends RasterLayer
 
   public final WMSLayer copy()
   {
-<<<<<<< HEAD
-    return new WMSLayer(_mapLayer, _mapServerURL, _mapServerVersion, _queryLayer, _queryServerURL, _queryServerVersion, _sector, _format, _srs, _style, _isTransparent, (_condition == null) ? null : _condition.copy(), _timeToCache, _readExpired, (_parameters == null) ? null : _parameters.copy());
-=======
-    return new WMSLayer(_mapLayer, _mapServerURL, _mapServerVersion, _queryLayer, _queryServerURL, _queryServerVersion, _dataSector, _format, _srs, _style, _isTransparent, (_condition == null) ? null : _condition.copy(), TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, (_parameters == null) ? null : _parameters.copy(), _transparency, _disclaimerInfo);
->>>>>>> purgatory
+    return new WMSLayer(_mapLayer, _mapServerURL, _mapServerVersion, _queryLayer, _queryServerURL, _queryServerVersion, _dataSector, _format, _srs, _style, _isTransparent, (_condition == null) ? null : _condition.copy(), _timeToCache, _readExpired, (_parameters == null) ? null : _parameters.copy(), _transparency, _disclaimerInfo);
   }
 
   public final RenderState getRenderState()
@@ -689,4 +658,10 @@ public class WMSLayer extends RasterLayer
     }
     return RenderState.ready();
   }
+
+  public final Sector getDataSector()
+  {
+    return _dataSector;
+  }
+
 }

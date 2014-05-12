@@ -36,28 +36,19 @@ public class LayerSet implements ChangedInfoListener
 
   private ChangedListener _listener;
 
-<<<<<<< HEAD
-=======
   private ChangedInfoListener _changedInfoListener;
 
-//  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
->>>>>>> purgatory
+  //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
   private java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
 
   private void layersChanged()
   {
-<<<<<<< HEAD
-  //  delete _tileImageProvider;
     if (_tileImageProvider != null)
     {
       _tileImageProvider._release();
       _tileImageProvider = null;
     }
-=======
-  //  delete _layerTilesRenderParameters;
-  //  _layerTilesRenderParameters = NULL;
->>>>>>> purgatory
     if (_listener != null)
     {
       _listener.changed();
@@ -104,15 +95,12 @@ public class LayerSet implements ChangedInfoListener
   }
 
   public LayerSet()
+  //  _layerTilesRenderParameters(NULL),
   {
      _listener = null;
      _context = null;
-<<<<<<< HEAD
      _tileImageProvider = null;
-=======
      _changedInfoListener = null;
-
->>>>>>> purgatory
   }
 
   public void dispose()
@@ -122,8 +110,6 @@ public class LayerSet implements ChangedInfoListener
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
-  
-  //  delete _tileImageProvider;
     _tileImageProvider._release();
   }
 
@@ -524,7 +510,6 @@ public class LayerSet implements ChangedInfoListener
     }
   }
 
-<<<<<<< HEAD
   public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
@@ -574,7 +559,7 @@ public class LayerSet implements ChangedInfoListener
     return _tileImageProvider;
   }
 
-=======
+
   public final void setChangedInfoListener(ChangedInfoListener changedInfoListener)
   {
     if (_changedInfoListener != null)
@@ -610,5 +595,5 @@ public class LayerSet implements ChangedInfoListener
       _changedInfoListener.changedInfo(getInfo());
     }
   }
->>>>>>> purgatory
+
 }

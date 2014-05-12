@@ -26,19 +26,19 @@ public class TiledVectorLayer extends VectorLayer
 {
   private final GEORasterSymbolizer _symbolizer;
   private final String _urlTemplate;
-  private final Sector _sector ;
+  private final Sector _dataSector ;
   private final TimeInterval _timeToCache;
   private final boolean _readExpired;
 
   private IMathUtils   _mu;
   private IStringUtils _su;
 
-  private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector sector, LayerTilesRenderParameters parameters, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
+  private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, LayerTilesRenderParameters parameters, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(parameters, transparency, condition);
+     super(parameters, transparency, condition, disclaimerInfo);
      _symbolizer = symbolizer;
      _urlTemplate = urlTemplate;
-     _sector = new Sector(sector);
+     _dataSector = new Sector(dataSector);
      _timeToCache = timeToCache;
      _readExpired = readExpired;
      _su = null;
@@ -105,21 +105,13 @@ public class TiledVectorLayer extends VectorLayer
       return false;
     }
   
-    return _sector.isEquals(t._sector);
+    return _dataSector.isEquals(t._dataSector);
   }
 
 
-  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency)
+  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     return newMercator(symbolizer, urlTemplate, sector, firstLevel, maxLevel, timeToCache, readExpired, transparency, null);
-  }
-  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired)
-  {
-     return newMercator(symbolizer, urlTemplate, sector, firstLevel, maxLevel, timeToCache, readExpired, 1, null);
-  }
-  public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector sector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
-  {
-    return new TiledVectorLayer(symbolizer, urlTemplate, sector, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), timeToCache, readExpired, transparency, condition);
+    return new TiledVectorLayer(symbolizer, urlTemplate, dataSector, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), timeToCache, readExpired, transparency, condition, disclaimerInfo);
   }
 
   public void dispose()
@@ -146,14 +138,14 @@ public class TiledVectorLayer extends VectorLayer
 
   public final TiledVectorLayer copy()
   {
-    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _sector, _parameters.copy(), _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy());
+    return new TiledVectorLayer(_symbolizer.copy(), _urlTemplate, _dataSector, _parameters.copy(), _timeToCache, _readExpired, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
   }
 
   public final TileImageContribution contribution(Tile tile)
   {
     if ((_condition == null) || _condition.isAvailable(tile))
     {
-      return (_sector.touchesWith(tile._sector) ? TileImageContribution.fullCoverageTransparent(_transparency) : null);
+      return (_dataSector.touchesWith(tile._sector) ? TileImageContribution.fullCoverageTransparent(_transparency) : null);
     }
     return null;
   }
@@ -183,4 +175,10 @@ public class TiledVectorLayer extends VectorLayer
   {
     return _symbolizer.copy();
   }
+
+  public final Sector getDataSector()
+  {
+    return _dataSector;
+  }
+
 }

@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  ICanvasUtils.h
+//  ICanvasUtils.hpp
 //  G3MiOSSDK
 //
 //  Created by Mari Luz Mateo on 07/05/14.
@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "ILogger.hpp"
 //class ICanvas;
 //class GFont;
 //class Vector2F;
