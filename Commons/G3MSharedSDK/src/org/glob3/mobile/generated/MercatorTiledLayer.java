@@ -146,6 +146,22 @@ public class MercatorTiledLayer extends RasterLayer
    Implementation details: http: //wiki.openstreetmap.org/wiki/Slippy_map_tilenames
    */
   
+  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector dataSector, int initialLevel, int maxLevel, boolean isTransparent, float transparency, LayerCondition condition)
+  {
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, dataSector, initialLevel, maxLevel, isTransparent, transparency, condition, "");
+  }
+  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector dataSector, int initialLevel, int maxLevel, boolean isTransparent, float transparency)
+  {
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, dataSector, initialLevel, maxLevel, isTransparent, transparency, null, "");
+  }
+  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector dataSector, int initialLevel, int maxLevel, boolean isTransparent)
+  {
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, dataSector, initialLevel, maxLevel, isTransparent, 1, null, "");
+  }
+  public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector dataSector, int initialLevel, int maxLevel)
+  {
+     this(protocol, domain, subdomains, imageFormat, timeToCache, readExpired, dataSector, initialLevel, maxLevel, false, 1, null, "");
+  }
   public MercatorTiledLayer(String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector dataSector, int initialLevel, int maxLevel, boolean isTransparent, float transparency, LayerCondition condition, String disclaimerInfo)
   {
      super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, disclaimerInfo);
