@@ -817,6 +817,8 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void pollApplicationDataFromServer(const G3MContext* context);
+  
+  const std::string getApplicationId();
 };
 
 #endif

@@ -575,37 +575,38 @@ ProtoRenderer* MapBooBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
 }
 
-ErrorRenderer* MapBooBuilder::createErrorRenderer() {
-  class Mapboo_ErrorMessagesCustomizer : public ErrorMessagesCustomizer {
-  private:
-    MapBooBuilder* _mbBuilder;
-  public:
-    Mapboo_ErrorMessagesCustomizer(MapBooBuilder* mbBuilder) {
-      _mbBuilder = mbBuilder;
-    }
-    ~Mapboo_ErrorMessagesCustomizer() {}
-    std::vector<std::string> customize(const std::vector<std::string>& errors) {
-      std::vector<std::string> customizedErrorMessages;
-      const IStringUtils* stringUtils = IStringUtils::instance();
-      const int errorsSize = errors.size();
-      
-      const std::string appNotFound = "Invalid request: Application #" + _mbBuilder->_applicationId + " not found";
-      
-      for (int i = 0; i < errorsSize; i++) {
-        std::string error = errors.at(i);
-        if (stringUtils->beginsWith(error, appNotFound)) {
-          customizedErrorMessages.push_back("Oops, application not found!");
-          break;
-        }
-        else {
-          customizedErrorMessages.push_back(error);
-        }
+
+class Mapboo_ErrorMessagesCustomizer : public ErrorMessagesCustomizer {
+private:
+  MapBooBuilder* _mbBuilder;
+public:
+  Mapboo_ErrorMessagesCustomizer(MapBooBuilder* mbBuilder) {
+    _mbBuilder = mbBuilder;
+  }
+  ~Mapboo_ErrorMessagesCustomizer() {}
+  std::vector<std::string> customize(const std::vector<std::string>& errors) {
+    std::vector<std::string> customizedErrorMessages;
+    const IStringUtils* stringUtils = IStringUtils::instance();
+    const int errorsSize = errors.size();
+    
+    const std::string appNotFound = "Invalid request: Application #" + _mbBuilder->getApplicationId() + " not found";
+    
+    for (int i = 0; i < errorsSize; i++) {
+      std::string error = errors.at(i);
+      if (stringUtils->beginsWith(error, appNotFound)) {
+        customizedErrorMessages.push_back("Oops, application not found!");
+        break;
       }
-      
-      return customizedErrorMessages;
-    };
+      else {
+        customizedErrorMessages.push_back(error);
+      }
+    }
+    
+    return customizedErrorMessages;
   };
-  
+};
+
+ErrorRenderer* MapBooBuilder::createErrorRenderer() {
   return new HUDErrorRenderer(new Mapboo_ErrorMessagesCustomizer(this));
 }
 
@@ -1631,6 +1632,10 @@ void MapBooBuilder::setApplicationEventId(const int eventId) {
 
 int MapBooBuilder::getApplicationTimestamp() const {
   return _applicationTimestamp;
+}
+
+const std::string MapBooBuilder::getApplicationId() {
+  return _applicationId;
 }
 
 void MapBooBuilder::saveApplicationData() const {

@@ -70,23 +70,23 @@ Vector2F ICanvasUtils::drawStringsOn(const std::vector<std::string> &strings,
     case Top:
       top = 0;
       break;
-    case Middle:
-      top = (height / 2) - (extent._y / 2);
-      break;
     case Bottom:
       top = height - extent._y;
       break;
+    case Middle:
+    default:
+      top = (height / 2) - (extent._y / 2);
   }
   switch (hAlign) {
     case Left:
       left = 0;
       break;
-    case Center:
-      left = (width / 2) - (extent._x / 2);
-      break;
     case Right:
       left = width - extent._x;
       break;
+    case Center:
+    default:
+      left = (width / 2) - (extent._x / 2);
   }
 
   column.drawAt(left, top, canvas);
