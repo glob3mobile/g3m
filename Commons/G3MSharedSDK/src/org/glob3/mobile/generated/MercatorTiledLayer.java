@@ -24,7 +24,6 @@ public class MercatorTiledLayer extends Layer
   protected final java.util.ArrayList<String> _subdomains;
   protected final String _imageFormat;
 
-  protected final Sector _sector ;
   protected final int _initialLevel;
   protected final int _maxLevel;
 
@@ -52,7 +51,7 @@ public class MercatorTiledLayer extends Layer
       return false;
     }
   
-    if (!_sector.isEquals(t._sector))
+    if (!_dataSector.isEquals(t._dataSector))
     {
       return false;
     }
@@ -93,22 +92,21 @@ public class MercatorTiledLayer extends Layer
    Implementation details: http: //wiki.openstreetmap.org/wiki/Slippy_map_tilenames
    */
   
-  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition, float transparency)
+  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector dataSector, int initialLevel, int maxLevel, LayerCondition condition, float transparency)
   {
-     this(name, protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, condition, transparency, "");
+     this(name, protocol, domain, subdomains, imageFormat, timeToCache, readExpired, dataSector, initialLevel, maxLevel, condition, transparency, "");
   }
-  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition)
+  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector dataSector, int initialLevel, int maxLevel, LayerCondition condition)
   {
-     this(name, protocol, domain, subdomains, imageFormat, timeToCache, readExpired, sector, initialLevel, maxLevel, condition, (float)1.0, "");
+     this(name, protocol, domain, subdomains, imageFormat, timeToCache, readExpired, dataSector, initialLevel, maxLevel, condition, (float)1.0, "");
   }
-  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector sector, int initialLevel, int maxLevel, LayerCondition condition, float transparency, String disclaimerInfo)
+  public MercatorTiledLayer(String name, String protocol, String domain, java.util.ArrayList<String> subdomains, String imageFormat, TimeInterval timeToCache, boolean readExpired, Sector dataSector, int initialLevel, int maxLevel, LayerCondition condition, float transparency, String disclaimerInfo)
   {
-     super(condition, name, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, disclaimerInfo);
+     super(condition, name, timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, maxLevel, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), dataSector, transparency, disclaimerInfo);
      _protocol = protocol;
      _domain = domain;
      _subdomains = subdomains;
      _imageFormat = imageFormat;
-     _sector = new Sector(sector);
      _initialLevel = initialLevel;
      _maxLevel = maxLevel;
   
@@ -126,12 +124,12 @@ public class MercatorTiledLayer extends Layer
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
     final Sector tileSector = tile._sector;
-    if (!_sector.touchesWith(tileSector))
+    if (!_dataSector.touchesWith(tileSector))
     {
       return petitions;
     }
   
-    final Sector sector = tileSector.intersection(_sector);
+    final Sector sector = tileSector.intersection(_dataSector);
     if (sector._deltaLatitude.isZero() || sector._deltaLongitude.isZero())
     {
       return petitions;
@@ -188,7 +186,7 @@ public class MercatorTiledLayer extends Layer
 
   public MercatorTiledLayer copy()
   {
-    return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _sector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy(), _transparency, _disclaimerInfo);
+    return new MercatorTiledLayer(_name, _protocol, _domain, _subdomains, _imageFormat, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _dataSector, _initialLevel, _maxLevel, (_condition == null) ? null : _condition.copy(), _transparency, _disclaimerInfo);
   }
 
   public RenderState getRenderState()

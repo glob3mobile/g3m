@@ -86,15 +86,7 @@ public class LayerTilesRenderParameters
 
   public static LayerTilesRenderParameters createDefaultWGS84(int firstLevel, int maxLevel)
   {
-    final Sector topSector = Sector.fullSphere();
-    final Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
-    final int topSectorSplitsByLatitude = splitsParameters._x;
-    final int topSectorSplitsByLongitude = splitsParameters._y;
-//    const int  topSectorSplitsByLatitude  = 2;
-//    const int  topSectorSplitsByLongitude = 4;
-    final boolean mercator = false;
-
-    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
+    return createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
   }
 
   public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)

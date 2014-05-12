@@ -110,7 +110,7 @@ public class BingMapsLayer extends Layer
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency, String disclaimerInfo)
   {
-     super(condition, "BingMaps", timeToCache, readExpired, null, transparency, disclaimerInfo);
+     super(condition, "BingMaps", timeToCache, readExpired, null, Sector.fullSphere(), transparency, disclaimerInfo);
      _imagerySet = imagerySet;
      _culture = "en-US";
      _key = key;
@@ -141,7 +141,7 @@ public class BingMapsLayer extends Layer
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency, String disclaimerInfo)
   {
-     super(condition, "BingMaps", timeToCache, readExpired, null, transparency, disclaimerInfo);
+     super(condition, "BingMaps", timeToCache, readExpired, null, Sector.fullSphere(), transparency, disclaimerInfo);
      _imagerySet = imagerySet;
      _culture = culture;
      _key = key;

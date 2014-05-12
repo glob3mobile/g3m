@@ -34,6 +34,8 @@ public abstract class MapBooBuilder
 
   private boolean _isApplicationTubeOpen;
 
+  private MapBoo_ErrorRenderer _mbErrorRenderer;
+
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
   {
@@ -106,7 +108,46 @@ public abstract class MapBooBuilder
 
   private ErrorRenderer createErrorRenderer()
   {
-    return new HUDErrorRenderer();
+//C++ TO JAVA CONVERTER TODO TASK: Java does not allow declaring types within methods:
+//    class Mapboo_ErrorMessagesCustomizer : public ErrorMessagesCustomizer
+//    {
+//    private:
+//      MapBooBuilder* _mbBuilder;
+//    public:
+//      Mapboo_ErrorMessagesCustomizer(MapBooBuilder* mbBuilder)
+//      {
+//        _mbBuilder = mbBuilder;
+//      }
+//      ~Mapboo_ErrorMessagesCustomizer()
+//      {
+//      }
+//      java.util.ArrayList<String> customize(const java.util.ArrayList<String>& errors)
+//      {
+//        java.util.ArrayList<String> customizedErrorMessages;
+//        const IStringUtils* stringUtils = IStringUtils::instance();
+//        const int errorsSize = errors.size();
+//  
+//        const String appNotFound = "Invalid request: Application #" + _mbBuilder->_applicationId + " not found";
+//  
+//        for (int i = 0; i < errorsSize; i++)
+//        {
+//          String error = errors.at(i);
+//          if (stringUtils->beginsWith(error, appNotFound))
+//          {
+//            customizedErrorMessages.push_back("Oops, application not found!");
+//            break;
+//          }
+//          else
+//          {
+//            customizedErrorMessages.push_back(error);
+//          }
+//        }
+//  
+//        return customizedErrorMessages;
+//      };
+//    };
+  
+    return new HUDErrorRenderer(new Mapboo_ErrorMessagesCustomizer(this));
   }
 
   private java.util.ArrayList<PeriodicalTask> createPeriodicalTasks()
@@ -1014,6 +1055,10 @@ public abstract class MapBooBuilder
   
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
+  
+    _mbErrorRenderer = new MapBoo_ErrorRenderer();
+    mainRenderer.addRenderer(_mbErrorRenderer);
+  
     final Planet planet = createPlanet();
   
     PlanetRenderer planetRenderer = createPlanetRenderer();
@@ -1307,6 +1352,8 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void parseApplicationJSON(JSONObject jsonObject, URL url)
   {
+    java.util.ArrayList<String> errors = new java.util.ArrayList<String>();
+  
     if (jsonObject == null)
     {
       ILogger.instance().logError("Invalid ApplicationJSON");
@@ -1442,9 +1489,16 @@ public abstract class MapBooBuilder
       }
       else
       {
+        errors.add(jsonError.value());
         ILogger.instance().logError("Server Error: %s", jsonError.value());
+        if (_initialParse)
+        {
+          _initialParse = false;
+          setHasParsedApplication();
+        }
       }
     }
+    _mbErrorRenderer.setErrors(errors);
   }
 
   /** Private to MapbooBuilder, don't call it */

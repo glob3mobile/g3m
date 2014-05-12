@@ -305,7 +305,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _errors.clear();
       _layerTilesRenderParameters = null;
-      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
+      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, _errors);
       if (_layerTilesRenderParameters == null)
       {
         ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");

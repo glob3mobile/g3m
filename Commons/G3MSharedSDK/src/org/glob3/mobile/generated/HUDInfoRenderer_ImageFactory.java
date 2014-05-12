@@ -6,49 +6,7 @@ public class HUDInfoRenderer_ImageFactory extends HUDImageRenderer.CanvasImageFa
 
   protected final void drawOn(ICanvas canvas, int width, int height)
   {
-    int longestTextIndex = 0;
-    int maxLength = _infos.get(longestTextIndex).length();
-    final int infosSize = _infos.size();
-    for (int i = 1; i < infosSize; i++)
-    {
-      final int itemLength = _infos.get(i).length();
-      if (maxLength < itemLength)
-      {
-        maxLength = itemLength;
-        longestTextIndex = i;
-      }
-    }
-  
-    int fontSize = 11;
-    int textHeight = 0;
-    final int padding = 2;
-    final int maxWidth = width - (2 * padding);
-    boolean fit = false;
-    while (!fit && fontSize > 2)
-    {
-      GFont labelFont = GFont.sansSerif(fontSize);
-      final String longestText = _infos.get(longestTextIndex);
-      canvas.setFont(labelFont);
-      final Vector2F extent = canvas.textExtent(longestText);
-      if (extent._x <= maxWidth)
-      {
-        fit = true;
-        textHeight = (int) extent._y;
-      }
-      else
-      {
-        fontSize--;
-      }
-    }
-  
-    canvas.setFillColor(Color.white());
-    canvas.setShadow(Color.black(), 1.0f, 1.0f, -1.0f);
-    int cursor = textHeight + padding;
-    for (int i = 0; i < infosSize; i++)
-    {
-      canvas.fillText(_infos.get(i), 2, height - cursor);
-      cursor += textHeight;
-    }
+    ICanvasUtils.drawStringsOn(_infos, canvas, width, height, VerticalAlignment.Bottom, HorizontalAlignment.Left, Color.white(), 11, 2, Color.transparent(), Color.black(), 5);
   }
 
   protected final boolean isEquals(java.util.ArrayList<String> v1, java.util.ArrayList<String> v2)

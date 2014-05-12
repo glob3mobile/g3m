@@ -59,7 +59,9 @@ public abstract class Layer
 
   protected final float _transparency;
 
-  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, String disclaimerInfo)
+  protected final Sector _dataSector ;
+
+  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, Sector dataSector, float transparency, String disclaimerInfo)
   {
      _condition = condition;
      _name = name;
@@ -69,6 +71,7 @@ public abstract class Layer
      _enable = true;
      _parameters = parameters;
      _title = "";
+     _dataSector = new Sector(dataSector);
      _transparency = transparency;
      _disclaimerInfo = disclaimerInfo;
 
@@ -97,6 +100,11 @@ public abstract class Layer
   public final boolean getReadExpired()
   {
     return _readExpired;
+  }
+
+  public final Sector getDataSector()
+  {
+    return _dataSector;
   }
 
   public void setEnable(boolean enable)

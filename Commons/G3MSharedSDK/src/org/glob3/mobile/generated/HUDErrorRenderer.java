@@ -1,33 +1,18 @@
 package org.glob3.mobile.generated; 
-//
-//  HUDErrorRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 9/28/13.
-//
-//
-
-//
-//  HUDErrorRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 9/28/13.
-//
-//
-
-
-
-//class HUDImageRenderer;
-
-
 public class HUDErrorRenderer implements ErrorRenderer
 {
   private HUDImageRenderer _hudImageRenderer;
+  private ErrorMessagesCustomizer _errorMessageCustomizer;
 
 
   public HUDErrorRenderer()
   {
+     this(null);
+  }
+  public HUDErrorRenderer(ErrorMessagesCustomizer errorMessageCustomizer)
+  {
     _hudImageRenderer = new HUDImageRenderer(new HUDErrorRenderer_ImageFactory());
+    _errorMessageCustomizer = errorMessageCustomizer;
   }
 
   public void dispose()
@@ -38,7 +23,8 @@ public class HUDErrorRenderer implements ErrorRenderer
   public final void setErrors(java.util.ArrayList<String> errors)
   {
     HUDErrorRenderer_ImageFactory factory = (HUDErrorRenderer_ImageFactory)(_hudImageRenderer.getImageFactory());
-    if (factory.setErrors(errors))
+    final java.util.ArrayList<String> customizedErrors = (_errorMessageCustomizer != null) ? _errorMessageCustomizer.customize(errors) : errors;
+    if (factory.setErrors(customizedErrors))
     {
       _hudImageRenderer.recreateImage();
     }

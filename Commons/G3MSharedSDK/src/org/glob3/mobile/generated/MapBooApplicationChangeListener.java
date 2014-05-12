@@ -58,7 +58,6 @@ package org.glob3.mobile.generated;
 //class Sector;
 
 
-
 public abstract class MapBooApplicationChangeListener
 {
   public void dispose()

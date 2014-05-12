@@ -269,7 +269,7 @@ public class LayerSet implements ChangedInfoListener
     return null;
   }
 
-  public final LayerTilesRenderParameters createLayerTilesRenderParameters(java.util.ArrayList<String> errors)
+  public final LayerTilesRenderParameters createLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<String> errors)
   {
     Sector topSector = null;
     int topSectorSplitsByLatitude = 0;
@@ -281,10 +281,55 @@ public class LayerSet implements ChangedInfoListener
     int tileMeshWidth = 0;
     int tileMeshHeight = 0;
     boolean mercator = false;
+    Sector biggestDataSector = null;
   
     boolean layerSetNotReadyFlag = false;
     boolean first = true;
     final int layersCount = _layers.size();
+  
+    if (forceFirstLevelTilesRenderOnStart && layersCount > 0)
+    {
+      double biggestArea = 0;
+      for (int i = 0; i < layersCount; i++)
+      {
+        Layer layer = _layers.get(i);
+        if (layer.isEnable())
+        {
+          final double layerArea = layer.getDataSector().getAngularAreaInSquaredDegrees();
+          if (layerArea > biggestArea)
+          {
+            if (biggestDataSector != null)
+               biggestDataSector.dispose();
+            biggestDataSector = new Sector(layer.getDataSector());
+            biggestArea = layerArea;
+          }
+        }
+      }
+      if (biggestDataSector != null)
+      {
+        boolean dataSectorsInconsistency = false;
+        for (int i = 0; i < layersCount; i++)
+        {
+          Layer layer = _layers.get(i);
+          if (layer.isEnable())
+          {
+            if (!biggestDataSector.fullContains(layer.getDataSector()))
+            {
+              dataSectorsInconsistency = true;
+              break;
+            }
+          }
+        }
+        if (dataSectorsInconsistency)
+        {
+          errors.add("Inconsistency in layers data sectors");
+          return null;
+        }
+      }
+      if (biggestDataSector != null)
+         biggestDataSector.dispose();
+    }
+  
     for (int i = 0; i < layersCount; i++)
     {
       Layer layer = _layers.get(i);
