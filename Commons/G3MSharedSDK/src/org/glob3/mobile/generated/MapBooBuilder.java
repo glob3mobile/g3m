@@ -34,6 +34,8 @@ public abstract class MapBooBuilder
 
   private boolean _isApplicationTubeOpen;
 
+  private MapBoo_ErrorRenderer _mbErrorRenderer;
+
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
   {
@@ -63,7 +65,13 @@ public abstract class MapBooBuilder
   
     TileRenderingListener tileRenderingListener = null;
   
+<<<<<<< HEAD
     PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener);
+=======
+    ChangedRendererInfoListener changedRendererInfoListener = null;
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener);
+>>>>>>> purgatory
   
     if (_enableNotifications)
     {
@@ -104,7 +112,7 @@ public abstract class MapBooBuilder
 
   private ErrorRenderer createErrorRenderer()
   {
-    return new HUDErrorRenderer();
+    return new HUDErrorRenderer(new Mapboo_ErrorMessagesCustomizer(this));
   }
 
   private java.util.ArrayList<PeriodicalTask> createPeriodicalTasks()
@@ -190,33 +198,34 @@ public abstract class MapBooBuilder
     }
   
     final String layerType = jsonLayer.getAsString("layer", "<layer not present>");
+    Layer layer;
     if (layerType.compareTo("OSM") == 0)
     {
-      return new OSMLayer(defaultTimeToCache);
+      layer = new OSMLayer(defaultTimeToCache);
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
-      return parseMapQuestLayer(jsonLayer, defaultTimeToCache);
+      layer = parseMapQuestLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("BingMaps") == 0)
     {
-      return parseBingMapsLayer(jsonLayer, defaultTimeToCache);
+      layer = parseBingMapsLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("CartoDB") == 0)
     {
-      return parseCartoDBLayer(jsonLayer, defaultTimeToCache);
+      layer = parseCartoDBLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("MapBox") == 0)
     {
-      return parseMapBoxLayer(jsonLayer, defaultTimeToCache);
+      layer = parseMapBoxLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("WMS") == 0)
     {
-      return parseWMSLayer(jsonLayer);
+      layer = parseWMSLayer(jsonLayer);
     }
     else if (layerType.compareTo("URLTemplate") == 0)
     {
-      return parseURLTemplateLayer(jsonLayer);
+      layer = parseURLTemplateLayer(jsonLayer);
     }
     else
     {
@@ -224,6 +233,13 @@ public abstract class MapBooBuilder
       ILogger.instance().logError("%s", jsonBaseObjectLayer.description());
       return null;
     }
+  
+    final String layerAttribution = jsonLayer.getAsString("attribution", "");
+    if (layerAttribution.compareTo("") != 0)
+    {
+      layer.setInfo(layerAttribution);
+    }
+    return layer;
   }
 
   private MapQuestLayer parseMapQuestLayer(JSONObject jsonLayer, TimeInterval timeToCache)
@@ -277,17 +293,13 @@ public abstract class MapBooBuilder
     final String style = jsonLayer.getAsString("style", "");
     final URL queryServerURL = new URL("", false);
     final WMSServerVersion queryServerVersion = mapServerVersion;
-    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
-    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
-    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
-    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
-    final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
+    final Sector sector = parseSector(jsonLayer, "validSector");
     String imageFormat = jsonLayer.getAsString("imageFormat", "image/png");
     final String srs = jsonLayer.getAsString("projection", "EPSG:4326");
     LayerTilesRenderParameters layerTilesRenderParameters = null;
     if (srs.compareTo("EPSG:4326") == 0)
     {
-      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere());
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(0, 17);
     }
     else if (srs.compareTo("EPSG:3857") == 0)
     {
@@ -314,12 +326,7 @@ public abstract class MapBooBuilder
     final String projection = jsonLayer.getAsString("projection", "EPSG:3857");
     final boolean mercator = (projection.equals("EPSG:3857"));
   
-    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
-    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
-    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
-    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
-  
-    final Sector sector = Sector.fromDegrees(lowerLat, lowerLon, upperLat, upperLon);
+    final Sector sector = parseSector(jsonLayer, "validSector");
   
     URLTemplateLayer result;
     if (mercator)
@@ -1013,6 +1020,10 @@ public abstract class MapBooBuilder
   
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
+  
+    _mbErrorRenderer = new MapBoo_ErrorRenderer();
+    mainRenderer.addRenderer(_mbErrorRenderer);
+  
     final Planet planet = createPlanet();
   
     PlanetRenderer planetRenderer = createPlanetRenderer();
@@ -1031,9 +1042,11 @@ public abstract class MapBooBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    Renderer hudRenderer = null;
+    MapBoo_HUDRenderer hudRenderer = new MapBoo_HUDRenderer();
+    InfoDisplay infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
+    infoDisplay.showDisplay();
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -1083,6 +1096,29 @@ public abstract class MapBooBuilder
        isb.dispose();
   
     return new URL(path, false);
+  }
+
+  protected final Sector parseSector(JSONObject jsonObject, String paramName)
+  {
+  
+    final JSONObject sector = jsonObject.getAsObject(paramName);
+  
+    if (sector == null)
+    {
+      return Sector.fullSphere();
+    }
+  
+    if (sector.asNull() != null)
+    {
+      return Sector.fullSphere();
+    }
+  
+    final double lowerLat = sector.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = sector.getAsNumber("lowerLon", -180.0);
+    final double upperLat = sector.getAsNumber("upperLat", 90.0);
+    final double upperLon = sector.getAsNumber("upperLon", 180.0);
+  
+    return new Sector(Geodetic2D.fromDegrees(lowerLat, lowerLon), Geodetic2D.fromDegrees(upperLat, upperLon));
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1281,6 +1317,8 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void parseApplicationJSON(JSONObject jsonObject, URL url)
   {
+    java.util.ArrayList<String> errors = new java.util.ArrayList<String>();
+  
     if (jsonObject == null)
     {
       ILogger.instance().logError("Invalid ApplicationJSON");
@@ -1416,9 +1454,16 @@ public abstract class MapBooBuilder
       }
       else
       {
+        errors.add(jsonError.value());
         ILogger.instance().logError("Server Error: %s", jsonError.value());
+        if (_initialParse)
+        {
+          _initialParse = false;
+          setHasParsedApplication();
+        }
       }
     }
+    _mbErrorRenderer.setErrors(errors);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1791,5 +1836,10 @@ public abstract class MapBooBuilder
   {
     IDownloader downloader = context.getDownloader();
     downloader.requestBuffer(createApplicationPollURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+  }
+
+  public final String getApplicationId()
+  {
+    return _applicationId;
   }
 }

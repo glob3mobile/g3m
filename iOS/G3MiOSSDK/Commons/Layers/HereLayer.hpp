@@ -37,10 +37,11 @@ public:
   HereLayer(const std::string&    appId,
             const std::string&    appCode,
             const TimeInterval&   timeToCache,
-            const bool            readExpired  = true,
-            const int             initialLevel = 2,
-            const float           transparency = 1,
-            const LayerCondition* condition    = NULL);
+            const bool            readExpired    = true,
+            const int             initialLevel   = 2,
+            const float           transparency   = 1,
+            const LayerCondition* condition      = NULL,
+            const std::string&    disclaimerInfo = "");
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -54,6 +55,11 @@ public:
   HereLayer* copy() const;
 
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return Sector::fullSphere();
+  }
+  
 };
 
 #endif

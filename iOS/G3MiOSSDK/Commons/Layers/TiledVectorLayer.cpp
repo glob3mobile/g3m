@@ -22,16 +22,17 @@
 
 TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*        symbolizer,
                                    const std::string&                urlTemplate,
-                                   const Sector&                     sector,
+                                   const Sector&                     dataSector,
                                    const LayerTilesRenderParameters* parameters,
                                    const TimeInterval&               timeToCache,
                                    const bool                        readExpired,
                                    const float                       transparency,
-                                   const LayerCondition*             condition) :
-VectorLayer(parameters, transparency, condition),
+                                   const LayerCondition*             condition,
+                                   const std::string&                disclaimerInfo) :
+VectorLayer(parameters, transparency, condition, disclaimerInfo),
 _symbolizer(symbolizer),
 _urlTemplate(urlTemplate),
-_sector(sector),
+_dataSector(dataSector),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
 _su(NULL),
@@ -48,21 +49,23 @@ TiledVectorLayer::~TiledVectorLayer() {
 
 TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer* symbolizer,
                                                 const std::string&         urlTemplate,
-                                                const Sector&              sector,
+                                                const Sector&              dataSector,
                                                 const int                  firstLevel,
                                                 const int                  maxLevel,
                                                 const TimeInterval&        timeToCache,
                                                 const bool                 readExpired,
                                                 const float                transparency,
-                                                const LayerCondition*      condition) {
+                                                const LayerCondition*      condition,
+                                                const std::string&         disclaimerInfo) {
   return new TiledVectorLayer(symbolizer,
                               urlTemplate,
-                              sector,
+                              dataSector,
                               LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel),
                               timeToCache,
                               readExpired,
                               transparency,
-                              condition);
+                              condition,
+                              disclaimerInfo);
 }
 
 URL TiledVectorLayer::getFeatureInfoURL(const Geodetic2D& position,
@@ -81,7 +84,7 @@ bool TiledVectorLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
-  return _sector.isEquals(t->_sector);
+  return _dataSector.isEquals(t->_dataSector);
 }
 
 const std::string TiledVectorLayer::description() const {
@@ -91,12 +94,13 @@ const std::string TiledVectorLayer::description() const {
 TiledVectorLayer* TiledVectorLayer::copy() const {
   return new TiledVectorLayer(_symbolizer->copy(),
                               _urlTemplate,
-                              _sector,
+                              _dataSector,
                               _parameters->copy(),
                               _timeToCache,
                               _readExpired,
                               _transparency,
-                              (_condition == NULL) ? NULL : _condition->copy());
+                              (_condition == NULL) ? NULL : _condition->copy(),
+                              _disclaimerInfo);
 }
 
 std::vector<Petition*> TiledVectorLayer::createTileMapPetitions(const G3MRenderContext* rc,
@@ -115,7 +119,7 @@ TileImageProvider* TiledVectorLayer::createTileImageProvider(const G3MRenderCont
 
 const TileImageContribution* TiledVectorLayer::contribution(const Tile* tile) const {
   if ((_condition == NULL) || _condition->isAvailable(tile)) {
-    return (_sector.touchesWith(tile->_sector)
+    return (_dataSector.touchesWith(tile->_sector)
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : NULL);
   }

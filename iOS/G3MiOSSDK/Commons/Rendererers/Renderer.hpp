@@ -16,6 +16,7 @@ class RenderState;
 
 #include "ProtoRenderer.hpp"
 #include "RenderState.hpp"
+#include "ChangedRendererInfoListener.hpp"
 
 
 class Renderer : public ProtoRenderer {
@@ -50,7 +51,10 @@ public:
   virtual SurfaceElevationProvider* getSurfaceElevationProvider() = 0;
   
   virtual PlanetRenderer* getPlanetRenderer() = 0;
+    
+  virtual void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) = 0;
   
+//  virtual void setInfo(const std::vector<std::string>& info) = 0;
   
 };
 #endif

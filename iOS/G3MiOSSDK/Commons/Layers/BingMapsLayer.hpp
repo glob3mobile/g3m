@@ -15,7 +15,6 @@ class IByteBuffer;
 
 class BingMapType {
 public:
-
   static std::string Aerial() {
     return "Aerial";
   }
@@ -35,7 +34,6 @@ public:
   static std::string CollinsBart() {
     return "CollinsBart";
   }
-
 };
 
 
@@ -95,19 +93,21 @@ public:
   BingMapsLayer(const std::string&    imagerySet,
                 const std::string&    key,
                 const TimeInterval&   timeToCache,
-                const bool            readExpired  = true,
-                const int             initialLevel = 2,
-                const float           transparency = 1,
-                const LayerCondition* condition    = NULL);
+                const bool            readExpired    = true,
+                const int             initialLevel   = 2,
+                const float           transparency   = 1,
+                const LayerCondition* condition      = NULL,
+                const std::string&    disclaimerInfo = "");
 
   BingMapsLayer(const std::string&    imagerySet,
                 const std::string&    culture,
                 const std::string&    key,
                 const TimeInterval&   timeToCache,
-                const bool            readExpired  = true,
-                const int             initialLevel = 2,
-                const float           transparency = 1,
-                const LayerCondition* condition    = NULL);
+                const bool            readExpired    = true,
+                const int             initialLevel   = 2,
+                const float           transparency   = 1,
+                const LayerCondition* condition      = NULL,
+                const std::string&    disclaimerInfo = "");
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
@@ -132,8 +132,13 @@ public:
 #endif
 
   BingMapsLayer* copy() const;
-  
+
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return Sector::fullSphere();
+  }
+  
 };
 
 #endif

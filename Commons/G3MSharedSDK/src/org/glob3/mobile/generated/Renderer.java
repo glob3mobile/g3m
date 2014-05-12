@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  Renderer.cpp
+//  G3MiOSSDK
+//
+//  Created by Vidal Toboso on 23/04/14.
+//
+//
+
+//
 //  Renderer.hpp
 //  G3MiOSSDK
 //
@@ -44,5 +52,8 @@ public interface Renderer extends ProtoRenderer
 
   public abstract PlanetRenderer getPlanetRenderer();
 
+  public abstract void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier);
+
+//  virtual void setInfo(const std::vector<std::string>& info) = 0;
 
 }

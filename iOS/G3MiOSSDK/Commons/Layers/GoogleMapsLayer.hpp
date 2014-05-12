@@ -32,10 +32,11 @@ public:
 
   GoogleMapsLayer(const std::string&    key,
                   const TimeInterval&   timeToCache,
-                  const bool            readExpired  = true,
-                  const int             initialLevel = 2,
-                  const float           transparency = 1,
-                  const LayerCondition* condition    = NULL);
+                  const bool            readExpired    = true,
+                  const int             initialLevel   = 2,
+                  const float           transparency   = 1,
+                  const LayerCondition* condition      = NULL,
+                  const std::string&    disclaimerInfo = "");
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
@@ -50,6 +51,11 @@ public:
   GoogleMapsLayer* copy() const;
 
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return Sector::fullSphere();
+  }
+  
 };
 
 #endif

@@ -22,7 +22,8 @@ GoogleMapsLayer::GoogleMapsLayer(const std::string&    key,
                                  const bool            readExpired,
                                  const int             initialLevel,
                                  const float           transparency,
-                                 const LayerCondition* condition) :
+                                 const LayerCondition* condition,
+                                 const std::string&    disclaimerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -34,11 +35,11 @@ RasterLayer(timeToCache,
                                            LayerTilesRenderParameters::defaultTileMeshResolution(),
                                            true),
             transparency,
-            condition),
+            condition,
+            disclaimerInfo),
 _key(key),
 _initialLevel(initialLevel)
 {
-
 }
 
 
@@ -173,7 +174,8 @@ GoogleMapsLayer* GoogleMapsLayer::copy() const {
                              _readExpired,
                              _initialLevel,
                              _transparency,
-                             (_condition == NULL) ? NULL : _condition->copy() );
+                             (_condition == NULL) ? NULL : _condition->copy(),
+                             _disclaimerInfo);
 }
 
 bool GoogleMapsLayer::rawIsEquals(const Layer* that) const {
@@ -203,7 +205,6 @@ RenderState GoogleMapsLayer::getRenderState() {
 }
 
 const TileImageContribution* GoogleMapsLayer::rawContribution(const Tile* tile) const {
-  //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
   return ((_transparency < 1)
           ? TileImageContribution::fullCoverageTransparent(_transparency)
           : TileImageContribution::fullCoverageOpaque());

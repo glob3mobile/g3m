@@ -54,6 +54,7 @@ package org.glob3.mobile.generated;
 //class PlanetRenderer;
 //class ErrorRenderer;
 //class G3MRenderContext;
+//class InfoDisplay;
 
 
 

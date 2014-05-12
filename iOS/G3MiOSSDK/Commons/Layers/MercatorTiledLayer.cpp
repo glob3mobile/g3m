@@ -28,12 +28,13 @@ MercatorTiledLayer::MercatorTiledLayer(const std::string&              protocol,
                                        const std::string&              imageFormat,
                                        const TimeInterval&             timeToCache,
                                        const bool                      readExpired,
-                                       const Sector&                   sector,
+                                       const Sector&                   dataSector,
                                        const int                       initialLevel,
                                        const int                       maxLevel,
                                        const bool                      isTransparent,
                                        const float                     transparency,
-                                       const LayerCondition*           condition) :
+                                       const LayerCondition*           condition,
+                                       const std::string&              disclaimerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             new LayerTilesRenderParameters(Sector::fullSphere(),
@@ -45,17 +46,17 @@ RasterLayer(timeToCache,
                                            LayerTilesRenderParameters::defaultTileMeshResolution(),
                                            true),
             transparency,
-            condition),
+            condition,
+            disclaimerInfo),
 _protocol(protocol),
 _domain(domain),
 _subdomains(subdomains),
 _imageFormat(imageFormat),
-_sector(sector),
 _initialLevel(initialLevel),
 _maxLevel(maxLevel),
-_isTransparent(isTransparent)
+_isTransparent(isTransparent),
+_dataSector(dataSector)
 {
-
 }
 
 URL MercatorTiledLayer::getFeatureInfoURL(const Geodetic2D& position,
@@ -71,11 +72,11 @@ std::vector<Petition*> MercatorTiledLayer::createTileMapPetitions(const G3MRende
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->_sector;
-  if (!_sector.touchesWith(tileSector)) {
+  if (!_dataSector.touchesWith(tileSector)) {
     return petitions;
   }
 
-  const Sector sector = tileSector.intersection(_sector);
+  const Sector sector = tileSector.intersection(_dataSector);
   if (sector._deltaLatitude.isZero() ||
       sector._deltaLongitude.isZero() ) {
     return petitions;
@@ -187,12 +188,13 @@ MercatorTiledLayer* MercatorTiledLayer::copy() const {
                                 _imageFormat,
                                 _timeToCache,
                                 _readExpired,
-                                _sector,
+                                _dataSector,
                                 _initialLevel,
                                 _maxLevel,
                                 _isTransparent,
                                 _transparency,
-                                (_condition == NULL) ? NULL : _condition->copy());
+                                (_condition == NULL) ? NULL : _condition->copy(),
+                                _disclaimerInfo);
 }
 
 bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
@@ -210,7 +212,7 @@ bool MercatorTiledLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
-  if (!_sector.isEquals(t->_sector)) {
+  if (!_dataSector.isEquals(t->_dataSector)) {
     return false;
   }
 

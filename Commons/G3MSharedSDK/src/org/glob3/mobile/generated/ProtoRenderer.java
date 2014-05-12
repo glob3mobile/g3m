@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  ProtoRenderer.cpp
+//  G3MiOSSDK
+//
+//  Created by Vidal Toboso on 23/04/14.
+//
+//
+
+//
 //  ProtoRenderer.hpp
 //  G3MiOSSDK
 //

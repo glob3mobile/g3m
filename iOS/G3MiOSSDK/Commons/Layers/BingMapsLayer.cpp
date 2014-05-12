@@ -31,19 +31,20 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const bool            readExpired,
                              const int             initialLevel,
                              const float           transparency,
-                             const LayerCondition* condition) :
+                             const LayerCondition* condition,
+                             const std::string&    disclaimerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
             transparency,
-            condition),
+            condition,
+            disclaimerInfo),
 _imagerySet(imagerySet),
 _culture("en-US"),
 _key(key),
 _initialLevel(initialLevel),
 _isInitialized(false)
 {
-
 }
 
 BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
@@ -53,21 +54,21 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const bool            readExpired,
                              const int             initialLevel,
                              const float           transparency,
-                             const LayerCondition* condition) :
+                             const LayerCondition* condition,
+                             const std::string&    disclaimerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
             transparency,
-            condition),
+            condition,
+            disclaimerInfo),
 _imagerySet(imagerySet),
 _culture(culture),
 _key(key),
 _initialLevel(initialLevel),
 _isInitialized(false)
 {
-
 }
-
 
 
 class BingMapsLayer_MetadataBufferDownloadListener : public IBufferDownloadListener {
@@ -357,12 +358,14 @@ bool BingMapsLayer::rawIsEquals(const Layer* that) const {
 
 BingMapsLayer* BingMapsLayer::copy() const {
   return new BingMapsLayer(_imagerySet,
+                           _culture,
                            _key,
                            _timeToCache,
                            _readExpired,
                            _initialLevel,
                            _transparency,
-                           (_condition == NULL) ? NULL : _condition->copy());
+                           (_condition == NULL) ? NULL : _condition->copy(),
+                           _disclaimerInfo);
 }
 
 RenderState BingMapsLayer::getRenderState() {
@@ -384,7 +387,6 @@ RenderState BingMapsLayer::getRenderState() {
 }
 
 const TileImageContribution* BingMapsLayer::rawContribution(const Tile* tile) const {
-  //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
   return ((_transparency < 1)
           ? TileImageContribution::fullCoverageTransparent(_transparency)
           : TileImageContribution::fullCoverageOpaque());

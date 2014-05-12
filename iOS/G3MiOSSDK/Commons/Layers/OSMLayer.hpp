@@ -35,7 +35,8 @@ public:
            const bool          readExpired  = true,
            const int           initialLevel = 2,
            const float         transparency = 1,
-           LayerCondition*     condition    = NULL) :
+           LayerCondition*     condition    = NULL,
+           const std::string&  disclaimerInfo = "") :
   MercatorTiledLayer("http://",
                      "tile.openstreetmap.org",
                      getSubdomains(),
@@ -47,16 +48,17 @@ public:
                      18,
                      false, // isTransparent
                      transparency,
-                     condition)
+                     condition,
+                     disclaimerInfo)
   {
-
   }
 
   const std::string description() const;
 
   OSMLayer* copy() const;
-  
+
   RenderState getRenderState();
+  
 };
 
 #endif

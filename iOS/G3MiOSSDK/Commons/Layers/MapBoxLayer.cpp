@@ -28,7 +28,8 @@ MapBoxLayer* MapBoxLayer::copy() const {
                          _initialLevel,
                          _maxLevel,
                          _transparency,
-                         (_condition == NULL) ? NULL : _condition->copy());
+                         (_condition == NULL) ? NULL : _condition->copy(),
+                         _disclaimerInfo);
 }
 
 RenderState MapBoxLayer::getRenderState() {

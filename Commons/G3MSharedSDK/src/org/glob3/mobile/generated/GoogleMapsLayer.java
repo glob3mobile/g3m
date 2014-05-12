@@ -45,6 +45,7 @@ public class GoogleMapsLayer extends RasterLayer
   }
 
 
+<<<<<<< HEAD
   protected final TileImageContribution rawContribution(Tile tile)
   {
     //  return (_transparency < 1) ? FULL_COVERAGE_TRANSPARENT : FULL_COVERAGE_OPAQUE;
@@ -124,6 +125,31 @@ public class GoogleMapsLayer extends RasterLayer
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
   {
      super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition);
+=======
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
+  {
+     this(key, timeToCache, readExpired, initialLevel, condition, transparency, "");
+  }
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  {
+     this(key, timeToCache, readExpired, initialLevel, condition, (float)1.0, "");
+  }
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
+  {
+     this(key, timeToCache, readExpired, initialLevel, null, (float)1.0, "");
+  }
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired)
+  {
+     this(key, timeToCache, readExpired, 2, null, (float)1.0, "");
+  }
+  public GoogleMapsLayer(String key, TimeInterval timeToCache)
+  {
+     this(key, timeToCache, true, 2, null, (float)1.0, "");
+  }
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency, String disclaimerInfo)
+  {
+     super(condition, "GoogleMaps", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), Sector.fullSphere(), transparency, disclaimerInfo);
+>>>>>>> purgatory
      _key = key;
      _initialLevel = initialLevel;
   
@@ -200,7 +226,11 @@ public class GoogleMapsLayer extends RasterLayer
 
   public final GoogleMapsLayer copy()
   {
+<<<<<<< HEAD
     return new GoogleMapsLayer(_key, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy());
+=======
+    return new GoogleMapsLayer(_key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy(), _transparency, _disclaimerInfo);
+>>>>>>> purgatory
   }
 
   public final RenderState getRenderState()

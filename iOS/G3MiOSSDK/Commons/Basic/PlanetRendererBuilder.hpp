@@ -9,7 +9,8 @@
 #ifndef __G3MiOSSDK__PlanetRendererBuilder__
 #define __G3MiOSSDK__PlanetRendererBuilder__
 
-#include "LayerSet.hpp"
+class LayerSet;
+
 #include "TilesRenderParameters.hpp"
 #include "PlanetRenderer.hpp"
 
@@ -69,6 +70,8 @@ private:
   bool getLogTilesPetitions();
 
   TileRenderingListener* _tileRenderingListener;
+  
+  ChangedRendererInfoListener* _changedInfoListener;
 
 public:
   PlanetRendererBuilder();
@@ -109,7 +112,10 @@ public:
   void setTileRenderingListener(TileRenderingListener* tileRenderingListener);
 
   TileRenderingListener* getTileRenderingListener();
-
+  
+  ChangedRendererInfoListener* getChangedRendererInfoListener();
+  
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
 };
 
 #endif

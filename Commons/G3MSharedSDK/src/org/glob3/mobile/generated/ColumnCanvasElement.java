@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 public class ColumnCanvasElement extends GroupCanvasElement
 {
+  private final HorizontalAlignment _elementAlign;
   protected final Vector2F calculateExtent(ICanvas canvas)
   {
     float width = 0F;
@@ -42,25 +43,30 @@ public class ColumnCanvasElement extends GroupCanvasElement
     return new Vector2F(width, height);
   }
 
+  public ColumnCanvasElement(Color color, float margin, float padding, float cornerRadius)
+  {
+     this(color, margin, padding, cornerRadius, HorizontalAlignment.Center);
+  }
   public ColumnCanvasElement(Color color, float margin, float padding)
   {
-     this(color, margin, padding, 0);
+     this(color, margin, padding, 0, HorizontalAlignment.Center);
   }
   public ColumnCanvasElement(Color color, float margin)
   {
-     this(color, margin, 0, 0);
+     this(color, margin, 0, 0, HorizontalAlignment.Center);
   }
   public ColumnCanvasElement(Color color)
   {
-     this(color, 0, 0, 0);
+     this(color, 0, 0, 0, HorizontalAlignment.Center);
   }
   public ColumnCanvasElement()
   {
-     this(Color.transparent(), 0, 0, 0);
+     this(Color.transparent(), 0, 0, 0, HorizontalAlignment.Center);
   }
-  public ColumnCanvasElement(Color color, float margin, float padding, float cornerRadius)
+  public ColumnCanvasElement(Color color, float margin, float padding, float cornerRadius, HorizontalAlignment elementAlign)
   {
      super(color, margin, padding, cornerRadius);
+     _elementAlign = elementAlign;
   }
 
   public void dispose()
@@ -81,7 +87,20 @@ public class ColumnCanvasElement extends GroupCanvasElement
   
       final Vector2F childExtent = child.getExtent(canvas);
   
-      final float cursorLeft = left + halfWidth - (childExtent._x / 2);
+      float cursorLeft;
+      switch (_elementAlign)
+      {
+        case Left:
+          cursorLeft = left;
+          break;
+        case Right:
+          cursorLeft = left + extent._x - childExtent._x;
+          break;
+        case Center:
+        default:
+          cursorLeft = left + halfWidth - (childExtent._x / 2);
+          break;
+      }
   
       child.drawAt(cursorLeft, cursorTop, canvas);
   

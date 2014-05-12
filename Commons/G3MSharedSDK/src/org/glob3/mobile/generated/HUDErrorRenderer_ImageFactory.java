@@ -8,18 +8,7 @@ public class HUDErrorRenderer_ImageFactory extends HUDImageRenderer.CanvasImageF
   {
     canvas.setFillColor(Color.black());
     canvas.fillRectangle(0, 0, width, height);
-  
-    ColumnCanvasElement column = new ColumnCanvasElement(Color.fromRGBA(0.9f, 0.4f, 0.4f, 1.0f), 0, 16, 8); // cornerRadius -  padding -  margin
-    final GFont labelFont = GFont.sansSerif(18);
-    final Color labelColor = Color.white();
-  
-    final int errorsSize = _errors.size();
-    for (int i = 0; i < errorsSize; i++)
-    {
-      column.add(new TextCanvasElement(_errors.get(i), labelFont, labelColor));
-    }
-  
-    column.drawCentered(canvas);
+    ICanvasUtils.drawStringsOn(_errors, canvas, width, height, HorizontalAlignment.Center, VerticalAlignment.Middle, HorizontalAlignment.Center, Color.white(), 18, 5, Color.fromRGBA(0.9f, 0.4f, 0.4f, 1.0f), Color.transparent(), 16);
   }
 
   protected final boolean isEquals(java.util.ArrayList<String> v1, java.util.ArrayList<String> v2)

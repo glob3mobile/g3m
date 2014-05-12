@@ -18,10 +18,9 @@ RasterLayer::RasterLayer(const TimeInterval&               timeToCache,
                          const bool                        readExpired,
                          const LayerTilesRenderParameters* parameters,
                          const float                       transparency,
-                         const LayerCondition*             condition) :
-Layer(parameters,
-      transparency,
-      condition),
+                         const LayerCondition*             condition,
+                         const std::string&                disclaimerInfo) :
+Layer(parameters, transparency, condition, disclaimerInfo),
 _timeToCache(timeToCache),
 _readExpired(readExpired)
 {

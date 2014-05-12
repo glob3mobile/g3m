@@ -17,24 +17,24 @@
 
 TMSLayer::TMSLayer(const std::string& mapLayer,
                    const URL& mapServerURL,
-                   const Sector& sector,
+                   const Sector& dataSector,
                    const std::string& format,
                    const bool isTransparent,
                    LayerCondition* condition,
                    const TimeInterval& timeToCache,
                    bool readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   float transparency):
+                   float transparency,
+                   const std::string& disclaimerInfo):
 RasterLayer(timeToCache,
             readExpired,
-            (parameters == NULL)
-            ? LayerTilesRenderParameters::createDefaultWGS84(sector)
-            : parameters,
+            (parameters == NULL) ? LayerTilesRenderParameters::createDefaultWGS84(dataSector, 0, 17) : parameters,
             transparency,
-            condition),
+            condition,
+            disclaimerInfo),
 _mapServerURL(mapServerURL),
 _mapLayer(mapLayer),
-_sector(sector),
+_dataSector(dataSector),
 _format(format),
 _isTransparent(isTransparent)
 {
@@ -48,7 +48,7 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
   std::vector<Petition*> petitions;
 
   const Sector tileSector = tile->_sector;
-  if (!_sector.touchesWith(tileSector)) {
+  if (!_dataSector.touchesWith(tileSector)) {
     return petitions;
   }
 

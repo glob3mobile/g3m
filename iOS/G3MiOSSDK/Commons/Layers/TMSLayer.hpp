@@ -25,7 +25,7 @@ private:
 #endif
 
   const std::string   _mapLayer;
-  const Sector        _sector;
+  const Sector        _dataSector;
   const std::string   _format;
   const bool          _isTransparent;
 
@@ -40,7 +40,8 @@ public:
            const TimeInterval& timeToCache,
            bool readExpired,
            const LayerTilesRenderParameters* parameters = NULL,
-           float transparency = (float)1.0);
+           float transparency = 1,
+           const std::string& disclaimerInfo = "");
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,

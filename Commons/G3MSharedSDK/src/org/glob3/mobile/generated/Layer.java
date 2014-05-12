@@ -43,6 +43,15 @@ public abstract class Layer
 
   protected boolean _enable;
 
+<<<<<<< HEAD
+=======
+  protected final String _name;
+
+  protected String _disclaimerInfo;
+
+  protected java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+
+>>>>>>> purgatory
   protected LayerTilesRenderParameters _parameters;
 
   protected final float _transparency;
@@ -53,20 +62,33 @@ public abstract class Layer
     if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
+      _layerSet.changedInfo(_info);
     }
   }
 
   protected String _title;
 
 
+<<<<<<< HEAD
   protected Layer(LayerTilesRenderParameters parameters, float transparency, LayerCondition condition)
+=======
+  protected final Sector _dataSector ;
+
+  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, Sector dataSector, float transparency, String disclaimerInfo)
+>>>>>>> purgatory
   {
      _condition = condition;
      _layerSet = null;
      _enable = true;
      _parameters = parameters;
      _title = "";
+     _dataSector = new Sector(dataSector);
      _transparency = transparency;
+<<<<<<< HEAD
+=======
+     _disclaimerInfo = disclaimerInfo;
+
+>>>>>>> purgatory
   }
 
   protected final void setParameters(LayerTilesRenderParameters parameters)
@@ -84,6 +106,11 @@ public abstract class Layer
   protected abstract boolean rawIsEquals(Layer that);
 
 
+
+  public final Sector getDataSector()
+  {
+    return _dataSector;
+  }
 
   public void setEnable(boolean enable)
   {
@@ -225,6 +252,29 @@ public abstract class Layer
       return false;
     }
   
+<<<<<<< HEAD
+=======
+    if (_timeToCacheMS != that._timeToCacheMS)
+    {
+      return false;
+    }
+  
+    if (_readExpired != that._readExpired)
+    {
+      return false;
+    }
+  
+    if (!(_info == that._info))
+    {
+      return false;
+    }
+  
+    if (!(_disclaimerInfo.equals(that._disclaimerInfo)))
+    {
+      return false;
+    }
+  
+>>>>>>> purgatory
     return rawIsEquals(that);
   }
 
@@ -240,8 +290,38 @@ public abstract class Layer
     _title = title;
   }
 
+<<<<<<< HEAD
   public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
 
   public abstract TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters);
+=======
+  public final String getInfo()
+  {
+    return _disclaimerInfo;
+  }
+
+  public final void setInfo(String disclaimerInfo)
+  {
+    if (!_disclaimerInfo.equals(disclaimerInfo))
+    {
+      _disclaimerInfo = disclaimerInfo;
+      if (_layerSet != null)
+      {
+        _layerSet.changedInfo(getInfos());
+      }
+    }
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO BETTER
+  public final java.util.ArrayList<String> getInfos()
+  {
+    _info.clear();
+    final String layerInfo = getInfo();
+    _info.add(layerInfo);
+    return _info;
+  }
+
+>>>>>>> purgatory
 
 }

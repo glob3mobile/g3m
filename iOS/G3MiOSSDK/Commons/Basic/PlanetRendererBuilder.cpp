@@ -38,7 +38,8 @@ _verticalExaggeration(0),
 _renderedSector(NULL),
 _renderTileMeshes(true),
 _logTilesPetitions(false),
-_tileRenderingListener(NULL)
+_tileRenderingListener(NULL),
+_changedInfoListener(NULL)
 {
 }
 
@@ -328,6 +329,19 @@ void PlanetRendererBuilder::setTileRenderingListener(TileRenderingListener* tile
   _tileRenderingListener = tileRenderingListener;
 }
 
+ChangedRendererInfoListener* PlanetRendererBuilder::getChangedRendererInfoListener() {
+  return _changedInfoListener;
+}
+
+void PlanetRendererBuilder::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener) {
+  if (_changedInfoListener != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+  } else {
+    _changedInfoListener = changedInfoListener;
+    ILogger::instance()->logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
+  }
+}
+
 TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
   return _tileRenderingListener;
 }
@@ -346,7 +360,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getRenderedSector(),
                                                       getRenderTileMeshes(),
                                                       getLogTilesPetitions(),
-                                                      getTileRenderingListener());
+                                                      getTileRenderingListener(),
+                                                      getChangedRendererInfoListener());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),

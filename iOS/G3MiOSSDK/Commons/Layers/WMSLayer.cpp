@@ -22,7 +22,7 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const std::string&                queryLayer,
                    const URL&                        queryServerURL,
                    const WMSServerVersion            queryServerVersion,
-                   const Sector&                     sector,
+                   const Sector&                     dataSector,
                    const std::string&                format,
                    const std::string&                srs,
                    const std::string&                style,
@@ -31,34 +31,35 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const TimeInterval&               timeToCache,
                    const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   const float                       transparency):
+                   const float                       transparency,
+                   const std::string&                disclaimerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
-            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
+            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere(), 0, 17)
             : parameters,
             transparency,
-            condition),
+            condition,
+            disclaimerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
+_dataSector(dataSector),
 _queryLayer(queryLayer),
 _queryServerURL(queryServerURL),
 _queryServerVersion(queryServerVersion),
-_sector(sector),
 _format(format),
 _srs(srs),
 _style(style),
 _isTransparent(isTransparent),
 _extraParameter("")
 {
-
 }
 
 WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const URL&                        mapServerURL,
                    const WMSServerVersion            mapServerVersion,
-                   const Sector&                     sector,
+                   const Sector&                     dataSector,
                    const std::string&                format,
                    const std::string&                srs,
                    const std::string&                style,
@@ -67,21 +68,23 @@ WMSLayer::WMSLayer(const std::string&                mapLayer,
                    const TimeInterval&               timeToCache,
                    const bool                        readExpired,
                    const LayerTilesRenderParameters* parameters,
-                   const float                       transparency):
+                   const float                       transparency,
+                   const std::string&                disclaimerInfo):
 RasterLayer(timeToCache,
             readExpired,
             (parameters == NULL)
-            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere())
+            ? LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere(), 0, 17)
             : parameters,
             transparency,
-            condition),
+            condition,
+            disclaimerInfo),
 _mapLayer(mapLayer),
 _mapServerURL(mapServerURL),
 _mapServerVersion(mapServerVersion),
+_dataSector(dataSector),
 _queryLayer(mapLayer),
 _queryServerURL(mapServerURL),
 _queryServerVersion(mapServerVersion),
-_sector(sector),
 _format(format),
 _srs(srs),
 _style(style),
@@ -110,11 +113,11 @@ std::vector<Petition*> WMSLayer::createTileMapPetitions(const G3MRenderContext* 
   }
 
   const Sector tileSector = tile->_sector;
-  if (!_sector.touchesWith(tileSector)) {
+  if (!_dataSector.touchesWith(tileSector)) {
     return petitions;
   }
 
-  const Sector sector = tileSector.intersection(_sector);
+  const Sector sector = tileSector.intersection(_dataSector);
   if (sector._deltaLatitude.isZero() ||
       sector._deltaLongitude.isZero() ) {
     return petitions;
@@ -257,7 +260,7 @@ const URL WMSLayer::createURL(const Tile* tile) const {
 //    return petitions;
 //  }
 //
-  const Sector sector = tileSector.intersection(_sector);
+  const Sector sector = tileSector.intersection(_dataSector);
 //  if (sector._deltaLatitude.isZero() ||
 //      sector._deltaLongitude.isZero() ) {
 //    return petitions;
@@ -380,11 +383,11 @@ const URL WMSLayer::createURL(const Tile* tile) const {
 
 URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
                                 const Sector& tileSector) const {
-  if (!_sector.touchesWith(tileSector)) {
+  if (!_dataSector.touchesWith(tileSector)) {
     return URL::nullURL();
   }
 
-  const Sector intersectionSector = tileSector.intersection(_sector);
+  const Sector intersectionSector = tileSector.intersection(_dataSector);
 
 	//Server name
   std::string req = _queryServerURL._path;
@@ -536,7 +539,7 @@ bool WMSLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
-  if (!(_sector.isEquals(t->_sector))) {
+  if (!(_dataSector.isEquals(t->_dataSector))) {
     return false;
   }
 
@@ -574,7 +577,7 @@ WMSLayer* WMSLayer::copy() const {
                       _queryLayer,
                       _queryServerURL,
                       _queryServerVersion,
-                      _sector,
+                      _dataSector,
                       _format,
                       _srs,
                       _style,
@@ -582,7 +585,9 @@ WMSLayer* WMSLayer::copy() const {
                       (_condition == NULL) ? NULL : _condition->copy(),
                       _timeToCache,
                       _readExpired,
-                      (_parameters == NULL) ? NULL : _parameters->copy());
+                      (_parameters == NULL) ? NULL : _parameters->copy(),
+                      _transparency,
+                      _disclaimerInfo);
 }
 
 RenderState WMSLayer::getRenderState() {
@@ -607,16 +612,16 @@ RenderState WMSLayer::getRenderState() {
 const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
   const Sector tileSector = tile->_sector;
 
-  if (!_sector.touchesWith(tileSector)) {
+  if (!_dataSector.touchesWith(tileSector)) {
     return NULL;
   }
-  else if (_sector.fullContains(tileSector)) {
+  else if (_dataSector.fullContains(tileSector)) {
     return ((_isTransparent || (_transparency < 1))
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : TileImageContribution::fullCoverageOpaque());
   }
   else {
-    const Sector contributionSector = _sector.intersection(tileSector);
+    const Sector contributionSector = _dataSector.intersection(tileSector);
     return ((_isTransparent || (_transparency < 1))
             ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
             : TileImageContribution::partialCoverageOpaque(contributionSector));

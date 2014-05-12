@@ -21,8 +21,6 @@ LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
-
-//  delete _tileImageProvider;
   _tileImageProvider->_release();
 }
 
@@ -136,6 +134,7 @@ void LayerSet::addLayer(Layer* layer) {
   }
 
   layersChanged();
+  changedInfo(layer->getInfos());
 }
 
 void LayerSet::removeAllLayers(const bool deleteLayers) {
@@ -151,6 +150,7 @@ void LayerSet::removeAllLayers(const bool deleteLayers) {
     _layers.clear();
 
     layersChanged();
+    changedInfo(getInfo());
   }
 }
 
@@ -159,7 +159,6 @@ void LayerSet::layerChanged(const Layer* layer) const {
 }
 
 void LayerSet::layersChanged() const {
-//  delete _tileImageProvider;
   if (_tileImageProvider != NULL) {
     _tileImageProvider->_release();
     _tileImageProvider = NULL;
@@ -193,7 +192,7 @@ bool LayerSet::isEquals(const LayerSet* that) const {
   return true;
 }
 
-LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vector<std::string>& errors) const {
+LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart, std::vector<std::string>& errors) const {
   Sector* topSector                  = NULL;
   int     topSectorSplitsByLatitude  = 0;
   int     topSectorSplitsByLongitude = 0;
@@ -204,10 +203,44 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(std::vect
   int     tileMeshWidth              = 0;
   int     tileMeshHeight             = 0;
   bool    mercator                   = false;
+  Sector* biggestDataSector          = NULL;
 
   bool layerSetNotReadyFlag = false;
   bool first = true;
   const int layersCount = _layers.size();
+  
+  if (forceFirstLevelTilesRenderOnStart && layersCount > 0) {
+    double biggestArea = 0;
+    for (int i = 0; i < layersCount; i++) {
+      Layer* layer = _layers[i];
+      if (layer->isEnable()) {
+        const double layerArea = layer->getDataSector().getAngularAreaInSquaredDegrees();
+        if (layerArea > biggestArea) {
+          delete biggestDataSector;
+          biggestDataSector = new Sector(layer->getDataSector());
+          biggestArea = layerArea;
+        }
+      }
+    }
+    if (biggestDataSector != NULL) {
+      bool dataSectorsInconsistency = false;
+      for (int i = 0; i < layersCount; i++) {
+        Layer* layer = _layers[i];
+        if (layer->isEnable()) {
+          if (!biggestDataSector->fullContains(layer->getDataSector())) {
+            dataSectorsInconsistency = true;
+            break;
+          }
+        }
+      }
+      if (dataSectorsInconsistency) {
+        errors.push_back("Inconsistency in layers data sectors");
+        return NULL;
+      }
+    }
+    delete biggestDataSector;
+  }
+
   for (int i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
 
@@ -424,4 +457,33 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
     _tileImageProvider = createTileImageProvider(rc, layerTilesRenderParameters);
   }
   return _tileImageProvider;
+}
+
+std::vector<std::string> LayerSet::getInfo() {
+  _infos.clear();
+  const int layersCount = _layers.size();
+  for (int i = 0; i < layersCount; i++) {
+    Layer* layer = _layers[i];
+    if (layer->isEnable()) {
+      const std::string layerInfo = layer->getInfo();
+      _infos.push_back(layerInfo);
+    }
+  }
+  return _infos;
+}
+
+void LayerSet::changedInfo(const std::vector<std::string>& info) {
+  if (_changedInfoListener != NULL) {
+    _changedInfoListener->changedInfo(getInfo());
+  }
+}
+
+void LayerSet::setChangedInfoListener(ChangedInfoListener* changedInfoListener) {
+  if (_changedInfoListener != NULL) {
+    ILogger::instance()->logError("Changed Info Listener of LayerSet already set");
+    return;
+  }
+  ILogger::instance()->logError("Changed Info Listener of LayerSet set ok");
+  _changedInfoListener = changedInfoListener;
+  changedInfo(getInfo());
 }

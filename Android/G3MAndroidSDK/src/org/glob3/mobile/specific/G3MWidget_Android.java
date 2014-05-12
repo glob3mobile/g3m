@@ -27,6 +27,7 @@ import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.InfoDisplay;
 import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
@@ -315,7 +316,8 @@ public final class G3MWidget_Android
                           final java.util.ArrayList<PeriodicalTask> periodicalTasks,
                           final SceneLighting sceneLighting,
                           final InitialCameraPositionProvider initialCameraPositionProvider,
-                          final WidgetUserData userData) {
+                          final WidgetUserData userData,
+                          final InfoDisplay infoDisplay) {
 
 
       _g3mWidget = G3MWidget.create(//
@@ -339,7 +341,8 @@ public final class G3MWidget_Android
                periodicalTasks, //
                createGPUProgramManager(), //
                sceneLighting, //
-               initialCameraPositionProvider);
+               initialCameraPositionProvider, //
+               infoDisplay);
 
       _g3mWidget.setUserData(userData);
    }

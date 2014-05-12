@@ -18,6 +18,7 @@ class VisibleSectorListener;
 class ElevationDataProvider;
 class LayerTilesRenderParameters;
 class TerrainTouchListener;
+class ChangedInfoListener;
 
 #include "IStringBuilder.hpp"
 #include "DefaultRenderer.hpp"
@@ -26,8 +27,10 @@ class TerrainTouchListener;
 #include "Camera.hpp"
 #include "LayerSet.hpp"
 #include "ITileVisitor.hpp"
-#include "ChangedListener.hpp"
 #include "SurfaceElevationProvider.hpp"
+#include "ChangedListener.hpp"
+
+
 
 class EllipsoidShape;
 class TileRasterizer;
@@ -203,7 +206,7 @@ public:
 };
 
 
-class PlanetRenderer: public DefaultRenderer, ChangedListener, SurfaceElevationProvider {
+class PlanetRenderer: public DefaultRenderer, ChangedListener, ChangedInfoListener, SurfaceElevationProvider {
 private:
   TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -286,7 +289,7 @@ private:
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
-
+  
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -301,7 +304,8 @@ public:
                  const Sector&                renderedSector,
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
-                 TileRenderingListener*       tileRenderingListener);
+                 TileRenderingListener*       tileRenderingListener,
+                 ChangedRendererInfoListener* changedInfoListener);
 
   ~PlanetRenderer();
 
@@ -447,7 +451,13 @@ public:
   bool getRenderTileMeshes() const {
     return _renderTileMeshes;
   }
-
+  
+  void changedInfo(const std::vector<std::string>& info) {
+    if (_changedInfoListener != NULL) {
+      _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
+    }
+  }
+  
 };
 
 

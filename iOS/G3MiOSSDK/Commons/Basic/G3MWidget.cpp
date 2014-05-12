@@ -79,7 +79,8 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      std::vector<PeriodicalTask*>         periodicalTasks,
                      GPUProgramManager*                   gpuProgramManager,
                      SceneLighting*                       sceneLighting,
-                     const InitialCameraPositionProvider* initialCameraPositionProvider):
+                     const InitialCameraPositionProvider* initialCameraPositionProvider,
+                     InfoDisplay* infoDisplay):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -134,7 +135,8 @@ _rootState(NULL),
 _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
-_nFramesBeetweenProgramsCleanUp(500)
+_nFramesBeetweenProgramsCleanUp(500),
+_infoDisplay(infoDisplay)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -163,6 +165,8 @@ _nFramesBeetweenProgramsCleanUp(500)
   for (int i = 0; i < periodicalTasks.size(); i++) {
     addPeriodicalTask(periodicalTasks[i]);
   }
+  _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)this, -1);
+
 
   _renderContext = new G3MRenderContext(_frameTasksExecutor,
                                         IFactory::instance(),
@@ -206,7 +210,8 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              std::vector<PeriodicalTask*>         periodicalTasks,
                              GPUProgramManager*                   gpuProgramManager,
                              SceneLighting*                       sceneLighting,
-                             const InitialCameraPositionProvider* initialCameraPositionProvider) {
+                             const InitialCameraPositionProvider* initialCameraPositionProvider,
+                             InfoDisplay* infoDisplay) {
 
   return new G3MWidget(gl,
                        storage,
@@ -228,7 +233,8 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                        periodicalTasks,
                        gpuProgramManager,
                        sceneLighting,
-                       initialCameraPositionProvider);
+                       initialCameraPositionProvider,
+                       infoDisplay);
 }
 
 G3MWidget::~G3MWidget() {
@@ -275,6 +281,10 @@ G3MWidget::~G3MWidget() {
     _rootState->_release();
   }
   delete _initialCameraPositionProvider;
+  
+  if(_infoDisplay != NULL) {
+    delete _infoDisplay;
+  }
 }
 
 void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
@@ -809,4 +819,32 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
   }
   return changed;
 }
+
+//void G3MWidget::notifyChangedInfo() const {
+//
+//  if(_hudRenderer != NULL){
+//    const RenderState_Type renderStateType = _rendererState->_type;
+//    switch (renderStateType) {
+//      case RENDER_READY:
+//      //_hudRenderer->setInfo(_mainRenderer->getInfo());
+//      break;
+//      
+//      case RENDER_BUSY:
+//      break;
+//      
+//      default:
+//      break;
+//      
+//    }
+//  }
+//}
+
+void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
+  if(_infoDisplay != NULL){
+    _infoDisplay->changedInfo(info);
+  } else {
+    ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
+  }
+}
+
 

@@ -28,7 +28,8 @@ CartoDBLayer* CartoDBLayer::copy() const {
                           _readExpired,
                           _transparency,
                           _isTransparent,
-                          (_condition == NULL) ? NULL : _condition->copy());
+                          (_condition == NULL) ? NULL : _condition->copy(),
+                          _disclaimerInfo);
 }
 
 RenderState CartoDBLayer::getRenderState() {
