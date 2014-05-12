@@ -266,8 +266,11 @@ public class VectorialLOD {
          st = conn.createStatement();
 
          final String theGeom = getGeometryColumnName(st, dataSourceTable);
-         final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-         final String filterCriteria = buildFilterCriterium(geomFilterCriteria, simplifyTolerance);
+         final float tolerance = getMaxVertexTolerance(sector, qualityFactor);
+         final String simplifyTolerance = Float.toString(tolerance);
+         final String filterCriteria = buildFilterCriterium(geomFilterCriteria, tolerance);
+
+         //         System.out.println("FILTER CRITERIA: " + filterCriteria);
 
          if ((theGeom == null) || (simplifyTolerance == null)) {
             st.close();
@@ -279,7 +282,13 @@ public class VectorialLOD {
                                   + baseQuery2 + dataSourceTable + baseQuery4 + filterCriteria + baseQuery3 + theGeom + ","
                                   + bboxQuery + baseQuery5;
 
-         //System.out.println("fullQuery: " + fullQuery);
+         //         System.out.println("fullQuery: " + fullQuery);
+
+         // -- ejemplo --
+         //SELECT row_to_json(fc) FROM ( 
+         //  SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (
+         //    SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-4.5,38.426561832270956), ST_Point(49.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE ((ST_Area(Box2D(the_geom))>0.08169412 and true))) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-4.5,38.426561832270956), ST_Point(49.5,69.06659668046103)),4326))) As f ) As fc;
+         //---------------
 
          //-- PRUEBA => QUITAR ------------------------------------------------------
          //         final String fullQuery = "select type, count(*) from roads group by type";
@@ -473,8 +482,10 @@ public class VectorialLOD {
                                               final float qualityFactor) {
 
       //final float tolerance = (float) (sector._deltaLongitude._degrees / (qualityFactor * 1000f));
-      final double delta = Math.sqrt(Math.pow(sector._deltaLatitude._degrees, 2) + Math.pow(sector._deltaLongitude._degrees, 2));
-      final float tolerance = (float) (delta / (qualityFactor * 500f));
+      final double hypotenuse = Math.sqrt(Math.pow(sector._deltaLatitude._degrees, 2)
+                                          + Math.pow(sector._deltaLongitude._degrees, 2));
+      //final float tolerance = (float) (hypotenuse / (qualityFactor * 500f));
+      final float tolerance = (float) (hypotenuse / (qualityFactor * 256f));
 
       if (VERBOSE) {
          System.out.println("tolerance: " + tolerance);
@@ -485,38 +496,35 @@ public class VectorialLOD {
 
 
    private static String buildFilterCriterium(final String filterCriteria,
-                                              final String tolerance) {
-
-      //return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
-      //return filterCriteria;
-      //return "ST_Length(the_geom)>" + tolerance + " and " + filterCriteria;
+                                              final float tolerance) {
 
       if (_geomType == null) {
          return filterCriteria;
       }
 
-      if ((_geomType == GeomType.POLYGON) || (_geomType == GeomType.MULTIPOLYGON)) {
-         return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
-      }
-      else if ((_geomType == GeomType.LINESTRING) || (_geomType == GeomType.MULTILINESTRING)) {
-         return "ST_Length(the_geom)>" + tolerance + " and " + filterCriteria;
+      if (_geomType == GeomType.POINT) {
+         return filterCriteria;
       }
 
-      return filterCriteria;
+      return "(ST_Area(Box2D(the_geom))>" + Float.toString(2 * (tolerance * tolerance)) + " and " + filterCriteria + ")";
+
+      //http://postgis.refractions.net/documentation/manual-1.4/ST_NPoints.html
+
+      //----------------------------------------------
+
+      //      if (_geomType == null) {
+      //         return filterCriteria;
+      //      }
+      //
+      //      if ((_geomType == GeomType.POLYGON) || (_geomType == GeomType.MULTIPOLYGON)) {
+      //         return "ST_Area(the_geom)>" + tolerance + " and " + filterCriteria;
+      //      }
+      //      else if ((_geomType == GeomType.LINESTRING) || (_geomType == GeomType.MULTILINESTRING)) {
+      //         return "ST_Length(the_geom)>" + tolerance + " and " + filterCriteria;
+      //      }
+      //
+      //      return filterCriteria;
    }
-
-
-   //   private static String getAreaFilterCriterium(final Sector sector,
-   //                                                final float qualityFactor) {
-   //
-   //      final String filter = "ST_Area(the_geom)>" + Float.toString((1.0f * getMaxVertexTolerance(sector, qualityFactor)));
-   //
-   //      if (VERBOSE) {
-   //         System.out.println("filter: " + filter);
-   //      }
-   //
-   //      return filter;
-   //   }
 
 
    private static String buildSectorQuery(final List<Sector> sectorList) {
@@ -821,12 +829,6 @@ public class VectorialLOD {
       }
 
       if (sector._level >= FIRST_LEVEL) {
-
-         //-- hardcoded for levels 0 and 1 ---------------
-         //         final float qf = (sector._level > 1) ? QUALITY_FACTOR : 0.5f;
-         //         final String filterCriteria = (sector._level > 1) ? dataSource._geomFilterCriteria : getAreaFilterCriterium(sector, qf);
-         //-----------------------------------------------
-         //final String filterCriteria = dataSource._geomFilterCriteria + " and " + getAreaFilterCriterium(sector, QUALITY_FACTOR);
 
          final String geoJson = selectGeometries(dataSource._sourceTable, //
                   sector.getSector(), //
