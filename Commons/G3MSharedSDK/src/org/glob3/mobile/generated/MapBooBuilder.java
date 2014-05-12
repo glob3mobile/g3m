@@ -108,45 +108,6 @@ public abstract class MapBooBuilder
 
   private ErrorRenderer createErrorRenderer()
   {
-//C++ TO JAVA CONVERTER TODO TASK: Java does not allow declaring types within methods:
-//    class Mapboo_ErrorMessagesCustomizer : public ErrorMessagesCustomizer
-//    {
-//    private:
-//      MapBooBuilder* _mbBuilder;
-//    public:
-//      Mapboo_ErrorMessagesCustomizer(MapBooBuilder* mbBuilder)
-//      {
-//        _mbBuilder = mbBuilder;
-//      }
-//      ~Mapboo_ErrorMessagesCustomizer()
-//      {
-//      }
-//      java.util.ArrayList<String> customize(const java.util.ArrayList<String>& errors)
-//      {
-//        java.util.ArrayList<String> customizedErrorMessages;
-//        const IStringUtils* stringUtils = IStringUtils::instance();
-//        const int errorsSize = errors.size();
-//  
-//        const String appNotFound = "Invalid request: Application #" + _mbBuilder->_applicationId + " not found";
-//  
-//        for (int i = 0; i < errorsSize; i++)
-//        {
-//          String error = errors.at(i);
-//          if (stringUtils->beginsWith(error, appNotFound))
-//          {
-//            customizedErrorMessages.push_back("Oops, application not found!");
-//            break;
-//          }
-//          else
-//          {
-//            customizedErrorMessages.push_back(error);
-//          }
-//        }
-//  
-//        return customizedErrorMessages;
-//      };
-//    };
-  
     return new HUDErrorRenderer(new Mapboo_ErrorMessagesCustomizer(this));
   }
 
@@ -1871,5 +1832,10 @@ public abstract class MapBooBuilder
   {
     IDownloader downloader = context.getDownloader();
     downloader.requestBuffer(createApplicationPollURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+  }
+
+  public final String getApplicationId()
+  {
+    return _applicationId;
   }
 }
