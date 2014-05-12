@@ -66,11 +66,11 @@ public:
                                        const Sector&              dataSector,
                                        const int                  firstLevel,
                                        const int                  maxLevel,
-                                       const TimeInterval&        timeToCache,
-                                       const bool                 readExpired,
-                                       const float                transparency,
-                                       const LayerCondition*      condition,
-                                       const std::string&         disclaimerInfo);
+                                       const TimeInterval&        timeToCache    = TimeInterval::fromDays(30),
+                                       const bool                 readExpired    = true,
+                                       const float                transparency   = 1,
+                                       const LayerCondition*      condition      = NULL,
+                                       const std::string&         disclaimerInfo = "");
 
   ~TiledVectorLayer();
 
