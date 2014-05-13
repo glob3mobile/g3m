@@ -46,7 +46,7 @@ public:
     return _coordinates->at(index);
   }
 
-  long long getCoordinatesCount() const;
+  virtual long long getCoordinatesCount() const;
   
 };
 
