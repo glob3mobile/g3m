@@ -12,6 +12,7 @@
 #include "LayerSet.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "LayerTouchEventListener.hpp"
+#include "Tile.hpp"
 
 Layer::Layer(const LayerTilesRenderParameters* parameters,
              const float                       transparency,
@@ -157,4 +158,13 @@ std::vector<std::string> Layer::getInfos() {
   const std::string layerInfo = getInfo();
   _info.push_back(layerInfo);
   return _info;
+}
+
+const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const{
+    const int maxLevel = _parameters->_maxLevel;
+    const Tile* tileP = tile;
+    while (tileP->_level > maxLevel) {
+        tileP = tileP->getParent();
+    }
+    return tileP;
 }

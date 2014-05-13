@@ -66,6 +66,8 @@ protected:
   virtual std::string getLayerType() const = 0;
 
   virtual bool rawIsEquals(const Layer* that) const = 0;
+    
+  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
 
 public:
 

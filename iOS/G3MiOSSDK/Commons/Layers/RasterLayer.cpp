@@ -63,7 +63,9 @@ long long RasterLayer::requestImage(const Tile* tile,
                                     bool logDownloadActivity,
                                     IImageDownloadListener* listener,
                                     bool deleteListener) const {
-  const URL url = createURL(tile);
+  const Tile* suitableTile = getParentTileOfSuitableLevel(tile);
+    
+  const URL url = createURL(suitableTile);
   if (logDownloadActivity) {
     ILogger::instance()->logInfo("Downloading %s", url._path.c_str());
   }
