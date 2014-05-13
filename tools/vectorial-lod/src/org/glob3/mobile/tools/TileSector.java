@@ -101,6 +101,17 @@ public class TileSector
    }
 
 
+   public static final double getAngularAreaInSquaredDegrees(final List<Sector> sectors) {
+
+      double area = 0.0;
+      for (final Sector s : sectors) {
+         area += s.getAngularAreaInSquaredDegrees();
+      }
+
+      return area;
+   }
+
+
    public static List<Sector> getExtendedSector(final Sector sector,
                                                 final double overlapPercentage) {
 
