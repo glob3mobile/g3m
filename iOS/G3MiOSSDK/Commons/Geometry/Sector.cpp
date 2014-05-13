@@ -15,6 +15,7 @@
 #include "GEOLineRasterSymbol.hpp"
 
 const Sector Sector::FULL_SPHERE = Sector::fromDegrees(-90, -180, 90, 180);
+const Sector Sector::NAN_SECTOR = Sector::fromDegrees(NAND, NAND, NAND, NAND);
 
 Sector Sector::fullSphere() {
   return FULL_SPHERE;

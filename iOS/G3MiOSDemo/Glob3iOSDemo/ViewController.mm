@@ -1433,7 +1433,7 @@ public:
                                         "EPSG:4326",
                                         "",
                                         false,
-                                        new LevelTileCondition(0, 6),
+                                        NULL, //new LevelTileCondition(0, 6),
                                         //NULL,
                                         TimeInterval::fromDays(30),
                                         true,
@@ -1446,18 +1446,18 @@ public:
                                         );
     layerSet->addLayer(blueMarble);
       
-      WMSLayer* bing = new WMSLayer("ve",
-                                    URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
-                                    WMS_1_1_0,
-                                    Sector::fullSphere(),
-                                    "image/jpeg",
-                                    "EPSG:4326",
-                                    "",
-                                    false,
-                                    new LevelTileCondition(6, 500),
-                                    TimeInterval::fromDays(30),
-                                    true);
-      layerSet->addLayer(bing);
+//      WMSLayer* bing = new WMSLayer("ve",
+//                                    URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+//                                    WMS_1_1_0,
+//                                    Sector::fullSphere(),
+//                                    "image/jpeg",
+//                                    "EPSG:4326",
+//                                    "",
+//                                    false,
+//                                    new LevelTileCondition(6, 500),
+//                                    TimeInterval::fromDays(30),
+//                                    true);
+      //layerSet->addLayer(bing);
 
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
