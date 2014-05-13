@@ -152,4 +152,19 @@ public class GEO2DCoordinatesArrayData extends RCObject
     return _sector;
   }
 
+  public final long getCoordinatesCount()
+  {
+    long result = 0;
+    if (_coordinatesArray != null)
+    {
+      final int coordinatesArrayCount = _coordinatesArray.size();
+      for (int i = 0; i < coordinatesArrayCount; i++)
+      {
+        final GEO2DCoordinatesData coordinates = _coordinatesArray.get(i);
+        result += coordinates.getCoordinatesCount();
+      }
+    }
+    return result;
+  }
+
 }

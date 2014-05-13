@@ -43,4 +43,9 @@ public class GEO2DPointGeometry extends GEOGeometry2D
     return _position;
   }
 
+  public final long getCoordinatesCount()
+  {
+    return 1;
+  }
+
 }
