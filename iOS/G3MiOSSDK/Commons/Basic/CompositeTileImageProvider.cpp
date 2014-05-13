@@ -245,14 +245,30 @@ void CompositeTileImageProvider::Composer::mixResult() {
     const ChildResult* result = _results[i];
     imageId += result->_imageId + "|";
 
-#warning //For now, we consider the whole image will appear on the tile (no source rect needed)
+#warning JM at Work //For now, we consider the whole image will appear on the tile (no source rect needed)
     const IImage* image = result->_image;
     const float   alpha = result->_contribution->_alpha;
+    const Sector* imageSector = result->_contribution->getSector();
 
-    if (result->_contribution->isFullCoverageAndOpaque()) {
+    if (result->_contribution->isFullCoverageAndOpaque() && imageSector->isNan()) {
       canvas->drawImage(image, 0, 0);
     }
     else {
+        
+        if (!imageSector->isNan() && !imageSector->isEquals(_tileSector)){
+            
+            if (!_tileSector.fullContains(*imageSector)){
+                
+                printf("Tile: %s\n Image: %s\n", _tileSector.description().c_str(), imageSector->description().c_str());
+            
+                ILogger::instance()->logInfo("Merging image on tile of upper level");
+                const RectangleF* srcRect = getInnerRectangle(_width, _height,
+                                                              _tileSector,
+                                                              *imageSector);
+            }
+            
+        }
+        
       if (result->_contribution->isFullCoverage()) {
         canvas->drawImage(image,
                           //SRC RECT
@@ -264,11 +280,9 @@ void CompositeTileImageProvider::Composer::mixResult() {
                           alpha);
       }
       else {
-        const Sector* imageSector = result->_contribution->getDestinationSector();
-
-        const RectangleF* destRect = getInnerRectangle(_width, _height,
-                                                       _tileSector,
-                                                       *imageSector);
+          const RectangleF* destRect = getInnerRectangle(_width, _height,
+                                                         _tileSector,
+                                                         *imageSector);
 
         canvas->drawImage(image,
                           //SRC RECT

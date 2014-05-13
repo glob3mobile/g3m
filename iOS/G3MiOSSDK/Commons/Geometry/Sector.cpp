@@ -17,6 +17,43 @@
 const Sector Sector::FULL_SPHERE = Sector::fromDegrees(-90, -180, 90, 180);
 const Sector Sector::NAN_SECTOR = Sector::fromDegrees(NAND, NAND, NAND, NAND);
 
+Sector::Sector(const Geodetic2D& lower,
+       const Geodetic2D& upper) :
+_lower(lower),
+_upper(upper),
+_deltaLatitude(upper._latitude.sub(lower._latitude)),
+_deltaLongitude(upper._longitude.sub(lower._longitude)),
+_center(Angle::midAngle(lower._latitude, upper._latitude),
+        Angle::midAngle(lower._longitude, upper._longitude)),
+_deltaRadiusInRadians(-1.0),
+_normalizedCartesianCenter(NULL)
+{
+//    if (_deltaLatitude._degrees == 0){
+//        printf("NO AREA");
+//    }
+}
+
+Sector::Sector(const Sector& sector) :
+_lower(sector._lower),
+_upper(sector._upper),
+_deltaLatitude(sector._deltaLatitude),
+_deltaLongitude(sector._deltaLongitude),
+_center(sector._center),
+_deltaRadiusInRadians(sector._deltaRadiusInRadians)
+{
+    if (sector._normalizedCartesianCenter == NULL) {
+        _normalizedCartesianCenter = NULL;
+    }
+    else {
+        const Vector3D* normalizedCartesianCenter = sector._normalizedCartesianCenter;
+        _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
+    }
+    
+//    if (_deltaLatitude._degrees == 0){
+//        printf("NO AREA");
+//    }
+}
+
 Sector Sector::fullSphere() {
   return FULL_SPHERE;
 }

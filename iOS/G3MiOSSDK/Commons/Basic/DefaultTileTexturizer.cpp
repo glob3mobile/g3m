@@ -321,6 +321,12 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                          const IImage*                image,
                                          const std::string&           imageId,
                                          const TileImageContribution* contribution) {
+    
+#warning JM at WORK
+    if (!contribution->getSector()->isNan()){
+        ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile");
+    }
+    
   _builder->imageCreated(image, imageId, contribution);
 }
 

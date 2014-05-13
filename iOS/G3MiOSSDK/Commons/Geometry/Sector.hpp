@@ -52,43 +52,16 @@ public:
     ~Sector();
     
     Sector(const Geodetic2D& lower,
-           const Geodetic2D& upper) :
-    _lower(lower),
-    _upper(upper),
-    _deltaLatitude(upper._latitude.sub(lower._latitude)),
-    _deltaLongitude(upper._longitude.sub(lower._longitude)),
-    _center(Angle::midAngle(lower._latitude, upper._latitude),
-            Angle::midAngle(lower._longitude, upper._longitude)),
-    _deltaRadiusInRadians(-1.0),
-    _normalizedCartesianCenter(NULL)
-    {
-        //    if (_deltaLatitude._degrees < 0) {
-        //      printf("break point\n");
-        //    }
-        //    if (_deltaLongitude._degrees < 0) {
-        //      printf("break point\n");
-        //    }
-    }
+           const Geodetic2D& upper);
     
-    Sector(const Sector& sector) :
-    _lower(sector._lower),
-    _upper(sector._upper),
-    _deltaLatitude(sector._deltaLatitude),
-    _deltaLongitude(sector._deltaLongitude),
-    _center(sector._center),
-    _deltaRadiusInRadians(sector._deltaRadiusInRadians)
-    {
-        if (sector._normalizedCartesianCenter == NULL) {
-            _normalizedCartesianCenter = NULL;
-        }
-        else {
-            const Vector3D* normalizedCartesianCenter = sector._normalizedCartesianCenter;
-            _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
-        }
-    }
+    Sector(const Sector& sector);
     
-    bool isNan(){
+    bool isNan() const{
         return ISNAN(_lower._latitude._degrees);
+    }
+    
+    bool hasNoArea() const{
+        return _deltaLatitude._radians == 0 || _deltaLongitude._radians == 0;
     }
     
     static Sector fromDegrees(double minLat, double minLon,

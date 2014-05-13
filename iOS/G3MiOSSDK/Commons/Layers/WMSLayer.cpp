@@ -635,6 +635,11 @@ const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
     }
     else {
         const Sector contributionSector = _dataSector.intersection(requestedImageSector);
+        
+        if (contributionSector.hasNoArea()){
+            return NULL;
+        }
+        
         return ((_isTransparent || (_transparency < 1))
                 ? TileImageContribution::partialCoverageTransparent(contributionSector, _transparency)
                 : TileImageContribution::partialCoverageOpaque(contributionSector));
