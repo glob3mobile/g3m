@@ -616,6 +616,9 @@ const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
     return NULL;
   }
   else if (_dataSector.fullContains(tileSector)) {
+      
+      
+      
     return ((_isTransparent || (_transparency < 1))
             ? TileImageContribution::fullCoverageTransparent(_transparency)
             : TileImageContribution::fullCoverageOpaque());

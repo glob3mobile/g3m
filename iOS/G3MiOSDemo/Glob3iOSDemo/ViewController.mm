@@ -507,6 +507,41 @@ public:
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+    
+    if (bool showingPNOA = true){
+        Sector sector = Sector::fromDegrees(21, -18, 45, 6);
+        std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
+        
+        coordinates->push_back( new Geodetic2D( sector.getSW() ) );
+        coordinates->push_back( new Geodetic2D( sector.getNW() ) );
+        coordinates->push_back( new Geodetic2D( sector.getNE() ) );
+        coordinates->push_back( new Geodetic2D( sector.getSE() ) );
+        coordinates->push_back( new Geodetic2D( sector.getSW() ) );
+        
+        //    printf("RESTERIZING: %s\n", _sector->description().c_str());
+        
+        float dashLengths[] = {};
+        int dashCount = 0;
+        
+        Color c = Color::red();
+        
+        GEO2DLineRasterStyle ls(c, //const Color&     color,
+                                (float)1.0, //const float      width,
+                                CAP_ROUND, // const StrokeCap  cap,
+                                JOIN_ROUND, //const StrokeJoin join,
+                                1,//const float      miterLimit,
+                                dashLengths,//float            dashLengths[],
+                                dashCount,//const int        dashCount,
+                                0);//const int        dashPhase) :
+        
+        
+        const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
+        GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
+        coordinatesData->_release();
+        
+        geoTileRasterizer->addSymbol(symbol);
+    }
+    
 //#warning Diego at work!
 //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
 
@@ -1387,7 +1422,7 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = false;
+  bool testingTransparencies = true;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1410,6 +1445,19 @@ public:
                                                                        false)
                                         );
     layerSet->addLayer(blueMarble);
+      
+      WMSLayer* bing = new WMSLayer("ve",
+                                    URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+                                    WMS_1_1_0,
+                                    Sector::fullSphere(),
+                                    "image/jpeg",
+                                    "EPSG:4326",
+                                    "",
+                                    false,
+                                    new LevelTileCondition(6, 500),
+                                    TimeInterval::fromDays(30),
+                                    true);
+      layerSet->addLayer(bing);
 
     WMSLayer *pnoa = new WMSLayer("PNOA",
                                   URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -1427,7 +1475,7 @@ public:
     layerSet->addLayer(pnoa);
   }
 
-  if (true) {
+  if (false) {
 #warning Diego at work!
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
@@ -1887,7 +1935,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = false;
+  const bool renderDebug = true;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
