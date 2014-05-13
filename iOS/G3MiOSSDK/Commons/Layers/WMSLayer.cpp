@@ -611,18 +611,12 @@ RenderState WMSLayer::getRenderState() {
 
 const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
     
-#warning JM at work
-    const int maxLevel = _parameters->_maxLevel;
-    const Tile* tileP = tile;
-    while (tileP->_level > maxLevel) {
-        tileP = tileP->getParent();
-    }
-    if (tile != tileP){
-        ILogger::instance()->logInfo("Fetching image for tile parent of level %d", tileP->_level);
-    }
+    const Tile* tileP = getParentTileOfSuitableLevel(tile); //Parent tile with a suitable Level
+//    if (tile != tileP){
+//        ILogger::instance()->logInfo("Fetching image for tile parent of level %d", tileP->_level);
+//    }
     
     const Sector requestedImageSector = tileP->_sector;
-    //const Sector tileSector = tile->_sector;
     
     if (!_dataSector.touchesWith(requestedImageSector)) {
         return NULL;
@@ -635,7 +629,6 @@ const TileImageContribution* WMSLayer::rawContribution(const Tile* tile) const {
     }
     else {
         const Sector contributionSector = _dataSector.intersection(requestedImageSector);
-        
         if (contributionSector.hasNoArea()){
             return NULL;
         }
