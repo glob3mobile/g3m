@@ -268,7 +268,7 @@ public class VectorialLOD {
          final String theGeom = getGeometryColumnName(st, dataSourceTable);
          final float tolerance = getMaxVertexTolerance(sector, qualityFactor);
          final String simplifyTolerance = Float.toString(tolerance);
-         final String filterCriteria = buildFilterCriterium(geomFilterCriteria, tolerance);
+         final String filterCriteria = buildFilterCriterium(geomFilterCriteria, sector);
 
          //         System.out.println("FILTER CRITERIA: " + filterCriteria);
 
@@ -285,13 +285,11 @@ public class VectorialLOD {
          //         System.out.println("fullQuery: " + fullQuery);
 
          // -- ejemplos --
-         // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE ((ST_Area(Box2D(the_geom))>0.08169412 and true))) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
+         // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
          //----------
          //SELECT row_to_json(fc) FROM ( 
          //  SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (
-         //    SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-4.5,38.426561832270956), ST_Point(49.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE ((ST_Area(Box2D(the_geom))>0.08169412 and true))) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-4.5,38.426561832270956), ST_Point(49.5,69.06659668046103)),4326))) As f ) As fc;
-         //---------------
-         //SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)) and ST_Area(Box2D(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))))>0.08169412 ) As f ) As fc;
+         //    SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-4.5,38.426561832270956), ST_Point(49.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-4.5,38.426561832270956), ST_Point(49.5,69.06659668046103)),4326))) As f ) As fc;
          //-----------------
 
 
@@ -402,6 +400,8 @@ public class VectorialLOD {
 
    private static GeomType getGeometriesType(final String dataSourceTable) {
 
+      //http://postgis.net/docs/GeometryType.html
+
       final String geomQuery = "SELECT type FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
 
       try {
@@ -490,10 +490,14 @@ public class VectorialLOD {
       final double hypotenuse = Math.sqrt(Math.pow(sector._deltaLatitude._degrees, 2)
                                           + Math.pow(sector._deltaLongitude._degrees, 2));
       //final float tolerance = (float) (hypotenuse / (qualityFactor * 500f));
-      final float tolerance = (float) (hypotenuse / (qualityFactor * 256f));
+      final float tolerance = (float) (hypotenuse / (qualityFactor * 512f));
+      //      System.out.println("tolerance: " + tolerance);
+      //
+      //      final float tolerance2 = (float) (sector.getAngularAreaInSquaredDegrees() / (qualityFactor * 256f * 256f));
+      //      System.out.println("tolerance2: " + tolerance2);
 
       if (VERBOSE) {
-         System.out.println("tolerance: " + tolerance);
+         //System.out.println("tolerance: " + tolerance);
       }
 
       return tolerance;
@@ -501,7 +505,7 @@ public class VectorialLOD {
 
 
    private static String buildFilterCriterium(final String filterCriteria,
-                                              final float tolerance) {
+                                              final Sector sector) {
 
       if (_geomType == null) {
          return filterCriteria;
@@ -511,9 +515,14 @@ public class VectorialLOD {
          return filterCriteria;
       }
 
-      return "(ST_Area(Box2D(the_geom))>" + Float.toString(2 * (tolerance * tolerance)) + " and " + filterCriteria + ")";
+      return "ST_Area(Box2D(the_geom))>" + Double.toString(2 * (sector.getAngularAreaInSquaredDegrees() / (256 * 256))) + " and "
+             + filterCriteria;
+
+      //      return "(ST_Area(Box2D(the_geom))>" + Float.toString(2 * (tolerance * tolerance)) + " and " + filterCriteria + ")";
 
       //http://postgis.refractions.net/documentation/manual-1.4/ST_NPoints.html
+      //http://postgis.refractions.net/docs/ST_Extent.html
+      //http://postgis.refractions.net/docs/ST_Area.html
 
       //----------------------------------------------
 
