@@ -35,6 +35,11 @@ public:
     return _coordinatesData;
   }
 
+  long long getCoordinatesCount() const {
+    return _coordinatesData->size();
+  }
+
+
 };
 
 #endif

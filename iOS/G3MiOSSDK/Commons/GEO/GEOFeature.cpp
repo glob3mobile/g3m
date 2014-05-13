@@ -60,3 +60,7 @@ void GEOFeature::rasterize(const GEORasterSymbolizer* symbolizer,
                          tileLevel);
   }
 }
+
+long long GEOFeature::getCoordinatesCount() const {
+  return _geometry->getCoordinatesCount();
+}

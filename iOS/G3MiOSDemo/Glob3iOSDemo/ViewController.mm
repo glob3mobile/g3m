@@ -1433,21 +1433,31 @@ public:
                                        TimeInterval::fromDays(30)));
 
 
-    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+//    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+//    const int firstLevel = 2;
+//    const int maxLevel = 10;
+
+    // http://igosoftware.dyndns.org:8000/vectorial/catastro_4-LEVELS_MERCATOR/GEOJSON/15/16034/12348.geojson
+
+    const std::string urlTemplate = "http://igosoftware.dyndns.org:8000/vectorial/catastro_4-LEVELS_MERCATOR/GEOJSON/{level}/{x}/{y}.geojson";
     const int firstLevel = 2;
-    const int maxLevel = 10;
+    const int maxLevel = 18;
+    const Sector sector = Sector::fromDegrees(40.315, -3.840,
+                                              40.609, -3.518);
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
 
     layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
                                                      urlTemplate,
-                                                     Sector::fullSphere(),       // sector
+                                                     //Sector::fullSphere(),       // sector
+                                                     sector,
                                                      firstLevel,
                                                      maxLevel,
                                                      TimeInterval::fromDays(30), // timeToCache
                                                      true,                       // readExpired
                                                      1,                          // transparency
-                                                     NULL,                       // condition
+                                                     //NULL,                       // condition
+                                                     new LevelTileCondition(15, 18),
                                                      ""                          // disclaimerInfo
                                                      ));
   }

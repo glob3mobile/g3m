@@ -37,6 +37,10 @@ public:
     return _polygonsData;
   }
 
+  long long getCoordinatesCount() const {
+    return _polygonsData->size();
+  }
+
 };
 
 #endif

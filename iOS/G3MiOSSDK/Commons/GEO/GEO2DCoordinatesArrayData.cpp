@@ -120,3 +120,15 @@ const Sector* GEO2DCoordinatesArrayData::getSector() const {
   }
   return _sector;
 }
+
+long long GEO2DCoordinatesArrayData::getCoordinatesCount() const {
+  long long result = 0;
+  if (_coordinatesArray != NULL) {
+    const int coordinatesArrayCount = _coordinatesArray->size();
+    for (int i = 0; i < coordinatesArrayCount; i++) {
+      const GEO2DCoordinatesData* coordinates = _coordinatesArray->at(i);
+      result += coordinates->getCoordinatesCount();
+    }
+  }
+  return result;
+}
