@@ -218,7 +218,7 @@ RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSec
                                                                     int wholeSectorHeight,
                                                                     const Sector& wholeSector,
                                                                     const Sector& innerSector) const {
-    if (wholeSector.isEquals(innerSector)){
+    if (wholeSector.isNan() || innerSector.isNan() || wholeSector.isEquals(innerSector)){
         return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
     }
     
@@ -262,6 +262,7 @@ void CompositeTileImageProvider::Composer::mixResult() {
         else {
             
             Sector visibleContributionSector = imageSector->intersection(_tileSector);
+            imageId += "_" + visibleContributionSector.description();
             
             const RectangleF* srcRect = getInnerRectangle(_width, _height,
                                                           *imageSector,
@@ -271,17 +272,22 @@ void CompositeTileImageProvider::Composer::mixResult() {
                                                            _tileSector,
                                                            visibleContributionSector);
             
-            if (_contributionsSize == 1 && !imageSector->isNan() && !imageSector->isEquals(_tileSector)){
-                if (!_tileSector.fullContains(*imageSector)){
-                    ILogger::instance()->logInfo("Merging image %d of upper level.\nTile: %s\nImage: %s\nURL:%s\nSrcRect: %s\nDestRect: %s\n\n",
-                                                 image,
-                                                 _tileSector.description().c_str(),
-                                                 imageSector->description().c_str(),
-                                                 result->_imageId.c_str(),
-                                                 srcRect->description().c_str(),
-                                                 destRect->description().c_str());
-                }
-            }
+//            if (_contributionsSize == 1 && !imageSector->isNan() && !imageSector->isEquals(_tileSector)){
+//                
+//                //Cape Town
+//                if (imageSector->contains(Angle::fromDegrees(-34.210786265259316), Angle::fromDegrees(18.63006591796875))){
+//                
+//                if (!_tileSector.fullContains(*imageSector)){
+//                    ILogger::instance()->logInfo("Merging image %d of upper level.\nTile: %s\nImage: %s\nURL:%s\nSrcRect: %s\nDestRect: %s\n\n",
+//                                                 image,
+//                                                 _tileSector.description().c_str(),
+//                                                 imageSector->description().c_str(),
+//                                                 result->_imageId.c_str(),
+//                                                 srcRect->description().c_str(),
+//                                                 destRect->description().c_str());
+//                }
+//                }
+//            }
             
             canvas->drawImage(image,
                               //SRC RECT

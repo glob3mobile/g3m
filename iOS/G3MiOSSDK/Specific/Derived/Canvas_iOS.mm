@@ -441,6 +441,13 @@ void Canvas_iOS::_drawImage(const IImage* image,
     CGContextDrawImage(_context,
                        destRect,
                        cgCropImage);
+      
+      
+//      printf("Cropping image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(), srcLeft, srcTop, srcWidth, srcHeight);
+//      printf("Painting image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(),
+//             destLeft, _canvasHeight - (destTop + destHeight),
+//             destWidth,
+//             destHeight);
 
     CGContextSetAlpha(_context, 1.0);
 
