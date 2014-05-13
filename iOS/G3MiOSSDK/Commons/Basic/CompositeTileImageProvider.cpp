@@ -264,7 +264,7 @@ void CompositeTileImageProvider::Composer::mixResult() {
                           alpha);
       }
       else {
-        const Sector* imageSector = result->_contribution->getSector();
+        const Sector* imageSector = result->_contribution->getDestinationSector();
 
         const RectangleF* destRect = getInnerRectangle(_width, _height,
                                                        _tileSector,

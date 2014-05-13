@@ -23,8 +23,7 @@ class Color;
 
 class Sector {
 private:
-    static const Sector FULL_SPHERE;
-    static const Sector NAN_SECTOR;
+
     
     
     // this lazy value represent the half diagonal of the sector, measured in radians
@@ -35,6 +34,12 @@ private:
     mutable Vector3D* _normalizedCartesianCenter;
     
 public:
+    
+    //Special instances
+    static const Sector FULL_SPHERE;
+    static const Sector NAN_SECTOR;
+    
+    
     const Geodetic2D _lower;
     const Geodetic2D _upper;
     
