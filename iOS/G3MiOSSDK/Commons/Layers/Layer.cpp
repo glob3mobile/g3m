@@ -162,7 +162,12 @@ std::vector<std::string> Layer::getInfos() {
 
 const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const{
     const int maxLevel = _parameters->_maxLevel;
+#ifdef C_CODE
     const Tile* tileP = tile;
+#endif
+#ifdef JAVA_CODE
+    Tile tileP = tile;
+#endif
     while (tileP->_level > maxLevel) {
         tileP = tileP->getParent();
     }
