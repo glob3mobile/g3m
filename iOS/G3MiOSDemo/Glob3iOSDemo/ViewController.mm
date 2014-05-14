@@ -1529,11 +1529,13 @@ public:
 //    const Sector sector = Sector::fromDegrees(  49.1625, -8.58622,
 //                                              60.84, 1.76259);
 
-    const std::string urlTemplate = "http://igosoftware.dyndns.org:8000/vectorial/andorra-roads/GEOJSON/{level}/{x}/{y}.geojson";
+    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-roads/{level}/{x}/{y}.geojson";
     const int firstLevel = 2;
-    const int maxLevel = 18;
-    const Sector sector = Sector::fromDegrees(42.4228, 1.3611,
-                                              42.784, 1.85713);
+    const int maxLevel = 15;
+    const Sector sector = Sector::fromDegrees(34.991, -83.9755,
+                                              39.728, -74.749);
+
+//    xMin,yMin -83.9755,34.991 : xMax,yMax -74.749,39.728
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
 
@@ -1547,7 +1549,7 @@ public:
                                                      true,                       // readExpired
                                                      1,                          // transparency
                                                      //NULL,                       // condition
-                                                     new LevelTileCondition(14, 18),
+                                                     new LevelTileCondition(11, 15),
                                                      ""                          // disclaimerInfo
                                                      ));
   }
