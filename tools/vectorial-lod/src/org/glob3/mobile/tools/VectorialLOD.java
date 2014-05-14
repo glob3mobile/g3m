@@ -37,9 +37,10 @@ import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 public class VectorialLOD {
 
-   final static String ROOT_DIRECTORY  = "LOD";
-   final static String PARAMETERS_FILE = "parameters.xml";
-   final static int    PIXELS_PER_TILE = 256;
+   final static String ROOT_DIRECTORY    = "LOD";
+   final static String PARAMETERS_FILE   = "parameters.xml";
+   final static String METADATA_FILENAME = "metadata.json";
+   final static int    PIXELS_PER_TILE   = 256;
 
    private enum GeomType {
       POINT,
@@ -87,11 +88,15 @@ public class VectorialLOD {
    private static String                     _lodFolder              = null;
    private static String                     _geojsonFolder          = null;
    private static String                     _bsonFolder             = null;
+   private static String                     _metadataFileName       = null;
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
    private static TileSector                 _boundSector            = TileSector.FULL_SPHERE;
    private static GeomType                   _geomType;
    private static String                     _theGeomColumnName      = "the_geom";
+   private static String                     _projection             = null;
+   private static int                        _firstLevelCreated      = 0;
+   private static int                        _lastLevelCreated       = 0;
 
    /*
     * For handling postgis database access and connections
@@ -818,6 +823,14 @@ public class VectorialLOD {
       final String folderName = baseFolder + File.separatorChar + sector._level;
       if (!new File(folderName).exists()) {
          new File(folderName).mkdir();
+         //TODO: -- provisional: dejarlo comentado mientras generemos tiles vacios. Descomentar luego --
+         //         if (sector._level <= _firstLevelCreated) {
+         //            _firstLevelCreated = sector._level;
+         //         }
+         //         if (sector._level >= _lastLevelCreated) {
+         //            _lastLevelCreated = sector._level;
+         //         }
+         // -------------------------------------------------------------------------
       }
 
       final String subFolderName = folderName + File.separatorChar + sector._column;
@@ -864,8 +877,9 @@ public class VectorialLOD {
          new File(ROOT_DIRECTORY).mkdir();
       }
 
-      final String projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
-      _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + projection;
+      //final String projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
+      _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + _projection;
+
       if (!new File(_lodFolder).exists()) {
          new File(_lodFolder).mkdir();
       }
@@ -974,6 +988,8 @@ public class VectorialLOD {
 
       _dataBaseService.releaseConnections();
 
+      writeMetadataFile();
+
       final long time = System.currentTimeMillis() - start;
       System.out.println("Vectorial LOD generation finished in " + getTimeMessage(time));
    }
@@ -1005,7 +1021,8 @@ public class VectorialLOD {
             writeOutputFile(geoJson, sector);
          }
          else {
-            System.out.println("Skip empty tile: ../" + getTileLabel(sector));
+            //System.out.println("Skip empty tile: ../" + getTileLabel(sector));
+            writeEmptyFile(sector);
          }
 
       }
@@ -1086,10 +1103,73 @@ public class VectorialLOD {
    //      }
    //   }
 
+   private static void writeMetadataFile() {
+
+      if (_firstLevelCreated > _lastLevelCreated) {
+         _firstLevelCreated = -1;
+         _lastLevelCreated = -1;
+      }
+
+      final String metadata = "{ sector: [" + _boundSector._lower._latitude._degrees + ", "
+                              + _boundSector._lower._longitude._degrees + ", " + _boundSector._upper._latitude._degrees + ", "
+                              + _boundSector._upper._longitude._degrees + " ], minLevel: " + _firstLevelCreated + ", maxLevel: "
+                              + _lastLevelCreated + ", projection: " + _projection + " }";
+
+      _metadataFileName = _lodFolder + File.separatorChar + METADATA_FILENAME;
+      final File metadataFile = new File(_metadataFileName);
+      try {
+         if (metadataFile.exists()) {
+            metadataFile.delete();
+         }
+         new File(_metadataFileName).createNewFile();
+
+         final FileWriter file = new FileWriter(_metadataFileName);
+         file.write(metadata);
+         file.flush();
+         file.close();
+         System.out.println("File " + METADATA_FILENAME + " created.");
+      }
+      catch (final IOException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+   }
+
+
+   private static void writeEmptyFile(final TileSector sector) {
+
+      try {
+         if (generateGeojson()) {
+            final File geojsonFile = new File(getGeojsonFileName(sector));
+            geojsonFile.createNewFile();
+         }
+         if (generateBson()) {
+            final File bsonFile = new File(getBsonFileName(sector));
+            bsonFile.createNewFile();
+         }
+      }
+      catch (final IOException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+
+   }
+
+
    private static void writeOutputFile(final String geoJson,
                                        final TileSector sector) {
 
       try {
+
+         //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
+         if (sector._level < _firstLevelCreated) {
+            _firstLevelCreated = sector._level;
+         }
+         if (sector._level > _lastLevelCreated) {
+            _lastLevelCreated = sector._level;
+         }
+         // -------------------------------------------------------------------------
+
          if (generateGeojson()) {
             System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
             final FileWriter file = new FileWriter(getGeojsonFileName(sector));
@@ -1174,6 +1254,10 @@ public class VectorialLOD {
       initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
 
       initializeConcurrentService();
+
+      _firstLevelCreated = MAX_LEVEL;
+      _lastLevelCreated = FIRST_LEVEL;
+      _projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
 
    }
 
