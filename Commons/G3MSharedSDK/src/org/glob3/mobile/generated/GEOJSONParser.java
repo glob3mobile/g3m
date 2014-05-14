@@ -66,26 +66,29 @@ public class GEOJSONParser
 
   private GEOObject pvtParse(boolean showStatistics)
   {
-    final JSONBaseObject jsonBaseObject = (_bson == null) ? IJSONParser.instance().parse(_json) : BSONParser.parse(_bson);
-  
     GEOObject result = null;
   
-    final JSONObject jsonObject = jsonBaseObject.asObject();
-    if (jsonObject != null)
-    {
-      result = toGEO(jsonObject);
-    }
-    else
-    {
-      ILogger.instance().logError("Root object for GEOJSON has to be a JSONObject");
-    }
+    final JSONBaseObject jsonBaseObject = (_bson == null) ? IJSONParser.instance().parse(_json) : BSONParser.parse(_bson);
   
     if (jsonBaseObject != null)
-       jsonBaseObject.dispose();
-  
-    if (showStatistics)
     {
-      showStatisticsToLogger();
+      final JSONObject jsonObject = jsonBaseObject.asObject();
+      if (jsonObject != null)
+      {
+        result = toGEO(jsonObject);
+      }
+      else
+      {
+        ILogger.instance().logError("Root object for GEOJSON has to be a JSONObject");
+      }
+  
+      if (jsonBaseObject != null)
+         jsonBaseObject.dispose();
+  
+      if (showStatistics)
+      {
+        showStatisticsToLogger();
+      }
     }
   
     return result;
