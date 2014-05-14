@@ -19,6 +19,14 @@ public class DTT_TileImageListener extends TileImageListener
 
   public final void imageCreated(String tileId, IImage image, String imageId, TileImageContribution contribution)
   {
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning JM at WORK
+      if (!contribution.getSector().isNan())
+      {
+          ILogger.instance().logInfo("DTT_TileImageListener received image that does not fit tile");
+      }
+  
     _builder.imageCreated(image, imageId, contribution);
   }
 

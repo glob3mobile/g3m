@@ -88,6 +88,17 @@ public abstract class Layer
 
   protected abstract boolean rawIsEquals(Layer that);
 
+  protected final Tile getParentTileOfSuitableLevel(Tile tile)
+  {
+      final int maxLevel = _parameters._maxLevel;
+      final Tile tileP = tile;
+      while (tileP._level > maxLevel)
+      {
+          tileP = tileP.getParent();
+      }
+      return tileP;
+  }
+
 
   public void setEnable(boolean enable)
   {
