@@ -983,7 +983,7 @@ public class VectorialLOD {
          generateVectorialLOD(sector, dataSource);
          //processSubSectors(sector, dataSource);
       }
-      System.out.println("Generating.. wait termination...");
+      System.out.println("Generating.. await termination...");
 
       _concurrentService.awaitTermination();
 
