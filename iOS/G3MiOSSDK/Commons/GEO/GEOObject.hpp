@@ -37,6 +37,8 @@ public:
                          MarksRenderer*          marksRenderer,
                          GEOTileRasterizer*      geoTileRasterizer) const = 0 ;
 
+  virtual long long getCoordinatesCount() const = 0;
+
 };
 
 #endif

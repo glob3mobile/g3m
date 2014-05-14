@@ -64,4 +64,9 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
     return _polygonsData;
   }
 
+  public final long getCoordinatesCount()
+  {
+    return _polygonsData.size();
+  }
+
 }

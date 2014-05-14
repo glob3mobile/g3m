@@ -40,4 +40,16 @@ public class GEO2DPolygonData extends GEO2DCoordinatesData
     return _holesCoordinatesArray;
   }
 
+  public final long getCoordinatesCount()
+  {
+    long result = super.getCoordinatesCount();
+    final int holesCoordinatesArraySize = _holesCoordinatesArray.size();
+    for (int j = 0; j < holesCoordinatesArraySize; j++)
+    {
+      final java.util.ArrayList<Geodetic2D> holeCoordinates = _holesCoordinatesArray.get(j);
+      result += holeCoordinates.size();
+    }
+    return result;
+  }
+
 }

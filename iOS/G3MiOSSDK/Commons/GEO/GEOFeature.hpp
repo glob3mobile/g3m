@@ -53,6 +53,8 @@ public:
                  const GEORasterProjection* projection,
                  int tileLevel) const;
 
+  long long getCoordinatesCount() const;
+
 };
 
 #endif

@@ -53,4 +53,10 @@ public class GEO2DLineStringGeometry extends GEOGeometry2D
     return _coordinatesData;
   }
 
+  public final long getCoordinatesCount()
+  {
+    return _coordinatesData.size();
+  }
+
+
 }

@@ -40,6 +40,8 @@ public:
 
   const std::vector<std::vector<Geodetic2D*>*>* getHolesCoordinatesArray() const;
 
+  long long getCoordinatesCount() const;
+
 };
 
 #endif

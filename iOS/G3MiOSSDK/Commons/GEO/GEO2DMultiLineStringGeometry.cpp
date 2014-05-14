@@ -36,3 +36,7 @@ std::vector<GEOSymbol*>* GEO2DMultiLineStringGeometry::createSymbols(const GEOSy
 std::vector<GEORasterSymbol*>* GEO2DMultiLineStringGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
 }
+
+long long GEO2DMultiLineStringGeometry::getCoordinatesCount() const {
+  return _coordinatesArrayData->getCoordinatesCount();
+}

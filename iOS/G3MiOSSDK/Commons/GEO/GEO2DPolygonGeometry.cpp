@@ -36,3 +36,7 @@ std::vector<GEOSymbol*>* GEO2DPolygonGeometry::createSymbols(const GEOSymbolizer
 std::vector<GEORasterSymbol*>* GEO2DPolygonGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
 }
+
+long long GEO2DPolygonGeometry::getCoordinatesCount() const {
+  return _polygonData->getCoordinatesCount();
+}
