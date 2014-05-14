@@ -143,7 +143,7 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteListener) :
 _label(label),
 _iconURL(iconURL),
-_position(new Geodetic3D(position)),
+_position(position),
 _altitudeMode(altitudeMode),
 _labelBottom(labelBottom),
 _labelFontSize(labelFontSize),
@@ -185,7 +185,7 @@ Mark::Mark(const std::string& label,
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
-_position(new Geodetic3D(position)),
+_position(position),
 _altitudeMode(altitudeMode),
 _labelFontSize(labelFontSize),
 _labelFontColor(labelFontColor),
@@ -223,7 +223,7 @@ Mark::Mark(const URL&         iconURL,
 _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
-_position(new Geodetic3D(position)),
+_position(position),
 _altitudeMode(altitudeMode),
 _labelFontSize(20),
 _labelFontColor(Color::newFromRGBA(1, 1, 1, 1)),
@@ -262,7 +262,7 @@ Mark::Mark(const IImage*      image,
 _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
-_position(new Geodetic3D(position)),
+_position(position),
 _altitudeMode(altitudeMode),
 _labelFontSize(20),
 _labelFontColor(NULL),
@@ -291,12 +291,13 @@ _normalAtMarkPosition(NULL)
 
 void Mark::initialize(const G3MContext* context,
                       long long downloadPriority) {
-
-  _surfaceElevationProvider = context->getSurfaceElevationProvider();
-  if (_surfaceElevationProvider != NULL) {
-    _surfaceElevationProvider->addListener(_position->_latitude,
-                                           _position->_longitude,
-                                           this);
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    _surfaceElevationProvider = context->getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != NULL) {
+      _surfaceElevationProvider->addListener(_position._latitude,
+                                             _position._longitude,
+                                             this);
+    }
   }
 
   if (!_textureSolved) {
@@ -362,8 +363,6 @@ bool Mark::isReady() const {
 
 Mark::~Mark() {
 
-  delete _position;
-
   delete _normalAtMarkPosition;
 
   if (_surfaceElevationProvider != NULL) {
@@ -397,13 +396,13 @@ Mark::~Mark() {
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
 
-    double altitude = _position->_height;
+    double altitude = _position._height;
     if (_altitudeMode == RELATIVE_TO_GROUND) {
       altitude += _currentSurfaceElevation;
     }
 
-    Geodetic3D positionWithSurfaceElevation(_position->_latitude,
-                                            _position->_longitude,
+    Geodetic3D positionWithSurfaceElevation(_position._latitude,
+                                            _position._longitude,
                                             altitude);
 
     _cartesianPosition = new Vector3D( planet->toCartesian(positionWithSurfaceElevation) );
@@ -472,7 +471,7 @@ void Mark::render(const G3MRenderContext* rc,
   if (renderableByDistance) {
     bool occludedByHorizon = false;
 
-    if (_position->_height > cameraHeight) {
+    if (_position._height > cameraHeight) {
       // Computing horizon culling
       const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
       if (dists.size() > 0) {
