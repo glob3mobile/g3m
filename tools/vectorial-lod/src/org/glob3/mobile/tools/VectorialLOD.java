@@ -466,7 +466,7 @@ public class VectorialLOD {
          st.close();
 
          boundSector = parseBoundSectorFromBbox(bboxStr);
-
+         //System.out.println("boundSector: " + boundSector.toString());
       }
       catch (final SQLException e) {
          // TODO Auto-generated catch block
@@ -624,6 +624,16 @@ public class VectorialLOD {
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
 
       return "ST_Area(Box2D(the_geom))>" + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
+
+      // -- debería ser así:
+      //      return "ST_Area(Box2D(ST_Intersection(the_geom,"+bboxQuery+")))>" + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE))
+      //             + " and " + filterCriteria;
+
+      // -- o así:
+      //      return "ST_Area(ST_Intersection(Box2D(the_geom)," + bboxQuery + "))>"
+      //             + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
+
+      // ST_Area(Box2D(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))))>0.08169412
 
       //      return "(ST_Area(Box2D(the_geom))>" + Float.toString(2 * (tolerance * tolerance)) + " and " + filterCriteria + ")";
    }
@@ -942,12 +952,15 @@ public class VectorialLOD {
       createFolderStructure(dataSource);
 
       _theGeomColumnName = getGeometryColumnName(dataSource._sourceTable);
+      //System.out.println("_theGeomColumnName: " + _theGeomColumnName);
 
       _boundSector = getGeometriesBound(dataSource._sourceTable);
       //System.out.println(_boundSector.toString());
 
       _geomType = getGeometriesType(dataSource._sourceTable);
-      System.out.println("Source data type: " + _geomType.toString());
+      if (_geomType != null) {
+         System.out.println("Source data type: " + _geomType.toString());
+      }
 
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
