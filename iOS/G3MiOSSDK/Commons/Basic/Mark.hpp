@@ -82,7 +82,7 @@ private:
   /**
    * The point where the mark will be geo-located.
    */
-  Geodetic3D  _position;
+  Geodetic3D*  _position;
   /**
    * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
    * Default value: 4.5e+06
@@ -207,7 +207,7 @@ public:
   }
 
   const Geodetic3D getPosition() const {
-    return _position;
+    return *_position;
   }
 
   void initialize(const G3MContext* context,
@@ -271,6 +271,9 @@ public:
   void elevationChanged(const Sector& position,
                         const ElevationData* rawElevationData, //Without considering vertical exaggeration
                         double verticalExaggeration) {}
+
+  void setPosition(const Geodetic3D& position);
+
 };
 
 #endif
