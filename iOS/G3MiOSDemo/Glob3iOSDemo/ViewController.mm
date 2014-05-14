@@ -1529,9 +1529,9 @@ public:
 //    const Sector sector = Sector::fromDegrees(  49.1625, -8.58622,
 //                                              60.84, 1.76259);
 
-    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-roads/{level}/{x}/{y}.geojson";
+    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-polygons/{level}/{x}/{y}.geojson";
     const int firstLevel = 2;
-    const int maxLevel = 15;
+    const int maxLevel = 10;
     const Sector sector = Sector::fromDegrees(34.991, -83.9755,
                                               39.728, -74.749);
 
@@ -1549,7 +1549,7 @@ public:
                                                      true,                       // readExpired
                                                      1,                          // transparency
                                                      //NULL,                       // condition
-                                                     new LevelTileCondition(11, 15),
+                                                     new LevelTileCondition(8, 10),
                                                      ""                          // disclaimerInfo
                                                      ));
   }
