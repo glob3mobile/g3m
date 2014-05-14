@@ -1506,7 +1506,10 @@ public:
   if (true) {
 #warning Diego at work!
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
-                                       TimeInterval::fromDays(30)));
+                                       TimeInterval::fromDays(30),
+                                       true,
+                                       2,
+                                       10));
 
 //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
 
@@ -1549,7 +1552,7 @@ public:
                                                      true,                       // readExpired
                                                      1,                          // transparency
                                                      //NULL,                       // condition
-                                                     new LevelTileCondition(8, 10),
+                                                     new LevelTileCondition(9, 10),
                                                      ""                          // disclaimerInfo
                                                      ));
   }
