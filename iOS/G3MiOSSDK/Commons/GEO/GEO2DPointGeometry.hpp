@@ -33,6 +33,10 @@ public:
     return _position;
   }
 
+  long long getCoordinatesCount() const {
+    return 1;
+  }
+
 };
 
 #endif

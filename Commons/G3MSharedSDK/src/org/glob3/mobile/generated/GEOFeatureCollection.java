@@ -79,4 +79,16 @@ public class GEOFeatureCollection extends GEOObject
     }
   }
 
+  public final long getCoordinatesCount()
+  {
+    long result = 0;
+    final int featuresCount = _features.size();
+    for (int i = 0; i < featuresCount; i++)
+    {
+      GEOFeature feature = _features.get(i);
+      result += feature.getCoordinatesCount();
+    }
+    return result;
+  }
+
 }

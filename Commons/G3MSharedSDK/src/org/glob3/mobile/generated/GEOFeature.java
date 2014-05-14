@@ -81,4 +81,9 @@ public class GEOFeature extends GEOObject
     }
   }
 
+  public final long getCoordinatesCount()
+  {
+    return _geometry.getCoordinatesCount();
+  }
+
 }

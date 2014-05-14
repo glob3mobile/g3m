@@ -57,3 +57,14 @@ void GEOFeatureCollection::rasterize(const GEORasterSymbolizer* symbolizer,
     }
   }
 }
+
+
+long long GEOFeatureCollection::getCoordinatesCount() const {
+  long long result = 0;
+  const int featuresCount = _features.size();
+  for (int i = 0; i < featuresCount; i++) {
+    GEOFeature* feature = _features[i];
+    result += feature->getCoordinatesCount();
+  }
+  return result;
+}

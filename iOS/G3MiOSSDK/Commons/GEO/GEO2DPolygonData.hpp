@@ -33,6 +33,8 @@ public:
     return _holesCoordinatesArray;
   }
 
+  long long getCoordinatesCount() const;
+
 };
 
 

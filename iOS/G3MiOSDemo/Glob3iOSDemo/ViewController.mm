@@ -1303,6 +1303,65 @@ private:
     return GEO2DSurfaceRasterStyle( color );
   }
 
+  static GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) {
+    const JSONObject* properties = geometry->getFeature()->getProperties();
+
+    const std::string type = properties->getAsString("type", "");
+
+    int colorIndex = 0;
+    if (type == "residential") {
+      colorIndex = 1;
+    }
+    else if (type == "service") {
+      colorIndex = 2;
+    }
+    else if (type == "footway") {
+      colorIndex = 3;
+    }
+    else if (type == "unclassified") {
+      colorIndex = 4;
+    }
+    else if (type == "track") {
+      colorIndex = 5;
+    }
+    else if (type == "tertiary") {
+      colorIndex = 6;
+    }
+    else if (type == "path") {
+      colorIndex = 7;
+    }
+    else if (type == "primary") {
+      colorIndex = 8;
+    }
+    else if (type == "secondary") {
+      colorIndex = 9;
+    }
+    else if (type == "trunk") {
+      colorIndex = 10;
+    }
+    else if (type == "cycleway") {
+      colorIndex = 11;
+    }
+    else if (type == "steps") {
+      colorIndex = 12;
+    }
+
+    const Color color = Color::fromRGBA(0.7, 0, 0, 0.75).wheelStep(13, colorIndex).muchLighter().muchLighter();
+
+//    float dashLengths[] = {1, 12};
+//    int dashCount = 2;
+    float dashLengths[] = {};
+    int dashCount = 0;
+
+    return GEO2DLineRasterStyle(color,
+                                1,
+                                CAP_ROUND,
+                                JOIN_ROUND,
+                                1,
+                                dashLengths,
+                                dashCount,
+                                0);
+  }
 
 public:
   GEORasterSymbolizer* copy() const {
@@ -1314,11 +1373,28 @@ public:
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
-    return NULL;
+//    return NULL;
+
+      std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
+
+      //    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
+      //                                                createLineStyle(geometry),
+      //                                                30000) );
+
+      symbols->push_back( new GEOLineRasterSymbol(geometry->getCoordinates(),
+                                                  createLineRasterStyle(geometry)) );
+      
+      return symbols;
+
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DMultiLineStringGeometry* geometry) const {
-    return NULL;
+    std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
+
+    symbols->push_back( new GEOMultiLineRasterSymbol(geometry->getCoordinatesArray(),
+                                                     createLineRasterStyle(geometry)) );
+
+    return symbols;
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPolygonGeometry* geometry) const {
@@ -1432,22 +1508,48 @@ public:
     layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
                                        TimeInterval::fromDays(30)));
 
+//    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
 
-    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+//    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+//    const int firstLevel = 2;
+//    const int maxLevel = 10;
+
+    // http://igosoftware.dyndns.org:8000/vectorial/catastro_4-LEVELS_MERCATOR/GEOJSON/15/16034/12348.geojson
+
+//    const std::string urlTemplate = "http://igosoftware.dyndns.org:8000/vectorial/catastro_4-LEVELS_MERCATOR/GEOJSON/{level}/{x}/{y}.geojson";
+//    const int firstLevel = 2;
+//    const int maxLevel = 18;
+//    const Sector sector = Sector::fromDegrees(40.315, -3.840,
+//                                              40.609, -3.518);
+
+
+//    const std::string urlTemplate = "http://igosoftware.dyndns.org:8000/vectorial/roads_10-LEVELS_MERCATOR/GEOJSON/{level}/{x}/{y}.geojson";
+//    const int firstLevel = 2;
+//    const int maxLevel = 9;
+//    const Sector sector = Sector::fromDegrees(  49.1625, -8.58622,
+//                                              60.84, 1.76259);
+
+    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-polygons/{level}/{x}/{y}.geojson";
     const int firstLevel = 2;
     const int maxLevel = 10;
+    const Sector sector = Sector::fromDegrees(34.991, -83.9755,
+                                              39.728, -74.749);
+
+//    xMin,yMin -83.9755,34.991 : xMax,yMax -74.749,39.728
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
 
     layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
                                                      urlTemplate,
-                                                     Sector::fullSphere(),       // sector
+                                                     //Sector::fullSphere(),       // sector
+                                                     sector,
                                                      firstLevel,
                                                      maxLevel,
                                                      TimeInterval::fromDays(30), // timeToCache
                                                      true,                       // readExpired
                                                      1,                          // transparency
-                                                     NULL,                       // condition
+                                                     //NULL,                       // condition
+                                                     new LevelTileCondition(8, 10),
                                                      ""                          // disclaimerInfo
                                                      ));
   }

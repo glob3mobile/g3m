@@ -63,4 +63,9 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
     return _polygonData.getHolesCoordinatesArray();
   }
 
+  public final long getCoordinatesCount()
+  {
+    return _polygonData.getCoordinatesCount();
+  }
+
 }

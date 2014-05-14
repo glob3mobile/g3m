@@ -39,27 +39,29 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::cancel() {
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground(const G3MContext* context) {
   if ((_imageAssembler != NULL) && (_buffer != NULL)) {
-    bool showStatistics = false;
-    GEOObject* geoObject = GEOJSONParser::parseJSON(_buffer, showStatistics);
+    _canvas = IFactory::instance()->createCanvas();
+    _canvas->initialize(_imageWidth, _imageHeight);
+    
+    if (_buffer->size() > 0) {
+      bool showStatistics = false;
+      GEOObject* geoObject = GEOJSONParser::parseJSON(_buffer, showStatistics);
 
-    if (geoObject != NULL) {
-      if (_imageAssembler != NULL) {
-        _canvas = IFactory::instance()->createCanvas();
+      if (geoObject != NULL) {
+        if (_imageAssembler != NULL) {
 
-        _canvas->initialize(_imageWidth, _imageHeight);
+          const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
+                                                                          _tileIsMercator,
+                                                                          _imageWidth,
+                                                                          _imageHeight);;
+          geoObject->rasterize(_symbolizer,
+                               _canvas,
+                               projection,
+                               _tileLevel);
 
-        const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
-                                                                        _tileIsMercator,
-                                                                        _imageWidth,
-                                                                        _imageHeight);;
-        geoObject->rasterize(_symbolizer,
-                             _canvas,
-                             projection,
-                             _tileLevel);
-
-        delete projection;
+          delete projection;
+        }
+        delete geoObject;
       }
-      delete geoObject;
     }
   }
 }
