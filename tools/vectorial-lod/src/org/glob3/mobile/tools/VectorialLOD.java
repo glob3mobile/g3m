@@ -983,6 +983,7 @@ public class VectorialLOD {
          generateVectorialLOD(sector, dataSource);
          //processSubSectors(sector, dataSource);
       }
+      System.out.println("Generating.. wait termination...");
 
       _concurrentService.awaitTermination();
 
@@ -1055,7 +1056,8 @@ public class VectorialLOD {
          }
       };
 
-      _concurrentService.execute(task, subSectorLevel);
+      //_concurrentService.execute(task, subSectorLevel);
+      _concurrentService.execute(task);
    }
 
 
@@ -1106,8 +1108,8 @@ public class VectorialLOD {
    private static void writeMetadataFile() {
 
       if (_firstLevelCreated > _lastLevelCreated) {
-         _firstLevelCreated = -1;
-         _lastLevelCreated = -1;
+         _firstLevelCreated = _lastLevelCreated;
+         //_lastLevelCreated = -1;
       }
 
       final String metadata = "{ sector: [" + _boundSector._lower._latitude._degrees + ", "
@@ -1171,7 +1173,7 @@ public class VectorialLOD {
          // -------------------------------------------------------------------------
 
          if (generateGeojson()) {
-            System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
+            //System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
             final FileWriter file = new FileWriter(getGeojsonFileName(sector));
             file.write(geoJson);
             file.flush();
@@ -1185,7 +1187,7 @@ public class VectorialLOD {
             try {
                JBson2BJson.instance().json2bson(geoJson, bsonFile, true);
                if (!generateGeojson()) {
-                  System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
+                  //System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
                }
             }
             catch (final JBson2BJsonException e) {
@@ -1214,7 +1216,8 @@ public class VectorialLOD {
 
    private static void initializeConcurrentService() {
 
-      _concurrentService = GConcurrentService.createDefaultConcurrentService(MAX_LEVEL + 1, "G3m vectorial LOD");
+      //_concurrentService = GConcurrentService.createDefaultConcurrentService(MAX_LEVEL + 1, "G3m vectorial LOD");
+      _concurrentService = new GConcurrentService();
    }
 
 
