@@ -44,7 +44,7 @@ public class Mark implements SurfaceElevationListener
   /**
    * The point where the mark will be geo-located.
    */
-  private Geodetic3D _position;
+  private Geodetic3D _position ;
   /**
    * The minimun distance (in meters) to show the mark. If the camera is further than this, the mark will not be displayed.
    * Default value: 4.5e+06
@@ -353,9 +353,6 @@ public class Mark implements SurfaceElevationListener
   public void dispose()
   {
   
-    if (_position != null)
-       _position.dispose();
-  
     if (_normalAtMarkPosition != null)
        _normalAtMarkPosition.dispose();
   
@@ -406,11 +403,13 @@ public class Mark implements SurfaceElevationListener
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
-  
-    _surfaceElevationProvider = context.getSurfaceElevationProvider();
-    if (_surfaceElevationProvider != null)
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
-      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+      _surfaceElevationProvider = context.getSurfaceElevationProvider();
+      if (_surfaceElevationProvider != null)
+      {
+        _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+      }
     }
   
     if (!_textureSolved)
