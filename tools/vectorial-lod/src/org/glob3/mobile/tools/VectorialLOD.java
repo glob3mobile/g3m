@@ -48,7 +48,7 @@ public class VectorialLOD {
    final static int     SQUARED_PIXELS_PER_TILE = (int) Math.pow(
                                                          (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
                                                          2);
-   final static int     VERTEX_THRESHOLD        = 20000;
+   final static int     VERTEX_THRESHOLD        = 16000;
    final static int     INITIAL_AREA_FACTOR     = 3;
 
    final static boolean VERBOSE                 = false;
@@ -339,11 +339,8 @@ public class VectorialLOD {
    }
 
 
-   //TODO: provisional. Change to json parser vertex count
+   //TODO: provisional. Change to json parser vertex count 
    private static int getGeomVertexCount(final String geoJson) {
-
-      //      final String[] splitedGeojson = geoJson.split(".");
-      //      return (splitedGeojson.length - 1) / 2;
 
       int counter = 0;
       for (int index = 0; index < geoJson.length(); index++) {
@@ -352,8 +349,12 @@ public class VectorialLOD {
          }
       }
 
-      //System.out.println("numPoints: " + counter);
-      return counter / 2;
+      final int result = counter / 2;
+      //      if (result >= 10000) {
+      //         System.out.println("num Vertex: " + result);
+      //      }
+
+      return result;
    }
 
 
@@ -380,7 +381,7 @@ public class VectorialLOD {
 
       final String propsQuery = buildPropertiesQuery(includeProperties);
       final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, extendedSector);
+      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
 
       //         System.out.println("FILTER CRITERIA: " + filterCriteria);
 
@@ -691,6 +692,7 @@ public class VectorialLOD {
 
    private static String buildFilterCriterium(final String filterCriteria,
                                               final double areaFactor,
+                                              final String bboxQuery,
                                               final List<Sector> extendedSector) {
 
       //http://postgis.refractions.net/documentation/manual-1.4/ST_NPoints.html
@@ -708,25 +710,22 @@ public class VectorialLOD {
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
       final double factor = areaFactor * areaFactor;
 
-      return "ST_Area(Box2D(the_geom))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and "
-             + filterCriteria;
+      //      return "ST_Area(Box2D(the_geom))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and "
+      //             + filterCriteria;
 
-      // -- debería ser así:
-      //      return "ST_Area(Box2D(ST_Intersection(the_geom,"+bboxQuery+")))>" + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE))
-      //             + " and " + filterCriteria;
+      //      return "ST_Area(Box2D(ST_Intersection(the_geom," + bboxQuery + ")))>"
+      //             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
 
-      // -- o así:
-      //      return "ST_Area(ST_Intersection(Box2D(the_geom)," + bboxQuery + "))>"
-      //             + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
+      return "ST_Area(ST_Intersection(ST_SetSRID(Box2D(the_geom),4326)," + bboxQuery + "))>"
+             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
 
       // ST_Area(Box2D(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))))>0.08169412
-
-      //      return "(ST_Area(Box2D(the_geom))>" + Float.toString(2 * (tolerance * tolerance)) + " and " + filterCriteria + ")";
    }
 
 
    //   private static String buildFilterCriterium(final String filterCriteria,
-   //                                              final Sector sector) {
+   //                                              final double areaFactor,
+   //                                              final List<Sector> extendedSector) {
    //
    //      //http://postgis.refractions.net/documentation/manual-1.4/ST_NPoints.html
    //      //http://postgis.refractions.net/docs/ST_Extent.html
@@ -740,8 +739,21 @@ public class VectorialLOD {
    //         return filterCriteria;
    //      }
    //
-   //      return "ST_Area(Box2D(the_geom))>" + Double.toString(2 * (sector.getAngularAreaInSquaredDegrees() / (256 * 256))) + " and "
+   //      final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
+   //      final double factor = areaFactor * areaFactor;
+   //
+   //      return "ST_Area(Box2D(the_geom))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and "
    //             + filterCriteria;
+   //
+   //      // -- debería ser así:
+   //      //      return "ST_Area(Box2D(ST_Intersection(the_geom,"+bboxQuery+")))>" + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE))
+   //      //             + " and " + filterCriteria;
+   //
+   //      // -- o así:
+   //      //      return "ST_Area(ST_Intersection(Box2D(the_geom)," + bboxQuery + "))>"
+   //      //             + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
+   //
+   //      // ST_Area(Box2D(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))))>0.08169412
    //
    //      //      return "(ST_Area(Box2D(the_geom))>" + Float.toString(2 * (tolerance * tolerance)) + " and " + filterCriteria + ")";
    //   }
