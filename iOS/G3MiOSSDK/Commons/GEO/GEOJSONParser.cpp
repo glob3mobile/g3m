@@ -57,24 +57,26 @@ void GEOJSONParser::showStatisticsToLogger() const {
 }
 
 GEOObject* GEOJSONParser::pvtParse(bool showStatistics) const {
-  const JSONBaseObject* jsonBaseObject = (_bson == NULL) ? IJSONParser::instance()->parse(_json) : BSONParser::parse(_bson);
-
   GEOObject* result = NULL;
 
-  const JSONObject* jsonObject = jsonBaseObject->asObject();
-  if (jsonObject != NULL) {
-    result = toGEO(jsonObject);
-  }
-  else {
-    ILogger::instance()->logError("Root object for GEOJSON has to be a JSONObject");
-  }
+  const JSONBaseObject* jsonBaseObject = (_bson == NULL) ? IJSONParser::instance()->parse(_json) : BSONParser::parse(_bson);
 
-  delete jsonBaseObject;
+  if (jsonBaseObject != NULL) {
+    const JSONObject* jsonObject = jsonBaseObject->asObject();
+    if (jsonObject != NULL) {
+      result = toGEO(jsonObject);
+    }
+    else {
+      ILogger::instance()->logError("Root object for GEOJSON has to be a JSONObject");
+    }
 
-  if (showStatistics) {
-    showStatisticsToLogger();
+    delete jsonBaseObject;
+
+    if (showStatistics) {
+      showStatisticsToLogger();
+    }
   }
-
+  
   return result;
 }
 

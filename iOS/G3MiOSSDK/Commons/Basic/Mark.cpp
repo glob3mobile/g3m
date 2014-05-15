@@ -291,12 +291,13 @@ _normalAtMarkPosition(NULL)
 
 void Mark::initialize(const G3MContext* context,
                       long long downloadPriority) {
-
-  _surfaceElevationProvider = context->getSurfaceElevationProvider();
-  if (_surfaceElevationProvider != NULL) {
-    _surfaceElevationProvider->addListener(_position->_latitude,
-                                           _position->_longitude,
-                                           this);
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    _surfaceElevationProvider = context->getSurfaceElevationProvider();
+    if (_surfaceElevationProvider != NULL) {
+      _surfaceElevationProvider->addListener(_position->_latitude,
+                                             _position->_longitude,
+                                             this);
+    }
   }
 
   if (!_textureSolved) {
@@ -535,6 +536,22 @@ void Mark::elevationChanged(const Geodetic2D& position,
   delete _cartesianPosition;
   _cartesianPosition = NULL;
   
+  if (_glState != NULL) {
+    _glState->_release();
+    _glState = NULL;
+  }
+}
+
+void Mark::setPosition(const Geodetic3D& position) {
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    ILogger::instance()->logWarning("Position change with _altitudeMode == RELATIVE_TO_GROUND not supported");
+  }
+  delete _position;
+  _position = new Geodetic3D(position);
+
+  delete _cartesianPosition;
+  _cartesianPosition = NULL;
+
   if (_glState != NULL) {
     _glState->_release();
     _glState = NULL;

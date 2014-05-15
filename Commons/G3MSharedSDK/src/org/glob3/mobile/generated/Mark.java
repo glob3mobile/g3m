@@ -406,11 +406,13 @@ public class Mark implements SurfaceElevationListener
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
-  
-    _surfaceElevationProvider = context.getSurfaceElevationProvider();
-    if (_surfaceElevationProvider != null)
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
-      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+      _surfaceElevationProvider = context.getSurfaceElevationProvider();
+      if (_surfaceElevationProvider != null)
+      {
+        _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+      }
     }
   
     if (!_textureSolved)
@@ -640,4 +642,26 @@ public class Mark implements SurfaceElevationListener
   public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
   {
   }
+
+  public final void setPosition(Geodetic3D position)
+  {
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      ILogger.instance().logWarning("Position change with _altitudeMode == RELATIVE_TO_GROUND not supported");
+    }
+    if (_position != null)
+       _position.dispose();
+    _position = new Geodetic3D(position);
+  
+    if (_cartesianPosition != null)
+       _cartesianPosition.dispose();
+    _cartesianPosition = null;
+  
+    if (_glState != null)
+    {
+      _glState._release();
+      _glState = null;
+    }
+  }
+
 }
