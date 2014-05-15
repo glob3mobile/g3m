@@ -100,9 +100,9 @@ TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
  */
 TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
-//    _texturizer = new MultiLayerTileTexturizer();
-#warning Diego at work!
-    _texturizer = new DefaultTileTexturizer();
+    _texturizer = new MultiLayerTileTexturizer();
+//#warning Diego at work!
+//    _texturizer = new DefaultTileTexturizer();
   }
 
   return _texturizer;
