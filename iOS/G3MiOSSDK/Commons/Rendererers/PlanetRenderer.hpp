@@ -295,8 +295,6 @@ private:
 #endif
   std::vector<std::string> _errors;
 
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
-
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
 #ifdef C_CODE
@@ -496,6 +494,9 @@ public:
                                  const std::list<Geodetic2D>* route = NULL);
 
   int getNumberOfRenderedTiles() const;
+    
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
+  
   
 };
 
