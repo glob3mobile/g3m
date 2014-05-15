@@ -37,12 +37,21 @@ import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 public class VectorialLOD {
 
-   final static String ROOT_DIRECTORY      = "LOD";
-   final static String PARAMETERS_FILE     = "parameters.xml";
-   final static String METADATA_FILENAME   = "metadata.json";
-   final static int    PIXELS_PER_TILE     = 256;
-   final static int    VERTEX_THRESHOLD    = 5000;
-   final static int    INITIAL_AREA_FACTOR = 3;
+   //-- Internal constants definition ------------------------------------------------------------------
+   final static String  ROOT_DIRECTORY          = "LOD";
+   final static String  PARAMETERS_FILE         = "parameters.xml";
+   final static String  METADATA_FILENAME       = "metadata.json";
+
+   final static double  OVERLAP_PERCENTAGE      = 10.0;
+   final static int     CONNECTION_TIMEOUT      = 5;               //seconds
+   final static int     PIXELS_PER_TILE         = 256;
+   final static int     SQUARED_PIXELS_PER_TILE = (int) Math.pow(
+                                                         (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
+                                                         2);
+   final static int     VERTEX_THRESHOLD        = 20000;
+   final static int     INITIAL_AREA_FACTOR     = 3;
+
+   final static boolean VERBOSE                 = false;
 
    private enum GeomType {
       POINT,
@@ -53,52 +62,44 @@ public class VectorialLOD {
    }
 
    //-- Data base connection parameters ----------------------------------------------------------------
-   private static String                     HOST                    = "igosoftware.dyndns.org";
-   private static String                     PORT                    = "5414";
+   private static String                     HOST               = "igosoftware.dyndns.org";
+   private static String                     PORT               = "5414";
    //   private static String                     HOST               = "192.168.1.14";
    //   private static String                     PORT               = "5432";
-   private static String                     USER                    = "postgres";
-   private static String                     PASSWORD                = "postgres1g0";
-   private static String                     DATABASE_NAME           = "vectorial_test";
+   private static String                     USER               = "postgres";
+   private static String                     PASSWORD           = "postgres1g0";
+   private static String                     DATABASE_NAME      = "vectorial_test";
 
    //-- Data source and filter parameters --------------------------------------------------------------
-   private static String                     DATABASE_TABLE          = "ne_10m_admin_0_countries";
-   private static String                     FILTER_CRITERIA         = "true";
+   private static String                     DATABASE_TABLE     = "ne_10m_admin_0_countries";
+   private static String                     FILTER_CRITERIA    = "true";
    //private static String                     FILTER_CRITERIA    = "\"continent\" like 'Euro%' AND \"pop_est\" > 10000000";
    private static String[]                   PROPERTIES;
 
    //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
-   private static float                      QUALITY_FACTOR          = 1.0f;
-   private static boolean                    MERCATOR                = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
-   private static int                        FIRST_LEVEL             = 0;
-   private static int                        MAX_LEVEL               = 3;
-   private static int                        NUM_LEVELS              = (MAX_LEVEL - FIRST_LEVEL) + 1;
-   private static int                        MAX_DB_CONNECTIONS      = NUM_LEVELS;
-   private static String                     OUTPUT_FORMAT           = "geojson";                    // valid values: geojson, bson, both
+   private static float                      QUALITY_FACTOR     = 1.0f;
+   private static boolean                    MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
+   private static int                        FIRST_LEVEL        = 0;
+   private static int                        MAX_LEVEL          = 3;
+   private static int                        NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
+   private static int                        MAX_DB_CONNECTIONS = NUM_LEVELS;
+   private static String                     OUTPUT_FORMAT      = "geojson";                    // valid values: geojson, bson, both
 
-   //-- Internal constants definition ------------------------------------------------------------------
-   //final static float                        QUALITY_FACTOR     = 2.0f;
-   final static double                       OVERLAP_PERCENTAGE      = 10.0;
-   final static int                          CONNECTION_TIMEOUT      = 5;                            //seconds
-   final static int                          SQUARED_PIXELS_PER_TILE = (int) Math.pow(
-                                                                              (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
-                                                                              2);
+   //-- Variables ----------------------------------------------------------------------
 
-   final static boolean                      VERBOSE                 = false;
-
-   private static DataBaseService            _dataBaseService        = null;
-   private static String                     _lodFolder              = null;
-   private static String                     _geojsonFolder          = null;
-   private static String                     _bsonFolder             = null;
-   private static String                     _metadataFileName       = null;
+   private static DataBaseService            _dataBaseService   = null;
+   private static String                     _lodFolder         = null;
+   private static String                     _geojsonFolder     = null;
+   private static String                     _bsonFolder        = null;
+   private static String                     _metadataFileName  = null;
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
-   private static TileSector                 _boundSector            = TileSector.FULL_SPHERE;
+   private static TileSector                 _boundSector       = TileSector.FULL_SPHERE;
    private static GeomType                   _geomType;
-   private static String                     _theGeomColumnName      = "the_geom";
-   private static String                     _projection             = null;
-   private static int                        _firstLevelCreated      = 0;
-   private static int                        _lastLevelCreated       = 0;
+   private static String                     _theGeomColumnName = "the_geom";
+   private static String                     _projection        = null;
+   private static int                        _firstLevelCreated = 0;
+   private static int                        _lastLevelCreated  = 0;
 
    /*
     * For handling postgis database access and connections
@@ -265,7 +266,6 @@ public class VectorialLOD {
             ILogger.instance().logError("Invalid data for sector: " + sector.toString() + ". ");
             return null;
          }
-
          //         System.out.println("fullQuery: " + fullQuery);
 
          // first try: usual parameters
@@ -339,11 +339,21 @@ public class VectorialLOD {
    }
 
 
+   //TODO: provisional. Change to json parser vertex count
    private static int getGeomVertexCount(final String geoJson) {
 
-      final String[] splitedGeojson = geoJson.split(".");
+      //      final String[] splitedGeojson = geoJson.split(".");
+      //      return (splitedGeojson.length - 1) / 2;
 
-      return (splitedGeojson.length - 1) / 2;
+      int counter = 0;
+      for (int index = 0; index < geoJson.length(); index++) {
+         if (geoJson.charAt(index) == '.') {
+            counter++;
+         }
+      }
+
+      //System.out.println("numPoints: " + counter);
+      return counter / 2;
    }
 
 
@@ -698,7 +708,7 @@ public class VectorialLOD {
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
       final double factor = areaFactor * areaFactor;
 
-      return "ST_Area(Box2D(the_geom))>" + Double.toString(areaFactor * (factor / SQUARED_PIXELS_PER_TILE)) + " and "
+      return "ST_Area(Box2D(the_geom))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and "
              + filterCriteria;
 
       // -- debería ser así:
