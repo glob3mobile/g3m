@@ -271,7 +271,7 @@ public class VectorialLOD {
          // first try: usual parameters
          geoJsonResult = executeQuery(fullQuery);
 
-         if (geoJsonResult.contains("null")) {
+         if (geoJsonResult == null) {
             return null;
          }
 
@@ -287,7 +287,7 @@ public class VectorialLOD {
 
          geoJsonResult = executeQuery(fullQuery);
 
-         if (geoJsonResult.contains("null")) {
+         if (geoJsonResult == null) {
             return null;
          }
 
@@ -302,10 +302,6 @@ public class VectorialLOD {
                   includeProperties);
 
          geoJsonResult = executeQuery(fullQuery);
-
-         if (geoJsonResult.contains("null")) {
-            return null;
-         }
 
          //return result anyway
          return geoJsonResult;
