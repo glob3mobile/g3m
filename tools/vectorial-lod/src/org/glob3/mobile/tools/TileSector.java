@@ -101,10 +101,10 @@ public class TileSector
    }
 
 
-   public static final double getAngularAreaInSquaredDegrees(final List<Sector> sectors) {
+   public static final double getAngularAreaInSquaredDegrees(final List<Sector> extendedSector) {
 
       double area = 0.0;
-      for (final Sector s : sectors) {
+      for (final Sector s : extendedSector) {
          area += s.getAngularAreaInSquaredDegrees();
       }
 

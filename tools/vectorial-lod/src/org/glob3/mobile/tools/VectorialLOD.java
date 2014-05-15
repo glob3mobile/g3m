@@ -149,12 +149,10 @@ public class VectorialLOD {
             }
          }
          catch (final ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            ILogger.instance().logError("class not found error: " + e.getMessage());
          }
          catch (final SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            ILogger.instance().logError("SQL error creating connection: " + e.getMessage());
          }
 
          return connPool;
@@ -177,8 +175,7 @@ public class VectorialLOD {
             }
          }
          catch (final SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            ILogger.instance().logError("SQL error releasing connection: " + e.getMessage());
          }
 
       }
@@ -295,13 +292,9 @@ public class VectorialLOD {
 
          //         System.out.println("fullQuery: " + fullQuery);
 
-         // -- ejemplos --
-         // -- la query es del tipo:
+         // -- ejemplo query --
          // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
-         //----------
-         // -- y creo que debería ser:
-         // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
-         //-----------------------------------
+         //-------------------
 
          final ResultSet rs = st.executeQuery(fullQuery);
 
@@ -316,8 +309,7 @@ public class VectorialLOD {
          }
       }
       catch (final SQLException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         ILogger.instance().logError("SQL error getting data for sector: " + sector.toString() + ". " + e.getMessage());
       }
 
       return geoJsonResult;
@@ -474,8 +466,7 @@ public class VectorialLOD {
          //System.out.println("boundSector: " + boundSector.toString());
       }
       catch (final SQLException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         ILogger.instance().logError("SQL error getting geometry bound sector: " + e.getMessage());
       }
 
       return boundSector;
@@ -519,13 +510,17 @@ public class VectorialLOD {
          final ResultSet rs = st.executeQuery(geomQuery);
 
          if (!rs.next()) {
+            st.close();
             return null;
          }
-         return parseGeometryType(rs.getString(1));
+
+         final String geomType = rs.getString(1);
+         st.close();
+
+         return parseGeometryType(geomType);
       }
       catch (final SQLException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         ILogger.instance().logError("SQL error getting geometry type: " + e.getMessage());
       }
       return null;
    }
@@ -666,23 +661,23 @@ public class VectorialLOD {
    //   }
 
 
-   private static String buildSectorQuery(final List<Sector> sectorList) {
+   private static String buildSectorQuery(final List<Sector> extendedSector) {
 
       //SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326))),0.027))::json As geometry, row_to_json((SELECT l FROM (SELECT "continent", "pop_est") As l)) As properties FROM (SELECT * FROM ne_10m_admin_0_countries WHERE (true)) As lg WHERE ST_Intersects(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326)))) As f ) As fc;
 
       //ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326))
 
-      if ((sectorList.size() < 1) || (sectorList.size() > 2)) {
+      if ((extendedSector.size() < 1) || (extendedSector.size() > 2)) {
          return null;
       }
 
-      if (sectorList.size() == 1) {
+      if (extendedSector.size() == 1) {
 
-         return buildSectorQuery(sectorList.get(0));
+         return buildSectorQuery(extendedSector.get(0));
       }
 
-      final String resultQuery = "ST_Union(" + buildSectorQuery(sectorList.get(0)) + "," + buildSectorQuery(sectorList.get(1))
-                                 + ")";
+      final String resultQuery = "ST_Union(" + buildSectorQuery(extendedSector.get(0)) + ","
+                                 + buildSectorQuery(extendedSector.get(1)) + ")";
 
       return resultQuery;
 
@@ -737,13 +732,17 @@ public class VectorialLOD {
          rs = st.executeQuery(geomQuery);
 
          if (!rs.next()) {
+            st.close();
             return null;
          }
-         return rs.getString(1);
+
+         final String geomColumnName = rs.getString(1);
+         st.close();
+
+         return geomColumnName;
       }
       catch (final SQLException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         ILogger.instance().logError("SQL error getting geometry column: " + e.getMessage());
       }
       return null;
    }
@@ -776,41 +775,12 @@ public class VectorialLOD {
 
    private static String getGeojsonFileName(final TileSector sector) {
 
-      //      final String folderName = _geojsonFolder + File.separatorChar + sector._level;
-      //      final String subFolderName = folderName + File.separatorChar + sector._column;
-      //
-      //      if (!new File(folderName).exists()) {
-      //         new File(folderName).mkdir();
-      //         if (VERBOSE) {
-      //            System.out.println("LEVEL: " + sector._level);
-      //         }
-      //      }
-      //
-      //      if (!new File(subFolderName).exists()) {
-      //         new File(subFolderName).mkdir();
-      //      }
-      //
-      //      return subFolderName + File.separatorChar + getTileGeojsonName(sector);
-
       return getFileName(sector, false);
    }
 
 
    private static String getBsonFileName(final TileSector sector) {
 
-      //      final String folderName = _bsonFolder + File.separatorChar + sector._level;
-      //      final String subFolderName = folderName + File.separatorChar + sector._column;
-      //
-      //      if (!new File(folderName).exists()) {
-      //         new File(folderName).mkdir();
-      //         //System.out.println("LEVEL: " + sector._level);
-      //      }
-      //
-      //      if (!new File(subFolderName).exists()) {
-      //         new File(subFolderName).mkdir();
-      //      }
-      //
-      //      return subFolderName + File.separatorChar + getTileBsonName(sector);
       return getFileName(sector, true);
    }
 
@@ -859,12 +829,7 @@ public class VectorialLOD {
    }
 
 
-   //   private static String getTmpGeojsonName(final TileSector sector) {
-   //
-   //      return sector._level + "-" + sector._column + "-" + sector.getRow(_renderParameters) + ".geojson";
-   //   }
-
-
+   @SuppressWarnings("unused")
    private static String getTileLabel(final TileSector sector) {
 
       return sector._level + "/" + sector._column + "/" + sector.getRow(_renderParameters);
@@ -940,24 +905,6 @@ public class VectorialLOD {
    }
 
 
-   //   private static ArrayList<TileSector> createFirstLevelExtendedTileSectors(final double tolerance) {
-   //
-   //      final ArrayList<TileSector> levelZeroTileSectors = createFirstLevelTileSectors();
-   //      final ArrayList<TileSector> levelZeroExtendedTileSectors = new ArrayList<TileSector>();
-   //
-   //      for (final TileSector s : levelZeroTileSectors) {
-   //
-   //         final Geodetic2D geodeticDelta = new Geodetic2D(s._deltaLatitude.times(tolerance), s._deltaLongitude.times(tolerance));
-   //         final Geodetic2D extendLower = s._lower.sub(geodeticDelta);
-   //         final Geodetic2D extendUpper = s._upper.add(geodeticDelta);
-   //
-   //         levelZeroExtendedTileSectors.add(new TileSector(extendLower, extendUpper, s._parent, s._level, s._row, s._column));
-   //      }
-   //
-   //      return levelZeroExtendedTileSectors;
-   //   }
-
-
    private static void launchVectorialLODProcessing(final DataSource dataSource) {
 
       final long start = System.currentTimeMillis();
@@ -1004,7 +951,6 @@ public class VectorialLOD {
       }
 
       if (!_boundSector.intersects(sector)) {
-         //System.out.println("Paso del sector: " + sector._level + "-" + sector._row + "-" + sector._column);
          return;
       }
 
@@ -1012,8 +958,7 @@ public class VectorialLOD {
 
          final String geoJson = selectGeometries(dataSource._sourceTable, //
                   sector.getSector(), //
-                  //sector.getExtendedSector(OVERLAP_PERCENTAGE),//
-                  QUALITY_FACTOR, // qualityFactor
+                  QUALITY_FACTOR, // 
                   dataSource._geomFilterCriteria, //
                   dataSource._includeProperties);
 
@@ -1061,55 +1006,10 @@ public class VectorialLOD {
    }
 
 
-   //   private static void writeOutputFile(final String geoJson,
-   //                                       final TileSector sector) {
-   //
-   //      try {
-   //
-   //         String fileName = "";
-   //
-   //         if (generateGeojson()) {
-   //            fileName = getGeojsonFileName(sector);
-   //            System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
-   //         }
-   //         else {
-   //            fileName = _lodFolder + File.separatorChar + getTmpGeojsonName(sector);
-   //         }
-   //         final FileWriter file = new FileWriter(fileName);
-   //         file.write(geoJson);
-   //         file.flush();
-   //         file.close();
-   //
-   //         if (generateBson()) {
-   //            final File bsonFile = new File(getBsonFileName(sector));
-   //            bsonFile.createNewFile();
-   //            final File geojsonFile = new File(fileName);
-   //
-   //            try {
-   //               JBson2BJson.instance().transform(geojsonFile, bsonFile, true);
-   //            }
-   //            catch (final JBson2BJsonException e) {
-   //               ILogger.instance().logError(e.getMessage());
-   //            }
-   //
-   //            if (!generateGeojson()) {
-   //               System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
-   //               new File(fileName).delete();
-   //            }
-   //         }
-   //
-   //      }
-   //      catch (final IOException e) {
-   //         // TODO Auto-generated catch block
-   //         e.printStackTrace();
-   //      }
-   //   }
-
    private static void writeMetadataFile() {
 
       if (_firstLevelCreated > _lastLevelCreated) {
          _firstLevelCreated = _lastLevelCreated;
-         //_lastLevelCreated = -1;
       }
 
       final String metadata = "{ sector: [" + _boundSector._lower._latitude._degrees + ", "
@@ -1132,8 +1032,7 @@ public class VectorialLOD {
          System.out.println("File " + METADATA_FILENAME + " created.");
       }
       catch (final IOException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         ILogger.instance().logError("IO error creating metadata file: " + e.getMessage());
       }
    }
 
@@ -1151,8 +1050,7 @@ public class VectorialLOD {
          }
       }
       catch (final IOException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         ILogger.instance().logError("IO Error writting output file: " + e.getMessage());
       }
 
    }
@@ -1191,13 +1089,12 @@ public class VectorialLOD {
                }
             }
             catch (final JBson2BJsonException e) {
-               ILogger.instance().logError(e.getMessage());
+               ILogger.instance().logError("Error generating bson file: " + e.getMessage());
             }
          }
       }
       catch (final IOException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         ILogger.instance().logError("Error generating output file: " + e.getMessage());
       }
    }
 
@@ -1573,16 +1470,13 @@ public class VectorialLOD {
             return true;
          }
          catch (final FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            ILogger.instance().logError("Initialization file not found: " + e.getMessage());
          }
          catch (final InvalidPropertiesFormatException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            ILogger.instance().logError("Initialization file invalid format: " + e.getMessage());
          }
          catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            ILogger.instance().logError("Initialization file IO error: " + e.getMessage());
          }
 
       }

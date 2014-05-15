@@ -145,7 +145,7 @@ public class GConcurrentService {
          }
 
          _executor.shutdown();
-         _executor.awaitTermination(2, TimeUnit.DAYS);
+         _executor.awaitTermination(4, TimeUnit.DAYS);
       }
       catch (final InterruptedException e) {
          throw new RuntimeException(e);
