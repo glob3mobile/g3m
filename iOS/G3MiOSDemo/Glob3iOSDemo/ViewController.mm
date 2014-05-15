@@ -1547,7 +1547,7 @@ public:
                                   TimeInterval::fromDays(30),
                                   true,
                                   NULL,
-                                  0.5);
+                                  1);
     layerSet->addLayer(pnoa);
   }
 
@@ -2040,7 +2040,7 @@ public:
 
 - (TilesRenderParameters*) createPlanetRendererParameters
 {
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceFirstLevelTilesRenderOnStart = true;
   const bool incrementalTileQuality = false;
