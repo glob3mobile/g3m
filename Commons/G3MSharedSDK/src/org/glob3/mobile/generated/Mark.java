@@ -647,11 +647,12 @@ public class Mark implements SurfaceElevationListener
   {
     if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
-      ILogger.instance().logWarning("Position change with _altitudeMode == RELATIVE_TO_GROUND not supported");
+      throw new RuntimeException("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
     }
+  
     if (_position != null)
        _position.dispose();
-    _position = new Geodetic3D(position);
+    _position = position;
   
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();

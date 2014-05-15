@@ -27,7 +27,6 @@ package org.glob3.mobile.generated;
 //class TextureIDReference;
 
 
-
 public class MarkUserData
 {
   public void dispose()

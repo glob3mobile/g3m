@@ -173,17 +173,25 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     return _roll;
   }
 
-  public final void setPosition(Geodetic3D position, AltitudeMode altitudeMode)
-  {
-    if (_position != null)
-       _position.dispose();
-    _position = position;
-    _altitudeMode = altitudeMode;
-    cleanTransformMatrix();
-  }
+//  void setPosition(Geodetic3D* position,
+//                   AltitudeMode altitudeMode);
 
+
+  //void Shape::setPosition(Geodetic3D* position,
+  //                        AltitudeMode altitudeMode) {
+  //  delete _position;
+  //  _position = position;
+  //  _altitudeMode = altitudeMode;
+  //  cleanTransformMatrix();
+  //}
+  
   public final void setPosition(Geodetic3D position)
   {
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      throw new RuntimeException("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
+    }
+  
     if (_position != null)
        _position.dispose();
     _position = position;
