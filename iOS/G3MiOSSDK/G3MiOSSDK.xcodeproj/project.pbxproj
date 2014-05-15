@@ -198,6 +198,10 @@
 		CF6B5F6116C1938D00C590C1 /* JSONFloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F5F16C1938D00C590C1 /* JSONFloat.cpp */; };
 		CF6B5F6516C194D200C590C1 /* JSONInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6316C194D200C590C1 /* JSONInteger.cpp */; };
 		CF6B5F6916C1956B00C590C1 /* JSONLong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */; };
+		CF6CCE3619254B3500AA3ED7 /* ChessboardLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6CCE3419254B3500AA3ED7 /* ChessboardLayer.cpp */; };
+		CF6CCE3919254B7500AA3ED7 /* ProceduralLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6CCE3719254B7500AA3ED7 /* ProceduralLayer.cpp */; };
+		CF6CCE3A19254BA900AA3ED7 /* ChessboardLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6CCE3519254B3500AA3ED7 /* ChessboardLayer.hpp */; };
+		CF6CCE3B19254BA900AA3ED7 /* ProceduralLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6CCE3819254B7500AA3ED7 /* ProceduralLayer.hpp */; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
 		CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723917184D620043C74B /* CanvasElement.cpp */; };
 		CF6D723D17184D920043C74B /* CanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723A17184D620043C74B /* CanvasElement.hpp */; };
@@ -713,6 +717,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				CF6CCE3A19254BA900AA3ED7 /* ChessboardLayer.hpp in CopyFiles */,
+				CF6CCE3B19254BA900AA3ED7 /* ProceduralLayer.hpp in CopyFiles */,
 				CF8649021921616B001D643A /* ICanvasUtils.hpp in CopyFiles */,
 				CF8649031921616B001D643A /* ChildRenderer.hpp in CopyFiles */,
 				CF2412B0191FE64300B796FB /* GEO2DCoordinatesArrayData.hpp in CopyFiles */,
@@ -1363,6 +1369,10 @@
 		CF6B5F6416C194D200C590C1 /* JSONInteger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONInteger.hpp; sourceTree = "<group>"; };
 		CF6B5F6716C1956B00C590C1 /* JSONLong.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONLong.cpp; sourceTree = "<group>"; };
 		CF6B5F6816C1956B00C590C1 /* JSONLong.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONLong.hpp; sourceTree = "<group>"; };
+		CF6CCE3419254B3500AA3ED7 /* ChessboardLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChessboardLayer.cpp; sourceTree = "<group>"; };
+		CF6CCE3519254B3500AA3ED7 /* ChessboardLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ChessboardLayer.hpp; sourceTree = "<group>"; };
+		CF6CCE3719254B7500AA3ED7 /* ProceduralLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProceduralLayer.cpp; sourceTree = "<group>"; };
+		CF6CCE3819254B7500AA3ED7 /* ProceduralLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ProceduralLayer.hpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
 		CF6D723917184D620043C74B /* CanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CanvasElement.cpp; path = Commons/Basic/CanvasElement.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2637,6 +2647,10 @@
 				CFD8E76F184FB71D00228031 /* SectorTileCondition.hpp */,
 				CF485F8718511C250013795B /* AndTileCondition.cpp */,
 				CF485F8818511C250013795B /* AndTileCondition.hpp */,
+				CF6CCE3419254B3500AA3ED7 /* ChessboardLayer.cpp */,
+				CF6CCE3519254B3500AA3ED7 /* ChessboardLayer.hpp */,
+				CF6CCE3719254B7500AA3ED7 /* ProceduralLayer.cpp */,
+				CF6CCE3819254B7500AA3ED7 /* ProceduralLayer.hpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -2909,6 +2923,7 @@
 				CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */,
 				CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */,
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
+				CF6CCE3919254B7500AA3ED7 /* ProceduralLayer.cpp in Sources */,
 				CFA5292618FED6FD00631CB4 /* TileRasterizerContext.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
 				D895CA1E1861C33A00AE8291 /* IImageUtils.cpp in Sources */,
@@ -3160,6 +3175,7 @@
 				CF47E0F51901D66F00410BB5 /* CanvasTileImageProvider.cpp in Sources */,
 				D8B8CE8E178D645F00EE1B97 /* GPUVariableValueSet.cpp in Sources */,
 				E71AA049191AACE400834D69 /* ICanvasUtils.cpp in Sources */,
+				CF6CCE3619254B3500AA3ED7 /* ChessboardLayer.cpp in Sources */,
 				FB0BB676177B60E10034CC52 /* CameraZoomAndRotateHandler.cpp in Sources */,
 				FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */,
 				CFE60469190442FE00E6C78B /* TextureMapping.cpp in Sources */,

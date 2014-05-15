@@ -88,33 +88,13 @@ void ChessboardTileImageProvider::create(const Tile* tile,
     ICanvas* canvas = IFactory::instance()->createCanvas();
     canvas->initialize(width, height);
 
-    canvas->setFillColor(Color::white());
+    canvas->setFillColor(_backgroundColor);
     canvas->fillRectangle(0, 0, width, height);
 
-//    canvas->setFillColor(Color::gray());
-
-    canvas->setFillColor(Color::fromRGBA(0.9f, 0.9f, 0.35f, 1));
+    canvas->setFillColor(_boxColor);
 
     const float xInterval = (float) width  / _splits;
     const float yInterval = (float) height / _splits;
-
-//    for (int col = 0; col <= _splits; col += 2) {
-//      const float x  = col * xInterval;
-//      const float x2 = (col + 1) * xInterval;
-//      for (int row = 0; row <= _splits; row += 2) {
-//        const float y  = row * yInterval;
-//        const float y2 = (row + 1) * yInterval;
-//
-//        canvas->fillRectangle(x - (xInterval / 2),
-//                              y - (yInterval / 2),
-//                              xInterval,
-//                              yInterval);
-//        canvas->fillRectangle(x2 - (xInterval / 2),
-//                              y2 - (yInterval / 2),
-//                              xInterval,
-//                              yInterval);
-//      }
-//    }
 
     for (int col = 0; col < _splits; col += 2) {
       const float x  = col * xInterval;
@@ -135,9 +115,6 @@ void ChessboardTileImageProvider::create(const Tile* tile,
                                      4);
       }
     }
-
-//    canvas->setLineColor(Color::magenta());
-//    canvas->strokeRectangle(0, 0, width, height);
 
     canvas->createImage(new ChessboardTileImageProvider_IImageListener(this,
                                                                        tile,

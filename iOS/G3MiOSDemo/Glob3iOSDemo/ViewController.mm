@@ -141,7 +141,7 @@
 #import <G3MiOSSDK/TiledVectorLayer.hpp>
 #import <G3MiOSSDK/GEORasterSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
-
+#import <G3MiOSSDK/ChessboardLayer.hpp>
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
@@ -1498,7 +1498,7 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = true;
+  bool testingTransparencies = false;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1551,19 +1551,21 @@ public:
     layerSet->addLayer(pnoa);
   }
 
-  if (false) {
+  if (true) {
 #warning Diego at work!
-    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2,
-                                       10));
+//    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
+//                                       TimeInterval::fromDays(30),
+//                                       true,
+//                                       2,
+//                                       10));
+
+    layerSet->addLayer( ChessboardLayer::newMercator() );
 
 //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
 
-//    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
-//    const int firstLevel = 2;
-//    const int maxLevel = 10;
+    const std::string urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+    const int firstLevel = 2;
+    const int maxLevel = 9;
 
     // http://igosoftware.dyndns.org:8000/vectorial/catastro_4-LEVELS_MERCATOR/GEOJSON/15/16034/12348.geojson
 
@@ -1580,27 +1582,26 @@ public:
 //    const Sector sector = Sector::fromDegrees(  49.1625, -8.58622,
 //                                              60.84, 1.76259);
 
-    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-polygons/{level}/{x}/{y}.geojson";
-    const int firstLevel = 2;
-    const int maxLevel = 10;
-    const Sector sector = Sector::fromDegrees(34.991, -83.9755,
-                                              39.728, -74.749);
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-polygons/{level}/{x}/{y}.geojson";
+//    const int firstLevel = 2;
+//    const int maxLevel = 10;
+//    const Sector sector = Sector::fromDegrees(34.991, -83.9755,
+//                                              39.728, -74.749);
 
-//    xMin,yMin -83.9755,34.991 : xMax,yMax -74.749,39.728
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
 
     layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
                                                      urlTemplate,
-                                                     //Sector::fullSphere(),       // sector
-                                                     sector,
+                                                     Sector::fullSphere(),       // sector
+                                                     //sector,
                                                      firstLevel,
                                                      maxLevel,
                                                      TimeInterval::fromDays(30), // timeToCache
                                                      true,                       // readExpired
                                                      1,                          // transparency
-                                                     //NULL,                       // condition
-                                                     new LevelTileCondition(9, 10),
+                                                     NULL,                       // condition
+                                                     //new LevelTileCondition(9, 10),
                                                      ""                          // disclaimerInfo
                                                      ));
   }
