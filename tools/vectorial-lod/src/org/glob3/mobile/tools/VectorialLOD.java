@@ -37,10 +37,12 @@ import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 public class VectorialLOD {
 
-   final static String ROOT_DIRECTORY    = "LOD";
-   final static String PARAMETERS_FILE   = "parameters.xml";
-   final static String METADATA_FILENAME = "metadata.json";
-   final static int    PIXELS_PER_TILE   = 256;
+   final static String ROOT_DIRECTORY      = "LOD";
+   final static String PARAMETERS_FILE     = "parameters.xml";
+   final static String METADATA_FILENAME   = "metadata.json";
+   final static int    PIXELS_PER_TILE     = 256;
+   final static int    VERTEX_THRESHOLD    = 5000;
+   final static int    INITIAL_AREA_FACTOR = 3;
 
    private enum GeomType {
       POINT,
@@ -248,16 +250,113 @@ public class VectorialLOD {
                                          final String geomFilterCriteria,
                                          final String... includeProperties) {
 
+      String geoJsonResult = null;
+      final int areaFactor = INITIAL_AREA_FACTOR;
+      try {
+         // -- query example --
+         // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
+         //-------------------
 
-      //final String bboxQuery = buildSectorQuery(sector);
-      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-      final String bboxQuery = buildSectorQuery(extendedSector);
+         //-- full query for geometry select
+         String fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor, areaFactor, geomFilterCriteria,
+                  includeProperties);
 
-      if (bboxQuery == null) {
+         if (fullQuery == null) {
+            ILogger.instance().logError("Invalid data for sector: " + sector.toString() + ". ");
+            return null;
+         }
+
+         //         System.out.println("fullQuery: " + fullQuery);
+
+         // first try: usual parameters
+         geoJsonResult = executeQuery(fullQuery);
+
+         if (geoJsonResult.contains("null")) {
+            return null;
+         }
+
+         if (getGeomVertexCount(geoJsonResult) < VERTEX_THRESHOLD) {
+            return geoJsonResult;
+         }
+
+         ILogger.instance().logWarning("Too much vertex for sector, area tunning: " + sector.toString());
+
+         // second try: increase area filter factor
+         fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor, areaFactor + 1, geomFilterCriteria,
+                  includeProperties);
+
+         geoJsonResult = executeQuery(fullQuery);
+
+         if (geoJsonResult.contains("null")) {
+            return null;
+         }
+
+         if (getGeomVertexCount(geoJsonResult) < VERTEX_THRESHOLD) {
+            return geoJsonResult;
+         }
+
+         ILogger.instance().logWarning("Too much vertex for sector, quality factor tunning: " + sector.toString());
+
+         // third try: increase area filter factor and reduce quality factor
+         fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor / 2.0f, areaFactor + 1, geomFilterCriteria,
+                  includeProperties);
+
+         geoJsonResult = executeQuery(fullQuery);
+
+         if (geoJsonResult.contains("null")) {
+            return null;
+         }
+
+         //return result anyway
+         return geoJsonResult;
+      }
+      catch (final SQLException e) {
+         ILogger.instance().logError("SQL error getting data for sector: " + sector.toString() + ". " + e.getMessage());
+      }
+
+      return geoJsonResult;
+   }
+
+
+   private static String executeQuery(final String query) throws SQLException {
+
+      String result = null;
+
+      final Connection conn = _dataBaseService.getConnection();
+      final Statement st = conn.createStatement();
+
+      final ResultSet rs = st.executeQuery(query);
+
+      if (!rs.next()) {
+         st.close();
+         return null; //no data on this bbox
+      }
+
+      result = rs.getString(1);
+      st.close();
+
+      if (result.contains("null")) {
          return null;
       }
 
-      final String propsQuery = buildPropertiesQuery(includeProperties);
+      return result;
+   }
+
+
+   private static int getGeomVertexCount(final String geoJson) {
+
+      final String[] splitedGeojson = geoJson.split(".");
+
+      return (splitedGeojson.length - 1) / 2;
+   }
+
+
+   public static String buildSelectQuery(final String dataSourceTable,
+                                         final Sector sector,
+                                         final float qualityFactor,
+                                         final double areaFactor,
+                                         final String geomFilterCriteria,
+                                         final String... includeProperties) {
 
       final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.";
       final String baseQuery1 = "))::json As geometry, row_to_json((SELECT l FROM (SELECT ";
@@ -266,53 +365,31 @@ public class VectorialLOD {
       final String baseQuery4 = " WHERE (";
       final String baseQuery5 = ")) As f ) As fc;";
 
-      String geoJsonResult = null;
-      Connection conn = null;
-      Statement st = null;
-      try {
-         conn = _dataBaseService.getConnection();
-         st = conn.createStatement();
+      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
+      final String bboxQuery = buildSectorQuery(extendedSector);
 
-         //final String theGeom = getGeometryColumnName(st, dataSourceTable);
-         final float tolerance = getMaxVertexTolerance(sector, qualityFactor);
-         final String simplifyTolerance = Float.toString(tolerance);
-         final String filterCriteria = buildFilterCriterium(geomFilterCriteria, extendedSector);
-
-         //         System.out.println("FILTER CRITERIA: " + filterCriteria);
-
-         if (simplifyTolerance == null) {
-            st.close();
-            return null; // null tolerance means no data on this bbox
-         }
-
-         //-- full query final where first cut, second simplify
-         final String fullQuery = baseQuery0 + _theGeomColumnName + "," + bboxQuery + ")," + simplifyTolerance + baseQuery1
-                                  + propsQuery + baseQuery2 + dataSourceTable + baseQuery4 + filterCriteria + baseQuery3
-                                  + _theGeomColumnName + "," + bboxQuery + baseQuery5;
-
-         //         System.out.println("fullQuery: " + fullQuery);
-
-         // -- ejemplo query --
-         // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
-         //-------------------
-
-         final ResultSet rs = st.executeQuery(fullQuery);
-
-         if (!rs.next()) {
-            st.close();
-            return null; //no data on this bbox
-         }
-         geoJsonResult = rs.getString(1);
-         st.close();
-         if (geoJsonResult.contains("null")) {
-            return null;
-         }
-      }
-      catch (final SQLException e) {
-         ILogger.instance().logError("SQL error getting data for sector: " + sector.toString() + ". " + e.getMessage());
+      if (bboxQuery == null) {
+         return null;
       }
 
-      return geoJsonResult;
+      final String propsQuery = buildPropertiesQuery(includeProperties);
+      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
+      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, extendedSector);
+
+      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
+
+      //-- full query final where first cut, second simplify
+      final String fullQuery = baseQuery0 + _theGeomColumnName + "," + bboxQuery + ")," + simplifyTolerance + baseQuery1
+                               + propsQuery + baseQuery2 + dataSourceTable + baseQuery4 + filterCriteria + baseQuery3
+                               + _theGeomColumnName + "," + bboxQuery + baseQuery5;
+
+      //         System.out.println("fullQuery: " + fullQuery);
+
+      // -- ejemplo query --
+      // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
+      //-------------------
+
+      return fullQuery;
    }
 
 
@@ -433,7 +510,7 @@ public class VectorialLOD {
    //   }
 
 
-   public static TileSector getGeometriesBound(final String dataSourceTable) {
+   private static TileSector getGeometriesBound(final String dataSourceTable) {
 
       TileSector boundSector = TileSector.FULL_SPHERE;
       Connection conn = null;
@@ -607,6 +684,7 @@ public class VectorialLOD {
 
 
    private static String buildFilterCriterium(final String filterCriteria,
+                                              final double areaFactor,
                                               final List<Sector> extendedSector) {
 
       //http://postgis.refractions.net/documentation/manual-1.4/ST_NPoints.html
@@ -622,8 +700,10 @@ public class VectorialLOD {
       }
 
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
+      final double factor = areaFactor * areaFactor;
 
-      return "ST_Area(Box2D(the_geom))>" + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
+      return "ST_Area(Box2D(the_geom))>" + Double.toString(areaFactor * (factor / SQUARED_PIXELS_PER_TILE)) + " and "
+             + filterCriteria;
 
       // -- debería ser así:
       //      return "ST_Area(Box2D(ST_Intersection(the_geom,"+bboxQuery+")))>" + Double.toString(9 * (sectorArea / SQUARED_PIXELS_PER_TILE))
