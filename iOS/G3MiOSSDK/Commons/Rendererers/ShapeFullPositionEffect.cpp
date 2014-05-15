@@ -15,7 +15,7 @@ void ShapeFullPositionEffect::doStep(const G3MRenderContext* rc,
   const double alpha = getAlpha(when);
   
   const Geodetic3D pos = Geodetic3D::linearInterpolation(_fromPosition, _toPosition, alpha);
-  _shape->setPosition(new Geodetic3D(pos));
+  _shape->setPosition(pos);
   
   if (!_fromPitch.isNan() && !_toPitch.isNan()) {
     _shape->setPitch(Angle::linearInterpolation(_fromPitch, _toPitch, alpha));
@@ -31,7 +31,7 @@ void ShapeFullPositionEffect::doStep(const G3MRenderContext* rc,
 }
 
 void ShapeFullPositionEffect::cancel(const TimeInterval& when) {
-  _shape->setPosition( new Geodetic3D(_toPosition) );
+  _shape->setPosition(_toPosition);
   if (!_toPitch.isNan()) {
     _shape->setPitch(_toPitch);
   }
@@ -47,7 +47,7 @@ void ShapeFullPositionEffect::cancel(const TimeInterval& when) {
 
 void ShapeFullPositionEffect::stop(const G3MRenderContext* rc,
                                    const TimeInterval& when) {
-  _shape->setPosition( new Geodetic3D(_toPosition) );
+  _shape->setPosition(_toPosition);
   if (!_toPitch.isNan()) {
     _shape->setPitch(_toPitch);
   }

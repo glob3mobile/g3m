@@ -22,6 +22,7 @@
 #include "Vector2D.hpp"
 #include "Geodetic3D.hpp"
 #include "TextureIDReference.hpp"
+#include "ErrorHandling.hpp"
 
 class MarkLabelImageListener : public IImageListener {
 private:
@@ -544,10 +545,16 @@ void Mark::elevationChanged(const Geodetic2D& position,
 
 void Mark::setPosition(const Geodetic3D& position) {
   if (_altitudeMode == RELATIVE_TO_GROUND) {
-    ILogger::instance()->logWarning("Position change with _altitudeMode == RELATIVE_TO_GROUND not supported");
+    THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
   }
+
   delete _position;
+#ifdef C_CODE
   _position = new Geodetic3D(position);
+#endif
+#ifdef JAVA_CODE
+  _position = position;
+#endif
 
   delete _cartesianPosition;
   _cartesianPosition = NULL;
