@@ -8,8 +8,8 @@
 
 #include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
-//#include "MultiLayerTileTexturizer.hpp"
-#include "DefaultTileTexturizer.hpp"
+#include "MultiLayerTileTexturizer.hpp"
+//#include "DefaultTileTexturizer.hpp"
 #include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
