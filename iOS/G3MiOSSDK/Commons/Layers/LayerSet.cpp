@@ -459,7 +459,7 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
   return _tileImageProvider;
 }
 
-std::vector<std::string> LayerSet::getInfo() {
+const std::vector<std::string> LayerSet::getInfo() {
   _infos.clear();
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {

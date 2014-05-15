@@ -38,9 +38,8 @@ protected:
 
   bool _enable;
 
-  std::string _disclaimerInfo;
-
-  std::vector<std::string> _info;
+  std::string              _disclaimerInfo;
+  std::vector<std::string> _infos;
 
 #ifdef C_CODE
   const LayerTilesRenderParameters* _parameters;
@@ -140,7 +139,7 @@ public:
 
   void setInfo(const std::string& disclaimerInfo);
   
-  std::vector<std::string> getInfos();
+  const std::vector<std::string> getInfos();
   
 };
 

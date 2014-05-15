@@ -108,7 +108,7 @@ public:
 
   void setChangedInfoListener(ChangedInfoListener* changedInfoListener);
 
-  std::vector<std::string> getInfo();
+  const std::vector<std::string> getInfo();
 
   void changedInfo(const std::vector<std::string>& info);
   
