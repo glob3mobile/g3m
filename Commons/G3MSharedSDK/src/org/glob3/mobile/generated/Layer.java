@@ -44,8 +44,7 @@ public abstract class Layer
   protected boolean _enable;
 
   protected String _disclaimerInfo;
-
-  protected java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+  protected java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
 
   protected LayerTilesRenderParameters _parameters;
 
@@ -57,7 +56,7 @@ public abstract class Layer
     if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
-      _layerSet.changedInfo(_info);
+      _layerSet.changedInfo(_infos);
     }
   }
 
@@ -241,7 +240,7 @@ public abstract class Layer
     }
   
   
-    if (!(_info == that._info))
+    if (!(_infos == that._infos))
     {
       return false;
     }
@@ -293,10 +292,10 @@ public abstract class Layer
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO BETTER
-    _info.clear();
+    _infos.clear();
     final String layerInfo = getInfo();
-    _info.add(layerInfo);
-    return _info;
+    _infos.add(layerInfo);
+    return _infos;
   }
 
 }
