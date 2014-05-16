@@ -77,6 +77,47 @@ public class ChessboardLayer extends ProceduralLayer
     return new ChessboardLayer(backgroundColor, boxColor, splits, dataSector, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), transparency, condition, disclaimerInfo);
   }
 
+  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency, LayerCondition condition)
+  {
+     return newWGS84(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, transparency, condition, "");
+  }
+  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency)
+  {
+     return newWGS84(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, transparency, null, "");
+  }
+  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel)
+  {
+     return newWGS84(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, 1, null, "");
+  }
+  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel)
+  {
+     return newWGS84(backgroundColor, boxColor, splits, dataSector, firstLevel, 18, 1, null, "");
+  }
+  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector)
+  {
+     return newWGS84(backgroundColor, boxColor, splits, dataSector, 2, 18, 1, null, "");
+  }
+  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits)
+  {
+     return newWGS84(backgroundColor, boxColor, splits, Sector.fullSphere(), 2, 18, 1, null, "");
+  }
+  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor)
+  {
+     return newWGS84(backgroundColor, boxColor, 8, Sector.fullSphere(), 2, 18, 1, null, "");
+  }
+  public static ChessboardLayer newWGS84(Color backgroundColor)
+  {
+     return newWGS84(backgroundColor, Color.fromRGBA(0.9f, 0.9f, 0.35f, 1), 8, Sector.fullSphere(), 2, 18, 1, null, "");
+  }
+  public static ChessboardLayer newWGS84()
+  {
+     return newWGS84(Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1), 8, Sector.fullSphere(), 2, 18, 1, null, "");
+  }
+  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency, LayerCondition condition, String disclaimerInfo)
+  {
+    return new ChessboardLayer(backgroundColor, boxColor, splits, dataSector, LayerTilesRenderParameters.createDefaultWGS84(firstLevel, maxLevel), transparency, condition, disclaimerInfo);
+  }
+
   public final String getLayerType()
   {
     return "ChessboardLayer";
