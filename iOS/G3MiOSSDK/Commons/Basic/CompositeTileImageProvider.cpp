@@ -170,6 +170,7 @@ void CompositeTileImageProvider::Composer::done() {
   bool simpleCase;
   if (_contributionsSize == 1) {
     const ChildResult* singleResult = _results[0];
+    // check for (singleResult->_contribution == NULL). It's NULL when error or cancelation.
     const Sector* contributionSector = (singleResult->_contribution == NULL) ? NULL : singleResult->_contribution->getSector();
     simpleCase = ((contributionSector == NULL) ||
                   contributionSector->isNan()  ||
