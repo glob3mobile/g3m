@@ -202,6 +202,7 @@
 		CF6CCE3919254B7500AA3ED7 /* ProceduralLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6CCE3719254B7500AA3ED7 /* ProceduralLayer.cpp */; };
 		CF6CCE3A19254BA900AA3ED7 /* ChessboardLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6CCE3519254B3500AA3ED7 /* ChessboardLayer.hpp */; };
 		CF6CCE3B19254BA900AA3ED7 /* ProceduralLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6CCE3819254B7500AA3ED7 /* ProceduralLayer.hpp */; };
+		CF6CCE3E1925604200AA3ED7 /* GEORasterizerLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6CCE3C1925604200AA3ED7 /* GEORasterizerLayer.cpp */; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
 		CF6D723B17184D620043C74B /* CanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6D723917184D620043C74B /* CanvasElement.cpp */; };
 		CF6D723D17184D920043C74B /* CanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6D723A17184D620043C74B /* CanvasElement.hpp */; };
@@ -1373,6 +1374,8 @@
 		CF6CCE3519254B3500AA3ED7 /* ChessboardLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ChessboardLayer.hpp; sourceTree = "<group>"; };
 		CF6CCE3719254B7500AA3ED7 /* ProceduralLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProceduralLayer.cpp; sourceTree = "<group>"; };
 		CF6CCE3819254B7500AA3ED7 /* ProceduralLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ProceduralLayer.hpp; sourceTree = "<group>"; };
+		CF6CCE3C1925604200AA3ED7 /* GEORasterizerLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEORasterizerLayer.cpp; sourceTree = "<group>"; };
+		CF6CCE3D1925604200AA3ED7 /* GEORasterizerLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEORasterizerLayer.hpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
 		CF6D723917184D620043C74B /* CanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CanvasElement.cpp; path = Commons/Basic/CanvasElement.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2612,6 +2615,8 @@
 				CF2B32681911A5A500B4AC52 /* VectorLayer.hpp */,
 				CF02302119119B0100FD85E0 /* TiledVectorLayer.cpp */,
 				CF02302219119B0100FD85E0 /* TiledVectorLayer.hpp */,
+				CF6CCE3C1925604200AA3ED7 /* GEORasterizerLayer.cpp */,
+				CF6CCE3D1925604200AA3ED7 /* GEORasterizerLayer.hpp */,
 				CFE676B016ECDA7C00CB93B9 /* BingMapsLayer.cpp */,
 				CFE676B116ECDA7C00CB93B9 /* BingMapsLayer.hpp */,
 				CF75C3A416EA621D00F7EE9F /* GoogleMapsLayer.cpp */,
@@ -3093,6 +3098,7 @@
 				CFDA835D16D6758200295F96 /* BilinearInterpolator.cpp in Sources */,
 				CFDA836216D6776B00295F96 /* SubviewElevationData.cpp in Sources */,
 				CF27B16016D93DCA0000A415 /* BufferElevationData.cpp in Sources */,
+				CF6CCE3E1925604200AA3ED7 /* GEORasterizerLayer.cpp in Sources */,
 				CF27B16416D93F2C0000A415 /* ShortBufferElevationData.cpp in Sources */,
 				CFD42ABC16DBFE8600B03961 /* LayerTilesRenderParameters.cpp in Sources */,
 				CFD15C4416E78C7D004DC360 /* OSMLayer.cpp in Sources */,

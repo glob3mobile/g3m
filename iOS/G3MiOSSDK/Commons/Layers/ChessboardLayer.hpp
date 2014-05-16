@@ -53,6 +53,16 @@ public:
                                       const LayerCondition* condition       = NULL,
                                       const std::string&    disclaimerInfo  = "");
 
+  static ChessboardLayer* newWGS84(const Color&          backgroundColor = Color::white(),
+                                   const Color&          boxColor        = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1),
+                                   const int             splits          = 8,
+                                   const Sector&         dataSector      = Sector::fullSphere(),
+                                   const int             firstLevel      = 2,
+                                   const int             maxLevel        = 18,
+                                   const float           transparency    = 1,
+                                   const LayerCondition* condition       = NULL,
+                                   const std::string&    disclaimerInfo  = "");
+
   std::string getLayerType() const {
     return "ChessboardLayer";
   }
@@ -80,7 +90,7 @@ public:
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
   bool rawIsEquals(const Layer* that) const;
-
+  
 };
 
 #endif

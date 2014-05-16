@@ -18,6 +18,7 @@ class IBufferDownloadListener;
 class IStringUtils;
 class GEORasterSymbolizer;
 
+
 class TiledVectorLayer : public VectorLayer {
 private:
   const GEORasterSymbolizer* _symbolizer;
