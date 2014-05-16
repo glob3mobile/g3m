@@ -17,12 +17,12 @@ public class TileSector
          extends
             Sector {
 
-   private final static Angle     POS180       = Angle.fromDegrees(180.0);
-   private final static Angle     NEG180       = Angle.fromDegrees(-180.0);
-   private final static Angle     POS360       = Angle.fromDegrees(360.0);
+   private final static Angle     POS180             = Angle.fromDegrees(180.0);
+   private final static Angle     NEG180             = Angle.fromDegrees(-180.0);
+   private final static Angle     POS360             = Angle.fromDegrees(360.0);
 
-   public final static TileSector FULL_SPHERE  = new TileSector(Sector.fullSphere(), null, 0, 0, 0);
-   private final static Sector    EMPTY_SECTOR = Sector.fromDegrees(0, 0, 0, 0);
+   public final static TileSector FULL_SPHERE_SECTOR = new TileSector(Sector.fullSphere(), null, 0, 0, 0);
+   private final static Sector    EMPTY_SECTOR       = Sector.fromDegrees(0, 0, 0, 0);
 
    public TileSector              _parent;
    public int                     _level;

@@ -21,6 +21,7 @@ import java.util.Properties;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
@@ -28,6 +29,7 @@ import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.specific.Factory_JavaDesktop;
+import org.glob3.mobile.specific.JSONParser_JavaDesktop;
 import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
@@ -48,7 +50,7 @@ public class VectorialLOD {
    final static int     SQUARED_PIXELS_PER_TILE = (int) Math.pow(
                                                          (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
                                                          2);
-   final static int     VERTEX_THRESHOLD        = 16000;
+   final static long    VERTEX_THRESHOLD        = 16000;
    final static int     INITIAL_AREA_FACTOR     = 3;
 
    final static boolean VERBOSE                 = false;
@@ -94,7 +96,7 @@ public class VectorialLOD {
    private static String                     _metadataFileName  = null;
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
-   private static TileSector                 _boundSector       = TileSector.FULL_SPHERE;
+   private static TileSector                 _boundSector       = TileSector.FULL_SPHERE_SECTOR;
    private static GeomType                   _geomType;
    private static String                     _theGeomColumnName = "the_geom";
    private static String                     _projection        = null;
@@ -340,16 +342,23 @@ public class VectorialLOD {
 
 
    //TODO: provisional. Change to json parser vertex count 
-   private static int getGeomVertexCount(final String geoJson) {
+   private static long getGeomVertexCount(final String geoJson) {
 
-      int counter = 0;
+      //return GEOJSONParser.parseJSON(geoJson).getCoordinatesCount();
+
+      //      final GEOObject jsonObject = GEOJSONParser.parseJSON(geoJson);
+      //      final long cuenta = jsonObject.getCoordinatesCount();
+      //      System.out.println("num Vertex: " + cuenta);
+      //      return cuenta;
+
+      long counter = 0;
       for (int index = 0; index < geoJson.length(); index++) {
          if (geoJson.charAt(index) == '.') {
             counter++;
          }
       }
 
-      final int result = counter / 2;
+      final long result = counter / 2;
       //      if (result >= 10000) {
       //         System.out.println("num Vertex: " + result);
       //      }
@@ -519,7 +528,7 @@ public class VectorialLOD {
 
    private static TileSector getGeometriesBound(final String dataSourceTable) {
 
-      TileSector boundSector = TileSector.FULL_SPHERE;
+      TileSector boundSector = TileSector.FULL_SPHERE_SECTOR;
       Connection conn = null;
       Statement st = null;
       try {
@@ -540,7 +549,7 @@ public class VectorialLOD {
 
          if (!rs.next()) {
             st.close();
-            return TileSector.FULL_SPHERE;
+            return TileSector.FULL_SPHERE_SECTOR;
          }
 
          final String bboxStr = rs.getString(1);
@@ -560,7 +569,7 @@ public class VectorialLOD {
    private static TileSector parseBoundSectorFromBbox(final String bbox) {
 
       if ((bbox == null) || bbox.equals("")) {
-         return TileSector.FULL_SPHERE;
+         return TileSector.FULL_SPHERE_SECTOR;
       }
 
       System.out.println("Source data bound: " + bbox);
@@ -1238,6 +1247,10 @@ public class VectorialLOD {
 
       if (IMathUtils.instance() == null) {
          IMathUtils.setInstance(new MathUtils_JavaDesktop());
+      }
+
+      if (IJSONParser.instance() == null) {
+         IJSONParser.setInstance(new JSONParser_JavaDesktop());
       }
 
       IStringBuilder.setInstance(new StringBuilder_JavaDesktop());
