@@ -27,35 +27,52 @@ public class ICanvasUtils
   }
   public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor, int padding, int cornerRadius)
   {
-    int longestTextIndex = 0;
-    int maxLength = strings.get(longestTextIndex).length();
+  
+  //  int longestTextIndex = 0;
+  //  int maxLength = strings.at(longestTextIndex).length();
+  //  const int stringsSize = strings.size();
+  //  for (int i = 1; i < stringsSize; i++) {
+  //    const int itemLength = strings.at(i).length();
+  //    if (maxLength < itemLength) {
+  //      maxLength = itemLength;
+  //      longestTextIndex = i;
+  //    }
+  //  }
+  //
+  //  int fontSize = maxFontSize;
+  //  const int maxWidth = width - (2 * padding);
+  //  bool fit = false;
+  //  while (!fit && fontSize > minFontSize) {
+  //    GFont labelFont = GFont::sansSerif(fontSize);
+  //    const std::string longestText = strings.at(longestTextIndex);
+  //    canvas->setFont(labelFont);
+  //    const Vector2F extent = canvas->textExtent(longestText);
+  //    if (extent._x <= maxWidth) {
+  //      fit = true;
+  //    }
+  //    else {
+  //      fontSize--;
+  //    }
+  //  }
+  
+  
+    final int maxWidth = width - (2 * padding);
     final int stringsSize = strings.size();
-    for (int i = 1; i < stringsSize; i++)
-    {
-      final int itemLength = strings.get(i).length();
-      if (maxLength < itemLength)
-      {
-        maxLength = itemLength;
-        longestTextIndex = i;
-      }
-    }
   
     int fontSize = maxFontSize;
-    final int maxWidth = width - (2 * padding);
-    boolean fit = false;
-    while (!fit && fontSize > minFontSize)
+    boolean allFit = true;
+    while (!allFit && (fontSize > minFontSize))
     {
-      GFont labelFont = GFont.sansSerif(fontSize);
-      final String longestText = strings.get(longestTextIndex);
-      canvas.setFont(labelFont);
-      final Vector2F extent = canvas.textExtent(longestText);
-      if (extent._x <= maxWidth)
+      canvas.setFont(GFont.sansSerif(fontSize));
+      for (int i = 0; i < stringsSize; i++)
       {
-        fit = true;
-      }
-      else
-      {
-        fontSize--;
+        final Vector2F extent = canvas.textExtent(strings.get(i));
+        if (extent._x > maxWidth)
+        {
+          allFit = false;
+          fontSize--;
+          continue;
+        }
       }
     }
   

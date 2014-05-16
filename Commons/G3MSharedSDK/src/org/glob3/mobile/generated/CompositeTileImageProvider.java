@@ -102,6 +102,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       if (_contributionsSize == 1)
       {
         final ChildResult singleResult = _results.get(0);
+        // check for (singleResult->_contribution == NULL). It's NULL when error or cancelation.
         final Sector contributionSector = (singleResult._contribution == null) ? null : singleResult._contribution.getSector();
         simpleCase = ((contributionSector == null) || contributionSector.isNan() || _tileSector.isEquals(contributionSector));
       }
