@@ -121,6 +121,43 @@ public class JBson2BJson {
 
    /**
     * 
+    * @param jsonString
+    * @param fBson
+    * @throws JBson2BJsonException
+    */
+   public void json2bson(final String jsonString,
+                         final File fBson,
+                         final boolean overwrite) throws JBson2BJsonException {
+
+      if (overwrite && fBson.exists()) {
+         if (!fBson.delete()) {
+            throw new JBson2BJsonException("Output bson file exist and can't to delete it for overwrite", null);
+         }
+      }
+
+      final JSONBaseObject jbase = parseJsonString(jsonString);
+      if (jbase != null) {
+         try {
+            if (fBson.exists() || fBson.createNewFile()) {
+               writeBsonFile(jbase, fBson);
+            }
+            else {
+               throw new JBson2BJsonException("Output bson file does not exist or it was not possible to be created");
+            }
+         }
+         catch (final IOException e) {
+            throw new JBson2BJsonException(e.getMessage(), e.getCause());
+         }
+      }
+      else {
+         throw new JBson2BJsonException("JSON String was not properly parsed");
+      }
+
+   }
+
+
+   /**
+    * 
     * @param fBson
     * @param overwrite
     * @param fsJson
@@ -330,6 +367,14 @@ public class JBson2BJson {
       }
 
       return jbase;
+   }
+
+
+   private JSONBaseObject parseJsonString(final String jsonString) {
+
+      final byte content[] = jsonString.getBytes();
+      final JSONParser_JavaDesktop jp = new JSONParser_JavaDesktop();
+      return jp.parse(new ByteBuffer_JavaDesktop(content));
    }
 
 
