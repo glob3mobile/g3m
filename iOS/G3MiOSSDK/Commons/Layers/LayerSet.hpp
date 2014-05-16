@@ -90,7 +90,8 @@ public:
 
   Layer* getLayerByTitle(const std::string& title) const;
 
-  LayerTilesRenderParameters* createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart, std::vector<std::string>& errors) const;
+  LayerTilesRenderParameters* createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart,
+                                                               std::vector<std::string>& errors) const;
 
   bool isEquals(const LayerSet* that) const;
 
@@ -108,7 +109,7 @@ public:
 
   void setChangedInfoListener(ChangedInfoListener* changedInfoListener);
 
-  std::vector<std::string> getInfo();
+  const std::vector<std::string> getInfo();
 
   void changedInfo(const std::vector<std::string>& info);
   

@@ -192,7 +192,8 @@ bool LayerSet::isEquals(const LayerSet* that) const {
   return true;
 }
 
-LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart, std::vector<std::string>& errors) const {
+LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart,
+                                                                       std::vector<std::string>& errors) const {
   Sector* topSector                  = NULL;
   int     topSectorSplitsByLatitude  = 0;
   int     topSectorSplitsByLongitude = 0;
@@ -252,8 +253,8 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const boo
           const std::vector<std::string> layerErrors = layerRenderState.getErrors();
 #ifdef C_CODE
           errors.insert(errors.end(),
-                      layerErrors.begin(),
-                      layerErrors.end());
+                        layerErrors.begin(),
+                        layerErrors.end());
 #endif
 #ifdef JAVA_CODE
           errors.addAll(layerErrors);
@@ -289,7 +290,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const boo
             return NULL;
           }
 
-          if (!topSector->isEquals(layerParam->_topSector) ) {
+          if ( !topSector->isEquals(layerParam->_topSector) ) {
             errors.push_back("Inconsistency in Layer's Parameters: topSector");
             delete topSector;
             return NULL;
@@ -459,7 +460,7 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
   return _tileImageProvider;
 }
 
-std::vector<std::string> LayerSet::getInfo() {
+const std::vector<std::string> LayerSet::getInfo() {
   _infos.clear();
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {

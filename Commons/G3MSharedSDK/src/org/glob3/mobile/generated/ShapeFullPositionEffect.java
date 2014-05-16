@@ -60,7 +60,7 @@ public class ShapeFullPositionEffect extends EffectWithDuration
     final double alpha = getAlpha(when);
   
     final Geodetic3D pos = Geodetic3D.linearInterpolation(_fromPosition, _toPosition, alpha);
-    _shape.setPosition(new Geodetic3D(pos));
+    _shape.setPosition(pos);
   
     if (!_fromPitch.isNan() && !_toPitch.isNan())
     {
@@ -80,7 +80,7 @@ public class ShapeFullPositionEffect extends EffectWithDuration
 
   public final void cancel(TimeInterval when)
   {
-    _shape.setPosition(new Geodetic3D(_toPosition));
+    _shape.setPosition(_toPosition);
     if (!_toPitch.isNan())
     {
       _shape.setPitch(_toPitch);
@@ -98,7 +98,7 @@ public class ShapeFullPositionEffect extends EffectWithDuration
   }
   public final void stop(G3MRenderContext rc, TimeInterval when)
   {
-    _shape.setPosition(new Geodetic3D(_toPosition));
+    _shape.setPosition(_toPosition);
     if (!_toPitch.isNan())
     {
       _shape.setPitch(_toPitch);

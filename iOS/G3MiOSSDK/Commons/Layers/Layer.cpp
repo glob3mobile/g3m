@@ -12,6 +12,7 @@
 #include "LayerSet.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "LayerTouchEventListener.hpp"
+#include "Tile.hpp"
 
 Layer::Layer(const LayerTilesRenderParameters* parameters,
              const float                       transparency,
@@ -59,7 +60,7 @@ void Layer::removeLayerSet(LayerSet* layerSet) {
 void Layer::notifyChanges() const {
   if (_layerSet != NULL) {
     _layerSet->layerChanged(this);
-    _layerSet->changedInfo(_info);
+    _layerSet->changedInfo(_infos);
   }
 }
 
@@ -117,7 +118,7 @@ bool Layer::isEquals(const Layer* that) const {
   }
 
 
-  if (!(_info == that->_info)) {
+  if (!(_infos == that->_infos)) {
     return false;
   }
 
@@ -151,10 +152,24 @@ void Layer::setInfo(const std::string& disclaimerInfo) {
   }
 }
 
-std::vector<std::string> Layer::getInfos() {
+const std::vector<std::string> Layer::getInfos() {
 #warning TODO BETTER
-  _info.clear();
+  _infos.clear();
   const std::string layerInfo = getInfo();
-  _info.push_back(layerInfo);
-  return _info;
+  _infos.push_back(layerInfo);
+  return _infos;
+}
+
+const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const{
+    const int maxLevel = _parameters->_maxLevel;
+#ifdef C_CODE
+    const Tile* tileP = tile;
+#endif
+#ifdef JAVA_CODE
+    Tile tileP = tile;
+#endif
+    while (tileP->_level > maxLevel) {
+        tileP = tileP->getParent();
+    }
+    return tileP;
 }

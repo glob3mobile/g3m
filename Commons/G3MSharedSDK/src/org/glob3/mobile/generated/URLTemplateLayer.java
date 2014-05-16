@@ -98,21 +98,32 @@ public class URLTemplateLayer extends RasterLayer
 
   protected final TileImageContribution rawContribution(Tile tile)
   {
-    final Sector tileSector = tile._sector;
+      final Tile tileP = getParentTileOfSuitableLevel(tile); //Parent tile with a suitable Level
+      //    if (tile != tileP){
+      //        ILogger::instance()->logInfo("Fetching image for tile parent of level %d", tileP->_level);
+      //    }
   
-    if (!_dataSector.touchesWith(tileSector))
-    {
-      return null;
-    }
-    else if (_dataSector.fullContains(tileSector))
-    {
-      return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
-    }
-    else
-    {
-      final Sector contributionSector = _dataSector.intersection(tileSector);
-      return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(contributionSector, _transparency) : TileImageContribution.partialCoverageOpaque(contributionSector));
-    }
+      final Sector requestedImageSector = tileP._sector;
+  
+      if (!_dataSector.touchesWith(requestedImageSector))
+      {
+          return null;
+      }
+      else if (_dataSector.fullContains(requestedImageSector) && tile == tileP)
+      {
+          //Most common case tile of suitable level being fully coveraged by layer
+          return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
+      }
+      else
+      {
+          final Sector contributionSector = _dataSector.intersection(requestedImageSector);
+          if (contributionSector.hasNoArea())
+          {
+              return null;
+          }
+  
+          return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(contributionSector, _transparency) : TileImageContribution.partialCoverageOpaque(contributionSector));
+      }
   }
 
   protected final URL createURL(Tile tile)

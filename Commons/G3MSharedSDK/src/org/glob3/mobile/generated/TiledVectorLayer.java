@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class IStringUtils;
 //class GEORasterSymbolizer;
 
+
 public class TiledVectorLayer extends VectorLayer
 {
   private final GEORasterSymbolizer _symbolizer;

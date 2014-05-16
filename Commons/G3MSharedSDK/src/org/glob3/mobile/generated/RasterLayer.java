@@ -84,7 +84,9 @@ public abstract class RasterLayer extends Layer
 
   public final long requestImage(Tile tile, IDownloader downloader, long tileDownloadPriority, boolean logDownloadActivity, IImageDownloadListener listener, boolean deleteListener)
   {
-    final URL url = createURL(tile);
+    final Tile suitableTile = getParentTileOfSuitableLevel(tile);
+  
+    final URL url = createURL(suitableTile);
     if (logDownloadActivity)
     {
       ILogger.instance().logInfo("Downloading %s", url._path);

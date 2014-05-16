@@ -44,8 +44,7 @@ public abstract class Layer
   protected boolean _enable;
 
   protected String _disclaimerInfo;
-
-  protected java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
+  protected java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
 
   protected LayerTilesRenderParameters _parameters;
 
@@ -57,7 +56,7 @@ public abstract class Layer
     if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
-      _layerSet.changedInfo(_info);
+      _layerSet.changedInfo(_infos);
     }
   }
 
@@ -87,6 +86,17 @@ public abstract class Layer
   protected abstract String getLayerType();
 
   protected abstract boolean rawIsEquals(Layer that);
+
+  protected final Tile getParentTileOfSuitableLevel(Tile tile)
+  {
+      final int maxLevel = _parameters._maxLevel;
+      Tile tileP = tile;
+      while (tileP._level > maxLevel)
+      {
+          tileP = tileP.getParent();
+      }
+      return tileP;
+  }
 
 
   public void setEnable(boolean enable)
@@ -230,7 +240,7 @@ public abstract class Layer
     }
   
   
-    if (!(_info == that._info))
+    if (!(_infos == that._infos))
     {
       return false;
     }
@@ -282,10 +292,10 @@ public abstract class Layer
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO BETTER
-    _info.clear();
+    _infos.clear();
     final String layerInfo = getInfo();
-    _info.add(layerInfo);
-    return _info;
+    _infos.add(layerInfo);
+    return _infos;
   }
 
 }

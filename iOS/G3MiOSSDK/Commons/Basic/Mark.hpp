@@ -18,6 +18,7 @@
 #include "Vector2I.hpp"
 #include "Color.hpp"
 #include "GLState.hpp"
+#include "SurfaceElevationProvider.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -26,8 +27,6 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
-
-#include "SurfaceElevationProvider.hpp"
 
 
 class MarkUserData {

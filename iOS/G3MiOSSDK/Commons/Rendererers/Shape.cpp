@@ -14,6 +14,7 @@
 #include "ShapePositionEffect.hpp"
 #include "ShapeFullPositionEffect.hpp"
 #include "Camera.hpp"
+#include "ErrorHandling.hpp"
 
 class ShapePendingEffect {
 public:
@@ -187,4 +188,27 @@ void Shape::elevationChanged(const Geodetic2D& position,
 
   delete _transformMatrix;
   _transformMatrix = NULL;
+}
+
+//void Shape::setPosition(Geodetic3D* position,
+//                        AltitudeMode altitudeMode) {
+//  delete _position;
+//  _position = position;
+//  _altitudeMode = altitudeMode;
+//  cleanTransformMatrix();
+//}
+
+void Shape::setPosition(const Geodetic3D& position) {
+  if (_altitudeMode == RELATIVE_TO_GROUND) {
+    THROW_EXCEPTION("Position change with (_altitudeMode == RELATIVE_TO_GROUND) not supported");
+  }
+
+  delete _position;
+#ifdef C_CODE
+  _position = new Geodetic3D(position);
+#endif
+#ifdef JAVA_CODE
+  _position = position;
+#endif
+  cleanTransformMatrix();
 }
