@@ -98,7 +98,7 @@ public class VectorialLOD {
    private static LayerTilesRenderParameters _renderParameters;
    private static TileSector                 _boundSector       = TileSector.FULL_SPHERE_SECTOR;
    private static GeomType                   _geomType;
-   private static String                     _theGeomColumnName = "the_geom";
+   private static String                     _theGeomColumnName = null;                         //"the_geom";
    private static String                     _projection        = null;
    private static int                        _firstLevelCreated = 0;
    private static int                        _lastLevelCreated  = 0;
@@ -270,7 +270,7 @@ public class VectorialLOD {
          }
          //         System.out.println("fullQuery: " + fullQuery);
 
-         // first try: usual parameters
+         // first attempt: usual parameters
          geoJsonResult = executeQuery(fullQuery);
 
          if (geoJsonResult == null) {
@@ -283,7 +283,7 @@ public class VectorialLOD {
 
          ILogger.instance().logWarning("Too much vertex for sector, area tunning: " + sector.toString());
 
-         // second try: increase area filter factor
+         // second attempt: increase area filter factor
          fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor, areaFactor + 1, geomFilterCriteria,
                   includeProperties);
 
@@ -299,7 +299,7 @@ public class VectorialLOD {
 
          ILogger.instance().logWarning("Too much vertex for sector, quality factor tunning: " + sector.toString());
 
-         // third try: increase area filter factor and reduce quality factor
+         // third attempt: increase area filter factor and reduce quality factor
          fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor / 2.0f, areaFactor + 1, geomFilterCriteria,
                   includeProperties);
 
@@ -593,24 +593,46 @@ public class VectorialLOD {
    private static GeomType getGeometriesType(final String dataSourceTable) {
 
       //http://postgis.net/docs/GeometryType.html
+      //select GeometryType(way) from planet_osm_polygon LIMIT 1;
 
       final String geomQuery = "SELECT type FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
+      final String auxGeomQuery = "SELECT GeometryType(" + _theGeomColumnName + ") FROM " + dataSourceTable + " LIMIT 1";
 
       try {
          final Connection conn = _dataBaseService.getConnection();
          final Statement st = conn.createStatement();
 
-         final ResultSet rs = st.executeQuery(geomQuery);
+         ResultSet rs = st.executeQuery(geomQuery);
 
          if (!rs.next()) {
             st.close();
             return null;
          }
 
-         final String geomType = rs.getString(1);
+         String geomTypeStr = rs.getString(1);
+
+         final GeomType geomType = parseGeometryType(geomTypeStr);
+
+         if (geomType != null) {
+            st.close();
+            return geomType;
+         }
+
+         ILogger.instance().logWarning("Unknown geometry type. Attempt alternative strategy.");
+
+         //-- alternative strategy for unknown geometry types. Query to any of the rows
+         rs = st.executeQuery(auxGeomQuery);
+
+         if (!rs.next()) {
+            st.close();
+            return null;
+         }
+
+         geomTypeStr = rs.getString(1);
          st.close();
 
-         return parseGeometryType(geomType);
+         return parseGeometryType(geomTypeStr);
+
       }
       catch (final SQLException e) {
          ILogger.instance().logError("SQL error getting geometry type: " + e.getMessage());
@@ -623,19 +645,19 @@ public class VectorialLOD {
 
       GeomType geomType = null;
 
-      if (type.equalsIgnoreCase("POLYGON")) {
+      if (type.trim().equalsIgnoreCase("POLYGON")) {
          geomType = GeomType.POLYGON;
       }
-      else if (type.equalsIgnoreCase("MULTIPOLYGON")) {
+      else if (type.trim().equalsIgnoreCase("MULTIPOLYGON")) {
          geomType = GeomType.MULTIPOLYGON;
       }
-      else if (type.equalsIgnoreCase("LINESTRING")) {
+      else if (type.trim().equalsIgnoreCase("LINESTRING")) {
          geomType = GeomType.LINESTRING;
       }
-      else if (type.equalsIgnoreCase("MULTILINESTRING")) {
+      else if (type.trim().equalsIgnoreCase("MULTILINESTRING")) {
          geomType = GeomType.MULTILINESTRING;
       }
-      else if (type.equalsIgnoreCase("POINT")) {
+      else if (type.trim().equalsIgnoreCase("POINT")) {
          geomType = GeomType.POINT;
       }
 
@@ -719,14 +741,14 @@ public class VectorialLOD {
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
       final double factor = areaFactor * areaFactor;
 
-      //      return "ST_Area(Box2D(the_geom))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and "
-      //             + filterCriteria;
+      return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
+             + " and " + filterCriteria;
 
-      //      return "ST_Area(Box2D(ST_Intersection(the_geom," + bboxQuery + ")))>"
+      //      return "ST_Area(Box2D(ST_Intersection(" + _theGeomColumnName + "," + bboxQuery + ")))>"
       //             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
 
-      return "ST_Area(ST_Intersection(ST_SetSRID(Box2D(the_geom),4326)," + bboxQuery + "))>"
-             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
+      //      return "ST_Area(ST_Intersection(ST_SetSRID(Box2D(" + _theGeomColumnName + "),4326)," + bboxQuery + "))>"
+      //             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
 
       // ST_Area(Box2D(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))))>0.08169412
    }
@@ -828,6 +850,7 @@ public class VectorialLOD {
    private static String getGeometryColumnName(final String dataSourceTable) {
 
       final String geomQuery = "SELECT f_geometry_column FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
+      //System.out.println("getGeometryColumnNameQuery: " + geomQuery);
 
       Connection conn = null;
       Statement st = null;
@@ -1019,7 +1042,9 @@ public class VectorialLOD {
       createFolderStructure(dataSource);
 
       _theGeomColumnName = getGeometryColumnName(dataSource._sourceTable);
-      //System.out.println("_theGeomColumnName: " + _theGeomColumnName);
+      if (_theGeomColumnName != null) {
+         System.out.println("Geometry column name: " + _theGeomColumnName);
+      }
 
       _boundSector = getGeometriesBound(dataSource._sourceTable);
       //System.out.println(_boundSector.toString());
