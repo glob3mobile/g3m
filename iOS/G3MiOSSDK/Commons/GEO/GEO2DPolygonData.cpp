@@ -37,10 +37,12 @@ GEO2DPolygonData::~GEO2DPolygonData() {
 
 long long GEO2DPolygonData::getCoordinatesCount() const {
   long long result = GEO2DCoordinatesData::getCoordinatesCount();
-  const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
-  for (int j = 0; j < holesCoordinatesArraySize; j++) {
-    const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
-    result += holeCoordinates->size();
+  if (_holesCoordinatesArray != NULL) {
+    const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
+    for (int j = 0; j < holesCoordinatesArraySize; j++) {
+      const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
+      result += holeCoordinates->size();
+    }
   }
   return result;
 }

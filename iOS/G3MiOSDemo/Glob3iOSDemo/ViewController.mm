@@ -1588,7 +1588,7 @@ public:
 
     const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-lines/{level}/{x}/{y}.geojson";
     const int firstLevel = 2;
-    const int maxLevel = 12;
+    const int maxLevel = 15;
     const Sector sector = Sector::fromDegrees(34.991, -83.9755,
                                               39.728, -74.749);
 
@@ -1605,7 +1605,7 @@ public:
                                                      true,                       // readExpired
                                                      1,                          // transparency
                                                      //NULL,                       // condition
-                                                     new LevelTileCondition(10, 12),
+                                                     new LevelTileCondition(10, 15),
                                                      ""                          // disclaimerInfo
                                                      ));
   }
