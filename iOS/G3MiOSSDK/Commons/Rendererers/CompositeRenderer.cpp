@@ -227,7 +227,7 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
     _changedInfoListener->changedRendererInfo(-1, getInfo());
   }
   
-  ILogger::instance()->logInfo("Changed Renderer Info Listener of CompositeRenderer set ok");
+  //ILogger::instance()->logInfo("Changed Renderer Info Listener of CompositeRenderer set ok");
 }
 
 void CompositeRenderer::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
