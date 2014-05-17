@@ -32,7 +32,6 @@ void DefaultRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener
     _changedInfoListener = changedInfoListener;
     _rendererIdentifier = rendererIdentifier;
     notifyChangedInfo(_info);
-    ILogger::instance()->logInfo("Changed Renderer Info Listener of DefaultRenderer set ok");
   }
 }
 

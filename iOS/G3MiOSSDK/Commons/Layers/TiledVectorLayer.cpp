@@ -176,6 +176,19 @@ long long TiledVectorLayer::requestGEOJSONBuffer(const Tile* tile,
                                                  bool logDownloadActivity,
                                                  IBufferDownloadListener* listener,
                                                  bool deleteListener) const {
+
+  if (tile->_level > _parameters->_maxLevel) {
+    const Tile* parentTile = tile->getParent();
+    if (parentTile != NULL) {
+      return requestGEOJSONBuffer(parentTile,
+                                  downloader,
+                                  tileDownloadPriority,
+                                  logDownloadActivity,
+                                  listener,
+                                  deleteListener);
+    }
+  }
+  
   const URL url = createURL(tile);
   if (logDownloadActivity) {
     ILogger::instance()->logInfo("Downloading %s", url._path.c_str());

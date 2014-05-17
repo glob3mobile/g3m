@@ -351,7 +351,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
 void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
-  if (!parameters) {
+  if (parameters == NULL) {
     //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
@@ -430,9 +430,8 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
-
   if (layerTilesRenderParameters == NULL) {
-    return RenderState::error(_errors);
+    return _errors.empty() ? RenderState::busy() : RenderState::error(_errors);
   }
 
   const RenderState layerSetRenderState = _layerSet->getRenderState();

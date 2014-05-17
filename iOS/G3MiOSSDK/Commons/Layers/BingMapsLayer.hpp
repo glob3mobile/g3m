@@ -44,6 +44,7 @@ private:
   const std::string _key;
 
   const int _initialLevel;
+  const int _maxLevel;
 
   bool _isInitialized;
 
@@ -95,6 +96,7 @@ public:
                 const TimeInterval&   timeToCache,
                 const bool            readExpired    = true,
                 const int             initialLevel   = 2,
+                const int             maxLevel       = 25,
                 const float           transparency   = 1,
                 const LayerCondition* condition      = NULL,
                 const std::string&    disclaimerInfo = "");
@@ -105,6 +107,7 @@ public:
                 const TimeInterval&   timeToCache,
                 const bool            readExpired    = true,
                 const int             initialLevel   = 2,
+                const int             maxLevel       = 25,
                 const float           transparency   = 1,
                 const LayerCondition* condition      = NULL,
                 const std::string&    disclaimerInfo = "");

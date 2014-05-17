@@ -184,6 +184,16 @@ public class TiledVectorLayer extends VectorLayer
 
   public final long requestGEOJSONBuffer(Tile tile, IDownloader downloader, long tileDownloadPriority, boolean logDownloadActivity, IBufferDownloadListener listener, boolean deleteListener)
   {
+  
+    if (tile._level > _parameters._maxLevel)
+    {
+      final Tile parentTile = tile.getParent();
+      if (parentTile != null)
+      {
+        return requestGEOJSONBuffer(parentTile, downloader, tileDownloadPriority, logDownloadActivity, listener, deleteListener);
+      }
+    }
+  
     final URL url = createURL(tile);
     if (logDownloadActivity)
     {

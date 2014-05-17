@@ -46,6 +46,7 @@ private:
   private:
     ImageAssembler* _imageAssembler;
     IByteBuffer*    _buffer;
+    const bool      _isBSON;
     ICanvas*        _canvas;
     const int       _imageWidth;
     const int       _imageHeight;
@@ -65,6 +66,7 @@ private:
   public:
     GEOJSONBufferRasterizer(ImageAssembler* imageAssembler,
                             IByteBuffer* buffer,
+                            bool isBSON,
                             const int imageWidth,
                             const int imageHeight,
                             const GEORasterSymbolizer* symbolizer,
@@ -81,6 +83,7 @@ private:
     _tileIsMercator(tileIsMercator),
     _tileLevel(tileLevel),
     _imageId(imageId),
+    _isBSON(isBSON),
     _canvas(NULL)
     {
     }
@@ -188,6 +191,7 @@ private:
     void cancel();
 
     void bufferDownloaded(IByteBuffer* buffer,
+                          bool isBSON,
                           const std::string& imageId);
     void bufferDownloadError(const URL& url);
     void bufferDownloadCanceled();
