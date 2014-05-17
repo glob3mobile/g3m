@@ -188,17 +188,10 @@ public class TiledVectorLayer extends VectorLayer
     if (tile._level > _parameters._maxLevel)
     {
       final Tile parentTile = tile.getParent();
-      if (parentTile == null)
+      if (parentTile != null)
       {
-        listener.onError(new URL("can't find a tile"));
-        if (deleteListener)
-        {
-          if (listener != null)
-             listener.dispose();
-        }
-        return -1;
+        return requestGEOJSONBuffer(parentTile, downloader, tileDownloadPriority, logDownloadActivity, listener, deleteListener);
       }
-      return requestGEOJSONBuffer(parentTile, downloader, tileDownloadPriority, logDownloadActivity, listener, deleteListener);
     }
   
     final URL url = createURL(tile);
