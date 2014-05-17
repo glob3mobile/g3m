@@ -44,7 +44,9 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground
     
     if (_buffer->size() > 0) {
       bool showStatistics = false;
-      GEOObject* geoObject = GEOJSONParser::parseJSON(_buffer, showStatistics);
+      GEOObject* geoObject = (_isBSON
+                              ? GEOJSONParser::parseBSON(_buffer, showStatistics)
+                              : GEOJSONParser::parseJSON(_buffer, showStatistics));
 
       if (geoObject != NULL) {
         if (_imageAssembler != NULL) {
@@ -83,7 +85,9 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferDownloadListener::onDownloa
     delete buffer;
   }
   else {
+    const bool isBSON = IStringUtils::instance()->endsWith(url._path, "bson");
     _imageAssembler->bufferDownloaded(buffer,
+                                      isBSON,
                                       url._path);
   }
 }
@@ -176,6 +180,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::cancel() {
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBuffer* buffer,
+                                                                         bool isBSON,
                                                                          const std::string& imageId) {
   _downloadListener = NULL;
   _downloadRequestId = -1;
@@ -188,6 +193,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(IByteBu
     _symbolizer = NULL; // moves ownership of _symbolizer to GEOJSONBufferRasterizer
     _rasterizer = new GEOJSONBufferRasterizer(this,
                                               buffer,
+                                              isBSON,
                                               _imageWidth,
                                               _imageHeight,
                                               symbolizer,
