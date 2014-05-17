@@ -130,30 +130,30 @@ public:
   }
 };
 
+
 class PinkishRasterSymbolizer : public SampleRasterSymbolizer {
 protected:
   const Color baseColorForGeometry(const GEOGeometry* geometry) const {
-    return Color::fromRGBA(0.92, 0.6, 0.65, 0.75);
+    return Color::fromRGBA(0.92, 0.6, 0.65, 0.6);
   }
 
 public:
   GEORasterSymbolizer* copy() const {
     return new PinkishRasterSymbolizer();
   }
-
 };
+
 
 class GreenishRasterSymbolizer : public SampleRasterSymbolizer {
 protected:
   const Color baseColorForGeometry(const GEOGeometry* geometry) const {
-    return Color::fromRGBA(0.6, 0.92, 0.65, 0.75);
+    return Color::fromRGBA(0.6, 0.92, 0.65, 0.6);
   }
 
 public:
   GEORasterSymbolizer* copy() const {
     return new GreenishRasterSymbolizer();
   }
-
 };
 
 
@@ -178,8 +178,7 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   const int firstLevel = 2;
   const int maxLevel = 17;
 
-//  const GEORasterSymbolizer* symbolizer = new PinkishRasterSymbolizer();
-  const GEORasterSymbolizer* symbolizer = new GreenishRasterSymbolizer();
+  const GEORasterSymbolizer* symbolizer = new PinkishRasterSymbolizer();
 
   _tiledVectorLayer = TiledVectorLayer::newMercator(symbolizer,
                                                     urlTemplate,
@@ -195,7 +194,7 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   model->getLayerSet()->addLayer(_tiledVectorLayer);
 
 
-  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(7),
                                        Geodetic3D::fromDegrees(47.371223104914406576, 8.5408702851516871135, 1040),
                                        Angle::zero(),
                                        Angle::fromDegrees(-90));
