@@ -165,7 +165,8 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
 
-  BingMapsLayer* rasterLayer = new BingMapsLayer(BingMapType::AerialWithLabels(),
+  BingMapsLayer* rasterLayer = new BingMapsLayer(//BingMapType::AerialWithLabels(),
+                                                 BingMapType::Aerial(),
                                                  "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                                  TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(rasterLayer);
@@ -188,14 +189,13 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
                                                     TimeInterval::fromDays(30), // timeToCache
                                                     true,                       // readExpired
                                                     1,                          // transparency
-                                                    new LevelTileCondition(14, 21),
+                                                    new LevelTileCondition(15, 21),
                                                     ""                          // disclaimerInfo
                                                     );
   model->getLayerSet()->addLayer(_tiledVectorLayer);
 
-
-  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(7),
-                                       Geodetic3D::fromDegrees(47.371223104914406576, 8.5408702851516871135, 1040),
+  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                       Geodetic3D::fromDegrees(47.371716253228562721, 8.5409432031508725203, 1040),
                                        Angle::zero(),
                                        Angle::fromDegrees(-90));
 
