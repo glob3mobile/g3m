@@ -430,7 +430,6 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
-
   if (layerTilesRenderParameters == NULL) {
     return _errors.empty() ? RenderState::busy() : RenderState::error(_errors);
   }
