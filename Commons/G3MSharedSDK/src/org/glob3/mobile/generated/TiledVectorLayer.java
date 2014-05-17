@@ -212,4 +212,18 @@ public class TiledVectorLayer extends VectorLayer
     return _dataSector;
   }
 
+  public final void setSymbolizer(GEORasterSymbolizer symbolizer, boolean deletePrevious)
+  {
+    if (_symbolizer != symbolizer)
+    {
+      if (deletePrevious)
+      {
+        if (_symbolizer != null)
+           _symbolizer.dispose();
+      }
+      _symbolizer = symbolizer;
+      notifyChanges();
+    }
+  }
+
 }
