@@ -580,7 +580,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (layerTilesRenderParameters == null)
     {
-      return RenderState.error(_errors);
+      return _errors.isEmpty() ? RenderState.busy() : RenderState.error(_errors);
     }
   
     final RenderState layerSetRenderState = _layerSet.getRenderState();
