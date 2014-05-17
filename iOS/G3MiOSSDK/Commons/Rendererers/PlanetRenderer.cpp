@@ -351,7 +351,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
 void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
-  if (!parameters) {
+  if (parameters == NULL) {
     //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
