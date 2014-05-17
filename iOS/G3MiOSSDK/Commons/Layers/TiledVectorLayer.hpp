@@ -105,6 +105,9 @@ public:
   const Sector getDataSector() const {
     return _dataSector;
   }
+
+  void setSymbolizer(const GEORasterSymbolizer* symbolizer,
+                     bool deletePrevious);
   
 };
 
