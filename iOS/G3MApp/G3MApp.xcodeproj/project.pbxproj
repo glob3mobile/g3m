@@ -46,6 +46,7 @@
 		CFE3B3EC183ADB2D0078C796 /* planeDiffuse.png in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3E9183ADB2D0078C796 /* planeDiffuse.png */; };
 		CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */; };
 		CFE3B3F2183C07C50078C796 /* isosurface-mesh.json in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */; };
+		CFF30256192816250049BEF4 /* G3MTiledVectorDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */; };
 		CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4418329FB7006ABFF6 /* Security.framework */; };
 		CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */; };
 		CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF64D4818329FE6006ABFF6 /* libicucore.dylib */; };
@@ -159,6 +160,8 @@
 		CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MIsosurfaceDemoScene.cpp; sourceTree = "<group>"; };
 		CFE3B3EE183C05F70078C796 /* G3MIsosurfaceDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MIsosurfaceDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3F1183C07C50078C796 /* isosurface-mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "isosurface-mesh.json"; sourceTree = "<group>"; };
+		CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MTiledVectorDemoScene.cpp; sourceTree = "<group>"; };
+		CFF30255192816250049BEF4 /* G3MTiledVectorDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MTiledVectorDemoScene.hpp; sourceTree = "<group>"; };
 		CFF64D4418329FB7006ABFF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CFF64D4618329FC8006ABFF6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CFF64D4818329FE6006ABFF6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -264,6 +267,8 @@
 				CF6920B31837F1CA007409D8 /* G3MRasterLayersDemoScene.hpp */,
 				CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */,
 				CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */,
+				CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */,
+				CFF30255192816250049BEF4 /* G3MTiledVectorDemoScene.hpp */,
 				CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */,
 				CF6920B61837F26B007409D8 /* G3MVectorialDemoScene.hpp */,
 			);
@@ -571,6 +576,7 @@
 				CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */,
 				CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */,
 				CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */,
+				CFF30256192816250049BEF4 /* G3MTiledVectorDemoScene.cpp in Sources */,
 				CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */,
 				CFE3B3DC183AD38D0078C796 /* G3MCameraDemoScene.cpp in Sources */,
 				CF6920CC1839679B007409D8 /* G3MSelectOptionViewController.mm in Sources */,
