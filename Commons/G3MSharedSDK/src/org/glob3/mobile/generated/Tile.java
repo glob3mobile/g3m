@@ -516,12 +516,6 @@ public class Tile
      _rendered = false;
      _tileRenderingListener = null;
      _id = createTileId(level, row, column);
-    //  int __remove_tile_print;
-    //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
-    //         getKey().description().c_str(),
-    //         _sector._deltaLatitude.description().c_str(),
-    //         _sector._deltaLongitude.description().c_str()
-    //         );
   }
 
   public void dispose()
@@ -641,7 +635,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, boolean visibilityAlreadyTested)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -654,7 +648,7 @@ public class Tile
   
     boolean rendered = false;
   
-    if (visibilityAlreadyTested || isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
+    if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
     {
       setIsVisible(true, texturizer);
   
@@ -696,10 +690,18 @@ public class Tile
         {
           Tile subTile = subTiles.get(i);
   
-          if (subTile.isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
-          {
+  //        if (subTile->isVisible(rc,
+  //                               planet,
+  //                               cameraNormalizedPosition,
+  //                               cameraAngle2HorizonInRadians,
+  //                               cameraFrustumInModelCoordinates,
+  //                               elevationDataProvider,
+  //                               renderedSector,
+  //                               tessellator,
+  //                               layerTilesRenderParameters,
+  //                               tilesRenderParameters)) {
             toVisitInNextIteration.add(subTile);
-          }
+  //        }
         }
       }
     }
@@ -731,9 +733,6 @@ public class Tile
     }
   
   }
-
-//  const TileKey getKey() const;
-//  const std::string getId() const;
 
   public final void setTextureSolved(boolean textureSolved)
   {
@@ -810,11 +809,6 @@ public class Tile
     }
   }
 
-
-  //const TileKey Tile::getKey() const {
-  //  return TileKey(_level, _row, _column);
-  //}
-  
   public final Tile getDeepestTileContaining(Geodetic3D position)
   {
     if (_sector.contains(position._latitude, position._longitude))
