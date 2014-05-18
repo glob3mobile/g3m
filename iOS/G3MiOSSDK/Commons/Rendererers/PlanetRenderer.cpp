@@ -767,7 +767,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #endif
 #ifdef JAVA_CODE
     toVisit.clear();
-    toVisit.addAll( toVisitNextIteration );
+    toVisit.addAll( toVisitInNextIteration );
 #endif
   }
 
