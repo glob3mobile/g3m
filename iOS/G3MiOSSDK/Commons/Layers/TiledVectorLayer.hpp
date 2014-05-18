@@ -21,7 +21,12 @@ class GEORasterSymbolizer;
 
 class TiledVectorLayer : public VectorLayer {
 private:
+#ifdef C_CODE
   const GEORasterSymbolizer* _symbolizer;
+#endif
+#ifdef JAVA_CODE
+  private GEORasterSymbolizer _symbolizer;
+#endif
   const std::string          _urlTemplate;
   const Sector               _dataSector;
 #ifdef C_CODE
@@ -105,6 +110,9 @@ public:
   const Sector getDataSector() const {
     return _dataSector;
   }
+
+  void setSymbolizer(const GEORasterSymbolizer* symbolizer,
+                     bool deletePrevious);
   
 };
 

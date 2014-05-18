@@ -701,7 +701,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       //   so it has to be executed in the OpenGL thread
       if (_context == null)
       {
-        ILogger.instance().logError("_context if not initialized");
+        ILogger.instance().logError("_context is not initialized");
       }
       else
       {

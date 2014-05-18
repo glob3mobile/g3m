@@ -47,6 +47,17 @@ TiledVectorLayer::~TiledVectorLayer() {
 #endif
 }
 
+void TiledVectorLayer::setSymbolizer(const GEORasterSymbolizer* symbolizer,
+                                     bool deletePrevious) {
+  if (_symbolizer != symbolizer) {
+    if (deletePrevious) {
+      delete _symbolizer;
+    }
+    _symbolizer = symbolizer;
+    notifyChanges();
+  }
+}
+
 TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer* symbolizer,
                                                 const std::string&         urlTemplate,
                                                 const Sector&              dataSector,

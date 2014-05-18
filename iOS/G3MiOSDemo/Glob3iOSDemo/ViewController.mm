@@ -1311,17 +1311,19 @@ public:
 class SampleRasterSymbolizer : public GEORasterSymbolizer {
 private:
   static GEO2DLineRasterStyle createPolygonLineRasterStyle(const GEOGeometry* geometry) {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//
+//    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+//
+//    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
 
-    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
-
-    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex).muchLighter().muchLighter();
+    const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
 
     float dashLengths[] = {};
     int dashCount = 0;
 
     return GEO2DLineRasterStyle(color,
-                                2,
+                                1,
                                 CAP_ROUND,
                                 JOIN_ROUND,
                                 1,
@@ -1331,59 +1333,63 @@ private:
   }
 
   static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(const GEOGeometry* geometry) {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//
+//    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
+//
+//    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
 
-    const int colorIndex = (int) properties->getAsNumber("mapcolor7", 0);
-
-    const Color color = Color::fromRGBA(0.7, 0, 0, 0.5).wheelStep(7, colorIndex);
+    const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75);
 
     return GEO2DSurfaceRasterStyle( color );
   }
 
   static GEO2DLineRasterStyle createLineRasterStyle(const GEOGeometry* geometry) {
-    const JSONObject* properties = geometry->getFeature()->getProperties();
+//    const JSONObject* properties = geometry->getFeature()->getProperties();
+//
+//    const std::string type = properties->getAsString("type", "");
+//
+//    int colorIndex = 0;
+//    if (type == "residential") {
+//      colorIndex = 1;
+//    }
+//    else if (type == "service") {
+//      colorIndex = 2;
+//    }
+//    else if (type == "footway") {
+//      colorIndex = 3;
+//    }
+//    else if (type == "unclassified") {
+//      colorIndex = 4;
+//    }
+//    else if (type == "track") {
+//      colorIndex = 5;
+//    }
+//    else if (type == "tertiary") {
+//      colorIndex = 6;
+//    }
+//    else if (type == "path") {
+//      colorIndex = 7;
+//    }
+//    else if (type == "primary") {
+//      colorIndex = 8;
+//    }
+//    else if (type == "secondary") {
+//      colorIndex = 9;
+//    }
+//    else if (type == "trunk") {
+//      colorIndex = 10;
+//    }
+//    else if (type == "cycleway") {
+//      colorIndex = 11;
+//    }
+//    else if (type == "steps") {
+//      colorIndex = 12;
+//    }
+//
+//    const Color color = Color::fromRGBA(0.7, 0, 0, 0.75).wheelStep(13, colorIndex).muchLighter().muchLighter();
 
-    const std::string type = properties->getAsString("type", "");
-
-    int colorIndex = 0;
-    if (type == "residential") {
-      colorIndex = 1;
-    }
-    else if (type == "service") {
-      colorIndex = 2;
-    }
-    else if (type == "footway") {
-      colorIndex = 3;
-    }
-    else if (type == "unclassified") {
-      colorIndex = 4;
-    }
-    else if (type == "track") {
-      colorIndex = 5;
-    }
-    else if (type == "tertiary") {
-      colorIndex = 6;
-    }
-    else if (type == "path") {
-      colorIndex = 7;
-    }
-    else if (type == "primary") {
-      colorIndex = 8;
-    }
-    else if (type == "secondary") {
-      colorIndex = 9;
-    }
-    else if (type == "trunk") {
-      colorIndex = 10;
-    }
-    else if (type == "cycleway") {
-      colorIndex = 11;
-    }
-    else if (type == "steps") {
-      colorIndex = 12;
-    }
-
-    const Color color = Color::fromRGBA(0.7, 0, 0, 0.75).wheelStep(13, colorIndex).muchLighter().muchLighter();
+    const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
 
 //    float dashLengths[] = {1, 12};
 //    int dashCount = 2;
@@ -1557,11 +1563,21 @@ public:
 
   if (true) {
 #warning Diego at work!
-    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
-                                       TimeInterval::fromDays(30),
-                                       true,
-                                       2,
-                                       16));
+//    layerSet->addLayer(new MapBoxLayer("examples.map-9ijuk24y",
+//                                       TimeInterval::fromDays(30),
+//                                       true,
+//                                       2,
+//                                       10));
+
+    layerSet->addLayer(new BingMapsLayer(BingMapType::AerialWithLabels(),
+                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                         TimeInterval::fromDays(30)
+//                                         true,
+//                                         2,
+//                                         17
+                                         )
+                       );
+
 
 //    layerSet->addLayer( ChessboardLayer::newMercator() );
 
@@ -1586,11 +1602,27 @@ public:
 //    const Sector sector = Sector::fromDegrees(  49.1625, -8.58622,
 //                                              60.84, 1.76259);
 
-    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-lines/{level}/{x}/{y}.geojson";
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-lines/{level}/{x}/{y}.geojson";
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/virginia-polygons/{level}/{x}/{y}.geojson";
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/portugal-buildings/{level}/{x}/{y}.geojson";
+
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/portugal-buildings/{level}/{x}/{y}.geojson";
+
+    const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+    //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
+    //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-roads/{level}/{x}/{y}.geojson";
+
     const int firstLevel = 2;
-    const int maxLevel = 16;
-    const Sector sector = Sector::fromDegrees(34.991, -83.9755,
-                                              39.728, -74.749);
+    const int maxLevel = 17;
+    const Sector virginiaSector = Sector::fromDegrees(34.991, -83.9755,
+                                                      39.728, -74.749);
+
+//    (-17.2631249 32.6339646,-6.1857279 42.141711)
+    const Sector portugalSector = Sector::fromDegrees(32.6339646, -17.2631249,
+                                                      42.14171, -6.1857279);
+
+    const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
+                                                   47.803029, 10.492264);
 
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
@@ -1598,14 +1630,14 @@ public:
     layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
                                                      urlTemplate,
                                                      //Sector::fullSphere(),       // sector
-                                                     sector,
+                                                     swissSector,
                                                      firstLevel,
                                                      maxLevel,
                                                      TimeInterval::fromDays(30), // timeToCache
                                                      true,                       // readExpired
                                                      1,                          // transparency
                                                      //NULL,                       // condition
-                                                     new LevelTileCondition(2, 16),
+                                                     new LevelTileCondition(14, 21),
                                                      ""                          // disclaimerInfo
                                                      ));
   }

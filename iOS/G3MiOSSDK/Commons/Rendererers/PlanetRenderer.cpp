@@ -192,7 +192,7 @@ void PlanetRenderer::changed() {
     // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
     //   so it has to be executed in the OpenGL thread
     if (_context == NULL) {
-      ILogger::instance()->logError("_context if not initialized");
+      ILogger::instance()->logError("_context is not initialized");
     }
     else {
       _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);

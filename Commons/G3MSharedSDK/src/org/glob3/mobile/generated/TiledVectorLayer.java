@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 
 public class TiledVectorLayer extends VectorLayer
 {
-  private final GEORasterSymbolizer _symbolizer;
+  private GEORasterSymbolizer _symbolizer;
   private final String _urlTemplate;
   private final Sector _dataSector ;
   private final TimeInterval _timeToCache;
@@ -137,8 +137,7 @@ public class TiledVectorLayer extends VectorLayer
 
   public void dispose()
   {
-    if (_symbolizer != null)
-       _symbolizer.dispose();
+    _symbolizer = null;
     super.dispose();
   }
 
@@ -210,6 +209,19 @@ public class TiledVectorLayer extends VectorLayer
   public final Sector getDataSector()
   {
     return _dataSector;
+  }
+
+  public final void setSymbolizer(GEORasterSymbolizer symbolizer, boolean deletePrevious)
+  {
+    if (_symbolizer != symbolizer)
+    {
+      if (deletePrevious)
+      {
+        _symbolizer = null;
+      }
+      _symbolizer = symbolizer;
+      notifyChanges();
+    }
   }
 
 }
