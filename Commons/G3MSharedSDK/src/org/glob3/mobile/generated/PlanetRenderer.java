@@ -497,7 +497,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   //  }
   //  else {
   
-      java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
+      java.util.ArrayList<Tile> toVisit = new java.util.ArrayList<Tile>();
   //    for (int i = 0; i < firstLevelTilesCount; i++) {
   //      toVisit.push_back(_firstLevelTiles[i]);
   //    }
@@ -515,18 +515,19 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       tile.render(rc, _glState, toVisit, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener, false); // visibility has to be tested for _firstLevelTiles - SENDING SQUARED TEX SIZE -  if first render, forceFullRender
     }
   
-    java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
+    java.util.ArrayList<Tile> toVisitInNextIteration = new java.util.ArrayList<Tile>();
   
-    while (toVisit.size() > 0)
+    while (!toVisit.isEmpty())
     {
   //    iteration++;
   //    visitied += toVisit.size();
       //ILogger::instance()->logInfo("Render iteration #%d, visiting %d tiles", iteration, toVisit.size());
   
       toVisitInNextIteration.clear();
-      for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
+      final int toVisitSize = toVisit.size();
+      for (int i = 0; i < toVisitSize; i++)
       {
-        Tile tile = iter.next();
+        Tile tile = toVisit.get(i);
   
         tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener, true); // Only the visible tiles are present in toVisit list - SENDING SQUARED TEX SIZE -  if first render, forceFullRender
       }
