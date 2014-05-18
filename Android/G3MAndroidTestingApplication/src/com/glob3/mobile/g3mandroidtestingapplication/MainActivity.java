@@ -4,6 +4,9 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BingMapType;
+import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GEO2DLineRasterStyle;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
@@ -17,9 +20,11 @@ import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbolizer;
+import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
+import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
@@ -55,10 +60,13 @@ public class MainActivity
 
       setContentView(R.layout.activity_main);
 
+
       _g3mWidget = createWidget();
 
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       placeHolder.addView(_g3mWidget);
+
+      ILogger.instance().logError("processors:" + Runtime.getRuntime().availableProcessors());
    }
 
 
@@ -155,25 +163,37 @@ public class MainActivity
       final LayerSet layerSet = new LayerSet();
       //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
-      layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
+
+      layerSet.addLayer(new BingMapsLayer(BingMapType.AerialWithLabels(),
+               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30)));
 
 
-      final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+      //  final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+      final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
       final int firstLevel = 2;
-      final int maxLevel = 10;
+      final int maxLevel = 16;
+
+      final Geodetic2D lower = new Geodetic2D( //
+               Angle.fromDegrees(45.8176852), //
+               Angle.fromDegrees(5.956216));
+      final Geodetic2D upper = new Geodetic2D( //
+               Angle.fromDegrees(47.803029), //
+               Angle.fromDegrees(10.492264));
+
+      final Sector sector = new Sector(lower, upper);
 
       final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
 
       final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
                symbolizer, //
                urlTemplate, //
-               Sector.fullSphere(), // sector
+               sector, // sector
                firstLevel, //
                maxLevel, //
                TimeInterval.fromDays(30), // timeToCache
                true, // readExpired
                1, // transparency
-               null, // condition
+               new LevelTileCondition(14, 21), // condition
                "" // disclaimerInfo
       );
       layerSet.addLayer(tiledVectorLayer);

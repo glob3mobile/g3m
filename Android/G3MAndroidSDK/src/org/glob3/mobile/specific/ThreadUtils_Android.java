@@ -33,7 +33,8 @@ public final class ThreadUtils_Android
       _widgetAndroid = widgetAndroid;
 
       final int availableProcessors = Runtime.getRuntime().availableProcessors();
-      final int numThreads = Math.max(1, availableProcessors - 1);
+      //      final int numThreads = Math.max(1, availableProcessors - 1);
+      final int numThreads = 2;
       final BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<Runnable>();
       _backgroundExecutor = new ThreadPoolExecutor(numThreads, numThreads, 1, TimeUnit.DAYS, workQueue);
    }
