@@ -33,6 +33,7 @@ public class TiledVectorLayer extends VectorLayer
 
   private IMathUtils   _mu;
   private IStringUtils _su;
+  private TileImageProvider _tileImageProvider;
 
   private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, LayerTilesRenderParameters parameters, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo)
   {
@@ -42,6 +43,7 @@ public class TiledVectorLayer extends VectorLayer
      _dataSector = new Sector(dataSector);
      _timeToCache = timeToCache;
      _readExpired = readExpired;
+     _tileImageProvider = null;
      _su = null;
      _mu = null;
   }
@@ -139,6 +141,10 @@ public class TiledVectorLayer extends VectorLayer
   public void dispose()
   {
     _symbolizer = null;
+    if (_tileImageProvider != null)
+    {
+      _tileImageProvider._release();
+    }
     super.dispose();
   }
 
@@ -179,7 +185,12 @@ public class TiledVectorLayer extends VectorLayer
 
   public final TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
-    return new TiledVectorLayerTileImageProvider(this, rc.getDownloader(), rc.getThreadUtils());
+    if (_tileImageProvider == null)
+    {
+      _tileImageProvider = new TiledVectorLayerTileImageProvider(this, rc.getDownloader(), rc.getThreadUtils());
+    }
+    _tileImageProvider._retain();
+    return _tileImageProvider;
   }
 
 //  long long requestGEOJSONBuffer(const Tile* tile,
@@ -191,14 +202,14 @@ public class TiledVectorLayer extends VectorLayer
 
   public static class RequestGEOJSONBufferData
   {
-    public final URL _url = new URL();
-    public final TimeInterval _timeToCache = new TimeInterval();
+    public final URL          _url;
+    public final TimeInterval _timeToCache;
     public final boolean _readExpired;
 
     public RequestGEOJSONBufferData(URL url, TimeInterval timeToCache, boolean readExpired)
     {
-       _url = new URL(url);
-       _timeToCache = new TimeInterval(timeToCache);
+       _url = url;
+       _timeToCache = timeToCache;
        _readExpired = readExpired;
     }
   }
