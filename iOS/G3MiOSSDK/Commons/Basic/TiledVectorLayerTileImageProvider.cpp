@@ -464,6 +464,7 @@ void TiledVectorLayerTileImageProvider::takeGEOObjectFor(const URL& url,
 }
 
 GEOObject* TiledVectorLayerTileImageProvider::getGEOObjectFor(const URL& url) {
+  _geoObjectsCacheRequests++;
   const std::string path = url._path;
   for (std::list<CacheEntry*>::iterator it = _geoObjectsCache.begin();
        it != _geoObjectsCache.end();
@@ -471,6 +472,15 @@ GEOObject* TiledVectorLayerTileImageProvider::getGEOObjectFor(const URL& url) {
     CacheEntry* entry = *it;
     if (entry->_path == path) {
 #warning move hit to top
+
+#ifdef C_CODE
+      it = _geoObjectsCache.erase(it);
+#endif
+#ifdef JAVA_CODE
+      it.remove();
+#endif
+      _geoObjectsCacheHits++;
+      _geoObjectsCache.push_front(entry);
       return entry->_geoObject->deepCopy();
     }
   }
