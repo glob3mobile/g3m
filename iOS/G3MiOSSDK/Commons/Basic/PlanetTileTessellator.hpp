@@ -172,7 +172,8 @@ public:
 
       if (sector.isEquals(Sector::fullSphere())) {
         _renderedSector = NULL;
-      } else{
+      }
+      else {
         _renderedSector = new Sector(sector);
       }
     }

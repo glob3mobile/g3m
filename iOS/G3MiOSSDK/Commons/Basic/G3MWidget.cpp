@@ -842,7 +842,8 @@ bool G3MWidget::setRenderedSector(const Sector& sector) {
 void G3MWidget::changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info) {
   if(_infoDisplay != NULL){
     _infoDisplay->changedInfo(info);
-  } else {
+  }
+  else {
     ILogger::instance()->logWarning("Render Infos are changing and InfoDisplay is NULL");
   }
 }

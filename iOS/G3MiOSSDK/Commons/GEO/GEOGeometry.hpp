@@ -17,7 +17,7 @@ class GEOFeature;
 
 class GEOGeometry : public GEOObject {
 private:
-  GEOFeature* _feature;
+  mutable GEOFeature* _feature;
 
 protected:
   virtual std::vector<GEOSymbol*>* createSymbols(const GEOSymbolizer* symbolizer) const = 0;
@@ -36,7 +36,7 @@ public:
 
   }
 
-  void setFeature(GEOFeature* feature);
+  void setFeature(GEOFeature* feature) const;
 
   const GEOFeature* getFeature() const {
     return _feature;
@@ -48,6 +48,8 @@ public:
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
                  GEOTileRasterizer*      geoTileRasterizer) const;
+
+  virtual const GEOGeometry* deepCopy() const = 0;
 
 };
 

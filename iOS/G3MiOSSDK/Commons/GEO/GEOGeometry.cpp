@@ -11,7 +11,7 @@
 #include "GEOFeature.hpp"
 
 
-void GEOGeometry::setFeature(GEOFeature* feature) {
+void GEOGeometry::setFeature(GEOFeature* feature) const {
   if (_feature != feature) {
     delete _feature;
     _feature = feature;

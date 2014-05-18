@@ -50,4 +50,6 @@ public abstract class GEOGeometry2D extends GEOGeometry
     }
   }
 
+  public abstract GEOGeometry2D deepCopy();
+
 }

@@ -78,4 +78,6 @@ public abstract class GEOGeometry extends GEOObject
     }
   }
 
+  public abstract GEOGeometry deepCopy();
+
 }

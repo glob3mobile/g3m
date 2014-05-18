@@ -200,7 +200,8 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
       if (_normalsMesh != NULL) {
         //_normalsMesh->render(rc, parentGLState);
       }
-    } else{
+    }
+    else {
       if (_normalsMesh != NULL) {
         delete _normalsMesh;
         _normalsMesh = NULL;

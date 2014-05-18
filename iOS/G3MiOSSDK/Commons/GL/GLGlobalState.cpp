@@ -77,8 +77,8 @@ void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
         currentState._polygonOffsetUnits = _polygonOffsetUnits;
         currentState._polygonOffsetFactor = _polygonOffsetFactor;
       }
-
-    } else{
+    }
+    else {
       nativeGL->disable(GLStage::polygonOffsetFill());
     }
   }

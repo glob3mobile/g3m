@@ -25,6 +25,12 @@ public final class Timer_WebGL
 
 
    @Override
+   public long nowInMilliseconds() {
+      return System.currentTimeMillis();
+   }
+
+
+   @Override
    public void start() {
       _startTimeInMilliseconds = System.currentTimeMillis();
    }
@@ -40,5 +46,6 @@ public final class Timer_WebGL
    public long elapsedTimeInMilliseconds() {
       return System.currentTimeMillis() - _startTimeInMilliseconds;
    }
+
 
 }

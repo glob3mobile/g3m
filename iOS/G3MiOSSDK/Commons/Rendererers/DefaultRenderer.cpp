@@ -16,11 +16,11 @@ void DefaultRenderer::setEnable(bool enable) {
 #warning vtp ask dgd: empty vector?
       if(isEnable()){
         notifyChangedInfo(_info);
-      }else{
+      }
+      else {
         const std::vector<std::string> info;
         _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
       }
-      
     }
   }
 }
@@ -28,7 +28,8 @@ void DefaultRenderer::setEnable(bool enable) {
 void DefaultRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("Changed Renderer Info Listener of DefaultRenderer already set");
-  } else {
+  }
+  else {
     _changedInfoListener = changedInfoListener;
     _rendererIdentifier = rendererIdentifier;
     notifyChangedInfo(_info);
