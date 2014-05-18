@@ -675,7 +675,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 //  }
 //  else {
 
-    std::list<Tile*> toVisit;
+    std::vector<Tile*> toVisit;
 //    for (int i = 0; i < firstLevelTilesCount; i++) {
 //      toVisit.push_back(_firstLevelTiles[i]);
 //    }
@@ -719,18 +719,17 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                  );
   }
 
-  std::list<Tile*> toVisitInNextIteration;
+  std::vector<Tile*> toVisitInNextIteration;
 
-  while (toVisit.size() > 0) {
+  while (!toVisit.empty()) {
 //    iteration++;
 //    visitied += toVisit.size();
     //ILogger::instance()->logInfo("Render iteration #%d, visiting %d tiles", iteration, toVisit.size());
 
     toVisitInNextIteration.clear();
-    for (std::list<Tile*>::iterator iter = toVisit.begin();
-         iter != toVisit.end();
-         iter++) {
-      Tile* tile = *iter;
+    const int toVisitSize = toVisit.size();
+    for (int i = 0; i < toVisitSize; i++) {
+      Tile* tile = toVisit[i];
 
       tile->render(rc,
                    *_glState,

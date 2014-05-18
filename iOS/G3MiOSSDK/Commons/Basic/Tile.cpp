@@ -586,7 +586,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 
 void Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
-                  std::list<Tile*>* toVisitInNextIteration,
+                  std::vector<Tile*>* toVisitInNextIteration,
                   const Planet* planet,
                   const Vector3D& cameraNormalizedPosition,
                   double cameraAngle2HorizonInRadians,
