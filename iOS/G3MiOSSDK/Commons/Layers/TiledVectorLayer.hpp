@@ -110,8 +110,14 @@ public:
 
   class RequestGEOJSONBufferData {
   public:
+#ifdef C_CODE
     const URL          _url;
     const TimeInterval _timeToCache;
+#endif
+#ifdef JAVA_CODE
+    public final URL          _url;
+    public final TimeInterval _timeToCache;
+#endif
     const bool         _readExpired;
 
     RequestGEOJSONBufferData(const URL&          url,
