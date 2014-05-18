@@ -122,15 +122,17 @@ public:
                            const Angle& pitch,
                            const Angle& heading,
                            const Angle& roll,
-                           bool linearInterpolation=false);
-  
+                           bool linearInterpolation     = false,
+                           bool forceToPositionOnCancel = true,
+                           bool forceToPositionOnStop   = true);
+
   void setAnimatedPosition(const Geodetic3D& position,
                            bool linearInterpolation=false) {
     setAnimatedPosition(TimeInterval::fromSeconds(3),
                         position,
                         linearInterpolation);
   }
-  
+
   void setHeading(const Angle& heading) {
 #ifdef C_CODE
     delete _heading;

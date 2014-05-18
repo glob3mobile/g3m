@@ -31,32 +31,36 @@ void ShapeFullPositionEffect::doStep(const G3MRenderContext* rc,
 }
 
 void ShapeFullPositionEffect::cancel(const TimeInterval& when) {
-  _shape->setPosition(_toPosition);
-  if (!_toPitch.isNan()) {
-    _shape->setPitch(_toPitch);
-  }
-  
-  if (!_toHeading.isNan()) {
-    _shape->setHeading(_toHeading);
-  }
+  if (_forceToPositionOnCancel) {
+    _shape->setPosition(_toPosition);
+    if (!_toPitch.isNan()) {
+      _shape->setPitch(_toPitch);
+    }
 
-  if (!_toRoll.isNan()) {
-    _shape->setRoll(_toRoll);
+    if (!_toHeading.isNan()) {
+      _shape->setHeading(_toHeading);
+    }
+
+    if (!_toRoll.isNan()) {
+      _shape->setRoll(_toRoll);
+    }
   }
 }
 
 void ShapeFullPositionEffect::stop(const G3MRenderContext* rc,
                                    const TimeInterval& when) {
-  _shape->setPosition(_toPosition);
-  if (!_toPitch.isNan()) {
-    _shape->setPitch(_toPitch);
-  }
-  
-  if (!_toHeading.isNan()) {
-    _shape->setHeading(_toHeading);
-  }
+  if (_forceToPositionOnStop) {
+    _shape->setPosition(_toPosition);
+    if (!_toPitch.isNan()) {
+      _shape->setPitch(_toPitch);
+    }
 
-  if (!_toRoll.isNan()) {
-    _shape->setRoll(_toRoll);
+    if (!_toHeading.isNan()) {
+      _shape->setHeading(_toHeading);
+    }
+
+    if (!_toRoll.isNan()) {
+      _shape->setRoll(_toRoll);
+    }
   }
 }
