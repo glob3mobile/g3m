@@ -50,24 +50,6 @@ public class ShapesRenderer extends DefaultRenderer
   {
   
     final Camera cam = rc.getCurrentCamera();
-    /*
-  
-     if (_projection == NULL) {
-     _projection = new ProjectionGLFeature(cam->getProjectionMatrix44D());
-     _glState->addGLFeature(_projection, true);
-     _glStateTransparent->addGLFeature(_projection, true);
-     } else{
-     _projection->setMatrix(cam->getProjectionMatrix44D());
-     }
-  
-     if (_model == NULL) {
-     _model = new ModelGLFeature(cam->getModelMatrix44D());
-     _glState->addGLFeature(_model, true);
-     _glStateTransparent->addGLFeature(_model, true);
-     } else{
-     _model->setMatrix(cam->getModelMatrix44D());
-     }
-     */
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {

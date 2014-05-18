@@ -114,7 +114,6 @@ public class TextureGLFeature extends GLColorGroupFeature
     }
     else
     {
-  
       if (u == 1.0 && v == 1.0)
       {
         _values.removeUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS);

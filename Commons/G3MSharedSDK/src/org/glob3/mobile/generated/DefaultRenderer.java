@@ -90,7 +90,6 @@ public abstract class DefaultRenderer implements Renderer
           final java.util.ArrayList<String> info = new java.util.ArrayList<String>();
           _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
         }
-  
       }
     }
   }

@@ -332,7 +332,6 @@ public class GLGlobalState
           currentState._polygonOffsetUnits = _polygonOffsetUnits;
           currentState._polygonOffsetFactor = _polygonOffsetFactor;
         }
-  
       }
       else
       {

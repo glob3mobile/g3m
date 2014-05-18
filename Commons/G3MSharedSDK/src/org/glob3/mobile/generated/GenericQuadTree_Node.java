@@ -21,31 +21,6 @@ public class GenericQuadTree_Node
      _children = null;
   }
 
-
-  //void GenericQuadTree_Node::computeElementsSector() {
-  //
-  //  delete _elementsSector;
-  //  _elementsSector = new Sector(_sector);
-  //  if (_children == NULL) {
-  //    const int size = _elements.size();
-  //    for (int i = 0; i < size; i++) {
-  //      Sector newElementSector = _elementsSector->mergedWith(_elements[i]->getSector());
-  //      delete _elementsSector;
-  //      _elementsSector = new Sector(newElementSector);
-  //    }
-  //
-  //  } else{
-  //
-  //    for (int i = 0; i < 4; i++) {
-  //      Sector newElementSector =_elementsSector->mergedWith(_children[i]->getElementsSector());
-  //      delete _elementsSector;
-  //      _elementsSector = new Sector(newElementSector);
-  //    }
-  //
-  //  }
-  //
-  //}
-  
   private void splitNode(int maxElementsPerNode, int maxDepth, double childAreaProportion)
   {
     _children = new GenericQuadTree_Node[4];
@@ -122,7 +97,6 @@ public class GenericQuadTree_Node
       }
       else
       {
-  
         if (cost == minChildInsertionCost)
         {
           //        printf("BOTH CHILDREN WITH SAME COST");
@@ -265,8 +239,8 @@ public class GenericQuadTree_Node
             return true;
           }
         }
-      } //Element is associated to geodetic
-      else
+      }
+      else //Element is associated to geodetic
       {
         GenericQuadTree_Geodetic2DElement e = (GenericQuadTree_Geodetic2DElement) element;
         if (sector.contains(e._geodetic))
@@ -326,8 +300,8 @@ public class GenericQuadTree_Node
             return true;
           }
         }
-      } //Element is associated to geodetic
-      else
+      }
+      else //Element is associated to geodetic
       {
         GenericQuadTree_Geodetic2DElement e = (GenericQuadTree_Geodetic2DElement) element;
         if (geo.isEquals(e._geodetic))

@@ -211,7 +211,6 @@ public class GenericQuadTree_TESTER
       }
       else
       {
-  
         Geodetic2D geo = Geodetic2D.fromDegrees(minLat, minLon);
         geos.add(new Geodetic2D(geo));
         String desc = "GEODETIC ELEMENT " + geo.description();

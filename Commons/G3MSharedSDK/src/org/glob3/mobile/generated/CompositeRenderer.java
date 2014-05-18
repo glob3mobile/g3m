@@ -315,7 +315,6 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
       ILogger.instance().logWarning("Child Render not found: %d", rendererIdentifier);
     }
   
-  
     if (_changedInfoListener != null)
     {
       _changedInfoListener.changedRendererInfo(-1, getInfo());

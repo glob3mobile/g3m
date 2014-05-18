@@ -425,32 +425,27 @@ public class GPUProgram
     {
       u = getGPUUniformBool(name);
     }
+    else if (type == GLType.glVec2Float())
+    {
+      u = getGPUUniformVec2Float(name);
+    }
+    else if (type == GLType.glVec4Float())
+    {
+      u = getGPUUniformVec4Float(name);
+    }
+    else if (type == GLType.glFloat())
+    {
+      u = getGPUUniformFloat(name);
+    }
+    else if (type == GLType.glMatrix4Float())
+    {
+      u = getGPUUniformMatrix4Float(name);
+    }
     else
     {
-      if (type == GLType.glVec2Float())
-      {
-        u = getGPUUniformVec2Float(name);
-      }
-      else
-      {
-        if (type == GLType.glVec4Float())
-        {
-          u = getGPUUniformVec4Float(name);
-        }
-        else
-        {
-          if (type == GLType.glFloat())
-          {
-            u = getGPUUniformFloat(name);
-          }
-          else
-            if (type == GLType.glMatrix4Float())
-            {
-              u = getGPUUniformMatrix4Float(name);
-            }
-        }
-      }
+      ILogger.instance().logError("Invalid uniform type");
     }
+  
     return u;
   }
 
