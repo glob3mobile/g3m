@@ -68,3 +68,7 @@ long long GEOFeatureCollection::getCoordinatesCount() const {
   }
   return result;
 }
+
+const GEOFeatureCollection* GEOFeatureCollection::deepCopy() const {
+  return new GEOFeatureCollection(_features);
+}

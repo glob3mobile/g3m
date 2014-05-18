@@ -18,3 +18,7 @@ std::vector<GEOSymbol*>* GEO2DPointGeometry::createSymbols(const GEOSymbolizer* 
 std::vector<GEORasterSymbol*>* GEO2DPointGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
 }
+
+const GEO2DPointGeometry* GEO2DPointGeometry::deepCopy() const {
+  return new GEO2DPointGeometry(_position);
+}
