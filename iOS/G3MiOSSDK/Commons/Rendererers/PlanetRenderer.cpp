@@ -687,11 +687,13 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 //  ILogger::instance()->logInfo("Rendering _firstLevelTiles iteration #%d, visiting %d tiles",
 //                               iteration,
 //                               firstLevelTilesCount);
+
+  const bool forceFirstLevelRender = _firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart;
   for (int i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
     tile->render(rc,
                  *_glState,
-                 &toVisit,
+                 forceFirstLevelRender ? NULL : &toVisit,
                  planet,
                  cameraNormalizedPosition,
                  cameraAngle2HorizonInRadians,
