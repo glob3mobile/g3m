@@ -286,7 +286,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       f.setMatrix(cam.getModelViewMatrix44D());
     }
-  
   }
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
@@ -490,7 +489,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         for (int i = 0; i < toVisitSize; i++)
         {
           Tile tile = toVisit.get(i);
-  
           tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, forceFullRender
         }
   
