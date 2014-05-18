@@ -458,42 +458,87 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     final double texWidthSquared = texWidth * texWidth;
     final double texHeightSquared = texHeight * texHeight;
   
-    final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
+    final double nowInMS = _lastSplitTimer.nowInMilliseconds();
+  //
+  //  if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
+  //    // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
+  //    // loaded as they will be used as last-chance fallback texture for any tile.
+  //    _firstRender = false;
+  //
+  //    for (int i = 0; i < firstLevelTilesCount; i++) {
+  //      Tile* tile = _firstLevelTiles[i];
+  //      tile->render(rc,
+  //                   *_glState,
+  //                   NULL,
+  //                   planet,
+  //                   cameraNormalizedPosition,
+  //                   cameraAngle2HorizonInRadians,
+  //                   cameraFrustumInModelCoordinates,
+  //                   &_statistics,
+  //                   _verticalExaggeration,
+  //                   layerTilesRenderParameters,
+  //                   _texturizer,
+  //                   _tilesRenderParameters,
+  //                   _lastSplitTimer,
+  //                   _elevationDataProvider,
+  //                   _tessellator,
+  //                   _tileRasterizer,
+  //                   _layerSet,
+  //                   _renderedSector,
+  //                   _firstRender, /* if first render, force full render */
+  //                   _tileDownloadPriority,
+  //                   texWidthSquared,
+  //                   texHeightSquared,
+  //                   nowInMS,
+  //                   _renderTileMeshes,
+  //                   _logTilesPetitions,
+  //                   _tileRenderingListener);
+  //    }
+  //  }
+  //  else {
   
-    if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
-    {
-      // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
-      // loaded as they will be used as last-chance fallback texture for any tile.
-      _firstRender = false;
-  
-      for (int i = 0; i < firstLevelTilesCount; i++)
-      {
-        Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
-      }
-    }
-    else
-    {
       java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
-      for (int i = 0; i < firstLevelTilesCount; i++)
-      {
-        toVisit.addLast(_firstLevelTiles.get(i));
-      }
+  //    for (int i = 0; i < firstLevelTilesCount; i++) {
+  //      toVisit.push_back(_firstLevelTiles[i]);
+  //    }
   
-      while (toVisit.size() > 0)
-      {
-        java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
   
-        for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
-        {
-          Tile tile = iter.next();
+  //  int iteration = 1;
+  //  int visitied = firstLevelTilesCount;
   
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); //SENDING SQUARED TEX SIZE -  if first render, forceFullRender
-        }
-  
-        toVisit = toVisitInNextIteration;
-      }
+  //  ILogger::instance()->logInfo("Rendering _firstLevelTiles iteration #%d, visiting %d tiles",
+  //                               iteration,
+  //                               firstLevelTilesCount);
+    for (int i = 0; i < firstLevelTilesCount; i++)
+    {
+      Tile tile = _firstLevelTiles.get(i);
+      tile.render(rc, _glState, toVisit, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener, false); // visibility has to be tested for _firstLevelTiles - SENDING SQUARED TEX SIZE -  if first render, forceFullRender
     }
+  
+    java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
+  
+    while (toVisit.size() > 0)
+    {
+  //    iteration++;
+  //    visitied += toVisit.size();
+      //ILogger::instance()->logInfo("Render iteration #%d, visiting %d tiles", iteration, toVisit.size());
+  
+      toVisitInNextIteration.clear();
+      for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
+      {
+        Tile tile = iter.next();
+  
+        tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener, true); // Only the visible tiles are present in toVisit list - SENDING SQUARED TEX SIZE -  if first render, forceFullRender
+      }
+  
+      toVisit.clear();
+      toVisit.addAll( toVisitNextIteration );
+    }
+  
+    _firstRender = false;
+    //ILogger::instance()->logInfo("Render after %d iterations, visited %d tiles", iteration, visitied);
+  
+  //  }
   
     if (_showStatistics)
     {
