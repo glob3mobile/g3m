@@ -682,19 +682,7 @@ void Tile::render(const G3MRenderContext* rc,
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
-
-//        if (subTile->isVisible(rc,
-//                               planet,
-//                               cameraNormalizedPosition,
-//                               cameraAngle2HorizonInRadians,
-//                               cameraFrustumInModelCoordinates,
-//                               elevationDataProvider,
-//                               renderedSector,
-//                               tessellator,
-//                               layerTilesRenderParameters,
-//                               tilesRenderParameters)) {
-          toVisitInNextIteration->push_back(subTile);
-//        }
+        toVisitInNextIteration->push_back(subTile);
       }
     }
   }

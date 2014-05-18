@@ -670,7 +670,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _renderTileMeshes,
                    _logTilesPetitions,
                    _tileRenderingListener
-                   //false // visibility was not tested for _firstLevelTiles
                    );
     }
 
@@ -682,7 +681,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
       toVisit.push_back(_firstLevelTiles[i]);
     }
 
-    bool firstIteration = true;
     std::vector<Tile*> toVisitInNextIteration;
     while (!toVisit.empty()) {
       toVisitInNextIteration.clear();
@@ -717,10 +715,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _renderTileMeshes,
                      _logTilesPetitions,
                      _tileRenderingListener
-                     //!firstIteration
                      );
-
-        firstIteration = false;
       }
 
 #ifdef C_CODE
