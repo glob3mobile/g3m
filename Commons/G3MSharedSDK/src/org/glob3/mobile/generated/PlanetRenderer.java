@@ -509,10 +509,12 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   //  ILogger::instance()->logInfo("Rendering _firstLevelTiles iteration #%d, visiting %d tiles",
   //                               iteration,
   //                               firstLevelTilesCount);
+  
+    final boolean forceFirstLevelRender = _firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart;
     for (int i = 0; i < firstLevelTilesCount; i++)
     {
       Tile tile = _firstLevelTiles.get(i);
-      tile.render(rc, _glState, toVisit, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener, false); // visibility has to be tested for _firstLevelTiles - SENDING SQUARED TEX SIZE -  if first render, forceFullRender
+      tile.render(rc, _glState, forceFirstLevelRender ? null : toVisit, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener, false); // visibility has to be tested for _firstLevelTiles - SENDING SQUARED TEX SIZE -  if first render, forceFullRender
     }
   
     java.util.ArrayList<Tile> toVisitInNextIteration = new java.util.ArrayList<Tile>();
