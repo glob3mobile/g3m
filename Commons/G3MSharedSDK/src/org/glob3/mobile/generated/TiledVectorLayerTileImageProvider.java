@@ -46,9 +46,11 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
   private static class GEOJSONBufferRasterizer extends GAsyncTask
   {
+    private final URL _url = new URL();
     private ImageAssembler _imageAssembler;
     private IByteBuffer _buffer;
-    private final boolean _isBSON;
+//    const bool      _isBSON;
+    private GEOObject _geoObject;
     private ICanvas _canvas;
     private final int _imageWidth;
     private final int _imageHeight;
@@ -59,11 +61,14 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private final boolean _tileIsMercator;
     private final int _tileLevel;
 
-    private final String _imageId;
+//    const std::string _imageId;
 
-    public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, IByteBuffer buffer, boolean isBSON, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, String tileId, Sector tileSector, boolean tileIsMercator, int tileLevel, String imageId)
+    public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, URL url, IByteBuffer buffer, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, String tileId, Sector tileSector, boolean tileIsMercator, int tileLevel)
+//    _imageId(imageId),
+//    _isBSON(isBSON),
     {
        _imageAssembler = imageAssembler;
+       _url = new URL(url);
        _buffer = buffer;
        _imageWidth = imageWidth;
        _imageHeight = imageHeight;
@@ -72,8 +77,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _tileSector = new Sector(tileSector);
        _tileIsMercator = tileIsMercator;
        _tileLevel = tileLevel;
-       _imageId = imageId;
-       _isBSON = isBSON;
+       _geoObject = null;
        _canvas = null;
     }
 
@@ -85,6 +89,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
     
       _symbolizer = null;
+      if (_geoObject != null)
+         _geoObject.dispose();
       if (_buffer != null)
          _buffer.dispose();
       if (_canvas != null)
@@ -101,12 +107,14 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     
         if (_buffer.size() > 0)
         {
-          final boolean showStatistics = false;
-          GEOObject geoObject = (_isBSON ? GEOJSONParser.parseBSON(_buffer, showStatistics) : GEOJSONParser.parseJSON(_buffer, showStatistics));
+          final boolean isBSON = IStringUtils.instance().endsWith(_url._path, "bson");
     
-          if (geoObject != null)
+          final boolean showStatistics = false;
+          _geoObject = (isBSON ? GEOJSONParser.parseBSON(_buffer, showStatistics) : GEOJSONParser.parseJSON(_buffer, showStatistics));
+    
+          if (_geoObject != null)
           {
-            final long coordinatesCount = geoObject.getCoordinatesCount();
+            final long coordinatesCount = _geoObject.getCoordinatesCount();
             if (coordinatesCount > 5000)
             {
               ILogger.instance().logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d", _tileId, coordinatesCount);
@@ -115,13 +123,12 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
             if (_imageAssembler != null)
             {
               final GEORasterProjection projection = new GEORasterProjection(_tileSector, _tileIsMercator, _imageWidth, _imageHeight);
-              geoObject.rasterize(_symbolizer, _canvas, projection, _tileLevel);
+              _geoObject.rasterize(_symbolizer, _canvas, projection, _tileLevel);
     
               if (projection != null)
                  projection.dispose();
             }
-            if (geoObject != null)
-               geoObject.dispose();
+            // delete geoObject;
           }
         }
       }
@@ -133,7 +140,11 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
         ICanvas canvas = _canvas;
         _canvas = null; // moves ownership of _canvas to _imageAssembler
-        _imageAssembler.rasterizedGEOObject(canvas, _imageId);
+    
+        GEOObject geoObject = _geoObject;
+        _geoObject = null; // moves ownership of _geoObject to _imageAssembler
+    
+        _imageAssembler.rasterizedGEOObject(_url, geoObject, canvas);
       }
     }
 
@@ -168,8 +179,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
       else
       {
-        final boolean isBSON = IStringUtils.instance().endsWith(url._path, "bson");
-        _imageAssembler.bufferDownloaded(buffer, isBSON, url._path);
+        _imageAssembler.bufferDownloaded(url, buffer);
       }
     }
 
@@ -271,12 +281,40 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
     public final void start(TiledVectorLayer layer, Tile tile, long tileDownloadPriority, boolean logDownloadActivity)
     {
-      _downloadListener = new GEOJSONBufferDownloadListener(this);
+    //  _downloadListener = new GEOJSONBufferDownloadListener(this);
+    //
+    //  _symbolizer = layer->symbolizerCopy();
+    
+    //  _downloadRequestId = layer->requestGEOJSONBuffer(tile,
+    //                                                   _downloader,
+    //                                                   tileDownloadPriority,
+    //                                                   logDownloadActivity,
+    //                                                   _downloadListener,
+    //                                                   true /* deleteListener */);
     
       _symbolizer = layer.symbolizerCopy();
     
-      _downloadRequestId = layer.requestGEOJSONBuffer(tile, _downloader, tileDownloadPriority, logDownloadActivity, _downloadListener, true); // deleteListener
+      TiledVectorLayer.RequestGEOJSONBufferData requestData = layer.getRequestGEOJSONBufferData(tile);
     
+      GEOObject geoObject = _tileImageProvider.getGEOObjectFor(requestData._url);
+      if (geoObject == null)
+      {
+        _downloadListener = new GEOJSONBufferDownloadListener(this);
+    
+    
+        if (logDownloadActivity)
+        {
+          ILogger.instance().logInfo("Downloading %s", requestData._url._path);
+        }
+        _downloadRequestId = _downloader.requestBuffer(requestData._url, tileDownloadPriority, requestData._timeToCache, requestData._readExpired, _downloadListener, true); // deleteListener
+      }
+      else
+      {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning Diego at work
+      }
+    
+      requestData = null;
     }
 
     public final void cancel()
@@ -296,7 +334,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _tileImageProvider.requestFinish(_tileId);
     }
 
-    public final void bufferDownloaded(IByteBuffer buffer, boolean isBSON, String imageId)
+    public final void bufferDownloaded(URL url, IByteBuffer buffer)
     {
       _downloadListener = null;
       _downloadRequestId = -1;
@@ -310,7 +348,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
         final GEORasterSymbolizer symbolizer = _symbolizer;
         _symbolizer = null; // moves ownership of _symbolizer to GEOJSONBufferRasterizer
-        _rasterizer = new GEOJSONBufferRasterizer(this, buffer, isBSON, _imageWidth, _imageHeight, symbolizer, _tileId, _tileSector, _tileIsMercator, _tileLevel, imageId);
+    
+        _rasterizer = new GEOJSONBufferRasterizer(this, url, buffer, _imageWidth, _imageHeight, symbolizer, _tileId, _tileSector, _tileIsMercator, _tileLevel);
         _threadUtils.invokeAsyncTask(_rasterizer, true);
       }
     }
@@ -328,8 +367,11 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       _downloadRequestId = -1;
     }
 
-    public final void rasterizedGEOObject(ICanvas canvas, String imageId)
+    public final void rasterizedGEOObject(URL url, GEOObject geoObject, ICanvas canvas)
     {
+    
+      _tileImageProvider.takeGEOObjectFor(url, geoObject);
+    
       if (canvas == null)
       {
         _listener.imageCreationError(_tileId, "GEOJSON parser error");
@@ -341,7 +383,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
       else
       {
-        canvas.createImage(new CanvasImageListener(this, imageId), true); // autodelete
+        canvas.createImage(new CanvasImageListener(this, url._path), true); // autodelete
     
         if (canvas != null)
            canvas.dispose();
@@ -407,6 +449,16 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     if (assembler != null) {
       assembler.dispose();
     }
+  }
+
+  public final GEOObject getGEOObjectFor(URL url)
+  {
+    return null;
+  }
+  public final void takeGEOObjectFor(URL url, GEOObject geoObject)
+  {
+    if (geoObject != null)
+       geoObject.dispose();
   }
 
 }
