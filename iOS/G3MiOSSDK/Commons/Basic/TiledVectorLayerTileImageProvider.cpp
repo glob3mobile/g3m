@@ -454,7 +454,7 @@ TiledVectorLayerTileImageProvider::~TiledVectorLayerTileImageProvider() {
 void TiledVectorLayerTileImageProvider::takeGEOObjectFor(const URL& url,
                                                          GEOObject* geoObject) {
 //  delete geoObject;
-  if (_geoObjectsCache.size() > 32) {
+  if (_geoObjectsCache.size() > 48) {
     CacheEntry* lastEntry = _geoObjectsCache.back();
     _geoObjectsCache.pop_back();
     delete lastEntry;
