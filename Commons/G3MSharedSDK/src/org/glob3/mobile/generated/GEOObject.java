@@ -31,4 +31,6 @@ public abstract class GEOObject
 
   public abstract long getCoordinatesCount();
 
+  public abstract GEOObject deepCopy();
+
 }

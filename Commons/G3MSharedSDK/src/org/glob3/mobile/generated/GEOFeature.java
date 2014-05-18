@@ -28,7 +28,7 @@ package org.glob3.mobile.generated;
 public class GEOFeature extends GEOObject
 {
   private final JSONBaseObject _id;
-  private GEOGeometry _geometry;
+  private final GEOGeometry _geometry;
   private final JSONObject _properties;
 
 
@@ -84,6 +84,11 @@ public class GEOFeature extends GEOObject
   public final long getCoordinatesCount()
   {
     return _geometry.getCoordinatesCount();
+  }
+
+  public final GEOFeature deepCopy()
+  {
+    return new GEOFeature((_id == null) ? null : _id.deepCopy(), (_geometry == null) ? null : _geometry.deepCopy(), (_properties == null) ? null : _properties.deepCopy());
   }
 
 }

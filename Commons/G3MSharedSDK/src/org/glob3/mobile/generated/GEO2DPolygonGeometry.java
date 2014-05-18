@@ -68,4 +68,13 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
     return _polygonData.getCoordinatesCount();
   }
 
+  public final GEO2DPolygonGeometry deepCopy()
+  {
+    if (_polygonData != null)
+    {
+      _polygonData._retain();
+    }
+    return new GEO2DPolygonGeometry(_polygonData);
+  }
+
 }
