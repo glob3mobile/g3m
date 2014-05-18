@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 
 public class GEOFeatureCollection extends GEOObject
 {
-  private final java.util.ArrayList<GEOFeature> _features = new java.util.ArrayList<GEOFeature>();
+  private java.util.ArrayList<GEOFeature> _features = new java.util.ArrayList<GEOFeature>();
 
   private static java.util.ArrayList<GEOFeature> copy(java.util.ArrayList<GEOFeature> features)
   {

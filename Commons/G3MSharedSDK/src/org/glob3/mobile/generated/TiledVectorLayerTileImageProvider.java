@@ -563,7 +563,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   public final void takeGEOObjectFor(URL url, GEOObject geoObject)
   {
   //  delete geoObject;
-    if (_geoObjectsCache.size() > 32)
+    if (_geoObjectsCache.size() > 48)
     {
       CacheEntry lastEntry = _geoObjectsCache.getLast();
       _geoObjectsCache.removeLast();
