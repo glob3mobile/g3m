@@ -44,9 +44,11 @@ private:
 
   class GEOJSONBufferRasterizer : public GAsyncTask {
   private:
+    const URL       _url;
     ImageAssembler* _imageAssembler;
     IByteBuffer*    _buffer;
-    const bool      _isBSON;
+//    const bool      _isBSON;
+    GEOObject*      _geoObject;
     ICanvas*        _canvas;
     const int       _imageWidth;
     const int       _imageHeight;
@@ -62,21 +64,21 @@ private:
     const bool        _tileIsMercator;
     const int         _tileLevel;
 
-    const std::string _imageId;
+//    const std::string _imageId;
 
   public:
     GEOJSONBufferRasterizer(ImageAssembler* imageAssembler,
+                            const URL& url,
                             IByteBuffer* buffer,
-                            bool isBSON,
                             const int imageWidth,
                             const int imageHeight,
                             const GEORasterSymbolizer* symbolizer,
                             const std::string& tileId,
                             const Sector& tileSector,
                             const bool   tileIsMercator,
-                            const int    tileLevel,
-                            const std::string& imageId) :
+                            const int    tileLevel) :
     _imageAssembler(imageAssembler),
+    _url(url),
     _buffer(buffer),
     _imageWidth(imageWidth),
     _imageHeight(imageHeight),
@@ -85,8 +87,9 @@ private:
     _tileSector(tileSector),
     _tileIsMercator(tileIsMercator),
     _tileLevel(tileLevel),
-    _imageId(imageId),
-    _isBSON(isBSON),
+//    _imageId(imageId),
+//    _isBSON(isBSON),
+    _geoObject(NULL),
     _canvas(NULL)
     {
     }
@@ -193,14 +196,14 @@ private:
 
     void cancel();
 
-    void bufferDownloaded(IByteBuffer* buffer,
-                          bool isBSON,
-                          const std::string& imageId);
+    void bufferDownloaded(const URL& url,
+                          IByteBuffer* buffer);
     void bufferDownloadError(const URL& url);
     void bufferDownloadCanceled();
 
-    void rasterizedGEOObject(ICanvas* canvas,
-                             const std::string& imageId);
+    void rasterizedGEOObject(const URL& url,
+                             GEOObject* geoObject,
+                             ICanvas* canvas);
     void deletedRasterizer();
 
     void imageCreated(const IImage* image,
@@ -240,6 +243,10 @@ public:
   void cancel(const std::string& tileId);
 
   void requestFinish(const std::string& tileId);
+
+  GEOObject* getGEOObjectFor(const URL& url);
+  void takeGEOObjectFor(const URL& url,
+                        GEOObject* geoObject);
 
 };
 

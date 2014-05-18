@@ -9,7 +9,6 @@
 #include "TiledVectorLayer.hpp"
 
 #include "LayerTilesRenderParameters.hpp"
-#include "URL.hpp"
 #include "RenderState.hpp"
 #include "LayerCondition.hpp"
 #include "TiledVectorLayerTileImageProvider.hpp"
@@ -180,38 +179,52 @@ const URL TiledVectorLayer::createURL(const Tile* tile) const {
   return URL(path, false);
 }
 
-
-long long TiledVectorLayer::requestGEOJSONBuffer(const Tile* tile,
-                                                 IDownloader* downloader,
-                                                 long long tileDownloadPriority,
-                                                 bool logDownloadActivity,
-                                                 IBufferDownloadListener* listener,
-                                                 bool deleteListener) const {
-
-  if (tile->_level > _parameters->_maxLevel) {
-    const Tile* parentTile = tile->getParent();
-    if (parentTile != NULL) {
-      return requestGEOJSONBuffer(parentTile,
-                                  downloader,
-                                  tileDownloadPriority,
-                                  logDownloadActivity,
-                                  listener,
-                                  deleteListener);
-    }
-  }
-  
-  const URL url = createURL(tile);
-  if (logDownloadActivity) {
-    ILogger::instance()->logInfo("Downloading %s", url._path.c_str());
-  }
-  return downloader->requestBuffer(url,
-                                   tileDownloadPriority,
-                                   _timeToCache,
-                                   _readExpired,
-                                   listener,
-                                   deleteListener);
-}
-
 const GEORasterSymbolizer*  TiledVectorLayer::symbolizerCopy() const {
   return _symbolizer->copy();
 }
+
+
+//long long TiledVectorLayer::requestGEOJSONBuffer(const Tile* tile,
+//                                                 IDownloader* downloader,
+//                                                 long long tileDownloadPriority,
+//                                                 bool logDownloadActivity,
+//                                                 IBufferDownloadListener* listener,
+//                                                 bool deleteListener) const {
+//
+//  if (tile->_level > _parameters->_maxLevel) {
+//    const Tile* parentTile = tile->getParent();
+//    if (parentTile != NULL) {
+//      return requestGEOJSONBuffer(parentTile,
+//                                  downloader,
+//                                  tileDownloadPriority,
+//                                  logDownloadActivity,
+//                                  listener,
+//                                  deleteListener);
+//    }
+//  }
+//
+//  const URL url = createURL(tile);
+//  if (logDownloadActivity) {
+//    ILogger::instance()->logInfo("Downloading %s", url._path.c_str());
+//  }
+//  return downloader->requestBuffer(url,
+//                                   tileDownloadPriority,
+//                                   _timeToCache,
+//                                   _readExpired,
+//                                   listener,
+//                                   deleteListener);
+//}
+
+TiledVectorLayer::RequestGEOJSONBufferData* TiledVectorLayer::getRequestGEOJSONBufferData(const Tile* tile) const {
+  if (tile->_level > _parameters->_maxLevel) {
+    const Tile* parentTile = tile->getParent();
+    if (parentTile != NULL) {
+      return getRequestGEOJSONBufferData(parentTile);
+    }
+  }
+
+  return new RequestGEOJSONBufferData(createURL(tile),
+                                      _timeToCache,
+                                      _readExpired);
+}
+
