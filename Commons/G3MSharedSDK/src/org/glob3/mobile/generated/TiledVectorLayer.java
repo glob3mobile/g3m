@@ -110,6 +110,7 @@ public class TiledVectorLayer extends VectorLayer
   }
 
 
+
   public static TiledVectorLayer newMercator(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, int firstLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition)
   {
      return newMercator(symbolizer, urlTemplate, dataSector, firstLevel, maxLevel, timeToCache, readExpired, transparency, condition, "");
@@ -181,24 +182,71 @@ public class TiledVectorLayer extends VectorLayer
     return new TiledVectorLayerTileImageProvider(this, rc.getDownloader(), rc.getThreadUtils());
   }
 
-  public final long requestGEOJSONBuffer(Tile tile, IDownloader downloader, long tileDownloadPriority, boolean logDownloadActivity, IBufferDownloadListener listener, boolean deleteListener)
+//  long long requestGEOJSONBuffer(const Tile* tile,
+//                                 IDownloader* downloader,
+//                                 long long tileDownloadPriority,
+//                                 bool logDownloadActivity,
+//                                 IBufferDownloadListener* listener,
+//                                 bool deleteListener) const;
+
+  public static class RequestGEOJSONBufferData
   {
+    public final URL _url = new URL();
+    public final TimeInterval _timeToCache = new TimeInterval();
+    public final boolean _readExpired;
+
+    public RequestGEOJSONBufferData(URL url, TimeInterval timeToCache, boolean readExpired)
+    {
+       _url = new URL(url);
+       _timeToCache = new TimeInterval(timeToCache);
+       _readExpired = readExpired;
+    }
+  }
+
+
+  //long long TiledVectorLayer::requestGEOJSONBuffer(const Tile* tile,
+  //                                                 IDownloader* downloader,
+  //                                                 long long tileDownloadPriority,
+  //                                                 bool logDownloadActivity,
+  //                                                 IBufferDownloadListener* listener,
+  //                                                 bool deleteListener) const {
+  //
+  //  if (tile->_level > _parameters->_maxLevel) {
+  //    const Tile* parentTile = tile->getParent();
+  //    if (parentTile != NULL) {
+  //      return requestGEOJSONBuffer(parentTile,
+  //                                  downloader,
+  //                                  tileDownloadPriority,
+  //                                  logDownloadActivity,
+  //                                  listener,
+  //                                  deleteListener);
+  //    }
+  //  }
+  //
+  //  const URL url = createURL(tile);
+  //  if (logDownloadActivity) {
+  //    ILogger::instance()->logInfo("Downloading %s", url._path.c_str());
+  //  }
+  //  return downloader->requestBuffer(url,
+  //                                   tileDownloadPriority,
+  //                                   _timeToCache,
+  //                                   _readExpired,
+  //                                   listener,
+  //                                   deleteListener);
+  //}
   
+  public final TiledVectorLayer.RequestGEOJSONBufferData getRequestGEOJSONBufferData(Tile tile)
+  {
     if (tile._level > _parameters._maxLevel)
     {
       final Tile parentTile = tile.getParent();
       if (parentTile != null)
       {
-        return requestGEOJSONBuffer(parentTile, downloader, tileDownloadPriority, logDownloadActivity, listener, deleteListener);
+        return getRequestGEOJSONBufferData(parentTile);
       }
     }
   
-    final URL url = createURL(tile);
-    if (logDownloadActivity)
-    {
-      ILogger.instance().logInfo("Downloading %s", url._path);
-    }
-    return downloader.requestBuffer(url, tileDownloadPriority, _timeToCache, _readExpired, listener, deleteListener);
+    return new RequestGEOJSONBufferData(createURL(tile), _timeToCache, _readExpired);
   }
 
   public final GEORasterSymbolizer symbolizerCopy()
