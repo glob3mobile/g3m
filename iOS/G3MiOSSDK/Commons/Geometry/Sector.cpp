@@ -318,7 +318,8 @@ Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const{
 
   if (lat > _upper._latitude._degrees) {
     lat = _upper._latitude._degrees;
-  } else{
+  }
+  else {
     if (lat < _lower._latitude._degrees) {
       lat = _lower._latitude._degrees;
     }
@@ -326,7 +327,8 @@ Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const{
 
   if (lon > _upper._longitude._degrees) {
     lon = _upper._longitude._degrees;
-  } else{
+  }
+  else {
     if (lon < _lower._longitude._degrees) {
       lon = _lower._longitude._degrees;
     }

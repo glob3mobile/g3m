@@ -112,7 +112,8 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
                            pitch,
                            roll);
 
-  } else if (x > 0.99999 && x < 1.000001) {
+  }
+  else if (x > 0.99999 && x < 1.000001) {
     //Pitch 90
     const Vector3D wpp = wppp; //No Roll
 

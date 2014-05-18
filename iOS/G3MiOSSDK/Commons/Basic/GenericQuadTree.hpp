@@ -276,7 +276,8 @@ class GenericQuadTree_TESTER {
     void endVisit(bool aborted) const{
       if (!aborted) {
         ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
-      } else{
+      }
+      else {
         //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
         GenericQuadTree_TESTER::_nElements += 1;
@@ -309,7 +310,8 @@ class GenericQuadTree_TESTER {
     void endVisit(bool aborted) const{
       if (!aborted) {
         ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
-      } else{
+      }
+      else {
         //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
         GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
         GenericQuadTree_TESTER::_nElements += 1;

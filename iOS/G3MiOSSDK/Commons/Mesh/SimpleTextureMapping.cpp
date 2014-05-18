@@ -30,7 +30,8 @@ void SimpleTextureMapping::releaseGLTextureId() {
     _glTextureId.dispose();
 #endif
     _glTextureId = NULL;
-  } else{
+  }
+  else {
     ILogger::instance()->logError("Releasing invalid simple texture mapping");
   }
 }
@@ -57,8 +58,8 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const{
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
       tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
-    } else{
-
+    }
+    else {
       state.clearGLFeatureGroup(COLOR_GROUP);
       if ((_scaleU != 1) ||
           (_scaleV != 1) ||

@@ -589,10 +589,10 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(cam), true);
-  } else{
+  }
+  else {
     f->setMatrix(cam->getModelViewMatrix44D());
   }
-
 }
 
 void PlanetRenderer::render(const G3MRenderContext* rc,
@@ -630,10 +630,10 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
   const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
 
-  texWidth *= correctionFactor;
+  texWidth  *= correctionFactor;
   texHeight *= correctionFactor;
 
-  const double texWidthSquared = texWidth * texWidth;
+  const double texWidthSquared  = texWidth  * texWidth;
   const double texHeightSquared = texHeight * texHeight;
 
   const double nowInMS = _lastSplitTimer->nowInMilliseconds();
@@ -669,8 +669,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    nowInMS,
                    _renderTileMeshes,
                    _logTilesPetitions,
-                   _tileRenderingListener
-                   );
+                   _tileRenderingListener);
     }
 
     _firstRender = false;
@@ -688,7 +687,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
       const int toVisitSize = toVisit.size();
       for (int i = 0; i < toVisitSize; i++) {
         Tile* tile = toVisit[i];
-
         tile->render(rc,
                      *_glState,
                      &toVisitInNextIteration,
@@ -843,14 +841,15 @@ bool PlanetRenderer::setRenderedSector(const Sector& sector) {
 
     if (sector.isEquals(Sector::fullSphere())) {
       _renderedSector = NULL;
-    } else{
+    }
+    else {
       _renderedSector = new Sector(sector);
     }
-    
+
     _tessellator->setRenderedSector(sector);
-    
+
     changed();
-    
+
     return true;
   }
   return false;

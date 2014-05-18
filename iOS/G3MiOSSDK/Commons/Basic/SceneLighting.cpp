@@ -30,7 +30,7 @@ void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCon
                           false);
   }
   /* //Add this to obtain a rotating "sun"
-   else{
+   else {
 
    ITimer *timer = IFactory::instance()->createTimer();
    double sec = timer->now().milliseconds();
@@ -83,7 +83,7 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
                                                       _ambientColor),
                           false);
   }
-  else{
+  else {
     f->setLightDirection(lightDir);
   }
 

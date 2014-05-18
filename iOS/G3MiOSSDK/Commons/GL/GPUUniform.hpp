@@ -147,7 +147,8 @@ public:
   void setUniform(GL* gl, const IGLUniformID* id) const{
     if (_value) {
       gl->uniform1i(id, 1);
-    } else{
+    }
+    else {
       gl->uniform1i(id, 0);
     }
   }

@@ -412,7 +412,8 @@ public:
 
     if (glIsProgram(program) == GL_FALSE) {
       return true;
-    } else{
+    }
+    else {
       int markedToBeDeleted;
       glGetProgramiv(program, GL_DELETE_STATUS, &markedToBeDeleted);
       return (markedToBeDeleted == GL_TRUE);

@@ -38,9 +38,16 @@ public:
   {
     _glState = new GLState();
     if (_isTransparent) {
-      _glState->addGLFeature(new BlendingModeGLFeature(true, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
-    } else{
-      _glState->addGLFeature(new BlendingModeGLFeature(false, GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha()), false);
+      _glState->addGLFeature(new BlendingModeGLFeature(true,
+                                                       GLBlendFactor::srcAlpha(),
+                                                       GLBlendFactor::oneMinusSrcAlpha()),
+                             false);
+    }
+    else {
+      _glState->addGLFeature(new BlendingModeGLFeature(false,
+                                                       GLBlendFactor::srcAlpha(),
+                                                       GLBlendFactor::oneMinusSrcAlpha()),
+                             false);
     }
   }
 

@@ -129,7 +129,8 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
       }
       indices.add((short) ((2*_resolution-2)+(j+1)*delta));
     }
-  } else {
+  }
+  else {
     for (short j=0; j<_resolution-1; j++) {
       if (j>0) indices.add((short) ((j+1)*delta));
       for (short i=0; i<2*_resolution-1; i++) {
