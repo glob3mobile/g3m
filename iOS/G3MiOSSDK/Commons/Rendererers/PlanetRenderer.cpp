@@ -720,6 +720,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                  false /* visibility has to be tested for _firstLevelTiles  */
                  );
   }
+  _firstRender = false;
 
   std::vector<Tile*> toVisitInNextIteration;
 
@@ -772,7 +773,6 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #endif
   }
 
-  _firstRender = false;
   //ILogger::instance()->logInfo("Render after %d iterations, visited %d tiles", iteration, visitied);
 
 //  }
