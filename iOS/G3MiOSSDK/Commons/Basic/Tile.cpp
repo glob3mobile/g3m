@@ -283,8 +283,8 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                      const TileTessellator* tessellator,
                      const LayerTilesRenderParameters* layerTilesRenderParameters,
                      const TilesRenderParameters* tilesRenderParameters) {
-
-  if (renderedSector != NULL && !renderedSector->touchesWith(_sector)) { //Incomplete world
+  if ((renderedSector != NULL) &&
+      !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
   }
 
@@ -609,7 +609,8 @@ void Tile::render(const G3MRenderContext* rc,
                   double nowInMS,
                   const bool renderTileMeshes,
                   bool logTilesPetitions,
-                  TileRenderingListener* tileRenderingListener) {
+                  TileRenderingListener* tileRenderingListener,
+                  bool visibilityAlreadyTested) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -620,7 +621,8 @@ void Tile::render(const G3MRenderContext* rc,
 
   bool rendered = false;
 
-  if (isVisible(rc,
+  if (visibilityAlreadyTested ||
+      isVisible(rc,
                 planet,
                 cameraNormalizedPosition,
                 cameraAngle2HorizonInRadians,
@@ -688,7 +690,19 @@ void Tile::render(const G3MRenderContext* rc,
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
-        toVisitInNextIteration->push_back(subTile);
+
+        if (subTile->isVisible(rc,
+                               planet,
+                               cameraNormalizedPosition,
+                               cameraAngle2HorizonInRadians,
+                               cameraFrustumInModelCoordinates,
+                               elevationDataProvider,
+                               renderedSector,
+                               tessellator,
+                               layerTilesRenderParameters,
+                               tilesRenderParameters)) {
+          toVisitInNextIteration->push_back(subTile);
+        }
       }
     }
   }

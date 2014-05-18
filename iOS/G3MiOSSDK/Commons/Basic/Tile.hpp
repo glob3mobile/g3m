@@ -244,7 +244,8 @@ public:
               double nowInMS,
               const bool renderTileMeshes,
               bool logTilesPetitions,
-              TileRenderingListener* tileRenderingListener);
+              TileRenderingListener* tileRenderingListener,
+              bool visibilityAlreadyTested);
 
 //  const TileKey getKey() const;
 //  const std::string getId() const;
