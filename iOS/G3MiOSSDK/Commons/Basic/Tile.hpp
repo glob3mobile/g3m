@@ -243,11 +243,7 @@ public:
               double nowInMS,
               const bool renderTileMeshes,
               bool logTilesPetitions,
-              TileRenderingListener* tileRenderingListener,
-              bool visibilityAlreadyTested);
-
-//  const TileKey getKey() const;
-//  const std::string getId() const;
+              TileRenderingListener* tileRenderingListener);
 
   void setTextureSolved(bool textureSolved);
 

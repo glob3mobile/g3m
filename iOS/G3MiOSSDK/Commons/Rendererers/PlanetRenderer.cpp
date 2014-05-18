@@ -637,106 +637,16 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const double texHeightSquared = texHeight * texHeight;
 
   const double nowInMS = _lastSplitTimer->nowInMilliseconds();
-//
-//  if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
-//    // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
-//    // loaded as they will be used as last-chance fallback texture for any tile.
-//    _firstRender = false;
-//
-//    for (int i = 0; i < firstLevelTilesCount; i++) {
-//      Tile* tile = _firstLevelTiles[i];
-//      tile->render(rc,
-//                   *_glState,
-//                   NULL,
-//                   planet,
-//                   cameraNormalizedPosition,
-//                   cameraAngle2HorizonInRadians,
-//                   cameraFrustumInModelCoordinates,
-//                   &_statistics,
-//                   _verticalExaggeration,
-//                   layerTilesRenderParameters,
-//                   _texturizer,
-//                   _tilesRenderParameters,
-//                   _lastSplitTimer,
-//                   _elevationDataProvider,
-//                   _tessellator,
-//                   _tileRasterizer,
-//                   _layerSet,
-//                   _renderedSector,
-//                   _firstRender, /* if first render, force full render */
-//                   _tileDownloadPriority,
-//                   texWidthSquared,
-//                   texHeightSquared,
-//                   nowInMS,
-//                   _renderTileMeshes,
-//                   _logTilesPetitions,
-//                   _tileRenderingListener);
-//    }
-//  }
-//  else {
 
-    std::vector<Tile*> toVisit;
-//    for (int i = 0; i < firstLevelTilesCount; i++) {
-//      toVisit.push_back(_firstLevelTiles[i]);
-//    }
+  if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
+    // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
+    // loaded as they will be used as last-chance fallback texture for any tile.
 
-
-//  int iteration = 1;
-//  int visitied = firstLevelTilesCount;
-
-//  ILogger::instance()->logInfo("Rendering _firstLevelTiles iteration #%d, visiting %d tiles",
-//                               iteration,
-//                               firstLevelTilesCount);
-
-  const bool forceFirstLevelRender = _firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart;
-  for (int i = 0; i < firstLevelTilesCount; i++) {
-    Tile* tile = _firstLevelTiles[i];
-    tile->render(rc,
-                 *_glState,
-                 forceFirstLevelRender ? NULL : &toVisit,
-                 planet,
-                 cameraNormalizedPosition,
-                 cameraAngle2HorizonInRadians,
-                 cameraFrustumInModelCoordinates,
-                 &_statistics,
-                 _verticalExaggeration,
-                 layerTilesRenderParameters,
-                 _texturizer,
-                 _tilesRenderParameters,
-                 _lastSplitTimer,
-                 _elevationDataProvider,
-                 _tessellator,
-                 _tileRasterizer,
-                 _layerSet,
-                 _renderedSector,
-                 _firstRender, /* if first render, forceFullRender */
-                 _tileDownloadPriority,
-                 texWidthSquared,     //SENDING SQUARED TEX SIZE
-                 texHeightSquared,
-                 nowInMS,
-                 _renderTileMeshes,
-                 _logTilesPetitions,
-                 _tileRenderingListener,
-                 false /* visibility has to be tested for _firstLevelTiles  */
-                 );
-  }
-  _firstRender = false;
-
-  std::vector<Tile*> toVisitInNextIteration;
-
-  while (!toVisit.empty()) {
-//    iteration++;
-//    visitied += toVisit.size();
-    //ILogger::instance()->logInfo("Render iteration #%d, visiting %d tiles", iteration, toVisit.size());
-
-    toVisitInNextIteration.clear();
-    const int toVisitSize = toVisit.size();
-    for (int i = 0; i < toVisitSize; i++) {
-      Tile* tile = toVisit[i];
-
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      Tile* tile = _firstLevelTiles[i];
       tile->render(rc,
                    *_glState,
-                   &toVisitInNextIteration,
+                   NULL,
                    planet,
                    cameraNormalizedPosition,
                    cameraAngle2HorizonInRadians,
@@ -752,30 +662,76 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _tileRasterizer,
                    _layerSet,
                    _renderedSector,
-                   _firstRender, /* if first render, forceFullRender */
+                   _firstRender, /* if first render, force full render */
                    _tileDownloadPriority,
-                   texWidthSquared,     //SENDING SQUARED TEX SIZE
+                   texWidthSquared,
                    texHeightSquared,
                    nowInMS,
                    _renderTileMeshes,
                    _logTilesPetitions,
-                   _tileRenderingListener,
-                   true /* Only the visible tiles are present in toVisit list */
+                   _tileRenderingListener
+                   //false // visibility was not tested for _firstLevelTiles
                    );
     }
 
+    _firstRender = false;
+  }
+  else {
+    std::vector<Tile*> toVisit;
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      toVisit.push_back(_firstLevelTiles[i]);
+    }
+
+    bool firstIteration = true;
+    std::vector<Tile*> toVisitInNextIteration;
+    while (!toVisit.empty()) {
+      toVisitInNextIteration.clear();
+
+      const int toVisitSize = toVisit.size();
+      for (int i = 0; i < toVisitSize; i++) {
+        Tile* tile = toVisit[i];
+
+        tile->render(rc,
+                     *_glState,
+                     &toVisitInNextIteration,
+                     planet,
+                     cameraNormalizedPosition,
+                     cameraAngle2HorizonInRadians,
+                     cameraFrustumInModelCoordinates,
+                     &_statistics,
+                     _verticalExaggeration,
+                     layerTilesRenderParameters,
+                     _texturizer,
+                     _tilesRenderParameters,
+                     _lastSplitTimer,
+                     _elevationDataProvider,
+                     _tessellator,
+                     _tileRasterizer,
+                     _layerSet,
+                     _renderedSector,
+                     _firstRender, /* if first render, forceFullRender */
+                     _tileDownloadPriority,
+                     texWidthSquared,
+                     texHeightSquared,
+                     nowInMS,
+                     _renderTileMeshes,
+                     _logTilesPetitions,
+                     _tileRenderingListener
+                     //!firstIteration
+                     );
+
+        firstIteration = false;
+      }
+
 #ifdef C_CODE
-    toVisit = toVisitInNextIteration;
+      toVisit = toVisitInNextIteration;
 #endif
 #ifdef JAVA_CODE
-    toVisit.clear();
-    toVisit.addAll( toVisitInNextIteration );
+      toVisit.clear();
+      toVisit.addAll(toVisitInNextIteration);
 #endif
+    }
   }
-
-  //ILogger::instance()->logInfo("Render after %d iterations, visited %d tiles", iteration, visitied);
-
-//  }
 
   if (_showStatistics) {
     _statistics.log( rc->getLogger() );

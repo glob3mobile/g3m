@@ -90,12 +90,6 @@ _rendered(false),
 _tileRenderingListener(NULL),
 _id( createTileId(level, row, column) )
 {
-  //  int __remove_tile_print;
-  //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
-  //         getKey().description().c_str(),
-  //         _sector._deltaLatitude.description().c_str(),
-  //         _sector._deltaLongitude.description().c_str()
-  //         );
 }
 
 Tile::~Tile() {
@@ -609,8 +603,7 @@ void Tile::render(const G3MRenderContext* rc,
                   double nowInMS,
                   const bool renderTileMeshes,
                   bool logTilesPetitions,
-                  TileRenderingListener* tileRenderingListener,
-                  bool visibilityAlreadyTested) {
+                  TileRenderingListener* tileRenderingListener) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -621,8 +614,7 @@ void Tile::render(const G3MRenderContext* rc,
 
   bool rendered = false;
 
-  if (visibilityAlreadyTested ||
-      isVisible(rc,
+  if (isVisible(rc,
                 planet,
                 cameraNormalizedPosition,
                 cameraAngle2HorizonInRadians,
@@ -691,18 +683,18 @@ void Tile::render(const G3MRenderContext* rc,
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
 
-        if (subTile->isVisible(rc,
-                               planet,
-                               cameraNormalizedPosition,
-                               cameraAngle2HorizonInRadians,
-                               cameraFrustumInModelCoordinates,
-                               elevationDataProvider,
-                               renderedSector,
-                               tessellator,
-                               layerTilesRenderParameters,
-                               tilesRenderParameters)) {
+//        if (subTile->isVisible(rc,
+//                               planet,
+//                               cameraNormalizedPosition,
+//                               cameraAngle2HorizonInRadians,
+//                               cameraFrustumInModelCoordinates,
+//                               elevationDataProvider,
+//                               renderedSector,
+//                               tessellator,
+//                               layerTilesRenderParameters,
+//                               tilesRenderParameters)) {
           toVisitInNextIteration->push_back(subTile);
-        }
+//        }
       }
     }
   }
@@ -802,10 +794,6 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
 
   return subTiles;
 }
-
-//const TileKey Tile::getKey() const {
-//  return TileKey(_level, _row, _column);
-//}
 
 const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
   if (_sector.contains(position._latitude, position._longitude)) {
