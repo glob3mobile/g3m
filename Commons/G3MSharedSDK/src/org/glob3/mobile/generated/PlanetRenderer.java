@@ -469,7 +469,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       {
         Tile tile = _firstLevelTiles.get(i);
         tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
-                     //false // visibility was not tested for _firstLevelTiles
       }
   
       _firstRender = false;
@@ -482,7 +481,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         toVisit.add(_firstLevelTiles.get(i));
       }
   
-      boolean firstIteration = true;
       java.util.ArrayList<Tile> toVisitInNextIteration = new java.util.ArrayList<Tile>();
       while (!toVisit.isEmpty())
       {
@@ -494,9 +492,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           Tile tile = toVisit.get(i);
   
           tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, forceFullRender
-                       //!firstIteration
-  
-          firstIteration = false;
         }
   
         toVisit.clear();

@@ -689,19 +689,7 @@ public class Tile
         for (int i = 0; i < subTilesSize; i++)
         {
           Tile subTile = subTiles.get(i);
-  
-  //        if (subTile->isVisible(rc,
-  //                               planet,
-  //                               cameraNormalizedPosition,
-  //                               cameraAngle2HorizonInRadians,
-  //                               cameraFrustumInModelCoordinates,
-  //                               elevationDataProvider,
-  //                               renderedSector,
-  //                               tessellator,
-  //                               layerTilesRenderParameters,
-  //                               tilesRenderParameters)) {
-            toVisitInNextIteration.add(subTile);
-  //        }
+          toVisitInNextIteration.add(subTile);
         }
       }
     }
