@@ -55,6 +55,6 @@ std::vector<GEO2DPolygonData*>* GEO2DMultiPolygonGeometry::copy(const std::vecto
 }
 
 
-const GEO2DMultiPolygonGeometry* GEO2DMultiPolygonGeometry::deepCopy() const {
+GEO2DMultiPolygonGeometry* GEO2DMultiPolygonGeometry::deepCopy() const {
   return new GEO2DMultiPolygonGeometry(copy(_polygonsData));
 }

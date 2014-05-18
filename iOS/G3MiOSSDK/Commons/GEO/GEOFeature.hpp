@@ -55,7 +55,7 @@ public:
 
   long long getCoordinatesCount() const;
 
-  const GEOFeature* deepCopy() const;
+  GEOFeature* deepCopy() const;
 
 };
 

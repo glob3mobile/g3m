@@ -46,6 +46,7 @@ private:
   private IMathUtils   _mu;
   private IStringUtils _su;
 #endif
+  mutable TileImageProvider* _tileImageProvider;
 
   TiledVectorLayer(const GEORasterSymbolizer*        symbolizer,
                    const std::string&                urlTemplate,

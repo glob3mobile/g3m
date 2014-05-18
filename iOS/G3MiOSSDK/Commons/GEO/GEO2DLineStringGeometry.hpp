@@ -47,7 +47,7 @@ public:
     return _coordinatesData->size();
   }
 
-  const GEO2DLineStringGeometry* deepCopy() const;
+  GEO2DLineStringGeometry* deepCopy() const;
 
 };
 

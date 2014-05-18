@@ -44,7 +44,7 @@ public:
     return _polygonsData->size();
   }
 
-  const GEO2DMultiPolygonGeometry* deepCopy() const;
+  GEO2DMultiPolygonGeometry* deepCopy() const;
 
 };
 

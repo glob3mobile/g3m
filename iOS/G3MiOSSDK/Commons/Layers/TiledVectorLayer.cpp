@@ -34,6 +34,7 @@ _urlTemplate(urlTemplate),
 _dataSector(dataSector),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
+_tileImageProvider(NULL),
 _su(NULL),
 _mu(NULL)
 {
@@ -41,6 +42,9 @@ _mu(NULL)
 
 TiledVectorLayer::~TiledVectorLayer() {
   delete _symbolizer;
+  if (_tileImageProvider != NULL) {
+    _tileImageProvider->_release();
+  }
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -122,9 +126,13 @@ std::vector<Petition*> TiledVectorLayer::createTileMapPetitions(const G3MRenderC
 
 TileImageProvider* TiledVectorLayer::createTileImageProvider(const G3MRenderContext* rc,
                                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const {
-  return new TiledVectorLayerTileImageProvider(this,
-                                               rc->getDownloader(),
-                                               rc->getThreadUtils());
+  if (_tileImageProvider == NULL) {
+    _tileImageProvider = new TiledVectorLayerTileImageProvider(this,
+                                                               rc->getDownloader(),
+                                                               rc->getThreadUtils());
+  }
+  _tileImageProvider->_retain();
+  return _tileImageProvider;
 }
 
 const TileImageContribution* TiledVectorLayer::contribution(const Tile* tile) const {

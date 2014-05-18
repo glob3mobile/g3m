@@ -48,6 +48,6 @@ long long GEO2DMultiLineStringGeometry::getCoordinatesCount() const {
   return _coordinatesArrayData->getCoordinatesCount();
 }
 
-const GEO2DMultiLineStringGeometry* GEO2DMultiLineStringGeometry::deepCopy() const {
+GEO2DMultiLineStringGeometry* GEO2DMultiLineStringGeometry::deepCopy() const {
   return new GEO2DMultiLineStringGeometry(_coordinatesArrayData);
 }

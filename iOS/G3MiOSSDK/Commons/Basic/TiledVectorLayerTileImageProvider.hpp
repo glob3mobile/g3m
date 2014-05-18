@@ -21,6 +21,7 @@ class GEORasterSymbolizer;
 #include "Vector2I.hpp"
 #include "Sector.hpp"
 #include "IImageListener.hpp"
+#include <list>
 
 class TiledVectorLayerTileImageProvider : public TileImageProvider {
 private:
@@ -47,7 +48,6 @@ private:
     const URL       _url;
     ImageAssembler* _imageAssembler;
     IByteBuffer*    _buffer;
-//    const bool      _isBSON;
     GEOObject*      _geoObject;
     ICanvas*        _canvas;
     const int       _imageWidth;
@@ -64,12 +64,13 @@ private:
     const bool        _tileIsMercator;
     const int         _tileLevel;
 
-//    const std::string _imageId;
+    void rasterizeGEOObject();
 
   public:
     GEOJSONBufferRasterizer(ImageAssembler* imageAssembler,
                             const URL& url,
                             IByteBuffer* buffer,
+                            GEOObject*   geoObject,
                             const int imageWidth,
                             const int imageHeight,
                             const GEORasterSymbolizer* symbolizer,
@@ -80,6 +81,7 @@ private:
     _imageAssembler(imageAssembler),
     _url(url),
     _buffer(buffer),
+    _geoObject(geoObject),
     _imageWidth(imageWidth),
     _imageHeight(imageHeight),
     _symbolizer(symbolizer),
@@ -89,7 +91,6 @@ private:
     _tileLevel(tileLevel),
 //    _imageId(imageId),
 //    _isBSON(isBSON),
-    _geoObject(NULL),
     _canvas(NULL)
     {
     }
@@ -208,6 +209,9 @@ private:
 
     void imageCreated(const IImage* image,
                       const std::string& imageId);
+
+//    void geoObjectDownloaded(const GEOObject* geoObject,
+//                             const GEORasterSymbolizer* symbolizer);
   };
 
 
@@ -216,6 +220,26 @@ private:
   const IThreadUtils*     _threadUtils;
 
   std::map<const std::string, ImageAssembler*> _assemblers;
+
+  class CacheEntry {
+  public:
+    const std::string _path;
+    const GEOObject*  _geoObject;
+
+    CacheEntry(const std::string& path,
+               const GEOObject*   geoObject) :
+    _path(path),
+    _geoObject(geoObject)
+    {
+    }
+
+    ~CacheEntry();
+  };
+
+  std::list<CacheEntry*> _geoObjectsCache;
+
+protected:
+  ~TiledVectorLayerTileImageProvider();
 
 public:
 

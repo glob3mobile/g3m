@@ -65,7 +65,7 @@ long long GEOFeature::getCoordinatesCount() const {
   return _geometry->getCoordinatesCount();
 }
 
-const GEOFeature* GEOFeature::deepCopy() const {
+GEOFeature* GEOFeature::deepCopy() const {
   return new GEOFeature((_id         == NULL) ? NULL : _id->deepCopy(),
                         (_geometry   == NULL) ? NULL : _geometry->deepCopy(),
                         (_properties == NULL) ? NULL : _properties->deepCopy());

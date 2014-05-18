@@ -39,7 +39,7 @@ public:
 
   virtual long long getCoordinatesCount() const = 0;
 
-  virtual const GEOObject* deepCopy() const = 0;
+  virtual GEOObject* deepCopy() const = 0;
 
 };
 
