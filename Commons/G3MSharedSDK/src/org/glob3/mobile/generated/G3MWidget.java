@@ -678,7 +678,6 @@ public class G3MWidget implements ChangedRendererInfoListener
     _forceBusyRenderer = forceBusyRenderer;
   }
 
-<<<<<<< HEAD
   public final Vector3D getScenePositionForPixel(int x, int y)
   {
     zRender();
@@ -746,7 +745,6 @@ public class G3MWidget implements ChangedRendererInfoListener
   }
 
 
-=======
   //void notifyChangedInfo() const;
 
   public final void setInfoDisplay(InfoDisplay infoDisplay)
@@ -791,7 +789,6 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
->>>>>>> origin/purgatory
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
@@ -861,15 +858,11 @@ public class G3MWidget implements ChangedRendererInfoListener
 
   private boolean _forceBusyRenderer;
 
-<<<<<<< HEAD
-  private int _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
-
-  private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider)
-=======
   private InfoDisplay _infoDisplay;
 
+  private int _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay)
->>>>>>> origin/purgatory
   {
      _frameTasksExecutor = new FrameTasksExecutor();
      _effectsScheduler = new EffectsScheduler();
@@ -915,11 +908,8 @@ public class G3MWidget implements ChangedRendererInfoListener
      _initialCameraPositionHasBeenSet = false;
      _forceBusyRenderer = false;
      _nFramesBeetweenProgramsCleanUp = 500;
-<<<<<<< HEAD
      _zRenderCounter = -1;
-=======
      _infoDisplay = infoDisplay;
->>>>>>> origin/purgatory
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);

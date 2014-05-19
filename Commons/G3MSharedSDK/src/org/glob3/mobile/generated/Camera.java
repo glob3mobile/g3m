@@ -129,13 +129,8 @@ public class Camera
 
   public final Vector3D pixel2Ray(Vector2I pixel)
   {
-<<<<<<< HEAD
     final double px = pixel._x + 0.5;
-    final double py = _height - pixel._y - 0.5;
-=======
-    final int px = pixel._x;
-    final int py = _viewPortHeight - pixel._y;
->>>>>>> origin/purgatory
+    final double py = _viewPortHeight - pixel._y - 0.5;
     final Vector3D pixel3D = new Vector3D(px, py, 0);
   
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
@@ -155,7 +150,7 @@ public class Camera
   public final Vector3D pixel2Ray(Vector3D pixel3D)
   {
   
-    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
       return obj;
@@ -173,35 +168,27 @@ public class Camera
   {
     final Vector2D p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
-<<<<<<< HEAD
     Vector3D direction = point.sub(getCartesianPosition());
     double angle = direction.angleBetween(getViewDirection())._degrees;
     if (angle > 90) //Projecting point behind the camera
     {
-      return new Vector2F((float)-p._x, (float)-(_height - p._y));
+      return new Vector2F((float)-p._x, (float)-(_viewPortHeight - p._y));
     }
   
-    return new Vector2F((float) p._x, (float)(_height - p._y));
-=======
     return new Vector2F((float) p._x, (float)(_viewPortHeight - p._y));
->>>>>>> origin/purgatory
   }
   public final Vector2F point2Pixel(Vector3F point)
   {
     final Vector2F p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
-<<<<<<< HEAD
     Vector3D direction = point.asVector3D().sub(getCartesianPosition());
     double angle = direction.angleBetween(getViewDirection())._degrees;
     if (angle > 90) //Projecting point behind the camera
     {
-      return new Vector2F((float)-p._x, (float)-(_height - p._y));
+      return new Vector2F((float)-p._x, (float)-(_viewPortHeight - p._y));
     }
   
-    return new Vector2F(p._x, (_height - p._y));
-=======
     return new Vector2F(p._x, (_viewPortHeight - p._y));
->>>>>>> origin/purgatory
   }
 
   public final int getViewPortWidth()

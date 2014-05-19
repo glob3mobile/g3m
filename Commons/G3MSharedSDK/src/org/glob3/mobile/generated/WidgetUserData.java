@@ -54,11 +54,8 @@ package org.glob3.mobile.generated;
 //class PlanetRenderer;
 //class ErrorRenderer;
 //class G3MRenderContext;
-<<<<<<< HEAD
 //class Vector3D;
-=======
 //class InfoDisplay;
->>>>>>> origin/purgatory
 
 
 
