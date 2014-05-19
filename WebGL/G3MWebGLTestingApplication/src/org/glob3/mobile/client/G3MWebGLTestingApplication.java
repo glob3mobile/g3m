@@ -33,8 +33,8 @@ import org.glob3.mobile.generated.GEO2DPolygonGeometry;
 import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
 import org.glob3.mobile.generated.GEOGeometry;
 import org.glob3.mobile.generated.GEOMultiLineRasterSymbol;
-import org.glob3.mobile.generated.GEORasterLineSymbol;
-import org.glob3.mobile.generated.GEORasterPolygonSymbol;
+//import org.glob3.mobile.generated.GEORasterLineSymbol;
+//import org.glob3.mobile.generated.GEORasterPolygonSymbol;
 import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.GEOSymbol;
 import org.glob3.mobile.generated.GEOSymbolizer;
@@ -260,7 +260,7 @@ public class G3MWebGLTestingApplication
                Angle.fromDegrees(720), //
                Angle.zero());
 
-      final GEOSymbolizer defaultSymbolizer = new GEOSymbolizer() {
+ /*     final GEOSymbolizer defaultSymbolizer = new GEOSymbolizer() {
          @Override
          public ArrayList<GEOSymbol> createSymbols(final GEO2DPointGeometry geometry) {
             return new ArrayList<GEOSymbol>(0);
@@ -361,6 +361,8 @@ public class G3MWebGLTestingApplication
             return symbols;
          }
       };
+      
+      
       final GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
 
       final ShapesRenderer shapesRenderer = null;
@@ -375,6 +377,7 @@ public class G3MWebGLTestingApplication
       builder.addRenderer(geoRenderer);
 
       builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+      */
 
 
       //      final GInitializationTask initializationTask = new GInitializationTask() {
@@ -972,7 +975,7 @@ public class G3MWebGLTestingApplication
                   periodicalTasks, //
                   userData, //
                   lighting, //
-                  initialCameraPositionProvider);
+                  initialCameraPositionProvider, null);
       }
    }
 
