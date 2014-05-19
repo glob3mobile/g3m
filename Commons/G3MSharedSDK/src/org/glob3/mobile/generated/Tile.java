@@ -472,6 +472,27 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
+  private void setRendered(boolean rendered, TileRenderingListener tileRenderingListener)
+  {
+    if (_rendered != rendered)
+    {
+      _rendered = rendered;
+  
+      if (tileRenderingListener != null)
+      {
+        if (_rendered)
+        {
+          tileRenderingListener.startRendering(this);
+        }
+        else
+        {
+          tileRenderingListener.stopRendering(this);
+        }
+      }
+    }
+  }
+
+
   public final Sector _sector ;
   public final boolean _mercator;
   public final int _level;
@@ -704,11 +725,23 @@ public class Tile
         }
       }
   
+      setRendered(rendered, tileRenderingListener);
   
       return isRawRender; //RETURN ISRAWRENDER
     }
-    else
-    {
+  
+    //Not rendering, prunning will be performed
+  
+    setRendered(rendered, tileRenderingListener);
+    setIsVisible(false, texturizer);
+    prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
+    return false;
+  
+  /*
+   //// ESTA PARTE FUE CAMBIADA POR JM EN RAMA SENDEROS
+      return isRawRender; //RETURN ISRAWRENDER
+    }
+    else {
       setIsVisible(false, texturizer);
   
       prune(texturizer, elevationDataProvider);
@@ -718,24 +751,21 @@ public class Tile
       return false; //RETURN ISRAWRENDER
     }
   
-    if (_rendered != rendered)
-    {
+    if (_rendered != rendered) {
       _rendered = rendered;
   
-      if (tileRenderingListener != null)
-      {
-        if (_rendered)
-        {
-          tileRenderingListener.startRendering(this);
+      if (tileRenderingListener != NULL) {
+        if (_rendered) {
+          tileRenderingListener->startRendering(this);
           _tileRenderingListener = tileRenderingListener;
         }
-        else
-        {
-          tileRenderingListener.stopRendering(this);
-          _tileRenderingListener = null;
+        else {
+          tileRenderingListener->stopRendering(this);
+          _tileRenderingListener = NULL;
         }
       }
     }
+   */
   
   }
 
@@ -839,7 +869,7 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
   //  return TileKey(_level, _row, _column);
   //}
   
-  public final Tile getDeepestTileContaining(Geodetic3D position)
+  public final Tile Tile.getDeepestTileContaining(Geodetic3D position)
   {
     if (_sector.contains(position._latitude, position._longitude))
     {
@@ -1198,3 +1228,4 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
+
