@@ -239,8 +239,8 @@ public class VectorialLOD {
     *           tolerance, and so on less vertex filtered and more vertex generate for the resultant geometry. Usual values
     *           between 1.0 to 10.0.
     * @param geomFilterCriteria
-    *           : filter criteria using pure database query format that will be included in a where clause. i.e.
-    *           "\"continent\" like 'Euro%' AND \"pop_est\" > 10000000"
+    *           : filter criteria using pure database query format that will be included in a where clause. i.e. "continent" like
+    *           'Euro%' AND "pop_est" > 10000000"
     * @param includeProperties
     *           : fields/columns associated to the vectorial data that shall be included as feature properties in the resultant
     *           geoJson data.
@@ -268,7 +268,8 @@ public class VectorialLOD {
             ILogger.instance().logError("Invalid data for sector: " + sector.toString() + ". ");
             return null;
          }
-         //         System.out.println("fullQuery: " + fullQuery);
+
+         //System.out.println("fullQuery: " + fullQuery);
 
          // first attempt: usual parameters
          geoJsonResult = executeQuery(fullQuery);
@@ -367,6 +368,7 @@ public class VectorialLOD {
    }
 
 
+   //-- Release 3.0
    public static String buildSelectQuery(final String dataSourceTable,
                                          final Sector sector,
                                          final float qualityFactor,
@@ -374,12 +376,17 @@ public class VectorialLOD {
                                          final String geomFilterCriteria,
                                          final String... includeProperties) {
 
-      final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.";
-      final String baseQuery1 = "))::json As geometry, row_to_json((SELECT l FROM (SELECT ";
-      final String baseQuery2 = ") As l)) As properties FROM (SELECT * FROM ";
-      final String baseQuery3 = ")) As lg WHERE ST_Intersects(";
-      final String baseQuery4 = " WHERE (";
-      final String baseQuery5 = ")) As f ) As fc;";
+      //SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326)),0.091) as sg, "mapcolor7", "scalerank" FROM (SELECT * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326))) as ff WHERE (ST_Area(Box2D(sg))>0.078 and true) ) As lg ) As f ) As fc;
+
+      final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT ";
+      final String baseQuery1 = ") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
+      final String baseQuery2 = ") as sg, * FROM ";
+      final String baseQuery3 = " WHERE ST_Intersects(";
+      final String baseQuery4 = ")) as ff WHERE (";
+      final String baseQuery5 = ")) As lg ) As f ) As fc";
+
+      // FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326)),0.091) as sg, "mapcolor7", "scalerank" FROM (SELECT * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326))) as ff WHERE (ST_Area(Box2D(sg))>0.078 and true) ) As lg ) As f ) As fc;
+
 
       final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
       final String bboxQuery = buildSectorQuery(extendedSector);
@@ -395,18 +402,107 @@ public class VectorialLOD {
       //         System.out.println("FILTER CRITERIA: " + filterCriteria);
 
       //-- full query final where first cut, second simplify
-      final String fullQuery = baseQuery0 + _theGeomColumnName + "," + bboxQuery + ")," + simplifyTolerance + baseQuery1
-                               + propsQuery + baseQuery2 + dataSourceTable + baseQuery4 + filterCriteria + baseQuery3
-                               + _theGeomColumnName + "," + bboxQuery + baseQuery5;
+      final String fullQuery = baseQuery0 + propsQuery + baseQuery1 + _theGeomColumnName + "," + bboxQuery + "),"
+                               + simplifyTolerance + baseQuery2 + dataSourceTable + baseQuery3 + _theGeomColumnName + ","
+                               + bboxQuery + baseQuery4 + filterCriteria + baseQuery5;
 
       //         System.out.println("fullQuery: " + fullQuery);
 
       // -- ejemplo query --
-      // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
+      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326)),0.091) as sg, * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326))) as ff WHERE (ST_Area(Box2D(sg))>0.078 and true) ) As lg ) As f ) As fc;
       //-------------------
 
       return fullQuery;
    }
+
+
+   //   //-- Release 2.0
+   //   public static String buildSelectQuery(final String dataSourceTable,
+   //                                         final Sector sector,
+   //                                         final float qualityFactor,
+   //                                         final double areaFactor,
+   //                                         final String geomFilterCriteria,
+   //                                         final String... includeProperties) {
+   //
+   //      //SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326)),0.091) as sg, * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326))) as ff WHERE (ST_Area(Box2D(sg))>0.078 and true) ) As lg ) As f ) As fc;
+   //
+   //      final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT ";
+   //      final String baseQuery1 = ") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
+   //      final String baseQuery2 = ") as sg, * FROM ";
+   //      final String baseQuery3 = " WHERE ST_Intersects(";
+   //      final String baseQuery4 = ")) as ff WHERE (";
+   //      final String baseQuery5 = ")) As lg ) As f ) As fc";
+   //
+   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
+   //      final String bboxQuery = buildSectorQuery(extendedSector);
+   //
+   //      if (bboxQuery == null) {
+   //         return null;
+   //      }
+   //
+   //      final String propsQuery = buildPropertiesQuery(includeProperties);
+   //      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
+   //      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
+   //
+   //      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
+   //
+   //      //-- full query final where first cut, second simplify
+   //      final String fullQuery = baseQuery0 + propsQuery + baseQuery1 + _theGeomColumnName + "," + bboxQuery + "),"
+   //                               + simplifyTolerance + baseQuery2 + dataSourceTable + baseQuery3 + _theGeomColumnName + ","
+   //                               + bboxQuery + baseQuery4 + filterCriteria + baseQuery5;
+   //
+   //      //         System.out.println("fullQuery: " + fullQuery);
+   //
+   //      // -- ejemplo query --
+   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326)),0.091) as sg, * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326))) as ff WHERE (ST_Area(Box2D(sg))>0.078 and true) ) As lg ) As f ) As fc;
+   //      //-------------------
+   //
+   //      return fullQuery;
+   //   }
+
+
+   //    //-- Release 1.0
+   //   public static String buildSelectQuery(final String dataSourceTable,
+   //                                         final Sector sector,
+   //                                         final float qualityFactor,
+   //                                         final double areaFactor,
+   //                                         final String geomFilterCriteria,
+   //                                         final String... includeProperties) {
+   //
+   //      final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.";
+   //      final String baseQuery1 = "))::json As geometry, row_to_json((SELECT l FROM (SELECT ";
+   //      final String baseQuery2 = ") As l)) As properties FROM (SELECT * FROM ";
+   //      final String baseQuery3 = ")) As lg WHERE ST_Intersects(";
+   //      final String baseQuery4 = " WHERE (";
+   //      final String baseQuery5 = ")) As f ) As fc;";
+   //
+   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
+   //      final String bboxQuery = buildSectorQuery(extendedSector);
+   //
+   //      if (bboxQuery == null) {
+   //         return null;
+   //      }
+   //
+   //      final String propsQuery = buildPropertiesQuery(includeProperties);
+   //      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
+   //      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
+   //
+   //      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
+   //
+   //      //-- full query final where first cut, second simplify
+   //      final String fullQuery = baseQuery0 + _theGeomColumnName + "," + bboxQuery + ")," + simplifyTolerance + baseQuery1
+   //                               + propsQuery + baseQuery2 + dataSourceTable + baseQuery4 + filterCriteria + baseQuery3
+   //                               + _theGeomColumnName + "," + bboxQuery + baseQuery5;
+   //
+   //      //         System.out.println("fullQuery: " + fullQuery);
+   //
+   //      // -- ejemplo query --
+   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-94.5,-80.4371420605902), ST_Point(-40.5,-65.2474530233411)),4326)),0.09130158))::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7") As l)) As properties FROM (SELECT * FROM ne_10m_admin_0_countries WHERE (ST_Area(Box2D(the_geom))>0.07822518434797841 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-94.5,-80.4371420605902), ST_Point(-40.5,-65.2474530233411)),4326))) As f ) As fc;
+   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(171.0,-92.34867395568881), ST_Point(180.0,-64.16458648742304)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-92.34867395568881), ST_Point(-81.0,-64.16458648742304)),4326))),0.1816682))::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7") As l)) As properties FROM (SELECT * FROM ne_10m_admin_0_countries WHERE (ST_Area(Box2D(the_geom))>0.2902897396356331 and true)) As lg WHERE ST_Intersects(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(171.0,-92.34867395568881), ST_Point(180.0,-64.16458648742304)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-92.34867395568881), ST_Point(-81.0,-64.16458648742304)),4326)))) As f ) As fc;
+   //      //-------------------
+   //
+   //      return fullQuery;
+   //   }
 
 
    //   /**
@@ -741,8 +837,11 @@ public class VectorialLOD {
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
       final double factor = areaFactor * areaFactor;
 
-      return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
-             + " and " + filterCriteria;
+      //ST_Area(Box2D(sg))>0.078 and true
+      return "ST_Area(Box2D(sg))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
+
+      //      return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
+      //             + " and " + filterCriteria;
 
       //      return "ST_Area(Box2D(ST_Intersection(" + _theGeomColumnName + "," + bboxQuery + ")))>"
       //             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
