@@ -51,7 +51,6 @@ public class GEOFeature extends GEOObject
        _geometry.dispose();
     if (_properties != null)
        _properties.dispose();
-  
     super.dispose();
   }
 
@@ -83,7 +82,7 @@ public class GEOFeature extends GEOObject
 
   public final long getCoordinatesCount()
   {
-    return _geometry.getCoordinatesCount();
+    return (_geometry == null) ? 0 : _geometry.getCoordinatesCount();
   }
 
   public final GEOFeature deepCopy()

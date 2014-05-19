@@ -87,7 +87,7 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
 
   public final long getCoordinatesCount()
   {
-    return _polygonsData.size();
+    return (_polygonsData == null) ? 0 : _polygonsData.size();
   }
 
   public final GEO2DMultiPolygonGeometry deepCopy()

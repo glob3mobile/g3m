@@ -65,7 +65,7 @@ public class GEO2DPolygonGeometry extends GEOGeometry2D
 
   public final long getCoordinatesCount()
   {
-    return _polygonData.getCoordinatesCount();
+    return (_polygonData == null) ? 0 : _polygonData.getCoordinatesCount();
   }
 
   public final GEO2DPolygonGeometry deepCopy()
