@@ -41,7 +41,7 @@ public:
   }
 
   long long getCoordinatesCount() const {
-    return _polygonsData->size();
+    return (_polygonsData == NULL) ? 0 : _polygonsData->size();
   }
 
   GEO2DMultiPolygonGeometry* deepCopy() const;

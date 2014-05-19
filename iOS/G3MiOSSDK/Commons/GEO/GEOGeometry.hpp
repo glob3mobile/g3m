@@ -33,7 +33,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   void setFeature(GEOFeature* feature) const;

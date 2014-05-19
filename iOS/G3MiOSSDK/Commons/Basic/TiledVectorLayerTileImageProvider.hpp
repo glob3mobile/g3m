@@ -71,6 +71,8 @@ private:
 
     void rasterizeGEOObject();
 
+    bool _deleteGEOObject;
+
   public:
     GEOJSONBufferRasterizer(ImageAssembler* imageAssembler,
                             const URL& url,
@@ -96,7 +98,8 @@ private:
     _tileLevel(tileLevel),
 //    _imageId(imageId),
 //    _isBSON(isBSON),
-    _canvas(NULL)
+    _canvas(NULL),
+    _deleteGEOObject(false)
     {
     }
 

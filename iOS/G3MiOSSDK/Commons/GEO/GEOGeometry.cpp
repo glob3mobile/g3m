@@ -12,10 +12,14 @@
 
 
 void GEOGeometry::setFeature(GEOFeature* feature) const {
-  if (_feature != feature) {
-    delete _feature;
-    _feature = feature;
+//  if (_feature != feature) {
+//    delete _feature;
+//    _feature = feature;
+//  }
+  if (_feature != NULL) {
+    printf("break point on me\n");
   }
+  _feature = feature;
 }
 
 void GEOGeometry::symbolize(const G3MRenderContext* rc,

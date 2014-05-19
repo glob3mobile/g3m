@@ -74,10 +74,8 @@ const std::vector<GEOFeature*> GEOFeatureCollection::copy(const std::vector<GEOF
   const int size = features.size();
   for (int i = 0; i < size; i++) {
     GEOFeature* feature = features[i];
-
     result.push_back( (feature == NULL) ? NULL : feature->deepCopy() );
   }
-
   return result;
 }
 

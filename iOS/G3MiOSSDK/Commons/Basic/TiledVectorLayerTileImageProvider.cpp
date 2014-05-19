@@ -61,18 +61,17 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::rasterizeGEOObj
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground(const G3MContext* context) {
 
-  if (_imageAssembler == NULL) {
-    delete _geoObject;
-    _geoObject = NULL;
-  }
-  else {
+//  if (_imageAssembler == NULL) {
+//    _deleteGEOObject = true;
+//  }
+//  else {
+  if (_imageAssembler != NULL) {
     _canvas = IFactory::instance()->createCanvas();
     _canvas->initialize(_imageWidth, _imageHeight);
 
     if (_geoObject != NULL) {
       rasterizeGEOObject();
-      delete _geoObject;
-      _geoObject = NULL;
+      _deleteGEOObject = true;
     }
     else if (_buffer != NULL) {
       const bool isBSON = IStringUtils::instance()->endsWith(_url._path, "bson");
@@ -134,6 +133,11 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::onPostExecute(c
 
     GEOObject* geoObject = _geoObject;
     _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
+
+    if (_deleteGEOObject) {
+      delete geoObject;
+      geoObject = NULL;
+    }
 
     _imageAssembler->rasterizedGEOObject(_url,
                                          geoObject,

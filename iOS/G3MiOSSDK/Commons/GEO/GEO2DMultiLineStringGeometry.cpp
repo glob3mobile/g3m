@@ -45,7 +45,7 @@ std::vector<GEORasterSymbol*>* GEO2DMultiLineStringGeometry::createRasterSymbols
 }
 
 long long GEO2DMultiLineStringGeometry::getCoordinatesCount() const {
-  return _coordinatesArrayData->getCoordinatesCount();
+  return (_coordinatesArrayData == NULL) ? 0 : _coordinatesArrayData->getCoordinatesCount();
 }
 
 GEO2DMultiLineStringGeometry* GEO2DMultiLineStringGeometry::deepCopy() const {

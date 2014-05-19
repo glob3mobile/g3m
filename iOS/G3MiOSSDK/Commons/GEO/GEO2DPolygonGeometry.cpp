@@ -38,7 +38,7 @@ std::vector<GEORasterSymbol*>* GEO2DPolygonGeometry::createRasterSymbols(const G
 }
 
 long long GEO2DPolygonGeometry::getCoordinatesCount() const {
-  return _polygonData->getCoordinatesCount();
+  return (_polygonData == NULL) ? 0 : _polygonData->getCoordinatesCount();
 }
 
 GEO2DPolygonGeometry* GEO2DPolygonGeometry::deepCopy() const {
