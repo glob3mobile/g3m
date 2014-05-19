@@ -617,34 +617,38 @@ void Tile::render(const G3MRenderContext* rc,
     // TODO: verticalExaggeration changed, invalidate tileExtent, Mesh, etc.
     _verticalExaggeration = verticalExaggeration;
   }
+  
+  const bool tileVisible = isVisible(rc,
+                             planet,
+                             cameraNormalizedPosition,
+                             cameraAngle2HorizonInRadians,
+                             cameraFrustumInModelCoordinates,
+                             elevationDataProvider,
+                             renderedSector,
+                             tessellator,
+                             layerTilesRenderParameters,
+                             tilesRenderParameters);
+  
+  const bool tileMeetsRenderCriteria = meetsRenderCriteria(rc,
+                                                     layerTilesRenderParameters,
+                                                     texturizer,
+                                                     tilesRenderParameters,
+                                                     tilesStatistics,
+                                                     lastSplitTimer,
+                                                     texWidthSquared,
+                                                     texHeightSquared,
+                                                     nowInMS);
 
   bool rendered = false;
 
-  if (isVisible(rc,
-                planet,
-                cameraNormalizedPosition,
-                cameraAngle2HorizonInRadians,
-                cameraFrustumInModelCoordinates,
-                elevationDataProvider,
-                renderedSector,
-                tessellator,
-                layerTilesRenderParameters,
-                tilesRenderParameters)) {
+  if (tileVisible) {
     setIsVisible(true, texturizer);
 
     tilesStatistics->computeVisibleTile(this);
 
     const bool isRawRender = (
                               (toVisitInNextIteration == NULL) ||
-                              meetsRenderCriteria(rc,
-                                                  layerTilesRenderParameters,
-                                                  texturizer,
-                                                  tilesRenderParameters,
-                                                  tilesStatistics,
-                                                  lastSplitTimer,
-                                                  texWidthSquared,
-                                                  texHeightSquared,
-                                                  nowInMS) ||
+                              tileMeetsRenderCriteria ||
                               (tilesRenderParameters->_incrementalTileQuality && !_textureSolved)
                               );
 
@@ -694,8 +698,9 @@ void Tile::render(const G3MRenderContext* rc,
   }
   else {
     setIsVisible(false, texturizer);
-
-    prune(texturizer, elevationDataProvider);
+    if (!tileMeetsRenderCriteria){
+      prune(texturizer, elevationDataProvider);
+    }
     //TODO: AVISAR CAMBIO DE TERRENO
   }
 
