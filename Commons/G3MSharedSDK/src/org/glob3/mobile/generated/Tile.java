@@ -653,15 +653,19 @@ public class Tile
       _verticalExaggeration = verticalExaggeration;
     }
   
+    final boolean tileVisible = isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+  
+    final boolean tileMeetsRenderCriteria = meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
+  
     boolean rendered = false;
   
-    if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
+    if (tileVisible)
     {
       setIsVisible(true, texturizer);
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || tileMeetsRenderCriteria || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {
@@ -703,8 +707,10 @@ public class Tile
     else
     {
       setIsVisible(false, texturizer);
-  
-      prune(texturizer, elevationDataProvider);
+      if (!tileMeetsRenderCriteria)
+      {
+        prune(texturizer, elevationDataProvider);
+      }
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   
