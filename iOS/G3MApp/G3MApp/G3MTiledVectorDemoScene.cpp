@@ -171,9 +171,7 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
                                                  TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(rasterLayer);
 
-
-#warning TODO move vector-tiles data to any internet server
-  const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
   const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
                                                  47.803029, 10.492264);
   const int firstLevel = 2;

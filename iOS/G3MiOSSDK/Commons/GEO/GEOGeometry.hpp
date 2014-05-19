@@ -33,7 +33,6 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
 
   void setFeature(GEOFeature* feature) const;
@@ -49,7 +48,7 @@ public:
                  MarksRenderer*          marksRenderer,
                  GEOTileRasterizer*      geoTileRasterizer) const;
 
-  virtual const GEOGeometry* deepCopy() const = 0;
+  virtual GEOGeometry* deepCopy() const = 0;
 
 };
 

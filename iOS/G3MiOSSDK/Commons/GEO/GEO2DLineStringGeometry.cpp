@@ -30,6 +30,6 @@ std::vector<GEORasterSymbol*>* GEO2DLineStringGeometry::createRasterSymbols(cons
   return symbolizer->createSymbols(this);
 }
 
-const GEO2DLineStringGeometry* GEO2DLineStringGeometry::deepCopy() const {
+GEO2DLineStringGeometry* GEO2DLineStringGeometry::deepCopy() const {
   return new GEO2DLineStringGeometry(_coordinatesData);
 }

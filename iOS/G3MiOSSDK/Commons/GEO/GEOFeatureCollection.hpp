@@ -21,7 +21,9 @@ class GEOSymbolizer;
 
 class GEOFeatureCollection : public GEOObject {
 private:
-  const std::vector<GEOFeature*> _features;
+  std::vector<GEOFeature*> _features;
+
+  static const std::vector<GEOFeature*> copy(const std::vector<GEOFeature*>& features);
 
 public:
   GEOFeatureCollection(const std::vector<GEOFeature*>& features) :
@@ -48,7 +50,7 @@ public:
 
   long long getCoordinatesCount() const;
 
-  const GEOFeatureCollection* deepCopy() const;
+  GEOFeatureCollection* deepCopy() const;
 
 };
 

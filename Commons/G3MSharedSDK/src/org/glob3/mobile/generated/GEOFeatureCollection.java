@@ -26,7 +26,21 @@ package org.glob3.mobile.generated;
 
 public class GEOFeatureCollection extends GEOObject
 {
-  private final java.util.ArrayList<GEOFeature> _features = new java.util.ArrayList<GEOFeature>();
+  private java.util.ArrayList<GEOFeature> _features = new java.util.ArrayList<GEOFeature>();
+
+  private static java.util.ArrayList<GEOFeature> copy(java.util.ArrayList<GEOFeature> features)
+  {
+    java.util.ArrayList<GEOFeature> result = new java.util.ArrayList<GEOFeature>();
+    final int size = features.size();
+    for (int i = 0; i < size; i++)
+    {
+      GEOFeature feature = features.get(i);
+  
+      result.add((feature == null) ? null : feature.deepCopy());
+    }
+  
+    return result;
+  }
 
   public GEOFeatureCollection(java.util.ArrayList<GEOFeature> features)
   {
@@ -93,7 +107,7 @@ public class GEOFeatureCollection extends GEOObject
 
   public final GEOFeatureCollection deepCopy()
   {
-    return new GEOFeatureCollection(_features);
+    return new GEOFeatureCollection(copy(_features));
   }
 
 }

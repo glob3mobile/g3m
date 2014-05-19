@@ -42,7 +42,7 @@ public:
 
   long long getCoordinatesCount() const;
 
-  const GEO2DPolygonGeometry* deepCopy() const;
+  GEO2DPolygonGeometry* deepCopy() const;
 
 };
 

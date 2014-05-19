@@ -12,6 +12,7 @@
 #include "VectorLayer.hpp"
 #include "Sector.hpp"
 #include "TimeInterval.hpp"
+#include "URL.hpp"
 class TileImageContribution;
 class IDownloader;
 class IBufferDownloadListener;
@@ -45,6 +46,7 @@ private:
   private IMathUtils   _mu;
   private IStringUtils _su;
 #endif
+  mutable TileImageProvider* _tileImageProvider;
 
   TiledVectorLayer(const GEORasterSymbolizer*        symbolizer,
                    const std::string&                urlTemplate,
@@ -67,6 +69,7 @@ protected:
 
 
 public:
+
   static TiledVectorLayer* newMercator(const GEORasterSymbolizer* symbolizer,
                                        const std::string&         urlTemplate,
                                        const Sector&              dataSector,
@@ -98,12 +101,36 @@ public:
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
-  long long requestGEOJSONBuffer(const Tile* tile,
-                                 IDownloader* downloader,
-                                 long long tileDownloadPriority,
-                                 bool logDownloadActivity,
-                                 IBufferDownloadListener* listener,
-                                 bool deleteListener) const;
+//  long long requestGEOJSONBuffer(const Tile* tile,
+//                                 IDownloader* downloader,
+//                                 long long tileDownloadPriority,
+//                                 bool logDownloadActivity,
+//                                 IBufferDownloadListener* listener,
+//                                 bool deleteListener) const;
+
+  class RequestGEOJSONBufferData {
+  public:
+#ifdef C_CODE
+    const URL          _url;
+    const TimeInterval _timeToCache;
+#endif
+#ifdef JAVA_CODE
+    public final URL          _url;
+    public final TimeInterval _timeToCache;
+#endif
+    const bool         _readExpired;
+
+    RequestGEOJSONBufferData(const URL&          url,
+                             const TimeInterval& timeToCache,
+                             const bool          readExpired) :
+    _url(url),
+    _timeToCache(timeToCache),
+    _readExpired(readExpired)
+    {
+    }
+  };
+
+  RequestGEOJSONBufferData* getRequestGEOJSONBufferData(const Tile* tile) const;
 
   const GEORasterSymbolizer*  symbolizerCopy() const;
 

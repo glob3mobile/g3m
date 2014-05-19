@@ -37,7 +37,7 @@ public:
     return 1;
   }
 
-  const GEO2DPointGeometry* deepCopy() const;
+  GEO2DPointGeometry* deepCopy() const;
 
 };
 

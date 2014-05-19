@@ -36,7 +36,7 @@ public:
 
   long long getCoordinatesCount() const;
 
-  const GEO2DMultiLineStringGeometry* deepCopy() const;
+  GEO2DMultiLineStringGeometry* deepCopy() const;
 
 };
 
