@@ -79,7 +79,8 @@ public:
     if (_degrees>360) {
       _degrees -= 360;
     }
-    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+    _modelviewMatrix = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees),
+                                                              Vector3D(0, 0, -1));
   }
 
   void start(const G3MRenderContext* rc);
@@ -104,6 +105,7 @@ public:
 class BusyMeshEffect : public EffectWithForce {
 private:
   BusyMeshRenderer* _renderer;
+  long long _lastMS;
 
 public:
 
@@ -113,12 +115,21 @@ public:
   { }
 
   void start(const G3MRenderContext* rc,
-             const TimeInterval& when) {}
+             const TimeInterval& when) {
+    _lastMS = when.milliseconds();
+  }
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     EffectWithForce::doStep(rc, when);
-    _renderer->incDegrees(5);
+
+    const long long now = when.milliseconds();
+    const long long ellapsed = now - _lastMS;
+    _lastMS = now;
+
+    const double deltaDegrees = (360.0 / 1200.0) * ellapsed;
+
+    _renderer->incDegrees(deltaDegrees);
   }
 
   void stop(const G3MRenderContext* rc,

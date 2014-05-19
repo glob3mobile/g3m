@@ -30,6 +30,7 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const TimeInterval&   timeToCache,
                              const bool            readExpired,
                              const int             initialLevel,
+                             const int             maxLevel,
                              const float           transparency,
                              const LayerCondition* condition,
                              const std::string&    disclaimerInfo) :
@@ -43,6 +44,7 @@ _imagerySet(imagerySet),
 _culture("en-US"),
 _key(key),
 _initialLevel(initialLevel),
+_maxLevel(maxLevel),
 _isInitialized(false)
 {
 }
@@ -53,6 +55,7 @@ BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
                              const TimeInterval&   timeToCache,
                              const bool            readExpired,
                              const int             initialLevel,
+                             const int             maxLevel,
                              const float           transparency,
                              const LayerCondition* condition,
                              const std::string&    disclaimerInfo) :
@@ -66,6 +69,7 @@ _imagerySet(imagerySet),
 _culture(culture),
 _key(key),
 _initialLevel(initialLevel),
+_maxLevel(maxLevel),
 _isInitialized(false)
 {
 }
@@ -232,7 +236,7 @@ void BingMapsLayer::processMetadata(const std::string& brandLogoUri,
                                                1,
                                                1,
                                                mu->max(zoomMin, _initialLevel),
-                                               zoomMax,
+                                               mu->min(zoomMax, _maxLevel),
                                                Vector2I(imageWidth, imageHeight),
                                                LayerTilesRenderParameters::defaultTileMeshResolution(),
                                                true));
@@ -353,6 +357,10 @@ bool BingMapsLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
+  if (_maxLevel != t->_maxLevel) {
+    return false;
+  }
+
   return true;
 }
 
@@ -363,6 +371,7 @@ BingMapsLayer* BingMapsLayer::copy() const {
                            _timeToCache,
                            _readExpired,
                            _initialLevel,
+                           _maxLevel,
                            _transparency,
                            (_condition == NULL) ? NULL : _condition->copy(),
                            _disclaimerInfo);

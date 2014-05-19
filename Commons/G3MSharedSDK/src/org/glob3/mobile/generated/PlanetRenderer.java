@@ -286,7 +286,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       f.setMatrix(cam.getModelViewMatrix44D());
     }
-  
   }
 
   private SurfaceElevationProvider_Tree _elevationListenersTree = new SurfaceElevationProvider_Tree();
@@ -458,40 +457,43 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     final double texWidthSquared = texWidth * texWidth;
     final double texHeightSquared = texHeight * texHeight;
   
-    final double nowInMS = _lastSplitTimer.now().milliseconds(); //Getting now from _lastSplitTimer
+    final double nowInMS = _lastSplitTimer.nowInMilliseconds();
   
     if (_firstRender && _tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
     {
       // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
       // loaded as they will be used as last-chance fallback texture for any tile.
-      _firstRender = false;
   
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
         tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
       }
+  
+      _firstRender = false;
     }
     else
     {
-      java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
+      java.util.ArrayList<Tile> toVisit = new java.util.ArrayList<Tile>();
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        toVisit.addLast(_firstLevelTiles.get(i));
+        toVisit.add(_firstLevelTiles.get(i));
       }
   
-      while (toVisit.size() > 0)
+      java.util.ArrayList<Tile> toVisitInNextIteration = new java.util.ArrayList<Tile>();
+      while (!toVisit.isEmpty())
       {
-        java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
+        toVisitInNextIteration.clear();
   
-        for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
+        final int toVisitSize = toVisit.size();
+        for (int i = 0; i < toVisitSize; i++)
         {
-          Tile tile = iter.next();
-  
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); //SENDING SQUARED TEX SIZE -  if first render, forceFullRender
+          Tile tile = toVisit.get(i);
+          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, forceFullRender
         }
   
-        toVisit = toVisitInNextIteration;
+        toVisit.clear();
+        toVisit.addAll(toVisitInNextIteration);
       }
     }
   
@@ -577,10 +579,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
     final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
-  
     if (layerTilesRenderParameters == null)
     {
-      return RenderState.error(_errors);
+      return _errors.isEmpty() ? RenderState.busy() : RenderState.error(_errors);
     }
   
     final RenderState layerSetRenderState = _layerSet.getRenderState();
@@ -702,7 +703,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       //   so it has to be executed in the OpenGL thread
       if (_context == null)
       {
-        ILogger.instance().logError("_context if not initialized");
+        ILogger.instance().logError("_context is not initialized");
       }
       else
       {

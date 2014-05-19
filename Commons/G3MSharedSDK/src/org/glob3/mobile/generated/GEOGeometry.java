@@ -35,17 +35,19 @@ public abstract class GEOGeometry extends GEOObject
   public void dispose()
   {
   super.dispose();
-
   }
 
   public final void setFeature(GEOFeature feature)
   {
-    if (_feature != feature)
+  //  if (_feature != feature) {
+  //    delete _feature;
+  //    _feature = feature;
+  //  }
+    if (_feature != null)
     {
-      if (_feature != null)
-         _feature.dispose();
-      _feature = feature;
+      System.out.print("break point on me\n");
     }
+    _feature = feature;
   }
 
   public final GEOFeature getFeature()
@@ -77,5 +79,7 @@ public abstract class GEOGeometry extends GEOObject
       symbols = null;
     }
   }
+
+  public abstract GEOGeometry deepCopy();
 
 }

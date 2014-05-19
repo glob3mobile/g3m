@@ -302,9 +302,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     {
       _changedInfoListener.changedRendererInfo(-1, getInfo());
     }
-  
-    ILogger.instance().logInfo("Changed Renderer Info Listener of CompositeRenderer set ok");
-  }
+    }
 
   public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info)
   {
@@ -316,7 +314,6 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     {
       ILogger.instance().logWarning("Child Render not found: %d", rendererIdentifier);
     }
-  
   
     if (_changedInfoListener != null)
     {

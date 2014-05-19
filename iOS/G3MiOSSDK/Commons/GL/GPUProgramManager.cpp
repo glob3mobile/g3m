@@ -152,7 +152,8 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
       }
 
       _programs[name] = prog;
-    } else{
+    }
+    else {
       ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());
     }
 
@@ -165,7 +166,8 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
   std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
   if (it != _programs.end()) {
     return it->second;
-  } else{
+  }
+  else {
     return NULL;
   }
 #endif
@@ -182,7 +184,8 @@ void GPUProgramManager::removeUnused() {
       ILogger::instance()->logInfo("Deleting program %s", it->second->getName().c_str() );
       delete it->second;
       _programs.erase(it++);
-    } else{
+    }
+    else {
       ++it;
     }
   }

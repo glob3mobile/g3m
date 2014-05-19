@@ -90,12 +90,6 @@ _rendered(false),
 _tileRenderingListener(NULL),
 _id( createTileId(level, row, column) )
 {
-  //  int __remove_tile_print;
-  //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
-  //         getKey().description().c_str(),
-  //         _sector._deltaLatitude.description().c_str(),
-  //         _sector._deltaLongitude.description().c_str()
-  //         );
 }
 
 Tile::~Tile() {
@@ -283,8 +277,8 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                      const TileTessellator* tessellator,
                      const LayerTilesRenderParameters* layerTilesRenderParameters,
                      const TilesRenderParameters* tilesRenderParameters) {
-
-  if (renderedSector != NULL && !renderedSector->touchesWith(_sector)) { //Incomplete world
+  if ((renderedSector != NULL) &&
+      !renderedSector->touchesWith(_sector)) { //Incomplete world
     return false;
   }
 
@@ -586,7 +580,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 
 void Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
-                  std::list<Tile*>* toVisitInNextIteration,
+                  std::vector<Tile*>* toVisitInNextIteration,
                   const Planet* planet,
                   const Vector3D& cameraNormalizedPosition,
                   double cameraAngle2HorizonInRadians,
@@ -788,10 +782,6 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
 
   return subTiles;
 }
-
-//const TileKey Tile::getKey() const {
-//  return TileKey(_level, _row, _column);
-//}
 
 const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
   if (_sector.contains(position._latitude, position._longitude)) {

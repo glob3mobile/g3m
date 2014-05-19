@@ -192,7 +192,7 @@ void PlanetRenderer::changed() {
     // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
     //   so it has to be executed in the OpenGL thread
     if (_context == NULL) {
-      ILogger::instance()->logError("_context if not initialized");
+      ILogger::instance()->logError("_context is not initialized");
     }
     else {
       _context->getThreadUtils()->invokeInRendererThread(new RecreateTilesTask(this), true);
@@ -351,7 +351,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
 void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
-  if (!parameters) {
+  if (parameters == NULL) {
     //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
@@ -430,9 +430,8 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
-
   if (layerTilesRenderParameters == NULL) {
-    return RenderState::error(_errors);
+    return _errors.empty() ? RenderState::busy() : RenderState::error(_errors);
   }
 
   const RenderState layerSetRenderState = _layerSet->getRenderState();
@@ -590,10 +589,10 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
     _glState->addGLFeature(new ModelViewGLFeature(cam), true);
-  } else{
+  }
+  else {
     f->setMatrix(cam->getModelViewMatrix44D());
   }
-
 }
 
 void PlanetRenderer::render(const G3MRenderContext* rc,
@@ -631,18 +630,17 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const double factor = _tilesRenderParameters->_texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
   const double correctionFactor = (deviceInfo->getDPI() * deviceQualityFactor) / factor;
 
-  texWidth *= correctionFactor;
+  texWidth  *= correctionFactor;
   texHeight *= correctionFactor;
 
-  const double texWidthSquared = texWidth * texWidth;
+  const double texWidthSquared  = texWidth  * texWidth;
   const double texHeightSquared = texHeight * texHeight;
 
-  const double nowInMS = _lastSplitTimer->now().milliseconds(); //Getting now from _lastSplitTimer
+  const double nowInMS = _lastSplitTimer->nowInMilliseconds();
 
   if (_firstRender && _tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
     // force one render pass of the firstLevelTiles tiles to make the (toplevel) textures
     // loaded as they will be used as last-chance fallback texture for any tile.
-    _firstRender = false;
 
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
@@ -673,21 +671,22 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _logTilesPetitions,
                    _tileRenderingListener);
     }
+
+    _firstRender = false;
   }
   else {
-    std::list<Tile*> toVisit;
+    std::vector<Tile*> toVisit;
     for (int i = 0; i < firstLevelTilesCount; i++) {
       toVisit.push_back(_firstLevelTiles[i]);
     }
 
-    while (toVisit.size() > 0) {
-      std::list<Tile*> toVisitInNextIteration;
+    std::vector<Tile*> toVisitInNextIteration;
+    while (!toVisit.empty()) {
+      toVisitInNextIteration.clear();
 
-      for (std::list<Tile*>::iterator iter = toVisit.begin();
-           iter != toVisit.end();
-           iter++) {
-        Tile* tile = *iter;
-
+      const int toVisitSize = toVisit.size();
+      for (int i = 0; i < toVisitSize; i++) {
+        Tile* tile = toVisit[i];
         tile->render(rc,
                      *_glState,
                      &toVisitInNextIteration,
@@ -708,15 +707,22 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _renderedSector,
                      _firstRender, /* if first render, forceFullRender */
                      _tileDownloadPriority,
-                     texWidthSquared,     //SENDING SQUARED TEX SIZE
+                     texWidthSquared,
                      texHeightSquared,
                      nowInMS,
                      _renderTileMeshes,
                      _logTilesPetitions,
-                     _tileRenderingListener);
+                     _tileRenderingListener
+                     );
       }
 
+#ifdef C_CODE
       toVisit = toVisitInNextIteration;
+#endif
+#ifdef JAVA_CODE
+      toVisit.clear();
+      toVisit.addAll(toVisitInNextIteration);
+#endif
     }
   }
 
@@ -835,14 +841,15 @@ bool PlanetRenderer::setRenderedSector(const Sector& sector) {
 
     if (sector.isEquals(Sector::fullSphere())) {
       _renderedSector = NULL;
-    } else{
+    }
+    else {
       _renderedSector = new Sector(sector);
     }
-    
+
     _tessellator->setRenderedSector(sector);
-    
+
     changed();
-    
+
     return true;
   }
   return false;

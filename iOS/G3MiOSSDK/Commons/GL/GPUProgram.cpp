@@ -117,7 +117,8 @@ bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) co
 
   if (result) {
     gl->attachShader(_programID, shader);
-  } else{
+  }
+  else {
     ILogger::instance()->logError("GPUProgram: Problem encountered while compiling shader.");
   }
 
@@ -345,22 +346,23 @@ GPUUniform* GPUProgram::getUniformOfType(const std::string& name, int type) cons
   GPUUniform* u = NULL;
   if (type == GLType::glBool()) {
     u = getGPUUniformBool(name);
-  } else {
-    if (type == GLType::glVec2Float()) {
-      u = getGPUUniformVec2Float(name);
-    } else{
-      if (type == GLType::glVec4Float()) {
-        u = getGPUUniformVec4Float(name);
-      } else{
-        if (type == GLType::glFloat()) {
-          u = getGPUUniformFloat(name);
-        } else
-          if (type == GLType::glMatrix4Float()) {
-            u = getGPUUniformMatrix4Float(name);
-          }
-      }
-    }
   }
+  else if (type == GLType::glVec2Float()) {
+    u = getGPUUniformVec2Float(name);
+  }
+  else if (type == GLType::glVec4Float()) {
+    u = getGPUUniformVec4Float(name);
+  }
+  else if (type == GLType::glFloat()) {
+    u = getGPUUniformFloat(name);
+  }
+  else if (type == GLType::glMatrix4Float()) {
+    u = getGPUUniformMatrix4Float(name);
+  }
+  else {
+    ILogger::instance()->logError("Invalid uniform type");
+  }
+
   return u;
 }
 

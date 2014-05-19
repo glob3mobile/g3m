@@ -42,6 +42,8 @@ public:
 
   long long getCoordinatesCount() const;
 
+  GEO2DPolygonGeometry* deepCopy() const;
+
 };
 
 #endif

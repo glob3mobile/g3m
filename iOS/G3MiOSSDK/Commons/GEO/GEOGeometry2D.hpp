@@ -30,6 +30,8 @@ public:
                  const GEORasterProjection* projection,
                  int tileLevel) const;
 
+  virtual GEOGeometry2D* deepCopy() const = 0;
+
 };
 
 #endif

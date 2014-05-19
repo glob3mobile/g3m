@@ -30,30 +30,6 @@ GenericQuadTree_Node::~GenericQuadTree_Node() {
   delete _sector;
 }
 
-//void GenericQuadTree_Node::computeElementsSector() {
-//
-//  delete _elementsSector;
-//  _elementsSector = new Sector(_sector);
-//  if (_children == NULL) {
-//    const int size = _elements.size();
-//    for (int i = 0; i < size; i++) {
-//      Sector newElementSector = _elementsSector->mergedWith(_elements[i]->getSector());
-//      delete _elementsSector;
-//      _elementsSector = new Sector(newElementSector);
-//    }
-//
-//  } else{
-//
-//    for (int i = 0; i < 4; i++) {
-//      Sector newElementSector =_elementsSector->mergedWith(_children[i]->getElementsSector());
-//      delete _elementsSector;
-//      _elementsSector = new Sector(newElementSector);
-//    }
-//
-//  }
-//
-//}
-
 void GenericQuadTree_Node::splitNode(int maxElementsPerNode,
                                      int maxDepth,
                                      double childAreaProportion) {
@@ -126,8 +102,8 @@ GenericQuadTree_Node* GenericQuadTree_Node::getBestNodeForInsertion(GenericQuadT
     if (cost < minChildInsertionCost) {
       minChildInsertionCost = cost;
       bestChildForInsertion = child;
-    } else{
-
+    }
+    else {
       if (cost == minChildInsertionCost) {
         //        printf("BOTH CHILDREN WITH SAME COST");
 
@@ -272,7 +248,8 @@ bool GenericQuadTree_Node::acceptVisitor(const Sector& sector,
           return true;
         }
       }
-    } else{ //Element is associated to geodetic
+    }
+    else { //Element is associated to geodetic
       GenericQuadTree_Geodetic2DElement* e = (GenericQuadTree_Geodetic2DElement*) element;
       if (sector.contains(e->_geodetic)) {
         const bool abort = visitor.visitElement(e->_geodetic, element->_element);
@@ -321,7 +298,8 @@ bool GenericQuadTree_Node::acceptVisitor(const Geodetic2D& geo,
           return true;
         }
       }
-    } else{ //Element is associated to geodetic
+    }
+    else { //Element is associated to geodetic
       GenericQuadTree_Geodetic2DElement* e = (GenericQuadTree_Geodetic2DElement*) element;
       if (geo.isEquals(e->_geodetic)) {
         const bool abort = visitor.visitElement(e->_geodetic, element->_element);
@@ -563,8 +541,8 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer) 
         ILogger::instance()->logInfo("ERROR");
       }
 
-    } else{
-
+    }
+    else {
       Geodetic2D geo = Geodetic2D::fromDegrees(minLat, minLon);
       geos.push_back(new Geodetic2D(geo));
       std::string desc = "GEODETIC ELEMENT " + geo.description();

@@ -22,13 +22,13 @@ class GEOSymbolizer;
 class GEOFeature : public GEOObject {
 private:
   const JSONBaseObject* _id;
-  GEOGeometry*          _geometry;
+  const GEOGeometry*    _geometry;
   const JSONObject*     _properties;
 
 public:
 
   GEOFeature(const JSONBaseObject* id,
-             GEOGeometry* geometry,
+             const GEOGeometry* geometry,
              const JSONObject* properties);
 
   ~GEOFeature();
@@ -54,6 +54,8 @@ public:
                  int tileLevel) const;
 
   long long getCoordinatesCount() const;
+
+  GEOFeature* deepCopy() const;
 
 };
 

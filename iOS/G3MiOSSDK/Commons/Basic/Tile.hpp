@@ -10,7 +10,6 @@
 #define G3MiOSSDK_Tile
 
 #include <vector>
-#include <list>
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
 
@@ -221,7 +220,7 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState& parentState,
-              std::list<Tile*>* toVisitInNextIteration,
+              std::vector<Tile*>* toVisitInNextIteration,
               const Planet* planet,
               const Vector3D& cameraNormalizedPosition,
               double cameraAngle2HorizonInRadians,
@@ -245,9 +244,6 @@ public:
               const bool renderTileMeshes,
               bool logTilesPetitions,
               TileRenderingListener* tileRenderingListener);
-
-//  const TileKey getKey() const;
-//  const std::string getId() const;
 
   void setTextureSolved(bool textureSolved);
 

@@ -260,3 +260,27 @@ void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   }
 }
 
+
+void TrailsRenderer::removeTrail(Trail* trail,
+                                 bool deleteTrail) {
+  const int trailsCount = _trails.size();
+  int foundIndex = -1;
+  for (int i = 0; i < trailsCount; i++) {
+    Trail* each = _trails[i];
+    if (trail == each) {
+      foundIndex = i;
+      break;
+    }
+  }
+  if (foundIndex >= 0) {
+#ifdef C_CODE
+    _trails.erase(_trails.begin() + foundIndex);
+#endif
+#ifdef JAVA_CODE
+    _trails.remove(foundIndex);
+#endif
+    if (deleteTrail) {
+      delete trail;
+    }
+  }
+}

@@ -213,13 +213,21 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     addShapeEffect(effect);
   }
 
-  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll)
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll, boolean linearInterpolation, boolean forceToPositionOnCancel)
   {
-     setAnimatedPosition(duration, position, pitch, heading, roll, false);
+     setAnimatedPosition(duration, position, pitch, heading, roll, linearInterpolation, forceToPositionOnCancel, true);
   }
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll, boolean linearInterpolation)
   {
-    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading, heading, _roll, roll, linearInterpolation);
+     setAnimatedPosition(duration, position, pitch, heading, roll, linearInterpolation, true, true);
+  }
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll)
+  {
+     setAnimatedPosition(duration, position, pitch, heading, roll, false, true, true);
+  }
+  public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position, Angle pitch, Angle heading, Angle roll, boolean linearInterpolation, boolean forceToPositionOnCancel, boolean forceToPositionOnStop)
+  {
+    Effect effect = new ShapeFullPositionEffect(duration, this, _position, position, _pitch, pitch, _heading, heading, _roll, roll, linearInterpolation, forceToPositionOnCancel, forceToPositionOnStop);
     addShapeEffect(effect);
   }
 

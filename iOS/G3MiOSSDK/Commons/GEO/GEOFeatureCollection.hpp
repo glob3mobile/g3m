@@ -23,8 +23,10 @@ class GEOFeatureCollection : public GEOObject {
 private:
   std::vector<GEOFeature*> _features;
 
+  static const std::vector<GEOFeature*> copy(const std::vector<GEOFeature*>& features);
+
 public:
-  GEOFeatureCollection(std::vector<GEOFeature*>& features) :
+  GEOFeatureCollection(const std::vector<GEOFeature*>& features) :
   _features(features)
   {
   }
@@ -47,6 +49,8 @@ public:
                  int tileLevel) const;
 
   long long getCoordinatesCount() const;
+
+  GEOFeatureCollection* deepCopy() const;
 
 };
 

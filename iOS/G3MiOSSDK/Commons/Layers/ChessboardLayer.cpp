@@ -32,6 +32,25 @@ ChessboardLayer* ChessboardLayer::newMercator(const Color&          backgroundCo
                              disclaimerInfo);
 }
 
+ChessboardLayer* ChessboardLayer::newWGS84(const Color&          backgroundColor,
+                                           const Color&          boxColor,
+                                           const int             splits,
+                                           const Sector&         dataSector,
+                                           const int             firstLevel,
+                                           const int             maxLevel,
+                                           const float           transparency,
+                                           const LayerCondition* condition,
+                                           const std::string&    disclaimerInfo) {
+  return new ChessboardLayer(backgroundColor,
+                             boxColor,
+                             splits,
+                             dataSector,
+                             LayerTilesRenderParameters::createDefaultWGS84(firstLevel, maxLevel),
+                             transparency,
+                             condition,
+                             disclaimerInfo);
+}
+
 RenderState ChessboardLayer::getRenderState() {
   return RenderState::ready();
 }

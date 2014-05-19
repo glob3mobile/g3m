@@ -1,61 +1,55 @@
 package org.glob3.mobile.generated; 
 public class ICanvasUtils
 {
-  public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor, int padding)
+  public static void drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor, int padding)
   {
-     return drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, minFontSize, backgroundColor, shadowColor, padding, 8);
+     drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, minFontSize, backgroundColor, shadowColor, padding, 8);
   }
-  public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor)
+  public static void drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor)
   {
-     return drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, minFontSize, backgroundColor, shadowColor, 16, 8);
+     drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, minFontSize, backgroundColor, shadowColor, 16, 8);
   }
-  public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor)
+  public static void drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor)
   {
-     return drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, minFontSize, backgroundColor, Color.black(), 16, 8);
+     drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, minFontSize, backgroundColor, Color.black(), 16, 8);
   }
-  public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize)
+  public static void drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize)
   {
-     return drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, minFontSize, Color.transparent(), Color.black(), 16, 8);
+     drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, minFontSize, Color.transparent(), Color.black(), 16, 8);
   }
-  public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize)
+  public static void drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize)
   {
-     return drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, 2, Color.transparent(), Color.black(), 16, 8);
+     drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, maxFontSize, 2, Color.transparent(), Color.black(), 16, 8);
   }
-  public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color)
+  public static void drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color)
   {
-     return drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, 18, 2, Color.transparent(), Color.black(), 16, 8);
+     drawStringsOn(strings, canvas, width, height, hAlign, vAlign, textAlign, color, 18, 2, Color.transparent(), Color.black(), 16, 8);
   }
-  public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor, int padding, int cornerRadius)
+  public static void drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor, int padding, int cornerRadius)
   {
-    int longestTextIndex = 0;
-    int maxLength = strings.get(longestTextIndex).length();
-    final int stringsSize = strings.size();
-    for (int i = 1; i < stringsSize; i++)
+  
+    if (strings.isEmpty())
     {
-      final int itemLength = strings.get(i).length();
-      if (maxLength < itemLength)
-      {
-        maxLength = itemLength;
-        longestTextIndex = i;
-      }
+      return;
     }
   
-    int fontSize = maxFontSize;
     final int maxWidth = width - (2 * padding);
-    boolean fit = false;
-    while (!fit && fontSize > minFontSize)
+    final int stringsSize = strings.size();
+  
+    int fontSize = maxFontSize;
+    boolean allFit = true;
+    while (!allFit && (fontSize > minFontSize))
     {
-      GFont labelFont = GFont.sansSerif(fontSize);
-      final String longestText = strings.get(longestTextIndex);
-      canvas.setFont(labelFont);
-      final Vector2F extent = canvas.textExtent(longestText);
-      if (extent._x <= maxWidth)
+      canvas.setFont(GFont.sansSerif(fontSize));
+      for (int i = 0; i < stringsSize; i++)
       {
-        fit = true;
-      }
-      else
-      {
-        fontSize--;
+        final Vector2F extent = canvas.textExtent(strings.get(i));
+        if (extent._x > maxWidth)
+        {
+          allFit = false;
+          fontSize--;
+          continue;
+        }
       }
     }
   
@@ -71,8 +65,6 @@ public class ICanvasUtils
     final Vector2F extent = column.getExtent(canvas);
     final Vector2F position = getPosition(extent, width, height, hAlign, vAlign);
     column.drawAt(position._x, position._y, canvas);
-  
-    return extent;
   }
 
   public static Vector2F getPosition(Vector2F extent, int canvasWidth, int canvasHeight, HorizontalAlignment hAlign, VerticalAlignment vAlign)

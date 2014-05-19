@@ -165,14 +165,18 @@ void Shape::setAnimatedPosition(const TimeInterval& duration,
                                 const Angle& pitch,
                                 const Angle& heading,
                                 const Angle& roll,
-                                bool linearInterpolation) {
+                                bool linearInterpolation,
+                                bool forceToPositionOnCancel,
+                                bool forceToPositionOnStop) {
   Effect* effect = new ShapeFullPositionEffect(duration,
                                                this,
                                                *_position, position,
                                                *_pitch,    pitch,
                                                *_heading,  heading,
                                                *_roll,     roll,
-                                               linearInterpolation);
+                                               linearInterpolation,
+                                               forceToPositionOnCancel,
+                                               forceToPositionOnStop);
   addShapeEffect(effect);
 }
 
@@ -181,8 +185,9 @@ void Shape::elevationChanged(const Geodetic2D& position,
                       double verticalExaggeration) {
 
   if (ISNAN(rawElevation)) {
-    _surfaceElevation = 0;    //USING 0 WHEN NO ELEVATION DATA
-  } else{
+    _surfaceElevation = 0; //USING 0 WHEN NO ELEVATION DATA
+  }
+  else {
     _surfaceElevation = rawElevation * verticalExaggeration;
   }
 
