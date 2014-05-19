@@ -839,7 +839,7 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
   //  return TileKey(_level, _row, _column);
   //}
   
-  public final Tile Tile.getDeepestTileContaining(Geodetic3D position)
+  public final Tile getDeepestTileContaining(Geodetic3D position)
   {
     if (_sector.contains(position._latitude, position._longitude))
     {
