@@ -491,6 +491,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   }
 
   private java.util.LinkedList<CacheEntry> _geoObjectsCache = new java.util.LinkedList<CacheEntry>();
+  private long _geoObjectsCacheRequests;
+  private long _geoObjectsCacheHits;
 
   public void dispose()
   {
@@ -511,6 +513,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
      _layer = layer;
      _downloader = downloader;
      _threadUtils = threadUtils;
+     _geoObjectsCacheRequests = 0;
+     _geoObjectsCacheHits = 0;
   }
 
 
@@ -547,6 +551,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
   public final GEOObject getGEOObjectFor(URL url)
   {
+    _geoObjectsCacheRequests++;
     final String path = url._path;
     for (java.util.Iterator<CacheEntry> it = _geoObjectsCache.iterator(); it.hasNext();)
     {
@@ -555,6 +560,10 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning move hit to top
+  
+        it.remove();
+        _geoObjectsCacheHits++;
+        _geoObjectsCache.addFirst(entry);
         return entry._geoObject.deepCopy();
       }
     }
