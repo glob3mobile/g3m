@@ -157,6 +157,31 @@ public:
 };
 
 
+class RainbowRasterSymbolizer : public SampleRasterSymbolizer {
+private:
+  mutable int _geometryCounter;
+protected:
+  const Color baseColorForGeometry(const GEOGeometry* geometry) const {
+    _geometryCounter++;
+    const int wheelSize = 32;
+
+    const int colorIndex = _geometryCounter % wheelSize;
+
+    return Color::fromRGBA(0.6, 0.92, 0.65, 0.6).wheelStep(wheelSize, colorIndex);
+  }
+
+public:
+  RainbowRasterSymbolizer() :
+  _geometryCounter(0)
+  {
+  }
+
+  GEORasterSymbolizer* copy() const {
+    return new RainbowRasterSymbolizer();
+  }
+};
+
+
 void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
@@ -204,8 +229,11 @@ void G3MTiledVectorDemoScene::rawSelectOption(const std::string& option,
   if (option == "Pinkish") {
     _tiledVectorLayer->setSymbolizer( new PinkishRasterSymbolizer(), true );
   }
-  else {
+  else if (option == "Greenish") {
     _tiledVectorLayer->setSymbolizer( new GreenishRasterSymbolizer(), true );
+  }
+  else {
+    _tiledVectorLayer->setSymbolizer( new RainbowRasterSymbolizer(), true );
   }
 }
 

@@ -29,6 +29,7 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRaster
   delete _buffer;
   delete _geoObject;
   delete _canvas;
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -60,18 +61,12 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::rasterizeGEOObj
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground(const G3MContext* context) {
-
-//  if (_imageAssembler == NULL) {
-//    _deleteGEOObject = true;
-//  }
-//  else {
   if (_imageAssembler != NULL) {
     _canvas = IFactory::instance()->createCanvas();
     _canvas->initialize(_imageWidth, _imageHeight);
 
     if (_geoObject != NULL) {
       rasterizeGEOObject();
-      _deleteGEOObject = true;
     }
     else if (_buffer != NULL) {
       const bool isBSON = IStringUtils::instance()->endsWith(_url._path, "bson");
@@ -131,16 +126,29 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::onPostExecute(c
     ICanvas* canvas = _canvas;
     _canvas = NULL;  // moves ownership of _canvas to _imageAssembler
 
-    GEOObject* geoObject = _geoObject;
-    _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
+//    GEOObject* geoObject = _geoObject;
+//    _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
+//
+//    if (_deleteGEOObject) {
+//      // deletes geoObject before passing it back to _imageAssembler.
+//      // This geoObjects had come from the cache, no need to put into the cache again
+//      delete geoObject;
+//      geoObject = NULL;
+//    }
 
-    if (_deleteGEOObject) {
-      delete geoObject;
-      geoObject = NULL;
+    GEOObject* transferedGEOObject;
+    if (_geoObjectFromCache) {
+      // delete geoObject before passing it back to _imageAssembler.
+      // This geoObject had come from the cache, no need to put into the cache again
+      transferedGEOObject = NULL;
+    }
+    else {
+      transferedGEOObject = _geoObject;
+      _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
     }
 
     _imageAssembler->rasterizedGEOObject(_url,
-                                         geoObject,
+                                         transferedGEOObject,
                                          canvas);
   }
 }

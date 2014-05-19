@@ -54,6 +54,7 @@ private:
     ImageAssembler* _imageAssembler;
     IByteBuffer*    _buffer;
     GEOObject*      _geoObject;
+    const bool      _geoObjectFromCache;
     ICanvas*        _canvas;
     const int       _imageWidth;
     const int       _imageHeight;
@@ -71,20 +72,19 @@ private:
 
     void rasterizeGEOObject();
 
-    bool _deleteGEOObject;
 
   public:
-    GEOJSONBufferRasterizer(ImageAssembler* imageAssembler,
-                            const URL& url,
-                            IByteBuffer* buffer,
-                            GEOObject*   geoObject,
-                            const int imageWidth,
-                            const int imageHeight,
+    GEOJSONBufferRasterizer(ImageAssembler*            imageAssembler,
+                            const URL&                 url,
+                            IByteBuffer*               buffer,    // buffer or
+                            GEOObject*                 geoObject, // geoObject, never both
+                            const int                  imageWidth,
+                            const int                  imageHeight,
                             const GEORasterSymbolizer* symbolizer,
-                            const std::string& tileId,
-                            const Sector& tileSector,
-                            const bool   tileIsMercator,
-                            const int    tileLevel) :
+                            const std::string&         tileId,
+                            const Sector&              tileSector,
+                            const bool                 tileIsMercator,
+                            const int                  tileLevel) :
     _imageAssembler(imageAssembler),
     _url(url),
     _buffer(buffer),
@@ -96,10 +96,8 @@ private:
     _tileSector(tileSector),
     _tileIsMercator(tileIsMercator),
     _tileLevel(tileLevel),
-//    _imageId(imageId),
-//    _isBSON(isBSON),
     _canvas(NULL),
-    _deleteGEOObject(false)
+    _geoObjectFromCache( geoObject != NULL)
     {
     }
 
