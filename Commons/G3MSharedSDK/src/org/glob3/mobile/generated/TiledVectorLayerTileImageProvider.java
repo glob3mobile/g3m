@@ -50,6 +50,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private ImageAssembler _imageAssembler;
     private IByteBuffer _buffer;
     private GEOObject _geoObject;
+    private final boolean _geoObjectFromCache;
     private ICanvas _canvas;
     private final int _imageWidth;
     private final int _imageHeight;
@@ -75,11 +76,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
          projection.dispose();
     }
 
-    private boolean _deleteGEOObject;
 
-    public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, URL url, IByteBuffer buffer, GEOObject geoObject, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, String tileId, Sector tileSector, boolean tileIsMercator, int tileLevel)
-//    _imageId(imageId),
-//    _isBSON(isBSON),
+    public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, URL url, IByteBuffer buffer, GEOObject geoObject, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, String tileId, Sector tileSector, boolean tileIsMercator, int tileLevel) // geoObject, never both -  buffer or
     {
        _imageAssembler = imageAssembler;
        _url = url;
@@ -93,7 +91,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _tileIsMercator = tileIsMercator;
        _tileLevel = tileLevel;
        _canvas = null;
-       _deleteGEOObject = false;
+       _geoObjectFromCache = geoObject != null;
     }
 
     public void dispose()
@@ -110,16 +108,12 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
          _geoObject.dispose();
       if (_canvas != null)
          _canvas.dispose();
+    
       super.dispose();
     }
 
     public final void runInBackground(G3MContext context)
     {
-    
-    //  if (_imageAssembler == NULL) {
-    //    _deleteGEOObject = true;
-    //  }
-    //  else {
       if (_imageAssembler != null)
       {
         _canvas = IFactory.instance().createCanvas();
@@ -128,7 +122,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         if (_geoObject != null)
         {
           rasterizeGEOObject();
-          _deleteGEOObject = true;
         }
         else if (_buffer != null)
         {
@@ -190,17 +183,30 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         ICanvas canvas = _canvas;
         _canvas = null; // moves ownership of _canvas to _imageAssembler
     
-        GEOObject geoObject = _geoObject;
-        _geoObject = null; // moves ownership of _geoObject to _imageAssembler
+    //    GEOObject* geoObject = _geoObject;
+    //    _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
+    //
+    //    if (_deleteGEOObject) {
+    //      // deletes geoObject before passing it back to _imageAssembler.
+    //      // This geoObjects had come from the cache, no need to put into the cache again
+    //      delete geoObject;
+    //      geoObject = NULL;
+    //    }
     
-        if (_deleteGEOObject)
+        GEOObject transferedGEOObject;
+        if (_geoObjectFromCache)
         {
-          if (geoObject != null)
-             geoObject.dispose();
-          geoObject = null;
+          // delete geoObject before passing it back to _imageAssembler.
+          // This geoObject had come from the cache, no need to put into the cache again
+          transferedGEOObject = null;
+        }
+        else
+        {
+          transferedGEOObject = _geoObject;
+          _geoObject = null; // moves ownership of _geoObject to _imageAssembler
         }
     
-        _imageAssembler.rasterizedGEOObject(_url, geoObject, canvas);
+        _imageAssembler.rasterizedGEOObject(_url, transferedGEOObject, canvas);
       }
     }
 
