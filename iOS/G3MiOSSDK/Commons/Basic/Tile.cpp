@@ -1224,3 +1224,19 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
   const Vector2D uv = _sector.getUVCoordinates(position2D);
   return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));
 }
+
+void Tile::setRendered(const bool rendered, TileRenderingListener* tileRenderingListener){
+  if (_rendered != rendered) {
+    _rendered = rendered;
+    
+    if (tileRenderingListener != NULL) {
+      if (_rendered) {
+        tileRenderingListener->startRendering(this);
+      }
+      else {
+        tileRenderingListener->stopRendering(this);
+      }
+    }
+  }
+}
+

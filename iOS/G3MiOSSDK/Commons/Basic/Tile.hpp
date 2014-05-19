@@ -175,6 +175,9 @@ private:
   static std::string createTileId(int level,
                                   int row,
                                   int column);
+  
+  void setRendered(const bool rendered, TileRenderingListener* tileRenderingListener);
+
 
 public:
   const Sector      _sector;
