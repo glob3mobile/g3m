@@ -35,10 +35,8 @@ public class GEOFeatureCollection extends GEOObject
     for (int i = 0; i < size; i++)
     {
       GEOFeature feature = features.get(i);
-  
       result.add((feature == null) ? null : feature.deepCopy());
     }
-  
     return result;
   }
 

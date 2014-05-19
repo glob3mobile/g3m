@@ -75,6 +75,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
          projection.dispose();
     }
 
+    private boolean _deleteGEOObject;
+
     public GEOJSONBufferRasterizer(ImageAssembler imageAssembler, URL url, IByteBuffer buffer, GEOObject geoObject, int imageWidth, int imageHeight, GEORasterSymbolizer symbolizer, String tileId, Sector tileSector, boolean tileIsMercator, int tileLevel)
 //    _imageId(imageId),
 //    _isBSON(isBSON),
@@ -91,6 +93,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _tileIsMercator = tileIsMercator;
        _tileLevel = tileLevel;
        _canvas = null;
+       _deleteGEOObject = false;
     }
 
     public void dispose()
@@ -113,13 +116,11 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     public final void runInBackground(G3MContext context)
     {
     
-      if (_imageAssembler == null)
-      {
-        if (_geoObject != null)
-           _geoObject.dispose();
-        _geoObject = null;
-      }
-      else
+    //  if (_imageAssembler == NULL) {
+    //    _deleteGEOObject = true;
+    //  }
+    //  else {
+      if (_imageAssembler != null)
       {
         _canvas = IFactory.instance().createCanvas();
         _canvas.initialize(_imageWidth, _imageHeight);
@@ -127,9 +128,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         if (_geoObject != null)
         {
           rasterizeGEOObject();
-          if (_geoObject != null)
-             _geoObject.dispose();
-          _geoObject = null;
+          _deleteGEOObject = true;
         }
         else if (_buffer != null)
         {
@@ -193,6 +192,13 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     
         GEOObject geoObject = _geoObject;
         _geoObject = null; // moves ownership of _geoObject to _imageAssembler
+    
+        if (_deleteGEOObject)
+        {
+          if (geoObject != null)
+             geoObject.dispose();
+          geoObject = null;
+        }
     
         _imageAssembler.rasterizedGEOObject(_url, geoObject, canvas);
       }

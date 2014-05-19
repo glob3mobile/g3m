@@ -65,7 +65,7 @@ public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
 
   public final long getCoordinatesCount()
   {
-    return _coordinatesArrayData.getCoordinatesCount();
+    return (_coordinatesArrayData == null) ? 0 : _coordinatesArrayData.getCoordinatesCount();
   }
 
   public final GEO2DMultiLineStringGeometry deepCopy()
