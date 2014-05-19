@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.GEOJSONParser;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -342,29 +343,28 @@ public class VectorialLOD {
    }
 
 
-   //TODO: provisional. Change to json parser vertex count 
    private static long getGeomVertexCount(final String geoJson) {
 
-      //      return GEOJSONParser.parseJSON(geoJson).getCoordinatesCount();
+      return GEOJSONParser.parseJSON(geoJson, false).getCoordinatesCount();
 
-      //      final GEOObject jsonObject = GEOJSONParser.parseJSON(geoJson);
+      //      final GEOObject jsonObject = GEOJSONParser.parseJSON(geoJson, false);
       //      final long cuenta = jsonObject.getCoordinatesCount();
       //      System.out.println("num Vertex: " + cuenta);
       //      return cuenta;
 
-      long counter = 0;
-      for (int index = 0; index < geoJson.length(); index++) {
-         if (geoJson.charAt(index) == '.') {
-            counter++;
-         }
-      }
-
-      final long result = counter / 2;
-      //      if (result >= 10000) {
-      //         System.out.println("num Vertex: " + result);
+      //      long counter = 0;
+      //      for (int index = 0; index < geoJson.length(); index++) {
+      //         if (geoJson.charAt(index) == '.') {
+      //            counter++;
+      //         }
       //      }
-
-      return result;
+      //
+      //      final long result = counter / 2;
+      //      //      if (result >= 10000) {
+      //      //         System.out.println("num Vertex MIO: " + result);
+      //      //      }
+      //
+      //      return result;
    }
 
 
@@ -839,11 +839,13 @@ public class VectorialLOD {
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
       final double factor = areaFactor * areaFactor;
 
-      //ST_Area(Box2D(sg))>0.078 and true
-      return "ST_Area(Box2D(sg))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
+      //-- only for release 2.0
+      //      return "ST_Area(Box2D(sg))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
 
-      //      return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
-      //             + " and " + filterCriteria;
+      return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
+             + " and " + filterCriteria;
+
+      //--------------------------------------------
 
       //      return "ST_Area(Box2D(ST_Intersection(" + _theGeomColumnName + "," + bboxQuery + ")))>"
       //             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
