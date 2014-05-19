@@ -9,9 +9,11 @@
 #ifndef __G3MiOSSDK__MercatorTiledLayer__
 #define __G3MiOSSDK__MercatorTiledLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
+#include "Sector.hpp"
 
-class MercatorTiledLayer : public Layer {
+
+class MercatorTiledLayer : public RasterLayer {
 protected:
   const std::string _protocol;
   const std::string _domain;
@@ -22,10 +24,12 @@ protected:
   protected final java.util.ArrayList<String> _subdomains;
 #endif
   const std::string _imageFormat;
-  
-  const Sector _sector;
+
+  const Sector _dataSector;
+
   const int    _initialLevel;
   const int    _maxLevel;
+  const bool   _isTransparent;
 
   virtual std::string getLayerType() const{
     return "MercatorTiled";
@@ -33,19 +37,24 @@ protected:
 
   virtual bool rawIsEquals(const Layer* that) const;
 
+  const TileImageContribution* rawContribution(const Tile* tile) const;
+
+  const URL createURL(const Tile* tile) const;
+
 public:
-  MercatorTiledLayer(const std::string&              name,
-                     const std::string&              protocol,
+  MercatorTiledLayer(const std::string&              protocol,
                      const std::string&              domain,
                      const std::vector<std::string>& subdomains,
                      const std::string&              imageFormat,
                      const TimeInterval&             timeToCache,
-                     bool                            readExpired,
-                     const Sector&                   sector,
-                     int                             initialLevel,
-                     int                             maxLevel,
-                     LayerCondition*                 condition,
-                     float transparency = (float)1.0);
+                     const bool                      readExpired,
+                     const Sector&                   dataSector,
+                     const int                       initialLevel,
+                     const int                       maxLevel,
+                     const bool                      isTransparent  = false,
+                     const float                     transparency   = 1,
+                     const LayerCondition*           condition      = NULL,
+                     const std::string&              disclaimerInfo = "");
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
@@ -56,10 +65,14 @@ public:
 
   virtual const std::string description() const;
 
-
   virtual MercatorTiledLayer* copy() const;
 
   virtual RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return _dataSector;
+  }
+
 };
 
 #endif

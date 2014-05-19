@@ -12,37 +12,10 @@
 #include <string>
 
 class IImage;
-class Tile;
 class IImageListener;
 class ChangedListener;
 class G3MContext;
-
-
-class TileRasterizerContext {
-private:
-  TileRasterizerContext(const TileRasterizerContext& that);
-
-public:
-#ifdef C_CODE
-  const Tile*   const _tile;
-  const bool          _mercator;
-#endif
-#ifdef JAVA_CODE
-  public final Tile    _tile;
-  public final boolean _mercator;
-#endif
-
-  TileRasterizerContext(const Tile* tile,
-                        bool mercator) :
-  _tile(tile),
-  _mercator(mercator)
-  {
-  }
-
-  ~TileRasterizerContext() {
-  }
-};
-
+class TileRasterizerContext;
 
 class TileRasterizer {
 private:
@@ -54,7 +27,6 @@ protected:
   _enable(true),
   _listener(NULL)
   {
-
   }
 
 public:

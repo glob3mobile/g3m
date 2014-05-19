@@ -13,6 +13,7 @@
 #include "CameraRenderer.hpp"
 #include "GL.hpp"
 #include "IDeviceInfo.hpp"
+#include "IFactory.hpp"
 
 #include "G3MWidget.hpp"
 

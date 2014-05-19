@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__TrailsRenderer__
 #define __G3MiOSSDK__TrailsRenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Geodetic3D.hpp"
 #include <vector>
 #include "Color.hpp"
@@ -157,7 +157,7 @@ public:
 };
 
 
-class TrailsRenderer : public LeafRenderer {
+class TrailsRenderer : public DefaultRenderer {
 private:
   std::vector<Trail*> _trails;
 
@@ -180,39 +180,8 @@ public:
 
   virtual ~TrailsRenderer();
 
-  void onResume(const G3MContext* context) {
-
-  }
-
-  void onPause(const G3MContext* context) {
-
-  }
-
-  void onDestroy(const G3MContext* context) {
-
-  }
-
-  void initialize(const G3MContext* context);
-
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
-  }
-
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
-
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-
-  }
-
-  void start(const G3MRenderContext* rc) {
-
-  }
-
-  void stop(const G3MRenderContext* rc) {
 
   }
 

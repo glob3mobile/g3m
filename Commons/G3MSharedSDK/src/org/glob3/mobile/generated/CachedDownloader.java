@@ -52,7 +52,8 @@ public class CachedDownloader extends IDownloader
     {
       if (_lastImageResult != null)
       {
-        IFactory.instance().deleteImage(_lastImageResult._image);
+        if (_lastImageResult._image != null)
+           _lastImageResult._image.dispose();
         if (_lastImageResult != null)
            _lastImageResult.dispose();
       }
@@ -168,7 +169,8 @@ public class CachedDownloader extends IDownloader
   
     if (_lastImageResult != null)
     {
-      IFactory.instance().deleteImage(_lastImageResult._image);
+      if (_lastImageResult._image != null)
+         _lastImageResult._image.dispose();
       if (_lastImageResult != null)
          _lastImageResult.dispose();
     }

@@ -34,13 +34,28 @@ public class LevelTileCondition extends LayerCondition
 
   }
 
-  public final boolean isAvailable(G3MRenderContext rc, Tile tile)
-  {
-    final int level = tile._level;
-    return ((level >= _minLevel) && (level <= _maxLevel));
-  }
+//  bool isAvailable(const G3MRenderContext* rc,
+//                   const Tile* tile) const;
+//  
+//  bool isAvailable(const G3MEventContext* ec,
+//                   const Tile* tile) const;
 
-  public final boolean isAvailable(G3MEventContext ec, Tile tile)
+
+  //bool LevelTileCondition::isAvailable(const G3MRenderContext* rc,
+  //                                     const Tile* tile) const {
+  //  const int level = tile->_level;
+  //  return ((level >= _minLevel) &&
+  //          (level <= _maxLevel));
+  //}
+  //
+  //bool LevelTileCondition::isAvailable(const G3MEventContext* ec,
+  //                                     const Tile* tile) const {
+  //  const int level = tile->_level;
+  //  return ((level >= _minLevel) &&
+  //          (level <= _maxLevel));
+  //}
+  
+  public final boolean isAvailable(Tile tile)
   {
     final int level = tile._level;
     return ((level >= _minLevel) && (level <= _maxLevel));

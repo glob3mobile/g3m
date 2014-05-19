@@ -39,13 +39,4 @@ public class IImageResult
   public void dispose()
   {
   }
-
-//  IImage* getImage() const {
-//    return _image;
-//  }
-
-//  bool isExpired() const {
-//    return _expired;
-//  }
-
 }

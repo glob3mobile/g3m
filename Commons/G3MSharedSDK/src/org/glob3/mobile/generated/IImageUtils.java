@@ -101,7 +101,7 @@ public class IImageUtils
   
     if (imagesSize == 1)
     {
-      IImage image = images.get(0);
+      final IImage image = images.get(0);
       final RectangleF sourceRect = sourceRects.get(0);
       final RectangleF destRect = destRects.get(0);
   
@@ -118,7 +118,7 @@ public class IImageUtils
   
     for (int i = 0; i < imagesSize ; i++)
     {
-      IImage image = images.get(i);
+      final IImage image = images.get(i);
       final RectangleF srcRect = sourceRects.get(i);
       final RectangleF dstRect = destRects.get(i);
       final float transparency = transparencies.get(i);

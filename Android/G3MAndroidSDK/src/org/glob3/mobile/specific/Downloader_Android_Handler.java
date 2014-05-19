@@ -197,15 +197,20 @@ public final class Downloader_Android_Handler {
             }
          }
          else {
+            //            final long s = SystemClock.currentThreadTimeMillis();
+            //            ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod started.");
+
             connection = (HttpURLConnection) _javaURL.openConnection();
-            connection.setConnectTimeout((int) downloader.getConnectTimeout().milliseconds());
-            connection.setReadTimeout((int) downloader.getReadTimeout().milliseconds());
-            connection.setUseCaches(false);
+            // connection.setConnectTimeout((int) downloader.getConnectTimeout().milliseconds());
+            //connection.setReadTimeout((int) downloader.getReadTimeout().milliseconds());
+            // connection.setUseCaches(false);
             connection.connect();
             statusCode = connection.getResponseCode();
 
             if (statusCode == 200) {
                data = getData(connection.getInputStream(), connection.getContentLength());
+               //               final long e = SystemClock.currentThreadTimeMillis();
+               //               ILogger.instance().logWarning(TAG + " runWithDownloader: downlaod: " + (e - s) + " miliseconds");
             }
          }
       }
@@ -332,6 +337,13 @@ public final class Downloader_Android_Handler {
             _image.dispose();
             _image = null;
          }
+      }
+
+
+      @Override
+      public void dispose() {
+         // TODO Auto-generated method stub
+
       }
    }
 

@@ -7,7 +7,6 @@ import org.glob3.mobile.generated.ICanvas;
 import org.glob3.mobile.generated.IDeviceInfo;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.IShortBuffer;
 import org.glob3.mobile.generated.ITimer;
@@ -22,19 +21,7 @@ public class Factory_JavaDesktop
 
 
    @Override
-   public void deleteImage(final IImage pImage) {
-      throw new RuntimeException("Not yet implemented");
-   }
-
-
-   @Override
    public ITimer createTimer() {
-      throw new RuntimeException("Not yet implemented");
-   }
-
-
-   @Override
-   public void deleteTimer(final ITimer pTimer) {
       throw new RuntimeException("Not yet implemented");
    }
 

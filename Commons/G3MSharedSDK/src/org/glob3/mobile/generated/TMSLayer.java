@@ -18,31 +18,35 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class TMSLayer extends Layer
+public abstract class TMSLayer extends RasterLayer
 {
 
   private final URL _mapServerURL;
 
   private final String _mapLayer;
-  private Sector _sector ;
+  private final Sector _dataSector ;
   private final String _format;
   private final boolean _isTransparent;
 
 
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
   {
-     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, parameters, (float)1.0);
+     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, parameters, transparency, "");
   }
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters)
   {
-     this(mapLayer, mapServerURL, sector, format, isTransparent, condition, timeToCache, readExpired, null, (float)1.0);
+     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, parameters, 1, "");
   }
-  public TMSLayer(String mapLayer, URL mapServerURL, Sector sector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired)
   {
-     super(condition, mapLayer, timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(sector) : parameters, transparency);
+     this(mapLayer, mapServerURL, dataSector, format, isTransparent, condition, timeToCache, readExpired, null, 1, "");
+  }
+  public TMSLayer(String mapLayer, URL mapServerURL, Sector dataSector, String format, boolean isTransparent, LayerCondition condition, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, String disclaimerInfo)
+  {
+     super(timeToCache, readExpired, (parameters == null) ? LayerTilesRenderParameters.createDefaultWGS84(dataSector, 0, 17) : parameters, transparency, condition, disclaimerInfo);
      _mapServerURL = mapServerURL;
      _mapLayer = mapLayer;
-     _sector = new Sector(sector);
+     _dataSector = new Sector(dataSector);
      _format = format;
      _isTransparent = isTransparent;
   }
@@ -53,13 +57,13 @@ public abstract class TMSLayer extends Layer
     java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
     final Sector tileSector = tile._sector;
-    if (!_sector.touchesWith(tileSector))
+    if (!_dataSector.touchesWith(tileSector))
     {
       return petitions;
     }
   
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_mapServerURL.getPath());
+    isb.addString(_mapServerURL._path);
     isb.addString(_mapLayer);
     isb.addString("/");
     isb.addInt(tile._level);
@@ -72,7 +76,7 @@ public abstract class TMSLayer extends Layer
   
     ILogger.instance().logInfo(isb.getString());
   
-    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), getTimeToCache(), getReadExpired(), _isTransparent, _transparency);
+    Petition petition = new Petition(tileSector, new URL(isb.getString(), false), _timeToCache, _readExpired, _isTransparent, _transparency);
     petitions.add(petition);
   
      return petitions;
@@ -97,7 +101,7 @@ public abstract class TMSLayer extends Layer
     {
       _errors.add("Missing layer parameter: mapLayer");
     }
-    final String mapServerUrl = _mapServerURL.getPath();
+    final String mapServerUrl = _mapServerURL._path;
     if (mapServerUrl.compareTo("") == 0)
     {
       _errors.add("Missing layer parameter: mapServerURL");

@@ -23,18 +23,16 @@ package org.glob3.mobile.generated;
 
 public class GEOPolygonRasterSymbol extends GEORasterSymbol
 {
-  private java.util.ArrayList<Geodetic2D> _coordinates;
-  private final GEO2DLineRasterStyle      _lineStyle;
-  private final GEO2DSurfaceRasterStyle   _surfaceStyle;
-
-  private final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _holesCoordinatesArray;
+  private final GEO2DPolygonData _polygonData;
+  private final GEO2DLineRasterStyle    _lineStyle;
+  private final GEO2DSurfaceRasterStyle _surfaceStyle;
 
   protected final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
   {
     final boolean rasterSurface = _surfaceStyle.apply(canvas);
     final boolean rasterBoundary = _lineStyle.apply(canvas);
   
-    rasterPolygon(_coordinates, _holesCoordinatesArray, rasterSurface, rasterBoundary, canvas, projection);
+    rasterPolygon(_polygonData, rasterSurface, rasterBoundary, canvas, projection);
   }
 
 
@@ -48,19 +46,28 @@ public class GEOPolygonRasterSymbol extends GEORasterSymbol
   }
   public GEOPolygonRasterSymbol(GEO2DPolygonData polygonData, GEO2DLineRasterStyle lineStyle, GEO2DSurfaceRasterStyle surfaceStyle, int minTileLevel, int maxTileLevel)
   {
-     super(calculateSectorFromCoordinates(polygonData.getCoordinates()), minTileLevel, maxTileLevel);
-     _coordinates = copyCoordinates(polygonData.getCoordinates());
-     _holesCoordinatesArray = copyCoordinatesArray(polygonData.getHolesCoordinatesArray());
+     super(minTileLevel, maxTileLevel);
+     _polygonData = polygonData;
      _lineStyle = lineStyle;
      _surfaceStyle = surfaceStyle;
-  
+    if (_polygonData != null)
+    {
+      _polygonData._retain();
+    }
   }
 
   public void dispose()
   {
-  
+    if (_polygonData != null)
+    {
+      _polygonData._release();
+    }
     super.dispose();
-  
+  }
+
+  public final Sector getSector()
+  {
+    return (_polygonData == null) ? null : _polygonData.getSector();
   }
 
 }

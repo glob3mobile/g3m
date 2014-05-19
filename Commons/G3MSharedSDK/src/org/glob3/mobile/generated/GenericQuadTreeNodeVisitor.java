@@ -8,13 +8,12 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GenericQuadTree.h
+//  GenericQuadTree.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 07/08/13.
 //
 //
-
 
 
 

@@ -10,7 +10,6 @@
 
 #include "ILogger.hpp"
 #include "Downloader_iOS.hpp"
-#include "IFactory.hpp"
 #include "IStringUtils.hpp"
 
 #import "NSString_CppAdditions.h"
@@ -181,7 +180,7 @@
     if (_url->isFileProtocol()) {
       const IStringUtils* su = IStringUtils::instance();
 
-      const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->getPath(),
+      const std::string fileFullName = IStringUtils::instance()->replaceSubstring(_url->_path,
                                                                                   URL::FILE_PROTOCOL,
                                                                                   "");
       const int dotPos = su->indexOf(fileFullName, ".");

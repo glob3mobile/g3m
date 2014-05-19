@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class BingMapsLayer extends Layer
+public class BingMapsLayer extends RasterLayer
 {
   private final String _imagerySet;
   private final String _culture;
@@ -83,63 +83,102 @@ public class BingMapsLayer extends Layer
     return true;
   }
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
+  }
+
+  protected final URL createURL(Tile tile)
+  {
+    final IStringUtils su = IStringUtils.instance();
+  
+    final int level = tile._level;
+    final int column = tile._column;
+    final int numRows = (int) IMathUtils.instance().pow(2.0, level);
+    final int row = numRows - tile._row - 1;
+  
+    final int subdomainsSize = _imageUrlSubdomains.size();
+    String subdomain = "";
+    if (subdomainsSize > 0)
+    {
+      // select subdomain based on fixed data (instead of round-robin) to be cache friendly
+      final int subdomainsIndex = IMathUtils.instance().abs(level + column + row) % subdomainsSize;
+      subdomain = _imageUrlSubdomains.get(subdomainsIndex);
+    }
+  
+    final String quadkey = getQuadkey(level, column, row);
+  
+    String path = _imageUrl;
+    path = su.replaceSubstring(path, "{subdomain}", subdomain);
+    path = su.replaceSubstring(path, "{quadkey}", quadkey);
+    path = su.replaceSubstring(path, "{culture}", _culture);
+  
+    return new URL(path, false);
+  }
+
 
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http: //msdn.microsoft.com/en-us/library/gg650598.aspx
    */
-  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
   {
-     this(imagerySet, key, timeToCache, readExpired, initialLevel, condition, (float)1.0);
+     this(imagerySet, key, timeToCache, readExpired, initialLevel, transparency, condition, "");
+  }
+  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
+  {
+     this(imagerySet, key, timeToCache, readExpired, initialLevel, transparency, null, "");
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(imagerySet, key, timeToCache, readExpired, initialLevel, null, (float)1.0);
+     this(imagerySet, key, timeToCache, readExpired, initialLevel, 1, null, "");
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired)
   {
-     this(imagerySet, key, timeToCache, readExpired, 2, null, (float)1.0);
+     this(imagerySet, key, timeToCache, readExpired, 2, 1, null, "");
   }
   public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache)
   {
-     this(imagerySet, key, timeToCache, true, 2, null, (float)1.0);
+     this(imagerySet, key, timeToCache, true, 2, 1, null, "");
   }
-  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
+  public BingMapsLayer(String imagerySet, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(condition, "BingMaps", timeToCache, readExpired, null, transparency);
+     super(timeToCache, readExpired, null, transparency, condition, disclaimerInfo);
      _imagerySet = imagerySet;
      _culture = "en-US";
      _key = key;
      _initialLevel = initialLevel;
      _isInitialized = false;
-  
   }
 
-  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
   {
-     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, condition, (float)1.0);
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, transparency, condition, "");
+  }
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
+  {
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, transparency, null, "");
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, null, (float)1.0);
+     this(imagerySet, culture, key, timeToCache, readExpired, initialLevel, 1, null, "");
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired)
   {
-     this(imagerySet, culture, key, timeToCache, readExpired, 2, null, (float)1.0);
+     this(imagerySet, culture, key, timeToCache, readExpired, 2, 1, null, "");
   }
   public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache)
   {
-     this(imagerySet, culture, key, timeToCache, true, 2, null, (float)1.0);
+     this(imagerySet, culture, key, timeToCache, true, 2, 1, null, "");
   }
-  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition, float transparency)
+  public BingMapsLayer(String imagerySet, String culture, String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(condition, "BingMaps", timeToCache, readExpired, null, transparency);
+     super(timeToCache, readExpired, null, transparency, condition, disclaimerInfo);
      _imagerySet = imagerySet;
      _culture = culture;
      _key = key;
      _initialLevel = initialLevel;
      _isInitialized = false;
-  
   }
 
   public final URL getFeatureInfoURL(Geodetic2D position, Sector sector)
@@ -291,7 +330,7 @@ public class BingMapsLayer extends Layer
   
     processMetadata(brandLogoUri, copyright, imageUrl, imageUrlSubdomains, imageWidth, imageHeight, zoomMin, zoomMax);
   
-  //  http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1180&mkt={culture}
+    //  http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1180&mkt={culture}
   
   
     parser.deleteJSONData(jsonBaseObject);
@@ -314,7 +353,7 @@ public class BingMapsLayer extends Layer
 
   public final BingMapsLayer copy()
   {
-    return new BingMapsLayer(_imagerySet, _key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
+    return new BingMapsLayer(_imagerySet, _culture, _key, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
   }
 
   public final RenderState getRenderState()
@@ -339,4 +378,10 @@ public class BingMapsLayer extends Layer
     }
     return RenderState.ready();
   }
+
+  public final Sector getDataSector()
+  {
+    return Sector.fullSphere();
+  }
+
 }

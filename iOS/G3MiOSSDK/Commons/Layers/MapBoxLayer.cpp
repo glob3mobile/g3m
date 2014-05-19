@@ -9,7 +9,8 @@
 #include "MapBoxLayer.hpp"
 
 #include "LayerCondition.hpp"
-
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 const std::string MapBoxLayer::description() const {
   return "[MapBoxLayer]";
@@ -22,11 +23,13 @@ bool MapBoxLayer::rawIsEquals(const Layer* that) const {
 
 MapBoxLayer* MapBoxLayer::copy() const {
   return new MapBoxLayer(_mapKey,
-                         TimeInterval::fromMilliseconds(_timeToCacheMS),
+                         _timeToCache,
                          _readExpired,
                          _initialLevel,
                          _maxLevel,
-                         (_condition == NULL) ? NULL : _condition->copy());
+                         _transparency,
+                         (_condition == NULL) ? NULL : _condition->copy(),
+                         _disclaimerInfo);
 }
 
 RenderState MapBoxLayer::getRenderState() {

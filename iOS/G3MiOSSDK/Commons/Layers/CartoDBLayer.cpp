@@ -9,7 +9,8 @@
 #include "CartoDBLayer.hpp"
 
 #include "LayerCondition.hpp"
-
+#include "TimeInterval.hpp"
+#include "RenderState.hpp"
 
 const std::string CartoDBLayer::description() const {
   return "[CartoDBLayer]";
@@ -23,9 +24,12 @@ bool CartoDBLayer::rawIsEquals(const Layer* that) const {
 CartoDBLayer* CartoDBLayer::copy() const {
   return new CartoDBLayer(_userName,
                           _table,
-                          TimeInterval::fromMilliseconds(_timeToCacheMS),
+                          _timeToCache,
                           _readExpired,
-                          (_condition == NULL) ? NULL : _condition->copy());
+                          _transparency,
+                          _isTransparent,
+                          (_condition == NULL) ? NULL : _condition->copy(),
+                          _disclaimerInfo);
 }
 
 RenderState CartoDBLayer::getRenderState() {

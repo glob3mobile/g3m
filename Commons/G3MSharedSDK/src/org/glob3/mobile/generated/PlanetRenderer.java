@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class PlanetRenderer extends LeafRenderer implements ChangedListener, SurfaceElevationProvider
+public class PlanetRenderer extends DefaultRenderer implements ChangedListener, ChangedInfoListener, SurfaceElevationProvider
 {
   private TileTessellator _tessellator;
   private ElevationDataProvider _elevationDataProvider;
@@ -17,7 +17,6 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   private TilesStatistics _statistics = new TilesStatistics();
 
   private Camera     _lastCamera;
-  private G3MContext _context;
 
   private java.util.ArrayList<Tile> _firstLevelTiles = new java.util.ArrayList<Tile>();
   private boolean _firstLevelTilesJustCreated;
@@ -80,7 +79,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
         if (_renderedSector == null || sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
         {
-          Tile tile = new Tile(_texturizer, null, sector, 0, row, col, this);
+          Tile tile = new Tile(_texturizer, null, sector, parameters._mercator, 0, row, col, this);
           if (parameters._firstLevel == 0)
           {
             _firstLevelTiles.add(tile);
@@ -99,7 +98,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < topLevelTilesSize; i++)
       {
         Tile tile = topLevelTiles.get(i);
-        createFirstLevelTiles(_firstLevelTiles, tile, parameters._firstLevel, parameters._mercator);
+        createFirstLevelTiles(_firstLevelTiles, tile, parameters._firstLevel);
       }
     }
   
@@ -109,8 +108,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
     _firstLevelTilesJustCreated = true;
   }
-  private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel, boolean mercator)
+  private void createFirstLevelTiles(java.util.ArrayList<Tile> firstLevelTiles, Tile tile, int firstLevel)
   {
+  
     if (tile._level == firstLevel)
     {
       firstLevelTiles.add(tile);
@@ -123,10 +123,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   
       final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
   
-      final Angle splitLatitude = mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude);
-      /*                               */
-      /*                               */
-  
+      final Angle splitLatitude = (tile._mercator ? MercatorUtils.calculateSplitLatitude(lower._latitude, upper._latitude) : Angle.midAngle(lower._latitude, upper._latitude));
   
       java.util.ArrayList<Tile> children = tile.createSubTiles(splitLatitude, splitLongitude, false);
   
@@ -134,7 +131,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       for (int i = 0; i < childrenSize; i++)
       {
         Tile child = children.get(i);
-        createFirstLevelTiles(firstLevelTiles, child, firstLevel, mercator);
+        createFirstLevelTiles(firstLevelTiles, child, firstLevel);
       }
   
       children = null;
@@ -251,7 +248,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   {
     if (tile._level < maxLevel)
     {
-      java.util.ArrayList<Tile> subTiles = tile.getSubTiles(getLayerTilesRenderParameters()._mercator);
+      java.util.ArrayList<Tile> subTiles = tile.getSubTiles();
   
       final int subTilesCount = subTiles.size();
       for (int i = 0; i < subTilesCount; i++)
@@ -269,7 +266,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     }
   }
 
-  private long _texturePriority;
+  private long _tileDownloadPriority;
 
   private float _verticalExaggeration;
 
@@ -308,7 +305,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     {
       _errors.clear();
       _layerTilesRenderParameters = null;
-      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
+      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, _errors);
       if (_layerTilesRenderParameters == null)
       {
         ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
@@ -320,6 +317,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 //  std::list<Tile*> _tilesRenderedInLastFrame;
 
@@ -385,6 +383,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
 =======
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
 >>>>>>> origin/purgatory
+=======
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener)
+>>>>>>> origin/purgatory
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -399,9 +400,8 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _lastSplitTimer = null;
      _lastCamera = null;
      _firstRender = false;
-     _context = null;
      _lastVisibleSector = null;
-     _texturePriority = texturePriority;
+     _tileDownloadPriority = tileDownloadPriority;
      _allFirstLevelTilesAreTextureSolved = false;
      _recreateTilesPending = false;
      _glState = new GLState();
@@ -412,11 +412,15 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
+    _context = null;
     _layerSet.setChangeListener(this);
+    _layerSet.setChangedInfoListener(this);
     if (_tileRasterizer != null)
     {
       _tileRasterizer.setChangeListener(this);
     }
+  
+    _changedInfoListener = changedInfoListener;
   }
 
   public void dispose()
@@ -510,9 +514,13 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       {
         Tile tile = _firstLevelTiles.get(i);
 <<<<<<< HEAD
+<<<<<<< HEAD
         tile.performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, _statistics, _logTilesPetitions);
 =======
         tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
+>>>>>>> origin/purgatory
+=======
+        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
 >>>>>>> origin/purgatory
       }
     }
@@ -532,7 +540,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         {
           Tile tile = iter.next();
   
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); //SENDING SQUARED TEX SIZE -  if first render, force full render
+          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); //SENDING SQUARED TEX SIZE -  if first render, forceFullRender
         }
   
         toVisit = toVisitInNextIteration;
@@ -545,25 +553,13 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
       _statistics.log(rc.getLogger());
     }
   
-  
-    final Sector renderedSector = _statistics.getRenderedSector();
-    if (renderedSector != null)
-    {
-      if ((_lastVisibleSector == null) || !renderedSector.isEquals(_lastVisibleSector))
-      {
-        if (_lastVisibleSector != null)
-           _lastVisibleSector.dispose();
-        _lastVisibleSector = new Sector(renderedSector);
-      }
-    }
-  
+    _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
     if (_lastVisibleSector != null)
     {
       final int visibleSectorListenersCount = _visibleSectorListeners.size();
       for (int i = 0; i < visibleSectorListenersCount; i++)
       {
         VisibleSectorListenerEntry entry = _visibleSectorListeners.get(i);
-  
         entry.tryToNotifyListener(_lastVisibleSector, rc);
       }
     }
@@ -675,7 +671,7 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
         for (int i = 0; i < firstLevelTilesCount; i++)
         {
           Tile tile = _firstLevelTiles.get(i);
-          tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _texturePriority, _verticalExaggeration, _logTilesPetitions);
+          tile.prepareForFullRendering(rc, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, layerTilesRenderParameters, _layerSet, _tilesRenderParameters, true, _tileDownloadPriority, _verticalExaggeration, _logTilesPetitions); // forceFullRender
         }
       }
   
@@ -743,19 +739,9 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
     _firstRender = false;
   }
 
-  public final void onResume(G3MContext context)
-  {
-
-  }
-
   public final void onPause(G3MContext context)
   {
     recreateTiles();
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
   }
 
   public final void setEnable(boolean enable)
@@ -833,21 +819,21 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   /**
    * Set the download-priority used by Tiles (for downloading textures).
    *
-   * @param texturePriority: new value for download priority of textures
+   * @param tileDownloadPriority: new value for download priority of textures
    */
-  public final void setTexturePriority(long texturePriority)
+  public final void setTileDownloadPriority(long tileDownloadPriority)
   {
-    _texturePriority = texturePriority;
+    _tileDownloadPriority = tileDownloadPriority;
   }
 
   /**
    * Return the current value for the download priority of textures
    *
-   * @return _texturePriority: long
+   * @return _tileDownloadPriority: long
    */
-  public final long getTexturePriority()
+  public final long getTileDownloadPriority()
   {
-    return _texturePriority;
+    return _tileDownloadPriority;
   }
 
   /**
@@ -1003,6 +989,14 @@ public class PlanetRenderer extends LeafRenderer implements ChangedListener, Sur
   public final boolean getRenderTileMeshes()
   {
     return _renderTileMeshes;
+  }
+
+  public final void changedInfo(java.util.ArrayList<String> info)
+  {
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
+    }
   }
 
 }

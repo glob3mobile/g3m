@@ -25,21 +25,24 @@
 #include "GEO2DMultiPolygonGeometry.hpp"
 #include "BSONParser.hpp"
 
-GEOObject* GEOJSONParser::parseJSON(const IByteBuffer* json) {
-  return parseJSON(json->getAsString());
+GEOObject* GEOJSONParser::parseJSON(const IByteBuffer* json,
+                                    bool showStatistics) {
+  return parseJSON(json->getAsString(), showStatistics);
 }
 
-GEOObject* GEOJSONParser::parseJSON(const std::string& json) {
+GEOObject* GEOJSONParser::parseJSON(const std::string& json,
+                                    bool showStatistics) {
   GEOJSONParser parser(json, NULL);
-  return parser.pvtParse();
+  return parser.pvtParse(showStatistics);
 }
 
-GEOObject* GEOJSONParser::parseBSON(const IByteBuffer* bson) {
+GEOObject* GEOJSONParser::parseBSON(const IByteBuffer* bson,
+                                    bool showStatistics) {
   GEOJSONParser parser("", bson);
-  return parser.pvtParse();
+  return parser.pvtParse(showStatistics);
 }
 
-void GEOJSONParser::showStatistics() const {
+void GEOJSONParser::showStatisticsToLogger() const {
   ILogger::instance()->logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), Polygons2D=%d (Holes=%d), MultiPolygons=%d, features=%d, featuresCollection=%d",
                                _coordinates2DCount,
                                _points2DCount,
@@ -53,23 +56,27 @@ void GEOJSONParser::showStatistics() const {
                                _featuresCollectionCount);
 }
 
-GEOObject* GEOJSONParser::pvtParse() const {
-  const JSONBaseObject* jsonBaseObject = (_bson == NULL) ? IJSONParser::instance()->parse(_json) : BSONParser::parse(_bson);
-
+GEOObject* GEOJSONParser::pvtParse(bool showStatistics) const {
   GEOObject* result = NULL;
 
-  const JSONObject* jsonObject = jsonBaseObject->asObject();
-  if (jsonObject != NULL) {
-    result = toGEO(jsonObject);
+  const JSONBaseObject* jsonBaseObject = (_bson == NULL) ? IJSONParser::instance()->parse(_json) : BSONParser::parse(_bson);
+
+  if (jsonBaseObject != NULL) {
+    const JSONObject* jsonObject = jsonBaseObject->asObject();
+    if (jsonObject != NULL) {
+      result = toGEO(jsonObject);
+    }
+    else {
+      ILogger::instance()->logError("Root object for GEOJSON has to be a JSONObject");
+    }
+
+    delete jsonBaseObject;
+
+    if (showStatistics) {
+      showStatisticsToLogger();
+    }
   }
-  else {
-    ILogger::instance()->logError("Root object for GEOJSON has to be a JSONObject");
-  }
-
-  delete jsonBaseObject;
-
-  showStatistics();
-
+  
   return result;
 }
 

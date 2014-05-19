@@ -1,4 +1,26 @@
 package org.glob3.mobile.generated; 
+//
+//  FrameTasksExecutor.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 19/08/12.
+//
+//
+
+//
+//  FrameTasksExecutor.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 19/08/12.
+//
+//
+
+
+
+//class G3MRenderContext;
+//class FrameTask;
+
+
 public class FrameTasksExecutor
 {
   private final int _minimumExecutionsPerFrame;
@@ -6,17 +28,22 @@ public class FrameTasksExecutor
   private final int _maximumQueuedTasks;
   private final long _maxTimePerFrameMS;
   private final long _maxTimePerFrameStressedMS;
+  private final boolean _debug;
 
-  private java.util.LinkedList<FrameTask> _preRenderTasks = new java.util.LinkedList<FrameTask>();
+  private java.util.LinkedList<FrameTask> _tasks = new java.util.LinkedList<FrameTask>();
 
   private boolean canExecutePreRenderStep(G3MRenderContext rc, int executedCounter)
   {
-    final int tasksCount = _preRenderTasks.size();
+    final int tasksCount = _tasks.size();
     if (tasksCount <= _minimumExecutionsPerFrame)
     {
-      //if (_stressed) {
-      //  rc->getLogger()->logWarning("Abandon STRESSED mode");
-      //}
+      if (_debug)
+      {
+        if (_stressed)
+        {
+          rc.getLogger().logWarning("FTE: Abandon STRESSED mode");
+        }
+      }
       _stressed = false;
     }
   
@@ -32,10 +59,13 @@ public class FrameTasksExecutor
   
     if (tasksCount > _maximumQueuedTasks)
     {
-      //if (!_stressed) {
-      //  rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
-      //                              _preRenderTasks.size());
-      //}
+      if (_debug)
+      {
+        if (!_stressed)
+        {
+          rc.getLogger().logWarning("FTE: Too many queued tasks (%d). Goes to STRESSED mode", _tasks.size());
+        }
+      }
       _stressed = true;
     }
   
@@ -53,27 +83,68 @@ public class FrameTasksExecutor
 
   private boolean _stressed;
 
+  private void showDebugInfo(G3MRenderContext rc, int executedCounter, int canceledCounter)
+  {
+    final int preRenderTasksSize = _tasks.size();
+    if ((executedCounter > 0) || (canceledCounter > 0) || (preRenderTasksSize > 0))
+    {
+  
+      IStringBuilder isb = IStringBuilder.newStringBuilder();
+      isb.addString("FTE: Tasks");
+  
+      if (canceledCounter > 0)
+      {
+        isb.addString(" canceled=");
+        isb.addInt(canceledCounter);
+      }
+  
+      if (executedCounter > 0)
+      {
+        isb.addString(" executed=");
+        isb.addInt(executedCounter);
+        isb.addString(" in ");
+        isb.addLong(rc.getFrameStartTimer().elapsedTimeInMilliseconds());
+        isb.addString("ms");
+      }
+  
+      isb.addString(" queued=");
+      isb.addInt(preRenderTasksSize);
+  
+      if (_stressed)
+      {
+        isb.addString(" *Stressed*");
+      }
+  
+      final String msg = isb.getString();
+      if (isb != null)
+         isb.dispose();
+  
+      rc.getLogger().logInfo(msg);
+    }
+  }
+
   public FrameTasksExecutor()
   {
      _minimumExecutionsPerFrame = 1;
-     _maximumExecutionsPerFrame = 8;
+     _maximumExecutionsPerFrame = 4;
      _maximumQueuedTasks = 64;
-     _maxTimePerFrameMS = 5;
-     _maxTimePerFrameStressedMS = 25;
+     _maxTimePerFrameMS = 10;
+     _maxTimePerFrameStressedMS = 20;
      _stressed = false;
-
+     _debug = false;
   }
 
-  public final void addPreRenderTask(FrameTask preRenderTask)
+  public final void addPreRenderTask(FrameTask task)
   {
-    _preRenderTasks.addLast(preRenderTask);
+    _tasks.addLast(task);
   }
 
   public final void doPreRenderCycle(G3MRenderContext rc)
   {
   
-    //  int canceledCounter = 0;
-    java.util.Iterator<FrameTask> i = _preRenderTasks.iterator();
+    // remove canceled tasks
+    int canceledCounter = 0;
+    java.util.Iterator<FrameTask> i = _tasks.iterator();
     while (i.hasNext())
     {
       FrameTask task = i.next();
@@ -84,24 +155,28 @@ public class FrameTasksExecutor
         if (task != null)
            task.dispose();
         i.remove();
-        //      canceledCounter++;
+        canceledCounter++;
       }
       else
       {
       }
     }
   
-    //  if (canceledCounter > 0) {
-    //    rc->getLogger()->logInfo("Removed %d tasks, actived %d tasks.",
-    //                             canceledCounter,
-    //                             _preRenderTasks.size());
-    //  }
+    if (_debug)
+    {
+      if (canceledCounter > 0)
+      {
+        rc.getLogger().logInfo("FTE: Removed %d tasks, actived %d tasks.", canceledCounter, _tasks.size());
+      }
+    }
   
+  
+    // execute some tasks
     int executedCounter = 0;
     while (canExecutePreRenderStep(rc, executedCounter))
     {
-      FrameTask task = _preRenderTasks.getFirst();
-      _preRenderTasks.removeFirst();
+      FrameTask task = _tasks.getFirst();
+      _tasks.removeFirst();
   
       task.execute(rc);
   
@@ -111,35 +186,15 @@ public class FrameTasksExecutor
       executedCounter++;
     }
   
-    //  if (false) {
-    //    //    if ( rc->getFrameStartTimer()->elapsedTime().milliseconds() > _maxTimePerFrame.milliseconds()*3 ) {
-    //    //      rc->getLogger()->logWarning("doPreRenderCycle() took too much time, Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
-    //    //                                  canceledCounter,
-    //    //                                  executedCounter,
-    //    //                                  rc->getFrameStartTimer()->elapsedTime().milliseconds(),
-    //    //                                  _preRenderTasks.size(),
-    //    //                                  _stressed);
-    //    //
-    //    //    }
-    //    //    else {
-    //    if ((executedCounter > 0) ||
-    //        (canceledCounter > 0) ||
-    //        (_preRenderTasks.size() > 0)) {
-    //      rc->getLogger()->logInfo("Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
-    //                               canceledCounter,
-    //                               executedCounter,
-    //                               rc->getFrameStartTimer()->elapsedTime().milliseconds(),
-    //                               _preRenderTasks.size(),
-    //                               _stressed);
-    //    }
-    //    //    }
-    //  }
   
+    if (_debug)
+    {
+      showDebugInfo(rc, executedCounter, canceledCounter);
+    }
   }
 
   public void dispose()
   {
-
   }
 
 }

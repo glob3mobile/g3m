@@ -9,14 +9,14 @@
 #ifndef G3MiOSSDK_BusyMeshRenderer
 #define G3MiOSSDK_BusyMeshRenderer
 
-#include "LeafRenderer.hpp"
+#include "ProtoRenderer.hpp"
 #include "IndexedMesh.hpp"
 #include "Effects.hpp"
 #include "Color.hpp"
 #include "GLState.hpp"
 
 
-class BusyMeshRenderer : public LeafRenderer, EffectTarget {
+class BusyMeshRenderer : public ProtoRenderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;
@@ -49,18 +49,11 @@ public:
 
   }
   
-  void initialize(const G3MContext* context);
-  
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
+  void initialize(const G3MContext* context) {
+    
   }
-
+ 
   void render(const G3MRenderContext* rc, GLState* glState);
-  
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
   
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
@@ -79,10 +72,6 @@ public:
     delete _backgroundColor;
 
     _glState->_release();
-    
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
   }
 
   void incDegrees(double value) {

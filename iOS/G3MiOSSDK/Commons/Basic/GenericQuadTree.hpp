@@ -1,5 +1,5 @@
 //
-//  GenericQuadTree.h
+//  GenericQuadTree.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 07/08/13.
@@ -8,8 +8,6 @@
 
 #ifndef __G3MiOSSDK__GenericQuadTree__
 #define __G3MiOSSDK__GenericQuadTree__
-
-#include <iostream>
 
 #include "Sector.hpp"
 #include "Geodetic2D.hpp"
@@ -408,4 +406,5 @@ public:
   static void run(GenericQuadTree& tree, GEOTileRasterizer* rasterizer);
   
 };
-#endif /* defined(__G3MiOSSDK__GenericGenericQuadTree__) */
+
+#endif

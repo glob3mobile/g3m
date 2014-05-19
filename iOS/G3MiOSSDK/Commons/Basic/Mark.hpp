@@ -271,6 +271,9 @@ public:
   void elevationChanged(const Sector& position,
                         const ElevationData* rawElevationData, //Without considering vertical exaggeration
                         double verticalExaggeration) {}
+
+  void setPosition(const Geodetic3D& position);
+
 };
 
 #endif

@@ -214,7 +214,7 @@ void ICanvas::drawImage(const IImage* image,
   if (transparency >= 1.0) {
     _drawImage(image,
                srcLeft, srcTop, srcWidth, srcHeight,
-               destLeft, destTop, destWidth, destHeight);
+               destLeft, destTop, destWidth, destHeight, transparency);
   } else{
     _drawImage(image,
                srcLeft, srcTop, srcWidth, srcHeight,

@@ -38,8 +38,8 @@ public:
                           TileRasterizer* tileRasterizer,
                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                           const LayerSet* layerSet,
-                          bool isForcedFullRender,
-                          long long texturePriority,
+                          bool forceFullRender,
+                          long long tileDownloadPriority,
                           Tile* tile,
                           Mesh* tessellatorMesh,
                           Mesh* previousMesh,
@@ -65,7 +65,7 @@ public:
                                    const Geodetic3D& position,
                                    const Tile* tile,
                                    LayerSet* layerSet) = 0;
-
+  
 };
 
 #endif

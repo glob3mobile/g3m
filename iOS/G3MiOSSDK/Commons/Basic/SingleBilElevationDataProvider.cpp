@@ -117,7 +117,7 @@ void SingleBilElevationDataProvider::onElevationData(ElevationData* elevationDat
   _elevationDataResolved = true;
   if (_elevationData == NULL) {
     ILogger::instance()->logError("Can't download Elevation-Data from %s",
-                                  _bilUrl.getPath().c_str());
+                                  _bilUrl._path.c_str());
   }
 
   drainQueue();

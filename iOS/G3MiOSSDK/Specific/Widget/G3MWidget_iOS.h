@@ -26,6 +26,7 @@ class CameraRenderer;
 class LayerSet;
 class ICameraConstrainer;
 class Renderer;
+class ProtoRenderer;
 class WidgetUserData;
 class PlanetRenderer;
 class TilesRenderParameters;
@@ -34,6 +35,7 @@ class PeriodicalTask;
 class GInitializationTask;
 class TimeInterval;
 class ErrorRenderer;
+class InfoDisplay;
 
 // This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
 // The view content is basically an EAGL surface you render your OpenGL scene into.
@@ -68,7 +70,7 @@ class ErrorRenderer;
            cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (Renderer*) busyRenderer
+                busyRenderer: (ProtoRenderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
                  hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor
@@ -78,7 +80,8 @@ class ErrorRenderer;
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition;
+       initialCameraPosition: (Geodetic3D) initialCameraPosition
+                 infoDisplay: (InfoDisplay*) infoDisplay;
 
 - (GL*)getGL;
 

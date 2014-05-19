@@ -16,7 +16,6 @@
 #include "TilesRenderParameters.hpp"
 #include "DownloadPriority.hpp"
 #include "G3MWidget.hpp"
-//#include "SimpleCameraConstrainer.hpp"
 #include "SectorAndHeightCameraConstrainer.hpp"
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
@@ -50,6 +49,8 @@
 #include "Mark.hpp"
 #include "URLTemplateLayer.hpp"
 #include "ErrorHandling.hpp"
+#include "ICanvas.hpp"
+#include "ICanvasUtils.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -188,7 +189,8 @@ MapBooBuilder::MapBooBuilder(const URL& serverURL,
                              const std::string& applicationId,
                              MapBoo_ViewType viewType,
                              MapBooApplicationChangeListener* applicationListener,
-                             bool enableNotifications) :
+                             bool enableNotifications,
+                             const std::string& token) :
 _serverURL(serverURL),
 _tubesURL(tubesURL),
 _applicationId(applicationId),
@@ -199,6 +201,7 @@ _applicationEMail(""),
 _applicationAbout(""),
 _applicationTimestamp(-1),
 _applicationEventId(-1),
+_token(token),
 _gl(NULL),
 _g3mWidget(NULL),
 _storage(NULL),
@@ -384,7 +387,7 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&   
   if (iconURL != NULL) {
     isb->addString(",\"iconURL\":");
     isb->addString("\"");
-    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString( escapeString(iconURL->_path) );
     isb->addString("\"");
   }
 
@@ -422,7 +425,7 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&  p
   if (iconURL != NULL) {
     isb->addString(",\"iconURL\":");
     isb->addString("\"");
-    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString( escapeString(iconURL->_path) );
     isb->addString("\"");
   }
 
@@ -505,7 +508,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                                                       quality);
 
   const bool showStatistics = false;
-  long long texturePriority = DownloadPriority::HIGHER;
+  long long tileDownloadPriority = DownloadPriority::HIGHER;
 
   const Sector renderedSector = Sector::fullSphere();
   const bool renderTileMeshes = true;
@@ -513,6 +516,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool logTilesPetitions = false;
 
   TileRenderingListener* tileRenderingListener = NULL;
+  
+  ChangedRendererInfoListener* changedRendererInfoListener = NULL;
 
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
@@ -523,11 +528,12 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               _layerSet,
                                               parameters,
                                               showStatistics,
-                                              texturePriority,
+                                              tileDownloadPriority,
                                               renderedSector,
                                               renderTileMeshes,
                                               logTilesPetitions,
-                                              tileRenderingListener);
+                                              tileRenderingListener,
+                                              changedRendererInfoListener);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
@@ -565,12 +571,43 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
   return cameraRenderer;
 }
 
-Renderer* MapBooBuilder::createBusyRenderer() {
+ProtoRenderer* MapBooBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
 }
 
+
+class Mapboo_ErrorMessagesCustomizer : public ErrorMessagesCustomizer {
+private:
+  MapBooBuilder* _mbBuilder;
+public:
+  Mapboo_ErrorMessagesCustomizer(MapBooBuilder* mbBuilder) {
+    _mbBuilder = mbBuilder;
+  }
+  ~Mapboo_ErrorMessagesCustomizer() {}
+  std::vector<std::string> customize(const std::vector<std::string>& errors) {
+    std::vector<std::string> customizedErrorMessages;
+    const IStringUtils* stringUtils = IStringUtils::instance();
+    const int errorsSize = errors.size();
+    
+    const std::string appNotFound = "Invalid request: Application #" + _mbBuilder->getApplicationId() + " not found";
+    
+    for (int i = 0; i < errorsSize; i++) {
+      std::string error = errors.at(i);
+      if (stringUtils->beginsWith(error, appNotFound)) {
+        customizedErrorMessages.push_back("Oops, application not found!");
+        break;
+      }
+      else {
+        customizedErrorMessages.push_back(error);
+      }
+    }
+    
+    return customizedErrorMessages;
+  };
+};
+
 ErrorRenderer* MapBooBuilder::createErrorRenderer() {
-  return new HUDErrorRenderer();
+  return new HUDErrorRenderer(new Mapboo_ErrorMessagesCustomizer(this));
 }
 
 MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonLayer,
@@ -620,17 +657,12 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
   const std::string style = jsonLayer->getAsString("style", "");
   const URL queryServerURL = URL("", false);
   const WMSServerVersion queryServerVersion = mapServerVersion;
-  const double lowerLat = jsonLayer->getAsNumber("lowerLat", -90.0);
-  const double lowerLon = jsonLayer->getAsNumber("lowerLon", -180.0);
-  const double upperLat = jsonLayer->getAsNumber("upperLat", 90.0);
-  const double upperLon = jsonLayer->getAsNumber("upperLon", 180.0);
-  const Sector sector = Sector(Geodetic2D(Angle::fromDegrees(lowerLat), Angle::fromDegrees(lowerLon)),
-                               Geodetic2D(Angle::fromDegrees(upperLat), Angle::fromDegrees(upperLon)));
+  const Sector sector = parseSector(jsonLayer, "validSector");
   std::string imageFormat = jsonLayer->getAsString("imageFormat", "image/png");
   const std::string srs = jsonLayer->getAsString("projection", "EPSG:4326");
   LayerTilesRenderParameters* layerTilesRenderParameters = NULL;
   if (srs.compare("EPSG:4326") == 0) {
-    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::fullSphere());
+    layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultWGS84(0, 17);
   }
   else if (srs.compare("EPSG:3857") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
@@ -669,13 +701,7 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
   const std::string projection = jsonLayer->getAsString("projection", "EPSG:3857");
   const bool mercator = (projection == "EPSG:3857");
 
-  const double lowerLat = jsonLayer->getAsNumber("lowerLat", -90.0);
-  const double lowerLon = jsonLayer->getAsNumber("lowerLon", -180.0);
-  const double upperLat = jsonLayer->getAsNumber("upperLat", 90.0);
-  const double upperLon = jsonLayer->getAsNumber("upperLon", 180.0);
-
-  const Sector sector = Sector::fromDegrees(lowerLat, lowerLon,
-                                            upperLat, upperLon);
+  const Sector sector = parseSector(jsonLayer, "validSector");
 
   URLTemplateLayer* result;
   if (mercator) {
@@ -716,32 +742,39 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
   }
 
   const std::string layerType = jsonLayer->getAsString("layer", "<layer not present>");
+  Layer* layer;
   if (layerType.compare("OSM") == 0) {
-    return new OSMLayer(defaultTimeToCache);
+    layer = new OSMLayer(defaultTimeToCache);
   }
   else if (layerType.compare("MapQuest") == 0) {
-    return parseMapQuestLayer(jsonLayer, defaultTimeToCache);
+    layer = parseMapQuestLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("BingMaps") == 0) {
-    return parseBingMapsLayer(jsonLayer, defaultTimeToCache);
+    layer = parseBingMapsLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("CartoDB") == 0) {
-    return parseCartoDBLayer(jsonLayer, defaultTimeToCache);
+    layer = parseCartoDBLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("MapBox") == 0) {
-    return parseMapBoxLayer(jsonLayer, defaultTimeToCache);
+    layer = parseMapBoxLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("WMS") == 0) {
-    return parseWMSLayer(jsonLayer);
+    layer = parseWMSLayer(jsonLayer);
   }
   else if (layerType.compare("URLTemplate") == 0) {
-    return parseURLTemplateLayer(jsonLayer);
+    layer = parseURLTemplateLayer(jsonLayer);
   }
   else {
     ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
     ILogger::instance()->logError("%s", jsonBaseObjectLayer->description().c_str());
     return NULL;
   }
+  
+  const std::string layerAttribution = jsonLayer->getAsString("attribution", "");
+  if (layerAttribution.compare("") != 0) {
+    layer->setInfo(layerAttribution);
+  }
+  return layer;
 }
 
 Color MapBooBuilder::parseColor(const JSONString* jsonColor) const {
@@ -852,9 +885,30 @@ Sector* MapBooBuilder::parseSector(const JSONBaseObject* jsonBaseObjectLayer) co
   const double lowerLon = jsonObject->getAsNumber("lowerLon", -180.0);
   const double upperLat = jsonObject->getAsNumber("upperLat",   90.0);
   const double upperLon = jsonObject->getAsNumber("upperLon",  180.0);
-
+  
   return new Sector(Geodetic2D::fromDegrees(lowerLat, lowerLon),
                     Geodetic2D::fromDegrees(upperLat, upperLon));
+}
+
+const Sector MapBooBuilder::parseSector(const JSONObject* jsonObject, const std::string& paramName) const {
+ 
+  const JSONObject* sector = jsonObject->getAsObject(paramName);
+  
+  if (sector == NULL) {
+    return Sector::fullSphere();
+  }
+  
+  if (sector->asNull() != NULL) {
+    return Sector::fullSphere();
+  }
+  
+  const double lowerLat = sector->getAsNumber("lowerLat",  -90.0);
+  const double lowerLon = sector->getAsNumber("lowerLon", -180.0);
+  const double upperLat = sector->getAsNumber("upperLat",   90.0);
+  const double upperLon = sector->getAsNumber("upperLon",  180.0);
+  
+  return Sector(Geodetic2D::fromDegrees(lowerLat, lowerLon),
+                Geodetic2D::fromDegrees(upperLat, upperLon));
 }
 
 MapBoo_Scene* MapBooBuilder::parseScene(const JSONObject* jsonObject) const {
@@ -925,7 +979,7 @@ void MapBooBuilder::parseApplicationEventsJSON(const std::string& json,
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
-                                  url.getPath().c_str());
+                                  url._path.c_str());
   }
   else {
     const JSONArray* jsonArray = jsonBaseObject->asArray();
@@ -946,6 +1000,8 @@ void MapBooBuilder::parseApplicationEventsJSON(const std::string& json,
 
 void MapBooBuilder::parseApplicationJSON(const JSONObject* jsonObject,
                                          const URL& url) {
+  std::vector<std::string> errors;
+
   if (jsonObject == NULL) {
     ILogger::instance()->logError("Invalid ApplicationJSON");
   }
@@ -1054,10 +1110,16 @@ void MapBooBuilder::parseApplicationJSON(const JSONObject* jsonObject,
       }
     }
     else {
+      errors.push_back(jsonError->value().c_str());
       ILogger::instance()->logError("Server Error: %s",
                                     jsonError->value().c_str());
+      if (_initialParse) {
+        _initialParse = false;
+        setHasParsedApplication();
+      }
     }
   }
+  _mbErrorRenderer->setErrors(errors);
 }
 
 
@@ -1067,7 +1129,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
-                                  url.getPath().c_str());
+                                  url._path.c_str());
   }
   else {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
@@ -1274,7 +1336,7 @@ void MapBooBuilder::recreateLayerSet() {
 }
 
 const URL MapBooBuilder::createApplicationTubeURL() const {
-  const std::string tubesPath = _tubesURL.getPath();
+  const std::string tubesPath = _tubesURL._path;
 
   std::string view;
   switch (_viewType) {
@@ -1351,7 +1413,7 @@ public:
 
   void onOpen(IWebSocket* ws) {
     ILogger::instance()->logInfo("Tube '%s' opened!",
-                                 ws->getURL().getPath().c_str());
+                                 ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(true);
   }
 
@@ -1359,7 +1421,7 @@ public:
                const std::string& error) {
     ILogger::instance()->logError("Error '%s' on Tube '%s'",
                                   error.c_str(),
-                                  ws->getURL().getPath().c_str());
+                                  ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(false);
   }
 
@@ -1371,7 +1433,7 @@ public:
 
   void onClose(IWebSocket* ws) {
     ILogger::instance()->logError("Tube '%s' closed!",
-                                  ws->getURL().getPath().c_str());
+                                  ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(false);
   }
 };
@@ -1422,7 +1484,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+    ILogger::instance()->logError("Can't download %s", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
@@ -1436,12 +1498,14 @@ public:
   }
 };
 
-const URL MapBooBuilder::createApplicationRestURL() const {
+const URL MapBooBuilder::createApplicationPollURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_serverURL.getPath());
-  isb->addString("/REST/1/applications/");
+  isb->addString(_serverURL._path);
+  isb->addString("/poll/");
   isb->addString(_applicationId);
-  isb->addString("?view=runtime&eventId=");
+  isb->addString("?view=");
+  isb->addString(getViewAsString());
+  isb->addString("&eventId=");
   isb->addInt(_applicationEventId);
   const std::string path = isb->getString();
   delete isb;
@@ -1503,6 +1567,10 @@ G3MWidget* MapBooBuilder::create() {
 
 
   CompositeRenderer* mainRenderer = new CompositeRenderer();
+  
+  _mbErrorRenderer = new MapBoo_ErrorRenderer();
+  mainRenderer->addRenderer(_mbErrorRenderer);
+  
   const Planet* planet = createPlanet();
 
   PlanetRenderer* planetRenderer = createPlanetRenderer();
@@ -1521,7 +1589,9 @@ G3MWidget* MapBooBuilder::create() {
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
-  Renderer* hudRenderer = NULL;
+  MapBoo_HUDRenderer* hudRenderer = new MapBoo_HUDRenderer();
+  InfoDisplay* infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
+  infoDisplay->showDisplay();
 
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
@@ -1543,7 +1613,8 @@ G3MWidget* MapBooBuilder::create() {
                                  *periodicalTasks,
                                  getGPUProgramManager(),
                                  createSceneLighting(),
-                                 icpp);
+                                 icpp,
+                                 infoDisplay);
   delete cameraConstraints;
   delete periodicalTasks;
 
@@ -1561,6 +1632,10 @@ void MapBooBuilder::setApplicationEventId(const int eventId) {
 
 int MapBooBuilder::getApplicationTimestamp() const {
   return _applicationTimestamp;
+}
+
+const std::string MapBooBuilder::getApplicationId() {
+  return _applicationId;
 }
 
 void MapBooBuilder::saveApplicationData() const {
@@ -1678,6 +1753,34 @@ void MapBooBuilder::changeScene(const MapBoo_Scene* scene) {
   }
 }
 
+class MapBooBuilder_DummyListener : public IBufferDownloadListener {
+public:
+  MapBooBuilder_DummyListener()
+  {
+  }
+  
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+    // do nothing
+    delete buffer;
+  }
+  
+  void onError(const URL& url) {
+    ILogger::instance()->logError("Can't download %s", url._path.c_str());
+  }
+  
+  void onCancel(const URL& url) {
+    // do nothing
+  }
+  
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    // do nothing
+  }
+};
+
 void MapBooBuilder::changedCurrentScene() {
   recreateLayerSet();
 
@@ -1709,19 +1812,26 @@ void MapBooBuilder::changedCurrentScene() {
   }
 
   if (_viewType == VIEW_EDITION_PREVIEW) {
-    if ((_webSocket != NULL) && _isApplicationTubeOpen) {
-      if (_applicationCurrentSceneId.compare(_lastApplicationCurrentSceneId) != 0) {
-        if (_lastApplicationCurrentSceneId.compare("-1") != 0) {
+    if (_applicationCurrentSceneId.compare(_lastApplicationCurrentSceneId) != 0) {
+      if (_lastApplicationCurrentSceneId.compare("-1") != 0) {
+        if (_webSocket != NULL && _isApplicationTubeOpen) {
           _webSocket->send( getApplicationCurrentSceneCommand() );
         }
-        _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
+        else if (_token.length() > 0) {
+            _g3mWidget->getG3MContext()->getDownloader()->requestBuffer(createApplicationCurrentSceneURL(), //
+                                                                        DownloadPriority::HIGHEST, //
+                                                                        TimeInterval::zero(), //
+                                                                        false, // readExpired
+                                                                        new MapBooBuilder_DummyListener(), //
+                                                                        false);
+        }
+        else {
+            ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+        }
       }
-    }
-    else {
-      ILogger::instance()->logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+      _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
     }
   }
-  
 }
 
 const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
@@ -1731,6 +1841,22 @@ const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+const URL MapBooBuilder::createApplicationCurrentSceneURL() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_serverURL._path);
+  isb->addString("/REST/1/applications/");
+  isb->addString(_applicationId);
+  isb->addString("/_POST_?");
+  isb->addString("currentSceneId=");
+  isb->addString(_applicationCurrentSceneId);
+  isb->addString("&token=");
+  isb->addString(_token);
+  const std::string path = isb->getString();
+  delete isb;
+
+  return URL(path, false);
 }
 
 void MapBooBuilder::updateVisibleScene(const bool cameraPositionChanged) {
@@ -1892,7 +2018,7 @@ const MapBoo_Notification* MapBooBuilder::createNotification(const Geodetic2D&  
 
 void MapBooBuilder::pollApplicationDataFromServer(const G3MContext *context) {
   IDownloader* downloader = context->getDownloader();
-  downloader->requestBuffer(createApplicationRestURL(),
+  downloader->requestBuffer(createApplicationPollURL(),
                             DownloadPriority::HIGHEST,
                             TimeInterval::zero(),
                             false, // readExpired
@@ -1900,12 +2026,25 @@ void MapBooBuilder::pollApplicationDataFromServer(const G3MContext *context) {
                             true);
 }
 
+
+const std::string MapBooBuilder::getViewAsString() const {
+  switch (_viewType) {
+    case VIEW_EDITION_PREVIEW:
+      return "edition-preview";
+    case VIEW_PRESENTATION:
+      return "presentation";
+    case VIEW_RUNTIME:
+    default:
+      return "runtime";
+  }
+}
+
 const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
                                                      const Vector2I& tileDimension,
                                                      const Vector2I& pixelPosition,
                                                      const Geodetic3D& position) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_serverURL.getPath());
+  isb->addString(_serverURL._path);
 
   isb->addString("/Public/applications/");
   isb->addString(_applicationId);
@@ -1965,3 +2104,118 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
   
 }
 
+
+void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
+                                          int width,
+                                          int height) {
+  ICanvasUtils::drawStringsOn(_infos,
+                              canvas,
+                              width,
+                              height,
+                              Left,
+                              Bottom,
+                              Left,
+                              Color::white(),
+                              11,
+                              2,
+                              Color::transparent(),
+                              Color::black(),
+                              5);
+}
+
+bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
+                                            const std::vector<std::string>& v2) const {
+  const int size1 = v1.size();
+  const int size2 = v2.size();
+  if (size1 != size2) {
+    return false;
+  }
+  
+  for (int i = 0; i < size1; i++) {
+    const std::string str1 = v1[i];
+    const std::string str2 = v2[i];
+    if (str1 != str2) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool HUDInfoRenderer_ImageFactory::setInfos(const std::vector<std::string>& infos) {
+  if ( isEquals(_infos, infos) ) {
+    return false;
+  }
+  
+  _infos.clear();
+#ifdef C_CODE
+  _infos.insert(_infos.end(),
+                 infos.begin(),
+                 infos.end());
+#endif
+#ifdef JAVA_CODE
+  _infos.addAll(infos);
+#endif
+
+  return true;
+}
+
+MapBoo_HUDRenderer::MapBoo_HUDRenderer() {
+  _hudImageRenderer = new HUDImageRenderer(new HUDInfoRenderer_ImageFactory());
+}
+
+MapBoo_HUDRenderer::~MapBoo_HUDRenderer() {
+  delete _hudImageRenderer;
+}
+
+void MapBoo_HUDRenderer::updateInfo(const std::vector<std::string> &info) {
+  HUDInfoRenderer_ImageFactory* factory = (HUDInfoRenderer_ImageFactory*) (_hudImageRenderer->getImageFactory());
+  if (factory->setInfos(info)) {
+    _hudImageRenderer->recreateImage();
+  }
+}
+
+void MapBoo_HUDRenderer::initialize(const G3MContext* context) {
+  _hudImageRenderer->initialize(context);
+}
+
+void MapBoo_HUDRenderer::render(const G3MRenderContext* rc,
+                              GLState* glState) {
+  _hudImageRenderer->render(rc, glState);
+}
+
+void MapBoo_HUDRenderer::onResizeViewportEvent(const G3MEventContext* ec,
+                                             int width, int height) {
+  _hudImageRenderer->onResizeViewportEvent(ec,
+                                           width, height);
+}
+
+void MapBoo_HUDRenderer::start(const G3MRenderContext* rc) {
+  _hudImageRenderer->start(rc);
+}
+
+void MapBoo_HUDRenderer::stop(const G3MRenderContext* rc) {
+  _hudImageRenderer->stop(rc);
+}
+
+void MapBoo_HUDRenderer::onResume(const G3MContext* context) {
+  _hudImageRenderer->onResume(context);
+}
+
+void MapBoo_HUDRenderer::onPause(const G3MContext* context) {
+  _hudImageRenderer->onPause(context);
+}
+
+void MapBoo_HUDRenderer::onDestroy(const G3MContext* context) {
+  _hudImageRenderer->onDestroy(context);
+}
+
+void MapBoo_ErrorRenderer::setErrors(const std::vector<std::string>& errors) {
+  _errors = errors;
+}
+
+RenderState MapBoo_ErrorRenderer::getRenderState(const G3MRenderContext* rc) {
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
+}

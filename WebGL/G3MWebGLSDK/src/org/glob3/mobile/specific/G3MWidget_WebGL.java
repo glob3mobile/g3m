@@ -2,8 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.ArrayList;
-
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.Camera;
@@ -30,10 +28,12 @@ import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.InfoDisplay;
 import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.ProtoRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
@@ -267,7 +267,8 @@ public class G3MWidget_WebGL
 		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
 
 		webGLContext.viewport(0, 0, width, height);
-		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT | webGLContext.DEPTH_BUFFER_BIT);
+		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT
+				| webGLContext.DEPTH_BUFFER_BIT);
    }-*/;
 
 
@@ -289,9 +290,12 @@ public class G3MWidget_WebGL
 		// Animation
 		// Provides requestAnimationFrame in a cross browser way.
 		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame || $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame || $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame || function(callback, element) {
+			return $wnd.requestAnimationFrame
+					|| $wnd.webkitRequestAnimationFrame
+					|| $wnd.mozRequestAnimationFrame
+					|| $wnd.oRequestAnimationFrame
+					|| $wnd.msRequestAnimationFrame
+					|| function(callback, element) {
 						return $wnd.setTimeout(callback, 1000 / 60);
 					};
 		})();
@@ -299,7 +303,8 @@ public class G3MWidget_WebGL
 		// Provides cancelAnimationFrame in a cross browser way.
 		$wnd.cancelAnimFrame = (function() {
 			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame || $wnd.oCancelAnimationFrame
+					|| $wnd.mozCancelAnimationFrame
+					|| $wnd.oCancelAnimationFrame
 					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
 		})();
 
@@ -312,7 +317,8 @@ public class G3MWidget_WebGL
 
    private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas) /*-{
 		var context = null;
-		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d", "moz-webgl" ];
+		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
+				"moz-webgl" ];
 
 		if (jsCanvas != null) {
 			for ( var cn in contextNames) {
@@ -323,11 +329,11 @@ public class G3MWidget_WebGL
 					//STORING SIZE FOR GLVIEWPORT
 					context.viewportWidth = jsCanvas.width;
 					context.viewportHeight = jsCanvas.height;
-				}
-				catch (e) {
+				} catch (e) {
 				}
 				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(event) {
+					jsCanvas.addEventListener("webglcontextlost", function(
+							event) {
 						event.preventDefault();
 						$wnd.alert("webglcontextlost");
 					}, false);
@@ -337,8 +343,7 @@ public class G3MWidget_WebGL
 			if (context == null) {
 				alert("No WebGL context available");
 			}
-		}
-		else {
+		} else {
 			alert("No canvas available");
 		}
 
@@ -352,16 +357,36 @@ public class G3MWidget_WebGL
    }
 
 
-   public void initWidget(/*final INativeGL nativeGL,*/
-                          final IStorage storage,
+   //   public void initWidget(final IStorage storage,
+   //                          final IDownloader downloader,
+   //                          final IThreadUtils threadUtils,
+   //                          final ICameraActivityListener cameraActivityListener,
+   //                          final Planet planet,
+   //                          final ArrayList<ICameraConstrainer> cameraConstraints,
+   //                          final CameraRenderer cameraRenderer,
+   //                          final Renderer mainRenderer,
+   //                          final ProtoRenderer busyRenderer,
+   //                          final ErrorRenderer errorRenderer,
+   //                          final Renderer hudRenderer,
+   //                          final Color backgroundColor,
+   //                          final boolean logFPS,
+   //                          final boolean logDownloaderStatistics,
+   //                          final GInitializationTask initializationTask,
+   //                          final boolean autoDeleteInitializationTask,
+   //                          final ArrayList<PeriodicalTask> periodicalTasks,
+   //                          final WidgetUserData userData,
+   //                          final SceneLighting sceneLighting,
+   //                          final InitialCameraPositionProvider initialCameraPositionProvider) {
+
+   public void initWidget(final IStorage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
                           final ICameraActivityListener cameraActivityListener,
                           final Planet planet,
-                          final ArrayList<ICameraConstrainer> cameraConstraints,
+                          final java.util.ArrayList<ICameraConstrainer> cameraConstrainers,
                           final CameraRenderer cameraRenderer,
                           final Renderer mainRenderer,
-                          final Renderer busyRenderer,
+                          final ProtoRenderer busyRenderer,
                           final ErrorRenderer errorRenderer,
                           final Renderer hudRenderer,
                           final Color backgroundColor,
@@ -369,10 +394,11 @@ public class G3MWidget_WebGL
                           final boolean logDownloaderStatistics,
                           final GInitializationTask initializationTask,
                           final boolean autoDeleteInitializationTask,
-                          final ArrayList<PeriodicalTask> periodicalTasks,
+                          final java.util.ArrayList<PeriodicalTask> periodicalTasks,
                           final WidgetUserData userData,
                           final SceneLighting sceneLighting,
-                          final InitialCameraPositionProvider initialCameraPositionProvider) {
+                          final InitialCameraPositionProvider initialCameraPositionProvider,
+                          final InfoDisplay infoDisplay) {
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
@@ -381,7 +407,7 @@ public class G3MWidget_WebGL
                threadUtils, //
                cameraActivityListener, //
                planet, //
-               cameraConstraints, //
+               cameraConstrainers, //
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
@@ -395,7 +421,8 @@ public class G3MWidget_WebGL
                periodicalTasks, //
                createGPUProgramManager(), //
                sceneLighting, //
-               initialCameraPositionProvider);
+               initialCameraPositionProvider, //
+               infoDisplay);
 
       _g3mWidget.setUserData(userData);
 
@@ -515,4 +542,5 @@ public class G3MWidget_WebGL
    public GL getGL() {
       return _gl;
    }
+
 }

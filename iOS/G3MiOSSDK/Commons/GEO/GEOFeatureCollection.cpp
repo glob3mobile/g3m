@@ -41,3 +41,30 @@ void GEOFeatureCollection::symbolize(const G3MRenderContext* rc,
                        geoTileRasterizer);
   }
 }
+
+void GEOFeatureCollection::rasterize(const GEORasterSymbolizer* symbolizer,
+                                     ICanvas* canvas,
+                                     const GEORasterProjection* projection,
+                                     int tileLevel) const {
+  const int featuresCount = _features.size();
+  for (int i = 0; i < featuresCount; i++) {
+    GEOFeature* feature = _features[i];
+    if (feature != NULL) {
+      feature->rasterize(symbolizer,
+                         canvas,
+                         projection,
+                         tileLevel);
+    }
+  }
+}
+
+
+long long GEOFeatureCollection::getCoordinatesCount() const {
+  long long result = 0;
+  const int featuresCount = _features.size();
+  for (int i = 0; i < featuresCount; i++) {
+    GEOFeature* feature = _features[i];
+    result += feature->getCoordinatesCount();
+  }
+  return result;
+}

@@ -57,21 +57,20 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
-    //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean isForcedFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
+  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long tileDownloadPriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
   {
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, layerTilesRenderParameters, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority, logTilesPetitions));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, layerTilesRenderParameters, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, tileDownloadPriority, logTilesPetitions));
       tile.setTexturizerData(builderHolder);
     }
   
     TileTextureBuilder builder = builderHolder.get();
-    if (isForcedFullRender)
+    if (forceFullRender)
     {
       builder.start();
     }

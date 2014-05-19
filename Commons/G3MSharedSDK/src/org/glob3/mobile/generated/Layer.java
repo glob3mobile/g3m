@@ -17,17 +17,25 @@ package org.glob3.mobile.generated;
 
 
 
-
-//class Petition;
-//class Tile;
 //class LayerCondition;
+//class LayerTouchEventListener;
 //class LayerSet;
-//class Vector2I;
 //class LayerTilesRenderParameters;
+//class G3MRenderContext;
+//class G3MEventContext;
+//class Tile;
+//class URL;
+//class RenderState;
+//class Geodetic2D;
+//class G3MContext;
+//class Sector;
+//class LayerTouchEvent;
+//class Petition;
+//class TileImageProvider;
+
 
 public abstract class Layer
 {
-  protected LayerCondition _condition;
   protected java.util.ArrayList<LayerTouchEventListener> _listeners = new java.util.ArrayList<LayerTouchEventListener>();
   protected java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
@@ -35,37 +43,35 @@ public abstract class Layer
 
   protected boolean _enable;
 
-  protected final String _name;
+  protected String _disclaimerInfo;
+
+  protected java.util.ArrayList<String> _info = new java.util.ArrayList<String>();
 
   protected LayerTilesRenderParameters _parameters;
 
-  protected final long _timeToCacheMS;
-  protected final boolean _readExpired;
+  protected final float _transparency;
+  protected final LayerCondition _condition;
 
   protected final void notifyChanges()
   {
     if (_layerSet != null)
     {
       _layerSet.layerChanged(this);
+      _layerSet.changedInfo(_info);
     }
   }
 
   protected String _title;
 
-  protected final float _transparency;
-
-  protected Layer(LayerCondition condition, String name, TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency)
+  protected Layer(LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     _condition = condition;
-     _name = name;
-     _layerSet = null;
-     _timeToCacheMS = timeToCache._milliseconds;
-     _readExpired = readExpired;
-     _enable = true;
      _parameters = parameters;
-     _title = "";
      _transparency = transparency;
-
+     _condition = condition;
+     _disclaimerInfo = disclaimerInfo;
+     _layerSet = null;
+     _enable = true;
+     _title = "";
   }
 
   protected final void setParameters(LayerTilesRenderParameters parameters)
@@ -82,16 +88,17 @@ public abstract class Layer
 
   protected abstract boolean rawIsEquals(Layer that);
 
-
-  public final TimeInterval getTimeToCache()
+  protected final Tile getParentTileOfSuitableLevel(Tile tile)
   {
-    return TimeInterval.fromMilliseconds(_timeToCacheMS);
+      final int maxLevel = _parameters._maxLevel;
+      Tile tileP = tile;
+      while (tileP._level > maxLevel)
+      {
+          tileP = tileP.getParent();
+      }
+      return tileP;
   }
 
-  public final boolean getReadExpired()
-  {
-    return _readExpired;
-  }
 
   public void setEnable(boolean enable)
   {
@@ -114,9 +121,7 @@ public abstract class Layer
     _parameters = null;
   }
 
-  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
-
-  public boolean isAvailable(G3MRenderContext rc, Tile tile)
+  public boolean isAvailable(Tile tile)
   {
     if (!isEnable())
     {
@@ -126,23 +131,8 @@ public abstract class Layer
     {
       return true;
     }
-    return _condition.isAvailable(rc, tile);
+    return _condition.isAvailable(tile);
   }
-
-  public boolean isAvailable(G3MEventContext ec, Tile tile)
-  {
-    if (!isEnable())
-    {
-      return false;
-    }
-    if (_condition == null)
-    {
-      return true;
-    }
-    return _condition.isAvailable(ec, tile);
-  }
-
-  //  virtual bool isTransparent() const = 0;
 
   public abstract URL getFeatureInfoURL(Geodetic2D position, Sector sector);
 
@@ -192,11 +182,6 @@ public abstract class Layer
     _layerSet = null;
   }
 
-  public final String getName()
-  {
-    return _name;
-  }
-
   public final LayerTilesRenderParameters getLayerTilesRenderParameters()
   {
     return _parameters;
@@ -208,7 +193,7 @@ public abstract class Layer
     return description();
   }
 
-  public final boolean isEquals(Layer that)
+  public boolean isEquals(Layer that)
   {
     if (this == that)
     {
@@ -250,22 +235,18 @@ public abstract class Layer
       return false;
     }
   
-    if (!(_name.equals(that._name)))
-    {
-      return false;
-    }
-  
     if (!_parameters.isEquals(that._parameters))
     {
       return false;
     }
   
-    if (_timeToCacheMS != that._timeToCacheMS)
+  
+    if (!(_info == that._info))
     {
       return false;
     }
   
-    if (_readExpired != that._readExpired)
+    if (!(_disclaimerInfo.equals(that._disclaimerInfo)))
     {
       return false;
     }
@@ -275,6 +256,7 @@ public abstract class Layer
 
   public abstract Layer copy();
 
+  public abstract Sector getDataSector();
 
   public final String getTitle()
   {
@@ -284,6 +266,37 @@ public abstract class Layer
   public final void setTitle(String title)
   {
     _title = title;
+  }
+
+  public abstract java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile);
+
+  public abstract TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters);
+
+  public final String getInfo()
+  {
+    return _disclaimerInfo;
+  }
+
+  public final void setInfo(String disclaimerInfo)
+  {
+    if (!_disclaimerInfo.equals(disclaimerInfo))
+    {
+      _disclaimerInfo = disclaimerInfo;
+      if (_layerSet != null)
+      {
+        _layerSet.changedInfo(getInfos());
+      }
+    }
+  }
+
+  public final java.util.ArrayList<String> getInfos()
+  {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO BETTER
+    _info.clear();
+    final String layerInfo = getInfo();
+    _info.add(layerInfo);
+    return _info;
   }
 
 }

@@ -7,4 +7,3 @@
 //
 
 #include "IImageBuilder.hpp"
-

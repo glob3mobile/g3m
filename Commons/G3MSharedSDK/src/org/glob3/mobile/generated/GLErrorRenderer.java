@@ -17,13 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLErrorRenderer extends LeafRenderer
+public class GLErrorRenderer extends DefaultRenderer
 {
-
-  public final void initialize(G3MContext context)
-  {
-  
-  }
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
@@ -39,50 +34,16 @@ public class GLErrorRenderer extends LeafRenderer
   
   }
 
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return false;
-  }
-
   public void dispose()
   {
     super.dispose();
-  
   }
-
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
-  }
-
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return RenderState.ready();
-  }
-
-  public final void start(G3MRenderContext rc)
-  {
 
   }
 
-  public final void stop(G3MRenderContext rc)
-  {
 
-  }
-
-  public final void onResume(G3MContext context)
-  {
-
-  }
-
-  public final void onPause(G3MContext context)
-  {
-
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
-  }
 
   public final void zRender(G3MRenderContext rc, GLState glState)
   {

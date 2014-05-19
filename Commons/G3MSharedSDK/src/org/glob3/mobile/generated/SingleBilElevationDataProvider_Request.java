@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class SingleBilElevationDataProvider_BufferDownloadListener;
-
+//class IDownloader;
 
 public class SingleBilElevationDataProvider_Request
 {

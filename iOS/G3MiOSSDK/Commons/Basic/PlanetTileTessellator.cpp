@@ -18,7 +18,6 @@
 #include "GLConstants.hpp"
 #include "Color.hpp"
 #include "Planet.hpp"
-#include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "ElevationData.hpp"
 #include "MercatorUtils.hpp"
@@ -109,28 +108,27 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                                             Tile* tile,
                                             const ElevationData* elevationData,
                                             float verticalExaggeration,
-                                            bool mercator,
                                             bool renderDebug,
                                             TileTessellatorMeshData& data) const {
 
   const Sector tileSector = tile->_sector;
-  const Sector meshSector = getRenderedSectorForTile(tile);// tile->getSector();
+  const Sector meshSector = getRenderedSectorForTile(tile); // tile->getSector();
   const Vector2I meshResolution = calculateResolution(rawResolution, tile, meshSector);
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(planet, meshSector._center);
   ShortBufferBuilder indices;
   FloatBufferBuilderFromCartesian2D* textCoords = new FloatBufferBuilderFromCartesian2D();
 
-  double minElevation = createSurface(tileSector,
-                                      meshSector,
-                                      meshResolution,
-                                      elevationData,
-                                      verticalExaggeration,
-                                      mercator,
-                                      vertices,
-                                      indices,
-                                      *textCoords,
-                                      data);
+  const double minElevation = createSurface(tileSector,
+                                            meshSector,
+                                            meshResolution,
+                                            elevationData,
+                                            verticalExaggeration,
+                                            tile->_mercator,
+                                            vertices,
+                                            indices,
+                                            *textCoords,
+                                            data);
 
   if (_skirted) {
     const double relativeSkirtHeight = minElevation - skirtDepthForSector(planet, tileSector);
@@ -138,10 +136,10 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
     double absoluteSkirtHeight = 0;
     if (_renderedSector != NULL) {
 #ifdef C_CODE
-      absoluteSkirtHeight = - skirtDepthForSector(planet, *_renderedSector);
+      absoluteSkirtHeight = -skirtDepthForSector(planet, *_renderedSector);
 #endif
 #ifdef JAVA_CODE
-      absoluteSkirtHeight = - skirtDepthForSector(planet, _renderedSector);
+      absoluteSkirtHeight = -skirtDepthForSector(planet, _renderedSector);
 #endif
     }
 
@@ -149,7 +147,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                     tileSector,
                     meshSector,
                     meshResolution,
-                    needsEastSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                    needsEastSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight,
                     vertices,
                     indices,
                     *textCoords);
@@ -158,7 +156,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                      tileSector,
                      meshSector,
                      meshResolution,
-                     needsNorthSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                     needsNorthSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight,
                      vertices,
                      indices,
                      *textCoords);
@@ -167,7 +165,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                     tileSector,
                     meshSector,
                     meshResolution,
-                    needsWestSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                    needsWestSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight,
                     vertices,
                     indices,
                     *textCoords);
@@ -176,7 +174,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
                      tileSector,
                      meshSector,
                      meshResolution,
-                     needsSouthSkirt(tileSector)? relativeSkirtHeight : absoluteSkirtHeight,
+                     needsSouthSkirt(tileSector) ? relativeSkirtHeight : absoluteSkirtHeight,
                      vertices,
                      indices,
                      *textCoords);
@@ -204,12 +202,11 @@ Mesh* PlanetTileTessellator::createTileMesh(const Planet* planet,
 
 const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
                                                    const Angle& latitude,
-                                                   const Angle& longitude,
-                                                   bool mercator) const {
+                                                   const Angle& longitude) const {
   const Sector sector = tile->_sector;
 
   const Vector2F linearUV = sector.getUVCoordinatesF(latitude, longitude);
-  if (!mercator) {
+  if (!tile->_mercator) {
     return linearUV;
   }
 
@@ -224,8 +221,7 @@ const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
 }
 
 IFloatBuffer* PlanetTileTessellator::createTextCoords(const Vector2I& rawResolution,
-                                                      const Tile* tile,
-                                                      bool mercator) const {
+                                                      const Tile* tile) const {
 
   PlanetTileTessellatorData* data = (PlanetTileTessellatorData*) tile->getTessellatorData();
   if (data == NULL || data->_textCoords == NULL) {

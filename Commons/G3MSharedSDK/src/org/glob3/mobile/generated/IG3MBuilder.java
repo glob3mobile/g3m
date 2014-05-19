@@ -29,7 +29,9 @@ package org.glob3.mobile.generated;
 //class G3MWidget;
 //class PlanetRendererBuilder;
 //class Planet;
+//TODO
 //class Renderer;
+//class ProtoRenderer;
 //class WidgetUserData;
 //class GPUProgramSources;
 //class GPUProgramManager;
@@ -41,6 +43,7 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MarksRenderer;
 //class ErrorRenderer;
+//class InfoDisplay;
 
 
 public abstract class IG3MBuilder
@@ -49,12 +52,12 @@ public abstract class IG3MBuilder
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
   private ICameraActivityListener _cameraActivityListener;
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private Planet _planet;
   private java.util.ArrayList<ICameraConstrainer> _cameraConstraints;
   private CameraRenderer _cameraRenderer;
   private Color _backgroundColor;
   private PlanetRendererBuilder _planetRendererBuilder;
-  private Renderer _busyRenderer;
+  private ProtoRenderer _busyRenderer;
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
   private java.util.ArrayList<Renderer> _renderers;
@@ -67,6 +70,7 @@ public abstract class IG3MBuilder
   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
   private SceneLighting _sceneLighting;
   private Sector _shownSector;
+  private InfoDisplay _infoDisplay;
 
 
   /**
@@ -161,7 +165,7 @@ public abstract class IG3MBuilder
    *
    * @return _busyRenderer: Renderer*
    */
-  private Renderer getBusyRenderer()
+  private ProtoRenderer getBusyRenderer()
   {
     if (_busyRenderer == null)
     {
@@ -328,6 +332,10 @@ public abstract class IG3MBuilder
     }
     return _shownSector;
   }
+  private InfoDisplay getInfoDisplay()
+  {
+    return _infoDisplay;
+  }
 
   private void pvtSetInitializationTask(GInitializationTask initializationTask, boolean autoDeleteInitializationTask)
   {
@@ -425,9 +433,12 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp);
+    G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, getInfoDisplay());
   
     g3mWidget.setUserData(getUserData());
+  
+  
+    //mainRenderer->getPlanetRenderer()->initializeChangedInfoListener(g3mWidget);
   
     _gl = null;
     _storage = null;
@@ -484,6 +495,7 @@ public abstract class IG3MBuilder
      _userData = null;
      _sceneLighting = null;
      _shownSector = null;
+     _infoDisplay = null;
   }
 
   public void dispose()
@@ -763,7 +775,7 @@ public abstract class IG3MBuilder
    *
    * @param busyRenderer - cannot be NULL.
    */
-  public final void setBusyRenderer(Renderer busyRenderer)
+  public final void setBusyRenderer(ProtoRenderer busyRenderer)
   {
     if (_busyRenderer != null)
     {
@@ -1063,6 +1075,16 @@ public abstract class IG3MBuilder
     MarksRenderer marksRenderer = new MarksRenderer(false);
     addRenderer(marksRenderer);
     return marksRenderer;
+  }
+
+  public final void setInfoDisplay(InfoDisplay infoDisplay)
+  {
+    if (_infoDisplay != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: infoDisplay already initialized");
+      return;
+    }
+    _infoDisplay = infoDisplay;
   }
 
 }

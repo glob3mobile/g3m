@@ -8,6 +8,9 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include "IImage.hpp"
+//class IImage;
+//class URL;
 
 public abstract class IImageDownloadListener
 {

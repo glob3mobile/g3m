@@ -2,6 +2,7 @@
 
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+<<<<<<< HEAD
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
@@ -31,6 +32,31 @@ import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+=======
+import java.util.ArrayList;
+
+import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.GEO2DLineRasterStyle;
+import org.glob3.mobile.generated.GEO2DLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiLineStringGeometry;
+import org.glob3.mobile.generated.GEO2DMultiPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DPointGeometry;
+import org.glob3.mobile.generated.GEO2DPolygonData;
+import org.glob3.mobile.generated.GEO2DPolygonGeometry;
+import org.glob3.mobile.generated.GEO2DSurfaceRasterStyle;
+import org.glob3.mobile.generated.GEOGeometry;
+import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
+import org.glob3.mobile.generated.GEORasterSymbol;
+import org.glob3.mobile.generated.GEORasterSymbolizer;
+import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.MapBoxLayer;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.StrokeCap;
+import org.glob3.mobile.generated.StrokeJoin;
+import org.glob3.mobile.generated.TiledVectorLayer;
+import org.glob3.mobile.generated.TimeInterval;
+>>>>>>> origin/purgatory
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -47,7 +73,9 @@ public class MainActivity
             Activity {
 
    private G3MWidget_Android _g3mWidget;
-   private RelativeLayout    _placeHolder;
+
+
+   //   private RelativeLayout    _placeHolder;
 
    G3MBuilder_Android builder = null;
    MarksRenderer marksRenderer = new MarksRenderer(false);
@@ -60,10 +88,30 @@ public class MainActivity
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
       setContentView(R.layout.activity_main);
+<<<<<<< HEAD
       builder = new G3MBuilder_Android(this);
+=======
+
+      _g3mWidget = createWidget();
+
+      final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+      placeHolder.addView(_g3mWidget);
+   }
+
+
+   private G3MWidget_Android createWidget() {
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+>>>>>>> origin/purgatory
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
+      // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+
+      return builder.createWidget();
+   }
 
 
+<<<<<<< HEAD
 		if (false) {
 			final MeshRenderer meshRenderer = new MeshRenderer();
 			meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
@@ -74,42 +122,93 @@ public class MainActivity
 		
       final LayerSet layerSet = new LayerSet();
       //layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+=======
+   private static class SampleRasterSymbolizer
+            extends
+               GEORasterSymbolizer {
 
-      final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
-               WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0,
-                        18), TimeInterval.fromDays(30), true);
-      blueMarble.setTitle("WMS Nasa Blue Marble");
-
-      final URLTemplateLayer azar4326testlayer = URLTemplateLayer.newWGS84(
-               "http://azar.akka.eu/cgi-bin/mapserv?map=maps/azar_4326.map&REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&WIDTH=256&HEIGHT=256&BBOX={lowerLongitude}%2C{lowerLatitude}%2C{upperLongitude}%2C{upperLatitude}0&CRS=EPSG:4326&LAYERS=ScanMilAIP&FORMAT=image/jpeg&SRS=EPSG:4326&STYLES=&TRANSPARENT=true",
-               Sector.fullSphere(), true, 0, 18, TimeInterval.fromDays(30), true, new LevelTileCondition(0, 18));
+      private static final Color FROM_COLOR = Color.fromRGBA(0.7f, 0, 0, 0.5f);
+>>>>>>> origin/purgatory
 
 
-      layerSet.addLayer(azar4326testlayer);
-      //   layerSet.addLayer(blueMarble);
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      private static GEO2DLineRasterStyle createPolygonLineRasterStyle(final GEOGeometry geometry) {
+         final JSONObject properties = geometry.getFeature().getProperties();
+         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+         final Color color = FROM_COLOR.wheelStep(7, colorIndex).muchLighter().muchLighter();
+         final float dashLengths[] = {};
+         final int dashCount = 0;
+         return new GEO2DLineRasterStyle(color, 2, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0);
+      }
 
-      builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
 
-      final HUDRenderer hudRenderer = new HUDRenderer();
-      builder.setHUDRenderer(hudRenderer);
-      createHUD(hudRenderer);
+      private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
+         final JSONObject properties = geometry.getFeature().getProperties();
+         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+         final Color color = FROM_COLOR.wheelStep(7, colorIndex);
+         return new GEO2DSurfaceRasterStyle(color);
+      }
 
-      _g3mWidget = builder.createWidget();
 
-      _g3mWidget.setCameraPosition(new Geodetic3D(Angle.fromDegrees(46.5), Angle.fromDegrees(2.20), 2000000));
+      @Override
+      public GEORasterSymbolizer copy() {
+         return new SampleRasterSymbolizer();
+      }
 
-      _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-      _placeHolder.addView(_g3mWidget);
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPointGeometry geometry) {
+         return null;
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DLineStringGeometry geometry) {
+         return null;
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiLineStringGeometry geometry) {
+         return null;
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DPolygonGeometry geometry) {
+         final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
+         final GEOPolygonRasterSymbol symbol = new GEOPolygonRasterSymbol( //
+                  geometry.getPolygonData(), //
+                  createPolygonLineRasterStyle(geometry), //
+                  createPolygonSurfaceRasterStyle(geometry) //
+         );
+         symbols.add(symbol);
+         return symbols;
+      }
+
+
+      @Override
+      public ArrayList<GEORasterSymbol> createSymbols(final GEO2DMultiPolygonGeometry geometry) {
+         final ArrayList<GEORasterSymbol> symbols = new ArrayList<GEORasterSymbol>();
+
+         final GEO2DLineRasterStyle lineStyle = createPolygonLineRasterStyle(geometry);
+         final GEO2DSurfaceRasterStyle surfaceStyle = createPolygonSurfaceRasterStyle(geometry);
+
+         for (final GEO2DPolygonData polygonData : geometry.getPolygonsData()) {
+            symbols.add(new GEOPolygonRasterSymbol(polygonData, lineStyle, surfaceStyle));
+         }
+
+         return symbols;
+      }
    }
 
 
-   private void createHUD(final HUDRenderer hudRenderer) {
-      final DownloaderImageBuilder imageBuilder = new DownloaderImageBuilder(new URL("file:///altitude_ladder.png"));
+   private LayerSet createLayerSet() {
+      final LayerSet layerSet = new LayerSet();
+      //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
-      final float vertVis = 0.1f;
-      final float aspect = 85f / 5100f;
+      layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
 
+<<<<<<< HEAD
 		//      if (false) {
 		//
 		//         final int time = 10; // SECS
@@ -300,24 +399,31 @@ public class MainActivity
                0.8f, //
                HUDRelativePosition.Anchor.VIEWPORT_WIDTH, //
                HUDRelativePosition.Align.RIGHT);
+=======
+>>>>>>> origin/purgatory
 
-      final HUDRelativePosition y = new HUDRelativePosition( //
-               0.5f, //
-               HUDRelativePosition.Anchor.VIEWPORT_HEIGTH, //
-               HUDRelativePosition.Align.MIDDLE);
+      final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+      final int firstLevel = 2;
+      final int maxLevel = 10;
 
-      final HUDRelativeSize width = new HUDRelativeSize( //
-               10f * aspect, //
-               HUDRelativeSize.Reference.VIEWPORT_MIN_AXIS);
+      final GEORasterSymbolizer symbolizer = new SampleRasterSymbolizer();
 
-      final HUDRelativeSize height = new HUDRelativeSize( //
-               0.8f, //
-               HUDRelativeSize.Reference.VIEWPORT_MIN_AXIS);
+      final TiledVectorLayer tiledVectorLayer = TiledVectorLayer.newMercator( //
+               symbolizer, //
+               urlTemplate, //
+               Sector.fullSphere(), // sector
+               firstLevel, //
+               maxLevel, //
+               TimeInterval.fromDays(30), // timeToCache
+               true, // readExpired
+               1, // transparency
+               null, // condition
+               "" // disclaimerInfo
+      );
+      layerSet.addLayer(tiledVectorLayer);
 
-      final HUDQuadWidget altRuler = new HUDQuadWidget(imageBuilder, x, y, width, height);
 
-      altRuler.setTexCoordsScale(1, vertVis);
-      hudRenderer.addWidget(altRuler);
+      return layerSet;
    }
 
 {
