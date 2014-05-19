@@ -169,7 +169,7 @@ public class MainActivity
 
 
       //  final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
-      final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
+      final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
       final int firstLevel = 2;
       final int maxLevel = 16;
 
