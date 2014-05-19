@@ -694,8 +694,21 @@ bool Tile::render(const G3MRenderContext* rc,
         toVisitInNextIteration->push_back(subTile);
       }
     }
+    
+    setRendered(rendered, tileRenderingListener);
+    
+    return isRawRender; //RETURN ISRAWRENDER
+  }
+  
+  //Not rendering, prunning will be performed
+  
+  setRendered(rendered, tileRenderingListener);
+  setIsVisible(false, texturizer);
+  prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
+  return false;
 
-
+/*
+ //// ESTA PARTE FUE CAMBIADA POR JM EN RAMA SENDEROS
     return isRawRender; //RETURN ISRAWRENDER
   }
   else {
@@ -722,6 +735,7 @@ bool Tile::render(const G3MRenderContext* rc,
       }
     }
   }
+ */
   
 }
 
