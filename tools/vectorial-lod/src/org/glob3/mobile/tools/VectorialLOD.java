@@ -443,9 +443,13 @@ public class VectorialLOD {
       }
 
       final String propsQuery = buildPropertiesQuery(includeProperties);
-      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
 
+      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
+      //      System.out.println("simplifyTolerance: " + simplifyTolerance);
+      //      final String simplifyTolerance2 = Float.toString(getMaxVertexTolerance(extendedSector, qualityFactor));
+      //      System.out.println("simplifyTolerance2: " + simplifyTolerance2);
+
+      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
       //         System.out.println("FILTER CRITERIA: " + filterCriteria);
 
       //-- full query final where first cut, second simplify
@@ -792,6 +796,23 @@ public class VectorialLOD {
    }
 
 
+   //   /*
+   //    * version 0.14: 
+   //    * - tolerance obtained from the sector area downscaled by squared pixels per tile. 
+   //    * - qualityFactor to adjust tolerance (usual values: from 1.0 to 10.0)
+   //    *   greater values entail less tolerance on Douglas-Peuker algorithm and 
+   //    *   so on less simplification and more vertex generated as result.
+   //    */
+   //   private static float getMaxVertexTolerance(final List<Sector> extendedSector,
+   //                                              final float qualityFactor) {
+   //
+   //      final float tolerance2 = (float) Math.sqrt((TileSector.getAngularAreaInSquaredDegrees(extendedSector) / (qualityFactor * SQUARED_PIXELS_PER_TILE)));
+   //      //System.out.println("tolerance2: " + tolerance2);
+   //
+   //      return tolerance2;
+   //   }
+
+
    /*
     * version 0.13: 
     * - tolerance obtained from the sector deltaLongitude downscaled by 500. 
@@ -839,7 +860,7 @@ public class VectorialLOD {
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
       final double factor = areaFactor * areaFactor;
 
-      //-- only for release 2.0
+      //-- only for release 2.0 of buildSelectQuery()
       //      return "ST_Area(Box2D(sg))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
 
       return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
