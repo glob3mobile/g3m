@@ -561,7 +561,7 @@ public class VectorialLOD {
    //      //System.out.println("fullQuery: " + fullQuery);
    //
    //      // -- ejemplo query --
-   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326)),0.091) as sg, * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326))) as ff WHERE (ST_Area(Box2D(sg))>0.078 and true) ) As lg ) As f ) As fc;
+   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326)),0.091) as sg, "mapcolor7", "scalerank" FROM (SELECT * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326))) as ff WHERE (ST_Area(Box2D(the_geom))>0.078 and true) ) As lg ) As f ) As fc;
    //      //-------------------
    //
    //      return fullQuery;
