@@ -411,3 +411,17 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
   const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
   return distanceInMeters * _viewPortHeight / frustumData._top;
 }
+
+double Camera::getPixelsForObjectSize(double distance, double objectSize) const{
+  
+  FrustumData fd = getFrustumData();
+  
+  const double objSizeAtZNear = (objectSize * fd._znear) / distance; // Meters
+  
+  const double pixelSizeW = (fd._right - fd._left) / _viewPortWidth;
+  const double pixelSizeH = (fd._top - fd._bottom) / _viewPortHeight;
+  const double pixelSize = (pixelSizeW > pixelSizeH)? pixelSizeW : pixelSizeH; //Meters per pixel
+  
+  return objSizeAtZNear / pixelSize; //Pixels
+  
+}

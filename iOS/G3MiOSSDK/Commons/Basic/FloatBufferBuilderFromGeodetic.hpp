@@ -31,7 +31,7 @@ private:
     _cy = (float) center._y;
     _cz = (float) center._z;
   }
-
+  
   const Planet* _planet;
 
   FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
@@ -62,6 +62,8 @@ private:
   }
 
 public:
+  
+  const Planet* getPlanet() const{ return _planet;}
 
   static FloatBufferBuilderFromGeodetic* builderWithoutCenter(const Planet* planet) {
     return new FloatBufferBuilderFromGeodetic(
@@ -119,6 +121,8 @@ public:
   void add(const Angle& latitude,
            const Angle& longitude,
            const double height);
+  
+  void add(const Vector3D& vector);
 
   void add(const Geodetic3D& position) {
     add(position._latitude,

@@ -306,6 +306,8 @@ public:
 
   double getEstimatedPixelDistance(const Vector3D& point0,
                                    const Vector3D& point1) const;
+  
+  double getPixelsForObjectSize(double distance, double length) const;
 
 private:
   //  const Angle getHeading(const Vector3D& normal) const;

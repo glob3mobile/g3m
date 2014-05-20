@@ -27,6 +27,11 @@ public:
   double _minHeight;
   double _maxHeight;
   double _averageHeight;
+  double _deviation;
+  double _maxVerticesDistanceInLongitude;
+  double _maxVerticesDistanceInLatitude;
+  int _surfaceResolutionX;
+  int _surfaceResolutionY;
 };
 
 

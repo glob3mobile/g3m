@@ -339,6 +339,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
 
+#warning JM at Work
+  
+  const Camera* camera = rc->getCurrentCamera();
+  IMathUtils* mu = IMathUtils::instance();
 
   if ((_northArcSegmentRatioSquared == 0) ||
       (_southArcSegmentRatioSquared == 0) ||
@@ -346,23 +350,50 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
       (_westArcSegmentRatioSquared  == 0)) {
     prepareTestLODData( rc->getPlanet() );
   }
-
-  const Camera* camera = rc->getCurrentCamera();
-
-  const double distanceInPixelsNorth = camera->getEstimatedPixelDistance(*_northWestPoint, *_northEastPoint);
-  const double distanceInPixelsSouth = camera->getEstimatedPixelDistance(*_southWestPoint, *_southEastPoint);
-  const double distanceInPixelsWest  = camera->getEstimatedPixelDistance(*_northWestPoint, *_southWestPoint);
-  const double distanceInPixelsEast  = camera->getEstimatedPixelDistance(*_northEastPoint, *_southEastPoint);
-
-  const double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
-  const double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
-  const double distanceInPixelsSquaredArcWest  = (distanceInPixelsWest  * distanceInPixelsWest)  * _westArcSegmentRatioSquared;
-  const double distanceInPixelsSquaredArcEast  = (distanceInPixelsEast  * distanceInPixelsEast)  * _eastArcSegmentRatioSquared;
-
-  _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) &&
-                                    (distanceInPixelsSquaredArcSouth <= texHeightSquared) &&
-                                    (distanceInPixelsSquaredArcWest  <= texWidthSquared ) &&
-                                    (distanceInPixelsSquaredArcEast  <= texWidthSquared ));
+  
+  //Computing distance to tile
+  double tileRadius = _northEastPoint->sub(*_southWestPoint).length() / 2.0;
+  Vector3D center = rc->getPlanet()->toCartesian(_sector._center);
+  double distanceToTile = camera->getCartesianPosition().sub(center).length();
+  distanceToTile -= tileRadius;
+  
+  //Deviation
+  double visibleDeviation = mu->maxDouble();
+  if (distanceToTile > 0.0){
+    visibleDeviation = camera->getPixelsForObjectSize(distanceToTile, _tileTessellatorMeshData._deviation);
+  }
+  
+  //Pixel size in meters
+  const int texWidth = (int) mu->sqrt(texWidthSquared);
+  const int texelsBetweenVerticesLongitude = texWidth / _tileTessellatorMeshData._surfaceResolutionX;
+  const double maxTexelWidth = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLongitude;
+  
+  const int texHeight = (int) mu->sqrt(texHeightSquared);
+  const int texelsBetweenVerticesLatitude = texHeight / _tileTessellatorMeshData._surfaceResolutionY;
+  const double maxTexelHeight = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLatitude;
+  
+  const double maxTexelSize = (maxTexelHeight > maxTexelWidth) ? maxTexelHeight : maxTexelWidth;
+  
+  double maxPixelsPerTexel = mu->maxDouble();
+  if (maxPixelsPerTexel > 0.0){
+    maxPixelsPerTexel = camera->getPixelsForObjectSize(distanceToTile, maxTexelSize);
+  }
+  
+  //int texHeight = (int) mu->sqrt(texHeightSquared);
+  
+  bool lastLMRCR = _lastMeetsRenderCriteriaResult;
+  
+  //CRITERIA
+  _lastMeetsRenderCriteriaResult = (visibleDeviation < 1.0) && (maxPixelsPerTexel < 1.0);
+  
+  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
+    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
+           _tileTessellatorMeshData._deviation,
+           distanceToTile,
+           visibleDeviation,
+           maxTexelWidth,
+           maxPixelsPerTexel);
+  }
   
   return _lastMeetsRenderCriteriaResult;
 }
@@ -893,7 +924,10 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                                             tileMeshResolution,
                                                             this,
                                                             renderDebug);
-    _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
+#warning JM at work
+    const Vector2I res2(res._x * 2, res._y *2);
+    
+    _elevationDataRequest = new TileElevationDataRequest(this, res2, elevationDataProvider);
     _elevationDataRequest->sendRequest();
   }
 
