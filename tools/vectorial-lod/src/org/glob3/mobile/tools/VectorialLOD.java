@@ -326,30 +326,6 @@ public class VectorialLOD {
             optimizeArea = !optimizeArea;
          }
 
-
-         // second attempt: increase area filter factor
-         fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor, areaFactor + 1, geomFilterCriteria,
-                  includeProperties);
-
-         geoJsonResult = executeQuery(fullQuery);
-
-         if (geoJsonResult == null) {
-            return null;
-         }
-
-         if (getGeomVertexCount(geoJsonResult) < VERTEX_THRESHOLD) {
-            return geoJsonResult;
-         }
-
-         ILogger.instance().logWarning("Too much vertex for sector, quality factor tunning: " + sector.toString());
-
-         // third attempt: increase area filter factor and reduce quality factor
-         fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor / 2.0f, areaFactor + 1, geomFilterCriteria,
-                  includeProperties);
-
-         geoJsonResult = executeQuery(fullQuery);
-
-         //return result anyway
          return geoJsonResult;
       }
       catch (final SQLException e) {
