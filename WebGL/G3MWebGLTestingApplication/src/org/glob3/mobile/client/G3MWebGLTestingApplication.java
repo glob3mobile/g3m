@@ -1235,7 +1235,7 @@ public class G3MWebGLTestingApplication
       }
 
 
-      final boolean testingTransparencies = true;
+      final boolean testingTransparencies = false;
       if (testingTransparencies) {
          final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
                   WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(
