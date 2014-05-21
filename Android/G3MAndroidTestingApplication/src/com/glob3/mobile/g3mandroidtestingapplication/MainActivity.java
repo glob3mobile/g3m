@@ -100,7 +100,16 @@ public class MainActivity
 	   shapesRenderer.addShape(box);
 	   builder.addRenderer(shapesRenderer);
 
-
+	   // create elevations for Tenerife from bil file
+	   Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
+			   -17.0232177085356,                // min longitude
+			   28.6103464294992,                 // max latitude
+			   -16.0019401695656);               // max longitude
+	   Vector2I extent = new Vector2I(256, 256);                             // image resolution
+	   URL url = new URL("file:///Tenerife-256x256.bil", false);
+	   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+	   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	   float verticalExaggeration = 4.0f;
+	   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
 
 	   _g3mWidget = builder.createWidget();  
 
