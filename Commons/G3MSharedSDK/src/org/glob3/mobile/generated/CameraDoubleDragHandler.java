@@ -115,6 +115,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     Vector3D touchedPosition1 = widget.getScenePositionForPixel(pixel1._x, pixel1._y);
     eventContext.getPlanet().beginDoubleDrag(_camera0.getCartesianPosition(), _camera0.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
   
+    
+	  eventContext.getLogger().logInfo("Haciendo double down en (%d,%d) y (%d,%d)", 
+			  pixel0._x, pixel0._y, pixel1._x, pixel1._y);
+
+    
     // draw scene points int render debug mode
     if (_meshRenderer != null)
     {
@@ -142,6 +147,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     if (!matrix.isValid())
        return;
   
+    
+    
+ 	  eventContext.getLogger().logInfo("Haciendo double move en (%d,%d) y (%d,%d)", 
+ 			  pixel0._x, pixel0._y, pixel1._x, pixel1._y);
+
     // apply transformation
     Camera camera = cameraContext.getNextCamera();
     camera.copyFrom(_camera0);
