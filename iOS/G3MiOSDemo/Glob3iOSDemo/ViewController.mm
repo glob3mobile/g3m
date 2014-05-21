@@ -1079,7 +1079,7 @@ public:
 builder.initializeWidget();
 //  [self testGenericQuadTree:geoTileRasterizer];
   
-  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.50), Angle::fromDegrees(-16.58), 250000);
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
   [self G3MWidget].widget->setCameraPosition(position);
   [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
   
