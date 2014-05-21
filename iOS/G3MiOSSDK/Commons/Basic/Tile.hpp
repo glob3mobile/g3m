@@ -291,7 +291,7 @@ void actualizeQuadTree(const G3MRenderContext* rc,
   void zRender(const G3MRenderContext* rc,
                const GLState& parentState);
 
-  const TileKey getKey() const;
+  //const TileKey getKey() const;
 
 //  const TileKey getKey() const;
 //  const std::string getId() const;

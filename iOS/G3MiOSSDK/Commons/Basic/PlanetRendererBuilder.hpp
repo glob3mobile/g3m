@@ -95,7 +95,7 @@ public:
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
   void addTerrainTouchListener(TerrainTouchListener* listener);
-  void setTexturePriority(long long texturePriority);
+  //void setTexturePriority(long long texturePriority);
   void setTileDownloadPriority(long long tileDownloadPriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
