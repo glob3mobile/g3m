@@ -285,23 +285,24 @@ public final class MotionEventProcessor {
                                   final int y) {
       //      log(LogLevel.InfoLevel, " delta=" + delta + " x=" + x + " y=" + y);
 
-      final Vector2I beginFirstPosition = new Vector2I(x - 10, y - 10);
-      final Vector2I beginSecondPosition = new Vector2I(x + 10, y + 10);
+      final Vector2I beginFirstPosition = new Vector2I(x - 10, y);
+      final Vector2I beginSecondPosition = new Vector2I(x + 10, y);
 
       final ArrayList<Touch> beginTouches = new ArrayList<Touch>(2);
       beginTouches.add(new Touch(beginFirstPosition, beginFirstPosition));
       beginTouches.add(new Touch(beginSecondPosition, beginSecondPosition));
 
 
-      final Vector2I endFirstPosition = new Vector2I(beginFirstPosition._x - delta, beginFirstPosition._y - delta);
-      final Vector2I endSecondPosition = new Vector2I(beginSecondPosition._x + delta, beginSecondPosition._y + delta);
+      final Vector2I endFirstPosition = new Vector2I(beginFirstPosition._x - delta, beginFirstPosition._y);
+      final Vector2I endSecondPosition = new Vector2I(beginSecondPosition._x + delta, beginSecondPosition._y);
 
       final ArrayList<Touch> endTouches = new ArrayList<Touch>(2);
       endTouches.add(new Touch(endFirstPosition, beginFirstPosition));
       endTouches.add(new Touch(endSecondPosition, beginSecondPosition));
 
       dispatchEvents( //
-               TouchEvent.create(TouchEventType.Down, beginTouches), //
+              TouchEvent.create(TouchEventType.Down, beginTouches), //
+              TouchEvent.create(TouchEventType.Move, beginTouches), //
                TouchEvent.create(TouchEventType.Move, endTouches), //
                TouchEvent.create(TouchEventType.Up, endTouches) //
       );

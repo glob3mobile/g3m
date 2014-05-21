@@ -166,7 +166,8 @@ public:
 
   
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
-                              const Vector3D& finalRay1) const;
+                              const Vector3D& finalRay1,
+                              bool allowRotation) const;
   
   Effect* createDoubleTapEffect(const Vector3D& origin,
                                         const Vector3D& centerRay,
