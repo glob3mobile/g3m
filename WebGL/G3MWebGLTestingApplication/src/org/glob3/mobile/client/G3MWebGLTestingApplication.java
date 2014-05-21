@@ -1131,7 +1131,7 @@ public class G3MWebGLTestingApplication
       // builder.setInitializationTask(createMarkersInitializationTask());
 
 
-      final LayerSet layerSet = new LayerSet();
+      //final LayerSet layerSet = new LayerSet();
 
       /*
        * final boolean blueMarble = false; if (blueMarble) { final WMSLayer
@@ -1151,7 +1151,7 @@ public class G3MWebGLTestingApplication
        * @Override public void dispose() {} }); }
        */
 
-      final boolean useOrtoAyto = false;
+  /*    final boolean useOrtoAyto = false;
       if (useOrtoAyto) {
 
          final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, new Vector2I(
@@ -1255,9 +1255,9 @@ public class G3MWebGLTestingApplication
                   WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null,
                   TimeInterval.fromDays(30), true, null, (float) 0.5);
          layerSet.addLayer(pnoa);
-      }
+      }*/
 
-      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      //builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       /*
        * final WMSLayer political = new WMSLayer("topp:cia", new
