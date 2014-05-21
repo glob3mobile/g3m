@@ -4,6 +4,11 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.CachedDownloader;
+import org.glob3.mobile.generated.CameraDoubleDragHandler;
+import org.glob3.mobile.generated.CameraDoubleTapHandler;
+import org.glob3.mobile.generated.CameraRenderer;
+import org.glob3.mobile.generated.CameraRotationHandler;
+import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;
 import org.glob3.mobile.generated.IStorage;
@@ -64,6 +69,20 @@ public class G3MBuilder_Android
                getStorage(), //
                saveInBackground);
    }
+
+
+@Override
+protected CameraRenderer createDefaultCameraRenderer() {
+	  CameraRenderer cameraRenderer = new CameraRenderer();
+	  final boolean useInertia = true;
+	  cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+	  final boolean allowRotationInDoubleDrag = true;
+	  cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
+	  cameraRenderer.addHandler(new CameraRotationHandler());
+	  cameraRenderer.addHandler(new CameraDoubleTapHandler());
+	  
+	  return cameraRenderer;
+}
 
 
 }

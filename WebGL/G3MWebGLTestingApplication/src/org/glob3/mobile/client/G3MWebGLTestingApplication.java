@@ -1530,14 +1530,7 @@ public class G3MWebGLTestingApplication
 	   //const Planet* planet = Planet::createSphericalEarth();
 	   final Planet planet = Planet.createFlatEarth();
 	   builder.setPlanet(planet);
-	   
-	   // set camera handlers
-	   CameraRenderer cameraRenderer = createCameraRenderer();
-	   MeshRenderer meshRenderer = new MeshRenderer();
-	   builder.addRenderer( meshRenderer );
-	   cameraRenderer.setDebugMeshRenderer(meshRenderer);
-	   builder.setCameraRenderer(cameraRenderer);
-	   
+	   	   
 	   // create shape
 	   ShapesRenderer shapesRenderer = new ShapesRenderer();
 	   Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
