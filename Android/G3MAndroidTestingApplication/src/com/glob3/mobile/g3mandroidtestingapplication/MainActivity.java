@@ -108,7 +108,7 @@ public class MainActivity
 	   Vector2I extent = new Vector2I(256, 256);                             // image resolution
 	   URL url = new URL("file:///Tenerife-256x256.bil", false);
 	   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
-	   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	   float verticalExaggeration = 4.0f;
+	   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
 	   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
 
 	   _g3mWidget = builder.createWidget();  

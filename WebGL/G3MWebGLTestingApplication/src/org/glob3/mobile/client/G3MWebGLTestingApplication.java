@@ -17,6 +17,7 @@ import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DirectMesh;
+import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.ErrorRenderer;
 import org.glob3.mobile.generated.FixedFocusSceneLighting;
 import org.glob3.mobile.generated.FloatBufferBuilderFromColor;
@@ -83,6 +84,7 @@ import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SimpleInitialCameraPositionProvider;
+import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TimeInterval;
@@ -142,8 +144,10 @@ public class G3MWebGLTestingApplication
          // initWithoutBuilder();
 
          // initialize a default widget by using a builder
-         initDefaultWithBuilder();
-
+         //initDefaultWithBuilder();
+    	  
+    	  testBranch_zrender_touchhandlers();
+    	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
 
@@ -1501,4 +1505,68 @@ public class G3MWebGLTestingApplication
        */
 
    }
+   
+	public CameraRenderer createCameraRenderer()
+	{
+	  CameraRenderer cameraRenderer = new CameraRenderer();
+	  final boolean useInertia = true;
+	  cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+	  cameraRenderer.addHandler(new CameraDoubleDragHandler());
+	  //cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
+
+	  cameraRenderer.addHandler(new CameraRotationHandler());
+	  cameraRenderer.addHandler(new CameraDoubleTapHandler());
+	  
+	  return cameraRenderer;
+	}
+
+	
+   public void testBranch_zrender_touchhandlers() {
+	   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+	   //const Planet* planet = Planet::createEarth();
+	   //const Planet* planet = Planet::createSphericalEarth();
+	   final Planet planet = Planet.createFlatEarth();
+	   builder.setPlanet(planet);
+
+	   // set camera handlers
+	   CameraRenderer cameraRenderer = createCameraRenderer();
+	   MeshRenderer meshRenderer = new MeshRenderer();
+	   builder.addRenderer( meshRenderer );
+	   cameraRenderer.setDebugMeshRenderer(meshRenderer);
+	   builder.setCameraRenderer(cameraRenderer);
+	   
+	   // create shape
+	   ShapesRenderer shapesRenderer = new ShapesRenderer();
+	   Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
+			   Angle.fromDegrees(-16.4),
+			   0),
+			   AltitudeMode.ABSOLUTE,
+			   new Vector3D(3000, 3000, 20000),
+			   2,
+			   Color.fromRGBA(1.0f, 1.0f, 0.0f, 0.5f),
+			   Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
+	   shapesRenderer.addShape(box);
+	   builder.addRenderer(shapesRenderer);
+
+	   // create elevations for Tenerife from bil file
+	   Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
+			   -17.0232177085356,                // min longitude
+			   28.6103464294992,                 // max latitude
+			   -16.0019401695656);               // max longitude
+	   Vector2I extent = new Vector2I(256, 256);                             // image resolution
+	   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Tenerife-256x256.bil", false);
+	   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+	   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
+	   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
+
+	   _widget = builder.createWidget();
+	   
+	   // set camera looking at Tenerife
+	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
+	   _widget.setCameraPosition(position);
+	   _widget.setCameraPitch(Angle.fromDegrees(-50.0));
+
+  }
+
 }
