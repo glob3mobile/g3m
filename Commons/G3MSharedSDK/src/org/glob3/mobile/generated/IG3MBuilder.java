@@ -306,7 +306,8 @@ public abstract class IG3MBuilder
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    cameraRenderer.addHandler(new CameraDoubleDragHandler());
+    final boolean allowRotationInDoubleDrag = true;
+    cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   

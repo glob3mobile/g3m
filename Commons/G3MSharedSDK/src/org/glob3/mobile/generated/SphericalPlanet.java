@@ -393,7 +393,7 @@ public class SphericalPlanet extends Planet
   }*/
   
   
-  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
+  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
   {
     // test if initialPoints are valid
     if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -516,6 +516,7 @@ public class SphericalPlanet extends Planet
     }
   
     // camera rotation
+    if (allowRotation)
     {
       Vector3D normal = geodeticSurfaceNormal(centerPoint2);
       Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);

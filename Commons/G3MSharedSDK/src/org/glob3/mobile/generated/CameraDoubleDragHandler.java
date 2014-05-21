@@ -23,11 +23,13 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 {
 
   private MeshRenderer _meshRenderer;
+  private boolean _allowRotation;
 
-  public CameraDoubleDragHandler()
+  public CameraDoubleDragHandler(boolean allowRotation)
   {
      _camera0 = new Camera(new Camera());
      _meshRenderer = null;
+     _allowRotation = allowRotation;
   }
 
   public void dispose()
@@ -115,11 +117,6 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     Vector3D touchedPosition1 = widget.getScenePositionForPixel(pixel1._x, pixel1._y);
     eventContext.getPlanet().beginDoubleDrag(_camera0.getCartesianPosition(), _camera0.getViewDirection(), widget.getScenePositionForCentralPixel(), touchedPosition0, touchedPosition1);
   
-    
-	  eventContext.getLogger().logInfo("Haciendo double down en (%d,%d) y (%d,%d)", 
-			  pixel0._x, pixel0._y, pixel1._x, pixel1._y);
-
-    
     // draw scene points int render debug mode
     if (_meshRenderer != null)
     {
@@ -143,15 +140,10 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Planet planet = eventContext.getPlanet();
     final Vector2I pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2I pixel1 = touchEvent.getTouch(1).getPos();
-    MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1));
+    MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1), _allowRotation);
     if (!matrix.isValid())
        return;
   
-    
-    
- 	  eventContext.getLogger().logInfo("Haciendo double move en (%d,%d) y (%d,%d)", 
- 			  pixel0._x, pixel0._y, pixel1._x, pixel1._y);
-
     // apply transformation
     Camera camera = cameraContext.getNextCamera();
     camera.copyFrom(_camera0);

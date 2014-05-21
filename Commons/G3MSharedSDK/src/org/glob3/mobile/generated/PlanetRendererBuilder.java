@@ -452,7 +452,7 @@ public class PlanetRendererBuilder
     _tile = texturePriority;
   }*/
   
-  public final void setTileDownloadPriority(long tileDownloadPriority)
+  public final void PlanetRendererBuilder.setTileDownloadPriority(long tileDownloadPriority)
   {
     _tileDownloadPriority = tileDownloadPriority;
   }
