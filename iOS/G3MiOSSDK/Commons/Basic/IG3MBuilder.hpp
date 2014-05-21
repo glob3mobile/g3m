@@ -89,7 +89,6 @@ private:
   WidgetUserData*                   getUserData();
   GPUProgramManager*                getGPUProgramManager();
   std::vector<ICameraConstrainer*>* createDefaultCameraConstraints();
-  CameraRenderer*                   createDefaultCameraRenderer();
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
@@ -108,9 +107,11 @@ protected:
 
   G3MWidget* create();
 
-  virtual IThreadUtils* createDefaultThreadUtils() = 0;
-  virtual IStorage*     createDefaultStorage()     = 0;
-  virtual IDownloader*  createDefaultDownloader()  = 0;
+  virtual IThreadUtils*   createDefaultThreadUtils()    = 0;
+  virtual IStorage*       createDefaultStorage()        = 0;
+  virtual IDownloader*    createDefaultDownloader()     = 0;
+  virtual CameraRenderer* createDefaultCameraRenderer() = 0;
+
 
 
 public:

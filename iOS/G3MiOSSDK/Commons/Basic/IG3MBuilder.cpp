@@ -760,18 +760,6 @@ std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() 
   return cameraConstraints;
 }
 
-CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
-  CameraRenderer* cameraRenderer = new CameraRenderer();
-  const bool useInertia = true;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  const bool allowRotationInDoubleDrag = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
-  cameraRenderer->addHandler(new CameraRotationHandler());
-  cameraRenderer->addHandler(new CameraDoubleTapHandler());
-  
-  return cameraRenderer;
-}
-
 std::vector<PeriodicalTask*>* IG3MBuilder::createDefaultPeriodicalTasks() {
   std::vector<PeriodicalTask*>* periodicalTasks = new std::vector<PeriodicalTask*>;
   

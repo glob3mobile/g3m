@@ -16,6 +16,12 @@
 
 #include "BasicShadersGL2.hpp"
 
+#include "CameraSingleDragHandler.hpp"
+#include "CameraDoubleDragHandler.hpp"
+#include "CameraRotationHandler.hpp"
+#include "CameraDoubleTapHandler.hpp"
+
+
 G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
   _nativeWidget = nativeWidget;
 
@@ -74,3 +80,16 @@ GPUProgramSources G3MBuilder_iOS::loadGPUProgramSources(const std::string& name)
 
   return GPUProgramSources(name, vertexSource, fragmentSource);
 }
+
+CameraRenderer* G3MBuilder_iOS::createDefaultCameraRenderer() {
+  CameraRenderer* cameraRenderer = new CameraRenderer();
+  const bool useInertia = true;
+  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  const bool allowRotationInDoubleDrag = true;
+  cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
+  cameraRenderer->addHandler(new CameraRotationHandler());
+  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  
+  return cameraRenderer;
+}
+
