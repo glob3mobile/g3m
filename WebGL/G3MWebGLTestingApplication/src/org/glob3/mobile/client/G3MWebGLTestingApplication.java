@@ -620,7 +620,8 @@ public class G3MWebGLTestingApplication
          final CameraRenderer cameraRenderer = new CameraRenderer();
          final boolean useInertia = true;
          cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-         cameraRenderer.addHandler(new CameraDoubleDragHandler());
+         final boolean allowRotationInDoubleDrag = false;
+         cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
          cameraRenderer.addHandler(new CameraRotationHandler());
          cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
@@ -1511,7 +1512,8 @@ public class G3MWebGLTestingApplication
 	  CameraRenderer cameraRenderer = new CameraRenderer();
 	  final boolean useInertia = true;
 	  cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-	  cameraRenderer.addHandler(new CameraDoubleDragHandler());
+	  final boolean allowRotationInDoubleDrag = false;
+	  cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
 	  //cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
 
 	  cameraRenderer.addHandler(new CameraRotationHandler());
