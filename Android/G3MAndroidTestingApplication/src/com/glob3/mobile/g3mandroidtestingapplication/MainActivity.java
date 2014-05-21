@@ -66,30 +66,51 @@ public class MainActivity
 
    @Override
    protected void onCreate(final Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
+	   super.onCreate(savedInstanceState);
 
-      requestWindowFeature(Window.FEATURE_NO_TITLE);
-      getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	   requestWindowFeature(Window.FEATURE_NO_TITLE);
+	   getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-      setContentView(R.layout.activity_main);
-      
-		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-		
-		  //const Planet* planet = Planet::createEarth();
-		  //const Planet* planet = Planet::createSphericalEarth();
-		  final Planet planet = Planet.createFlatEarth();
-		  builder.setPlanet(planet);
+	   setContentView(R.layout.activity_main);
 
-		
-		  CameraRenderer cameraRenderer = createCameraRenderer();
-		  MeshRenderer meshRenderer = new MeshRenderer();
-		  builder.addRenderer( meshRenderer );
-		  cameraRenderer.setDebugMeshRenderer(meshRenderer);
-		  builder.setCameraRenderer(cameraRenderer);
+	   final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
-		_g3mWidget = builder.createWidget();  
-		_placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-		_placeHolder.addView(_g3mWidget);
+	   //const Planet* planet = Planet::createEarth();
+	   //const Planet* planet = Planet::createSphericalEarth();
+	   final Planet planet = Planet.createFlatEarth();
+	   builder.setPlanet(planet);
+
+	   // set camera handlers
+	   CameraRenderer cameraRenderer = createCameraRenderer();
+	   MeshRenderer meshRenderer = new MeshRenderer();
+	   builder.addRenderer( meshRenderer );
+	   cameraRenderer.setDebugMeshRenderer(meshRenderer);
+	   builder.setCameraRenderer(cameraRenderer);
+	   
+	   // create shape
+	   ShapesRenderer shapesRenderer = new ShapesRenderer();
+	   Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
+			   Angle.fromDegrees(-16.4),
+			   0),
+			   AltitudeMode.ABSOLUTE,
+			   new Vector3D(3000, 3000, 20000),
+			   2,
+			   Color.fromRGBA(1.0f, 1.0f, 0.0f, 0.5f),
+			   Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
+	   shapesRenderer.addShape(box);
+	   builder.addRenderer(shapesRenderer);
+
+
+
+	   _g3mWidget = builder.createWidget();  
+
+	   // set camera looking at Tenerife
+	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
+	   _g3mWidget.setCameraPosition(position);
+	   _g3mWidget.setCameraPitch(Angle.fromDegrees(-50.0));
+
+	   _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+	   _placeHolder.addView(_g3mWidget);
    }
 
 
