@@ -60,4 +60,11 @@ WebGL/G3MWebGLTemplate/war/org.glob3.mobile.G3MWebGLTemplate/
 WebGL/G3MWebGLTemplate/war/WEB-INF/classes/
 WebGL/G3MWebGLTemplate/war/WEB-INF/deploy/
 
+WebGL/G3MWebGLTestingApplication/.gwt/
+WebGL/G3MWebGLTestingApplication/gwt-unitCache/
+WebGL/G3MWebGLTestingApplication/war/org.glob3.mobile.G3MWebGLTestingApplication/
+WebGL/G3MWebGLTestingApplication/war/WEB-INF/classes/
+WebGL/G3MWebGLTestingApplication/war/WEB-INF/deploy/
+
+
 *.xccheckout
