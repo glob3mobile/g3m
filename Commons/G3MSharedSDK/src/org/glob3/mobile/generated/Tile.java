@@ -865,32 +865,7 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     }
   }
 
-  //const TileKey getKey() const {
-  //  return TileKey(_level, _row, _column);
-  //}
-  
-  public final Tile Tile.getDeepestTileContaining(Geodetic3D position)
-  {
-    if (_sector.contains(position._latitude, position._longitude))
-    {
-      if (_subtiles == null)
-      {
-        return this;
-      }
-  
-      for (int i = 0; i < _subtiles.size(); i++)
-      {
-        final Tile subtile = _subtiles.get(i);
-        final Tile subtileResult = subtile.getDeepestTileContaining(position);
-        if (subtileResult != null)
-        {
-          return subtileResult;
-        }
-      }
-    }
-  
-    return null;
-  }
+  //const TileKey getKey() const;
 
 //  const TileKey getKey() const;
 //  const std::string getId() const;
@@ -971,8 +946,33 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     }
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Tile getDeepestTileContaining(Geodetic3D position);
+
+  //const TileKey Tile::getKey() const {
+  //  return TileKey(_level, _row, _column);
+  //}
+  
+  public final Tile getDeepestTileContaining(Geodetic3D position)
+  {
+    if (_sector.contains(position._latitude, position._longitude))
+    {
+      if (_subtiles == null)
+      {
+        return this;
+      }
+  
+      for (int i = 0; i < _subtiles.size(); i++)
+      {
+        final Tile subtile = _subtiles.get(i);
+        final Tile subtileResult = subtile.getDeepestTileContaining(position);
+        if (subtileResult != null)
+        {
+          return subtileResult;
+        }
+      }
+    }
+  
+    return null;
+  }
 
   public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
   {

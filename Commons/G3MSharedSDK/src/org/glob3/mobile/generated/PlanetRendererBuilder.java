@@ -448,16 +448,16 @@ public class PlanetRendererBuilder
   {
     getTerrainTouchListeners().add(listener);
   }
-  /*void setTexturePriority(long long texturePriority) {
+  //void setTexturePriority(long long texturePriority);
+
+  /*void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
     _tile = texturePriority;
   }*/
   
-  public final void PlanetRendererBuilder.setTileDownloadPriority(long tileDownloadPriority)
+  public final void setTileDownloadPriority(long tileDownloadPriority)
   {
     _tileDownloadPriority = tileDownloadPriority;
   }
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void setTileDownloadPriority(long tileDownloadPriority);
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider)
   {
