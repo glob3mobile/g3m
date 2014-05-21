@@ -297,7 +297,7 @@ public class VectorialLOD {
          //tunning loop
          while (numVertex > VERTEX_THRESHOLD) {
 
-            ILogger.instance().logWarning("Too much vertex for sector: " + numVertex + ". Tunning.. " + sector.toString());
+            ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.toString());
 
             //to force alternative optimization. first attemp, try area; second attempt try quality factor
             if (optimizeArea) {
@@ -1085,7 +1085,9 @@ public class VectorialLOD {
       }
 
       //final String projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
-      _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + _projection;
+      //_lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + _projection;
+      _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_LEVELS-" + FIRST_LEVEL + "-" + MAX_LEVEL
+                   + "_" + _projection;
 
       if (!new File(_lodFolder).exists()) {
          new File(_lodFolder).mkdir();
