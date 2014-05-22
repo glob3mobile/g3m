@@ -579,31 +579,32 @@ ProtoRenderer* MapBooBuilder::createBusyRenderer() {
 class Mapboo_ErrorMessagesCustomizer : public ErrorMessagesCustomizer {
 private:
   MapBooBuilder* _mbBuilder;
+
 public:
   Mapboo_ErrorMessagesCustomizer(MapBooBuilder* mbBuilder) {
     _mbBuilder = mbBuilder;
   }
+
   ~Mapboo_ErrorMessagesCustomizer() {}
+
   std::vector<std::string> customize(const std::vector<std::string>& errors) {
     std::vector<std::string> customizedErrorMessages;
     const IStringUtils* stringUtils = IStringUtils::instance();
     const int errorsSize = errors.size();
-    
+
     const std::string appNotFound = "Invalid request: Application #" + _mbBuilder->getApplicationId() + " not found";
-    
+
     for (int i = 0; i < errorsSize; i++) {
       std::string error = errors.at(i);
       if (stringUtils->beginsWith(error, appNotFound)) {
         customizedErrorMessages.push_back("Oops, application not found!");
         break;
       }
-      else {
-        customizedErrorMessages.push_back(error);
-      }
+      customizedErrorMessages.push_back(error);
     }
-    
+
     return customizedErrorMessages;
-  };
+  }
 };
 
 ErrorRenderer* MapBooBuilder::createErrorRenderer() {
