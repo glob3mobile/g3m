@@ -65,9 +65,10 @@ WebGL/G3MWebGLTemplate/war/WEB-INF/deploy/
 *.sdf
 *.opensdf
 *.suo
+*.v12.suo
 *.vxproj.user
 
-Windows/Generated Files/
+Windows/Generated\ Files/
 Windows/Debug
 
 
