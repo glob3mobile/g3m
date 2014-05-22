@@ -475,6 +475,7 @@ void TiledVectorLayerTileImageProvider::takeGEOObjectFor(const URL& url,
                                              geoObject));
 }
 
+#warning create GEOObjectHolder with a RC around a GEOObject
 GEOObject* TiledVectorLayerTileImageProvider::getGEOObjectFor(const URL& url) {
   _geoObjectsCacheRequests++;
   const std::string path = url._path;
@@ -483,8 +484,6 @@ GEOObject* TiledVectorLayerTileImageProvider::getGEOObjectFor(const URL& url) {
        ++it) {
     CacheEntry* entry = *it;
     if (entry->_path == path) {
-#warning move hit to top
-
 #ifdef C_CODE
       it = _geoObjectsCache.erase(it);
 #endif

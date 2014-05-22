@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#include <OpenGLES/ES2/gl.h>
 
 
 #include "BusyQuadRenderer.hpp"

@@ -80,5 +80,5 @@ const std::vector<GEOFeature*> GEOFeatureCollection::copy(const std::vector<GEOF
 }
 
 GEOFeatureCollection* GEOFeatureCollection::deepCopy() const {
-  return new GEOFeatureCollection(copy(_features));
+  return new GEOFeatureCollection( copy(_features) );
 }
