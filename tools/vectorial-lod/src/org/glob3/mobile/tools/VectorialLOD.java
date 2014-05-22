@@ -455,29 +455,10 @@ public class VectorialLOD {
    private static long getGeomVertexCount(final String geoJson) {
 
       return GEOJSONParser.parseJSON(geoJson, false).getCoordinatesCount();
-
-      //      final GEOObject jsonObject = GEOJSONParser.parseJSON(geoJson, false);
-      //      final long cuenta = jsonObject.getCoordinatesCount();
-      //      System.out.println("num Vertex: " + cuenta);
-      //      return cuenta;
-
-      //      long counter = 0;
-      //      for (int index = 0; index < geoJson.length(); index++) {
-      //         if (geoJson.charAt(index) == '.') {
-      //            counter++;
-      //         }
-      //      }
-      //
-      //      final long result = counter / 2;
-      //      //      if (result >= 10000) {
-      //      //         System.out.println("num Vertex MIO: " + result);
-      //      //      }
-      //
-      //      return result;
    }
 
 
-   //-- Release 4.0
+   //-- Release 4.5
    public static String buildSelectQuery(final String dataSourceTable,
                                          final Sector sector,
                                          final float qualityFactor,
@@ -492,8 +473,10 @@ public class VectorialLOD {
       final String baseQuery2 = ") as sg, ";
       final String baseQuery3 = " FROM ";
       final String baseQuery4 = " WHERE ST_Intersects(";
-      final String baseQuery5 = ") and (";
-      final String baseQuery6 = ")) As lg ) As f ) As fc";
+      //final String baseQuery5 = ") and (";
+      final String baseQuery5 = ") and ";
+      //final String baseQuery6 = ")) As lg ) As f ) As fc";
+      final String baseQuery6 = ") As lg ) As f ) As fc";
 
       final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
       final String bboxQuery = buildSectorQuery(extendedSector);
@@ -907,9 +890,10 @@ public class VectorialLOD {
 
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
       final double factor = areaFactor * areaFactor;
+      final String andFilter = (filterCriteria.equalsIgnoreCase("true")) ? "" : " and " + filterCriteria;
 
       return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
-             + " and " + filterCriteria;
+             + andFilter;
 
       //-- only for release 2.0 of buildSelectQuery()
       //      return "ST_Area(Box2D(sg))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;

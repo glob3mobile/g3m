@@ -7,12 +7,12 @@
 <!-- Postgis database parameters -->  
 
    <!-- Url address for postgis database host access -->
-   <entry key="HOST">192.168.1.14</entry>
-   <!-- <entry key="HOST">igosoftware.dyndns.org</entry> -->
+   <!-- <entry key="HOST">192.168.1.14</entry> -->
+   <entry key="HOST">igosoftware.dyndns.org</entry>
    
    <!-- Port number for postgis database access -->
-   <entry key="PORT">5432</entry>
-   <!-- <entry key="PORT">5414</entry> -->
+   <!-- <entry key="PORT">5432</entry> -->
+   <entry key="PORT">5414</entry>
    
    <!-- User name for postgis database access -->
    <entry key="USER">postgres</entry>
@@ -36,7 +36,7 @@
    <entry key="MERCATOR">true</entry>
    
    <!-- first level of tiles to be generated -->
-   <entry key="FIRST_LEVEL">10</entry>
+   <entry key="FIRST_LEVEL">11</entry>
    
    <!-- last level of tiles to be generated -->
    <entry key="MAX_LEVEL">12</entry>
@@ -62,7 +62,8 @@
    <!-- i.e. "continent" like 'Euro%' AND "pop_est" > 10000000 -->
    <!-- <entry key="FILTER_CRITERIA">("maxspeed">110 or "type"='motorway')</entry> -->
    <!-- <entry key="FILTER_CRITERIA">true</entry> -->
-   <entry key="FILTER_CRITERIA">"ele" LIKE '4%' ORDER BY "ele" DESC LIMIT 100</entry>
+   <!-- <entry key="FILTER_CRITERIA">"ele" LIKE '4%' ORDER BY "ele" DESC LIMIT 100</entry> -->
+   <entry key="FILTER_CRITERIA">"ele"::numeric>300 ORDER BY "ele" DESC LIMIT 100</entry>
    
    
    <!-- list of fields/columns associated to the vectorial data that shall be included as feature -->
