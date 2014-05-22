@@ -61,3 +61,4 @@ WebGL/G3MWebGLTemplate/war/WEB-INF/classes/
 WebGL/G3MWebGLTemplate/war/WEB-INF/deploy/
 
 *.xccheckout
+ *.opensdf
