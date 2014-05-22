@@ -284,7 +284,7 @@ public class VectorialLOD {
 
          long numVertex = getGeomVertexCount(geoJsonResult);
 
-         if (numVertex <= VERTEX_THRESHOLD) {
+         if ((numVertex <= VERTEX_THRESHOLD) || _geomType.equals(GeomType.POINT)) {
             return geoJsonResult;
          }
 
