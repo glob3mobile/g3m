@@ -570,9 +570,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       CacheEntry entry = it.next();
       if (entry._path.equals(path))
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning move hit to top
-  
         it.remove();
         _geoObjectsCacheHits++;
         _geoObjectsCache.addFirst(entry);
@@ -595,3 +592,5 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   }
 
 }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning create GEOObjectHolder with a RC around a GEOObject
