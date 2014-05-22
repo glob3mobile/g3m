@@ -36,10 +36,10 @@
    <entry key="MERCATOR">true</entry>
    
    <!-- first level of tiles to be generated -->
-   <entry key="FIRST_LEVEL">0</entry>
+   <entry key="FIRST_LEVEL">10</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">4</entry>
+   <entry key="MAX_LEVEL">12</entry>
    
    <!-- valid output format: geojson, bson, both -->
    <entry key="OUTPUT_FORMAT">both</entry>
@@ -60,8 +60,10 @@
 
    <!-- filter criteria using pure database query format that will be included in a where clause -->
    <!-- i.e. "continent" like 'Euro%' AND "pop_est" > 10000000 -->
-   <entry key="FILTER_CRITERIA">true</entry>
    <!-- <entry key="FILTER_CRITERIA">("maxspeed">110 or "type"='motorway')</entry> -->
+   <!-- <entry key="FILTER_CRITERIA">true</entry> -->
+   <entry key="FILTER_CRITERIA">"ele" LIKE '4%' ORDER BY "ele" DESC LIMIT 100</entry>
+   
    
    <!-- list of fields/columns associated to the vectorial data that shall be included as feature -->
    <!-- properties in the resultant geoJson file. Use a comma separated list -->
