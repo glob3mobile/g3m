@@ -1,0 +1,723 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BA53043B-BC1B-4B2B-AF1B-3BE231F95745}</ProjectGuid>
+    <Keyword>ManagedCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <WindowsAppContainer>true</WindowsAppContainer>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;G3MWINDOWSSDK_EXPORTS;C_CODE=__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\iOS\G3MiOSSDK\Commons\Rendererers;..\iOS\G3MiOSSDK\Commons\Mesh;..\iOS\G3MiOSSDK\Commons\Math;..\iOS\G3MiOSSDK\Commons\Layers;..\iOS\G3MiOSSDK\Commons\JSON;..\iOS\G3MiOSSDK\Commons\Interfaces;..\iOS\G3MiOSSDK\Commons\GL;..\iOS\G3MiOSSDK\Commons\Geometry;..\iOS\G3MiOSSDK\Commons\GEO;..\iOS\G3MiOSSDK\Commons\Downloader;..\iOS\G3MiOSSDK\Commons\Cameras;..\iOS\G3MiOSSDK\Commons\Basic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;G3MWINDOWSSDK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\AbstractImageBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\BalloonCanvasElement.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\BilParser.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\BufferElevationData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ByteBufferBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ByteBufferIterator.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CanvasElement.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CanvasImageBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CanvasTileImageProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CanvasTileRasterizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CartoCSSLexer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CartoCSSParser.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CartoCSSSymbolizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CartoCSSTokens.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ChangedInfoListener.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ChangedListener.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ChessboardTileImageProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\Color.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ColumnCanvasElement.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CompositeElevationData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CompositeElevationDataProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CompositeTileImageContribution.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\CompositeTileImageProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\Context.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\DebugTileImageProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\DebugTileRasterizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\DecimatedSubviewElevationData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\DefaultTileTexturizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\DownloaderImageBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\DownloadPriority.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\Effects.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ElevationData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ElevationDataProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\FloatBufferBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\FloatBufferBuilderFromGeodetic.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\FloatBufferElevationData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\FrameTask.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\FrameTasksExecutor.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\G3MWidget.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\GenericQuadTree.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\GFont.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\GroupCanvasElement.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\IBuffer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ICanvas.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\IG3MBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\IImageBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\IImageUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\InfoDisplay.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\InitialCameraPositionProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\IntBufferBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\InterpolatedSubviewElevationData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\IThreadUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\LabelImageBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\LayerBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\MapBooBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\Mark.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\MercatorUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\MultiLayerTileTexturizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\OrderedRenderable.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\Petition.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\PlanetRendererBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\PlanetTileTessellator.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\QuadTree.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\RasterLayerTileImageProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\RCObject.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\SceneLighting.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ShortBufferBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\ShortBufferElevationData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\SingleBilElevationDataProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\SubviewElevationData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\SurfaceElevationProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TextCanvasElement.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TextureIDReference.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TexturesHandler.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\Tile.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TiledVectorLayerTileImageProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TileElevationDataRequest.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TileImageContribution.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TileImageProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TileRasterizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TileRasterizerContext.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TileTessellator.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TileTexturizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TimeInterval.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\TouchEvent.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\URL.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\basic\WMSBilElevationDataProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\Camera.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\CameraDoubleDragHandler.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\CameraDoubleTapHandler.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\CameraEffects.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\CameraRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\CameraRotationHandler.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\CameraSingleDragHandler.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\CameraZoomAndRotateHandler.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\ICameraConstrainer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\SectorAndHeightCameraConstrainer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\cameras\SimpleCameraConstrainer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\downloader\IWebSocket.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\downloader\NullStorage.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Angle.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\BoundingArea.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Box.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\CoordinateSystem.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Ellipsoid.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\EllipsoidalPlanet.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\FlatPlanet.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Frustum.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Geodetic2D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Geodetic3D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\LayoutUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Matrix44D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Matrix44DProvider.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\MutableMatrix44D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\MutableVector2D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\MutableVector2I.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\MutableVector3D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\NormalsUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Plane.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Planet.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Quadric.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\RectangleI.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Sector.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Sphere.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\SphericalPlanet.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\TaitBryanAngles.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Vector2D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Vector2F.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Vector2I.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Vector3D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Vector3F.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geometry\Vector4D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\CompositeTileRasterizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DCoordinatesArrayData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DCoordinatesData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DLineRasterStyle.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DLineStringGeometry.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DMultiLineStringGeometry.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DMultiPolygonGeometry.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DPointGeometry.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DPolygonData.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DPolygonGeometry.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEO2DSurfaceRasterStyle.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOFeature.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOFeatureCollection.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOGeometry.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOGeometry2D.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOJSONParser.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOLabelRasterSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOLine2DMeshSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOLine2DStyle.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOLineRasterSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOMarkSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOMeshSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOMultiLine2DMeshSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOMultiLineRasterSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOObject.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOPolygonRasterSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEORasterProjection.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEORasterSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEORasterSymbolizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEORenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOShapeSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOStyle.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOSymbol.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOSymbolizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\geo\GEOTileRasterizer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GL.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GLConstants.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GLFeature.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GLFeatureGroup.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GLGlobalState.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GLState.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GPUAttribute.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GPUProgram.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GPUProgramFactory.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GPUProgramManager.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GPUUniform.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GPUVariable.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\gl\GPUVariableValueSet.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\CachedDownloader.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\ICanvasUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\IDeviceInfo.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\IFactory.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\ILogger.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\IMathUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\IStorage.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\IStringBuilder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\IStringUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\interfaces\ITextUtils.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\BSONGenerator.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\BSONParser.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\IJSONParser.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONArray.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONBaseObject.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONBoolean.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONDouble.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONFloat.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONGenerator.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONInteger.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONLong.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONNull.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONNumber.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONObject.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\json\JSONString.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\AndTileCondition.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\BingMapsLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\CartoDBLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\GoogleMapsLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\HereLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\Layer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\LayerSet.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\LevelTileCondition.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\MapBoxLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\MapQuestLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\MercatorTiledLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\OSMLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\RasterLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\SectorTileCondition.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\TiledVectorLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\TMSLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\URLTemplateLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\VectorLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\layers\WMSLayer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\math\BilinearInterpolator.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\math\Interpolator.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\AbstractGeometryMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\AbstractMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\CompositeMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\DirectMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\FlatColorMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\G3MMeshMaterial.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\G3MMeshParser.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\IndexedGeometryMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\IndexedMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\LeveledMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\LeveledTexturedMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\Mesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\MeshHolder.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\MultiTextureMapping.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\SimpleTextureMapping.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\TexturedMesh.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\TextureMapping.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\mesh\TransformableTextureMapping.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\AbstractMeshShape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\BoxShape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\BusyMeshRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\BusyQuadRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ChangedRendererInfoListener.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ChildRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\CircleShape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\CompositeRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\CompositeShape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\DefaultRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\EllipsoidShape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ErrorRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\GLErrorRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDAbsolutePosition.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDAbsoluteSize.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDErrorRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDImageRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDPosition.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDQuadWidget.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDRelativePosition.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDRelativeSize.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDSize.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\HUDWidget.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\LayerTilesRenderParameters.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\MarksRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\MeshRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\MeshShape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\MultiTexturedHUDQuadWidget.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\PlanetRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ProtoRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\QuadShape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\Renderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\RenderState.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SceneJSParserStatistics.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SceneJSShapesParser.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SGGeometryNode.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SGLayerNode.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SGMaterialNode.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SGNode.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SGRotateNode.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SGShape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SGTextureNode.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\SGTranslateNode.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\Shape.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ShapeFullPositionEffect.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ShapeOrbitCameraEffect.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ShapePositionEffect.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ShapeScaleEffect.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\ShapesRenderer.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\TerrainTouchListener.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\TilesRenderParameters.cpp" />
+    <ClCompile Include="..\ios\g3miossdk\commons\rendererers\TrailsRenderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\AbstractImageBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\BalloonCanvasElement.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\BasicShadersGL2.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\BilParser.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\BufferElevationData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ByteBufferBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ByteBufferIterator.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CameraGoToPositionEffect.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CanvasElement.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CanvasImageBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CanvasTileImageProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CanvasTileRasterizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CartoCSSLexer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CartoCSSParser.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CartoCSSSymbolizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CartoCSSTokens.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ChangedInfoListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ChangedListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ChessboardTileImageProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\Color.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ColumnCanvasElement.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CompositeElevationData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CompositeElevationDataProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CompositeTileImageContribution.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\CompositeTileImageProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\Context.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\DebugTileImageProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\DebugTileRasterizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\DecimatedSubviewElevationData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\DefaultTileTexturizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\DownloaderImageBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\DownloadPriority.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\Effects.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ElevationData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ElevationDataProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ErrorHandling.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\FloatBufferBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\FloatBufferBuilderFromCartesian2D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\FloatBufferBuilderFromCartesian3D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\FloatBufferBuilderFromColor.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\FloatBufferBuilderFromGeodetic.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\FloatBufferElevationData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\FrameTask.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\FrameTasksExecutor.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\G3MWidget.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\GenericQuadTree.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\GFont.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\GInitializationTask.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\GroupCanvasElement.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\GTask.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IBuffer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ICanvas.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IFloatBuffer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IG3MBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IImageBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IImageBuilderListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IImageUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IIntBuffer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\InfoDisplay.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\InitialCameraPositionProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IntBufferBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\InterpolatedSubviewElevationData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IShortBuffer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ITexturizerData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\IThreadUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\LabelImageBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\LabelPosition.h" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\LayerBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\LayerTouchEventListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\MapBooBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\Mark.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\MercatorUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\MultiLayerTileTexturizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\OrderedRenderable.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\PeriodicalTask.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\Petition.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\PlanetRendererBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\PlanetTileTessellator.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\QuadTree.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\RasterLayerTileImageProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\RCObject.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\SceneLighting.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ShortBufferBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\ShortBufferElevationData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\SimpleFloatBufferBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\SingleBilElevationDataProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\SubviewElevationData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\SurfaceElevationProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TextCanvasElement.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TextureIDReference.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TexturesHandler.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\Tile.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TiledVectorLayerTileImageProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileElevationDataRequest.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileImageContribution.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileImageListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileImageProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileRasterizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileRasterizerContext.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileRenderingListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileTessellator.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TileTexturizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TimeInterval.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\TouchEvent.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\URL.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\basic\WMSBilElevationDataProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\Camera.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\CameraDoubleDragHandler.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\CameraDoubleTapHandler.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\CameraEffects.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\CameraEventHandler.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\CameraRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\CameraRotationHandler.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\CameraSingleDragHandler.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\CameraZoomAndRotateHandler.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\ICameraConstrainer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\SectorAndHeightCameraConstrainer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\cameras\SimpleCameraConstrainer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\downloader\IBufferDownloadListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\downloader\IImageDownloadListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\downloader\IWebSocket.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\downloader\IWebSocketListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\downloader\NullStorage.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Angle.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\BoundingArea.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\BoundingVolume.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Box.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\CoordinateSystem.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Ellipsoid.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\EllipsoidalPlanet.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Extent.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\FlatPlanet.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Frustum.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Geodetic2D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Geodetic3D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\LayoutUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Matrix44D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Matrix44DProvider.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\MutableMatrix44D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\MutableVector2D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\MutableVector2I.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\MutableVector3D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\NormalsUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Plane.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Planet.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Quadric.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Rectangle.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\RectangleF.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\RectangleI.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Sector.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Sphere.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\SphericalPlanet.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\TaitBryanAngles.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Vector2D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Vector2F.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Vector2I.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Vector3D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Vector3F.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geometry\Vector4D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\CompositeTileRasterizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DCoordinatesArrayData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DCoordinatesData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DLineRasterStyle.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DLineStringGeometry.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DMultiLineStringGeometry.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DMultiPolygonGeometry.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DPointGeometry.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DPolygonData.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DPolygonGeometry.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEO2DSurfaceRasterStyle.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOFeature.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOFeatureCollection.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOGeometry.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOGeometry2D.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOJSONParser.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOLabelRasterSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOLine2DMeshSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOLine2DStyle.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOLineRasterSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOMarkSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOMeshSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOMultiLine2DMeshSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOMultiLineRasterSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOObject.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOPolygonRasterSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEORasterProjection.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEORasterSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEORasterSymbolizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEORenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOShapeSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOStyle.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOSymbol.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOSymbolizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\geo\GEOTileRasterizer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GL.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GLConstants.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GLFeature.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GLFeatureGroup.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GLGlobalState.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GLState.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GPUAttribute.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GPUProgram.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GPUProgramFactory.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GPUProgramManager.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GPUUniform.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GPUVariable.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\gl\GPUVariableValueSet.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\CachedDownloader.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IByteBuffer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\ICameraActivityListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\ICanvasUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IDeviceInfo.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IDownloader.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IFactory.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IGLTextureId.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IGLUniformID.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IImage.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IImageListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\ILogger.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IMathUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\INativeGL.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IStorage.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IStringBuilder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\IStringUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\ITextUtils.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\ITileVisitor.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\interfaces\ITimer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\BSONGenerator.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\BSONParser.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\IJSONParser.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONArray.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONBaseObject.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONBoolean.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONDouble.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONFloat.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONGenerator.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONInteger.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONLong.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONNull.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONNumber.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONObject.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONString.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\json\JSONVisitor.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\AndTileCondition.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\BingMapsLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\CartoDBLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\GoogleMapsLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\HereLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\Layer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\LayerCondition.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\LayerSet.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\LevelTileCondition.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\MapBoxLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\MapQuestLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\MercatorTiledLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\OSMLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\RasterLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\SectorTileCondition.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\TiledVectorLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\TMSLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\URLTemplateLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\VectorLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\layers\WMSLayer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\math\BilinearInterpolator.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\math\Interpolator.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\AbstractGeometryMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\AbstractMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\CompositeMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\DirectMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\FlatColorMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\G3MMeshMaterial.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\G3MMeshParser.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\IndexedGeometryMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\IndexedMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\LeveledMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\LeveledTexturedMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\Mesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\MeshHolder.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\MultiTextureMapping.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\SimpleTextureMapping.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\TexturedMesh.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\TextureMapping.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\mesh\TransformableTextureMapping.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\AbstractMeshShape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\BoxShape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\BusyMeshRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\BusyQuadRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ChangedRendererInfoListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ChildRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\CircleShape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\CompositeRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\CompositeShape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\DefaultRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\EllipsoidShape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ErrorRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\GLErrorRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDAbsolutePosition.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDAbsoluteSize.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDErrorRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDImageRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDPosition.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDQuadWidget.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDRelativePosition.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDRelativeSize.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDSize.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\HUDWidget.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\LayerTilesRenderParameters.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\MarksRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\MarkTouchListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\MeshRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\MeshShape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\MultiTexturedHUDQuadWidget.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\PlanetRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ProtoRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\QuadShape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\Renderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\RenderState.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SceneJSParserStatistics.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SceneJSShapesParser.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SGGeometryNode.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SGLayerNode.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SGMaterialNode.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SGNode.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SGRotateNode.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SGShape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SGTextureNode.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\SGTranslateNode.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\Shape.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ShapeFullPositionEffect.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ShapeOrbitCameraEffect.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ShapePositionEffect.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ShapeScaleEffect.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\ShapesRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\TerrainTouchListener.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\TilesRenderParameters.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\TrailsRenderer.hpp" />
+    <ClInclude Include="..\ios\g3miossdk\commons\rendererers\VisibleSectorListener.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
