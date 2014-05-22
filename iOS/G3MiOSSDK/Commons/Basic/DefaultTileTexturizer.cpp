@@ -293,12 +293,12 @@ public:
   }
 
   void imageCreationError(const std::string& error) {
-#warning Diego at work
+#define Diego at work
     ILogger::instance()->logError("%s", error.c_str());
   }
 
   void imageCreationCanceled() {
-#warning Diego at work
+#define Diego at work
   }
 
 };
@@ -322,7 +322,7 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                          const std::string&           imageId,
                                          const TileImageContribution* contribution) {
     
-#warning JM at WORK
+#define JM at WORK
     if (!contribution->getSector()->isNan()){
         ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile");
     }
@@ -427,12 +427,12 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
   //  TileImageProvider* tileImageProvider = new DebugTileImageProvider();
   //  TileImageProvider* tileImageProvider = new ChessboardTileImageProvider();
 
-#warning TODO: creates the TileImageProvider from the LayerSet (and Rasterizer?)
+#define TODO creates the TileImageProvider from the LayerSet (and Rasterizer?)
   TileImageProvider* tileImageProvider = layerSet->getTileImageProvider(rc,
                                                                         layerTilesRenderParameters);
 
   if (tileImageProvider == NULL) {
-#warning TODO: error callback
+#define TODO error callback
     tile->setTextureSolved(true);
     tile->setTexturizerDirty(false);
     return NULL;

@@ -324,7 +324,7 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
                                                                      normalized);
   _values->addAttributeValue(TEXTURE_COORDS, value, false);
 
-#warning ONLY TARGET 0 FOR SGNODES
+#define ONLY TARGET 0 FOR SGNODES
   GPUUniformValueInt* texUnit = new GPUUniformValueInt(0);
   _values->addUniformValue(SAMPLER, texUnit, false);
 

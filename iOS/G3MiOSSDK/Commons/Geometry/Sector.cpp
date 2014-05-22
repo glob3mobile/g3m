@@ -281,7 +281,7 @@ const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const 
   return *_normalizedCartesianCenter;
 }
 
-const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
+/*const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
 
   std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
 
@@ -293,7 +293,8 @@ const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
 
   //    printf("RESTERIZING: %s\n", _sector->description().c_str());
 
-  float dashLengths[] = {};
+  //float dashLengths[] = {};
+  float* dashLengths;
   int dashCount = 0;
 
   GEO2DLineRasterStyle ls(c, //const Color&     color,
@@ -310,7 +311,7 @@ const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
   const GEOLineRasterSymbol* result = new GEOLineRasterSymbol(coordinatesData, ls);
   coordinatesData->_release();
   return result;
-}
+}*/
 
 Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const{
   double lat = g._latitude._degrees;

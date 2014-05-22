@@ -13,7 +13,7 @@ void DefaultRenderer::setEnable(bool enable) {
   if(enable != _enable){
     _enable = enable;
     if(_changedInfoListener!= NULL){
-#warning vtp ask dgd: empty vector?
+#define vtp ask dgd: empty vector?
       if(isEnable()){
         notifyChangedInfo(_info);
       }else{

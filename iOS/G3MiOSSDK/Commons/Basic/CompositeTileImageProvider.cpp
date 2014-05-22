@@ -164,7 +164,7 @@ void CompositeTileImageProvider::Composer::done() {
         cleanUp();
         return;
     }
-#warning JM at work
+#define JM at work
     const Sector* contributionSector = _results[0]->_contribution->getSector();
     const bool simpleCase = _contributionsSize == 1 && (contributionSector->isNan() || _tileSector.isEquals(*contributionSector));
     
@@ -249,7 +249,7 @@ void CompositeTileImageProvider::Composer::mixResult() {
         const ChildResult* result = _results[i];
         imageId += result->_imageId + "|";
         
-#warning JM at Work //For now, we consider the whole image will appear on the tile (no source rect needed)
+#define JM at Work //For now, we consider the whole image will appear on the tile (no source rect needed)
         const IImage* image = result->_image;
         const float   alpha = result->_contribution->_alpha;
         const Sector* imageSector = result->_contribution->getSector();

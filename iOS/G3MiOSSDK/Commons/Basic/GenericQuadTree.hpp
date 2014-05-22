@@ -180,7 +180,7 @@ public:
     return n;
   }
 
-  void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+  //void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
 
   void getGeodetics(std::vector<Geodetic2D*>& geo) const;
   void getSectors(std::vector<Sector*>& sectors) const;
@@ -231,7 +231,7 @@ public:
 
   bool acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const;
 
-  void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+  //void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
 
   std::vector<Geodetic2D*> getGeodetics() const{
     std::vector<Geodetic2D*> geo;

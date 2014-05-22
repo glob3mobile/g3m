@@ -17,6 +17,8 @@
 #include "SceneJSShapesParser.hpp"
 #include "SGShape.hpp"
 
+#include <algorithm>
+
 class TransparentShapeWrapper : public OrderedRenderable {
 private:
   Shape* _shape;

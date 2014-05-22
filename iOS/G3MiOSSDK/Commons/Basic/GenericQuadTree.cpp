@@ -381,7 +381,7 @@ void GenericQuadTree_Node::increaseNodeSector(GenericQuadTree_Element* element) 
   _sector = new Sector(s.mergedWith(element->getSector()));
 }
 
-void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const{
+/*void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const{
 
   if (_elements.size() > 0) {
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
@@ -394,7 +394,8 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
 
     //    printf("RESTERIZING: %s\n", _sector->description().c_str());
 
-    float dashLengths[] = {};
+    //float dashLengths[] = {};
+	float* dashLengths = 0;
     int dashCount = 0;
 
     Color c = Color::red().wheelStep(12, _depth);
@@ -421,9 +422,7 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
       _children[i]->symbolize(geoTileRasterizer);
     }
   }
-
-
-}
+}*/
 
 void GenericQuadTree_Node::getGeodetics(std::vector<Geodetic2D*>& geo) const{
   for (int i = 0; i < _elements.size(); i++) {
@@ -519,11 +518,11 @@ bool GenericQuadTree::acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) con
   return false;
 }
 
-void GenericQuadTree::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
+/*void GenericQuadTree::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
   if (_root != NULL) {
     _root->symbolize(geoTileRasterizer);
   }
-}
+}*/
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -602,9 +601,9 @@ void GenericQuadTree_TESTER::run(int nElements,  GEOTileRasterizer* rasterizer) 
   NodeVisitor_TESTER nodeVis;
   tree.acceptNodeVisitor(nodeVis);
 
-  if (rasterizer != NULL) {
+  /*if (rasterizer != NULL) {
     tree.symbolize(rasterizer);
-  }
+  }*/
 
   double c_e = (float)_nComparisons / _nElements;
   ILogger::instance()->logInfo("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
@@ -647,9 +646,9 @@ void GenericQuadTree_TESTER::run(GenericQuadTree& tree, GEOTileRasterizer* raste
   NodeVisitor_TESTER nodeVis;
   tree.acceptNodeVisitor(nodeVis);
   
-  if (rasterizer != NULL) {
+  /*if (rasterizer != NULL) {
     tree.symbolize(rasterizer);
-  }
+  }*/
   
   double c_e = (float)_nComparisons / _nElements;
   ILogger::instance()->logInfo("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);

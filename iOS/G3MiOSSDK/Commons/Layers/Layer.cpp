@@ -153,7 +153,7 @@ void Layer::setInfo(const std::string& disclaimerInfo) {
 }
 
 std::vector<std::string> Layer::getInfos() {
-#warning TODO BETTER
+#define TODO BETTER
   _info.clear();
   const std::string layerInfo = getInfo();
   _info.push_back(layerInfo);

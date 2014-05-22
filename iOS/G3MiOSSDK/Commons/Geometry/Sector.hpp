@@ -239,7 +239,7 @@ public:
         return _deltaLatitude._degrees * _deltaLongitude._degrees;
     }
     
-    const GEORasterSymbol* createGEOSymbol(const Color& c) const;
+    //const GEORasterSymbol* createGEOSymbol(const Color& c) const;
     
     Geodetic2D getClosesInnerPoint(const Geodetic2D& g) const;
     
