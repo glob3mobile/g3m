@@ -61,6 +61,7 @@ TEMPLATE:
 - FIRST_LEVEL: first level of tiles to be generated.
 - MAX_LEVEL: last level of tiles to be generated.
 - OUTPUT_FORMAT: valid output files format: geojson, bson, both.
+- OUTPUT_FOLDER: output folder path, using the correct operating system path separator. By default, LOD folder shall be used at the current path.
 
 * Parameters for specific vectorial data
 - DATABASE_TABLE: name of the table in the database with the target vectorial data
@@ -76,25 +77,25 @@ EXAMPLES OF USE:
 Example 0) Execution using parameters.xml file, simply run the script:
 ./run.sh
 
-Example 1) LOD of type polygons data: ne_10m_admin_0_countries table, 6 levels (0 - 5), geojson format, WGS84, properties: continent, mapcolor7, scalerank
+Example 1) LOD of type polygons data: ne_10m_admin_0_countries table, 6 levels (0 - 5), geojson format, /home/user/LOD folder, WGS84, properties: continent, mapcolor7, scalerank
 
 * Using run.sh script:
-./run.sh igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test 2.0 false 0 5 geojson ne_10m_admin_0_countries true continent mapcolor7 scalerank
+./run.sh igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test 2.0 false 0 5 geojson /home/user/LOD ne_10m_admin_0_countries true continent mapcolor7 scalerank
 
 * Using runAgainstDB.sh script:
-./runAgainstDB.sh 2.0 false 0 5 geojson ne_10m_admin_0_countries true continent mapcolor7 scalerank
+./runAgainstDB.sh 2.0 false 0 5 geojson /home/user/LOD ne_10m_admin_0_countries true continent mapcolor7 scalerank
 
 
 
 Example 2) LOD of type linestring data: ne_10m_admin_0_boundary_lines_land, 5 levels (0 - 4), bson format, MERCATOR, properties: scalerank, labelrank
 
-./runAgainstDB.sh 2.0 true 0 4 bson ne_10m_admin_0_boundary_lines_land true scalerank labelrank
+./runAgainstDB.sh 2.0 true 0 4 bson /home/user/LOD ne_10m_admin_0_boundary_lines_land true scalerank labelrank
 
 
 
 Example 3) LOD of type point data: ne_10m_populated_places, 4 levels (0 - 3), both formats, WGS84, properties: SCALERANK, LATITUDE, LONGITUDE
 
-./runAgainstDB.sh 2.0 false 0 3 both ne_10m_populated_places true SCALERANK LATITUDE LONGITUDE
+./runAgainstDB.sh 2.0 false 0 3 both /home/user/LOD ne_10m_populated_places true SCALERANK LATITUDE LONGITUDE
 
 
 

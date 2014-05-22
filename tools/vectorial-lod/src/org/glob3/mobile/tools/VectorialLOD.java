@@ -41,12 +41,13 @@ import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 public class VectorialLOD {
 
    //-- Internal constants definition ------------------------------------------------------------------
-   final static String  ROOT_DIRECTORY          = "LOD";
+
    final static String  PARAMETERS_FILE         = "parameters.xml";
    final static String  METADATA_FILENAME       = "metadata.json";
+   final static String  EMPTY_GEOJSON           = "{\"type\":\"FeatureCollection\",\"features\":null}";
 
    final static double  OVERLAP_PERCENTAGE      = 10.0;
-   final static int     CONNECTION_TIMEOUT      = 5;               //seconds
+   final static int     CONNECTION_TIMEOUT      = 5;                                                   //seconds
    final static int     PIXELS_PER_TILE         = 256;
    final static int     SQUARED_PIXELS_PER_TILE = (int) Math.pow(
                                                          (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
@@ -88,7 +89,7 @@ public class VectorialLOD {
    private static int                        NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
    private static int                        MAX_DB_CONNECTIONS = NUM_LEVELS;
    private static String                     OUTPUT_FORMAT      = "geojson";                    // valid values: geojson, bson, both
-
+   private static String                     ROOT_FOLDER        = "LOD";
    //-- Variables ----------------------------------------------------------------------
 
    private static DataBaseService            _dataBaseService   = null;
@@ -272,7 +273,7 @@ public class VectorialLOD {
             return null;
          }
 
-         //System.out.println("fullQuery: " + fullQuery);
+         //         System.out.println("fullQuery: " + fullQuery);
 
          // first attempt: usual parameters
          geoJsonResult = executeQuery(fullQuery);
@@ -442,7 +443,8 @@ public class VectorialLOD {
       result = rs.getString(1);
       st.close();
 
-      if (result.contains("null")) {
+      //      if (result.contains("null")) {
+      if (result.contains(EMPTY_GEOJSON)) {
          return null;
       }
 
@@ -1080,14 +1082,14 @@ public class VectorialLOD {
 
    private static void createFolderStructure(final DataSource dataSource) {
 
-      if (!new File(ROOT_DIRECTORY).exists()) {
-         new File(ROOT_DIRECTORY).mkdir();
+      if (!new File(ROOT_FOLDER).exists()) {
+         new File(ROOT_FOLDER).mkdir();
       }
 
       //final String projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
       //_lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + _projection;
-      _lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_LEVELS-" + FIRST_LEVEL + "-" + MAX_LEVEL
-                   + "_" + _projection;
+      _lodFolder = ROOT_FOLDER + File.separatorChar + dataSource._sourceTable + "_LEVELS-" + FIRST_LEVEL + "-" + MAX_LEVEL + "_"
+                   + _projection;
 
       if (!new File(_lodFolder).exists()) {
          new File(_lodFolder).mkdir();
@@ -1399,7 +1401,7 @@ public class VectorialLOD {
 
    private static void initialize() {
 
-      initializeUtils();
+      //      initializeUtils();
 
       initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
 
@@ -1475,6 +1477,7 @@ public class VectorialLOD {
          System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
       }
       else {
+         System.out.println();
          System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR.");
       }
 
@@ -1512,8 +1515,28 @@ public class VectorialLOD {
          System.exit(1);
       }
 
+      //----
       if ((args[9] != null) && (!args[9].equals(""))) {
-         DATABASE_TABLE = args[9];
+         OUTPUT_FORMAT = args[9];
+         System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
+      }
+      else {
+         System.err.println("Invalid OUTPUT_FORMAT argument.");
+         System.exit(1);
+      }
+
+      if ((args[10] != null) && (!args[10].equals(""))) {
+         ROOT_FOLDER = args[10];
+         System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
+      }
+      else {
+         System.out.println();
+         System.err.println("Invalid OUTPUT_FOLDER argument. Using default folder: " + ROOT_FOLDER);
+      }
+      //----
+
+      if ((args[11] != null) && (!args[11].equals(""))) {
+         DATABASE_TABLE = args[11];
          System.out.println("DATABASE_TABLE: " + DATABASE_TABLE);
       }
       else {
@@ -1521,20 +1544,21 @@ public class VectorialLOD {
          System.exit(1);
       }
 
-      if ((args[10] != null) && (!args[10].equals(""))) {
-         FILTER_CRITERIA = args[10];
+      if ((args[12] != null) && (!args[12].equals(""))) {
+         FILTER_CRITERIA = args[12];
          System.out.println("FILTER_CRITERIA: " + FILTER_CRITERIA);
       }
       else {
+         System.out.println();
          System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
       }
 
-      final int numProperties = args.length - 11;
+      final int numProperties = args.length - 13;
       if (numProperties > 0) {
          PROPERTIES = new String[numProperties];
          System.out.print("PROPERTIES: ");
          for (int i = 0; i < numProperties; i++) {
-            PROPERTIES[i] = args[11 + i];
+            PROPERTIES[i] = args[13 + i];
             System.out.print(PROPERTIES[i]);
             if (i == (numProperties - 1)) {
                System.out.println(".");
@@ -1581,7 +1605,7 @@ public class VectorialLOD {
             properties.loadFromXML(stream);
 
             String tmp;
-            HOST = properties.getProperty("HOST");
+            HOST = properties.getProperty("HOST").trim();
 
             if ((HOST != null) && (!HOST.equals(""))) {
                System.out.println("HOST: " + HOST);
@@ -1591,7 +1615,7 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            PORT = properties.getProperty("PORT");
+            PORT = properties.getProperty("PORT").trim();
             if ((PORT != null) && (!PORT.equals(""))) {
                System.out.println("PORT: " + PORT);
             }
@@ -1600,7 +1624,7 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            USER = properties.getProperty("USER");
+            USER = properties.getProperty("USER").trim();
             if ((USER != null) && (!USER.equals(""))) {
                System.out.println("USER: " + USER);
             }
@@ -1609,7 +1633,7 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            PASSWORD = properties.getProperty("PASSWORD");
+            PASSWORD = properties.getProperty("PASSWORD").trim();
             if ((PASSWORD != null) && (!PASSWORD.equals(""))) {
                System.out.println("PASSWORD: " + PASSWORD);
             }
@@ -1618,7 +1642,7 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            DATABASE_NAME = properties.getProperty("DATABASE_NAME");
+            DATABASE_NAME = properties.getProperty("DATABASE_NAME").trim();
             if ((DATABASE_NAME != null) && (!DATABASE_NAME.equals(""))) {
                System.out.println("DATABASE_NAME: " + DATABASE_NAME);
             }
@@ -1627,16 +1651,17 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            tmp = properties.getProperty("QUALITY_FACTOR");
+            tmp = properties.getProperty("QUALITY_FACTOR").trim();
             if ((tmp != null) && (!tmp.equals(""))) {
                QUALITY_FACTOR = Float.parseFloat(tmp);
                System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
             }
             else {
-               System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR.");
+               System.out.println();
+               System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR: " + QUALITY_FACTOR);
             }
 
-            tmp = properties.getProperty("MERCATOR");
+            tmp = properties.getProperty("MERCATOR").trim();
             if ((tmp != null) && (!tmp.equals(""))) {
                MERCATOR = Boolean.parseBoolean(tmp);
                if (MERCATOR) {
@@ -1651,7 +1676,7 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            tmp = properties.getProperty("FIRST_LEVEL");
+            tmp = properties.getProperty("FIRST_LEVEL").trim();
             if ((tmp != null) && (!tmp.equals(""))) {
                FIRST_LEVEL = Integer.parseInt(tmp);
                System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
@@ -1661,7 +1686,7 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            tmp = properties.getProperty("MAX_LEVEL");
+            tmp = properties.getProperty("MAX_LEVEL").trim();
             if ((tmp != null) && (!tmp.equals(""))) {
                MAX_LEVEL = Integer.parseInt(tmp);
                System.out.println("MAX_LEVEL: " + MAX_LEVEL);
@@ -1673,7 +1698,7 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            OUTPUT_FORMAT = properties.getProperty("OUTPUT_FORMAT");
+            OUTPUT_FORMAT = properties.getProperty("OUTPUT_FORMAT").trim();
             if ((OUTPUT_FORMAT != null) && (!OUTPUT_FORMAT.equals(""))) {
                System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
             }
@@ -1682,7 +1707,17 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            DATABASE_TABLE = properties.getProperty("DATABASE_TABLE");
+            tmp = properties.getProperty("OUTPUT_FOLDER").trim();
+            if ((tmp != null) && (!tmp.equals(""))) {
+               ROOT_FOLDER = tmp;
+               System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
+            }
+            else {
+               System.out.println();
+               System.err.println("Invalid OUTPUT_FOLDER argument. Using default output folder: " + ROOT_FOLDER);
+            }
+
+            DATABASE_TABLE = properties.getProperty("DATABASE_TABLE").trim();
             if ((DATABASE_TABLE != null) && (!DATABASE_TABLE.equals(""))) {
                System.out.println("DATABASE_TABLE: " + DATABASE_TABLE);
             }
@@ -1691,11 +1726,13 @@ public class VectorialLOD {
                System.exit(1);
             }
 
-            FILTER_CRITERIA = properties.getProperty("FILTER_CRITERIA");
-            if ((FILTER_CRITERIA != null) && (!FILTER_CRITERIA.equals(""))) {
+            tmp = properties.getProperty("FILTER_CRITERIA").trim();
+            if ((tmp != null) && (!tmp.equals(""))) {
+               FILTER_CRITERIA = tmp;
                System.out.println("FILTER_CRITERIA: " + FILTER_CRITERIA);
             }
             else {
+               System.out.println();
                System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
             }
 
@@ -1714,13 +1751,14 @@ public class VectorialLOD {
                System.out.println();
             }
             else {
+               System.out.println();
                System.err.println("Non PROPERTIES argument. No property included from datasource.");
             }
 
             return true;
          }
          catch (final FileNotFoundException e) {
-            ILogger.instance().logError("Initialization file not found: " + e.getMessage());
+            ILogger.instance().logError("Initialization file: " + PARAMETERS_FILE + ", not found !");
          }
          catch (final InvalidPropertiesFormatException e) {
             ILogger.instance().logError("Initialization file invalid format: " + e.getMessage());
@@ -1730,11 +1768,15 @@ public class VectorialLOD {
          }
 
       }
+
+      ILogger.instance().logWarning("Initialization file: " + PARAMETERS_FILE + ", not found !");
       return false;
    }
 
 
    public static void main(final String[] args) {
+
+      initializeUtils();
 
       if (!initializeFromFile(PARAMETERS_FILE)) {
          initializeFromArguments(args);
