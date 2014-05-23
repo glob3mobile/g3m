@@ -262,8 +262,9 @@ public:
                       const Angle& altitude);
 
   void forceMatrixCreation() const{
-    //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
-    //getFrustumData();
+    getGeodeticCenterOfView();
+    getXYZCenterOfView();
+    getFrustumInModelCoordinates();
     getProjectionMatrix44D();
     getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();

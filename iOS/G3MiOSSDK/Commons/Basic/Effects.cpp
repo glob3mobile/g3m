@@ -149,7 +149,6 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
 #endif
 
 #ifdef JAVA_CODE
-  //final java.util.ArrayList<EffectRun> effectsToStop = new java.util.ArrayList<EffectRun>();
   _effectsToStop.clear();
   final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
   while (iterator.hasNext()) {
