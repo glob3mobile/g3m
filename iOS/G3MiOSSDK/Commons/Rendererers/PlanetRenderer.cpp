@@ -680,7 +680,10 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #endif
 #ifdef JAVA_CODE
     _toVisit.clear();
-    _toVisit.addAll(_firstLevelTiles);
+    //_toVisit.addAll(_firstLevelTiles);
+    for (final Tile tile : _firstLevelTiles) {
+      _toVisit.add(tile);
+    }
 #endif
 
     while (!_toVisit.empty()) {
@@ -723,7 +726,10 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #endif
 #ifdef JAVA_CODE
       _toVisit.clear();
-      _toVisit.addAll(_toVisitInNextIteration);
+      //_toVisit.addAll(_toVisitInNextIteration);
+      for (final Tile tile : _toVisitInNextIteration) {
+        _toVisit.add(tile);
+      }
 #endif
     }
   }

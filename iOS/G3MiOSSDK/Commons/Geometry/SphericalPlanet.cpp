@@ -13,11 +13,10 @@
 
 
 SphericalPlanet::SphericalPlanet(const Sphere& sphere):
-_sphere(sphere)
+_sphere(sphere),
+_radii( Vector3D(sphere._radius, sphere._radius, sphere._radius) )
 {
-
 }
-
 
 Vector3D SphericalPlanet::geodeticSurfaceNormal(const Angle& latitude,
                                                 const Angle& longitude) const {
