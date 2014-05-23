@@ -49,7 +49,8 @@ public class EffectsScheduler
     }
   }
 
-  final java.util.ArrayList<EffectRun> _effectsToStop = new java.util.ArrayList<EffectRun>();
+  final java.util.ArrayList<EffectRun> _effectsToStop   = new java.util.ArrayList<EffectRun>();
+  final java.util.ArrayList<EffectRun> _effectsToCancel = new java.util.ArrayList<EffectRun>();
 
   public EffectsScheduler()
   {
@@ -102,13 +103,13 @@ public class EffectsScheduler
   {
     final TimeInterval now = _timer.now();
   
-    final java.util.ArrayList<EffectRun> effectsToCancel = new java.util.ArrayList<EffectRun>();
+    _effectsToCancel.clear();
   
     final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
     while (iterator.hasNext()) {
       final EffectRun effectRun = iterator.next();
       if (effectRun._started) {
-        effectsToCancel.add(effectRun);
+        _effectsToCancel.add(effectRun);
       }
       else {
         effectRun.dispose();
@@ -116,7 +117,9 @@ public class EffectsScheduler
       iterator.remove();
     }
   
-    for (final EffectRun effectRun : effectsToCancel) {
+    final int effectsToCancelSize = _effectsToCancel.size();
+    for (int i = 0; i < effectsToCancelSize; i++) {
+      final EffectRun effectRun = _effectsToCancel.get(i);
       effectRun._effect.cancel(now);
       effectRun.dispose();
     }
@@ -126,14 +129,14 @@ public class EffectsScheduler
   {
     final TimeInterval now = _timer.now();
   
-    final java.util.ArrayList<EffectRun> effectsToCancel = new java.util.ArrayList<EffectRun>();
+    _effectsToCancel.clear();
   
     final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
     while (iterator.hasNext()) {
       final EffectRun effectRun = iterator.next();
       if (effectRun._target == target) {
         if (effectRun._started) {
-          effectsToCancel.add(effectRun);
+          _effectsToCancel.add(effectRun);
         }
         else {
           effectRun.dispose();
@@ -142,7 +145,9 @@ public class EffectsScheduler
       }
     }
   
-    for (final EffectRun effectRun : effectsToCancel) {
+    final int effectsToCancelSize = _effectsToCancel.size();
+    for (int i = 0; i < effectsToCancelSize; i++) {
+      final EffectRun effectRun = _effectsToCancel.get(i);
       effectRun._effect.cancel(now);
       effectRun.dispose();
     }
