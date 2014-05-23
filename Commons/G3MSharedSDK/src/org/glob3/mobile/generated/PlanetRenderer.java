@@ -316,6 +316,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
+  private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
+  private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
+
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener)
   {
      _tessellator = tessellator;
@@ -474,27 +477,25 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
     else
     {
-      java.util.ArrayList<Tile> toVisit = new java.util.ArrayList<Tile>();
-      for (int i = 0; i < firstLevelTilesCount; i++)
-      {
-        toVisit.add(_firstLevelTiles.get(i));
-      }
+      _toVisit.clear();
+      _toVisit.addAll(_firstLevelTiles);
   
-      java.util.ArrayList<Tile> toVisitInNextIteration = new java.util.ArrayList<Tile>();
-      while (!toVisit.isEmpty())
+      while (!_toVisit.isEmpty())
       {
-        toVisitInNextIteration.clear();
+        _toVisitInNextIteration.clear();
   
-        final int toVisitSize = toVisit.size();
+        final int toVisitSize = _toVisit.size();
         for (int i = 0; i < toVisitSize; i++)
         {
-          Tile tile = toVisit.get(i);
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, forceFullRender
+          Tile tile = _toVisit.get(i);
+          tile.render(rc, _glState, _toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, forceFullRender
         }
   
-        toVisit.clear();
-        toVisit.addAll(toVisitInNextIteration);
+        _toVisit.clear();
+        _toVisit.addAll(toVisitInNextIteration);
       }
+  //    _toVisit.clear();
+  //    _toVisitInNextIteration.clear();
     }
   
     if (_showStatistics)
