@@ -90,17 +90,13 @@ public class Camera
   
     _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
   
-    if (_geodeticCenterOfView != null)
-       _geodeticCenterOfView.dispose();
-    _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
+    _geodeticCenterOfView = that._geodeticCenterOfView;
   
     _frustum = that._frustum;
   
     _frustumInModelCoordinates = that._frustumInModelCoordinates;
   
-    if (_geodeticPosition != null)
-       _geodeticPosition.dispose();
-    _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
+    _geodeticPosition = that._geodeticPosition;
     _angle2Horizon = that._angle2Horizon;
   
     _tanHalfVerticalFieldOfView = that._tanHalfVerticalFieldOfView;
