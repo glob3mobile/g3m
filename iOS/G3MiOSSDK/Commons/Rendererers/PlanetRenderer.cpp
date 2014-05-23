@@ -681,8 +681,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #ifdef JAVA_CODE
     _toVisit.clear();
     //_toVisit.addAll(_firstLevelTiles);
-    for (final Tile tile : _firstLevelTiles) {
-      _toVisit.add(tile);
+//    for (final Tile tile : _firstLevelTiles) {
+//      _toVisit.add(tile);
+//    }
+    for (int i = 0; i < firstLevelTilesCount; i++) {
+      _toVisit.add( _firstLevelTiles.get(i) );
     }
 #endif
 
@@ -727,8 +730,12 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #ifdef JAVA_CODE
       _toVisit.clear();
       //_toVisit.addAll(_toVisitInNextIteration);
-      for (final Tile tile : _toVisitInNextIteration) {
-        _toVisit.add(tile);
+//      for (final Tile tile : _toVisitInNextIteration) {
+//        _toVisit.add(tile);
+//      }
+      final int toVisitInNextIterationSize = _toVisitInNextIteration.size();
+      for (int i = 0; i < toVisitInNextIterationSize; i++) {
+        _toVisit.add( _toVisitInNextIteration.get(i) );
       }
 #endif
     }
