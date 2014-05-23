@@ -31,25 +31,23 @@ public class EffectsScheduler
   private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {
   
-    if (!_effectsRuns.isEmpty()) {
-      _effectsToStop.clear();
-      final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-      while (iterator.hasNext()) {
-        final EffectRun effectRun = iterator.next();
-        if (effectRun._started) {
-          if (effectRun._effect.isDone(rc, when)) {
-            iterator.remove();
-            _effectsToStop.add(effectRun);
-          }
+    _effectsToStop.clear();
+    final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
+    while (iterator.hasNext()) {
+      final EffectRun effectRun = iterator.next();
+      if (effectRun._started) {
+        if (effectRun._effect.isDone(rc, when)) {
+          iterator.remove();
+          _effectsToStop.add(effectRun);
         }
       }
+    }
   
-      final int effectsToStopSize = _effectsToStop.size();
-      for (int i = 0; i < effectsToStopSize; i++) {
-        final EffectRun effectRun = _effectsToStop.get(i);
-        effectRun._effect.stop(rc, when);
-        effectRun.dispose();
-      }
+    final int effectsToStopSize = _effectsToStop.size();
+    for (int i = 0; i < effectsToStopSize; i++) {
+      final EffectRun effectRun = _effectsToStop.get(i);
+      effectRun._effect.stop(rc, when);
+      effectRun.dispose();
     }
   }
 
@@ -63,24 +61,25 @@ public class EffectsScheduler
 
   public final void doOneCyle(G3MRenderContext rc)
   {
-    if (_effectsRuns.isEmpty())
+    if (!_effectsRuns.isEmpty())
     {
-      return;
-    }
+      final TimeInterval now = _timer.now();
   
-    final TimeInterval now = _timer.now();
+      processFinishedEffects(rc, now);
   
-    processFinishedEffects(rc, now);
-  
-    final int effectsRunsSize = _effectsRuns.size();
-    for (int i = 0; i < effectsRunsSize; i++) {
-      final EffectRun effectRun = _effectsRuns.get(i);
-      final Effect effect = effectRun._effect;
-      if (!effectRun._started) {
-        effect.start(rc, now);
-        effectRun._started = true;
+      // ask for _effectsRuns.size() here, as processFinishedEffects can modify the size
+      final int effectsRunsSize = _effectsRuns.size();
+      for (int i = 0; i < effectsRunsSize; i++)
+      {
+        EffectRun effectRun = _effectsRuns.get(i);
+        Effect effect = effectRun._effect;
+        if (!effectRun._started)
+        {
+          effect.start(rc, now);
+          effectRun._started = true;
+        }
+        effect.doStep(rc, now);
       }
-      effect.doStep(rc, now);
     }
   }
 
