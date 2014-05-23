@@ -89,10 +89,10 @@ public class Tile
       return;
     }
   
-  //  delete _middleWestPoint;
-  //  delete _middleEastPoint;
-  //  delete _middleNorthPoint;
-  //  delete _middleSouthPoint;
+    //  delete _middleWestPoint;
+    //  delete _middleEastPoint;
+    //  delete _middleNorthPoint;
+    //  delete _middleSouthPoint;
     if (_northWestPoint != null)
        _northWestPoint.dispose();
     if (_northEastPoint != null)
@@ -105,16 +105,16 @@ public class Tile
   
     final double mediumHeight = _tileTessellatorMeshData._averageHeight;
   
-  //  const Geodetic2D center = _sector.getCenter();
-  //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
-  //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
-  //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
-  //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
-  //
-  //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
-  //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
-  //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
-  //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+    //  const Geodetic2D center = _sector.getCenter();
+    //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
+    //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
+    //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
+    //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
+    //
+    //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
+    //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
+    //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
+    //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
   
     _northWestPoint = new Vector3D(planet.toCartesian(_sector.getNW(), mediumHeight));
     _northEastPoint = new Vector3D(planet.toCartesian(_sector.getNE(), mediumHeight));
@@ -131,28 +131,28 @@ public class Tile
   private void prepareTestLODData(Planet planet)
   {
   
-  //  if (_middleNorthPoint == NULL) {
-  //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
-  //    return;
-  //  }
-  //
-  //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
-  //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
-  //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
-  //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
-  //
-  //  const Angle latitudeAngle = nN.angleBetween(nS);
-  //  double latRad = latitudeAngle._radians;
-  //  const double sin_lat_2 = SIN(latRad / 2);
-  //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
-  //
-  //  const Angle longitudeAngle = nE.angleBetween(nW);
-  //  const double lonRad = longitudeAngle._radians;
-  //  const double sin_lon_2 = SIN(lonRad / 2);
-  //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
-  //
-  //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
-  //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
+    //  if (_middleNorthPoint == NULL) {
+    //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
+    //    return;
+    //  }
+    //
+    //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
+    //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
+    //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
+    //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
+    //
+    //  const Angle latitudeAngle = nN.angleBetween(nS);
+    //  double latRad = latitudeAngle._radians;
+    //  const double sin_lat_2 = SIN(latRad / 2);
+    //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
+    //
+    //  const Angle longitudeAngle = nE.angleBetween(nW);
+    //  const double lonRad = longitudeAngle._radians;
+    //  const double sin_lon_2 = SIN(lonRad / 2);
+    //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
+    //
+    //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
+    //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
   
     if ((_northWestPoint == null) || (_northEastPoint == null) || (_southWestPoint == null) || (_southEastPoint == null))
     {
@@ -706,12 +706,35 @@ public class Tile
     }
     else
     {
+      //TODO: AVISAR CAMBIO DE TERRENO
+  
       setIsVisible(false, texturizer);
+  
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning JM at work
+  
       if (!tileMeetsRenderCriteria)
       {
-        prune(texturizer, elevationDataProvider);
+        //prune(texturizer, elevationDataProvider);
+  
+        if (toVisitInNextIteration != null)
+        {
+          java.util.ArrayList<Tile> subTiles = getSubTiles();
+          if (_justCreatedSubtiles)
+          {
+            lastSplitTimer.start();
+            _justCreatedSubtiles = false;
+          }
+  
+          final int subTilesSize = subTiles.size();
+          for (int i = 0; i < subTilesSize; i++)
+          {
+            Tile subTile = subTiles.get(i);
+            toVisitInNextIteration.addLast(subTile);
+          }
+        }
       }
-      //TODO: AVISAR CAMBIO DE TERRENO
     }
   
     if (_rendered != rendered)
