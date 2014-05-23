@@ -675,21 +675,23 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     _firstRender = false;
   }
   else {
-    std::vector<Tile*> toVisit;
-    for (int i = 0; i < firstLevelTilesCount; i++) {
-      toVisit.push_back(_firstLevelTiles[i]);
-    }
+#ifdef C_CODE
+    _toVisit = _firstLevelTiles;
+#endif
+#ifdef JAVA_CODE
+    _toVisit.clear();
+    _toVisit.addAll(_firstLevelTiles);
+#endif
 
-    std::vector<Tile*> toVisitInNextIteration;
-    while (!toVisit.empty()) {
-      toVisitInNextIteration.clear();
+    while (!_toVisit.empty()) {
+      _toVisitInNextIteration.clear();
 
-      const int toVisitSize = toVisit.size();
+      const int toVisitSize = _toVisit.size();
       for (int i = 0; i < toVisitSize; i++) {
-        Tile* tile = toVisit[i];
+        Tile* tile = _toVisit[i];
         tile->render(rc,
                      *_glState,
-                     &toVisitInNextIteration,
+                     &_toVisitInNextIteration,
                      planet,
                      cameraNormalizedPosition,
                      cameraAngle2HorizonInRadians,
@@ -717,13 +719,15 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
       }
 
 #ifdef C_CODE
-      toVisit = toVisitInNextIteration;
+      _toVisit = _toVisitInNextIteration;
 #endif
 #ifdef JAVA_CODE
-      toVisit.clear();
-      toVisit.addAll(toVisitInNextIteration);
+      _toVisit.clear();
+      _toVisit.addAll(toVisitInNextIteration);
 #endif
     }
+//    _toVisit.clear();
+//    _toVisitInNextIteration.clear();
   }
 
   if (_showStatistics) {
