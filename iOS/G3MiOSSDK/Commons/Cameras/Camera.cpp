@@ -55,8 +55,13 @@ void Camera::copyFrom(const Camera &that) {
 
   _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
 
+#ifdef C_CODE
   delete _geodeticCenterOfView;
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
+#endif
+#ifdef JAVA_CODE
+  _geodeticCenterOfView = that._geodeticCenterOfView;
+#endif
 
 #ifdef C_CODE
   delete _frustum;
@@ -74,8 +79,13 @@ void Camera::copyFrom(const Camera &that) {
   _frustumInModelCoordinates = that._frustumInModelCoordinates;
 #endif
 
+#ifdef C_CODE
   delete _geodeticPosition;
   _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
+#endif
+#ifdef JAVA_CODE
+  _geodeticPosition = that._geodeticPosition;
+#endif
   _angle2Horizon = that._angle2Horizon;
 
   _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
