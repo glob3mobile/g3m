@@ -46,7 +46,7 @@ public class VectorialLOD {
    final static String  METADATA_FILENAME       = "metadata.json";
    final static String  EMPTY_GEOJSON           = "{\"type\":\"FeatureCollection\",\"features\":null}";
 
-   final static double  OVERLAP_PERCENTAGE      = 10.0;
+   final static double  OVERLAP_PERCENTAGE      = 5.0;
    final static int     CONNECTION_TIMEOUT      = 5;                                                   //seconds
    final static int     PIXELS_PER_TILE         = 256;
    final static int     SQUARED_PIXELS_PER_TILE = (int) Math.pow(
@@ -69,8 +69,6 @@ public class VectorialLOD {
    //-- Data base connection parameters ----------------------------------------------------------------
    private static String                     HOST               = "igosoftware.dyndns.org";
    private static String                     PORT               = "5414";
-   //   private static String                     HOST               = "192.168.1.14";
-   //   private static String                     PORT               = "5432";
    private static String                     USER               = "postgres";
    private static String                     PASSWORD           = "postgres1g0";
    private static String                     DATABASE_NAME      = "vectorial_test";
@@ -78,7 +76,6 @@ public class VectorialLOD {
    //-- Data source and filter parameters --------------------------------------------------------------
    private static String                     DATABASE_TABLE     = "ne_10m_admin_0_countries";
    private static String                     FILTER_CRITERIA    = "true";
-   //private static String                     FILTER_CRITERIA    = "\"continent\" like 'Euro%' AND \"pop_est\" > 10000000";
    private static String[]                   PROPERTIES;
 
    //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
@@ -86,8 +83,8 @@ public class VectorialLOD {
    private static boolean                    MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
    private static int                        FIRST_LEVEL        = 0;
    private static int                        MAX_LEVEL          = 3;
-   private static int                        NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
-   private static int                        MAX_DB_CONNECTIONS = NUM_LEVELS;
+   //private static int                        NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
+   private static int                        MAX_DB_CONNECTIONS = 2;
    private static String                     OUTPUT_FORMAT      = "geojson";                    // valid values: geojson, bson, both
    private static String                     ROOT_FOLDER        = "LOD";
    //-- Variables ----------------------------------------------------------------------
@@ -105,6 +102,9 @@ public class VectorialLOD {
    private static String                     _projection        = null;
    private static int                        _firstLevelCreated = 0;
    private static int                        _lastLevelCreated  = 0;
+
+   private static int                        _firstLevel        = FIRST_LEVEL;
+   private static int                        _maxLevel          = MAX_LEVEL;
 
    /*
     * For handling postgis database access and connections
@@ -196,6 +196,7 @@ public class VectorialLOD {
                                                final String password,
                                                final String dataBaseName) {
 
+      MAX_DB_CONNECTIONS = _concurrentService.getThreadsNumber();
       _dataBaseService = new DataBaseService(host, port, user, password, dataBaseName);
 
       // Check one of the service connections before return 
@@ -444,7 +445,7 @@ public class VectorialLOD {
       st.close();
 
       //      if (result.contains("null")) {
-      if (result.contains(EMPTY_GEOJSON)) {
+      if ((result == null) || result.equals("") || result.contains(EMPTY_GEOJSON)) {
          return null;
       }
 
@@ -466,7 +467,7 @@ public class VectorialLOD {
                                          final String geomFilterCriteria,
                                          final String... includeProperties) {
 
-      //--i.e: SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and (ST_Area(Box2D(the_geom))>0.078 and true) ) As lg ) As f ) As fc;
+      //--i.e: SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
 
       final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT ";
       final String baseQuery1 = ") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
@@ -498,7 +499,7 @@ public class VectorialLOD {
       //System.out.println("fullQuery: " + fullQuery);
 
       // -- query example --
-      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and (ST_Area(Box2D(the_geom))>0.078 and true) ) As lg ) As f ) As fc;
+      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
       //-------------------
 
       return fullQuery;
@@ -1357,7 +1358,6 @@ public class VectorialLOD {
       _renderParameters = mercator ? LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel)
                                   : LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
 
-
    }
 
 
@@ -1389,7 +1389,7 @@ public class VectorialLOD {
 
       initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
 
-      initializeConcurrentService();
+      //initializeConcurrentService();
 
       _firstLevelCreated = MAX_LEVEL;
       _lastLevelCreated = FIRST_LEVEL;
@@ -1491,8 +1491,8 @@ public class VectorialLOD {
       if ((args[8] != null) && (!args[8].equals(""))) {
          MAX_LEVEL = Integer.parseInt(args[8]);
          System.out.println("MAX_LEVEL: " + MAX_LEVEL);
-         NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
-         MAX_DB_CONNECTIONS = NUM_LEVELS;
+         //NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
+         //MAX_DB_CONNECTIONS = NUM_LEVELS;
       }
       else {
          System.err.println("Invalid MAX_LEVEL argument.");
@@ -1674,8 +1674,8 @@ public class VectorialLOD {
             if ((tmp != null) && (!tmp.equals(""))) {
                MAX_LEVEL = Integer.parseInt(tmp);
                System.out.println("MAX_LEVEL: " + MAX_LEVEL);
-               NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
-               MAX_DB_CONNECTIONS = NUM_LEVELS;
+               //NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
+               //MAX_DB_CONNECTIONS = NUM_LEVELS;
             }
             else {
                System.err.println("Invalid MAX_LEVEL argument.");
@@ -1761,6 +1761,8 @@ public class VectorialLOD {
    public static void main(final String[] args) {
 
       initializeUtils();
+
+      initializeConcurrentService();
 
       if (!initializeFromFile(PARAMETERS_FILE)) {
          initializeFromArguments(args);

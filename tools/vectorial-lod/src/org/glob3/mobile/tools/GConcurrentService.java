@@ -16,9 +16,11 @@ public class GConcurrentService {
 
    public static final boolean      VERBOSE      = false;
    public static final long         ALIVE_PERIOD = 5000;
+   private static final int         SCALE_FACTOR = 2;
 
-   private final ThreadPoolExecutor _executor;
    private final static AtomicLong  _taskCounter = new AtomicLong(0);
+   private final ThreadPoolExecutor _executor;
+   private int                      _maxThreads  = Runtime.getRuntime().availableProcessors();
 
 
    public interface TaskCompleteListener {
@@ -121,11 +123,16 @@ public class GConcurrentService {
 
    public GConcurrentService() {
 
-      final int scaleFactor = 2;
-      final int cpus = Runtime.getRuntime().availableProcessors();
-      final int maxThreads = Math.max(cpus * scaleFactor, 1);
+      this(SCALE_FACTOR);
+   }
 
-      _executor = new ThreadPoolExecutor(0, maxThreads, 10, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
+
+   public GConcurrentService(final int scaleFactor) {
+
+      final int cpus = Runtime.getRuntime().availableProcessors();
+      _maxThreads = Math.max(cpus * scaleFactor, 1);
+
+      _executor = new ThreadPoolExecutor(0, _maxThreads, 10, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
                defaultThreadFactory(Thread.NORM_PRIORITY));
       _executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
    }
@@ -150,6 +157,11 @@ public class GConcurrentService {
       catch (final InterruptedException e) {
          throw new RuntimeException(e);
       }
+   }
+
+
+   public int getThreadsNumber() {
+      return _maxThreads;
    }
 
 }
