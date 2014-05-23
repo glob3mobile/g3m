@@ -44,18 +44,16 @@ public class EllipsoidalPlanet extends Planet
   public EllipsoidalPlanet(Ellipsoid ellipsoid)
   {
      _ellipsoid = ellipsoid;
-  
   }
 
   public void dispose()
   {
   super.dispose();
-
   }
 
   public final Vector3D getRadii()
   {
-    return _ellipsoid.getRadii();
+    return _ellipsoid._radii;
   }
 
   public final Vector3D centricSurfaceNormal(Vector3D positionOnEllipsoidalPlanet)
@@ -65,22 +63,16 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D geodeticSurfaceNormal(Vector3D positionOnEllipsoidalPlanet)
   {
-    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized();
+    return positionOnEllipsoidalPlanet.times(_ellipsoid._oneOverRadiiSquared).normalized();
   }
 
   public final Vector3D geodeticSurfaceNormal(MutableVector3D positionOnEllipsoidalPlanet)
   {
-    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized().asVector3D();
+    return positionOnEllipsoidalPlanet.times(_ellipsoid._oneOverRadiiSquared).normalized().asVector3D();
   }
-
 
   public final Vector3D geodeticSurfaceNormal(Angle latitude, Angle longitude)
   {
-  //  const double cosLatitude = latitude.cosinus();
-  //
-  //  return Vector3D(cosLatitude * longitude.cosinus(),
-  //                  cosLatitude * longitude.sinus(),
-  //                  latitude.sinus());
     final double cosLatitude = java.lang.Math.cos(latitude._radians);
   
     return new Vector3D(cosLatitude * java.lang.Math.cos(longitude._radians), cosLatitude * java.lang.Math.sin(longitude._radians), java.lang.Math.sin(latitude._radians));
@@ -105,7 +97,7 @@ public class EllipsoidalPlanet extends Planet
   {
     final Vector3D n = geodeticSurfaceNormal(latitude, longitude);
   
-    final Vector3D k = _ellipsoid.getRadiiSquared().times(n);
+    final Vector3D k = _ellipsoid._radiiSquared.times(n);
     final double gamma = IMathUtils.instance().sqrt((k._x * n._x) + (k._y * n._y) + (k._z * n._z));
   
     final Vector3D rSurface = k.div(gamma);
@@ -149,9 +141,9 @@ public class EllipsoidalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
-    final Vector3D radiiSquared = _ellipsoid.getRadiiSquared();
-    final Vector3D radiiToTheFourth = _ellipsoid.getRadiiToTheFourth();
+    final Vector3D oneOverRadiiSquared = _ellipsoid._oneOverRadiiSquared;
+    final Vector3D radiiSquared = _ellipsoid._radiiSquared;
+    final Vector3D radiiToTheFourth = _ellipsoid._radiiToTheFourth;
   
     final double beta = 1.0 / mu.sqrt((position._x * position._x) * oneOverRadiiSquared._x + (position._y * position._y) * oneOverRadiiSquared._y + (position._z * position._z) * oneOverRadiiSquared._z);
   
@@ -197,7 +189,7 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
   {
-    Vector3D oneOverRadiiSquared = _ellipsoid.getOneOverRadiiSquared();
+    Vector3D oneOverRadiiSquared = _ellipsoid._oneOverRadiiSquared;
   
     final double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * oneOverRadiiSquared._x + (position._y * position._y) * oneOverRadiiSquared._y + (position._z * position._z) * oneOverRadiiSquared._z);
   
@@ -251,7 +243,7 @@ public class EllipsoidalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final Vector3D radius = _ellipsoid.getRadii();
+    final Vector3D radius = _ellipsoid._radii;
     final double R = (radius._x + radius._y + radius._z) / 3;
   
     // spheric distance from P to Q
@@ -279,7 +271,7 @@ public class EllipsoidalPlanet extends Planet
   {
     final IMathUtils mu = IMathUtils.instance();
   
-    final Vector3D radius = _ellipsoid.getRadii();
+    final Vector3D radius = _ellipsoid._radii;
     final double R = (radius._x + radius._y + radius._z) / 3;
   
     final double medLat = g1._latitude._degrees;
@@ -642,6 +634,5 @@ public class EllipsoidalPlanet extends Planet
 
     return new Geodetic3D(rendereSector._center, height);
   }
-
 
 }

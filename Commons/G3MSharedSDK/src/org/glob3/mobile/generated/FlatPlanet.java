@@ -41,7 +41,6 @@ public class FlatPlanet extends Planet
   public FlatPlanet(Vector2D size)
   {
      _size = new Vector2D(size);
-  
   }
 
   public void dispose()
@@ -183,11 +182,7 @@ public class FlatPlanet extends Planet
 
   public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
-    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
-    return translation;
-  
-    //const MutableMatrix44D rotation    = MutableMatrix44D::createGeodeticRotationMatrix( position );
-    //return translation.multiply(rotation);
+    return MutableMatrix44D.createTranslationMatrix(toCartesian(position));
   }
 
   public final boolean isFlat()
@@ -349,7 +344,6 @@ public class FlatPlanet extends Planet
 
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
   {
-  
   //  Vector3D pos = nextCamera->getCartesianPosition();
   //  Vector3D origin = _origin.asVector3D();
   //  double maxDist = _size.length() * 1.5;
@@ -358,8 +352,6 @@ public class FlatPlanet extends Planet
   //    //    printf("TOO FAR %f\n", pos.distanceTo(origin) / maxDist);
   //    nextCamera->copyFrom(*previousCamera);
   //  }
-  
-  
   }
 
   public final Geodetic3D getDefaultCameraPosition(Sector rendereSector)

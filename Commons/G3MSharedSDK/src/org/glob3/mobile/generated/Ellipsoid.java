@@ -21,12 +21,12 @@ package org.glob3.mobile.generated;
 
 public class Ellipsoid
 {
-  private final Vector3D _center ;
-  private final Vector3D _radii ;
+  public final Vector3D _center ;
+  public final Vector3D _radii ;
 
-  private final Vector3D _radiiSquared ;
-  private final Vector3D _radiiToTheFourth ;
-  private final Vector3D _oneOverRadiiSquared ;
+  public final Vector3D _radiiSquared ;
+  public final Vector3D _radiiToTheFourth ;
+  public final Vector3D _oneOverRadiiSquared ;
 
 
   public Ellipsoid(Vector3D center, Vector3D radii)
@@ -65,21 +65,19 @@ public class Ellipsoid
 
   public final double getMeanRadius()
   {
-    return (_radii._x + _radii._y + _radii._y) /3;
+    return (_radii._x + _radii._y + _radii._y) / 3;
   }
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
-    Vector3D oneOverRadiiSquared = getOneOverRadiiSquared();
-  
     // By laborious algebraic manipulation....
-    final double a = (direction._x * direction._x * oneOverRadiiSquared._x + direction._y * direction._y * oneOverRadiiSquared._y + direction._z * direction._z * oneOverRadiiSquared._z);
+    final double a = (direction._x * direction._x * _oneOverRadiiSquared._x + direction._y * direction._y * _oneOverRadiiSquared._y + direction._z * direction._z * _oneOverRadiiSquared._z);
   
-    final double b = 2.0 * (origin._x * direction._x * oneOverRadiiSquared._x + origin._y * direction._y * oneOverRadiiSquared._y + origin._z * direction._z * oneOverRadiiSquared._z);
+    final double b = 2.0 * (origin._x * direction._x * _oneOverRadiiSquared._x + origin._y * direction._y * _oneOverRadiiSquared._y + origin._z * direction._z * _oneOverRadiiSquared._z);
   
-    final double c = (origin._x * origin._x * oneOverRadiiSquared._x + origin._y * origin._y * oneOverRadiiSquared._y + origin._z * origin._z * oneOverRadiiSquared._z - 1.0);
+    final double c = (origin._x * origin._x * _oneOverRadiiSquared._x + origin._y * origin._y * _oneOverRadiiSquared._y + origin._z * origin._z * _oneOverRadiiSquared._z - 1.0);
   
     // Solve the quadratic equation: ax^2 + bx + c = 0.
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
