@@ -177,6 +177,10 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
 }
 
 void EffectsScheduler::doOneCyle(const G3MRenderContext* rc) {
+  if (_effectsRuns.empty()) {
+    return;
+  }
+
   const TimeInterval now = _timer->now();
 
   processFinishedEffects(rc, now);
