@@ -31,23 +31,26 @@ public class EffectsScheduler
   private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {
   
-    final java.util.ArrayList<EffectRun> effectsToStop = new java.util.ArrayList<EffectRun>();
+    //final java.util.ArrayList<EffectRun> effectsToStop = new java.util.ArrayList<EffectRun>();
+    _effectsToStop.clear();
     final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
     while (iterator.hasNext()) {
       final EffectRun effectRun = iterator.next();
       if (effectRun._started) {
         if (effectRun._effect.isDone(rc, when)) {
           iterator.remove();
-          effectsToStop.add(effectRun);
+          _effectsToStop.add(effectRun);
         }
       }
     }
   
-    for (final EffectRun effectRun : effectsToStop) {
+    for (final EffectRun effectRun : _effectsToStop) {
       effectRun._effect.stop(rc, when);
       effectRun.dispose();
     }
   }
+
+  final java.util.ArrayList<EffectRun> _effectsToStop = new java.util.ArrayList<EffectRun>();
 
   public EffectsScheduler()
   {
