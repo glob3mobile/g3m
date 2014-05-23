@@ -492,10 +492,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         }
   
         _toVisit.clear();
-        _toVisit.addAll(toVisitInNextIteration);
+        _toVisit.addAll(_toVisitInNextIteration);
       }
-  //    _toVisit.clear();
-  //    _toVisitInNextIteration.clear();
     }
   
     if (_showStatistics)
