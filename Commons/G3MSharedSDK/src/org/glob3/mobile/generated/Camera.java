@@ -82,7 +82,7 @@ public class Camera
   
     _dirtyFlags.copyFrom(that._dirtyFlags);
   
-    _frustumData = new FrustumData(that._frustumData);
+    _frustumData = that._frustumData;
   
     _projectionMatrix.copyValue(that._projectionMatrix);
     _modelMatrix.copyValue(that._modelMatrix);
@@ -94,13 +94,9 @@ public class Camera
        _geodeticCenterOfView.dispose();
     _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
   
-    if (_frustum != null)
-       _frustum.dispose();
-    _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
+    _frustum = that._frustum;
   
-    if (_frustumInModelCoordinates != null)
-       _frustumInModelCoordinates.dispose();
-    _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+    _frustumInModelCoordinates = that._frustumInModelCoordinates;
   
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
@@ -420,7 +416,8 @@ public class Camera
   public final void forceMatrixCreation()
   {
     getGeodeticCenterOfView();
-    getXYZCenterOfView();
+    //getXYZCenterOfView();
+    _getCartesianCenterOfView();
     getFrustumInModelCoordinates();
     getProjectionMatrix44D();
     getModelMatrix44D();
