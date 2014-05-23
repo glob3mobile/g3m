@@ -620,7 +620,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   const Planet* planet = rc->getPlanet();
   const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
-  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
+  const double cameraAngle2HorizonInRadians      = _lastCamera->getAngle2HorizonInRadians();
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
 
   //Texture Size for every tile
