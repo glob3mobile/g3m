@@ -63,6 +63,11 @@ public class EffectsScheduler
 
   public final void doOneCyle(G3MRenderContext rc)
   {
+    if (_effectsRuns.isEmpty())
+    {
+      return;
+    }
+  
     final TimeInterval now = _timer.now();
   
     processFinishedEffects(rc, now);
