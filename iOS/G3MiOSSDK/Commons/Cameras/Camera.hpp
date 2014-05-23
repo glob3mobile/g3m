@@ -171,7 +171,14 @@ public:
   const Vector3D getUp() const { return _up.asVector3D(); }
   const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
   const Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
-  const Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
+  const Vector3D getViewDirection() const {
+    // return _center.sub(_position).asVector3D();
+
+    // perform the substraction inlinde to avoid a temporary MutableVector3D instance
+    return Vector3D(_center.x() - _position.x(),
+                    _center.y() - _position.y(),
+                    _center.z() - _position.z());
+  }
 
   void dragCamera(const Vector3D& p0,
                   const Vector3D& p1);
