@@ -419,8 +419,9 @@ public class Camera
 
   public final void forceMatrixCreation()
   {
-    //MutableMatrix44D projectionMatrix = MutableMatrix44D::createProjectionMatrix(_frustumData);
-    //getFrustumData();
+    getGeodeticCenterOfView();
+    getXYZCenterOfView();
+    getFrustumInModelCoordinates();
     getProjectionMatrix44D();
     getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();

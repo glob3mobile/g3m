@@ -31,7 +31,6 @@ public class EffectsScheduler
   private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {
   
-    //final java.util.ArrayList<EffectRun> effectsToStop = new java.util.ArrayList<EffectRun>();
     _effectsToStop.clear();
     final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
     while (iterator.hasNext()) {
