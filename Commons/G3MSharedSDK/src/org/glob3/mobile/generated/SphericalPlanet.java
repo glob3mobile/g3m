@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 public class SphericalPlanet extends Planet
 {
   private Sphere _sphere;
+  private final Vector3D _radii ;
 
   private MutableVector3D _origin = new MutableVector3D();
   private MutableVector3D _initialPoint = new MutableVector3D();
@@ -40,7 +41,7 @@ public class SphericalPlanet extends Planet
   public SphericalPlanet(Sphere sphere)
   {
      _sphere = sphere;
-  
+     _radii = new Vector3D(new Vector3D(sphere._radius, sphere._radius, sphere._radius));
   }
 
   public void dispose()
@@ -51,7 +52,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D getRadii()
   {
-    return new Vector3D(_sphere._radius, _sphere._radius, _sphere._radius);
+    return _radii;
   }
 
   public final Vector3D centricSurfaceNormal(Vector3D position)

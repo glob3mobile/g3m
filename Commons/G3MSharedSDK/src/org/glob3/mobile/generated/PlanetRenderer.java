@@ -478,7 +478,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     else
     {
       _toVisit.clear();
-      _toVisit.addAll(_firstLevelTiles);
+      //_toVisit.addAll(_firstLevelTiles);
+      for (final Tile tile : _firstLevelTiles) {
+        _toVisit.add(tile);
+      }
   
       while (!_toVisit.isEmpty())
       {
@@ -492,7 +495,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         }
   
         _toVisit.clear();
-        _toVisit.addAll(_toVisitInNextIteration);
+        //_toVisit.addAll(_toVisitInNextIteration);
+        for (final Tile tile : _toVisitInNextIteration) {
+          _toVisit.add(tile);
+        }
       }
     }
   
