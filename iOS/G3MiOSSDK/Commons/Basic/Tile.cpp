@@ -780,6 +780,10 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
                                        setParent) );
   }
 
+#ifdef JAVA_CODE
+  subTiles.trimToSize();
+#endif
+
   return subTiles;
 }
 

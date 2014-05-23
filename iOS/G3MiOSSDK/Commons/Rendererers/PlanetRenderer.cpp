@@ -720,8 +720,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      nowInMS,
                      _renderTileMeshes,
                      _logTilesPetitions,
-                     _tileRenderingListener
-                     );
+                     _tileRenderingListener);
       }
 
 #ifdef C_CODE
