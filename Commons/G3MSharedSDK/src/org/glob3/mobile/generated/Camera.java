@@ -195,7 +195,10 @@ public class Camera
   }
   public final Vector3D getViewDirection()
   {
-     return _center.sub(_position).asVector3D();
+    // return _center.sub(_position).asVector3D();
+
+    // perform the substraction inlinde to avoid a temporary MutableVector3D instance
+    return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
 
   public final void dragCamera(Vector3D p0, Vector3D p1)
