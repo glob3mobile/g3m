@@ -263,7 +263,8 @@ public:
 
   void forceMatrixCreation() const{
     getGeodeticCenterOfView();
-    getXYZCenterOfView();
+    //getXYZCenterOfView();
+    _getCartesianCenterOfView();
     getFrustumInModelCoordinates();
     getProjectionMatrix44D();
     getModelMatrix44D();

@@ -42,7 +42,12 @@ void Camera::copyFrom(const Camera &that) {
 
   _dirtyFlags.copyFrom(that._dirtyFlags);
 
+#ifdef C_CODE
   _frustumData = FrustumData(that._frustumData);
+#endif
+#ifdef JAVA_CODE
+  _frustumData = that._frustumData;
+#endif
 
   _projectionMatrix.copyValue(that._projectionMatrix);
   _modelMatrix.copyValue(that._modelMatrix);
@@ -53,11 +58,21 @@ void Camera::copyFrom(const Camera &that) {
   delete _geodeticCenterOfView;
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
 
+#ifdef C_CODE
   delete _frustum;
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
+#endif
+#ifdef JAVA_CODE
+  _frustum = that._frustum;
+#endif
 
+#ifdef C_CODE
   delete _frustumInModelCoordinates;
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
+#endif
+#ifdef JAVA_CODE
+  _frustumInModelCoordinates = that._frustumInModelCoordinates;
+#endif
 
   delete _geodeticPosition;
   _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
