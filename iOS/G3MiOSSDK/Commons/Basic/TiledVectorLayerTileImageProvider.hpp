@@ -43,6 +43,8 @@ private:
     void imageCreated(const IImage* image);
   };
 
+  class GEOObjectHolder;
+
   class GEOJSONBufferRasterizer : public GAsyncTask {
   private:
 #ifdef C_CODE
@@ -51,13 +53,14 @@ private:
 #ifdef JAVA_CODE
     private final URL _url;
 #endif
-    ImageAssembler* _imageAssembler;
-    IByteBuffer*    _buffer;
-    GEOObject*      _geoObject;
-    const bool      _geoObjectFromCache;
-    ICanvas*        _canvas;
-    const int       _imageWidth;
-    const int       _imageHeight;
+    ImageAssembler*        _imageAssembler;
+    IByteBuffer*           _buffer;
+    const GEOObjectHolder* _geoObjectHolder;
+    GEOObject*             _geoObject;
+    const bool             _geoObjectFromCache;
+    ICanvas*               _canvas;
+    const int              _imageWidth;
+    const int              _imageHeight;
 
 #ifdef C_CODE
     const GEORasterSymbolizer* _symbolizer;
@@ -70,14 +73,14 @@ private:
     const bool        _tileIsMercator;
     const int         _tileLevel;
 
-    void rasterizeGEOObject();
+    void rasterizeGEOObject(const GEOObject* geoObject);
 
 
   public:
     GEOJSONBufferRasterizer(ImageAssembler*            imageAssembler,
                             const URL&                 url,
-                            IByteBuffer*               buffer,    // buffer or
-                            GEOObject*                 geoObject, // geoObject, never both
+                            IByteBuffer*               buffer,          // buffer or
+                            const GEOObjectHolder*     geoObjectHolder, // GEOObjectHolder, never both
                             const int                  imageWidth,
                             const int                  imageHeight,
                             const GEORasterSymbolizer* symbolizer,
@@ -88,7 +91,8 @@ private:
     _imageAssembler(imageAssembler),
     _url(url),
     _buffer(buffer),
-    _geoObject(geoObject),
+    _geoObjectHolder(geoObjectHolder),
+    _geoObjectFromCache( geoObjectHolder != NULL ),
     _imageWidth(imageWidth),
     _imageHeight(imageHeight),
     _symbolizer(symbolizer),
@@ -97,7 +101,7 @@ private:
     _tileIsMercator(tileIsMercator),
     _tileLevel(tileLevel),
     _canvas(NULL),
-    _geoObjectFromCache( geoObject != NULL)
+    _geoObject(NULL)
     {
     }
 
@@ -227,15 +231,28 @@ private:
 
   std::map<const std::string, ImageAssembler*> _assemblers;
 
+  class GEOObjectHolder : public RCObject {
+  public:
+    const GEOObject* _geoObject;
+
+    GEOObjectHolder(const GEOObject* geoObject) :
+    _geoObject(geoObject)
+    {
+    }
+
+    ~GEOObjectHolder();
+
+  };
+
   class CacheEntry {
   public:
-    const std::string _path;
-    const GEOObject*  _geoObject;
+    const std::string      _path;
+    const GEOObjectHolder* _geoObjectHolder;
 
     CacheEntry(const std::string& path,
                const GEOObject*   geoObject) :
     _path(path),
-    _geoObject(geoObject)
+    _geoObjectHolder(new GEOObjectHolder(geoObject))
     {
     }
 
@@ -278,7 +295,7 @@ public:
 
   void requestFinish(const std::string& tileId);
 
-  GEOObject* getGEOObjectFor(const URL& url);
+  const GEOObjectHolder* getGEOObjectFor(const URL& url);
   void takeGEOObjectFor(const URL& url,
                         GEOObject* geoObject);
 
