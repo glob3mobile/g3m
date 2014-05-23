@@ -103,8 +103,6 @@ public class VectorialLOD {
    private static int                        _firstLevelCreated = 0;
    private static int                        _lastLevelCreated  = 0;
 
-   private static int                        _firstLevel        = FIRST_LEVEL;
-   private static int                        _maxLevel          = MAX_LEVEL;
 
    /*
     * For handling postgis database access and connections
