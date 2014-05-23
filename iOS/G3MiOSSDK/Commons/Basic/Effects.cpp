@@ -153,21 +153,25 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
 #endif
 
 #ifdef JAVA_CODE
-  _effectsToStop.clear();
-  final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-  while (iterator.hasNext()) {
-    final EffectRun effectRun = iterator.next();
-    if (effectRun._started) {
-      if (effectRun._effect.isDone(rc, when)) {
-        iterator.remove();
-        _effectsToStop.add(effectRun);
+  if (!_effectsRuns.isEmpty()) {
+    _effectsToStop.clear();
+    final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
+    while (iterator.hasNext()) {
+      final EffectRun effectRun = iterator.next();
+      if (effectRun._started) {
+        if (effectRun._effect.isDone(rc, when)) {
+          iterator.remove();
+          _effectsToStop.add(effectRun);
+        }
       }
     }
-  }
 
-  for (final EffectRun effectRun : _effectsToStop) {
-    effectRun._effect.stop(rc, when);
-    effectRun.dispose();
+    final int effectsToStopSize = _effectsToStop.size();
+    for (int i = 0; i < effectsToStopSize; i++) {
+      final EffectRun effectRun = _effectsToStop.get(i);
+      effectRun._effect.stop(rc, when);
+      effectRun.dispose();
+    }
   }
 #endif
 }
@@ -190,9 +194,9 @@ void EffectsScheduler::doOneCyle(const G3MRenderContext* rc) {
   }
 #endif
 #ifdef JAVA_CODE
-  final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
-  while (iterator.hasNext()) {
-    final EffectRun effectRun = iterator.next();
+  final int effectsRunsSize = _effectsRuns.size();
+  for (int i = 0; i < effectsRunsSize; i++) {
+    final EffectRun effectRun = _effectsRuns.get(i);
     final Effect effect = effectRun._effect;
     if (!effectRun._started) {
       effect.start(rc, now);
