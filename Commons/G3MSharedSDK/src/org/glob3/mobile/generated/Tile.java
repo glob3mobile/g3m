@@ -926,6 +926,8 @@ public class Tile
       subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
     }
   
+    subTiles.trimToSize();
+  
     return subTiles;
   }
 
