@@ -180,9 +180,6 @@ public:
     
   }
 
-//  void copyFrom(const MutableMatrix44D& that);
-
-
   Matrix44D* asMatrix44D() const{
     if (_matrix44D == NULL) {
       _matrix44D = new Matrix44D(_m00, _m10, _m20, _m30,
