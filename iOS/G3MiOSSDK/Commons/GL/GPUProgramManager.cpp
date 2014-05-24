@@ -191,13 +191,13 @@ void GPUProgramManager::removeUnused() {
   }
 #endif
 #ifdef JAVA_CODE
-  java.util.Iterator it = _programs.entrySet().iterator();
-  while (it.hasNext()) {
-    java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-    GPUProgram program = (GPUProgram) pairs.getValue();
+  final java.util.Iterator<java.util.Map.Entry<String, GPUProgram>> iterator = _programs.entrySet().iterator();
+  while (iterator.hasNext()) {
+    final java.util.Map.Entry<String, GPUProgram> entry = iterator.next();
+    final GPUProgram program = entry.getValue();
     if (program.getNReferences() == 0) {
-      ILogger.instance().logInfo("Deleting program %s", program.getName() );
-      it.remove();
+      ILogger.instance().logInfo("Deleting program %s", program.getName());
+      iterator.remove();
     }
   }
 #endif
