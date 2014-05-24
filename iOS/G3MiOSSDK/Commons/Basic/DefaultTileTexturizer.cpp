@@ -461,7 +461,6 @@ Mesh* DefaultTileTexturizer::texturize(const G3MRenderContext* rc,
   Mesh* texturizedMesh = builder->getTexturedMesh();
 
   if (forceFullRender) {
-#warning TODO: Does it make sense to start the task here?
     builder->start();
   }
   else {

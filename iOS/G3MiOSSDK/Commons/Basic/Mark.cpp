@@ -448,7 +448,7 @@ void Mark::createGLState(const Planet* planet,
 }
 
 void Mark::render(const G3MRenderContext* rc,
-                  const Vector3D& cameraPosition,
+                  const MutableVector3D& cameraPosition,
                   double cameraHeight,
                   const GLState* parentGLState,
                   const Planet* planet,
@@ -459,9 +459,9 @@ void Mark::render(const G3MRenderContext* rc,
 
 //  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
 //  _markCameraVector.putSub(markPosition, cameraPosition);
-  _markCameraVector.put(markPosition->_x - cameraPosition._x,
-                        markPosition->_y - cameraPosition._y,
-                        markPosition->_z - cameraPosition._z);
+  _markCameraVector.put(markPosition->_x - cameraPosition.x(),
+                        markPosition->_y - cameraPosition.y(),
+                        markPosition->_z - cameraPosition.z());
 
   // mark will be renderered only if is renderable by distance and placed on a visible globe area
   bool renderableByDistance;
@@ -480,7 +480,12 @@ void Mark::render(const G3MRenderContext* rc,
 
     if (_position->_height > cameraHeight) {
       // Computing horizon culling
-      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, _markCameraVector);
+      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
+                                                                       cameraPosition.y(),
+                                                                       cameraPosition.z(),
+                                                                       _markCameraVector.x(),
+                                                                       _markCameraVector.y(),
+                                                                       _markCameraVector.z());
       if (dists.size() > 0) {
         const double dist = dists[0];
         if (dist > 0.0 && dist < 1.0) {
