@@ -303,7 +303,7 @@ public class Camera
       return Angle.nan();
     }
   
-    return point0.angleBetween(point1);
+    return Vector3D.angleBetween(point0, point1);
   }
 
   public final void initialize(G3MContext context)

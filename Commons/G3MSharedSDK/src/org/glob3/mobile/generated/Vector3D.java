@@ -190,20 +190,19 @@ public class Vector3D
   }
   public final double angleInRadiansBetween(Vector3D other)
   {
-    final Vector3D v1 = normalized();
-    final Vector3D v2 = other.normalized();
-  
-    double c = v1.dot(v2);
-    if (c > 1.0)
-    {
-      c = 1.0;
-    }
-    else if (c < -1.0)
-    {
-      c = -1.0;
-    }
-  
-    return IMathUtils.instance().acos(c);
+  //  const Vector3D v1 = normalized();
+  //  const Vector3D v2 = other.normalized();
+  //
+  //  double c = v1.dot(v2);
+  //  if (c > 1.0) {
+  //    c = 1.0;
+  //  }
+  //  else if (c < -1.0) {
+  //    c = -1.0;
+  //  }
+  //
+  //  return IMathUtils::instance()->acos(c);
+    return angleInRadiansBetween(this, other);
   }
   public final Angle signedAngleBetween(Vector3D other, Vector3D up)
   {
@@ -214,6 +213,40 @@ public class Vector3D
     }
   
     return angle.times(-1);
+  }
+
+  public static double dot(Vector3D a, Vector3D b)
+  {
+    final double aLength = a.length();
+    final double a_x = a._x / aLength;
+    final double a_y = a._y / aLength;
+    final double a_z = a._z / aLength;
+  
+    final double bLength = b.length();
+    final double b_x = b._x / bLength;
+    final double b_y = b._y / bLength;
+    final double b_z = b._z / bLength;
+  
+    return ((a_x * b_x) + (a_y * b_y) + (a_z * b_z));
+  }
+
+  public static double angleInRadiansBetween(Vector3D a, Vector3D b)
+  {
+    double c = Vector3D.dot(a, b);
+    if (c > 1.0)
+    {
+      c = 1.0;
+    }
+    else if (c < -1.0)
+    {
+      c = -1.0;
+    }
+    return IMathUtils.instance().acos(c);
+  }
+
+  public static Angle angleBetween(Vector3D a, Vector3D b)
+  {
+    return Angle.fromRadians(angleInRadiansBetween(a, b));
   }
 
   public final Vector3D rotateAroundAxis(Vector3D axis, Angle theta)
