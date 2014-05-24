@@ -59,7 +59,7 @@ public:
                              int width, int height) {
     const int halfWidth = width / 2;
     const int halfHeight = height / 2;
-    _projectionMatrix.copyFrom(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,   halfWidth,
+    _projectionMatrix.copyValue(MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth,   halfWidth,
                                                                                     -halfHeight, halfHeight,
                                                                                     -halfWidth,  halfWidth));
     
@@ -79,7 +79,7 @@ public:
     if (_degrees>360) {
       _degrees -= 360;
     }
-    _modelviewMatrix.copyFrom(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees),
+    _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees),
                                                                      Vector3D(0, 0, -1)));
   }
 

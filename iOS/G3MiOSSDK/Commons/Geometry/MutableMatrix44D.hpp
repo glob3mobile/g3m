@@ -180,7 +180,7 @@ public:
     
   }
 
-  void copyFrom(const MutableMatrix44D& that);
+//  void copyFrom(const MutableMatrix44D& that);
 
 
   Matrix44D* asMatrix44D() const{

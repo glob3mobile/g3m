@@ -116,7 +116,7 @@ void BusyQuadRenderer::render(const G3MRenderContext* rc,
 
 void BusyQuadRenderer::createGLState() {
   //Modelview and projection
-  _modelviewMatrix.copyFrom(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
+  _modelviewMatrix.copyValue(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1)));
   _glState->clearGLFeatureGroup(CAMERA_GROUP);
   _glState->addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
   _glState->addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
