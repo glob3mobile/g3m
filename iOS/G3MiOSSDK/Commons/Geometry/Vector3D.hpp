@@ -128,6 +128,8 @@ public:
                     _z - v._z);
   }
 
+  Vector3D sub(const MutableVector3D& v) const;
+
   Vector3D sub(double d) const {
     return Vector3D(_x - d,
                     _y - d,

@@ -166,6 +166,7 @@ public:
   }
 
   const Vector3D getCartesianPosition() const { return _position.asVector3D(); }
+  const MutableVector3D getCartesianPositionMutable() const { return _position; }
   const Vector3D getNormalizedPosition() const { return _normalizedPosition.asVector3D(); }
   const Vector3D getCenter() const { return _center.asVector3D(); }
   const Vector3D getUp() const { return _up.asVector3D(); }

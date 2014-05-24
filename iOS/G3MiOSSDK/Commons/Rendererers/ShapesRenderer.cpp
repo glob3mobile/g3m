@@ -83,7 +83,7 @@ void ShapesRenderer::render(const G3MRenderContext* rc, GLState* glState) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
-  const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
+  const MutableVector3D cameraPosition = rc->getCurrentCamera()->getCartesianPositionMutable();
 
   //Setting camera matrixes
   updateGLState(rc);

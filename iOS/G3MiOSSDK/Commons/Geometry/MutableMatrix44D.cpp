@@ -387,8 +387,6 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
                                                         const Vector3D& axis) {
   const Vector3D a = axis.normalized();
 
-//  const double c = angle.cosinus();
-//  const double s = angle.sinus();
   const double c = COS(angle._radians);
   const double s = SIN(angle._radians);
 

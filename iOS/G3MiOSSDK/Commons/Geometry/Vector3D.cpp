@@ -164,3 +164,9 @@ const double Vector3D::squaredDistanceTo(const Vector3D& that) const {
   const double dz = _z - that._z;
   return (dx * dx) + (dy * dy) + (dz * dz);
 }
+
+Vector3D Vector3D::sub(const MutableVector3D& v) const {
+  return Vector3D(_x - v.x(),
+                  _y - v.y(),
+                  _z - v.z());
+}

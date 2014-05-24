@@ -66,7 +66,6 @@ private:
 
 public:
 
-  //CONTRUCTORS
   //Contructor parameters in column major order
   MutableMatrix44D(double m00, double m10, double m20, double m30,
                    double m01, double m11, double m21, double m31,
