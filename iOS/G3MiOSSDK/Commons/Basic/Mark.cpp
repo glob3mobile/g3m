@@ -489,7 +489,7 @@ void Mark::render(const G3MRenderContext* rc,
       if (_normalAtMarkPosition == NULL) {
         _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
       }
-      occludedByHorizon = (_normalAtMarkPosition->angleBetween(markCameraVector)._radians <= HALF_PI);
+      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
     }
 
 
