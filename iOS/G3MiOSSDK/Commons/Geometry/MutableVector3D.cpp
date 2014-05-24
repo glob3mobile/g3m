@@ -62,3 +62,32 @@ MutableVector3D MutableVector3D::rotatedAroundAxis(const MutableVector3D& axis,
                           (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms
                          );
 }
+
+double MutableVector3D::dot(const MutableVector3D& a,
+                            const MutableVector3D& b) {
+  const double aLength = a.length();
+  const double a_x = a._x / aLength;
+  const double a_y = a._y / aLength;
+  const double a_z = a._z / aLength;
+
+  const double bLength = b.length();
+  const double b_x = b._x / bLength;
+  const double b_y = b._y / bLength;
+  const double b_z = b._z / bLength;
+
+  return ((a_x * b_x) +
+          (a_y * b_y) +
+          (a_z * b_z));
+}
+
+double MutableVector3D::angleInRadiansBetween(const MutableVector3D& a,
+                                              const MutableVector3D& b) {
+  double c = MutableVector3D::dot(a, b);
+  if (c > 1.0) {
+    c = 1.0;
+  }
+  else if (c < -1.0) {
+    c = -1.0;
+  }
+  return IMathUtils::instance()->acos(c);
+}

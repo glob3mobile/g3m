@@ -320,6 +320,10 @@ public:
                                    const Vector3D& point1) const;
 
 private:
+
+  mutable MutableVector3D _ray0;
+  mutable MutableVector3D _ray1;
+
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!

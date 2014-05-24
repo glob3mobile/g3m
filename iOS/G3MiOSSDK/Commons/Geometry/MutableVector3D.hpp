@@ -27,6 +27,11 @@ private:
 #warning makes copy constructor private
 //  MutableVector3D(const MutableVector3D& that);
 
+
+  static double dot(const MutableVector3D& a,
+                    const MutableVector3D& b);
+
+
 public:
 
   MutableVector3D() :
@@ -190,6 +195,16 @@ public:
   Vector3D asVector3D() const {
     return Vector3D(_x, _y, _z);
   }
+
+  void putSub(const MutableVector3D& a,
+              const Vector3D& b) {
+    _x = a._x - b._x;
+    _y = a._y - b._y;
+    _z = a._z - b._z;
+  }
+
+  static double angleInRadiansBetween(const MutableVector3D& a,
+                                      const MutableVector3D& b);
 
 };
 
