@@ -74,7 +74,7 @@ public class Tile
      Arco = ang * Cuerda / (2 * sen(ang/2))
      */
   
-    final double angleInRadians = a.angleInRadiansBetween(b);
+    final double angleInRadians = Vector3D.angleInRadiansBetween(a, b);
     final double halfAngleSin = java.lang.Math.sin(angleInRadians / 2);
     final double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
     return (arcSegmentRatio * arcSegmentRatio);
