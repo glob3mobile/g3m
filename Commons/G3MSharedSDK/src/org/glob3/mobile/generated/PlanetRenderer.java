@@ -442,9 +442,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     final int firstLevelTilesCount = _firstLevelTiles.size();
   
-    final Planet planet = rc.getPlanet();
-    final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
-    final double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
+    //const Planet* planet = rc->getPlanet();
+    //const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+    //const double cameraAngle2HorizonInRadians      = _lastCamera->getAngle2HorizonInRadians();
     final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
   
     //Texture Size for every tile
@@ -470,7 +470,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
+        tile.render(rc, _glState, null, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
+                     //planet,
+                     //cameraNormalizedPosition,
+                     //cameraAngle2HorizonInRadians,
       }
   
       _firstRender = false;
@@ -494,7 +497,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         for (int i = 0; i < toVisitSize; i++)
         {
           Tile tile = _toVisit.get(i);
-          tile.render(rc, _glState, _toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, forceFullRender
+          tile.render(rc, _glState, _toVisitInNextIteration, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, forceFullRender
+                       //planet,
+                       //cameraNormalizedPosition,
+                       //cameraAngle2HorizonInRadians,
         }
   
         _toVisit.clear();
