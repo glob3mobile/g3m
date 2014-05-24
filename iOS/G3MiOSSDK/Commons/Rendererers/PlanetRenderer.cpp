@@ -618,9 +618,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
 
-  const Planet* planet = rc->getPlanet();
-  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
-  const double cameraAngle2HorizonInRadians      = _lastCamera->getAngle2HorizonInRadians();
+  //const Planet* planet = rc->getPlanet();
+  //const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+  //const double cameraAngle2HorizonInRadians      = _lastCamera->getAngle2HorizonInRadians();
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
 
   //Texture Size for every tile
@@ -647,9 +647,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
       tile->render(rc,
                    *_glState,
                    NULL,
-                   planet,
-                   cameraNormalizedPosition,
-                   cameraAngle2HorizonInRadians,
+                   //planet,
+                   //cameraNormalizedPosition,
+                   //cameraAngle2HorizonInRadians,
                    cameraFrustumInModelCoordinates,
                    &_statistics,
                    _verticalExaggeration,
@@ -698,9 +698,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
         tile->render(rc,
                      *_glState,
                      &_toVisitInNextIteration,
-                     planet,
-                     cameraNormalizedPosition,
-                     cameraAngle2HorizonInRadians,
+                     //planet,
+                     //cameraNormalizedPosition,
+                     //cameraAngle2HorizonInRadians,
                      cameraFrustumInModelCoordinates,
                      &_statistics,
                      _verticalExaggeration,
