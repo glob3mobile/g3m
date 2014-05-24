@@ -70,6 +70,13 @@ public class MutableVector3D
      _z = v._z;
   }
 
+  public final void put(double x, double y, double z)
+  {
+    _x = x;
+    _y = y;
+    _z = z;
+  }
+
   public final void copyFrom(MutableVector3D that)
   {
     _x = that._x;
@@ -267,6 +274,21 @@ public class MutableVector3D
       c = -1.0;
     }
     return IMathUtils.instance().acos(c);
+  }
+
+  public final MutableVector3D rotateAroundAxis(MutableVector3D axis, Angle theta)
+  {
+    final double u = axis._x;
+    final double v = axis._y;
+    final double w = axis._z;
+  
+    final double cosTheta = java.lang.Math.cos(theta._radians);
+    final double sinTheta = java.lang.Math.sin(theta._radians);
+  
+    final double ms = axis.squaredLength();
+    final double m = IMathUtils.instance().sqrt(ms);
+  
+    return new MutableVector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
   }
 
 }

@@ -217,8 +217,6 @@ public class Vector3D
     final double v = axis._y;
     final double w = axis._z;
   
-  //  const double cosTheta = theta.cosinus();
-  //  const double sinTheta = theta.sinus();
     final double cosTheta = java.lang.Math.cos(theta._radians);
     final double sinTheta = java.lang.Math.sin(theta._radians);
   

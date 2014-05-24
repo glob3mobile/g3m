@@ -190,6 +190,10 @@ public class Camera
   {
      return _up.asVector3D();
   }
+  public final MutableVector3D getUpMutable()
+  {
+     return _up;
+  }
   public final Geodetic3D getGeodeticCenterOfView()
   {
      return _getGeodeticCenterOfView();
@@ -205,6 +209,12 @@ public class Camera
     // perform the substraction inlinde to avoid a temporary MutableVector3D instance
     return new Vector3D(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
   }
+
+  public final void getViewDirectionInto(MutableVector3D result)
+  {
+    result.put(_center.x() - _position.x(), _center.y() - _position.y(), _center.z() - _position.z());
+  }
+
 
   public final void dragCamera(Vector3D p0, Vector3D p1)
   {
