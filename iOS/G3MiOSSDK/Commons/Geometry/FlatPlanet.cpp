@@ -14,7 +14,8 @@
 
 
 FlatPlanet::FlatPlanet(const Vector2D& size):
-_size(size)
+_size(size),
+_radii(size._x, size._y, 0)
 {
 }
 
@@ -23,17 +24,21 @@ Vector3D FlatPlanet::geodeticSurfaceNormal(const Angle& latitude,
   return Vector3D(0, 0, 1);
 }
 
-std::vector<double> FlatPlanet::intersectionsDistances(const Vector3D& origin,
-                                                       const Vector3D& direction) const {
+std::vector<double> FlatPlanet::intersectionsDistances(double originX,
+                                                       double originY,
+                                                       double originZ,
+                                                       double directionX,
+                                                       double directionY,
+                                                       double directionZ) const {
   std::vector<double> intersections;
 
   // compute intersection with plane
-  if (direction._z == 0) return intersections;
-  const double t = -origin._z / direction._z;
-  const double x = origin._x + t * direction._x;
+  if (directionZ == 0) return intersections;
+  const double t = -originZ / directionZ;
+  const double x = originX + t * directionX;
   const double halfWidth = 0.5 * _size._x;
   if (x < -halfWidth || x > halfWidth) return intersections;
-  const double y = origin._y + t * direction._y;
+  const double y = originY + t * directionY;
   const double halfHeight = 0.5 * _size._y;
   if (y < -halfHeight || y > halfHeight) return intersections;
   intersections.push_back(t);
@@ -83,7 +88,12 @@ double FlatPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
 
 Vector3D FlatPlanet::closestIntersection(const Vector3D& pos,
                                          const Vector3D& ray) const {
-  std::vector<double> distances = intersectionsDistances(pos , ray);
+  std::vector<double> distances = intersectionsDistances(pos._x,
+                                                         pos._y,
+                                                         pos._z,
+                                                         ray._x,
+                                                         ray._y,
+                                                         ray._z);
   if (distances.empty()) {
     return Vector3D::nan();
   }

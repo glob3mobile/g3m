@@ -19,6 +19,7 @@
 class FlatPlanet: public Planet {
 private:
   const Vector2D _size;
+  const Vector3D _radii;
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
@@ -44,7 +45,7 @@ public:
   }
   
   Vector3D getRadii() const{
-    return Vector3D(_size._x, _size._y, 0);
+    return _radii;
   }
   
   Vector3D centricSurfaceNormal(const Vector3D& position) const {
@@ -71,9 +72,13 @@ public:
     return Vector3D(0, 0, 1);
   }
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const;
-  
+  std::vector<double> intersectionsDistances(double originX,
+                                             double originY,
+                                             double originZ,
+                                             double directionX,
+                                             double directionY,
+                                             double directionZ) const;
+
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
                        const double height) const;

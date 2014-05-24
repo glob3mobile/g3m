@@ -153,7 +153,7 @@ std::list<Vector3D> EllipsoidalPlanet::computeCurve(const Vector3D& start,
   }
 
   const Vector3D normal = start.cross(stop).normalized();
-  const double theta = start.angleBetween(stop)._radians;
+  const double theta = start.angleInRadiansBetween(stop);
 
   //int n = max((int)(theta / granularity) - 1, 0);
   int n = ((int) (theta / granularity) - 1) > 0 ? (int) (theta / granularity) - 1 : 0;
@@ -234,7 +234,12 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
 
 Vector3D EllipsoidalPlanet::closestIntersection(const Vector3D& pos,
                                                 const Vector3D& ray) const {
-  std::vector<double> distances = intersectionsDistances(pos , ray);
+  std::vector<double> distances = intersectionsDistances(pos._x,
+                                                         pos._y,
+                                                         pos._z,
+                                                         ray._x,
+                                                         ray._y,
+                                                         ray._z);
   if (distances.empty()) {
     return Vector3D::nan();
   }

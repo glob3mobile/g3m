@@ -457,7 +457,11 @@ void Mark::render(const G3MRenderContext* rc,
 
   const Vector3D* markPosition = getCartesianPosition(planet);
 
-  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+//  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+//  _markCameraVector.putSub(markPosition, cameraPosition);
+  _markCameraVector.put(markPosition->_x - cameraPosition._x,
+                        markPosition->_y - cameraPosition._y,
+                        markPosition->_z - cameraPosition._z);
 
   // mark will be renderered only if is renderable by distance and placed on a visible globe area
   bool renderableByDistance;
@@ -465,7 +469,7 @@ void Mark::render(const G3MRenderContext* rc,
     renderableByDistance = true;
   }
   else {
-    const double squaredDistanceToCamera = markCameraVector.squaredLength();
+    const double squaredDistanceToCamera = _markCameraVector.squaredLength();
     renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
   }
 
@@ -476,7 +480,7 @@ void Mark::render(const G3MRenderContext* rc,
 
     if (_position->_height > cameraHeight) {
       // Computing horizon culling
-      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, markCameraVector);
+      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition, _markCameraVector);
       if (dists.size() > 0) {
         const double dist = dists[0];
         if (dist > 0.0 && dist < 1.0) {
@@ -490,7 +494,7 @@ void Mark::render(const G3MRenderContext* rc,
         _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
       }
 //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
-      occludedByHorizon = (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, markCameraVector) <= HALF_PI);
+      occludedByHorizon = (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector) <= HALF_PI);
     }
 
     if (!occludedByHorizon) {

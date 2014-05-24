@@ -81,11 +81,20 @@ public:
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const {
-    return _ellipsoid.intersectionsDistances(origin, direction);
+  std::vector<double> intersectionsDistances(double originX,
+                                             double originY,
+                                             double originZ,
+                                             double directionX,
+                                             double directionY,
+                                             double directionZ) const {
+    return _ellipsoid.intersectionsDistances(originX,
+                                             originY,
+                                             originZ,
+                                             directionX,
+                                             directionY,
+                                             directionZ);
   }
-  
+
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
                        const double height) const;

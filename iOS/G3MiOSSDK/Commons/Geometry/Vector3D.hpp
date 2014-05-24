@@ -172,9 +172,15 @@ public:
 
   static double normalizedDot(const Vector3D& a,
                               const Vector3D& b);
-  
+
+  static double normalizedDot(const Vector3D& a,
+                              const MutableVector3D& b);
+
   static double angleInRadiansBetween(const Vector3D& a,
                                       const Vector3D& b);
+
+  static double angleInRadiansBetween(const Vector3D& a,
+                                      const MutableVector3D& b);
 
   static Angle angleBetween(const Vector3D& a,
                             const Vector3D& b) {

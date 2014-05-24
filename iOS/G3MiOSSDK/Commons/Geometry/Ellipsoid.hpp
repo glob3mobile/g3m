@@ -63,9 +63,21 @@ public:
   }
 
   std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const;
+                                             const Vector3D& direction) const {
+    return intersectionsDistances(origin._x,
+                                  origin._y,
+                                  origin._z,
+                                  direction._x,
+                                  direction._y,
+                                  direction._z);
+  }
 
-
+  std::vector<double> intersectionsDistances(double originX,
+                                             double originY,
+                                             double originZ,
+                                             double directionX,
+                                             double directionY,
+                                             double directionZ) const;
 };
 
 #endif

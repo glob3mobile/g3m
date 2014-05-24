@@ -19,6 +19,7 @@
 #include "Color.hpp"
 #include "GLState.hpp"
 #include "SurfaceElevationProvider.hpp"
+#include "MutableVector3D.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -27,7 +28,6 @@ class MarkTouchListener;
 class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
-
 
 class MarkUserData {
 public:
@@ -139,6 +139,8 @@ private:
   AltitudeMode _altitudeMode;
 
   Vector3D* _normalAtMarkPosition;
+
+  MutableVector3D _markCameraVector;
 
 public:
   /**
