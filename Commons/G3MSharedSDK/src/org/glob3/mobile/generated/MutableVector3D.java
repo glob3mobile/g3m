@@ -32,6 +32,23 @@ public class MutableVector3D
 //  MutableVector3D(const MutableVector3D& that);
 
 
+  private static double dot(MutableVector3D a, MutableVector3D b)
+  {
+    final double aLength = a.length();
+    final double a_x = a._x / aLength;
+    final double a_y = a._y / aLength;
+    final double a_z = a._z / aLength;
+  
+    final double bLength = b.length();
+    final double b_x = b._x / bLength;
+    final double b_y = b._y / bLength;
+    final double b_z = b._z / bLength;
+  
+    return ((a_x * b_x) + (a_y * b_y) + (a_z * b_z));
+  }
+
+
+
   public MutableVector3D()
   {
      _x = 0;
@@ -229,6 +246,27 @@ public class MutableVector3D
   public final Vector3D asVector3D()
   {
     return new Vector3D(_x, _y, _z);
+  }
+
+  public final void putSub(MutableVector3D a, Vector3D b)
+  {
+    _x = a._x - b._x;
+    _y = a._y - b._y;
+    _z = a._z - b._z;
+  }
+
+  public static double angleInRadiansBetween(MutableVector3D a, MutableVector3D b)
+  {
+    double c = MutableVector3D.dot(a, b);
+    if (c > 1.0)
+    {
+      c = 1.0;
+    }
+    else if (c < -1.0)
+    {
+      c = -1.0;
+    }
+    return IMathUtils.instance().acos(c);
   }
 
 }

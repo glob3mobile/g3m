@@ -538,13 +538,21 @@ public class Camera
 
   public final double getEstimatedPixelDistance(Vector3D point0, Vector3D point1)
   {
-    final Vector3D ray0 = _position.sub(point0);
-    final Vector3D ray1 = _position.sub(point1);
-    final double angleInRadians = ray1.angleInRadiansBetween(ray0);
+  //  const Vector3D ray0 = _position.sub(point0);
+  //  const Vector3D ray1 = _position.sub(point1);
+  //  const double angleInRadians = ray1.angleInRadiansBetween(ray0);
+  
+    _ray0.putSub(_position, point0);
+    _ray1.putSub(_position, point1);
+    final double angleInRadians = MutableVector3D.angleInRadiansBetween(_ray1, _ray0);
     final FrustumData frustumData = getFrustumData();
     final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
+
+
+  private MutableVector3D _ray0 = new MutableVector3D();
+  private MutableVector3D _ray1 = new MutableVector3D();
 
   //  const Angle getHeading(const Vector3D& normal) const;
 
