@@ -322,7 +322,7 @@ public class Camera
   {
     if (!v.equalTo(_position))
     {
-//      _position = MutableVector3D(v);
+      //      _position = MutableVector3D(v);
       _position.copyFrom(v);
       if (_geodeticPosition != null)
          _geodeticPosition.dispose();
@@ -331,7 +331,7 @@ public class Camera
       final double distanceToPlanetCenter = _position.length();
       final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
-//      _normalizedPosition = _position.normalized();
+      //      _normalizedPosition = _position.normalized();
       _normalizedPosition.copyFrom(_position);
       _normalizedPosition.normalize();
     }
@@ -614,7 +614,7 @@ public class Camera
   {
     if (!v.equalTo(_center))
     {
-//      _center = MutableVector3D(v);
+      //      _center = MutableVector3D(v);
       _center.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
@@ -624,7 +624,7 @@ public class Camera
   {
     if (!v.equalTo(_up))
     {
-//      _up = MutableVector3D(v);
+      //      _up = MutableVector3D(v);
       _up.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
@@ -647,7 +647,7 @@ public class Camera
     if (_dirtyFlags._cartesianCenterOfViewDirty)
     {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-//      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      //      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
       _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
@@ -745,7 +745,7 @@ public class Camera
     if (_dirtyFlags._projectionMatrixDirty)
     {
       _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix = MutableMatrix44D.createProjectionMatrix(getFrustumData());
+      _projectionMatrix.copyFrom(MutableMatrix44D.createProjectionMatrix(getFrustumData()));
     }
     return _projectionMatrix;
   }
@@ -756,7 +756,7 @@ public class Camera
     if (_dirtyFlags._modelMatrixDirty)
     {
       _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
+      _modelMatrix.copyFrom(MutableMatrix44D.createModelMatrix(_position, _center, _up));
     }
     return _modelMatrix;
   }
@@ -767,12 +767,10 @@ public class Camera
     if (_dirtyFlags._modelViewMatrixDirty)
     {
       _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
+      _modelViewMatrix.copyFrom(getProjectionMatrix().multiply(getModelMatrix()));
     }
     return _modelViewMatrix;
   }
-
-
 
   private void setCameraCoordinateSystem(CoordinateSystem rs)
   {

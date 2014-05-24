@@ -272,7 +272,7 @@ public class FlatPlanet extends Planet
       delta = delta.add(viewDirection.times(t2));
       MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(delta.asVector3D());
       positionCamera = positionCamera.transformedBy(translation, 1.0);
-      matrix = translation.multiply(matrix);
+      matrix.copyFrom(translation.multiply(matrix));
     }
   
     // compute 3D point of view center
@@ -287,7 +287,7 @@ public class FlatPlanet extends Planet
     {
       MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(centerPoint2.sub(finalPoint));
       positionCamera = positionCamera.transformedBy(translation, 1.0);
-      matrix = translation.multiply(matrix);
+      matrix.copyFrom(translation.multiply(matrix));
     }
   
     // camera rotation
@@ -301,7 +301,7 @@ public class FlatPlanet extends Planet
       if (sign<0)
          angle = -angle;
       MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
-      matrix = rotation.multiply(matrix);
+      matrix.copyFrom(rotation.multiply(matrix));
     }
   
     return matrix;

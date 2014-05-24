@@ -27,10 +27,6 @@ public class MutableVector3D
   private double _z;
 
 //  MutableVector3D& operator=(const MutableVector3D& that);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning makes copy constructor private
-//  MutableVector3D(const MutableVector3D& that);
-
 
   private static double dot(MutableVector3D a, MutableVector3D b)
   {
