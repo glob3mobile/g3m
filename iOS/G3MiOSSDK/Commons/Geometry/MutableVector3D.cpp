@@ -63,8 +63,8 @@ MutableVector3D MutableVector3D::rotatedAroundAxis(const MutableVector3D& axis,
                          );
 }
 
-double MutableVector3D::dot(const MutableVector3D& a,
-                            const MutableVector3D& b) {
+double MutableVector3D::normalizedDot(const MutableVector3D& a,
+                                      const MutableVector3D& b) {
   const double aLength = a.length();
   const double a_x = a._x / aLength;
   const double a_y = a._y / aLength;
@@ -82,7 +82,7 @@ double MutableVector3D::dot(const MutableVector3D& a,
 
 double MutableVector3D::angleInRadiansBetween(const MutableVector3D& a,
                                               const MutableVector3D& b) {
-  double c = MutableVector3D::dot(a, b);
+  double c = MutableVector3D::normalizedDot(a, b);
   if (c > 1.0) {
     c = 1.0;
   }

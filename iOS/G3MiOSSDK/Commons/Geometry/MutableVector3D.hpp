@@ -25,9 +25,6 @@ private:
 
 //  MutableVector3D& operator=(const MutableVector3D& that);
 
-  static double dot(const MutableVector3D& a,
-                    const MutableVector3D& b);
-
 
 public:
 
@@ -207,6 +204,9 @@ public:
     _y = a._y - b._y;
     _z = a._z - b._z;
   }
+
+  static double normalizedDot(const MutableVector3D& a,
+                              const MutableVector3D& b);
 
   static double angleInRadiansBetween(const MutableVector3D& a,
                                       const MutableVector3D& b);

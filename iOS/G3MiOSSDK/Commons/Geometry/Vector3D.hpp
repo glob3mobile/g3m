@@ -170,8 +170,8 @@ public:
   double angleInRadiansBetween(const Vector3D& other) const;
   Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const;
 
-  static double dot(const Vector3D& a,
-                    const Vector3D& b);
+  static double normalizedDot(const Vector3D& a,
+                              const Vector3D& b);
   
   static double angleInRadiansBetween(const Vector3D& a,
                                       const Vector3D& b);

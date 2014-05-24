@@ -50,8 +50,8 @@ Angle Vector3D::signedAngleBetween(const Vector3D& other,
   return angle.times(-1);
 }
 
-double Vector3D::dot(const Vector3D& a,
-                     const Vector3D& b) {
+double Vector3D::normalizedDot(const Vector3D& a,
+                               const Vector3D& b) {
   const double aLength = a.length();
   const double a_x = a._x / aLength;
   const double a_y = a._y / aLength;
@@ -69,7 +69,7 @@ double Vector3D::dot(const Vector3D& a,
 
 double Vector3D::angleInRadiansBetween(const Vector3D& a,
                                        const Vector3D& b) {
-  double c = Vector3D::dot(a, b);
+  double c = Vector3D::normalizedDot(a, b);
   if (c > 1.0) {
     c = 1.0;
   }
