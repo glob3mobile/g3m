@@ -24,9 +24,6 @@ private:
   double _z;
 
 //  MutableVector3D& operator=(const MutableVector3D& that);
-#warning makes copy constructor private
-//  MutableVector3D(const MutableVector3D& that);
-
 
   static double dot(const MutableVector3D& a,
                     const MutableVector3D& b);

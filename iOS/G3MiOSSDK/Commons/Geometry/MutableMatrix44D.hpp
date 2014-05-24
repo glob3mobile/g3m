@@ -28,13 +28,10 @@ class MutableVector3D;
 
 #include "Matrix44D.hpp"
 
-//#include "MutableMatrix44D.hpp"
-
 
 class MutableMatrix44D {
 
 private:
-
   //_m23 -> row 2, column 3
   double _m00;
   double _m01;
@@ -53,9 +50,6 @@ private:
   double _m32;
   double _m33;
 
-  //  mutable IFloatBuffer* _columnMajorFloatBuffer;
-  //  mutable float*        _columnMajorFloatArray;
-
   mutable Matrix44D* _matrix44D;
 
   bool _isValid;
@@ -66,6 +60,9 @@ private:
   _matrix44D(NULL)
   {
   }
+
+  MutableMatrix44D& operator=(const MutableMatrix44D& that);
+
 
 public:
 
@@ -183,6 +180,9 @@ public:
     
   }
 
+  void copyFrom(const MutableMatrix44D& that);
+
+
   Matrix44D* asMatrix44D() const{
     if (_matrix44D == NULL) {
       _matrix44D = new Matrix44D(_m00, _m10, _m20, _m30,
@@ -203,8 +203,6 @@ public:
             (_m30 == m._m30) && (_m31 == m._m31) && (_m32 == m._m32) && (_m33 == m._m33)
             );
   }
-
-  MutableMatrix44D& operator=(const MutableMatrix44D &m);
 
   ~MutableMatrix44D();
 
