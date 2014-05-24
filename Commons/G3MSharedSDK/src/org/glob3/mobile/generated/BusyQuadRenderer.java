@@ -80,7 +80,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
   private void createGLState()
   {
     //Modelview and projection
-    _modelviewMatrix.copyFrom(MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1)));
+    _modelviewMatrix.copyValue(MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1)));
     _glState.clearGLFeatureGroup(GLFeatureGroupName.CAMERA_GROUP);
     _glState.addGLFeature(new ProjectionGLFeature(_projectionMatrix.asMatrix44D()), false);
     _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
@@ -132,7 +132,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
   {
     final int halfWidth = width / 2;
     final int halfHeight = height / 2;
-    _projectionMatrix.copyFrom(MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth));
+    _projectionMatrix.copyValue(MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth));
   }
 
   public void dispose()
@@ -154,7 +154,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
     _degrees += value;
     if (_degrees>360)
        _degrees -= 360;
-    _modelviewMatrix.copyFrom(MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1)));
+    _modelviewMatrix.copyValue(MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_degrees), new Vector3D(0, 0, 1)));
   }
 
   public final void start(G3MRenderContext rc)

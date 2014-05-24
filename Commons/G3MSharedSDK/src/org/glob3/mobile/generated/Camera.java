@@ -745,7 +745,7 @@ public class Camera
     if (_dirtyFlags._projectionMatrixDirty)
     {
       _dirtyFlags._projectionMatrixDirty = false;
-      _projectionMatrix.copyFrom(MutableMatrix44D.createProjectionMatrix(getFrustumData()));
+      _projectionMatrix.copyValue(MutableMatrix44D.createProjectionMatrix(getFrustumData()));
     }
     return _projectionMatrix;
   }
@@ -756,7 +756,7 @@ public class Camera
     if (_dirtyFlags._modelMatrixDirty)
     {
       _dirtyFlags._modelMatrixDirty = false;
-      _modelMatrix.copyFrom(MutableMatrix44D.createModelMatrix(_position, _center, _up));
+      _modelMatrix.copyValue(MutableMatrix44D.createModelMatrix(_position, _center, _up));
     }
     return _modelMatrix;
   }
@@ -767,7 +767,8 @@ public class Camera
     if (_dirtyFlags._modelViewMatrixDirty)
     {
       _dirtyFlags._modelViewMatrixDirty = false;
-      _modelViewMatrix.copyFrom(getProjectionMatrix().multiply(getModelMatrix()));
+      //_modelViewMatrix.copyValue(getProjectionMatrix().multiply(getModelMatrix()));
+      _modelViewMatrix.copyValueOfMultiplication(getProjectionMatrix(), getModelMatrix());
     }
     return _modelViewMatrix;
   }
