@@ -489,9 +489,9 @@ void Mark::render(const G3MRenderContext* rc,
       if (_normalAtMarkPosition == NULL) {
         _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
       }
-      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
+//      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
+      occludedByHorizon = (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, markCameraVector) <= HALF_PI);
     }
-
 
     if (!occludedByHorizon) {
       if ((_textureId == NULL) && (_textureImage != NULL)) {

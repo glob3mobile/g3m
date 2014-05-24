@@ -279,7 +279,7 @@ Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
     return Angle::nan();
   }
 
-  return point0.angleBetween(point1);
+  return Vector3D::angleBetween(point0, point1);
 }
 
 void Camera::setPointOfView(const Geodetic3D& center,

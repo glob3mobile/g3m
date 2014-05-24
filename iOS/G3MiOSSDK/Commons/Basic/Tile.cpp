@@ -994,7 +994,7 @@ double Tile::getSquaredArcSegmentRatio(const Vector3D& a,
    Arco = ang * Cuerda / (2 * sen(ang/2))
    */
 
-  const double angleInRadians = a.angleInRadiansBetween(b);
+  const double angleInRadians = Vector3D::angleInRadiansBetween(a, b);
   const double halfAngleSin = SIN(angleInRadians / 2);
   const double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
   return (arcSegmentRatio * arcSegmentRatio);
