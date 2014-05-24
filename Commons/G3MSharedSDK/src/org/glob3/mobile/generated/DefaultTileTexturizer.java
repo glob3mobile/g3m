@@ -85,8 +85,6 @@ public class DefaultTileTexturizer extends TileTexturizer
   
     if (forceFullRender)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: Does it make sense to start the task here?
       builder.start();
     }
     else

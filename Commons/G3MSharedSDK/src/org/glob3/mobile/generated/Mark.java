@@ -442,7 +442,7 @@ public class Mark implements SurfaceElevationListener
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void render(G3MRenderContext rc, Vector3D cameraPosition);
+//  void render(G3MRenderContext rc, MutableVector3D cameraPosition);
 
   public final boolean isReady()
   {
@@ -542,14 +542,14 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, Vector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
+  public final void render(G3MRenderContext rc, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
   //  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
   //  _markCameraVector.putSub(markPosition, cameraPosition);
-    _markCameraVector.put(markPosition._x - cameraPosition._x, markPosition._y - cameraPosition._y, markPosition._z - cameraPosition._z);
+    _markCameraVector.put(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
   
     // mark will be renderered only if is renderable by distance and placed on a visible globe area
     boolean renderableByDistance;
@@ -572,7 +572,7 @@ public class Mark implements SurfaceElevationListener
       if (_position._height > cameraHeight)
       {
         // Computing horizon culling
-        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition, _markCameraVector);
+        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition.x(), cameraPosition.y(), cameraPosition.z(), _markCameraVector.x(), _markCameraVector.y(), _markCameraVector.z());
         if (dists.size() > 0)
         {
           final double dist = dists.get(0);
