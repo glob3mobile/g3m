@@ -88,9 +88,9 @@ public class EllipsoidalPlanet extends Planet
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
-    return _ellipsoid.intersectionsDistances(origin, direction);
+    return _ellipsoid.intersectionsDistances(originX, originY, originZ, directionX, directionY, directionZ);
   }
 
   public final Vector3D toCartesian(Angle latitude, Angle longitude, double height)
@@ -205,7 +205,7 @@ public class EllipsoidalPlanet extends Planet
     }
   
     final Vector3D normal = start.cross(stop).normalized();
-    final double theta = start.angleBetween(stop)._radians;
+    final double theta = start.angleInRadiansBetween(stop);
   
     //int n = max((int)(theta / granularity) - 1, 0);
     int n = ((int)(theta / granularity) - 1) > 0 ? (int)(theta / granularity) - 1 : 0;
@@ -344,7 +344,7 @@ public class EllipsoidalPlanet extends Planet
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
+    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
     if (distances.isEmpty())
     {
       return Vector3D.nan();

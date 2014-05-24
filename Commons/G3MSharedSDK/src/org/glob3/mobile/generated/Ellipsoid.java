@@ -70,14 +70,19 @@ public class Ellipsoid
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
+  }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
+  {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     // By laborious algebraic manipulation....
-    final double a = (direction._x * direction._x * _oneOverRadiiSquared._x + direction._y * direction._y * _oneOverRadiiSquared._y + direction._z * direction._z * _oneOverRadiiSquared._z);
+    final double a = (directionX * directionX * _oneOverRadiiSquared._x + directionY * directionY * _oneOverRadiiSquared._y + directionZ * directionZ * _oneOverRadiiSquared._z);
   
-    final double b = 2.0 * (origin._x * direction._x * _oneOverRadiiSquared._x + origin._y * direction._y * _oneOverRadiiSquared._y + origin._z * direction._z * _oneOverRadiiSquared._z);
+    final double b = 2.0 * (originX * directionX * _oneOverRadiiSquared._x + originY * directionY * _oneOverRadiiSquared._y + originZ * directionZ * _oneOverRadiiSquared._z);
   
-    final double c = (origin._x * origin._x * _oneOverRadiiSquared._x + origin._y * origin._y * _oneOverRadiiSquared._y + origin._z * origin._z * _oneOverRadiiSquared._z - 1.0);
+    final double c = (originX * originX * _oneOverRadiiSquared._x + originY * originY * _oneOverRadiiSquared._y + originZ * originZ * _oneOverRadiiSquared._z - 1.0);
   
     // Solve the quadratic equation: ax^2 + bx + c = 0.
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -113,6 +118,4 @@ public class Ellipsoid
     }
     return intersections;
   }
-
-
 }

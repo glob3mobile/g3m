@@ -186,22 +186,10 @@ public class Vector3D
 
   public final Angle angleBetween(Vector3D other)
   {
-    return Angle.fromRadians(angleInRadiansBetween(other));
+    return Angle.fromRadians(Vector3D.angleInRadiansBetween(this, other));
   }
   public final double angleInRadiansBetween(Vector3D other)
   {
-  //  const Vector3D v1 = normalized();
-  //  const Vector3D v2 = other.normalized();
-  //
-  //  double c = v1.dot(v2);
-  //  if (c > 1.0) {
-  //    c = 1.0;
-  //  }
-  //  else if (c < -1.0) {
-  //    c = -1.0;
-  //  }
-  //
-  //  return IMathUtils::instance()->acos(c);
     return angleInRadiansBetween(this, other);
   }
   public final Angle signedAngleBetween(Vector3D other, Vector3D up)
@@ -215,7 +203,7 @@ public class Vector3D
     return angle.times(-1);
   }
 
-  public static double dot(Vector3D a, Vector3D b)
+  public static double normalizedDot(Vector3D a, Vector3D b)
   {
     final double aLength = a.length();
     final double a_x = a._x / aLength;
@@ -230,9 +218,38 @@ public class Vector3D
     return ((a_x * b_x) + (a_y * b_y) + (a_z * b_z));
   }
 
+  public static double normalizedDot(Vector3D a, MutableVector3D b)
+  {
+    final double aLength = a.length();
+    final double a_x = a._x / aLength;
+    final double a_y = a._y / aLength;
+    final double a_z = a._z / aLength;
+  
+    final double bLength = b.length();
+    final double b_x = b.x() / bLength;
+    final double b_y = b.y() / bLength;
+    final double b_z = b.z() / bLength;
+  
+    return ((a_x * b_x) + (a_y * b_y) + (a_z * b_z));
+  }
+
   public static double angleInRadiansBetween(Vector3D a, Vector3D b)
   {
-    double c = Vector3D.dot(a, b);
+    double c = Vector3D.normalizedDot(a, b);
+    if (c > 1.0)
+    {
+      c = 1.0;
+    }
+    else if (c < -1.0)
+    {
+      c = -1.0;
+    }
+    return IMathUtils.instance().acos(c);
+  }
+
+  public static double angleInRadiansBetween(Vector3D a, MutableVector3D b)
+  {
+    double c = Vector3D.normalizedDot(a, b);
     if (c > 1.0)
     {
       c = 1.0;

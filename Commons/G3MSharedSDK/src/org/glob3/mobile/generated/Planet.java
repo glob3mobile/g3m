@@ -55,7 +55,18 @@ public abstract class Planet
 
   public abstract Vector3D geodeticSurfaceNormal(Geodetic3D geodetic);
   public abstract Vector3D geodeticSurfaceNormal(Geodetic2D geodetic);
-  public abstract java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction);
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
+  }
+
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, MutableVector3D direction)
+  {
+    return intersectionsDistances(origin._x, origin._y, origin._z, direction.x(), direction.y(), direction.z());
+  }
+
+  public abstract java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ);
 
   public abstract Vector3D toCartesian(Angle latitude, Angle longitude, double height);
 

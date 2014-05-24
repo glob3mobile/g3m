@@ -102,6 +102,8 @@ public class Mark implements SurfaceElevationListener
 
   private Vector3D _normalAtMarkPosition;
 
+  private MutableVector3D _markCameraVector = new MutableVector3D();
+
   /**
    * Creates a marker with icon and label
    */
@@ -545,7 +547,9 @@ public class Mark implements SurfaceElevationListener
   
     final Vector3D markPosition = getCartesianPosition(planet);
   
-    final Vector3D markCameraVector = markPosition.sub(cameraPosition);
+  //  const Vector3D markCameraVector = markPosition->sub(cameraPosition);
+  //  _markCameraVector.putSub(markPosition, cameraPosition);
+    _markCameraVector.put(markPosition._x - cameraPosition._x, markPosition._y - cameraPosition._y, markPosition._z - cameraPosition._z);
   
     // mark will be renderered only if is renderable by distance and placed on a visible globe area
     boolean renderableByDistance;
@@ -555,7 +559,7 @@ public class Mark implements SurfaceElevationListener
     }
     else
     {
-      final double squaredDistanceToCamera = markCameraVector.squaredLength();
+      final double squaredDistanceToCamera = _markCameraVector.squaredLength();
       renderableByDistance = (squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera));
     }
   
@@ -568,7 +572,7 @@ public class Mark implements SurfaceElevationListener
       if (_position._height > cameraHeight)
       {
         // Computing horizon culling
-        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition, markCameraVector);
+        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition, _markCameraVector);
         if (dists.size() > 0)
         {
           final double dist = dists.get(0);
@@ -586,7 +590,7 @@ public class Mark implements SurfaceElevationListener
           _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
         }
   //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
-        occludedByHorizon = (Vector3D.angleInRadiansBetween(_normalAtMarkPosition, markCameraVector) <= DefineConstants.HALF_PI);
+        occludedByHorizon = (Vector3D.angleInRadiansBetween(_normalAtMarkPosition, _markCameraVector) <= DefineConstants.HALF_PI);
       }
   
       if (!occludedByHorizon)

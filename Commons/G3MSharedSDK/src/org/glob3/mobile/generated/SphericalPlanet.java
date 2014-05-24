@@ -93,16 +93,16 @@ public class SphericalPlanet extends Planet
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     // By laborious algebraic manipulation....
-    final double a = direction._x * direction._x + direction._y * direction._y + direction._z * direction._z;
+    final double a = directionX * directionX + directionY * directionY + directionZ * directionZ;
   
-    final double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
+    final double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
   
-    final double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _sphere._radiusSquared;
+    final double c = originX * originX + originY * originY + originZ * originZ - _sphere._radiusSquared;
   
     // Solve the quadratic equation: ax^2 + bx + c = 0.
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -333,7 +333,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
+    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
     if (distances.isEmpty())
     {
       return Vector3D.nan();
