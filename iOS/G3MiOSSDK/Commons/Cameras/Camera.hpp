@@ -213,14 +213,17 @@ public:
 
   void setCartesianPosition(const MutableVector3D& v) {
     if (!v.equalTo(_position)) {
-      _position = MutableVector3D(v);
+//      _position = MutableVector3D(v);
+      _position.copyFrom(v);
       delete _geodeticPosition;
       _geodeticPosition = NULL;
       _dirtyFlags.setAll(true);
       const double distanceToPlanetCenter = _position.length();
       const double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
-      _normalizedPosition = _position.normalized();
+//      _normalizedPosition = _position.normalized();
+      _normalizedPosition.copyFrom(_position);
+      _normalizedPosition.normalize();
     }
   }
 
@@ -365,14 +368,16 @@ private:
 
   void setCenter(const MutableVector3D& v) {
     if (!v.equalTo(_center)) {
-      _center = MutableVector3D(v);
+//      _center = MutableVector3D(v);
+      _center.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
   }
 
   void setUp(const MutableVector3D& v) {
     if (!v.equalTo(_up)) {
-      _up = MutableVector3D(v);
+//      _up = MutableVector3D(v);
+      _up.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
   }
@@ -390,7 +395,8 @@ private:
   MutableVector3D   _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+//      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
   }

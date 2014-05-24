@@ -294,8 +294,10 @@ MutableMatrix44D EllipsoidalPlanet::createGeodeticTransformMatrix(const Geodetic
 
 void EllipsoidalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
 {
-  _origin = origin.asMutableVector3D();
-  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+//  _origin = origin.asMutableVector3D();
+  _origin.copyFrom(origin);
+//  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  _initialPoint.copyFrom(closestIntersection(origin, initialRay));
   _validSingleDrag = false;
 }
 
@@ -310,7 +312,8 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
   MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
-    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+//    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+    finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
   }
 
   // compute the rotation axis
@@ -322,7 +325,8 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
 
   // save params for possible inertial animations
-  _lastDragAxis = rotationAxis.asMutableVector3D();
+//  _lastDragAxis = rotationAxis.asMutableVector3D();
+  _lastDragAxis.copyFrom(rotationAxis);
   double radians = rotationDelta._radians;
   _lastDragRadiansStep = radians - _lastDragRadians;
   _lastDragRadians = radians;

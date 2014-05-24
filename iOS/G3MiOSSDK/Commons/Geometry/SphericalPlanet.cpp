@@ -266,8 +266,10 @@ MutableMatrix44D SphericalPlanet::createGeodeticTransformMatrix(const Geodetic3D
 
 void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& initialRay) const
 {
-  _origin = origin.asMutableVector3D();
-  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+//  _origin = origin.asMutableVector3D();
+//  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  _origin.copyFrom(origin);
+  _initialPoint.copyFrom(closestIntersection(origin, initialRay));
   _validSingleDrag = false;
 }
 
@@ -282,7 +284,8 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
   MutableVector3D finalPoint = closestIntersection(origin, finalRay).asMutableVector3D();
   if (finalPoint.isNan()) {
     //printf ("--invalid final point in drag!!\n");
-    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+//    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+    finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
   }
 
   // compute the rotation axis
@@ -294,7 +297,8 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
   if (rotationDelta.isNan()) return MutableMatrix44D::invalid();
 
   // save params for possible inertial animations
-  _lastDragAxis = rotationAxis.asMutableVector3D();
+//  _lastDragAxis = rotationAxis.asMutableVector3D();
+  _lastDragAxis.copyFrom(rotationAxis);
   double radians = rotationDelta._radians;
   _lastDragRadiansStep = radians - _lastDragRadians;
   _lastDragRadians = radians;
@@ -317,19 +321,25 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
                                       const Vector3D& initialRay0,
                                       const Vector3D& initialRay1) const
 {
-  _origin = origin.asMutableVector3D();
-  _centerRay = centerRay.asMutableVector3D();
-  _initialPoint0 = closestIntersection(origin, initialRay0).asMutableVector3D();
-  _initialPoint1 = closestIntersection(origin, initialRay1).asMutableVector3D();
+//  _origin = origin.asMutableVector3D();
+//  _centerRay = centerRay.asMutableVector3D();
+//  _initialPoint0 = closestIntersection(origin, initialRay0).asMutableVector3D();
+//  _initialPoint1 = closestIntersection(origin, initialRay1).asMutableVector3D();
+  _origin.copyFrom(origin);
+  _centerRay.copyFrom(centerRay);
+  _initialPoint0.copyFrom(closestIntersection(origin, initialRay0));
+  _initialPoint1.copyFrom(closestIntersection(origin, initialRay1));
   _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1)._degrees;
-  _centerPoint = closestIntersection(origin, centerRay).asMutableVector3D();
+//  _centerPoint = closestIntersection(origin, centerRay).asMutableVector3D();
+  _centerPoint.copyFrom(closestIntersection(origin, centerRay));
   _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1)._degrees;
 
   // middle point in 3D
   Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
   Geodetic2D g1 = toGeodetic2D(_initialPoint1.asVector3D());
   Geodetic2D g  = getMidPoint(g0, g1);
-  _initialPoint = toCartesian(g).asMutableVector3D();
+//  _initialPoint = toCartesian(g).asMutableVector3D();
+  _initialPoint.copyFrom(toCartesian(g));
 }
 
 

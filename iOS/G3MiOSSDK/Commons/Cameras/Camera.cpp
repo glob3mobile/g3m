@@ -35,10 +35,14 @@ void Camera::copyFrom(const Camera &that) {
 
   _planet = that._planet;
 
-  _position = MutableVector3D(that._position);
-  _center   = MutableVector3D(that._center);
-  _up       = MutableVector3D(that._up);
-  _normalizedPosition = MutableVector3D(that._normalizedPosition);
+//  _position = MutableVector3D(that._position);
+//  _center   = MutableVector3D(that._center);
+//  _up       = MutableVector3D(that._up);
+//  _normalizedPosition = MutableVector3D(that._normalizedPosition);
+  _position.copyFrom(that._position);
+  _center.copyFrom(that._center);
+  _up.copyFrom(that._up);
+  _normalizedPosition.copyFrom(that._normalizedPosition);
 
   _dirtyFlags.copyFrom(that._dirtyFlags);
 
@@ -53,7 +57,8 @@ void Camera::copyFrom(const Camera &that) {
   _modelMatrix.copyValue(that._modelMatrix);
   _modelViewMatrix.copyValue(that._modelViewMatrix);
 
-  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
+//  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
+  _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
 
 #ifdef C_CODE
   delete _geodeticCenterOfView;
@@ -409,8 +414,11 @@ CoordinateSystem Camera::getCameraCoordinateSystem() const{
 }
 
 void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
-  _center = _position.add(rs._y.asMutableVector3D());
-  _up = rs._z.asMutableVector3D();
+//  _center = _position.add(rs._y.asMutableVector3D());
+  _center.copyFrom(_position);
+  _center.addInPlace(rs._y);
+//  _up = rs._z.asMutableVector3D();
+  _up.copyFrom(rs._z);
   _dirtyFlags.setAll(true);  //Recalculate Everything
 }
 

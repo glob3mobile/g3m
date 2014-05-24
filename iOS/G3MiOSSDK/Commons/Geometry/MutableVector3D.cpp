@@ -14,6 +14,14 @@ MutableVector3D MutableVector3D::normalized() const {
   return MutableVector3D(_x / d, _y /d, _z / d);
 }
 
+void MutableVector3D::normalize() {
+  const double d = length();
+//  return MutableVector3D(_x / d, _y /d, _z / d);
+  _x /= d;
+  _y /= d;
+  _z /= d;
+}
+
 
 Angle MutableVector3D::angleBetween(const MutableVector3D& other) const {
   const MutableVector3D v1 = normalized();
