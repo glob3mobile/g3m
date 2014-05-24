@@ -57,6 +57,14 @@ public:
   {
   }
 
+  void put(const double x,
+           const double y,
+           const double z) {
+    _x = x;
+    _y = y;
+    _z = z;
+  }
+
   void copyFrom(const MutableVector3D& that) {
     _x = that._x;
     _y = that._y;
@@ -205,6 +213,9 @@ public:
 
   static double angleInRadiansBetween(const MutableVector3D& a,
                                       const MutableVector3D& b);
+
+  MutableVector3D rotateAroundAxis(const MutableVector3D& axis,
+                                   const Angle& theta) const;
 
 };
 

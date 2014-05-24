@@ -169,6 +169,7 @@ public:
   const Vector3D getNormalizedPosition() const { return _normalizedPosition.asVector3D(); }
   const Vector3D getCenter() const { return _center.asVector3D(); }
   const Vector3D getUp() const { return _up.asVector3D(); }
+  const MutableVector3D getUpMutable() const { return _up; }
   const Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
   const Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
   const Vector3D getViewDirection() const {
@@ -179,6 +180,13 @@ public:
                     _center.y() - _position.y(),
                     _center.z() - _position.z());
   }
+
+  const void getViewDirectionInto(MutableVector3D& result) const {
+    result.put(_center.x() - _position.x(),
+               _center.y() - _position.y(),
+               _center.z() - _position.z());
+  }
+
 
   void dragCamera(const Vector3D& p0,
                   const Vector3D& p1);

@@ -56,8 +56,6 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
   const double v = axis._y;
   const double w = axis._z;
   
-//  const double cosTheta = theta.cosinus();
-//  const double sinTheta = theta.sinus();
   const double cosTheta = COS(theta._radians);
   const double sinTheta = SIN(theta._radians);
 

@@ -91,3 +91,31 @@ double MutableVector3D::angleInRadiansBetween(const MutableVector3D& a,
   }
   return IMathUtils::instance()->acos(c);
 }
+
+MutableVector3D MutableVector3D::rotateAroundAxis(const MutableVector3D& axis,
+                                                  const Angle& theta) const {
+  const double u = axis._x;
+  const double v = axis._y;
+  const double w = axis._z;
+
+  const double cosTheta = COS(theta._radians);
+  const double sinTheta = SIN(theta._radians);
+
+  const double ms = axis.squaredLength();
+  const double m = IMathUtils::instance()->sqrt(ms);
+
+  return MutableVector3D(
+                         ((u * (u * _x + v * _y + w * _z)) +
+                          (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) +
+                          (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms,
+
+                         ((v * (u * _x + v * _y + w * _z)) +
+                          (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) +
+                          (m * ((w * _x) - (u * _z)) * sinTheta)) / ms,
+
+                         ((w * (u * _x + v * _y + w * _z)) +
+                          (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) +
+                          (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms
+                         
+                         );
+}
