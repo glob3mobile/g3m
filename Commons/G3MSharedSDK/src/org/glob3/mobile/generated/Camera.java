@@ -75,10 +75,14 @@ public class Camera
   
     _planet = that._planet;
   
-    _position = new MutableVector3D(that._position);
-    _center = new MutableVector3D(that._center);
-    _up = new MutableVector3D(that._up);
-    _normalizedPosition = new MutableVector3D(that._normalizedPosition);
+  //  _position = MutableVector3D(that._position);
+  //  _center   = MutableVector3D(that._center);
+  //  _up       = MutableVector3D(that._up);
+  //  _normalizedPosition = MutableVector3D(that._normalizedPosition);
+    _position.copyFrom(that._position);
+    _center.copyFrom(that._center);
+    _up.copyFrom(that._up);
+    _normalizedPosition.copyFrom(that._normalizedPosition);
   
     _dirtyFlags.copyFrom(that._dirtyFlags);
   
@@ -88,7 +92,8 @@ public class Camera
     _modelMatrix.copyValue(that._modelMatrix);
     _modelViewMatrix.copyValue(that._modelViewMatrix);
   
-    _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
+  //  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
+    _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
   
     _geodeticCenterOfView = that._geodeticCenterOfView;
   
@@ -307,7 +312,8 @@ public class Camera
   {
     if (!v.equalTo(_position))
     {
-      _position = new MutableVector3D(v);
+//      _position = MutableVector3D(v);
+      _position.copyFrom(v);
       if (_geodeticPosition != null)
          _geodeticPosition.dispose();
       _geodeticPosition = null;
@@ -315,7 +321,9 @@ public class Camera
       final double distanceToPlanetCenter = _position.length();
       final double planetRadius = distanceToPlanetCenter - getGeodeticPosition()._height;
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
-      _normalizedPosition = _position.normalized();
+//      _normalizedPosition = _position.normalized();
+      _normalizedPosition.copyFrom(_position);
+      _normalizedPosition.normalize();
     }
   }
 
@@ -588,7 +596,8 @@ public class Camera
   {
     if (!v.equalTo(_center))
     {
-      _center = new MutableVector3D(v);
+//      _center = MutableVector3D(v);
+      _center.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
   }
@@ -597,7 +606,8 @@ public class Camera
   {
     if (!v.equalTo(_up))
     {
-      _up = new MutableVector3D(v);
+//      _up = MutableVector3D(v);
+      _up.copyFrom(v);
       _dirtyFlags.setAll(true);
     }
   }
@@ -619,7 +629,8 @@ public class Camera
     if (_dirtyFlags._cartesianCenterOfViewDirty)
     {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+//      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
   }
@@ -747,8 +758,11 @@ public class Camera
 
   private void setCameraCoordinateSystem(CoordinateSystem rs)
   {
-    _center = _position.add(rs._y.asMutableVector3D());
-    _up = rs._z.asMutableVector3D();
+  //  _center = _position.add(rs._y.asMutableVector3D());
+    _center.copyFrom(_position);
+    _center.addInPlace(rs._y);
+  //  _up = rs._z.asMutableVector3D();
+    _up.copyFrom(rs._z);
     _dirtyFlags.setAll(true); //Recalculate Everything
   }
 

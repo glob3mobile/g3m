@@ -26,6 +26,11 @@ public class MutableVector3D
   private double _y;
   private double _z;
 
+//  MutableVector3D& operator=(const MutableVector3D& that);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning makes copy constructor private
+//  MutableVector3D(const MutableVector3D& that);
+
 
   public MutableVector3D()
   {
@@ -39,7 +44,6 @@ public class MutableVector3D
      _x = x;
      _y = y;
      _z = z;
-
   }
 
   public MutableVector3D(MutableVector3D v)
@@ -47,13 +51,34 @@ public class MutableVector3D
      _x = v._x;
      _y = v._y;
      _z = v._z;
+  }
 
+  public final void copyFrom(MutableVector3D that)
+  {
+    _x = that._x;
+    _y = that._y;
+    _z = that._z;
+  }
+
+  public final void copyFrom(Vector3D that)
+  {
+    _x = that._x;
+    _y = that._y;
+    _z = that._z;
   }
 
   public final MutableVector3D normalized()
   {
     final double d = length();
     return new MutableVector3D(_x / d, _y /d, _z / d);
+  }
+  public final void normalize()
+  {
+    final double d = length();
+  //  return MutableVector3D(_x / d, _y /d, _z / d);
+    _x /= d;
+    _y /= d;
+    _z /= d;
   }
 
   public static MutableVector3D nan()
@@ -94,6 +119,20 @@ public class MutableVector3D
   public final MutableVector3D add(MutableVector3D v)
   {
     return new MutableVector3D(_x + v._x, _y + v._y, _z + v._z);
+  }
+
+  public final void addInPlace(MutableVector3D that)
+  {
+    _x += that._x;
+    _y += that._y;
+    _z += that._z;
+  }
+
+  public final void addInPlace(Vector3D that)
+  {
+    _x += that._x;
+    _y += that._y;
+    _z += that._z;
   }
 
   public final MutableVector3D sub(MutableVector3D v)

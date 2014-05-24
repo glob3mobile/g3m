@@ -368,8 +368,10 @@ public class EllipsoidalPlanet extends Planet
 
   public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
   {
-    _origin = origin.asMutableVector3D();
-    _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  //  _origin = origin.asMutableVector3D();
+    _origin.copyFrom(origin);
+  //  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+    _initialPoint.copyFrom(closestIntersection(origin, initialRay));
     _validSingleDrag = false;
   }
 
@@ -385,7 +387,8 @@ public class EllipsoidalPlanet extends Planet
     if (finalPoint.isNan())
     {
       //printf ("--invalid final point in drag!!\n");
-      finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+  //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+      finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
     }
   
     // compute the rotation axis
@@ -398,7 +401,8 @@ public class EllipsoidalPlanet extends Planet
        return MutableMatrix44D.invalid();
   
     // save params for possible inertial animations
-    _lastDragAxis = rotationAxis.asMutableVector3D();
+  //  _lastDragAxis = rotationAxis.asMutableVector3D();
+    _lastDragAxis.copyFrom(rotationAxis);
     double radians = rotationDelta._radians;
     _lastDragRadiansStep = radians - _lastDragRadians;
     _lastDragRadians = radians;
