@@ -178,6 +178,10 @@ public class Camera
   {
      return _position.asVector3D();
   }
+  public final MutableVector3D getCartesianPositionMutable()
+  {
+     return _position;
+  }
   public final Vector3D getNormalizedPosition()
   {
      return _normalizedPosition.asVector3D();

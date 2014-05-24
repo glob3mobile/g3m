@@ -149,6 +149,11 @@ public class Vector3D
     return new Vector3D(_x - v._x, _y - v._y, _z - v._z);
   }
 
+  public final Vector3D sub(MutableVector3D v)
+  {
+    return new Vector3D(_x - v.x(), _y - v.y(), _z - v.z());
+  }
+
   public final Vector3D sub(double d)
   {
     return new Vector3D(_x - d, _y - d, _z - d);

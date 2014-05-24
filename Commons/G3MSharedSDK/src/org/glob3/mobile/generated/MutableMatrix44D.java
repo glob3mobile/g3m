@@ -99,7 +99,6 @@ public class MutableMatrix44D
 
 
 
-  //CONTRUCTORS
   //Contructor parameters in column major order
   public MutableMatrix44D(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)
   {
@@ -730,8 +729,6 @@ public class MutableMatrix44D
   {
     final Vector3D a = axis.normalized();
   
-  //  const double c = angle.cosinus();
-  //  const double s = angle.sinus();
     final double c = java.lang.Math.cos(angle._radians);
     final double s = java.lang.Math.sin(angle._radians);
   

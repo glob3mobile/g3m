@@ -585,7 +585,7 @@ public class Mark implements SurfaceElevationListener
         {
           _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
         }
-        occludedByHorizon = (_normalAtMarkPosition.angleBetween(markCameraVector)._radians <= DefineConstants.HALF_PI);
+        occludedByHorizon = (_normalAtMarkPosition.angleInRadiansBetween(markCameraVector) <= DefineConstants.HALF_PI);
       }
   
   
