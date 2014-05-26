@@ -9,9 +9,9 @@
 #ifndef __G3MiOSSDK__GoogleMapsLayer__
 #define __G3MiOSSDK__GoogleMapsLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 
-class GoogleMapsLayer : public Layer {
+class GoogleMapsLayer : public RasterLayer {
 private:
   const std::string _key;
   const int         _initialLevel;
@@ -23,15 +23,20 @@ protected:
 
   bool rawIsEquals(const Layer* that) const;
 
+
+  const TileImageContribution* rawContribution(const Tile* tile) const;
+
+  const URL createURL(const Tile* tile) const;
+
 public:
 
-  GoogleMapsLayer(const std::string& key,
-                  const TimeInterval& timeToCache,
-                  bool readExpired = true,
-                  int initialLevel = 2,
-                  LayerCondition* condition = NULL,
-                  float transparency = (float)1.0,
-                  const std::string& disclaimerInfo = "");
+  GoogleMapsLayer(const std::string&    key,
+                  const TimeInterval&   timeToCache,
+                  const bool            readExpired    = true,
+                  const int             initialLevel   = 2,
+                  const float           transparency   = 1,
+                  const LayerCondition* condition      = NULL,
+                  const std::string&    disclaimerInfo = "");
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
@@ -46,6 +51,11 @@ public:
   GoogleMapsLayer* copy() const;
 
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return Sector::fullSphere();
+  }
+  
 };
 
 #endif

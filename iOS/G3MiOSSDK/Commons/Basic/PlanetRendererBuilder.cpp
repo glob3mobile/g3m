@@ -9,6 +9,7 @@
 #include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
 #include "MultiLayerTileTexturizer.hpp"
+//#include "DefaultTileTexturizer.hpp"
 #include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
@@ -31,7 +32,7 @@ _texturizer(NULL),
 _tileTessellator(NULL),
 _visibleSectorListeners(NULL),
 _stabilizationMilliSeconds(NULL),
-_texturePriority(DownloadPriority::HIGHER),
+_tileDownloadPriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
@@ -100,6 +101,8 @@ TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
 TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
     _texturizer = new MultiLayerTileTexturizer();
+//#warning Diego at work!
+//    _texturizer = new DefaultTileTexturizer();
   }
 
   return _texturizer;
@@ -216,12 +219,12 @@ std::vector<long long>* PlanetRendererBuilder::getStabilizationMilliSeconds() {
 }
 
 /**
- * Returns the _texturePriority.
+ * Returns the _tileDownloadPriority.
  *
- * @return _texturePriority: long long
+ * @return _tileDownloadPriority: long long
  */
-long long PlanetRendererBuilder::getTexturePriority() {
-  return _texturePriority;
+long long PlanetRendererBuilder::getTileDownloadPriority() {
+  return _tileDownloadPriority;
 }
 
 void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
@@ -286,8 +289,8 @@ void PlanetRendererBuilder::addVisibleSectorListener(VisibleSectorListener* list
   getStabilizationMilliSeconds()->push_back(stabilizationInterval._milliseconds);
 }
 
-void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
-  _texturePriority = texturePriority;
+void PlanetRendererBuilder::setTileDownloadPriority(long long tileDownloadPriority) {
+  _tileDownloadPriority = tileDownloadPriority;
 }
 
 void PlanetRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
@@ -353,7 +356,7 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getLayerSet(),
                                                       getParameters(),
                                                       getShowStatistics(),
-                                                      getTexturePriority(),
+                                                      getTileDownloadPriority(),
                                                       getRenderedSector(),
                                                       getRenderTileMeshes(),
                                                       getLogTilesPetitions(),

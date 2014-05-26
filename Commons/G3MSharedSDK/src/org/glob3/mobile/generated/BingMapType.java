@@ -16,10 +16,11 @@ package org.glob3.mobile.generated;
 //
 
 
+//class IByteBuffer;
+
 
 public class BingMapType
 {
-
   public static String Aerial()
   {
     return "Aerial";
@@ -44,5 +45,4 @@ public class BingMapType
   {
     return "CollinsBart";
   }
-
 }

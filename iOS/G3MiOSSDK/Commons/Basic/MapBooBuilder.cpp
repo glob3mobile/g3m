@@ -50,7 +50,7 @@
 #include "URLTemplateLayer.hpp"
 #include "ErrorHandling.hpp"
 #include "ICanvas.hpp"
-#include "GFont.hpp"
+#include "ICanvasUtils.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -387,7 +387,7 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&   
   if (iconURL != NULL) {
     isb->addString(",\"iconURL\":");
     isb->addString("\"");
-    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString( escapeString(iconURL->_path) );
     isb->addString("\"");
   }
 
@@ -425,7 +425,7 @@ const std::string MapBooBuilder::getSendNotificationCommand(const Geodetic2D&  p
   if (iconURL != NULL) {
     isb->addString(",\"iconURL\":");
     isb->addString("\"");
-    isb->addString( escapeString(iconURL->getPath()) );
+    isb->addString( escapeString(iconURL->_path) );
     isb->addString("\"");
   }
 
@@ -508,7 +508,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                                                       quality);
 
   const bool showStatistics = false;
-  long long texturePriority = DownloadPriority::HIGHER;
+  long long tileDownloadPriority = DownloadPriority::HIGHER;
 
   const Sector renderedSector = Sector::fullSphere();
   const bool renderTileMeshes = true;
@@ -528,7 +528,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               _layerSet,
                                               parameters,
                                               showStatistics,
-                                              texturePriority,
+                                              tileDownloadPriority,
                                               renderedSector,
                                               renderTileMeshes,
                                               logTilesPetitions,
@@ -575,8 +575,39 @@ ProtoRenderer* MapBooBuilder::createBusyRenderer() {
   return new BusyMeshRenderer(Color::newFromRGBA(0, 0, 0, 1));
 }
 
+
+class Mapboo_ErrorMessagesCustomizer : public ErrorMessagesCustomizer {
+private:
+  MapBooBuilder* _mbBuilder;
+public:
+  Mapboo_ErrorMessagesCustomizer(MapBooBuilder* mbBuilder) {
+    _mbBuilder = mbBuilder;
+  }
+  ~Mapboo_ErrorMessagesCustomizer() {}
+  std::vector<std::string> customize(const std::vector<std::string>& errors) {
+    std::vector<std::string> customizedErrorMessages;
+    const IStringUtils* stringUtils = IStringUtils::instance();
+    const int errorsSize = errors.size();
+    
+    const std::string appNotFound = "Invalid request: Application #" + _mbBuilder->getApplicationId() + " not found";
+    
+    for (int i = 0; i < errorsSize; i++) {
+      std::string error = errors.at(i);
+      if (stringUtils->beginsWith(error, appNotFound)) {
+        customizedErrorMessages.push_back("Oops, application not found!");
+        break;
+      }
+      else {
+        customizedErrorMessages.push_back(error);
+      }
+    }
+    
+    return customizedErrorMessages;
+  };
+};
+
 ErrorRenderer* MapBooBuilder::createErrorRenderer() {
-  return new HUDErrorRenderer();
+  return new HUDErrorRenderer(new Mapboo_ErrorMessagesCustomizer(this));
 }
 
 MapQuestLayer* MapBooBuilder::parseMapQuestLayer(const JSONObject* jsonLayer,
@@ -948,7 +979,7 @@ void MapBooBuilder::parseApplicationEventsJSON(const std::string& json,
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(json, true);
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
-                                  url.getPath().c_str());
+                                  url._path.c_str());
   }
   else {
     const JSONArray* jsonArray = jsonBaseObject->asArray();
@@ -969,6 +1000,8 @@ void MapBooBuilder::parseApplicationEventsJSON(const std::string& json,
 
 void MapBooBuilder::parseApplicationJSON(const JSONObject* jsonObject,
                                          const URL& url) {
+  std::vector<std::string> errors;
+
   if (jsonObject == NULL) {
     ILogger::instance()->logError("Invalid ApplicationJSON");
   }
@@ -1077,10 +1110,16 @@ void MapBooBuilder::parseApplicationJSON(const JSONObject* jsonObject,
       }
     }
     else {
+      errors.push_back(jsonError->value().c_str());
       ILogger::instance()->logError("Server Error: %s",
                                     jsonError->value().c_str());
+      if (_initialParse) {
+        _initialParse = false;
+        setHasParsedApplication();
+      }
     }
   }
+  _mbErrorRenderer->setErrors(errors);
 }
 
 
@@ -1090,7 +1129,7 @@ void MapBooBuilder::parseApplicationJSON(const std::string& json,
 
   if (jsonBaseObject == NULL) {
     ILogger::instance()->logError("Can't parse ApplicationJSON from %s",
-                                  url.getPath().c_str());
+                                  url._path.c_str());
   }
   else {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
@@ -1297,7 +1336,7 @@ void MapBooBuilder::recreateLayerSet() {
 }
 
 const URL MapBooBuilder::createApplicationTubeURL() const {
-  const std::string tubesPath = _tubesURL.getPath();
+  const std::string tubesPath = _tubesURL._path;
 
   std::string view;
   switch (_viewType) {
@@ -1374,7 +1413,7 @@ public:
 
   void onOpen(IWebSocket* ws) {
     ILogger::instance()->logInfo("Tube '%s' opened!",
-                                 ws->getURL().getPath().c_str());
+                                 ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(true);
   }
 
@@ -1382,7 +1421,7 @@ public:
                const std::string& error) {
     ILogger::instance()->logError("Error '%s' on Tube '%s'",
                                   error.c_str(),
-                                  ws->getURL().getPath().c_str());
+                                  ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(false);
   }
 
@@ -1394,7 +1433,7 @@ public:
 
   void onClose(IWebSocket* ws) {
     ILogger::instance()->logError("Tube '%s' closed!",
-                                  ws->getURL().getPath().c_str());
+                                  ws->getURL()._path.c_str());
     _builder->setApplicationTubeOpened(false);
   }
 };
@@ -1445,7 +1484,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+    ILogger::instance()->logError("Can't download %s", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
@@ -1461,7 +1500,7 @@ public:
 
 const URL MapBooBuilder::createApplicationPollURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_serverURL.getPath());
+  isb->addString(_serverURL._path);
   isb->addString("/poll/");
   isb->addString(_applicationId);
   isb->addString("?view=");
@@ -1528,6 +1567,10 @@ G3MWidget* MapBooBuilder::create() {
 
 
   CompositeRenderer* mainRenderer = new CompositeRenderer();
+  
+  _mbErrorRenderer = new MapBoo_ErrorRenderer();
+  mainRenderer->addRenderer(_mbErrorRenderer);
+  
   const Planet* planet = createPlanet();
 
   PlanetRenderer* planetRenderer = createPlanetRenderer();
@@ -1589,6 +1632,10 @@ void MapBooBuilder::setApplicationEventId(const int eventId) {
 
 int MapBooBuilder::getApplicationTimestamp() const {
   return _applicationTimestamp;
+}
+
+const std::string MapBooBuilder::getApplicationId() {
+  return _applicationId;
 }
 
 void MapBooBuilder::saveApplicationData() const {
@@ -1720,7 +1767,7 @@ public:
   }
   
   void onError(const URL& url) {
-    ILogger::instance()->logError("Can't download %s", url.getPath().c_str());
+    ILogger::instance()->logError("Can't download %s", url._path.c_str());
   }
   
   void onCancel(const URL& url) {
@@ -1798,7 +1845,7 @@ const std::string MapBooBuilder::getApplicationCurrentSceneCommand() const {
 
 const URL MapBooBuilder::createApplicationCurrentSceneURL() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_serverURL.getPath());
+  isb->addString(_serverURL._path);
   isb->addString("/REST/1/applications/");
   isb->addString(_applicationId);
   isb->addString("/_POST_?");
@@ -1997,7 +2044,7 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
                                                      const Vector2I& pixelPosition,
                                                      const Geodetic3D& position) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString(_serverURL.getPath());
+  isb->addString(_serverURL._path);
 
   isb->addString("/Public/applications/");
   isb->addString(_applicationId);
@@ -2061,43 +2108,19 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
 void HUDInfoRenderer_ImageFactory::drawOn(ICanvas* canvas,
                                           int width,
                                           int height) {
-  int longestTextIndex = 0;
-  int maxLength = _infos.at(longestTextIndex).length();
-  const int infosSize = _infos.size();
-  for (int i = 1; i < infosSize; i++) {
-    const int itemLength = _infos.at(i).length();
-    if (maxLength < itemLength) {
-      maxLength = itemLength;
-      longestTextIndex = i;
-    }
-  }
-  
-  int fontSize = 11;
-  int textHeight = 0;
-  const int padding = 2;
-  const int maxWidth = width - (2 * padding);
-  bool fit = false;
-  while (!fit && fontSize > 2) {
-    GFont labelFont = GFont::sansSerif(fontSize);
-    const std::string longestText = _infos.at(longestTextIndex);
-    canvas->setFont(labelFont);
-    const Vector2F extent = canvas->textExtent(longestText);
-    if (extent._x <= maxWidth) {
-      fit = true;
-      textHeight = (int) extent._y;
-    }
-    else {
-      fontSize--;
-    }
-  }
-
-  canvas->setFillColor(Color::white());
-  canvas->setShadow(Color::black(), 1.0f, 1.0f, -1.0f);
-  int cursor = textHeight + padding;
-  for (int i = 0; i < infosSize; i++) {
-    canvas->fillText(_infos.at(i), 2, height - cursor);
-    cursor += textHeight;
-  }
+  ICanvasUtils::drawStringsOn(_infos,
+                              canvas,
+                              width,
+                              height,
+                              Left,
+                              Bottom,
+                              Left,
+                              Color::white(),
+                              11,
+                              2,
+                              Color::transparent(),
+                              Color::black(),
+                              5);
 }
 
 bool HUDInfoRenderer_ImageFactory::isEquals(const std::vector<std::string>& v1,
@@ -2184,4 +2207,15 @@ void MapBoo_HUDRenderer::onPause(const G3MContext* context) {
 
 void MapBoo_HUDRenderer::onDestroy(const G3MContext* context) {
   _hudImageRenderer->onDestroy(context);
+}
+
+void MapBoo_ErrorRenderer::setErrors(const std::vector<std::string>& errors) {
+  _errors = errors;
+}
+
+RenderState MapBoo_ErrorRenderer::getRenderState(const G3MRenderContext* rc) {
+  if (_errors.size() > 0) {
+    return RenderState::error(_errors);
+  }
+  return RenderState::ready();
 }

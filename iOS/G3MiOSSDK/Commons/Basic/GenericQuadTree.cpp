@@ -384,13 +384,13 @@ void GenericQuadTree_Node::increaseNodeSector(GenericQuadTree_Element* element) 
 void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const{
 
   if (_elements.size() > 0) {
-    std::vector<Geodetic2D*> line;
+    std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
 
-    line.push_back( new Geodetic2D( _sector->getSW() ) );
-    line.push_back( new Geodetic2D( _sector->getNW() ) );
-    line.push_back( new Geodetic2D( _sector->getNE() ) );
-    line.push_back( new Geodetic2D( _sector->getSE() ) );
-    line.push_back( new Geodetic2D( _sector->getSW() ) );
+    coordinates->push_back( new Geodetic2D( _sector->getSW() ) );
+    coordinates->push_back( new Geodetic2D( _sector->getNW() ) );
+    coordinates->push_back( new Geodetic2D( _sector->getNE() ) );
+    coordinates->push_back( new Geodetic2D( _sector->getSE() ) );
+    coordinates->push_back( new Geodetic2D( _sector->getSW() ) );
 
     //    printf("RESTERIZING: %s\n", _sector->description().c_str());
 
@@ -409,7 +409,9 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
                             0);//const int        dashPhase) :
 
 
-    GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(&line, ls);
+    const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
+    GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
+    coordinatesData->_release();
 
     geoTileRasterizer->addSymbol(symbol);
   }

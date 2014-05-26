@@ -117,8 +117,6 @@ public class MultiTextureMapping extends TransformableTextureMapping
 
   public final void modifyGLState(GLState state)
   {
-  
-  
     GLFeatureSet tglfs = state.getGLFeatures(GLFeatureID.GLF_TEXTURE);
   
     for (int i = 0; i < tglfs.size(); i++)
@@ -129,9 +127,13 @@ public class MultiTextureMapping extends TransformableTextureMapping
         tglf.setScale(_scaleU, _scaleV);
         tglf.setTranslation(_translationU, _translationV);
         tglf.setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
+        if (tglfs != null)
+           tglfs.dispose();
         return; //The TextureGLFeature for target 0 already exists and we do not have to recreate the state
       }
     }
+    if (tglfs != null)
+       tglfs.dispose();
   
     //CREATING TWO TEXTURES GLFEATURE
   

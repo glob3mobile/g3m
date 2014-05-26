@@ -63,19 +63,19 @@ MultiTextureMapping::~MultiTextureMapping() {
 }
 
 void MultiTextureMapping::modifyGLState(GLState& state) const{
+  GLFeatureSet* tglfs = state.getGLFeatures(GLF_TEXTURE);
 
-
-  GLFeatureSet tglfs = state.getGLFeatures(GLF_TEXTURE);
-
-  for (int i = 0; i < tglfs.size(); i++) {
-    TextureGLFeature* tglf =  (TextureGLFeature*) tglfs.get(0);
+  for (int i = 0; i < tglfs->size(); i++) {
+    TextureGLFeature* tglf =  (TextureGLFeature*) tglfs->get(0);
     if (tglf->getTarget() == 0 && tglf->getTextureID() == _glTextureId->getID()) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
       tglf->setRotationAngleInRadiansAndRotationCenter(_rotationInRadians, _rotationCenterU, _rotationCenterV);
+      delete tglfs;
       return; //The TextureGLFeature for target 0 already exists and we do not have to recreate the state
     }
   }
+  delete tglfs;
 
   //CREATING TWO TEXTURES GLFEATURE
 

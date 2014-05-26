@@ -7,32 +7,45 @@
 //
 
 #include "Tile.hpp"
+
+#include "TileRenderingListener.hpp"
 #include "Mesh.hpp"
-#include "Camera.hpp"
-#include "ITimer.hpp"
-#include "TileTessellator.hpp"
-#include "TileTexturizer.hpp"
-#include "PlanetRenderer.hpp"
-#include "TilesRenderParameters.hpp"
-#include "TileKey.hpp"
-#include "Box.hpp"
-#include "ElevationDataProvider.hpp"
-#include "MeshHolder.hpp"
+#include "ITexturizerData.hpp"
 #include "ElevationData.hpp"
+#include "TileElevationDataRequest.hpp"
+#include "PlanetTileTessellator.hpp"
+#include "TileTexturizer.hpp"
 #include "LayerTilesRenderParameters.hpp"
-#include "IStringBuilder.hpp"
+#include "TilesRenderParameters.hpp"
+#include "MeshHolder.hpp"
+#include "PlanetRenderer.hpp"
+#include "FlatColorMesh.hpp"
 #include "MercatorUtils.hpp"
 #include "DecimatedSubviewElevationData.hpp"
-#include "TileElevationDataRequest.hpp"
-#include "Vector2F.hpp"
-#include "FlatColorMesh.hpp"
-#include "PlanetRenderer.hpp"
-#include "PlanetTileTessellator.hpp"
-#include "TileRenderingListener.hpp"
+
+std::string Tile::createTileId(int level,
+                               int row,
+                               int column) {
+#ifdef C_CODE
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addInt(level);
+  isb->addString("/");
+  isb->addInt(row);
+  isb->addString("/");
+  isb->addInt(column);
+  std::string s = isb->getString();
+  delete isb;
+  return s;
+#endif
+#ifdef JAVA_CODE
+  return level + "/" + row + "/" + column;
+#endif
+}
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
            const Sector& sector,
+           const bool mercator,
            int level,
            int row,
            int column,
@@ -40,6 +53,7 @@ Tile::Tile(TileTexturizer* texturizer,
 _texturizer(texturizer),
 _parent(parent),
 _sector(sector),
+_mercator(mercator),
 _level(level),
 _row(row),
 _column(column),
@@ -73,7 +87,8 @@ _southArcSegmentRatioSquared(0),
 _eastArcSegmentRatioSquared(0),
 _westArcSegmentRatioSquared(0),
 _rendered(false),
-_tileRenderingListener(NULL)
+_tileRenderingListener(NULL),
+_id( createTileId(level, row, column) )
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -123,6 +138,14 @@ Tile::~Tile() {
   delete _southWestPoint;
   delete _southEastPoint;
 }
+
+void Tile::setTexturizerData(ITexturizerData* texturizerData) {
+  if (texturizerData != _texturizerData) {
+    delete _texturizerData;
+    _texturizerData = texturizerData;
+  }
+}
+
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
                                          bool textureSolved) {
@@ -187,7 +210,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                      this,
                                                      NULL,
                                                      _verticalExaggeration,
-                                                     layerTilesRenderParameters->_mercator,
                                                      tilesRenderParameters->_renderDebug,
                                                      _tileTessellatorMeshData);
 
@@ -199,7 +221,6 @@ Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                                           this,
                                                           _elevationData,
                                                           _verticalExaggeration,
-                                                          layerTilesRenderParameters->_mercator,
                                                           tilesRenderParameters->_renderDebug,
                                                           _tileTessellatorMeshData);
 
@@ -309,12 +330,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
 
   if (tilesRenderParameters->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
-      if (tilesStatistics->getSplitsCountInFrame() > 0) {
-        // there are not more splitsCount-budget to spend
-        return true;
-      }
-
-      if (lastSplitTimer->elapsedTimeInMilliseconds() < 25) {
+      if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
         // there are not more time-budget to spend
         return true;
       }
@@ -328,7 +344,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
       (_southArcSegmentRatioSquared == 0) ||
       (_eastArcSegmentRatioSquared  == 0) ||
       (_westArcSegmentRatioSquared  == 0)) {
-#warning CHECK IT
     prepareTestLODData( rc->getPlanet() );
   }
 
@@ -360,8 +375,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    const LayerTilesRenderParameters* layerTilesRenderParameters,
                                    const LayerSet* layerSet,
                                    const TilesRenderParameters* tilesRenderParameters,
-                                   bool isForcedFullRender,
-                                   long long texturePriority,
+                                   bool forceFullRender,
+                                   long long tileDownloadPriority,
                                    float verticalExaggeration,
                                    bool logTilesPetitions) {
 
@@ -390,8 +405,8 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                               tileRasterizer,
                                               layerTilesRenderParameters,
                                               layerSet,
-                                              isForcedFullRender,
-                                              texturePriority,
+                                              forceFullRender,
+                                              tileDownloadPriority,
                                               this,
                                               tessellatorMesh,
                                               _texturizedMesh,
@@ -409,8 +424,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                      const LayerTilesRenderParameters* layerTilesRenderParameters,
                      const LayerSet* layerSet,
                      const TilesRenderParameters* tilesRenderParameters,
-                     bool isForcedFullRender,
-                     long long texturePriority,
+                     bool forceFullRender,
+                     long long tileDownloadPriority,
                      bool logTilesPetitions) {
 
   Mesh* tessellatorMesh = getTessellatorMesh(rc,
@@ -434,8 +449,8 @@ void Tile::rawRender(const G3MRenderContext* rc,
                                               tileRasterizer,
                                               layerTilesRenderParameters,
                                               layerSet,
-                                              isForcedFullRender,
-                                              texturePriority,
+                                              forceFullRender,
+                                              tileDownloadPriority,
                                               this,
                                               tessellatorMesh,
                                               _texturizedMesh,
@@ -467,7 +482,7 @@ void Tile::debugRender(const G3MRenderContext* rc,
 }
 
 
-std::vector<Tile*>* Tile::getSubTiles(const bool mercator) {
+std::vector<Tile*>* Tile::getSubTiles() {
   if (_subtiles != NULL) {
     // quick check to avoid splitLongitude/splitLatitude calculation
     return _subtiles;
@@ -480,7 +495,7 @@ std::vector<Tile*>* Tile::getSubTiles(const bool mercator) {
                                                upper._longitude);
 
 
-  const Angle splitLatitude = mercator
+  const Angle splitLatitude = _mercator
   /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
                                                                               upper._latitude)
   /*                               */ : Angle::midAngle(lower._latitude,
@@ -512,10 +527,9 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
   }
 }
 
-void Tile::prune(TileTexturizer* texturizer,
+void Tile::prune(TileTexturizer*        texturizer,
                  ElevationDataProvider* elevationDataProvider) {
   if (_subtiles != NULL) {
-
     //Notifying elevation event when LOD decreases
     _planetRenderer->sectorElevationChanged(_elevationData);
 
@@ -535,7 +549,6 @@ void Tile::prune(TileTexturizer* texturizer,
 
     delete _subtiles;
     _subtiles = NULL;
-
   }
 }
 
@@ -589,8 +602,8 @@ void Tile::render(const G3MRenderContext* rc,
                   TileRasterizer* tileRasterizer,
                   const LayerSet* layerSet,
                   const Sector* renderedSector,
-                  bool isForcedFullRender,
-                  long long texturePriority,
+                  bool forceFullRender,
+                  long long tileDownloadPriority,
                   double texWidthSquared,
                   double texHeightSquared,
                   double nowInMS,
@@ -638,8 +651,8 @@ void Tile::render(const G3MRenderContext* rc,
     if (isRawRender) {
 
       const long long tileTexturePriority = (tilesRenderParameters->_incrementalTileQuality
-                                             ? texturePriority + layerTilesRenderParameters->_maxLevel - _level
-                                             : texturePriority + _level);
+                                             ? tileDownloadPriority + layerTilesRenderParameters->_maxLevel - _level
+                                             : tileDownloadPriority + _level);
 
       rendered = true;
       if (renderTileMeshes) {
@@ -652,7 +665,7 @@ void Tile::render(const G3MRenderContext* rc,
                   layerTilesRenderParameters,
                   layerSet,
                   tilesRenderParameters,
-                  isForcedFullRender,
+                  forceFullRender,
                   tileTexturePriority,
                   logTilesPetitions);
       }
@@ -660,16 +673,15 @@ void Tile::render(const G3MRenderContext* rc,
         debugRender(rc, &parentState, tessellator, layerTilesRenderParameters);
       }
 
-      tilesStatistics->computePlanetRenderered(this);
+      tilesStatistics->computeTileRenderered(this);
 
       prune(texturizer, elevationDataProvider);
       //TODO: AVISAR CAMBIO DE TERRENO
     }
     else {
-      std::vector<Tile*>* subTiles = getSubTiles(layerTilesRenderParameters->_mercator);
+      std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
         lastSplitTimer->start();
-        tilesStatistics->computeSplitInFrame();
         _justCreatedSubtiles = false;
       }
 
@@ -713,6 +725,7 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
   return new Tile(_texturizer,
                   parent,
                   Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
+                  _mercator,
                   level,
                   row, column,
                   _planetRenderer);
@@ -776,9 +789,9 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   return subTiles;
 }
 
-const TileKey Tile::getKey() const {
-  return TileKey(_level, _row, _column);
-}
+//const TileKey Tile::getKey() const {
+//  return TileKey(_level, _row, _column);
+//}
 
 const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
   if (_sector.contains(position._latitude, position._longitude)) {

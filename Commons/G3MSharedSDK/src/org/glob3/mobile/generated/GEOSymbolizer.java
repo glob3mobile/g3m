@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  GEOSymbolizer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 3/25/13.
-//
-//
-
-//
 //  GEOSymbolizer.hpp
 //  G3MiOSSDK
 //

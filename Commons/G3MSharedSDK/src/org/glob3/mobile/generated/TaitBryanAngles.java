@@ -8,13 +8,12 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  TaitBryanAngles.h
+//  TaitBryanAngles.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 06/02/14.
 //
 //
-
 
 
 

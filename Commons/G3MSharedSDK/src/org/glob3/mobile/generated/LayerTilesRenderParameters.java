@@ -26,7 +26,7 @@ public class LayerTilesRenderParameters
    */
   private static Vector2I calculateTopSectorSplitsParametersWGS84(Sector topSector)
   {
-    IMathUtils math = IMathUtils.instance();
+  //  IMathUtils* math = IMathUtils::instance();
     final double maxTile = 90;
     double sLat;
     double sLon;
@@ -45,9 +45,11 @@ public class LayerTilesRenderParameters
   
     final double tileDeltaLat = topSector._deltaLatitude.div(sLat)._degrees;
     final double factorLat = tileDeltaLat / maxTile;
-    double factor = math.max(factorLat, 1);
+  //  double factor = math->max(factorLat, 1L);
+  //  return Vector2I((int) math->round(sLat * factor), (int) math->round(sLon * factor));
   
-    return new Vector2I((int) math.round(sLat * factor), (int) math.round(sLon * factor));
+    final double factor = (factorLat < 1) ? 1 : factorLat;
+    return new Vector2I((int)((sLat * factor) + 0.5), (int)((sLon * factor) + 0.5));
   }
   public final Sector _topSector ;
   public final int _topSectorSplitsByLatitude;
@@ -86,15 +88,7 @@ public class LayerTilesRenderParameters
 
   public static LayerTilesRenderParameters createDefaultWGS84(int firstLevel, int maxLevel)
   {
-    final Sector topSector = Sector.fullSphere();
-    final Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
-    final int topSectorSplitsByLatitude = splitsParameters._x;
-    final int topSectorSplitsByLongitude = splitsParameters._y;
-//    const int  topSectorSplitsByLatitude  = 2;
-//    const int  topSectorSplitsByLongitude = 4;
-    final boolean mercator = false;
-
-    return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
+    return createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
   }
 
   public static LayerTilesRenderParameters createDefaultWGS84(Sector topSector, int firstLevel, int maxLevel)

@@ -9,6 +9,11 @@ public class LeveledTexturedMesh extends Mesh
 
   private LazyTextureMapping getCurrentTextureMapping()
   {
+    if (_mappings == null)
+    {
+      return null;
+    }
+  
     if (_currentLevel < 0)
     {
       int newCurrentLevel = -1;
@@ -63,38 +68,46 @@ public class LeveledTexturedMesh extends Mesh
      _mappings = mappings;
      _currentLevel = -1;
      _glState = new GLState();
+    if (_mappings == null)
+    {
+      throw new RuntimeException("LeveledTexturedMesh: mappings can't be NULL!");
+    }
     if (_mappings.size() <= 0)
     {
-      ILogger.instance().logError("LeveledTexturedMesh: empty mappings");
+      throw new RuntimeException("LeveledTexturedMesh: empty mappings");
     }
   }
 
   public void dispose()
   {
-    synchronized (this) {
+  ///#ifdef JAVA_CODE
+  //  synchronized (this) {
+  ///#endif
   
-      if (_ownedMesh)
-      {
-        if (_mesh != null)
-           _mesh.dispose();
-      }
-  
-      if (_mappings != null)
-      {
-        for (int i = 0; i < _mappings.size(); i++)
-        {
-          LazyTextureMapping mapping = _mappings.get(i);
-          if (mapping != null)
-             mapping.dispose();
-        }
-  
-        _mappings = null;
-        _mappings = null;
-      }
-  
-      _glState._release();
-  
+    if (_ownedMesh)
+    {
+      if (_mesh != null)
+         _mesh.dispose();
     }
+  
+    if (_mappings != null)
+    {
+      for (int i = 0; i < _mappings.size(); i++)
+      {
+        LazyTextureMapping mapping = _mappings.get(i);
+        if (mapping != null)
+           mapping.dispose();
+      }
+  
+      _mappings = null;
+  //    _mappings = NULL;
+    }
+  
+    _glState._release();
+  
+  ///#ifdef JAVA_CODE
+  //  }
+  ///#endif
   
     super.dispose();
   }

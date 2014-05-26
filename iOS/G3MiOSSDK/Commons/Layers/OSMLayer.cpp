@@ -9,6 +9,8 @@
 #include "OSMLayer.hpp"
 
 #include "LayerCondition.hpp"
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 
 const std::string OSMLayer::description() const {
@@ -20,9 +22,10 @@ bool OSMLayer::rawIsEquals(const Layer* that) const {
 }
 
 OSMLayer* OSMLayer::copy() const {
-  return new OSMLayer(TimeInterval::fromMilliseconds(_timeToCacheMS),
+  return new OSMLayer(_timeToCache,
                       _readExpired,
                       _initialLevel,
+                      _transparency,
                       (_condition == NULL) ? NULL : _condition->copy(),
                       _disclaimerInfo);
 }

@@ -26,12 +26,13 @@ public class GEORenderer_GEOObjectParserAsyncTask extends GAsyncTask
     if (_buffer != null)
        _buffer.dispose();
 //    delete _geoObject;
+    super.dispose();
   }
 
   public final void runInBackground(G3MContext context)
   {
 //    ILogger::instance()->logInfo("Parsing GEOObject buffer from \"%s\" (%db)",
-//                                 _url.getPath().c_str(),
+//                                 _url._path.c_str(),
 //                                 _buffer->size());
 
     if (_isBSON)
@@ -52,7 +53,7 @@ public class GEORenderer_GEOObjectParserAsyncTask extends GAsyncTask
   {
     if (_geoObject == null)
     {
-      ILogger.instance().logError("Error parsing GEOJSON from \"%s\"", _url.getPath());
+      ILogger.instance().logError("Error parsing GEOJSON from \"%s\"", _url._path);
     }
     else
     {

@@ -125,11 +125,14 @@ public:
   ~GEORenderer_GEOObjectParserAsyncTask() {
     delete _buffer;
 //    delete _geoObject;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void runInBackground(const G3MContext* context) {
 //    ILogger::instance()->logInfo("Parsing GEOObject buffer from \"%s\" (%db)",
-//                                 _url.getPath().c_str(),
+//                                 _url._path.c_str(),
 //                                 _buffer->size());
 
     if (_isBSON) {
@@ -145,7 +148,7 @@ public:
 
   void onPostExecute(const G3MContext* context) {
     if (_geoObject == NULL) {
-      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url.getPath().c_str());
+      ILogger::instance()->logError("Error parsing GEOJSON from \"%s\"", _url._path.c_str());
     }
     else {
 //      ILogger::instance()->logInfo("Adding GEOObject to _geoRenderer");
@@ -179,7 +182,7 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     ILogger::instance()->logInfo("Downloaded GEOObject buffer from \"%s\" (%db)",
-                                 url.getPath().c_str(),
+                                 url._path.c_str(),
                                  buffer->size());
 
     _threadUtils->invokeAsyncTask(new GEORenderer_GEOObjectParserAsyncTask(url,
@@ -191,11 +194,11 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
   }
 
   void onCancel(const URL& url) {
-    ILogger::instance()->logInfo("Canceled download of \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logInfo("Canceled download of \"%s\"", url._path.c_str());
   }
 
   void onCanceledDownload(const URL& url,
@@ -211,7 +214,7 @@ void GEORenderer::requestBuffer(const URL& url,
                                 const TimeInterval& timeToCache,
                                 bool readExpired,
                                 bool isBSON) {
-//  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url.getPath().c_str());
+//  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url._path.c_str());
   IDownloader* downloader = _context->getDownloader();
   downloader->requestBuffer(url,
                             priority,

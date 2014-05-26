@@ -59,6 +59,7 @@ class Sector;
 #include "HUDRenderer.hpp"
 #include "InfoDisplay.hpp"
 #include "HUDImageRenderer.hpp"
+#include "GroupCanvasElement.hpp"
 
 
 class MapBooApplicationChangeListener {
@@ -492,6 +493,20 @@ public:
   
 };
 
+class MapBoo_ErrorRenderer : public DefaultRenderer {
+private:
+  std::vector<std::string> _errors;
+public:
+  MapBoo_ErrorRenderer() {}
+  ~MapBoo_ErrorRenderer() {};
+  void setErrors(const std::vector<std::string>& errors);
+  RenderState getRenderState(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              GLState* glState) {}
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height) {}
+};
+
 class MapBooBuilder {
 private:
 
@@ -537,6 +552,8 @@ private:
 #endif
 
   bool        _isApplicationTubeOpen;
+  
+  MapBoo_ErrorRenderer* _mbErrorRenderer;
 
   LayerSet* _layerSet;
   PlanetRenderer* createPlanetRenderer();
@@ -802,6 +819,8 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void pollApplicationDataFromServer(const G3MContext* context);
+  
+  const std::string getApplicationId();
 };
 
 #endif

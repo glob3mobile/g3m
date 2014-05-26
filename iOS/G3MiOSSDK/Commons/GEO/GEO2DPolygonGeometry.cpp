@@ -10,6 +10,7 @@
 
 #include "GEOSymbolizer.hpp"
 #include "GEO2DPolygonData.hpp"
+#include "GEORasterSymbolizer.hpp"
 
 const std::vector<Geodetic2D*>* GEO2DPolygonGeometry::getCoordinates() const {
   return _polygonData->getCoordinates();
@@ -20,40 +21,22 @@ const std::vector<std::vector<Geodetic2D*>*>* GEO2DPolygonGeometry::getHolesCoor
 }
 
 GEO2DPolygonGeometry::~GEO2DPolygonGeometry() {
-  delete _polygonData;
-  
-//  const int coordinatesCount = _coordinates->size();
-//  for (int i = 0; i < coordinatesCount; i++) {
-//    Geodetic2D* coordinate = _coordinates->at(i);
-//    delete coordinate;
-//  }
-//  delete _coordinates;
-//
-//
-//  if (_holesCoordinatesArray != NULL) {
-//    const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
-//    for (int j = 0; j < holesCoordinatesArraySize; j++) {
-//      const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
-//
-//      const int holeCoordinatesCount = holeCoordinates->size();
-//      for (int i =0; i < holeCoordinatesCount; i++) {
-//        const Geodetic2D* holeCoordinate = holeCoordinates->at(i);
-//
-//        delete holeCoordinate;
-//      }
-//
-//      delete holeCoordinates;
-//    }
-//    delete _holesCoordinatesArray;
-//  }
-
+  if (_polygonData) {
+    _polygonData->_release();
+  }
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
-
 
 std::vector<GEOSymbol*>* GEO2DPolygonGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
+}
+
+std::vector<GEORasterSymbol*>* GEO2DPolygonGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
+}
+
+long long GEO2DPolygonGeometry::getCoordinatesCount() const {
+  return _polygonData->getCoordinatesCount();
 }

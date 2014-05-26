@@ -34,6 +34,8 @@ public abstract class MapBooBuilder
 
   private boolean _isApplicationTubeOpen;
 
+  private MapBoo_ErrorRenderer _mbErrorRenderer;
+
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
   {
@@ -54,7 +56,7 @@ public abstract class MapBooBuilder
     final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
   
     final boolean showStatistics = false;
-    long texturePriority = DownloadPriority.HIGHER;
+    long tileDownloadPriority = DownloadPriority.HIGHER;
   
     final Sector renderedSector = Sector.fullSphere();
     final boolean renderTileMeshes = true;
@@ -65,7 +67,7 @@ public abstract class MapBooBuilder
   
     ChangedRendererInfoListener changedRendererInfoListener = null;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener);
   
     if (_enableNotifications)
     {
@@ -106,7 +108,7 @@ public abstract class MapBooBuilder
 
   private ErrorRenderer createErrorRenderer()
   {
-    return new HUDErrorRenderer();
+    return new HUDErrorRenderer(new Mapboo_ErrorMessagesCustomizer(this));
   }
 
   private java.util.ArrayList<PeriodicalTask> createPeriodicalTasks()
@@ -628,7 +630,7 @@ public abstract class MapBooBuilder
     {
       isb.addString(",\"iconURL\":");
       isb.addString("\"");
-      isb.addString(escapeString(iconURL.getPath()));
+      isb.addString(escapeString(iconURL._path));
       isb.addString("\"");
     }
   
@@ -666,7 +668,7 @@ public abstract class MapBooBuilder
     {
       isb.addString(",\"iconURL\":");
       isb.addString("\"");
-      isb.addString(escapeString(iconURL.getPath()));
+      isb.addString(escapeString(iconURL._path));
       isb.addString("\"");
     }
   
@@ -925,7 +927,7 @@ public abstract class MapBooBuilder
   private URL createApplicationCurrentSceneURL()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL.getPath());
+    isb.addString(_serverURL._path);
     isb.addString("/REST/1/applications/");
     isb.addString(_applicationId);
     isb.addString("/_POST_?");
@@ -1014,6 +1016,10 @@ public abstract class MapBooBuilder
   
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
+  
+    _mbErrorRenderer = new MapBoo_ErrorRenderer();
+    mainRenderer.addRenderer(_mbErrorRenderer);
+  
     final Planet planet = createPlanet();
   
     PlanetRenderer planetRenderer = createPlanetRenderer();
@@ -1074,7 +1080,7 @@ public abstract class MapBooBuilder
   protected final URL createApplicationPollURL()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL.getPath());
+    isb.addString(_serverURL._path);
     isb.addString("/poll/");
     isb.addString(_applicationId);
     isb.addString("?view=");
@@ -1268,7 +1274,7 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final URL createApplicationTubeURL()
   {
-    final String tubesPath = _tubesURL.getPath();
+    final String tubesPath = _tubesURL._path;
   
     String view;
     switch (_viewType)
@@ -1293,7 +1299,7 @@ public abstract class MapBooBuilder
   
     if (jsonBaseObject == null)
     {
-      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url._path);
     }
     else
     {
@@ -1307,6 +1313,8 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void parseApplicationJSON(JSONObject jsonObject, URL url)
   {
+    java.util.ArrayList<String> errors = new java.util.ArrayList<String>();
+  
     if (jsonObject == null)
     {
       ILogger.instance().logError("Invalid ApplicationJSON");
@@ -1442,9 +1450,16 @@ public abstract class MapBooBuilder
       }
       else
       {
+        errors.add(jsonError.value());
         ILogger.instance().logError("Server Error: %s", jsonError.value());
+        if (_initialParse)
+        {
+          _initialParse = false;
+          setHasParsedApplication();
+        }
       }
     }
+    _mbErrorRenderer.setErrors(errors);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1453,7 +1468,7 @@ public abstract class MapBooBuilder
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
     if (jsonBaseObject == null)
     {
-      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url._path);
     }
     else
     {
@@ -1751,7 +1766,7 @@ public abstract class MapBooBuilder
   public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL.getPath());
+    isb.addString(_serverURL._path);
   
     isb.addString("/Public/applications/");
     isb.addString(_applicationId);
@@ -1817,5 +1832,10 @@ public abstract class MapBooBuilder
   {
     IDownloader downloader = context.getDownloader();
     downloader.requestBuffer(createApplicationPollURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+  }
+
+  public final String getApplicationId()
+  {
+    return _applicationId;
   }
 }

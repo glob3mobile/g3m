@@ -146,7 +146,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     _elevationDataResolved = true;
     if (_elevationData == null)
     {
-      ILogger.instance().logError("Can't download Elevation-Data from %s", _bilUrl.getPath());
+      ILogger.instance().logError("Can't download Elevation-Data from %s", _bilUrl._path);
     }
   
     drainQueue();

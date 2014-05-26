@@ -14,10 +14,8 @@ public class MarkLabelImageListener extends IImageListener
   public final void imageCreated(IImage image)
   {
     if (_iconImage != null)
-    {
-      IFactory.instance().deleteImage(_iconImage);
-      _iconImage = null;
-    }
+       _iconImage.dispose();
+    _iconImage = null;
 
     if (image == null)
     {

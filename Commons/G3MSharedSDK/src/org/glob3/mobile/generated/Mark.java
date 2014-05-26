@@ -168,7 +168,7 @@ public class Mark implements SurfaceElevationListener
      _minDistanceToCamera = minDistanceToCamera;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
-     _imageID = iconURL.getPath() + "_" + label;
+     _imageID = iconURL._path + "_" + label;
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
@@ -288,7 +288,7 @@ public class Mark implements SurfaceElevationListener
      _minDistanceToCamera = minDistanceToCamera;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
-     _imageID = iconURL.getPath() + "_";
+     _imageID = iconURL._path + "_";
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
@@ -379,10 +379,8 @@ public class Mark implements SurfaceElevationListener
       if (_userData != null)
          _userData.dispose();
     }
-    if (_textureImage != null)
-    {
-      IFactory.instance().deleteImage(_textureImage);
-    }
+  
+    _textureImage = null;
   
     if (_glState != null)
     {
@@ -408,16 +406,18 @@ public class Mark implements SurfaceElevationListener
 
   public final void initialize(G3MContext context, long downloadPriority)
   {
-  
-    _surfaceElevationProvider = context.getSurfaceElevationProvider();
-    if (_surfaceElevationProvider != null)
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
     {
-      _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+      _surfaceElevationProvider = context.getSurfaceElevationProvider();
+      if (_surfaceElevationProvider != null)
+      {
+        _surfaceElevationProvider.addListener(_position._latitude, _position._longitude, this);
+      }
     }
   
     if (!_textureSolved)
     {
-      final boolean hasIconURL = (_iconURL.getPath().length() != 0);
+      final boolean hasIconURL = (_iconURL._path.length() != 0);
       if (hasIconURL)
       {
         IDownloader downloader = context.getDownloader();
@@ -461,7 +461,7 @@ public class Mark implements SurfaceElevationListener
     if (_labelShadowColor != null)
        _labelShadowColor.dispose();
   
-    ILogger.instance().logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")", _iconURL.getPath(), _label);
+    ILogger.instance().logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")", _iconURL._path, _label);
   }
 
   public final void onTextureDownload(IImage image)
@@ -595,7 +595,7 @@ public class Mark implements SurfaceElevationListener
         {
           _textureId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false);
   
-          rc.getFactory().deleteImage(_textureImage);
+          _textureImage = null;
           _textureImage = null;
         }
   
@@ -642,4 +642,26 @@ public class Mark implements SurfaceElevationListener
   public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
   {
   }
+
+  public final void setPosition(Geodetic3D position)
+  {
+    if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
+    {
+      ILogger.instance().logWarning("Position change with _altitudeMode == RELATIVE_TO_GROUND not supported");
+    }
+    if (_position != null)
+       _position.dispose();
+    _position = new Geodetic3D(position);
+  
+    if (_cartesianPosition != null)
+       _cartesianPosition.dispose();
+    _cartesianPosition = null;
+  
+    if (_glState != null)
+    {
+      _glState._release();
+      _glState = null;
+    }
+  }
+
 }

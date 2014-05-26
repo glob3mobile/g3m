@@ -104,7 +104,7 @@
     if (uiImage) {
       IImage* image = new Image_iOS(uiImage, data);
       _cppImageListener->onCanceledDownload(url, image, false);
-      IFactory::instance()->deleteImage(image);
+      delete image;
     }
   }
 }

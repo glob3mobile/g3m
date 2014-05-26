@@ -13,7 +13,7 @@
 #include "ILogger.hpp"
 #include "IStorage.hpp"
 #include "TimeInterval.hpp"
-#include "IFactory.hpp"
+#include "IImage.hpp"
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
 private:
@@ -241,7 +241,7 @@ CachedDownloader::~CachedDownloader() {
   delete _downloader;
 
   if (_lastImageResult != NULL) {
-    IFactory::instance()->deleteImage(_lastImageResult->_image);
+    delete _lastImageResult->_image;
     delete _lastImageResult;
   }
   delete _lastImageURL;
@@ -296,7 +296,6 @@ void CachedDownloader::initialize(const G3MContext* context,
   _downloader->initialize(context, frameTasksExecutor);
 }
 
-
 IImageResult CachedDownloader::getCachedImageResult(const URL& url,
                                                     bool readExpired) {
   if ( (_lastImageResult != NULL) && (_lastImageURL != NULL) ) {
@@ -316,7 +315,7 @@ IImageResult CachedDownloader::getCachedImageResult(const URL& url,
 
   if (cachedImage != NULL) {
     if (_lastImageResult != NULL) {
-      IFactory::instance()->deleteImage(_lastImageResult->_image);
+      delete _lastImageResult->_image;
       delete _lastImageResult;
     }
     _lastImageResult = new IImageResult(cachedImage->shallowCopy(),

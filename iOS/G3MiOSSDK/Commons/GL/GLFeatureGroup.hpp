@@ -32,6 +32,9 @@ protected:
 #endif
   int _nFeatures;
 
+  GLFeatureSet(const GLFeatureSet& that);
+  GLFeatureSet& operator=(const GLFeatureSet& that);
+
 public:
 
   GLFeatureSet():_nFeatures(0) {
@@ -71,7 +74,7 @@ public:
 
 #define N_GLFEATURES_GROUPS 4
 
-class GLFeatureGroup/*: public GLFeatureSet */{
+class GLFeatureGroup {
 
   static GLFeatureGroup** _groups;
 

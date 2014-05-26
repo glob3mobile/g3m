@@ -293,13 +293,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
 
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current         = [touch locationInView:self];
-    CGPoint previous        = [touch previousLocationInView:self];
-    unsigned char tapCount  = (unsigned char) [touch tapCount];
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current         = [uiTouch locationInView:self];
+    CGPoint previous        = [uiTouch previousLocationInView:self];
+    unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
+    Touch* touch = new Touch(Vector2I((int) current.x,
                                       (int) current.y),
                              Vector2I((int) previous.x,
                                       (int) previous.y),
@@ -324,12 +324,12 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
 
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current  = [touch locationInView:self];
-    CGPoint previous = [touch previousLocationInView:self];
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current  = [uiTouch locationInView:self];
+    CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
+    Touch* touch = new Touch(Vector2I((int) current.x,
                                       (int) current.y),
                              Vector2I((int) previous.x,
                                       (int) previous.y));
@@ -383,12 +383,12 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   // pointers.reserve([allTouches count]);
 
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current  = [touch locationInView:self];
-    CGPoint previous = [touch previousLocationInView:self];
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current  = [uiTouch locationInView:self];
+    CGPoint previous = [uiTouch previousLocationInView:self];
 
-    [touch timestamp];
+    [uiTouch timestamp];
 
     Touch *touch = new Touch(Vector2I((int) current.x,
                                       (int) current.y),

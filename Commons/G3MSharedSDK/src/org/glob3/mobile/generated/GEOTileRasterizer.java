@@ -39,38 +39,7 @@ public class GEOTileRasterizer extends CanvasTileRasterizer
 
   public final void rawRasterize(IImage image, TileRasterizerContext trc, IImageListener listener, boolean autodelete)
   {
-    //  if (_quadTree.isEmpty()) {
-    //    listener->imageCreated(image);
-    //    if (autodelete) {
-    //      delete listener;
-    //    }
-    //  }
-    //  else {
-    //    const Tile*   tile     = trc._tile;
-    //    const bool    mercator = trc._mercator;
-    //
-    //    const int width  = image->getWidth();
-    //    const int height = image->getHeight();
-    //
-    //    GEORasterProjection* projection = new GEORasterProjection(tile->_sector, mercator,
-    //                                                              width, height);
-    //
-    //    ICanvas* canvas = getCanvas(width, height);
-    //
-    //    canvas->drawImage(image, 0, 0);
-    //
-    //    _quadTree.acceptVisitor(tile->_sector,
-    //                            GEOTileRasterizer_QuadTreeVisitor(canvas, projection, tile->_level));
-    //
-    //    canvas->createImage(listener, autodelete);
-    //
-    //    delete image;
-    //
-    //    delete projection;
-    //  }
-  
-    final Tile tile = trc._tile;
-    _quadTree.acceptVisitor(tile._sector, new GEOTileRasterizer_QuadTreeVisitor(this, image, trc, listener, autodelete));
+    _quadTree.acceptVisitor(trc._tile._sector, new GEOTileRasterizer_QuadTreeVisitor(this, image, trc, listener, autodelete));
   }
 
   public final void addSymbol(GEORasterSymbol symbol)

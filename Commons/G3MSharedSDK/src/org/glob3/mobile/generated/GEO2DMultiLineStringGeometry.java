@@ -17,13 +17,18 @@ package org.glob3.mobile.generated;
 
 
 //class Geodetic2D;
-
+//class GEO2DCoordinatesArrayData;
 
 public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
 {
-  private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
+  private final GEO2DCoordinatesArrayData _coordinatesArrayData;
 
   protected final java.util.ArrayList<GEOSymbol> createSymbols(GEOSymbolizer symbolizer)
+  {
+    return symbolizer.createSymbols(this);
+  }
+
+  protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
   {
     return symbolizer.createSymbols(this);
   }
@@ -31,36 +36,27 @@ public class GEO2DMultiLineStringGeometry extends GEOGeometry2D
 
   public GEO2DMultiLineStringGeometry(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
   {
-     _coordinatesArray = coordinatesArray;
-
+    _coordinatesArrayData = (coordinatesArray == null) ? null : new GEO2DCoordinatesArrayData(coordinatesArray);
   }
 
   public void dispose()
   {
-    final int coordinatesArrayCount = _coordinatesArray.size();
-    for (int i = 0; i < coordinatesArrayCount; i++)
+    if (_coordinatesArrayData != null)
     {
-      java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
-      final int coordinatesCount = coordinates.size();
-      for (int j = 0; j < coordinatesCount; j++)
-      {
-        Geodetic2D coordinate = coordinates.get(j);
-        if (coordinate != null)
-           coordinate.dispose();
-      }
-      coordinates = null;
+      _coordinatesArrayData._release();
     }
   
-    _coordinatesArray = null;
-  
     super.dispose();
-  
   }
 
-  public final java.util.ArrayList<java.util.ArrayList<Geodetic2D>> getCoordinatesArray()
+  public final GEO2DCoordinatesArrayData getCoordinatesArray()
   {
-    return _coordinatesArray;
+    return _coordinatesArrayData;
   }
 
+  public final long getCoordinatesCount()
+  {
+    return _coordinatesArrayData.getCoordinatesCount();
+  }
 
 }

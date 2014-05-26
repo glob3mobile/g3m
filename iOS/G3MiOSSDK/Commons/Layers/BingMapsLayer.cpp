@@ -22,62 +22,59 @@
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
 #include "LayerCondition.hpp"
+#include "Context.hpp"
+#include "RenderState.hpp"
 
-BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
-                             const std::string& key,
-                             const TimeInterval& timeToCache,
-                             bool readExpired,
-                             int initialLevel,
-                             LayerCondition* condition,
-                             float transparency,
-                             const std::string& disclaimerInfo) :
-Layer(condition,
-      "BingMaps",
-      timeToCache,
-      readExpired,
-      NULL,
-      transparency,
-      disclaimerInfo),
+BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
+                             const std::string&    key,
+                             const TimeInterval&   timeToCache,
+                             const bool            readExpired,
+                             const int             initialLevel,
+                             const float           transparency,
+                             const LayerCondition* condition,
+                             const std::string&    disclaimerInfo) :
+RasterLayer(timeToCache,
+            readExpired,
+            NULL,
+            transparency,
+            condition,
+            disclaimerInfo),
 _imagerySet(imagerySet),
 _culture("en-US"),
 _key(key),
 _initialLevel(initialLevel),
 _isInitialized(false)
 {
-
 }
 
-BingMapsLayer::BingMapsLayer(const std::string& imagerySet,
-                             const std::string& culture,
-                             const std::string& key,
-                             const TimeInterval& timeToCache,
-                             bool readExpired,
-                             int initialLevel,
-                             LayerCondition* condition,
-                             float transparency,
-                             const std::string& disclaimerInfo) :
-Layer(condition,
-      "BingMaps",
-      timeToCache,
-      readExpired,
-      NULL,
-      transparency,
-      disclaimerInfo),
+BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
+                             const std::string&    culture,
+                             const std::string&    key,
+                             const TimeInterval&   timeToCache,
+                             const bool            readExpired,
+                             const int             initialLevel,
+                             const float           transparency,
+                             const LayerCondition* condition,
+                             const std::string&    disclaimerInfo) :
+RasterLayer(timeToCache,
+            readExpired,
+            NULL,
+            transparency,
+            condition,
+            disclaimerInfo),
 _imagerySet(imagerySet),
 _culture(culture),
 _key(key),
 _initialLevel(initialLevel),
 _isInitialized(false)
 {
-
 }
-
 
 
 class BingMapsLayer_MetadataBufferDownloadListener : public IBufferDownloadListener {
 private:
   BingMapsLayer* _bingMapsLayer;
-  
+
 public:
   BingMapsLayer_MetadataBufferDownloadListener(BingMapsLayer* bingMapsLayer) :
   _bingMapsLayer(bingMapsLayer)
@@ -207,7 +204,7 @@ void BingMapsLayer::onDowloadMetadata(IByteBuffer* buffer) {
                   imageWidth, imageHeight,
                   zoomMin, zoomMax);
 
-//  http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1180&mkt={culture}
+  //  http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=1180&mkt={culture}
 
 
   parser->deleteJSONData(jsonBaseObject);
@@ -280,7 +277,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
   std::vector<Petition*> petitions;
 
   const IStringUtils* su = IStringUtils::instance();
-  
+
   const int level   = tile->_level;
   const int column  = tile->_column;
   const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
@@ -307,8 +304,34 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
                                     getReadExpired(),
                                     true,
                                     _transparency) );
-  
+
   return petitions;
+}
+
+const URL BingMapsLayer::createURL(const Tile* tile) const {
+  const IStringUtils* su = IStringUtils::instance();
+
+  const int level   = tile->_level;
+  const int column  = tile->_column;
+  const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
+  const int row     = numRows - tile->_row - 1;
+
+  const int subdomainsSize = _imageUrlSubdomains.size();
+  std::string subdomain = "";
+  if (subdomainsSize > 0) {
+    // select subdomain based on fixed data (instead of round-robin) to be cache friendly
+    const int subdomainsIndex =  IMathUtils::instance()->abs(level + column + row) % subdomainsSize;
+    subdomain = _imageUrlSubdomains[subdomainsIndex];
+  }
+
+  const std::string quadkey = getQuadkey(level, column, row);
+
+  std::string path = _imageUrl;
+  path = su->replaceSubstring(path, "{subdomain}", subdomain);
+  path = su->replaceSubstring(path, "{quadkey}",   quadkey);
+  path = su->replaceSubstring(path, "{culture}",   _culture);
+
+  return URL(path, false);
 }
 
 const std::string BingMapsLayer::description() const {
@@ -335,12 +358,13 @@ bool BingMapsLayer::rawIsEquals(const Layer* that) const {
 
 BingMapsLayer* BingMapsLayer::copy() const {
   return new BingMapsLayer(_imagerySet,
+                           _culture,
                            _key,
-                           TimeInterval::fromMilliseconds(_timeToCacheMS),
+                           _timeToCache,
                            _readExpired,
                            _initialLevel,
-                           (_condition == NULL) ? NULL : _condition->copy(),
                            _transparency,
+                           (_condition == NULL) ? NULL : _condition->copy(),
                            _disclaimerInfo);
 }
 
@@ -352,7 +376,7 @@ RenderState BingMapsLayer::getRenderState() {
   if (_key.compare("") == 0) {
     _errors.push_back("Missing layer parameter: key");
   }
-  
+
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }
@@ -360,4 +384,10 @@ RenderState BingMapsLayer::getRenderState() {
     return RenderState::busy();
   }
   return RenderState::ready();
+}
+
+const TileImageContribution* BingMapsLayer::rawContribution(const Tile* tile) const {
+  return ((_transparency < 1)
+          ? TileImageContribution::fullCoverageTransparent(_transparency)
+          : TileImageContribution::fullCoverageOpaque());
 }

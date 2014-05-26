@@ -14,18 +14,16 @@
 #include "Color.hpp"
 class Geodetic2D;
 #include "GEO2DLineRasterStyle.hpp"
+#include "GEO2DCoordinatesData.hpp"
 
 class GEOLineRasterSymbol : public GEORasterSymbol {
 private:
+  const GEO2DCoordinatesData* _coordinates;
 #ifdef C_CODE
-  const std::vector<Geodetic2D*>* _coordinates;
-  const GEO2DLineRasterStyle      _style;
-#else
-  std::vector<Geodetic2D*>* _coordinates;
+  const GEO2DLineRasterStyle _style;
 #endif
 #ifdef JAVA_CODE
-  //private java.util.ArrayList<Geodetic2D> _coordinates;
-  private final GEO2DLineRasterStyle      _style;
+  private final GEO2DLineRasterStyle _style;
 #endif
 
 protected:
@@ -33,12 +31,14 @@ protected:
                     const GEORasterProjection* projection) const;
 
 public:
-  GEOLineRasterSymbol(const std::vector<Geodetic2D*>* coordinates,
+  GEOLineRasterSymbol(const GEO2DCoordinatesData* coordinates,
                       const GEO2DLineRasterStyle& style,
                       const int minTileLevel = -1,
                       const int maxTileLevel = -1);
 
   ~GEOLineRasterSymbol();
+
+  const Sector* getSector() const;
 
 };
 

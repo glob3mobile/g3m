@@ -12,14 +12,13 @@
 
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
-
 #include "IMathUtils.hpp"
-#include "IFactory.hpp"
-
 #include <vector>
+class IFactory;
 
 class G3MRenderContext;
 class G3MContext;
+
 
 class EffectTarget {
 public:
@@ -29,14 +28,12 @@ public:
   // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
   virtual void unusedMethod() const = 0;
 #endif
-  
+
 #ifdef JAVA_CODE
   void dispose();
 #endif
-  
-  
-  
 };
+
 
 class Effect {
 protected:
@@ -234,7 +231,7 @@ public:
   void initialize(const G3MContext* context);
 
   virtual ~EffectsScheduler() {
-    _factory->deleteTimer(_timer);
+    delete _timer;
 
     for (unsigned int i = 0; i < _effectsRuns.size(); i++) {
       EffectRun* effectRun = _effectsRuns[i];

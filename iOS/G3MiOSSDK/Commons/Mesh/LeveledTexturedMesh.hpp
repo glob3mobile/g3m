@@ -15,6 +15,7 @@
 #include "GLState.hpp"
 #include <vector>
 #include "Vector2F.hpp"
+#include "ErrorHandling.hpp"
 
 class TextureIDReference;
 
@@ -137,8 +138,11 @@ public:
   _currentLevel(-1),
   _glState(new GLState())
   {
+    if (_mappings == NULL) {
+      THROW_EXCEPTION("LeveledTexturedMesh: mappings can't be NULL!");
+    }
     if (_mappings->size() <= 0) {
-      ILogger::instance()->logError("LeveledTexturedMesh: empty mappings");
+      THROW_EXCEPTION("LeveledTexturedMesh: empty mappings");
     }
   }
 

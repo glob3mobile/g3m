@@ -3,7 +3,6 @@ public class TextureUploader extends IImageListener
 {
   private TileTextureBuilder _builder;
   private final Tile _tile;
-  private final boolean _mercator;
 
   private TileRasterizer _tileRasterizer;
 
@@ -12,11 +11,10 @@ public class TextureUploader extends IImageListener
 
   private final String _textureId;
 
-  public TextureUploader(TileTextureBuilder builder, Tile tile, boolean mercator, TileRasterizer tileRasterizer, java.util.ArrayList<RectangleF> srcRects, java.util.ArrayList<RectangleF> dstRects, String textureId)
+  public TextureUploader(TileTextureBuilder builder, Tile tile, TileRasterizer tileRasterizer, java.util.ArrayList<RectangleF> srcRects, java.util.ArrayList<RectangleF> dstRects, String textureId)
   {
      _builder = builder;
      _tile = tile;
-     _mercator = mercator;
      _tileRasterizer = tileRasterizer;
      _srcRects = srcRects;
      _dstRects = dstRects;
@@ -31,8 +29,8 @@ public class TextureUploader extends IImageListener
     }
     else
     {
-      final TileRasterizerContext trc = new TileRasterizerContext(_tile, _mercator);
-      _tileRasterizer.rasterize(image, trc, new TextureUploader(_builder, _tile, _mercator, null, _srcRects, _dstRects, _textureId), true);
+      final TileRasterizerContext trc = new TileRasterizerContext(_tile);
+      _tileRasterizer.rasterize(image, trc, new TextureUploader(_builder, _tile, null, _srcRects, _dstRects, _textureId), true);
     }
   }
 }

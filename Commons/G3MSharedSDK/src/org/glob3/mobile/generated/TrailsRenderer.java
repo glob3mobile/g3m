@@ -83,8 +83,6 @@ public class TrailsRenderer extends DefaultRenderer
   }
 
 }
-///#include "CompositeMesh.hpp"
-
 //#define MAX_POSITIONS_PER_SEGMENT 128
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:

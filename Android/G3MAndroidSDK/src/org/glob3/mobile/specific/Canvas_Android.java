@@ -342,7 +342,7 @@ public final class Canvas_Android
    @Override
    protected void _setLineDash(final float[] lengths,
                                final int count,
-                               final int phase) {
+                               final float phase) {
       if ((count == 0) || (lengths.length == 0)) {
          _strokePaint.setPathEffect(null);
       }

@@ -16,22 +16,16 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
-
-//class Tile;
-//class Rectangle;
-//class Sector;
-//class IFactory;
-//class MutableVector2D;
+//class IImage;
+//class TimeInterval;
 
 public class Petition
 {
-  private final Sector _sector;
+  private final Sector _sector ;
   private IImage _image;
   private final float _layerTransparency;
 
-  final private URL _url; //Conversor creates class "Url"
+  final private URL _url;
 
   private final long _timeToCacheInMS;
   private final boolean _readExpired;
@@ -54,25 +48,18 @@ public class Petition
      _isTransparent = isTransparent;
      _image = null;
      _layerTransparency = layerTransparency;
-
   }
 
   public void dispose()
   {
-    if (_sector != null)
-       _sector.dispose();
     releaseImage();
   }
 
   public final void releaseImage()
   {
-    IFactory.instance().deleteImage(_image);
+    if (_image != null)
+       _image.dispose();
     _image = null;
-  }
-
-  public final boolean hasImage()
-  {
-    return (_image != null);
   }
 
   public final URL getURL()
@@ -118,7 +105,7 @@ public class Petition
     isb.addString(_url.description());
     isb.addString(", sector=");
     isb.addString(_sector.description());
-    isb.addString(", buffer=");
+    isb.addString(", image=");
     if (_image == null)
     {
       isb.addString("NULL");

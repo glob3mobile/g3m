@@ -7,6 +7,7 @@ package org.glob3.mobile.generated;
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+///#include "ILogger.hpp"
 //
 //  JSONBaseObject.hpp
 //  G3MiOSSDK
@@ -39,9 +40,6 @@ public abstract class JSONBaseObject
   {
   }
 
-
-  ///#include "ILogger.hpp"
-  
   public JSONObject asObject()
   {
     //ILogger::instance()->logError("The requested Object is not of type JSONObject!");

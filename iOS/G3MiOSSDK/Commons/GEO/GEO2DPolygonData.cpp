@@ -13,14 +13,6 @@
 
 GEO2DPolygonData::~GEO2DPolygonData() {
 #ifdef C_CODE
-  const int coordinatesCount = _coordinates->size();
-  for (int i = 0; i < coordinatesCount; i++) {
-    Geodetic2D* coordinate = _coordinates->at(i);
-    delete coordinate;
-  }
-  delete _coordinates;
-
-
   if (_holesCoordinatesArray != NULL) {
     const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
     for (int j = 0; j < holesCoordinatesArraySize; j++) {
@@ -38,4 +30,17 @@ GEO2DPolygonData::~GEO2DPolygonData() {
     delete _holesCoordinatesArray;
   }
 #endif
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+long long GEO2DPolygonData::getCoordinatesCount() const {
+  long long result = GEO2DCoordinatesData::getCoordinatesCount();
+  const int holesCoordinatesArraySize = _holesCoordinatesArray->size();
+  for (int j = 0; j < holesCoordinatesArraySize; j++) {
+    const std::vector<Geodetic2D*>* holeCoordinates = _holesCoordinatesArray->at(j);
+    result += holeCoordinates->size();
+  }
+  return result;
 }

@@ -66,22 +66,7 @@ public:
   
   static LayerTilesRenderParameters* createDefaultWGS84(const int firstLevel,
                                                         const int maxLevel) {
-    const Sector topSector = Sector::fullSphere();
-    const Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
-    const int  topSectorSplitsByLatitude  = splitsParameters._x;
-    const int  topSectorSplitsByLongitude = splitsParameters._y;
-//    const int  topSectorSplitsByLatitude  = 2;
-//    const int  topSectorSplitsByLongitude = 4;
-    const bool mercator = false;
-    
-    return new LayerTilesRenderParameters(topSector,
-                                          topSectorSplitsByLatitude,
-                                          topSectorSplitsByLongitude,
-                                          firstLevel,
-                                          maxLevel,
-                                          LayerTilesRenderParameters::defaultTileTextureResolution(),
-                                          LayerTilesRenderParameters::defaultTileMeshResolution(),
-                                          mercator);
+    return createDefaultWGS84(Sector::fullSphere(), firstLevel, maxLevel);
   }
 
   static LayerTilesRenderParameters* createDefaultWGS84(const Sector& topSector,

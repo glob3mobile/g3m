@@ -12,6 +12,7 @@
 #include "Effects.hpp"
 
 #include "Context.hpp"
+#include "IFactory.hpp"
 
 void EffectsScheduler::initialize(const G3MContext* context) {
   _factory = context->getFactory();
@@ -120,21 +121,21 @@ void EffectsScheduler::processFinishedEffects(const G3MRenderContext* rc,
                                               const TimeInterval& when) {
 #ifdef C_CODE
   std::vector<EffectRun*> effectsToStop;
-  std::vector<EffectRun*>::iterator i = _effectsRuns.begin();
-  while (i != _effectsRuns.end()) {
-    EffectRun* effectRun = *i;
+  std::vector<EffectRun*>::iterator it = _effectsRuns.begin();
+  while (it != _effectsRuns.end()) {
+    EffectRun* effectRun = *it;
 
     bool removed = false;
     if (effectRun->_started) {
       Effect* effect = effectRun->_effect;
       if (effect->isDone(rc, when)) {
-        i = _effectsRuns.erase(i);
+        it = _effectsRuns.erase(it);
         removed = true;
         effectsToStop.push_back( effectRun );
       }
     }
     if (!removed) {
-      i++;
+      it++;
     }
   }
 

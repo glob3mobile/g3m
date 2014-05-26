@@ -11,6 +11,8 @@
 
 #include "Sector.hpp"
 
+#include <vector>
+
 class QuadTree_Content;
 
 class QuadTreeVisitor {

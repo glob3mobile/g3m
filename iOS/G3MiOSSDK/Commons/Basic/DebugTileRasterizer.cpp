@@ -8,15 +8,14 @@
 
 #include "DebugTileRasterizer.hpp"
 
-#include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "IImage.hpp"
 #include "IImageListener.hpp"
 #include "Tile.hpp"
 #include "IStringBuilder.hpp"
-
 #include "TextCanvasElement.hpp"
 #include "ColumnCanvasElement.hpp"
+#include "TileRasterizerContext.hpp"
 
 DebugTileRasterizer::DebugTileRasterizer(const GFont& font,
                                          const Color& color,
