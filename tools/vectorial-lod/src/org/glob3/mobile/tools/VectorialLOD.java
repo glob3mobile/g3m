@@ -977,7 +977,8 @@ public class VectorialLOD {
 
    private static String getGeometriesSRID(final String dataSourceTable) {
 
-      final String sridQuery = "SELECT srid FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
+      //final String sridQuery = "SELECT srid FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
+      final String sridQuery = "SELECT ST_SRID(" + _theGeomColumnName + ") FROM " + dataSourceTable + " LIMIT 1";
 
       try {
          final Connection conn = _dataBaseService.getConnection();
