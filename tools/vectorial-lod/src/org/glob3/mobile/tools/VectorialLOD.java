@@ -102,6 +102,7 @@ public class VectorialLOD {
    private static String                     _projection        = null;
    private static int                        _firstLevelCreated = 0;
    private static int                        _lastLevelCreated  = 0;
+   private static String                     _geomSRID;
 
 
    /*
@@ -927,7 +928,6 @@ public class VectorialLOD {
                                  + buildSectorQuery(extendedSector.get(1)) + ")";
 
       return resultQuery;
-
    }
 
 
@@ -973,6 +973,61 @@ public class VectorialLOD {
       }
       return null;
    }
+
+
+   private static String getGeometriesSRID(final String dataSourceTable) {
+
+      final String sridQuery = "SELECT srid FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
+
+      try {
+         final Connection conn = _dataBaseService.getConnection();
+         final Statement st = conn.createStatement();
+
+         final ResultSet rs = st.executeQuery(sridQuery);
+
+         if (!rs.next()) {
+            st.close();
+            return null;
+         }
+
+         final int geomSRID = rs.getInt(1);
+
+         return Integer.toString(geomSRID);
+
+      }
+      catch (final SQLException e) {
+         ILogger.instance().logError("SQL error getting SRID: " + e.getMessage());
+      }
+      return null;
+   }
+
+
+   //   private static String getGeometriesSRID(final String dataSourceTable) {
+   //
+   //      //-- SELECT Find_SRID('public', 'tiger_us_state_2007', 'the_geom_4269')
+   //      final String sridQuery = "SELECT Find_SRID('public', '" + dataSourceTable + "', '" + _theGeomColumnName + "')";
+   //      //System.out.println("sridQuery: " + sridQuery);
+   //
+   //      try {
+   //         final Connection conn = _dataBaseService.getConnection();
+   //         final Statement st = conn.createStatement();
+   //
+   //         final ResultSet rs = st.executeQuery(sridQuery);
+   //
+   //         if (!rs.next()) {
+   //            st.close();
+   //            return null;
+   //         }
+   //
+   //         final int geomSRID = rs.getInt(1);
+   //
+   //         return Integer.toString(geomSRID);
+   //      }
+   //      catch (final SQLException e) {
+   //         ILogger.instance().logError("SQL error getting SRID: " + e.getMessage());
+   //      }
+   //      return null;
+   //   }
 
 
    private static String getTimeMessage(final long ms) {
@@ -1154,6 +1209,10 @@ public class VectorialLOD {
          System.out.println("Source data type: " + _geomType.toString());
       }
 
+      //TODO: pending to support any srid different from 4326
+      _geomSRID = getGeometriesSRID(dataSource._sourceTable);
+      System.out.println("SRID: " + _geomSRID);
+
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
 
@@ -1177,6 +1236,8 @@ public class VectorialLOD {
    private static void generateVectorialLOD(final TileSector sector,
                                             final DataSource dataSource) {
 
+      boolean containsData = true;
+
       if (sector._level > MAX_LEVEL) {
          return;
       }
@@ -1199,15 +1260,17 @@ public class VectorialLOD {
          }
          else {
             //System.out.println("Skip empty tile: ../" + getTileLabel(sector));
+            containsData = sectorContainsData(dataSource._sourceTable, sector.getSector());
             writeEmptyFile(sector);
          }
-
       }
 
-      //final List<TileSector> subSectors = sector.getSubTileSectors();
-      final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
-      for (final TileSector s : subSectors) {
-         processSubSectors(s, dataSource);
+      if (containsData) { //stop subdivision when there are not data inside this sector
+         //final List<TileSector> subSectors = sector.getSubTileSectors();
+         final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
+         for (final TileSector s : subSectors) {
+            processSubSectors(s, dataSource);
+         }
       }
    }
 
@@ -1234,6 +1297,65 @@ public class VectorialLOD {
 
       //_concurrentService.execute(task, subSectorLevel);
       _concurrentService.execute(task);
+   }
+
+
+   private static boolean sectorContainsData(final String sourceTable,
+                                             final Sector sector) {
+
+      final String checkQuery = buildCheckQuery(sourceTable, sector);
+      //System.out.println("checkQuery: " + checkQuery);
+
+      if (checkQuery == null) {
+         return false;
+      }
+
+      final Connection conn = _dataBaseService.getConnection();
+      try {
+         final Statement st = conn.createStatement();
+         final ResultSet rs = st.executeQuery(checkQuery);
+         if (!rs.next()) {
+            st.close();
+            return false; //no data on this bbox
+         }
+
+         final int result = rs.getInt(1);
+         st.close();
+
+         //         if (result > 0) {
+         //            System.out.println("SECTOR CONTAINS DATA: " + result);
+         //         }
+         return (result > 0);
+      }
+      catch (final SQLException e) {
+         ILogger.instance().logError("SQL error getting geometries intersection: " + e.getMessage());
+      }
+
+      return false;
+   }
+
+
+   private static String buildCheckQuery(final String sourceTable,
+                                         final Sector sector) {
+
+      //--i.e: SELECT COUNT(the_geom) FROM roads WHERE ST_Intersects(the_geom, ST_SetSRID(ST_MakeBox2D(ST_Point(-15.5,1.43), ST_Point(15.5,50.24)),4326)) 
+
+      final String baseQuery0 = "SELECT COUNT(";
+      final String baseQuery1 = ") FROM ";
+      final String baseQuery2 = " WHERE ST_Intersects(";
+      //final String baseQuery3 = 
+
+      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
+      final String bboxQuery = buildSectorQuery(extendedSector);
+
+      if (bboxQuery == null) {
+         return null;
+      }
+
+      final String checkQuery = baseQuery0 + _theGeomColumnName + baseQuery1 + sourceTable + baseQuery2 + _theGeomColumnName
+                                + "," + bboxQuery + ")";
+
+      return checkQuery;
    }
 
 
