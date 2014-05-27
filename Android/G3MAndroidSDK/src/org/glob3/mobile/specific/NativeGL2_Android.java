@@ -916,7 +916,7 @@ public final class NativeGL2_Android
 
 		double winZ = (r * 256.0 + g) / 65535.0;
 
-		ILogger.instance().logInfo("DIST %f, %f, %f -> Z = %f", r,g,b, winZ);
+		//ILogger.instance().logInfo("DIST %f, %f, %f -> Z = %f", r,g,b, winZ);
 
 
 

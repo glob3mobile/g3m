@@ -1,15 +1,24 @@
 package com.glob3.mobile.g3mandroidtestingapplication;
 
+<<<<<<< HEAD
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedList;
+=======
+>>>>>>> origin/zrender-touchhandlers
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BoxShape;
+import org.glob3.mobile.generated.CameraDoubleDragHandler;
+import org.glob3.mobile.generated.CameraDoubleTapHandler;
+import org.glob3.mobile.generated.CameraRenderer;
+import org.glob3.mobile.generated.CameraRotationHandler;
+import org.glob3.mobile.generated.CameraSingleDragHandler;
+import org.glob3.mobile.generated.CameraZoomAndRotateHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.DownloaderImageBuilder;
 import org.glob3.mobile.generated.ElevationDataProvider;
@@ -29,6 +38,11 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
+<<<<<<< HEAD
+=======
+import org.glob3.mobile.generated.MapBoxLayer;
+import org.glob3.mobile.generated.MapQuestLayer;
+>>>>>>> origin/zrender-touchhandlers
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MeshRenderer;
@@ -62,6 +76,7 @@ public class MainActivity
 extends
 Activity {
 
+<<<<<<< HEAD
 	private G3MWidget_Android _g3mWidget;
 	private RelativeLayout    _placeHolder;
 
@@ -73,12 +88,113 @@ Activity {
 		setContentView(R.layout.activity_main);
 		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 		// builder.getPlanetRendererBuilder().setRenderDebug(true);
+=======
+
+   //   private RelativeLayout    _placeHolder;
+
+   G3MBuilder_Android builder = null;
+   MarksRenderer marksRenderer = new MarksRenderer(false);
+
+   @Override
+   protected void onCreate(final Bundle savedInstanceState) {
+	   super.onCreate(savedInstanceState);
+
+	   requestWindowFeature(Window.FEATURE_NO_TITLE);
+	   getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+	   setContentView(R.layout.activity_main);
+
+	   final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+	   //const Planet* planet = Planet::createEarth();
+	   //const Planet* planet = Planet::createSphericalEarth();
+	   final Planet planet = Planet.createFlatEarth();
+	   builder.setPlanet(planet);
+
+	   // set camera handlers
+	   CameraRenderer cameraRenderer = createCameraRenderer();
+	   MeshRenderer meshRenderer = new MeshRenderer();
+	   builder.addRenderer( meshRenderer );
+	   cameraRenderer.setDebugMeshRenderer(meshRenderer);
+	   builder.setCameraRenderer(cameraRenderer);
+	   
+	   // create shape
+	   ShapesRenderer shapesRenderer = new ShapesRenderer();
+	   Shape box = new BoxShape(new Geodetic3D(Angle.fromDegrees(28.4),
+			   Angle.fromDegrees(-16.4),
+			   0),
+			   AltitudeMode.ABSOLUTE,
+			   new Vector3D(3000, 3000, 20000),
+			   2,
+			   Color.fromRGBA(1.0f, 1.0f, 0.0f, 0.5f),
+			   Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
+	   shapesRenderer.addShape(box);
+	   builder.addRenderer(shapesRenderer);
+
+	   // create elevations for Tenerife from bil file
+	   Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
+			   -17.0232177085356,                // min longitude
+			   28.6103464294992,                 // max latitude
+			   -16.0019401695656);               // max longitude
+	   Vector2I extent = new Vector2I(256, 256);                             // image resolution
+	   URL url = new URL("file:///Tenerife-256x256.bil", false);
+	   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+	   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
+	   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
+
+	   _g3mWidget = builder.createWidget();  
+
+	   // set camera looking at Tenerife
+	   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
+	   _g3mWidget.setCameraPosition(position);
+	   _g3mWidget.setCameraPitch(Angle.fromDegrees(-50.0));
+
+	   _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+	   _placeHolder.addView(_g3mWidget);
+   }
+
+
+   private G3MWidget_Android createWidget() {
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+      // builder.getPlanetRendererBuilder().setRenderDebug(true);
+      // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
+
+      return builder.createWidget();
+      
+   }
+>>>>>>> origin/zrender-touchhandlers
 
 		// final ShapesRenderer shapesRenderer = new ShapesRenderer();
 		// builder.addRenderer(shapesRenderer);
 
+<<<<<<< HEAD
 		final MarksRenderer marksRenderer = new MarksRenderer(true);
 		builder.addRenderer(marksRenderer);
+=======
+	
+		
+      final LayerSet layerSet = new LayerSet();
+      //layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+
+    private LayerSet createLayerSet() {
+      final LayerSet layerSet = new LayerSet();
+      //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
+
+      layerSet.addLayer(new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30)));
+
+
+
+      final String urlTemplate = "http://192.168.1.2/ne_10m_admin_0_countries-Levels10/{level}/{y}/{x}.geojson";
+      final int firstLevel = 2;
+      final int maxLevel = 10;
+
+ 
+
+      return layerSet;
+   }
+>>>>>>> origin/zrender-touchhandlers
 
 		final MeshRenderer meshRenderer = new MeshRenderer();
 		meshRenderer.loadBSONMesh(new URL("file:///1951_r.bson"), Color.white());
@@ -188,6 +304,7 @@ Activity {
 		//
 		// }
 
+<<<<<<< HEAD
 		// if (false) { // Adding and deleting marks
 		//
 		// final int time = 1; // SECS
@@ -504,6 +621,8 @@ class PrecacherInitializationTask extends GInitializationTask {
 		}
 	}
 
+=======
+>>>>>>> origin/zrender-touchhandlers
 	@Override
 	public void run(G3MContext context) {
 
@@ -526,6 +645,22 @@ class PrecacherInitializationTask extends GInitializationTask {
 	public boolean isDone(G3MContext context) {
 		return _done;
 	}
+	
+	public CameraRenderer createCameraRenderer()
+	{
+	  CameraRenderer cameraRenderer = new CameraRenderer();
+	  final boolean useInertia = true;
+	  cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+	  final boolean allowRotationInDoubleDrag = true;
+	  cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
+	  //cameraRenderer.addHandler(new CameraZoomAndRotateHandler());
+
+	  cameraRenderer.addHandler(new CameraRotationHandler());
+	  cameraRenderer.addHandler(new CameraDoubleTapHandler());
+	  
+	  return cameraRenderer;
+	}
+
 }
 
 //END OF CODE FOR PRECACHING AREA

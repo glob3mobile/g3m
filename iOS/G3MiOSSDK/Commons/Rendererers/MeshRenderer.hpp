@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__MeshRenderer__
 #define __G3MiOSSDK__MeshRenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include <vector>
 #include "GLState.hpp"
 #include "DownloadPriority.hpp"
@@ -37,7 +37,7 @@ enum MeshType {
   MESH
 };
 
-class MeshRenderer : public LeafRenderer {
+class MeshRenderer : public DefaultRenderer {
 private:
 
 
@@ -98,16 +98,11 @@ private:
   GLState* _glState;
   void updateGLState(const G3MRenderContext* rc);
 
-#ifdef C_CODE
-  const G3MContext* _context;
-#endif
-#ifdef JAVA_CODE
-  private G3MContext _context;
-#endif
-
   std::vector<LoadQueueItem*> _loadQueue;
 
   void drainLoadQueue();
+  
+  void cleanLoadQueue();
 
   void requestMeshBuffer(const URL&          url,
                          long long           priority,
@@ -128,9 +123,9 @@ public:
 
   MeshRenderer():
   _glState(new GLState()),
-  _context(NULL),
   _showNormals(false)
   {
+    _context = NULL;
   }
   
   ~MeshRenderer();
@@ -143,42 +138,14 @@ public:
 
   void disableAll();
 
-  void onResume(const G3MContext* context) {
-
-  }
-
-  void onPause(const G3MContext* context) {
-
-  }
-
-  void onDestroy(const G3MContext* context) {
-
-  }
-
-  void initialize(const G3MContext* context);
-
-  RenderState getRenderState(const G3MRenderContext* rc) {
-    return RenderState::ready();
-  }
+  void onChangedContext();
+  
+  void onLostContext();
 
   void render(const G3MRenderContext* rc, GLState* glState);
 
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
-
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-
-  }
-
-  void start(const G3MRenderContext* rc) {
-
-  }
-  
-  void stop(const G3MRenderContext* rc) {
-    
   }
 
   void loadJSONPointCloud(const URL&          url,

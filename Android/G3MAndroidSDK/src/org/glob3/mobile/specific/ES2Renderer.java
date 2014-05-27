@@ -64,21 +64,21 @@ public final class ES2Renderer
 
       // experimental FPS reduction - DGD
       final long now = System.currentTimeMillis();
-      long timeElapsedInRender = now - _startTime;
-      long timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
+      final long timeElapsedInRender = now - _startTime;
+      final long timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
       if (timeLeftInMS > 0) {
-         System.gc();
-
-         timeElapsedInRender = System.currentTimeMillis() - _startTime;
-         timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
-         if (timeLeftInMS > 0) {
-            try {
-               //ILogger.instance().logInfo("**** sleeping OpenGL thread for " + timeLeftInMS + "ms");
-               Thread.sleep(timeLeftInMS);
-            }
-            catch (final InterruptedException e) {
-            }
+         //         System.gc();
+         //
+         //         timeElapsedInRender = System.currentTimeMillis() - _startTime;
+         //         timeLeftInMS = GOAL_MS_PER_FRAME - timeElapsedInRender;
+         //         if (timeLeftInMS > 0) {
+         try {
+            //ILogger.instance().logInfo("**** sleeping OpenGL thread for " + timeLeftInMS + "ms");
+            Thread.sleep(timeLeftInMS);
          }
+         catch (final InterruptedException e) {
+         }
+         //         }
          _startTime = System.currentTimeMillis();
       }
       else {

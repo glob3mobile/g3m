@@ -10,15 +10,12 @@
 #ifndef G3MiOSSDK_Camera
 #define G3MiOSSDK_Camera
 
-#include <math.h>
-
 #include "CoordinateSystem.hpp"
 #include "TaitBryanAngles.hpp"
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "Context.hpp"
-#include "IFactory.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"
@@ -106,8 +103,8 @@ public:
 class Camera {
 public:
   Camera(const Camera &that):
-  _width(that._width),
-  _height(that._height),
+  _viewPortWidth(that._viewPortWidth),
+  _viewPortHeight(that._viewPortHeight),
   _planet(that._planet),
   _position(that._position),
   _groundHeight(that._groundHeight),
@@ -159,11 +156,11 @@ public:
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
 
-  int getWidth() const { return _width; }
-  int getHeight() const { return _height; }
+  int getViewPortWidth()  const { return _viewPortWidth; }
+  int getViewPortHeight() const { return _viewPortHeight; }
 
   float getViewPortRatio() const {
-    return (float) _width / _height;
+    return (float) _viewPortWidth / _viewPortHeight;
   }
 
   EffectTarget* getEffectTarget() {
@@ -324,11 +321,13 @@ private:
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
-  int _width;
-  int _height;
-
+  int _viewPortWidth;
+  int _viewPortHeight;
+#ifdef C_CODE
   const Planet *_planet;
-
+#else
+  Planet *_planet;
+#endif
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector

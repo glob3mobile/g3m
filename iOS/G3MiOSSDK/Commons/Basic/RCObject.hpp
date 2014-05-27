@@ -24,11 +24,13 @@ private:
 #endif
   }
 
+  RCObject(const RCObject& that);
+  RCObject& operator=(const RCObject& that);
+
 protected:
   RCObject():
   _referenceCounter(1) // the object starts retained
   {
-
   }
 
   virtual ~RCObject();

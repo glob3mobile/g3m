@@ -27,16 +27,16 @@ private:
     return result;
   }
 
-  MapQuestLayer(const std::string& name,
-                const std::string& domain,
+  MapQuestLayer(const std::string&              domain,
                 const std::vector<std::string>& subdomains,
-                int initialLevel,
-                int maxLevel,
-                const TimeInterval& timeToCache,
-                bool readExpired,
-                LayerCondition* condition) :
-  MercatorTiledLayer(name,
-                     "http://",
+                const int                       initialLevel,
+                const int                       maxLevel,
+                const TimeInterval&             timeToCache,
+                const bool                      readExpired,
+                const float                     transparency,
+                const LayerCondition*           condition,
+                const std::string& disclaimerInfo = "") :
+  MercatorTiledLayer("http://",
                      domain,
                      subdomains,
                      "jpg",
@@ -45,9 +45,11 @@ private:
                      Sector::fullSphere(),
                      initialLevel,
                      maxLevel,
-                     condition)
+                     false, // isTransparent
+                     transparency,
+                     condition,
+                     disclaimerInfo)
   {
-
   }
 
 
@@ -61,32 +63,34 @@ protected:
 
 public:
 
-  static MapQuestLayer* newOSM(const TimeInterval& timeToCache,
-                               bool readExpired = true,
-                               int initialLevel = 2,
-                               LayerCondition* condition = NULL) {
-    return new MapQuestLayer("MapQuest-OSM",
-                             "mqcdn.com/tiles/1.0.0/map",
+  static MapQuestLayer* newOSM(const TimeInterval&   timeToCache,
+                               const bool            readExpired  = true,
+                               const int             initialLevel = 2,
+                               const float           transparency = 1,
+                               const LayerCondition* condition    = NULL) {
+    return new MapQuestLayer("mqcdn.com/tiles/1.0.0/map",
                              getSubdomains(),
                              initialLevel,
                              19,
                              timeToCache,
                              readExpired,
+                             transparency,
                              condition);
   }
 
 
-  static MapQuestLayer* newOpenAerial(const TimeInterval& timeToCache,
-                                      bool readExpired = true,
-                                      int initialLevel = 2,
-                                      LayerCondition* condition = NULL) {
-    return new MapQuestLayer("MapQuest-OpenAerial",
-                             "mqcdn.com/tiles/1.0.0/sat",
+  static MapQuestLayer* newOpenAerial(const TimeInterval&   timeToCache,
+                                      const bool            readExpired  = true,
+                                      const int             initialLevel = 2,
+                                      const float           transparency = 1,
+                                      const LayerCondition* condition    = NULL) {
+    return new MapQuestLayer("mqcdn.com/tiles/1.0.0/sat",
                              getSubdomains(),
                              initialLevel,
                              11,
                              timeToCache,
                              readExpired,
+                             transparency,
                              condition);
   }
 

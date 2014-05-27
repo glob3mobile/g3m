@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  TimeInterval.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 13/06/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+//
 //  TimeInterval.hpp
 //  G3MiOSSDK
 //
@@ -8,15 +16,14 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include "IMathUtils.hpp"
 
 
 public class TimeInterval
 {
-
   private TimeInterval(long milliseconds)
   {
      _milliseconds = milliseconds;
-
   }
 
   public final long _milliseconds;
@@ -24,7 +31,6 @@ public class TimeInterval
   public TimeInterval(TimeInterval other)
   {
      _milliseconds = other._milliseconds;
-
   }
 
   public static TimeInterval fromMilliseconds(long milliseconds)

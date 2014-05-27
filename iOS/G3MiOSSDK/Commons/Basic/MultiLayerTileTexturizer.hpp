@@ -10,7 +10,6 @@
 #define G3MiOSSDK_MultiLayerTileTexturizer
 
 #include "TileTexturizer.hpp"
-#include "TileKey.hpp"
 #include "Geodetic3D.hpp"
 
 class IGLTextureId;
@@ -42,8 +41,8 @@ public:
                   TileRasterizer* tileRasterizer,
                   const LayerTilesRenderParameters* layerTilesRenderParameters,
                   const LayerSet* layerSet,
-                  bool isForcedFullRender,
-                  long long texturePriority,
+                  bool forceFullRender,
+                  long long tileDownloadPriority,
                   Tile* tile,
                   Mesh* tessellatorMesh,
                   Mesh* previousMesh,

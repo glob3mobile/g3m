@@ -17,7 +17,7 @@ public class MapBooBuilder_RestJSON extends IBufferDownloadListener
 
   public final void onError(URL url)
   {
-    ILogger.instance().logError("Can't download %s", url.getPath());
+    ILogger.instance().logError("Can't download %s", url._path);
   }
 
   public final void onCancel(URL url)

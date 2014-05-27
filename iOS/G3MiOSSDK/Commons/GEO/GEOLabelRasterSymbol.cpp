@@ -11,7 +11,7 @@
 #include "ICanvas.hpp"
 #include "GEORasterProjection.hpp"
 
-const Sector* GEOLabelRasterSymbol::calculateSectorFromPosition(const Geodetic2D& position) {
+Sector* GEOLabelRasterSymbol::calculateSectorFromPosition(const Geodetic2D& position) {
   const double delta = 2;
   return new Sector(Geodetic2D::fromDegrees(position._latitude._degrees  - delta,
                                             position._longitude._degrees - delta),
@@ -25,15 +25,20 @@ GEOLabelRasterSymbol::GEOLabelRasterSymbol(const std::string& label,
                                            const Color& color,
                                            const int minTileLevel,
                                            const int maxTileLevel) :
-GEORasterSymbol(calculateSectorFromPosition(position),
-                minTileLevel,
-                maxTileLevel),
+GEORasterSymbol(minTileLevel, maxTileLevel),
 _position(position),
 _label(label),
 _font(font),
-_color(color)
+_color(color),
+_sector(NULL)
 {
+}
 
+GEOLabelRasterSymbol::~GEOLabelRasterSymbol() {
+  delete _sector;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void GEOLabelRasterSymbol::rawRasterize(ICanvas*                   canvas,
@@ -47,9 +52,13 @@ void GEOLabelRasterSymbol::rawRasterize(ICanvas*                   canvas,
   const float left = pixelPosition._x - textExtent._x/2;
   const float top  = pixelPosition._y - textExtent._y/2;
 
-  //  canvas->setFillColor(Color::fromRGBA(0, 1, 0, 0.8f));
-  //  canvas->fillRectangle(left, top, textExtent._x, textExtent._y);
-
   canvas->setFillColor(_color);
   canvas->fillText(_label, left, top);
+}
+
+const Sector* GEOLabelRasterSymbol::getSector() const {
+  if (_sector == NULL) {
+    _sector = calculateSectorFromPosition(_position);
+  }
+  return _sector;
 }

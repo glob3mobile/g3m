@@ -43,9 +43,9 @@ public class SGLayerNode extends SGNode
       if (_downloadedImage != null)
       {
         final boolean generateMipmap = false;
-        _textureId = rc.getTexturesHandler().getTextureIDReference(_downloadedImage, GLFormat.rgba(), getURL().getPath(), generateMipmap);
+        _textureId = rc.getTexturesHandler().getTextureIDReference(_downloadedImage, GLFormat.rgba(), getURL()._path, generateMipmap);
   
-        IFactory.instance().deleteImage(_downloadedImage);
+        _downloadedImage = null;
         _downloadedImage = null;
       }
     }
@@ -106,10 +106,7 @@ public class SGLayerNode extends SGNode
 
   public final void onImageDownload(IImage image)
   {
-    if (_downloadedImage != null)
-    {
-      IFactory.instance().deleteImage(_downloadedImage);
-    }
+    _downloadedImage = null;
     _downloadedImage = image;
   }
 

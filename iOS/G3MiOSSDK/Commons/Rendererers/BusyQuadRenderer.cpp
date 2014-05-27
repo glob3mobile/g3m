@@ -26,6 +26,7 @@
 #include "GPUProgram.hpp"
 #include "Camera.hpp"
 
+
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
   if (_animated) {
     Effect *effect = new BusyEffect(this);

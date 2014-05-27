@@ -19,18 +19,15 @@ class GEO2DPolygonData;
 
 class GEOPolygonRasterSymbol : public GEORasterSymbol {
 private:
+  const GEO2DPolygonData* _polygonData;
 #ifdef C_CODE
-  const std::vector<Geodetic2D*>* _coordinates;
-  const GEO2DLineRasterStyle      _lineStyle;
-  const GEO2DSurfaceRasterStyle   _surfaceStyle;
+  const GEO2DLineRasterStyle    _lineStyle;
+  const GEO2DSurfaceRasterStyle _surfaceStyle;
 #endif
 #ifdef JAVA_CODE
-  private java.util.ArrayList<Geodetic2D> _coordinates;
-  private final GEO2DLineRasterStyle      _lineStyle;
-  private final GEO2DSurfaceRasterStyle   _surfaceStyle;
+  private final GEO2DLineRasterStyle    _lineStyle;
+  private final GEO2DSurfaceRasterStyle _surfaceStyle;
 #endif
-
-  const std::vector<std::vector<Geodetic2D*>*>* _holesCoordinatesArray;
 
 protected:
   void rawRasterize(ICanvas*                   canvas,
@@ -45,6 +42,8 @@ public:
                          const int maxTileLevel = -1);
 
   ~GEOPolygonRasterSymbol();
+
+  const Sector* getSector() const;
 
 };
 

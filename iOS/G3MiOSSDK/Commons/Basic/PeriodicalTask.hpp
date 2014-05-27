@@ -41,8 +41,7 @@ public:
 
   ~PeriodicalTask() {
     delete _task;
-
-    IFactory::instance()->deleteTimer(_timer);
+    delete _timer;
   }
 
   void resetTimeout() {

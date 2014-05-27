@@ -64,26 +64,32 @@ public class GEOJSONParser
 
   }
 
-  private GEOObject pvtParse()
+  private GEOObject pvtParse(boolean showStatistics)
   {
-    final JSONBaseObject jsonBaseObject = (_bson == null) ? IJSONParser.instance().parse(_json) : BSONParser.parse(_bson);
-  
     GEOObject result = null;
   
-    final JSONObject jsonObject = jsonBaseObject.asObject();
-    if (jsonObject != null)
-    {
-      result = toGEO(jsonObject);
-    }
-    else
-    {
-      ILogger.instance().logError("Root object for GEOJSON has to be a JSONObject");
-    }
+    final JSONBaseObject jsonBaseObject = (_bson == null) ? IJSONParser.instance().parse(_json) : BSONParser.parse(_bson);
   
     if (jsonBaseObject != null)
-       jsonBaseObject.dispose();
+    {
+      final JSONObject jsonObject = jsonBaseObject.asObject();
+      if (jsonObject != null)
+      {
+        result = toGEO(jsonObject);
+      }
+      else
+      {
+        ILogger.instance().logError("Root object for GEOJSON has to be a JSONObject");
+      }
   
-    showStatistics();
+      if (jsonBaseObject != null)
+         jsonBaseObject.dispose();
+  
+      if (showStatistics)
+      {
+        showStatisticsToLogger();
+      }
+    }
   
     return result;
   }
@@ -456,7 +462,7 @@ public class GEOJSONParser
     return coordinates;
   }
 
-  private void showStatistics()
+  private void showStatisticsToLogger()
   {
     ILogger.instance().logInfo("GEOJSONParser Statistics: Coordinates2D=%d, Points2D=%d, LineStrings2D=%d, MultiLineStrings2D=%d (LineStrings2D=%d), Polygons2D=%d (Holes=%d), MultiPolygons=%d, features=%d, featuresCollection=%d", _coordinates2DCount, _points2DCount, _lineStrings2DCount, _multiLineStrings2DCount, _lineStringsInMultiLineString2DCount, _polygon2DCount, _holesLineStringsInPolygon2DCount, _multiPolygon2DCount, _featuresCount, _featuresCollectionCount);
   }
@@ -464,18 +470,30 @@ public class GEOJSONParser
 
   public static GEOObject parseJSON(String json)
   {
+     return parseJSON(json, true);
+  }
+  public static GEOObject parseJSON(String json, boolean showStatistics)
+  {
     GEOJSONParser parser = new GEOJSONParser(json, null);
-    return parser.pvtParse();
+    return parser.pvtParse(showStatistics);
   }
   public static GEOObject parseJSON(IByteBuffer json)
   {
-    return parseJSON(json.getAsString());
+     return parseJSON(json, true);
+  }
+  public static GEOObject parseJSON(IByteBuffer json, boolean showStatistics)
+  {
+    return parseJSON(json.getAsString(), showStatistics);
   }
 
   public static GEOObject parseBSON(IByteBuffer bson)
   {
+     return parseBSON(bson, true);
+  }
+  public static GEOObject parseBSON(IByteBuffer bson, boolean showStatistics)
+  {
     GEOJSONParser parser = new GEOJSONParser("", bson);
-    return parser.pvtParse();
+    return parser.pvtParse(showStatistics);
   }
 
 }

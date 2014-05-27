@@ -19,7 +19,7 @@ public class SGLayerNode_ImageDownloadListener extends IImageDownloadListener
 
   public final void onError(URL url)
   {
-    ILogger.instance().logWarning("Can't download texture \"%s\"", url.getPath());
+    ILogger.instance().logWarning("Can't download texture \"%s\"", url._path);
   }
 
   public final void onCancel(URL url)

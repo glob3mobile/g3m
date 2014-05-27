@@ -19,11 +19,13 @@ public:
   virtual ~LayerCondition() {
   }
 
-  virtual bool isAvailable(const G3MRenderContext* rc,
-                           const Tile* tile) const = 0;
-  
-  virtual bool isAvailable(const G3MEventContext* ec,
-                           const Tile* tile) const = 0;
+//  virtual bool isAvailable(const G3MRenderContext* rc,
+//                           const Tile* tile) const = 0;
+//  
+//  virtual bool isAvailable(const G3MEventContext* ec,
+//                           const Tile* tile) const = 0;
+
+  virtual bool isAvailable(const Tile* tile) const = 0;
 
   virtual LayerCondition* copy() const = 0;
 

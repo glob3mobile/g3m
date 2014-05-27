@@ -3,7 +3,6 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
 {
   public final void apply(GLFeatureSet features, GPUVariableValueSet vs, GLGlobalState state)
   {
-  
     Matrix44DMultiplicationHolderBuilder modelViewHolderBuilder = new Matrix44DMultiplicationHolderBuilder();
     Matrix44DMultiplicationHolderBuilder modelTransformHolderBuilder = new Matrix44DMultiplicationHolderBuilder();
   
@@ -58,5 +57,8 @@ public class GLFeatureCameraGroup extends GLFeatureGroup
     vs.addUniformValue(GPUUniformKey.MODELVIEW, new GPUUniformValueMatrix4(modelViewProvider), false);
   
     modelViewProvider._release();
+  
+    modelViewHolderBuilder.dispose();
+    modelTransformHolderBuilder.dispose();
   }
 }

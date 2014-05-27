@@ -1,24 +1,22 @@
 package org.glob3.mobile.generated; 
 //
-//  FrameTasksExecutor.cpp
+//  FrameTask.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 19/08/12.
+//  Created by Diego Gomez Deck on 4/30/14.
 //
 //
 
 //
-//  FrameTasksExecutor.hpp
+//  FrameTask.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 19/08/12.
+//  Created by Diego Gomez Deck on 4/30/14.
 //
 //
-
 
 
 //class G3MRenderContext;
-
 
 public abstract class FrameTask
 {

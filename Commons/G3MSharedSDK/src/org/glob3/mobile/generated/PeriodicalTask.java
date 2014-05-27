@@ -38,8 +38,8 @@ public class PeriodicalTask
   {
     if (_task != null)
        _task.dispose();
-
-    IFactory.instance().deleteTimer(_timer);
+    if (_timer != null)
+       _timer.dispose();
   }
 
   public final void resetTimeout()

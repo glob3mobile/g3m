@@ -148,7 +148,6 @@ public:
                        Tile* tile,
                        const ElevationData* elevationData,
                        float verticalExaggeration,
-                       bool mercator,
                        bool debug,
                        TileTessellatorMeshData& data) const;
 
@@ -162,13 +161,11 @@ public:
   }
 
   IFloatBuffer* createTextCoords(const Vector2I& resolution,
-                                 const Tile* tile,
-                                 bool mercator) const;
+                                 const Tile* tile) const;
 
   const Vector2F getTextCoord(const Tile* tile,
                               const Angle& latitude,
-                              const Angle& longitude,
-                              bool mercator) const;
+                              const Angle& longitude) const;
 
   void setRenderedSector(const Sector& sector) {
     if (_renderedSector == NULL || !_renderedSector->isEquals(sector)) {

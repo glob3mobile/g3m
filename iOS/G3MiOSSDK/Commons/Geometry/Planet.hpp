@@ -98,7 +98,8 @@ public:
                                const Vector3D& touchedPosition1) const = 0;
   
   virtual MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
-                                      const Vector3D& finalRay1) const = 0;
+                                      const Vector3D& finalRay1,
+                                      bool allowRotation) const = 0;
   
   virtual Effect* createDoubleTapEffect(const Vector3D& origin,
                                         const Vector3D& centerRay,
@@ -113,7 +114,7 @@ public:
   virtual void applyCameraConstrainers(const Camera* previousCamera,
                                        Camera* nextCamera) const = 0;
 
-  virtual Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const = 0;
+  virtual Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const = 0;
 
   CoordinateSystem getCoordinateSystemAt(const Geodetic3D& geo) const;
 };

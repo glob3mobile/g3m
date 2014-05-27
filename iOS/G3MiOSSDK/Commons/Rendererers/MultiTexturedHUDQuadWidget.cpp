@@ -71,7 +71,7 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image1,
                                                                                     GLFormat::rgba(),
-                                                                                    _imageURL1.getPath(),
+                                                                                    _imageURL1._path,
                                                                                     false);
 
   if (texId == NULL) {
@@ -81,7 +81,7 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
 
   const TextureIDReference* texId2 = rc->getTexturesHandler()->getTextureIDReference(_image2,
                                                                                      GLFormat::rgba(),
-                                                                                     _imageURL2.getPath(),
+                                                                                     _imageURL2._path,
                                                                                      false);
 
   if (texId2 == NULL) {
@@ -90,8 +90,8 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   }
 
   const Camera* camera = rc->getCurrentCamera();
-  const int viewPortWidth  = camera->getWidth();
-  const int viewPortHeight = camera->getHeight();
+  const int viewPortWidth  = camera->getViewPortWidth();
+  const int viewPortHeight = camera->getViewPortHeight();
 
   const float width  = _width;
   const float height = _height;
@@ -221,7 +221,7 @@ void MultiTexturedHUDQuadWidget::onImageDownload(IImage* image, const URL& url) 
 }
 
 void MultiTexturedHUDQuadWidget::onImageDownloadError(const URL& url) {
-  _errors.push_back("MultiTexturedHUDQuadWidget: Error downloading \"" + url.getPath() + "\"");
+  _errors.push_back("MultiTexturedHUDQuadWidget: Error downloading \"" + url._path + "\"");
 }
 
 RenderState MultiTexturedHUDQuadWidget::getRenderState(const G3MRenderContext* rc) {

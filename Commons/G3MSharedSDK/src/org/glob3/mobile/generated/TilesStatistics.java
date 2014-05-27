@@ -25,6 +25,9 @@ package org.glob3.mobile.generated;
 //class ElevationDataProvider;
 //class LayerTilesRenderParameters;
 //class TerrainTouchListener;
+//class ChangedInfoListener;
+
+
 
 
 //class EllipsoidShape;
@@ -43,32 +46,21 @@ public class TilesStatistics
   private int[] _tilesVisibleByLevel = new int[_maxLOD];
   private int[] _tilesRenderedByLevel = new int[_maxLOD];
 
-  private int _splitsCountInFrame;
   private int _buildersStartsInFrame;
 
-  private Sector _renderedSector;
+  private double _visibleLowerLatitudeDegrees;
+  private double _visibleLowerLongitudeDegrees;
+  private double _visibleUpperLatitudeDegrees;
+  private double _visibleUpperLongitudeDegrees;
 
 
   public TilesStatistics()
   {
-     _tilesProcessed = 0;
-     _tilesVisible = 0;
-     _tilesRendered = 0;
-     _splitsCountInFrame = 0;
-     _buildersStartsInFrame = 0;
-     _renderedSector = null;
-    for (int i = 0; i < _maxLOD; i++)
-    {
-      _tilesProcessedByLevel[i] = 0;
-      _tilesVisibleByLevel[i] = 0;
-      _tilesRenderedByLevel[i] = 0;
-    }
+    clear();
   }
 
   public void dispose()
   {
-    if (_renderedSector != null)
-       _renderedSector.dispose();
   }
 
   public final void clear()
@@ -76,27 +68,20 @@ public class TilesStatistics
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _splitsCountInFrame = 0;
     _buildersStartsInFrame = 0;
-    if (_renderedSector != null)
-       _renderedSector.dispose();
-    _renderedSector = null;
+
+    final IMathUtils mu = IMathUtils.instance();
+    _visibleLowerLatitudeDegrees = mu.maxDouble();
+    _visibleLowerLongitudeDegrees = mu.maxDouble();
+    _visibleUpperLatitudeDegrees = mu.minDouble();
+    _visibleUpperLongitudeDegrees = mu.minDouble();
+
     for (int i = 0; i < _maxLOD; i++)
     {
       _tilesProcessedByLevel[i] = 0;
       _tilesVisibleByLevel[i] = 0;
       _tilesRenderedByLevel[i] = 0;
     }
-  }
-
-  public final int getSplitsCountInFrame()
-  {
-    return _splitsCountInFrame;
-  }
-
-  public final void computeSplitInFrame()
-  {
-    _splitsCountInFrame++;
   }
 
   public final int getBuildersStartsInFrame()
@@ -128,25 +113,48 @@ public class TilesStatistics
   public final void computeRenderedSector(Tile tile)
   {
     final Sector sector = tile._sector;
-    if (_renderedSector == null)
+
+    final double lowerLatitudeDegrees = sector._lower._latitude._degrees;
+    final double lowerLongitudeDegrees = sector._lower._longitude._degrees;
+    final double upperLatitudeDegrees = sector._upper._latitude._degrees;
+    final double upperLongitudeDegrees = sector._upper._longitude._degrees;
+
+    if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees)
     {
-      _renderedSector = sector;
+      _visibleLowerLatitudeDegrees = lowerLatitudeDegrees;
     }
-    else
+    if (upperLatitudeDegrees < _visibleLowerLatitudeDegrees)
     {
-      if (!_renderedSector.fullContains(sector))
-      {
-        Sector previous = _renderedSector;
+      _visibleLowerLatitudeDegrees = upperLatitudeDegrees;
+    }
+    if (lowerLatitudeDegrees >_visibleUpperLatitudeDegrees)
+    {
+      _visibleUpperLatitudeDegrees = lowerLatitudeDegrees;
+    }
+    if (upperLatitudeDegrees > _visibleUpperLatitudeDegrees)
+    {
+      _visibleUpperLatitudeDegrees = upperLatitudeDegrees;
+    }
 
-        _renderedSector = _renderedSector.mergedWith(sector);
-
-        if (previous != null)
-           previous.dispose();
-      }
+    if (lowerLongitudeDegrees < _visibleLowerLongitudeDegrees)
+    {
+      _visibleLowerLongitudeDegrees = lowerLongitudeDegrees;
+    }
+    if (upperLongitudeDegrees < _visibleLowerLongitudeDegrees)
+    {
+      _visibleLowerLongitudeDegrees = upperLongitudeDegrees;
+    }
+    if (lowerLongitudeDegrees > _visibleUpperLongitudeDegrees)
+    {
+      _visibleUpperLongitudeDegrees = lowerLongitudeDegrees;
+    }
+    if (upperLongitudeDegrees > _visibleUpperLongitudeDegrees)
+    {
+      _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
   }
 
-  public final void computePlanetRenderered(Tile tile)
+  public final void computeTileRenderered(Tile tile)
   {
     _tilesRendered++;
 
@@ -156,27 +164,22 @@ public class TilesStatistics
     computeRenderedSector(tile);
   }
 
-  public final Sector getRenderedSector()
+  public final Sector updateVisibleSector(Sector visibleSector)
   {
-    return _renderedSector;
+    if ((visibleSector == null) || (visibleSector._lower._latitude._degrees != _visibleLowerLatitudeDegrees) || (visibleSector._lower._longitude._degrees != _visibleLowerLongitudeDegrees) || (visibleSector._upper._latitude._degrees != _visibleUpperLatitudeDegrees) || (visibleSector._upper._longitude._degrees != _visibleUpperLongitudeDegrees))
+    {
+      if (visibleSector != null)
+         visibleSector.dispose();
+
+      if ((_visibleLowerLatitudeDegrees > _visibleUpperLatitudeDegrees) || (_visibleLowerLongitudeDegrees > _visibleUpperLongitudeDegrees))
+      {
+        return null;
+      }
+
+      return new Sector(Geodetic2D.fromDegrees(_visibleLowerLatitudeDegrees, _visibleLowerLongitudeDegrees), Geodetic2D.fromDegrees(_visibleUpperLatitudeDegrees, _visibleUpperLongitudeDegrees));
+    }
+    return visibleSector;
   }
-
-  //  bool equalsTo(const TilesStatistics& that) const {
-  //    if (_tilesProcessed != that._tilesProcessed) {
-  //      return false;
-  //    }
-  //    if (_tilesRendered != that._tilesRendered) {
-  //      return false;
-  //    }
-  //    if (_tilesRenderedByLevel != that._tilesRenderedByLevel) {
-  //      return false;
-  //    }
-  //    if (_tilesProcessedByLevel != that._tilesProcessedByLevel) {
-  //      return false;
-  //    }
-  //    return true;
-  //  }
-
 
   public static String asLogString(int[] m, int nMax)
   {
@@ -196,7 +199,6 @@ public class TilesStatistics
         {
           isb.addString(",");
         }
-        //isb->addString("L");
         isb.addInt(level);
         isb.addString(":");
         isb.addInt(counter);
@@ -212,10 +214,14 @@ public class TilesStatistics
   public final void log(ILogger logger)
   {
     logger.logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).", _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD), _tilesVisible, asLogString(_tilesVisibleByLevel, _maxLOD), _tilesRendered, asLogString(_tilesRenderedByLevel, _maxLOD));
+<<<<<<< HEAD
     //    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
     //                    _tilesProcessed,
     //                    _tilesVisible,
     //                    _tilesRendered);
+=======
+>>>>>>> origin/zrender-touchhandlers
   }
+
 
 }

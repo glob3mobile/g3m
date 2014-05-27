@@ -30,7 +30,7 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    ILogger.instance().logInfo("Downloaded Mesh buffer from \"%s\" (%db)", url.getPath(), buffer.size());
+    ILogger.instance().logInfo("Downloaded Mesh buffer from \"%s\" (%db)", url._path, buffer.size());
 
     _threadUtils.invokeAsyncTask(new MeshRenderer_MeshParserAsyncTask(_meshRenderer, url, buffer, _pointSize, _deltaHeight, _color, _listener, _deleteListener, _isBSON, _meshType, _context), true);
     _color = null;
@@ -38,7 +38,7 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
 
   public final void onError(URL url)
   {
-    ILogger.instance().logError("Error downloading \"%s\"", url.getPath());
+    ILogger.instance().logError("Error downloading \"%s\"", url._path);
 
     if (_deleteListener)
     {
@@ -50,7 +50,7 @@ public class MeshRenderer_MeshBufferDownloadListener extends IBufferDownloadList
 
   public final void onCancel(URL url)
   {
-    ILogger.instance().logInfo("Canceled download of \"%s\"", url.getPath());
+    ILogger.instance().logInfo("Canceled download of \"%s\"", url._path);
 
     if (_deleteListener)
     {

@@ -18,8 +18,8 @@
 #import "ByteBuffer_iOS.hpp"
 #import "JSONNull.hpp"
 
-JSONBaseObject* JSONParser_iOS::parse(NSData* jsonData,
-                                      bool nullAsObject) {
+JSONBaseObject* JSONParser_iOS::parseNSData(NSData* jsonData,
+                                            bool nullAsObject) {
   NSError *e = nil;
   id nsJsonObject = [NSJSONSerialization JSONObjectWithData: jsonData
                                                     options: NSJSONReadingAllowFragments
@@ -27,10 +27,10 @@ JSONBaseObject* JSONParser_iOS::parse(NSData* jsonData,
 
   if (e) {
     ILogger::instance()->logError("JSON Parser: Error=%s",
-                                    [[e localizedDescription] UTF8String]);
+                                  [[e localizedDescription] UTF8String]);
     if ([e userInfo]) {
       ILogger::instance()->logError("JSON Parser: UserInfo=%s",
-                                      [[[e userInfo] description] UTF8String]);
+                                    [[[e userInfo] description] UTF8String]);
     }
 
     return NULL;
@@ -46,7 +46,7 @@ JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer,
   NSData* data = [NSData dataWithBytes: buffer_iOS->getPointer()
                                 length: buffer_iOS->size()];
 
-  return parse(data, nullAsObject);
+  return parseNSData(data, nullAsObject);
 }
 
 JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString,
@@ -54,7 +54,7 @@ JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString,
   NSString *string = [[NSString alloc] initWithUTF8String: inputString.c_str()];
   NSData* data = [string dataUsingEncoding: NSUTF8StringEncoding];
 
-  return parse(data, nullAsObject);
+  return parseNSData(data, nullAsObject);
 }
 
 JSONBaseObject* JSONParser_iOS::convert(NSObject* object,
@@ -124,6 +124,6 @@ JSONBaseObject* JSONParser_iOS::convert(NSObject* object,
   else if ( [object isKindOfClass:[NSNull class]] ) {
     return nullAsObject ? new JSONNull() : NULL;
   }
-
+  
   return NULL;
 }

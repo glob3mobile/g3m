@@ -56,7 +56,8 @@ _logFPS(false),
 _logDownloaderStatistics(false),
 _userData(NULL),
 _sceneLighting(NULL),
-_shownSector(NULL)
+_shownSector(NULL),
+_infoDisplay(NULL)
 {
 }
 
@@ -203,7 +204,7 @@ CameraRenderer* IG3MBuilder::getCameraRenderer() {
  *
  * @return _busyRenderer: Renderer*
  */
-Renderer* IG3MBuilder::getBusyRenderer() {
+ProtoRenderer* IG3MBuilder::getBusyRenderer() {
   if (!_busyRenderer) {
     _busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0, (float)0, (float)1));
   }
@@ -495,7 +496,7 @@ void IG3MBuilder::setBackgroundColor(Color* backgroundColor) {
  *
  * @param busyRenderer - cannot be NULL.
  */
-void IG3MBuilder::setBusyRenderer(Renderer* busyRenderer) {
+void IG3MBuilder::setBusyRenderer(ProtoRenderer* busyRenderer) {
   if (_busyRenderer) {
     ILogger::instance()->logError("LOGIC ERROR: busyRenderer already initialized");
     return;
@@ -697,7 +698,7 @@ G3MWidget* IG3MBuilder::create() {
                                                           initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-
+  
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -718,9 +719,13 @@ G3MWidget* IG3MBuilder::create() {
                                             *getPeriodicalTasks(),
                                             getGPUProgramManager(),
                                             getSceneLighting(),
-                                            icpp);
+                                            icpp,
+                                            getInfoDisplay());
   
   g3mWidget->setUserData(getUserData());
+  
+  
+  //mainRenderer->getPlanetRenderer()->initializeChangedInfoListener(g3mWidget);
 
   _gl = NULL;
   _storage = NULL;
@@ -753,17 +758,6 @@ std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() 
   cameraConstraints->push_back(scc);
   
   return cameraConstraints;
-}
-
-CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
-  CameraRenderer* cameraRenderer = new CameraRenderer();
-  const bool useInertia = true;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  cameraRenderer->addHandler(new CameraDoubleDragHandler());
-  cameraRenderer->addHandler(new CameraRotationHandler());
-  cameraRenderer->addHandler(new CameraDoubleTapHandler());
-  
-  return cameraRenderer;
 }
 
 std::vector<PeriodicalTask*>* IG3MBuilder::createDefaultPeriodicalTasks() {
@@ -873,3 +867,18 @@ GEORenderer* IG3MBuilder::createGEORenderer(GEOSymbolizer* symbolizer,
 
   return geoRenderer;
 }
+
+
+void IG3MBuilder::setInfoDisplay(InfoDisplay *infoDisplay) {
+  if (_infoDisplay != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: infoDisplay already initialized");
+    return;
+  }
+  _infoDisplay = infoDisplay;
+}
+
+InfoDisplay* IG3MBuilder::getInfoDisplay() const {
+  return _infoDisplay;
+}
+
+

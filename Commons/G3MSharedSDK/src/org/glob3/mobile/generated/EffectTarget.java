@@ -19,14 +19,16 @@ package org.glob3.mobile.generated;
 
 
 
-
-
+//class IFactory;
 
 //class G3MRenderContext;
 //class G3MContext;
 
+
 public interface EffectTarget
 {
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void dispose();
+  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  
+
+  void dispose();
 }

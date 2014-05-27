@@ -255,19 +255,33 @@ void ShapesRenderer::drainLoadQueue() {
   _loadQueue.clear();
 }
 
-void ShapesRenderer::initialize(const G3MContext* context) {
-  _context = context;
+void ShapesRenderer::cleanLoadQueue() {
+  const int loadQueueSize = _loadQueue.size();
+  for (int i = 0; i < loadQueueSize; i++) {
+    LoadQueueItem* item = _loadQueue[i];
+    delete item;
+  }
+  _loadQueue.clear();
+}
 
+void ShapesRenderer::onChangedContext() {
   if (_context != NULL) {
     const int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
-      shape->initialize(context);
+      shape->initialize(_context);
     }
 
     drainLoadQueue();
   }
 }
+
+void ShapesRenderer::onLostContext() {
+  if (_context == NULL) {
+    cleanLoadQueue();
+  }
+}
+
 
 
 void ShapesRenderer::loadJSONSceneJS(const URL&          url,
@@ -417,11 +431,14 @@ public:
       delete _listener;
     }
     delete _buffer;
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void onPostExecute(const G3MContext* context) {
     if (_sgShape == NULL) {
-      ILogger::instance()->logError("Error parsing SceneJS from \"%s\"", _url.getPath().c_str());
+      ILogger::instance()->logError("Error parsing SceneJS from \"%s\"", _url._path.c_str());
       delete _position;
       _position = NULL;
     }
@@ -482,7 +499,7 @@ public:
                   IByteBuffer* buffer,
                   bool expired) {
     ILogger::instance()->logInfo("Downloaded SceneJS buffer from \"%s\" (%db)",
-                                 url.getPath().c_str(),
+                                 url._path.c_str(),
                                  buffer->size());
 
     _threadUtils->invokeAsyncTask(new ShapesRenderer_SceneJSParserAsyncTask(_shapesRenderer,
@@ -500,7 +517,7 @@ public:
   }
 
   void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
 
     if (_deleteListener) {
       delete _listener;
@@ -510,7 +527,7 @@ public:
   }
 
   void onCancel(const URL& url) {
-    ILogger::instance()->logInfo("Canceled download of \"%s\"", url.getPath().c_str());
+    ILogger::instance()->logInfo("Canceled download of \"%s\"", url._path.c_str());
 
     if (_deleteListener) {
       delete _listener;

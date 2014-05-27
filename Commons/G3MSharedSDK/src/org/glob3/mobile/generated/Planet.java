@@ -99,7 +99,7 @@ public abstract class Planet
 
   public abstract void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D centerPosition, Vector3D touchedPosition0, Vector3D touchedPosition1);
 
-  public abstract MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1);
+  public abstract MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation);
 
   public abstract Effect createDoubleTapEffect(Vector3D origin, Vector3D centerRay, Vector3D touchedPosition);
 
@@ -111,7 +111,7 @@ public abstract class Planet
 
   public abstract void applyCameraConstrainers(Camera previousCamera, Camera nextCamera);
 
-  public abstract Geodetic3D getDefaultCameraPosition(Sector shownSector);
+  public abstract Geodetic3D getDefaultCameraPosition(Sector rendereSector);
 
   public final CoordinateSystem getCoordinateSystemAt(Geodetic3D geo)
   {

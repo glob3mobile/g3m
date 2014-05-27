@@ -23,11 +23,21 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 {
 
   private MeshRenderer _meshRenderer;
+<<<<<<< HEAD
 
   public CameraDoubleDragHandler()
   {
      _camera0 = new Camera(new Camera());
      _meshRenderer = null;
+=======
+  private boolean _allowRotation;
+
+  public CameraDoubleDragHandler(boolean allowRotation)
+  {
+     _camera0 = new Camera(new Camera());
+     _meshRenderer = null;
+     _allowRotation = allowRotation;
+>>>>>>> origin/zrender-touchhandlers
   }
 
   public void dispose()
@@ -138,7 +148,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
     final Planet planet = eventContext.getPlanet();
     final Vector2I pixel0 = touchEvent.getTouch(0).getPos();
     final Vector2I pixel1 = touchEvent.getTouch(1).getPos();
-    MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1));
+    MutableMatrix44D matrix = planet.doubleDrag(_camera0.pixel2Ray(pixel0), _camera0.pixel2Ray(pixel1), _allowRotation);
     if (!matrix.isValid())
        return;
   

@@ -39,7 +39,7 @@ public abstract class ICanvas
 
   protected abstract void _setLineMiterLimit(float limit);
 
-  protected abstract void _setLineDash(float[] lengths, int count, int phase);
+  protected abstract void _setLineDash(float[] lengths, int count, float phase);
 
   protected abstract void _fillRectangle(float left, float top, float width, float height);
 
@@ -300,7 +300,7 @@ public abstract class ICanvas
   
     if (transparency >= 1.0)
     {
-      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
+      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
     }
     else
     {

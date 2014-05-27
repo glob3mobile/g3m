@@ -21,7 +21,7 @@ public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownload
 
   public final void onDownload(URL url, IImage image, boolean expired)
   {
-    _listener.imageCreated(image, url.getPath());
+    _listener.imageCreated(image, url._path);
     if (_deleteListener)
     {
       if (_listener != null)
@@ -32,7 +32,7 @@ public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownload
 
   public final void onError(URL url)
   {
-    _listener.onError("Error downloading image from \"" + url.getPath() + "\"");
+    _listener.onError("Error downloading image from \"" + url._path + "\"");
     if (_deleteListener)
     {
       if (_listener != null)
@@ -43,7 +43,7 @@ public class DownloaderImageBuilder_ImageDownloadListener extends IImageDownload
 
   public final void onCancel(URL url)
   {
-    _listener.onError("Canceled download image from \"" + url.getPath() + "\"");
+    _listener.onError("Canceled download image from \"" + url._path + "\"");
     if (_deleteListener)
     {
       if (_listener != null)

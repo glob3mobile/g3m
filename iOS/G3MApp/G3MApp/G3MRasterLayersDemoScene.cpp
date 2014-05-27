@@ -19,7 +19,8 @@
 #include <G3MiOSSDK/BingMapsLayer.hpp>
 #include <G3MiOSSDK/URLTemplateLayer.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
-
+#include <G3MiOSSDK/TimeInterval.hpp>
+#include <G3MiOSSDK/MercatorTiledLayer.hpp>
 
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   MapBoxLayer* mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j",
@@ -111,8 +112,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   subdomains.push_back("1.");
   subdomains.push_back("2.");
   subdomains.push_back("3.");
-  MercatorTiledLayer* meteoritesLayer = new MercatorTiledLayer("CartoDB-meteoritessize",
-                                                               "http://",
+  MercatorTiledLayer* meteoritesLayer = new MercatorTiledLayer("http://",
                                                                "tiles.cartocdn.com/osm2/tiles/meteoritessize",
                                                                subdomains,
                                                                "png",
@@ -121,7 +121,8 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
                                                                Sector::fullSphere(),
                                                                2,
                                                                17,
-                                                               NULL);
+                                                               true // isTransparent
+                                                               );
   meteoritesLayer->setTitle("CartoDB Meteorites");
   meteoritesLayer->setEnable(false);
   layerSet->addLayer(meteoritesLayer);
@@ -134,6 +135,7 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
                                                                            18,
                                                                            TimeInterval::fromDays(30),
                                                                            true,
+                                                                           1,
                                                                            new LevelTileCondition(12, 18));
   arcGISOverlayLayerTest->setTitle("ESRI ArcGis Online");
   arcGISOverlayLayerTest->setEnable(false);

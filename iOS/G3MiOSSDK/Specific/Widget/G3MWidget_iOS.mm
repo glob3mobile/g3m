@@ -23,6 +23,8 @@
 #include "Planet.hpp"
 #include "Sector.hpp"
 #include "InitialCameraPositionProvider.hpp"
+#include "InfoDisplay.hpp"
+
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -53,7 +55,7 @@
            cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (Renderer*) busyRenderer
+                busyRenderer: (ProtoRenderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
                  hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor
@@ -63,7 +65,8 @@
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition;
+       initialCameraPosition: (Geodetic3D) initialCameraPosition
+                 infoDisplay: (InfoDisplay*) infoDisplay;
 {
   GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
   GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
@@ -72,7 +75,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                                               Color::white());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-
+  
   _widgetVP = G3MWidget::create([_renderer getGL],
                                 storage,
                                 downloader,
@@ -91,9 +94,10 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                 initializationTask,
                                 autoDeleteInitializationTask,
                                 periodicalTasks,
-                                gpuProgramManager,//GPUProgramManager
-                                sceneLighting,    //Scene Lighting
-                                icpp);
+                                gpuProgramManager,
+                                sceneLighting,
+                                icpp,
+                                infoDisplay);
 
   [self widget]->setUserData(userData);
 }
@@ -117,6 +121,11 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     eaglLayer.opaque = TRUE;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+//    // for retina display
+//    eaglLayer.contentsScale = 2;
+//    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)]) {
+//      eaglLayer.contentsScale = [UIScreen mainScreen].scale;
+//    }
 
     // create GL object
     _renderer = [[ES2Renderer alloc] init];
@@ -155,11 +164,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
     // class is used as fallback when it isn't available.
     NSString *reqSysVer = @"3.1";
     NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
-    if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
+    if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending) {
       _displayLinkSupported = TRUE;
+    }
 
     //Detecting LongPress
-    UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                      action:@selector(handleLongPress:)];
     longPressRecognizer.minimumPressDuration = 1.0;
     [self addGestureRecognizer:longPressRecognizer];
   }
@@ -282,13 +293,13 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
 
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current         = [touch locationInView:self];
-    CGPoint previous        = [touch previousLocationInView:self];
-    unsigned char tapCount  = (unsigned char) [touch tapCount];
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current         = [uiTouch locationInView:self];
+    CGPoint previous        = [uiTouch previousLocationInView:self];
+    unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
+    Touch* touch = new Touch(Vector2I((int) current.x,
                                       (int) current.y),
                              Vector2I((int) previous.x,
                                       (int) previous.y),
@@ -313,12 +324,12 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
 
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current  = [touch locationInView:self];
-    CGPoint previous = [touch previousLocationInView:self];
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current  = [uiTouch locationInView:self];
+    CGPoint previous = [uiTouch previousLocationInView:self];
 
-    Touch *touch = new Touch(Vector2I((int) current.x,
+    Touch* touch = new Touch(Vector2I((int) current.x,
                                       (int) current.y),
                              Vector2I((int) previous.x,
                                       (int) previous.y));
@@ -372,12 +383,12 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
   // pointers.reserve([allTouches count]);
 
   NSEnumerator *enumerator = [allTouches objectEnumerator];
-  UITouch *touch = nil;
-  while ((touch = [enumerator nextObject])) {
-    CGPoint current  = [touch locationInView:self];
-    CGPoint previous = [touch previousLocationInView:self];
+  UITouch* uiTouch = nil;
+  while ((uiTouch = [enumerator nextObject])) {
+    CGPoint current  = [uiTouch locationInView:self];
+    CGPoint previous = [uiTouch previousLocationInView:self];
 
-    [touch timestamp];
+    [uiTouch timestamp];
 
     Touch *touch = new Touch(Vector2I((int) current.x,
                                       (int) current.y),

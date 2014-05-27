@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class Renderer;
+//class ProtoRenderer;
 //class TouchEvent;
 //class Planet;
 //class ILogger;
@@ -54,6 +55,7 @@ package org.glob3.mobile.generated;
 //class ErrorRenderer;
 //class G3MRenderContext;
 //class Vector3D;
+//class InfoDisplay;
 
 
 

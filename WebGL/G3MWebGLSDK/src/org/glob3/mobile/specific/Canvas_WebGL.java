@@ -404,7 +404,7 @@ public final class Canvas_WebGL
    @Override
    protected void _setLineDash(final float[] lengths,
                                final int count,
-                               final int phase) {
+                               final float phase) {
       final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
 
       for (int i = 0; i < count; i++) {
@@ -415,7 +415,7 @@ public final class Canvas_WebGL
 
 
    private native void jsSetLineDash(final JsArrayNumber lengths,
-                                     final int phase) /*-{
+                                     final float phase) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.setLineDash(lengths);
 		context.lineDashOffset = phase;

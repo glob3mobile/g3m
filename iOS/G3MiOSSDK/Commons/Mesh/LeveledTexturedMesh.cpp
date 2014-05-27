@@ -84,29 +84,29 @@ void LazyTextureMapping::releaseGLTextureId() {
 }
 
 LeveledTexturedMesh::~LeveledTexturedMesh() {
-#ifdef JAVA_CODE
-  synchronized (this) {
-#endif
+//#ifdef JAVA_CODE
+//  synchronized (this) {
+//#endif
 
-    if (_ownedMesh) {
-      delete _mesh;
-    }
-
-    if (_mappings != NULL) {
-      for (int i = 0; i < _mappings->size(); i++) {
-        LazyTextureMapping* mapping = _mappings->at(i);
-        delete mapping;
-      }
-
-      delete _mappings;
-      _mappings = NULL;
-    }
-
-    _glState->_release();
-
-#ifdef JAVA_CODE
+  if (_ownedMesh) {
+    delete _mesh;
   }
-#endif
+
+  if (_mappings != NULL) {
+    for (int i = 0; i < _mappings->size(); i++) {
+      LazyTextureMapping* mapping = _mappings->at(i);
+      delete mapping;
+    }
+
+    delete _mappings;
+//    _mappings = NULL;
+  }
+
+  _glState->_release();
+
+//#ifdef JAVA_CODE
+//  }
+//#endif
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -126,6 +126,10 @@ BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {
 }
 
 LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
+  if (_mappings == NULL) {
+    return NULL;
+  }
+
   if (_currentLevel < 0) {
     int newCurrentLevel = -1;
 

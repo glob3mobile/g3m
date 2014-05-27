@@ -45,27 +45,44 @@ public class AndTileCondition extends LayerCondition
     }
   }
 
-  public final boolean isAvailable(G3MRenderContext rc, Tile tile)
-  {
-    int size = _children.size();
-    for (int i = 0; i < size; i++)
-    {
-      LayerCondition child = _children.get(i);
-      if (!child.isAvailable(rc, tile))
-      {
-        return false;
-      }
-    }
-    return true;
-  }
+//  bool isAvailable(const G3MRenderContext* rc,
+//                   const Tile* tile) const;
+//
+//  bool isAvailable(const G3MEventContext* ec,
+//                   const Tile* tile) const;
 
-  public final boolean isAvailable(G3MEventContext ec, Tile tile)
+
+  //bool AndTileCondition::isAvailable(const G3MRenderContext* rc,
+  //                                   const Tile* tile) const {
+  //  int size = _children.size();
+  //  for (int i = 0; i < size; i++) {
+  //    LayerCondition* child = _children[i];
+  //    if (!child->isAvailable(rc, tile)) {
+  //      return false;
+  //    }
+  //  }
+  //  return true;
+  //}
+  //
+  //bool AndTileCondition::isAvailable(const G3MEventContext* ec,
+  //                                   const Tile* tile) const {
+  //  int size = _children.size();
+  //  for (int i = 0; i < size; i++) {
+  //    LayerCondition* child = _children[i];
+  //    if (!child->isAvailable(ec, tile)) {
+  //      return false;
+  //    }
+  //  }
+  //  return true;
+  //}
+  
+  public final boolean isAvailable(Tile tile)
   {
     int size = _children.size();
     for (int i = 0; i < size; i++)
     {
       LayerCondition child = _children.get(i);
-      if (!child.isAvailable(ec, tile))
+      if (!child.isAvailable(tile))
       {
         return false;
       }
