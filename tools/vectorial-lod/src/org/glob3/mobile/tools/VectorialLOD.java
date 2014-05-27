@@ -977,24 +977,41 @@ public class VectorialLOD {
 
    private static String getGeometriesSRID(final String dataSourceTable) {
 
-      //final String sridQuery = "SELECT srid FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
-      final String sridQuery = "SELECT ST_SRID(" + _theGeomColumnName + ") FROM " + dataSourceTable + " LIMIT 1";
+      final String sridQuery = "SELECT srid FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
+      final String auxSridQuery = "SELECT ST_SRID(" + _theGeomColumnName + ") FROM " + dataSourceTable + " LIMIT 1";
 
       try {
          final Connection conn = _dataBaseService.getConnection();
          final Statement st = conn.createStatement();
 
-         final ResultSet rs = st.executeQuery(sridQuery);
+         ResultSet rs = st.executeQuery(sridQuery);
+
+         if (rs.next()) {
+            final int geomSRID = rs.getInt(1);
+
+            if (geomSRID > 0) {
+               st.close();
+               return Integer.toString(geomSRID);
+            }
+         }
+
+         ILogger.instance().logWarning("Unknown SRID. Attempt alternative strategy.");
+
+         //-- alternative strategy for unknown SRIDs. Query to any of the rows
+         rs = st.executeQuery(auxSridQuery);
 
          if (!rs.next()) {
             st.close();
             return null;
          }
-
          final int geomSRID = rs.getInt(1);
+         st.close();
 
-         return Integer.toString(geomSRID);
+         if (geomSRID > 0) {
+            return Integer.toString(geomSRID);
+         }
 
+         return null;
       }
       catch (final SQLException e) {
          ILogger.instance().logError("SQL error getting SRID: " + e.getMessage());
@@ -1212,7 +1229,9 @@ public class VectorialLOD {
 
       //TODO: pending to support any srid different from 4326
       _geomSRID = getGeometriesSRID(dataSource._sourceTable);
-      System.out.println("SRID: " + _geomSRID);
+      if (_geomType != null) {
+         System.out.println("SRID: " + _geomSRID);
+      }
 
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
