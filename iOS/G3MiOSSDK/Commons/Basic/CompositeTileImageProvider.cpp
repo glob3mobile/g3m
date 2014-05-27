@@ -165,8 +165,6 @@ void CompositeTileImageProvider::Composer::done() {
     return;
   }
 
-#warning JM at work
-  //const bool simpleCase = (_contributionsSize == 1) && ((contributionSector == NULL) || _tileSector.isEquals(*contributionSector));
   bool simpleCase;
   if (_contributionsSize == 1) {
     const ChildResult* singleResult = _results[0];
@@ -261,7 +259,6 @@ void CompositeTileImageProvider::Composer::mixResult() {
     const ChildResult* result = _results[i];
     imageId += result->_imageId + "|";
 
-#warning JM at Work //For now, we consider the whole image will appear on the tile (no source rect needed)
     const IImage* image = result->_image;
     const float   alpha = result->_contribution->_alpha;
     const Sector* imageSector = result->_contribution->getSector();

@@ -190,25 +190,9 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
 
-  BingMapsLayer* rasterLayer = new BingMapsLayer(//BingMapType::AerialWithLabels(),
-                                                 BingMapType::Aerial(),
+  BingMapsLayer* rasterLayer = new BingMapsLayer(BingMapType::Aerial(),
                                                  "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                 TimeInterval::fromDays(30),
-                                                 true,
-                                                 2,
-                                                 10
-                                                 );
-
-
-//  const std::string&    imagerySet,
-//  const std::string&    key,
-//  const TimeInterval&   timeToCache,
-//  const bool            readExpired    = true,
-//  const int             initialLevel   = 2,
-//  const int             maxLevel       = 25,
-//  const float           transparency   = 1,
-//  const LayerCondition* condition      = NULL,
-//  const std::string&    disclaimerInfo = ""
+                                                 TimeInterval::fromDays(30));
 
   model->getLayerSet()->addLayer(rasterLayer);
 
