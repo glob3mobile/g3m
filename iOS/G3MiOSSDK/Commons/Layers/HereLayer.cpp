@@ -300,10 +300,6 @@ RenderState HereLayer::getRenderState() {
 
 
 const TileImageContribution* HereLayer::rawContribution(const Tile* tile) const {
-//  return ((_transparency < 1)
-//          ? TileImageContribution::fullCoverageTransparent(_transparency)
-//          : TileImageContribution::fullCoverageOpaque());
-
   const Tile* tileP = getParentTileOfSuitableLevel(tile);
   if (tileP == NULL) {
     return NULL;

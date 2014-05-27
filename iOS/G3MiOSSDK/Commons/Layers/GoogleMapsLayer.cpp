@@ -205,10 +205,6 @@ RenderState GoogleMapsLayer::getRenderState() {
 }
 
 const TileImageContribution* GoogleMapsLayer::rawContribution(const Tile* tile) const {
-//  return ((_transparency < 1)
-//          ? TileImageContribution::fullCoverageTransparent(_transparency)
-//          : TileImageContribution::fullCoverageOpaque());
-
   const Tile* tileP = getParentTileOfSuitableLevel(tile);
   if (tileP == NULL) {
     return NULL;
