@@ -193,14 +193,32 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   BingMapsLayer* rasterLayer = new BingMapsLayer(//BingMapType::AerialWithLabels(),
                                                  BingMapType::Aerial(),
                                                  "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                 TimeInterval::fromDays(30));
+                                                 TimeInterval::fromDays(30),
+                                                 true,
+                                                 2,
+                                                 10
+                                                 );
+
+
+//  const std::string&    imagerySet,
+//  const std::string&    key,
+//  const TimeInterval&   timeToCache,
+//  const bool            readExpired    = true,
+//  const int             initialLevel   = 2,
+//  const int             maxLevel       = 25,
+//  const float           transparency   = 1,
+//  const LayerCondition* condition      = NULL,
+//  const std::string&    disclaimerInfo = ""
+
   model->getLayerSet()->addLayer(rasterLayer);
 
-  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+//  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
   const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
                                                  47.803029, 10.492264);
   const int firstLevel = 2;
-  const int maxLevel = 17;
+  const int maxLevel = 16;
+//  const int maxLevel = 17;
 
   const GEORasterSymbolizer* symbolizer = new PinkishRasterSymbolizer();
 
@@ -212,7 +230,8 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
                                                     TimeInterval::fromDays(30), // timeToCache
                                                     true,                       // readExpired
                                                     1,                          // transparency
-                                                    new LevelTileCondition(15, 21),
+                                                    //new LevelTileCondition(15, 21),
+                                                    new LevelTileCondition(10, 21),
                                                     ""                          // disclaimerInfo
                                                     );
   model->getLayerSet()->addLayer(_tiledVectorLayer);
