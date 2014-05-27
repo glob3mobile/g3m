@@ -45,6 +45,7 @@ public class VectorialLOD {
    final static String  PARAMETERS_FILE         = "parameters.xml";
    final static String  METADATA_FILENAME       = "metadata.json";
    final static String  EMPTY_GEOJSON           = "{\"type\":\"FeatureCollection\",\"features\":null}";
+   final static String  INTERNAL_SRID           = "4326";
 
    final static double  OVERLAP_PERCENTAGE      = 5.0;
    final static int     CONNECTION_TIMEOUT      = 5;                                                   //seconds
@@ -469,12 +470,23 @@ public class VectorialLOD {
       //--i.e: SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
 
       final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT ";
-      final String baseQuery1 = ") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
-      final String baseQuery2 = ") as sg, ";
+
+      String baseQuery1 = "";
+      String baseQuery2 = "";
+      if (_geomSRID.equals(INTERNAL_SRID)) {
+         baseQuery1 = ") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
+         baseQuery2 = ") as sg, ";
+      }
+      else {
+         baseQuery1 = ") As l)) As properties FROM ( SELECT ST_Transform(ST_SimplifyPreserveTopology(ST_Intersection(";
+         baseQuery2 = ")," + INTERNAL_SRID + ") as sg, ";
+      }
+
       final String baseQuery3 = " FROM ";
       final String baseQuery4 = " WHERE ST_Intersects(";
       //final String baseQuery5 = ") and (";
-      final String baseQuery5 = ") and ";
+      String baseQuery5 = ") and ";
+
       //final String baseQuery6 = ")) As lg ) As f ) As fc";
       final String baseQuery6 = ") As lg ) As f ) As fc";
 
@@ -490,12 +502,16 @@ public class VectorialLOD {
       final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
       //         System.out.println("FILTER CRITERIA: " + filterCriteria);
 
+      if (filterCriteria.toUpperCase().trim().startsWith("ORDER")) {
+         baseQuery5 = ") ";
+      }
+
       //-- full query final where first cut, second simplify
       final String fullQuery = baseQuery0 + propsQuery + baseQuery1 + _theGeomColumnName + "," + bboxQuery + "),"
                                + simplifyTolerance + baseQuery2 + propsQuery + baseQuery3 + dataSourceTable + baseQuery4
                                + _theGeomColumnName + "," + bboxQuery + baseQuery5 + filterCriteria + baseQuery6;
 
-      //System.out.println("fullQuery: " + fullQuery);
+      //      System.out.println("fullQuery: " + fullQuery);
 
       // -- query example --
       // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
@@ -675,8 +691,16 @@ public class VectorialLOD {
          //            return TileSector.FULL_SPHERE;
          //         }
 
-         final String bboxQuery = "SELECT Box2D(ST_Extent(" + _theGeomColumnName + ")) from " + dataSourceTable;
+         String bboxQuery = "";
          //System.out.println("bboxQuery: " + bboxQuery);
+         if (_geomSRID.equals(INTERNAL_SRID)) {
+            bboxQuery = "SELECT Box2D(ST_Extent(" + _theGeomColumnName + ")) from " + dataSourceTable;
+         }
+         else {
+            //-- SELECT Box2D(ST_Transform(ST_SetSRID(ST_Extent(way),900913),4326)) FROM planet_osm_polygon
+            bboxQuery = "SELECT Box2D(ST_Transform(ST_SetSRID(ST_Extent(" + _theGeomColumnName + ")," + _geomSRID + "),"
+                        + INTERNAL_SRID + ")) FROM " + dataSourceTable;
+         }
 
          final ResultSet rs = st.executeQuery(bboxQuery);
 
@@ -890,7 +914,12 @@ public class VectorialLOD {
 
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
       final double factor = areaFactor * areaFactor;
-      final String andFilter = (filterCriteria.equalsIgnoreCase("true")) ? "" : " and " + filterCriteria;
+
+      //final String andFilter = (filterCriteria.equalsIgnoreCase("true")) ? "" : " and " + filterCriteria;
+      String andFilter = "";
+      if (!filterCriteria.trim().equalsIgnoreCase("true")) {
+         andFilter = (filterCriteria.toUpperCase().trim().startsWith("ORDER")) ? " " + filterCriteria : " and " + filterCriteria;
+      }
 
       return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
              + andFilter;
@@ -939,7 +968,11 @@ public class VectorialLOD {
                     + Double.toString(sector._upper._longitude._degrees) + ","
                     + Double.toString(sector._upper._latitude._degrees) + ")),4326)";
 
-      //      System.out.println("BOX QUERY: " + resultQuery);
+      if (!_geomSRID.equals(INTERNAL_SRID)) {
+         resultQuery = "ST_Transform(" + resultQuery + "," + _geomSRID + ")";
+      }
+
+      //System.out.println("BOX QUERY: " + resultQuery);
 
       return resultQuery;
    }
@@ -986,16 +1019,17 @@ public class VectorialLOD {
 
          ResultSet rs = st.executeQuery(sridQuery);
 
+         int geomSRID = 0;
          if (rs.next()) {
-            final int geomSRID = rs.getInt(1);
+            geomSRID = rs.getInt(1);
 
-            if (geomSRID > 0) {
+            if (isValidSRID(geomSRID)) {
                st.close();
                return Integer.toString(geomSRID);
             }
          }
 
-         ILogger.instance().logWarning("Unknown SRID. Attempt alternative strategy.");
+         ILogger.instance().logWarning("Unknown SRID: " + geomSRID + ". Attempt alternative strategy.");
 
          //-- alternative strategy for unknown SRIDs. Query to any of the rows
          rs = st.executeQuery(auxSridQuery);
@@ -1004,19 +1038,50 @@ public class VectorialLOD {
             st.close();
             return null;
          }
-         final int geomSRID = rs.getInt(1);
+         geomSRID = rs.getInt(1);
          st.close();
 
-         if (geomSRID > 0) {
+         if (isValidSRID(geomSRID)) {
             return Integer.toString(geomSRID);
          }
 
          return null;
       }
       catch (final SQLException e) {
-         ILogger.instance().logError("SQL error getting SRID: " + e.getMessage());
+         ILogger.instance().logError("SQL error getting geometries SRID: " + e.getMessage());
       }
       return null;
+   }
+
+
+   private static boolean isValidSRID(final int srid) {
+
+      //-- SELECT COUNT(srid) from spatial_ref_sys WHERE srid='4326'
+      final String sridQuery = "SELECT COUNT(srid) from spatial_ref_sys WHERE srid='" + Integer.toString(srid) + "'";
+
+      Connection conn = null;
+      Statement st = null;
+      ResultSet rs = null;
+      try {
+         conn = _dataBaseService.getConnection();
+         st = conn.createStatement();
+         rs = st.executeQuery(sridQuery);
+
+         if (!rs.next()) {
+            st.close();
+            return false;
+         }
+
+         final int containSRID = rs.getInt(1);
+         st.close();
+
+         return (containSRID > 0);
+      }
+      catch (final SQLException e) {
+         ILogger.instance().logError("SQL during SRID validation: " + e.getMessage());
+      }
+
+      return false;
    }
 
 
@@ -1052,6 +1117,10 @@ public class VectorialLOD {
       return getTimeMessage(ms, true);
    }
 
+
+   //   public String getSectorString(final Sector sector) {
+   //      return "Sector [level=" + sector._level + ", row=" + sector._row + ", column=" + sector._column+"]";
+   //   }
 
    private static String getTimeMessage(final long ms,
                                         final boolean rounded) {
@@ -1219,18 +1288,26 @@ public class VectorialLOD {
          System.out.println("Geometry column name: " + _theGeomColumnName);
       }
 
+      //TODO: pending to support any srid different from 4326
+      _geomSRID = getGeometriesSRID(dataSource._sourceTable);
+      if (_geomSRID != null) {
+         System.out.println("Source data SRID: " + _geomSRID);
+         if (!_geomSRID.equals(INTERNAL_SRID)) {
+            ILogger.instance().logInfo(
+                     "Source data SRID different from 4326. For performance reasons consider reprojection of source data.");
+         }
+      }
+      else {
+         System.err.println("Invalid SRID of source data. Exit application.");
+         System.exit(1);
+      }
+
       _boundSector = getGeometriesBound(dataSource._sourceTable);
       //System.out.println(_boundSector.toString());
 
       _geomType = getGeometriesType(dataSource._sourceTable);
       if (_geomType != null) {
          System.out.println("Source data type: " + _geomType.toString());
-      }
-
-      //TODO: pending to support any srid different from 4326
-      _geomSRID = getGeometriesSRID(dataSource._sourceTable);
-      if (_geomType != null) {
-         System.out.println("SRID: " + _geomSRID);
       }
 
       //assume full sphere topSector for tiles pyramid generation
