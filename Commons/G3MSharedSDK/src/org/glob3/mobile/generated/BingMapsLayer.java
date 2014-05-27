@@ -91,10 +91,6 @@ public class BingMapsLayer extends RasterLayer
 
   protected final TileImageContribution rawContribution(Tile tile)
   {
-  //  return ((_transparency < 1)
-  //          ? TileImageContribution::fullCoverageTransparent(_transparency)
-  //          : TileImageContribution::fullCoverageOpaque());
-  
     final Tile tileP = getParentTileOfSuitableLevel(tile);
     if (tileP == null)
     {
