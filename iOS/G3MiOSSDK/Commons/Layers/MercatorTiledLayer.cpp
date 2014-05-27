@@ -253,10 +253,6 @@ RenderState MercatorTiledLayer::getRenderState() {
 }
 
 const TileImageContribution* MercatorTiledLayer::rawContribution(const Tile* tile) const {
-//  return ((_isTransparent || (_transparency < 1))
-//          ? TileImageContribution::fullCoverageTransparent(_transparency)
-//          : TileImageContribution::fullCoverageOpaque());
-
   const Tile* tileP = getParentTileOfSuitableLevel(tile);
   if (tileP == NULL) {
     return NULL;
