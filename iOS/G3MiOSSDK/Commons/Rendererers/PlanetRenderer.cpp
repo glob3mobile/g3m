@@ -926,7 +926,8 @@ std::list<std::string> PlanetRenderer::getTilesURL(Geodetic2D lower, Geodetic2D 
   std::list<std::string> urls = visitor->_urls;
 
   for (int i = 0; i < 20; i++) {
-    printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    ILogger::instance()->logInfo("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
   }
 
   delete visitor;
@@ -1045,7 +1046,8 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
   }
 
   for (int i = 0; i < 20; i++) {
-    printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    ILogger::instance()->logInfo("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
   }
 
   return urls;
