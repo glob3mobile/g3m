@@ -764,7 +764,7 @@ public class Tile
     prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
     return false;
   
-      setRendered(rendered, tileRenderingListener);
+      //setRendered(rendered, tileRenderingListener);
   
   /*
    //// ESTA PARTE FUE CAMBIADA POR JM EN RAMA SENDEROS
