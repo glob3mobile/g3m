@@ -349,7 +349,7 @@ public class Tile
     if (_level > GlobalMembersTile.MAX_LOD)
     {
       GlobalMembersTile.MAX_LOD = _level;
-      System.out.printf("MAXLOD = %d\n", _level);
+      ILogger.instance().logInfo("MAXLOD = %d\n", _level);
     }
   
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);

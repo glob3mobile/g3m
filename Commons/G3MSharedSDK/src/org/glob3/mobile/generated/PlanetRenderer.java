@@ -978,7 +978,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     for (int i = 0; i < 20; i++)
     {
-      System.out.printf("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+      ILogger.instance().logInfo("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+      //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
     }
   
     if (visitor != null)
@@ -1127,7 +1128,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     for (int i = 0; i < 20; i++)
     {
-      System.out.printf("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+      ILogger.instance().logInfo("TILES_VISITED LOD:%d -> %d\n", i, GlobalMembersPlanetRenderer.TILES_VISITED[i]);
+      //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
     }
   
     return urls;
