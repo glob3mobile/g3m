@@ -46,6 +46,8 @@ public class VectorialLOD {
    final static String  METADATA_FILENAME       = "metadata.json";
    final static String  EMPTY_GEOJSON           = "{\"type\":\"FeatureCollection\",\"features\":null}";
    final static String  INTERNAL_SRID           = "4326";
+   final static String  MERCATOR_PYRAMID        = "MERCATOR";
+   final static String  WGS84_PYRAMID           = "WGS84";
 
    final static double  OVERLAP_PERCENTAGE      = 5.0;
    final static int     CONNECTION_TIMEOUT      = 5;                                                   //seconds
@@ -263,7 +265,7 @@ public class VectorialLOD {
 
       try {
          // -- query example --
-         // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
+         // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
          //-------------------
 
          //-- full query for geometry select
@@ -516,6 +518,8 @@ public class VectorialLOD {
       // -- query example --
       // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
       //-------------------
+      //-- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT false) As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(-9.0,-94.5), ST_Point(180.0,4.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-171.0,4.5)),4326))),0.39305884) as sg, false FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(-9.0,-94.5), ST_Point(180.0,4.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-171.0,4.5)),4326))) and ST_Area(Box2D(the_geom))>2.2247471562965018) As lg ) As f ) As fc
+
 
       return fullQuery;
    }
@@ -701,6 +705,8 @@ public class VectorialLOD {
             bboxQuery = "SELECT Box2D(ST_Transform(ST_SetSRID(ST_Extent(" + _theGeomColumnName + ")," + _geomSRID + "),"
                         + INTERNAL_SRID + ")) FROM " + dataSourceTable;
          }
+
+         //         System.out.println("bboxQuery: " + bboxQuery);
 
          final ResultSet rs = st.executeQuery(bboxQuery);
 
@@ -1194,7 +1200,7 @@ public class VectorialLOD {
    private static String getTileBsonName(final TileSector sector) {
 
       //return sector._column + ".bson";
-      return sector.getRow(_renderParameters) + ".bson";
+      return sector.getRow(_renderParameters) + ".geobson";
    }
 
 
@@ -1228,7 +1234,7 @@ public class VectorialLOD {
       }
 
       if (generateBson()) {
-         _bsonFolder = _lodFolder + File.separatorChar + "BSON";
+         _bsonFolder = _lodFolder + File.separatorChar + "GEOBSON";
          if (!new File(_bsonFolder).exists()) {
             new File(_bsonFolder).mkdir();
          }
@@ -1288,7 +1294,6 @@ public class VectorialLOD {
          System.out.println("Geometry column name: " + _theGeomColumnName);
       }
 
-      //TODO: pending to support any srid different from 4326
       _geomSRID = getGeometriesSRID(dataSource._sourceTable);
       if (_geomSRID != null) {
          System.out.println("Source data SRID: " + _geomSRID);
@@ -1313,11 +1318,13 @@ public class VectorialLOD {
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
 
+      System.out.println("Generating.. await termination...");
       for (final TileSector sector : firstLevelTileSectors) {
          generateVectorialLOD(sector, dataSource);
          //processSubSectors(sector, dataSource);
       }
-      System.out.println("Generating.. await termination...");
+
+      //System.out.println("Running MAIN at: " + Thread.currentThread().getName());
 
       _concurrentService.awaitTermination();
 
@@ -1388,6 +1395,7 @@ public class VectorialLOD {
       final Runnable task = new Runnable() {
          @Override
          public void run() {
+            //System.out.println("Running at: " + Thread.currentThread().getName());
             generateVectorialLOD(sector, dataSource);
          }
       };
@@ -1462,10 +1470,25 @@ public class VectorialLOD {
          _firstLevelCreated = _lastLevelCreated;
       }
 
+      //pyramid: { type: "epsg:4326", topSector: [], splitByLatitude: 1, splitsByLongitude: 1 }
+
+      final String EPSG = (_projection.equals(MERCATOR_PYRAMID)) ? "\"EPSG:900913\"" : "\"EPSG:4326\"";
+      final String pyramid = "{ type: " + EPSG + ", topSector: [" + _renderParameters._topSector._lower._latitude._degrees + ", "
+                             + _renderParameters._topSector._lower._longitude._degrees + ", "
+                             + _renderParameters._topSector._upper._latitude._degrees + ", "
+                             + _renderParameters._topSector._upper._longitude._degrees + "], splitsByLatitude: "
+                             + _renderParameters._topSectorSplitsByLatitude + ", splitsByLongitude: "
+                             + _renderParameters._topSectorSplitsByLongitude + " }";
+
+      //      final String metadata = "{ sector: [" + _boundSector._lower._latitude._degrees + ", "
+      //                              + _boundSector._lower._longitude._degrees + ", " + _boundSector._upper._latitude._degrees + ", "
+      //                              + _boundSector._upper._longitude._degrees + "], minLevel: " + _firstLevelCreated + ", maxLevel: "
+      //                              + _lastLevelCreated + ", projection: " + _projection + " }";
+
       final String metadata = "{ sector: [" + _boundSector._lower._latitude._degrees + ", "
                               + _boundSector._lower._longitude._degrees + ", " + _boundSector._upper._latitude._degrees + ", "
-                              + _boundSector._upper._longitude._degrees + " ], minLevel: " + _firstLevelCreated + ", maxLevel: "
-                              + _lastLevelCreated + ", projection: " + _projection + " }";
+                              + _boundSector._upper._longitude._degrees + "], minLevel: " + _firstLevelCreated + ", maxLevel: "
+                              + _lastLevelCreated + ", pyramid: " + pyramid + " }";
 
       _metadataFileName = _lodFolder + File.separatorChar + METADATA_FILENAME;
       final File metadataFile = new File(_metadataFileName);
@@ -1610,7 +1633,7 @@ public class VectorialLOD {
 
       _firstLevelCreated = MAX_LEVEL;
       _lastLevelCreated = FIRST_LEVEL;
-      _projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
+      _projection = (_renderParameters._mercator) ? MERCATOR_PYRAMID : WGS84_PYRAMID;
 
    }
 

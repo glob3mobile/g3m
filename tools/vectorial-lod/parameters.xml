@@ -21,8 +21,8 @@
    <entry key="PASSWORD">postgres1g0</entry>
    
    <!-- Name of the accessed postgis database -->
-   <!-- <entry key="DATABASE_NAME">vectorial_test</entry> -->
-   <entry key="DATABASE_NAME">osm</entry>
+   <entry key="DATABASE_NAME">vectorial_test</entry>
+   <!-- <entry key="DATABASE_NAME">osm</entry> -->
    <!-- <entry key="DATABASE_NAME">virginia</entry> -->
 
 <!-- LOD parameters -->   
@@ -36,10 +36,10 @@
    <entry key="MERCATOR">true</entry>
    
    <!-- first level of tiles to be generated -->
-   <entry key="FIRST_LEVEL">14</entry>
+   <entry key="FIRST_LEVEL">1</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">15</entry>
+   <entry key="MAX_LEVEL">2</entry>
    
    <!-- valid output format: geojson, bson, both -->
    <entry key="OUTPUT_FORMAT">both</entry>
@@ -51,21 +51,21 @@
 <!-- Parameters for specific vectorial data -->  
 
    <!-- name of the table in the database with the target vectorial data -->
-   <!-- <entry key="DATABASE_TABLE">ne_10m_admin_0_countries</entry> -->
+   <entry key="DATABASE_TABLE">ne_10m_admin_0_countries</entry>
    <!-- <entry key="DATABASE_TABLE">roads</entry> -->
    <!-- <entry key="DATABASE_TABLE">catastro</entry> -->
    <!-- <entry key="DATABASE_TABLE">planet_osm_polygon</entry> -->
    <!-- <entry key="DATABASE_TABLE">planet_osm_roads</entry> -->
-   <entry key="DATABASE_TABLE">planet_osm_point</entry>
+   <!-- <entry key="DATABASE_TABLE">planet_osm_point</entry> -->
 
    <!-- filter criteria using pure database query format that will be included in a where clause -->
    <!-- i.e. "continent" like 'Euro%' AND "pop_est" > 10000000 -->
    <!-- <entry key="FILTER_CRITERIA">("maxspeed">110 or "type"='motorway')</entry> -->
-   <!-- <entry key="FILTER_CRITERIA">true</entry> -->
+   <entry key="FILTER_CRITERIA">true</entry>
    <!-- <entry key="FILTER_CRITERIA">"ele" LIKE '4%' ORDER BY "ele" DESC LIMIT 20</entry> -->
    <!-- <entry key="FILTER_CRITERIA">"ele"::numeric>300 ORDER BY "ele" DESC LIMIT 20</entry> -->
    <!-- <entry key="FILTER_CRITERIA">"ele">'300' ORDER BY "ele" DESC LIMIT 20</entry> -->
-   <entry key="FILTER_CRITERIA">ORDER BY "ele" DESC LIMIT 20</entry>
+   <!-- <entry key="FILTER_CRITERIA">ORDER BY "ele" DESC LIMIT 20</entry> -->
    <!-- <entry key="FILTER_CRITERIA">ORDER BY "admin_level" DESC LIMIT 20</entry> -->
    
    
@@ -76,6 +76,6 @@
    <!-- <entry key="PROPERTIES">pcat1</entry> -->
    <!-- <entry key="PROPERTIES">building, name</entry> -->
    <!-- <entry key="PROPERTIES">brand</entry> -->
-   <entry key="PROPERTIES">ele</entry>
+   <!-- <entry key="PROPERTIES">ele</entry> -->
    
 </properties>

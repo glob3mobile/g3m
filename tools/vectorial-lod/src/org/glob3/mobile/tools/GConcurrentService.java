@@ -103,6 +103,7 @@ public class GConcurrentService {
             public void taskCompleted(final Thread thread) {
                _taskCounter.decrementAndGet();
                //System.out.println("Pending.. " + _taskCounter.decrementAndGet());
+               //System.out.println("Ending: " + Thread.currentThread().getName());
             }
          };
 
@@ -148,6 +149,7 @@ public class GConcurrentService {
 
       try {
          while (_taskCounter.get() > 0) {
+            //System.out.println("Waiting at thread: " + Thread.currentThread().getName());
             Thread.sleep(ALIVE_PERIOD);
          }
 
