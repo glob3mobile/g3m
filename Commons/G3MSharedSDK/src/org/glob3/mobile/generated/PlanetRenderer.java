@@ -299,30 +299,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private LayerTilesRenderParameters _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
-  private LayerTilesRenderParameters getLayerTilesRenderParameters()
-  {
-    if (_layerTilesRenderParametersDirty)
-    {
-      _errors.clear();
-      _layerTilesRenderParameters = null;
-      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, _errors);
-      if (_layerTilesRenderParameters == null)
-      {
-        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
-      }
-      _layerTilesRenderParametersDirty = false;
-    }
-    return _layerTilesRenderParameters;
-  }
-
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-<<<<<<< HEAD
   G3MRenderContext _renderContext;
   //  std::list<Tile*> _tilesRenderedInLastFrame;
-=======
-//  std::list<Tile*> _tilesRenderedInLastFrame;
->>>>>>> origin/zrender-touchhandlers
 
   private long _renderedTilesListFrame;
   private java.util.LinkedList<Tile> _renderedTiles = new java.util.LinkedList<Tile>();
@@ -382,7 +362,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return _renderedTiles;
   }
 
-<<<<<<< HEAD
   private void addLayerSetURLForSector(java.util.LinkedList<URL> urls, Tile tile)
   {
     java.util.ArrayList<Petition> petitions = _layerSet.createTileMapPetitions(_renderContext, _layerTilesRenderParameters, tile);
@@ -424,10 +403,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return false;
   }
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
-=======
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener)
->>>>>>> origin/zrender-touchhandlers
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -583,11 +559,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-<<<<<<< HEAD
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
-=======
         tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
->>>>>>> origin/zrender-touchhandlers
       }
     }
     else
@@ -1091,7 +1063,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return _renderTileMeshes;
   }
 
-<<<<<<< HEAD
   public final java.util.LinkedList<URL> getResourcesURL(Sector sector, int minLOD, int maxLOD)
   {
      return getResourcesURL(sector, minLOD, maxLOD, null);
@@ -1143,7 +1114,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
         if (tile._level < maxLOD)
         {
-          java.util.ArrayList<Tile> newTiles = tile.getSubTiles(_layerTilesRenderParameters._mercator);
+          //std::vector<Tile*>* newTiles = tile->getSubTiles(_layerTilesRenderParameters->_mercator);
+          java.util.ArrayList<Tile> newTiles = tile.getSubTiles();
           for (int i = 0; i < newTiles.size(); i++)
           {
             _tiles.addLast(newTiles.get(i));
@@ -1164,14 +1136,31 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final int getNumberOfRenderedTiles()
   {
     return _renderedTiles.size();
-=======
+  }
+
+  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
+  {
+    if (_layerTilesRenderParametersDirty)
+    {
+      _errors.clear();
+      _layerTilesRenderParameters = null;
+      _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_tilesRenderParameters._forceFirstLevelTilesRenderOnStart, _errors);
+      if (_layerTilesRenderParameters == null)
+      {
+        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+      }
+      _layerTilesRenderParametersDirty = false;
+    }
+    return _layerTilesRenderParameters;
+  }
+
+
   public final void changedInfo(java.util.ArrayList<String> info)
   {
     if (_changedInfoListener != null)
     {
       _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
     }
->>>>>>> origin/zrender-touchhandlers
   }
 
 }

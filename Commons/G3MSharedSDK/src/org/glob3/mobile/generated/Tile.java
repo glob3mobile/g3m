@@ -222,14 +222,10 @@ public class Tile
     {
       final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
   
-<<<<<<< HEAD
       Color color = isTextureSolved()? Color.blue() : Color.red();
   
       //TODO: CHECK
       _debugMesh = tessellator.createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this, color);
-=======
-      _debugMesh = tessellator.createTileDebugMesh(rc.getPlanet(), tileMeshResolution, this);
->>>>>>> origin/zrender-touchhandlers
     }
     return _debugMesh;
   }
@@ -505,26 +501,6 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-  private void setRendered(boolean rendered, TileRenderingListener tileRenderingListener)
-  {
-    if (_rendered != rendered)
-    {
-      _rendered = rendered;
-  
-      if (tileRenderingListener != null)
-      {
-        if (_rendered)
-        {
-          tileRenderingListener.startRendering(this);
-        }
-        else
-        {
-          tileRenderingListener.stopRendering(this);
-        }
-      }
-    }
-  }
-
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -640,6 +616,24 @@ public class Tile
   }
 
   //Change to public for TileCache
+  //std::vector<Tile*>* getSubTiles(const bool mercator);
+
+//  const Sector getSector() const {
+  //    return _sector;
+  //  }
+  //
+  //  int getLevel() const {
+  //    return _level;
+  //  }
+  //
+  //  int getRow() const {
+  //    return _row;
+  //  }
+  //
+  //  int getColumn() const {
+  //    return _column;
+  //  }
+
   public final java.util.ArrayList<Tile> getSubTiles()
   {
     if (_subtiles != null)
@@ -661,25 +655,6 @@ public class Tile
     return getSubTiles(splitLatitude, splitLongitude);
   }
 
-<<<<<<< HEAD
-//  const Sector getSector() const {
-  //    return _sector;
-  //  }
-  //
-  //  int getLevel() const {
-  //    return _level;
-  //  }
-  //
-  //  int getRow() const {
-  //    return _row;
-  //  }
-  //
-  //  int getColumn() const {
-  //    return _column;
-  //  }
-
-=======
->>>>>>> origin/zrender-touchhandlers
   public final Mesh getTexturizedMesh()
   {
     return _texturizedMesh;
@@ -719,11 +694,7 @@ public class Tile
   }
 
   //RETURN ISRAWRENDER
-<<<<<<< HEAD
-  public final boolean render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
-=======
   public final boolean render(G3MRenderContext rc, GLState parentState, java.util.LinkedList<Tile> toVisitInNextIteration, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
->>>>>>> origin/zrender-touchhandlers
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -785,8 +756,6 @@ public class Tile
   
       return isRawRender; //RETURN ISRAWRENDER
     }
-<<<<<<< HEAD
-=======
   
     //Not rendering, prunning will be performed
   
@@ -794,23 +763,26 @@ public class Tile
     setIsVisible(false, texturizer);
     prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
     return false;
+  
+      setRendered(rendered, tileRenderingListener);
   
   /*
    //// ESTA PARTE FUE CAMBIADA POR JM EN RAMA SENDEROS
+  >>>>>>> origin/zrender-touchhandlers
       return isRawRender; //RETURN ISRAWRENDER
     }
-    else {
-      setIsVisible(false, texturizer);
->>>>>>> origin/zrender-touchhandlers
   
     //Not rendering, prunning will be performed
   
-<<<<<<< HEAD
+  <<<< HEAD
     setRendered(rendered, tileRenderingListener);
     setIsVisible(false, texturizer);
     prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
     return false;
-=======
+  =======
+      return false; //RETURN ISRAWRENDER
+    }
+  
     if (_rendered != rendered) {
       _rendered = rendered;
   
@@ -827,7 +799,6 @@ public class Tile
     }
    */
   
->>>>>>> origin/zrender-touchhandlers
   }
 
 public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Tile> renderedTiles, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerSet layerSet, Sector renderedSector, boolean isForcedFullRender, long texturePriority, double texWidthSquared, double texHeightSquared, double nowInMS)
@@ -886,17 +857,6 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
         subTile.actualizeQuadTree(rc, renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared, texHeightSquared, nowInMS); // parentState,
       }
     }
-<<<<<<< HEAD
-    else
-    {
-      setIsVisible(false, texturizer);
-  
-      prune(texturizer, elevationDataProvider);
-      //TODO: AVISAR CAMBIO DE TERRENO
-    }
-  
-=======
->>>>>>> origin/zrender-touchhandlers
   }
   else
   {

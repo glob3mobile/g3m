@@ -214,13 +214,10 @@ public class TilesStatistics
   public final void log(ILogger logger)
   {
     logger.logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).", _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD), _tilesVisible, asLogString(_tilesVisibleByLevel, _maxLOD), _tilesRendered, asLogString(_tilesRenderedByLevel, _maxLOD));
-<<<<<<< HEAD
     //    logger->logInfo("Tiles processed:%d, visible:%d, rendered:%d.",
     //                    _tilesProcessed,
     //                    _tilesVisible,
     //                    _tilesRendered);
-=======
->>>>>>> origin/zrender-touchhandlers
   }
 
 

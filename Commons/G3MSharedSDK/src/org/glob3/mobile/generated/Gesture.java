@@ -21,10 +21,7 @@ package org.glob3.mobile.generated;
 
 
 
-<<<<<<< HEAD
-=======
 //class RenderState;
->>>>>>> origin/zrender-touchhandlers
 //class CameraEventHandler;
 //class MeshRenderer;
 

@@ -748,8 +748,6 @@ public class G3MWidget implements ChangedRendererInfoListener
     return Vector3D.nan();
   }
 
-<<<<<<< HEAD
-=======
 
   //void notifyChangedInfo() const;
 
@@ -795,7 +793,6 @@ public class G3MWidget implements ChangedRendererInfoListener
     }
   }
 
->>>>>>> origin/zrender-touchhandlers
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;

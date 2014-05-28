@@ -23,13 +23,6 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 {
 
   private MeshRenderer _meshRenderer;
-<<<<<<< HEAD
-
-  public CameraDoubleDragHandler()
-  {
-     _camera0 = new Camera(new Camera());
-     _meshRenderer = null;
-=======
   private boolean _allowRotation;
 
   public CameraDoubleDragHandler(boolean allowRotation)
@@ -37,7 +30,6 @@ public class CameraDoubleDragHandler extends CameraEventHandler
      _camera0 = new Camera(new Camera());
      _meshRenderer = null;
      _allowRotation = allowRotation;
->>>>>>> origin/zrender-touchhandlers
   }
 
   public void dispose()
