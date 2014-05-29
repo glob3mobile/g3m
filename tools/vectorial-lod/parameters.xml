@@ -36,10 +36,10 @@
    <entry key="MERCATOR">true</entry>
    
    <!-- first level of tiles to be generated -->
-   <entry key="FIRST_LEVEL">1</entry>
+   <entry key="FIRST_LEVEL">15</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">2</entry>
+   <entry key="MAX_LEVEL">15</entry>
    
    <!-- valid output format: geojson, bson, both -->
    <entry key="OUTPUT_FORMAT">both</entry>
@@ -71,7 +71,7 @@
    
    <!-- list of fields/columns associated to the vectorial data that shall be included as feature -->
    <!-- properties in the resultant geoJson file. Use a comma separated list -->
-   <!-- <entry key="PROPERTIES">mapcolor7</entry> -->
+   <entry key="PROPERTIES">mapcolor7</entry>
    <!-- <entry key="PROPERTIES">type</entry> -->
    <!-- <entry key="PROPERTIES">pcat1</entry> -->
    <!-- <entry key="PROPERTIES">building, name</entry> -->
