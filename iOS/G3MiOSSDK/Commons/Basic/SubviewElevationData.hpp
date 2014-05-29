@@ -34,7 +34,7 @@ public:
   
   bool hasNoData() const{ return _hasNoData;}
   
-  //const float* getBufferPointer() const{ return _buffer;}
+  const float* getBufferPointer() const{ return _buffer;}
 
 };
 

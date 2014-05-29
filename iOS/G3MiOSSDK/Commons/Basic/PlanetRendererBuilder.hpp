@@ -38,8 +38,6 @@ private:
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
 
-  TileTessellator* getTileTessellator();
-  TileTexturizer* getTexturizer();
   TileRasterizer* getTileRasterizer();
 
   LayerSet* getLayerSet();
@@ -120,6 +118,11 @@ public:
   ChangedRendererInfoListener* getChangedRendererInfoListener();
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
+  
+  
+  TileTessellator* getTileTessellator();
+  
+  TileTexturizer* getTexturizer();
 };
 
 #endif

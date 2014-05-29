@@ -492,6 +492,10 @@ public:
     }
   }
   
+  TileTessellator* getTileTessellator() const{
+    return _tessellator;
+  }
+  
 };
 
 
