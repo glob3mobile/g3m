@@ -1573,7 +1573,6 @@ public class G3MWebGLTestingApplication
 		   final Planet planet = Planet.createFlatEarth();
 		   builder.setPlanet(planet);
 		   
-		   /*
 		   // wms layer
 			final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, 
 					new Vector2I(256, 256), 
@@ -1593,7 +1592,6 @@ public class G3MWebGLTestingApplication
 				   ltrp);
 		   layerSet.addLayer(grafcanLIDAR);
 		   builder.getPlanetRendererBuilder().setLayerSet(layerSet);
-		   */
 		   	   
 		   // create elevations for GC
 		   Sector sector = Sector.fromDegrees(27.7116484957735, -15.90589160041418, 28.225913322423995, -15.32910937385168 );
