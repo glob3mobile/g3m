@@ -41,7 +41,7 @@
    <!-- last level of tiles to be generated -->
    <entry key="MAX_LEVEL">15</entry>
    
-   <!-- valid output format: geojson, bson, both -->
+   <!-- valid output format: geojson, geobson, both -->
    <entry key="OUTPUT_FORMAT">both</entry>
    
    <!-- output folder path, using the correct operating system path separator. By default, LOD folder -->

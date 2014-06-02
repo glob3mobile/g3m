@@ -3,9 +3,12 @@
 package org.glob3.mobile.tools;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -38,7 +41,7 @@ import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJson;
 import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 
-public class VectorialLOD {
+public class MixedVectorialLOD {
 
    //-- Internal constants definition ------------------------------------------------------------------
 
@@ -76,22 +79,21 @@ public class VectorialLOD {
    private static String                     PASSWORD           = "postgres1g0";
    private static String                     DATABASE_NAME      = "vectorial_test";
 
-   //-- Data source and filter parameters --------------------------------------------------------------
-   private static String                     DATABASE_TABLE     = "ne_10m_admin_0_countries";
-   private static String                     FILTER_CRITERIA    = "true";
-   private static String[]                   PROPERTIES;
-
    //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
    private static float                      QUALITY_FACTOR     = 1.0f;
    private static boolean                    MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
    private static int                        FIRST_LEVEL        = 0;
    private static int                        MAX_LEVEL          = 3;
-   //private static int                        NUM_LEVELS         = (MAX_LEVEL - FIRST_LEVEL) + 1;
    private static int                        MAX_DB_CONNECTIONS = 2;
    private static String                     OUTPUT_FORMAT      = "geojson";                    // valid values: geojson, geobson, both
    private static String                     ROOT_FOLDER        = "LOD";
 
-   //-- Variables ----------------------------------------------------------------------
+   //-- Data source and filter parameters --------------------------------------------------------------
+   private static String                     DATABASE_TABLE     = "ne_10m_admin_0_countries";
+   private static String                     FILTER_CRITERIA    = "true";
+   private static String[]                   PROPERTIES;
+
+   //-- Common variables for all data sources -----------------------------------------------------------
    private static DataBaseService            _dataBaseService   = null;
    private static String                     _lodFolder         = null;
    private static String                     _geojsonFolder     = null;
@@ -99,14 +101,21 @@ public class VectorialLOD {
    private static String                     _metadataFileName  = null;
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
-   private static TileSector                 _boundSector       = TileSector.FULL_SPHERE_SECTOR;
-   private static GeomType                   _geomType          = null;
-   private static String                     _theGeomColumnName = null;                         //"the_geom";
    private static String                     _projection        = null;
    private static int                        _firstLevelCreated = 0;
    private static int                        _lastLevelCreated  = 0;
-   private static String                     _geomSRID          = null;
 
+   //-- Different variables for any data source ---------------------------------------------------------
+   private static Sector                     _globalBoundSector = TileSector.FULL_SPHERE_SECTOR;
+   //   private static GeomType                   _geomType          = null;
+   //   private static String                     _theGeomColumnName = null;                         //"the_geom"; 
+   //   private static String                     _geomSRID          = null;
+
+   //-- New for mixed vectorial LOD ---------------------------------------------------
+
+   private static List<DataSource>           _dataSources       = new ArrayList<DataSource>();
+
+   //----------------------------------------------------------------------------------
 
    /*
     * For handling postgis database access and connections
@@ -221,6 +230,10 @@ public class VectorialLOD {
       public final String   _sourceTable;
       public final String   _geomFilterCriteria;
       public final String[] _includeProperties;
+      public TileSector     _boundSector       = TileSector.FULL_SPHERE_SECTOR;
+      public GeomType       _geomType          = null;
+      public String         _theGeomColumnName = null;
+      public String         _geomSRID          = null;
 
 
       public DataSource(final String sourceTable,
@@ -231,6 +244,45 @@ public class VectorialLOD {
          _geomFilterCriteria = geomFilterCriteria;
          _includeProperties = includeProperties;
       }
+
+
+      //      public DataSource(final TileSector boundSector,
+      //                        final GeomType geomType,
+      //                        final String theGeomColumnName,
+      //                        final String geomSRID,
+      //                        final String sourceTable,
+      //                        final String geomFilterCriteria,
+      //                        final String... includeProperties) {
+      //
+      //         _boundSector = boundSector;
+      //         _geomType = geomType;
+      //         _theGeomColumnName = theGeomColumnName;
+      //         _geomSRID = geomSRID;
+      //         _sourceTable = sourceTable;
+      //         _geomFilterCriteria = geomFilterCriteria;
+      //         _includeProperties = includeProperties;
+      //      }
+
+
+      public void setBoundSector(final TileSector boundSector) {
+         _boundSector = boundSector;
+      }
+
+
+      public void setGeomType(final GeomType geomType) {
+         _geomType = geomType;
+      }
+
+
+      public void setTheGeomColumnName(final String theGeomColumnName) {
+         _theGeomColumnName = theGeomColumnName;
+      }
+
+
+      public void setGeomSRID(final String geomSRID) {
+         _geomSRID = geomSRID;
+      }
+
    }
 
 
@@ -253,7 +305,7 @@ public class VectorialLOD {
     * @return : String with the vectorial data in geoJson format.
     * 
     */
-   public static String selectGeometries(final String dataSourceTable,
+   public static String selectGeometries(final DataSource dataSource,
                                          final Sector sector,
                                          final float qualityFactor,
                                          final String geomFilterCriteria,
@@ -269,7 +321,7 @@ public class VectorialLOD {
          //-------------------
 
          //-- full query for geometry select
-         String fullQuery = buildSelectQuery(dataSourceTable, sector, qf, areaFactor, geomFilterCriteria, includeProperties);
+         String fullQuery = buildSelectQuery(dataSource, sector, qf, areaFactor);
 
          if (fullQuery == null) {
             ILogger.instance().logError("Invalid data for sector: " + sector.toString() + ". ");
@@ -287,7 +339,7 @@ public class VectorialLOD {
 
          long numVertex = getGeomVertexCount(geoJsonResult);
 
-         if ((numVertex <= VERTEX_THRESHOLD) || _geomType.equals(GeomType.POINT)) {
+         if ((numVertex <= VERTEX_THRESHOLD) || dataSource._geomType.equals(GeomType.POINT)) {
             return geoJsonResult;
          }
 
@@ -313,7 +365,7 @@ public class VectorialLOD {
                qf = qf / qfStep;
             }
 
-            fullQuery = buildSelectQuery(dataSourceTable, sector, qf, areaFactor, geomFilterCriteria, includeProperties);
+            fullQuery = buildSelectQuery(dataSource, sector, qf, areaFactor);
 
             geoJsonResult = executeQuery(fullQuery);
 
@@ -338,95 +390,6 @@ public class VectorialLOD {
 
       return geoJsonResult;
    }
-
-
-   //   /**
-   //    * 
-   //    * @param dataSourceTable
-   //    *           : table from postgis database containing the vectorial data
-   //    * @param sector
-   //    *           : geometry bounding sector for any of the tiles
-   //    * @param qualityFactor
-   //    *           : value used to adjust simplification tolerance during Douglas-Peucker simplification. Greater values entail less
-   //    *           tolerance, and so on less vertex filtered and more vertex generate for the resultant geometry. Usual values
-   //    *           between 1.0 to 10.0.
-   //    * @param geomFilterCriteria
-   //    *           : filter criteria using pure database query format that will be included in a where clause. i.e. "continent" like
-   //    *           'Euro%' AND "pop_est" > 10000000"
-   //    * @param includeProperties
-   //    *           : fields/columns associated to the vectorial data that shall be included as feature properties in the resultant
-   //    *           geoJson data.
-   //    * @return : String with the vectorial data in geoJson format.
-   //    * 
-   //    */
-   //   public static String selectGeometries(final String dataSourceTable,
-   //                                         final Sector sector,
-   //                                         final float qualityFactor,
-   //                                         final String geomFilterCriteria,
-   //                                         final String... includeProperties) {
-   //
-   //      String geoJsonResult = null;
-   //      final int areaFactor = INITIAL_AREA_FACTOR;
-   //      try {
-   //         // -- query example --
-   //         // --SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326)),0.20210655))::json As geometry, row_to_json((SELECT l FROM (SELECT "type") As l)) As properties FROM (SELECT * FROM roads WHERE (ST_Area(Box2D(the_geom))>0.08169412 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))) As f ) As fc;
-   //         //-------------------
-   //
-   //         //-- full query for geometry select
-   //         String fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor, areaFactor, geomFilterCriteria,
-   //                  includeProperties);
-   //
-   //         if (fullQuery == null) {
-   //            ILogger.instance().logError("Invalid data for sector: " + sector.toString() + ". ");
-   //            return null;
-   //         }
-   //
-   //         //System.out.println("fullQuery: " + fullQuery);
-   //
-   //         // first attempt: usual parameters
-   //         geoJsonResult = executeQuery(fullQuery);
-   //
-   //         if (geoJsonResult == null) {
-   //            return null;
-   //         }
-   //
-   //         if (getGeomVertexCount(geoJsonResult) < VERTEX_THRESHOLD) {
-   //            return geoJsonResult;
-   //         }
-   //
-   //         ILogger.instance().logWarning("Too much vertex for sector, area tunning: " + sector.toString());
-   //
-   //         // second attempt: increase area filter factor
-   //         fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor, areaFactor + 1, geomFilterCriteria,
-   //                  includeProperties);
-   //
-   //         geoJsonResult = executeQuery(fullQuery);
-   //
-   //         if (geoJsonResult == null) {
-   //            return null;
-   //         }
-   //
-   //         if (getGeomVertexCount(geoJsonResult) < VERTEX_THRESHOLD) {
-   //            return geoJsonResult;
-   //         }
-   //
-   //         ILogger.instance().logWarning("Too much vertex for sector, quality factor tunning: " + sector.toString());
-   //
-   //         // third attempt: increase area filter factor and reduce quality factor
-   //         fullQuery = buildSelectQuery(dataSourceTable, sector, qualityFactor / 2.0f, areaFactor + 1, geomFilterCriteria,
-   //                  includeProperties);
-   //
-   //         geoJsonResult = executeQuery(fullQuery);
-   //
-   //         //return result anyway
-   //         return geoJsonResult;
-   //      }
-   //      catch (final SQLException e) {
-   //         ILogger.instance().logError("SQL error getting data for sector: " + sector.toString() + ". " + e.getMessage());
-   //      }
-   //
-   //      return geoJsonResult;
-   //   }
 
 
    private static String executeQuery(final String query) throws SQLException {
@@ -464,18 +427,16 @@ public class VectorialLOD {
    //--
    //-- Release 4.6: fix bug when includeProperties=null
    //--
-   public static String buildSelectQuery(final String dataSourceTable,
+   public static String buildSelectQuery(final DataSource dataSource,
                                          final Sector sector,
                                          final float qualityFactor,
-                                         final double areaFactor,
-                                         final String geomFilterCriteria,
-                                         final String... includeProperties) {
+                                         final double areaFactor) {
 
       //--i.e: SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
       //--i.e. properties=null: SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json(null) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-89.98956298828124,-90.24749095327094), ST_Point(-89.97747802734375,-84.80268998131024)),4326)),0.00966764) as sg FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-89.98956298828124,-90.24749095327094), ST_Point(-89.97747802734375,-84.80268998131024)),4326)) and ST_Area(Box2D(the_geom))>7.46805548092793E-6) As lg ) As f ) As fc;
 
       String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json(";
-      if (includeProperties != null) {
+      if (dataSource._includeProperties != null) {
          baseQuery0 = baseQuery0 + "(SELECT l FROM (SELECT ";
       }
       else {
@@ -484,8 +445,8 @@ public class VectorialLOD {
 
       String baseQuery1 = "";
       String baseQuery2 = "";
-      if (_geomSRID.equals(INTERNAL_SRID)) {
-         if (includeProperties != null) {
+      if (dataSource._geomSRID.equals(INTERNAL_SRID)) {
+         if (dataSource._includeProperties != null) {
             baseQuery1 = ") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
             baseQuery2 = ") as sg, ";
          }
@@ -495,7 +456,7 @@ public class VectorialLOD {
          }
       }
       else {
-         if (includeProperties != null) {
+         if (dataSource._includeProperties != null) {
             baseQuery1 = ") As l)) As properties FROM ( SELECT ST_Transform(ST_SimplifyPreserveTopology(ST_Intersection(";
             baseQuery2 = ")," + INTERNAL_SRID + ") as sg, ";
          }
@@ -514,15 +475,15 @@ public class VectorialLOD {
       final String baseQuery6 = ") As lg ) As f ) As fc";
 
       final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-      final String bboxQuery = buildSectorQuery(extendedSector);
+      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
 
       if (bboxQuery == null) {
          return null;
       }
 
-      final String propsQuery = buildPropertiesQuery(includeProperties);
+      final String propsQuery = buildPropertiesQuery(dataSource._includeProperties);
       final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
+      final String filterCriteria = buildFilterCriterium(dataSource, areaFactor, bboxQuery, extendedSector);
       //         System.out.println("FILTER CRITERIA: " + filterCriteria);
 
       if (filterCriteria.toUpperCase().trim().startsWith("ORDER")) {
@@ -530,9 +491,9 @@ public class VectorialLOD {
       }
 
       //-- full query final where first cut, second simplify
-      final String fullQuery = baseQuery0 + propsQuery + baseQuery1 + _theGeomColumnName + "," + bboxQuery + "),"
-                               + simplifyTolerance + baseQuery2 + propsQuery + baseQuery3 + dataSourceTable + baseQuery4
-                               + _theGeomColumnName + "," + bboxQuery + baseQuery5 + filterCriteria + baseQuery6;
+      final String fullQuery = baseQuery0 + propsQuery + baseQuery1 + dataSource._theGeomColumnName + "," + bboxQuery + "),"
+                               + simplifyTolerance + baseQuery2 + propsQuery + baseQuery3 + dataSource._sourceTable + baseQuery4
+                               + dataSource._theGeomColumnName + "," + bboxQuery + baseQuery5 + filterCriteria + baseQuery6;
 
 
       //      System.out.println("fullQuery: " + fullQuery);
@@ -546,226 +507,7 @@ public class VectorialLOD {
    }
 
 
-   //   //-- Release 4.5
-   //   public static String buildSelectQuery(final String dataSourceTable,
-   //                                         final Sector sector,
-   //                                         final float qualityFactor,
-   //                                         final double areaFactor,
-   //                                         final String geomFilterCriteria,
-   //                                         final String... includeProperties) {
-   //
-   //      //--i.e: SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
-   //
-   //      final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT ";
-   //
-   //      String baseQuery1 = "";
-   //      String baseQuery2 = "";
-   //      if (_geomSRID.equals(INTERNAL_SRID)) {
-   //         baseQuery1 = ") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
-   //         baseQuery2 = ") as sg, ";
-   //      }
-   //      else {
-   //         baseQuery1 = ") As l)) As properties FROM ( SELECT ST_Transform(ST_SimplifyPreserveTopology(ST_Intersection(";
-   //         baseQuery2 = ")," + INTERNAL_SRID + ") as sg, ";
-   //      }
-   //
-   //      final String baseQuery3 = " FROM ";
-   //      final String baseQuery4 = " WHERE ST_Intersects(";
-   //      //final String baseQuery5 = ") and (";
-   //      String baseQuery5 = ") and ";
-   //
-   //      //final String baseQuery6 = ")) As lg ) As f ) As fc";
-   //      final String baseQuery6 = ") As lg ) As f ) As fc";
-   //
-   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-   //      final String bboxQuery = buildSectorQuery(extendedSector);
-   //
-   //      if (bboxQuery == null) {
-   //         return null;
-   //      }
-   //
-   //      final String propsQuery = buildPropertiesQuery(includeProperties);
-   //      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-   //      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
-   //      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
-   //
-   //      if (filterCriteria.toUpperCase().trim().startsWith("ORDER")) {
-   //         baseQuery5 = ") ";
-   //      }
-   //
-   //      //-- full query final where first cut, second simplify
-   //      final String fullQuery = baseQuery0 + propsQuery + baseQuery1 + _theGeomColumnName + "," + bboxQuery + "),"
-   //                               + simplifyTolerance + baseQuery2 + propsQuery + baseQuery3 + dataSourceTable + baseQuery4
-   //                               + _theGeomColumnName + "," + bboxQuery + baseQuery5 + filterCriteria + baseQuery6;
-   //
-   //
-   //      //      System.out.println("fullQuery: " + fullQuery);
-   //
-   //      // -- query example --
-   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,bbox),0.091) as sg, "mapcolor7", "scalerank" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,bbox) and ST_Area(Box2D(the_geom))>0.078 and true ) As lg ) As f ) As fc;
-   //      //-------------------
-   //      //-- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT false) As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(-9.0,-94.5), ST_Point(180.0,4.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-171.0,4.5)),4326))),0.39305884) as sg, false FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(-9.0,-94.5), ST_Point(180.0,4.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-171.0,4.5)),4326))) and ST_Area(Box2D(the_geom))>2.2247471562965018) As lg ) As f ) As fc
-   //
-   //
-   //      return fullQuery;
-   //   }
-
-
-   //   //-- Release 3.0
-   //   public static String buildSelectQuery(final String dataSourceTable,
-   //                                         final Sector sector,
-   //                                         final float qualityFactor,
-   //                                         final double areaFactor,
-   //                                         final String geomFilterCriteria,
-   //                                         final String... includeProperties) {
-   //
-   //      //SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326)),0.091) as sg, "mapcolor7", "scalerank" FROM (SELECT * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326))) as ff WHERE (ST_Area(Box2D(the_geom))>0.078 and true) ) As lg ) As f ) As fc;
-   //
-   //      final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT ";
-   //      final String baseQuery1 = ") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
-   //      final String baseQuery2 = ") as sg, ";
-   //      final String baseQuery3 = " FROM (SELECT * FROM ";
-   //      final String baseQuery4 = " WHERE ST_Intersects(";
-   //      final String baseQuery5 = ")) as ff WHERE (";
-   //      final String baseQuery6 = " )) As lg ) As f ) As fc";
-   //
-   //      // 
-   //
-   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-   //      final String bboxQuery = buildSectorQuery(extendedSector);
-   //
-   //      if (bboxQuery == null) {
-   //         return null;
-   //      }
-   //
-   //      final String propsQuery = buildPropertiesQuery(includeProperties);
-   //      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-   //      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
-   //
-   //      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
-   //
-   //      //-- full query final where first cut, second simplify
-   //      final String fullQuery = baseQuery0 + propsQuery + baseQuery1 + _theGeomColumnName + "," + bboxQuery + "),"
-   //                               + simplifyTolerance + baseQuery2 + propsQuery + baseQuery3 + dataSourceTable + baseQuery4
-   //                               + _theGeomColumnName + "," + bboxQuery + baseQuery5 + filterCriteria + baseQuery6;
-   //
-   //      //System.out.println("fullQuery: " + fullQuery);
-   //
-   //      // -- ejemplo query --
-   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326)),0.091) as sg, "mapcolor7", "scalerank" FROM (SELECT * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(85.5,-80.4371420605902), ST_Point(139.5,-65.2474530233411)),4326))) as ff WHERE (ST_Area(Box2D(the_geom))>0.078 and true) ) As lg ) As f ) As fc;
-   //      //-------------------
-   //
-   //      return fullQuery;
-   //   }
-
-
-   //   //-- Release 2.0
-   //   public static String buildSelectQuery(final String dataSourceTable,
-   //                                         final Sector sector,
-   //                                         final float qualityFactor,
-   //                                         final double areaFactor,
-   //                                         final String geomFilterCriteria,
-   //                                         final String... includeProperties) {
-   //
-   //      //SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326)),0.091) as sg, * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326))) as ff WHERE (ST_Area(Box2D(sg))>0.078 and true) ) As lg ) As f ) As fc;
-   //
-   //      final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT ";
-   //      final String baseQuery1 = ") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(";
-   //      final String baseQuery2 = ") as sg, * FROM ";
-   //      //      final String baseQuery2 = ") as sg, ";
-   //      //      final String baseQuery21 = " FROM ";
-   //      final String baseQuery3 = " WHERE ST_Intersects(";
-   //      final String baseQuery4 = ")) as ff WHERE (";
-   //      final String baseQuery5 = ")) As lg ) As f ) As fc";
-   //
-   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-   //      final String bboxQuery = buildSectorQuery(extendedSector);
-   //
-   //      if (bboxQuery == null) {
-   //         return null;
-   //      }
-   //
-   //      final String propsQuery = buildPropertiesQuery(includeProperties);
-   //
-   //      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-   //      //      System.out.println("simplifyTolerance: " + simplifyTolerance);
-   //      //      final String simplifyTolerance2 = Float.toString(getMaxVertexTolerance(extendedSector, qualityFactor));
-   //      //      System.out.println("simplifyTolerance2: " + simplifyTolerance2);
-   //
-   //      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
-   //      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
-   //
-   //      //-- full query final where first cut, second simplify
-   //      final String fullQuery = baseQuery0 + propsQuery + baseQuery1 + _theGeomColumnName + "," + bboxQuery + "),"
-   //                               + simplifyTolerance + baseQuery2 + dataSourceTable + baseQuery3 + _theGeomColumnName + ","
-   //                               + bboxQuery + baseQuery4 + filterCriteria + baseQuery5;
-   //
-   //      //         System.out.println("fullQuery: " + fullQuery);
-   //
-   //      // -- ejemplo query --
-   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7", "scalerank") As l)) As properties FROM ( SELECT * from ( SELECT ST_SimplifyPreserveTopology(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326)),0.091) as sg, * FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(105.0,-9.0), ST_Point(135.0,7.5)),4326))) as ff WHERE (ST_Area(Box2D(sg))>0.078 and true) ) As lg ) As f ) As fc;
-   //      //-------------------
-   //
-   //      return fullQuery;
-   //   }
-
-
-   //   //-- Release 1.0
-   //   public static String buildSelectQuery(final String dataSourceTable,
-   //                                         final Sector sector,
-   //                                         final float qualityFactor,
-   //                                         final double areaFactor,
-   //                                         final String geomFilterCriteria,
-   //                                         final String... includeProperties) {
-   //
-   //      final String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.";
-   //      final String baseQuery1 = "))::json As geometry, row_to_json((SELECT l FROM (SELECT ";
-   //      final String baseQuery2 = ") As l)) As properties FROM (SELECT * FROM ";
-   //      final String baseQuery3 = ")) As lg WHERE ST_Intersects(";
-   //      final String baseQuery4 = " WHERE (";
-   //      final String baseQuery5 = ")) As f ) As fc;";
-   //
-   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-   //      final String bboxQuery = buildSectorQuery(extendedSector);
-   //
-   //      if (bboxQuery == null) {
-   //         return null;
-   //      }
-   //
-   //      final String propsQuery = buildPropertiesQuery(includeProperties);
-   //      final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-   //      final String filterCriteria = buildFilterCriterium(geomFilterCriteria, areaFactor, bboxQuery, extendedSector);
-   //
-   //      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
-   //
-   //      //-- full query final where first cut, second simplify
-   //      final String fullQuery = baseQuery0 + _theGeomColumnName + "," + bboxQuery + ")," + simplifyTolerance + baseQuery1
-   //                               + propsQuery + baseQuery2 + dataSourceTable + baseQuery4 + filterCriteria + baseQuery3
-   //                               + _theGeomColumnName + "," + bboxQuery + baseQuery5;
-   //
-   //      //         System.out.println("fullQuery: " + fullQuery);
-   //
-   //      // -- ejemplo query --
-   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-94.5,-80.4371420605902), ST_Point(-40.5,-65.2474530233411)),4326)),0.09130158))::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7") As l)) As properties FROM (SELECT * FROM ne_10m_admin_0_countries WHERE (ST_Area(Box2D(the_geom))>0.07822518434797841 and true)) As lg WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-94.5,-80.4371420605902), ST_Point(-40.5,-65.2474530233411)),4326))) As f ) As fc;
-   //      // -- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(171.0,-92.34867395568881), ST_Point(180.0,-64.16458648742304)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-92.34867395568881), ST_Point(-81.0,-64.16458648742304)),4326))),0.1816682))::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7") As l)) As properties FROM (SELECT * FROM ne_10m_admin_0_countries WHERE (ST_Area(Box2D(the_geom))>0.2902897396356331 and true)) As lg WHERE ST_Intersects(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(171.0,-92.34867395568881), ST_Point(180.0,-64.16458648742304)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-92.34867395568881), ST_Point(-81.0,-64.16458648742304)),4326)))) As f ) As fc;
-   //      //-------------------
-   //
-   //      return fullQuery;
-   //   }
-
-
-   //   public static String batchSelectGeometries(final String dataSourceTable,
-   //                                              final TileSector sector,
-   //                                              final float qualityFactor,
-   //                                              final String geomFilterCriteria,
-   //                                              final String... includeProperties) {
-   //
-   //      return selectGeometries(dataSourceTable, sector.getExtendedSector(OVERLAP_PERCENTAGE), qualityFactor, geomFilterCriteria,
-   //               includeProperties);
-   //   }
-
-
-   private static TileSector getGeometriesBound(final String dataSourceTable) {
+   private static TileSector getGeometriesBound(final DataSource dataSource) {
 
       TileSector boundSector = TileSector.FULL_SPHERE_SECTOR;
       Connection conn = null;
@@ -774,22 +516,15 @@ public class VectorialLOD {
          conn = _dataBaseService.getConnection();
          st = conn.createStatement();
 
-         //         final String theGeom = getGeometryColumnName(st, dataSourceTable);
-         //
-         //         if (theGeom == null) {
-         //            st.close();
-         //            return TileSector.FULL_SPHERE;
-         //         }
-
          String bboxQuery = "";
          //System.out.println("bboxQuery: " + bboxQuery);
-         if (_geomSRID.equals(INTERNAL_SRID)) {
-            bboxQuery = "SELECT Box2D(ST_Extent(" + _theGeomColumnName + ")) from " + dataSourceTable;
+         if (dataSource._geomSRID.equals(INTERNAL_SRID)) {
+            bboxQuery = "SELECT Box2D(ST_Extent(" + dataSource._theGeomColumnName + ")) from " + dataSource._sourceTable;
          }
          else {
             //-- SELECT Box2D(ST_Transform(ST_SetSRID(ST_Extent(way),900913),4326)) FROM planet_osm_polygon
-            bboxQuery = "SELECT Box2D(ST_Transform(ST_SetSRID(ST_Extent(" + _theGeomColumnName + ")," + _geomSRID + "),"
-                        + INTERNAL_SRID + ")) FROM " + dataSourceTable;
+            bboxQuery = "SELECT Box2D(ST_Transform(ST_SetSRID(ST_Extent(" + dataSource._theGeomColumnName + "),"
+                        + dataSource._geomSRID + ")," + INTERNAL_SRID + ")) FROM " + dataSource._sourceTable;
          }
 
          //         System.out.println("bboxQuery: " + bboxQuery);
@@ -839,13 +574,26 @@ public class VectorialLOD {
    }
 
 
-   private static GeomType getGeometriesType(final String dataSourceTable) {
+   private static Sector getGlobalBoundSector(final List<DataSource> dataSources) {
+
+      Sector globalSector = dataSources.get(0)._boundSector;
+
+      for (int index = 1; index < dataSources.size(); index++) {
+         globalSector = globalSector.mergedWith(dataSources.get(index)._boundSector);
+      }
+
+      return globalSector;
+   }
+
+
+   private static GeomType getGeometriesType(final DataSource dataSource) {
 
       //http://postgis.net/docs/GeometryType.html
       //select GeometryType(way) from planet_osm_polygon LIMIT 1;
 
-      final String geomQuery = "SELECT type FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
-      final String auxGeomQuery = "SELECT GeometryType(" + _theGeomColumnName + ") FROM " + dataSourceTable + " LIMIT 1";
+      final String geomQuery = "SELECT type FROM geometry_columns WHERE f_table_name='" + dataSource._sourceTable + "'";
+      final String auxGeomQuery = "SELECT GeometryType(" + dataSource._theGeomColumnName + ") FROM " + dataSource._sourceTable
+                                  + " LIMIT 1";
 
       try {
          final Connection conn = _dataBaseService.getConnection();
@@ -971,14 +719,10 @@ public class VectorialLOD {
    private static float getMaxVertexTolerance(final Sector sector,
                                               final float qualityFactor) {
 
-      //final float tolerance = (float) (sector._deltaLongitude._degrees / (qualityFactor * 1000f));
       final double hypotenuse = Math.sqrt(Math.pow(sector._deltaLatitude._degrees, 2)
                                           + Math.pow(sector._deltaLongitude._degrees, 2));
-      //final float tolerance = (float) (hypotenuse / (qualityFactor * 500f));
+
       final float tolerance = (float) (hypotenuse / (qualityFactor * 512f));
-      //      System.out.println("tolerance: " + tolerance);
-      //      final float tolerance2 = (float) (sector.getAngularAreaInSquaredDegrees() / (qualityFactor * 256f * 256f));
-      //      System.out.println("tolerance2: " + tolerance2);
 
       if (VERBOSE) {
          System.out.println("tolerance: " + tolerance);
@@ -988,7 +732,7 @@ public class VectorialLOD {
    }
 
 
-   private static String buildFilterCriterium(final String filterCriteria,
+   private static String buildFilterCriterium(final DataSource dataSource,
                                               final double areaFactor,
                                               final String bboxQuery,
                                               final List<Sector> extendedSector) {
@@ -997,12 +741,12 @@ public class VectorialLOD {
       //http://postgis.refractions.net/docs/ST_Extent.html
       //http://postgis.refractions.net/docs/ST_Area.html
 
-      if (_geomType == null) {
-         return filterCriteria;
+      if (dataSource._geomType == null) {
+         return dataSource._geomFilterCriteria;
       }
 
-      if (_geomType == GeomType.POINT) {
-         return filterCriteria;
+      if (dataSource._geomType == GeomType.POINT) {
+         return dataSource._geomFilterCriteria;
       }
 
       final double sectorArea = TileSector.getAngularAreaInSquaredDegrees(extendedSector);
@@ -1010,12 +754,15 @@ public class VectorialLOD {
 
       //final String andFilter = (filterCriteria.equalsIgnoreCase("true")) ? "" : " and " + filterCriteria;
       String andFilter = "";
-      if (!filterCriteria.trim().equalsIgnoreCase("true")) {
-         andFilter = (filterCriteria.toUpperCase().trim().startsWith("ORDER")) ? " " + filterCriteria : " and " + filterCriteria;
+      if (!dataSource._geomFilterCriteria.trim().equalsIgnoreCase("true")) {
+         andFilter = (dataSource._geomFilterCriteria.toUpperCase().trim().startsWith("ORDER")) ? " "
+                                                                                                 + dataSource._geomFilterCriteria
+                                                                                              : " and "
+                                                                                                + dataSource._geomFilterCriteria;
       }
 
-      return "ST_Area(Box2D(" + _theGeomColumnName + "))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE))
-             + andFilter;
+      return "ST_Area(Box2D(" + dataSource._theGeomColumnName + "))>"
+             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + andFilter;
 
       //-- only for release 2.0 of buildSelectQuery()
       //      return "ST_Area(Box2D(sg))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
@@ -1032,7 +779,8 @@ public class VectorialLOD {
    }
 
 
-   private static String buildSectorQuery(final List<Sector> extendedSector) {
+   private static String buildSectorQuery(final DataSource dataSource,
+                                          final List<Sector> extendedSector) {
 
       //SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM (SELECT 'Feature' As type, ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Intersection(lg.the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326))),0.027))::json As geometry, row_to_json((SELECT l FROM (SELECT "continent", "pop_est") As l)) As properties FROM (SELECT * FROM ne_10m_admin_0_countries WHERE (true)) As lg WHERE ST_Intersects(the_geom,ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326)))) As f ) As fc;
       //ST_Union(ST_SetSRID(ST_MakeBox2D(ST_Point(175.5,-94.5), ST_Point(180.0,-40.5)),4326),ST_SetSRID(ST_MakeBox2D(ST_Point(-180.0,-94.5), ST_Point(-130.5,-40.5)),4326))
@@ -1043,17 +791,18 @@ public class VectorialLOD {
 
       if (extendedSector.size() == 1) {
 
-         return buildSectorQuery(extendedSector.get(0));
+         return buildSectorQuery(dataSource._geomSRID, extendedSector.get(0));
       }
 
-      final String resultQuery = "ST_Union(" + buildSectorQuery(extendedSector.get(0)) + ","
-                                 + buildSectorQuery(extendedSector.get(1)) + ")";
+      final String resultQuery = "ST_Union(" + buildSectorQuery(dataSource._geomSRID, extendedSector.get(0)) + ","
+                                 + buildSectorQuery(dataSource._geomSRID, extendedSector.get(1)) + ")";
 
       return resultQuery;
    }
 
 
-   private static String buildSectorQuery(final Sector sector) {
+   private static String buildSectorQuery(final String srid,
+                                          final Sector sector) {
 
       String resultQuery = "ST_SetSRID(ST_MakeBox2D(ST_Point(";
       resultQuery = resultQuery + Double.toString(sector._lower._longitude._degrees) + ","
@@ -1061,8 +810,8 @@ public class VectorialLOD {
                     + Double.toString(sector._upper._longitude._degrees) + ","
                     + Double.toString(sector._upper._latitude._degrees) + ")),4326)";
 
-      if (!_geomSRID.equals(INTERNAL_SRID)) {
-         resultQuery = "ST_Transform(" + resultQuery + "," + _geomSRID + ")";
+      if (!srid.equals(INTERNAL_SRID)) {
+         resultQuery = "ST_Transform(" + resultQuery + "," + srid + ")";
       }
 
       //System.out.println("BOX QUERY: " + resultQuery);
@@ -1101,10 +850,11 @@ public class VectorialLOD {
    }
 
 
-   private static String getGeometriesSRID(final String dataSourceTable) {
+   private static String getGeometriesSRID(final DataSource dataSource) {
 
-      final String sridQuery = "SELECT srid FROM geometry_columns WHERE f_table_name='" + dataSourceTable + "'";
-      final String auxSridQuery = "SELECT ST_SRID(" + _theGeomColumnName + ") FROM " + dataSourceTable + " LIMIT 1";
+      final String sridQuery = "SELECT srid FROM geometry_columns WHERE f_table_name='" + dataSource._sourceTable + "'";
+      final String auxSridQuery = "SELECT ST_SRID(" + dataSource._theGeomColumnName + ") FROM " + dataSource._sourceTable
+                                  + " LIMIT 1";
 
       try {
          final Connection conn = _dataBaseService.getConnection();
@@ -1270,7 +1020,7 @@ public class VectorialLOD {
          new File(subFolderName).mkdir();
       }
 
-      final String fileName = (isBson) ? subFolderName + File.separatorChar + getTileGeobsonName(sector)
+      final String fileName = (isBson) ? subFolderName + File.separatorChar + getTileBsonName(sector)
                                       : subFolderName + File.separatorChar + getTileGeojsonName(sector);
 
       return fileName;
@@ -1284,7 +1034,7 @@ public class VectorialLOD {
    }
 
 
-   private static String getTileGeobsonName(final TileSector sector) {
+   private static String getTileBsonName(final TileSector sector) {
 
       //return sector._column + ".bson";
       return sector.getRow(_renderParameters) + ".geobson";
@@ -1298,7 +1048,7 @@ public class VectorialLOD {
    }
 
 
-   private static void createFolderStructure(final DataSource dataSource) {
+   private static void createFolderStructure(final List<DataSource> dataSources) {
 
       if (!new File(ROOT_FOLDER).exists()) {
          new File(ROOT_FOLDER).mkdir();
@@ -1306,8 +1056,8 @@ public class VectorialLOD {
 
       //final String projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
       //_lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + _projection;
-      _lodFolder = ROOT_FOLDER + File.separatorChar + dataSource._sourceTable + "_LEVELS-" + FIRST_LEVEL + "-" + MAX_LEVEL + "_"
-                   + _projection;
+      final String mixedName = buildMixedTableName(dataSources);
+      _lodFolder = ROOT_FOLDER + File.separatorChar + mixedName + "_LEVELS-" + FIRST_LEVEL + "-" + MAX_LEVEL + "_" + _projection;
 
       if (!new File(_lodFolder).exists()) {
          new File(_lodFolder).mkdir();
@@ -1329,7 +1079,27 @@ public class VectorialLOD {
    }
 
 
-   private static ArrayList<TileSector> createFirstLevelTileSectors() {
+   private static String buildMixedTableName(final List<DataSource> dataSources) {
+
+      if (dataSources.size() == 1) {
+         return dataSources.get(0)._sourceTable;
+      }
+
+      String mixedName = "";
+      int index = 0;
+      for (final DataSource ds : dataSources) {
+         mixedName = mixedName + ds._sourceTable.substring(0, ds._sourceTable.length() / 2);
+         if (index < (dataSources.size() - 1)) {
+            mixedName = mixedName + "_";
+         }
+         index++;
+      }
+
+      return mixedName;
+   }
+
+
+   private static ArrayList<TileSector> createFirstLevelTileSectors(final List<DataSource> dataSources) {
 
       final ArrayList<TileSector> levelZeroTileSectors = new ArrayList<TileSector>();
 
@@ -1359,8 +1129,11 @@ public class VectorialLOD {
 
             final TileSector tileSector = new TileSector(sector, null, 0, row, col);
 
-            if (tileSector.intersects(_boundSector)) {
-               levelZeroTileSectors.add(tileSector);
+            for (final DataSource ds : dataSources) {
+               if (tileSector.intersects(ds._boundSector)) {
+                  levelZeroTileSectors.add(tileSector);
+                  break;
+               }
             }
          }
       }
@@ -1369,49 +1142,62 @@ public class VectorialLOD {
    }
 
 
-   private static void launchVectorialLODProcessing(final DataSource dataSource) {
+   private static void launchVectorialLODProcessing(final List<DataSource> dataSources) {
 
       final long start = System.currentTimeMillis();
-      System.out.println("Starting vectorial LOD generation of " + dataSource._sourceTable + " source..");
-
-      createFolderStructure(dataSource);
-
-      _theGeomColumnName = getGeometryColumnName(dataSource._sourceTable);
-      if (_theGeomColumnName != null) {
-         System.out.println("Geometry column name: " + _theGeomColumnName);
+      System.out.println("Starting mixed vectorial LOD generation of datasources: ");
+      for (final DataSource ds : dataSources) {
+         System.out.println("    " + ds._sourceTable);
       }
-      else {
-         System.err.println("Invalid Geometry column. Exit application.");
-         System.exit(1);
-      }
+      System.out.println();
 
-      _geomSRID = getGeometriesSRID(dataSource._sourceTable);
-      if (_geomSRID != null) {
-         System.out.println("Source data SRID: " + _geomSRID);
-         if (!_geomSRID.equals(INTERNAL_SRID)) {
-            ILogger.instance().logInfo(
-                     "Source data SRID different from 4326. For performance reasons consider reprojection of source data.");
+      createFolderStructure(dataSources);
+
+      for (final DataSource ds : dataSources) {
+         System.out.println("DATA SOURCE: " + ds._sourceTable);
+
+         final String theGeomColumnName = getGeometryColumnName(ds._sourceTable);
+         if (theGeomColumnName != null) {
+            ds.setTheGeomColumnName(theGeomColumnName);
+            System.out.println("    Geometry column name: " + theGeomColumnName);
          }
-      }
-      else {
-         System.err.println("Invalid SRID of source data. Exit application.");
-         System.exit(1);
+         else {
+            System.err.println("Invalid Geometry column. Exit application.");
+            System.exit(1);
+         }
+
+         final String geomSRID = getGeometriesSRID(ds);
+         if (geomSRID != null) {
+            ds.setGeomSRID(geomSRID);
+            System.out.println("    Source data SRID: " + geomSRID);
+            if (!geomSRID.equals(INTERNAL_SRID)) {
+               ILogger.instance().logInfo(
+                        "Source data SRID different from 4326. For performance reasons consider reprojection of source data.");
+            }
+         }
+         else {
+            System.err.println("Invalid SRID of source data. Exit application.");
+            System.exit(1);
+         }
+
+         final GeomType geomType = getGeometriesType(ds);
+         if (geomType != null) {
+            ds.setGeomType(geomType);
+            System.out.println("    Source data type: " + geomType.toString());
+         }
+
+         final TileSector boundSector = getGeometriesBound(ds);
+         ds.setBoundSector(boundSector);
       }
 
-      _boundSector = getGeometriesBound(dataSource._sourceTable);
-      //System.out.println(_boundSector.toString());
-
-      _geomType = getGeometriesType(dataSource._sourceTable);
-      if (_geomType != null) {
-         System.out.println("Source data type: " + _geomType.toString());
-      }
+      _globalBoundSector = getGlobalBoundSector(dataSources);
 
       //assume full sphere topSector for tiles pyramid generation
-      final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors();
+      final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors(dataSources);
 
       System.out.println("Generating.. await termination...");
       for (final TileSector sector : firstLevelTileSectors) {
-         generateVectorialLOD(sector, dataSource);
+         generateMixedVectorialLOD(sector, dataSources);
          //processSubSectors(sector, dataSource);
       }
 
@@ -1428,8 +1214,8 @@ public class VectorialLOD {
    }
 
 
-   private static void generateVectorialLOD(final TileSector sector,
-                                            final DataSource dataSource) {
+   private static void generateMixedVectorialLOD(final TileSector sector,
+                                                 final List<DataSource> dataSources) {
 
       boolean containsData = true;
 
@@ -1437,26 +1223,15 @@ public class VectorialLOD {
          return;
       }
 
-      if (!_boundSector.intersects(sector)) {
-         return;
-      }
-
       if (sector._level >= FIRST_LEVEL) {
+         containsData = false;
+         for (final DataSource ds : dataSources) {
 
-         final String geoJson = selectGeometries(dataSource._sourceTable, //
-                  sector.getSector(), //
-                  QUALITY_FACTOR, // 
-                  dataSource._geomFilterCriteria, //
-                  dataSource._includeProperties);
+            if (!ds._boundSector.intersects(sector)) {
+               continue;
+            }
 
-         if (geoJson != null) {
-            //System.out.println("Generating: ../" + getTileLabel(sector));
-            writeOutputFile(geoJson, sector);
-         }
-         else {
-            //System.out.println("Skip empty tile: ../" + getTileLabel(sector));
-            containsData = sectorContainsData(dataSource._sourceTable, sector.getSector());
-            writeEmptyFile(sector);
+            containsData = containsData || generateVectorialLOD(sector, ds);
          }
       }
 
@@ -1464,9 +1239,35 @@ public class VectorialLOD {
          //final List<TileSector> subSectors = sector.getSubTileSectors();
          final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
          for (final TileSector s : subSectors) {
-            processSubSectors(s, dataSource);
+            processSubSectors(s, dataSources);
          }
       }
+
+   }
+
+
+   private static boolean generateVectorialLOD(final TileSector sector,
+                                               final DataSource dataSource) {
+
+      boolean containsData = true;
+
+      final String geoJson = selectGeometries(dataSource, //
+               sector.getSector(), //
+               QUALITY_FACTOR, // 
+               dataSource._geomFilterCriteria, //
+               dataSource._includeProperties);
+
+      if (geoJson != null) {
+         //System.out.println("Generating: ../" + getTileLabel(sector));
+         writeOutputFile(geoJson, sector);
+      }
+      else {
+         //System.out.println("Skip empty tile: ../" + getTileLabel(sector));
+         containsData = sectorContainsData(dataSource, sector.getSector());
+         writeEmptyFile(sector);
+      }
+
+      return containsData;
    }
 
 
@@ -1476,7 +1277,7 @@ public class VectorialLOD {
     * 
     */
    private static void processSubSectors(final TileSector sector,
-                                         final DataSource dataSource) {
+                                         final List<DataSource> dataSources) {
 
       final int subSectorLevel = sector._level;
       if (subSectorLevel > MAX_LEVEL) {
@@ -1487,7 +1288,7 @@ public class VectorialLOD {
          @Override
          public void run() {
             //System.out.println("Running at: " + Thread.currentThread().getName());
-            generateVectorialLOD(sector, dataSource);
+            generateMixedVectorialLOD(sector, dataSources);
          }
       };
 
@@ -1496,10 +1297,10 @@ public class VectorialLOD {
    }
 
 
-   private static boolean sectorContainsData(final String sourceTable,
+   private static boolean sectorContainsData(final DataSource dataSource,
                                              final Sector sector) {
 
-      final String checkQuery = buildCheckQuery(sourceTable, sector);
+      final String checkQuery = buildCheckQuery(dataSource, sector);
       //System.out.println("checkQuery: " + checkQuery);
 
       if (checkQuery == null) {
@@ -1531,25 +1332,23 @@ public class VectorialLOD {
    }
 
 
-   private static String buildCheckQuery(final String sourceTable,
+   private static String buildCheckQuery(final DataSource dataSource,
                                          final Sector sector) {
 
       //--i.e: SELECT COUNT(the_geom) FROM roads WHERE ST_Intersects(the_geom, ST_SetSRID(ST_MakeBox2D(ST_Point(-15.5,1.43), ST_Point(15.5,50.24)),4326)) 
-
       final String baseQuery0 = "SELECT COUNT(";
       final String baseQuery1 = ") FROM ";
       final String baseQuery2 = " WHERE ST_Intersects(";
-      //final String baseQuery3 = 
 
       final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-      final String bboxQuery = buildSectorQuery(extendedSector);
+      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
 
       if (bboxQuery == null) {
          return null;
       }
 
-      final String checkQuery = baseQuery0 + _theGeomColumnName + baseQuery1 + sourceTable + baseQuery2 + _theGeomColumnName
-                                + "," + bboxQuery + ")";
+      final String checkQuery = baseQuery0 + dataSource._theGeomColumnName + baseQuery1 + dataSource._sourceTable + baseQuery2
+                                + dataSource._theGeomColumnName + "," + bboxQuery + ")";
 
       return checkQuery;
    }
@@ -1576,10 +1375,11 @@ public class VectorialLOD {
       //                              + _boundSector._upper._longitude._degrees + "], minLevel: " + _firstLevelCreated + ", maxLevel: "
       //                              + _lastLevelCreated + ", projection: " + _projection + " }";
 
-      final String metadata = "{ sector: [" + _boundSector._lower._latitude._degrees + ", "
-                              + _boundSector._lower._longitude._degrees + ", " + _boundSector._upper._latitude._degrees + ", "
-                              + _boundSector._upper._longitude._degrees + "], minLevel: " + _firstLevelCreated + ", maxLevel: "
-                              + _lastLevelCreated + ", pyramid: " + pyramid + " }";
+      final String metadata = "{ sector: [" + _globalBoundSector._lower._latitude._degrees + ", "
+                              + _globalBoundSector._lower._longitude._degrees + ", "
+                              + _globalBoundSector._upper._latitude._degrees + ", "
+                              + _globalBoundSector._upper._longitude._degrees + "], minLevel: " + _firstLevelCreated
+                              + ", maxLevel: " + _lastLevelCreated + ", pyramid: " + pyramid + " }";
 
       _metadataFileName = _lodFolder + File.separatorChar + METADATA_FILENAME;
       final File metadataFile = new File(_metadataFileName);
@@ -1601,7 +1401,7 @@ public class VectorialLOD {
    }
 
 
-   private static void writeEmptyFile(final TileSector sector) {
+   private static void writeEmptyFile(final TileSecto sector) {
 
       try {
          if (generateGeojson()) {
@@ -1621,10 +1421,9 @@ public class VectorialLOD {
 
 
    private static void writeOutputFile(final String geoJson,
-                                       final TileSector sector) {
+                                       final TileSecto sector) {
 
       try {
-
          //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
          if (sector._level < _firstLevelCreated) {
             _firstLevelCreated = sector._level;
@@ -1636,10 +1435,18 @@ public class VectorialLOD {
 
          if (generateGeojson()) {
             //System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
-            final FileWriter file = new FileWriter(getGeojsonFileName(sector));
-            file.write(geoJson);
-            file.flush();
-            file.close();
+            final String geojsonFileName = getGeojsonFileName(sector);
+
+            if (new File(geojsonFileName).exists()) {
+               //TODO: edit existing file and copy new geojson data
+               addFeatureToExistingGeojsonFile(geoJson, geojsonFileName);
+            }
+            else {
+               final FileWriter file = new FileWriter(geojsonFileName);
+               file.write(geoJson);
+               file.flush();
+               file.close();
+            }
          }
 
          if (generateGeobson()) {
@@ -1660,6 +1467,93 @@ public class VectorialLOD {
       catch (final IOException e) {
          ILogger.instance().logError("Error generating output file: " + e.getMessage());
       }
+   }
+
+
+   //   private static void writeOutputFile(final String geoJson,
+   //                                       final TileSector sector) {
+   //
+   //      try {
+   //         //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
+   //         if (sector._level < _firstLevelCreated) {
+   //            _firstLevelCreated = sector._level;
+   //         }
+   //         if (sector._level > _lastLevelCreated) {
+   //            _lastLevelCreated = sector._level;
+   //         }
+   //         // -------------------------------------------------------------------------
+   //
+   //         if (generateGeojson()) {
+   //            //System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
+   //            final FileWriter file = new FileWriter(getGeojsonFileName(sector));
+   //            file.write(geoJson);
+   //            file.flush();
+   //            file.close();
+   //         }
+   //
+   //         if (generateGeobson()) {
+   //            final File bsonFile = new File(getGeobsonFileName(sector));
+   //            bsonFile.createNewFile();
+   //
+   //            try {
+   //               JBson2BJson.instance().json2bson(geoJson, bsonFile, true);
+   //               if (!generateGeojson()) {
+   //                  //System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
+   //               }
+   //            }
+   //            catch (final JBson2BJsonException e) {
+   //               ILogger.instance().logError("Error generating bson file: " + e.getMessage());
+   //            }
+   //         }
+   //      }
+   //      catch (final IOException e) {
+   //         ILogger.instance().logError("Error generating output file: " + e.getMessage());
+   //      }
+   //   }
+
+
+   private static void addFeatureToExistingGeojsonFile(final String geoJson,
+                                                       final String geojsonFileName) {
+
+      final String feature = getFeatureFromGeojson(geoJson);
+
+      try {
+         String verify, putData;
+         final File file = new File(geojsonFileName);
+         //file.createNewFile();
+         final FileWriter fw = new FileWriter(file);
+         final BufferedWriter bw = new BufferedWriter(fw);
+         final FileReader fr = new FileReader(file);
+         final BufferedReader br = new BufferedReader(fr);
+
+         while ((verify = br.readLine()) != null) {
+
+            if (verify != null) {
+               putData = verify.replaceAll("}]}", "}, ");
+               bw.write(putData);
+            }
+         }
+         br.close();
+
+         bw.write(feature);
+         bw.write("]}");
+         bw.flush();
+         bw.close();
+      }
+      catch (final IOException e) {
+         //TODO:
+         e.printStackTrace();
+      }
+
+   }
+
+
+   private static String getFeatureFromGeojson(final String geoJson) {
+
+      String result = geoJson.replace("{\"type\":\"FeatureCollection\",\"features\":[", "");
+      result = result.replace("}]}", "}");
+
+      return result;
    }
 
 
@@ -2102,15 +1996,12 @@ public class VectorialLOD {
       System.out.print("Connecting to " + DATABASE_NAME + " postGIS database.. ");
 
       if (createDataBaseService(HOST, PORT, USER, PASSWORD, DATABASE_NAME)) {
-         //      if (createDataBaseService("igosoftware.dyndns.org", "5414", "postgres", "postgres1g0", "vectorial_test")) {
+
          System.out.println("done.");
 
          initialize();
 
          final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, PROPERTIES);
-         //         final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, "continent", "pop_est");
-         //         final DataSource dataSource = new DataSource("ne_10m_admin_0_boundary_lines_land", "true", "adm0_left", "labelrank");
-         //         final DataSource dataSource = new DataSource("ne_10m_populated_places", "true", "NAMEASCII", "POP_MAX");
 
          // batch mode to generate full LOD pyramid for a vectorial data source
          launchVectorialLODProcessing(dataSource);
