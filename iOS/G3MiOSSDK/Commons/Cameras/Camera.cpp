@@ -356,7 +356,8 @@ FrustumData Camera::calculateFrustumData() const {
                      zNear, zFar);
   
 }
-FrustumData Camera::calculateWiderFrustumData() const {
+
+FrustumData Camera::calculateWiderFrustumData(float factor) const {
   const double heightFromGround = getHeightFromGround();
   
   double zNear = heightFromGround * 0.1;
@@ -407,8 +408,8 @@ FrustumData Camera::calculateWiderFrustumData() const {
   const double top = tanHalfVFOV * zNear;
   const double bottom = -top;
   
-  return FrustumData(2*left, 2*right,
-                     2*bottom, 2*top,
+  return FrustumData(factor*left, factor*right,
+                     factor*bottom, factor*top,
                      zNear, zFar);
   
 }

@@ -308,6 +308,8 @@ private:
   bool sectorCloseToRoute(const Sector& sector,
                           const std::list<Geodetic2D>& route,
                           double angularDistanceFromCenterInRadians) const;
+  
+  float _frustumCullingFactor;
 
 public:
   PlanetRenderer(TileTessellator*             tessellator,
@@ -492,6 +494,9 @@ public:
     }
   }
   
+  void setFrustumCullingFactor(float frustumCullingFactor) {
+    _frustumCullingFactor = frustumCullingFactor;
+  }
 };
 
 

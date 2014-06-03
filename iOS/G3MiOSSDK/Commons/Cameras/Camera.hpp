@@ -201,10 +201,10 @@ public:
     return _frustumInModelCoordinates;
   }
   
-  const Frustum* const getWiderFrustumInModelCoordinates() const {
+  const Frustum* const getWiderFrustumInModelCoordinates(float factor) const {
     if (_widerFrustumInModelCoordinates)
       delete _widerFrustumInModelCoordinates;
-    Frustum widerFrustum(calculateWiderFrustumData());
+    Frustum widerFrustum(calculateWiderFrustumData(factor));
     _widerFrustumInModelCoordinates = widerFrustum.transformedBy_P(getModelMatrix());
     return _widerFrustumInModelCoordinates;
   }
@@ -430,7 +430,7 @@ private:
   }
 
   FrustumData calculateFrustumData() const;
-  FrustumData calculateWiderFrustumData() const;
+  FrustumData calculateWiderFrustumData(float factor) const;
 
   // opengl projection matrix
   const MutableMatrix44D& getProjectionMatrix() const{
