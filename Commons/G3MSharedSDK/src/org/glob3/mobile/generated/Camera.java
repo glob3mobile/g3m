@@ -304,12 +304,12 @@ public class Camera
     return _frustumInModelCoordinates;
   }
 
-  public final Frustum getWiderFrustumInModelCoordinates()
+  public final Frustum getWiderFrustumInModelCoordinates(float factor)
   {
     if (_widerFrustumInModelCoordinates != null)
       if (_widerFrustumInModelCoordinates != null)
          _widerFrustumInModelCoordinates.dispose();
-    Frustum widerFrustum = new Frustum(calculateWiderFrustumData());
+    Frustum widerFrustum = new Frustum(calculateWiderFrustumData(factor));
     _widerFrustumInModelCoordinates = widerFrustum.transformedBy_P(getModelMatrix());
     return _widerFrustumInModelCoordinates;
   }
@@ -774,7 +774,7 @@ public class Camera
     return new FrustumData(left, right, bottom, top, zNear, zFar);
   
   }
-  private FrustumData calculateWiderFrustumData()
+  private FrustumData calculateWiderFrustumData(float factor)
   {
     final double heightFromGround = getHeightFromGround();
   
@@ -833,7 +833,7 @@ public class Camera
     final double top = tanHalfVFOV * zNear;
     final double bottom = -top;
   
-    return new FrustumData(2 *left, 2 *right, 2 *bottom, 2 *top, zNear, zFar);
+    return new FrustumData(factor *left, factor *right, factor *bottom, factor *top, zNear, zFar);
   
   }
 

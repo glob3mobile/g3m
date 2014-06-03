@@ -331,7 +331,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
       double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
       final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
-      final Frustum cameraWiderFrustumInModelCoordinates = _lastCamera.getWiderFrustumInModelCoordinates();
+      final Frustum cameraWiderFrustumInModelCoordinates = _lastCamera.getWiderFrustumInModelCoordinates(_frustumCullingFactor);
   
   
       _renderedTiles.clear();
@@ -405,6 +405,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return false;
   }
 
+  private float _frustumCullingFactor;
+
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener)
   {
      _tessellator = tessellator;
@@ -442,6 +444,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   
     _changedInfoListener = changedInfoListener;
+  
+    _frustumCullingFactor = 1.0F;
   }
 
   public void dispose()
@@ -536,7 +540,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
     double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
     final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
-    final Frustum cameraWiderFrustumInModelCoordinates = _lastCamera.getWiderFrustumInModelCoordinates();
+    final Frustum cameraWiderFrustumInModelCoordinates = _lastCamera.getWiderFrustumInModelCoordinates(_frustumCullingFactor);
   
     //Texture Size for every tile
     int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
@@ -1168,4 +1172,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
+  public final void setFrustumCullingFactor(float frustumCullingFactor)
+  {
+    _frustumCullingFactor = frustumCullingFactor;
+  }
 }
