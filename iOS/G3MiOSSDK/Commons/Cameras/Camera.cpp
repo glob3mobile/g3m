@@ -304,32 +304,32 @@ FrustumData Camera::calculateFrustumData() const {
   const double heightFromGround = getHeightFromGround();
   
   double zNear = heightFromGround * 0.1;
-
+  
   //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
   
   double zFar = _planet->distanceToHorizon(_position.asVector3D());
-
+  
   const double goalRatio = 1000;
   const double ratio = zFar / zNear;
   if (ratio < goalRatio) {
     zNear = zFar / goalRatio;
   }
-
+  
   //  int __TODO_remove_debug_code;
   //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
   //         height,
   //         zNear,
   //         zFar,
   //         ratio);
-
+  
   // compute rest of frustum numbers
-
+  
   double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
   double tanHalfVFOV = _tanHalfVerticalFieldOfView;
-
+  
   if (ISNAN(tanHalfHFOV) || ISNAN(tanHalfVFOV)) {
     const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
-
+    
     if (ISNAN(tanHalfHFOV) && ISNAN(tanHalfVFOV)) {
       tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
       tanHalfHFOV = tanHalfVFOV / ratioScreen;
@@ -345,16 +345,72 @@ FrustumData Camera::calculateFrustumData() const {
       }
     }
   }
-
+  
   const double right = tanHalfHFOV * zNear;
   const double left = -right;
   const double top = tanHalfVFOV * zNear;
   const double bottom = -top;
-
+  
   return FrustumData(left, right,
                      bottom, top,
                      zNear, zFar);
-
+  
+}
+FrustumData Camera::calculateWiderFrustumData() const {
+  const double heightFromGround = getHeightFromGround();
+  
+  double zNear = heightFromGround * 0.1;
+  
+  //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
+  
+  double zFar = _planet->distanceToHorizon(_position.asVector3D());
+  
+  const double goalRatio = 1000;
+  const double ratio = zFar / zNear;
+  if (ratio < goalRatio) {
+    zNear = zFar / goalRatio;
+  }
+  
+  //  int __TODO_remove_debug_code;
+  //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+  //         height,
+  //         zNear,
+  //         zFar,
+  //         ratio);
+  
+  // compute rest of frustum numbers
+  
+  double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
+  double tanHalfVFOV = _tanHalfVerticalFieldOfView;
+  
+  if (ISNAN(tanHalfHFOV) || ISNAN(tanHalfVFOV)) {
+    const double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
+    
+    if (ISNAN(tanHalfHFOV) && ISNAN(tanHalfVFOV)) {
+      tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3  =>  aprox tan(34 degrees / 2)
+      tanHalfHFOV = tanHalfVFOV / ratioScreen;
+    }
+    else {
+      if (ISNAN(tanHalfHFOV)) {
+        tanHalfHFOV = tanHalfVFOV / ratioScreen;
+      }
+      else {
+        if ISNAN(tanHalfVFOV) {
+          tanHalfVFOV = tanHalfHFOV * ratioScreen;
+        }
+      }
+    }
+  }
+  
+  const double right = tanHalfHFOV * zNear;
+  const double left = -right;
+  const double top = tanHalfVFOV * zNear;
+  const double bottom = -top;
+  
+  return FrustumData(2*left, 2*right,
+                     2*bottom, 2*top,
+                     zNear, zFar);
+  
 }
 
 double Camera::getProjectedSphereArea(const Sphere& sphere) const {

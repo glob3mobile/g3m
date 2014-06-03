@@ -631,6 +631,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
   double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+  const Frustum* cameraWiderFrustumInModelCoordinates = _lastCamera->getWiderFrustumInModelCoordinates();
   
   //Texture Size for every tile
   int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
@@ -661,6 +662,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    cameraNormalizedPosition,
                    cameraAngle2HorizonInRadians,
                    cameraFrustumInModelCoordinates,
+                   cameraWiderFrustumInModelCoordinates,
                    &_statistics,
                    _verticalExaggeration,
                    layerTilesRenderParameters,
@@ -703,6 +705,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      cameraNormalizedPosition,
                      cameraAngle2HorizonInRadians,
                      cameraFrustumInModelCoordinates,
+                     cameraWiderFrustumInModelCoordinates,
                      &_statistics,
                      _verticalExaggeration,
                      layerTilesRenderParameters,
@@ -1101,6 +1104,8 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
     const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
     double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
     const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+    const Frustum* cameraWiderFrustumInModelCoordinates = _lastCamera->getWiderFrustumInModelCoordinates();
+
 
     _renderedTiles.clear();
 
@@ -1126,6 +1131,7 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
                                              cameraNormalizedPosition,
                                              cameraAngle2HorizonInRadians,
                                              cameraFrustumInModelCoordinates,
+                                             cameraWiderFrustumInModelCoordinates,
                                              &_statistics,
                                              _verticalExaggeration,
                                              layerTilesRenderParameters,

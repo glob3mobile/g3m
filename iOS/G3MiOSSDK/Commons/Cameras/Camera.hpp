@@ -119,6 +119,7 @@ public:
   _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
+  _widerFrustumInModelCoordinates(NULL),
   _camEffectTarget(new CameraEffectTarget()),
   _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
   _angle2Horizon(that._angle2Horizon),
@@ -135,6 +136,7 @@ public:
     delete _camEffectTarget;
     delete _frustum;
     delete _frustumInModelCoordinates;
+    delete _widerFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
   }
@@ -197,6 +199,14 @@ public:
       _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix());
     }
     return _frustumInModelCoordinates;
+  }
+  
+  const Frustum* const getWiderFrustumInModelCoordinates() const {
+    if (_widerFrustumInModelCoordinates)
+      delete _widerFrustumInModelCoordinates;
+    Frustum widerFrustum(calculateWiderFrustumData());
+    _widerFrustumInModelCoordinates = widerFrustum.transformedBy_P(getModelMatrix());
+    return _widerFrustumInModelCoordinates;
   }
 
   Vector3D getHorizontalVector();
@@ -351,6 +361,7 @@ private:
   mutable Geodetic3D*      _geodeticCenterOfView;
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
+  mutable Frustum*         _widerFrustumInModelCoordinates;
   double                   _tanHalfVerticalFieldOfView;
   double                   _tanHalfHorizontalFieldOfView;
   double                   _rollInRadians;
@@ -419,6 +430,7 @@ private:
   }
 
   FrustumData calculateFrustumData() const;
+  FrustumData calculateWiderFrustumData() const;
 
   // opengl projection matrix
   const MutableMatrix44D& getProjectionMatrix() const{

@@ -286,6 +286,7 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                      const Vector3D& cameraNormalizedPosition,
                      double cameraAngle2HorizonInRadians,
                      const Frustum* cameraFrustumInModelCoordinates,
+                     const Frustum* cameraWiderFrustumInModelCoordinates,
                      ElevationDataProvider* elevationDataProvider,
                      const Sector* renderedSector,
                      const TileTessellator* tessellator,
@@ -303,7 +304,7 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                                                            tilesRenderParameters);
 
   return ((boundingVolume != NULL)  &&
-          boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates));
+          boundingVolume->touchesFrustum(cameraWiderFrustumInModelCoordinates));
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
@@ -625,6 +626,7 @@ bool Tile::render(const G3MRenderContext* rc,
                   const Vector3D& cameraNormalizedPosition,
                   double cameraAngle2HorizonInRadians,
                   const Frustum* cameraFrustumInModelCoordinates,
+                  const Frustum* cameraWiderFrustumInModelCoordinates,
                   TilesStatistics* tilesStatistics,
                   const float verticalExaggeration,
                   const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -659,6 +661,7 @@ bool Tile::render(const G3MRenderContext* rc,
                 cameraNormalizedPosition,
                 cameraAngle2HorizonInRadians,
                 cameraFrustumInModelCoordinates,
+                cameraWiderFrustumInModelCoordinates,
                 elevationDataProvider,
                 renderedSector,
                 tessellator,
@@ -1050,6 +1053,7 @@ void Tile::actualizeQuadTree(const G3MRenderContext* rc,
                              const Vector3D& cameraNormalizedPosition,
                              double cameraAngle2HorizonInRadians,
                              const Frustum* cameraFrustumInModelCoordinates,
+                             const Frustum* cameraWiderFrustumInModelCoordinates,
                              TilesStatistics* tilesStatistics,
                              const float verticalExaggeration,
                              const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -1080,6 +1084,7 @@ void Tile::actualizeQuadTree(const G3MRenderContext* rc,
                 cameraNormalizedPosition,
                 cameraAngle2HorizonInRadians,
                 cameraFrustumInModelCoordinates,
+                cameraWiderFrustumInModelCoordinates,
                 elevationDataProvider,
                 renderedSector,
                 tessellator,
@@ -1135,7 +1140,8 @@ void Tile::actualizeQuadTree(const G3MRenderContext* rc,
         Tile* subTile = subTiles->at(i);
 
         subTile->actualizeQuadTree(rc,/* parentState,*/ renderedTiles, planet,
-                                   cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared,
+                                   cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates,
+                                   tilesStatistics, verticalExaggeration, layerTilesRenderParameters, texturizer, tilesRenderParameters, lastSplitTimer, elevationDataProvider, tessellator, tileRasterizer, layerSet, renderedSector, isForcedFullRender, texturePriority, texWidthSquared,
                                    texHeightSquared,
                                    nowInMS);
       }
