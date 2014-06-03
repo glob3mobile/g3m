@@ -32,6 +32,7 @@ import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.SceneLighting;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
@@ -437,5 +438,8 @@ public final class G3MWidget_Android
       return getG3MWidget().getG3MContext();
    }
 
+   public PlanetRenderer getPlanetRenderer() {
+	   return getG3MWidget().getPlanetRenderer();
+   }
 
 }

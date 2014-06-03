@@ -192,12 +192,14 @@ Activity {
 		}
 
 		_g3mWidget = builder.createWidget();  
-		
 
-		   // set camera looking at Tenerife
-		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
-		   _g3mWidget.setCameraPosition(position);
-		   _g3mWidget.setCameraPitch(Angle.fromDegrees(-50.0));
+		// set frustumCullingFactor
+		_g3mWidget.getPlanetRenderer().setFrustumCullingFactor(2.0f);
+
+		// set camera looking at Tenerife
+		Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
+		_g3mWidget.setCameraPosition(position);
+		_g3mWidget.setCameraPitch(Angle.fromDegrees(-50.0));
 
 
 
