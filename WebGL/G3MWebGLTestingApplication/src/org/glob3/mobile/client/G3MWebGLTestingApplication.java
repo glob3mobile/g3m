@@ -146,8 +146,8 @@ public class G3MWebGLTestingApplication
          // initialize a default widget by using a builder
          //initDefaultWithBuilder();
     	  
-    	 // testBranch_zrender_touchhandlers();
-    	  testBILGC();
+    	  testBranch_zrender_touchhandlers();
+    	  //testBILGC();
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -1557,6 +1557,9 @@ public class G3MWebGLTestingApplication
 		   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
 
 		   _widget = builder.createWidget();
+		   
+		   // set frustumCullingFactor
+		   _widget.getPlanetRenderer().setFrustumCullingFactor(2.0f);
 		   
 		   // set camera looking at Tenerife
 		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);
