@@ -26,33 +26,37 @@ Vector2F ICanvasUtils::drawStringsOn(const std::vector<std::string> &strings,
                                      const Color& shadowColor,
                                      const int padding,
                                      const int cornerRadius) {
-  int longestTextIndex = 0;
-  int maxLength = strings.at(longestTextIndex).length();
-  const int stringsSize = strings.size();
-  for (int i = 1; i < stringsSize; i++) {
-    const int itemLength = strings.at(i).length();
-    if (maxLength < itemLength) {
-      maxLength = itemLength;
-      longestTextIndex = i;
-    }
-  }
   
+  const int stringsSize = strings.size();
   int fontSize = maxFontSize;
-  const int maxWidth = width - (2 * padding);
-  bool fit = false;
-  while (!fit && fontSize > minFontSize) {
-    GFont labelFont = GFont::sansSerif(fontSize);
-    const std::string longestText = strings.at(longestTextIndex);
-    canvas->setFont(labelFont);
-    const Vector2F extent = canvas->textExtent(longestText);
-    if (extent._x <= maxWidth) {
-      fit = true;
+  if (stringsSize > 0 ) {
+    int longestTextIndex = 0;
+    int maxLength = strings.at(longestTextIndex).length();
+    for (int i = 1; i < stringsSize; i++) {
+      const int itemLength = strings.at(i).length();
+      if (maxLength < itemLength) {
+        maxLength = itemLength;
+        longestTextIndex = i;
+      }
     }
-    else {
-      fontSize--;
+    
+    
+    
+    const int maxWidth = width - (2 * padding);
+    bool fit = false;
+    while (!fit && fontSize > minFontSize) {
+      GFont labelFont = GFont::sansSerif(fontSize);
+      const std::string longestText = strings.at(longestTextIndex);
+      canvas->setFont(labelFont);
+      const Vector2F extent = canvas->textExtent(longestText);
+      if (extent._x <= maxWidth) {
+        fit = true;
+      }
+      else {
+        fontSize--;
+      }
     }
   }
-
   canvas->setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
   
   ColumnCanvasElement column(backgroundColor,
