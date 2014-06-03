@@ -27,38 +27,43 @@ public class ICanvasUtils
   }
   public static Vector2F drawStringsOn(java.util.ArrayList<String> strings, ICanvas canvas, int width, int height, HorizontalAlignment hAlign, VerticalAlignment vAlign, HorizontalAlignment textAlign, Color color, int maxFontSize, int minFontSize, Color backgroundColor, Color shadowColor, int padding, int cornerRadius)
   {
-    int longestTextIndex = 0;
-    int maxLength = strings.get(longestTextIndex).length();
+  
     final int stringsSize = strings.size();
-    for (int i = 1; i < stringsSize; i++)
-    {
-      final int itemLength = strings.get(i).length();
-      if (maxLength < itemLength)
-      {
-        maxLength = itemLength;
-        longestTextIndex = i;
-      }
-    }
-  
     int fontSize = maxFontSize;
-    final int maxWidth = width - (2 * padding);
-    boolean fit = false;
-    while (!fit && fontSize > minFontSize)
+    if (stringsSize > 0)
     {
-      GFont labelFont = GFont.sansSerif(fontSize);
-      final String longestText = strings.get(longestTextIndex);
-      canvas.setFont(labelFont);
-      final Vector2F extent = canvas.textExtent(longestText);
-      if (extent._x <= maxWidth)
+      int longestTextIndex = 0;
+      int maxLength = strings.get(longestTextIndex).length();
+      for (int i = 1; i < stringsSize; i++)
       {
-        fit = true;
+        final int itemLength = strings.get(i).length();
+        if (maxLength < itemLength)
+        {
+          maxLength = itemLength;
+          longestTextIndex = i;
+        }
       }
-      else
+  
+  
+  
+      final int maxWidth = width - (2 * padding);
+      boolean fit = false;
+      while (!fit && fontSize > minFontSize)
       {
-        fontSize--;
+        GFont labelFont = GFont.sansSerif(fontSize);
+        final String longestText = strings.get(longestTextIndex);
+        canvas.setFont(labelFont);
+        final Vector2F extent = canvas.textExtent(longestText);
+        if (extent._x <= maxWidth)
+        {
+          fit = true;
+        }
+        else
+        {
+          fontSize--;
+        }
       }
     }
-  
     canvas.setShadow(shadowColor, 1.0f, 1.0f, -1.0f);
   
     ColumnCanvasElement column = new ColumnCanvasElement(backgroundColor, 0, padding, cornerRadius, textAlign); // margin
