@@ -331,6 +331,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
       double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
       final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+      final Frustum cameraWiderFrustumInModelCoordinates = _lastCamera.getWiderFrustumInModelCoordinates();
+  
   
       _renderedTiles.clear();
   
@@ -351,7 +353,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
-        _firstLevelTiles.get(i).actualizeQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS); // if first render, force full render
+        _firstLevelTiles.get(i).actualizeQuadTree(rc, _renderedTiles, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS); // if first render, force full render
       }
     }
     else
@@ -534,6 +536,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
     double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
     final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
+    final Frustum cameraWiderFrustumInModelCoordinates = _lastCamera.getWiderFrustumInModelCoordinates();
   
     //Texture Size for every tile
     int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
@@ -559,7 +562,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
+        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
       }
     }
     else
@@ -578,7 +581,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         {
           Tile tile = iter.next();
   
-          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); //SENDING SQUARED TEX SIZE -  if first render, forceFullRender
+          tile.render(rc, _glState, toVisitInNextIteration, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); //SENDING SQUARED TEX SIZE -  if first render, forceFullRender
         }
   
         toVisit = toVisitInNextIteration;
