@@ -45,7 +45,7 @@ public class MixedVectorialLOD {
 
    //-- Internal constants definition ------------------------------------------------------------------
 
-   final static String  PARAMETERS_FILE         = "parameters.xml";
+   final static String  PARAMETERS_FILE         = "mixed.parameters.xml";
    final static String  METADATA_FILENAME       = "metadata.json";
    final static String  EMPTY_GEOJSON           = "{\"type\":\"FeatureCollection\",\"features\":null}";
    final static String  INTERNAL_SRID           = "4326";
@@ -89,9 +89,9 @@ public class MixedVectorialLOD {
    private static String                     ROOT_FOLDER        = "LOD";
 
    //-- Data source and filter parameters --------------------------------------------------------------
-   private static String                     DATABASE_TABLE     = "ne_10m_admin_0_countries";
-   private static String                     FILTER_CRITERIA    = "true";
-   private static String[]                   PROPERTIES;
+   private static String[]                   DATABASE_TABLES;
+   private static String[]                   FILTER_CRITERIA;
+   private static String[][]                 PROPERTIES;
 
    //-- Common variables for all data sources -----------------------------------------------------------
    private static DataBaseService            _dataBaseService   = null;
@@ -556,7 +556,7 @@ public class MixedVectorialLOD {
          return TileSector.FULL_SPHERE_SECTOR;
       }
 
-      System.out.println("Source data bound: " + bbox);
+      System.out.println("    Source data bound: " + bbox);
 
       final int begin = bbox.indexOf("(") + 1;
       final int end = bbox.indexOf(")") - 1;
@@ -581,7 +581,7 @@ public class MixedVectorialLOD {
       for (int index = 1; index < dataSources.size(); index++) {
          globalSector = globalSector.mergedWith(dataSources.get(index)._boundSector);
       }
-
+      System.out.println();
       return globalSector;
    }
 
@@ -1041,6 +1041,12 @@ public class MixedVectorialLOD {
    }
 
 
+   private static String getTmpGeojsonName(final TileSector sector) {
+
+      return sector._level + "_" + sector._column + "_" + sector.getRow(_renderParameters) + ".geojson";
+   }
+
+
    @SuppressWarnings("unused")
    private static String getTileLabel(final TileSector sector) {
 
@@ -1401,16 +1407,20 @@ public class MixedVectorialLOD {
    }
 
 
-   private static void writeEmptyFile(final TileSecto sector) {
+   private static void writeEmptyFile(final TileSector sector) {
 
       try {
          if (generateGeojson()) {
             final File geojsonFile = new File(getGeojsonFileName(sector));
-            geojsonFile.createNewFile();
+            if (!geojsonFile.exists()) {
+               geojsonFile.createNewFile();
+            }
          }
          if (generateGeobson()) {
             final File geobsonFile = new File(getGeobsonFileName(sector));
-            geobsonFile.createNewFile();
+            if (!geobsonFile.exists()) {
+               geobsonFile.createNewFile();
+            }
          }
       }
       catch (final IOException e) {
@@ -1421,7 +1431,7 @@ public class MixedVectorialLOD {
 
 
    private static void writeOutputFile(final String geoJson,
-                                       final TileSecto sector) {
+                                       final TileSector sector) {
 
       try {
          //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
@@ -1433,13 +1443,13 @@ public class MixedVectorialLOD {
          }
          // -------------------------------------------------------------------------
 
+         final String geojsonFileName = getGeojsonFileName(sector);
+         final File geojsonFile = new File(geojsonFileName);
+
          if (generateGeojson()) {
             //System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
-            final String geojsonFileName = getGeojsonFileName(sector);
-
-            if (new File(geojsonFileName).exists()) {
-               //TODO: edit existing file and copy new geojson data
-               addFeatureToExistingGeojsonFile(geoJson, geojsonFileName);
+            if (!isEmptyFile(geojsonFile)) {
+               addFeatureToExistingGeojsonFile(geoJson, geojsonFile);
             }
             else {
                final FileWriter file = new FileWriter(geojsonFileName);
@@ -1450,88 +1460,60 @@ public class MixedVectorialLOD {
          }
 
          if (generateGeobson()) {
-            final File bsonFile = new File(getGeobsonFileName(sector));
-            bsonFile.createNewFile();
+            final String geobsonFileName = getGeobsonFileName(sector);
+            final File geobsonFile = new File(geobsonFileName);
 
-            try {
-               JBson2BJson.instance().json2bson(geoJson, bsonFile, true);
-               if (!generateGeojson()) {
-                  //System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
+            if (!isEmptyFile(geobsonFile)) {
+               if (!isEmptyFile(geojsonFile)) {
+                  addFeatureToExistingGeobsonFile(geoJson, geobsonFile, geojsonFile);
+               }
+               else {
+                  final String tmpFileName = _lodFolder + File.separatorChar + getTmpGeojsonName(sector);
+                  addFeatureToExistingGeobsonFile(geoJson, geobsonFile, new File(tmpFileName));
                }
             }
-            catch (final JBson2BJsonException e) {
-               ILogger.instance().logError("Error generating bson file: " + e.getMessage());
+            else {
+               final File bsonFile = new File(geobsonFileName);
+               bsonFile.createNewFile();
+
+               try {
+                  JBson2BJson.instance().json2bson(geoJson, bsonFile, true);
+                  if (!generateGeojson()) {
+                     //System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
+                  }
+               }
+               catch (final JBson2BJsonException e) {
+                  ILogger.instance().logError("JBson2BJson Error generating geobson file: " + e.getMessage());
+               }
             }
          }
       }
       catch (final IOException e) {
-         ILogger.instance().logError("Error generating output file: " + e.getMessage());
+         ILogger.instance().logError("I/O Error generating output file: " + e.getMessage());
       }
    }
 
 
-   //   private static void writeOutputFile(final String geoJson,
-   //                                       final TileSector sector) {
-   //
-   //      try {
-   //         //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
-   //         if (sector._level < _firstLevelCreated) {
-   //            _firstLevelCreated = sector._level;
-   //         }
-   //         if (sector._level > _lastLevelCreated) {
-   //            _lastLevelCreated = sector._level;
-   //         }
-   //         // -------------------------------------------------------------------------
-   //
-   //         if (generateGeojson()) {
-   //            //System.out.println("Generating: ../" + getTileLabel(sector) + ".geojson");
-   //            final FileWriter file = new FileWriter(getGeojsonFileName(sector));
-   //            file.write(geoJson);
-   //            file.flush();
-   //            file.close();
-   //         }
-   //
-   //         if (generateGeobson()) {
-   //            final File bsonFile = new File(getGeobsonFileName(sector));
-   //            bsonFile.createNewFile();
-   //
-   //            try {
-   //               JBson2BJson.instance().json2bson(geoJson, bsonFile, true);
-   //               if (!generateGeojson()) {
-   //                  //System.out.println("Generating: ../" + getTileLabel(sector) + ".bson");
-   //               }
-   //            }
-   //            catch (final JBson2BJsonException e) {
-   //               ILogger.instance().logError("Error generating bson file: " + e.getMessage());
-   //            }
-   //         }
-   //      }
-   //      catch (final IOException e) {
-   //         ILogger.instance().logError("Error generating output file: " + e.getMessage());
-   //      }
-   //   }
-
-
    private static void addFeatureToExistingGeojsonFile(final String geoJson,
-                                                       final String geojsonFileName) {
+                                                       final File geojsonFile) {
 
       final String feature = getFeatureFromGeojson(geoJson);
+      System.out.println("FEATURE: " + feature);
 
       try {
          String verify, putData;
-         final File file = new File(geojsonFileName);
+         //final File file = new File(geojsonFileName);
          //file.createNewFile();
-         final FileWriter fw = new FileWriter(file);
+         final FileWriter fw = new FileWriter(geojsonFile);
          final BufferedWriter bw = new BufferedWriter(fw);
-         final FileReader fr = new FileReader(file);
+         final FileReader fr = new FileReader(geojsonFile);
          final BufferedReader br = new BufferedReader(fr);
 
-         while ((verify = br.readLine()) != null) {
-
-            if (verify != null) {
-               putData = verify.replaceAll("}]}", "}, ");
-               bw.write(putData);
-            }
+         verify = br.readLine();
+         while (verify != null) {
+            putData = verify.replaceAll("}]}", "}, ");
+            bw.write(putData);
+            verify = br.readLine();
          }
          br.close();
 
@@ -1541,19 +1523,62 @@ public class MixedVectorialLOD {
          bw.close();
       }
       catch (final IOException e) {
-         //TODO:
-         e.printStackTrace();
+         ILogger.instance().logError("Error merging geojson output file: " + e.getMessage());
       }
-
    }
 
 
    private static String getFeatureFromGeojson(final String geoJson) {
 
-      String result = geoJson.replace("{\"type\":\"FeatureCollection\",\"features\":[", "");
-      result = result.replace("}]}", "}");
+      String feature = geoJson.replace("{\"type\":\"FeatureCollection\",\"features\":[", "");
+      feature = feature.replace("}]}", "}");
 
-      return result;
+      System.out.println("FEATURE: " + feature);
+
+      return feature;
+   }
+
+
+   private static void addFeatureToExistingGeobsonFile(final String geoJson,
+                                                       final File geobsonFile,
+                                                       final File geojsonFile) {
+
+      try {
+         //         final File geobsonFile = new File(geobsonFileName);
+         //         final File geojsonFile = new File(geojsonFileName);
+
+         if (!geojsonFile.exists()) {
+            //geojsonFile = new File(geojsonFileName);
+            geojsonFile.createNewFile();
+            JBson2BJson.instance().bson2json(geobsonFile, geojsonFile, true);
+         }
+
+         //         geobsonFile = new File(geobsonFileName);
+         //         geobsonFile.createNewFile();
+
+         addFeatureToExistingGeojsonFile(geoJson, geojsonFile);
+
+         JBson2BJson.instance().json2bson(geojsonFile, geobsonFile, true);
+
+      }
+      catch (final JBson2BJsonException e) {
+         ILogger.instance().logError("JBson2BJson Error generating geobson file: " + e.getMessage());
+      }
+      catch (final IOException e) {
+         ILogger.instance().logError("I/O Error generating geobson file: " + e.getMessage());
+      }
+
+
+   }
+
+
+   private static boolean isEmptyFile(final File file) {
+      return (!file.exists() || (file.length() == 0));
+   }
+
+
+   private static boolean isEmptyString(final String str) {
+      return ((str == null) || (str.length() == 0));
    }
 
 
@@ -1623,181 +1648,35 @@ public class MixedVectorialLOD {
    }
 
 
-   private static void initializeFromArguments(final String[] args) {
+   //   private static String[] parsePropertiesFromFile(final String propList) {
+   //
+   //      if ((propList == null) || propList.trim().equals("")) {
+   //         return null;
+   //      }
+   //
+   //      final String[] properties = propList.split(",");
+   //
+   //      for (int i = 0; i < properties.length; i++) {
+   //         properties[i] = properties[i].trim();
+   //      }
+   //
+   //      return properties;
+   //   }
 
-      //COMMAND LINE example:
-      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test 2.0 false 0 3 ne_10m_admin_0_countries true continent pop_est
-      // igosoftware.dyndns.org 5414 postgres postgres1g0 vectorial_test 2.0 false 0 6 ne_10m_admin_0_countries true continent mapcolor7 scalerank
-      System.out.println("Initializing from parameters.. ");
-      //System.out.println("NUM parameters: " + args.length);
+   private static String[] parseDataFromFile(final String dataList,
+                                             final String separator) {
 
-      if (args.length < 11) {
-         System.err.println("FAIL: Invalid number of parameters [" + args.length + "].");
-         System.exit(1);
-      }
-
-      if ((args[0] != null) && (!args[0].equals(""))) {
-         HOST = args[0];
-         System.out.println("HOST: " + HOST);
-      }
-      else {
-         System.err.println("Invalid HOST argument.");
-         System.exit(1);
-      }
-
-      if ((args[1] != null) && (!args[1].equals(""))) {
-         PORT = args[1];
-         System.out.println("PORT: " + PORT);
-      }
-      else {
-         System.err.println("Invalid PORT argument.");
-         System.exit(1);
-      }
-
-      if ((args[2] != null) && (!args[2].equals(""))) {
-         USER = args[2];
-         System.out.println("USER: " + USER);
-      }
-      else {
-         System.err.println("Invalid USER argument.");
-         System.exit(1);
-      }
-
-      if ((args[3] != null) && (!args[3].equals(""))) {
-         PASSWORD = args[3];
-         System.out.println("PASSWORD: " + PASSWORD);
-      }
-      else {
-         System.err.println("Invalid PASSWORD argument.");
-         System.exit(1);
-      }
-
-      if ((args[4] != null) && (!args[4].equals(""))) {
-         DATABASE_NAME = args[4];
-         System.out.println("DATABASE_NAME: " + DATABASE_NAME);
-      }
-      else {
-         System.err.println("Invalid DATABASE_NAME argument.");
-         System.exit(1);
-      }
-
-      if ((args[5] != null) && (!args[5].equals(""))) {
-         QUALITY_FACTOR = Float.parseFloat(args[5]);
-         System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
-      }
-      else {
-         System.out.println();
-         System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR.");
-      }
-
-      if ((args[6] != null) && (!args[6].equals(""))) {
-         MERCATOR = Boolean.parseBoolean(args[6]);
-         if (MERCATOR) {
-            System.out.println("MERCATOR projection");
-         }
-         else {
-            System.out.println("WGS84 projection");
-         }
-      }
-      else {
-         System.err.println("Invalid PROJECTION specification.");
-         System.exit(1);
-      }
-
-      if ((args[7] != null) && (!args[7].equals(""))) {
-         FIRST_LEVEL = Integer.parseInt(args[7]);
-         System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
-      }
-      else {
-         System.err.println("Invalid FIRST_LEVEL argument.");
-         System.exit(1);
-      }
-
-      if ((args[8] != null) && (!args[8].equals(""))) {
-         MAX_LEVEL = Integer.parseInt(args[8]);
-         System.out.println("MAX_LEVEL: " + MAX_LEVEL);
-         //NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
-         //MAX_DB_CONNECTIONS = NUM_LEVELS;
-      }
-      else {
-         System.err.println("Invalid MAX_LEVEL argument.");
-         System.exit(1);
-      }
-
-      //----
-      if ((args[9] != null) && (!args[9].equals(""))) {
-         OUTPUT_FORMAT = args[9];
-         System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
-      }
-      else {
-         System.err.println("Invalid OUTPUT_FORMAT argument.");
-         System.exit(1);
-      }
-
-      if ((args[10] != null) && (!args[10].equals(""))) {
-         ROOT_FOLDER = args[10];
-         System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
-      }
-      else {
-         System.out.println();
-         System.err.println("Invalid OUTPUT_FOLDER argument. Using default folder: " + ROOT_FOLDER);
-      }
-      //----
-
-      if ((args[11] != null) && (!args[11].equals(""))) {
-         DATABASE_TABLE = args[11];
-         System.out.println("DATABASE_TABLE: " + DATABASE_TABLE);
-      }
-      else {
-         System.err.println("Invalid DATABASE_TABLE argument.");
-         System.exit(1);
-      }
-
-      if ((args[12] != null) && (!args[12].equals(""))) {
-         FILTER_CRITERIA = args[12];
-         System.out.println("FILTER_CRITERIA: " + FILTER_CRITERIA);
-      }
-      else {
-         System.out.println();
-         System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
-      }
-
-      final int numProperties = args.length - 13;
-      if (numProperties > 0) {
-         PROPERTIES = new String[numProperties];
-         System.out.print("PROPERTIES: ");
-         for (int i = 0; i < numProperties; i++) {
-            PROPERTIES[i] = args[13 + i];
-            System.out.print(PROPERTIES[i]);
-            if (i == (numProperties - 1)) {
-               System.out.println(".");
-            }
-            else {
-               System.out.print(", ");
-            }
-         }
-         System.out.println();
-      }
-      else {
-         System.err.println("Non PROPERTIES argument. No property included from datasource.");
-      }
-
-   }
-
-
-   private static String[] parsePropertiesFromFile(final String propList) {
-
-      if ((propList == null) || propList.trim().equals("")) {
+      if (isEmptyString(dataList)) {
          return null;
       }
 
-      final String[] properties = propList.split(",");
+      final String[] data = dataList.split(separator);
 
-      for (int i = 0; i < properties.length; i++) {
-         properties[i] = properties[i].trim();
+      for (int i = 0; i < data.length; i++) {
+         data[i] = data[i].trim();
       }
 
-      return properties;
+      return data;
    }
 
 
@@ -1816,7 +1695,7 @@ public class MixedVectorialLOD {
             String tmp;
             HOST = properties.getProperty("HOST").trim();
 
-            if ((HOST != null) && (!HOST.equals(""))) {
+            if (!isEmptyString(HOST)) {
                System.out.println("HOST: " + HOST);
             }
             else {
@@ -1825,7 +1704,7 @@ public class MixedVectorialLOD {
             }
 
             PORT = properties.getProperty("PORT").trim();
-            if ((PORT != null) && (!PORT.equals(""))) {
+            if (!isEmptyString(PORT)) {
                System.out.println("PORT: " + PORT);
             }
             else {
@@ -1834,7 +1713,7 @@ public class MixedVectorialLOD {
             }
 
             USER = properties.getProperty("USER").trim();
-            if ((USER != null) && (!USER.equals(""))) {
+            if (!isEmptyString(USER)) {
                System.out.println("USER: " + USER);
             }
             else {
@@ -1843,7 +1722,7 @@ public class MixedVectorialLOD {
             }
 
             PASSWORD = properties.getProperty("PASSWORD").trim();
-            if ((PASSWORD != null) && (!PASSWORD.equals(""))) {
+            if (!isEmptyString(PASSWORD)) {
                System.out.println("PASSWORD: " + PASSWORD);
             }
             else {
@@ -1852,7 +1731,7 @@ public class MixedVectorialLOD {
             }
 
             DATABASE_NAME = properties.getProperty("DATABASE_NAME").trim();
-            if ((DATABASE_NAME != null) && (!DATABASE_NAME.equals(""))) {
+            if (!isEmptyString(DATABASE_NAME)) {
                System.out.println("DATABASE_NAME: " + DATABASE_NAME);
             }
             else {
@@ -1861,7 +1740,7 @@ public class MixedVectorialLOD {
             }
 
             tmp = properties.getProperty("QUALITY_FACTOR").trim();
-            if ((tmp != null) && (!tmp.equals(""))) {
+            if (!isEmptyString(tmp)) {
                QUALITY_FACTOR = Float.parseFloat(tmp);
                System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
             }
@@ -1871,7 +1750,7 @@ public class MixedVectorialLOD {
             }
 
             tmp = properties.getProperty("MERCATOR").trim();
-            if ((tmp != null) && (!tmp.equals(""))) {
+            if (!isEmptyString(tmp)) {
                MERCATOR = Boolean.parseBoolean(tmp);
                if (MERCATOR) {
                   System.out.println("MERCATOR projection");
@@ -1886,7 +1765,7 @@ public class MixedVectorialLOD {
             }
 
             tmp = properties.getProperty("FIRST_LEVEL").trim();
-            if ((tmp != null) && (!tmp.equals(""))) {
+            if (!isEmptyString(tmp)) {
                FIRST_LEVEL = Integer.parseInt(tmp);
                System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
             }
@@ -1896,7 +1775,7 @@ public class MixedVectorialLOD {
             }
 
             tmp = properties.getProperty("MAX_LEVEL").trim();
-            if ((tmp != null) && (!tmp.equals(""))) {
+            if (!isEmptyString(tmp)) {
                MAX_LEVEL = Integer.parseInt(tmp);
                System.out.println("MAX_LEVEL: " + MAX_LEVEL);
                //NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
@@ -1908,7 +1787,7 @@ public class MixedVectorialLOD {
             }
 
             OUTPUT_FORMAT = properties.getProperty("OUTPUT_FORMAT").trim();
-            if ((OUTPUT_FORMAT != null) && (!OUTPUT_FORMAT.equals(""))) {
+            if (!isEmptyString(OUTPUT_FORMAT)) {
                System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
             }
             else {
@@ -1917,7 +1796,7 @@ public class MixedVectorialLOD {
             }
 
             tmp = properties.getProperty("OUTPUT_FOLDER").trim();
-            if ((tmp != null) && (!tmp.equals(""))) {
+            if (!isEmptyString(tmp)) {
                ROOT_FOLDER = tmp;
                System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
             }
@@ -1926,35 +1805,83 @@ public class MixedVectorialLOD {
                System.err.println("Invalid OUTPUT_FOLDER argument. Using default output folder: " + ROOT_FOLDER);
             }
 
-            DATABASE_TABLE = properties.getProperty("DATABASE_TABLE").trim();
-            if ((DATABASE_TABLE != null) && (!DATABASE_TABLE.equals(""))) {
-               System.out.println("DATABASE_TABLE: " + DATABASE_TABLE);
-            }
-            else {
-               System.err.println("Invalid DATABASE_TABLE argument.");
-               System.exit(1);
-            }
 
-            tmp = properties.getProperty("FILTER_CRITERIA").trim();
-            if ((tmp != null) && (!tmp.equals(""))) {
-               FILTER_CRITERIA = tmp;
-               System.out.println("FILTER_CRITERIA: " + FILTER_CRITERIA);
+            //---------
+            final String dataBaseTables = properties.getProperty("DATABASE_TABLE").trim();
+
+            if (!isEmptyString(dataBaseTables)) {
+               DATABASE_TABLES = parseDataFromFile(dataBaseTables, "/");
+               System.out.println("DATABASE TABLES: " + dataBaseTables);
+               //               for (final String element : DATABASE_TABLES) {
+               //                  System.out.print(element);
+               //                                    if (i == (DATABASE_TABLES.length - 1)) {
+               //                                       System.out.println(".");
+               //                                    }
+               //                                    else {
+               //                                       System.out.print(", ");
+               //                                    }
+               //               }
+               //System.out.println();
             }
             else {
                System.out.println();
-               System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
+               System.err.println("Non database table argument. No property included from datasource.");
+               System.exit(1);
             }
 
-            PROPERTIES = parsePropertiesFromFile(properties.getProperty("PROPERTIES"));
-            if ((PROPERTIES != null) && (PROPERTIES.length > 0)) {
-               System.out.print("PROPERTIES: ");
-               for (int i = 0; i < PROPERTIES.length; i++) {
-                  System.out.print(PROPERTIES[i]);
-                  if (i == (PROPERTIES.length - 1)) {
-                     System.out.println(".");
+            //---------
+            final String filterCriteria = properties.getProperty("FILTER_CRITERIA").trim();
+
+            if (!isEmptyString(filterCriteria)) {
+               FILTER_CRITERIA = parseDataFromFile(filterCriteria, "/");
+               System.out.println("FILTER CRITERIA: " + filterCriteria);
+               for (int i = 0; i < DATABASE_TABLES.length; i++) {
+                  if (isEmptyString(FILTER_CRITERIA[i])) {
+                     FILTER_CRITERIA[i] = "true";
+                  }
+                  //                  System.out.print(FILTER_CRITERIA[i]);
+                  //                  if (i == (DATABASE_TABLES.length - 1)) {
+                  //                     System.out.println(".");
+                  //                  }
+                  //                  else {
+                  //                     System.out.print(", ");
+                  //                  }
+               }
+               //System.out.println();
+            }
+            else {
+               for (int i = 0; i < DATABASE_TABLES.length; i++) {
+                  FILTER_CRITERIA[i] = "true";
+               }
+               System.out.println();
+               System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
+            }
+            //---------
+
+            PROPERTIES = new String[DATABASE_TABLES.length][];
+            final String includeProperties = properties.getProperty("PROPERTIES").trim();
+
+            if (!isEmptyString(includeProperties)) {
+               final String[] propertiesList = parseDataFromFile(includeProperties, "/");
+
+               System.out.println("PROPERTIES: " + includeProperties);
+               for (int i = 0; i < DATABASE_TABLES.length; i++) {
+
+                  if (!isEmptyString(propertiesList[i])) {
+                     final String[] props = parseDataFromFile(propertiesList[i], ",");
+                     if ((props != null) && (props.length > 0)) {
+                        PROPERTIES[i] = props;
+                        //                        System.out.print(propertiesList[i]);
+                     }
+                     //                     if (i == (DATABASE_TABLES.length - 1)) {
+                     //                        System.out.println(".");
+                     //                     }
+                     //                     else {
+                     //                        System.out.print(" / ");
+                     //                     }
                   }
                   else {
-                     System.out.print(", ");
+                     PROPERTIES[i] = null;
                   }
                }
                System.out.println();
@@ -1962,6 +1889,12 @@ public class MixedVectorialLOD {
             else {
                System.out.println();
                System.err.println("Non PROPERTIES argument. No property included from datasource.");
+            }
+
+            //-- Initialize data sources -----------------------------------------
+            for (int i = 0; i < DATABASE_TABLES.length; i++) {
+               final DataSource ds = new DataSource(DATABASE_TABLES[i], FILTER_CRITERIA[i], PROPERTIES[i]);
+               _dataSources.add(ds);
             }
 
             return true;
@@ -1989,27 +1922,28 @@ public class MixedVectorialLOD {
 
       initializeConcurrentService();
 
-      if (!initializeFromFile(PARAMETERS_FILE)) {
-         initializeFromArguments(args);
-      }
+      if (initializeFromFile(PARAMETERS_FILE)) {
 
-      System.out.print("Connecting to " + DATABASE_NAME + " postGIS database.. ");
+         System.out.print("Connecting to " + DATABASE_NAME + " postGIS database.. ");
 
-      if (createDataBaseService(HOST, PORT, USER, PASSWORD, DATABASE_NAME)) {
+         if (createDataBaseService(HOST, PORT, USER, PASSWORD, DATABASE_NAME)) {
 
-         System.out.println("done.");
+            System.out.println("done.");
 
-         initialize();
+            initialize();
 
-         final DataSource dataSource = new DataSource(DATABASE_TABLE, FILTER_CRITERIA, PROPERTIES);
+            // batch mode to generate full LOD pyramid for a vectorial data source
+            launchVectorialLODProcessing(_dataSources);
 
-         // batch mode to generate full LOD pyramid for a vectorial data source
-         launchVectorialLODProcessing(dataSource);
-
+         }
+         else {
+            System.out.println("Failed. Error connecting to database.");
+         }
       }
       else {
-         System.out.println("Failed. Error connecting to database.");
+         ILogger.instance().logError("Initialization error. Exit application");
       }
+
    }
 
 }
