@@ -1236,7 +1236,7 @@ public class MixedVectorialLOD {
             if (!ds._boundSector.intersects(sector)) {
                continue;
             }
-
+            //System.out.println("ds: " + ds._sourceTable);
             containsData = containsData || generateVectorialLOD(sector, ds);
          }
       }
@@ -1263,8 +1263,12 @@ public class MixedVectorialLOD {
                dataSource._geomFilterCriteria, //
                dataSource._includeProperties);
 
+
       if (geoJson != null) {
          //System.out.println("Generating: ../" + getTileLabel(sector));
+         if (dataSource._sourceTable.equalsIgnoreCase("ne_10m_admin_0_boundary_lines_land")) {
+            System.out.println("HAY ALGUNO !!!!");
+         }
          writeOutputFile(geoJson, sector);
       }
       else {
@@ -1454,6 +1458,7 @@ public class MixedVectorialLOD {
             else {
                final FileWriter file = new FileWriter(geojsonFileName);
                file.write(geoJson);
+               //file.write("\n");
                file.flush();
                file.close();
             }
@@ -1494,32 +1499,65 @@ public class MixedVectorialLOD {
    }
 
 
+   //   private static void addFeatureToExistingGeojsonFile(final String geoJson,
+   //                                                       final File geojsonFile) {
+   //
+   //      final String feature = getFeatureFromGeojson(geoJson);
+   //      //System.out.println("FEATURE: " + feature);
+   //
+   //      try {
+   //         String verify, putData;
+   //         //final File file = new File(geojsonFileName);
+   //         //file.createNewFile();
+   //         final FileWriter fw = new FileWriter(geojsonFile);
+   //         final BufferedWriter bw = new BufferedWriter(fw);
+   //         final FileReader fr = new FileReader(geojsonFile);
+   //         final BufferedReader br = new BufferedReader(fr);
+   //
+   //         verify = br.readLine();
+   //         while (verify != null) {
+   //            putData = verify.replaceAll("}]}", "}, ");
+   //            bw.write(putData);
+   //            verify = br.readLine();
+   //         }
+   //         br.close();
+   //
+   //         bw.write(feature);
+   //         bw.write("]}");
+   //         bw.flush();
+   //         bw.close();
+   //      }
+   //      catch (final IOException e) {
+   //         ILogger.instance().logError("Error merging geojson output file: " + e.getMessage());
+   //      }
+   //   }
+
+
    private static void addFeatureToExistingGeojsonFile(final String geoJson,
                                                        final File geojsonFile) {
 
       final String feature = getFeatureFromGeojson(geoJson);
-      System.out.println("FEATURE: " + feature);
+      //System.out.println("FEATURE: " + feature);
 
       try {
-         String verify, putData;
-         //final File file = new File(geojsonFileName);
-         //file.createNewFile();
+         String getData, putData;
          final FileWriter fw = new FileWriter(geojsonFile);
          final BufferedWriter bw = new BufferedWriter(fw);
          final FileReader fr = new FileReader(geojsonFile);
          final BufferedReader br = new BufferedReader(fr);
 
-         verify = br.readLine();
-         while (verify != null) {
-            putData = verify.replaceAll("}]}", "}, ");
-            bw.write(putData);
-            verify = br.readLine();
-         }
+         final char fileContent[] = new char[(int) geojsonFile.length()];
+         final int contentLength = br.read(fileContent);
          br.close();
 
-         bw.write(feature);
-         bw.write("]}");
-         bw.flush();
+         if (contentLength > 0) {
+            getData = br.toString();
+            putData = getData.replace("}]}", "}, ");
+            bw.write(putData);
+            bw.write(feature);
+            bw.write("]}");
+            bw.flush();
+         }
          bw.close();
       }
       catch (final IOException e) {
@@ -1532,8 +1570,6 @@ public class MixedVectorialLOD {
 
       String feature = geoJson.replace("{\"type\":\"FeatureCollection\",\"features\":[", "");
       feature = feature.replace("}]}", "}");
-
-      System.out.println("FEATURE: " + feature);
 
       return feature;
    }
@@ -1573,6 +1609,10 @@ public class MixedVectorialLOD {
 
 
    private static boolean isEmptyFile(final File file) {
+      final boolean existe = file.exists();
+      final boolean largo = file.length() == 0;
+      final boolean result = (!file.exists() || (file.length() == 0));
+
       return (!file.exists() || (file.length() == 0));
    }
 

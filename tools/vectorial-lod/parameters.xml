@@ -7,12 +7,12 @@
 <!-- Postgis database parameters -->  
 
    <!-- Url address for postgis database host access -->
-   <entry key="HOST">192.168.1.14</entry>
-   <!-- <entry key="HOST">igosoftware.dyndns.org</entry> -->
+   <!-- <entry key="HOST">192.168.1.14</entry> -->
+   <entry key="HOST">igosoftware.dyndns.org</entry>
    
    <!-- Port number for postgis database access -->
-   <entry key="PORT">5432</entry>
-   <!-- <entry key="PORT">5414</entry> -->
+   <!-- <entry key="PORT">5432</entry> -->
+   <entry key="PORT">5414</entry>
    
    <!-- User name for postgis database access -->
    <entry key="USER">postgres</entry>
@@ -36,10 +36,10 @@
    <entry key="MERCATOR">true</entry>
    
    <!-- first level of tiles to be generated -->
-   <entry key="FIRST_LEVEL">11</entry>
+   <entry key="FIRST_LEVEL">5</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">11</entry>
+   <entry key="MAX_LEVEL">5</entry>
    
    <!-- valid output format: geojson, geobson, both -->
    <entry key="OUTPUT_FORMAT">both</entry>
@@ -57,7 +57,8 @@
    <!-- <entry key="DATABASE_TABLE">planet_osm_polygon</entry> -->
    <!-- <entry key="DATABASE_TABLE">planet_osm_roads</entry> -->
    <!-- <entry key="DATABASE_TABLE">planet_osm_point</entry> -->
-   <entry key="DATABASE_TABLE">italy_buildings</entry>
+   <!-- <entry key="DATABASE_TABLE">italy_buildings</entry> -->
+   <entry key="DATABASE_TABLE">ne_10m_admin_0_boundary_lines_land</entry>
 
    <!-- filter criteria using pure database query format that will be included in a where clause -->
    <!-- i.e. "continent" like 'Euro%' AND "pop_est" > 10000000 -->
@@ -78,6 +79,7 @@
    <!-- <entry key="PROPERTIES">building, name</entry> -->
    <!-- <entry key="PROPERTIES">brand</entry> -->
    <!-- <entry key="PROPERTIES">ele</entry> -->
-   <entry key="PROPERTIES">type</entry>
+   <!-- <entry key="PROPERTIES">type</entry> -->
+   <entry key="PROPERTIES">scalerank</entry>
    
 </properties>
