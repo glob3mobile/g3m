@@ -1236,8 +1236,9 @@ public class MixedVectorialLOD {
             if (!ds._boundSector.intersects(sector)) {
                continue;
             }
-            //System.out.println("ds: " + ds._sourceTable);
-            containsData = containsData || generateVectorialLOD(sector, ds);
+
+            //final boolean contained = generateVectorialLOD(sector, ds);
+            containsData = generateVectorialLOD(sector, ds) || containsData;
          }
       }
 
@@ -1263,12 +1264,8 @@ public class MixedVectorialLOD {
                dataSource._geomFilterCriteria, //
                dataSource._includeProperties);
 
-
       if (geoJson != null) {
          //System.out.println("Generating: ../" + getTileLabel(sector));
-         if (dataSource._sourceTable.equalsIgnoreCase("ne_10m_admin_0_boundary_lines_land")) {
-            System.out.println("HAY ALGUNO !!!!");
-         }
          writeOutputFile(geoJson, sector);
       }
       else {
@@ -1541,8 +1538,7 @@ public class MixedVectorialLOD {
 
       try {
          String getData, putData;
-         final FileWriter fw = new FileWriter(geojsonFile);
-         final BufferedWriter bw = new BufferedWriter(fw);
+
          final FileReader fr = new FileReader(geojsonFile);
          final BufferedReader br = new BufferedReader(fr);
 
@@ -1551,14 +1547,17 @@ public class MixedVectorialLOD {
          br.close();
 
          if (contentLength > 0) {
-            getData = br.toString();
+            final FileWriter fw = new FileWriter(geojsonFile);
+            final BufferedWriter bw = new BufferedWriter(fw);
+
+            getData = String.valueOf(fileContent);
             putData = getData.replace("}]}", "}, ");
             bw.write(putData);
             bw.write(feature);
             bw.write("]}");
             bw.flush();
+            bw.close();
          }
-         bw.close();
       }
       catch (final IOException e) {
          ILogger.instance().logError("Error merging geojson output file: " + e.getMessage());
@@ -1609,10 +1608,6 @@ public class MixedVectorialLOD {
 
 
    private static boolean isEmptyFile(final File file) {
-      final boolean existe = file.exists();
-      final boolean largo = file.length() == 0;
-      final boolean result = (!file.exists() || (file.length() == 0));
-
       return (!file.exists() || (file.length() == 0));
    }
 
