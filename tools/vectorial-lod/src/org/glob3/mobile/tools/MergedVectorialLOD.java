@@ -41,11 +41,11 @@ import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJson;
 import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
 
 
-public class MixedVectorialLOD {
+public class MergedVectorialLOD {
 
    //-- Internal constants definition ------------------------------------------------------------------
 
-   final static String  PARAMETERS_FILE         = "mixed.parameters.xml";
+   final static String  PARAMETERS_FILE         = "parameters.merged.xml";
    final static String  METADATA_FILENAME       = "metadata.json";
    final static String  EMPTY_GEOJSON           = "{\"type\":\"FeatureCollection\",\"features\":null}";
    final static String  INTERNAL_SRID           = "4326";
@@ -111,7 +111,7 @@ public class MixedVectorialLOD {
    //   private static String                     _theGeomColumnName = null;                         //"the_geom"; 
    //   private static String                     _geomSRID          = null;
 
-   //-- New for mixed vectorial LOD ---------------------------------------------------
+   //-- New for merged vectorial LOD ---------------------------------------------------
 
    private static List<DataSource>           _dataSources       = new ArrayList<DataSource>();
 
@@ -1062,8 +1062,8 @@ public class MixedVectorialLOD {
 
       //final String projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
       //_lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + _projection;
-      final String mixedName = buildMixedTableName(dataSources);
-      _lodFolder = ROOT_FOLDER + File.separatorChar + mixedName + "_LEVELS-" + FIRST_LEVEL + "-" + MAX_LEVEL + "_" + _projection;
+      final String mergedName = buildMergedTableName(dataSources);
+      _lodFolder = ROOT_FOLDER + File.separatorChar + mergedName + "_LEVELS-" + FIRST_LEVEL + "-" + MAX_LEVEL + "_" + _projection;
 
       if (!new File(_lodFolder).exists()) {
          new File(_lodFolder).mkdir();
@@ -1085,23 +1085,23 @@ public class MixedVectorialLOD {
    }
 
 
-   private static String buildMixedTableName(final List<DataSource> dataSources) {
+   private static String buildMergedTableName(final List<DataSource> dataSources) {
 
       if (dataSources.size() == 1) {
          return dataSources.get(0)._sourceTable;
       }
 
-      String mixedName = "";
+      String mergedName = "";
       int index = 0;
       for (final DataSource ds : dataSources) {
-         mixedName = mixedName + ds._sourceTable.substring(0, ds._sourceTable.length() / 2);
+         mergedName = mergedName + ds._sourceTable.substring(0, ds._sourceTable.length() / 2);
          if (index < (dataSources.size() - 1)) {
-            mixedName = mixedName + "_";
+            mergedName = mergedName + "_";
          }
          index++;
       }
 
-      return mixedName;
+      return mergedName;
    }
 
 
@@ -1151,7 +1151,7 @@ public class MixedVectorialLOD {
    private static void launchVectorialLODProcessing(final List<DataSource> dataSources) {
 
       final long start = System.currentTimeMillis();
-      System.out.println("Starting mixed vectorial LOD generation of datasources: ");
+      System.out.println("Starting merged vectorial LOD generation of datasources: ");
       for (final DataSource ds : dataSources) {
          System.out.println("    " + ds._sourceTable);
       }
@@ -1203,7 +1203,7 @@ public class MixedVectorialLOD {
 
       System.out.println("Generating.. await termination...");
       for (final TileSector sector : firstLevelTileSectors) {
-         generateMixedVectorialLOD(sector, dataSources);
+         generateMergedVectorialLOD(sector, dataSources);
          //processSubSectors(sector, dataSource);
       }
 
@@ -1220,8 +1220,8 @@ public class MixedVectorialLOD {
    }
 
 
-   private static void generateMixedVectorialLOD(final TileSector sector,
-                                                 final List<DataSource> dataSources) {
+   private static void generateMergedVectorialLOD(final TileSector sector,
+                                                  final List<DataSource> dataSources) {
 
       boolean containsData = true;
 
@@ -1295,7 +1295,7 @@ public class MixedVectorialLOD {
          @Override
          public void run() {
             //System.out.println("Running at: " + Thread.currentThread().getName());
-            generateMixedVectorialLOD(sector, dataSources);
+            generateMergedVectorialLOD(sector, dataSources);
          }
       };
 

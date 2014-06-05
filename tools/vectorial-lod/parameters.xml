@@ -7,12 +7,12 @@
 <!-- Postgis database parameters -->  
 
    <!-- Url address for postgis database host access -->
-   <!-- <entry key="HOST">192.168.1.14</entry> -->
-   <entry key="HOST">igosoftware.dyndns.org</entry>
+   <entry key="HOST">192.168.1.14</entry>
+   <!-- <entry key="HOST">igosoftware.dyndns.org</entry> -->
    
    <!-- Port number for postgis database access -->
-   <!-- <entry key="PORT">5432</entry> -->
-   <entry key="PORT">5414</entry>
+   <entry key="PORT">5432</entry>
+   <!-- <entry key="PORT">5414</entry> -->
    
    <!-- User name for postgis database access -->
    <entry key="USER">postgres</entry>
