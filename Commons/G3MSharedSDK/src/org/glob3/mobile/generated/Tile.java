@@ -89,10 +89,10 @@ public class Tile
       return;
     }
   
-  //  delete _middleWestPoint;
-  //  delete _middleEastPoint;
-  //  delete _middleNorthPoint;
-  //  delete _middleSouthPoint;
+    //  delete _middleWestPoint;
+    //  delete _middleEastPoint;
+    //  delete _middleNorthPoint;
+    //  delete _middleSouthPoint;
     if (_northWestPoint != null)
        _northWestPoint.dispose();
     if (_northEastPoint != null)
@@ -105,16 +105,16 @@ public class Tile
   
     final double mediumHeight = _tileTessellatorMeshData._averageHeight;
   
-  //  const Geodetic2D center = _sector.getCenter();
-  //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
-  //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
-  //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
-  //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
-  //
-  //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
-  //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
-  //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
-  //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+    //  const Geodetic2D center = _sector.getCenter();
+    //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
+    //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
+    //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
+    //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
+    //
+    //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
+    //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
+    //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
+    //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
   
     _northWestPoint = new Vector3D(planet.toCartesian(_sector.getNW(), mediumHeight));
     _northEastPoint = new Vector3D(planet.toCartesian(_sector.getNE(), mediumHeight));
@@ -131,28 +131,28 @@ public class Tile
   private void prepareTestLODData(Planet planet)
   {
   
-  //  if (_middleNorthPoint == NULL) {
-  //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
-  //    return;
-  //  }
-  //
-  //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
-  //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
-  //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
-  //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
-  //
-  //  const Angle latitudeAngle = nN.angleBetween(nS);
-  //  double latRad = latitudeAngle._radians;
-  //  const double sin_lat_2 = SIN(latRad / 2);
-  //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
-  //
-  //  const Angle longitudeAngle = nE.angleBetween(nW);
-  //  const double lonRad = longitudeAngle._radians;
-  //  const double sin_lon_2 = SIN(lonRad / 2);
-  //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
-  //
-  //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
-  //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
+    //  if (_middleNorthPoint == NULL) {
+    //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
+    //    return;
+    //  }
+    //
+    //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
+    //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
+    //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
+    //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
+    //
+    //  const Angle latitudeAngle = nN.angleBetween(nS);
+    //  double latRad = latitudeAngle._radians;
+    //  const double sin_lat_2 = SIN(latRad / 2);
+    //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
+    //
+    //  const Angle longitudeAngle = nE.angleBetween(nW);
+    //  const double lonRad = longitudeAngle._radians;
+    //  const double sin_lon_2 = SIN(lonRad / 2);
+    //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
+    //
+    //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
+    //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
   
     if ((_northWestPoint == null) || (_northEastPoint == null) || (_southWestPoint == null) || (_southEastPoint == null))
     {
@@ -468,6 +468,53 @@ public class Tile
   {
     return level + "/" + row + "/" + column;
   }
+
+  /////////
+  private static int TILE_CACHE_MAX_SIZE = 100;
+  private static java.util.ArrayList<Tile> _tileCache = new java.util.ArrayList<Tile>();
+  private static void clearTile(Tile tile)
+  {
+  
+    _tileCache.add(tile);
+  
+    while (_tileCache.size() > TILE_CACHE_MAX_SIZE)
+    {
+      Tile t = *(_tileCache.iterator());
+  
+      //printf("Deleting Tile\n");
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+      _tileCache.erase(_tileCache.iterator());
+  
+      TileTexturizer texturizer = t.getTexturizer();
+      if (texturizer != null)
+      {
+        texturizer.tileToBeDeleted(tile, tile._texturizedMesh);
+      }
+  
+      if (t != null)
+         t.dispose();
+    }
+  
+  }
+  private static Tile getSubTileFromCache(int level, int row, int column)
+  {
+  
+    for (java.util.Iterator<Tile> it = _tileCache.iterator(); it.hasNext();)
+    {
+      Tile tile = it.next();
+      if (tile._level == level && tile._row == row && tile._column == column)
+      {
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+        _tileCache.erase(it);
+        return tile;
+      }
+    }
+  
+    return null;
+  }
+
+
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -850,13 +897,13 @@ public class Tile
         subtile.setIsVisible(false, texturizer);
   
         subtile.prune(texturizer, elevationDataProvider);
-        if (texturizer != null)
-        {
-          texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
-        }
+        //      if (texturizer != NULL) {
+        //        texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
+        //      }
   
-        if (subtile != null)
-           subtile.dispose();
+        //delete subtile;
+  
+        clearTile(subtile);
       }
   
       _subtiles = null;
@@ -920,25 +967,57 @@ public class Tile
     Sector s1 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
     if (renderedSector == null || renderedSector.touchesWith(s1))
     {
-      subTiles.add(createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+      Tile tile = getSubTileFromCache(nextLevel, row2, column2);
+  
+      if (tile == null)
+      {
+        tile = createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent);
+      }
+  
+      subTiles.add(tile);
     }
   
     Sector s2 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
     if (renderedSector == null || renderedSector.touchesWith(s2))
     {
-      subTiles.add(createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent));
+      Tile tile = getSubTileFromCache(nextLevel, row2, column2 + 1);
+  
+      if (tile == null)
+      {
+        tile = createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent);
+      }
+  
+      subTiles.add(tile);
     }
   
     Sector s3 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
     if (renderedSector == null || renderedSector.touchesWith(s3))
     {
-      subTiles.add(createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent));
+      Tile tile = getSubTileFromCache(nextLevel, row2 + 1, column2);
+  
+      if (tile == null)
+      {
+        tile = createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent);
+  
+      }
+  
+      subTiles.add(tile);
     }
   
     Sector s4 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
     if (renderedSector == null || renderedSector.touchesWith(s4))
     {
-      subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
+  
+      Tile tile = getSubTileFromCache(nextLevel, row2 + 1, column2 + 1);
+  
+      if (tile == null)
+      {
+        tile = createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent);
+  
+  
+      }
+  
+      subTiles.add(tile);
     }
   
     return subTiles;
@@ -1086,6 +1165,9 @@ public class Tile
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
 
+  public final TileTexturizer getTexturizer()
+  {
+    return _texturizer;
+  }
+
 }
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark ElevationData methods
