@@ -479,12 +479,7 @@ public class Tile
   
     while (_tileCache.size() > TILE_CACHE_MAX_SIZE)
     {
-      Tile t = *(_tileCache.iterator());
-  
-      //printf("Deleting Tile\n");
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-      _tileCache.erase(_tileCache.iterator());
+      Tile t = null;
   
       TileTexturizer texturizer = t.getTexturizer();
       if (texturizer != null)
@@ -505,8 +500,7 @@ public class Tile
       Tile tile = it.next();
       if (tile._level == level && tile._row == row && tile._column == column)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-        _tileCache.erase(it);
+        _tileCache.remove(tile);
         return tile;
       }
     }

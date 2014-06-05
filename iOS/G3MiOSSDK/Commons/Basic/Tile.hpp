@@ -176,9 +176,12 @@ private:
                                   int row,
                                   int column);
   
-  /////////
+  ///////// TILE CACHE
   static int TILE_CACHE_MAX_SIZE;
   static std::vector<Tile*> _tileCache;
+  
+  static void setTileCacheSize(int size);
+  static void cropTileCache();
   static void clearTile(Tile* tile);
   static Tile* getSubTileFromCache(int level, int row, int column);
   

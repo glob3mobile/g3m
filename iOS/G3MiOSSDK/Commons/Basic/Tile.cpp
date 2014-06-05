@@ -1093,7 +1093,12 @@ Tile* Tile::getSubTileFromCache(int level, int row, int column){
     if (tile->_level == level &&
         tile->_row == row &&
         tile->_column == column){
+#ifdef C_CODE
       _tileCache.erase(it);
+#endif
+#ifdef JAVA_CODE
+      _tileCache.remove(tile);
+#endif
       return tile;
     }
   }
@@ -1104,20 +1109,30 @@ Tile* Tile::getSubTileFromCache(int level, int row, int column){
 void Tile::clearTile(Tile* tile){
   
   _tileCache.push_back(tile);
-  
+  cropTileCache();
+}
+
+void Tile::cropTileCache(){
   while (_tileCache.size() > TILE_CACHE_MAX_SIZE){
+#ifdef C_CODE
     Tile* t = *(_tileCache.begin());
-    
-    //printf("Deleting Tile\n");
-    
     _tileCache.erase(_tileCache.begin());
+#endif
+#ifdef JAVA_CODE
+    Tile t = _tileCache.get(0);
+    _tileCache.remove(0);
+#endif
     
     TileTexturizer* texturizer = t->getTexturizer();
     if (texturizer != NULL) {
-      texturizer->tileToBeDeleted(tile, tile->_texturizedMesh);
+      texturizer->tileToBeDeleted(t, t->_texturizedMesh);
     }
     
     delete t;
   }
-  
+}
+
+void Tile::setTileCacheSize(int size){
+  TILE_CACHE_MAX_SIZE = size;
+  cropTileCache();
 }
