@@ -391,7 +391,8 @@ public class JBson2BJson {
 
 
       public static boolean checkFileIsBson(final File fBson) {
-         if (fBson.exists() && fBson.isFile() && fBson.getName().toLowerCase().endsWith(".bson")) {
+         if (fBson.exists() && fBson.isFile()
+             && (fBson.getName().toLowerCase().endsWith(".bson") || fBson.getName().toLowerCase().endsWith(".geobson"))) {
             return true;
          }
 

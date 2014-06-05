@@ -1063,7 +1063,7 @@ public class MergedVectorialLOD {
       //final String projection = (_renderParameters._mercator) ? "MERCATOR" : "WGS84";
       //_lodFolder = ROOT_DIRECTORY + File.separatorChar + dataSource._sourceTable + "_" + NUM_LEVELS + "-LEVELS_" + _projection;
       final String mergedName = buildMergedTableName(dataSources);
-      _lodFolder = ROOT_FOLDER + File.separatorChar + mergedName + "_LEVELS-" + FIRST_LEVEL + "-" + MAX_LEVEL + "_" + _projection;
+      _lodFolder = ROOT_FOLDER + File.separatorChar + mergedName + "_LEVELS_" + FIRST_LEVEL + "-" + MAX_LEVEL + "_" + _projection;
 
       if (!new File(_lodFolder).exists()) {
          new File(_lodFolder).mkdir();
