@@ -410,7 +410,7 @@ public class MergedVectorialLOD {
       st.close();
 
       //      if (result.contains("null")) {
-      if ((result == null) || result.equals("") || result.contains(EMPTY_GEOJSON)) {
+      if ((isEmptyString(result)) || result.contains(EMPTY_GEOJSON)) {
          return null;
       }
 
