@@ -33,6 +33,7 @@ import org.glob3.mobile.generated.InitialCameraPositionProvider;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.PlanetRenderer;
 import org.glob3.mobile.generated.ProtoRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneLighting;
@@ -541,6 +542,10 @@ public class G3MWidget_WebGL
 
    public GL getGL() {
       return _gl;
+   }
+   
+   public PlanetRenderer getPlanetRenderer() {
+	   return getG3MWidget().getPlanetRenderer();
    }
 
 }

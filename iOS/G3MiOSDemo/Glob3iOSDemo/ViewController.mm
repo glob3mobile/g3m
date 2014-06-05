@@ -416,7 +416,7 @@ public:
 
 - (void) initializeElevationDataProvider: (G3MBuilder_iOS&) builder
 {
-  float verticalExaggeration = 4.0f;
+  float verticalExaggeration = 2.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
 
   //ElevationDataProvider* elevationDataProvider = NULL;
@@ -602,6 +602,7 @@ public:
   builder.setBackgroundColor(bgColor);
 
   LayerSet* layerSet = [self createLayerSet];
+  
 
   //  layerSet->addLayer(new WMSLayer("precipitation", //
   //                                  URL("http://wms.openweathermap.org/service", false), //
@@ -619,7 +620,7 @@ public:
     [self initializeElevationDataProvider: builder];
   }
 
-  //builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
   /*builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));*/
@@ -1099,6 +1100,9 @@ public:
 builder.initializeWidget();
 //  [self testGenericQuadTree:geoTileRasterizer];
   
+  // set frustumCullingFactor
+  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
+  
   Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
   [self G3MWidget].widget->setCameraPosition(position);
   [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
@@ -1572,7 +1576,7 @@ public:
                                        TimeInterval::fromDays(30)));
   }
 
-  bool testingTransparencies = true;
+  bool testingTransparencies = false;
   if (testingTransparencies){
 
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -1791,7 +1795,7 @@ public:
     layerSet->addLayer(i3Landsat);
   }
 
-  bool useWMSBing = true;
+  bool useWMSBing = false;
   if (useWMSBing) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?", false),
@@ -2085,6 +2089,22 @@ public:
   //    layerSet->addLayer( new URLTemplateLayer() );
   //  }
 
+  bool grafcan = true;
+  if (grafcan) {
+    WMSLayer* grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+                                        URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+                                         WMS_1_1_0,
+                                         Sector::fullSphere(),//gcSector,
+                                         "image/jpeg",
+                                         "EPSG:4326",
+                                         "",
+                                         false,
+                                         new LevelTileCondition(0, 17),
+                                         TimeInterval::fromDays(30),
+                                         true);
+    layerSet->addLayer(grafcanLIDAR);
+  }
+  
   return layerSet;
 }
 

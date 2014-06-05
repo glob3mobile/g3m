@@ -146,8 +146,8 @@ public class G3MWebGLTestingApplication
          // initialize a default widget by using a builder
          //initDefaultWithBuilder();
     	  
-    	 // testBranch_zrender_touchhandlers();
-    	  testBILGC();
+    	  testBranch_zrender_touchhandlers();
+    	  //testBILGC();
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -1544,6 +1544,22 @@ public class G3MWebGLTestingApplication
 				   Color.newFromRGBA(0.0f, 0.75f, 0.0f, 0.75f));
 		   shapesRenderer.addShape(box);
 		   builder.addRenderer(shapesRenderer);
+		   
+		   // create wmslayer from Grafcan
+		   LayerSet layerSet = new LayerSet();
+		   WMSLayer grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+				   new URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+				   WMSServerVersion.WMS_1_1_0,
+				   Sector.fullSphere(),//gcSector,
+				   "image/jpeg",
+				   "EPSG:4326",
+				   "",
+				   false,
+				   new LevelTileCondition(0, 17),
+				   TimeInterval.fromDays(30),
+				   true);
+		   layerSet.addLayer(grafcanLIDAR);
+		   builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 		   // create elevations for Tenerife from bil file
 		   Sector sector = Sector.fromDegrees (27.967811065876,                  // min latitude
@@ -1554,9 +1570,12 @@ public class G3MWebGLTestingApplication
 		   URL url = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/Tenerife-256x256.bil", false);
 		   ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
 		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);	  
-		   builder.getPlanetRendererBuilder().setVerticalExaggeration(4.0f);
+		   builder.getPlanetRendererBuilder().setVerticalExaggeration(2.0f);
 
 		   _widget = builder.createWidget();
+		   
+		   // set frustumCullingFactor
+		   _widget.getPlanetRenderer().setFrustumCullingFactor(2.0f);
 		   
 		   // set camera looking at Tenerife
 		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(27.60), Angle.fromDegrees(-16.54), 55000.0);

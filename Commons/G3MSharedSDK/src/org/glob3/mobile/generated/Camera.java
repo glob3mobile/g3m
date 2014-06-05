@@ -19,6 +19,7 @@ public class Camera
      _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
      _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
      _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+     _widerFrustumInModelCoordinates = null;
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
      _angle2Horizon = that._angle2Horizon;
@@ -63,6 +64,8 @@ public class Camera
        _frustum.dispose();
     if (_frustumInModelCoordinates != null)
        _frustumInModelCoordinates.dispose();
+    if (_widerFrustumInModelCoordinates != null)
+       _widerFrustumInModelCoordinates.dispose();
     if (_geodeticCenterOfView != null)
        _geodeticCenterOfView.dispose();
     if (_geodeticPosition != null)
@@ -299,6 +302,16 @@ public class Camera
       _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix());
     }
     return _frustumInModelCoordinates;
+  }
+
+  public final Frustum getWiderFrustumInModelCoordinates(float factor)
+  {
+    if (_widerFrustumInModelCoordinates != null)
+      if (_widerFrustumInModelCoordinates != null)
+         _widerFrustumInModelCoordinates.dispose();
+    Frustum widerFrustum = new Frustum(calculateWiderFrustumData(factor));
+    _widerFrustumInModelCoordinates = widerFrustum.transformedBy_P(getModelMatrix());
+    return _widerFrustumInModelCoordinates;
   }
 
   public final Vector3D getHorizontalVector()
@@ -613,6 +626,7 @@ public class Camera
   private Geodetic3D _geodeticCenterOfView;
   private Frustum _frustum;
   private Frustum _frustumInModelCoordinates;
+  private Frustum _widerFrustumInModelCoordinates;
   private double _tanHalfVerticalFieldOfView;
   private double _tanHalfHorizontalFieldOfView;
   private double _rollInRadians;
@@ -758,6 +772,68 @@ public class Camera
     final double bottom = -top;
   
     return new FrustumData(left, right, bottom, top, zNear, zFar);
+  
+  }
+  private FrustumData calculateWiderFrustumData(float factor)
+  {
+    final double heightFromGround = getHeightFromGround();
+  
+    double zNear = heightFromGround * 0.1;
+  
+    //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
+  
+    double zFar = _planet.distanceToHorizon(_position.asVector3D());
+  
+    final double goalRatio = 1000;
+    final double ratio = zFar / zNear;
+    if (ratio < goalRatio)
+    {
+      zNear = zFar / goalRatio;
+    }
+  
+    //  int __TODO_remove_debug_code;
+    //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+    //         height,
+    //         zNear,
+    //         zFar,
+    //         ratio);
+  
+    // compute rest of frustum numbers
+  
+    double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
+    double tanHalfVFOV = _tanHalfVerticalFieldOfView;
+  
+    if ((tanHalfHFOV != tanHalfHFOV) || (tanHalfVFOV != tanHalfVFOV))
+    {
+      final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
+  
+      if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
+      {
+        tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3 => aprox tan(34 degrees / 2)
+        tanHalfHFOV = tanHalfVFOV / ratioScreen;
+      }
+      else
+      {
+        if ((tanHalfHFOV != tanHalfHFOV))
+        {
+          tanHalfHFOV = tanHalfVFOV / ratioScreen;
+        }
+        else
+        {
+          if (tanHalfVFOV != tanHalfVFOV)
+          {
+            tanHalfVFOV = tanHalfHFOV * ratioScreen;
+          }
+        }
+      }
+    }
+  
+    final double right = tanHalfHFOV * zNear;
+    final double left = -right;
+    final double top = tanHalfVFOV * zNear;
+    final double bottom = -top;
+  
+    return new FrustumData(factor *left, factor *right, factor *bottom, factor *top, zNear, zFar);
   
   }
 
