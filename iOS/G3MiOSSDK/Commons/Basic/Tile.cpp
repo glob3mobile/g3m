@@ -329,7 +329,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
   
   if (tilesRenderParameters->_useTilesSplitBudget) {
-    if (_subtiles == NULL) { // the tile needs to create the subtiles
+    if (_subtiles == NULL && !has4SubTilesCached()) { // the tile needs to create the subtiles
       if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
         // there are not more time-budget to spend
         return true;
@@ -1136,3 +1136,34 @@ void Tile::setTileCacheSize(int size){
   TILE_CACHE_MAX_SIZE = size;
   cropTileCache();
 }
+
+
+bool Tile::has4SubTilesCached() {
+  
+  const int nextLevel = _level + 1;
+  
+  const int row2    = 2 * _row;
+  const int column2 = 2 * _column;
+  
+  int nSubtiles = 0;
+  
+  for (std::vector<Tile*>::iterator it = _tileCache.begin();
+       it != _tileCache.end();
+       it++){
+    Tile* tile = *it;
+    if (tile->_level == nextLevel){
+      if ((tile->_row == row2 && tile->_column == column2) ||
+          (tile->_row == row2+1 && tile->_column == column2) ||
+          (tile->_row == row2 && tile->_column == column2+1) ||
+          (tile->_row == row2+1 && tile->_column == column2+1)){
+        nSubtiles++;
+        if (nSubtiles == 4){
+          return true;
+        }
+      }
+    }
+  }
+  
+  return false;
+}
+

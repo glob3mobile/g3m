@@ -185,6 +185,8 @@ private:
   static void clearTile(Tile* tile);
   static Tile* getSubTileFromCache(int level, int row, int column);
   
+  bool has4SubTilesCached();
+  
   
 
 public:
