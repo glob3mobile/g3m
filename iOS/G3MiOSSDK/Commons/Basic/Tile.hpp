@@ -175,6 +175,14 @@ private:
   static std::string createTileId(int level,
                                   int row,
                                   int column);
+  
+  /////////
+  static int TILE_CACHE_MAX_SIZE;
+  static std::vector<Tile*> _tileCache;
+  static void clearTile(Tile* tile);
+  static Tile* getSubTileFromCache(int level, int row, int column);
+  
+  
 
 public:
   const Sector      _sector;
@@ -323,6 +331,10 @@ public:
 
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
+  
+  TileTexturizer* getTexturizer() const{
+    return _texturizer;
+  }
   
 };
 
