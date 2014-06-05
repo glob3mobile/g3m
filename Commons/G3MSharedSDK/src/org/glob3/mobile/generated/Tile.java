@@ -271,7 +271,7 @@ public class Tile
   
     if (tilesRenderParameters._useTilesSplitBudget)
     {
-      if (_subtiles == null) // the tile needs to create the subtiles
+      if (_subtiles == null && !has4SubTilesCached()) // the tile needs to create the subtiles
       {
         if (lastSplitTimer.elapsedTimeInMilliseconds() < 67)
         {
@@ -514,6 +514,35 @@ public class Tile
     }
   
     return null;
+  }
+
+  private boolean has4SubTilesCached()
+  {
+  
+    final int nextLevel = _level + 1;
+  
+    final int row2 = 2 * _row;
+    final int column2 = 2 * _column;
+  
+    int nSubtiles = 0;
+  
+    for (java.util.Iterator<Tile> it = _tileCache.iterator(); it.hasNext();)
+    {
+      Tile tile = it.next();
+      if (tile._level == nextLevel)
+      {
+        if ((tile._row == row2 && tile._column == column2) || (tile._row == row2+1 && tile._column == column2) || (tile._row == row2 && tile._column == column2+1) || (tile._row == row2+1 && tile._column == column2+1))
+        {
+          nSubtiles++;
+          if (nSubtiles == 4)
+          {
+            return true;
+          }
+        }
+      }
+    }
+  
+    return false;
   }
 
 
