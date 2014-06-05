@@ -469,28 +469,36 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-  /////////
+  ///////// TILE CACHE
   private static int TILE_CACHE_MAX_SIZE = 100;
   private static java.util.ArrayList<Tile> _tileCache = new java.util.ArrayList<Tile>();
-  private static void clearTile(Tile tile)
+
+  private static void setTileCacheSize(int size)
   {
-  
-    _tileCache.add(tile);
-  
+    TILE_CACHE_MAX_SIZE = size;
+    cropTileCache();
+  }
+  private static void cropTileCache()
+  {
     while (_tileCache.size() > TILE_CACHE_MAX_SIZE)
     {
-      Tile t = null;
+      Tile t = _tileCache.get(0);
+      _tileCache.remove(0);
   
       TileTexturizer texturizer = t.getTexturizer();
       if (texturizer != null)
       {
-        texturizer.tileToBeDeleted(tile, tile._texturizedMesh);
+        texturizer.tileToBeDeleted(t, t._texturizedMesh);
       }
   
-      if (t != null)
-         t.dispose();
+      t = null;
     }
+  }
+  private static void clearTile(Tile tile)
+  {
   
+    _tileCache.add(tile);
+    cropTileCache();
   }
   private static Tile getSubTileFromCache(int level, int row, int column)
   {
