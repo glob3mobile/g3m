@@ -49,7 +49,9 @@ Tile::Tile(TileTexturizer* texturizer,
            int level,
            int row,
            int column,
-           const PlanetRenderer* planetRenderer):
+           const PlanetRenderer* planetRenderer,
+           TileCache* tileCache,
+           bool deleteTextureWhenNotVisible):
 _texturizer(texturizer),
 _parent(parent),
 _sector(sector),
@@ -88,7 +90,9 @@ _eastArcSegmentRatioSquared(0),
 _westArcSegmentRatioSquared(0),
 _rendered(false),
 _tileRenderingListener(NULL),
-_id( createTileId(level, row, column) )
+_id( createTileId(level, row, column) ),
+_tileCache(tileCache),
+_deleteTextureWhenNotVisible(deleteTextureWhenNotVisible)
 {
   //  int __remove_tile_print;
   //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
@@ -329,7 +333,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   }
   
   if (tilesRenderParameters->_useTilesSplitBudget) {
-    if (_subtiles == NULL && !has4SubTilesCached()) { // the tile needs to create the subtiles
+    if (_subtiles == NULL && (_tileCache == NULL || !_tileCache->has4SubTilesCached(this))) { // the tile needs to create the subtiles
       if (lastSplitTimer->elapsedTimeInMilliseconds() < 67) {
         // there are not more time-budget to spend
         return true;
@@ -508,7 +512,8 @@ std::vector<Tile*>* Tile::getSubTiles() {
 std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
                                       const Angle& splitLongitude) {
   if (_subtiles == NULL) {
-    _justCreatedSubtiles = !has4SubTilesCached(); //Checking if subtiles are gonna be created or fetched from cache
+    //Checking if subtiles are gonna be created or fetched from cache
+    _justCreatedSubtiles = (_tileCache == NULL || !_tileCache->has4SubTilesCached(this));
     _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
   }
   return _subtiles;
@@ -540,13 +545,17 @@ void Tile::prune(TileTexturizer*        texturizer,
       subtile->setIsVisible(false, texturizer);
       
       subtile->prune(texturizer, elevationDataProvider);
-      //      if (texturizer != NULL) {
-      //        texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
-      //      }
       
-      //delete subtile;
-      
-      clearTile(subtile);
+      if (_tileCache == NULL){
+        
+        if (texturizer != NULL) {
+          texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
+        }
+        
+        delete subtile;
+      } else{
+        _tileCache->clearTile(subtile);
+      }
     }
     
     delete _subtiles;
@@ -559,10 +568,9 @@ void Tile::setIsVisible(bool isVisible,
   if (_isVisible != isVisible) {
     _isVisible = isVisible;
     
-    //Invisible tiles retain their texture
-//    if (!_isVisible) {
-//      deleteTexturizedMesh(texturizer);
-//    }
+    if (_deleteTextureWhenNotVisible && !_isVisible) {
+      deleteTexturizedMesh(texturizer);
+    }
   }
 }
 
@@ -731,7 +739,9 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                   _mercator,
                   level,
                   row, column,
-                  _planetRenderer);
+                  _planetRenderer,
+                  _tileCache,
+                  _deleteTextureWhenNotVisible);
 }
 
 std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
@@ -751,7 +761,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   
   Sector s1(Geodetic2D(lower._latitude, lower._longitude), Geodetic2D(splitLatitude, splitLongitude));
   if (renderedSector == NULL || renderedSector->touchesWith(s1)) {
-    Tile* tile = getSubTileFromCache(nextLevel, row2, column2);
+    Tile* tile = _tileCache == NULL? NULL : _tileCache->getSubTileFromCache(nextLevel, row2, column2);
     
     if (tile == NULL){
       tile = createSubTile(lower._latitude, lower._longitude,
@@ -767,7 +777,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   
   Sector s2(Geodetic2D(lower._latitude, splitLongitude), Geodetic2D(splitLatitude, upper._longitude));
   if (renderedSector == NULL || renderedSector->touchesWith(s2)) {
-    Tile* tile = getSubTileFromCache(nextLevel, row2, column2 + 1);
+    Tile* tile = _tileCache == NULL? NULL : _tileCache->getSubTileFromCache(nextLevel, row2, column2 + 1);
     
     if (tile == NULL){
       tile = createSubTile(lower._latitude, splitLongitude,
@@ -783,7 +793,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   
   Sector s3(Geodetic2D(splitLatitude, lower._longitude), Geodetic2D(upper._latitude, splitLongitude));
   if (renderedSector == NULL || renderedSector->touchesWith(s3)) {
-    Tile* tile = getSubTileFromCache(nextLevel, row2 + 1, column2);
+    Tile* tile = _tileCache == NULL? NULL : _tileCache->getSubTileFromCache(nextLevel, row2 + 1, column2);
     
     if (tile == NULL){
       tile = createSubTile(splitLatitude, lower._longitude,
@@ -801,7 +811,7 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
   Sector s4(Geodetic2D(splitLatitude, splitLongitude), Geodetic2D(upper._latitude, upper._longitude));
   if (renderedSector == NULL || renderedSector->touchesWith(s4)) {
     
-    Tile* tile = getSubTileFromCache(nextLevel, row2 + 1, column2 + 1);
+    Tile* tile = _tileCache == NULL? NULL : _tileCache->getSubTileFromCache(nextLevel, row2 + 1, column2 + 1);
     
     if (tile == NULL){
       tile = createSubTile(splitLatitude, splitLongitude,
@@ -1082,10 +1092,7 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
 
 #pragma mark TileCache
 
-int Tile::TILE_CACHE_MAX_SIZE = 100;
-std::vector<Tile*> Tile::_tileCache;
-
-Tile* Tile::getSubTileFromCache(int level, int row, int column){
+Tile* TileCache::getSubTileFromCache(int level, int row, int column){
   
   for (std::vector<Tile*>::iterator it = _tileCache.begin();
        it != _tileCache.end();
@@ -1107,14 +1114,14 @@ Tile* Tile::getSubTileFromCache(int level, int row, int column){
   return NULL;
 }
 
-void Tile::clearTile(Tile* tile){
+void TileCache::clearTile(Tile* tile){
   
   _tileCache.push_back(tile);
-  cropTileCache();
+  cropTileCache(_maxSize);
 }
 
-void Tile::cropTileCache(){
-  while (_tileCache.size() > TILE_CACHE_MAX_SIZE){
+void TileCache::cropTileCache(int size){
+  while (_tileCache.size() > size){
 #ifdef C_CODE
     Tile* t = *(_tileCache.begin());
     _tileCache.erase(_tileCache.begin());
@@ -1126,7 +1133,7 @@ void Tile::cropTileCache(){
     
     TileTexturizer* texturizer = t->getTexturizer();
     if (texturizer != NULL) {
-      texturizer->tileToBeDeleted(t, t->_texturizedMesh);
+      texturizer->tileToBeDeleted(t, t->getTexturizedMesh());
       
       t->deleteTexturizedMesh(texturizer);
     }
@@ -1140,30 +1147,24 @@ void Tile::cropTileCache(){
   }
 }
 
-void Tile::setTileCacheSize(int size){
-  TILE_CACHE_MAX_SIZE = size;
-  cropTileCache();
-}
-
-
-bool Tile::has4SubTilesCached() {
+bool TileCache::has4SubTilesCached(const Tile* tile) {
   
-  const int nextLevel = _level + 1;
+  const int nextLevel = tile->_level + 1;
   
-  const int row2    = 2 * _row;
-  const int column2 = 2 * _column;
+  const int row2    = 2 * tile->_row;
+  const int column2 = 2 * tile->_column;
   
   int nSubtiles = 0;
   
   for (std::vector<Tile*>::iterator it = _tileCache.begin();
        it != _tileCache.end();
        it++){
-    Tile* tile = *it;
-    if (tile->_level == nextLevel){
-      if ((tile->_row == row2 && tile->_column == column2) ||
-          (tile->_row == row2+1 && tile->_column == column2) ||
-          (tile->_row == row2 && tile->_column == column2+1) ||
-          (tile->_row == row2+1 && tile->_column == column2+1)){
+    Tile* t = *it;
+    if (t->_level == nextLevel){
+      if ((t->_row == row2 && t->_column == column2) ||
+          (t->_row == row2+1 && t->_column == column2) ||
+          (t->_row == row2 && t->_column == column2+1) ||
+          (t->_row == row2+1 && t->_column == column2+1)){
         nSubtiles++;
         if (nSubtiles == 4){
           return true;

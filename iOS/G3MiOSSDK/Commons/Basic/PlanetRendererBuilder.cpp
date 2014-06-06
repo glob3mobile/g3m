@@ -39,7 +39,9 @@ _renderedSector(NULL),
 _renderTileMeshes(true),
 _logTilesPetitions(false),
 _tileRenderingListener(NULL),
-_changedInfoListener(NULL)
+_changedInfoListener(NULL),
+_tileCacheSize(0),
+_deleteTexturesOfInvisibleTiles(true)
 {
 }
 
@@ -361,7 +363,9 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getRenderTileMeshes(),
                                                       getLogTilesPetitions(),
                                                       getTileRenderingListener(),
-                                                      getChangedRendererInfoListener());
+                                                      getChangedRendererInfoListener(),
+                                                      _tileCacheSize,
+                                                      _deleteTexturesOfInvisibleTiles);
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -435,3 +439,12 @@ GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
   addTileRasterizer(geoTileRasterizer);
   return geoTileRasterizer;
 }
+
+void PlanetRendererBuilder::setTileCacheSize(int x){
+  _tileCacheSize = x;
+}
+
+void PlanetRendererBuilder::setDeleteTexturesOfInvisibleTiles(bool x){
+  _deleteTexturesOfInvisibleTiles = x;
+}
+

@@ -533,7 +533,9 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               renderTileMeshes,
                                               logTilesPetitions,
                                               tileRenderingListener,
-                                              changedRendererInfoListener);
+                                              changedRendererInfoListener,
+                                              0,
+                                              true);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
