@@ -51,8 +51,8 @@
 <!-- Parameters for specific vectorial data -->  
 
    <!-- name of the table in the database with the target vectorial data -->
-   <entry key="DATABASE_TABLE">italy_buildings / italy_roads / ne_10m_populated_places</entry>
-   <!-- <entry key="DATABASE_TABLE">ne_10m_admin_0_countries / ne_10m_admin_0_boundary_lines_land</entry> -->
+   <!-- <entry key="DATABASE_TABLE">italy_buildings / italy_roads </entry> -->
+   <entry key="DATABASE_TABLE">ne_10m_admin_0_countries / ne_10m_admin_0_boundary_lines_land / ne_10m_populated_places</entry>
    <!-- <entry key="DATABASE_TABLE">roads</entry> -->
    <!-- <entry key="DATABASE_TABLE">catastro</entry> -->
    <!-- <entry key="DATABASE_TABLE">planet_osm_polygon</entry> -->
@@ -62,6 +62,7 @@
    <!-- filter criteria using pure database query format that will be included in a where clause -->
    <!-- i.e. "continent" like 'Euro%' AND "pop_est" > 10000000 -->
    <!-- <entry key="FILTER_CRITERIA">("maxspeed">110 or "type"='motorway')</entry> -->
+   <!-- <entry key="FILTER_CRITERIA">true / true </entry> -->
    <entry key="FILTER_CRITERIA">true / true / ORDER BY "LABELRANK" DESC LIMIT 20</entry>
    <!-- <entry key="FILTER_CRITERIA">"ele" LIKE '4%' ORDER BY "ele" DESC LIMIT 20</entry> -->
    <!-- <entry key="FILTER_CRITERIA">"ele"::numeric>300 ORDER BY "ele" DESC LIMIT 20</entry> -->
@@ -72,8 +73,8 @@
    
    <!-- list of fields/columns associated to the vectorial data that shall be included as feature -->
    <!-- properties in the resultant geoJson file. Use a comma separated list -->
-   <entry key="PROPERTIES">type / type / LABELRANK</entry>
-   <!-- <entry key="PROPERTIES">mapcolor7 / scalerank</entry> -->
+   <!-- <entry key="PROPERTIES">type / type</entry> -->
+   <entry key="PROPERTIES">mapcolor7 / scalerank / LABELRANK</entry>
    <!-- <entry key="PROPERTIES">type</entry> -->
    <!-- <entry key="PROPERTIES">pcat1</entry> -->
    <!-- <entry key="PROPERTIES">building, name</entry> -->

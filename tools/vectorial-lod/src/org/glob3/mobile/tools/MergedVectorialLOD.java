@@ -1820,22 +1820,21 @@ public class MergedVectorialLOD {
             }
 
             //---------
+            //-- default initialization
+            FILTER_CRITERIA = new String[DATABASE_TABLES.length];
+            for (int i = 0; i < DATABASE_TABLES.length; i++) {
+               FILTER_CRITERIA[i] = "true";
+            }
+
             final String filterCriteria = properties.getProperty("FILTER_CRITERIA").trim();
+            System.out.println("FILTER CRITERIA: " + filterCriteria);
 
             if (!isEmptyString(filterCriteria)) {
-               FILTER_CRITERIA = parseDataFromFile(filterCriteria, "/");
-               System.out.println("FILTER CRITERIA: " + filterCriteria);
-               for (int i = 0; i < DATABASE_TABLES.length; i++) {
-                  if (isEmptyString(FILTER_CRITERIA[i])) {
-                     FILTER_CRITERIA[i] = "true";
+               final String[] criteria = parseDataFromFile(filterCriteria, "/");
+               for (int i = 0; i < criteria.length; i++) {
+                  if (!isEmptyString(criteria[i])) {
+                     FILTER_CRITERIA[i] = criteria[i];
                   }
-                  //                  System.out.print(FILTER_CRITERIA[i]);
-                  //                  if (i == (DATABASE_TABLES.length - 1)) {
-                  //                     System.out.println(".");
-                  //                  }
-                  //                  else {
-                  //                     System.out.print(", ");
-                  //                  }
                }
                //System.out.println();
             }
@@ -1848,14 +1847,19 @@ public class MergedVectorialLOD {
             }
             //---------
 
+            //-- default initialization
             PROPERTIES = new String[DATABASE_TABLES.length][];
+            for (int i = 0; i < DATABASE_TABLES.length; i++) {
+               PROPERTIES[i] = null;
+            }
+
             final String includeProperties = properties.getProperty("PROPERTIES").trim();
+            System.out.println("PROPERTIES: " + includeProperties);
 
             if (!isEmptyString(includeProperties)) {
                final String[] propertiesList = parseDataFromFile(includeProperties, "/");
 
-               System.out.println("PROPERTIES: " + includeProperties);
-               for (int i = 0; i < DATABASE_TABLES.length; i++) {
+               for (int i = 0; i < propertiesList.length; i++) {
 
                   if (!isEmptyString(propertiesList[i])) {
                      final String[] props = parseDataFromFile(propertiesList[i], ",");
@@ -1863,15 +1867,6 @@ public class MergedVectorialLOD {
                         PROPERTIES[i] = props;
                         //                        System.out.print(propertiesList[i]);
                      }
-                     //                     if (i == (DATABASE_TABLES.length - 1)) {
-                     //                        System.out.println(".");
-                     //                     }
-                     //                     else {
-                     //                        System.out.print(" / ");
-                     //                     }
-                  }
-                  else {
-                     PROPERTIES[i] = null;
                   }
                }
                System.out.println();
