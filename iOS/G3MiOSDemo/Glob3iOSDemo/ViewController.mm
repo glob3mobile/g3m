@@ -1095,6 +1095,12 @@ public:
 
   //  WidgetUserData* userData = NULL;
   //  builder.setUserData(userData);
+  
+  bool testingTileCache = true;
+  if (testingTileCache){
+    builder.getPlanetRendererBuilder()->setTileCacheSize(200);
+    builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
+  }
 
 // initialization
 builder.initializeWidget();

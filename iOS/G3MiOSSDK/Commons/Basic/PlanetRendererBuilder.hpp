@@ -72,6 +72,9 @@ private:
   TileRenderingListener* _tileRenderingListener;
   
   ChangedRendererInfoListener* _changedInfoListener;
+  
+  int _tileCacheSize;
+  bool _deleteTexturesOfInvisibleTiles;
 
 public:
   PlanetRendererBuilder();
@@ -119,10 +122,13 @@ public:
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
   
-  
   TileTessellator* getTileTessellator();
   
   TileTexturizer* getTexturizer();
+  
+  void setTileCacheSize(int x);
+  
+  void setDeleteTexturesOfInvisibleTiles(bool x);
 };
 
 #endif

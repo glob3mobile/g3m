@@ -125,7 +125,9 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const bool                   renderTileMeshes,
                                const bool                   logTilesPetitions,
                                TileRenderingListener*       tileRenderingListener,
-                               ChangedRendererInfoListener*         changedInfoListener) :
+                               ChangedRendererInfoListener*         changedInfoListener,
+                               int sizeOfTileCache,
+                               bool deleteTexturesOfInvisibleTiles) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -151,7 +153,8 @@ _renderContext(NULL),
 _renderedTilesListFrame(-1),
 _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
-_tileRenderingListener(tileRenderingListener)
+_tileRenderingListener(tileRenderingListener),
+_deleteTexturesOfInvisibleTiles(deleteTexturesOfInvisibleTiles)
 {
   _context = NULL;
   _layerSet->setChangeListener(this);
@@ -163,6 +166,7 @@ _tileRenderingListener(tileRenderingListener)
   _changedInfoListener = changedInfoListener;
   
   _frustumCullingFactor = 1.0;
+  _tileCache = sizeOfTileCache < 1? NULL : new TileCache(sizeOfTileCache);
 }
 
 void PlanetRenderer::recreateTiles() {
@@ -199,6 +203,9 @@ void PlanetRenderer::changed() {
     _recreateTilesPending = true;
     // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
     //   so it has to be executed in the OpenGL thread
+    
+    _tileCache->cropTileCache(0);
+    
     if (_context == NULL) {
       ILogger::instance()->logError("_context if not initialized");
     }
@@ -389,9 +396,10 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Geodetic2D tileLower(tileLatFrom, tileLonFrom);
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
+      
 
       if (_renderedSector == NULL || sector.touchesWith(*_renderedSector)) { //Do not create innecesary tiles
-        Tile* tile = new Tile(_texturizer, NULL, sector, parameters->_mercator, 0, row, col, this);
+        Tile* tile = new Tile(_texturizer, NULL, sector, parameters->_mercator, 0, row, col, this, _tileCache, _deleteTexturesOfInvisibleTiles);
         if (parameters->_firstLevel == 0) {
           _firstLevelTiles.push_back(tile);
         }

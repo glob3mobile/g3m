@@ -35,6 +35,24 @@ class TileRenderingListener;
 class TileKey;
 class Geodetic3D;
 
+class TileCache{
+  int _maxSize;
+  
+  
+  std::vector<Tile*> _tileCache;
+  
+public:
+  
+  TileCache(int maxSize): _maxSize(maxSize){}
+  
+  void setTileCacheSize(int size);
+  void cropTileCache(int size);
+  void clearTile(Tile* tile);
+  Tile* getSubTileFromCache(int level, int row, int column);
+  
+  bool has4SubTilesCached(const Tile* tile);
+};
+
 
 class Tile {
 private:
@@ -150,7 +168,6 @@ private:
   void setIsVisible(bool isVisible,
                     TileTexturizer* texturizer);
 
-  void deleteTexturizedMesh(TileTexturizer* texturizer);
 
   ITexturizerData* _texturizerData;
   PlanetTileTessellatorData* _tessellatorData;
@@ -179,7 +196,8 @@ private:
                                   int row,
                                   int column);
   
-
+  TileCache* _tileCache;
+  bool _deleteTextureWhenNotVisible;
 public:
   const Sector      _sector;
   const bool        _mercator;
@@ -195,7 +213,9 @@ public:
        int level,
        int row,
        int column,
-       const PlanetRenderer* planetRenderer);
+       const PlanetRenderer* planetRenderer,
+       TileCache* tileCache,
+       bool deleteTextureWhenNotVisible);
 
   ~Tile();
 
@@ -392,6 +412,13 @@ void actualizeQuadTree(const G3MRenderContext* rc,
 
   Vector2I getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
                                            const Vector2I& size) const;
+
+  TileTexturizer* getTexturizer() const{
+    return _texturizer;
+  }
+
+  void deleteTexturizedMesh(TileTexturizer* texturizer);
+  
 };
 
 #endif

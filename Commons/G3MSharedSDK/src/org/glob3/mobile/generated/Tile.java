@@ -1,44 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  Tile.cpp
-//  G3MiOSSDK
-//
-//  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-//
-//  Tile.hpp
-//  G3MiOSSDK
-//
-//  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-
-//class TileTexturizer;
-//class Mesh;
-//class TileElevationDataRequest;
-//class BoundingVolume;
-//class Vector3D;
-//class TilesRenderParameters;
-//class LayerTilesRenderParameters;
-//class Frustum;
-//class TilesStatistics;
-//class ElevationDataProvider;
-//class ITimer;
-//class GLState;
-//class TileRasterizer;
-//class LayerSet;
-//class ITexturizerData;
-//class PlanetTileTessellatorData;
-//class PlanetRenderer;
-//class TileRenderingListener;
-//class TileKey;
-//class Geodetic3D;
-
-
 public class Tile
 {
   private TileTexturizer _texturizer;
@@ -89,10 +49,10 @@ public class Tile
       return;
     }
   
-  //  delete _middleWestPoint;
-  //  delete _middleEastPoint;
-  //  delete _middleNorthPoint;
-  //  delete _middleSouthPoint;
+    //  delete _middleWestPoint;
+    //  delete _middleEastPoint;
+    //  delete _middleNorthPoint;
+    //  delete _middleSouthPoint;
     if (_northWestPoint != null)
        _northWestPoint.dispose();
     if (_northEastPoint != null)
@@ -105,16 +65,16 @@ public class Tile
   
     final double mediumHeight = _tileTessellatorMeshData._averageHeight;
   
-  //  const Geodetic2D center = _sector.getCenter();
-  //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
-  //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
-  //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
-  //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
-  //
-  //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
-  //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
-  //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
-  //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+    //  const Geodetic2D center = _sector.getCenter();
+    //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
+    //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
+    //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
+    //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
+    //
+    //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
+    //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
+    //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
+    //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
   
     _northWestPoint = new Vector3D(planet.toCartesian(_sector.getNW(), mediumHeight));
     _northEastPoint = new Vector3D(planet.toCartesian(_sector.getNE(), mediumHeight));
@@ -131,28 +91,28 @@ public class Tile
   private void prepareTestLODData(Planet planet)
   {
   
-  //  if (_middleNorthPoint == NULL) {
-  //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
-  //    return;
-  //  }
-  //
-  //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
-  //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
-  //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
-  //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
-  //
-  //  const Angle latitudeAngle = nN.angleBetween(nS);
-  //  double latRad = latitudeAngle._radians;
-  //  const double sin_lat_2 = SIN(latRad / 2);
-  //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
-  //
-  //  const Angle longitudeAngle = nE.angleBetween(nW);
-  //  const double lonRad = longitudeAngle._radians;
-  //  const double sin_lon_2 = SIN(lonRad / 2);
-  //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
-  //
-  //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
-  //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
+    //  if (_middleNorthPoint == NULL) {
+    //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
+    //    return;
+    //  }
+    //
+    //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
+    //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
+    //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
+    //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
+    //
+    //  const Angle latitudeAngle = nN.angleBetween(nS);
+    //  double latRad = latitudeAngle._radians;
+    //  const double sin_lat_2 = SIN(latRad / 2);
+    //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
+    //
+    //  const Angle longitudeAngle = nE.angleBetween(nW);
+    //  const double lonRad = longitudeAngle._radians;
+    //  const double sin_lon_2 = SIN(lonRad / 2);
+    //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
+    //
+    //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
+    //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
   
     if ((_northWestPoint == null) || (_northEastPoint == null) || (_southWestPoint == null) || (_southEastPoint == null))
     {
@@ -274,7 +234,7 @@ public class Tile
   
     if (tilesRenderParameters._useTilesSplitBudget)
     {
-      if (_subtiles == null) // the tile needs to create the subtiles
+      if (_subtiles == null && (_tileCache == null || !_tileCache.has4SubTilesCached(this))) // the tile needs to create the subtiles
       {
         if (lastSplitTimer.elapsedTimeInMilliseconds() < 67)
         {
@@ -368,7 +328,7 @@ public class Tile
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
     Tile parent = setParent ? this : null;
-    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), _mercator, level, row, column, _planetRenderer);
+    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), _mercator, level, row, column, _planetRenderer, _tileCache, _deleteTextureWhenNotVisible);
   }
 
 
@@ -376,8 +336,9 @@ public class Tile
   {
     if (_subtiles == null)
     {
+      //Checking if subtiles are gonna be created or fetched from cache
+      _justCreatedSubtiles = (_tileCache == null || !_tileCache.has4SubTilesCached(this));
       _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
-      _justCreatedSubtiles = true;
     }
     return _subtiles;
   }
@@ -415,38 +376,13 @@ public class Tile
     {
       _isVisible = isVisible;
   
-      if (!_isVisible)
+      if (_deleteTextureWhenNotVisible && !_isVisible)
       {
         deleteTexturizedMesh(texturizer);
       }
     }
   }
 
-  private void deleteTexturizedMesh(TileTexturizer texturizer)
-  {
-    // check for (_parent != NULL) to avoid deleting the firstLevel tiles.
-    // in this case, the mesh is always loaded (as well as its texture) to be the last option
-    // falback texture for any tile
-    if ((_parent != null) && (_texturizedMesh != null))
-    {
-  
-      if (texturizer != null)
-      {
-        texturizer.tileMeshToBeDeleted(this, _texturizedMesh);
-      }
-  
-      if (_texturizedMesh != null)
-         _texturizedMesh.dispose();
-      _texturizedMesh = null;
-  
-      if (_texturizerData != null)
-         _texturizerData.dispose();
-      _texturizerData = null;
-  
-      setTexturizerDirty(true);
-      setTextureSolved(false);
-    }
-  }
 
   private ITexturizerData _texturizerData;
   private PlanetTileTessellatorData _tessellatorData;
@@ -501,6 +437,11 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
+<<<<<<< HEAD
+=======
+  private TileCache _tileCache;
+  private boolean _deleteTextureWhenNotVisible;
+>>>>>>> tile-cache
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -509,7 +450,7 @@ public class Tile
   public final int _column;
   public final String _id;
 
-  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer)
+  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer, TileCache tileCache, boolean deleteTextureWhenNotVisible)
   {
      _texturizer = texturizer;
      _parent = parent;
@@ -550,6 +491,8 @@ public class Tile
      _rendered = false;
      _tileRenderingListener = null;
      _id = createTileId(level, row, column);
+     _tileCache = tileCache;
+     _deleteTextureWhenNotVisible = deleteTextureWhenNotVisible;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -1028,13 +971,22 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
         subtile.setIsVisible(false, texturizer);
   
         subtile.prune(texturizer, elevationDataProvider);
-        if (texturizer != null)
-        {
-          texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
-        }
   
-        if (subtile != null)
-           subtile.dispose();
+        if (_tileCache == null)
+        {
+  
+          if (texturizer != null)
+          {
+            texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
+          }
+  
+          if (subtile != null)
+             subtile.dispose();
+        }
+        else
+        {
+          _tileCache.clearTile(subtile);
+        }
       }
   
       _subtiles = null;
@@ -1098,25 +1050,57 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     Sector s1 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
     if (renderedSector == null || renderedSector.touchesWith(s1))
     {
-      subTiles.add(createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent));
+      Tile tile = _tileCache == null? null : _tileCache.getSubTileFromCache(nextLevel, row2, column2);
+  
+      if (tile == null)
+      {
+        tile = createSubTile(lower._latitude, lower._longitude, splitLatitude, splitLongitude, nextLevel, row2, column2, setParent);
+      }
+  
+      subTiles.add(tile);
     }
   
     Sector s2 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
     if (renderedSector == null || renderedSector.touchesWith(s2))
     {
-      subTiles.add(createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent));
+      Tile tile = _tileCache == null? null : _tileCache.getSubTileFromCache(nextLevel, row2, column2 + 1);
+  
+      if (tile == null)
+      {
+        tile = createSubTile(lower._latitude, splitLongitude, splitLatitude, upper._longitude, nextLevel, row2, column2 + 1, setParent);
+      }
+  
+      subTiles.add(tile);
     }
   
     Sector s3 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
     if (renderedSector == null || renderedSector.touchesWith(s3))
     {
-      subTiles.add(createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent));
+      Tile tile = _tileCache == null? null : _tileCache.getSubTileFromCache(nextLevel, row2 + 1, column2);
+  
+      if (tile == null)
+      {
+        tile = createSubTile(splitLatitude, lower._longitude, upper._latitude, splitLongitude, nextLevel, row2 + 1, column2, setParent);
+  
+      }
+  
+      subTiles.add(tile);
     }
   
     Sector s4 = new Sector(new Geodetic2D(splitLatitude, splitLongitude), new Geodetic2D(upper._latitude, upper._longitude));
     if (renderedSector == null || renderedSector.touchesWith(s4))
     {
-      subTiles.add(createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent));
+  
+      Tile tile = _tileCache == null? null : _tileCache.getSubTileFromCache(nextLevel, row2 + 1, column2 + 1);
+  
+      if (tile == null)
+      {
+        tile = createSubTile(splitLatitude, splitLongitude, upper._latitude, upper._longitude, nextLevel, row2 + 1, column2 + 1, setParent);
+  
+  
+      }
+  
+      subTiles.add(tile);
     }
   
     return subTiles;
@@ -1263,7 +1247,48 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     final Vector2D uv = _sector.getUVCoordinates(position2D);
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
+<<<<<<< HEAD
+=======
+
+  public final TileTexturizer getTexturizer()
+  {
+    return _texturizer;
+  }
+
+  public final void deleteTexturizedMesh(TileTexturizer texturizer)
+  {
+    // check for (_parent != NULL) to avoid deleting the firstLevel tiles.
+    // in this case, the mesh is always loaded (as well as its texture) to be the last option
+    // falback texture for any tile
+    if ((_parent != null) && (_texturizedMesh != null))
+    {
+  
+      if (texturizer != null)
+      {
+        texturizer.tileMeshToBeDeleted(this, _texturizedMesh);
+      }
+  
+      if (_texturizedMesh != null)
+         _texturizedMesh.dispose();
+      _texturizedMesh = null;
+  
+      if (_texturizerData != null)
+         _texturizerData.dispose();
+      _texturizerData = null;
+  
+      setTexturizerDirty(true);
+      setTextureSolved(false);
+    }
+  }
+
+>>>>>>> tile-cache
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
 
+<<<<<<< HEAD
+=======
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark TileCache
+
+>>>>>>> tile-cache

@@ -311,6 +311,8 @@ private:
   
   float _frustumCullingFactor;
 
+  TileCache* _tileCache;
+  bool _deleteTexturesOfInvisibleTiles;
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -326,7 +328,9 @@ public:
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
                  TileRenderingListener*       tileRenderingListener,
-                 ChangedRendererInfoListener* changedInfoListener);
+                 ChangedRendererInfoListener* changedInfoListener,
+                 int sizeOfTileCache,
+                 bool deleteTexturesOfInvisibleTiles);
 
   ~PlanetRenderer();
 
