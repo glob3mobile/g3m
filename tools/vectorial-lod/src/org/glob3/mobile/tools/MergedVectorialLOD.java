@@ -1802,20 +1802,10 @@ public class MergedVectorialLOD {
             if (!isEmptyString(dataBaseTables)) {
                DATABASE_TABLES = parseDataFromFile(dataBaseTables, "/");
                System.out.println("DATABASE TABLES: " + dataBaseTables);
-               //               for (final String element : DATABASE_TABLES) {
-               //                  System.out.print(element);
-               //                                    if (i == (DATABASE_TABLES.length - 1)) {
-               //                                       System.out.println(".");
-               //                                    }
-               //                                    else {
-               //                                       System.out.print(", ");
-               //                                    }
-               //               }
-               //System.out.println();
             }
             else {
                System.out.println();
-               System.err.println("Non database table argument. No property included from datasource.");
+               System.err.println("Non database table argument. Exit application.");
                System.exit(1);
             }
 
