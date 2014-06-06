@@ -624,13 +624,13 @@ public:
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
   /*builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
                                                                TimeInterval::fromSeconds(3));*/
-
+/*
   builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
                                                                                 Color::yellow(),
                                                                                 true,  // showIDLabel
                                                                                 false, // showSectorLabels,
                                                                                 true   // showTileBounds
-                                                                                ));
+                                                                                ));*/
   builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
   
  /* Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
@@ -1107,7 +1107,7 @@ builder.initializeWidget();
 //  [self testGenericQuadTree:geoTileRasterizer];
   
   // set frustumCullingFactor
-  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
+  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(1.0);
   
   Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
   [self G3MWidget].widget->setCameraPosition(position);
