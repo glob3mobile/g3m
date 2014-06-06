@@ -494,6 +494,10 @@ public:
     }
   }
   
+  TileTessellator* getTileTessellator() const{
+    return _tessellator;
+  }
+  
   void setFrustumCullingFactor(float frustumCullingFactor) {
     _frustumCullingFactor = frustumCullingFactor;
   }

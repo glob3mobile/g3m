@@ -302,9 +302,11 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                                                            tessellator,
                                                            layerTilesRenderParameters,
                                                            tilesRenderParameters);
+  
+  return true;
 
-  return ((boundingVolume != NULL)  &&
-          boundingVolume->touchesFrustum(cameraWiderFrustumInModelCoordinates));
+//  return ((boundingVolume != NULL)  &&
+//          boundingVolume->touchesFrustum(cameraWiderFrustumInModelCoordinates));
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
