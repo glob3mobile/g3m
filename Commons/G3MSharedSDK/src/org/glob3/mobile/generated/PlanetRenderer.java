@@ -77,9 +77,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
         final Sector sector = new Sector(tileLower, tileUpper);
   
+  
         if (_renderedSector == null || sector.touchesWith(_renderedSector)) //Do not create innecesary tiles
         {
-          Tile tile = new Tile(_texturizer, null, sector, parameters._mercator, 0, row, col, this);
+          Tile tile = new Tile(_texturizer, null, sector, parameters._mercator, 0, row, col, this, _tileCache, _deleteTexturesOfInvisibleTiles);
           if (parameters._firstLevel == 0)
           {
             _firstLevelTiles.add(tile);
@@ -317,7 +318,10 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener)
+  private TileCache _tileCache;
+  private boolean _deleteTexturesOfInvisibleTiles;
+
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, int sizeOfTileCache, boolean deleteTexturesOfInvisibleTiles)
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -343,6 +347,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
+     _deleteTexturesOfInvisibleTiles = deleteTexturesOfInvisibleTiles;
     _context = null;
     _layerSet.setChangeListener(this);
     _layerSet.setChangedInfoListener(this);
@@ -352,6 +357,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   
     _changedInfoListener = changedInfoListener;
+  
+    _tileCache = sizeOfTileCache < 1? null : new TileCache(sizeOfTileCache);
   }
 
   public void dispose()
@@ -700,6 +707,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _recreateTilesPending = true;
       // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
       //   so it has to be executed in the OpenGL thread
+  
+      _tileCache.cropTileCache(0);
+  
       if (_context == null)
       {
         ILogger.instance().logError("_context if not initialized");

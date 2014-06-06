@@ -268,6 +268,9 @@ public class PlanetRendererBuilder
 
   private ChangedRendererInfoListener _changedInfoListener;
 
+  private int _tileCacheSize;
+  private boolean _deleteTexturesOfInvisibleTiles;
+
 
   ///#include "DefaultTileTexturizer.hpp"
   
@@ -294,6 +297,8 @@ public class PlanetRendererBuilder
      _logTilesPetitions = false;
      _tileRenderingListener = null;
      _changedInfoListener = null;
+     _tileCacheSize = 0;
+     _deleteTexturesOfInvisibleTiles = true;
   }
   public void dispose()
   {
@@ -325,7 +330,7 @@ public class PlanetRendererBuilder
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), _tileCacheSize, _deleteTexturesOfInvisibleTiles);
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -515,5 +520,15 @@ public class PlanetRendererBuilder
       _changedInfoListener = changedInfoListener;
       ILogger.instance().logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
     }
+  }
+
+  public final void setTileCacheSize(int x)
+  {
+    _tileCacheSize = x;
+  }
+
+  public final void setDeleteTexturesOfInvisibleTiles(boolean x)
+  {
+    _deleteTexturesOfInvisibleTiles = x;
   }
 }

@@ -1,44 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  Tile.cpp
-//  G3MiOSSDK
-//
-//  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-//
-//  Tile.hpp
-//  G3MiOSSDK
-//
-//  Created by Agustin Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-
-//class TileTexturizer;
-//class Mesh;
-//class TileElevationDataRequest;
-//class BoundingVolume;
-//class Vector3D;
-//class TilesRenderParameters;
-//class LayerTilesRenderParameters;
-//class Frustum;
-//class TilesStatistics;
-//class ElevationDataProvider;
-//class ITimer;
-//class GLState;
-//class TileRasterizer;
-//class LayerSet;
-//class ITexturizerData;
-//class PlanetTileTessellatorData;
-//class PlanetRenderer;
-//class TileRenderingListener;
-//class TileKey;
-//class Geodetic3D;
-
-
 public class Tile
 {
   private TileTexturizer _texturizer;
@@ -271,7 +231,7 @@ public class Tile
   
     if (tilesRenderParameters._useTilesSplitBudget)
     {
-      if (_subtiles == null && !has4SubTilesCached()) // the tile needs to create the subtiles
+      if (_subtiles == null && (_tileCache == null || !_tileCache.has4SubTilesCached(this))) // the tile needs to create the subtiles
       {
         if (lastSplitTimer.elapsedTimeInMilliseconds() < 67)
         {
@@ -356,7 +316,7 @@ public class Tile
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column, boolean setParent)
   {
     Tile parent = setParent ? this : null;
-    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), _mercator, level, row, column, _planetRenderer);
+    return new Tile(_texturizer, parent, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), _mercator, level, row, column, _planetRenderer, _tileCache, _deleteTextureWhenNotVisible);
   }
 
 
@@ -364,7 +324,8 @@ public class Tile
   {
     if (_subtiles == null)
     {
-      _justCreatedSubtiles = !has4SubTilesCached();
+      //Checking if subtiles are gonna be created or fetched from cache
+      _justCreatedSubtiles = (_tileCache == null || !_tileCache.has4SubTilesCached(this));
       _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
     }
     return _subtiles;
@@ -403,38 +364,13 @@ public class Tile
     {
       _isVisible = isVisible;
   
-//      if (!_isVisible)
-//      {
-//        deleteTexturizedMesh(texturizer);
-//      }
+      if (_deleteTextureWhenNotVisible && !_isVisible)
+      {
+        deleteTexturizedMesh(texturizer);
+      }
     }
   }
 
-  private void deleteTexturizedMesh(TileTexturizer texturizer)
-  {
-    // check for (_parent != NULL) to avoid deleting the firstLevel tiles.
-    // in this case, the mesh is always loaded (as well as its texture) to be the last option
-    // falback texture for any tile
-    if ((_parent != null) && (_texturizedMesh != null))
-    {
-  
-      if (texturizer != null)
-      {
-        texturizer.tileMeshToBeDeleted(this, _texturizedMesh);
-      }
-  
-      if (_texturizedMesh != null)
-         _texturizedMesh.dispose();
-      _texturizedMesh = null;
-  
-      if (_texturizerData != null)
-         _texturizerData.dispose();
-      _texturizerData = null;
-  
-      setTexturizerDirty(true);
-      setTextureSolved(false);
-    }
-  }
 
   private ITexturizerData _texturizerData;
   private PlanetTileTessellatorData _tessellatorData;
@@ -469,97 +405,8 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-  ///////// TILE CACHE
-  private static int TILE_CACHE_MAX_SIZE = 300;
-  private static java.util.ArrayList<Tile> _tileCache = new java.util.ArrayList<Tile>();
-
-  private static void setTileCacheSize(int size)
-  {
-    TILE_CACHE_MAX_SIZE = size;
-    cropTileCache();
-  }
-  private static void cropTileCache()
-  {
-    while (_tileCache.size() > TILE_CACHE_MAX_SIZE)
-    {
-    	int x = _tileCache.size();
-      Tile t = _tileCache.get(0);
-      _tileCache.remove(0);
-      
-      ILogger.instance().logInfo("Tile %d %d %d remove from cache", t._level, t._row, t._column);
-      
-      ILogger.instance().logInfo("CACHE %d, %d", x, _tileCache.size());
-  
-      TileTexturizer texturizer = t.getTexturizer();
-      if (texturizer != null)
-      {
-        texturizer.tileToBeDeleted(t, t._texturizedMesh);
-        t.deleteTexturizedMesh(texturizer);
-      }
-  
-      t.dispose();
-      t = null;
-    }
-  }
-  private static void clearTile(Tile tile)
-  {
-      ILogger.instance().logInfo("Tile %d %d %d added to cache", tile._level, tile._row, tile._column);
-    _tileCache.add(tile);
-    cropTileCache();
-  }
-  
-  public boolean _fetched = false;
-  
-  private static Tile getSubTileFromCache(int level, int row, int column)
-  {
-    for (java.util.Iterator<Tile> it = _tileCache.iterator(); it.hasNext();)
-    {
-      Tile tile = it.next();
-      if (tile._level == level && tile._row == row && tile._column == column)
-      {
-        _tileCache.remove(tile);
-        ILogger.instance().logInfo("Tile %d %d %d fetched from cache", tile._level, tile._row, tile._column);
-        
-        tile._fetched = true;
-        return tile;
-      }
-    }
-    
-    ILogger.instance().logInfo("Tile %d %d %d NOT fetched from cache", level, row, column);
-  
-    return null;
-  }
-
-  private boolean has4SubTilesCached()
-  {
-  
-    final int nextLevel = _level + 1;
-  
-    final int row2 = 2 * _row;
-    final int column2 = 2 * _column;
-  
-    int nSubtiles = 0;
-  
-    for (java.util.Iterator<Tile> it = _tileCache.iterator(); it.hasNext();)
-    {
-      Tile tile = it.next();
-      if (tile._level == nextLevel)
-      {
-        if ((tile._row == row2 && tile._column == column2) || (tile._row == row2+1 && tile._column == column2) || (tile._row == row2 && tile._column == column2+1) || (tile._row == row2+1 && tile._column == column2+1))
-        {
-          nSubtiles++;
-          if (nSubtiles == 4)
-          {
-            return true;
-          }
-        }
-      }
-    }
-  
-    return false;
-  }
-
-
+  private TileCache _tileCache;
+  private boolean _deleteTextureWhenNotVisible;
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -568,7 +415,7 @@ public class Tile
   public final int _column;
   public final String _id;
 
-  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer)
+  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer, TileCache tileCache, boolean deleteTextureWhenNotVisible)
   {
      _texturizer = texturizer;
      _parent = parent;
@@ -609,6 +456,8 @@ public class Tile
      _rendered = false;
      _tileRenderingListener = null;
      _id = createTileId(level, row, column);
+     _tileCache = tileCache;
+     _deleteTextureWhenNotVisible = deleteTextureWhenNotVisible;
     //  int __remove_tile_print;
     //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
     //         getKey().description().c_str(),
@@ -782,7 +631,6 @@ public class Tile
         {
           lastSplitTimer.start();
           _justCreatedSubtiles = false;
-          ILogger.instance().logInfo("JUST CREATED TILES");
         }
   
         final int subTilesSize = subTiles.size();
@@ -943,13 +791,22 @@ public class Tile
         subtile.setIsVisible(false, texturizer);
   
         subtile.prune(texturizer, elevationDataProvider);
-        //      if (texturizer != NULL) {
-        //        texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
-        //      }
   
-        //delete subtile;
+        if (_tileCache == null)
+        {
   
-        clearTile(subtile);
+          if (texturizer != null)
+          {
+            texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
+          }
+  
+          if (subtile != null)
+             subtile.dispose();
+        }
+        else
+        {
+          _tileCache.clearTile(subtile);
+        }
       }
   
       _subtiles = null;
@@ -1013,7 +870,7 @@ public class Tile
     Sector s1 = new Sector(new Geodetic2D(lower._latitude, lower._longitude), new Geodetic2D(splitLatitude, splitLongitude));
     if (renderedSector == null || renderedSector.touchesWith(s1))
     {
-      Tile tile = getSubTileFromCache(nextLevel, row2, column2);
+      Tile tile = _tileCache == null? null : _tileCache.getSubTileFromCache(nextLevel, row2, column2);
   
       if (tile == null)
       {
@@ -1026,7 +883,7 @@ public class Tile
     Sector s2 = new Sector(new Geodetic2D(lower._latitude, splitLongitude), new Geodetic2D(splitLatitude, upper._longitude));
     if (renderedSector == null || renderedSector.touchesWith(s2))
     {
-      Tile tile = getSubTileFromCache(nextLevel, row2, column2 + 1);
+      Tile tile = _tileCache == null? null : _tileCache.getSubTileFromCache(nextLevel, row2, column2 + 1);
   
       if (tile == null)
       {
@@ -1039,7 +896,7 @@ public class Tile
     Sector s3 = new Sector(new Geodetic2D(splitLatitude, lower._longitude), new Geodetic2D(upper._latitude, splitLongitude));
     if (renderedSector == null || renderedSector.touchesWith(s3))
     {
-      Tile tile = getSubTileFromCache(nextLevel, row2 + 1, column2);
+      Tile tile = _tileCache == null? null : _tileCache.getSubTileFromCache(nextLevel, row2 + 1, column2);
   
       if (tile == null)
       {
@@ -1054,7 +911,7 @@ public class Tile
     if (renderedSector == null || renderedSector.touchesWith(s4))
     {
   
-      Tile tile = getSubTileFromCache(nextLevel, row2 + 1, column2 + 1);
+      Tile tile = _tileCache == null? null : _tileCache.getSubTileFromCache(nextLevel, row2 + 1, column2 + 1);
   
       if (tile == null)
       {
@@ -1216,4 +1073,36 @@ public class Tile
     return _texturizer;
   }
 
+  public final void deleteTexturizedMesh(TileTexturizer texturizer)
+  {
+    // check for (_parent != NULL) to avoid deleting the firstLevel tiles.
+    // in this case, the mesh is always loaded (as well as its texture) to be the last option
+    // falback texture for any tile
+    if ((_parent != null) && (_texturizedMesh != null))
+    {
+  
+      if (texturizer != null)
+      {
+        texturizer.tileMeshToBeDeleted(this, _texturizedMesh);
+      }
+  
+      if (_texturizedMesh != null)
+         _texturizedMesh.dispose();
+      _texturizedMesh = null;
+  
+      if (_texturizerData != null)
+         _texturizerData.dispose();
+      _texturizerData = null;
+  
+      setTexturizerDirty(true);
+      setTextureSolved(false);
+    }
+  }
+
 }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark ElevationData methods
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark TileCache
+
