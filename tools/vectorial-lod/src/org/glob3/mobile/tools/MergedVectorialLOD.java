@@ -1101,7 +1101,7 @@ public class MergedVectorialLOD {
          index++;
       }
 
-      return mergedName;
+      return mergedName + "_MERGED";
    }
 
 
@@ -1197,6 +1197,7 @@ public class MergedVectorialLOD {
       }
 
       _globalBoundSector = getGlobalBoundSector(dataSources);
+      System.out.println("Global bound sector: " + _globalBoundSector.toString());
 
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors(dataSources);
@@ -1237,7 +1238,6 @@ public class MergedVectorialLOD {
                continue;
             }
 
-            //final boolean contained = generateVectorialLOD(sector, ds);
             containsData = generateVectorialLOD(sector, ds) || containsData;
          }
       }
