@@ -19,7 +19,7 @@ public class Camera
      _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
      _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
      _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
-     _widerFrustumInModelCoordinates = null;
+     _widerFrustumInModelCoordinates = (that._widerFrustumInModelCoordinates == null) ? null : new Frustum(that._widerFrustumInModelCoordinates);
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
      _angle2Horizon = that._angle2Horizon;
@@ -45,6 +45,7 @@ public class Camera
      _geodeticCenterOfView = null;
      _frustum = null;
      _frustumInModelCoordinates = null;
+     _widerFrustumInModelCoordinates = null;
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = null;
      _angle2Horizon = -99;
@@ -106,6 +107,10 @@ public class Camera
     if (_frustumInModelCoordinates != null)
        _frustumInModelCoordinates.dispose();
     _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+  
+    if (_widerFrustumInModelCoordinates != null)
+       _widerFrustumInModelCoordinates.dispose();
+    _widerFrustumInModelCoordinates = (that._widerFrustumInModelCoordinates == null) ? null : new Frustum(that._widerFrustumInModelCoordinates);
   
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();

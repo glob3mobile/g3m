@@ -91,29 +91,6 @@ public class Tile
   private void prepareTestLODData(Planet planet)
   {
   
-    //  if (_middleNorthPoint == NULL) {
-    //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
-    //    return;
-    //  }
-    //
-    //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
-    //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
-    //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
-    //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
-    //
-    //  const Angle latitudeAngle = nN.angleBetween(nS);
-    //  double latRad = latitudeAngle._radians;
-    //  const double sin_lat_2 = SIN(latRad / 2);
-    //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
-    //
-    //  const Angle longitudeAngle = nE.angleBetween(nW);
-    //  const double lonRad = longitudeAngle._radians;
-    //  const double sin_lon_2 = SIN(lonRad / 2);
-    //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
-    //
-    //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
-    //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
-  
     if ((_northWestPoint == null) || (_northEastPoint == null) || (_southWestPoint == null) || (_southEastPoint == null))
     {
       ILogger.instance().logError("Error in Tile::prepareTestLODData");
@@ -181,7 +158,6 @@ public class Tile
     if (_debugMesh == null)
     {
       final Vector2I tileMeshResolution = new Vector2I(layerTilesRenderParameters._tileMeshResolution);
-  
       Color color = isTextureSolved()? Color.blue() : Color.red();
   
       //TODO: CHECK
@@ -200,7 +176,9 @@ public class Tile
   
     final BoundingVolume boundingVolume = getBoundingVolume(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
   
-    return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraWiderFrustumInModelCoordinates));
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning THIS LINE IS PROBLEMATIC WHEN ELEVATIONDATAPROVIDER IS ASYNCHRONOUS
+    return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates));
   }
 
   private boolean _lastMeetsRenderCriteriaResult;
@@ -437,12 +415,8 @@ public class Tile
     return level + "/" + row + "/" + column;
   }
 
-<<<<<<< HEAD
-=======
   private TileCache _tileCache;
   private boolean _deleteTextureWhenNotVisible;
->>>>>>> tile-cache
-
   public final Sector _sector ;
   public final boolean _mercator;
   public final int _level;
@@ -706,41 +680,6 @@ public class Tile
     setIsVisible(false, texturizer);
     prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
     return false;
-  
-      //setRendered(rendered, tileRenderingListener);
-  
-  /*
-   //// ESTA PARTE FUE CAMBIADA POR JM EN RAMA SENDEROS
-  >>>>>>> origin/zrender-touchhandlers
-      return isRawRender; //RETURN ISRAWRENDER
-    }
-  
-    //Not rendering, prunning will be performed
-  
-  <<<< HEAD
-    setRendered(rendered, tileRenderingListener);
-    setIsVisible(false, texturizer);
-    prune(texturizer, elevationDataProvider); //TODO: AVISAR CAMBIO DE TERRENO
-    return false;
-  =======
-      return false; //RETURN ISRAWRENDER
-    }
-  
-    if (_rendered != rendered) {
-      _rendered = rendered;
-  
-      if (tileRenderingListener != NULL) {
-        if (_rendered) {
-          tileRenderingListener->startRendering(this);
-          _tileRenderingListener = tileRenderingListener;
-        }
-        else {
-          tileRenderingListener->stopRendering(this);
-          _tileRenderingListener = NULL;
-        }
-      }
-    }
-   */
   
   }
 
@@ -1247,8 +1186,6 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     final Vector2D uv = _sector.getUVCoordinates(position2D);
     return new Vector2I(math.toInt(tileDimension._x * uv._x), math.toInt(tileDimension._y * uv._y));
   }
-<<<<<<< HEAD
-=======
 
   public final TileTexturizer getTexturizer()
   {
@@ -1281,14 +1218,9 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     }
   }
 
->>>>>>> tile-cache
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
 
-<<<<<<< HEAD
-=======
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TileCache
-
->>>>>>> tile-cache

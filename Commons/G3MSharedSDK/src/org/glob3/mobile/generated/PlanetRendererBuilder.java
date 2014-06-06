@@ -43,38 +43,6 @@ public class PlanetRendererBuilder
   private ElevationDataProvider _elevationDataProvider;
   private float _verticalExaggeration;
 
-
-  /**
-   * Returns the _tileTessellator.
-   *
-   * @return _tileTessellator: TileTessellator*
-   */
-  private TileTessellator getTileTessellator()
-  {
-    if (_tileTessellator == null)
-    {
-      _tileTessellator = createTileTessellator();
-    }
-  
-    return _tileTessellator;
-  }
-
-  /**
-   * Returns the _texturizer.
-   *
-   * @return _texturizer: TileTexturizer*
-   */
-  private TileTexturizer getTexturizer()
-  {
-    if (_texturizer == null)
-    {
-      _texturizer = new MultiLayerTileTexturizer();
-  ///#warning Diego at work!
-  //    _texturizer = new DefaultTileTexturizer();
-    }
-  
-    return _texturizer;
-  }
   private TileRasterizer getTileRasterizer()
   {
     final int tileRasterizersSize = _tileRasterizers.size();
@@ -552,6 +520,40 @@ public class PlanetRendererBuilder
       _changedInfoListener = changedInfoListener;
       ILogger.instance().logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
     }
+  }
+
+
+  /**
+   * Returns the _tileTessellator.
+   *
+   * @return _tileTessellator: TileTessellator*
+   */
+  public final TileTessellator getTileTessellator()
+  {
+    if (_tileTessellator == null)
+    {
+      _tileTessellator = createTileTessellator();
+    }
+  
+    return _tileTessellator;
+  }
+
+
+  /**
+   * Returns the _texturizer.
+   *
+   * @return _texturizer: TileTexturizer*
+   */
+  public final TileTexturizer getTexturizer()
+  {
+    if (_texturizer == null)
+    {
+      _texturizer = new MultiLayerTileTexturizer();
+  ///#warning Diego at work!
+  //    _texturizer = new DefaultTileTexturizer();
+    }
+  
+    return _texturizer;
   }
 
   public final void setTileCacheSize(int x)

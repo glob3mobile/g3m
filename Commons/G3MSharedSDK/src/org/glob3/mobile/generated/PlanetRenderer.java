@@ -410,7 +410,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private TileCache _tileCache;
   private boolean _deleteTexturesOfInvisibleTiles;
-
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, int sizeOfTileCache, boolean deleteTexturesOfInvisibleTiles)
   {
      _tessellator = tessellator;
@@ -1179,6 +1178,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
     }
+  }
+
+  public final TileTessellator getTileTessellator()
+  {
+    return _tessellator;
   }
 
   public final void setFrustumCullingFactor(float frustumCullingFactor)
