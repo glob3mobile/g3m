@@ -364,8 +364,8 @@ public class Tile
   {
     if (_subtiles == null)
     {
+      _justCreatedSubtiles = !has4SubTilesCached();
       _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
-      _justCreatedSubtiles = true;
     }
     return _subtiles;
   }
@@ -403,10 +403,10 @@ public class Tile
     {
       _isVisible = isVisible;
   
-      if (!_isVisible)
-      {
-        deleteTexturizedMesh(texturizer);
-      }
+//      if (!_isVisible)
+//      {
+//        deleteTexturizedMesh(texturizer);
+//      }
     }
   }
 
@@ -470,7 +470,7 @@ public class Tile
   }
 
   ///////// TILE CACHE
-  private static int TILE_CACHE_MAX_SIZE = 100;
+  private static int TILE_CACHE_MAX_SIZE = 300;
   private static java.util.ArrayList<Tile> _tileCache = new java.util.ArrayList<Tile>();
 
   private static void setTileCacheSize(int size)
@@ -482,36 +482,50 @@ public class Tile
   {
     while (_tileCache.size() > TILE_CACHE_MAX_SIZE)
     {
+    	int x = _tileCache.size();
       Tile t = _tileCache.get(0);
       _tileCache.remove(0);
+      
+      ILogger.instance().logInfo("Tile %d %d %d remove from cache", t._level, t._row, t._column);
+      
+      ILogger.instance().logInfo("CACHE %d, %d", x, _tileCache.size());
   
       TileTexturizer texturizer = t.getTexturizer();
       if (texturizer != null)
       {
         texturizer.tileToBeDeleted(t, t._texturizedMesh);
+        t.deleteTexturizedMesh(texturizer);
       }
   
+      t.dispose();
       t = null;
     }
   }
   private static void clearTile(Tile tile)
   {
-  
+      ILogger.instance().logInfo("Tile %d %d %d added to cache", tile._level, tile._row, tile._column);
     _tileCache.add(tile);
     cropTileCache();
   }
+  
+  public boolean _fetched = false;
+  
   private static Tile getSubTileFromCache(int level, int row, int column)
   {
-  
     for (java.util.Iterator<Tile> it = _tileCache.iterator(); it.hasNext();)
     {
       Tile tile = it.next();
       if (tile._level == level && tile._row == row && tile._column == column)
       {
         _tileCache.remove(tile);
+        ILogger.instance().logInfo("Tile %d %d %d fetched from cache", tile._level, tile._row, tile._column);
+        
+        tile._fetched = true;
         return tile;
       }
     }
+    
+    ILogger.instance().logInfo("Tile %d %d %d NOT fetched from cache", level, row, column);
   
     return null;
   }
@@ -768,6 +782,7 @@ public class Tile
         {
           lastSplitTimer.start();
           _justCreatedSubtiles = false;
+          ILogger.instance().logInfo("JUST CREATED TILES");
         }
   
         final int subTilesSize = subTiles.size();

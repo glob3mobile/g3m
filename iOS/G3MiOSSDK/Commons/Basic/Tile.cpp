@@ -508,8 +508,8 @@ std::vector<Tile*>* Tile::getSubTiles() {
 std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
                                       const Angle& splitLongitude) {
   if (_subtiles == NULL) {
+    _justCreatedSubtiles = !has4SubTilesCached(); //Checking if subtiles are gonna be created or fetched from cache
     _subtiles = createSubTiles(splitLatitude, splitLongitude, true);
-    _justCreatedSubtiles = true;
   }
   return _subtiles;
 }
@@ -559,9 +559,10 @@ void Tile::setIsVisible(bool isVisible,
   if (_isVisible != isVisible) {
     _isVisible = isVisible;
     
-    if (!_isVisible) {
-      deleteTexturizedMesh(texturizer);
-    }
+    //Invisible tiles retain their texture
+//    if (!_isVisible) {
+//      deleteTexturizedMesh(texturizer);
+//    }
   }
 }
 
@@ -1126,9 +1127,16 @@ void Tile::cropTileCache(){
     TileTexturizer* texturizer = t->getTexturizer();
     if (texturizer != NULL) {
       texturizer->tileToBeDeleted(t, t->_texturizedMesh);
+      
+      t->deleteTexturizedMesh(texturizer);
     }
     
+#ifdef JAVA_CODE
+    t.dispose();
+#endif
+    
     delete t;
+    
   }
 }
 
