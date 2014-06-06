@@ -57,6 +57,8 @@ void Camera::copyFrom(const Camera &that) {
 
   delete _frustumInModelCoordinates;
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
+  delete _widerFrustumInModelCoordinates;
+  _widerFrustumInModelCoordinates = (that._widerFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._widerFrustumInModelCoordinates);
 
   delete _geodeticPosition;
   _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
@@ -81,6 +83,7 @@ _cartesianCenterOfView(0,0,0),
 _geodeticCenterOfView(NULL),
 _frustum(NULL),
 _frustumInModelCoordinates(NULL),
+_widerFrustumInModelCoordinates(NULL),
 _camEffectTarget(new CameraEffectTarget()),
 _geodeticPosition(NULL),
 _angle2Horizon(-99),
