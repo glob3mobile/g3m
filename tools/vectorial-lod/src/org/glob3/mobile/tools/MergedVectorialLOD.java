@@ -58,7 +58,7 @@ public class MergedVectorialLOD {
    final static int     SQUARED_PIXELS_PER_TILE = (int) Math.pow(
                                                          (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
                                                          2);
-   final static long    VERTEX_THRESHOLD        = 15000;
+   final static long    VERTEX_THRESHOLD        = 10000;
    final static int     INITIAL_AREA_FACTOR     = 3;
    final static int     MAX_TUNNING_ATTEMPS     = 10;
 
@@ -1496,40 +1496,6 @@ public class MergedVectorialLOD {
    }
 
 
-   //   private static void addFeatureToExistingGeojsonFile(final String geoJson,
-   //                                                       final File geojsonFile) {
-   //
-   //      final String feature = getFeatureFromGeojson(geoJson);
-   //      //System.out.println("FEATURE: " + feature);
-   //
-   //      try {
-   //         String verify, putData;
-   //         //final File file = new File(geojsonFileName);
-   //         //file.createNewFile();
-   //         final FileWriter fw = new FileWriter(geojsonFile);
-   //         final BufferedWriter bw = new BufferedWriter(fw);
-   //         final FileReader fr = new FileReader(geojsonFile);
-   //         final BufferedReader br = new BufferedReader(fr);
-   //
-   //         verify = br.readLine();
-   //         while (verify != null) {
-   //            putData = verify.replaceAll("}]}", "}, ");
-   //            bw.write(putData);
-   //            verify = br.readLine();
-   //         }
-   //         br.close();
-   //
-   //         bw.write(feature);
-   //         bw.write("]}");
-   //         bw.flush();
-   //         bw.close();
-   //      }
-   //      catch (final IOException e) {
-   //         ILogger.instance().logError("Error merging geojson output file: " + e.getMessage());
-   //      }
-   //   }
-
-
    private static void addFeatureToExistingGeojsonFile(final String geoJson,
                                                        final File geojsonFile) {
 
@@ -1579,22 +1545,13 @@ public class MergedVectorialLOD {
                                                        final File geojsonFile) {
 
       try {
-         //         final File geobsonFile = new File(geobsonFileName);
-         //         final File geojsonFile = new File(geojsonFileName);
-
          if (!geojsonFile.exists()) {
-            //geojsonFile = new File(geojsonFileName);
             geojsonFile.createNewFile();
             JBson2BJson.instance().bson2json(geobsonFile, geojsonFile, true);
          }
 
-         //         geobsonFile = new File(geobsonFileName);
-         //         geobsonFile.createNewFile();
-
          addFeatureToExistingGeojsonFile(geoJson, geojsonFile);
-
          JBson2BJson.instance().json2bson(geojsonFile, geobsonFile, true);
-
       }
       catch (final JBson2BJsonException e) {
          ILogger.instance().logError("JBson2BJson Error generating geobson file: " + e.getMessage());
@@ -1602,8 +1559,6 @@ public class MergedVectorialLOD {
       catch (final IOException e) {
          ILogger.instance().logError("I/O Error generating geobson file: " + e.getMessage());
       }
-
-
    }
 
 
@@ -1976,7 +1931,7 @@ public class MergedVectorialLOD {
          }
       }
       else {
-         ILogger.instance().logError("Initialization error. Exit application");
+         ILogger.instance().logError("Initialization error. Check parameters at " + PARAMETERS_FILE + " file.");
       }
 
    }

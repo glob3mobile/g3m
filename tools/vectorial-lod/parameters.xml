@@ -46,7 +46,7 @@
    
    <!-- output folder path, using the correct operating system path separator. By default, LOD folder -->
    <!-- shall be used at the current path. -->
-   <entry key="OUTPUT_FOLDER">LOD</entry>
+   <entry key="OUTPUT_FOLDER">/home/fpulido/Escritorio/LOD</entry>
 
 <!-- Parameters for specific vectorial data -->  
 

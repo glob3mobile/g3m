@@ -36,23 +36,23 @@
    <entry key="MERCATOR">true</entry>
    
    <!-- first level of tiles to be generated -->
-   <entry key="FIRST_LEVEL">4</entry>
+   <entry key="FIRST_LEVEL">12</entry>
    
    <!-- last level of tiles to be generated -->
-   <entry key="MAX_LEVEL">11</entry>
+   <entry key="MAX_LEVEL">16</entry>
    
-   <!-- valid output format: geojson, geobson, both -->
-   <entry key="OUTPUT_FORMAT">geojson</entry>
+<!--    valid output format: geojson, geobson, both -->
+   <entry key="OUTPUT_FORMAT">both</entry>
    
    <!-- output folder path, using the correct operating system path separator. By default, LOD folder -->
    <!-- shall be used at the current path. -->
-   <entry key="OUTPUT_FOLDER">LOD</entry>
+   <entry key="OUTPUT_FOLDER">/home/fpulido/Escritorio/LOD</entry>
 
 <!-- Parameters for specific vectorial data -->  
 
    <!-- name of the table in the database with the target vectorial data -->
-   <!-- <entry key="DATABASE_TABLE">italy_buildings / italy_roads</entry> -->
-   <entry key="DATABASE_TABLE">ne_10m_admin_0_countries / ne_10m_admin_0_boundary_lines_land</entry>
+   <entry key="DATABASE_TABLE">italy_buildings / italy_roads</entry>
+   <!-- <entry key="DATABASE_TABLE">ne_10m_admin_0_countries / ne_10m_admin_0_boundary_lines_land</entry> -->
    <!-- <entry key="DATABASE_TABLE">roads</entry> -->
    <!-- <entry key="DATABASE_TABLE">catastro</entry> -->
    <!-- <entry key="DATABASE_TABLE">planet_osm_polygon</entry> -->
@@ -72,8 +72,8 @@
    
    <!-- list of fields/columns associated to the vectorial data that shall be included as feature -->
    <!-- properties in the resultant geoJson file. Use a comma separated list -->
-   <!-- <entry key="PROPERTIES">type /type </entry> -->
-   <entry key="PROPERTIES">mapcolor7 / scalerank</entry>
+   <entry key="PROPERTIES">type /type </entry>
+   <!-- <entry key="PROPERTIES">mapcolor7 / scalerank</entry> -->
    <!-- <entry key="PROPERTIES">type</entry> -->
    <!-- <entry key="PROPERTIES">pcat1</entry> -->
    <!-- <entry key="PROPERTIES">building, name</entry> -->
