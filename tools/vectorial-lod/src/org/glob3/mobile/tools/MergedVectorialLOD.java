@@ -106,7 +106,7 @@ public class MergedVectorialLOD {
    private static int                        _lastLevelCreated  = 0;
 
    //-- Different variables for any data source ---------------------------------------------------------
-   private static Sector                     _globalBoundSector = TileSector.FULL_SPHERE_SECTOR;
+   private static TileSector                 _globalBoundSector = TileSector.FULL_SPHERE_SECTOR;
    //   private static GeomType                   _geomType          = null;
    //   private static String                     _theGeomColumnName = null;                         //"the_geom"; 
    //   private static String                     _geomSRID          = null;
@@ -507,6 +507,16 @@ public class MergedVectorialLOD {
    }
 
 
+   //   public static String buildFilteredQuery(final DataSource dataSource,
+   //                                           final Sector sector,
+   //                                           final float qualityFactor,
+   //                                           final double areaFactor) {
+   //
+   //
+   //      return;
+   //   }
+
+
    private static TileSector getGeometriesBound(final DataSource dataSource) {
 
       TileSector boundSector = TileSector.FULL_SPHERE_SECTOR;
@@ -574,14 +584,14 @@ public class MergedVectorialLOD {
    }
 
 
-   private static Sector getGlobalBoundSector(final List<DataSource> dataSources) {
+   private static TileSector getGlobalBoundSector(final List<DataSource> dataSources) {
 
-      Sector globalSector = dataSources.get(0)._boundSector;
+      TileSector globalSector = dataSources.get(0)._boundSector;
 
       for (int index = 1; index < dataSources.size(); index++) {
-         globalSector = globalSector.mergedWith(dataSources.get(index)._boundSector);
+         globalSector = (TileSector) globalSector.mergedWith(dataSources.get(index)._boundSector);
       }
-      System.out.println();
+
       return globalSector;
    }
 
@@ -1230,13 +1240,17 @@ public class MergedVectorialLOD {
          return;
       }
 
+      if (!_globalBoundSector.intersects(sector)) {
+         return;
+      }
+
       if (sector._level >= FIRST_LEVEL) {
          containsData = false;
          for (final DataSource ds : dataSources) {
 
-            if (!ds._boundSector.intersects(sector)) {
-               continue;
-            }
+            //            if (!ds._boundSector.intersects(sector)) {
+            //               continue;
+            //            }
 
             containsData = generateVectorialLOD(sector, ds) || containsData;
          }
@@ -1263,6 +1277,12 @@ public class MergedVectorialLOD {
                QUALITY_FACTOR, // 
                dataSource._geomFilterCriteria, //
                dataSource._includeProperties);
+
+      //--lunes: ejemplo de query para traerse el centroid de una geometria eliminada.
+      //-- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7") As l)) As properties FROM ( SELECT ST_Centroid(the_geom) as sg, "mapcolor7" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-113.0625,-0.5589200936855887), ST_Point(-100.6875,11.73732196739736)),4326)) and ST_Area(Box2D(the_geom))<=0.017270220680888727) As lg ) As f ) As fc;
+      //-- TODO: lo mejor sería que el selectGeometries de arriba devuelva un pair<String,String>, con el resultado
+      //-- y las filtradas.
+
 
       if (geoJson != null) {
          //System.out.println("Generating: ../" + getTileLabel(sector));
@@ -1455,7 +1475,6 @@ public class MergedVectorialLOD {
             else {
                final FileWriter file = new FileWriter(geojsonFileName);
                file.write(geoJson);
-               //file.write("\n");
                file.flush();
                file.close();
             }
