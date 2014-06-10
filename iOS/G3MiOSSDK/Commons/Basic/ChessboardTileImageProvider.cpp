@@ -89,7 +89,7 @@ void ChessboardTileImageProvider::create(const Tile* tile,
     canvas->initialize(width, height);
 
     canvas->setFillColor(Color::white());
-    canvas->fillRectangle(0, 0, width, height);
+    canvas->fillRectangle(0.0f, 0.0f, width, height);
 
 //    canvas->setFillColor(Color::gray());
 

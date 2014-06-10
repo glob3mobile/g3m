@@ -11,13 +11,13 @@
 
 
 #include "IDownloader.hpp"
-#include "IStorage.hpp"
+#include "Storage.hpp"
 #include "URL.hpp"
 
 class CachedDownloader : public IDownloader {
 private:
   IDownloader* _downloader;
-  IStorage*    _storage;
+  Storage*    _storage;
 
   long _requestsCounter;
   long _cacheHitsCounter;
@@ -33,7 +33,7 @@ private:
 
 public:
   CachedDownloader(IDownloader* downloader,
-                   IStorage*    storage,
+                   Storage*    storage,
                    bool         saveInBackground) :
   _downloader(downloader),
   _storage(storage),

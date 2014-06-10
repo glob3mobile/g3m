@@ -219,7 +219,7 @@ RectangleF* CompositeTileImageProvider::Composer::getInnerRectangle(int wholeSec
                                                                     const Sector& wholeSector,
                                                                     const Sector& innerSector) const {
     if (wholeSector.isNan() || innerSector.isNan() || wholeSector.isEquals(innerSector)){
-        return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
+        return new RectangleF(0.f, 0.f, wholeSectorWidth, wholeSectorHeight);
     }
     
     const double widthFactor  = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);

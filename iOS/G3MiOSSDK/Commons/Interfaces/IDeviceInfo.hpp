@@ -12,7 +12,8 @@
 enum DeviceInfo_Platform {
   DEVICE_iOS,
   DEVICE_Android,
-  DEVICE_GWT
+  DEVICE_GWT,
+  DEVICE_win8
 };
 
 class IDeviceInfo {

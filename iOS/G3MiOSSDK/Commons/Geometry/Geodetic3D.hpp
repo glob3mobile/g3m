@@ -12,10 +12,14 @@
 #include "Angle.hpp"
 #include "Geodetic2D.hpp"
 
+#ifdef _MSC_VER
+#pragma push_macro("ABSOLUTE")
+#undef ABSOLUTE
+#endif
 //Altitude modes taken from KML standard (with the exception of relative to sea floor)
 enum AltitudeMode{
-  RELATIVE_TO_GROUND,   //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
-  ABSOLUTE              //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
+	RELATIVE_TO_GROUND,   //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
+	ABSOLUTE              //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
 };
 
 
@@ -124,6 +128,11 @@ public:
   bool isEquals(const Geodetic3D& that) const;
 
 };
+
+
+#ifdef _MSC_VER
+#pragma pop_macro("ABSOLUTE")
+#endif
 
 
 

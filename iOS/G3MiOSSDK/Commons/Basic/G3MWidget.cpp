@@ -25,7 +25,7 @@
 #include "PeriodicalTask.hpp"
 #include "CameraGoToPositionEffect.hpp"
 #include "CameraRenderer.hpp"
-#include "IStorage.hpp"
+#include "Storage.hpp"
 #include "OrderedRenderable.hpp"
 #include <math.h>
 #include "GInitializationTask.hpp"
@@ -60,7 +60,7 @@ void G3MWidget::initSingletons(ILogger*            logger,
 }
 
 G3MWidget::G3MWidget(GL*                                  gl,
-                     IStorage*                            storage,
+                     Storage*                            storage,
                      IDownloader*                         downloader,
                      IThreadUtils*                        threadUtils,
                      ICameraActivityListener*             cameraActivityListener,
@@ -191,7 +191,7 @@ _infoDisplay(infoDisplay)
 
 
 G3MWidget* G3MWidget::create(GL*                                  gl,
-                             IStorage*                            storage,
+                             Storage*                            storage,
                              IDownloader*                         downloader,
                              IThreadUtils*                        threadUtils,
                              ICameraActivityListener*             cameraActivityListener,

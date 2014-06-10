@@ -23,7 +23,7 @@ class IStringUtils;
 class IThreadUtils;
 class IMathUtils;
 class IJSONParser;
-class IStorage;
+class Storage;
 class OrderedRenderable;
 class GPUProgramManager;
 class SurfaceElevationProvider;
@@ -42,7 +42,7 @@ protected:
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
-  IStorage*           _storage;
+  Storage*           _storage;
 
   SurfaceElevationProvider* _surfaceElevationProvider;
 
@@ -56,7 +56,7 @@ public:
              const Planet*             planet,
              IDownloader*              downloader,
              EffectsScheduler*         effectsScheduler,
-             IStorage*                 storage,
+             Storage*                 storage,
              SurfaceElevationProvider* surfaceElevationProvider) :
   _factory(factory),
   _stringUtils(stringUtils),
@@ -104,7 +104,7 @@ public:
     return _downloader;
   }
 
-  IStorage* getStorage() const {
+  Storage* getStorage() const {
     return _storage;
   }
 
@@ -137,7 +137,7 @@ public:
                   const Planet*             planet,
                   IDownloader*              downloader,
                   EffectsScheduler*         scheduler,
-                  IStorage*                 storage,
+                  Storage*                 storage,
                   SurfaceElevationProvider* surfaceElevationProvider) :
   G3MContext(factory,
              stringUtils,
@@ -191,7 +191,7 @@ public:
                    IDownloader*              downloader,
                    EffectsScheduler*         scheduler,
                    ITimer*                   frameStartTimer,
-                   IStorage*                 storage,
+                   Storage*                 storage,
                    GPUProgramManager*        gpuProgramManager,
                    SurfaceElevationProvider* surfaceElevationProvider) :
   G3MContext(factory,

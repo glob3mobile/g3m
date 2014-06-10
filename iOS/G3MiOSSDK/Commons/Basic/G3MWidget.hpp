@@ -36,7 +36,7 @@ class IMathUtils;
 class IJSONParser;
 class Geodetic3D;
 class CameraRenderer;
-class IStorage;
+class Storage;
 class ITextUtils;
 class G3MEventContext;
 class SurfaceElevationProvider;
@@ -102,7 +102,7 @@ public:
                              ITextUtils*         textUtils);
 
   static G3MWidget* create(GL*                                  gl,
-                           IStorage*                            storage,
+                           Storage*                            storage,
                            IDownloader*                         downloader,
                            IThreadUtils*                        threadUtils,
                            ICameraActivityListener*             cameraActivityListener,
@@ -246,7 +246,7 @@ public:
   void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
   
 private:
-  IStorage*                _storage;
+  Storage*                _storage;
   IDownloader*             _downloader;
   IThreadUtils*            _threadUtils;
   ICameraActivityListener* _cameraActivityListener;
@@ -318,7 +318,7 @@ private:
   InfoDisplay* _infoDisplay;
 
   G3MWidget(GL*                              gl,
-            IStorage*                        storage,
+            Storage*                        storage,
             IDownloader*                     downloader,
             IThreadUtils*                    threadUtils,
             ICameraActivityListener*         cameraActivityListener,

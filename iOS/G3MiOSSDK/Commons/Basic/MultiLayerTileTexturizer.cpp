@@ -424,7 +424,7 @@ public:
                                          intersectionSector);
         }
         else {
-          sourceRect = new RectangleF(0, 0,
+          sourceRect = new RectangleF(0.f, 0.f,
                                       image->getWidth(), image->getHeight());
         }
 

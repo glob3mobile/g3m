@@ -11,7 +11,7 @@
 
 #include <vector>
 class GL;
-class IStorage;
+class Storage;
 class IDownloader;
 class IThreadUtils;
 class ICameraActivityListener;
@@ -102,14 +102,14 @@ private:
 
 
 protected:
-  IStorage* _storage;
+  Storage* _storage;
 
-  IStorage* getStorage();
+  Storage* getStorage();
 
   G3MWidget* create();
 
   virtual IThreadUtils* createDefaultThreadUtils() = 0;
-  virtual IStorage*     createDefaultStorage()     = 0;
+  virtual Storage*     createDefaultStorage()     = 0;
   virtual IDownloader*  createDefaultDownloader()  = 0;
 
 
@@ -120,7 +120,7 @@ public:
 
   void setGL(GL* gl);
 
-  void setStorage(IStorage* storage);
+  void setStorage(Storage* storage);
 
   void setDownloader(IDownloader* downloader);
 

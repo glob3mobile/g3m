@@ -62,7 +62,7 @@ public:
 };
 
 
-class IStorage {
+class Storage {
 protected:
 #ifdef C_CODE
   const G3MContext* _context;
@@ -72,12 +72,12 @@ protected:
 #endif
 
 public:
-  IStorage() :
+  Storage() :
   _context(NULL)
   {
   }
 
-  virtual ~IStorage() {
+  virtual ~Storage() {
   }
 
   virtual void initialize(const G3MContext* context);

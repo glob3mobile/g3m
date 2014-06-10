@@ -9,9 +9,9 @@
 #ifndef G3MiOSSDK_NullStorage
 #define G3MiOSSDK_NullStorage
 
-#include "IStorage.hpp"
+#include "Storage.hpp"
 
-class NullStorage: public IStorage {
+class NullStorage: public Storage {
 public:
   IByteBufferResult readBuffer(const URL& url,
                                bool readExpired) {

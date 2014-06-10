@@ -14,7 +14,7 @@
 class GL;
 class G3MWidget;
 class PlanetRenderer;
-class IStorage;
+class Storage;
 class IDownloader;
 class IThreadUtils;
 class Planet;
@@ -540,7 +540,7 @@ private:
 
   GL* _gl;
   G3MWidget* _g3mWidget;
-  IStorage*  _storage;
+  Storage*  _storage;
 
   IWebSocket* _webSocket;
 
@@ -679,9 +679,9 @@ protected:
 
   const Planet* createPlanet();
 
-  IStorage* getStorage();
+  Storage* getStorage();
 
-  virtual IStorage* createStorage() = 0;
+  virtual Storage* createStorage() = 0;
 
   virtual IDownloader* createDownloader() = 0;
 

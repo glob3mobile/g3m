@@ -1391,7 +1391,7 @@ std::vector<PeriodicalTask*>* MapBooBuilder::createPeriodicalTasks() {
   return periodicalTasks;
 }
 
-IStorage* MapBooBuilder::getStorage() {
+Storage* MapBooBuilder::getStorage() {
   if (_storage == NULL) {
     _storage = createStorage();
   }

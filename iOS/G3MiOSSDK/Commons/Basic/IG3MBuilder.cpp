@@ -9,7 +9,7 @@
 #include "IG3MBuilder.hpp"
 #include "G3MWidget.hpp"
 #include "GL.hpp"
-#include "IStorage.hpp"
+#include "Storage.hpp"
 #include "IDownloader.hpp"
 #include "IThreadUtils.hpp"
 #include "ICameraActivityListener.hpp"
@@ -113,9 +113,9 @@ GL* IG3MBuilder::getGL() {
 /**
  * Returns the _storage. If it does not exist, it will be default initializated.
  *
- * @return _storage: IStorage*
+ * @return _storage: Storage*
  */
-IStorage* IG3MBuilder::getStorage() {
+Storage* IG3MBuilder::getStorage() {
   if (!_storage) {
     _storage = createDefaultStorage();
   }
@@ -343,7 +343,7 @@ void IG3MBuilder::setGL(GL *gl) {
  *
  * @param storage
  */
-void IG3MBuilder::setStorage(IStorage *storage) {
+void IG3MBuilder::setStorage(Storage *storage) {
   if (_storage) {
     ILogger::instance()->logError("LOGIC ERROR: storage already initialized");
     return;

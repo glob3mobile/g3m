@@ -11,7 +11,7 @@
 #include "IImageDownloadListener.hpp"
 #include "IStringBuilder.hpp"
 #include "ILogger.hpp"
-#include "IStorage.hpp"
+#include "Storage.hpp"
 #include "TimeInterval.hpp"
 #include "IImage.hpp"
 
@@ -24,7 +24,7 @@ private:
   IBufferDownloadListener* _listener;
   const bool _deleteListener;
 
-  IStorage* _storage;
+  Storage* _storage;
 
 #ifdef C_CODE
   const TimeInterval _timeToCache;
@@ -38,7 +38,7 @@ public:
                               IByteBuffer* expiredBuffer,
                               IBufferDownloadListener* listener,
                               bool deleteListener,
-                              IStorage* storage,
+                              Storage* storage,
                               const TimeInterval& timeToCache) :
   _downloader(downloader),
   _expiredBuffer(expiredBuffer),
@@ -135,7 +135,7 @@ private:
   IImageDownloadListener* _listener;
   const bool _deleteListener;
 
-  IStorage* _storage;
+  Storage* _storage;
 
 #ifdef C_CODE
   const TimeInterval _timeToCache;
@@ -149,7 +149,7 @@ public:
                              IImage* expiredImage,
                              IImageDownloadListener* listener,
                              bool deleteListener,
-                             IStorage* storage,
+                             Storage* storage,
                              const TimeInterval& timeToCache) :
   _downloader(downloader),
   _expiredImage(expiredImage),
