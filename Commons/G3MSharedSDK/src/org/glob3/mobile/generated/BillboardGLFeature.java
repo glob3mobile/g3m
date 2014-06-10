@@ -6,7 +6,7 @@ public class BillboardGLFeature extends GLFeature
     super.dispose();
   }
 
-  public BillboardGLFeature(Vector3D position, int textureWidth, int textureHeight)
+  public BillboardGLFeature(Vector3D position, float textureWidth, float textureHeight)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_BILLBOARD);
     _values.addUniformValue(GPUUniformKey.TEXTURE_EXTENT, new GPUUniformValueVec2Float(textureWidth, textureHeight), false);

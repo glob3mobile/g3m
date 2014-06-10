@@ -76,6 +76,11 @@ public class GPUProgramManager
   
     if (billboard)
     {
+      if (transformTC)
+      {
+        return compileProgramWithName(gl, "Billboard_TransformedTexCoor");
+      }
+  
       return compileProgramWithName(gl, "Billboard");
     }
   

@@ -76,9 +76,16 @@ public class Mark implements SurfaceElevationListener
 
   private boolean _textureSolved;
   private IImage _textureImage;
-  private int _textureWidth;
-  private int _textureHeight;
+  private float _textureWidth;
+  private float _textureHeight;
+  private boolean _textureSizeSetExternally;
   private final String _imageID;
+
+  private boolean _hasTCTransformations;
+  private float _translationTCX;
+  private float _translationTCY;
+  private float _scalingTCX;
+  private float _scalingTCY;
 
   private boolean _renderedMark;
 
@@ -92,7 +99,17 @@ public class Mark implements SurfaceElevationListener
   
     if (_textureId != null)
     {
-      _glState.addGLFeature(new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha()), false);
+  
+      if (_hasTCTransformations)
+      {
+      _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0, 0.0, 0.0);
+      }
+      else
+      {
+        _textureGLF = new TextureGLFeature(_textureId.getID(), billboardTexCoords, 2, 0, false, 0, true, GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+      }
+  
+      _glState.addGLFeature(_textureGLF, false);
     }
   }
 
@@ -101,6 +118,17 @@ public class Mark implements SurfaceElevationListener
   private AltitudeMode _altitudeMode;
 
   private Vector3D _normalAtMarkPosition;
+
+  private TextureGLFeature _textureGLF;
+
+  private void clearGLState()
+  {
+    if (_glState != null)
+    {
+      _glState._release();
+      _glState = null;
+    }
+  }
 
   /**
    * Creates a marker with icon and label
@@ -161,8 +189,8 @@ public class Mark implements SurfaceElevationListener
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
-     _textureWidth = 0;
-     _textureHeight = 0;
+     _textureWidth = 0F;
+     _textureHeight = 0F;
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
@@ -173,6 +201,9 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
+     _textureSizeSetExternally = false;
+     _hasTCTransformations = false;
+     _textureGLF = null;
   
   }
 
@@ -227,8 +258,8 @@ public class Mark implements SurfaceElevationListener
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
-     _textureWidth = 0;
-     _textureHeight = 0;
+     _textureWidth = 0F;
+     _textureHeight = 0F;
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
@@ -239,6 +270,9 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
+     _textureSizeSetExternally = false;
+     _textureGLF = null;
+     _hasTCTransformations = false;
   
   }
 
@@ -281,8 +315,8 @@ public class Mark implements SurfaceElevationListener
      _textureSolved = false;
      _textureImage = null;
      _renderedMark = false;
-     _textureWidth = 0;
-     _textureHeight = 0;
+     _textureWidth = 0F;
+     _textureHeight = 0F;
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
@@ -293,6 +327,9 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
+     _textureSizeSetExternally = false;
+     _textureGLF = null;
+     _hasTCTransformations = false;
   
   }
 
@@ -347,6 +384,8 @@ public class Mark implements SurfaceElevationListener
      _currentSurfaceElevation = 0.0;
      _glState = null;
      _normalAtMarkPosition = null;
+     _textureSizeSetExternally = false;
+     _hasTCTransformations = false;
   
   }
 
@@ -474,23 +513,27 @@ public class Mark implements SurfaceElevationListener
        _labelShadowColor.dispose();
   
     _textureImage = image;
-    _textureWidth = _textureImage.getWidth();
-    _textureHeight = _textureImage.getHeight();
+  
+    if (!_textureSizeSetExternally)
+    {
+      _textureWidth = _textureImage.getWidth();
+      _textureHeight = _textureImage.getHeight();
+    }
   }
 
-  public final int getTextureWidth()
+  public final float getTextureWidth()
   {
     return _textureWidth;
   }
 
-  public final int getTextureHeight()
+  public final float getTextureHeight()
   {
     return _textureHeight;
   }
 
-  public final Vector2I getTextureExtent()
+  public final Vector2F getTextureExtent()
   {
-    return new Vector2I(_textureWidth, _textureHeight);
+    return new Vector2F(_textureWidth, _textureHeight);
   }
 
   public final MarkUserData getUserData()
@@ -632,11 +675,7 @@ public class Mark implements SurfaceElevationListener
        _cartesianPosition.dispose();
     _cartesianPosition = null;
   
-    if (_glState != null)
-    {
-      _glState._release();
-      _glState = null;
-    }
+    clearGLState();
   }
 
   public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
@@ -657,11 +696,49 @@ public class Mark implements SurfaceElevationListener
        _cartesianPosition.dispose();
     _cartesianPosition = null;
   
-    if (_glState != null)
+    clearGLState();
+  }
+
+  public final void setOnScreenSize(Vector2F size)
+  {
+  
+    _textureWidth = (int)size._x;
+    _textureHeight = (int)size._y;
+    _textureSizeSetExternally = true;
+  
+    clearGLState();
+  }
+
+  public final void setTextureCoordinatesTransformation(Vector2F translation, Vector2F scaling)
+  {
+  
+    _translationTCX = translation._x;
+    _translationTCY = translation._y;
+  
+    _scalingTCX = scaling._x;
+    _scalingTCY = scaling._y;
+  
+    if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1)
     {
-      _glState._release();
-      _glState = null;
+      _hasTCTransformations = true;
     }
+  
+    if (_textureGLF != null)
+    {
+  
+      if (!_textureGLF.hasTranslateAndScale())
+      {
+        clearGLState();
+      }
+  
+      _textureGLF.setTranslation(_translationTCX, _translationTCY);
+      _textureGLF.setScale(_scalingTCX, _scalingTCY);
+    }
+    else
+    {
+  
+    }
+  
   }
 
 }

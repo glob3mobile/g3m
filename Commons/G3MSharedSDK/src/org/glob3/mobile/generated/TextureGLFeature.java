@@ -84,6 +84,11 @@ public class TextureGLFeature extends GLColorGroupFeature
   
   }
 
+  public final boolean hasTranslateAndScale()
+  {
+     return _translation != null && _scale != null;
+  }
+
   public final void setTranslation(float u, float v)
   {
     if (_translation == null)
@@ -94,14 +99,12 @@ public class TextureGLFeature extends GLColorGroupFeature
     }
     else
     {
-      if (u == 0.0 && v == 0.0)
-      {
-        _values.removeUniformValue(GPUUniformKey.TRANSLATION_TEXTURE_COORDS);
-      }
-      else
-      {
+  //    if (u == 0.0 && v == 0.0) {
+  //      _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
+  //    }
+  //    else{
         _translation.changeValue(u, v);
-      }
+  //    }
     }
   }
   public final void setScale(float u, float v)
@@ -115,14 +118,12 @@ public class TextureGLFeature extends GLColorGroupFeature
     else
     {
   
-      if (u == 1.0 && v == 1.0)
-      {
-        _values.removeUniformValue(GPUUniformKey.SCALE_TEXTURE_COORDS);
-      }
-      else
-      {
+  //    if (u == 1.0 && v == 1.0) {
+  //      _values->removeUniformValue(SCALE_TEXTURE_COORDS);
+  //    }
+  //    else{
         _scale.changeValue(u, v);
-      }
+  //    }
     }
   
   }
