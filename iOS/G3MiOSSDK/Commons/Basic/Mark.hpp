@@ -124,9 +124,16 @@ private:
 #ifdef JAVA_CODE
   private IImage _textureImage;
 #endif
-  int               _textureWidth;
-  int               _textureHeight;
+  float               _textureWidth;
+  float               _textureHeight;
+  bool              _textureSizeSetExternally;
   const std::string _imageID;
+  
+  bool _hasTCTransformations;
+  float _translationTCX, _translationTCY;
+  float _scalingTCX, _scalingTCY;
+
+  BillboardGLFeature* _billBoardGLF;
 
   bool    _renderedMark;
 
@@ -140,6 +147,8 @@ private:
   AltitudeMode _altitudeMode;
 
   Vector3D* _normalAtMarkPosition;
+  
+  void clearGLState();
 
 public:
   /**
@@ -226,16 +235,16 @@ public:
 
   void onTextureDownload(const IImage* image);
 
-  int getTextureWidth() const {
+  float getTextureWidth() const {
     return _textureWidth;
   }
 
-  int getTextureHeight() const {
+  float getTextureHeight() const {
     return _textureHeight;
   }
 
-  Vector2I getTextureExtent() const {
-    return Vector2I(_textureWidth, _textureHeight);
+  Vector2F getTextureExtent() const {
+    return Vector2F(_textureWidth, _textureHeight);
   }
 
   const MarkUserData* getUserData() const {
@@ -273,6 +282,11 @@ public:
                         double verticalExaggeration) {}
 
   void setPosition(const Geodetic3D& position);
+  
+  void setOnScreenSize(const Vector2F& size);
+  
+  void setTextureCoordinatesTransformation(const Vector2F& translation,
+                                           const Vector2F& scaling);
 
 };
 

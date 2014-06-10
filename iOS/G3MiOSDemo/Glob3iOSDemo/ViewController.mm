@@ -541,6 +541,8 @@ public:
         
         geoTileRasterizer->addSymbol(symbol);
     }
+  
+
     
 //#warning Diego at work!
 //  builder.getPlanetRendererBuilder()->setShowStatistics(true);
@@ -657,6 +659,56 @@ public:
 
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
+  
+  bool testingAnimatedMarks = true;
+  if (testingAnimatedMarks){
+    
+    Mark* animMark = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
+                                Geodetic3D::fromDegrees( 28.099999998178312, -15.41699999885168, 0),
+                                ABSOLUTE,
+                                4.5e+06,
+                                NULL,
+                                true,
+                                NULL,
+                                false);
+    
+    
+    class SpriteTask: public GTask{
+      Mark* _mark;
+      int _cols;
+      int _rows;
+      int _nFrames;
+      
+      int _currentFrame;
+    public:
+      SpriteTask(Mark* mark, int nColumn, int nRows, int nFrames):
+      _mark(mark), _currentFrame(0), _cols(nColumn), _rows(nRows), _nFrames(nFrames)
+      {
+        _mark->setOnScreenSize(Vector2F(100,100));
+      }
+      
+      
+      virtual void run(const G3MContext* context){
+        int row = _currentFrame / _cols;
+        int col = _currentFrame % _cols;
+        
+        float transX = col * (1.0 / _cols);
+        float transY = row * (1.0 / _rows);
+        
+        _mark->setTextureCoordinatesTransformation(Vector2F(transX,transY), Vector2F(0.25,0.5));
+        
+        _currentFrame = (_currentFrame+1) % _nFrames;
+      }
+      
+    };
+    
+    
+    builder.addPeriodicalTask(new PeriodicalTask(TimeInterval::fromMilliseconds(100),
+                                                 new SpriteTask(animMark, 4, 2, 7)));
+
+    
+    marksRenderer->addMark(animMark);
+  }
 
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer

@@ -20,20 +20,33 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 }
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
-                                       int textureWidth,
-                                       int textureHeight) :
-GLFeature(NO_GROUP, GLF_BILLBOARD)
+                                       float textureWidth,
+                                       float textureHeight,
+                                       const Vector2F& translateTexCoor,
+                                       const Vector2F& scaleTexCoor) :
+GLFeature(NO_GROUP, GLF_BILLBOARD),
+_translation(NULL),
+_scale(NULL)
 {
   _values->addUniformValue(TEXTURE_EXTENT,
                            new GPUUniformValueVec2Float(textureWidth, textureHeight),
                            false);
-
+  
   _values->addUniformValue(BILLBOARD_POSITION,
                            new GPUUniformValueVec4Float((float) position._x,
                                                         (float) position._y,
                                                         (float) position._z,
                                                         1),
                            false);
+  
+  if ((translateTexCoor._x != 0 || translateTexCoor._y != 0) ||
+      (scaleTexCoor._x != 1 || scaleTexCoor._y != 1)){
+    setTranslation(translateTexCoor._x, translateTexCoor._y);
+    setScale(scaleTexCoor._x, scaleTexCoor._y);
+  } else{
+    _translation = NULL;
+    _scale = NULL;
+  }
 }
 
 void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
@@ -41,6 +54,31 @@ void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
   state->disableCullFace();
   state->disPolygonOffsetFill();
 }
+
+void BillboardGLFeature::setTranslation(float u, float v) {
+  if (_translation == NULL) {
+    _translation = new GPUUniformValueVec2FloatMutable(u, v);
+    
+    _values->addUniformValue(TRANSLATION_TEXTURE_COORDS,
+                             _translation,
+                             false);
+  } else{
+    _translation->changeValue(u, v);
+  }
+}
+void BillboardGLFeature::setScale(float u, float v) {
+  if (_scale == NULL) {
+    _scale = new GPUUniformValueVec2FloatMutable(u, v);
+    
+    _values->addUniformValue(SCALE_TEXTURE_COORDS,
+                             _scale,
+                             false);
+  } else{
+    _scale->changeValue(u, v);
+  }
+}
+
+
 
 GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer,
                                      int arrayElementSize,
@@ -64,10 +102,10 @@ _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
 _lineWidth(lineWidth)
 {
-
+  
   _position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
   _values->addAttributeValue(POSITION, _position, false);
-
+  
   if (needsPointSize) {
     _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
   }
@@ -80,28 +118,28 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
   else {
     state->disableDepthTest();
   }
-
+  
   if (_cullFace) {
     state->enableCullFace(_culledFace);
   }
   else {
     state->disableCullFace();
   }
-
+  
   if (_polygonOffsetFill) {
     state->enablePolygonOffsetFill(_polygonOffsetFactor, _polygonOffsetUnits);
   }
   else {
     state->disPolygonOffsetFill();
   }
-
+  
   state->setLineWidth(_lineWidth);
 }
 
 
 GeometryGLFeature::~GeometryGLFeature() {
   //  _position->_release();
-
+  
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -117,28 +155,28 @@ void TextureGLFeature::createBasicValues(IFloatBuffer* texCoords,
                                                                      index,
                                                                      stride,
                                                                      normalized);
-
+  
   GPUUniformValueInt* texUnit = new GPUUniformValueInt(_target);
-
+  
   switch (_target) {
     case 0:
       _values->addUniformValue(SAMPLER, texUnit, false);
       _values->addAttributeValue(TEXTURE_COORDS, value, false);
       break;
-
+      
     case 1:
       _values->addUniformValue(SAMPLER2, texUnit, false);
       _values->addAttributeValue(TEXTURE_COORDS_2, value, false);
       break;
-
+      
     case 2:
       _values->addUniformValue(SAMPLER3, texUnit, false);
       _values->addAttributeValue(TEXTURE_COORDS_3, value, false);
       break;
-
+      
     default:
       ILogger::instance()->logError("Wrong texture target.");
-
+      
       break;
   }
 }
@@ -169,9 +207,9 @@ _scale(NULL),
 _rotationCenter(NULL),
 _rotationAngle(NULL)
 {
-
+  
   createBasicValues(texCoords, arrayElementSize, index, normalized, stride);
-
+  
   setTranslation(translateU, translateV);
   setScale(scaleU, scaleV);
   setRotationAngleInRadiansAndRotationCenter(rotationAngleInRadians, rotationCenterU, rotationCenterV);
@@ -195,15 +233,15 @@ _scale(NULL),
 _rotationCenter(NULL),
 _rotationAngle(NULL)
 {
-
+  
   createBasicValues(texCoords, arrayElementSize, index, normalized, stride);
-
+  
 }
 
 void TextureGLFeature::setTranslation(float u, float v) {
   if (_translation == NULL) {
     _translation = new GPUUniformValueVec2FloatMutable(u, v);
-
+    
     _values->addUniformValue(TRANSLATION_TEXTURE_COORDS,
                              _translation,
                              false);
@@ -219,12 +257,12 @@ void TextureGLFeature::setTranslation(float u, float v) {
 void TextureGLFeature::setScale(float u, float v) {
   if (_scale == NULL) {
     _scale = new GPUUniformValueVec2FloatMutable(u, v);
-
+    
     _values->addUniformValue(SCALE_TEXTURE_COORDS,
                              _scale,
                              false);
   } else{
-
+    
     if (u == 1.0 && v == 1.0) {
       _values->removeUniformValue(SCALE_TEXTURE_COORDS);
     }
@@ -232,21 +270,21 @@ void TextureGLFeature::setScale(float u, float v) {
       _scale->changeValue(u, v);
     }
   }
-
+  
 }
 
 void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v) {
-
+  
   if (_rotationAngle == NULL || _rotationCenter == NULL) {
     if (angle != 0.0) {
       _rotationCenter = new GPUUniformValueVec2FloatMutable(u, v);
-
+      
       _values->addUniformValue(ROTATION_CENTER_TEXTURE_COORDS,
                                _rotationCenter,
                                false);
-
+      
       _rotationAngle = new GPUUniformValueFloatMutable(angle);
-
+      
       _values->addUniformValue(ROTATION_ANGLE_TEXTURE_COORDS,
                                _rotationAngle,
                                false);
@@ -316,18 +354,18 @@ TextureCoordsGLFeature::TextureCoordsGLFeature(IFloatBuffer* texCoords,
                                                const Vector2F& scale):
 PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
 {
-
+  
   GPUAttributeValueVec2Float* value = new GPUAttributeValueVec2Float(texCoords,
                                                                      arrayElementSize,
                                                                      index,
                                                                      stride,
                                                                      normalized);
   _values->addAttributeValue(TEXTURE_COORDS, value, false);
-
+  
 #warning ONLY TARGET 0 FOR SGNODES
   GPUUniformValueInt* texUnit = new GPUUniformValueInt(0);
   _values->addUniformValue(SAMPLER, texUnit, false);
-
+  
   if (coordsTransformed) {
     _values->addUniformValue(TRANSLATION_TEXTURE_COORDS,
                              new GPUUniformValueVec2Float(translate._x,
@@ -338,10 +376,10 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
                                                           scale._y),
                              false);
   }
-
+  
 }
 void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
-
+  
 }
 
 ProjectionGLFeature::ProjectionGLFeature(const Camera* cam):
@@ -359,20 +397,20 @@ DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& diffuseLightDir
 GLFeature(LIGHTING_GROUP, GLF_DIRECTION_LIGTH) {
   _values->addUniformValue(AMBIENT_LIGHT_COLOR,
                            new GPUUniformValueVec3Float(ambientLightColor), false);
-
+  
   Vector3D dirN = diffuseLightDirection.normalized();
-
+  
   _lightDirectionUniformValue = new GPUUniformValueVec3FloatMutable((float) dirN._x,
                                                                     (float) dirN._y,
                                                                     (float) dirN._z);
-
+  
   _values->addUniformValue(DIFFUSE_LIGHT_DIRECTION,
                            _lightDirectionUniformValue,
                            false);
   _values->addUniformValue(DIFFUSE_LIGHT_COLOR,
                            new GPUUniformValueVec3Float(diffuseLightColor),
                            false);
-
+  
 }
 
 void DirectionLightGLFeature::setLightDirection(const Vector3D& lightDir) {
