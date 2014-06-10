@@ -112,6 +112,14 @@ public class TileSector
    }
 
 
+   public final TileSector mergedWith(final TileSector that) {
+      final Sector pepe = super.mergedWith(that);
+
+      //return pepe;
+      return new TileSector(pepe, this._parent, this._level, this._row, this._column);
+   }
+
+
    public static List<Sector> getExtendedSector(final Sector sector,
                                                 final double overlapPercentage) {
 

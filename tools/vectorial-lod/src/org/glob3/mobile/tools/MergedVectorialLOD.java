@@ -305,13 +305,13 @@ public class MergedVectorialLOD {
     * @return : String with the vectorial data in geoJson format.
     * 
     */
-   public static String selectGeometries(final DataSource dataSource,
-                                         final Sector sector,
-                                         final float qualityFactor,
-                                         final String geomFilterCriteria,
-                                         final String... includeProperties) {
+   //TODO: update header comments
+   public static GPair<String, String> selectGeometries(final DataSource dataSource,
+                                                        final Sector sector,
+                                                        final float qualityFactor) {
 
       String geoJsonResult = null;
+      String filteredResult = null;
       int areaFactor = INITIAL_AREA_FACTOR;
       float qf = qualityFactor;
 
@@ -325,7 +325,7 @@ public class MergedVectorialLOD {
 
          if (fullQuery == null) {
             ILogger.instance().logError("Invalid data for sector: " + sector.toString() + ". ");
-            return null;
+            return new GPair<String, String>(null, null);
          }
 
          //System.out.println("fullQuery: " + fullQuery);
@@ -333,14 +333,26 @@ public class MergedVectorialLOD {
          // first attempt: usual parameters
          geoJsonResult = executeQuery(fullQuery);
 
+         final String lodProperty = dataSource._geomType.toString().replace("MULTI", "");
+         if (dataSource._geomType != GeomType.POINT) {
+            final String filteredQuery = buildFilteredQuery(dataSource, sector, qf, areaFactor);
+            if (filteredQuery != null) {
+               filteredResult = executeQuery(filteredQuery);
+               if (!isEmptyString(filteredResult)) {
+                  filteredResult = addPropertyToExistingGeojson(filteredResult, "lodType", lodProperty);
+                  //System.out.println("filteredResult: " + filteredResult);
+               }
+            }
+         }
+
          if (geoJsonResult == null) {
-            return null;
+            return new GPair<String, String>(null, filteredResult);
          }
 
          long numVertex = getGeomVertexCount(geoJsonResult);
 
          if ((numVertex <= VERTEX_THRESHOLD) || dataSource._geomType.equals(GeomType.POINT)) {
-            return geoJsonResult;
+            return new GPair<String, String>(geoJsonResult, filteredResult);
          }
 
          //ILogger.instance().logWarning("Too much vertex for sector, area tunning: " + sector.toString());
@@ -366,29 +378,40 @@ public class MergedVectorialLOD {
             }
 
             fullQuery = buildSelectQuery(dataSource, sector, qf, areaFactor);
-
             geoJsonResult = executeQuery(fullQuery);
 
+            filteredResult = null;
+            if (dataSource._geomType != GeomType.POINT) {
+               final String filteredQuery = buildFilteredQuery(dataSource, sector, qf, areaFactor);
+               if (filteredQuery != null) {
+                  filteredResult = executeQuery(filteredQuery);
+                  if (!isEmptyString(filteredResult)) {
+                     filteredResult = addPropertyToExistingGeojson(filteredResult, "lodType", lodProperty);
+                     //System.out.println("filteredResult: " + filteredResult);
+                  }
+               }
+            }
+
             if (geoJsonResult == null) {
-               return null;
+               return new GPair<String, String>(null, filteredResult);
             }
 
             numVertex = getGeomVertexCount(geoJsonResult);
             if ((numVertex <= VERTEX_THRESHOLD) || (numAttepms >= MAX_TUNNING_ATTEMPS)) {
-               return geoJsonResult;
+               return new GPair<String, String>(geoJsonResult, filteredResult);
             }
 
             numAttepms++;
             optimizeArea = !optimizeArea;
          }
 
-         return geoJsonResult;
+         return new GPair<String, String>(geoJsonResult, filteredResult);
       }
       catch (final SQLException e) {
          ILogger.instance().logError("SQL error getting data for sector: " + sector.toString() + ". " + e.getMessage());
       }
 
-      return geoJsonResult;
+      return new GPair<String, String>(geoJsonResult, filteredResult);
    }
 
 
@@ -507,14 +530,78 @@ public class MergedVectorialLOD {
    }
 
 
-   //   public static String buildFilteredQuery(final DataSource dataSource,
-   //                                           final Sector sector,
-   //                                           final float qualityFactor,
-   //                                           final double areaFactor) {
-   //
-   //
-   //      return;
-   //   }
+   public static String buildFilteredQuery(final DataSource dataSource,
+                                           final Sector sector,
+                                           final float qualityFactor,
+                                           final double areaFactor) {
+
+      //-- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7") As l)) As properties FROM ( SELECT ST_Centroid(the_geom) as sg, "mapcolor7" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-113.0625,-0.5589200936855887), ST_Point(-100.6875,11.73732196739736)),4326)) and ST_Area(Box2D(the_geom))<=0.017270220680888727) As lg ) As f ) As fc;
+      //--
+      //-- WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-113.0625,-0.5589200936855887), ST_Point(-100.6875,11.73732196739736)),4326)) and ST_Area(Box2D(the_geom))<=0.017270220680888727) As lg ) As f ) As fc;
+
+      if (dataSource._geomType == GeomType.POINT) {
+         return null;
+      }
+
+      String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json(";
+      if (dataSource._includeProperties != null) {
+         baseQuery0 = baseQuery0 + "(SELECT l FROM (SELECT ";
+      }
+      else {
+         baseQuery0 = baseQuery0 + "null";
+      }
+
+      String baseQuery1 = "";
+      String baseQuery2 = "";
+      if (dataSource._geomSRID.equals(INTERNAL_SRID)) {
+         if (dataSource._includeProperties != null) {
+            baseQuery1 = ") As l)) As properties FROM ( SELECT ST_Centroid(";
+            baseQuery2 = ") as sg, ";
+         }
+         else {
+            baseQuery1 = ") As properties FROM ( SELECT ST_Centroid(";
+            baseQuery2 = ") as sg ";
+         }
+      }
+      else {
+         if (dataSource._includeProperties != null) {
+            baseQuery1 = ") As l)) As properties FROM ( SELECT ST_Transform(ST_Centroid(";
+            baseQuery2 = ")," + INTERNAL_SRID + ") as sg, ";
+         }
+         else {
+            baseQuery1 = ") As properties FROM ( SELECT ST_Transform(ST_Centroid(";
+            baseQuery2 = ")," + INTERNAL_SRID + ") as sg ";
+         }
+      }
+
+      final String baseQuery3 = " FROM ";
+      final String baseQuery4 = " WHERE ST_Intersects(";
+      String baseQuery5 = ") and ";
+      final String baseQuery6 = ") As lg ) As f ) As fc";
+
+      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
+      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
+
+      if (bboxQuery == null) {
+         return null;
+      }
+
+      final String propsQuery = buildPropertiesQuery(dataSource._includeProperties);
+      final String filterCriteria = buildComplementaryFilterCriterium(dataSource, areaFactor, bboxQuery, extendedSector);
+      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
+
+      if (filterCriteria.toUpperCase().trim().startsWith("ORDER")) {
+         baseQuery5 = ") ";
+      }
+
+      final String filteredQuery = baseQuery0 + propsQuery + baseQuery1 + dataSource._theGeomColumnName + baseQuery2 + propsQuery
+                                   + baseQuery3 + dataSource._sourceTable + baseQuery4 + dataSource._theGeomColumnName + ","
+                                   + bboxQuery + baseQuery5 + filterCriteria + baseQuery6;
+
+      //      System.out.println("filteredQuery: " + filteredQuery);
+
+      return filteredQuery;
+   }
 
 
    private static TileSector getGeometriesBound(final DataSource dataSource) {
@@ -589,7 +676,7 @@ public class MergedVectorialLOD {
       TileSector globalSector = dataSources.get(0)._boundSector;
 
       for (int index = 1; index < dataSources.size(); index++) {
-         globalSector = (TileSector) globalSector.mergedWith(dataSources.get(index)._boundSector);
+         globalSector = globalSector.mergedWith(dataSources.get(index)._boundSector);
       }
 
       return globalSector;
@@ -786,6 +873,22 @@ public class MergedVectorialLOD {
       //             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
 
       // ST_Area(Box2D(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))))>0.08169412
+   }
+
+
+   private static String buildComplementaryFilterCriterium(final DataSource dataSource,
+                                                           final double areaFactor,
+                                                           final String bboxQuery,
+                                                           final List<Sector> extendedSector) {
+
+      final String criterium = buildFilterCriterium(dataSource, areaFactor, bboxQuery, extendedSector);
+
+      String complementaryCriterium = "";
+      if (criterium.contains("ST_Area(Box2D(")) {
+         complementaryCriterium = criterium.replace(">", "<=");
+      }
+
+      return complementaryCriterium;
    }
 
 
@@ -1267,31 +1370,60 @@ public class MergedVectorialLOD {
    }
 
 
+   //   private static boolean generateVectorialLOD(final TileSector sector,
+   //                                               final DataSource dataSource) {
+   //
+   //      boolean containsData = true;
+   //
+   //      final String geoJson = selectGeometries(dataSource, //
+   //               sector.getSector(), //
+   //               QUALITY_FACTOR, // 
+   //               dataSource._geomFilterCriteria, //
+   //               dataSource._includeProperties);
+   //
+   //      if (geoJson != null) {
+   //         //System.out.println("Generating: ../" + getTileLabel(sector));
+   //         writeOutputFile(geoJson, sector);
+   //      }
+   //      else {
+   //         //System.out.println("Skip empty tile: ../" + getTileLabel(sector));
+   //         containsData = sectorContainsData(dataSource, sector.getSector());
+   //         writeEmptyFile(sector);
+   //      }
+   //
+   //      return containsData;
+   //   }
+
+
    private static boolean generateVectorialLOD(final TileSector sector,
                                                final DataSource dataSource) {
 
       boolean containsData = true;
 
-      final String geoJson = selectGeometries(dataSource, //
+      final GPair<String, String> geomResult = selectGeometries(dataSource, //
                sector.getSector(), //
-               QUALITY_FACTOR, // 
-               dataSource._geomFilterCriteria, //
-               dataSource._includeProperties);
+               QUALITY_FACTOR);
 
-      //--lunes: ejemplo de query para traerse el centroid de una geometria eliminada.
-      //-- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7") As l)) As properties FROM ( SELECT ST_Centroid(the_geom) as sg, "mapcolor7" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-113.0625,-0.5589200936855887), ST_Point(-100.6875,11.73732196739736)),4326)) and ST_Area(Box2D(the_geom))<=0.017270220680888727) As lg ) As f ) As fc;
-      //-- TODO: lo mejor sería que el selectGeometries de arriba devuelva un pair<String,String>, con el resultado
-      //-- y las filtradas.
-
+      String geoJson = geomResult._first;
+      final String filtered = geomResult._second;
 
       if (geoJson != null) {
          //System.out.println("Generating: ../" + getTileLabel(sector));
+         if (filtered != null) {
+            geoJson = addFeatureToExistingGeojson(geoJson, filtered);
+         }
          writeOutputFile(geoJson, sector);
       }
       else {
          //System.out.println("Skip empty tile: ../" + getTileLabel(sector));
-         containsData = sectorContainsData(dataSource, sector.getSector());
-         writeEmptyFile(sector);
+         //         containsData = sectorContainsData(dataSource, sector.getSector());
+         if (filtered != null) {
+            writeOutputFile(filtered, sector);
+         }
+         else {
+            containsData = false;
+            writeEmptyFile(sector);
+         }
       }
 
       return containsData;
@@ -1550,6 +1682,53 @@ public class MergedVectorialLOD {
    }
 
 
+   private static String addFeatureToExistingGeojson(final String baseGeojson,
+                                                     final String newGeojson) {
+
+      if (isEmptyString(baseGeojson)) {
+         return newGeojson;
+      }
+
+      final String newfeature = getFeatureFromGeojson(newGeojson);
+
+      final String resultData = baseGeojson.replace("}]}", "}, ");
+      return resultData + newfeature + "]}";
+   }
+
+
+   private static String addPropertyToExistingGeojson(final String baseGeojson,
+                                                      final String propertyName,
+                                                      final String propertyValue) {
+
+      if (isEmptyString(baseGeojson)) {
+         return null;
+      }
+
+      final String geoJsonProperty = getQuotedString(propertyName) + ":" + getQuotedString(propertyValue);
+      final String properties = getQuotedString("properties");
+      final String propertiesBegin = properties + ":{";
+      final String nullProperties = properties + ":null";
+
+      String resultData = null;
+      if (baseGeojson.contains(nullProperties)) {
+         final String insertProperty = propertiesBegin + geoJsonProperty + "}";
+         resultData = baseGeojson.replaceAll(nullProperties, insertProperty);
+         return resultData;
+      }
+
+      final StringBuffer sb = new StringBuffer(baseGeojson);
+
+      int currentIndex = sb.indexOf(propertiesBegin);
+      while (currentIndex != -1) {
+         final int insertOffset = sb.indexOf("}", currentIndex);
+         sb.insert(insertOffset, "," + geoJsonProperty);
+         currentIndex = sb.indexOf(propertiesBegin, insertOffset);
+      }
+
+      return sb.toString();
+   }
+
+
    private static String getFeatureFromGeojson(final String geoJson) {
 
       String feature = geoJson.replace("{\"type\":\"FeatureCollection\",\"features\":[", "");
@@ -1702,9 +1881,10 @@ public class MergedVectorialLOD {
             properties.loadFromXML(stream);
 
             String tmp;
-            HOST = properties.getProperty("HOST").trim();
+            tmp = properties.getProperty("HOST");
 
-            if (!isEmptyString(HOST)) {
+            if (!isEmptyString(tmp)) {
+               HOST = tmp.trim();
                System.out.println("HOST: " + HOST);
             }
             else {
@@ -1712,8 +1892,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            PORT = properties.getProperty("PORT").trim();
-            if (!isEmptyString(PORT)) {
+            tmp = properties.getProperty("PORT");
+            if (!isEmptyString(tmp)) {
+               PORT = tmp.trim();
                System.out.println("PORT: " + PORT);
             }
             else {
@@ -1721,8 +1902,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            USER = properties.getProperty("USER").trim();
-            if (!isEmptyString(USER)) {
+            tmp = properties.getProperty("USER");
+            if (!isEmptyString(tmp)) {
+               USER = tmp.trim();
                System.out.println("USER: " + USER);
             }
             else {
@@ -1730,8 +1912,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            PASSWORD = properties.getProperty("PASSWORD").trim();
-            if (!isEmptyString(PASSWORD)) {
+            tmp = properties.getProperty("PASSWORD");
+            if (!isEmptyString(tmp)) {
+               PASSWORD = tmp.trim();
                System.out.println("PASSWORD: " + PASSWORD);
             }
             else {
@@ -1739,8 +1922,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            DATABASE_NAME = properties.getProperty("DATABASE_NAME").trim();
-            if (!isEmptyString(DATABASE_NAME)) {
+            tmp = properties.getProperty("DATABASE_NAME");
+            if (!isEmptyString(tmp)) {
+               DATABASE_NAME = tmp.trim();
                System.out.println("DATABASE_NAME: " + DATABASE_NAME);
             }
             else {
@@ -1748,9 +1932,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            tmp = properties.getProperty("QUALITY_FACTOR").trim();
+            tmp = properties.getProperty("QUALITY_FACTOR");
             if (!isEmptyString(tmp)) {
-               QUALITY_FACTOR = Float.parseFloat(tmp);
+               QUALITY_FACTOR = Float.parseFloat(tmp.trim());
                System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
             }
             else {
@@ -1758,9 +1942,9 @@ public class MergedVectorialLOD {
                System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR: " + QUALITY_FACTOR);
             }
 
-            tmp = properties.getProperty("MERCATOR").trim();
+            tmp = properties.getProperty("MERCATOR");
             if (!isEmptyString(tmp)) {
-               MERCATOR = Boolean.parseBoolean(tmp);
+               MERCATOR = Boolean.parseBoolean(tmp.trim());
                if (MERCATOR) {
                   System.out.println("MERCATOR projection");
                }
@@ -1773,9 +1957,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            tmp = properties.getProperty("FIRST_LEVEL").trim();
+            tmp = properties.getProperty("FIRST_LEVEL");
             if (!isEmptyString(tmp)) {
-               FIRST_LEVEL = Integer.parseInt(tmp);
+               FIRST_LEVEL = Integer.parseInt(tmp.trim());
                System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
             }
             else {
@@ -1783,9 +1967,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            tmp = properties.getProperty("MAX_LEVEL").trim();
+            tmp = properties.getProperty("MAX_LEVEL");
             if (!isEmptyString(tmp)) {
-               MAX_LEVEL = Integer.parseInt(tmp);
+               MAX_LEVEL = Integer.parseInt(tmp.trim());
                System.out.println("MAX_LEVEL: " + MAX_LEVEL);
                //NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
                //MAX_DB_CONNECTIONS = NUM_LEVELS;
@@ -1795,8 +1979,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            OUTPUT_FORMAT = properties.getProperty("OUTPUT_FORMAT").trim();
-            if (!isEmptyString(OUTPUT_FORMAT)) {
+            tmp = properties.getProperty("OUTPUT_FORMAT");
+            if (!isEmptyString(tmp)) {
+               OUTPUT_FORMAT = tmp.trim();
                System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
             }
             else {
@@ -1804,9 +1989,9 @@ public class MergedVectorialLOD {
                System.exit(1);
             }
 
-            tmp = properties.getProperty("OUTPUT_FOLDER").trim();
+            tmp = properties.getProperty("OUTPUT_FOLDER");
             if (!isEmptyString(tmp)) {
-               ROOT_FOLDER = tmp;
+               ROOT_FOLDER = tmp.trim();
                System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
             }
             else {
@@ -1816,11 +2001,12 @@ public class MergedVectorialLOD {
 
 
             //---------
-            final String dataBaseTables = properties.getProperty("DATABASE_TABLE").trim();
+            String dataBaseTables = properties.getProperty("DATABASE_TABLE");
 
             if (!isEmptyString(dataBaseTables)) {
-               DATABASE_TABLES = parseDataFromFile(dataBaseTables, "/");
+               dataBaseTables = dataBaseTables.trim();
                System.out.println("DATABASE TABLES: " + dataBaseTables);
+               DATABASE_TABLES = parseDataFromFile(dataBaseTables, "/");
             }
             else {
                System.out.println();
@@ -1835,10 +2021,11 @@ public class MergedVectorialLOD {
                FILTER_CRITERIA[i] = "true";
             }
 
-            final String filterCriteria = properties.getProperty("FILTER_CRITERIA").trim();
-            System.out.println("FILTER CRITERIA: " + filterCriteria);
+            String filterCriteria = properties.getProperty("FILTER_CRITERIA");
 
             if (!isEmptyString(filterCriteria)) {
+               filterCriteria = filterCriteria.trim();
+               System.out.println("FILTER CRITERIA: " + filterCriteria);
                final String[] criteria = parseDataFromFile(filterCriteria, "/");
                for (int i = 0; i < criteria.length; i++) {
                   if (!isEmptyString(criteria[i])) {
@@ -1862,14 +2049,14 @@ public class MergedVectorialLOD {
                PROPERTIES[i] = null;
             }
 
-            final String includeProperties = properties.getProperty("PROPERTIES").trim();
-            System.out.println("PROPERTIES: " + includeProperties);
+            String includeProperties = properties.getProperty("PROPERTIES");
 
             if (!isEmptyString(includeProperties)) {
+               includeProperties = includeProperties.trim();
+               System.out.println("PROPERTIES: " + includeProperties);
                final String[] propertiesList = parseDataFromFile(includeProperties, "/");
 
                for (int i = 0; i < propertiesList.length; i++) {
-
                   if (!isEmptyString(propertiesList[i])) {
                      final String[] props = parseDataFromFile(propertiesList[i], ",");
                      if ((props != null) && (props.length > 0)) {
