@@ -75,23 +75,13 @@ private:
     super.dispose();
 #endif
   }
-  
-  GPUUniformValueVec2FloatMutable* _translation;
-  GPUUniformValueVec2FloatMutable* _scale;
 
 public:
   BillboardGLFeature(const Vector3D& position,
                      float textureWidth,
-                     float textureHeight,
-                     const Vector2F& translateTexCoor = Vector2F(0,0),
-                     const Vector2F& scaleTexCoor = Vector2F(1,1));
+                     float textureHeight);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
-  
-  bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
-  
-  void setTranslation(float u, float v);
-  void setScale(float u, float v);
 };
 
 class ViewportExtentGLFeature: public GLFeature {
@@ -371,6 +361,8 @@ public:
                    int sFactor,
                    int dFactor,
                    int target = 0);
+  
+  bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
 
   void setTranslation(float u, float v);
   void setScale(float u, float v);

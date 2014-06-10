@@ -168,7 +168,8 @@ _currentSurfaceElevation(0.0),
 _glState(NULL),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
-_hasTCTransformations(false)
+_hasTCTransformations(false),
+_textureGLF(NULL)
 {
   
 }
@@ -211,7 +212,7 @@ _currentSurfaceElevation(0.0),
 _glState(NULL),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
-_billBoardGLF(NULL),
+_textureGLF(NULL),
 _hasTCTransformations(false)
 {
   
@@ -252,7 +253,7 @@ _currentSurfaceElevation(0.0),
 _glState(NULL),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
-_billBoardGLF(NULL),
+_textureGLF(NULL),
 _hasTCTransformations(false)
 {
   
@@ -440,32 +441,43 @@ double Mark::getMinDistanceToCamera() {
 void Mark::createGLState(const Planet* planet,
                          IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
-  
-  if (_billBoardGLF == NULL){
-    if (_hasTCTransformations){
-    _billBoardGLF = new BillboardGLFeature(*getCartesianPosition(planet),
-                                           _textureWidth, _textureHeight,
-                                           Vector2F(_translationTCX, _translationTCY),
-                                           Vector2F(_scalingTCX, _scalingTCY));
-    } else{
-      _billBoardGLF = new BillboardGLFeature(*getCartesianPosition(planet),
-                                             _textureWidth, _textureHeight);
-    }
-  }
-  
-  _glState->addGLFeature(_billBoardGLF,
+
+  _glState->addGLFeature(new BillboardGLFeature(*getCartesianPosition(planet),
+                                                _textureWidth, _textureHeight),
                          false);
   
   if (_textureId != NULL) {
-    _glState->addGLFeature(new TextureGLFeature(_textureId->getID(),
-                                                billboardTexCoords,
-                                                2,
-                                                0,
-                                                false,
-                                                0,
-                                                true,
-                                                GLBlendFactor::srcAlpha(),
-                                                GLBlendFactor::oneMinusSrcAlpha()),
+    
+    if (_hasTCTransformations){
+    _textureGLF = new TextureGLFeature(_textureId->getID(),
+                                          billboardTexCoords,
+                                          2,
+                                          0,
+                                          false,
+                                          0,
+                                          true,
+                                          GLBlendFactor::srcAlpha(),
+                                          GLBlendFactor::oneMinusSrcAlpha(),
+                     _translationTCX,
+                     _translationTCY,
+                     _scalingTCX,
+                     _scalingTCY,
+                     0.0,
+                     0.0,
+                     0.0);
+    } else{
+      _textureGLF = new TextureGLFeature(_textureId->getID(),
+                                         billboardTexCoords,
+                                         2,
+                                         0,
+                                         false,
+                                         0,
+                                         true,
+                                         GLBlendFactor::srcAlpha(),
+                                         GLBlendFactor::oneMinusSrcAlpha());
+    }
+    
+    _glState->addGLFeature(_textureGLF,
                            false);
   }
 }
@@ -605,14 +617,14 @@ void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
     _hasTCTransformations = true;
   }
   
-  if (_billBoardGLF != NULL){
+  if (_textureGLF != NULL){
     
-    if (!_billBoardGLF->hasTranslateAndScale()){
+    if (!_textureGLF->hasTranslateAndScale()){
       clearGLState();
     }
     
-    _billBoardGLF->setTranslation(_translationTCX, _translationTCY);
-    _billBoardGLF->setScale(_scalingTCX, _scalingTCY);
+    _textureGLF->setTranslation(_translationTCX, _translationTCY);
+    _textureGLF->setScale(_scalingTCX, _scalingTCY);
   } else{
     
   }

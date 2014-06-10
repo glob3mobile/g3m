@@ -21,12 +21,8 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 
 BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
                                        float textureWidth,
-                                       float textureHeight,
-                                       const Vector2F& translateTexCoor,
-                                       const Vector2F& scaleTexCoor) :
-GLFeature(NO_GROUP, GLF_BILLBOARD),
-_translation(NULL),
-_scale(NULL)
+                                       float textureHeight) :
+GLFeature(NO_GROUP, GLF_BILLBOARD)
 {
   _values->addUniformValue(TEXTURE_EXTENT,
                            new GPUUniformValueVec2Float(textureWidth, textureHeight),
@@ -38,15 +34,6 @@ _scale(NULL)
                                                         (float) position._z,
                                                         1),
                            false);
-  
-  if ((translateTexCoor._x != 0 || translateTexCoor._y != 0) ||
-      (scaleTexCoor._x != 1 || scaleTexCoor._y != 1)){
-    setTranslation(translateTexCoor._x, translateTexCoor._y);
-    setScale(scaleTexCoor._x, scaleTexCoor._y);
-  } else{
-    _translation = NULL;
-    _scale = NULL;
-  }
 }
 
 void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
@@ -54,31 +41,6 @@ void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {
   state->disableCullFace();
   state->disPolygonOffsetFill();
 }
-
-void BillboardGLFeature::setTranslation(float u, float v) {
-  if (_translation == NULL) {
-    _translation = new GPUUniformValueVec2FloatMutable(u, v);
-    
-    _values->addUniformValue(TRANSLATION_TEXTURE_COORDS,
-                             _translation,
-                             false);
-  } else{
-    _translation->changeValue(u, v);
-  }
-}
-void BillboardGLFeature::setScale(float u, float v) {
-  if (_scale == NULL) {
-    _scale = new GPUUniformValueVec2FloatMutable(u, v);
-    
-    _values->addUniformValue(SCALE_TEXTURE_COORDS,
-                             _scale,
-                             false);
-  } else{
-    _scale->changeValue(u, v);
-  }
-}
-
-
 
 GeometryGLFeature::GeometryGLFeature(IFloatBuffer* buffer,
                                      int arrayElementSize,
@@ -246,12 +208,12 @@ void TextureGLFeature::setTranslation(float u, float v) {
                              _translation,
                              false);
   } else{
-    if (u == 0.0 && v == 0.0) {
-      _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
-    }
-    else{
+//    if (u == 0.0 && v == 0.0) {
+//      _values->removeUniformValue(TRANSLATION_TEXTURE_COORDS);
+//    }
+//    else{
       _translation->changeValue(u, v);
-    }
+//    }
   }
 }
 void TextureGLFeature::setScale(float u, float v) {
@@ -263,12 +225,12 @@ void TextureGLFeature::setScale(float u, float v) {
                              false);
   } else{
     
-    if (u == 1.0 && v == 1.0) {
-      _values->removeUniformValue(SCALE_TEXTURE_COORDS);
-    }
-    else{
+//    if (u == 1.0 && v == 1.0) {
+//      _values->removeUniformValue(SCALE_TEXTURE_COORDS);
+//    }
+//    else{
       _scale->changeValue(u, v);
-    }
+//    }
   }
   
 }

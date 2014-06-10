@@ -680,11 +680,17 @@ public:
       int _nFrames;
       
       int _currentFrame;
+      
+      float _scaleX;
+      float _scaleY;
     public:
       SpriteTask(Mark* mark, int nColumn, int nRows, int nFrames):
       _mark(mark), _currentFrame(0), _cols(nColumn), _rows(nRows), _nFrames(nFrames)
       {
         _mark->setOnScreenSize(Vector2F(100,100));
+        
+        _scaleX = 1.0 / _cols;
+        _scaleY = 1.0 / _rows;
       }
       
       
@@ -695,7 +701,11 @@ public:
         float transX = col * (1.0 / _cols);
         float transY = row * (1.0 / _rows);
         
-        _mark->setTextureCoordinatesTransformation(Vector2F(transX,transY), Vector2F(0.25,0.5));
+
+        
+//        printf("FRAME:%d, R:%d, C:%d -> %f %f\n", _currentFrame, row, col, transX, transY);
+        
+        _mark->setTextureCoordinatesTransformation(Vector2F(transX,transY), Vector2F(_scaleX, _scaleY));
         
         _currentFrame = (_currentFrame+1) % _nFrames;
       }

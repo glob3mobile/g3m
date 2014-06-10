@@ -133,8 +133,6 @@ private:
   float _translationTCX, _translationTCY;
   float _scalingTCX, _scalingTCY;
 
-  BillboardGLFeature* _billBoardGLF;
-
   bool    _renderedMark;
 
 
@@ -147,6 +145,8 @@ private:
   AltitudeMode _altitudeMode;
 
   Vector3D* _normalAtMarkPosition;
+  
+  TextureGLFeature* _textureGLF;
   
   void clearGLState();
 
