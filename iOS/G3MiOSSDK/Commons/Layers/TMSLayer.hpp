@@ -9,10 +9,12 @@
 #ifndef __G3MiOSSDK__TMSLayer__
 #define __G3MiOSSDK__TMSLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
+#include "URL.hpp"
+#include "Sector.hpp"
 
 
-class TMSLayer: public Layer {
+class TMSLayer: public RasterLayer {
 private:
 
 #ifdef C_CODE
@@ -23,7 +25,7 @@ private:
 #endif
 
   const std::string   _mapLayer;
-  Sector              _sector;
+  const Sector        _dataSector;
   const std::string   _format;
   const bool          _isTransparent;
 
@@ -37,7 +39,9 @@ public:
            LayerCondition* condition,
            const TimeInterval& timeToCache,
            bool readExpired,
-           const LayerTilesRenderParameters* parameters = NULL);
+           const LayerTilesRenderParameters* parameters = NULL,
+           float transparency = 1,
+           const std::string& disclaimerInfo = "");
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,

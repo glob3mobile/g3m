@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 
 public class URL
 {
-  private final String _path;
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  URL operator =(URL that);
 
@@ -27,7 +26,7 @@ public class URL
   {
     final IStringUtils iu = IStringUtils.instance();
 
-    String result = iu.replaceSubstring(parent.getPath() + "/" + path, "//", "/");
+    String result = iu.replaceSubstring(parent._path + "/" + path, "//", "/");
     if (iu.beginsWith(result, "http:/"))
     {
       result = "http://" + iu.substring(result, 6);
@@ -36,6 +35,7 @@ public class URL
     return result;
   }
 
+  public final String _path;
 
   public URL(URL that)
   {
@@ -49,7 +49,7 @@ public class URL
 
   /**
    Creates an URL.
-   
+
    @param escapePath Escape the given path (true) or take it as it is given (false)
    */
   public URL(String path)
@@ -101,12 +101,16 @@ public class URL
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("URL(");
-    isb.addString(getPath());
+    isb.addString(_path);
     isb.addString(")");
     final String s = isb.getString();
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
   public static String escape(String path)

@@ -4,29 +4,30 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private final Tile _tile;
   private final Tile _ancestor;
 
-  private MutableVector2D _scale = new MutableVector2D();
-  private MutableVector2D _translation = new MutableVector2D();
+  private float _translationU;
+  private float _translationV;
+  private float _scaleU;
+  private float _scaleV;
 
   private final TileTessellator _tessellator;
   private final Vector2I _resolution;
 
-  private final boolean _mercator;
-
-  public LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator, boolean mercator)
+  public LTMInitializer(Vector2I resolution, Tile tile, Tile ancestor, TileTessellator tessellator)
   {
      _resolution = resolution;
      _tile = tile;
      _ancestor = ancestor;
      _tessellator = tessellator;
-     _scale = new MutableVector2D(1,1);
-     _translation = new MutableVector2D(0,0);
-     _mercator = mercator;
+     _translationU = 0F;
+     _translationV = 0F;
+     _scaleU = 1F;
+     _scaleV = 1F;
 
   }
 
   public void dispose()
   {
-  super.dispose();
+    super.dispose();
 
   }
 
@@ -37,29 +38,31 @@ public class LTMInitializer extends LazyTextureMappingInitializer
     {
       final Sector tileSector = _tile._sector;
 
-      final Vector2D lowerTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._lower, _mercator);
+      final Vector2F lowerTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._lower);
 
-      final Vector2D upperTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._upper, _mercator);
+      final Vector2F upperTextCoordUV = _tessellator.getTextCoord(_ancestor, tileSector._upper);
 
-      _scale = new MutableVector2D(upperTextCoordUV._x - lowerTextCoordUV._x, lowerTextCoordUV._y - upperTextCoordUV._y);
+      _translationU = lowerTextCoordUV._x;
+      _translationV = upperTextCoordUV._y;
 
-      _translation = new MutableVector2D(lowerTextCoordUV._x, upperTextCoordUV._y);
+      _scaleU = upperTextCoordUV._x - lowerTextCoordUV._x;
+      _scaleV = lowerTextCoordUV._y - upperTextCoordUV._y;
     }
   }
 
-  public final MutableVector2D getScale()
+  public final Vector2F getTranslation()
   {
-    return _scale;
+    return new Vector2F(_translationU, _translationV);
   }
 
-  public final MutableVector2D getTranslation()
+  public final Vector2F getScale()
   {
-    return _translation;
+    return new Vector2F(_scaleU, _scaleV);
   }
 
   public final IFloatBuffer createTextCoords()
   {
-    return _tessellator.createTextCoords(_resolution, _tile, _mercator);
+    return _tessellator.createTextCoords(_resolution, _tile);
   }
 
 }

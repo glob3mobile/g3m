@@ -6,18 +6,20 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CameraRenderer_h
-#define G3MiOSSDK_CameraRenderer_h
+#ifndef G3MiOSSDK_CameraRenderer
+#define G3MiOSSDK_CameraRenderer
 
 #include <vector>
 
-#include "LeafRenderer.hpp"
+#include "ProtoRenderer.hpp"
+#include "RenderState.hpp"
 #include "Context.hpp"
 #include "Effects.hpp"
 
 
 #include "Effects.hpp"
 
+class RenderState;
 class CameraEventHandler;
 
 
@@ -57,7 +59,7 @@ public:
 
 
 
-class CameraRenderer: public LeafRenderer {
+class CameraRenderer: public ProtoRenderer {
 private:
   bool _processTouchEvents;
   std::vector<CameraEventHandler*> _handlers;
@@ -82,13 +84,17 @@ public:
 
   void render(const G3MRenderContext* rc, GLState* glState);
   
-  void initialize(const G3MContext* context);
+  void initialize(const G3MContext* context) {
+    
+  }
 
   bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
-                             int width, int height);
+                             int width, int height) {
+    
+  }
 
   RenderState getRenderState(const G3MRenderContext* rc) {
     return RenderState::ready();

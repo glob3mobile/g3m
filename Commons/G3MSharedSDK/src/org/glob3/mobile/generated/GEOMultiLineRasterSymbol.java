@@ -16,62 +16,65 @@ package org.glob3.mobile.generated;
 //
 
 
+//class GEO2DCoordinatesArrayData;
 
 public class GEOMultiLineRasterSymbol extends GEORasterSymbol
 {
-  private java.util.ArrayList<java.util.ArrayList<Geodetic2D>> _coordinatesArray;
-  private final GEO2DLineRasterStyle                           _style;
+  private final GEO2DCoordinatesArrayData _coordinatesArrayData;
 
-  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style, int minTileLevel)
+  private final GEO2DLineRasterStyle _style;
+
+  protected final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
   {
-     this(coordinatesArray, style, minTileLevel, -1);
+    if (_coordinatesArrayData != null)
+    {
+      if (_style.apply(canvas))
+      {
+        final int coordinatesArrayCount = _coordinatesArrayData.size();
+        for (int i = 0; i < coordinatesArrayCount; i++)
+        {
+          final GEO2DCoordinatesData coordinates = _coordinatesArrayData.get(i);
+          if (coordinates != null)
+          {
+            rasterLine(coordinates, canvas, projection);
+          }
+        }
+      }
+    }
   }
-  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style)
+
+  public GEOMultiLineRasterSymbol(GEO2DCoordinatesArrayData coordinatesArrayData, GEO2DLineRasterStyle style, int minTileLevel)
   {
-     this(coordinatesArray, style, -1, -1);
+     this(coordinatesArrayData, style, minTileLevel, -1);
   }
-  public GEOMultiLineRasterSymbol(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray, GEO2DLineRasterStyle style, int minTileLevel, int maxTileLevel)
+  public GEOMultiLineRasterSymbol(GEO2DCoordinatesArrayData coordinatesArrayData, GEO2DLineRasterStyle style)
   {
-     super(calculateSectorFromCoordinatesArray(coordinatesArray), minTileLevel, maxTileLevel);
-     _coordinatesArray = copyCoordinatesArray(coordinatesArray);
+     this(coordinatesArrayData, style, -1, -1);
+  }
+  public GEOMultiLineRasterSymbol(GEO2DCoordinatesArrayData coordinatesArrayData, GEO2DLineRasterStyle style, int minTileLevel, int maxTileLevel)
+  {
+     super(minTileLevel, maxTileLevel);
+     _coordinatesArrayData = coordinatesArrayData;
      _style = style;
+    if (_coordinatesArrayData != null)
+    {
+      _coordinatesArrayData._retain();
+    }
   }
 
   public void dispose()
   {
-    if (_coordinatesArray != null)
+    if (_coordinatesArrayData != null)
     {
-      final int coordinatesArrayCount = _coordinatesArray.size();
-      for (int i = 0; i < coordinatesArrayCount; i++)
-      {
-        java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
-        final int coordinatesCount = coordinates.size();
-        for (int j = 0; j < coordinatesCount; j++)
-        {
-          final Geodetic2D coordinate = coordinates.get(j);
-          if (coordinate != null)
-             coordinate.dispose();
-        }
-        coordinates = null;
-      }
-      _coordinatesArray = null;
+      _coordinatesArrayData._release();
     }
   
     super.dispose();
-  
   }
 
-  public final void rawRasterize(ICanvas canvas, GEORasterProjection projection)
+  public final Sector getSector()
   {
-    if (_style.apply(canvas))
-    {
-      final int coordinatesArrayCount = _coordinatesArray.size();
-      for (int i = 0; i < coordinatesArrayCount; i++)
-      {
-        java.util.ArrayList<Geodetic2D> coordinates = _coordinatesArray.get(i);
-        rasterLine(coordinates, canvas, projection);
-      }
-    }
+    return (_coordinatesArrayData == null) ? null : _coordinatesArrayData.getSector();
   }
 
 }

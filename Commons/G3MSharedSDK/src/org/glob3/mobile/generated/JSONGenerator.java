@@ -39,12 +39,8 @@ public class JSONGenerator extends JSONVisitor
        _isb.dispose();
   
     super.dispose();
-  
   }
 
-
-  ///#include "JSONNumber.hpp"
-  
   public static String generate(JSONBaseObject value)
   {
     JSONGenerator generator = new JSONGenerator();
@@ -57,32 +53,31 @@ public class JSONGenerator extends JSONVisitor
     return result;
   }
 
-  //  void visitNumber(const JSONNumber* value);
-
-  //void JSONGenerator::visitNumber(const JSONNumber* value) {
-  //  switch ( value->getType() ) {
-  //    case int_type:
-  //      _isb->addInt(value->intValue());
-  //      break;
-  //    case float_type:
-  //      _isb->addFloat(value->floatValue());
-  //      break;
-  //    case double_type:
-  //      _isb->addDouble(value->doubleValue());
-  //      break;
-  //
-  //    default:
-  //      break;
-  //  }
-  //}
-  
   public final void visitDouble(JSONDouble value)
   {
-    _isb.addDouble(value.doubleValue());
+    final double doubleValue = value.doubleValue();
+    final long longValue = (long) doubleValue;
+    if (longValue == doubleValue)
+    {
+      _isb.addLong(longValue);
+    }
+    else
+    {
+      _isb.addDouble(doubleValue);
+    }
   }
   public final void visitFloat(JSONFloat value)
   {
-    _isb.addFloat(value.floatValue());
+    final float floatValue = value.floatValue();
+    final int intValue = (int) floatValue;
+    if (intValue == floatValue)
+    {
+      _isb.addInt(intValue);
+    }
+    else
+    {
+      _isb.addFloat(floatValue);
+    }
   }
   public final void visitInteger(JSONInteger value)
   {

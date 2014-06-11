@@ -1,5 +1,5 @@
 //
-//  Matrix44DProvider.h
+//  Matrix44DProvider.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 23/08/13.
@@ -9,15 +9,13 @@
 #ifndef __G3MiOSSDK__Matrix44DProvider__
 #define __G3MiOSSDK__Matrix44DProvider__
 
-#include <iostream>
-
 #include "RCObject.hpp"
 #include "Matrix44D.hpp"
 
 #include <vector>
 
 
-class Matrix44DProvider: public RCObject{
+class Matrix44DProvider: public RCObject {
 protected:
   virtual ~Matrix44DProvider() {
 #ifdef JAVA_CODE
@@ -28,6 +26,7 @@ protected:
 public:
   virtual const Matrix44D* getMatrix() const = 0;
 };
+
 
 class Matrix44DHolder: public Matrix44DProvider {
 private:
@@ -73,11 +72,12 @@ public:
   }
 };
 
+
 class Matrix44DMultiplicationHolder : public Matrix44DProvider {
 private:
-  const Matrix44D** _matrix;
+  const Matrix44D**         _matrices;
   const Matrix44DProvider** _providers;
-  int _nMatrix;
+  const int _matricesSize;
   mutable Matrix44D* _modelview;
 
   void pullMatrixes() const;
@@ -85,17 +85,19 @@ private:
   ~Matrix44DMultiplicationHolder();
 
 public:
-  Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[], int nMatrix);
+  Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
+                                int matricesSize);
 
   Matrix44D* getMatrix() const;
   
 };
 
-class Matrix44DMultiplicationHolderBuilder{
 
+class Matrix44DMultiplicationHolderBuilder {
+private:
   std::vector<const Matrix44DProvider*> _providers;
-public:
 
+public:
   ~Matrix44DMultiplicationHolderBuilder() {
     const int providersSize = _providers.size();
     for (int i = 0; i < providersSize; i++) {
@@ -124,5 +126,4 @@ public:
 
 };
 
-
-#endif /* defined(__G3MiOSSDK__Matrix44DProvider__) */
+#endif

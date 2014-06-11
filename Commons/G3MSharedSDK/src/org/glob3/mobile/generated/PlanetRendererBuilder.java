@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//class LayerSet;
+
 
 
 public class PlanetRendererBuilder
@@ -35,7 +37,7 @@ public class PlanetRendererBuilder
   private Quality _quality;
   private java.util.ArrayList<VisibleSectorListener> _visibleSectorListeners;
   private java.util.ArrayList<Long> _stabilizationMilliSeconds;
-  private long _texturePriority;
+  private long _tileDownloadPriority;
 
   private ElevationDataProvider _elevationDataProvider;
   private float _verticalExaggeration;
@@ -66,6 +68,8 @@ public class PlanetRendererBuilder
     if (_texturizer == null)
     {
       _texturizer = new MultiLayerTileTexturizer();
+  ///#warning Diego at work!
+  //    _texturizer = new DefaultTileTexturizer();
     }
   
     return _texturizer;
@@ -200,14 +204,16 @@ public class PlanetRendererBuilder
   }
 
   /**
-   * Returns the _texturePriority.
+   * Returns the _tileDownloadPriority.
    *
-   * @return _texturePriority: long long
+   * @return _tileDownloadPriority: long long
    */
-  private long getTexturePriority()
+  private long getTileDownloadPriority()
   {
-    return _texturePriority;
+    return _tileDownloadPriority;
   }
+
+  private boolean _logTilesPetitions;
 
   private LayerSet createLayerSet()
   {
@@ -219,8 +225,7 @@ public class PlanetRendererBuilder
   }
   private TileTessellator createTileTessellator()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Testing Terrain Normals
+  ///#warning Testing Terrain Normals
     final boolean skirted = true;
     return new PlanetTileTessellator(skirted, getRenderedSector());
   }
@@ -254,7 +259,19 @@ public class PlanetRendererBuilder
     return _renderTileMeshes;
   }
 
+  private boolean getLogTilesPetitions()
+  {
+    return _logTilesPetitions;
+  }
 
+  private TileRenderingListener _tileRenderingListener;
+
+  private ChangedRendererInfoListener _changedInfoListener;
+
+
+  ///#include "DefaultTileTexturizer.hpp"
+  
+  
   public PlanetRendererBuilder()
   {
      _showStatistics = false;
@@ -269,11 +286,14 @@ public class PlanetRendererBuilder
      _tileTessellator = null;
      _visibleSectorListeners = null;
      _stabilizationMilliSeconds = null;
-     _texturePriority = DownloadPriority.HIGHER;
+     _tileDownloadPriority = DownloadPriority.HIGHER;
      _elevationDataProvider = null;
      _verticalExaggeration = 0F;
      _renderedSector = null;
      _renderTileMeshes = true;
+     _logTilesPetitions = false;
+     _tileRenderingListener = null;
+     _changedInfoListener = null;
   }
   public void dispose()
   {
@@ -299,10 +319,13 @@ public class PlanetRendererBuilder
   
     if (_renderedSector != null)
        _renderedSector.dispose();
+  
+    if (_tileRenderingListener != null)
+       _tileRenderingListener.dispose();
   }
   public final PlanetRenderer create()
   {
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTexturePriority(), getRenderedSector(), getRenderTileMeshes());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), getTileRasterizer(), getLayerSet(), getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener());
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
     {
@@ -323,6 +346,8 @@ public class PlanetRendererBuilder
     if (_renderedSector != null)
        _renderedSector.dispose();
     _renderedSector = null;
+  
+    _tileRenderingListener = null;
   
     _tileRasterizers.clear();
   
@@ -376,7 +401,7 @@ public class PlanetRendererBuilder
   {
     _renderDebug = renderDebug;
   }
-  public final void setUseTilesSplitBuget(boolean useTilesSplitBudget)
+  public final void setUseTilesSplitBudget(boolean useTilesSplitBudget)
   {
     _useTilesSplitBudget = useTilesSplitBudget;
   }
@@ -397,9 +422,9 @@ public class PlanetRendererBuilder
   {
     addVisibleSectorListener(listener, TimeInterval.zero());
   }
-  public final void setTexturePriority(long texturePriority)
+  public final void setTileDownloadPriority(long tileDownloadPriority)
   {
-    _texturePriority = texturePriority;
+    _tileDownloadPriority = tileDownloadPriority;
   }
 
   public final void setElevationDataProvider(ElevationDataProvider elevationDataProvider)
@@ -453,4 +478,42 @@ public class PlanetRendererBuilder
     _renderTileMeshes = renderTileMeshes;
   }
 
+  public final void setLogTilesPetitions(boolean logTilesPetitions)
+  {
+    _logTilesPetitions = logTilesPetitions;
+  }
+
+  public final void setTileRenderingListener(TileRenderingListener tileRenderingListener)
+  {
+    if (_tileRenderingListener != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: TileRenderingListener already set");
+      return;
+    }
+  
+    _tileRenderingListener = tileRenderingListener;
+  }
+
+  public final TileRenderingListener getTileRenderingListener()
+  {
+    return _tileRenderingListener;
+  }
+
+  public final ChangedRendererInfoListener getChangedRendererInfoListener()
+  {
+    return _changedInfoListener;
+  }
+
+  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener)
+  {
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+    }
+    else
+    {
+      _changedInfoListener = changedInfoListener;
+      ILogger.instance().logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
+    }
+  }
 }

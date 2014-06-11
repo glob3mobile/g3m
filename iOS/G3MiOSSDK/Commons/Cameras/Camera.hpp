@@ -7,46 +7,39 @@
  *
  */
 
-#ifndef CAMERA
-#define CAMERA
+#ifndef G3MiOSSDK_Camera
+#define G3MiOSSDK_Camera
 
-#include <math.h>
+#include "CoordinateSystem.hpp"
+#include "TaitBryanAngles.hpp"
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "Context.hpp"
-#include "IFactory.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Frustum.hpp"
 #include "Vector3F.hpp"
 #include "Effects.hpp"
-
-////#include "GPUProgramState.hpp"
-
 #include "GLState.hpp"
+
 class ILogger;
 class GPUProgramState;
 
-
 class CameraDirtyFlags {
-
 private:
-
   CameraDirtyFlags& operator=(const CameraDirtyFlags& that);
 
 public:
-  mutable bool _frustumDataDirty;
-  mutable bool _projectionMatrixDirty;
-  mutable bool _modelMatrixDirty;
-  mutable bool _modelViewMatrixDirty;
-  mutable bool _cartesianCenterOfViewDirty;
-  mutable bool _geodeticCenterOfViewDirty;
-  mutable bool _frustumDirty;
-  mutable bool _frustumMCDirty;
-  mutable bool _halfFrustumDirty;
-  mutable bool _halfFrustumMCDirty;
+  bool _frustumDataDirty;
+  bool _projectionMatrixDirty;
+  bool _modelMatrixDirty;
+  bool _modelViewMatrixDirty;
+  bool _cartesianCenterOfViewDirty;
+  bool _geodeticCenterOfViewDirty;
+  bool _frustumDirty;
+  bool _frustumMCDirty;
 
   CameraDirtyFlags() {
     setAll(true);
@@ -61,14 +54,9 @@ public:
     _geodeticCenterOfViewDirty  = other._geodeticCenterOfViewDirty;
     _frustumDirty               = other._frustumDirty;
     _frustumMCDirty             = other._frustumMCDirty;
-    _halfFrustumDirty           = other._halfFrustumDirty;
-    _halfFrustumMCDirty         = other._halfFrustumMCDirty;
-
   }
 
-
-  CameraDirtyFlags(const CameraDirtyFlags& other)
-  {
+  CameraDirtyFlags(const CameraDirtyFlags& other) {
     _frustumDataDirty           = other._frustumDataDirty;
     _projectionMatrixDirty      = other._projectionMatrixDirty;
     _modelMatrixDirty           = other._modelMatrixDirty;
@@ -77,26 +65,27 @@ public:
     _geodeticCenterOfViewDirty  = other._geodeticCenterOfViewDirty;
     _frustumDirty               = other._frustumDirty;
     _frustumMCDirty             = other._frustumMCDirty;
-    _halfFrustumDirty           = other._halfFrustumDirty;
-    _halfFrustumMCDirty         = other._halfFrustumMCDirty;
   }
 
-  std::string description() {
+  const std::string description() const {
     std::string d = "";
-    if (_frustumDataDirty) d+= "FD ";
-    if (_projectionMatrixDirty) d += "PM ";
-    if (_modelMatrixDirty) d+= "MM ";
-
-    if (_modelViewMatrixDirty) d+= "MVM ";
+    if (_frustumDataDirty)           d += "FD ";
+    if (_projectionMatrixDirty)      d += "PM ";
+    if (_modelMatrixDirty)           d += "MM ";
+    if (_modelViewMatrixDirty)       d += "MVM ";
     if (_cartesianCenterOfViewDirty) d += "CCV ";
-    if (_geodeticCenterOfViewDirty) d+= "GCV ";
-
-    if (_frustumDirty) d+= "F ";
-    if (_frustumMCDirty) d += "FMC ";
-    if (_halfFrustumDirty) d+= "HF ";
-    if (_halfFrustumMCDirty) d+= "HFMC ";
+    if (_geodeticCenterOfViewDirty)  d += "GCV ";
+    if (_frustumDirty)               d += "F ";
+    if (_frustumMCDirty)             d += "FMC ";
     return d;
   }
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   void setAll(bool value) {
     _frustumDataDirty           = value;
@@ -107,20 +96,15 @@ public:
     _geodeticCenterOfViewDirty  = value;
     _frustumDirty               = value;
     _frustumMCDirty             = value;
-    _halfFrustumDirty           = value;
-    _halfFrustumMCDirty         = value;
   }
 };
 
 
-/**
- * Class to control the camera.
- */
 class Camera {
 public:
   Camera(const Camera &that):
-  _width(that._width),
-  _height(that._height),
+  _viewPortWidth(that._viewPortWidth),
+  _viewPortHeight(that._viewPortHeight),
   _planet(that._planet),
   _position(that._position),
   _center(that._center),
@@ -134,23 +118,22 @@ public:
   _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
-  _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
-  _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
   _camEffectTarget(new CameraEffectTarget()),
   _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
   _angle2Horizon(that._angle2Horizon),
-  _normalizedPosition(that._normalizedPosition)
+  _normalizedPosition(that._normalizedPosition),
+  _tanHalfVerticalFieldOfView(NAND),
+  _tanHalfHorizontalFieldOfView(NAND),
+  _rollInRadians(that._rollInRadians)
   {
   }
 
-  Camera(int width, int height);
+  explicit Camera();
 
   ~Camera() {
     delete _camEffectTarget;
     delete _frustum;
     delete _frustumInModelCoordinates;
-    delete _halfFrustum;
-    delete _halfFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
   }
@@ -164,23 +147,18 @@ public:
 
   void resizeViewport(int width, int height);
 
-//  void render(const G3MRenderContext* rc,
-//              const GLGlobalState& parentState) const;
-
   const Vector3D pixel2Ray(const Vector2I& pixel) const;
 
   const Vector3D pixel2PlanetPoint(const Vector2I& pixel) const;
 
-//  const Vector2I point2Pixel(const Vector3D& point) const;
-//  const Vector2I point2Pixel(const Vector3F& point) const;
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
 
-  int getWidth() const { return _width; }
-  int getHeight() const { return _height; }
+  int getViewPortWidth()  const { return _viewPortWidth; }
+  int getViewPortHeight() const { return _viewPortHeight; }
 
   float getViewPortRatio() const {
-    return (float) _width / _height;
+    return (float) _viewPortWidth / _viewPortHeight;
   }
 
   EffectTarget* getEffectTarget() {
@@ -195,8 +173,6 @@ public:
   const Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
   const Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
 
-
-  //Dragging camera
   void dragCamera(const Vector3D& p0,
                   const Vector3D& p1);
   void rotateWithAxis(const Vector3D& axis,
@@ -204,11 +180,8 @@ public:
   void moveForward(double d);
   void translateCamera(const Vector3D& desp);
 
-
-  //Pivot
   void pivotOnCenter(const Angle& a);
 
-  //Rotate
   void rotateWithAxisAndPoint(const Vector3D& axis,
                               const Vector3D& point,
                               const Angle& delta);
@@ -216,7 +189,6 @@ public:
   void print();
 
   const Frustum* const getFrustumInModelCoordinates() const {
-    //    return getFrustumMC();
     if (_dirtyFlags._frustumMCDirty) {
       _dirtyFlags._frustumMCDirty = false;
       delete _frustumInModelCoordinates;
@@ -225,20 +197,12 @@ public:
     return _frustumInModelCoordinates;
   }
 
-  const Frustum* const getHalfFrustuminModelCoordinates() const {
-    return getHalfFrustumMC();
-  }
-
-  //  void setPosition(const Geodetic3D& position);
-
   Vector3D getHorizontalVector();
 
   Angle compute3DAngularDistance(const Vector2I& pixel0,
                                  const Vector2I& pixel1);
 
   void initialize(const G3MContext* context);
-
-  //  void resetPosition();
 
   void setCartesianPosition(const MutableVector3D& v) {
     if (!v.equalTo(_position)) {
@@ -270,7 +234,9 @@ public:
   }
 
   void setGeodeticPosition(const Geodetic3D& g3d);
-  
+
+  void setGeodeticPositionStablePitch(const Geodetic3D& g3d);
+
   void setGeodeticPosition(const Angle &latitude,
                            const Angle &longitude,
                            const double height) {
@@ -281,7 +247,7 @@ public:
                            const double height) {
     setGeodeticPosition(Geodetic3D(g2d, height));
   }
-
+  
   /**
    This method put the camera pointing to given center, at the given distance, using the given angles.
 
@@ -302,16 +268,6 @@ public:
     getModelMatrix44D();
     getModelViewMatrix().asMatrix44D();
   }
-  
-
-
-//  void addProjectionAndModelGLFeatures(GLState& glState) const{
-//    glState.clearGLFeatureGroup(CAMERA_GROUP);
-//    ProjectionGLFeature* p = new ProjectionGLFeature(getProjectionMatrix().asMatrix44D());
-//    glState.addGLFeature(p, false);
-//    ModelGLFeature* m = new ModelGLFeature(getModelMatrix44D());
-//    glState.addGLFeature(m, false);
-//  }
 
   Matrix44D* getModelMatrix44D() const{
     return getModelMatrix().asMatrix44D();
@@ -326,9 +282,9 @@ public:
   }
 
   double getAngle2HorizonInRadians() const { return _angle2Horizon; }
-  
+
   double getProjectedSphereArea(const Sphere& sphere) const;
-  
+
   void applyTransform(const MutableMatrix44D& mat);
 
   bool isPositionWithin(const Sector& sector, double height) const;
@@ -344,15 +300,34 @@ public:
   }
 
 
+  //In case any of the angles is NAN it would be inferred considering the vieport ratio
+  void setFOV(const Angle& vertical,
+              const Angle& horizontal);
+
+  Angle getRoll() const;
+  void setRoll(const Angle& angle);
+
+  CoordinateSystem getLocalCoordinateSystem() const;
+  CoordinateSystem getCameraCoordinateSystem() const;
+  TaitBryanAngles getHeadingPitchRoll() const;
+  void setHeadingPitchRoll(const Angle& heading,
+                           const Angle& pitch,
+                           const Angle& roll);
+
+  double getEstimatedPixelDistance(const Vector3D& point0,
+                                   const Vector3D& point1) const;
+
 private:
-  const Angle getHeading(const Vector3D& normal) const;
+  //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
-  int _width;
-  int _height;
-
+  int _viewPortWidth;
+  int _viewPortHeight;
+#ifdef C_CODE
   const Planet *_planet;
-
+#else
+  Planet *_planet;
+#endif
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector
@@ -364,7 +339,6 @@ private:
   // Must be updated when changing position
   mutable double          _angle2Horizon;
   MutableVector3D         _normalizedPosition;
-  
 
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData      _frustumData;
@@ -375,8 +349,9 @@ private:
   mutable Geodetic3D*      _geodeticCenterOfView;
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
-  mutable Frustum*         _halfFrustum;                    // ONLY FOR DEBUG
-  mutable Frustum*         _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
+  double                   _tanHalfVerticalFieldOfView;
+  double                   _tanHalfHorizontalFieldOfView;
+  double                   _rollInRadians;
 
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget {
@@ -432,31 +407,7 @@ private:
     return _frustum;
   }
 
-  Frustum* getHalfFrustum() const {
-    // __temporal_test_for_clipping;
-    if (_dirtyFlags._halfFrustumDirty) {
-      _dirtyFlags._halfFrustumDirty = false;
-      delete _halfFrustum;
-      FrustumData data = getFrustumData();
-      _halfFrustum = new Frustum(data._left/4, data._right/4,
-                                 data._bottom/4, data._top/4,
-                                 data._znear, data._zfar);
-    }
-    return _halfFrustum;
-  }
-
-  Frustum* getHalfFrustumMC() const {
-    if (_dirtyFlags._halfFrustumMCDirty) {
-      _dirtyFlags._halfFrustumMCDirty = false;
-      delete _halfFrustumInModelCoordinates;
-      _halfFrustumInModelCoordinates = getHalfFrustum()->transformedBy_P(getModelMatrix());
-    }
-    return _halfFrustumInModelCoordinates;
-  }
-  
   FrustumData calculateFrustumData() const;
-  
-  //void _setGeodeticPosition(const Vector3D& pos);
 
   // opengl projection matrix
   const MutableMatrix44D& getProjectionMatrix() const{
@@ -484,7 +435,11 @@ private:
     }
     return _modelViewMatrix;
   }
-
+  
+  
+  
+  void setCameraCoordinateSystem(const CoordinateSystem& rs);
+  
 };
 
 

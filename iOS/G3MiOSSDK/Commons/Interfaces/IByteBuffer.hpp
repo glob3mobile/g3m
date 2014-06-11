@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_IByteBuffer_h
-#define G3MiOSSDK_IByteBuffer_h
+#ifndef G3MiOSSDK_IByteBuffer
+#define G3MiOSSDK_IByteBuffer
 
 #include <string>
 
@@ -29,6 +29,12 @@ public:
   virtual void rawPut(int i, unsigned char value) = 0;
 
   virtual const std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   virtual const std::string getAsString() const = 0;
 

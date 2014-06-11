@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GoogleMapsLayer extends Layer
+public class GoogleMapsLayer extends RasterLayer
 {
   private final String _key;
   private final int _initialLevel;
@@ -45,24 +45,90 @@ public class GoogleMapsLayer extends Layer
   }
 
 
+  protected final TileImageContribution rawContribution(Tile tile)
+  {
+    return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
+  }
+
+  protected final URL createURL(Tile tile)
+  {
+    final Sector tileSector = tile._sector;
+  
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+    // http://maps.googleapis.com/maps/api/staticmap?center=New+York,NY&zoom=13&size=600x300&key=AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc&sensor=false
+  
+    /*
+     http: //maps.googleapis.com/maps/api/staticmap
+     ?center=New+York,NY
+     &zoom=13
+     &size=600x300
+     &key=AIzaSyC9pospBjqsfpb0Y9N3E3uNMD8ELoQVOrc
+     &sensor=false
+     */
+  
+    isb.addString("http://maps.googleapis.com/maps/api/staticmap?sensor=false");
+  
+    isb.addString("&center=");
+    isb.addDouble(tileSector._center._latitude._degrees);
+    isb.addString(",");
+    isb.addDouble(tileSector._center._longitude._degrees);
+  
+    final int level = tile._level;
+    isb.addString("&zoom=");
+    isb.addInt(level);
+  
+    isb.addString("&size=");
+    isb.addInt(_parameters._tileTextureResolution._x);
+    isb.addString("x");
+    isb.addInt(_parameters._tileTextureResolution._y);
+  
+    isb.addString("&format=jpg");
+  
+  
+    //  isb->addString("&maptype=roadmap);
+    //  isb->addString("&maptype=satellite");
+    isb.addString("&maptype=hybrid");
+    //  isb->addString("&maptype=terrain");
+  
+  
+    isb.addString("&key=");
+    isb.addString(_key);
+  
+  
+    final String path = isb.getString();
+  
+    if (isb != null)
+       isb.dispose();
+    return new URL(path, false);
+  }
+
+
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition)
+  {
+     this(key, timeToCache, readExpired, initialLevel, transparency, condition, "");
+  }
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency)
+  {
+     this(key, timeToCache, readExpired, initialLevel, transparency, null, "");
+  }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel)
   {
-     this(key, timeToCache, readExpired, initialLevel, null);
+     this(key, timeToCache, readExpired, initialLevel, 1, null, "");
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired)
   {
-     this(key, timeToCache, readExpired, 2, null);
+     this(key, timeToCache, readExpired, 2, 1, null, "");
   }
   public GoogleMapsLayer(String key, TimeInterval timeToCache)
   {
-     this(key, timeToCache, true, 2, null);
+     this(key, timeToCache, true, 2, 1, null, "");
   }
-  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, LayerCondition condition)
+  public GoogleMapsLayer(String key, TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(condition, "GoogleMaps", timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
+     super(timeToCache, readExpired, new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, initialLevel, 20, new Vector2I(256, 256), LayerTilesRenderParameters.defaultTileMeshResolution(), true), transparency, condition, disclaimerInfo);
      _key = key;
      _initialLevel = initialLevel;
-  
   }
 
   public final URL getFeatureInfoURL(Geodetic2D position, Sector sector)
@@ -109,10 +175,10 @@ public class GoogleMapsLayer extends Layer
     isb.addString("&format=jpg");
   
   
-  //  isb->addString("&maptype=roadmap);
-  //  isb->addString("&maptype=satellite");
+    //  isb->addString("&maptype=roadmap);
+    //  isb->addString("&maptype=satellite");
     isb.addString("&maptype=hybrid");
-  //  isb->addString("&maptype=terrain");
+    //  isb->addString("&maptype=terrain");
   
   
     isb.addString("&key=");
@@ -124,7 +190,7 @@ public class GoogleMapsLayer extends Layer
     if (isb != null)
        isb.dispose();
   
-    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true));
+    petitions.add(new Petition(tileSector, new URL(path, false), getTimeToCache(), getReadExpired(), true, _transparency));
   
     return petitions;
   }
@@ -136,7 +202,7 @@ public class GoogleMapsLayer extends Layer
 
   public final GoogleMapsLayer copy()
   {
-    return new GoogleMapsLayer(_key, TimeInterval.fromMilliseconds(_timeToCacheMS), _readExpired, _initialLevel, (_condition == null) ? null : _condition.copy());
+    return new GoogleMapsLayer(_key, _timeToCache, _readExpired, _initialLevel, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
   }
 
   public final RenderState getRenderState()
@@ -153,4 +219,10 @@ public class GoogleMapsLayer extends Layer
     }
     return RenderState.ready();
   }
+
+  public final Sector getDataSector()
+  {
+    return Sector.fullSphere();
+  }
+
 }

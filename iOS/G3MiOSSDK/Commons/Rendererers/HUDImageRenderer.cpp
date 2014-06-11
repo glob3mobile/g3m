@@ -23,7 +23,8 @@
 #include "DirectMesh.hpp"
 #include "ICanvas.hpp"
 #include "IStringUtils.hpp"
-
+#include "SimpleTextureMapping.hpp"
+#include "IFactory.hpp"
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
 
@@ -37,7 +38,7 @@ void HUDImageRenderer::CanvasImageFactory::create(const G3MRenderContext* rc,
   canvas->initialize(width, height);
 
   drawOn(canvas, width, height);
-  
+
   canvas->createImage(listener, deleteListener);
 
   delete canvas;
@@ -120,10 +121,10 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const std::string textureName = "HUDImageRenderer" + su->toString(_instanceID) + "/" + su->toString(_changeCounter++);
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_image,
-                                                                       GLFormat::rgba(),
-                                                                       textureName,
-                                                                       false);
-  
+                                                                                    GLFormat::rgba(),
+                                                                                    textureName,
+                                                                                    false);
+
   delete _image;
   _image = NULL;
 
@@ -135,8 +136,8 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
 
   const Camera* camera = rc->getCurrentCamera();
 
-  const double halfWidth  = camera->getWidth()  / 2.0;
-  const double halfHeight = camera->getHeight() / 2.0;
+  const double halfWidth  = camera->getViewPortWidth()  / 2.0;
+  const double halfHeight = camera->getViewPortHeight() / 2.0;
 
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
   vertices->add(-halfWidth,  halfHeight, 0);
@@ -177,8 +178,8 @@ Mesh* HUDImageRenderer::getMesh(const G3MRenderContext* rc) {
 
         const Camera* camera = rc->getCurrentCamera();
 
-        const int width  = camera->getWidth();
-        const int height = camera->getHeight();
+        const int width  = camera->getViewPortWidth();
+        const int height = camera->getViewPortHeight();
 
         _imageFactory->create(rc,
                               width, height,
@@ -191,7 +192,7 @@ Mesh* HUDImageRenderer::getMesh(const G3MRenderContext* rc) {
       _mesh = createMesh(rc);
     }
   }
-  
+
   return _mesh;
 }
 

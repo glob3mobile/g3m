@@ -11,14 +11,18 @@
 #include "Context.hpp"
 #include "ITimer.hpp"
 #include "ILogger.hpp"
+#include "FrameTask.hpp"
+#include "IStringBuilder.hpp"
 
 bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
                                                  int executedCounter) {
-  const int tasksCount = _preRenderTasks.size();
+  const int tasksCount = _tasks.size();
   if (tasksCount <= _minimumExecutionsPerFrame) {
-    //if (_stressed) {
-    //  rc->getLogger()->logWarning("Abandon STRESSED mode");
-    //}
+    if (_debug) {
+      if (_stressed) {
+        rc->getLogger()->logWarning("FTE: Abandon STRESSED mode");
+      }
+    }
     _stressed = false;
   }
 
@@ -31,10 +35,12 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
   }
 
   if (tasksCount > _maximumQueuedTasks) {
-    //if (!_stressed) {
-    //  rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
-    //                              _preRenderTasks.size());
-    //}
+    if (_debug) {
+      if (!_stressed) {
+        rc->getLogger()->logWarning("FTE: Too many queued tasks (%d). Goes to STRESSED mode",
+                                    _tasks.size());
+      }
+    }
     _stressed = true;
   }
 
@@ -50,35 +56,42 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const G3MRenderContext* rc,
 
 void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
 
-  //  int canceledCounter = 0;
-  std::list<FrameTask*>::iterator i = _preRenderTasks.begin();
-  while (i != _preRenderTasks.end()) {
+  // remove canceled tasks
+  int canceledCounter = 0;
+  std::list<FrameTask*>::iterator i = _tasks.begin();
+  while (i != _tasks.end()) {
     FrameTask* task = *i;
 
     const bool isCanceled = task->isCanceled(rc);
     if (isCanceled) {
       delete task;
 #ifdef C_CODE
-      _preRenderTasks.erase(i);
+      i = _tasks.erase(i);
 #endif
 #ifdef JAVA_CODE
       i.remove();
 #endif
-      //      canceledCounter++;
+      canceledCounter++;
     }
-    i++;
+    else {
+      i++;
+    }
   }
 
-  //  if (canceledCounter > 0) {
-  //    rc->getLogger()->logInfo("Removed %d tasks, actived %d tasks.",
-  //                             canceledCounter,
-  //                             _preRenderTasks.size());
-  //  }
+  if (_debug) {
+    if (canceledCounter > 0) {
+      rc->getLogger()->logInfo("FTE: Removed %d tasks, actived %d tasks.",
+                               canceledCounter,
+                               _tasks.size());
+    }
+  }
 
+
+  // execute some tasks
   int executedCounter = 0;
   while (canExecutePreRenderStep(rc, executedCounter)) {
-    FrameTask* task = _preRenderTasks.front();
-    _preRenderTasks.pop_front();
+    FrameTask* task = _tasks.front();
+    _tasks.pop_front();
 
     task->execute(rc);
 
@@ -87,28 +100,47 @@ void FrameTasksExecutor::doPreRenderCycle(const G3MRenderContext* rc) {
     executedCounter++;
   }
 
-  //  if (false) {
-  //    //    if ( rc->getFrameStartTimer()->elapsedTime().milliseconds() > _maxTimePerFrame.milliseconds()*3 ) {
-  //    //      rc->getLogger()->logWarning("doPreRenderCycle() took too much time, Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
-  //    //                                  canceledCounter,
-  //    //                                  executedCounter,
-  //    //                                  rc->getFrameStartTimer()->elapsedTime().milliseconds(),
-  //    //                                  _preRenderTasks.size(),
-  //    //                                  _stressed);
-  //    //
-  //    //    }
-  //    //    else {
-  //    if ((executedCounter > 0) ||
-  //        (canceledCounter > 0) ||
-  //        (_preRenderTasks.size() > 0)) {
-  //      rc->getLogger()->logInfo("Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
-  //                               canceledCounter,
-  //                               executedCounter,
-  //                               rc->getFrameStartTimer()->elapsedTime().milliseconds(),
-  //                               _preRenderTasks.size(),
-  //                               _stressed);
-  //    }
-  //    //    }
-  //  }
-  
+
+  if (_debug) {
+    showDebugInfo(rc, executedCounter, canceledCounter);
+  }
+}
+
+
+void FrameTasksExecutor::showDebugInfo(const G3MRenderContext* rc,
+                                       int executedCounter,
+                                       int canceledCounter) {
+  const int preRenderTasksSize = _tasks.size();
+  if ((executedCounter > 0) ||
+      (canceledCounter > 0) ||
+      (preRenderTasksSize > 0)) {
+
+    IStringBuilder* isb = IStringBuilder::newStringBuilder();
+    isb->addString("FTE: Tasks");
+
+    if (canceledCounter > 0) {
+      isb->addString(" canceled=");
+      isb->addInt(canceledCounter);
+    }
+
+    if (executedCounter > 0) {
+      isb->addString(" executed=");
+      isb->addInt(executedCounter);
+      isb->addString(" in ");
+      isb->addLong(rc->getFrameStartTimer()->elapsedTimeInMilliseconds());
+      isb->addString("ms");
+    }
+
+    isb->addString(" queued=");
+    isb->addInt(preRenderTasksSize);
+
+    if (_stressed) {
+      isb->addString(" *Stressed*");
+    }
+
+    const std::string msg = isb->getString();
+    delete isb;
+    
+    rc->getLogger()->logInfo(msg);
+  }
 }

@@ -6,11 +6,12 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_WMSLayer_hpp
-#define G3MiOSSDK_WMSLayer_hpp
+#ifndef G3MiOSSDK_WMSLayer
+#define G3MiOSSDK_WMSLayer
 
-#include "Layer.hpp"
-#include "Tile.hpp"
+#include "RasterLayer.hpp"
+#include "URL.hpp"
+#include "Sector.hpp"
 
 enum WMSServerVersion {
   WMS_1_1_0,
@@ -18,7 +19,7 @@ enum WMSServerVersion {
 };
 
 
-class WMSLayer: public Layer {
+class WMSLayer: public RasterLayer {
 private:
 
 #ifdef C_CODE
@@ -34,15 +35,12 @@ private:
   const WMSServerVersion _mapServerVersion;
   const std::string      _queryLayer;
   const WMSServerVersion _queryServerVersion;
-
-  Sector              _sector;
-
-  const std::string   _format;
-  const std::string   _srs;
-  const std::string   _style;
-  const bool          _isTransparent;
-
-  std::string         _extraParameter;
+  const Sector           _dataSector;
+  const std::string      _format;
+  const std::string      _srs;
+  const std::string      _style;
+  const bool             _isTransparent;
+  std::string            _extraParameter;
 
   inline double toBBOXLongitude(const Angle& longitude) const;
   inline double toBBOXLatitude (const Angle& latitude)  const;
@@ -55,37 +53,44 @@ protected:
   bool rawIsEquals(const Layer* that) const;
 
 
+  const TileImageContribution* rawContribution(const Tile* tile) const;
+
+  const URL createURL(const Tile* tile) const;
+
 public:
 
-  WMSLayer(const std::string& mapLayer,
-           const URL& mapServerURL,
-           const WMSServerVersion mapServerVersion,
-           const std::string& queryLayer,
-           const URL& queryServerURL,
-           const WMSServerVersion queryServerVersion,
-           const Sector& sector,
-           const std::string& format,
-           const std::string& srs,
-           const std::string& style,
-           const bool isTransparent,
-           LayerCondition* condition,
-           const TimeInterval& timeToCache,
-           bool readExpired,
-           const LayerTilesRenderParameters* parameters = NULL);
+  WMSLayer(const std::string&                mapLayer,
+           const URL&                        mapServerURL,
+           const WMSServerVersion            mapServerVersion,
+           const std::string&                queryLayer,
+           const URL&                        queryServerURL,
+           const WMSServerVersion            queryServerVersion,
+           const Sector&                     dataSector,
+           const std::string&                format,
+           const std::string&                srs,
+           const std::string&                style,
+           const bool                        isTransparent,
+           const LayerCondition*             condition,
+           const TimeInterval&               timeToCache,
+           const bool                        readExpired,
+           const LayerTilesRenderParameters* parameters     = NULL,
+           const float                       transparency   = 1,
+           const std::string&                disclaimerInfo = "");
 
-  WMSLayer(const std::string& mapLayer,
-           const URL& mapServerURL,
-           const WMSServerVersion mapServerVersion,
-           const Sector& sector,
-           const std::string& format,
-           const std::string& srs,
-           const std::string& style,
-           const bool isTransparent,
-           LayerCondition* condition,
-           const TimeInterval& timeToCache,
-           bool readExpired,
-           const LayerTilesRenderParameters* parameters = NULL);
-
+  WMSLayer(const std::string&                mapLayer,
+           const URL&                        mapServerURL,
+           const WMSServerVersion            mapServerVersion,
+           const Sector&                     dataSector,
+           const std::string&                format,
+           const std::string&                srs,
+           const std::string&                style,
+           const bool                        isTransparent,
+           const LayerCondition*             condition,
+           const TimeInterval&               timeToCache,
+           const bool                        readExpired,
+           const LayerTilesRenderParameters* parameters     = NULL,
+           const float                       transparency   = 1,
+           const std::string&                disclaimerInfo = "");
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -103,8 +108,13 @@ public:
   const std::string description() const;
 
   WMSLayer* copy() const;
-  
+
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return _dataSector;
+  }
+
 };
 
 #endif

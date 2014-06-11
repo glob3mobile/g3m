@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_JSONObject_hpp
-#define G3MiOSSDK_JSONObject_hpp
+#ifndef G3MiOSSDK_JSONObject
+#define G3MiOSSDK_JSONObject
 
 #include "JSONBaseObject.hpp"
 #include <map>
@@ -49,6 +49,24 @@ public:
 
   void put(const std::string& key,
            JSONBaseObject* object);
+
+  void put(const std::string& key,
+           const std::string& value);
+
+  void put(const std::string& key,
+           double value);
+
+  void put(const std::string& key,
+           float value);
+
+  void put(const std::string& key,
+           int value);
+
+  void put(const std::string& key,
+           long long value);
+
+  void put(const std::string& key,
+           bool value);
 
   int size() const;
 

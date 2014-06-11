@@ -10,7 +10,6 @@
 
 #include "IGLTextureId.hpp"
 #include "IImage.hpp"
-#include "IFactory.hpp"
 #include "TexturesHandler.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "ShortBufferBuilder.hpp"
@@ -21,6 +20,7 @@
 #include "IDownloader.hpp"
 #include "IImageDownloadListener.hpp"
 #include "Color.hpp"
+#include "SimpleTextureMapping.hpp"
 
 const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
   if (_textureImage == NULL) {
@@ -28,15 +28,15 @@ const TextureIDReference* QuadShape::getTextureId(const G3MRenderContext* rc) {
   }
 
   const TextureIDReference* texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                       GLFormat::rgba(),
-                                                                       _textureURL.getPath(),
-                                                                       false);
+                                                                                    GLFormat::rgba(),
+                                                                                    _textureURL._path,
+                                                                                    false);
 
-  rc->getFactory()->deleteImage(_textureImage);
+  delete _textureImage;
   _textureImage = NULL;
 
   if (texId == NULL) {
-    rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
+    rc->getLogger()->logError("Can't load texture %s", _textureURL._path.c_str());
   }
 
   return texId;
@@ -93,7 +93,7 @@ QuadShape::~QuadShape() {
 Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
   if (!_textureRequested) {
     _textureRequested = true;
-    if (_textureURL.getPath().length() != 0) {
+    if (_textureURL._path.length() != 0) {
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),
@@ -167,6 +167,6 @@ Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
                                                     texCoords.create(),
                                                     true,
                                                     true);
-
+  
   return new TexturedMesh(im, true, texMap, true, true);
 }

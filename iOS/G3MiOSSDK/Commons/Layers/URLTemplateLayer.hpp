@@ -9,12 +9,15 @@
 #ifndef __G3MiOSSDK__URLTemplateLayer__
 #define __G3MiOSSDK__URLTemplateLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 
-class URLTemplateLayer : public Layer {
+#include "Sector.hpp"
+class IStringUtils;
+
+
+class URLTemplateLayer : public RasterLayer {
 private:
   const std::string _urlTemplate;
-  const Sector      _sector;
   const bool        _isTransparent;
 
 #ifdef C_CODE
@@ -26,43 +29,55 @@ private:
   private IStringUtils _su;
 #endif
 
-  URLTemplateLayer(const std::string&                urlTemplate,
-                   const Sector&                     sector,
-                   bool                              isTransparent,
-                   const TimeInterval&               timeToCache,
-                   bool                              readExpired,
-                   LayerCondition*                   condition,
-                   const LayerTilesRenderParameters* parameters);
-
-  const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
-                            const Tile* tile,
-                            const Sector& sector) const;
+  const Sector _dataSector;
 
 protected:
   std::string getLayerType() const {
     return "URLTemplate";
   }
 
+  virtual const std::string getPath(const LayerTilesRenderParameters* layerTilesRenderParameters,
+                                    const Tile* tile,
+                                    const Sector& sector) const;
+
   bool rawIsEquals(const Layer* that) const;
 
-public:
-  static URLTemplateLayer* newMercator(const std::string&  urlTemplate,
-                                       const Sector&       sector,
-                                       bool                isTransparent,
-                                       const int           firstLevel,
-                                       const int           maxLevel,
-                                       const TimeInterval& timeToCache,
-                                       bool                readExpired = true,
-                                       LayerCondition*     condition = NULL);
+  const TileImageContribution* rawContribution(const Tile* tile) const;
 
-  static URLTemplateLayer* newWGS84(const std::string&  urlTemplate,
-                                    const Sector&       sector,
-                                    bool                isTransparent,
-                                    const int           firstLevel,
-                                    const int           maxLevel,
-                                    const TimeInterval& timeToCache,
-                                    bool                readExpired = true,
-                                    LayerCondition*     condition = NULL);
+  const URL createURL(const Tile* tile) const;
+
+public:
+  static URLTemplateLayer* newMercator(const std::string&    urlTemplate,
+                                       const Sector&         dataSector,
+                                       const bool            isTransparent,
+                                       const int             firstLevel,
+                                       const int             maxLevel,
+                                       const TimeInterval&   timeToCache,
+                                       const bool            readExpired    = true,
+                                       const float           transparency   = 1,
+                                       const LayerCondition* condition      = NULL,
+                                       const std::string&    disclaimerInfo = "");
+
+  static URLTemplateLayer* newWGS84(const std::string&    urlTemplate,
+                                    const Sector&         dataSector,
+                                    const bool            isTransparent,
+                                    const int             firstLevel,
+                                    const int             maxLevel,
+                                    const TimeInterval&   timeToCache,
+                                    const bool            readExpired    = true,
+                                    const LayerCondition* condition      = NULL,
+                                    const float           transparency   = 1,
+                                    const std::string&    disclaimerInfo = "");
+
+  URLTemplateLayer(const std::string&                urlTemplate,
+                   const Sector&                     dataSector,
+                   const bool                        isTransparent,
+                   const TimeInterval&               timeToCache,
+                   const bool                        readExpired,
+                   const LayerCondition*             condition,
+                   const LayerTilesRenderParameters* parameters,
+                   float                             transparency   = 1,
+                   const std::string&                disclaimerInfo = "");
 
   const std::string description() const;
 
@@ -76,6 +91,11 @@ public:
                                                 const Tile* tile) const;
   
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return _dataSector;
+  }
+
 };
 
 #endif

@@ -1,13 +1,13 @@
 //
-//  Attribute.h
+//  Attribute.hpp
 //  G3MiOSSDK
 //
 //  Created by Jose Miguel SN on 27/03/13.
 //
 //
 
-#ifndef G3MiOSSDK_Attribute_h
-#define G3MiOSSDK_Attribute_h
+#ifndef G3MiOSSDK_Attribute
+#define G3MiOSSDK_Attribute
 
 
 #include "INativeGL.hpp"
@@ -69,6 +69,12 @@ public:
   virtual void setAttribute(GL* gl, const int id) const = 0;
   virtual bool isEquals(const GPUAttributeValue* v) const = 0;
   virtual std::string description() const = 0;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
@@ -93,7 +99,7 @@ public:
   const GPUAttributeKey _key;
 
   virtual ~GPUAttribute() {
-    if (_value != NULL){
+    if (_value != NULL) {
       _value->_release();
     }
 

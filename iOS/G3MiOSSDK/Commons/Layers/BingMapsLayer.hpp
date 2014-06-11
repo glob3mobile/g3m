@@ -9,11 +9,12 @@
 #ifndef __G3MiOSSDK__BingMapsLayer__
 #define __G3MiOSSDK__BingMapsLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
+class IByteBuffer;
+
 
 class BingMapType {
 public:
-
   static std::string Aerial() {
     return "Aerial";
   }
@@ -33,13 +34,13 @@ public:
   static std::string CollinsBart() {
     return "CollinsBart";
   }
-
 };
 
 
-class BingMapsLayer : public Layer {
+class BingMapsLayer : public RasterLayer {
 private:
   const std::string _imagerySet;
+  const std::string _culture;
   const std::string _key;
 
   const int _initialLevel;
@@ -79,18 +80,34 @@ protected:
 
   bool rawIsEquals(const Layer* that) const;
 
+  const TileImageContribution* rawContribution(const Tile* tile) const;
+
+  const URL createURL(const Tile* tile) const;
+
 public:
 
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http://msdn.microsoft.com/en-us/library/gg650598.aspx
    */
-  BingMapsLayer(const std::string& imagerySet,
-                const std::string& key,
-                const TimeInterval& timeToCache,
-                bool readExpired = true,
-                int initialLevel = 2,
-                LayerCondition* condition = NULL);
+  BingMapsLayer(const std::string&    imagerySet,
+                const std::string&    key,
+                const TimeInterval&   timeToCache,
+                const bool            readExpired    = true,
+                const int             initialLevel   = 2,
+                const float           transparency   = 1,
+                const LayerCondition* condition      = NULL,
+                const std::string&    disclaimerInfo = "");
+
+  BingMapsLayer(const std::string&    imagerySet,
+                const std::string&    culture,
+                const std::string&    key,
+                const TimeInterval&   timeToCache,
+                const bool            readExpired    = true,
+                const int             initialLevel   = 2,
+                const float           transparency   = 1,
+                const LayerCondition* condition      = NULL,
+                const std::string&    disclaimerInfo = "");
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;
@@ -107,10 +124,21 @@ public:
   void onDownloadErrorMetadata();
 
   const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   BingMapsLayer* copy() const;
-  
+
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return Sector::fullSphere();
+  }
+  
 };
 
 #endif

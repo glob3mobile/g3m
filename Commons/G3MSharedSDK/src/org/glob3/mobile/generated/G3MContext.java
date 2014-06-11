@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  InitializationContext.cpp
+//  Context.cpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  InitializationContext.h
+//  Context.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
@@ -41,10 +41,10 @@ public class G3MContext
   protected final IFactory _factory;
   protected final IStringUtils _stringUtils;
   protected final IThreadUtils _threadUtils;
-  protected ILogger _logger;
+  protected final ILogger _logger;
   protected final IMathUtils _mathUtils;
   protected final IJSONParser _jsonParser;
-  protected Planet _planet;
+  protected final Planet _planet;
   protected IDownloader _downloader;
   protected EffectsScheduler _effectsScheduler;
   protected IStorage _storage;

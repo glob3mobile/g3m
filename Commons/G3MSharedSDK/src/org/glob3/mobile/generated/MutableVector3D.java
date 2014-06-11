@@ -101,6 +101,11 @@ public class MutableVector3D
     return new MutableVector3D(_x - v._x, _y - v._y, _z - v._z);
   }
 
+  public final Vector3D sub(Vector3D v)
+  {
+    return new Vector3D(_x - v._x, _y - v._y, _z - v._z);
+  }
+
   public final MutableVector3D times(MutableVector3D v)
   {
     return new MutableVector3D(_x * v._x, _y * v._y, _z * v._z);

@@ -10,7 +10,7 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SingleBillElevationDataProvider;
+import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Vector2I;
@@ -35,15 +35,15 @@ public class ScenarioTerrainActivity
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_scenario_terrain);
 
-      final float _VerticalExaggeration = 2f;
-      final double DELTA_HEIGHT = -700.905;
+      final float verticalExaggeration = 2f;
+      final double deltaHeight = -700.905;
       // final double DELTA_HEIGHT = 0;
 
 
       final LayerSet layerSet = new LayerSet();
 
 
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
+      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 11);
       layerSet.addLayer(mboxTerrainLayer);
 
 
@@ -66,27 +66,28 @@ public class ScenarioTerrainActivity
 
       // NROWS          1335
       // NCOLS          2516
-      final ElevationDataProvider dem = new SingleBillElevationDataProvider(new URL("file:///0576.bil", false), demSector,
-               new Vector2I(2516, 1335), DELTA_HEIGHT);
+      final ElevationDataProvider elevationDataProvider = new SingleBilElevationDataProvider(new URL("file:///0576.bil", false),
+               demSector, new Vector2I(2516, 1335), deltaHeight);
 
-      builder.getPlanetRendererBuilder().setElevationDataProvider(dem);
-      builder.getPlanetRendererBuilder().setVerticalExaggeration(_VerticalExaggeration);
+      builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+      builder.getPlanetRendererBuilder().setVerticalExaggeration(verticalExaggeration);
 
       //The sector is shrinked to adjust the projection of
-      builder.setShownSector(demSector.shrinkedByPercent(0.1f));
+      builder.setShownSector(demSector.shrinkedByPercent(0.2f));
 
       _g3mWidget = builder.createWidget();
 
       // set the initial camera position to be into the valley
       final Geodetic3D position = Geodetic3D.fromDegrees(40.13966959177994, -5.89060128999895, 4694.511700438305);
-      final Angle heading = Angle.fromDegrees(51.146970);
-      final Angle pitch = Angle.fromDegrees(69.137225);
+      final Angle heading = Angle.fromDegrees(-51.146970);
+      final Angle pitch = Angle.fromDegrees(-20.8627755);
       _g3mWidget.setCameraPosition(position);
       _g3mWidget.setCameraHeading(heading);
       _g3mWidget.setCameraPitch(pitch);
 
       _placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       _placeHolder.addView(_g3mWidget);
+
    }
 
 

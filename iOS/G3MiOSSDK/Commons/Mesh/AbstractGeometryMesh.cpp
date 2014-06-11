@@ -134,9 +134,10 @@ void AbstractGeometryMesh::createGLState() {
                                                0,            //Stride 0
                                                true,         //Depth test
                                                false, 0,
-                                               false, (float)0.0, (float)0.0,
+                                               false, 0, 0,
                                                _lineWidth,
-                                               true, _pointSize), false);
+                                               true, _pointSize),
+                         false);
 
   if (_normals != NULL) {
     _glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),
@@ -144,7 +145,8 @@ void AbstractGeometryMesh::createGLState() {
   }
 
   if (_translationMatrix != NULL) {
-    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()), false);
+    _glState->addGLFeature(new ModelTransformGLFeature(_translationMatrix->asMatrix44D()),
+                           false);
   }
 }
 
@@ -154,16 +156,16 @@ void AbstractGeometryMesh::rawRender(const G3MRenderContext* rc,
   rawRender(rc);
 
   //RENDERING NORMALS
-  if (_normals != NULL){
-    if (_showNormals){
-      if (_normalsMesh == NULL){
+  if (_normals != NULL) {
+    if (_showNormals) {
+      if (_normalsMesh == NULL) {
         _normalsMesh = createNormalsMesh();
       }
-      if (_normalsMesh != NULL){
+      if (_normalsMesh != NULL) {
         _normalsMesh->render(rc, parentGLState);
       }
     } else{
-      if (_normalsMesh != NULL){
+      if (_normalsMesh != NULL) {
         delete _normalsMesh;
         _normalsMesh = NULL;
       }
@@ -195,7 +197,7 @@ Mesh* AbstractGeometryMesh::createNormalsMesh() const{
 
   const int size = _vertices->size();
 
-#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
+//#warning FOR TILES NOT TAKING ALL VERTICES [Apparently there's not enough graphical memory]
 
   for (int i = 0; i < size; i+=6) {
     Vector3D v(_vertices->get(i), _vertices->get(i+1), _vertices->get(i+2));

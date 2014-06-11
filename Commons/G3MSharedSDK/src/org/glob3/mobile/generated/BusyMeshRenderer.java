@@ -21,8 +21,7 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
+public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
@@ -75,9 +74,9 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   
   //  const float r2=50;
     final Camera camera = rc.getCurrentCamera();
-    final int width = camera.getWidth();
-    final int height = camera.getHeight();
-    final int minSize = (width < height) ? width : height;
+    final int viewPortWidth = camera.getViewPortWidth();
+    final int viewPortHeight = camera.getViewPortHeight();
+    final int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
     final float outerRadius = minSize / 15.0f;
   
     final IMathUtils mu = IMathUtils.instance();
@@ -145,11 +144,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 
   public final void initialize(G3MContext context)
   {
-  }
 
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return RenderState.ready();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -164,11 +159,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
     {
       mesh.render(rc, _glState);
     }
-  }
-
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -190,8 +180,6 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
        _backgroundColor.dispose();
 
     _glState._release();
-
-  super.dispose();
   }
 
   public final void incDegrees(double value)

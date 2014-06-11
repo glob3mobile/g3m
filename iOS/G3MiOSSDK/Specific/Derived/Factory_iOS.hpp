@@ -1,13 +1,13 @@
 //
-//  Factory_iOS.h
+//  Factory_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Factory_iOS_h
-#define G3MiOSSDK_Factory_iOS_h
+#ifndef G3MiOSSDK_Factory_iOS
+#define G3MiOSSDK_Factory_iOS
 
 #include "IFactory.hpp"
 
@@ -35,13 +35,13 @@ public:
     return new Timer_iOS();
   }
 
-  void deleteTimer(const ITimer* timer) const {
-    delete timer;
-  }
-
-  void deleteImage(const IImage* image) const {
-    delete image;
-  }
+//  void deleteTimer(const ITimer* timer) const {
+//    delete timer;
+//  }
+//
+//  void deleteImage(const IImage* image) const {
+//    delete image;
+//  }
 
   IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
     return new ByteBuffer_iOS(data, length);

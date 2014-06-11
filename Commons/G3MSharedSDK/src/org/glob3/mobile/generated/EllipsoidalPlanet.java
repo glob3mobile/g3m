@@ -631,30 +631,16 @@ public class EllipsoidalPlanet extends Planet
 
   public final void applyCameraConstrainers(Camera previousCamera, Camera nextCamera)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning __ASK_JM
-  
-    //  Vector3D pos = nextCamera->getCartesianPosition();
-    //  Vector3D origin = _origin.asVector3D();
-    //  double maxDist = _ellipsoid.getRadii().maxAxis() * 5;
-  
-    /*
-     // this constrainst is not right (probably confusing origin with (0,0,0))
-     if (pos.distanceTo(origin) > maxDist) {
-     nextCamera->copyFromForcingMatrixCreation(*previousCamera);
-     //    Vector3D pos2 = nextCamera->getCartesianPosition();
-     //    printf("TOO FAR %f -> pos2: %f\n", pos.distanceTo(origin) / maxDist, pos2.distanceTo(origin) / maxDist);
-     }*/
   
   }
 
-  public final Geodetic3D getDefaultCameraPosition(Sector shownSector)
+  public final Geodetic3D getDefaultCameraPosition(Sector rendereSector)
   {
-    final Vector3D asw = toCartesian(shownSector.getSW());
-    final Vector3D ane = toCartesian(shownSector.getNE());
+    final Vector3D asw = toCartesian(rendereSector.getSW());
+    final Vector3D ane = toCartesian(rendereSector.getNE());
     final double height = asw.sub(ane).length() * 1.9;
 
-    return new Geodetic3D(shownSector._center, height);
+    return new Geodetic3D(rendereSector._center, height);
   }
 
 

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Mark_hpp
-#define G3MiOSSDK_Mark_hpp
+#ifndef G3MiOSSDK_Mark
+#define G3MiOSSDK_Mark
 
 #include <string>
 #include "Geodetic3D.hpp"
@@ -130,12 +130,10 @@ private:
 
   bool    _renderedMark;
 
-  static IFloatBuffer* _billboardTexCoord;
 
   GLState* _glState;
-  void createGLState(const Planet* planet);
-
-  static IFloatBuffer* getBillboardTexCoords();
+  void createGLState(const Planet* planet,
+                     IFloatBuffer* billboardTexCoords);
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _currentSurfaceElevation;
@@ -148,7 +146,7 @@ public:
    * Creates a marker with icon and label
    */
   Mark(const std::string& label,
-       const URL          iconURL,
+       const URL&         iconURL,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
@@ -180,7 +178,7 @@ public:
   /**
    * Creates a marker just with icon, without label
    */
-  Mark(const URL          iconURL,
+  Mark(const URL&         iconURL,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,
@@ -263,7 +261,8 @@ public:
               double cameraHeight,
               const GLState* parentGLState,
               const Planet* planet,
-              GL* gl);
+              GL* gl,
+              IFloatBuffer* billboardTexCoords);
 
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration
@@ -272,6 +271,9 @@ public:
   void elevationChanged(const Sector& position,
                         const ElevationData* rawElevationData, //Without considering vertical exaggeration
                         double verticalExaggeration) {}
+
+  void setPosition(const Geodetic3D& position);
+
 };
 
 #endif

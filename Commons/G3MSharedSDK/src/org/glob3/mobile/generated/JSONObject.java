@@ -118,6 +118,36 @@ public class JSONObject extends JSONBaseObject
     _entries.put(key, object);
   }
 
+  public final void put(String key, String value)
+  {
+    _entries.put(key, new JSONString(value));
+  }
+
+  public final void put(String key, double value)
+  {
+    _entries.put(key, new JSONDouble(value));
+  }
+
+  public final void put(String key, float value)
+  {
+    _entries.put(key, new JSONFloat(value));
+  }
+
+  public final void put(String key, int value)
+  {
+    _entries.put(key, new JSONInteger(value));
+  }
+
+  public final void put(String key, long value)
+  {
+    _entries.put(key, new JSONLong(value));
+  }
+
+  public final void put(String key, boolean value)
+  {
+    _entries.put(key, new JSONBoolean(value));
+  }
+
   public final int size()
   {
     return _entries.size();

@@ -10,7 +10,8 @@
 #include "OrientedBox.hpp"
 #include "Camera.hpp"
 #include "GEO2DLineRasterStyle.hpp"
-#include "GEORasterLineSymbol.hpp"
+//#include "GEORasterLineSymbol.hpp"
+#include "GEOLineRasterSymbol.hpp"
 
 
 RasterLineShape::~RasterLineShape() {
@@ -56,7 +57,7 @@ OrientedBox* RasterLineShape::computeOrientedBox(const Planet* planet,
   double distanceToCamera = camera->getCartesianPosition().distanceTo(*_cartesianStartPos);
   FrustumData frustum = camera->getFrustumData();
   const int pixelWidth = 10;
-  double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getHeight() / frustum._znear;
+  double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getViewPortHeight() / frustum._znear;
   const Vector3D upper = Vector3D(scale, scale, 1);
   const Vector3D lower = Vector3D(-scale, -scale, 0);
   return new OrientedBox(lower, upper, *getTransformMatrix(planet));
@@ -93,5 +94,10 @@ GEORasterSymbol* RasterLineShape::createRasterSymbolIfNeeded() const
   coordinates.push_back(_geodeticEndPos);
   float dashLengths[] = {};
   GEO2DLineRasterStyle lineStyle(*_color, _width, CAP_ROUND, JOIN_ROUND, 1, dashLengths, 0, 0);
-  return new GEORasterLineSymbol(&coordinates, lineStyle);
+  //return new GEORasterLineSymbol(&coordinates, lineStyle);
+  
+  const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(&coordinates);
+  return new GEOLineRasterSymbol(coordinatesData, lineStyle);
 }
+  
+  

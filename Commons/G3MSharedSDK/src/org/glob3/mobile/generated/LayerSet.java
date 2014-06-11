@@ -17,26 +17,38 @@ package org.glob3.mobile.generated;
 
 
 
-//class Petition;
-//class Vector2I;
-//class LayerTilesRenderParameters;
-
+//class Layer;
 //class ChangedListener;
+//class G3MContext;
+//class TileImageProvider;
+//class G3MRenderContext;
+//class LayerTilesRenderParameters;
+//class Tile;
+//class G3MEventContext;
+//class Geodetic3D;
+//class RenderState;
+//class Petition;
 
-public class LayerSet
+
+public class LayerSet implements ChangedInfoListener
 {
   private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
 
   private ChangedListener _listener;
 
-//  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
+  private ChangedInfoListener _changedInfoListener;
+
+  //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
 
   private void layersChanged()
   {
-  //  delete _layerTilesRenderParameters;
-  //  _layerTilesRenderParameters = NULL;
-  
+    if (_tileImageProvider != null)
+    {
+      _tileImageProvider._release();
+      _tileImageProvider = null;
+    }
     if (_listener != null)
     {
       _listener.changed();
@@ -45,22 +57,60 @@ public class LayerSet
 
   private G3MContext _context;
 
+  private TileImageProvider _tileImageProvider;
+
+  private TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
+  {
+    TileImageProvider singleTileImageProvider = null;
+    CompositeTileImageProvider compositeTileImageProvider = null;
+  
+    final int layersSize = _layers.size();
+    for (int i = 0; i < layersSize; i++)
+    {
+      Layer layer = _layers.get(i);
+      if (layer.isEnable())
+      {
+        TileImageProvider layerTileImageProvider = layer.createTileImageProvider(rc, layerTilesRenderParameters);
+        if (layerTileImageProvider != null)
+        {
+          if (compositeTileImageProvider != null)
+          {
+            compositeTileImageProvider.addProvider(layerTileImageProvider);
+          }
+          else if (singleTileImageProvider == null)
+          {
+            singleTileImageProvider = layerTileImageProvider;
+          }
+          else
+          {
+            compositeTileImageProvider = new CompositeTileImageProvider();
+            compositeTileImageProvider.addProvider(singleTileImageProvider);
+            compositeTileImageProvider.addProvider(layerTileImageProvider);
+          }
+        }
+      }
+    }
+  
+    return (compositeTileImageProvider == null) ? singleTileImageProvider : compositeTileImageProvider;
+  }
+
   public LayerSet()
-//  _layerTilesRenderParameters(NULL),
+  //  _layerTilesRenderParameters(NULL),
   {
      _listener = null;
      _context = null;
-
+     _tileImageProvider = null;
+     _changedInfoListener = null;
   }
 
   public void dispose()
   {
-  //  delete _layerTilesRenderParameters;
     for (int i = 0; i < _layers.size(); i++)
     {
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
+    _tileImageProvider._release();
   }
 
   public final void removeAllLayers(boolean deleteLayers)
@@ -81,6 +131,7 @@ public class LayerSet
       _layers.clear();
   
       layersChanged();
+      changedInfo(getInfo());
     }
   }
 
@@ -95,47 +146,7 @@ public class LayerSet
     }
   
     layersChanged();
-  }
-
-  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
-  {
-    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-    final int layersSize = _layers.size();
-    for (int i = 0; i < layersSize; i++)
-    {
-      Layer layer = _layers.get(i);
-      if (layer.isAvailable(rc, tile))
-      {
-  
-        Tile petitionTile = tile;
-        final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
-        while ((petitionTile._level > maxLevel) && (petitionTile != null))
-        {
-          petitionTile = petitionTile.getParent();
-        }
-  
-        if (petitionTile == null)
-        {
-          ILogger.instance().logError("Can't find a valid tile for petitions");
-        }
-  
-        java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, layerTilesRenderParameters, petitionTile);
-  
-        final int tilePetitionsSize = tilePetitions.size();
-        for (int j = 0; j < tilePetitionsSize; j++)
-        {
-          petitions.add(tilePetitions.get(j));
-        }
-      }
-    }
-  
-    if (petitions.isEmpty())
-    {
-      rc.getLogger().logWarning("Can't create map petitions for tile %s", tile.getKey().description());
-    }
-  
-    return petitions;
+    changedInfo(layer.getInfos());
   }
 
   public final boolean onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
@@ -144,7 +155,7 @@ public class LayerSet
     for (int i = _layers.size()-1; i >= 0; i--)
     {
       Layer layer = _layers.get(i);
-      if (layer.isAvailable(ec, tile))
+      if (layer.isAvailable(tile))
       {
         LayerTouchEvent tte = new LayerTouchEvent(position, tile._sector, layer);
   
@@ -239,18 +250,6 @@ public class LayerSet
     return null;
   }
 
-  public final Layer getLayerByName(String name)
-  {
-    final int layersCount = _layers.size();
-    for (int i = 0; i < layersCount; i++)
-    {
-      if (name.equals(_layers.get(i).getName()))
-      {
-        return _layers.get(i);
-      }
-    }
-    return null;
-  }
   public final Layer getLayerByTitle(String title)
   {
     final int layersCount = _layers.size();
@@ -264,7 +263,7 @@ public class LayerSet
     return null;
   }
 
-  public final LayerTilesRenderParameters createLayerTilesRenderParameters(java.util.ArrayList<String> errors)
+  public final LayerTilesRenderParameters createLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<String> errors)
   {
     Sector topSector = null;
     int topSectorSplitsByLatitude = 0;
@@ -276,10 +275,55 @@ public class LayerSet
     int tileMeshWidth = 0;
     int tileMeshHeight = 0;
     boolean mercator = false;
+    Sector biggestDataSector = null;
   
     boolean layerSetNotReadyFlag = false;
     boolean first = true;
     final int layersCount = _layers.size();
+  
+    if (forceFirstLevelTilesRenderOnStart && layersCount > 0)
+    {
+      double biggestArea = 0;
+      for (int i = 0; i < layersCount; i++)
+      {
+        Layer layer = _layers.get(i);
+        if (layer.isEnable())
+        {
+          final double layerArea = layer.getDataSector().getAngularAreaInSquaredDegrees();
+          if (layerArea > biggestArea)
+          {
+            if (biggestDataSector != null)
+               biggestDataSector.dispose();
+            biggestDataSector = new Sector(layer.getDataSector());
+            biggestArea = layerArea;
+          }
+        }
+      }
+      if (biggestDataSector != null)
+      {
+        boolean dataSectorsInconsistency = false;
+        for (int i = 0; i < layersCount; i++)
+        {
+          Layer layer = _layers.get(i);
+          if (layer.isEnable())
+          {
+            if (!biggestDataSector.fullContains(layer.getDataSector()))
+            {
+              dataSectorsInconsistency = true;
+              break;
+            }
+          }
+        }
+        if (dataSectorsInconsistency)
+        {
+          errors.add("Inconsistency in layers data sectors");
+          return null;
+        }
+      }
+      if (biggestDataSector != null)
+         biggestDataSector.dispose();
+    }
+  
     for (int i = 0; i < layersCount; i++)
     {
       Layer layer = _layers.get(i);
@@ -406,14 +450,6 @@ public class LayerSet
     return parameters;
   }
 
-
-  //const LayerTilesRenderParameters* LayerSet::getLayerTilesRenderParameters(std::vector<std::string>& errors) const {
-  //  if (_layerTilesRenderParameters == NULL) {
-  //    _layerTilesRenderParameters = createLayerTilesRenderParameters(errors);
-  //  }
-  //  return _layerTilesRenderParameters;
-  //}
-  
   public final boolean isEquals(LayerSet that)
   {
     if (that == null)
@@ -471,6 +507,92 @@ public class LayerSet
     for (int i = 0; i < layersCount; i++)
     {
       _layers.get(i).setEnable(false);
+    }
+  }
+
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, Tile tile)
+  {
+    java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
+  
+    final int layersSize = _layers.size();
+    for (int i = 0; i < layersSize; i++)
+    {
+      Layer layer = _layers.get(i);
+      if (layer.isAvailable(tile))
+      {
+        Tile petitionTile = tile;
+        final int maxLevel = layer.getLayerTilesRenderParameters()._maxLevel;
+        while ((petitionTile._level > maxLevel) && (petitionTile != null))
+        {
+          petitionTile = petitionTile.getParent();
+        }
+  
+        if (petitionTile == null)
+        {
+          ILogger.instance().logError("Can't find a valid tile for petitions");
+        }
+  
+        java.util.ArrayList<Petition> tilePetitions = layer.createTileMapPetitions(rc, layerTilesRenderParameters, petitionTile);
+  
+        final int tilePetitionsSize = tilePetitions.size();
+        for (int j = 0; j < tilePetitionsSize; j++)
+        {
+          petitions.add(tilePetitions.get(j));
+        }
+      }
+    }
+  
+    if (petitions.isEmpty())
+    {
+      rc.getLogger().logWarning("Can't create map petitions for tile %s", tile._id);
+    }
+  
+    return petitions;
+  }
+
+  public final TileImageProvider getTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
+  {
+    if (_tileImageProvider == null)
+    {
+      _tileImageProvider = createTileImageProvider(rc, layerTilesRenderParameters);
+    }
+    return _tileImageProvider;
+  }
+
+
+  public final void setChangedInfoListener(ChangedInfoListener changedInfoListener)
+  {
+    if (_changedInfoListener != null)
+    {
+      ILogger.instance().logError("Changed Info Listener of LayerSet already set");
+      return;
+    }
+    ILogger.instance().logError("Changed Info Listener of LayerSet set ok");
+    _changedInfoListener = changedInfoListener;
+    changedInfo(getInfo());
+  }
+
+  public final java.util.ArrayList<String> getInfo()
+  {
+    _infos.clear();
+    final int layersCount = _layers.size();
+    for (int i = 0; i < layersCount; i++)
+    {
+      Layer layer = _layers.get(i);
+      if (layer.isEnable())
+      {
+        final String layerInfo = layer.getInfo();
+        _infos.add(layerInfo);
+      }
+    }
+    return _infos;
+  }
+
+  public final void changedInfo(java.util.ArrayList<String> info)
+  {
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedInfo(getInfo());
     }
   }
 

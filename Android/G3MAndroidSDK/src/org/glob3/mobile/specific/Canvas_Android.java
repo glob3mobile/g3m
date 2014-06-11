@@ -20,7 +20,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 
 
-public class Canvas_Android
+public final class Canvas_Android
          extends
             ICanvas {
 
@@ -96,12 +96,12 @@ public class Canvas_Android
 
    @Override
    public void dispose() {
-      super.dispose();
       if (_bitmap != null) {
          _bitmap.recycle();
          _bitmap = null;
       }
       _canvas = null;
+      super.dispose();
    }
 
 
@@ -342,7 +342,7 @@ public class Canvas_Android
    @Override
    protected void _setLineDash(final float[] lengths,
                                final int count,
-                               final int phase) {
+                               final float phase) {
       if ((count == 0) || (lengths.length == 0)) {
          _strokePaint.setPathEffect(null);
       }
@@ -400,6 +400,39 @@ public class Canvas_Android
    protected void _lineTo(final float x,
                           final float y) {
       _path.lineTo(x, y);
+   }
+
+
+   @Override
+   protected void _drawImage(final IImage image,
+                             final float srcLeft,
+                             final float srcTop,
+                             final float srcWidth,
+                             final float srcHeight,
+                             final float destLeft,
+                             final float destTop,
+                             final float destWidth,
+                             final float destHeight,
+                             final float transparency) {
+
+      final Bitmap bitmap = ((Image_Android) image).getBitmap();
+
+      final RectF dst = _rectF;
+      dst.set(destLeft, //
+               destTop, //
+               destLeft + destWidth, // Right
+               destTop + destHeight); // Bottom
+
+      final Rect src = _rect;
+      src.set(Math.round(srcLeft), //
+               Math.round(srcTop), //
+               Math.round(srcLeft + srcWidth), // Right
+               Math.round(srcTop + srcHeight)); // Bottom
+
+      final Paint paint = new Paint();
+      paint.setAlpha(Math.round(255 * transparency));
+
+      _canvas.drawBitmap(bitmap, src, dst, paint);
    }
 
 }

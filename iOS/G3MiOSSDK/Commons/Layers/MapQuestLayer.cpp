@@ -9,7 +9,8 @@
 #include "MapQuestLayer.hpp"
 
 #include "LayerCondition.hpp"
-
+#include "RenderState.hpp"
+#include "TimeInterval.hpp"
 
 const std::string MapQuestLayer::description() const {
   return "[MapQuestLayer]";
@@ -21,14 +22,15 @@ bool MapQuestLayer::rawIsEquals(const Layer* that) const {
 }
 
 MapQuestLayer* MapQuestLayer::copy() const {
-  return new MapQuestLayer(_name,
-                           _domain,
+  return new MapQuestLayer(_domain,
                            _subdomains,
                            _initialLevel,
                            _maxLevel,
-                           TimeInterval::fromMilliseconds(_timeToCacheMS),
+                           _timeToCache,
                            _readExpired,
-                           (_condition == NULL) ? NULL : _condition->copy());
+                           _transparency,
+                           (_condition == NULL) ? NULL : _condition->copy(),
+                           _disclaimerInfo);
 }
 
 RenderState MapQuestLayer::getRenderState() {

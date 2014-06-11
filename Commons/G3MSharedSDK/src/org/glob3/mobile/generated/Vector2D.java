@@ -151,5 +151,9 @@ public class Vector2D
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

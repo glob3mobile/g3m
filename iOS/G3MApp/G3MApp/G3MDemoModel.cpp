@@ -18,7 +18,7 @@
 #include <G3MiOSSDK/ErrorHandling.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBillElevationDataProvider.hpp>
+#include <G3MiOSSDK/SingleBilElevationDataProvider.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -55,7 +55,7 @@ _context(NULL)
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
   if (_context != NULL) {
-    ERROR("G3MContext already initialized");
+    THROW_EXCEPTION("G3MContext already initialized");
   }
   _context = context;
 
@@ -64,7 +64,7 @@ void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
 
 void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
   if (_g3mWidget != NULL) {
-    ERROR("G3MWidget already initialized");
+    THROW_EXCEPTION("G3MWidget already initialized");
   }
   _g3mWidget = g3mWidget;
 }
@@ -76,7 +76,7 @@ void G3MDemoModel::reset() {
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(1);
 
-  //  ElevationDataProvider* elevationDataProvider = new SingleBillElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+  //  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
   //                                                                                     Sector::fullSphere(),
   //                                                                                     Vector2I(2048, 1024));
   ElevationDataProvider* elevationDataProvider = NULL;
@@ -84,7 +84,7 @@ void G3MDemoModel::reset() {
 
   _g3mWidget->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
 
-  _g3mWidget->setShownSector( Sector::fullSphere() );
+  _g3mWidget->setRenderedSector( Sector::fullSphere() );
 
   getMarksRenderer()->removeAllMarks();
   getMeshRenderer()->clearMeshes();
@@ -138,7 +138,7 @@ void G3MDemoModel::selectScene(const std::string& sceneName) {
 
 void G3MDemoModel::selectScene(G3MDemoScene* scene) {
   if (_context == NULL) {
-    ERROR("G3MContext not initialized");
+    THROW_EXCEPTION("G3MContext not initialized");
   }
 
   if ((scene != NULL) &&

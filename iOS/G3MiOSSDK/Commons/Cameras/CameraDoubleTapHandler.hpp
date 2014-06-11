@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CameraDoubleTapHandler_hpp
-#define G3MiOSSDK_CameraDoubleTapHandler_hpp
+#ifndef G3MiOSSDK_CameraDoubleTapHandler
+#define G3MiOSSDK_CameraDoubleTapHandler
 
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"

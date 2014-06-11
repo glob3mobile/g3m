@@ -30,7 +30,7 @@ NSString* SQLiteStorage_iOS::getDBPath() const {
 bool SQLiteStorage_iOS::addSkipBackupAttributeToItemAtPath(NSString* path) {
   assert([[NSFileManager defaultManager] fileExistsAtPath: path]);
 
-  NSURL* url = [NSURL URLWithString:path];
+  NSURL* url = [NSURL URLWithString: [NSString stringWithFormat:@"file://%@", path]];
 
   NSError *error = nil;
   BOOL success = [url setResourceValue: [NSNumber numberWithBool: YES]
@@ -190,7 +190,7 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
                                    bool saveInBackground) {
   const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) buffer;
 
-  NSString* name     = [NSString stringWithCppString: url.getPath()];
+  NSString* name     = [NSString stringWithCppString: url._path];
   NSData*   contents = [NSData dataWithBytes: buffer_iOS->getPointer()
                                       length: buffer_iOS->size()];
 
@@ -210,7 +210,7 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   const Image_iOS* image_iOS = (const Image_iOS*) image;
   UIImage* uiImage = image_iOS->getUIImage();
 
-  NSString* name = [NSString stringWithCppString: url.getPath()];
+  NSString* name = [NSString stringWithCppString: url._path];
 
   NSData* contents = image_iOS->getSourceBuffer();
   if (contents == NULL) {
@@ -239,7 +239,7 @@ IImageResult SQLiteStorage_iOS::readImage(const URL& url,
 
     //  double parsedTime = 0;
 
-    NSString* name = [NSString stringWithCppString: url.getPath()];
+    NSString* name = [NSString stringWithCppString: url._path];
     SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
     if ([rs next]) {
       NSData* data = [rs dataColumnByIndex: 0];
@@ -280,7 +280,7 @@ IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
     IByteBuffer* buffer = NULL;
     bool expired = false;
 
-    NSString* name = [NSString stringWithCppString: url.getPath()];
+    NSString* name = [NSString stringWithCppString: url._path];
     SQResultSet* rs = [_readDB executeQuery:@"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
     if ([rs next]) {
       NSData* nsData = [rs dataColumnByIndex: 0];

@@ -9,7 +9,10 @@
 #include "GLState.hpp"
 #include "GLFeature.hpp"
 
+#include <vector>
+
 GLState::~GLState() {
+  delete _features;
   delete _accumulatedFeatures;
 
   delete _valuesSet;
@@ -19,7 +22,7 @@ GLState::~GLState() {
     _parentGLState->_release();
   }
 
-  if (_linkedProgram != NULL){
+  if (_linkedProgram != NULL) {
     _linkedProgram->removeReference();
   }
 }
@@ -31,7 +34,7 @@ void GLState::hasChangedStructure() const {
   delete _globalState;
   _globalState = NULL;
 
-  if (_linkedProgram != NULL){
+  if (_linkedProgram != NULL) {
     _linkedProgram->removeReference();
     _linkedProgram = NULL;
   }
@@ -40,7 +43,7 @@ void GLState::hasChangedStructure() const {
   _accumulatedFeatures = NULL;
 }
 
-GLFeatureSet* GLState::getAccumulatedFeatures() const{
+GLFeatureSet* GLState::getAccumulatedFeatures() const {
   if (_accumulatedFeatures == NULL) {
 
     _accumulatedFeatures = new GLFeatureSet();
@@ -51,14 +54,15 @@ GLFeatureSet* GLState::getAccumulatedFeatures() const{
         _accumulatedFeatures->add(parents);
       }
     }
-    _accumulatedFeatures->add(&_features);
+    _accumulatedFeatures->add(_features);
 
   }
   return _accumulatedFeatures;
 }
 
-void GLState::addGLFeature(GLFeature* f, bool mustRetain) {
-  _features.add(f);
+void GLState::addGLFeature(GLFeature* f,
+                           bool mustRetain) {
+  _features->add(f);
 
   if (!mustRetain) {
     f->_release();
@@ -67,7 +71,7 @@ void GLState::addGLFeature(GLFeature* f, bool mustRetain) {
   hasChangedStructure();
 }
 
-void GLState::setParent(const GLState* parent) const{
+void GLState::setParent(const GLState* parent) const {
 
   if (parent == NULL) {
     if (parent != _parentGLState) {
@@ -95,7 +99,7 @@ void GLState::setParent(const GLState* parent) const{
   }
 }
 
-void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
+void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const {
 
 
   if (_valuesSet == NULL && _globalState == NULL) {
@@ -135,27 +139,39 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const{
 }
 
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g) {
-  _features.clearFeatures(g);
+  _features->clearFeatures(g);
   hasChangedStructure();
 }
 
 void GLState::clearAllGLFeatures() {
-  _features.clearFeatures();
+  _features->clearFeatures();
   hasChangedStructure();
 }
 
-int GLState::getNumberOfGLFeatures() const{
-  return _features.size();
+int GLState::getNumberOfGLFeatures() const {
+  return _features->size();
 }
 
-GLFeature* GLState::getGLFeature(GLFeatureID id) const{
-  const int size = _features.size();
+GLFeature* GLState::getGLFeature(GLFeatureID id) const {
+  const int size = _features->size();
   for (int i = 0; i < size; i++) {
-    GLFeature* f = _features.get(i);
+    GLFeature* f = _features->get(i);
     if (f->_id == id) {
       return f;
     }
   }
 
   return NULL;
+}
+
+GLFeatureSet* GLState::getGLFeatures(GLFeatureID id) const {
+  GLFeatureSet* features = new GLFeatureSet();
+  const int size = _features->size();
+  for (int i = 0; i < size; i++) {
+    GLFeature* f = _features->get(i);
+    if (f->_id == id) {
+      features->add(f);
+    }
+  }
+  return features;
 }

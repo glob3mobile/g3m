@@ -6,11 +6,10 @@
 //
 //
 
-#ifndef G3MiOSSDK_MultiLayerTileTexturizer_hpp
-#define G3MiOSSDK_MultiLayerTileTexturizer_hpp
+#ifndef G3MiOSSDK_MultiLayerTileTexturizer
+#define G3MiOSSDK_MultiLayerTileTexturizer
 
 #include "TileTexturizer.hpp"
-#include "TileKey.hpp"
 #include "Geodetic3D.hpp"
 
 class IGLTextureId;
@@ -42,12 +41,13 @@ public:
                   TileRasterizer* tileRasterizer,
                   const LayerTilesRenderParameters* layerTilesRenderParameters,
                   const LayerSet* layerSet,
-                  bool isForcedFullRender,
-                  long long texturePriority,
+                  bool forceFullRender,
+                  long long tileDownloadPriority,
                   Tile* tile,
                   Mesh* tessellatorMesh,
-                  Mesh* previousMesh);
-  
+                  Mesh* previousMesh,
+                  bool logTilesPetitions);
+
   void tileToBeDeleted(Tile* tile,
                        Mesh* mesh);
   

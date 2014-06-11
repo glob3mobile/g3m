@@ -8,7 +8,6 @@
 
 #include "Image_iOS.hpp"
 
-#include "IFactory.hpp"
 #include "IStringBuilder.hpp"
 #include "IImageListener.hpp"
 #include "RectangleI.hpp"

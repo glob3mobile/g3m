@@ -9,11 +9,13 @@
 #include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
 #include "MultiLayerTileTexturizer.hpp"
+//#include "DefaultTileTexturizer.hpp"
 #include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
 #include "TileRasterizer.hpp"
+#include "TileRenderingListener.hpp"
 
 #include "CompositeTileRasterizer.hpp"
 
@@ -30,11 +32,14 @@ _texturizer(NULL),
 _tileTessellator(NULL),
 _visibleSectorListeners(NULL),
 _stabilizationMilliSeconds(NULL),
-_texturePriority(DownloadPriority::HIGHER),
+_tileDownloadPriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
-_renderTileMeshes(true)
+_renderTileMeshes(true),
+_logTilesPetitions(false),
+_tileRenderingListener(NULL),
+_changedInfoListener(NULL)
 {
 }
 
@@ -53,6 +58,8 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _elevationDataProvider;
 
   delete _renderedSector;
+
+  delete _tileRenderingListener;
 }
 
 /**
@@ -94,6 +101,8 @@ TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
 TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
     _texturizer = new MultiLayerTileTexturizer();
+//#warning Diego at work!
+//    _texturizer = new DefaultTileTexturizer();
   }
 
   return _texturizer;
@@ -132,6 +141,15 @@ TilesRenderParameters* PlanetRendererBuilder::getParameters() {
  */
 bool PlanetRendererBuilder::getShowStatistics() {
   return _showStatistics;
+}
+
+bool PlanetRendererBuilder::getLogTilesPetitions() {
+  return _logTilesPetitions;
+}
+
+
+void PlanetRendererBuilder::setLogTilesPetitions(bool logTilesPetitions) {
+  _logTilesPetitions = logTilesPetitions;
 }
 
 /**
@@ -201,12 +219,12 @@ std::vector<long long>* PlanetRendererBuilder::getStabilizationMilliSeconds() {
 }
 
 /**
- * Returns the _texturePriority.
+ * Returns the _tileDownloadPriority.
  *
- * @return _texturePriority: long long
+ * @return _tileDownloadPriority: long long
  */
-long long PlanetRendererBuilder::getTexturePriority() {
-  return _texturePriority;
+long long PlanetRendererBuilder::getTileDownloadPriority() {
+  return _tileDownloadPriority;
 }
 
 void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
@@ -253,7 +271,7 @@ void PlanetRendererBuilder::setRenderDebug(const bool renderDebug) {
   _renderDebug = renderDebug;
 }
 
-void PlanetRendererBuilder::setUseTilesSplitBuget(const bool useTilesSplitBudget) {
+void PlanetRendererBuilder::setUseTilesSplitBudget(const bool useTilesSplitBudget) {
   _useTilesSplitBudget = useTilesSplitBudget;
 }
 
@@ -271,8 +289,8 @@ void PlanetRendererBuilder::addVisibleSectorListener(VisibleSectorListener* list
   getStabilizationMilliSeconds()->push_back(stabilizationInterval._milliseconds);
 }
 
-void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
-  _texturePriority = texturePriority;
+void PlanetRendererBuilder::setTileDownloadPriority(long long tileDownloadPriority) {
+  _tileDownloadPriority = tileDownloadPriority;
 }
 
 void PlanetRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
@@ -302,6 +320,31 @@ float PlanetRendererBuilder::getVerticalExaggeration() {
   return _verticalExaggeration;
 }
 
+void PlanetRendererBuilder::setTileRenderingListener(TileRenderingListener* tileRenderingListener) {
+  if (_tileRenderingListener != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: TileRenderingListener already set");
+    return;
+  }
+
+  _tileRenderingListener = tileRenderingListener;
+}
+
+ChangedRendererInfoListener* PlanetRendererBuilder::getChangedRendererInfoListener() {
+  return _changedInfoListener;
+}
+
+void PlanetRendererBuilder::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener) {
+  if (_changedInfoListener != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+  } else {
+    _changedInfoListener = changedInfoListener;
+    ILogger::instance()->logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
+  }
+}
+
+TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
+  return _tileRenderingListener;
+}
 
 PlanetRenderer* PlanetRendererBuilder::create() {
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
@@ -313,9 +356,12 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getLayerSet(),
                                                       getParameters(),
                                                       getShowStatistics(),
-                                                      getTexturePriority(),
+                                                      getTileDownloadPriority(),
                                                       getRenderedSector(),
-                                                      getRenderTileMeshes());
+                                                      getRenderTileMeshes(),
+                                                      getLogTilesPetitions(),
+                                                      getTileRenderingListener(),
+                                                      getChangedRendererInfoListener());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -335,6 +381,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   delete _renderedSector;
   _renderedSector = NULL;
+
+  _tileRenderingListener = NULL;
 
   _tileRasterizers.clear();
 
@@ -358,7 +406,7 @@ bool PlanetRendererBuilder::getRenderTileMeshes() {
 }
 
 TileTessellator* PlanetRendererBuilder::createTileTessellator() {
-#warning Testing Terrain Normals
+//#warning Testing Terrain Normals
   const bool skirted = true;
   return new PlanetTileTessellator(skirted, getRenderedSector());
 }

@@ -153,5 +153,9 @@ public class GFont
        isb.dispose();
     return s;
   }
+  @Override
+  public String toString() {
+    return description();
+  }
 
 }

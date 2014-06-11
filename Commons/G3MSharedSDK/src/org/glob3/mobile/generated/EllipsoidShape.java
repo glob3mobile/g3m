@@ -170,15 +170,16 @@ public class EllipsoidShape extends AbstractMeshShape
         return null;
       }
   
-      _texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
+      _texId = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false);
   
-      rc.getFactory().deleteImage(_textureImage);
+      if (_textureImage != null)
+         _textureImage.dispose();
       _textureImage = null;
     }
   
     if (_texId == null)
     {
-      rc.getLogger().logError("Can't load texture %s", _textureURL.getPath());
+      rc.getLogger().logError("Can't load texture %s", _textureURL._path);
     }
   
     if (_texId == null)
@@ -196,7 +197,7 @@ public class EllipsoidShape extends AbstractMeshShape
     if (!_textureRequested)
     {
       _textureRequested = true;
-      if (_textureURL.getPath().length() != 0)
+      if (_textureURL._path.length() != 0)
       {
         rc.getDownloader().requestImage(_textureURL, 1000000, TimeInterval.fromDays(30), true, new EllipsoidShape_IImageDownloadListener(this), true);
       }
@@ -337,7 +338,6 @@ public class EllipsoidShape extends AbstractMeshShape
     _texId = null; //Releasing texture
   
     super.dispose();
-  
   }
 
   public final void setBorderColor(Color color)

@@ -1,4 +1,28 @@
 package org.glob3.mobile.generated; 
+//
+//  TileRasterizer.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 7/8/13.
+//
+//
+
+//
+//  TileRasterizer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 7/8/13.
+//
+//
+
+
+
+//class IImage;
+//class IImageListener;
+//class ChangedListener;
+//class G3MContext;
+//class TileRasterizerContext;
+
 public abstract class TileRasterizer
 {
   private ChangedListener _listener;
@@ -8,7 +32,6 @@ public abstract class TileRasterizer
   {
      _enable = true;
      _listener = null;
-
   }
 
 

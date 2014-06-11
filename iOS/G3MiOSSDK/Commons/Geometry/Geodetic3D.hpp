@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_Geodetic3D_hpp
-#define G3MiOSSDK_Geodetic3D_hpp
+#ifndef G3MiOSSDK_Geodetic3D
+#define G3MiOSSDK_Geodetic3D
 
 #include "Angle.hpp"
 #include "Geodetic2D.hpp"
@@ -89,8 +89,14 @@ public:
   }
   
   const std::string description() const;
-  
-  
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
+
   Geodetic3D add(const Geodetic3D& that) const {
     return Geodetic3D(_latitude.add(that._latitude),
                       _longitude.add(that._longitude),

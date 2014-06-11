@@ -57,21 +57,20 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
-    //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean isForcedFullRender, long texturePriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long tileDownloadPriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
   {
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
   
     if (builderHolder == null)
     {
-      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, layerTilesRenderParameters, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, texturePriority));
+      builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, tileRasterizer, rc, layerTilesRenderParameters, layerSet.createTileMapPetitions(rc, layerTilesRenderParameters, tile), rc.getDownloader(), tile, tessellatorMesh, tessellator, tileDownloadPriority, logTilesPetitions));
       tile.setTexturizerData(builderHolder);
     }
   
     TileTextureBuilder builder = builderHolder.get();
-    if (isForcedFullRender)
+    if (forceFullRender)
     {
       builder.start();
     }
@@ -86,9 +85,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void tileToBeDeleted(Tile tile, Mesh mesh)
   {
-  
     TileTextureBuilderHolder builderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
-  
     if (builderHolder != null)
     {
       TileTextureBuilder builder = builderHolder.get();
@@ -96,11 +93,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cleanTile();
       builder.cleanMesh();
     }
-  //  else {
-  //    if (mesh != NULL) {
-  //      ILogger::instance()->logInfo("break (point) on me 4\n");
-  //    }
-  //  }
   }
 
   public final boolean tileMeetsRenderCriteria(Tile tile)
@@ -142,13 +134,13 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       return;
     }
   
-  //  _texturesHandler->retainGLTextureId(glTextureId);
+    //  _texturesHandler->retainGLTextureId(glTextureId);
     final TextureIDReference glTextureIdRetainedCopy = glTextureId.createCopy();
   
     final int level = tile._level - ancestorTile._level;
     if (!tileMesh.setGLTextureIdForLevel(level, glTextureIdRetainedCopy))
     {
-  //    _texturesHandler->releaseGLTextureId(glTextureId);
+      //    _texturesHandler->releaseGLTextureId(glTextureId);
       if (glTextureIdRetainedCopy != null)
          glTextureIdRetainedCopy.dispose();
     }
@@ -180,11 +172,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
       builder.cancel();
       builder.cleanMesh();
     }
-  //  else {
-  //    if (mesh != NULL) {
-  //      ILogger::instance()->logInfo("break (point) on me 5\n");
-  //    }
-  //  }
   }
 
 }

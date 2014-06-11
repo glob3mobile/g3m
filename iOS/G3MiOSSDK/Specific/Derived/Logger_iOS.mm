@@ -9,7 +9,7 @@
 #include "Logger_iOS.hpp"
 
 
-void Logger_iOS::logInfo(const std::string& x, ...) const {
+void Logger_iOS::logInfo(const std::string x, ...) const {
   if (_level <= InfoLevel) {
 //    printf("Info: ");
 //    va_list args;
@@ -26,7 +26,7 @@ void Logger_iOS::logInfo(const std::string& x, ...) const {
   }
 }
 
-void Logger_iOS::logWarning(const std::string& x, ...) const {
+void Logger_iOS::logWarning(const std::string x, ...) const {
   if (_level <= WarningLevel) {
 //    printf("Warning: ");
 //    va_list args;
@@ -43,7 +43,7 @@ void Logger_iOS::logWarning(const std::string& x, ...) const {
   }
 }
 
-void Logger_iOS::logError(const std::string& x, ...) const {
+void Logger_iOS::logError(const std::string x, ...) const {
   if (_level <= ErrorLevel) {
 //    printf("ERROR: ");
 //    va_list args;

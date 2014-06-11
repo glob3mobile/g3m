@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class Camera;
 //class Sector;
 //class Vector2I;
+//class CoordinateSystem;
 
 public abstract class Planet
 {
@@ -109,6 +110,7 @@ public abstract class Planet
 
   public abstract void applyCameraConstrainers(Camera previousCamera, Camera nextCamera);
 
+<<<<<<< HEAD
   public abstract Geodetic3D getDefaultCameraPosition(Sector shownSector);
 
   public final MutableMatrix44D createTransformMatrix(Geodetic3D position, Angle heading, Angle pitch, Angle roll, Vector3D scale, Vector3D translation)
@@ -121,5 +123,18 @@ public abstract class Planet
     final MutableMatrix44D translationM = MutableMatrix44D.createTranslationMatrix(translation._x, translation._y, translation._z);
     final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translationM).multiply(scaleM);
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
+=======
+  public abstract Geodetic3D getDefaultCameraPosition(Sector rendereSector);
+
+  public final CoordinateSystem getCoordinateSystemAt(Geodetic3D geo)
+  {
+  
+    Vector3D origin = toCartesian(geo);
+    Vector3D z = centricSurfaceNormal(origin);
+    Vector3D y = getNorth().projectionInPlane(z);
+    Vector3D x = y.cross(z);
+  
+    return new CoordinateSystem(x,y,z, origin);
+>>>>>>> origin/purgatory
   }
 }

@@ -39,9 +39,6 @@ public class MapBoo_CameraPosition
     return _animated;
   }
 
-
-  ///#include "SimpleCameraConstrainer.hpp"
-  
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
@@ -64,6 +61,10 @@ public class MapBoo_CameraPosition
     if (isb != null)
        isb.dispose();
     return s;
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
 }

@@ -1,13 +1,13 @@
 //
-//  IFactory.h
+//  IFactory.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_IFactory_h
-#define G3MiOSSDK_IFactory_h
+#ifndef G3MiOSSDK_IFactory
+#define G3MiOSSDK_IFactory
 
 #include "ILogger.hpp"
 
@@ -56,11 +56,11 @@ public:
   virtual ~IFactory() {
   }
 
-  virtual void deleteImage(const IImage* image) const = 0;
+//  virtual void deleteImage(const IImage* image) const = 0;
 
   virtual ITimer* createTimer() const = 0;
 
-  virtual void deleteTimer(const ITimer* timer) const = 0;
+//  virtual void deleteTimer(const ITimer* timer) const = 0;
 
   virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
 

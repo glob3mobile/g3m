@@ -11,7 +11,6 @@
 
 class IImage;
 
-
 class IImageListener {
 public:
   virtual ~IImageListener() {

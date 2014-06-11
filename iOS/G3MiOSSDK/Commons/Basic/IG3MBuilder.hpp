@@ -23,7 +23,9 @@ class PeriodicalTask;
 class G3MWidget;
 class PlanetRendererBuilder;
 class Planet;
+//TODO
 class Renderer;
+class ProtoRenderer;
 class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
@@ -35,6 +37,7 @@ class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
 class ErrorRenderer;
+class InfoDisplay;
 
 
 class IG3MBuilder {
@@ -43,13 +46,18 @@ private:
   IDownloader*                      _downloader;
   IThreadUtils*                     _threadUtils;
   ICameraActivityListener*          _cameraActivityListener;
+#ifdef C_CODE
   const Planet*                     _planet;
+#else
+  Planet*                           _planet;
+#endif  
   std::vector<ICameraConstrainer*>* _cameraConstraints;
   CameraRenderer*                   _cameraRenderer;
   Color*                            _backgroundColor;
   PlanetRendererBuilder*            _planetRendererBuilder;
-  Renderer*                         _busyRenderer;
+  ProtoRenderer*                    _busyRenderer;
   ErrorRenderer*                    _errorRenderer;
+  Renderer*                         _hudRenderer;
   std::vector<Renderer*>*           _renderers;
   GInitializationTask*              _initializationTask;
   bool                              _autoDeleteInitializationTask;
@@ -60,6 +68,7 @@ private:
   std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
+  InfoDisplay*                      _infoDisplay;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
@@ -67,8 +76,9 @@ private:
   ICameraActivityListener*          getCameraActivityListener();
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
-  Renderer*                         getBusyRenderer();
+  ProtoRenderer*                    getBusyRenderer();
   ErrorRenderer*                    getErrorRenderer();
+  Renderer*                         getHUDRenderer() const;
   Color*                            getBackgroundColor();
   std::vector<Renderer*>*           getRenderers();
   bool                              getLogFPS();
@@ -83,6 +93,7 @@ private:
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
+  InfoDisplay*                      getInfoDisplay() const;
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
@@ -127,9 +138,11 @@ public:
 
   void setBackgroundColor(Color* backgroundColor);
 
-  void setBusyRenderer(Renderer* busyRenderer);
+  void setBusyRenderer(ProtoRenderer* busyRenderer);
 
   void setErrorRenderer(ErrorRenderer* errorRenderer);
+
+  void setHUDRenderer(Renderer* hudRenderer);
 
   void addRenderer(Renderer* renderer);
 
@@ -194,6 +207,8 @@ public:
   ShapesRenderer* createShapesRenderer();
 
   MarksRenderer* createMarksRenderer();
+  
+  void setInfoDisplay(InfoDisplay* infoDisplay);
   
 };
 

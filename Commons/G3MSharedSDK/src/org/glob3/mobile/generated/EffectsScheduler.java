@@ -26,38 +26,26 @@ public class EffectsScheduler
 
   private java.util.ArrayList<EffectRun> _effectsRuns = new java.util.ArrayList<EffectRun>();
   private ITimer _timer;
-  private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
-
+  private IFactory _factory;
 
   private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {
-    java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
-    final int size = _effectsRuns.size();
-    for (int i = 0; i < size; i++)
-    {
-      EffectRun effectRun = _effectsRuns.get(i);
   
-      if (effectRun._started)
-      {
-        Effect effect = effectRun._effect;
-        if (effect.isDone(rc, when))
-        {
-          effect.stop(rc, when);
-  
-          indicesToRemove.add(i);
+    final java.util.ArrayList<EffectRun> effectsToStop = new java.util.ArrayList<EffectRun>();
+    final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
+    while (iterator.hasNext()) {
+      final EffectRun effectRun = iterator.next();
+      if (effectRun._started) {
+        if (effectRun._effect.isDone(rc, when)) {
+          iterator.remove();
+          effectsToStop.add(effectRun);
         }
       }
     }
   
-    // backward iteration, to remove from bottom to top
-    for (int i = indicesToRemove.size() - 1; i >= 0; i--)
-    {
-      final int indexToRemove = indicesToRemove.get(i);
-      EffectRun effectRun = _effectsRuns.get(indexToRemove);
-      if (effectRun != null)
-         effectRun.dispose();
-  
-      _effectsRuns.remove(indexToRemove);
+    for (final EffectRun effectRun : effectsToStop) {
+      effectRun._effect.stop(rc, when);
+      effectRun.dispose();
     }
   }
 
@@ -72,18 +60,14 @@ public class EffectsScheduler
   
     processFinishedEffects(rc, now);
   
-    final int size = _effectsRuns.size();
-    for (int i = 0; i < size; i++)
-    {
-      EffectRun effectRun = _effectsRuns.get(i);
-      Effect effect = effectRun._effect;
-  
-      if (!effectRun._started)
-      {
+    final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
+    while (iterator.hasNext()) {
+      final EffectRun effectRun = iterator.next();
+      final Effect effect = effectRun._effect;
+      if (!effectRun._started) {
         effect.start(rc, now);
         effectRun._started = true;
       }
-  
       effect.doStep(rc, now);
     }
   }
@@ -96,7 +80,8 @@ public class EffectsScheduler
 
   public void dispose()
   {
-    _factory.deleteTimer(_timer);
+    if (_timer != null)
+       _timer.dispose();
 
     for (int i = 0; i < _effectsRuns.size(); i++)
     {
@@ -113,65 +98,52 @@ public class EffectsScheduler
 
   public final void cancelAllEffects()
   {
-    java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
     final TimeInterval now = _timer.now();
   
-    final int size = _effectsRuns.size();
-    for (int i = 0; i < size; i++)
-    {
-      EffectRun effectRun = _effectsRuns.get(i);
+    final java.util.ArrayList<EffectRun> effectsToCancel = new java.util.ArrayList<EffectRun>();
   
-      if (effectRun._started)
-      {
-        effectRun._effect.cancel(now);
+    final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
+    while (iterator.hasNext()) {
+      final EffectRun effectRun = iterator.next();
+      if (effectRun._started) {
+        effectsToCancel.add(effectRun);
       }
-      indicesToRemove.add(i);
+      else {
+        effectRun.dispose();
+      }
+      iterator.remove();
     }
   
-    // backward iteration, to remove from bottom to top
-    for (int i = indicesToRemove.size() - 1; i >= 0; i--)
-    {
-      final int indexToRemove = indicesToRemove.get(i);
-      EffectRun effectRun = _effectsRuns.get(indexToRemove);
-      if (effectRun != null)
-         effectRun.dispose();
-  
-      _effectsRuns.remove(indexToRemove);
+    for (final EffectRun effectRun : effectsToCancel) {
+      effectRun._effect.cancel(now);
+      effectRun.dispose();
     }
-  
   }
 
   public final void cancelAllEffectsFor(EffectTarget target)
   {
-    java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
     final TimeInterval now = _timer.now();
   
-    final int size = _effectsRuns.size();
-    for (int i = 0; i < size; i++)
-    {
-      EffectRun effectRun = _effectsRuns.get(i);
+    final java.util.ArrayList<EffectRun> effectsToCancel = new java.util.ArrayList<EffectRun>();
   
-      if (effectRun._target == target)
-      {
-        if (effectRun._started)
-        {
-          effectRun._effect.cancel(now);
+    final java.util.Iterator<EffectRun> iterator = _effectsRuns.iterator();
+    while (iterator.hasNext()) {
+      final EffectRun effectRun = iterator.next();
+      if (effectRun._target == target) {
+        if (effectRun._started) {
+          effectsToCancel.add(effectRun);
         }
-        indicesToRemove.add(i);
+        else {
+          effectRun.dispose();
+        }
+        iterator.remove();
       }
     }
   
-    // backward iteration, to remove from bottom to top
-    for (int i = indicesToRemove.size() - 1; i >= 0; i--)
-    {
-      final int indexToRemove = indicesToRemove.get(i);
-      EffectRun effectRun = _effectsRuns.get(indexToRemove);
-      if (effectRun != null)
-         effectRun.dispose();
-  
-      _effectsRuns.remove(indexToRemove);
+    for (final EffectRun effectRun : effectsToCancel) {
+      effectRun._effect.cancel(now);
+      effectRun.dispose();
     }
-  
   }
 
   public final void onResume(G3MContext context)

@@ -7,4 +7,3 @@
 //
 
 #include "TilesRenderParameters.hpp"
-

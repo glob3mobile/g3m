@@ -33,27 +33,27 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     _cz = (float) center._z;
   }
 
-  private final Planet _ellipsoid;
+  private final Planet _planet;
 
-  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet ellipsoid, Vector3D center)
+  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet planet, Vector3D center)
   {
-     _ellipsoid = ellipsoid;
+     _planet = planet;
      _centerStrategy = centerStrategy;
     setCenter(center);
   }
 
-  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet ellipsoid, Geodetic2D center)
+  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet planet, Geodetic2D center)
   {
-     _ellipsoid = ellipsoid;
+     _planet = planet;
      _centerStrategy = centerStrategy;
-    setCenter(_ellipsoid.toCartesian(center));
+    setCenter(_planet.toCartesian(center));
   }
 
-  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet ellipsoid, Geodetic3D center)
+  private FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy, Planet planet, Geodetic3D center)
   {
-     _ellipsoid = ellipsoid;
+     _planet = planet;
      _centerStrategy = centerStrategy;
-    setCenter(_ellipsoid.toCartesian(center));
+    setCenter(_planet.toCartesian(center));
   }
 
 
@@ -84,7 +84,7 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public final void add(Angle latitude, Angle longitude, double height)
   {
-    final Vector3D vector = _ellipsoid.toCartesian(latitude, longitude, height);
+    final Vector3D vector = _planet.toCartesian(latitude, longitude, height);
   
     if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
     {

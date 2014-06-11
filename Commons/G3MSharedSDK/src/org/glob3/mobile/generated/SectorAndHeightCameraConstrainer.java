@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class PlanetRenderer;
 
 public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
@@ -50,7 +49,6 @@ public class SectorAndHeightCameraConstrainer implements ICameraConstrainer
     if (invalidHeight || invalidPosition)
     {
       nextCamera.copyFrom(previousCamera);
-  
     }
   
     return true;

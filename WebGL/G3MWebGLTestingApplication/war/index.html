@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Testing App</title>
+<link type="text/css" rel="stylesheet" href="style/g3mwebgldemo.css">
+<!--                                           -->
+<!-- This script loads your compiled module.   -->
+<!-- If you add any GWT meta tags, they must   -->
+<!-- be added before this line.                -->
+<!--                                           -->
+<script type="text/javascript"
+	src="org.glob3.mobile.G3MWebGLTestingApplication/org.glob3.mobile.G3MWebGLTestingApplication.nocache.js"></script>
+</head>
+
+<body>
+	<!-- OPTIONAL: include this if you want history support -->
+	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
+		style="position: absolute; width: 0; height: 0; border: 0"></iframe>
+
+	<!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+	<noscript>
+		<div
+			style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+			Your web browser must have JavaScript enabled in order for this
+			application to display correctly.</div>
+	</noscript>
+
+	<div id="g3mWidgetHolder">
+	</div>
+	
+	<script type="text/javascript">
+	var _onLoadG3MListener = null;
+
+    function onLoadG3M() {
+    	// the G3M objets is already loaded
+    	if (_onLoadG3MListener != null)
+    		_onLoadG3MListener();
+    }
+
+    function setOnLoadG3MListener(func) {
+    	_onLoadG3MListener = func;
+    }
+	</script>
+	
+</body>
+</html>

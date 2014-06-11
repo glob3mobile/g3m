@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TileTexturizer_hpp
-#define G3MiOSSDK_TileTexturizer_hpp
+#ifndef G3MiOSSDK_TileTexturizer
+#define G3MiOSSDK_TileTexturizer
 
 #include "Renderer.hpp"
 
@@ -38,11 +38,12 @@ public:
                           TileRasterizer* tileRasterizer,
                           const LayerTilesRenderParameters* layerTilesRenderParameters,
                           const LayerSet* layerSet,
-                          bool isForcedFullRender,
-                          long long texturePriority,
+                          bool forceFullRender,
+                          long long tileDownloadPriority,
                           Tile* tile,
                           Mesh* tessellatorMesh,
-                          Mesh* previousMesh) = 0;
+                          Mesh* previousMesh,
+                          bool logTilesPetitions) = 0;
 
   virtual void tileToBeDeleted(Tile* tile,
                                Mesh* mesh) = 0;
@@ -64,7 +65,7 @@ public:
                                    const Geodetic3D& position,
                                    const Tile* tile,
                                    LayerSet* layerSet) = 0;
-
+  
 };
 
 #endif

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_FloatBufferBuilderFromGeodetic_hpp
-#define G3MiOSSDK_FloatBufferBuilderFromGeodetic_hpp
+#ifndef G3MiOSSDK_FloatBufferBuilderFromGeodetic
+#define G3MiOSSDK_FloatBufferBuilderFromGeodetic
 
 #include "FloatBufferBuilder.hpp"
 
@@ -32,33 +32,33 @@ private:
     _cz = (float) center._z;
   }
 
-  const Planet * _ellipsoid;
+  const Planet* _planet;
 
   FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
-                                 const Planet* ellipsoid,
+                                 const Planet* planet,
                                  const Vector3D& center):
-  _ellipsoid(ellipsoid),
+  _planet(planet),
   _centerStrategy(centerStrategy)
   {
     setCenter( center );
   }
 
   FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
-                                 const Planet* ellipsoid,
+                                 const Planet* planet,
                                  const Geodetic2D& center):
-  _ellipsoid(ellipsoid),
+  _planet(planet),
   _centerStrategy(centerStrategy)
   {
-    setCenter( _ellipsoid->toCartesian(center) );
+    setCenter( _planet->toCartesian(center) );
   }
 
   FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,
-                                 const Planet* ellipsoid,
+                                 const Planet* planet,
                                  const Geodetic3D& center):
-  _ellipsoid(ellipsoid),
+  _planet(planet),
   _centerStrategy(centerStrategy)
   {
-    setCenter( _ellipsoid->toCartesian(center) );
+    setCenter( _planet->toCartesian(center) );
   }
 
 public:

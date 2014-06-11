@@ -26,6 +26,7 @@ class CameraRenderer;
 class LayerSet;
 class ICameraConstrainer;
 class Renderer;
+class ProtoRenderer;
 class WidgetUserData;
 class PlanetRenderer;
 class TilesRenderParameters;
@@ -34,12 +35,7 @@ class PeriodicalTask;
 class GInitializationTask;
 class TimeInterval;
 class ErrorRenderer;
-
-// opengl versions value
-enum GL_version {
-  OpenGL_1,   //obsolete
-  OpenGL_2
-};
+class InfoDisplay;
 
 // This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
 // The view content is basically an EAGL surface you render your OpenGL scene into.
@@ -47,11 +43,9 @@ enum GL_version {
 @interface G3MWidget_iOS : UIView {
 @private
   BOOL _displayLinkSupported;
-  
-  enum GL_version glver;
-  
+
   TouchEvent* _lastTouchEvent;
-  
+
   void* _widgetVP;
 }
 
@@ -76,8 +70,9 @@ enum GL_version {
            cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
               cameraRenderer: (CameraRenderer*) cameraRenderer
                 mainRenderer: (Renderer*) mainRenderer
-                busyRenderer: (Renderer*) busyRenderer
+                busyRenderer: (ProtoRenderer*) busyRenderer
                errorRenderer: (ErrorRenderer*) errorRenderer
+                 hudRenderer: (Renderer*) hudRenderer
              backgroundColor: (Color) backgroundColor
                       logFPS: (bool) logFPS
      logDownloaderStatistics: (bool) logDownloaderStatistics
@@ -85,7 +80,8 @@ enum GL_version {
 autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
              periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
                     userData: (WidgetUserData*) userData
-       initialCameraPosition: (Geodetic3D) initialCameraPosition;
+       initialCameraPosition: (Geodetic3D) initialCameraPosition
+                 infoDisplay: (InfoDisplay*) infoDisplay;
 
 - (GL*)getGL;
 
@@ -109,8 +105,6 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
 - (void)setCameraPitch: (const Angle&) angle;
 
 - (void)cancelCameraAnimation;
-
-//- (void)resetCameraPosition;
 
 - (WidgetUserData*) userData;
 

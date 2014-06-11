@@ -1,5 +1,5 @@
 //
-//  InitializationContext.cpp
+//  Context.cpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
@@ -9,13 +9,11 @@
 #include "Context.hpp"
 
 #include "ITimer.hpp"
-#include "IFactory.hpp"
-
 #include "OrderedRenderable.hpp"
+#include <algorithm>
 
 G3MRenderContext::~G3MRenderContext() {
-  //  delete _frameStartTimer;
-  IFactory::instance()->deleteTimer(_frameStartTimer);
+  delete _frameStartTimer;
   delete _orderedRenderables;
 
 #ifdef JAVA_CODE

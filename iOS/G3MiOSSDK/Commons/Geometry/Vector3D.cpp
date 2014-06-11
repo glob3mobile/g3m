@@ -20,17 +20,24 @@ Vector3D Vector3D::normalized() const {
   return Vector3D(_x / d, _y / d, _z / d);
 }
 
-Angle Vector3D::angleBetween(const Vector3D& other) const {
+double Vector3D::angleInRadiansBetween(const Vector3D& other) const {
   const Vector3D v1 = normalized();
   const Vector3D v2 = other.normalized();
-  
+
   double c = v1.dot(v2);
-  if (c > 1.0) c = 1.0;
-  else if (c < -1.0) c = -1.0;
-  
-  return Angle::fromRadians(IMathUtils::instance()->acos(c));
+  if (c > 1.0) {
+    c = 1.0;
+  }
+  else if (c < -1.0) {
+    c = -1.0;
+  }
+
+  return IMathUtils::instance()->acos(c);
 }
 
+Angle Vector3D::angleBetween(const Vector3D& other) const {
+  return Angle::fromRadians( angleInRadiansBetween(other) );
+}
 
 Angle Vector3D::signedAngleBetween(const Vector3D& other,
                                    const Vector3D& up) const {

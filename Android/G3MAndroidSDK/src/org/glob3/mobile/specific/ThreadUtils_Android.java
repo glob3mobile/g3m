@@ -32,9 +32,10 @@ public final class ThreadUtils_Android
       }
       _widgetAndroid = widgetAndroid;
 
+      final int availableProcessors = Runtime.getRuntime().availableProcessors();
+      final int numThreads = Math.max(1, availableProcessors - 1);
       final BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<Runnable>();
-      //      _backgroundExecutor = new ThreadPoolExecutor(1, 1, 1, TimeUnit.DAYS, workQueue);
-      _backgroundExecutor = new ThreadPoolExecutor(4, 4, 1, TimeUnit.DAYS, workQueue);
+      _backgroundExecutor = new ThreadPoolExecutor(numThreads, numThreads, 1, TimeUnit.DAYS, workQueue);
    }
 
 
@@ -95,7 +96,7 @@ public final class ThreadUtils_Android
    }
 
 
-   private void drainQueues() {
+   private final void drainQueues() {
       for (final Runnable runnable : _backgroundQueue) {
          _backgroundExecutor.execute(runnable);
       }
@@ -110,10 +111,7 @@ public final class ThreadUtils_Android
 
    @Override
    public synchronized void onPause(final G3MContext context) {
-      //      final int ___DIEGO_AT_WORK;
-      //      if (_running) {
       _running = false;
-      //      }
    }
 
 

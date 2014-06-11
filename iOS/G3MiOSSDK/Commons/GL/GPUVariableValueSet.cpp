@@ -9,27 +9,25 @@
 #include "GPUVariableValueSet.hpp"
 
 void GPUVariableValueSet::combineWith(const GPUVariableValueSet* vs) {
-
-    for (int i = 0; i <= vs->_highestUniformKey; i++) {
-      if (vs->_uniformValues[i] != NULL) {
-        _uniformValues[i] = vs->_uniformValues[i];
-        _uniformValues[i]->_retain();
-        if (i > _highestUniformKey) {
-          _highestUniformKey = i;
-        }
+  for (int i = 0; i <= vs->_highestUniformKey; i++) {
+    if (vs->_uniformValues[i] != NULL) {
+      _uniformValues[i] = vs->_uniformValues[i];
+      _uniformValues[i]->_retain();
+      if (i > _highestUniformKey) {
+        _highestUniformKey = i;
       }
     }
+  }
 
-    for (int i = 0; i <= vs->_highestAttributeKey; i++) {
-      if (vs->_attributeValues[i] != NULL) {
-        _attributeValues[i] = vs->_attributeValues[i];
-        _attributeValues[i]->_retain();
-        if (i > _highestAttributeKey) {
-          _highestAttributeKey = i;
-        }
+  for (int i = 0; i <= vs->_highestAttributeKey; i++) {
+    if (vs->_attributeValues[i] != NULL) {
+      _attributeValues[i] = vs->_attributeValues[i];
+      _attributeValues[i]->_retain();
+      if (i > _highestAttributeKey) {
+        _highestAttributeKey = i;
       }
     }
-
+  }
 }
 
 void GPUVariableValueSet::applyValuesToProgram(GPUProgram* prog) const{

@@ -58,7 +58,7 @@ protected:
 
   virtual void _setLineDash(float lengths[],
                             int count,
-                            int phase) = 0;
+                            float phase) = 0;
 
   virtual void _fillRectangle(float left, float top,
                               float width, float height) = 0;
@@ -108,6 +108,11 @@ protected:
   virtual void _drawImage(const IImage* image,
                           float srcLeft, float srcTop, float srcWidth, float srcHeight,
                           float destLeft, float destTop, float destWidth, float destHeight) = 0;
+
+  virtual void _drawImage(const IImage* image,
+                          float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                          float destLeft, float destTop, float destWidth, float destHeight,
+                          float transparency) = 0;
 
 
   virtual void _beginPath() = 0;
@@ -223,6 +228,11 @@ public:
   void drawImage(const IImage* image,
                  float srcLeft, float srcTop, float srcWidth, float srcHeight,
                  float destLeft, float destTop, float destWidth, float destHeight);
+
+  void drawImage(const IImage* image,
+                 float srcLeft, float srcTop, float srcWidth, float srcHeight,
+                 float destLeft, float destTop, float destWidth, float destHeight,
+                 float transparency);
 
   int getWidth() const {
     return _canvasWidth;

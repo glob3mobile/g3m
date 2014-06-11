@@ -7,35 +7,40 @@
 //
 
 #include "Layer.hpp"
+
 #include "LayerCondition.hpp"
 #include "LayerSet.hpp"
 #include "LayerTilesRenderParameters.hpp"
+#include "LayerTouchEventListener.hpp"
+#include "Tile.hpp"
+
+Layer::Layer(const LayerTilesRenderParameters* parameters,
+             const float                       transparency,
+             const LayerCondition*             condition,
+             const std::string&                disclaimerInfo) :
+_parameters(parameters),
+_transparency(transparency),
+_condition(condition),
+_disclaimerInfo(disclaimerInfo),
+_layerSet(NULL),
+_enable(true),
+_title("")
+{
+}
 
 Layer::~Layer() {
   delete _condition;
   delete _parameters;
 }
 
-bool Layer::isAvailable(const G3MRenderContext* rc,
-                        const Tile* tile) const {
+bool Layer::isAvailable(const Tile* tile) const {
   if (!isEnable()) {
     return false;
   }
   if (_condition == NULL) {
     return true;
   }
-  return _condition->isAvailable(rc, tile);
-}
-
-bool Layer::isAvailable(const G3MEventContext* ec,
-                        const Tile* tile) const {
-  if (!isEnable()) {
-    return false;
-  }
-  if (_condition == NULL) {
-    return true;
-  }
-  return _condition->isAvailable(ec, tile);
+  return _condition->isAvailable(tile);
 }
 
 void Layer::setLayerSet(LayerSet* layerSet) {
@@ -55,11 +60,8 @@ void Layer::removeLayerSet(LayerSet* layerSet) {
 void Layer::notifyChanges() const {
   if (_layerSet != NULL) {
     _layerSet->layerChanged(this);
+    _layerSet->changedInfo(_info);
   }
-}
-
-const std::string Layer::getName() {
-  return _name;
 }
 
 const std::string Layer::getTitle() const {
@@ -111,21 +113,63 @@ bool Layer::isEquals(const Layer* that) const {
     return false;
   }
 
-  if (!(_name == that->_name)) {
-    return false;
-  }
-
   if (!_parameters->isEquals(that->_parameters)) {
     return false;
   }
 
-  if (_timeToCacheMS != that->_timeToCacheMS) {
+
+  if (!(_info == that->_info)) {
     return false;
   }
 
-  if (_readExpired != that->_readExpired) {
+  if (!(_disclaimerInfo == that->_disclaimerInfo)) {
     return false;
   }
 
   return rawIsEquals(that);
+}
+
+bool Layer::onLayerTouchEventListener(const G3MEventContext* ec,
+                                      const LayerTouchEvent& tte) const {
+  const int listenersSize = _listeners.size();
+  for (int i = 0; i < listenersSize; i++) {
+    LayerTouchEventListener* listener = _listeners[i];
+    if (listener != NULL) {
+      if (listener->onTerrainTouch(ec, tte)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+void Layer::setInfo(const std::string& disclaimerInfo) {
+  if (_disclaimerInfo != disclaimerInfo) {
+    _disclaimerInfo = disclaimerInfo;
+    if (_layerSet != NULL) {
+      _layerSet->changedInfo(getInfos());
+    }
+  }
+}
+
+std::vector<std::string> Layer::getInfos() {
+#warning TODO BETTER
+  _info.clear();
+  const std::string layerInfo = getInfo();
+  _info.push_back(layerInfo);
+  return _info;
+}
+
+const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const{
+    const int maxLevel = _parameters->_maxLevel;
+#ifdef C_CODE
+    const Tile* tileP = tile;
+#endif
+#ifdef JAVA_CODE
+    Tile tileP = tile;
+#endif
+    while (tileP->_level > maxLevel) {
+        tileP = tileP->getParent();
+    }
+    return tileP;
 }

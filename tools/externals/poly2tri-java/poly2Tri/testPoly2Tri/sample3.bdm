@@ -1,0 +1,26 @@
+type "2D"
+4
+0    0
+100  0
+100  100
+0    100
+
+begin circle2
+4
+30   50
+20   40
+10   50
+20   60
+end circle2
+
+begin circle3
+4
+90    50
+80    40
+70    50
+80    60
+end circle3
+
+
+
+

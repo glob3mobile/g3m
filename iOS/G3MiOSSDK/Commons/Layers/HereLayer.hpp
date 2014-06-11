@@ -9,12 +9,12 @@
 #ifndef __G3MiOSSDK__HereLayer__
 #define __G3MiOSSDK__HereLayer__
 
-#include "Layer.hpp"
+#include "RasterLayer.hpp"
 
 #include <string>
 
 
-class HereLayer : public Layer {
+class HereLayer : public RasterLayer {
 private:
   const std::string _appId;
   const std::string _appCode;
@@ -27,14 +27,21 @@ protected:
 
   bool rawIsEquals(const Layer* that) const;
 
+
+  const TileImageContribution* rawContribution(const Tile* tile) const;
+
+  const URL createURL(const Tile* tile) const;
+
 public:
 
-  HereLayer(const std::string& appId,
-            const std::string& appCode,
-            const TimeInterval& timeToCache,
-            bool readExpired = true,
-            int initialLevel = 2,
-            LayerCondition* condition = NULL);
+  HereLayer(const std::string&    appId,
+            const std::string&    appCode,
+            const TimeInterval&   timeToCache,
+            const bool            readExpired    = true,
+            const int             initialLevel   = 2,
+            const float           transparency   = 1,
+            const LayerCondition* condition      = NULL,
+            const std::string&    disclaimerInfo = "");
 
   std::vector<Petition*> createTileMapPetitions(const G3MRenderContext* rc,
                                                 const LayerTilesRenderParameters* layerTilesRenderParameters,
@@ -48,6 +55,11 @@ public:
   HereLayer* copy() const;
 
   RenderState getRenderState();
+
+  const Sector getDataSector() const {
+    return Sector::fullSphere();
+  }
+  
 };
 
 #endif

@@ -1,24 +1,4 @@
 package org.glob3.mobile.generated; 
-//class IStorageImageListener {
-//public:
-///#if C_CODE
-//  virtual ~IStorageImageListener() { }
-///#endif
-///#ifdef JAVA_CODE
-//  void dispose();
-///#endif
-//
-//  /**
-//   Callback method image reading.
-//   The image will be NULL if it doesn't exist
-//   The image has to be deleted in C++ / and disposed() en Java.
-//   */
-//  virtual void imageRead(IImage* image,
-//                         bool expired) = 0;
-//
-//};
-
-
 public abstract class IStorage
 {
   protected G3MContext _context;
@@ -41,11 +21,6 @@ public abstract class IStorage
   public abstract IByteBufferResult readBuffer(URL url, boolean readExpired);
 
   public abstract IImageResult readImage(URL url, boolean readExpired);
-
-//  virtual void readImage(const URL& url,
-//                         bool readExpired,
-//                         IStorageImageListener* imageListener,
-//                         bool autodeleteImageListener) = 0;
 
   public abstract void saveBuffer(URL url, IByteBuffer buffer, TimeInterval timeToExpires, boolean saveInBackground);
 

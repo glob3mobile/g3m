@@ -1,77 +1,33 @@
 package org.glob3.mobile.generated; 
-//
-//  HUDErrorRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 9/28/13.
-//
-//
-
-//
-//  HUDErrorRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 9/28/13.
-//
-//
-
-
-
-//class HUDImageRenderer;
-
-
-public class HUDErrorRenderer extends ErrorRenderer
+public class HUDErrorRenderer implements ErrorRenderer
 {
   private HUDImageRenderer _hudImageRenderer;
+  private ErrorMessagesCustomizer _errorMessageCustomizer;
 
 
   public HUDErrorRenderer()
   {
+     this(null);
+  }
+  public HUDErrorRenderer(ErrorMessagesCustomizer errorMessageCustomizer)
+  {
     _hudImageRenderer = new HUDImageRenderer(new HUDErrorRenderer_ImageFactory());
+    _errorMessageCustomizer = errorMessageCustomizer;
   }
 
   public void dispose()
   {
-    super.dispose();
+
   }
 
   public final void setErrors(java.util.ArrayList<String> errors)
   {
     HUDErrorRenderer_ImageFactory factory = (HUDErrorRenderer_ImageFactory)(_hudImageRenderer.getImageFactory());
-    if (factory.setErrors(errors))
+    final java.util.ArrayList<String> customizedErrors = (_errorMessageCustomizer != null) ? _errorMessageCustomizer.customize(errors) : errors;
+    if (factory.setErrors(customizedErrors))
     {
       _hudImageRenderer.recreateImage();
     }
-  }
-
-  public final boolean isEnable()
-  {
-    return _hudImageRenderer.isEnable();
-  }
-
-  public final void setEnable(boolean enable)
-  {
-    _hudImageRenderer.setEnable(enable);
-  }
-
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return _hudImageRenderer.getRenderState(rc);
-  }
-
-  public final boolean isPlanetRenderer()
-  {
-    return _hudImageRenderer.isPlanetRenderer();
-  }
-
-  public final SurfaceElevationProvider getSurfaceElevationProvider()
-  {
-    return _hudImageRenderer.getSurfaceElevationProvider();
-  }
-
-  public final PlanetRenderer getPlanetRenderer()
-  {
-    return _hudImageRenderer.getPlanetRenderer();
   }
 
   public final void initialize(G3MContext context)
@@ -82,11 +38,6 @@ public class HUDErrorRenderer extends ErrorRenderer
   public final void render(G3MRenderContext rc, GLState glState)
   {
     _hudImageRenderer.render(rc, glState);
-  }
-
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return _hudImageRenderer.onTouchEvent(ec, touchEvent);
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

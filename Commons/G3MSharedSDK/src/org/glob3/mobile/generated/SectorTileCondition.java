@@ -26,12 +26,24 @@ public class SectorTileCondition extends LayerCondition
      _sector = new Sector(sector);
   }
 
-  public final boolean isAvailable(G3MRenderContext rc, Tile tile)
-  {
-    return _sector.touchesWith(tile._sector);
-  }
+//  bool isAvailable(const G3MRenderContext* rc,
+//                   const Tile* tile) const;
+//
+//  bool isAvailable(const G3MEventContext* ec,
+//                   const Tile* tile) const;
 
-  public final boolean isAvailable(G3MEventContext ec, Tile tile)
+
+  //bool SectorTileCondition::isAvailable(const G3MRenderContext* rc,
+  //                                      const Tile* tile) const {
+  //  return _sector.touchesWith(tile->_sector);
+  //}
+  //
+  //bool SectorTileCondition::isAvailable(const G3MEventContext* ec,
+  //                                      const Tile* tile) const {
+  //  return _sector.touchesWith(tile->_sector);
+  //}
+  
+  public final boolean isAvailable(Tile tile)
   {
     return _sector.touchesWith(tile._sector);
   }

@@ -73,4 +73,17 @@ public class GEOFeature extends GEOObject
     }
   }
 
+  public final void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel)
+  {
+    if (_geometry != null)
+    {
+      _geometry.rasterize(symbolizer, canvas, projection, tileLevel);
+    }
+  }
+
+  public final long getCoordinatesCount()
+  {
+    return _geometry.getCoordinatesCount();
+  }
+
 }

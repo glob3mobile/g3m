@@ -76,12 +76,8 @@ public class VisibleSectorListenerEntry
   {
     if (_listener != null)
        _listener.dispose();
-
     if (_timer != null)
-    {
-      IFactory.instance().deleteTimer(_timer);
-    }
-
+       _timer.dispose();
     if (_lastSector != null)
        _lastSector.dispose();
   }

@@ -90,16 +90,16 @@ public class SimpleRasterLayerBuilder
       subdomains.add("2.");
       subdomains.add("3.");
 
-      final MercatorTiledLayer meteoritesLayer = new MercatorTiledLayer("CartoDB-meteoritessize", "http://",
+      final MercatorTiledLayer meteoritesLayer = new MercatorTiledLayer("http://",
                "tiles.cartocdn.com/osm2/tiles/meteoritessize", subdomains, "png", TimeInterval.fromDays(90), false,
-               Sector.fullSphere(), 2, 17, null);
+               Sector.fullSphere(), 2, 17, true);
       meteoritesLayer.setTitle("CartoDB Meteorites");
       meteoritesLayer.setEnable(false);
       layerSet.addLayer(meteoritesLayer);
 
       final URLTemplateLayer arcGISOverlayLayerTest = URLTemplateLayer.newMercator(
                "http://www.fairfaxcounty.gov/gis/rest/services/DMV/DMV/MapServer/export?dpi=96&transparent=true&format=png8&bbox={west}%2C{south}%2C{east}%2C{north}&bboxSR=3857&imageSR=3857&size={width}%2C{height}&f=image",
-               Sector.fullSphere(), true, 2, 18, TimeInterval.fromDays(30), true, new LevelTileCondition(12, 18));
+               Sector.fullSphere(), true, 2, 18, TimeInterval.fromDays(30), true, 1, new LevelTileCondition(12, 18));
       arcGISOverlayLayerTest.setTitle("ESRI ArcGis Online");
       arcGISOverlayLayerTest.setEnable(false);
       layerSet.addLayer(arcGISOverlayLayerTest);

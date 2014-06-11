@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Storage.h
+//  Storage.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 26/06/12.
@@ -39,13 +39,4 @@ public class IImageResult
   public void dispose()
   {
   }
-
-//  IImage* getImage() const {
-//    return _image;
-//  }
-
-//  bool isExpired() const {
-//    return _expired;
-//  }
-
 }

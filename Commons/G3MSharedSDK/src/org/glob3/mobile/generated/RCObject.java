@@ -26,10 +26,14 @@ public class RCObject
     this.dispose();
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  RCObject(RCObject that);
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  RCObject operator =(RCObject that);
+
   protected RCObject() // the object starts retained
   {
      _referenceCounter = 1;
-
   }
 
   public void dispose()

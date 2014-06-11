@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__ShapesRenderer__
 #define __G3MiOSSDK__ShapesRenderer__
 
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Shape.hpp"
 #include <vector>
 #include "DownloadPriority.hpp"
@@ -51,7 +51,9 @@ public:
 
 
 
-class ShapesRenderer : public LeafRenderer {
+//class ShapesRenderer : public LeafRenderer {
+
+class ShapesRenderer : public DefaultRenderer {
 private:
   class LoadQueueItem {
   public:
@@ -113,11 +115,9 @@ private:
 
 
 #ifdef C_CODE
-  const G3MContext* _context;
   const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private G3MContext _context;
   private Camera    _lastCamera;
 #endif
 
@@ -131,6 +131,8 @@ private:
   GEOTileRasterizer* _geoTileRasterizer;
 
   void drainLoadQueue();
+  
+  void cleanLoadQueue();
 
 
   void requestBuffer(const URL&          url,
@@ -149,7 +151,6 @@ public:
 
   ShapesRenderer(bool renderNotReadyShapes=true) :
   _renderNotReadyShapes(renderNotReadyShapes),
-  _context(NULL),
   _glState(new GLState()),
   _glStateTransparent(new GLState()),
   _lastCamera(NULL),
@@ -169,6 +170,7 @@ public:
   _autoDeleteShapeTouchListener(false),
   _shapeTouchListener(NULL)
   {
+    _context = NULL;
   }
   
 
@@ -196,6 +198,15 @@ public:
 
   void addShape(Shape* shape);
   
+/*  void addShape(Shape* shape) {
+    _shapes.push_back(shape);
+    if (_context != NULL) {
+      shape->initialize(_context);
+    }
+  }*/
+
+  void removeShape(Shape* shape);
+
   void removeAllShapes(bool deleteShapes=true);
 
   void enableAll();
@@ -207,15 +218,9 @@ public:
     _context = context;
   }
 
-  void onPause(const G3MContext* context) {
-
-  }
-
-  void onDestroy(const G3MContext* context) {
-
-  }
-
-  void initialize(const G3MContext* context);
+  void onChangedContext();
+  
+  void onLostContext();
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
@@ -224,12 +229,6 @@ public:
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
-  }
-
-  void start(const G3MRenderContext* rc) {
-  }
-
-  void stop(const G3MRenderContext* rc) {
   }
 
   void render(const G3MRenderContext* rc, GLState* glState);

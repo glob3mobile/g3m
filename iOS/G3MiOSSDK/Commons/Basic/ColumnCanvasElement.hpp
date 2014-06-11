@@ -10,8 +10,11 @@
 #define __G3MiOSSDK__ColumnCanvasElement__
 
 #include "GroupCanvasElement.hpp"
+#include "ICanvasUtils.hpp"
 
 class ColumnCanvasElement : public GroupCanvasElement {
+private:
+  const HorizontalAlignment _elementAlign;
 protected:
   Vector2F* calculateExtent(ICanvas* canvas);
 
@@ -19,8 +22,10 @@ public:
   ColumnCanvasElement(const Color& color = Color::transparent(),
                       float margin = 0,
                       float padding = 0,
-                      float cornerRadius = 0) :
-  GroupCanvasElement(color, margin, padding, cornerRadius)
+                      float cornerRadius = 0,
+                      const HorizontalAlignment elementAlign = Center) :
+  GroupCanvasElement(color, margin, padding, cornerRadius),
+  _elementAlign(elementAlign)
   {
   }
 

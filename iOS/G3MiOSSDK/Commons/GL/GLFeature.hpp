@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GLFeature_hpp
-#define G3MiOSSDK_GLFeature_hpp
+#ifndef G3MiOSSDK_GLFeature
+#define G3MiOSSDK_GLFeature
 
 #include "GPUVariableValueSet.hpp"
 #include "GLFeatureGroup.hpp"
@@ -38,13 +38,14 @@ enum GLFeatureID{
 class GLFeature: public RCObject {
 protected:
   ~GLFeature() {
+    delete _values;
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
 protected:
-  GPUVariableValueSet _values;
+  GPUVariableValueSet* _values;
 
 public:
   const GLFeatureGroupName _group;
@@ -55,10 +56,11 @@ public:
   _group(group),
   _id(id)
   {
+    _values = new GPUVariableValueSet();
   }
 
   const GPUVariableValueSet* getGPUVariableValueSet() const{
-    return &_values;
+    return _values;
   }
 
   virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;
@@ -138,7 +140,7 @@ class GLCameraGroupFeature: public GLFeature {
 private:
 
 #ifdef C_CODE
-  Matrix44DHolder *_matrixHolder;
+  Matrix44DHolder* _matrixHolder;
 #endif
 #ifdef JAVA_CODE
   private Matrix44DHolder _matrixHolder = null;
@@ -316,6 +318,19 @@ private:
 #endif
   }
 
+  const int _target;
+
+  void createBasicValues(IFloatBuffer* texCoords,
+                         int arrayElementSize,
+                         int index,
+                         bool normalized,
+                         int stride);
+
+  GPUUniformValueVec2FloatMutable* _translation;
+  GPUUniformValueVec2FloatMutable* _scale;
+  GPUUniformValueVec2FloatMutable* _rotationCenter;
+  GPUUniformValueFloatMutable* _rotationAngle;
+
 public:
   TextureGLFeature(const IGLTextureId* texID,
                    IFloatBuffer* texCoords,
@@ -326,9 +341,44 @@ public:
                    bool blend,
                    int sFactor,
                    int dFactor,
-                   bool coordsTransformed,
-                   const Vector2D& translate,
-                   const Vector2D& scale);
+                   float translateU,
+                   float translateV,
+                   float scaleU,
+                   float scaleV,
+                   float rotationAngleInRadians,
+                   float rotationCenterU,
+                   float rotationCenterV,
+                   int target = 0);
+
+  TextureGLFeature(const IGLTextureId* texID,
+                   IFloatBuffer* texCoords,
+                   int arrayElementSize,
+                   int index,
+                   bool normalized,
+                   int stride,
+                   bool blend,
+                   int sFactor,
+                   int dFactor,
+                   int target = 0);
+
+  void setTranslation(float u, float v);
+  void setScale(float u, float v);
+  void setRotationAngleInRadiansAndRotationCenter(float angle, float u, float v);
+
+  int getTarget() const{
+    return _target;
+  }
+
+#ifdef C_CODE
+  IGLTextureId const* getTextureID() const{
+    return _texID;
+  }
+#endif
+#ifdef JAVA_CODE
+  public final IGLTextureId getTextureID() {
+    return _texID;
+  }
+#endif
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };
@@ -420,8 +470,8 @@ public:
                          bool normalized,
                          int stride,
                          bool coordsTransformed,
-                         const Vector2D& translate,
-                         const Vector2D& scale);
+                         const Vector2F& translate,
+                         const Vector2F& scale);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 };

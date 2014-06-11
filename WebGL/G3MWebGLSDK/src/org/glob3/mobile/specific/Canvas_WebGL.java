@@ -15,7 +15,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayNumber;
 
 
-public class Canvas_WebGL
+public final class Canvas_WebGL
          extends
             ICanvas {
 
@@ -366,7 +366,7 @@ public class Canvas_WebGL
    }
 
 
-   private native void jsLineCap(String cap) /*-{
+   private native void jsLineCap(final String cap) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.lineCap = cap;
    }-*/;
@@ -404,7 +404,7 @@ public class Canvas_WebGL
    @Override
    protected void _setLineDash(final float[] lengths,
                                final int count,
-                               final int phase) {
+                               final float phase) {
       final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
 
       for (int i = 0; i < count; i++) {
@@ -415,7 +415,7 @@ public class Canvas_WebGL
 
 
    private native void jsSetLineDash(final JsArrayNumber lengths,
-                                     final int phase) /*-{
+                                     final float phase) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.setLineDash(lengths);
 		context.lineDashOffset = phase;
@@ -441,6 +441,30 @@ public class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.fill();
 		context.stroke();
+   }-*/;
+
+
+   @Override
+   protected native void _drawImage(final IImage image,
+                                    final float srcLeft,
+                                    final float srcTop,
+                                    final float srcWidth,
+                                    final float srcHeight,
+                                    final float destLeft,
+                                    final float destTop,
+                                    final float destWidth,
+                                    final float destHeight,
+                                    final float transparency) /*-{
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
+
+		context.globalAlpha = transparency;
+
+		context.drawImage(imageJS, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop,
+				destWidth, destHeight);
+
+		context.globalAlpha = 1.0;
+
    }-*/;
 
 }

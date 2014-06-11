@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  IFactory.h
+//  IFactory.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
@@ -65,11 +65,11 @@ public abstract class IFactory
   {
   }
 
-  public abstract void deleteImage(IImage image);
+//  virtual void deleteImage(const IImage* image) const = 0;
 
   public abstract ITimer createTimer();
 
-  public abstract void deleteTimer(ITimer timer);
+//  virtual void deleteTimer(const ITimer* timer) const = 0;
 
   public abstract IFloatBuffer createFloatBuffer(int size);
 

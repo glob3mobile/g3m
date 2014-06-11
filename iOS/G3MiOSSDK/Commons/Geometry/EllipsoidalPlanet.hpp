@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef G3MiOSSDK_EllipsoidalPlanet_hpp
-#define G3MiOSSDK_EllipsoidalPlanet_hpp
+#ifndef G3MiOSSDK_EllipsoidalPlanet
+#define G3MiOSSDK_EllipsoidalPlanet
 
 #include <vector>
 #include <list>
@@ -170,12 +170,12 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Sector& shownSector) const{
-    const Vector3D asw = toCartesian(shownSector.getSW());
-    const Vector3D ane = toCartesian(shownSector.getNE());
+  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const{
+    const Vector3D asw = toCartesian(rendereSector.getSW());
+    const Vector3D ane = toCartesian(rendereSector.getNE());
     const double height = asw.sub(ane).length() * 1.9;
 
-    return Geodetic3D(shownSector._center,
+    return Geodetic3D(rendereSector._center,
                       height);
   }
 

@@ -36,14 +36,15 @@ public:
 
   // http://0.tiles.cartocdn.com/mdelacalle/tiles/tm_world_borders_simpl_0_3/2/0/1.png
 
-  CartoDBLayer(const std::string& userName,
-               const std::string& table,
-               const TimeInterval& timeToCache,
-               bool readExpired = true,
-               //int initialCartoDBLevel = 1,
-               LayerCondition* condition = NULL) :
-  MercatorTiledLayer("CartoDBLayer",
-                     "http://",
+  CartoDBLayer(const std::string&    userName,
+               const std::string&    table,
+               const TimeInterval&   timeToCache,
+               const bool            readExpired    = true,
+               const float           transparency   = 1,
+               const bool            isTransparent  = false,
+               const LayerCondition* condition      = NULL,
+               const std::string&    disclaimerInfo = "") :
+  MercatorTiledLayer("http://",
                      "tiles.cartocdn.com/" + userName + "/tiles/" + table,
                      getSubdomains(),
                      "png",
@@ -52,14 +53,23 @@ public:
                      Sector::fullSphere(),
                      2,
                      17,
-                     condition),
+                     isTransparent,
+                     transparency,
+                     condition,
+                     disclaimerInfo),
   _userName(userName),
   _table(table)
   {
-
   }
 
   const std::string description() const;
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
   CartoDBLayer* copy() const;
 

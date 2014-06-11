@@ -17,35 +17,55 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class InterpolatedSubviewElevationData extends SubviewElevationData
 {
 
   public InterpolatedSubviewElevationData(ElevationData elevationData, Sector sector, Vector2I extent)
   {
      super(elevationData, sector, extent);
-    for (int x = 0; x < _width; x++)
+
+    if (sector.isEquals(elevationData.getSector()) && extent._x == elevationData.getExtentWidth() && extent._y == elevationData.getExtentHeight())
     {
-      final double u = (double) x / (_width - 1);
 
-      final Angle longitude = _sector.getInnerPointLongitude(u);
-
-      for (int y = 0; y < _height; y++)
+      //Performing copy
+      for (int x = 0; x < _width; x++)
       {
-        final double v = 1.0 - ((double) y / (_height - 1));
-
-        final Angle latitude = _sector.getInnerPointLatitude(v);
-
-        final int index = ((_height-1-y) * _width) + x;
-
-        final double height = elevationData.getElevationAt(latitude, longitude);
-
-        _buffer[index] = (float) height;
-
-        if (!_hasNoData)
+        for (int y = 0; y < _height; y++)
         {
-          if ((height != height))
+          final int index = ((_height-1-y) * _width) + x;
+          _buffer[index] = (float)elevationData.getElevationAt(x, y);
+        }
+      }
+
+    }
+    else
+    {
+
+      for (int x = 0; x < _width; x++)
+      {
+        final double u = (double) x / (_width - 1);
+
+        final Angle longitude = _sector.getInnerPointLongitude(u);
+
+        for (int y = 0; y < _height; y++)
+        {
+          final double v = 1.0 - ((double) y / (_height - 1));
+
+          final Angle latitude = _sector.getInnerPointLatitude(v);
+
+          final int index = ((_height-1-y) * _width) + x;
+
+          final double height = elevationData.getElevationAt(latitude, longitude);
+
+          _buffer[index] = (float) height;
+
+          if (!_hasNoData)
           {
-            _hasNoData = true;
+            if ((height != height))
+            {
+              _hasNoData = true;
+            }
           }
         }
       }

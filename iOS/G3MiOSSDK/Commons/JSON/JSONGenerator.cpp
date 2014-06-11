@@ -12,7 +12,6 @@
 #include "IStringBuilder.hpp"
 #include "JSONBoolean.hpp"
 #include "JSONString.hpp"
-//#include "JSONNumber.hpp"
 #include "JSONDouble.hpp"
 #include "JSONFloat.hpp"
 #include "JSONInteger.hpp"
@@ -38,7 +37,6 @@ JSONGenerator::~JSONGenerator() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 std::string JSONGenerator::getString() {
@@ -54,29 +52,26 @@ void JSONGenerator::visitBoolean(const JSONBoolean* value) {
   }
 }
 
-//void JSONGenerator::visitNumber(const JSONNumber* value) {
-//  switch ( value->getType() ) {
-//    case int_type:
-//      _isb->addInt(value->intValue());
-//      break;
-//    case float_type:
-//      _isb->addFloat(value->floatValue());
-//      break;
-//    case double_type:
-//      _isb->addDouble(value->doubleValue());
-//      break;
-//
-//    default:
-//      break;
-//  }
-//}
-
 void JSONGenerator::visitDouble(const JSONDouble* value) {
-  _isb->addDouble(value->doubleValue());
+  const double doubleValue = value->doubleValue();
+  const long long longValue = (long long) doubleValue;
+  if (longValue == doubleValue) {
+    _isb->addLong(longValue);
+  }
+  else {
+    _isb->addDouble(doubleValue);
+  }
 }
 
 void JSONGenerator::visitFloat(const JSONFloat*   value) {
-  _isb->addFloat(value->floatValue());
+  const float floatValue = value->floatValue();
+  const int intValue = (int) floatValue;
+  if (intValue == floatValue) {
+    _isb->addInt(intValue);
+  }
+  else {
+    _isb->addFloat(floatValue);
+  }
 }
 
 void JSONGenerator::visitInteger(const JSONInteger* value) {

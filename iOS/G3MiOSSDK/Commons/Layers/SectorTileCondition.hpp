@@ -22,11 +22,13 @@ public:
   {
   }
 
-  bool isAvailable(const G3MRenderContext* rc,
-                   const Tile* tile) const;
+//  bool isAvailable(const G3MRenderContext* rc,
+//                   const Tile* tile) const;
+//
+//  bool isAvailable(const G3MEventContext* ec,
+//                   const Tile* tile) const;
 
-  bool isAvailable(const G3MEventContext* ec,
-                   const Tile* tile) const;
+  bool isAvailable(const Tile* tile) const;
 
   SectorTileCondition* copy() const;
 

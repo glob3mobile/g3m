@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_JSONArray_hpp
-#define G3MiOSSDK_JSONArray_hpp
+#ifndef G3MiOSSDK_JSONArray
+#define G3MiOSSDK_JSONArray
 
 #include <vector>
 
@@ -44,6 +44,12 @@ public:
   int size() const;
 
   void add(JSONBaseObject* object);
+  void add(const std::string& value);
+  void add(double value);
+  void add(float value);
+  void add(int value);
+  void add(long long value);
+  void add(bool value);
 
   const std::string description() const;
 

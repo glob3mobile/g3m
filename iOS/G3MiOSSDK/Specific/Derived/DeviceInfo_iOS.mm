@@ -14,29 +14,29 @@
 
 
 DeviceInfo_iOS::DeviceInfo_iOS() {
-  UIScreen* mainScreen = [UIScreen mainScreen];
-
-  const float scale = [mainScreen respondsToSelector:@selector(scale)]
-  /*                          */ ? [mainScreen scale]
-  /*                          */ : 1;
+  //  UIScreen* mainScreen = [UIScreen mainScreen];
+  //
+  //  const float scale = [mainScreen respondsToSelector:@selector(scale)]
+  //  /*                          */ ? [mainScreen scale]
+  //  /*                          */ : 1;
+  const float scale = 1; // doesn't consider the retina factor as the opengl-view doesn't change it size based on retina resolution
 
   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    char* machine = new char[size+1];// malloc(size + 1);
+    char* machine = new char[size+1];
     sysctlbyname("hw.machine", machine, &size, NULL, 0);
     machine[size] = 0;
 
     //TODO: NEW MODELS OF IPAD MINI MAY HAVE NEW IDENTIFIERS
-
     bool iPadMini = strcmp(machine, "iPad2,5") == 0;
     delete [] machine;
 
-    if (iPadMini){
+    if (iPadMini) {
       _dpi = 163 * scale;
     }
-    else{ //REGULAR IPAD
+    else {
+      // REGULAR IPAD
       _dpi = 132 * scale;
     }
   }
@@ -46,5 +46,5 @@ DeviceInfo_iOS::DeviceInfo_iOS() {
   else {
     _dpi = 160 * scale;
   }
-
+  
 }

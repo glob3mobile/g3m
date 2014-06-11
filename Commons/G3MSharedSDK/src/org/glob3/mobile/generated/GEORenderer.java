@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class GEOTileRasterizer;
 //class GEORenderer_ObjectSymbolizerPair;
 
-public class GEORenderer extends LeafRenderer
+public class GEORenderer extends DefaultRenderer
 {
 
   private static class LoadQueueItem
@@ -67,6 +67,20 @@ public class GEORenderer extends LeafRenderer
     _loadQueue.clear();
   }
 
+  private void cleanLoadQueue()
+  {
+    final int loadQueueSize = _loadQueue.size();
+    for (int i = 0; i < loadQueueSize; i++)
+    {
+      LoadQueueItem item = _loadQueue.get(i);
+      if (item != null)
+         item.dispose();
+    }
+  
+    _loadQueue.clear();
+  }
+
+
   private java.util.ArrayList<GEORenderer_ObjectSymbolizerPair> _children = new java.util.ArrayList<GEORenderer_ObjectSymbolizerPair>();
 
   private final GEOSymbolizer _defaultSymbolizer;
@@ -76,13 +90,11 @@ public class GEORenderer extends LeafRenderer
   private MarksRenderer _marksRenderer;
   private GEOTileRasterizer _geoTileRasterizer;
 
-  private G3MContext _context;
-
   private java.util.ArrayList<LoadQueueItem> _loadQueue = new java.util.ArrayList<LoadQueueItem>();
 
   private void requestBuffer(URL url, GEOSymbolizer symbolizer, long priority, TimeInterval timeToCache, boolean readExpired, boolean isBSON)
   {
-  //  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url.getPath().c_str());
+  //  ILogger::instance()->logInfo("Requesting GEOObject from \"%s\"", url._path.c_str());
     IDownloader downloader = _context.getDownloader();
     downloader.requestBuffer(url, priority, timeToCache, readExpired, new GEORenderer_GEOObjectBufferDownloadListener(this, symbolizer, _context.getThreadUtils(), isBSON), true);
   }
@@ -105,7 +117,7 @@ public class GEORenderer extends LeafRenderer
      _shapesRenderer = shapesRenderer;
      _marksRenderer = marksRenderer;
      _geoTileRasterizer = geoTileRasterizer;
-     _context = null;
+    initialize(null);
   }
 
   public void dispose()
@@ -147,34 +159,20 @@ public class GEORenderer extends LeafRenderer
     }
   }
 
-  public final void onResume(G3MContext context)
+  public final void onChangedContext()
   {
-
-  }
-
-  public final void onPause(G3MContext context)
-  {
-
-  }
-
-  public final void onDestroy(G3MContext context)
-  {
-
-  }
-
-  public final void initialize(G3MContext context)
-  {
-    _context = context;
-  
     if (_context != null)
     {
       drainLoadQueue();
     }
   }
 
-  public final RenderState getRenderState(G3MRenderContext rc)
+  public final void onLostContext()
   {
-    return RenderState.ready();
+    if (_context == null)
+    {
+      cleanLoadQueue();
+    }
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -200,22 +198,7 @@ public class GEORenderer extends LeafRenderer
     }
   }
 
-  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
-  {
-    return false;
-  }
-
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
-  {
-
-  }
-
-  public final void start(G3MRenderContext rc)
-  {
-
-  }
-
-  public final void stop(G3MRenderContext rc)
   {
 
   }

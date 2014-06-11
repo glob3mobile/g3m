@@ -6,7 +6,7 @@ public class GPUUniformValueFloat extends GPUUniformValue
     super.dispose();
   }
 
-  public final float _value;
+  public float _value;
 
   public GPUUniformValueFloat(float d)
   {
