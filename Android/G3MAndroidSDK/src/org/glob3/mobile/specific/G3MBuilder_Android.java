@@ -6,7 +6,7 @@ import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;
-import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.Storage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.TimeInterval;
 
@@ -76,7 +76,7 @@ public class G3MBuilder_Android
 
 
    @Override
-   protected IStorage createDefaultStorage() {
+   protected Storage createDefaultStorage() {
       return new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext());
    }
 

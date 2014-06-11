@@ -22,7 +22,7 @@ import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.Storage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
@@ -297,7 +297,7 @@ public final class G3MWidget_Android
    }
 
 
-   public void initWidget(final IStorage storage,
+   public void initWidget(final Storage storage,
                           final IDownloader downloader,
                           final IThreadUtils threadUtils,
                           final ICameraActivityListener cameraActivityListener,

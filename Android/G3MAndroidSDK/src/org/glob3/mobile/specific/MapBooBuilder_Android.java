@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.GPUProgramFactory;
 import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.Storage;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.MapBooApplicationChangeListener;
 import org.glob3.mobile.generated.MapBooBuilder;
@@ -26,7 +26,7 @@ public class MapBooBuilder_Android
 
 
    @Override
-   protected IStorage createStorage() {
+   protected Storage createStorage() {
       return new SQLiteStorage_Android("g3m.cache", _nativeWidget.getContext());
    }
 

@@ -12,7 +12,7 @@ import org.glob3.mobile.generated.IByteBufferResult;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageResult;
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.Storage;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
@@ -27,7 +27,7 @@ import android.util.Log;
 
 public final class SQLiteStorage_Android
          extends
-            IStorage {
+            Storage {
 
    private static final String[]         COLUMNS       = new String[] { "contents", "expiration" };
    private static final String           SELECTION     = "name = ?";

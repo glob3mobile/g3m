@@ -115,13 +115,14 @@ public:
   }
 
   Matrix44DMultiplicationHolder* create() const {
+
     const int providersSize = _providers.size();
-    //const Matrix44DProvider* ps[providersSize];
-
-	//const Matrix44DProvider* *ps;
-	//ps = new Matrix44DProvider*[providersSize];
-
+#ifdef C_CODE
 	const Matrix44DProvider* *ps = new const Matrix44DProvider*[providersSize];
+#endif
+#ifdef JAVA_CODE
+	final Matrix44DProvider[] ps = new Matrix44DProvider[providersSize];
+#endif
 
     for (int i = 0; i < providersSize; i++) {
       ps[i] = _providers[i];
