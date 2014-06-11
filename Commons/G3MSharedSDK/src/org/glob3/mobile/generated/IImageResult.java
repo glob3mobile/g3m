@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  IStorage.cpp
+//  Storage.cpp
 //  G3MiOSSDK
 //
 //  Created by Mari Luz Mateo on 05/11/12.

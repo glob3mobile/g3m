@@ -79,8 +79,7 @@ public abstract class DefaultRenderer implements Renderer
       _enable = enable;
       if(_changedInfoListener!= null)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning vtp ask dgd: empty vector?
+//#define vtp ask dgd: empty vector?
         if(isEnable())
         {
           notifyChangedInfo(_info);

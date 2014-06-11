@@ -207,7 +207,7 @@ public class TileTextureBuilder extends RCObject
         }
         else
         {
-          sourceRect = new RectangleF(0, 0, image.getWidth(), image.getHeight());
+          sourceRect = new RectangleF(0.f, 0.f, image.getWidth(), image.getHeight());
         }
 
         //Part of the image we are going to draw

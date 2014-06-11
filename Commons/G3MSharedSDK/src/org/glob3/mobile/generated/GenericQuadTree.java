@@ -94,13 +94,7 @@ public class GenericQuadTree
     return false;
   }
 
-  public final void symbolize(GEOTileRasterizer geoTileRasterizer)
-  {
-    if (_root != null)
-    {
-      _root.symbolize(geoTileRasterizer);
-    }
-  }
+  //void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
 
   public final java.util.ArrayList<Geodetic2D> getGeodetics()
   {

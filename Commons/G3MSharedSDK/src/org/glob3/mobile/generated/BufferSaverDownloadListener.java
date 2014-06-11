@@ -8,11 +8,11 @@ public class BufferSaverDownloadListener extends IBufferDownloadListener
   private IBufferDownloadListener _listener;
   private final boolean _deleteListener;
 
-  private IStorage _storage;
+  private Storage _storage;
 
   private final TimeInterval _timeToCache;
 
-  public BufferSaverDownloadListener(CachedDownloader downloader, IByteBuffer expiredBuffer, IBufferDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
+  public BufferSaverDownloadListener(CachedDownloader downloader, IByteBuffer expiredBuffer, IBufferDownloadListener listener, boolean deleteListener, Storage storage, TimeInterval timeToCache)
   {
      _downloader = downloader;
      _expiredBuffer = expiredBuffer;

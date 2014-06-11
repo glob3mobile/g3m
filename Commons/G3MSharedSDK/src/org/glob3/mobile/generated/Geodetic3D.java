@@ -67,6 +67,11 @@ public class Geodetic3D
     return new Geodetic2D(_latitude, _longitude);
   }
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if _MSC_VER
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma pop_macro("ABSOLUTE")
+//#endif
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

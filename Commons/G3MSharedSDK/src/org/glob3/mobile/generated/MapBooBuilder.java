@@ -26,7 +26,7 @@ public abstract class MapBooBuilder
 
   private GL _gl;
   private G3MWidget _g3mWidget;
-  private IStorage _storage;
+  private Storage _storage;
 
   private IWebSocket _webSocket;
 
@@ -1055,7 +1055,7 @@ public abstract class MapBooBuilder
     return Planet.createSphericalEarth();
   }
 
-  protected final IStorage getStorage()
+  protected final Storage getStorage()
   {
     if (_storage == null)
     {
@@ -1064,7 +1064,7 @@ public abstract class MapBooBuilder
     return _storage;
   }
 
-  protected abstract IStorage createStorage();
+  protected abstract Storage createStorage();
 
   protected abstract IDownloader createDownloader();
 

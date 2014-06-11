@@ -291,8 +291,7 @@ public abstract class Layer
 
   public final java.util.ArrayList<String> getInfos()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO BETTER
+//#define TODO BETTER
     _info.clear();
     final String layerInfo = getInfo();
     _info.add(layerInfo);

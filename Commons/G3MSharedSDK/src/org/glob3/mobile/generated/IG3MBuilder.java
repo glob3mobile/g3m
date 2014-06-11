@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class GL;
-//class IStorage;
+//class Storage;
 //class IDownloader;
 //class IThreadUtils;
 //class ICameraActivityListener;
@@ -373,15 +373,15 @@ public abstract class IG3MBuilder
   }
 
 
-  protected IStorage _storage;
+  protected Storage _storage;
 
 
   /**
    * Returns the _storage. If it does not exist, it will be default initializated.
    *
-   * @return _storage: IStorage*
+   * @return _storage: Storage*
    */
-  protected final IStorage getStorage()
+  protected final Storage getStorage()
   {
     if (_storage == null)
     {
@@ -467,7 +467,7 @@ public abstract class IG3MBuilder
   }
 
   protected abstract IThreadUtils createDefaultThreadUtils();
-  protected abstract IStorage createDefaultStorage();
+  protected abstract Storage createDefaultStorage();
   protected abstract IDownloader createDefaultDownloader();
 
 
@@ -586,7 +586,7 @@ public abstract class IG3MBuilder
    *
    * @param storage
    */
-  public final void setStorage(IStorage storage)
+  public final void setStorage(Storage storage)
   {
     if (_storage != null)
     {

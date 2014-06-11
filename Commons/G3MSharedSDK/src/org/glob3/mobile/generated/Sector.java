@@ -487,31 +487,41 @@ public class Sector
         return _deltaLatitude._degrees * _deltaLongitude._degrees;
     }
 
-    public final GEORasterSymbol createGEOSymbol(Color c)
-    {
+    //const GEORasterSymbol* createGEOSymbol(const Color& c) const;
+
+
+    /*const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const{
     
-      java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
+      std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
     
-      coordinates.add(new Geodetic2D(getSW()));
-      coordinates.add(new Geodetic2D(getNW()));
-      coordinates.add(new Geodetic2D(getNE()));
-      coordinates.add(new Geodetic2D(getSE()));
-      coordinates.add(new Geodetic2D(getSW()));
+      coordinates->push_back( new Geodetic2D( getSW() ) );
+      coordinates->push_back( new Geodetic2D( getNW() ) );
+      coordinates->push_back( new Geodetic2D( getNE() ) );
+      coordinates->push_back( new Geodetic2D( getSE() ) );
+      coordinates->push_back( new Geodetic2D( getSW() ) );
     
       //    printf("RESTERIZING: %s\n", _sector->description().c_str());
     
-      float[] dashLengths = {};
+      //float dashLengths[] = {};
+      float* dashLengths;
       int dashCount = 0;
     
-      GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
+      GEO2DLineRasterStyle ls(c, //const Color&     color,
+                              (float)1.0, //const float      width,
+                              CAP_ROUND, // const StrokeCap  cap,
+                              JOIN_ROUND, //const StrokeJoin join,
+                              1, //const float      miterLimit,
+                              dashLengths, //float            dashLengths[],
+                              dashCount, //const int        dashCount,
+                              0); //const int        dashPhase) :
     
     
-      final GEO2DCoordinatesData coordinatesData = new GEO2DCoordinatesData(coordinates);
-      final GEOLineRasterSymbol result = new GEOLineRasterSymbol(coordinatesData, ls);
-      coordinatesData._release();
+      const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
+      const GEOLineRasterSymbol* result = new GEOLineRasterSymbol(coordinatesData, ls);
+      coordinatesData->_release();
       return result;
-    }
-
+    }*/
+    
     public final Geodetic2D getClosesInnerPoint(Geodetic2D g)
     {
       double lat = g._latitude._degrees;

@@ -87,7 +87,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   
     canvas.setLineColor(Color.green());
     canvas.setLineWidth(1);
-    canvas.strokeRectangle(0, 0, width, height);
+    canvas.strokeRectangle(0.f, 0.f, width, height);
   
     canvas.createImage(new DebugTileImageProvider.ImageListener(tile._id, contribution, listener, deleteListener), true);
   }

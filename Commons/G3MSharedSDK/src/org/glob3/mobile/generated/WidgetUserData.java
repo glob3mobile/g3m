@@ -43,7 +43,7 @@ package org.glob3.mobile.generated;
 //class IJSONParser;
 //class Geodetic3D;
 //class CameraRenderer;
-//class IStorage;
+//class Storage;
 //class ITextUtils;
 //class G3MEventContext;
 //class SurfaceElevationProvider;

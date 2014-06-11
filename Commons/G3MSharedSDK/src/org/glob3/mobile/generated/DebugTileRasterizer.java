@@ -118,7 +118,7 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
     {
       canvas.setLineColor(_color);
       canvas.setLineWidth(1);
-      canvas.strokeRectangle(0, 0, width, height);
+      canvas.strokeRectangle(0.f, 0.f, width, height);
     }
   
     if (_showIDLabel || _showSectorLabels)

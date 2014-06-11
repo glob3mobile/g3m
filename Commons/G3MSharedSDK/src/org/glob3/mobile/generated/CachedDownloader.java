@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 public class CachedDownloader extends IDownloader
 {
   private IDownloader _downloader;
-  private IStorage _storage;
+  private Storage _storage;
 
   private int _requestsCounter;
   private int _cacheHitsCounter;
@@ -70,7 +70,7 @@ public class CachedDownloader extends IDownloader
   private IImageResult _lastImageResult;
   private URL _lastImageURL;
 
-  public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
+  public CachedDownloader(IDownloader downloader, Storage storage, boolean saveInBackground)
   {
      _downloader = downloader;
      _storage = storage;

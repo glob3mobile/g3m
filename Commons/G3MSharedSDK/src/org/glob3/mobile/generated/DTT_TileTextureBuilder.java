@@ -155,15 +155,13 @@ public class DTT_TileTextureBuilder extends RCObject
 
   public final void imageCreationError(String error)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work
+//#define Diego at work
     ILogger.instance().logError("%s", error);
   }
 
   public final void imageCreationCanceled()
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Diego at work
+//#define Diego at work
   }
 
 }

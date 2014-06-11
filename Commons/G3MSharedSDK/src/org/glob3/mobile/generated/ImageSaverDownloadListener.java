@@ -8,11 +8,11 @@ public class ImageSaverDownloadListener extends IImageDownloadListener
   private IImageDownloadListener _listener;
   private final boolean _deleteListener;
 
-  private IStorage _storage;
+  private Storage _storage;
 
   private final TimeInterval _timeToCache;
 
-  public ImageSaverDownloadListener(CachedDownloader downloader, IImage expiredImage, IImageDownloadListener listener, boolean deleteListener, IStorage storage, TimeInterval timeToCache)
+  public ImageSaverDownloadListener(CachedDownloader downloader, IImage expiredImage, IImageDownloadListener listener, boolean deleteListener, Storage storage, TimeInterval timeToCache)
   {
      _downloader = downloader;
      _expiredImage = expiredImage;

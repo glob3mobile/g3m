@@ -242,10 +242,9 @@ public class GenericQuadTree_TESTER
     NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
     tree.acceptNodeVisitor(nodeVis);
   
-    if (rasterizer != null)
-    {
+    /*if (rasterizer != NULL) {
       tree.symbolize(rasterizer);
-    }
+    }*/
   
     double c_e = (float)_nComparisons / _nElements;
     ILogger.instance().logInfo("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
@@ -283,10 +282,9 @@ public class GenericQuadTree_TESTER
     NodeVisitor_TESTER nodeVis = new NodeVisitor_TESTER();
     tree.acceptNodeVisitor(nodeVis);
   
-    if (rasterizer != null)
-    {
+    /*if (rasterizer != NULL) {
       tree.symbolize(rasterizer);
-    }
+    }*/
   
     double c_e = (float)_nComparisons / _nElements;
     ILogger.instance().logInfo("NElements Found = %d, Mean NComparisons = %f -> COEF: %f\n", _nElements, c_e, c_e / _nElements);
@@ -300,6 +298,12 @@ public class GenericQuadTree_TESTER
 ///////////////////////////////
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark TREE
+
+/*void GenericQuadTree::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
+  if (_root != NULL) {
+    _root->symbolize(geoTileRasterizer);
+  }
+}*/
 
 ///////////////////////////////////////////////////////////////////////
 

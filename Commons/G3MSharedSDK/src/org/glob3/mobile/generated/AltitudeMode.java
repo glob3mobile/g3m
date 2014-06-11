@@ -17,11 +17,18 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if _MSC_VER
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma push_macro("ABSOLUTE")
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#undef ABSOLUTE
+//#endif
 //Altitude modes taken from KML standard (with the exception of relative to sea floor)
 public enum AltitudeMode
 {
-  RELATIVE_TO_GROUND, //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
-  ABSOLUTE; //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
+   RELATIVE_TO_GROUND, //Relative to elevation provided by any SurfaceElevationProvider (tipycally PlanetRenderer)
+   ABSOLUTE; //Relative to surface of geometrical planet definition (Ellipsoid, sphere, flat...)
 
    public int getValue()
    {

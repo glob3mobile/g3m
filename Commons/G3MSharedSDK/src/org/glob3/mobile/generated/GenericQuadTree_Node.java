@@ -419,47 +419,52 @@ public class GenericQuadTree_Node
     return n;
   }
 
-  public final void symbolize(GEOTileRasterizer geoTileRasterizer)
-  {
+  //void symbolize(GEOTileRasterizer* geoTileRasterizer) const;
+
+
+  /*void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const{
   
-    if (_elements.size() > 0)
-    {
-      java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
+    if (_elements.size() > 0) {
+      std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
   
-      coordinates.add(new Geodetic2D(_sector.getSW()));
-      coordinates.add(new Geodetic2D(_sector.getNW()));
-      coordinates.add(new Geodetic2D(_sector.getNE()));
-      coordinates.add(new Geodetic2D(_sector.getSE()));
-      coordinates.add(new Geodetic2D(_sector.getSW()));
+      coordinates->push_back( new Geodetic2D( _sector->getSW() ) );
+      coordinates->push_back( new Geodetic2D( _sector->getNW() ) );
+      coordinates->push_back( new Geodetic2D( _sector->getNE() ) );
+      coordinates->push_back( new Geodetic2D( _sector->getSE() ) );
+      coordinates->push_back( new Geodetic2D( _sector->getSW() ) );
   
       //    printf("RESTERIZING: %s\n", _sector->description().c_str());
   
-      float[] dashLengths = {};
+      //float dashLengths[] = {};
+  	float* dashLengths = 0;
       int dashCount = 0;
   
-      Color c = Color.red().wheelStep(12, _depth);
+      Color c = Color::red().wheelStep(12, _depth);
   
-      GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
+      GEO2DLineRasterStyle ls(c, //const Color&     color,
+                              (float)1.0, //const float      width,
+                              CAP_ROUND, // const StrokeCap  cap,
+                              JOIN_ROUND, //const StrokeJoin join,
+                              1, //const float      miterLimit,
+                              dashLengths, //float            dashLengths[],
+                              dashCount, //const int        dashCount,
+                              0); //const int        dashPhase) :
   
   
-      final GEO2DCoordinatesData coordinatesData = new GEO2DCoordinatesData(coordinates);
-      GEOLineRasterSymbol symbol = new GEOLineRasterSymbol(coordinatesData, ls);
-      coordinatesData._release();
+      const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
+      GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
+      coordinatesData->_release();
   
-      geoTileRasterizer.addSymbol(symbol);
+      geoTileRasterizer->addSymbol(symbol);
     }
   
-    if (_children != null)
-    {
-      for (int i = 0; i < 4; i++)
-      {
-        _children[i].symbolize(geoTileRasterizer);
+    if (_children != NULL) {
+      for (int i = 0; i < 4; i++) {
+        _children[i]->symbolize(geoTileRasterizer);
       }
     }
+  }*/
   
-  
-  }
-
   public final void getGeodetics(java.util.ArrayList<Geodetic2D> geo)
   {
     for (int i = 0; i < _elements.size(); i++)

@@ -1,9 +1,9 @@
 package org.glob3.mobile.generated; 
-public abstract class IStorage
+public abstract class Storage
 {
   protected G3MContext _context;
 
-  public IStorage()
+  public Storage()
   {
      _context = null;
   }

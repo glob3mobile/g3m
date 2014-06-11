@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class NullStorage extends IStorage
+public class NullStorage extends Storage
 {
   public final IByteBufferResult readBuffer(URL url, boolean readExpired)
   {
