@@ -512,7 +512,7 @@ public:
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
   builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
     
-    if (bool showingPNOA = true){
+    if (bool showingPNOA = false){
         Sector sector = Sector::fromDegrees(21, -18, 45, 6);
         std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
         
@@ -1040,10 +1040,9 @@ public:
     //Geodetic3D position(Geodetic3D(Angle::fromDegrees(-12.0875), Angle::fromDegrees(15.2036), 2328992));
     //Geodetic3D position(Geodetic3D(Angle::fromDegrees(-17.56), Angle::fromDegrees(19.20), 4390000));
     Geodetic3D position(Geodetic3D(Angle::fromDegrees(39.08), Angle::fromDegrees(2.90), 113000));
-    //[self G3MWidget].widget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5), position);
     [self G3MWidget].widget->setCameraPosition(position);
-    [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(5));
-    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24));
+    [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-5));
+    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24-90));
   }
 
 }
@@ -1496,7 +1495,7 @@ public:
   }
   
   //TODO: Check merkator with elevations
-  const bool useMapQuestOSM = false;
+  const bool useMapQuestOSM = true;
   if (useMapQuestOSM) {
     layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
     //    layerSet->addLayer( MapQuestLayer::newOpenAerial(TimeInterval::fromDays(30)) );
@@ -1513,7 +1512,7 @@ public:
                                        TimeInterval::fromDays(30)));
   }
   
-  bool testingTransparencies = true;
+  bool testingTransparencies = false;
   if (testingTransparencies){
     
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
