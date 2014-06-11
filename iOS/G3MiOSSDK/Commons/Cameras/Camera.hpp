@@ -10,15 +10,12 @@
 #ifndef G3MiOSSDK_Camera
 #define G3MiOSSDK_Camera
 
-#include <math.h>
-
 #include "CoordinateSystem.hpp"
 #include "TaitBryanAngles.hpp"
 
 #include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "Context.hpp"
-#include "IFactory.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2I.hpp"
 #include "MutableMatrix44D.hpp"
@@ -106,8 +103,8 @@ public:
 class Camera {
 public:
   Camera(const Camera &that):
-  _width(that._width),
-  _height(that._height),
+  _viewPortWidth(that._viewPortWidth),
+  _viewPortHeight(that._viewPortHeight),
   _planet(that._planet),
   _position(that._position),
   _groundHeight(that._groundHeight),
@@ -122,6 +119,7 @@ public:
   _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
+  _widerFrustumInModelCoordinates((that._widerFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._widerFrustumInModelCoordinates)),
   _camEffectTarget(new CameraEffectTarget()),
   _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
   _angle2Horizon(that._angle2Horizon),
@@ -138,6 +136,7 @@ public:
     delete _camEffectTarget;
     delete _frustum;
     delete _frustumInModelCoordinates;
+    delete _widerFrustumInModelCoordinates;
     delete _geodeticCenterOfView;
     delete _geodeticPosition;
   }
@@ -159,11 +158,11 @@ public:
   const Vector2F point2Pixel(const Vector3D& point) const;
   const Vector2F point2Pixel(const Vector3F& point) const;
 
-  int getWidth() const { return _width; }
-  int getHeight() const { return _height; }
+  int getViewPortWidth()  const { return _viewPortWidth; }
+  int getViewPortHeight() const { return _viewPortHeight; }
 
   float getViewPortRatio() const {
-    return (float) _width / _height;
+    return (float) _viewPortWidth / _viewPortHeight;
   }
 
   EffectTarget* getEffectTarget() {
@@ -200,6 +199,14 @@ public:
       _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix());
     }
     return _frustumInModelCoordinates;
+  }
+  
+  const Frustum* const getWiderFrustumInModelCoordinates(float factor) const {
+    if (_widerFrustumInModelCoordinates)
+      delete _widerFrustumInModelCoordinates;
+    Frustum widerFrustum(calculateWiderFrustumData(factor));
+    _widerFrustumInModelCoordinates = widerFrustum.transformedBy_P(getModelMatrix());
+    return _widerFrustumInModelCoordinates;
   }
 
   Vector3D getHorizontalVector();
@@ -333,11 +340,13 @@ private:
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
-  int _width;
-  int _height;
-
+  int _viewPortWidth;
+  int _viewPortHeight;
+#ifdef C_CODE
   const Planet *_planet;
-
+#else
+  Planet *_planet;
+#endif
   MutableVector3D _position;            // position
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector
@@ -361,6 +370,7 @@ private:
   mutable Geodetic3D*      _geodeticCenterOfView;
   mutable Frustum*         _frustum;
   mutable Frustum*         _frustumInModelCoordinates;
+  mutable Frustum*         _widerFrustumInModelCoordinates;
   double                   _tanHalfVerticalFieldOfView;
   double                   _tanHalfHorizontalFieldOfView;
   double                   _rollInRadians;
@@ -420,6 +430,7 @@ private:
   }
 
   FrustumData calculateFrustumData() const;
+  FrustumData calculateWiderFrustumData(float factor) const;
 
   // opengl projection matrix
   const MutableMatrix44D& getProjectionMatrix() const{

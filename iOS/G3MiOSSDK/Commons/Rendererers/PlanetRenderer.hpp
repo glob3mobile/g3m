@@ -18,17 +18,19 @@ class VisibleSectorListener;
 class ElevationDataProvider;
 class LayerTilesRenderParameters;
 class TerrainTouchListener;
+class ChangedInfoListener;
 
 #include "IStringBuilder.hpp"
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
-#include "TileKey.hpp"
 #include "Camera.hpp"
 #include "LayerSet.hpp"
 #include "ITileVisitor.hpp"
-#include "ChangedListener.hpp"
 #include "SurfaceElevationProvider.hpp"
+#include "ChangedListener.hpp"
+
+
 
 class EllipsoidShape;
 class TileRasterizer;
@@ -46,53 +48,40 @@ private:
   int _tilesVisibleByLevel[_maxLOD];
   int _tilesRenderedByLevel[_maxLOD];
 
-  int _splitsCountInFrame;
   int _buildersStartsInFrame;
 
-  Sector* _renderedSector;
+  double _visibleLowerLatitudeDegrees;
+  double _visibleLowerLongitudeDegrees;
+  double _visibleUpperLatitudeDegrees;
+  double _visibleUpperLongitudeDegrees;
 
 public:
 
-  TilesStatistics() :
-  _tilesProcessed(0),
-  _tilesVisible(0),
-  _tilesRendered(0),
-  _splitsCountInFrame(0),
-  _buildersStartsInFrame(0),
-  _renderedSector(NULL)
+  TilesStatistics()
   {
-    for (int i = 0; i < _maxLOD; i++) {
-      _tilesProcessedByLevel[i] = 0;
-      _tilesVisibleByLevel[i]   = 0;
-      _tilesRenderedByLevel[i]  = 0;
-    }
+    clear();
   }
 
   ~TilesStatistics() {
-    delete _renderedSector;
   }
 
   void clear() {
     _tilesProcessed = 0;
     _tilesVisible = 0;
     _tilesRendered = 0;
-    _splitsCountInFrame = 0;
     _buildersStartsInFrame = 0;
-    delete _renderedSector;
-    _renderedSector = NULL;
+
+    const IMathUtils* mu = IMathUtils::instance();
+    _visibleLowerLatitudeDegrees  = mu->maxDouble();
+    _visibleLowerLongitudeDegrees = mu->maxDouble();
+    _visibleUpperLatitudeDegrees  = mu->minDouble();
+    _visibleUpperLongitudeDegrees = mu->minDouble();
+
     for (int i = 0; i < _maxLOD; i++) {
       _tilesProcessedByLevel[i] = 0;
       _tilesVisibleByLevel[i]   = 0;
       _tilesRenderedByLevel[i]  = 0;
     }
-  }
-
-  int getSplitsCountInFrame() const {
-    return _splitsCountInFrame;
-  }
-
-  void computeSplitInFrame() {
-    _splitsCountInFrame++;
   }
 
   int getBuildersStartsInFrame() const {
@@ -119,31 +108,40 @@ public:
 
   void computeRenderedSector(Tile* tile) {
     const Sector sector = tile->_sector;
-    if (_renderedSector == NULL) {
-#ifdef C_CODE
-      _renderedSector = new Sector( sector );
-#endif
-#ifdef JAVA_CODE
-      _renderedSector = sector;
-#endif
+
+    const double lowerLatitudeDegrees  = sector._lower._latitude._degrees;
+    const double lowerLongitudeDegrees = sector._lower._longitude._degrees;
+    const double upperLatitudeDegrees  = sector._upper._latitude._degrees;
+    const double upperLongitudeDegrees = sector._upper._longitude._degrees;
+
+    if (lowerLatitudeDegrees < _visibleLowerLatitudeDegrees) {
+      _visibleLowerLatitudeDegrees = lowerLatitudeDegrees;
     }
-    else {
-      if (!_renderedSector->fullContains(sector)) {
-        Sector* previous = _renderedSector;
+    if (upperLatitudeDegrees < _visibleLowerLatitudeDegrees) {
+      _visibleLowerLatitudeDegrees = upperLatitudeDegrees;
+    }
+    if (lowerLatitudeDegrees >_visibleUpperLatitudeDegrees) {
+      _visibleUpperLatitudeDegrees = lowerLatitudeDegrees;
+    }
+    if (upperLatitudeDegrees > _visibleUpperLatitudeDegrees) {
+      _visibleUpperLatitudeDegrees = upperLatitudeDegrees;
+    }
 
-#ifdef C_CODE
-        _renderedSector = new Sector( _renderedSector->mergedWith(sector) );
-#endif
-#ifdef JAVA_CODE
-        _renderedSector = _renderedSector.mergedWith(sector);
-#endif
-
-        delete previous;
-      }
+    if (lowerLongitudeDegrees < _visibleLowerLongitudeDegrees) {
+      _visibleLowerLongitudeDegrees = lowerLongitudeDegrees;
+    }
+    if (upperLongitudeDegrees < _visibleLowerLongitudeDegrees) {
+      _visibleLowerLongitudeDegrees = upperLongitudeDegrees;
+    }
+    if (lowerLongitudeDegrees > _visibleUpperLongitudeDegrees) {
+      _visibleUpperLongitudeDegrees = lowerLongitudeDegrees;
+    }
+    if (upperLongitudeDegrees > _visibleUpperLongitudeDegrees) {
+      _visibleUpperLongitudeDegrees = upperLongitudeDegrees;
     }
   }
 
-  void computePlanetRenderered(Tile* tile) {
+  void computeTileRenderered(Tile* tile) {
     _tilesRendered++;
 
     const int level = tile->_level;
@@ -152,26 +150,26 @@ public:
     computeRenderedSector(tile);
   }
 
-  const Sector* getRenderedSector() const {
-    return _renderedSector;
+  Sector* updateVisibleSector(Sector* visibleSector) const {
+    if ((visibleSector == NULL) ||
+        (visibleSector->_lower._latitude._degrees  != _visibleLowerLatitudeDegrees)  ||
+        (visibleSector->_lower._longitude._degrees != _visibleLowerLongitudeDegrees) ||
+        (visibleSector->_upper._latitude._degrees  != _visibleUpperLatitudeDegrees)  ||
+        (visibleSector->_upper._longitude._degrees != _visibleUpperLongitudeDegrees) ) {
+      delete visibleSector;
+
+      if ((_visibleLowerLatitudeDegrees  > _visibleUpperLatitudeDegrees) ||
+          (_visibleLowerLongitudeDegrees > _visibleUpperLongitudeDegrees)) {
+        return NULL;
+      }
+
+      return new Sector(Geodetic2D::fromDegrees(_visibleLowerLatitudeDegrees,
+                                                _visibleLowerLongitudeDegrees),
+                        Geodetic2D::fromDegrees(_visibleUpperLatitudeDegrees,
+                                                _visibleUpperLongitudeDegrees));
+    }
+    return visibleSector;
   }
-
-  //  bool equalsTo(const TilesStatistics& that) const {
-  //    if (_tilesProcessed != that._tilesProcessed) {
-  //      return false;
-  //    }
-  //    if (_tilesRendered != that._tilesRendered) {
-  //      return false;
-  //    }
-  //    if (_tilesRenderedByLevel != that._tilesRenderedByLevel) {
-  //      return false;
-  //    }
-  //    if (_tilesProcessedByLevel != that._tilesProcessedByLevel) {
-  //      return false;
-  //    }
-  //    return true;
-  //  }
-
 
   static std::string asLogString(const int m[], const int nMax) {
     bool first = true;
@@ -186,7 +184,6 @@ public:
         else {
           isb->addString(",");
         }
-        //isb->addString("L");
         isb->addInt(level);
         isb->addString(":");
         isb->addInt(counter);
@@ -209,10 +206,11 @@ public:
     //                    _tilesRendered);
   }
 
+
 };
 
 
-class PlanetRenderer: public LeafRenderer, ChangedListener, SurfaceElevationProvider {
+class PlanetRenderer: public DefaultRenderer, ChangedListener, ChangedInfoListener, SurfaceElevationProvider {
 private:
   TileTessellator*             _tessellator;
   ElevationDataProvider*       _elevationDataProvider;
@@ -231,11 +229,9 @@ private:
 
 #ifdef C_CODE
   const Camera*     _lastCamera;
-  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
   private Camera     _lastCamera;
-  private G3MContext _context;
 #endif
 
   std::vector<Tile*> _firstLevelTiles;
@@ -248,8 +244,7 @@ private:
   void createFirstLevelTiles(const G3MContext* context);
   void createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                              Tile* tile,
-                             int firstLevel,
-                             bool mercator) const;
+                             int firstLevel) const;
 
   void sortTiles(std::vector<Tile*>& firstLevelTiles) const;
 
@@ -271,7 +266,7 @@ private:
                                 const int topLevel,
                                 const int maxLevel);
 
-  long long _texturePriority;
+  long long _tileDownloadPriority;
 
   float _verticalExaggeration;
 
@@ -295,8 +290,6 @@ private:
 #endif
   std::vector<std::string> _errors;
 
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
-
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
 #ifdef C_CODE
@@ -315,7 +308,11 @@ private:
   bool sectorCloseToRoute(const Sector& sector,
                           const std::list<Geodetic2D>& route,
                           double angularDistanceFromCenterInRadians) const;
+  
+  float _frustumCullingFactor;
 
+  TileCache* _tileCache;
+  bool _deleteTexturesOfInvisibleTiles;
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -326,11 +323,14 @@ public:
                  LayerSet*                    layerSet,
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
-                 long long                    texturePriority,
+                 long long                    tileDownloadPriority,
                  const Sector&                renderedSector,
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
-                 TileRenderingListener*       tileRenderingListener);
+                 TileRenderingListener*       tileRenderingListener,
+                 ChangedRendererInfoListener* changedInfoListener,
+                 int sizeOfTileCache,
+                 bool deleteTexturesOfInvisibleTiles);
 
   ~PlanetRenderer();
 
@@ -364,21 +364,13 @@ public:
     _firstRender = false;
   }
 
-  void onResume(const G3MContext* context) {
-
-  }
-
   void onPause(const G3MContext* context) {
     recreateTiles();
   }
 
-  void onDestroy(const G3MContext* context) {
-
-  }
-
   void setEnable(bool enable) {
 #ifdef C_CODE
-    LeafRenderer::setEnable(enable);
+    DefaultRenderer::setEnable(enable);
 #endif
 #ifdef JAVA_CODE
     super.setEnable(enable);
@@ -420,19 +412,19 @@ public:
   /**
    * Set the download-priority used by Tiles (for downloading textures).
    *
-   * @param texturePriority: new value for download priority of textures
+   * @param tileDownloadPriority: new value for download priority of textures
    */
-  void setTexturePriority(long long texturePriority) {
-    _texturePriority = texturePriority;
+  void setTileDownloadPriority(long long tileDownloadPriority) {
+    _tileDownloadPriority = tileDownloadPriority;
   }
 
   /**
    * Return the current value for the download priority of textures
    *
-   * @return _texturePriority: long
+   * @return _tileDownloadPriority: long
    */
-  long long getTexturePriority() const {
-    return _texturePriority;
+  long long getTileDownloadPriority() const {
+    return _tileDownloadPriority;
   }
 
   /**
@@ -496,7 +488,23 @@ public:
                                  const std::list<Geodetic2D>* route = NULL);
 
   int getNumberOfRenderedTiles() const;
+    
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
   
+  
+  void changedInfo(const std::vector<std::string>& info) {
+    if (_changedInfoListener != NULL) {
+      _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
+    }
+  }
+  
+  TileTessellator* getTileTessellator() const{
+    return _tessellator;
+  }
+  
+  void setFrustumCullingFactor(float frustumCullingFactor) {
+    _frustumCullingFactor = frustumCullingFactor;
+  }
 };
 
 

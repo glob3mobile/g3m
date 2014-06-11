@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  LayerCondition.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 23/08/12.
-//
-//
-
-//
 //  LayerCondition.h
 //  G3MiOSSDK
 //
@@ -27,9 +19,13 @@ public abstract class LayerCondition
   {
   }
 
-  public abstract boolean isAvailable(G3MRenderContext rc, Tile tile);
+//  virtual bool isAvailable(const G3MRenderContext* rc,
+//                           const Tile* tile) const = 0;
+//  
+//  virtual bool isAvailable(const G3MEventContext* ec,
+//                           const Tile* tile) const = 0;
 
-  public abstract boolean isAvailable(G3MEventContext ec, Tile tile);
+  public abstract boolean isAvailable(Tile tile);
 
   public abstract LayerCondition copy();
 

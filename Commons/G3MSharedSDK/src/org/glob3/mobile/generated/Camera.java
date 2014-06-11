@@ -3,8 +3,8 @@ public class Camera
 {
   public Camera(Camera that)
   {
-     _width = that._width;
-     _height = that._height;
+     _viewPortWidth = that._viewPortWidth;
+     _viewPortHeight = that._viewPortHeight;
      _planet = that._planet;
      _position = new MutableVector3D(that._position);
      _groundHeight = that._groundHeight;
@@ -19,6 +19,7 @@ public class Camera
      _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
      _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
      _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+     _widerFrustumInModelCoordinates = (that._widerFrustumInModelCoordinates == null) ? null : new Frustum(that._widerFrustumInModelCoordinates);
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = (that._geodeticPosition == null) ? null: new Geodetic3D(that._geodeticPosition);
      _angle2Horizon = that._angle2Horizon;
@@ -44,6 +45,7 @@ public class Camera
      _geodeticCenterOfView = null;
      _frustum = null;
      _frustumInModelCoordinates = null;
+     _widerFrustumInModelCoordinates = null;
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = null;
      _angle2Horizon = -99;
@@ -63,6 +65,8 @@ public class Camera
        _frustum.dispose();
     if (_frustumInModelCoordinates != null)
        _frustumInModelCoordinates.dispose();
+    if (_widerFrustumInModelCoordinates != null)
+       _widerFrustumInModelCoordinates.dispose();
     if (_geodeticCenterOfView != null)
        _geodeticCenterOfView.dispose();
     if (_geodeticPosition != null)
@@ -72,8 +76,8 @@ public class Camera
   public final void copyFrom(Camera that)
   {
     //TODO: IMPROVE PERFORMANCE
-    _width = that._width;
-    _height = that._height;
+    _viewPortWidth = that._viewPortWidth;
+    _viewPortHeight = that._viewPortHeight;
   
     _planet = that._planet;
   
@@ -104,6 +108,10 @@ public class Camera
        _frustumInModelCoordinates.dispose();
     _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
   
+    if (_widerFrustumInModelCoordinates != null)
+       _widerFrustumInModelCoordinates.dispose();
+    _widerFrustumInModelCoordinates = (that._widerFrustumInModelCoordinates == null) ? null : new Frustum(that._widerFrustumInModelCoordinates);
+  
     if (_geodeticPosition != null)
        _geodeticPosition.dispose();
     _geodeticPosition = ((that._geodeticPosition == null) ? null : new Geodetic3D(that._geodeticPosition));
@@ -121,8 +129,8 @@ public class Camera
 
   public final void resizeViewport(int width, int height)
   {
-    _width = width;
-    _height = height;
+    _viewPortWidth = width;
+    _viewPortHeight = height;
   
     _dirtyFlags.setAll(true);
   }
@@ -130,10 +138,10 @@ public class Camera
   public final Vector3D pixel2Ray(Vector2I pixel)
   {
     final double px = pixel._x + 0.5;
-    final double py = _height - pixel._y - 0.5;
+    final double py = _viewPortHeight - pixel._y - 0.5;
     final Vector3D pixel3D = new Vector3D(px, py, 0);
   
-    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
       return obj;
@@ -150,7 +158,7 @@ public class Camera
   public final Vector3D pixel2Ray(Vector3D pixel3D)
   {
   
-    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
+    final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
       return obj;
@@ -166,43 +174,43 @@ public class Camera
 
   public final Vector2F point2Pixel(Vector3D point)
   {
-    final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
+    final Vector2D p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
     Vector3D direction = point.sub(getCartesianPosition());
     double angle = direction.angleBetween(getViewDirection())._degrees;
     if (angle > 90) //Projecting point behind the camera
     {
-      return new Vector2F((float)-p._x, (float)-(_height - p._y));
+      return new Vector2F((float)-p._x, (float)-(_viewPortHeight - p._y));
     }
   
-    return new Vector2F((float) p._x, (float)(_height - p._y));
+    return new Vector2F((float) p._x, (float)(_viewPortHeight - p._y));
   }
   public final Vector2F point2Pixel(Vector3F point)
   {
-    final Vector2F p = getModelViewMatrix().project(point, 0, 0, _width, _height);
+    final Vector2F p = getModelViewMatrix().project(point, 0, 0, _viewPortWidth, _viewPortHeight);
   
     Vector3D direction = point.asVector3D().sub(getCartesianPosition());
     double angle = direction.angleBetween(getViewDirection())._degrees;
     if (angle > 90) //Projecting point behind the camera
     {
-      return new Vector2F((float)-p._x, (float)-(_height - p._y));
+      return new Vector2F((float)-p._x, (float)-(_viewPortHeight - p._y));
     }
   
-    return new Vector2F(p._x, (_height - p._y));
+    return new Vector2F(p._x, (_viewPortHeight - p._y));
   }
 
-  public final int getWidth()
+  public final int getViewPortWidth()
   {
-     return _width;
+     return _viewPortWidth;
   }
-  public final int getHeight()
+  public final int getViewPortHeight()
   {
-     return _height;
+     return _viewPortHeight;
   }
 
   public final float getViewPortRatio()
   {
-    return (float) _width / _height;
+    return (float) _viewPortWidth / _viewPortHeight;
   }
 
   public final EffectTarget getEffectTarget()
@@ -286,7 +294,7 @@ public class Camera
     getModelMatrix().print("Model Matrix", ILogger.instance());
     getProjectionMatrix().print("Projection Matrix", ILogger.instance());
     getModelViewMatrix().print("ModelView Matrix", ILogger.instance());
-    ILogger.instance().logInfo("Width: %d, Height %d\n", _width, _height);
+    ILogger.instance().logInfo("Viewport width: %d, height %d\n", _viewPortWidth, _viewPortHeight);
   }
 
   public final Frustum getFrustumInModelCoordinates()
@@ -299,6 +307,16 @@ public class Camera
       _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix());
     }
     return _frustumInModelCoordinates;
+  }
+
+  public final Frustum getWiderFrustumInModelCoordinates(float factor)
+  {
+    if (_widerFrustumInModelCoordinates != null)
+      if (_widerFrustumInModelCoordinates != null)
+         _widerFrustumInModelCoordinates.dispose();
+    Frustum widerFrustum = new Frustum(calculateWiderFrustumData(factor));
+    _widerFrustumInModelCoordinates = widerFrustum.transformedBy_P(getModelMatrix());
+    return _widerFrustumInModelCoordinates;
   }
 
   public final Vector3D getHorizontalVector()
@@ -484,7 +502,7 @@ public class Camera
     // this implementation is not right exact, but it's faster.
     final double z = sphere._center.distanceTo(getCartesianPosition());
     final double rWorld = sphere._radius * _frustumData._znear / z;
-    final double rScreen = rWorld * _height / (_frustumData._top - _frustumData._bottom);
+    final double rScreen = rWorld * _viewPortHeight / (_frustumData._top - _frustumData._bottom);
     return DefineConstants.PI * rScreen * rScreen;
   }
 
@@ -592,17 +610,15 @@ public class Camera
     final double angleInRadians = ray1.angleInRadiansBetween(ray0);
     final FrustumData frustumData = getFrustumData();
     final double distanceInMeters = frustumData._znear * IMathUtils.instance().tan(angleInRadians/2);
-    return distanceInMeters * _height / frustumData._top;
+    return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 
   //  const Angle getHeading(const Vector3D& normal) const;
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
-  private int _width;
-  private int _height;
-
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-
+  private int _viewPortWidth;
+  private int _viewPortHeight;
+  private Planet _planet;
   private MutableVector3D _position = new MutableVector3D(); // position
   private MutableVector3D _center = new MutableVector3D(); // point where camera is looking at
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
@@ -626,6 +642,7 @@ public class Camera
   private Geodetic3D _geodeticCenterOfView;
   private Frustum _frustum;
   private Frustum _frustumInModelCoordinates;
+  private Frustum _widerFrustumInModelCoordinates;
   private double _tanHalfVerticalFieldOfView;
   private double _tanHalfHorizontalFieldOfView;
   private double _rollInRadians;
@@ -731,7 +748,7 @@ public class Camera
   
     if ((tanHalfHFOV != tanHalfHFOV) || (tanHalfVFOV != tanHalfVFOV))
     {
-      final double ratioScreen = (double) _height / _width;
+      final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
   
       if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
       {
@@ -760,6 +777,68 @@ public class Camera
     final double bottom = -top;
   
     return new FrustumData(left, right, bottom, top, zNear, zFar);
+  
+  }
+  private FrustumData calculateWiderFrustumData(float factor)
+  {
+    final double heightFromGround = getHeightFromGround();
+  
+    double zNear = heightFromGround * 0.1;
+  
+    //printf ("computing new znear=%.3f.  Height from ground =%.2f\n", zNear, heightFromGround);
+  
+    double zFar = _planet.distanceToHorizon(_position.asVector3D());
+  
+    final double goalRatio = 1000;
+    final double ratio = zFar / zNear;
+    if (ratio < goalRatio)
+    {
+      zNear = zFar / goalRatio;
+    }
+  
+    //  int __TODO_remove_debug_code;
+    //  printf(">>> height=%f zNear=%f zFar=%f ratio=%f\n",
+    //         height,
+    //         zNear,
+    //         zFar,
+    //         ratio);
+  
+    // compute rest of frustum numbers
+  
+    double tanHalfHFOV = _tanHalfHorizontalFieldOfView;
+    double tanHalfVFOV = _tanHalfVerticalFieldOfView;
+  
+    if ((tanHalfHFOV != tanHalfHFOV) || (tanHalfVFOV != tanHalfVFOV))
+    {
+      final double ratioScreen = (double) _viewPortHeight / _viewPortWidth;
+  
+      if ((tanHalfHFOV != tanHalfHFOV) && (tanHalfVFOV != tanHalfVFOV))
+      {
+        tanHalfVFOV = 0.3; //Default behaviour _tanHalfFieldOfView = 0.3 => aprox tan(34 degrees / 2)
+        tanHalfHFOV = tanHalfVFOV / ratioScreen;
+      }
+      else
+      {
+        if ((tanHalfHFOV != tanHalfHFOV))
+        {
+          tanHalfHFOV = tanHalfVFOV / ratioScreen;
+        }
+        else
+        {
+          if (tanHalfVFOV != tanHalfVFOV)
+          {
+            tanHalfVFOV = tanHalfHFOV * ratioScreen;
+          }
+        }
+      }
+    }
+  
+    final double right = tanHalfHFOV * zNear;
+    final double left = -right;
+    final double top = tanHalfVFOV * zNear;
+    final double bottom = -top;
+  
+    return new FrustumData(factor *left, factor *right, factor *bottom, factor *top, zNear, zFar);
   
   }
 

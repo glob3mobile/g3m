@@ -54,13 +54,14 @@ public class ShapesRenderer_SceneJSParserAsyncTask extends GAsyncTask
     }
     if (_buffer != null)
        _buffer.dispose();
+    super.dispose();
   }
 
   public final void onPostExecute(G3MContext context)
   {
     if (_sgShape == null)
     {
-      ILogger.instance().logError("Error parsing SceneJS from \"%s\"", _url.getPath());
+      ILogger.instance().logError("Error parsing SceneJS from \"%s\"", _url._path);
       if (_position != null)
          _position.dispose();
       _position = null;

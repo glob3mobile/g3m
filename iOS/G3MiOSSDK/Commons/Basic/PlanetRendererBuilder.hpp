@@ -9,7 +9,8 @@
 #ifndef __G3MiOSSDK__PlanetRendererBuilder__
 #define __G3MiOSSDK__PlanetRendererBuilder__
 
-#include "LayerSet.hpp"
+class LayerSet;
+
 #include "TilesRenderParameters.hpp"
 #include "PlanetRenderer.hpp"
 
@@ -32,13 +33,11 @@ private:
   std::vector<VisibleSectorListener*>* _visibleSectorListeners;
   std::vector<TerrainTouchListener*>* _terrainTouchListeners;
   std::vector<long long>* _stabilizationMilliSeconds;
-  long long _texturePriority;
+  long long _tileDownloadPriority;
 
   ElevationDataProvider* _elevationDataProvider;
   float _verticalExaggeration;
 
-  TileTessellator* getTileTessellator();
-  TileTexturizer* getTexturizer();
   TileRasterizer* getTileRasterizer();
 
   LayerSet* getLayerSet();
@@ -51,7 +50,7 @@ private:
   std::vector<VisibleSectorListener*>* getVisibleSectorListeners();
   std::vector<TerrainTouchListener*>* getTerrainTouchListeners();
   std::vector<long long>* getStabilizationMilliSeconds();
-  long long getTexturePriority();
+  long long getTileDownloadPriority();
 
   bool _logTilesPetitions;
 
@@ -71,6 +70,11 @@ private:
   bool getLogTilesPetitions();
 
   TileRenderingListener* _tileRenderingListener;
+  
+  ChangedRendererInfoListener* _changedInfoListener;
+  
+  int _tileCacheSize;
+  bool _deleteTexturesOfInvisibleTiles;
 
 public:
   PlanetRendererBuilder();
@@ -92,7 +96,8 @@ public:
     addVisibleSectorListener(listener, TimeInterval::zero());
   }
   void addTerrainTouchListener(TerrainTouchListener* listener);
-  void setTexturePriority(long long texturePriority);
+  //void setTexturePriority(long long texturePriority);
+  void setTileDownloadPriority(long long tileDownloadPriority);
 
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider);
 
@@ -112,7 +117,18 @@ public:
   void setTileRenderingListener(TileRenderingListener* tileRenderingListener);
 
   TileRenderingListener* getTileRenderingListener();
-
+  
+  ChangedRendererInfoListener* getChangedRendererInfoListener();
+  
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
+  
+  TileTessellator* getTileTessellator();
+  
+  TileTexturizer* getTexturizer();
+  
+  void setTileCacheSize(int x);
+  
+  void setDeleteTexturesOfInvisibleTiles(bool x);
 };
 
 #endif

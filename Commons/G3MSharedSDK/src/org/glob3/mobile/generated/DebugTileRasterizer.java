@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 //class ICanvas;
 //class Sector;
+//class Tile;
 
 public class DebugTileRasterizer extends CanvasTileRasterizer
 {

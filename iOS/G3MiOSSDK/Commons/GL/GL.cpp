@@ -15,7 +15,6 @@
 #include "Vector2D.hpp"
 #include "INativeGL.hpp"
 #include "IShortBuffer.hpp"
-#include "IFactory.hpp"
 #include "IGLTextureId.hpp"
 
 #include "GPUProgram.hpp"

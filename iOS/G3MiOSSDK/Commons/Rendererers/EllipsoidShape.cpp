@@ -54,15 +54,15 @@ const TextureIDReference* EllipsoidShape::getTextureId(const G3MRenderContext* r
 
     _texId = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                              GLFormat::rgba(),
-                                                             _textureURL.getPath(),
+                                                             _textureURL._path,
                                                              false);
 
-    rc->getFactory()->deleteImage(_textureImage);
+    delete _textureImage;
     _textureImage = NULL;
   }
 
   if (_texId == NULL) {
-    rc->getLogger()->logError("Can't load texture %s", _textureURL.getPath().c_str());
+    rc->getLogger()->logError("Can't load texture %s", _textureURL._path.c_str());
   }
 
   if (_texId == NULL) {
@@ -219,7 +219,7 @@ void EllipsoidShape::imageDownloaded(IImage* image) {
 Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
   if (!_textureRequested) {
     _textureRequested = true;
-    if (_textureURL.getPath().length() != 0) {
+    if (_textureURL._path.length() != 0) {
       rc->getDownloader()->requestImage(_textureURL,
                                         1000000,
                                         TimeInterval::fromDays(30),

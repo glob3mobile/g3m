@@ -15,6 +15,7 @@
 
 class ICanvas;
 class Sector;
+class Tile;
 
 class DebugTileRasterizer : public CanvasTileRasterizer {
 private:

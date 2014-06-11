@@ -115,10 +115,19 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
 
-    public final ElevationDataProvider popBestProvider(java.util.ArrayList<ElevationDataProvider> ps, Vector2I extent)
+    public final double getSquaredGridResolutionInDegreesSquared(Vector2I extent, Sector sector)
     {
     
-      double bestRes = extent.squaredLength();
+      double latResInDegrees = sector._deltaLatitude._degrees / extent._y;
+      double lonResInDegrees = sector._deltaLongitude._degrees / extent._x;
+    
+      return latResInDegrees * latResInDegrees + lonResInDegrees * lonResInDegrees;
+    }
+
+    public final ElevationDataProvider popBestProvider(java.util.ArrayList<ElevationDataProvider> ps, Vector2I extent, Sector sector)
+    {
+    
+      double bestRes = getSquaredGridResolutionInDegreesSquared(extent, sector);
       double selectedRes = IMathUtils.instance().maxDouble();
       double selectedResDistance = IMathUtils.instance().maxDouble();
       IMathUtils mu = IMathUtils.instance();
@@ -132,7 +141,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       {
         ElevationDataProvider each = ps.get(i);
     
-        final double res = each.getMinResolution().squaredLength();
+        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), *(each.getSectors().get(0)));
         final double newResDistance = mu.abs(bestRes - res);
     
         if (newResDistance < selectedResDistance || (newResDistance == selectedResDistance && res < selectedRes)) //or equal and higher resolution - Closer Resolution
@@ -171,7 +180,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public final boolean launchNewStep()
     {
-      _currentProvider = popBestProvider(_providers, _resolution);
+      _currentProvider = popBestProvider(_providers, _resolution, _sector);
       if (_currentProvider != null)
       {
         _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);

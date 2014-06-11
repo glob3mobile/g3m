@@ -19,7 +19,7 @@
 #include "Sector.hpp"
 
 class SingleBilElevationDataProvider_BufferDownloadListener;
-
+class IDownloader;
 
 struct SingleBilElevationDataProvider_Request {
   const Sector _sector;

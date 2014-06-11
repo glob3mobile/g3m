@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  IFloatBuffer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/09/12.
-//
-//
-
-//
 //  IFloatBuffer.hpp
 //  G3MiOSSDK
 //

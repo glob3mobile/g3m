@@ -21,8 +21,8 @@ private:
   JSONBaseObject* convert(NSObject *object,
                           bool nullAsObject);
 
-  JSONBaseObject* parse(NSData* jsonData,
-                        bool nullAsObject);
+  JSONBaseObject* parseNSData(NSData* jsonData,
+                              bool nullAsObject);
 
 public:
   JSONBaseObject* parse(const std::string& string,

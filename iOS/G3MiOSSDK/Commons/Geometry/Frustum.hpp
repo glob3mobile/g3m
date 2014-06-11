@@ -176,7 +176,7 @@ public:
   }
   
   ~Frustum() {
-    if (_boundingVolume) delete _boundingVolume;
+    if (_boundingVolume != NULL) delete _boundingVolume;
   }
   
   BoundingVolume* getBoundingVolume() const {

@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  IShortBuffer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 1/18/13.
-//
-//
-
-//
 //  IShortBuffer.hpp
 //  G3MiOSSDK
 //

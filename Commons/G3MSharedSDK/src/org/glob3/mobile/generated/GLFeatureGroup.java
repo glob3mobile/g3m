@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 //#define N_GLFEATURES_GROUPS 4
 
-public abstract class GLFeatureGroup //: public GLFeatureSet
+public abstract class GLFeatureGroup
 {
 
   private static GLFeatureGroup[] _groups = null;

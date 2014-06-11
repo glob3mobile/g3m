@@ -39,13 +39,14 @@ enum GLFeatureID{
 class GLFeature: public RCObject {
 protected:
   ~GLFeature() {
+    delete _values;
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
 protected:
-  GPUVariableValueSet _values;
+  GPUVariableValueSet* _values;
 
 public:
   const GLFeatureGroupName _group;
@@ -56,10 +57,11 @@ public:
   _group(group),
   _id(id)
   {
+    _values = new GPUVariableValueSet();
   }
 
   const GPUVariableValueSet* getGPUVariableValueSet() const{
-    return &_values;
+    return _values;
   }
 
   virtual void applyOnGlobalGLState(GLGlobalState* state) const = 0;
@@ -139,7 +141,7 @@ class GLCameraGroupFeature: public GLFeature {
 private:
 
 #ifdef C_CODE
-  Matrix44DHolder *_matrixHolder;
+  Matrix44DHolder* _matrixHolder;
 #endif
 #ifdef JAVA_CODE
   private Matrix44DHolder _matrixHolder = null;

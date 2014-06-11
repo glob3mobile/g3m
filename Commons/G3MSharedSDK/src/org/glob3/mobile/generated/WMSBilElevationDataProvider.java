@@ -63,7 +63,7 @@ public class WMSBilElevationDataProvider extends ElevationDataProvider
      */
   
     //isb->addString("http://data.worldwind.arc.nasa.gov/elev");
-    isb.addString(_url.getPath());
+    isb.addString(_url._path);
   
     isb.addString("?REQUEST=GetMap");
     isb.addString("&SERVICE=WMS");

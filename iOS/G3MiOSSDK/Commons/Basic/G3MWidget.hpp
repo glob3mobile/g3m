@@ -10,6 +10,7 @@
 #define G3MiOSSDK_G3MWidget_h
 
 class Renderer;
+class ProtoRenderer;
 class TouchEvent;
 class Planet;
 class ILogger;
@@ -47,6 +48,7 @@ class PlanetRenderer;
 class ErrorRenderer;
 class G3MRenderContext;
 class Vector3D;
+//class InfoDisplay;
 
 class ShapesEditorRenderer;
 
@@ -57,6 +59,8 @@ class ShapesEditorRenderer;
 #include "Angle.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "RenderState.hpp"
+#include "InfoDisplay.hpp"
+#include "ChangedRendererInfoListener.hpp"
 
 class G3MContext;
 class GLGlobalState;
@@ -89,7 +93,7 @@ public:
 };
 
 
-class G3MWidget {
+class G3MWidget : public ChangedRendererInfoListener {
 public:
 
   static void initSingletons(ILogger*            logger,
@@ -109,7 +113,7 @@ public:
                            std::vector<ICameraConstrainer*>     cameraConstrainers,
                            CameraRenderer*                      cameraRenderer,
                            Renderer*                            mainRenderer,
-                           Renderer*                            busyRenderer,
+                           ProtoRenderer*                       busyRenderer,
                            ErrorRenderer*                       errorRenderer,
                            Renderer*                            hudRenderer,
                            const Color&                         backgroundColor,
@@ -120,7 +124,8 @@ public:
                            std::vector<PeriodicalTask*>         periodicalTasks,
                            GPUProgramManager*                   gpuProgramManager,
                            SceneLighting*                       sceneLighting,
-                           const InitialCameraPositionProvider* initialCameraPositionProvider);
+                           const InitialCameraPositionProvider* initialCameraPositionProvider,
+                           InfoDisplay* infoDisplay);
 
   ~G3MWidget();
 
@@ -249,7 +254,20 @@ public:
   Vector3D getFirstValidScenePositionForCentralColumn();
 
   Vector3D getFirstValidScenePositionForFrameBufferColumn(int column);
-
+  
+  
+  //void notifyChangedInfo() const;
+  
+  void setInfoDisplay(InfoDisplay* infoDisplay) {
+    _infoDisplay = infoDisplay;
+  }
+  
+  InfoDisplay*  getInfoDisplay() const {
+    return _infoDisplay;
+  }
+  
+  void changedRendererInfo(const int rendererIdentifier, const std::vector<std::string>& info);
+  
 private:
   IStorage*                _storage;
   IDownloader*             _downloader;
@@ -262,7 +280,7 @@ private:
 
   CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
-  Renderer*           _busyRenderer;
+  ProtoRenderer*      _busyRenderer;
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
@@ -270,6 +288,8 @@ private:
   
   ShapesEditorRenderer* _shapesEditorRenderer;
   
+  //ProtoRenderer*      _selectedRenderer;
+
   EffectsScheduler*   _effectsScheduler;
 
   std::vector<ICameraConstrainer*> _cameraConstrainers;
@@ -321,6 +341,8 @@ private:
   G3MRenderContext* _renderContext;
 
   bool _forceBusyRenderer;
+  
+  InfoDisplay* _infoDisplay;
 
   long _zRenderCounter; //-1 means Frame Buffer does not contain Z; Z of referenced frame otherwise
 
@@ -333,7 +355,7 @@ private:
             std::vector<ICameraConstrainer*> cameraConstrainers,
             CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
-            Renderer*                        busyRenderer,
+            ProtoRenderer*                   busyRenderer,
             ErrorRenderer*                   errorRenderer,
             Renderer*                        hudRenderer,
             const Color&                     backgroundColor,
@@ -344,12 +366,15 @@ private:
             std::vector<PeriodicalTask*>     periodicalTasks,
             GPUProgramManager*               gpuProgramManager,
             SceneLighting*                   sceneLighting,
-            const InitialCameraPositionProvider* initialCameraPositionProvider);
+            const InitialCameraPositionProvider* initialCameraPositionProvider,
+            InfoDisplay* infoDisplay);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;
 
   RenderState calculateRendererState();
+  
+  void setSelectedRenderer(ProtoRenderer* selectedRenderer);
   
 };
 

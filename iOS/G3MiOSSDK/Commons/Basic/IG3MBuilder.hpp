@@ -23,7 +23,9 @@ class PeriodicalTask;
 class G3MWidget;
 class PlanetRendererBuilder;
 class Planet;
+//TODO
 class Renderer;
+class ProtoRenderer;
 class WidgetUserData;
 class GPUProgramSources;
 class GPUProgramManager;
@@ -36,6 +38,7 @@ class ShapesRenderer;
 class MarksRenderer;
 class ErrorRenderer;
 class ShapesEditorRenderer;
+class InfoDisplay;
 
 
 class IG3MBuilder {
@@ -44,12 +47,16 @@ private:
   IDownloader*                      _downloader;
   IThreadUtils*                     _threadUtils;
   ICameraActivityListener*          _cameraActivityListener;
+#ifdef C_CODE
   const Planet*                     _planet;
+#else
+  Planet*                           _planet;
+#endif  
   std::vector<ICameraConstrainer*>* _cameraConstraints;
   CameraRenderer*                   _cameraRenderer;
   Color*                            _backgroundColor;
   PlanetRendererBuilder*            _planetRendererBuilder;
-  Renderer*                         _busyRenderer;
+  ProtoRenderer*                    _busyRenderer;
   ErrorRenderer*                    _errorRenderer;
   Renderer*                         _hudRenderer;
   std::vector<Renderer*>*           _renderers;
@@ -64,6 +71,7 @@ private:
   Sector*                           _shownSector;
   
   ShapesEditorRenderer*             _shapesEditorRenderer;
+  InfoDisplay*                      _infoDisplay;
 
   GL*                               getGL();
   IDownloader*                      getDownloader();
@@ -71,7 +79,7 @@ private:
   ICameraActivityListener*          getCameraActivityListener();
   std::vector<ICameraConstrainer*>* getCameraConstraints();
   CameraRenderer*                   getCameraRenderer();
-  Renderer*                         getBusyRenderer();
+  ProtoRenderer*                    getBusyRenderer();
   ErrorRenderer*                    getErrorRenderer();
   Renderer*                         getHUDRenderer() const;
   Color*                            getBackgroundColor();
@@ -84,10 +92,10 @@ private:
   WidgetUserData*                   getUserData();
   GPUProgramManager*                getGPUProgramManager();
   std::vector<ICameraConstrainer*>* createDefaultCameraConstraints();
-  CameraRenderer*                   createDefaultCameraRenderer();
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
+  InfoDisplay*                      getInfoDisplay() const;
 
   void pvtSetInitializationTask(GInitializationTask* initializationTask,
                                 const bool autoDeleteInitializationTask);
@@ -102,9 +110,11 @@ protected:
 
   G3MWidget* create();
 
-  virtual IThreadUtils* createDefaultThreadUtils() = 0;
-  virtual IStorage*     createDefaultStorage()     = 0;
-  virtual IDownloader*  createDefaultDownloader()  = 0;
+  virtual IThreadUtils*   createDefaultThreadUtils()    = 0;
+  virtual IStorage*       createDefaultStorage()        = 0;
+  virtual IDownloader*    createDefaultDownloader()     = 0;
+  virtual CameraRenderer* createDefaultCameraRenderer() = 0;
+
 
 
 public:
@@ -132,7 +142,7 @@ public:
 
   void setBackgroundColor(Color* backgroundColor);
 
-  void setBusyRenderer(Renderer* busyRenderer);
+  void setBusyRenderer(ProtoRenderer* busyRenderer);
 
   void setErrorRenderer(ErrorRenderer* errorRenderer);
 
@@ -203,6 +213,7 @@ public:
   MarksRenderer* createMarksRenderer();
   
   ShapesEditorRenderer* createShapesEditorRenderer();
+  void setInfoDisplay(InfoDisplay* infoDisplay);
   
 };
 

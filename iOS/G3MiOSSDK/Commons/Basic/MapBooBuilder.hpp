@@ -21,6 +21,7 @@ class Planet;
 class ICameraConstrainer;
 class CameraRenderer;
 class Renderer;
+class ProtoRenderer;
 class GInitializationTask;
 class PeriodicalTask;
 class Layer;
@@ -55,6 +56,10 @@ class Sector;
 #include "URL.hpp"
 #include "Color.hpp"
 #include "Geodetic3D.hpp"
+#include "HUDRenderer.hpp"
+#include "InfoDisplay.hpp"
+#include "HUDImageRenderer.hpp"
+#include "GroupCanvasElement.hpp"
 
 
 class MapBooApplicationChangeListener {
@@ -402,6 +407,113 @@ public:
 };
 
 
+class HUDInfoRenderer_ImageFactory : public HUDImageRenderer::CanvasImageFactory {
+private:
+  std::vector<std::string> _infos;
+  
+protected:
+  
+  void drawOn(ICanvas* canvas,
+              int width,
+              int height);
+  
+  bool isEquals(const std::vector<std::string>& v1,
+                const std::vector<std::string>& v2) const;
+  
+public:
+  ~HUDInfoRenderer_ImageFactory() {
+  }
+  
+  bool setInfos(const std::vector<std::string>& infos);
+};
+
+class MapBoo_HUDRenderer : public DefaultRenderer {
+private:
+  HUDImageRenderer* _hudImageRenderer;
+public:
+  MapBoo_HUDRenderer();
+  ~MapBoo_HUDRenderer();
+  void updateInfo(const std::vector<std::string>& info);
+  void initialize(const G3MContext* context);
+  
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
+  
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height);
+  
+  void start(const G3MRenderContext* rc);
+  
+  void stop(const G3MRenderContext* rc);
+  
+  
+  void onResume(const G3MContext* context);
+  
+  void onPause(const G3MContext* context);
+  
+  void onDestroy(const G3MContext* context);
+  
+  void zRender(const G3MRenderContext* rc,
+               GLState* glState){}
+
+};
+
+
+class MapBoo_HUDRendererInfoDisplay : public InfoDisplay {
+private:
+  MapBoo_HUDRenderer* _mapBooHUDRenderer;
+public:
+  
+  MapBoo_HUDRendererInfoDisplay(MapBoo_HUDRenderer* mapBooHUDRenderer):
+  _mapBooHUDRenderer(mapBooHUDRenderer)
+  {
+    
+  }
+  
+  void changedInfo(const std::vector<std::string>& info){
+    _mapBooHUDRenderer->updateInfo(info);
+    
+  }
+  
+  void showDisplay() {
+    _mapBooHUDRenderer->setEnable(true);
+  }
+  
+  void hideDisplay() {
+    _mapBooHUDRenderer->setEnable(false);
+  }
+  
+  bool isShowing() {
+    return _mapBooHUDRenderer->isEnable();
+  }
+  
+#ifdef C_CODE
+  virtual ~MapBoo_HUDRendererInfoDisplay() { }
+#endif
+#ifdef JAVA_CODE
+  public void dispose() { }
+#endif
+
+  
+};
+
+class MapBoo_ErrorRenderer : public DefaultRenderer {
+private:
+  std::vector<std::string> _errors;
+public:
+  MapBoo_ErrorRenderer() {}
+  ~MapBoo_ErrorRenderer() {};
+  void setErrors(const std::vector<std::string>& errors);
+  RenderState getRenderState(const G3MRenderContext* rc);
+  void render(const G3MRenderContext* rc,
+              GLState* glState) {}
+  void onResizeViewportEvent(const G3MEventContext* ec,
+                             int width, int height) {}
+  void zRender(const G3MRenderContext* rc,
+               GLState* glState){}
+
+};
+
 class MapBooBuilder {
 private:
 
@@ -431,6 +543,7 @@ private:
   std::string                _lastApplicationCurrentSceneId;
   
   int                        _applicationEventId;
+  const std::string          _token;
 
   GL* _gl;
   G3MWidget* _g3mWidget;
@@ -446,6 +559,8 @@ private:
 #endif
 
   bool        _isApplicationTubeOpen;
+  
+  MapBoo_ErrorRenderer* _mbErrorRenderer;
 
   LayerSet* _layerSet;
   PlanetRenderer* createPlanetRenderer();
@@ -455,7 +570,7 @@ private:
 
   CameraRenderer* createCameraRenderer();
 
-  Renderer* createBusyRenderer();
+  ProtoRenderer* createBusyRenderer();
 
   ErrorRenderer* createErrorRenderer();
 
@@ -547,6 +662,10 @@ private:
   
   void setCameraPosition(const MapBoo_CameraPosition* cameraPosition, const bool animated);
   void setCameraPosition(const MapBoo_CameraPosition* cameraPosition);
+  
+  const std::string getViewAsString() const;
+  
+  const URL createApplicationCurrentSceneURL() const;
 
 protected:
   MapBooBuilder(const URL& serverURL,
@@ -554,7 +673,8 @@ protected:
                 const std::string& applicationId,
                 MapBoo_ViewType viewType,
                 MapBooApplicationChangeListener* applicationListener,
-                bool enableNotifications);
+                bool enableNotifications,
+                const std::string& token);
 
   virtual ~MapBooBuilder();
 
@@ -578,7 +698,9 @@ protected:
 
   SceneLighting* createSceneLighting();
 
-  const URL createApplicationRestURL() const;
+  const URL createApplicationPollURL() const;
+  
+  const Sector parseSector(const JSONObject* jsonObject, const std::string& paramName) const;
 
 public:
   /** Private to MapbooBuilder, don't call it */
@@ -704,6 +826,8 @@ public:
 
   /** Private to MapbooBuilder, don't call it */
   void pollApplicationDataFromServer(const G3MContext* context);
+  
+  const std::string getApplicationId();
 };
 
 #endif

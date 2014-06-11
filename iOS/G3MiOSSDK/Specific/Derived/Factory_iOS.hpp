@@ -35,13 +35,13 @@ public:
     return new Timer_iOS();
   }
 
-  void deleteTimer(const ITimer* timer) const {
-    delete timer;
-  }
-
-  void deleteImage(const IImage* image) const {
-    delete image;
-  }
+//  void deleteTimer(const ITimer* timer) const {
+//    delete timer;
+//  }
+//
+//  void deleteImage(const IImage* image) const {
+//    delete image;
+//  }
 
   IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
     return new ByteBuffer_iOS(data, length);

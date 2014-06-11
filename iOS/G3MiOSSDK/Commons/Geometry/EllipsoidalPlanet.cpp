@@ -369,7 +369,8 @@ void EllipsoidalPlanet::beginDoubleDrag(const Vector3D& origin,
 */
 
 MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
-                                               const Vector3D& finalRay1) const
+                                               const Vector3D& finalRay1,
+                                               bool allowRotation) const
 {
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -484,7 +485,7 @@ MutableMatrix44D EllipsoidalPlanet::doubleDrag(const Vector3D& finalRay0,
   }
 
   // camera rotation
-  {
+  if (allowRotation) {
     Vector3D normal = geodeticSurfaceNormal(centerPoint2);
     Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
     Vector3D p0     = closestIntersection(positionCamera.asVector3D(), ray0.asVector3D());

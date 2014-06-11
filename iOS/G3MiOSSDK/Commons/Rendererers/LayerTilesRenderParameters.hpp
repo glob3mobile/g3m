@@ -9,10 +9,14 @@
 #ifndef __G3MiOSSDK__LayerTilesRenderParameters__
 #define __G3MiOSSDK__LayerTilesRenderParameters__
 
+#include <vector>
+
 #include "Sector.hpp"
 #include "Vector2I.hpp"
 
 class LayerTilesRenderParameters {
+private:
+  static const Vector2I calculateTopSectorSplitsParametersWGS84(const Sector& topSector);
 public:
   const Sector _topSector;
   const int    _topSectorSplitsByLatitude;
@@ -59,12 +63,18 @@ public:
     return Vector2I(256, 256);
   }
 
+  
+  static LayerTilesRenderParameters* createDefaultWGS84(const int firstLevel,
+                                                        const int maxLevel) {
+    return createDefaultWGS84(Sector::fullSphere(), firstLevel, maxLevel);
+  }
 
   static LayerTilesRenderParameters* createDefaultWGS84(const Sector& topSector,
                                                         const int firstLevel,
                                                         const int maxLevel) {
-    const int  topSectorSplitsByLatitude  = 2;
-    const int  topSectorSplitsByLongitude = 4;
+    const Vector2I splitsParameters = calculateTopSectorSplitsParametersWGS84(topSector);
+    const int  topSectorSplitsByLatitude  = splitsParameters._x;
+    const int  topSectorSplitsByLongitude = splitsParameters._y;
     const bool mercator = false;
 
     return new LayerTilesRenderParameters(topSector,
@@ -76,12 +86,22 @@ public:
                                           LayerTilesRenderParameters::defaultTileMeshResolution(),
                                           mercator);
   }
-
-  static LayerTilesRenderParameters* createDefaultWGS84(const Sector& topSector) {
-    const int  firstLevel = 0;
-    const int  maxLevel = 17;
-
-    return createDefaultWGS84(topSector, firstLevel, maxLevel);
+  
+  static LayerTilesRenderParameters* createDefaultWGS84(const Sector& topSector,
+                                                        const int topSectorSplitsByLatitude,
+                                                        const int topSectorSplitsByLongitude,
+                                                        const int firstLevel,
+                                                        const int maxLevel) {
+    const bool mercator = false;
+    
+    return new LayerTilesRenderParameters(topSector,
+                                          topSectorSplitsByLatitude,
+                                          topSectorSplitsByLongitude,
+                                          firstLevel,
+                                          maxLevel,
+                                          LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                          LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                          mercator);
   }
 
   static LayerTilesRenderParameters* createDefaultMercator(const int firstLevel,

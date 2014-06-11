@@ -10,13 +10,16 @@
 
 #include "GEOSymbolizer.hpp"
 #include "GEO2DPolygonData.hpp"
+#include "GEORasterSymbolizer.hpp"
 
 GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
   if (_polygonsData != NULL) {
     const int polygonsDataSize = _polygonsData->size();
     for (int i = 0; i < polygonsDataSize; i++) {
       GEO2DPolygonData* polygonData = _polygonsData->at(i);
-      delete polygonData;
+      if (polygonData != NULL) {
+        polygonData->_release();
+      }
     }
     delete _polygonsData;
   }
@@ -24,10 +27,13 @@ GEO2DMultiPolygonGeometry::~GEO2DMultiPolygonGeometry() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 
 std::vector<GEOSymbol*>* GEO2DMultiPolygonGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
+}
+
+std::vector<GEORasterSymbol*>* GEO2DMultiPolygonGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
 }

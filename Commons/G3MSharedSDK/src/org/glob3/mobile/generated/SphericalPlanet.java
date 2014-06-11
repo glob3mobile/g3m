@@ -393,7 +393,7 @@ public class SphericalPlanet extends Planet
   }*/
   
   
-  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
+  public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1, boolean allowRotation)
   {
     // test if initialPoints are valid
     if (_initialPoint0.isNan() || _initialPoint1.isNan())
@@ -516,6 +516,7 @@ public class SphericalPlanet extends Planet
     }
   
     // camera rotation
+    if (allowRotation)
     {
       Vector3D normal = geodeticSurfaceNormal(centerPoint2);
       Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
@@ -599,13 +600,13 @@ public class SphericalPlanet extends Planet
   
   }
 
-  public final Geodetic3D getDefaultCameraPosition(Sector shownSector)
+  public final Geodetic3D getDefaultCameraPosition(Sector rendereSector)
   {
-    final Vector3D asw = toCartesian(shownSector.getSW());
-    final Vector3D ane = toCartesian(shownSector.getNE());
+    final Vector3D asw = toCartesian(rendereSector.getSW());
+    final Vector3D ane = toCartesian(rendereSector.getNE());
     final double height = asw.sub(ane).length() * 1.9;
 
-    return new Geodetic3D(shownSector._center, height);
+    return new Geodetic3D(rendereSector._center, height);
   }
 
 }

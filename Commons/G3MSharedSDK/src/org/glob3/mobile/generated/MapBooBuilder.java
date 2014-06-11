@@ -22,6 +22,7 @@ public abstract class MapBooBuilder
   private String _lastApplicationCurrentSceneId;
 
   private int _applicationEventId;
+  private final String _token;
 
   private GL _gl;
   private G3MWidget _g3mWidget;
@@ -32,6 +33,8 @@ public abstract class MapBooBuilder
   private G3MContext _context;
 
   private boolean _isApplicationTubeOpen;
+
+  private MapBoo_ErrorRenderer _mbErrorRenderer;
 
   private LayerSet _layerSet;
   private PlanetRenderer createPlanetRenderer()
@@ -53,7 +56,7 @@ public abstract class MapBooBuilder
     final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
   
     final boolean showStatistics = false;
-    long texturePriority = DownloadPriority.HIGHER;
+    long tileDownloadPriority = DownloadPriority.HIGHER;
   
     final Sector renderedSector = Sector.fullSphere();
     final boolean renderTileMeshes = true;
@@ -62,7 +65,9 @@ public abstract class MapBooBuilder
   
     TileRenderingListener tileRenderingListener = null;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, texturePriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener);
+    ChangedRendererInfoListener changedRendererInfoListener = null;
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, 0, true);
   
     if (_enableNotifications)
     {
@@ -89,21 +94,22 @@ public abstract class MapBooBuilder
     CameraRenderer cameraRenderer = new CameraRenderer();
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    cameraRenderer.addHandler(new CameraDoubleDragHandler());
+    final boolean allowRotationInDoubleDrag = true;
+    cameraRenderer.addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
   
     return cameraRenderer;
   }
 
-  private Renderer createBusyRenderer()
+  private ProtoRenderer createBusyRenderer()
   {
     return new BusyMeshRenderer(Color.newFromRGBA(0, 0, 0, 1));
   }
 
   private ErrorRenderer createErrorRenderer()
   {
-    return new HUDErrorRenderer();
+    return new HUDErrorRenderer(new Mapboo_ErrorMessagesCustomizer(this));
   }
 
   private java.util.ArrayList<PeriodicalTask> createPeriodicalTasks()
@@ -189,33 +195,34 @@ public abstract class MapBooBuilder
     }
   
     final String layerType = jsonLayer.getAsString("layer", "<layer not present>");
+    Layer layer;
     if (layerType.compareTo("OSM") == 0)
     {
-      return new OSMLayer(defaultTimeToCache);
+      layer = new OSMLayer(defaultTimeToCache);
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
-      return parseMapQuestLayer(jsonLayer, defaultTimeToCache);
+      layer = parseMapQuestLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("BingMaps") == 0)
     {
-      return parseBingMapsLayer(jsonLayer, defaultTimeToCache);
+      layer = parseBingMapsLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("CartoDB") == 0)
     {
-      return parseCartoDBLayer(jsonLayer, defaultTimeToCache);
+      layer = parseCartoDBLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("MapBox") == 0)
     {
-      return parseMapBoxLayer(jsonLayer, defaultTimeToCache);
+      layer = parseMapBoxLayer(jsonLayer, defaultTimeToCache);
     }
     else if (layerType.compareTo("WMS") == 0)
     {
-      return parseWMSLayer(jsonLayer);
+      layer = parseWMSLayer(jsonLayer);
     }
     else if (layerType.compareTo("URLTemplate") == 0)
     {
-      return parseURLTemplateLayer(jsonLayer);
+      layer = parseURLTemplateLayer(jsonLayer);
     }
     else
     {
@@ -223,6 +230,13 @@ public abstract class MapBooBuilder
       ILogger.instance().logError("%s", jsonBaseObjectLayer.description());
       return null;
     }
+  
+    final String layerAttribution = jsonLayer.getAsString("attribution", "");
+    if (layerAttribution.compareTo("") != 0)
+    {
+      layer.setInfo(layerAttribution);
+    }
+    return layer;
   }
 
   private MapQuestLayer parseMapQuestLayer(JSONObject jsonLayer, TimeInterval timeToCache)
@@ -276,17 +290,13 @@ public abstract class MapBooBuilder
     final String style = jsonLayer.getAsString("style", "");
     final URL queryServerURL = new URL("", false);
     final WMSServerVersion queryServerVersion = mapServerVersion;
-    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
-    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
-    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
-    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
-    final Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(lowerLat), Angle.fromDegrees(lowerLon)), new Geodetic2D(Angle.fromDegrees(upperLat), Angle.fromDegrees(upperLon)));
+    final Sector sector = parseSector(jsonLayer, "validSector");
     String imageFormat = jsonLayer.getAsString("imageFormat", "image/png");
     final String srs = jsonLayer.getAsString("projection", "EPSG:4326");
     LayerTilesRenderParameters layerTilesRenderParameters = null;
     if (srs.compareTo("EPSG:4326") == 0)
     {
-      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere());
+      layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultWGS84(0, 17);
     }
     else if (srs.compareTo("EPSG:3857") == 0)
     {
@@ -313,12 +323,7 @@ public abstract class MapBooBuilder
     final String projection = jsonLayer.getAsString("projection", "EPSG:3857");
     final boolean mercator = (projection.equals("EPSG:3857"));
   
-    final double lowerLat = jsonLayer.getAsNumber("lowerLat", -90.0);
-    final double lowerLon = jsonLayer.getAsNumber("lowerLon", -180.0);
-    final double upperLat = jsonLayer.getAsNumber("upperLat", 90.0);
-    final double upperLon = jsonLayer.getAsNumber("upperLon", 180.0);
-  
-    final Sector sector = Sector.fromDegrees(lowerLat, lowerLon, upperLat, upperLon);
+    final Sector sector = parseSector(jsonLayer, "validSector");
   
     URLTemplateLayer result;
     if (mercator)
@@ -538,23 +543,26 @@ public abstract class MapBooBuilder
   
     if (_viewType == MapBoo_ViewType.VIEW_EDITION_PREVIEW)
     {
-      if ((_webSocket != null) && _isApplicationTubeOpen)
+      if (_applicationCurrentSceneId.compareTo(_lastApplicationCurrentSceneId) != 0)
       {
-        if (_applicationCurrentSceneId.compareTo(_lastApplicationCurrentSceneId) != 0)
+        if (_lastApplicationCurrentSceneId.compareTo("-1") != 0)
         {
-          if (_lastApplicationCurrentSceneId.compareTo("-1") != 0)
+          if (_webSocket != null && _isApplicationTubeOpen)
           {
             _webSocket.send(getApplicationCurrentSceneCommand());
           }
-          _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
+          else if (_token.length() > 0)
+          {
+              _g3mWidget.getG3MContext().getDownloader().requestBuffer(createApplicationCurrentSceneURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_DummyListener(), false); // readExpired
+          }
+          else
+          {
+              ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+          }
         }
-      }
-      else
-      {
-        ILogger.instance().logError("VIEW_PRESENTATION: can't fire the event of changed scene");
+        _lastApplicationCurrentSceneId = _applicationCurrentSceneId;
       }
     }
-  
   }
 
   private void updateVisibleScene(boolean cameraPositionChanged)
@@ -623,7 +631,7 @@ public abstract class MapBooBuilder
     {
       isb.addString(",\"iconURL\":");
       isb.addString("\"");
-      isb.addString(escapeString(iconURL.getPath()));
+      isb.addString(escapeString(iconURL._path));
       isb.addString("\"");
     }
   
@@ -661,7 +669,7 @@ public abstract class MapBooBuilder
     {
       isb.addString(",\"iconURL\":");
       isb.addString("\"");
-      isb.addString(escapeString(iconURL.getPath()));
+      isb.addString(escapeString(iconURL._path));
       isb.addString("\"");
     }
   
@@ -903,7 +911,39 @@ public abstract class MapBooBuilder
     }
   }
 
-  protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications)
+  private String getViewAsString()
+  {
+    switch (_viewType)
+    {
+      case VIEW_EDITION_PREVIEW:
+        return "edition-preview";
+      case VIEW_PRESENTATION:
+        return "presentation";
+      case VIEW_RUNTIME:
+      default:
+        return "runtime";
+    }
+  }
+
+  private URL createApplicationCurrentSceneURL()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_serverURL._path);
+    isb.addString("/REST/1/applications/");
+    isb.addString(_applicationId);
+    isb.addString("/_POST_?");
+    isb.addString("currentSceneId=");
+    isb.addString(_applicationCurrentSceneId);
+    isb.addString("&token=");
+    isb.addString(_token);
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    return new URL(path, false);
+  }
+
+  protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications, String token)
   {
      _serverURL = serverURL;
      _tubesURL = tubesURL;
@@ -915,6 +955,7 @@ public abstract class MapBooBuilder
      _applicationAbout = "";
      _applicationTimestamp = -1;
      _applicationEventId = -1;
+     _token = token;
      _gl = null;
      _g3mWidget = null;
      _storage = null;
@@ -976,6 +1017,10 @@ public abstract class MapBooBuilder
   
   
     CompositeRenderer mainRenderer = new CompositeRenderer();
+  
+    _mbErrorRenderer = new MapBoo_ErrorRenderer();
+    mainRenderer.addRenderer(_mbErrorRenderer);
+  
     final Planet planet = createPlanet();
   
     PlanetRenderer planetRenderer = createPlanetRenderer();
@@ -994,9 +1039,11 @@ public abstract class MapBooBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
-    Renderer hudRenderer = null;
+    MapBoo_HUDRenderer hudRenderer = new MapBoo_HUDRenderer();
+    InfoDisplay infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
+    infoDisplay.showDisplay();
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
@@ -1031,19 +1078,44 @@ public abstract class MapBooBuilder
     return new CameraFocusSceneLighting(Color.fromRGBA((float)0.3, (float)0.3, (float)0.3, (float)1.0), Color.yellow());
   }
 
-  protected final URL createApplicationRestURL()
+  protected final URL createApplicationPollURL()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL.getPath());
-    isb.addString("/REST/1/applications/");
+    isb.addString(_serverURL._path);
+    isb.addString("/poll/");
     isb.addString(_applicationId);
-    isb.addString("?view=runtime&eventId=");
+    isb.addString("?view=");
+    isb.addString(getViewAsString());
+    isb.addString("&eventId=");
     isb.addInt(_applicationEventId);
     final String path = isb.getString();
     if (isb != null)
        isb.dispose();
   
     return new URL(path, false);
+  }
+
+  protected final Sector parseSector(JSONObject jsonObject, String paramName)
+  {
+  
+    final JSONObject sector = jsonObject.getAsObject(paramName);
+  
+    if (sector == null)
+    {
+      return Sector.fullSphere();
+    }
+  
+    if (sector.asNull() != null)
+    {
+      return Sector.fullSphere();
+    }
+  
+    final double lowerLat = sector.getAsNumber("lowerLat", -90.0);
+    final double lowerLon = sector.getAsNumber("lowerLon", -180.0);
+    final double upperLat = sector.getAsNumber("upperLat", 90.0);
+    final double upperLon = sector.getAsNumber("upperLon", 180.0);
+  
+    return new Sector(Geodetic2D.fromDegrees(lowerLat, lowerLon), Geodetic2D.fromDegrees(upperLat, upperLon));
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1203,7 +1275,7 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final URL createApplicationTubeURL()
   {
-    final String tubesPath = _tubesURL.getPath();
+    final String tubesPath = _tubesURL._path;
   
     String view;
     switch (_viewType)
@@ -1228,7 +1300,7 @@ public abstract class MapBooBuilder
   
     if (jsonBaseObject == null)
     {
-      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url._path);
     }
     else
     {
@@ -1242,6 +1314,8 @@ public abstract class MapBooBuilder
   /** Private to MapbooBuilder, don't call it */
   public final void parseApplicationJSON(JSONObject jsonObject, URL url)
   {
+    java.util.ArrayList<String> errors = new java.util.ArrayList<String>();
+  
     if (jsonObject == null)
     {
       ILogger.instance().logError("Invalid ApplicationJSON");
@@ -1377,9 +1451,16 @@ public abstract class MapBooBuilder
       }
       else
       {
+        errors.add(jsonError.value());
         ILogger.instance().logError("Server Error: %s", jsonError.value());
+        if (_initialParse)
+        {
+          _initialParse = false;
+          setHasParsedApplication();
+        }
       }
     }
+    _mbErrorRenderer.setErrors(errors);
   }
 
   /** Private to MapbooBuilder, don't call it */
@@ -1388,7 +1469,7 @@ public abstract class MapBooBuilder
     final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(json, true);
     if (jsonBaseObject == null)
     {
-      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url.getPath());
+      ILogger.instance().logError("Can't parse ApplicationJSON from %s", url._path);
     }
     else
     {
@@ -1686,7 +1767,7 @@ public abstract class MapBooBuilder
   public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL.getPath());
+    isb.addString(_serverURL._path);
   
     isb.addString("/Public/applications/");
     isb.addString(_applicationId);
@@ -1751,6 +1832,11 @@ public abstract class MapBooBuilder
   public final void pollApplicationDataFromServer(G3MContext context)
   {
     IDownloader downloader = context.getDownloader();
-    downloader.requestBuffer(createApplicationRestURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+    downloader.requestBuffer(createApplicationPollURL(), DownloadPriority.HIGHEST, TimeInterval.zero(), false, new MapBooBuilder_RestJSON(this), true); // readExpired
+  }
+
+  public final String getApplicationId()
+  {
+    return _applicationId;
   }
 }

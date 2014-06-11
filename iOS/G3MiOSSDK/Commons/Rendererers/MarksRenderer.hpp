@@ -10,7 +10,7 @@
 #define G3MiOSSDK_MarksRenderer
 
 #include <vector>
-#include "LeafRenderer.hpp"
+#include "DefaultRenderer.hpp"
 
 //#include "GPUProgramState.hpp"
 
@@ -21,17 +21,15 @@ class Camera;
 class MarkTouchListener;
 class IFloatBuffer;
 
-class MarksRenderer : public LeafRenderer {
+class MarksRenderer : public DefaultRenderer {
 private:
   const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;
 
 #ifdef C_CODE
-  const G3MContext* _context;
   const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private G3MContext _context;
   private Camera     _lastCamera;
 #endif
 
@@ -55,7 +53,7 @@ public:
 
   virtual ~MarksRenderer();
 
-  virtual void initialize(const G3MContext* context);
+  virtual void onChangedContext();
 
   virtual void render(const G3MRenderContext* rc, GLState* glState);
 
@@ -73,22 +71,11 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  void start(const G3MRenderContext* rc) {
-  }
-
-  void stop(const G3MRenderContext* rc) {
-  }
-
+  //TODO: WHY? VTP
   void onResume(const G3MContext* context) {
     _context = context;
   }
-
-  void onPause(const G3MContext* context) {
-  }
-
-  void onDestroy(const G3MContext* context) {
-  }
-
+  
   /**
    Change the download-priority used by Marks (for downloading textures).
 

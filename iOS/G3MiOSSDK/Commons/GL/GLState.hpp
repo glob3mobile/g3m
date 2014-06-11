@@ -21,9 +21,9 @@
 
 #include "RCObject.hpp"
 
-class GLState: public RCObject{
+class GLState: public RCObject {
 private:
-  GLFeatureSet _features;
+  GLFeatureSet* _features;
   mutable GLFeatureSet* _accumulatedFeatures;
 
   mutable int _timeStamp;
@@ -58,6 +58,7 @@ public:
   _globalState(NULL),
   _accumulatedFeatures(NULL)
   {
+    _features = new GLFeatureSet();
   }
 
   int getTimeStamp() const { return _timeStamp;}
@@ -70,7 +71,8 @@ public:
 
   void applyOnGPU(GL* gl, GPUProgramManager& progManager, RenderType renderType) const;
 
-  void addGLFeature(GLFeature* f, bool mustRetain);
+  void addGLFeature(GLFeature* f,
+                    bool mustRetain);
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 
@@ -80,7 +82,7 @@ public:
 
   GLFeature* getGLFeature(GLFeatureID id) const;
 
-  GLFeatureSet getGLFeatures(GLFeatureID id) const;
+  GLFeatureSet* getGLFeatures(GLFeatureID id) const;
 };
 
 #endif

@@ -14,13 +14,13 @@ public class MapBooBuilder_ApplicationTubeListener implements IWebSocketListener
 
   public final void onOpen(IWebSocket ws)
   {
-    ILogger.instance().logInfo("Tube '%s' opened!", ws.getURL().getPath());
+    ILogger.instance().logInfo("Tube '%s' opened!", ws.getURL()._path);
     _builder.setApplicationTubeOpened(true);
   }
 
   public final void onError(IWebSocket ws, String error)
   {
-    ILogger.instance().logError("Error '%s' on Tube '%s'", error, ws.getURL().getPath());
+    ILogger.instance().logError("Error '%s' on Tube '%s'", error, ws.getURL()._path);
     _builder.setApplicationTubeOpened(false);
   }
 
@@ -32,7 +32,7 @@ public class MapBooBuilder_ApplicationTubeListener implements IWebSocketListener
 
   public final void onClose(IWebSocket ws)
   {
-    ILogger.instance().logError("Tube '%s' closed!", ws.getURL().getPath());
+    ILogger.instance().logError("Tube '%s' closed!", ws.getURL()._path);
     _builder.setApplicationTubeOpened(false);
   }
 }

@@ -121,10 +121,10 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
                                                                  const std::string& name,
                                                                  bool generateMipmap) {
 
-  TextureSpec textureSpec(name,
-                          image->getWidth(),
-                          image->getHeight(),
-                          generateMipmap);
+  const TextureSpec textureSpec(name,
+                                image->getWidth(),
+                                image->getHeight(),
+                                generateMipmap);
 
   const IGLTextureId* previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId != NULL) {

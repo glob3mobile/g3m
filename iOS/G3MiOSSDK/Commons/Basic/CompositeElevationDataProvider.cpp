@@ -185,11 +185,21 @@ _compData(NULL),
 _currentStep(NULL) {
 }
 
+double CompositeElevationDataProvider::
+CompositeElevationDataProvider_Request::getSquaredGridResolutionInDegreesSquared(const Vector2I& extent,
+                                                                          const Sector& sector) const{
+  
+  double latResInDegrees = sector._deltaLatitude._degrees / extent._y;
+  double lonResInDegrees = sector._deltaLongitude._degrees / extent._x;
+  
+  return latResInDegrees * latResInDegrees + lonResInDegrees * lonResInDegrees;
+}
+
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
-popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const{
+popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent, const Sector& sector) const{
 
-  double bestRes = extent.squaredLength();
+  double bestRes = getSquaredGridResolutionInDegreesSquared(extent, sector);
   double selectedRes = IMathUtils::instance()->maxDouble();
   double selectedResDistance = IMathUtils::instance()->maxDouble();
   IMathUtils *mu = IMathUtils::instance();
@@ -201,8 +211,8 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent)
   int selectedIndex = -1;
   for (int i = 0; i < psSize; i++) {
     ElevationDataProvider* each = ps[i];
-
-    const double res = each->getMinResolution().squaredLength();
+    
+    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *(each->getSectors().at(0)));
     const double newResDistance = mu->abs(bestRes - res);
 
     if (newResDistance < selectedResDistance || //Closer Resolution
@@ -227,7 +237,7 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent)
 }
 
 bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewStep() {
-  _currentProvider = popBestProvider(_providers, _resolution);
+  _currentProvider = popBestProvider(_providers, _resolution, _sector);
   if (_currentProvider != NULL) {
     _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
 

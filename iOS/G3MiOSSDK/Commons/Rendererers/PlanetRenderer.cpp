@@ -29,9 +29,10 @@
 #include "IDeviceInfo.hpp"
 #include "Sector.hpp"
 #include "TileRenderingListener.hpp"
-
 #include "G3MWidget.hpp"
 
+#include "IFactory.hpp"
+#include "Layer.hpp"
 #include <algorithm>
 
 #include "Petition.hpp"
@@ -104,11 +105,7 @@ public:
 
   ~VisibleSectorListenerEntry() {
     delete _listener;
-
-    if (_timer != NULL) {
-      IFactory::instance()->deleteTimer(_timer);
-    }
-
+    delete _timer;
     delete _lastSector;
   }
 };
@@ -123,11 +120,14 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                LayerSet*                    layerSet,
                                const TilesRenderParameters* tilesRenderParameters,
                                bool                         showStatistics,
-                               long long                    texturePriority,
+                               long long                    tileDownloadPriority,
                                const Sector&                renderedSector,
                                const bool                   renderTileMeshes,
                                const bool                   logTilesPetitions,
-                               TileRenderingListener*       tileRenderingListener) :
+                               TileRenderingListener*       tileRenderingListener,
+                               ChangedRendererInfoListener*         changedInfoListener,
+                               int sizeOfTileCache,
+                               bool deleteTexturesOfInvisibleTiles) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -141,9 +141,8 @@ _firstLevelTilesJustCreated(false),
 _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
-_context(NULL),
 _lastVisibleSector(NULL),
-_texturePriority(texturePriority),
+_tileDownloadPriority(tileDownloadPriority),
 _allFirstLevelTilesAreTextureSolved(false),
 _recreateTilesPending(false),
 _glState(new GLState()),
@@ -154,12 +153,20 @@ _renderContext(NULL),
 _renderedTilesListFrame(-1),
 _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
-_tileRenderingListener(tileRenderingListener)
+_tileRenderingListener(tileRenderingListener),
+_deleteTexturesOfInvisibleTiles(deleteTexturesOfInvisibleTiles)
 {
+  _context = NULL;
   _layerSet->setChangeListener(this);
+  _layerSet->setChangedInfoListener(this);
   if (_tileRasterizer != NULL) {
     _tileRasterizer->setChangeListener(this);
   }
+  
+  _changedInfoListener = changedInfoListener;
+  
+  _frustumCullingFactor = 1.0;
+  _tileCache = sizeOfTileCache < 1? NULL : new TileCache(sizeOfTileCache);
 }
 
 void PlanetRenderer::recreateTiles() {
@@ -196,6 +203,9 @@ void PlanetRenderer::changed() {
     _recreateTilesPending = true;
     // recreateTiles() delete tiles, then meshes, and delete textures from the GPU
     //   so it has to be executed in the OpenGL thread
+    
+    _tileCache->cropTileCache(0);
+    
     if (_context == NULL) {
       ILogger::instance()->logError("_context if not initialized");
     }
@@ -302,10 +312,11 @@ void PlanetRenderer::sortTiles(std::vector<Tile*>& tiles) const {
 #endif
 }
 
+
 void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
                                            Tile* tile,
-                                           int firstLevel,
-                                           bool mercator) const {
+                                           int firstLevel) const {
+
   if (tile->_level == firstLevel) {
     firstLevelTiles.push_back(tile);
   }
@@ -317,12 +328,11 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
     const Angle splitLongitude = Angle::midAngle(lower._longitude,
                                                  upper._longitude);
 
-    const Angle splitLatitude = mercator
-    /*                               */ ? MercatorUtils::calculateSplitLatitude(lower._latitude,
-                                                                                upper._latitude)
-    /*                               */ : Angle::midAngle(lower._latitude,
-                                                          upper._latitude);
-
+    const Angle splitLatitude = (tile->_mercator
+                                 ? MercatorUtils::calculateSplitLatitude(lower._latitude,
+                                                                         upper._latitude)
+                                 : Angle::midAngle(lower._latitude,
+                                                   upper._latitude));
 
     std::vector<Tile*>* children = tile->createSubTiles(splitLatitude,
                                                         splitLongitude,
@@ -331,7 +341,7 @@ void PlanetRenderer::createFirstLevelTiles(std::vector<Tile*>& firstLevelTiles,
     const int childrenSize = children->size();
     for (int i = 0; i < childrenSize; i++) {
       Tile* child = children->at(i);
-      createFirstLevelTiles(firstLevelTiles, child, firstLevel, mercator);
+      createFirstLevelTiles(firstLevelTiles, child, firstLevel);
     }
 
     delete children;
@@ -344,7 +354,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
   if (_layerTilesRenderParametersDirty) {
     _errors.clear();
     delete _layerTilesRenderParameters;
-    _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_errors);
+    _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart, _errors);
     if (_layerTilesRenderParameters == NULL) {
       ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
     }
@@ -386,9 +396,10 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
       const Geodetic2D tileLower(tileLatFrom, tileLonFrom);
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
+      
 
       if (_renderedSector == NULL || sector.touchesWith(*_renderedSector)) { //Do not create innecesary tiles
-        Tile* tile = new Tile(_texturizer, NULL, sector, 0, row, col, this);
+        Tile* tile = new Tile(_texturizer, NULL, sector, parameters->_mercator, 0, row, col, this, _tileCache, _deleteTexturesOfInvisibleTiles);
         if (parameters->_firstLevel == 0) {
           _firstLevelTiles.push_back(tile);
         }
@@ -403,7 +414,7 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
     const int topLevelTilesSize = topLevelTiles.size();
     for (int i = 0; i < topLevelTilesSize; i++) {
       Tile* tile = topLevelTiles[i];
-      createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel, parameters->_mercator);
+      createFirstLevelTiles(_firstLevelTiles, tile, parameters->_firstLevel);
     }
   }
 
@@ -469,8 +480,8 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       layerTilesRenderParameters,
                                       _layerSet,
                                       _tilesRenderParameters,
-                                      true,
-                                      _texturePriority,
+                                      true, // forceFullRender
+                                      _tileDownloadPriority,
                                       _verticalExaggeration,
                                       _logTilesPetitions);
       }
@@ -574,7 +585,7 @@ void PlanetRenderer::visitSubTilesTouchesWith(std::vector<Layer*> layers,
                                               const int topLevel,
                                               const int maxLevel) {
   if (tile->_level < maxLevel) {
-    std::vector<Tile*>* subTiles = tile->getSubTiles(getLayerTilesRenderParameters()->_mercator);
+    std::vector<Tile*>* subTiles = tile->getSubTiles();
 
     const int subTilesCount = subTiles->size();
     for (int i = 0; i < subTilesCount; i++) {
@@ -630,6 +641,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
   double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+  const Frustum* cameraWiderFrustumInModelCoordinates = _lastCamera->getWiderFrustumInModelCoordinates(_frustumCullingFactor);
   
   //Texture Size for every tile
   int texWidth  = layerTilesRenderParameters->_tileTextureResolution._x;
@@ -660,6 +672,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    cameraNormalizedPosition,
                    cameraAngle2HorizonInRadians,
                    cameraFrustumInModelCoordinates,
+                   cameraWiderFrustumInModelCoordinates,
                    &_statistics,
                    _verticalExaggeration,
                    layerTilesRenderParameters,
@@ -672,7 +685,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _layerSet,
                    _renderedSector,
                    _firstRender, /* if first render, force full render */
-                   _texturePriority,
+                   _tileDownloadPriority,
                    texWidthSquared,
                    texHeightSquared,
                    nowInMS,
@@ -702,6 +715,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      cameraNormalizedPosition,
                      cameraAngle2HorizonInRadians,
                      cameraFrustumInModelCoordinates,
+                     cameraWiderFrustumInModelCoordinates,
                      &_statistics,
                      _verticalExaggeration,
                      layerTilesRenderParameters,
@@ -713,8 +727,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _tileRasterizer,
                      _layerSet,
                      _renderedSector,
-                     _firstRender, /* if first render, force full render */
-                     _texturePriority,
+                     _firstRender, /* if first render, forceFullRender */
+                     _tileDownloadPriority,
                      texWidthSquared,     //SENDING SQUARED TEX SIZE
                      texHeightSquared,
                      nowInMS,
@@ -739,20 +753,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     _statistics.log( rc->getLogger() );
   }
 
-
-  const Sector* renderedSector = _statistics.getRenderedSector();
-  if (renderedSector != NULL) {
-    if ( (_lastVisibleSector == NULL) || !renderedSector->isEquals(*_lastVisibleSector) ) {
-      delete _lastVisibleSector;
-      _lastVisibleSector = new Sector(*renderedSector);
-    }
-  }
-
+  _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
   if (_lastVisibleSector != NULL) {
     const int visibleSectorListenersCount = _visibleSectorListeners.size();
     for (int i = 0; i < visibleSectorListenersCount; i++) {
       VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
-
       entry->tryToNotifyListener(_lastVisibleSector, rc);
     }
   }
@@ -934,7 +939,8 @@ std::list<std::string> PlanetRenderer::getTilesURL(Geodetic2D lower, Geodetic2D 
   std::list<std::string> urls = visitor->_urls;
 
   for (int i = 0; i < 20; i++) {
-    printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    ILogger::instance()->logInfo("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
   }
 
   delete visitor;
@@ -1042,7 +1048,8 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
       }
 
       if (tile->_level < maxLOD){
-        std::vector<Tile*>* newTiles = tile->getSubTiles(_layerTilesRenderParameters->_mercator);
+        //std::vector<Tile*>* newTiles = tile->getSubTiles(_layerTilesRenderParameters->_mercator);
+        std::vector<Tile*>* newTiles = tile->getSubTiles();
         for (int i = 0; i < newTiles->size(); i++) {
           _tiles.push_back(newTiles->at(i));
         }
@@ -1052,7 +1059,8 @@ std::list<URL> PlanetRenderer::getResourcesURL(const Sector& sector,
   }
 
   for (int i = 0; i < 20; i++) {
-    printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    ILogger::instance()->logInfo("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
+    //printf("TILES_VISITED LOD:%d -> %d\n", i, TILES_VISITED[i]);
   }
 
   return urls;
@@ -1106,6 +1114,8 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
     const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
     double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
     const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
+    const Frustum* cameraWiderFrustumInModelCoordinates = _lastCamera->getWiderFrustumInModelCoordinates(_frustumCullingFactor);
+
 
     _renderedTiles.clear();
 
@@ -1131,6 +1141,7 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
                                              cameraNormalizedPosition,
                                              cameraAngle2HorizonInRadians,
                                              cameraFrustumInModelCoordinates,
+                                             cameraWiderFrustumInModelCoordinates,
                                              &_statistics,
                                              _verticalExaggeration,
                                              layerTilesRenderParameters,
@@ -1143,7 +1154,7 @@ std::list<Tile*>* PlanetRenderer::getRenderedTilesList(const G3MRenderContext* r
                                              _layerSet,
                                              _renderedSector,
                                              _firstRender, // if first render, force full render
-                                             _texturePriority,
+                                             _tileDownloadPriority,
                                              texWidthSquared,
                                              texHeightSquared,
                                              nowInMS);
@@ -1186,3 +1197,17 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
 int PlanetRenderer::getNumberOfRenderedTiles() const{
   return _renderedTiles.size();
 }
+//std::vector<std::string> PlanetRenderer::getInfo() {
+//  _info.clear();
+//  std::vector<std::string> info = _layerSet->getInfo();
+//  
+//#ifdef C_CODE
+//      _info.insert(_info.end(),info.begin(), info.end());
+//#endif
+//#ifdef JAVA_CODE
+//      _infos.add(info);
+//#endif
+//  
+//  return _info;
+//}
+

@@ -10,7 +10,6 @@
 
 #include "IStringBuilder.hpp"
 #include "IFloatBuffer.hpp"
-#include "IFactory.hpp"
 #include "Vector3D.hpp"
 #include "Vector2I.hpp"
 

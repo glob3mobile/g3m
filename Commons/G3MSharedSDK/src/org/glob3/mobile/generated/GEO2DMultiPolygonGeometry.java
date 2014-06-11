@@ -29,6 +29,11 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
     return symbolizer.createSymbols(this);
   }
 
+  protected final java.util.ArrayList<GEORasterSymbol> createRasterSymbols(GEORasterSymbolizer symbolizer)
+  {
+    return symbolizer.createSymbols(this);
+  }
+
 
   public GEO2DMultiPolygonGeometry(java.util.ArrayList<GEO2DPolygonData> polygonsData)
   {
@@ -44,18 +49,24 @@ public class GEO2DMultiPolygonGeometry extends GEOGeometry2D
       {
         GEO2DPolygonData polygonData = _polygonsData.get(i);
         if (polygonData != null)
-           polygonData.dispose();
+        {
+          polygonData._release();
+        }
       }
       _polygonsData = null;
     }
   
     super.dispose();
-  
   }
 
   public final java.util.ArrayList<GEO2DPolygonData> getPolygonsData()
   {
     return _polygonsData;
+  }
+
+  public final long getCoordinatesCount()
+  {
+    return _polygonsData.size();
   }
 
 }

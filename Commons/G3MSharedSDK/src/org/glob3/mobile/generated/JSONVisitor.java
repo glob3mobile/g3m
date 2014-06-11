@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  JSONVisitor.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 1/3/13.
-//
-//
-
-//
 //  JSONVisitor.hpp
 //  G3MiOSSDK
 //

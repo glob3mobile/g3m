@@ -9,6 +9,7 @@
 #include "PlanetRendererBuilder.hpp"
 #include "WMSLayer.hpp"
 #include "MultiLayerTileTexturizer.hpp"
+//#include "DefaultTileTexturizer.hpp"
 #include "PlanetTileTessellator.hpp"
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
@@ -31,14 +32,17 @@ _texturizer(NULL),
 _tileTessellator(NULL),
 _visibleSectorListeners(NULL),
 _stabilizationMilliSeconds(NULL),
-_texturePriority(DownloadPriority::HIGHER),
+_tileDownloadPriority(DownloadPriority::HIGHER),
 _elevationDataProvider(NULL),
 _verticalExaggeration(0),
 _renderedSector(NULL),
 _terrainTouchListeners(NULL),
 _renderTileMeshes(true),
 _logTilesPetitions(false),
-_tileRenderingListener(NULL)
+_tileRenderingListener(NULL),
+_changedInfoListener(NULL),
+_tileCacheSize(0),
+_deleteTexturesOfInvisibleTiles(true)
 {
 }
 
@@ -100,6 +104,8 @@ TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
 TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
     _texturizer = new MultiLayerTileTexturizer();
+//#warning Diego at work!
+//    _texturizer = new DefaultTileTexturizer();
   }
 
   return _texturizer;
@@ -226,12 +232,12 @@ std::vector<long long>* PlanetRendererBuilder::getStabilizationMilliSeconds() {
 }
 
 /**
- * Returns the _texturePriority.
+ * Returns the _tileDownloadPriority.
  *
- * @return _texturePriority: long long
+ * @return _tileDownloadPriority: long long
  */
-long long PlanetRendererBuilder::getTexturePriority() {
-  return _texturePriority;
+long long PlanetRendererBuilder::getTileDownloadPriority() {
+  return _tileDownloadPriority;
 }
 
 void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator) {
@@ -300,8 +306,12 @@ void PlanetRendererBuilder::addTerrainTouchListener(TerrainTouchListener* listen
   getTerrainTouchListeners()->push_back(listener);
 }
 
-void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
-  _texturePriority = texturePriority;
+/*void PlanetRendererBuilder::setTexturePriority(long long texturePriority) {
+  _tile = texturePriority;
+}*/
+
+void PlanetRendererBuilder::setTileDownloadPriority(long long tileDownloadPriority) {
+  _tileDownloadPriority = tileDownloadPriority;
 }
 
 void PlanetRendererBuilder::setElevationDataProvider(ElevationDataProvider* elevationDataProvider) {
@@ -340,6 +350,19 @@ void PlanetRendererBuilder::setTileRenderingListener(TileRenderingListener* tile
   _tileRenderingListener = tileRenderingListener;
 }
 
+ChangedRendererInfoListener* PlanetRendererBuilder::getChangedRendererInfoListener() {
+  return _changedInfoListener;
+}
+
+void PlanetRendererBuilder::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener) {
+  if (_changedInfoListener != NULL) {
+    ILogger::instance()->logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+  } else {
+    _changedInfoListener = changedInfoListener;
+    ILogger::instance()->logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
+  }
+}
+
 TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
   return _tileRenderingListener;
 }
@@ -354,11 +377,14 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getLayerSet(),
                                                       getParameters(),
                                                       getShowStatistics(),
-                                                      getTexturePriority(),
+                                                      getTileDownloadPriority(),
                                                       getRenderedSector(),
                                                       getRenderTileMeshes(),
                                                       getLogTilesPetitions(),
-                                                      getTileRenderingListener());
+                                                      getTileRenderingListener(),
+                                                      getChangedRendererInfoListener(),
+                                                      _tileCacheSize,
+                                                      _deleteTexturesOfInvisibleTiles);
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
@@ -439,3 +465,12 @@ GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
   addTileRasterizer(geoTileRasterizer);
   return geoTileRasterizer;
 }
+
+void PlanetRendererBuilder::setTileCacheSize(int x){
+  _tileCacheSize = x;
+}
+
+void PlanetRendererBuilder::setDeleteTexturesOfInvisibleTiles(bool x){
+  _deleteTexturesOfInvisibleTiles = x;
+}
+

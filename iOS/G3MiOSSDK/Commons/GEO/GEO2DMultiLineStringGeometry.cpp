@@ -10,27 +10,33 @@
 
 #include "Geodetic2D.hpp"
 #include "GEOSymbolizer.hpp"
+#include "GEORasterSymbolizer.hpp"
+#include "GEO2DCoordinatesArrayData.hpp"
+
+GEO2DMultiLineStringGeometry::GEO2DMultiLineStringGeometry(std::vector<std::vector<Geodetic2D*>*>* coordinatesArray)
+{
+  _coordinatesArrayData = (coordinatesArray == NULL) ? NULL : new GEO2DCoordinatesArrayData(coordinatesArray);
+}
+
 
 GEO2DMultiLineStringGeometry::~GEO2DMultiLineStringGeometry() {
-  const int coordinatesArrayCount = _coordinatesArray->size();
-  for (int i = 0; i < coordinatesArrayCount; i++) {
-    std::vector<Geodetic2D*>* coordinates = _coordinatesArray->at(i);
-    const int coordinatesCount = coordinates->size();
-    for (int j = 0; j < coordinatesCount; j++) {
-      Geodetic2D* coordinate = coordinates->at(j);
-      delete coordinate;
-    }
-    delete coordinates;
+  if (_coordinatesArrayData != NULL) {
+    _coordinatesArrayData->_release();
   }
-
-  delete _coordinatesArray;
 
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 std::vector<GEOSymbol*>* GEO2DMultiLineStringGeometry::createSymbols(const GEOSymbolizer* symbolizer) const {
   return symbolizer->createSymbols(this);
+}
+
+std::vector<GEORasterSymbol*>* GEO2DMultiLineStringGeometry::createRasterSymbols(const GEORasterSymbolizer* symbolizer) const {
+  return symbolizer->createSymbols(this);
+}
+
+long long GEO2DMultiLineStringGeometry::getCoordinatesCount() const {
+  return _coordinatesArrayData->getCoordinatesCount();
 }

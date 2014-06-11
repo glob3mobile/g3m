@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 
 public class GLState extends RCObject
 {
-  private GLFeatureSet _features = new GLFeatureSet();
+  private GLFeatureSet _features;
   private GLFeatureSet _accumulatedFeatures;
 
   private int _timeStamp;
@@ -62,6 +62,8 @@ public class GLState extends RCObject
 
   public void dispose()
   {
+    if (_features != null)
+       _features.dispose();
     if (_accumulatedFeatures != null)
        _accumulatedFeatures.dispose();
   
@@ -91,6 +93,7 @@ public class GLState extends RCObject
      _valuesSet = null;
      _globalState = null;
      _accumulatedFeatures = null;
+    _features = new GLFeatureSet();
   }
 
   public final int getTimeStamp()

@@ -27,7 +27,7 @@ public class ShapesRenderer_SceneJSBufferDownloadListener extends IBufferDownloa
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    ILogger.instance().logInfo("Downloaded SceneJS buffer from \"%s\" (%db)", url.getPath(), buffer.size());
+    ILogger.instance().logInfo("Downloaded SceneJS buffer from \"%s\" (%db)", url._path, buffer.size());
 
     _threadUtils.invokeAsyncTask(new ShapesRenderer_SceneJSParserAsyncTask(_shapesRenderer, url, buffer, _uriPrefix, _isTransparent, _position, _altitudeMode, _listener, _deleteListener, _isBSON), true);
 
@@ -35,7 +35,7 @@ public class ShapesRenderer_SceneJSBufferDownloadListener extends IBufferDownloa
 
   public final void onError(URL url)
   {
-    ILogger.instance().logError("Error downloading \"%s\"", url.getPath());
+    ILogger.instance().logError("Error downloading \"%s\"", url._path);
 
     if (_deleteListener)
     {
@@ -49,7 +49,7 @@ public class ShapesRenderer_SceneJSBufferDownloadListener extends IBufferDownloa
 
   public final void onCancel(URL url)
   {
-    ILogger.instance().logInfo("Canceled download of \"%s\"", url.getPath());
+    ILogger.instance().logInfo("Canceled download of \"%s\"", url._path);
 
     if (_deleteListener)
     {

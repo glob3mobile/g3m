@@ -18,11 +18,13 @@ class CameraDoubleDragHandler: public CameraEventHandler {
   
 private:
   MeshRenderer* _meshRenderer;
+  bool _allowRotation;
   
 public:
-  CameraDoubleDragHandler():
+  CameraDoubleDragHandler(bool allowRotation):
   _camera0(Camera()),
-  _meshRenderer(NULL)
+  _meshRenderer(NULL),
+  _allowRotation(allowRotation)
   {
   }
   

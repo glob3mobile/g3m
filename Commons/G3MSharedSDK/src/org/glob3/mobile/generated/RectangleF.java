@@ -9,6 +9,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class RectangleF
 {
 
@@ -104,6 +105,23 @@ public class RectangleF
   public final boolean contains(float x, float y)
   {
     return (x >= _x) && (y >= _y) && (x <= (_x + _width)) && (y <= (_y + _height));
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("Rectangle: X:");
+    isb.addDouble(_x);
+    isb.addString(" Y:");
+    isb.addDouble(_y);
+    isb.addString(" WIDTH:");
+    isb.addDouble(_width);
+    isb.addString(" HEIGHT:");
+    isb.addDouble(_height);
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
 

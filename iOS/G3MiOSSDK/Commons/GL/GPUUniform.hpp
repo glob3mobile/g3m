@@ -95,12 +95,8 @@ public:
 #endif
   }
 
-//  const std::string getName() const { return _name; }
-//  const IGLUniformID* getID() const { return _id; }
-//  int getType() const { return _type; }
   bool wasSet() const { return _value != NULL; }
   const GPUUniformValue* getSetValue() const { return _value; }
-//  GPUUniformKey getKey() const { return _key;}
 
 
   int getIndex() const {
@@ -391,20 +387,17 @@ public:
 
 class GPUUniformValueMatrix4:public GPUUniformValue{
 private:
-//  const bool _ownsProvider;
 #ifdef C_CODE
   const Matrix44DProvider* _provider;
   mutable const Matrix44D* _lastModelSet;
 #endif
 #ifdef JAVA_CODE
-  protected Matrix44DProvider _provider = null;
-  protected  Matrix44D _lastModelSet;
+  private Matrix44DProvider _provider;
+  private Matrix44D         _lastModelSet;
 #endif
 
   ~GPUUniformValueMatrix4() {
-    //    if (_ownsProvider) {
     _provider->_release();
-    //    }
     if (_lastModelSet != NULL) {
       _lastModelSet->_release();
     }
@@ -420,7 +413,6 @@ public:
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DMultiplicationHolder( providers, nMatrix ) ),
   _lastModelSet(NULL)
-//  _ownsProvider(true)
   {
   }
 
@@ -428,7 +420,6 @@ public:
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(provider),
   _lastModelSet(NULL)
-//  _ownsProvider(ownsProvider)
   {
     _provider->_retain();
   }
@@ -437,12 +428,10 @@ public:
   GPUUniformValue(GLType::glMatrix4Float()),
   _provider(new Matrix44DHolder(m)),
   _lastModelSet(NULL)
-//  _ownsProvider(true)
   {
   }
 
   void setUniform(GL* gl, const IGLUniformID* id) const{
-
     if (_lastModelSet != NULL) {
       _lastModelSet->_release();
     }
@@ -469,8 +458,6 @@ public:
     delete isb;
     return s;
   }
-
-  //  const Matrix44D* getMatrix() const { return _m;}
 };
 
 

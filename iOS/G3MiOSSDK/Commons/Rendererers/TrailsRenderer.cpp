@@ -13,12 +13,9 @@
 #include "Planet.hpp"
 #include "GLConstants.hpp"
 #include "GLGlobalState.hpp"
-#include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
 #include "Camera.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "Camera.hpp"
-//#include "CompositeMesh.hpp"
 
 #define MAX_POSITIONS_PER_SEGMENT 128
 
@@ -261,8 +258,5 @@ void TrailsRenderer::render(const G3MRenderContext* rc, GLState* glState) {
       trail->render(rc, frustum, _glState);
     }
   }
-}
-
-void TrailsRenderer::initialize(const G3MContext* context) {
 }
 
