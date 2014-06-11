@@ -163,7 +163,7 @@ public:
   ShapesRenderer(GEOTileRasterizer* geoTileRasterizer):
   _geoTileRasterizer(geoTileRasterizer),
   _renderNotReadyShapes(true),
-  _context(NULL),
+//  _context(NULL),
   _glState(new GLState()),
   _glStateTransparent(new GLState()),
   _lastCamera(NULL),
