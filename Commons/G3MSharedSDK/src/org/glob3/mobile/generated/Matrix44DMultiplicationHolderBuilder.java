@@ -25,13 +25,9 @@ public class Matrix44DMultiplicationHolderBuilder
 
   public final Matrix44DMultiplicationHolder create()
   {
+
     final int providersSize = _providers.size();
-    //const Matrix44DProvider* ps[providersSize];
-
-   //const Matrix44DProvider* *ps;
-   //ps = new Matrix44DProvider*[providersSize];
-
-   Matrix44DProvider[] ps = new const Matrix44DProvider[providersSize];
+	final Matrix44DProvider[] ps = new Matrix44DProvider[providersSize];
 
     for (int i = 0; i < providersSize; i++)
     {
