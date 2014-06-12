@@ -636,7 +636,7 @@ public:
    Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
    builder.setBusyRenderer(busyRenderer);*/
   
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer: geoTileRasterizer];
+  ShapesRenderer* shapesRenderer = [self createSampleShapesRenderer: geoTileRasterizer];
   builder.getPlanetRendererBuilder()->setPlanetRendererParameters([self createPlanetRendererParameters]);
   //  builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
   //                                                               TimeInterval::fromSeconds(3));
@@ -1059,24 +1059,6 @@ public:
     
     delete vertex;
     
-  }
-  
-  if (false) {
-    GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                       geoRenderer: geoRenderer
-                                                                      meshRenderer: meshRenderer
-                                                                     marksRenderer: marksRenderer
-                                                                            planet: planet];
-    builder.setInitializationTask(initializationTask, true);
-    
-    /*PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
-     builder.addPeriodicalTask(periodicalTask);*/
-    
-    const bool logFPS = false;
-    builder.setLogFPS(logFPS);
-    
-    const bool logDownloaderStatistics = false;
-    builder.setLogDownloaderStatistics(logDownloaderStatistics);
   }
   
   //builder.getPlanetRendererBuilder()->setRenderDebug(true);
@@ -1852,9 +1834,8 @@ public:
       }
     };
     
-    catastro->addLayerTouchEventListener(new CatastroTerrainTouchEventListener());
-    
-    layerSet->addLayer(catastro);
+    //catastro->addLayerTouchEventListener(new CatastroTerrainTouchEventListener());
+    //layerSet->addLayer(catastro);
   }
   
   if (false) {
@@ -3832,6 +3813,221 @@ public:
   }
 }
 
+
+- (ShapesRenderer*) createSampleShapesRenderer: (GEOTileRasterizer*) geoTileRasterizer
+{
+  ShapesRenderer* shapesRenderer = new ShapesRenderer(geoTileRasterizer);
+  const double factor = 3000;
+  const Vector3D radius1(factor, factor, factor);
+  const Vector3D radius2(factor*1.5, factor*1.5, factor*1.5);
+  const Vector3D radiusBox(factor, factor*1.5, factor*2);
+  //const Vector3D radiusBox(1000, 2000, 3000);
+  
+  
+  {
+    Shape* point = new PointShape(new Geodetic3D(Angle::fromDegrees(39.70),
+                                                 Angle::fromDegrees(3.30),
+                                                 radiusBox._z),
+                                  ABSOLUTE,
+                                  8,
+                                  Color::fromRGBA(0, 0, 1, 1));
+    shapesRenderer->addShape(point);
+  }
+  {
+    Shape* point = new PointShape(new Geodetic3D(Angle::fromDegrees(39.55),
+                                                 Angle::fromDegrees(3.40),
+                                                 radiusBox._z),
+                                  ABSOLUTE,
+                                  6,
+                                  Color::fromRGBA(0, 0, 1, 1));
+    shapesRenderer->addShape(point);
+  }
+  {
+    Shape* point = new PointShape(new Geodetic3D(Angle::fromDegrees(39.70),
+                                                 Angle::fromDegrees(3.50),
+                                                 radiusBox._z),
+                                  ABSOLUTE,
+                                  4,
+                                  Color::fromRGBA(0, 0, 1, 1));
+    shapesRenderer->addShape(point);
+  }
+  
+  {
+    Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(39.69),
+                                               Angle::fromDegrees(3.31),
+                                               radiusBox._z),
+                                new Geodetic3D(Angle::fromDegrees(39.56),
+                                               Angle::fromDegrees(3.39),
+                                               radiusBox._z),
+                                ABSOLUTE,
+                                5,
+                                Color::fromRGBA(1, 0.5, 0, 1));
+    shapesRenderer->addShape(line);
+  }
+  {
+    Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(39.56),
+                                               Angle::fromDegrees(3.41),
+                                               radiusBox._z),
+                                new Geodetic3D(Angle::fromDegrees(39.69),
+                                               Angle::fromDegrees(3.49),
+                                               radiusBox._z),
+                                ABSOLUTE,
+                                5,
+                                Color::fromRGBA(1, 0.5, 0, 1));
+    shapesRenderer->addShape(line);
+  }
+  {
+    Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(39.70),
+                                               Angle::fromDegrees(3.31),
+                                               radiusBox._z),
+                                new Geodetic3D(Angle::fromDegrees(39.70),
+                                               Angle::fromDegrees(3.49),
+                                               radiusBox._z),
+                                ABSOLUTE,
+                                5,
+                                Color::fromRGBA(1, 0.5, 0, 1));
+    shapesRenderer->addShape(line);
+  }
+  
+  {
+    Shape* rasterLine = new RasterLineShape(new Geodetic2D(Angle::fromDegrees(39.40),
+                                                           Angle::fromDegrees(2.70)),
+                                            new Geodetic2D(Angle::fromDegrees(39.40),
+                                                           Angle::fromDegrees(3.00)),
+                                            2,
+                                            Color::fromRGBA(0, 0, 1, 1));
+    shapesRenderer->addShape(rasterLine);
+  }
+  
+  {
+    std::vector<Geodetic2D*>* vertices = new std::vector<Geodetic2D*>;
+    vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.50), Angle::fromDegrees(3.10)));
+    vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.38), Angle::fromDegrees(3.20)));
+    vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.40), Angle::fromDegrees(3.28)));
+    vertices->push_back(new Geodetic2D(Angle::fromDegrees(39.60), Angle::fromDegrees(3.25)));
+    
+    Shape* pol1 = new RasterPolygonShape(vertices,
+                                         2,
+                                         Color::green(),
+                                         Color::fromRGBA(1.0, 1.0, 1, 0.6));
+    shapesRenderer->addShape(pol1);
+  }
+  
+  
+  
+  
+  Shape* box1 = new BoxShape(new Geodetic3D(Angle::fromDegrees(39.70),
+                                            Angle::fromDegrees(2.80),
+                                            radiusBox._z/2),
+                             ABSOLUTE,
+                             radiusBox,
+                             0,
+                             Color::fromRGBA(0,    1, 0, 1));
+  //Color::newFromRGBA(0, 0.75, 0, 1));
+  //box->setAnimatedScale(1, 1, 20);
+  shapesRenderer->addShape(box1);
+  
+  
+  Shape* ellipsoid1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(39.80),
+                                                        Angle::fromDegrees(2.90),
+                                                        radius1._z),
+                                         ABSOLUTE,
+                                         URL("file:///world.jpg", false),
+                                         radius1,
+                                         32,
+                                         0,
+                                         false,
+                                         false
+                                         //Color::newFromRGBA(0,    0.5, 0.8, 0.5),
+                                         //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                         );
+  //ellipsoid1->setScale(2);
+  shapesRenderer->addShape(ellipsoid1);
+  
+  Shape* mercator1 = new EllipsoidShape(new Geodetic3D(Angle::fromDegrees(39.60),
+                                                       Angle::fromDegrees(3.00),
+                                                       radius2._x),
+                                        ABSOLUTE,
+                                        URL("file:///mercator_debug.png", false),
+                                        radius2,
+                                        32,
+                                        0,
+                                        false,
+                                        true
+                                        //Color::newFromRGBA(0.5,    0.0, 0.8, 0.5),
+                                        //Color::newFromRGBA(0, 0.75, 0, 0.75)
+                                        );
+  shapesRenderer->addShape(mercator1);
+  
+  if (true) {
+    NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                              ofType: @"json"];
+    if (planeFilePath) {
+      NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
+                                                        encoding: NSUTF8StringEncoding
+                                                           error: nil];
+      if (nsPlaneJSON) {
+        std::string planeJSON = [nsPlaneJSON UTF8String];
+        
+        Shape* plane = SceneJSShapesParser::parseFromJSON(planeJSON,
+                                                          URL::FILE_PROTOCOL + "/" ,
+                                                          false,
+                                                          new Geodetic3D(Angle::fromDegrees(39.70),
+                                                                         Angle::fromDegrees(2.60),
+                                                                         7*factor),
+                                                          ABSOLUTE);
+        
+        // Washington, DC
+        const double scale = factor/5;
+        plane->setScale(scale, scale, scale);
+        plane->setPitch(Angle::fromDegrees(120));
+        plane->setHeading(Angle::fromDegrees(-110));
+        shapesRenderer->addShape(plane);
+        
+        
+        /* plane->setAnimatedPosition(TimeInterval::fromSeconds(60),
+         Geodetic3D(Angle::fromDegrees(28.127222),
+         Angle::fromDegrees(-15.431389),
+         10000),
+         Angle::fromDegrees(90),
+         Angle::fromDegrees(720),
+         Angle::zero());*/
+        
+      }
+    }
+  }
+  
+  
+  // adding touch listener
+  class TestShapeTouchListener : public ShapeTouchListener {
+  private:
+    Shape* _selectedShape = NULL;
+  public:
+    bool touchedShape(Shape* shape) {
+      if (_selectedShape == NULL) {
+        shape->select();
+        _selectedShape = shape;
+      } else {
+        if (_selectedShape==shape) {
+          shape->unselect();
+          _selectedShape = NULL;
+        } else {
+          _selectedShape->unselect();
+          _selectedShape = shape;
+          shape->select();
+        }
+      }
+      return true;
+    }
+  };
+  
+  shapesRenderer->setShapeTouchListener(new TestShapeTouchListener, true);
+  
+  return shapesRenderer;
+}
+
+
+
 - (void) testingVectorialGeometry
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -3858,7 +4054,7 @@ public:
   layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
-  ShapesRenderer* shapesRenderer = [self createShapesRenderer: geoTileRasterizer];
+  ShapesRenderer* shapesRenderer = [self createSampleShapesRenderer: geoTileRasterizer];
   builder.addRenderer(shapesRenderer);
   
   // initialization
