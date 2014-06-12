@@ -124,3 +124,26 @@ void GEORasterSymbol::rasterize(ICanvas*                   canvas,
     rawRasterize(canvas, projection);
   }
 }
+
+
+std::vector<Geodetic2D*>* GEORasterSymbol::copyCoordinates(const std::vector<Geodetic2D*>* coordinates) {
+#ifdef C_CODE
+  if (coordinates == NULL) {
+    return NULL;
+  }
+  
+  std::vector<Geodetic2D*>* result = new std::vector<Geodetic2D*>();
+  
+  const int size = coordinates->size();
+  for (int i = 0; i < size; i++) {
+    const Geodetic2D* coordinate = coordinates->at(i);
+    result->push_back( new Geodetic2D(*coordinate) );
+  }
+  return result;
+#endif
+#ifdef JAVA_CODE
+  return coordinates;
+#endif
+}
+
+

@@ -284,11 +284,11 @@ private:
   ErrorRenderer*      _errorRenderer;
   Renderer*           _hudRenderer;
   RenderState*        _rendererState;
-  Renderer*           _selectedRenderer;
+  //Renderer*           _selectedRenderer;
   
   ShapesEditorRenderer* _shapesEditorRenderer;
   
-  //ProtoRenderer*      _selectedRenderer;
+  ProtoRenderer*      _selectedRenderer;
 
   EffectsScheduler*   _effectsScheduler;
 

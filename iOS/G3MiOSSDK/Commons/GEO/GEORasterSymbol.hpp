@@ -30,7 +30,7 @@ private:
 protected:
   const Sector* _sector;
 
-  static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
+  //static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 
   static Sector* calculateSectorFromCoordinates(const std::vector<Geodetic2D*>* coordinates);
   static Sector* calculateSectorFromCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
@@ -49,6 +49,8 @@ protected:
   _maxTileLevel(maxTileLevel)
   {
   }
+  
+  
 
   void rasterLine(const GEO2DCoordinatesData* coordinates,
                   ICanvas*                    canvas,

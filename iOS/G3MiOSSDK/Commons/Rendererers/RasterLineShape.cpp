@@ -10,7 +10,8 @@
 #include "OrientedBox.hpp"
 #include "Camera.hpp"
 #include "GEO2DLineRasterStyle.hpp"
-#include "GEORasterLineSymbol.hpp"
+//#include "GEORasterLineSymbol.hpp"
+#include "GEOLineRasterSymbol.hpp"
 
 
 RasterLineShape::~RasterLineShape() {
@@ -88,10 +89,15 @@ BoundingVolume* RasterLineShape::getBoundingVolume(const G3MRenderContext *rc)
 
 GEORasterSymbol* RasterLineShape::createRasterSymbolIfNeeded() const
 {
-  std::vector<Geodetic2D*> coordinates;
-  coordinates.push_back(_geodeticStartPos);
-  coordinates.push_back(_geodeticEndPos);
+  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>;
+  coordinates->push_back(_geodeticStartPos);
+  coordinates->push_back(_geodeticEndPos);
   float dashLengths[] = {};
   GEO2DLineRasterStyle lineStyle(*_color, _width, CAP_ROUND, JOIN_ROUND, 1, dashLengths, 0, 0);
-  return new GEORasterLineSymbol(&coordinates, lineStyle);
+  //return new GEORasterLineSymbol(&coordinates, lineStyle);
+  
+  const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
+  return new GEOLineRasterSymbol(coordinatesData, lineStyle);
 }
+  
+  

@@ -48,7 +48,11 @@ public class ShapesRenderer extends DefaultRenderer
 
   private G3MContext _context;
 =======
+<<<<<<< HEAD
 >>>>>>> origin/senderos-gc
+=======
+>>>>>>> origin/purgatory
+>>>>>>> origin/shape-intersection-gus
   private Camera    _lastCamera;
 
   private GLState _glState;
@@ -171,6 +175,12 @@ public class ShapesRenderer extends DefaultRenderer
      _lastCamera = null;
      _autoDeleteShapeTouchListener = false;
      _shapeTouchListener = null;
+<<<<<<< HEAD
+=======
+=======
+    _context = null;
+>>>>>>> origin/purgatory
+>>>>>>> origin/shape-intersection-gus
   }
 
 

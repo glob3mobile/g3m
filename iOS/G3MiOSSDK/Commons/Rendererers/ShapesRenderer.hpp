@@ -81,8 +81,9 @@ public:
 
 //class ShapesRenderer : public LeafRenderer {
 
-class ShapesRenderer : public DefaultRenderer {
+//class ShapesRenderer : public LeafRenderer {
 
+class ShapesRenderer : public DefaultRenderer {
 private:
   class LoadQueueItem {
   public:
@@ -195,7 +196,7 @@ public:
   ShapesRenderer(GEOTileRasterizer* geoTileRasterizer):
   _geoTileRasterizer(geoTileRasterizer),
   _renderNotReadyShapes(true),
-  _context(NULL),
+//  _context(NULL),
   _glState(new GLState()),
   _glStateTransparent(new GLState()),
   _lastCamera(NULL),
@@ -228,10 +229,19 @@ public:
 
   }
 
-  virtual void addShape(Shape* shape);
+  //virtual void addShape(Shape* shape);
+
+  void addShape(Shape* shape);
   
+/*  void addShape(Shape* shape) {
+    _shapes.push_back(shape);
+    if (_context != NULL) {
+      shape->initialize(_context);
+    }
+  }*/
+
   void removeShape(Shape* shape);
-  
+
   void removeAllShapes(bool deleteShapes=true);
 
   void enableAll();

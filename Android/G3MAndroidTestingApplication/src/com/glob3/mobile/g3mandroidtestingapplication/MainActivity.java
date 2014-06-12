@@ -3,6 +3,10 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Color;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/shape-intersection-gus
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GEOTileRasterizer;
@@ -74,6 +78,7 @@ import org.glob3.mobile.generated.Shape;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SingleBilElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
+<<<<<<< HEAD
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.Vector2I;
@@ -81,6 +86,9 @@ import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.URLTemplateLayer;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+=======
+>>>>>>> origin/purgatory
+>>>>>>> origin/shape-intersection-gus
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 import org.glob3.mobile.generated.Vector3D;
@@ -106,6 +114,7 @@ import android.widget.RelativeLayout;
 
 
 public class MainActivity
+<<<<<<< HEAD
 extends
 Activity {
 
@@ -149,6 +158,30 @@ Activity {
 		final ShapesRenderer shapesRenderer = new ShapesRenderer(geoTileRasterizer);
 		builder.addRenderer(shapesRenderer);
       
+=======
+         extends
+            Activity {
+
+   private G3MWidget_Android _g3mWidget;
+<<<<<<< HEAD
+   private RelativeLayout    _placeHolder;
+   private ILogger			 _logger;
+=======
+
+
+   //   private RelativeLayout    _placeHolder;
+>>>>>>> origin/purgatory
+
+
+   @Override
+   protected void onCreate(final Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+
+<<<<<<< HEAD
+      setContentView(R.layout.activity_main);
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      // builder.getPlanetRendererBuilder().setRenderDebug(true);
+>>>>>>> origin/shape-intersection-gus
       
       Planet planet = Planet.createEarth();
       builder.setPlanet(planet);
@@ -849,10 +882,16 @@ class PrecacherInitializationTask extends GInitializationTask {
 
 	}
 
+<<<<<<< HEAD
 	private int _nImagesDownloaded = 0;
 	private LinkedList<String> _urls;
 	private boolean _done = false;
 	private G3MWidget_Android _widget = null;
+=======
+      return layerSet;
+>>>>>>> origin/purgatory
+   }
+>>>>>>> origin/shape-intersection-gus
 
 	private Geodetic2D _upper, _lower;
 	private int _level;

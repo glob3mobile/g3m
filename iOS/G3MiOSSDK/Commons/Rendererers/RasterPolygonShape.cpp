@@ -9,7 +9,8 @@
 #include "RasterPolygonShape.hpp"
 #include "OrientedBox.hpp"
 #include "Camera.hpp"
-#include "GeoRasterPolygonSymbol.hpp"
+//#include "GeoRasterPolygonSymbol.hpp"
+#include "GEOPolygonRasterSymbol.hpp"
 #include "Geo2DPolygonData.hpp"
 
 
@@ -61,7 +62,7 @@ OrientedBox* RasterPolygonShape::computeOrientedBox(const Planet* planet,
   double distanceToCamera = camera->getCartesianPosition().distanceTo(*_cartesianStartPos);
   FrustumData frustum = camera->getFrustumData();
   const int pixelWidth = 10;
-  double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getHeight() / frustum._znear;
+  double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera->getViewPortHeight() / frustum._znear;
   double incZ = scale - (_maxZ - _minZ);
   if (incZ < 0) incZ = 0;
   const Vector3D upper = Vector3D(_maxX, _maxY, _maxZ+incZ);
@@ -111,10 +112,12 @@ GEORasterSymbol* RasterPolygonShape::createRasterSymbolIfNeeded() const
 {
   float dashLengths[] = {};
   std::vector<Geodetic2D*>* coordinates = GEORasterSymbol::copyCoordinates(_coordinates);
-  GEO2DPolygonData polygonData(coordinates, NULL);
+  GEO2DPolygonData* polygonData = new GEO2DPolygonData(coordinates, NULL);
   GEO2DLineRasterStyle lineStyle(*_borderColor, _borderWidth, CAP_ROUND, JOIN_ROUND, 1, dashLengths, 0, 0);
   GEO2DSurfaceRasterStyle surfaceStyle(*_surfaceColor);
-  return new GEORasterPolygonSymbol(&polygonData, lineStyle, surfaceStyle);
+  //return new GEORasterPolygonSymbol(&polygonData, lineStyle, surfaceStyle);
+  
+  return new GEOPolygonRasterSymbol(polygonData, lineStyle, surfaceStyle);
 }
 
 

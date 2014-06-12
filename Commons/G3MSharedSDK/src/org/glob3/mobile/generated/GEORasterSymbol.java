@@ -37,7 +37,11 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
   protected static java.util.ArrayList<java.util.ArrayList<Geodetic2D>> copyCoordinatesArray(java.util.ArrayList<java.util.ArrayList<Geodetic2D>> coordinatesArray)
 =======
   protected GEORasterSymbol(int minTileLevel, int maxTileLevel)
+<<<<<<< HEAD
 >>>>>>> origin/senderos-gc
+=======
+>>>>>>> origin/purgatory
+>>>>>>> origin/shape-intersection-gus
   {
      _minTileLevel = minTileLevel;
      _maxTileLevel = maxTileLevel;
@@ -166,6 +170,11 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  public abstract void rawRasterize(ICanvas canvas, GEORasterProjection projection);
+
+>>>>>>> origin/shape-intersection-gus
   // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
   public final void unusedMethod()
   {
@@ -177,5 +186,9 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
   }
 
 =======
+<<<<<<< HEAD
 >>>>>>> origin/senderos-gc
+=======
+>>>>>>> origin/purgatory
+>>>>>>> origin/shape-intersection-gus
 }
