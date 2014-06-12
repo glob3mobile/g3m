@@ -119,7 +119,7 @@ void Shape::render(const G3MRenderContext* rc,
       getTransformMatrix(rc->getPlanet()); //Applying transform to _glState
       _glState->setParent(parentGLState);
       rawRender(rc, _glState, renderNotReadyShapes);
-      if (isSelected() && !isRaster()) {
+      if (isSelected()) {
         BoundingVolume* boundingVolume = getBoundingVolume(rc);
         if (boundingVolume)
           boundingVolume->render(rc, *_glState);
