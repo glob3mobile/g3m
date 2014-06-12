@@ -1341,9 +1341,9 @@ public:
   CameraRenderer* cameraRenderer = new CameraRenderer();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  const bool allowRotationInDoubleDrag = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
+  //const bool allowRotationInDoubleDrag = true;
+  //cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
+  cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
   
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
