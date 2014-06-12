@@ -283,7 +283,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
+  
+  [self testingVectorialGeometry];
 
   //  [self initWithMapBooBuilder];
 
@@ -3699,5 +3701,46 @@ public:
     return YES;
   }
 }
+
+- (void) testingVectorialGeometry
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+
+  builder.setCameraRenderer([self createCameraRenderer]);
+  
+  const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  //  const Planet* planet = Planet::createFlatEarth();
+  builder.setPlanet(planet);
+  
+  Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
+  builder.setBackgroundColor(bgColor);
+  
+  bool useElevations = false;
+  if (useElevations) {
+    [self initializeElevationDataProvider: builder];
+  }
+  
+  LayerSet* layerSet = new LayerSet();
+  layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  ShapesRenderer* shapesRenderer = [self createShapesRenderer: geoTileRasterizer];
+  builder.addRenderer(shapesRenderer);
+  
+  // initialization
+  builder.initializeWidget();
+  
+  if (true) {
+    Geodetic3D position(Geodetic3D(Angle::fromDegrees(39.08), Angle::fromDegrees(2.90), 113000));
+    [self G3MWidget].widget->setCameraPosition(position);
+    [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-5));
+    [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(24-90));
+  }
+}
+
 
 @end
