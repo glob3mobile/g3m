@@ -26,11 +26,6 @@
    <!-- <entry key="DATABASE_NAME">virginia</entry> -->
 
 <!-- LOD parameters -->   
-
-   <!-- value used to adjust simplification tolerance for Douglas-Peucker simplification. -->
-   <!-- Greater values entail less tolerance, and so on less vertex filtered and more vertex generate -->
-   <!-- for the resultant geometry. Usual values between 1.0 to 10.0 -->
-   <entry key="QUALITY_FACTOR">1.0</entry>
    
    <!-- Projection selection. true=MERCATOR (epsg:900913 Google) / false=WGS84 (epsg:4326) -->
    <entry key="MERCATOR">true</entry>
@@ -41,12 +36,22 @@
    <!-- last level of tiles to be generated -->
    <entry key="MAX_LEVEL">5</entry>
    
-<!--    valid output format: geojson, geobson, both -->
+   <!-- valid output format: geojson, geobson, both -->
    <entry key="OUTPUT_FORMAT">both</entry>
    
    <!-- output folder path, using the correct operating system path separator. By default, LOD folder -->
    <!-- shall be used at the current path. -->
    <entry key="OUTPUT_FOLDER">/home/fpulido/Escritorio/LOD</entry>
+   
+   <!-- maximum number of vertex in a geojson/geobson file -->
+   <entry key="MAX_VERTEX">10000</entry>
+   
+   <!-- Geometry replacementet allowed or not. -->
+   <!-- (MULTI)LINE or (MULTI)POLYGON filtered during processing will be replaced by POINT. -->
+   <!-- REPLACE_FILTERED == 0, means substitutions not allowed.  -->
+   <!-- REPLACE_FILTERED > 0, this number is the maximun number of substitutions per tile -->
+   <entry key="REPLACE_FILTERED">20</entry>
+
 
 <!-- Parameters for specific vectorial data -->  
 
