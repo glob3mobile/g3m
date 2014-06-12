@@ -7,6 +7,7 @@
 //
 
 #include "GEORasterLineSymbol.hpp"
+#include "GEO2DCoordinatesData.hpp"
 
 #include "Tile.hpp"
 #include "ICanvas.hpp"
@@ -43,7 +44,8 @@ GEORasterLineSymbol::~GEORasterLineSymbol() {
 void GEORasterLineSymbol::rawRasterize(ICanvas*                   canvas,
                                        const GEORasterProjection* projection) const {
   if (_style.apply(canvas)) {
-    rasterLine(_coordinates,
+    const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(_coordinates);
+    rasterLine(coordinatesData,
                canvas,
                projection);
   }
