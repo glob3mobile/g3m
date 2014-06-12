@@ -308,7 +308,7 @@ bool Tile::isVisible(const G3MRenderContext* rc,
   
 #warning THIS LINE IS PROBLEMATIC WHEN ELEVATIONDATAPROVIDER IS ASYNCHRONOUS
   return ((boundingVolume != NULL)  &&
-          boundingVolume->touchesFrustum(cameraFrustumInModelCoordinates));
+          boundingVolume->touchesFrustum(cameraWiderFrustumInModelCoordinates));
 }
 
 bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,

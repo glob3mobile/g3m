@@ -288,8 +288,9 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
   
   //[self initCustomizedWithBuilder];
-  
-  [self testingVectorialGeometry];
+  //[self testingVectorialGeometry];
+
+  [self testElevationNavigation];
   
   //  [self initWithMapBooBuilder];
   
@@ -607,7 +608,6 @@ public:
   const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
   
-  
   Color* bgColor = Color::newFromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
   
   builder.setBackgroundColor(bgColor);
@@ -653,6 +653,20 @@ public:
   builder.setBusyRenderer(busyRenderer);
   
   //ShapesRenderer* shapesRenderer = [self createShapesRenderer: builder.getPlanet()];
+  /*builder.getPlanetRendererBuilder()->addVisibleSectorListener(new TestVisibleSectorListener(),
+   TimeInterval::fromSeconds(3));*/
+  /*
+   builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer(GFont::monospaced(15),
+   Color::yellow(),
+   true,  // showIDLabel
+   false, // showSectorLabels,
+   true   // showTileBounds
+   ));*/
+  builder.getPlanetRendererBuilder()->setIncrementalTileQuality(true);
+  
+  /* Renderer* busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1));
+   builder.setBusyRenderer(busyRenderer);*/
+  
   builder.addRenderer(shapesRenderer);
   
   MeshRenderer* meshRenderer = new MeshRenderer();
@@ -697,31 +711,35 @@ public:
     builder.setShownSector(Sector::fromDegrees(                                                                                 39.4642996294239623,                                                                                -6.3829977122432933,                                                                                  39.4829891936013553,-6.3645288909498845).shrinkedByPercent(-30));
   }
   
+  
+  if (false) {
+    //  meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/points.json"),
+    //                                   10,
+    //                                   new TestMeshLoadListener(),
+    //                                   true);
+    meshRenderer->loadJSONPointCloud(URL("file:///pointcloud/matterhorn.json"),
+                                     2,
+                                     0,
+                                     new TestMeshLoadListener(),
+                                     true);
+    
+    //  void testMeshLoad(const G3MContext* context) {
+    //    context->getDownloader()->requestBuffer(URL("file:///isosurface-mesh.json"),
+    //                                            100000, //  priority,
+    //                                            TimeInterval::fromDays(30),
+    //                                            true,
+    //                                            new ParseMeshBufferDownloadListener(_meshRenderer, _planet),
+    //                                            true);
+    //  }
+    meshRenderer->loadJSONMesh(URL("file:///isosurface-mesh.json"),
+                               Color::newFromRGBA(1, 1, 0, 1));
+    
+    meshRenderer->showNormals(true); //SHOWING NORMALS
+  }
+  
   MarksRenderer* marksRenderer = [self createMarksRenderer];
   builder.addRenderer(marksRenderer);
   GEORenderer* geoRenderer;
-  
-  if (false) {
-    geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
-                                       shapesRenderer: shapesRenderer
-                                        marksRenderer: marksRenderer
-                                    geoTileRasterizer: geoTileRasterizer];
-    builder.addRenderer(geoRenderer);
-    GInitializationTask* initializationTask = [self createSampleInitializationTask: shapesRenderer
-                                                                       geoRenderer: geoRenderer
-                                                                      meshRenderer: meshRenderer
-                                                                     marksRenderer: marksRenderer];
-    builder.setInitializationTask(initializationTask, true);
-    
-    //PeriodicalTask* periodicalTask = [self createSamplePeriodicalTask: &builder];
-    //builder.addPeriodicalTask(periodicalTask);
-    
-    const bool logFPS = false;
-    builder.setLogFPS(logFPS);
-    
-    const bool logDownloaderStatistics = false;
-    builder.setLogDownloaderStatistics(logDownloaderStatistics);
-  }
   
   //Showing light directions
   if (false){
@@ -1060,6 +1078,7 @@ public:
     delete vertex;
     
   }
+  
   
   //builder.getPlanetRendererBuilder()->setRenderDebug(true);
   
@@ -1465,6 +1484,7 @@ public:
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
     //    return NULL;
     
+
     std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
     
     //    symbols->push_back( new GEOLine2DMeshSymbol(geometry->getCoordinates(),
@@ -1693,6 +1713,15 @@ public:
                                             TimeInterval::fromDays(30)) );
   }
   
+  const bool useBingMaps = false;
+  if (useBingMaps) {
+    layerSet->addLayer( new BingMapsLayer(//BingMapType::Road(),
+                                          BingMapType::AerialWithLabels(),
+                                          //BingMapType::Aerial(),
+                                          "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
+                                          TimeInterval::fromDays(30)) );
+  }
+  
   const bool useOSMEditMap = false;
   if (useOSMEditMap) {
     // http://d.tiles.mapbox.com/v3/enf.osm-edit-date/4/4/5.png
@@ -1820,6 +1849,213 @@ public:
                                         new LevelTileCondition(0, 5),
                                         TimeInterval::fromDays(30),
                                         true);
+    layerSet->addLayer(blueMarble);
+    
+    
+    //    bool enabled = true;
+    //    WMSLayer* bing = LayerBuilder::createBingLayer(enabled);
+    WMSLayer* bing = new WMSLayer("ve",
+                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/jpeg",
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  new LevelTileCondition(6, 500),
+                                  TimeInterval::fromDays(30),
+                                  true);
+    layerSet->addLayer(bing);
+    
+  }
+  
+  if (false) {
+    //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/1-TrueMarble_2km_21600x10800_tif.tiles/{level}/{x}/{y}.png",
+    //                                                  Sector::fullSphere(),
+    //                                                  false,
+    //                                                  0,
+    //                                                  4,
+    //                                                  TimeInterval::zero(),
+    //                                                  false));
+    
+    //    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+    //                                        URL("http://www.nasa.network.com/wms?", false),
+    //                                        WMS_1_1_0,
+    //                                        Sector::fullSphere(),
+    //                                        "image/jpeg",
+    //                                        "EPSG:4326",
+    //                                        "",
+    //                                        false,
+    //                                        //new LevelTileCondition(0, 8),
+    //                                        NULL,
+    //                                        TimeInterval::fromDays(30),
+    //                                        true);
+    //    layerSet->addLayer(blueMarble);
+    
+    
+    // [lower=[lat=39.99854166666677, lon=-72.00145833333336], upper=[lat=42.50145833333343, lon=-68.9985416666667]]
+    // [lower=[lat=48.302366666666664, lon=11.65903888888889], upper=[lat=48.40372222222222, lon=11.788533333333335]]
+    
+    //    AndTileCondition* condition = new AndTileCondition(new LevelTileCondition(0, 500),
+    //                                                       new SectorTileCondition(Sector::fromDegrees(39.99854166666677, -72.00145833333336,
+    //                                                                                                   42.50145833333343, -68.9985416666667)));
+    //
+    //    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/2-N40-W072_ll_tif.tiles/{level}/{x}/{y}.png",
+    //                                                  Sector::fullSphere(),
+    //                                                  true,
+    //                                                  0,
+    //                                                  8,
+    //                                                  TimeInterval::zero(),
+    //                                                  false,
+    //                                                  //new LevelTileCondition(3, 500)
+    //                                                  //new SectorTileCondition(Sector::fromDegrees(39.99833333333333, -0.0016666666666663962,
+    //                                                  //                                            42.50166666666667, 3.0016666666666665))
+    //                                                  condition
+    //                                                  ));
+    
+    layerSet->addLayer(URLTemplateLayer::newWGS84("http://192.168.1.2/_merged/{level}/{x}/{y}.jpg",
+                                                  Sector::fullSphere(),
+                                                  true,
+                                                  0,
+                                                  15,
+                                                  TimeInterval::zero(),
+                                                  false,
+                                                  NULL
+                                                  ));
+    
+  }
+  
+  if (false) {
+    WMSLayer* political = new WMSLayer("topp:cia",
+                                       URL("http://worldwind22.arc.nasa.gov/geoserver/wms?", false),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/png",
+                                       "EPSG:4326",
+                                       "countryboundaries",
+                                       true,
+                                       NULL,
+                                       TimeInterval::fromDays(30),
+                                       true);
+    layerSet->addLayer(political);
+  }
+  
+  bool useOSM_WMS = false;
+  if (useOSM_WMS) {
+    WMSLayer *osm = new WMSLayer("osm_auto:all",
+                                 URL("http://129.206.228.72/cached/osm", false),
+                                 WMS_1_1_0,
+                                 //Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
+                                 Sector::fullSphere(),
+                                 "image/jpeg",
+                                 "EPSG:4326",
+                                 "",
+                                 false,
+                                 NULL,
+                                 TimeInterval::fromDays(30),
+                                 true);
+    // osm->setEnable(false);
+    
+    layerSet->addLayer(osm);
+  }
+  
+  
+  //  WMSLayer* pressure = new WMSLayer("pressure_cntr", //
+  //                                    URL("http://wms.openweathermap.org/service", false), //
+  //                                    WMS_1_1_0, //
+  //                                    Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+  //                                    "image/png", //
+  //                                    "EPSG:4326", //
+  //                                    "", //
+  //                                    true, //
+  //                                    NULL,
+  //                                    TimeInterval::zero());
+  //  layerSet->addLayer(pressure);
+  
+  const bool usePnoaLayer = false;
+  if (usePnoaLayer) {
+    WMSLayer *pnoa = new WMSLayer("PNOA",
+                                  URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                  WMS_1_1_0,
+                                  Sector::fromDegrees(21, -18, 45, 6),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::fromDays(30),
+                                  true);
+    layerSet->addLayer(pnoa);
+    
+    class PNOATerrainTouchEventListener : public LayerTouchEventListener {
+    public:
+      bool onTerrainTouch(const G3MEventContext* context,
+                          const LayerTouchEvent& event) {
+        const URL url = event.getLayer()->getFeatureInfoURL(event.getPosition().asGeodetic2D(),
+                                                            event.getSector());
+        
+        printf ("PNOA touched. Feature info = %s\n", url._path.c_str());
+        
+        return true;
+      }
+    };
+    
+    pnoa->addLayerTouchEventListener(new PNOATerrainTouchEventListener());
+  }
+  
+  const bool testURLescape = false;
+  if (testURLescape) {
+    WMSLayer *ayto = new WMSLayer(URL::escape("Ejes de via"),
+                                  URL("http://sig.caceres.es/wms_callejero.mapdef?", false),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL,
+                                  TimeInterval::fromDays(30),
+                                  true);
+    layerSet->addLayer(ayto);
+    
+  }
+  
+  //  WMSLayer *vias = new WMSLayer("VIAS",
+  //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
+  //                                WMS_1_1_0,
+  //                                "image/gif",
+  //                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
+  //                                "EPSG:4326",
+  //                                "",
+  //                                true,
+  //                                Angle::nan(),
+  //                                Angle::nan());
+  //  layerSet->addLayer(vias);
+  
+  //  WMSLayer *osm = new WMSLayer("bing",
+  //                               "http://wms.latlon.org/",
+  //                               WMS_1_1_0,
+  //                               "image/jpeg",
+  //                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+  //                               "EPSG:4326",
+  //                               "",
+  //                               false,
+  //                               Angle::nan(),
+  //                               Angle::nan());
+  //  layerSet->addLayer(osm);
+  
+  if (false) {
+    WMSLayer* catastro = new WMSLayer("catastro", //
+                                      URL("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx", false), //
+                                      WMS_1_1_0, //
+                                      Sector::fromDegrees(26.275479, -18.409639, 44.85536, 5.225974),
+                                      "image/png", //
+                                      "EPSG:4326", //
+                                      "", //
+                                      true, //
+                                      NULL, //
+                                      TimeInterval::fromDays(30),
+                                      true);
     
     class CatastroTerrainTouchEventListener : public LayerTouchEventListener {
     public:
@@ -2028,10 +2264,11 @@ public:
   
 }
 
-- (void) createShapesRenderer: (ShapesEditorRenderer*) shapesRenderer
+- (ShapesRenderer*) createShapesRenderer
 {
-  //ShapesEditorRenderer* shapesRenderer = new ShapesEditorRenderer(geoTileRasterizer);
-  /*  Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  /*
+   Shape* quad1 = new QuadShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
    Angle::fromDegrees(-122 - 2),
    824000 / 2),
    RELATIVE_TO_GROUND,
@@ -2129,6 +2366,7 @@ public:
     shapesRenderer->addShape(point);
   }
   
+
   {
     Shape* line = new LineShape(new Geodetic3D(Angle::fromDegrees(39.69),
                                                Angle::fromDegrees(3.31),
@@ -2430,13 +2668,15 @@ public:
    delete destRs[i];
    }*/
   
-  //return shapesRenderer;
+  return shapesRenderer;
 }
 
 
 class SampleSymbolizer : public GEOSymbolizer {
 private:
   mutable int _colorIndex = 0;
+  
+  const Planet* _planet;
   
 private:
   
@@ -4068,5 +4308,73 @@ public:
   }
 }
 
+- (void) testElevationNavigation
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  //const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  const Planet* planet = Planet::createFlatEarth();
+  builder.setPlanet(planet);
+  
+  // create shape
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.4),
+                                           Angle::fromDegrees(-16.4),
+                                           0),
+                            ABSOLUTE,
+                            Vector3D(3000, 3000, 20000),
+                            2,
+                            Color::fromRGBA(1,    1, 0, 0.5),
+                            Color::newFromRGBA(0, 0.75, 0, 0.75));
+  shapesRenderer->addShape(box);
+  builder.addRenderer(shapesRenderer);
+  
+  // create wmslayer from Grafcan
+  LayerSet* layerSet = new LayerSet();
+  WMSLayer* grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+                                        URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),//gcSector,
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 17),
+                                        TimeInterval::fromDays(30),
+                                        true);
+  layerSet->addLayer(grafcanLIDAR);
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  // create elevations for Tenerife from bil file
+  Sector sector = Sector::fromDegrees (27.967811065876,                  // min latitude
+                                       -17.0232177085356,                // min longitude
+                                       28.6103464294992,                 // max latitude
+                                       -16.0019401695656);               // max longitude
+  Vector2I extent = Vector2I(256, 256);                             // image resolution
+  URL url = URL("file:///Tenerife-256x256.bil", false);
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
+  
+  // create camera renderers
+  CameraRenderer* cameraRenderer = [self createCameraRenderer];
+  builder.setCameraRenderer(cameraRenderer);
+  
+  /* webgl optimization
+  bool testingTileCache = true;
+  if (testingTileCache){
+    builder.getPlanetRendererBuilder()->setTileCacheSize(200);
+    builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
+  }*/
+
+  // set frustumCullingFactor
+  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
+  
+  // set camera looking at Tenerife
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
+  [self G3MWidget].widget->setCameraPosition(position);
+  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
+}
 
 @end
