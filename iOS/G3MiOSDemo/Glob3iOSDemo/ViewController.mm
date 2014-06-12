@@ -4367,6 +4367,9 @@ public:
     builder.getPlanetRendererBuilder()->setTileCacheSize(200);
     builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
   }*/
+  
+  // initialization
+  builder.initializeWidget();
 
   // set frustumCullingFactor
   [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
