@@ -3874,68 +3874,6 @@ public:
   }
 }
 
-// CLASSES TO AVOID CAMERA PASSING TROUGH GROUND
-
-class ElevationCameraConstrainer: public ICameraConstrainer {
-private:
-  double _heightOffset;
-  float _vertEx;
-  
-public:
-  ElevationData* _ed;
-
-  ElevationCameraConstrainer(ElevationDataProvider* edp, float vertEx, double minHeigth, int zone, int dimA, int dimB);
-  ElevationCameraConstrainer() { };
-  
-  bool onCameraChange(const Planet* planet,
-                      const Camera* previousCamera,
-                      Camera* nextCamera) const {
-    if (_ed != NULL) {
-      Geodetic3D geo = nextCamera->getGeodeticPosition();
-      double elevation = _ed->getElevationAt(geo.asGeodetic2D());
-      double limitHeight = (elevation + _heightOffset) * _vertEx;
-      //printf ("camera constraint %f < %f ?\n", geo._height, limitHeight);
-      if (geo._height < limitHeight){
-        //nextCamera.setGeodeticPosition(new Geodetic3D(geo.asGeodetic2D(), limitHeight));
-        nextCamera->copyFrom(*previousCamera);
-        printf ("     COLISION!!!\n");
-      }
-    }
-    return true;
-  }
-};
-
-
-class MyElevationDataListener: public IElevationDataListener {
-private:
-  ElevationCameraConstrainer* _vc;
-  
-public:
-  MyElevationDataListener(ElevationCameraConstrainer* vc) {
-    _vc = vc;
-  }
-  
-  void onData(const Sector& sector,
-              const Vector2I& extent,
-              ElevationData* elevationData) {
-    _vc->_ed = elevationData;
-  }
-  
-  void onError(const Sector& sector, const Vector2I& extent) {}
-  void onCancel(const Sector& sector, const Vector2I& extent) {}
-};
-
-
-ElevationCameraConstrainer::ElevationCameraConstrainer(ElevationDataProvider* edp,
-                                                       float vertEx, double minHeigth, int zone, int dimA, int dimB) {
-    _ed = NULL;
-    _vertEx = vertEx;
-    _heightOffset = minHeigth;
-    const std::vector<const Sector*> sectors = edp->getSectors();
-    edp->requestElevationData(*sectors[zone], Vector2I(dimA, dimB),
-                             new MyElevationDataListener(this), true);
-  }
-
 
 - (void) testElevationNavigation
 {
@@ -3988,11 +3926,7 @@ ElevationCameraConstrainer::ElevationCameraConstrainer(ElevationDataProvider* ed
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   float verticalExaggeration = 2.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
-  
-  // create camera constraints
-  builder.addCameraConstraint(new ElevationCameraConstrainer(elevationDataProvider, verticalExaggeration,
-                                                             100, 0, elevationWidth, elevationHeight));
-  
+    
   // create camera renderers
   CameraRenderer* cameraRenderer = [self createCameraRenderer];
   builder.setCameraRenderer(cameraRenderer);
