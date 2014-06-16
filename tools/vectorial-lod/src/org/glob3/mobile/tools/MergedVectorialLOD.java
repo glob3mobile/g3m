@@ -42,27 +42,28 @@ public class MergedVectorialLOD {
 
    //-- Internal constants definition ------------------------------------------------------------------
 
-   final static String  DEFAULT_PARAMETERS_FILE = "parameters.merged.xml";
-   final static String  METADATA_FILENAME       = "metadata.json";
-   final static String  EMPTY_GEOJSON           = "{\"type\":\"FeatureCollection\",\"features\":null}";
-   final static String  INTERNAL_SRID           = "4326";
-   final static String  MERCATOR_PYRAMID        = "MERCATOR";
-   final static String  WGS84_PYRAMID           = "WGS84";
+   final static String  DEFAULT_PARAMETERS_FILE  = "parameters.merged.xml";
+   final static String  METADATA_FILENAME        = "metadata.json";
+   final static String  EMPTY_GEOJSON            = "{\"type\":\"FeatureCollection\",\"features\":null}";
+   final static String  INTERNAL_SRID            = "4326";
+   final static String  MERCATOR_PYRAMID         = "MERCATOR";
+   final static String  WGS84_PYRAMID            = "WGS84";
 
-   final static float   QUALITY_FACTOR          = 1.0f;
-   final static double  OVERLAP_PERCENTAGE      = 5.0;
-   final static int     CONNECTION_TIMEOUT      = 5;                                                   //seconds
-   final static int     PIXELS_PER_TILE         = 256;
-   final static int     SQUARED_PIXELS_PER_TILE = (int) Math.pow(
-                                                         (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
-                                                         2);
+   final static int     CONNECTIONS_SCALE_FACTOR = 2;
+   final static float   QUALITY_FACTOR           = 1.0f;
+   final static double  OVERLAP_PERCENTAGE       = 5.0;
+   final static int     CONNECTION_TIMEOUT       = 5;                                                   //seconds
+   final static int     PIXELS_PER_TILE          = 256;
+   final static int     SQUARED_PIXELS_PER_TILE  = (int) Math.pow(
+                                                          (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
+                                                          2);
    //final static long    VERTEX_THRESHOLD        = 10000;
-   final static int     INITIAL_AREA_FACTOR     = 3;
-   final static int     MAX_TUNNING_ATTEMPS     = 10;
-   final static int     AREA_STEP               = 1;
-   final static float   QF_STEP                 = 2.0f;
+   final static int     INITIAL_AREA_FACTOR      = 3;
+   final static int     MAX_TUNNING_ATTEMPS      = 10;
+   final static int     AREA_STEP                = 1;
+   final static float   QF_STEP                  = 2.0f;
 
-   final static boolean VERBOSE                 = false;
+   final static boolean VERBOSE                  = false;
 
    private enum GeomType {
       POINT,
@@ -211,7 +212,7 @@ public class MergedVectorialLOD {
                                                final String password,
                                                final String dataBaseName) {
 
-      MAX_DB_CONNECTIONS = _concurrentService.getThreadsNumber();
+      MAX_DB_CONNECTIONS = _concurrentService.getThreadsNumber() * CONNECTIONS_SCALE_FACTOR;
       _dataBaseService = new DataBaseService(host, port, user, password, dataBaseName);
 
       // Check one of the service connections before return 
@@ -1451,7 +1452,7 @@ public class MergedVectorialLOD {
             containsData = false;
 
             if (numAttemps > 0) {
-               ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.toString());
+               ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.label());
             }
 
             for (final DataSource ds : dataSources) {
