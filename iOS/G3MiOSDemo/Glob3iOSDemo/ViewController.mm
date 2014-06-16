@@ -278,7 +278,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
+  
+  [self testAvoidingCameraCollisionToGround];
 
   //  [self initWithMapBooBuilder];
 
@@ -1341,8 +1343,8 @@ builder.initializeWidget();
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   const bool allowRotationInDoubleDrag = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
-  //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
+  //cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
+  cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
 
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
@@ -3696,6 +3698,87 @@ public:
   } else {
     return YES;
   }
+}
+
+
+- (void) testAvoidingCameraCollisionToGround
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  //const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  const Planet* planet = Planet::createFlatEarth();
+  builder.setPlanet(planet);
+  
+  // create shape
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(28.4),
+                                           Angle::fromDegrees(-16.4),
+                                           0),
+                            ABSOLUTE,
+                            Vector3D(3000, 3000, 20000),
+                            2,
+                            Color::fromRGBA(1,    1, 0, 0.5),
+                            Color::newFromRGBA(0, 0.75, 0, 0.75));
+  shapesRenderer->addShape(box);
+  builder.addRenderer(shapesRenderer);
+  
+  // create wmslayer from Grafcan
+  LayerSet* layerSet = new LayerSet();
+  WMSLayer* grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+                                        URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),//gcSector,
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 17),
+                                        TimeInterval::fromDays(30),
+                                        true);
+  layerSet->addLayer(grafcanLIDAR);
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  // create elevations for Tenerife from bil file
+  Sector sector = Sector::fromDegrees (27.967811065876,                  // min latitude
+                                       -17.0232177085356,                // min longitude
+                                       28.6103464294992,                 // max latitude
+                                       -16.0019401695656);               // max longitude
+  int elevationWidth = 256;
+  int elevationHeight = 256;
+  Vector2I extent = Vector2I(elevationWidth, elevationHeight);           // image resolution
+  URL url = URL("file:///Tenerife-256x256.bil", false);
+  ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  float verticalExaggeration = 2.0f;
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  
+  /*
+  // create camera constraints
+  builder.addCameraConstraint(new ElevationCameraConstrainer(elevationDataProvider, verticalExaggeration,
+                                                             100, 0, elevationWidth, elevationHeight));*/
+  
+  // create camera renderers
+  CameraRenderer* cameraRenderer = [self createCameraRenderer];
+  builder.setCameraRenderer(cameraRenderer);
+  
+  /* webgl optimization
+   bool testingTileCache = true;
+   if (testingTileCache){
+   builder.getPlanetRendererBuilder()->setTileCacheSize(200);
+   builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
+   }*/
+  
+  // initialization
+  builder.initializeWidget();
+  
+  // set frustumCullingFactor
+  //[self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
+  
+  // set camera looking at Tenerife
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
+  [self G3MWidget].widget->setCameraPosition(position);
+  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
 }
 
 @end
