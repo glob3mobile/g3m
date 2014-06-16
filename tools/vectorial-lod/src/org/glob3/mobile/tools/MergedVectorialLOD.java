@@ -446,7 +446,7 @@ public class MergedVectorialLOD {
 
          final String propsQuery = buildPropertiesQuery(dataSource._includeProperties);
          final String simplifyTolerance = Float.toString(getMaxVertexTolerance(sector, qualityFactor));
-         final String filterCriteria = buildFilterCriterium(dataSource, areaFactor, bboxQuery, extendedSector);
+         final String filterCriteria = buildFilterCriterium(dataSource, areaFactor, extendedSector);
 
          //-- full query for geometry select
          final String fullQuery = buildSelectQuery(dataSource, bboxQuery, propsQuery, filterCriteria, simplifyTolerance);
@@ -914,7 +914,6 @@ public class MergedVectorialLOD {
 
    private static String buildFilterCriterium(final DataSource dataSource,
                                               final double areaFactor,
-                                              final String bboxQuery,
                                               final List<Sector> extendedSector) {
 
       //http://postgis.refractions.net/documentation/manual-1.4/ST_NPoints.html
