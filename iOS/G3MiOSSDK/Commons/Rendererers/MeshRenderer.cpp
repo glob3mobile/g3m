@@ -437,53 +437,55 @@ private:
       const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
       if (jsonCoordinates == NULL) {
         ILogger::instance()->logError("Invalid format for 'coordinates' of \"%s\"", _url._path.c_str());
+        ILogger::instance()->logInfo("\"%s\"", jsonObject->description().c_str());
       }
-      FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet());
-
-      const int coordinatesSize = jsonCoordinates->size();
-      for (int i = 0; i < coordinatesSize; i += 3) {
-        const double latInDegrees = jsonCoordinates->getAsNumber(i    , 0);
-        const double lonInDegrees = jsonCoordinates->getAsNumber(i + 1, 0);
-        const double height       = jsonCoordinates->getAsNumber(i + 2, 0);
-
-        vertices->add(Angle::fromDegrees(latInDegrees),
-                      Angle::fromDegrees(lonInDegrees),
-                      height);
+      else {
+        FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet());
+        
+        const int coordinatesSize = jsonCoordinates->size();
+        for (int i = 0; i < coordinatesSize; i += 3) {
+          const double latInDegrees = jsonCoordinates->getAsNumber(i    , 0);
+          const double lonInDegrees = jsonCoordinates->getAsNumber(i + 1, 0);
+          const double height       = jsonCoordinates->getAsNumber(i + 2, 0);
+          
+          vertices->add(Angle::fromDegrees(latInDegrees),
+                        Angle::fromDegrees(lonInDegrees),
+                        height);
+        }
+        
+        const JSONArray* jsonNormals = jsonObject->getAsArray("normals");
+        const int normalsSize = jsonNormals->size();
+        IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(normalsSize);
+        for (int i = 0; i < normalsSize; i++) {
+          normals->put(i, (float) jsonNormals->getAsNumber(i, 0) );
+        }
+        
+        const JSONArray* jsonIndices = jsonObject->getAsArray("indices");
+        const int indicesSize = jsonIndices->size();
+        IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesSize);
+        for (int i = 0; i < indicesSize; i++) {
+          indices->put(i, (short) jsonIndices->getAsNumber(i, 0) );
+        }
+        
+        _mesh = new IndexedMesh(GLPrimitive::triangles(),
+                                true,
+                                vertices->getCenter(),
+                                vertices->create(),
+                                indices,
+                                1, // lineWidth
+                                1, // pointSize
+                                _color, // flatColor
+                                NULL, // colors,
+                                1, //  colorsIntensity,
+                                true, // depthTest,
+                                normals
+                                );
+        
+        delete vertices;
+        
+        _color = NULL;
       }
-
-      const JSONArray* jsonNormals = jsonObject->getAsArray("normals");
-      const int normalsSize = jsonNormals->size();
-      IFloatBuffer* normals = IFactory::instance()->createFloatBuffer(normalsSize);
-      for (int i = 0; i < normalsSize; i++) {
-        normals->put(i, (float) jsonNormals->getAsNumber(i, 0) );
-      }
-
-      const JSONArray* jsonIndices = jsonObject->getAsArray("indices");
-      const int indicesSize = jsonIndices->size();
-      IShortBuffer* indices = IFactory::instance()->createShortBuffer(indicesSize);
-      for (int i = 0; i < indicesSize; i++) {
-        indices->put(i, (short) jsonIndices->getAsNumber(i, 0) );
-      }
-
-      _mesh = new IndexedMesh(GLPrimitive::triangles(),
-                              true,
-                              vertices->getCenter(),
-                              vertices->create(),
-                              indices,
-                              1, // lineWidth
-                              1, // pointSize
-                              _color, // flatColor
-                              NULL, // colors,
-                              1, //  colorsIntensity,
-                              true, // depthTest,
-                              normals
-                              );
-
-      delete vertices;
-
-      _color = NULL;
     }
-
   }
 
 public:
