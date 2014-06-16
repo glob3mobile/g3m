@@ -11,6 +11,7 @@
 
 #include "Shape.hpp"
 #include "GEORasterSymbol.hpp"
+#include "Geometer.hpp"
 
 
 class OrientedBox;
@@ -143,10 +144,23 @@ public:
   }
   
   void zRawRender(const G3MRenderContext* rc, GLState* parentGLState) {
-    
+  }
+  
+  double getLength() const {
+    double length = 0;
+    int size = _coordinates->size();
+    for (int n=0; n<size; n++) {
+      Geodetic2D* pos0 = _coordinates->at(n);
+      Geodetic2D* pos1 = _coordinates->at((n+1)%size);
+      length += GeoMeter::getDistance(*pos0, *pos1);
+    }
+    return length;
   }
 
-  
+  double getArea() const {
+    std::vector<Geodetic2D*> coordinates = getCopyRasterCoordinates();
+    return IMathUtils::instance()->abs(GeoMeter::getArea(coordinates));
+  }
 };
 
 
