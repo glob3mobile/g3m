@@ -148,7 +148,7 @@
 #import <G3MiOSSDK/TiledVectorLayer.hpp>
 #import <G3MiOSSDK/GEORasterSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
-
+#import <G3MiOSSDK/GeoMeter.hpp>
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
@@ -3702,6 +3702,47 @@ public:
   }
 }
 
+- (void) testingGeometer
+{
+  Geodetic2D g1 = Geodetic2D::fromDegrees(28.129064150616994, -15.423265639110468); //LP
+  Geodetic2D g2 = Geodetic2D::fromDegrees(40.41677540051771, -3.7037901976145804); //MADRID
+  
+  double dist = GeoMeter::getDistance(g1, g2);
+  
+  printf("DIST: %f m\n", dist);
+  
+  //GRAN CANARIA
+  std::vector<Geodetic2D*> polygon;
+  //    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.184954786361, -15.40326708869543) )); //NE
+  //    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.77990038725407, -15.43622607307043) ));    //SE
+  //    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.770179859222775, -15.81250781135168) ));    //SW
+  //    polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.175270696066402, -15.71637744025793) ));    //NW
+  
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.1801128508277, -15.401893797679804 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.0468737992174, -15.412880125804804 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.993531872334557, -15.368934813304804 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.864917930859935, -15.38404101447668 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.80419790643659, -15.43347949103918 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.743443929681458, -15.569435301586054 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.75559743885222, -15.687538328929804 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.835776559501845, -15.791908446117304 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(27.91468298115362, -15.83722704963293 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.021418448958062, -15.81525439338293 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.088074450524935, -15.71363085822668 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.17406012312459, -15.70264453010168 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.172849536482957, -15.629860106273554 ) ));
+  polygon.push_back(new Geodetic2D(Geodetic2D::fromDegrees(28.149845787838487, -15.47193163947668 ) ));
+  
+  
+  double area = GeoMeter::getArea(polygon);
+  printf("AREA: %f m^2 -> %f km^2\n", area, area / 1e6);
+  
+  const int size = polygon.size();
+  for (int i = 0; i < size; i++) {
+    delete polygon[i];
+  }
+}
+
 - (void) testingVectorialGeometry
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -3723,6 +3764,9 @@ public:
   if (useElevations) {
     [self initializeElevationDataProvider: builder];
   }
+  
+  // testing Geometer class
+  [self testingGeometer];
   
   LayerSet* layerSet = new LayerSet();
   layerSet->addLayer( MapQuestLayer::newOSM(TimeInterval::fromDays(30)) );

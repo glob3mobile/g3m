@@ -23,7 +23,6 @@
 		44131129190A504600C83A00 /* NullStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44131127190A504600C83A00 /* NullStorage.cpp */; };
 		441C28BD1733D413007DC83F /* ShapeFullPositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 441C28BB1733D413007DC83F /* ShapeFullPositionEffect.cpp */; };
 		441C28BE1733DA3D007DC83F /* ShapeFullPositionEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 441C28BC1733D413007DC83F /* ShapeFullPositionEffect.hpp */; };
-		442E683E192A273F00481626 /* ChildRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4435E3D31906B8070064A7D7 /* ChildRenderer.hpp */; };
 		4435E3CD19052B860064A7D7 /* InfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4435E3CB19052B860064A7D7 /* InfoDisplay.cpp */; };
 		4435E3D019056ED70064A7D7 /* ChangedRendererInfoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4435E3CE19056ED70064A7D7 /* ChangedRendererInfoListener.cpp */; };
 		4435E3D11905714A0064A7D7 /* ChangedRendererInfoListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4435E3CF19056ED70064A7D7 /* ChangedRendererInfoListener.hpp */; };
@@ -50,7 +49,6 @@
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
 		CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */; };
 		CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */; };
-		CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC96079115AF23F600D438D4 /* TextureMapping.cpp */; };
 		CCAD325F183FE063008F500D /* PointShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCAD325D183FE063008F500D /* PointShape.cpp */; };
 		CCAD3260183FE7F9008F500D /* PointShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CCAD325E183FE063008F500D /* PointShape.hpp */; };
 		CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */; };
@@ -712,6 +710,8 @@
 		FB2FD5161847C5C3002D2E78 /* RasterPolygonShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB2FD5141847B898002D2E78 /* RasterPolygonShape.hpp */; };
 		FB31AE3616F76B4C00C415FF /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */; };
 		FB31AE3916F8A37D00C415FF /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */; };
+		FB3DC502194F7917006E6363 /* GeoMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB3DC500194F7917006E6363 /* GeoMeter.cpp */; };
+		FB3DC503194F7933006E6363 /* GeoMeter.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = FB3DC501194F7917006E6363 /* GeoMeter.hpp */; };
 		FB6D00A516CBFF3A009BF93D /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */; };
 		FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */; };
 		FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBC23099179730FF009343FC /* CameraEffects.cpp */; };
@@ -724,11 +724,11 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				FB3DC503194F7933006E6363 /* GeoMeter.hpp in CopyFiles */,
 				FB2FD5161847C5C3002D2E78 /* RasterPolygonShape.hpp in CopyFiles */,
 				FB2FD51218460AA9002D2E78 /* RasterLineShape.hpp in CopyFiles */,
 				FB2FD50E1844C79A002D2E78 /* LineShape.hpp in CopyFiles */,
 				CCAD3260183FE7F9008F500D /* PointShape.hpp in CopyFiles */,
-				CF6920BE18392F83007409D8 /* ErrorHandling.hpp in CopyFiles */,
 				CF8649021921616B001D643A /* ICanvasUtils.hpp in CopyFiles */,
 				CF8649031921616B001D643A /* ChildRenderer.hpp in CopyFiles */,
 				CF2412B0191FE64300B796FB /* GEO2DCoordinatesArrayData.hpp in CopyFiles */,
@@ -1185,7 +1185,6 @@
 		CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraRotationHandler.hpp; path = Commons/Cameras/CameraRotationHandler.hpp; sourceTree = "<group>"; };
 		CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CameraRotationHandler.cpp; path = Commons/Cameras/CameraRotationHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraEventHandler.hpp; path = Commons/Cameras/CameraEventHandler.hpp; sourceTree = "<group>"; };
-		CC96079115AF23F600D438D4 /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
 		CCAD325D183FE063008F500D /* PointShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PointShape.cpp; path = Commons/Rendererers/PointShape.cpp; sourceTree = "<group>"; };
 		CCAD325E183FE063008F500D /* PointShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PointShape.hpp; path = Commons/Rendererers/PointShape.hpp; sourceTree = "<group>"; };
 		CCB2564D15B5A30900079B96 /* TextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureMapping.hpp; path = Commons/Mesh/TextureMapping.hpp; sourceTree = "<group>"; };
@@ -1843,6 +1842,8 @@
 		FB2FD5141847B898002D2E78 /* RasterPolygonShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RasterPolygonShape.hpp; path = Commons/Rendererers/RasterPolygonShape.hpp; sourceTree = "<group>"; };
 		FB31AE3416F76AE500C415FF /* LayoutUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = LayoutUtils.hpp; path = Commons/Geometry/LayoutUtils.hpp; sourceTree = "<group>"; };
 		FB31AE3516F76B4C00C415FF /* LayoutUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LayoutUtils.cpp; path = Commons/Geometry/LayoutUtils.cpp; sourceTree = "<group>"; };
+		FB3DC500194F7917006E6363 /* GeoMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GeoMeter.cpp; path = Commons/GEO/GeoMeter.cpp; sourceTree = "<group>"; };
+		FB3DC501194F7917006E6363 /* GeoMeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GeoMeter.hpp; path = Commons/GEO/GeoMeter.hpp; sourceTree = "<group>"; };
 		FB6D00A416CBFF3A009BF93D /* EllipsoidShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidShape.cpp; path = Commons/Rendererers/EllipsoidShape.cpp; sourceTree = "<group>"; };
 		FB6D00A716CBFF4F009BF93D /* EllipsoidShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidShape.hpp; path = Commons/Rendererers/EllipsoidShape.hpp; sourceTree = "<group>"; };
 		FBBDBCDA17AB940C00077004 /* FlatPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatPlanet.cpp; path = Commons/Geometry/FlatPlanet.cpp; sourceTree = "<group>"; };
@@ -2499,6 +2500,8 @@
 		CFDAE7A1166840E0006F6A00 /* GEO */ = {
 			isa = PBXGroup;
 			children = (
+				FB3DC500194F7917006E6363 /* GeoMeter.cpp */,
+				FB3DC501194F7917006E6363 /* GeoMeter.hpp */,
 				CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */,
 				CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */,
 				CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */,
@@ -3231,6 +3234,7 @@
 				CF290D55187F1695000BE644 /* TextureIDReference.cpp in Sources */,
 				CFDDDF9C17F8C9E100DD3499 /* URLTemplateLayer.cpp in Sources */,
 				CFAA530217AAFDCF002A9204 /* DecimatedSubviewElevationData.cpp in Sources */,
+				FB3DC502194F7917006E6363 /* GeoMeter.cpp in Sources */,
 				CFADF22318FF1CDB00360565 /* DefaultTileTexturizer.cpp in Sources */,
 				CFAA530517AAFE3D002A9204 /* InterpolatedSubviewElevationData.cpp in Sources */,
 				CFAB754C17AC455300852FA7 /* SurfaceElevationProvider.cpp in Sources */,
