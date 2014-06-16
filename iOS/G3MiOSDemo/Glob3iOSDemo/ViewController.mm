@@ -3753,27 +3753,12 @@ public:
   float verticalExaggeration = 2.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
-  /*
-  // create camera constraints
-  builder.addCameraConstraint(new ElevationCameraConstrainer(elevationDataProvider, verticalExaggeration,
-                                                             100, 0, elevationWidth, elevationHeight));*/
-  
   // create camera renderers
   CameraRenderer* cameraRenderer = [self createCameraRenderer];
   builder.setCameraRenderer(cameraRenderer);
   
-  /* webgl optimization
-   bool testingTileCache = true;
-   if (testingTileCache){
-   builder.getPlanetRendererBuilder()->setTileCacheSize(200);
-   builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
-   }*/
-  
   // initialization
   builder.initializeWidget();
-  
-  // set frustumCullingFactor
-  //[self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
   
   // set camera looking at Tenerife
   Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);

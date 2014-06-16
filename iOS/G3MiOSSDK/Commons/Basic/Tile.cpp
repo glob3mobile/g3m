@@ -622,6 +622,11 @@ bool Tile::render(const G3MRenderContext* rc,
   }
 
   bool rendered = false;
+  
+  Geodetic2D pos = Geodetic2D(Angle::fromDegrees(28.2097), Angle::fromDegrees(-16.6158));
+  //if (_sector.contains(pos) && _level>15)
+    //printf ("Zrender: preguntando tile nivel %d\n", _level);
+
 
   if (isVisible(rc,
                 planet,

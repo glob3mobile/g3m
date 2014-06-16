@@ -613,6 +613,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
+  
+  
+  //printf ("--camera height = %.2f\n", _lastCamera->getGeodeticPosition()._height);
+  
+  
 
   _statistics.clear();
   
