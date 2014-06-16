@@ -431,11 +431,13 @@ private:
   void parseMesh(const JSONBaseObject* jsonBaseObject) {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
     if (jsonObject == NULL) {
-      ILogger::instance()->logError("Invalid format for \"%s\"", _url._path.c_str());
+      ILogger::instance()->logError("Invalid format for 'base object' of \"%s\"", _url._path.c_str());
     }
     else {
       const JSONArray* jsonCoordinates = jsonObject->getAsArray("coordinates");
-
+      if (jsonCoordinates == NULL) {
+        ILogger::instance()->logError("Invalid format for 'coordinates' of \"%s\"", _url._path.c_str());
+      }
       FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_context->getPlanet());
 
       const int coordinatesSize = jsonCoordinates->size();
