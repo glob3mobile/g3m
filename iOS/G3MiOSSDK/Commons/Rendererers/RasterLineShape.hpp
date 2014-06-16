@@ -11,6 +11,7 @@
 
 
 #include "Shape.hpp"
+#include "Geometer.hpp"
 
 class OrientedBox;
 
@@ -118,6 +119,10 @@ public:
   }
   
   virtual void zRawRender(const G3MRenderContext* rc, GLState* parentGLState) { }
+  
+  double getLength() const {
+    return GeoMeter::getDistance(*_geodeticStartPos, *_geodeticEndPos);
+  }
 
 };
 

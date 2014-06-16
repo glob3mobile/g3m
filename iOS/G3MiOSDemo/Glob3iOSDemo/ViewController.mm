@@ -4256,6 +4256,9 @@ public:
           shape->select();
         }
       }
+      
+      if (_selectedShape != NULL)
+        printf ("Shape length = %.3f Km.   Shape area = %.3f Km2\n", shape->getLength()*1e-3, shape->getArea()*1e-6);
       return true;
     }
   };

@@ -331,7 +331,13 @@ public:
 
   virtual void zRawRender(const G3MRenderContext* rc, GLState* parentGLState) = 0;
 
-
+  virtual double getLength() const {
+    return 0;
+  }
+  
+  virtual double getArea() const {
+    return 0;
+  }
 };
 
 #endif
