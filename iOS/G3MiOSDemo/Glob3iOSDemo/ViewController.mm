@@ -1375,7 +1375,6 @@ public:
   const bool allowRotationInDoubleDrag = true;
   //cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
   cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
-  
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
@@ -3926,7 +3925,7 @@ public:
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   float verticalExaggeration = 2.0f;
   builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
-    
+
   // create camera renderers
   CameraRenderer* cameraRenderer = [self createCameraRenderer];
   builder.setCameraRenderer(cameraRenderer);

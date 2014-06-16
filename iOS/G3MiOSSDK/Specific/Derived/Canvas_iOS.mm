@@ -129,19 +129,6 @@ void Canvas_iOS::_setLineDash(float lengths[],
   CGContextSetLineDash(_context,
                        phase,
                        lengths, count);
-  
-                              
-/*<<<<<<< HEAD
-                              int phase) {
-  int ASK_TO_DIEGO;
-  /*CGContextSetLineDash(_context,
-=======
-                              float phase) {
-//#warning UNCOMMENT
-  CGContextSetLineDash(_context,
->>>>>>> origin/purgatory
-                       phase,
-                       lengths, count);*/
 }
 
 void Canvas_iOS::_setShadow(const Color& color,

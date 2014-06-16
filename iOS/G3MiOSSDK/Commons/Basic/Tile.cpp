@@ -487,7 +487,7 @@ void Tile::rawRender(const G3MRenderContext* rc,
 
   if (_level > MAX_LOD){
     MAX_LOD = _level;
-    ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
+    //ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
   }
 
   //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
