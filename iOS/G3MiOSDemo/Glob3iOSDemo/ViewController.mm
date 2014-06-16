@@ -288,9 +288,9 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
   
   //[self initCustomizedWithBuilder];
-  //[self testingVectorialGeometry];
+  [self testingVectorialGeometry];
 
-  [self testElevationNavigation];
+  //[self testElevationNavigation];
   
   //  [self initWithMapBooBuilder];
   
@@ -1363,7 +1363,6 @@ public:
   //const bool allowRotationInDoubleDrag = true;
   //cameraRenderer->addHandler(new CameraDoubleDragHandler(allowRotationInDoubleDrag));
   cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
-  
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
@@ -4199,7 +4198,7 @@ public:
                                         );
   shapesRenderer->addShape(mercator1);
   
-  if (true) {
+  if (false) {
     NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                               ofType: @"json"];
     if (planeFilePath) {
@@ -4352,6 +4351,7 @@ public:
   }
 }
 
+
 - (void) testElevationNavigation
 {
   G3MBuilder_iOS builder([self G3MWidget]);
@@ -4395,12 +4395,15 @@ public:
                                        -17.0232177085356,                // min longitude
                                        28.6103464294992,                 // max latitude
                                        -16.0019401695656);               // max longitude
-  Vector2I extent = Vector2I(256, 256);                             // image resolution
+  int elevationWidth = 256;
+  int elevationHeight = 256;
+  Vector2I extent = Vector2I(elevationWidth, elevationHeight);           // image resolution
   URL url = URL("file:///Tenerife-256x256.bil", false);
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(2.0f);
-  
+  float verticalExaggeration = 2.0f;
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+
   // create camera renderers
   CameraRenderer* cameraRenderer = [self createCameraRenderer];
   builder.setCameraRenderer(cameraRenderer);

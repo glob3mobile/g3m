@@ -169,6 +169,8 @@ BoundingVolume* Frustum::computeBoundingVolume() const {
   if (_rbf._y<miny) miny=_rbf._y;     if (_rbf._y>maxy) maxy=_rbf._y;
   if (_rbf._z<minz) minz=_rbf._z;     if (_rbf._z>maxz) maxz=_rbf._z;
 
+  //printf ("calculando bounding!!! maxz=%.2f\n", maxz);
+  
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }
 

@@ -30,9 +30,6 @@ public:
   _coordinates(coordinates),
   _sector(NULL)
   {
-    printf ("nuevo GEO2DCoordinatesData. Coordinates=%x  size=%d\n", coordinates, coordinates->size());
-    for (int i=0; i<coordinates->size(); i++)
-      printf ("   0: %x\n", coordinates[i].size());
   }
 
   const std::vector<Geodetic2D*>* getCoordinates() const {

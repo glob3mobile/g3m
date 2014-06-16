@@ -344,6 +344,7 @@ Vector3D G3MWidget::getScenePositionForPixel(int x, int y){
     
     // update ground height in camera class
     _nextCamera->setGroundHeightFromCartesianPoint(pos);
+    _currentCamera->setGroundHeightFromCartesianPoint(pos);
     return pos;
   } else{
     //ILogger::instance()->logInfo("NO Z");

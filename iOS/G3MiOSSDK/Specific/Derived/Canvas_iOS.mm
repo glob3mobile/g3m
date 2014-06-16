@@ -129,7 +129,6 @@ void Canvas_iOS::_setLineDash(float lengths[],
   CGContextSetLineDash(_context,
                        phase,
                        lengths, count);
-  
 }
 
 void Canvas_iOS::_setShadow(const Color& color,
