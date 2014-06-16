@@ -470,61 +470,6 @@ public class MergedVectorialLOD {
 
          return new GPair<String, String>(geoJsonResult, filteredResult);
 
-         //         if (geoJsonResult == null) {
-         //            return new GPair<String, String>(null, filteredResult);
-         //         }
-         //
-         //         long numVertex = getGeomVertexCount(geoJsonResult);
-         //
-         //         if ((numVertex <= MAX_VERTEX) || dataSource._geomType.equals(GeomType.POINT)) {
-         //            return new GPair<String, String>(geoJsonResult, filteredResult);
-         //         }
-         //
-         //         //ILogger.instance().logWarning("Too much vertex for sector, area tunning: " + sector.toString());
-         //
-         //         final int areaStep = 1;
-         //         final float qfStep = 2.0f;
-         //         int numAttepms = 0;
-         //         boolean optimizeArea = true;
-         //
-         //         //tunning loop
-         //         while ((numVertex > MAX_VERTEX) && (numAttepms < MAX_TUNNING_ATTEMPS)) {
-         //
-         //            ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.toString());
-         //
-         //            //to force alternative optimization. first attemp, try area; second attempt try quality factor
-         //            if (optimizeArea) {
-         //               // second attempt: increase area filter factor
-         //               areaFactor += areaStep;
-         //            }
-         //            else {
-         //               // third attempt: reduce quality factor
-         //               qf = qf / qfStep;
-         //            }
-         //
-         //            fullQuery = buildSelectQuery(dataSource, sector, qf, areaFactor);
-         //            geoJsonResult = executeQuery(fullQuery);
-         //
-         //            filteredResult = null;
-         //            if ((REPLACE_FILTERED > 0) && (dataSource._geomType != GeomType.POINT)) {
-         //               final String filteredQuery = buildFilteredQuery(dataSource, sector, areaFactor);
-         //               filteredResult = retrieveFilteredData(filteredQuery, lodProperty);
-         //            }
-         //
-         //            if (geoJsonResult == null) {
-         //               return new GPair<String, String>(null, filteredResult);
-         //            }
-         //
-         //            numVertex = getGeomVertexCount(geoJsonResult);
-         //            if (numVertex <= MAX_VERTEX) {
-         //               return new GPair<String, String>(geoJsonResult, filteredResult);
-         //            }
-         //
-         //            numAttepms++;
-         //            optimizeArea = !optimizeArea;
-         //         }
-         //
-         //         return new GPair<String, String>(geoJsonResult, filteredResult);
       }
       catch (final SQLException e) {
          ILogger.instance().logError("SQL error getting data for sector: " + sector.toString() + ". " + e.getMessage());
@@ -665,6 +610,70 @@ public class MergedVectorialLOD {
 
       return fullQuery;
    }
+
+
+   //   public static String buildFilteredQuery(final DataSource dataSource,
+   //                                           final String bboxQuery,
+   //                                           final String propsQuery,
+   //                                           final String fullCriteria) {
+   //
+   //      //-- SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json((SELECT l FROM (SELECT "mapcolor7") As l)) As properties FROM ( SELECT ST_Centroid(the_geom) as sg, "mapcolor7" FROM ne_10m_admin_0_countries WHERE ST_Intersects(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-169.3125,-90.30103702505689), ST_Point(-156.9375,-83.67822247380519)),4326)) and ST_Area(Box2D(the_geom))<=0.009301823131045654 LIMIT 10) As lg ) As f ) As fc;
+   //
+   //      if (dataSource._geomType == GeomType.POINT) {
+   //         return null;
+   //      }
+   //
+   //      String baseQuery0 = "SELECT row_to_json(fc) FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( SELECT 'Feature' As type, ST_AsGeoJSON(sg)::json As geometry, row_to_json(";
+   //      if (dataSource._includeProperties != null) {
+   //         baseQuery0 = baseQuery0 + "(SELECT l FROM (SELECT ";
+   //      }
+   //      else {
+   //         baseQuery0 = baseQuery0 + "null";
+   //      }
+   //
+   //      String baseQuery1 = "";
+   //      String baseQuery2 = "";
+   //      if (dataSource._geomSRID.equals(INTERNAL_SRID)) {
+   //         if (dataSource._includeProperties != null) {
+   //            baseQuery1 = ") As l)) As properties FROM ( SELECT ST_Centroid(";
+   //            baseQuery2 = ") as sg, ";
+   //         }
+   //         else {
+   //            baseQuery1 = ") As properties FROM ( SELECT ST_Centroid(";
+   //            baseQuery2 = ") as sg ";
+   //         }
+   //      }
+   //      else {
+   //         if (dataSource._includeProperties != null) {
+   //            baseQuery1 = ") As l)) As properties FROM ( SELECT ST_Transform(ST_Centroid(";
+   //            baseQuery2 = ")," + INTERNAL_SRID + ") as sg, ";
+   //         }
+   //         else {
+   //            baseQuery1 = ") As properties FROM ( SELECT ST_Transform(ST_Centroid(";
+   //            baseQuery2 = ")," + INTERNAL_SRID + ") as sg ";
+   //         }
+   //      }
+   //
+   //      final String baseQuery3 = " FROM ";
+   //      final String baseQuery4 = " WHERE ST_Intersects(";
+   //      String baseQuery5 = ") and ";
+   //      final String baseQuery6 = ") As lg ) As f ) As fc";
+   //
+   //      final String filterCriteria = buildComplementaryFilterCriterium(fullCriteria);
+   //      //         System.out.println("FILTER CRITERIA: " + filterCriteria);
+   //
+   //      if (filterCriteria.toUpperCase().trim().startsWith("ORDER")) {
+   //         baseQuery5 = ") ";
+   //      }
+   //
+   //      final String filteredQuery = baseQuery0 + propsQuery + baseQuery1 + dataSource._theGeomColumnName + baseQuery2 + propsQuery
+   //                                   + baseQuery3 + dataSource._sourceTable + baseQuery4 + dataSource._theGeomColumnName + ","
+   //                                   + bboxQuery + baseQuery5 + filterCriteria + baseQuery6;
+   //
+   //      //      System.out.println("filteredQuery: " + filteredQuery);
+   //
+   //      return filteredQuery;
+   //   }
 
 
    public static String buildFilteredQuery(final DataSource dataSource,
@@ -997,20 +1006,21 @@ public class MergedVectorialLOD {
 
       return "ST_Area(Box2D(" + dataSource._theGeomColumnName + "))>"
              + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + andFilter;
-
-      //-- only for release 2.0 of buildSelectQuery()
-      //      return "ST_Area(Box2D(sg))>" + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
-
-      //--------------------------------------------
-
-      //      return "ST_Area(Box2D(ST_Intersection(" + _theGeomColumnName + "," + bboxQuery + ")))>"
-      //             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
-
-      //      return "ST_Area(ST_Intersection(ST_SetSRID(Box2D(" + _theGeomColumnName + "),4326)," + bboxQuery + "))>"
-      //             + Double.toString(factor * (sectorArea / SQUARED_PIXELS_PER_TILE)) + " and " + filterCriteria;
-
-      // ST_Area(Box2D(ST_Intersection(the_geom,ST_SetSRID(ST_MakeBox2D(ST_Point(-49.5,38.426561832270956), ST_Point(4.5,69.06659668046103)),4326))))>0.08169412
    }
+
+
+   //   private static String buildComplementaryFilterCriterium(final String fullCriteria) {
+   //
+   //      String complementaryCriterium = "";
+   //      if (fullCriteria.contains("ST_Area(Box2D(")) {
+   //         complementaryCriterium = fullCriteria.replace(">", "<=");
+   //         if (!complementaryCriterium.toUpperCase().contains("LIMIT")) {
+   //            complementaryCriterium = complementaryCriterium + " LIMIT " + REPLACE_FILTERED;
+   //         }
+   //      }
+   //
+   //      return complementaryCriterium;
+   //   }
 
 
    private static String buildComplementaryFilterCriterium(final DataSource dataSource,
@@ -1497,10 +1507,11 @@ public class MergedVectorialLOD {
          long numVertex = 0;
          int numAttemps = 0;
          boolean optimizeArea = true;
+         boolean exit = false;
 
          do {
-            geoJsonResult = "";
-            filteredResult = "";
+            geoJsonResult = null;
+            filteredResult = null;
             containsData = false;
 
             if (numAttemps > 0) {
@@ -1530,20 +1541,29 @@ public class MergedVectorialLOD {
                }
             }
 
-            numVertex = getGeomVertexCount(geoJsonResult);
-            //to force alternative optimization. first attemp, try area; second attempt try quality factor
-            if (optimizeArea) {
-               // second attempt: increase area filter factor
-               af += AREA_STEP;
+            if (geoJsonResult != null) {
+               numVertex = getGeomVertexCount(geoJsonResult);
+            }
+
+            if ((numVertex <= MAX_VERTEX)) {
+               //System.out.println("numAttemps: " + numAttemps);
+               exit = true;
             }
             else {
-               // third attempt: reduce quality factor
-               qf = qf / QF_STEP;
+               //to force alternative optimization. first attemp, try area; second attempt try quality factor
+               if (optimizeArea) {
+                  // second attempt: increase area filter factor
+                  af += AREA_STEP;
+               }
+               else {
+                  // third attempt: reduce quality factor
+                  qf = qf / QF_STEP;
+               }
+               numAttemps++;
+               optimizeArea = !optimizeArea;
             }
-            numAttemps++;
-            optimizeArea = !optimizeArea;
          }
-         while ((numVertex > MAX_VERTEX) && (numAttemps < MAX_TUNNING_ATTEMPS));
+         while ((!exit) && (numAttemps < MAX_TUNNING_ATTEMPS));
 
          if (!isEmptyString(geoJsonResult)) {
             geoJsonResult = addFeatureToExistingGeojson(geoJsonResult, filteredResult);

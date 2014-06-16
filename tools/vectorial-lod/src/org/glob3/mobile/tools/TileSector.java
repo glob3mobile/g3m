@@ -285,18 +285,17 @@ public class TileSector
    //      return subSectors;
    //   }
 
+
    //   @Override
    //   public String toString() {
-   //      return "SectorVec [_parent=" + _parent + ", _level=" + _level + ", _row=" + _row + ", _column=" + _column + ", _lower="
+   //      return "TileSector [_level=" + _level + ", _row=" + _row + ", _column=" + _column + ", _lower="
    //             + toStringGeodetic2D(_lower) + ", _upper=" + toStringGeodetic2D(_upper) + ", _center=" + toStringGeodetic2D(_center)
    //             + ", _deltaLatitude=" + toStringAngle(_deltaLatitude) + ", _deltaLongitude=" + toStringAngle(_deltaLongitude) + "]";
    //   }
 
    @Override
    public String toString() {
-      return "TileSector [_level=" + _level + ", _row=" + _row + ", _column=" + _column + ", _lower="
-             + toStringGeodetic2D(_lower) + ", _upper=" + toStringGeodetic2D(_upper) + ", _center=" + toStringGeodetic2D(_center)
-             + ", _deltaLatitude=" + toStringAngle(_deltaLatitude) + ", _deltaLongitude=" + toStringAngle(_deltaLongitude) + "]";
+      return "TileSector [_level=" + _level + ", _row=" + _row + ", _column=" + _column + "]";
    }
 
 
