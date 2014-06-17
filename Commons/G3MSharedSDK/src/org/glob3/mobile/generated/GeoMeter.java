@@ -102,14 +102,16 @@ public class GeoMeter
   
     final Vector3D previousVertexNormal = new Vector3D(previousVertex._longitude._degrees - center._longitude._degrees, previousVertex._latitude._degrees - center._latitude._degrees, 0);
   
-    double previousVertexDistToCenter = getDistance(*previousVertex, center);
+    double previousVertexDistToCenter = getDistance(previousVertex, center);
+  
     IMathUtils mu = IMathUtils.instance();
     for (int i = 1; i < size; i++)
     {
   
       final Geodetic2D vertex = polygon.get(i);
   
-      final double distToPreviousVertex = getDistance(vertex, *previousVertex);
+      final double distToPreviousVertex = getDistance(vertex, previousVertex);
+  
       final double vertexDistToCenter = getDistance(vertex, center);
   
       final Vector3D vertexNormal = new Vector3D(vertex._longitude._degrees - center._longitude._degrees, vertex._latitude._degrees - center._latitude._degrees, 0);
