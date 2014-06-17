@@ -213,7 +213,7 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent,
     ElevationDataProvider* each = ps[i];
     
     const Sector* sector0 = each->getSectors().at(0);
-    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *(sector0));
+    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *sector0);
     const double newResDistance = mu->abs(bestRes - res);
 
     if (newResDistance < selectedResDistance || //Closer Resolution
