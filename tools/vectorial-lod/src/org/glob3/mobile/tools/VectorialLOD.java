@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,6 +43,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import es.igosoftware.util.GProgress;
+import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class VectorialLOD {
@@ -115,6 +119,7 @@ public class VectorialLOD {
    private static String                     _projection        = null;
    private static int                        _firstLevelCreated = 0;
    private static int                        _lastLevelCreated  = 0;
+   private static AtomicLong                 _progressCounter   = new AtomicLong(0);
 
    //-- Different variables for any data source ---------------------------------------------------------
    private static TileSector                 _globalBoundSector = TileSector.FULL_SPHERE_SECTOR;
@@ -1280,15 +1285,30 @@ public class VectorialLOD {
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors(dataSources);
 
+      estimateVectorialLODProgress(dataSources, firstLevelTileSectors);
+
+      //create progress reporter
+      final GProgress progress = new GProgress(_progressCounter.get()) {
+         @Override
+         public void informProgress(final long stepsDone,
+                                    final double percent,
+                                    final long elapsed,
+                                    final long estimatedMsToFinish) {
+
+            System.out.println("Processing.. " + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+         }
+      };
+
       System.out.println("Generating.. await termination...");
       for (final TileSector sector : firstLevelTileSectors) {
-         generateMergedVectorialLOD(sector, dataSources);
+         generateMergedVectorialLOD(sector, dataSources, progress);
          //processSubSectors(sector, dataSource);
       }
 
       //System.out.println("Running MAIN at: " + Thread.currentThread().getName());
 
       _concurrentService.awaitTermination();
+      progress.finish();
 
       _dataBaseService.releaseConnections();
 
@@ -1300,7 +1320,8 @@ public class VectorialLOD {
 
 
    private static void generateMergedVectorialLOD(final TileSector sector,
-                                                  final List<DataSource> dataSources) {
+                                                  final List<DataSource> dataSources,
+                                                  final GProgress progress) {
 
       if (sector._level > MAX_LEVEL) {
          return;
@@ -1314,6 +1335,8 @@ public class VectorialLOD {
       boolean containsData = true;
 
       if (sector._level >= FIRST_LEVEL) {
+
+         progress.stepDone();
 
          String geoJsonResult = "";
          String filteredResult = "";
@@ -1367,11 +1390,11 @@ public class VectorialLOD {
             else {
                //to force alternative optimization. first attemp, try area; second attempt try quality factor
                if (optimizeArea) {
-                  // second attempt: increase area filter factor
+                  // first attempt: increase area filter factor
                   af += AREA_STEP;
                }
                else {
-                  // third attempt: reduce quality factor
+                  // second attempt: reduce quality factor
                   qf = qf / QF_STEP;
                }
                numAttemps++;
@@ -1397,7 +1420,7 @@ public class VectorialLOD {
       if (containsData) { //stop subdivision when there are not data inside this sector
          final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
          for (final TileSector s : subSectors) {
-            processSubSectors(s, dataSources);
+            processSubSectors(s, dataSources, progress);
          }
       }
    }
@@ -1409,10 +1432,11 @@ public class VectorialLOD {
     * 
     */
    private static void processSubSectors(final TileSector sector,
-                                         final List<DataSource> dataSources) {
+                                         final List<DataSource> dataSources,
+                                         final GProgress progress) {
 
-      final int subSectorLevel = sector._level;
-      if (subSectorLevel > MAX_LEVEL) {
+      //final int subSectorLevel = sector._level;
+      if (sector._level > MAX_LEVEL) {
          return;
       }
 
@@ -1420,70 +1444,154 @@ public class VectorialLOD {
          @Override
          public void run() {
             //System.out.println("Running at: " + Thread.currentThread().getName());
-            generateMergedVectorialLOD(sector, dataSources);
+            generateMergedVectorialLOD(sector, dataSources, progress);
          }
       };
 
-      //_concurrentService.execute(task, subSectorLevel);
       _concurrentService.execute(task);
    }
 
 
-   //   private static boolean sectorContainsData(final DataSource dataSource,
-   //                                             final Sector sector) {
-   //
-   //      final String checkQuery = buildCheckQuery(dataSource, sector);
-   //      //System.out.println("checkQuery: " + checkQuery);
-   //
-   //      if (checkQuery == null) {
-   //         return false;
-   //      }
-   //
-   //      final Connection conn = _dataBaseService.getConnection();
-   //      try {
-   //         final Statement st = conn.createStatement();
-   //         final ResultSet rs = st.executeQuery(checkQuery);
-   //         if (!rs.next()) {
-   //            st.close();
-   //            return false; //no data on this bbox
-   //         }
-   //
-   //         final int result = rs.getInt(1);
-   //         st.close();
-   //
-   //         //         if (result > 0) {
-   //         //            System.out.println("SECTOR CONTAINS DATA: " + result);
-   //         //         }
-   //         return (result > 0);
-   //      }
-   //      catch (final SQLException e) {
-   //         ILogger.instance().logError("SQL error getting geometries intersection: " + e.getMessage());
-   //      }
-   //
-   //      return false;
-   //   }
+   private static void estimateVectorialLODProgress(final List<DataSource> dataSources,
+                                                    final ArrayList<TileSector> firstLevelTileSectors) {
+
+      System.out.println();
+      System.out.println("Estimating for progress indication.. please, await termination...");
+
+      final GUndeterminateProgress progress = new GUndeterminateProgress() {
+         @Override
+         public void informProgress(final long stepsDone,
+                                    final long elapsed) {
+            //System.out.println("Loading \"" + file.getName() + "\" " + progressString(stepsDone, elapsed));
+            System.out.println("Processing.. " + progressString(stepsDone, elapsed));
+         }
+      };
+
+      for (final TileSector sector : firstLevelTileSectors) {
+         estimateVectorialLOD(sector, dataSources, progress);
+      }
+
+      _concurrentService.awaitTermination();
+      progress.finish();
+      System.out.println("Number of tiles to process estimation: " + _progressCounter.get());
+
+      //restart concurrent service for later processing
+      initializeConcurrentService();
+   }
 
 
-   //   private static String buildCheckQuery(final DataSource dataSource,
-   //                                         final Sector sector) {
-   //
-   //      //--i.e: SELECT COUNT(the_geom) FROM roads WHERE ST_Intersects(the_geom, ST_SetSRID(ST_MakeBox2D(ST_Point(-15.5,1.43), ST_Point(15.5,50.24)),4326)) 
-   //      final String baseQuery0 = "SELECT COUNT(";
-   //      final String baseQuery1 = ") FROM ";
-   //      final String baseQuery2 = " WHERE ST_Intersects(";
-   //
-   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-   //      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
-   //
-   //      if (bboxQuery == null) {
-   //         return null;
-   //      }
-   //
-   //      final String checkQuery = baseQuery0 + dataSource._theGeomColumnName + baseQuery1 + dataSource._sourceTable + baseQuery2
-   //                                + dataSource._theGeomColumnName + "," + bboxQuery + ")";
-   //
-   //      return checkQuery;
-   //   }
+   private static void estimateVectorialLOD(final TileSector sector,
+                                            final List<DataSource> dataSources,
+                                            final GUndeterminateProgress progress) {
+
+      if (sector._level > MAX_LEVEL) {
+         return;
+      }
+
+      //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
+      if (!_globalBoundSector.intersects(sector)) {
+         return;
+      }
+
+      //over-estimation: assume all the tiles contains data
+      final boolean containsData = true;
+
+      if (sector._level >= FIRST_LEVEL) {
+         _progressCounter.incrementAndGet();
+         progress.stepDone();
+         //         containsData = false;
+         //         for (final DataSource ds : dataSources) {
+         //            //TODO: -- provisional: dejarlo comentado mientras generemos tiles vacios. Descomentar luego --
+         //            //            if (!ds._boundSector.intersects(sector)) {
+         //            //               continue;
+         //            //            }
+         //            containsData = containsData || sectorContainsData(ds, sector);
+         //         }
+      }
+
+      if (containsData) { //stop subdivision when there are not data inside this sector
+         final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
+         for (final TileSector s : subSectors) {
+            estimateSubSectors(s, dataSources, progress);
+         }
+      }
+   }
+
+
+   private static void estimateSubSectors(final TileSector sector,
+                                          final List<DataSource> dataSources,
+                                          final GUndeterminateProgress progress) {
+
+      if (sector._level > MAX_LEVEL) {
+         return;
+      }
+
+      final Runnable task = new Runnable() {
+         @Override
+         public void run() {
+            estimateVectorialLOD(sector, dataSources, progress);
+         }
+      };
+
+      _concurrentService.execute(task);
+   }
+
+
+   private static boolean sectorContainsData(final DataSource dataSource,
+                                             final Sector sector) {
+
+      final String checkQuery = buildCheckQuery(dataSource, sector);
+      //System.out.println("checkQuery: " + checkQuery);
+
+      if (checkQuery == null) {
+         return false;
+      }
+
+      final Connection conn = _dataBaseService.getConnection();
+      try {
+         final Statement st = conn.createStatement();
+         final ResultSet rs = st.executeQuery(checkQuery);
+         if (!rs.next()) {
+            st.close();
+            return false; //no data on this bbox
+         }
+
+         final int result = rs.getInt(1);
+         st.close();
+
+         //         if (result > 0) {
+         //            System.out.println("SECTOR CONTAINS DATA: " + result);
+         //         }
+         return (result > 0);
+      }
+      catch (final SQLException e) {
+         ILogger.instance().logError("SQL error getting geometries intersection: " + e.getMessage());
+      }
+
+      return false;
+   }
+
+
+   private static String buildCheckQuery(final DataSource dataSource,
+                                         final Sector sector) {
+
+      //--i.e: SELECT COUNT(the_geom) FROM roads WHERE ST_Intersects(the_geom, ST_SetSRID(ST_MakeBox2D(ST_Point(-15.5,1.43), ST_Point(15.5,50.24)),4326)) 
+      final String baseQuery0 = "SELECT COUNT(";
+      final String baseQuery1 = ") FROM ";
+      final String baseQuery2 = " WHERE ST_Intersects(";
+
+      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
+      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
+
+      if (bboxQuery == null) {
+         return null;
+      }
+
+      final String checkQuery = baseQuery0 + dataSource._theGeomColumnName + baseQuery1 + dataSource._sourceTable + baseQuery2
+                                + dataSource._theGeomColumnName + "," + bboxQuery + ")";
+
+      return checkQuery;
+   }
 
 
    private static void writeMetadataFile() {
@@ -1525,6 +1633,7 @@ public class VectorialLOD {
          file.write(metadata);
          file.flush();
          file.close();
+         System.out.println();
          System.out.println("File " + METADATA_FILENAME + " created.");
       }
       catch (final IOException e) {
