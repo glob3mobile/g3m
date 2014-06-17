@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="lib/postgis.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-9.3-1100.jdbc4.jar"/>
 	<classpathentry kind="src" path="/G3MJavaDesktopSDK"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/igolibs"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
