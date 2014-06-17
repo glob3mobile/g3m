@@ -141,7 +141,8 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
       ILogger::instance()->logError("NaN sub-area.");
     } else{
 
-      const bool outerFace = vertexNormal->cross( *previousVertexNormal)._z >= 0;
+      
+      const bool outerFace = vertexNormal->cross(*previousVertexNormal)._z >= 0;
       if (outerFace){
         accumulatedArea += T;
       } else{
