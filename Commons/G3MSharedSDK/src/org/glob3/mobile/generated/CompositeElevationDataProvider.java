@@ -142,7 +142,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
         ElevationDataProvider each = ps.get(i);
     
         final Sector sector0 = each.getSectors().get(0);
-        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), *(sector0));
+        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), sector0);
         final double newResDistance = mu.abs(bestRes - res);
     
         if (newResDistance < selectedResDistance || (newResDistance == selectedResDistance && res < selectedRes)) //or equal and higher resolution - Closer Resolution
