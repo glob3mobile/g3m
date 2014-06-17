@@ -163,8 +163,8 @@ public class GeoMeter
       else
       {
   
-  
-        final boolean outerFace = vertexNormal.crosspreviousVertexNormal._z >= 0;
+        final Vector3D crossedVector = vertexNormal.cross(previousVertexNormal);
+        final boolean outerFace = crossedVector._z >= 0;
         if (outerFace)
         {
           accumulatedArea += T;
