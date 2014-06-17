@@ -483,7 +483,7 @@ void LayerSet::setChangedInfoListener(ChangedInfoListener* changedInfoListener) 
     ILogger::instance()->logError("Changed Info Listener of LayerSet already set");
     return;
   }
-  ILogger::instance()->logError("Changed Info Listener of LayerSet set ok");
+  ILogger::instance()->logInfo("Changed Info Listener of LayerSet set ok");
   _changedInfoListener = changedInfoListener;
   changedInfo(getInfo());
 }
