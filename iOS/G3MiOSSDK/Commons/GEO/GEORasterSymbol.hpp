@@ -28,7 +28,7 @@ private:
   const int _maxTileLevel;
 
 protected:
-  const Sector* _sector;
+  //const Sector* _sector;
 
   //static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 

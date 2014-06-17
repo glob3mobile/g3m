@@ -288,9 +288,9 @@ Mesh* createSectorMesh(const Planet* planet,
   // [self initWithoutBuilder];
   
   //[self initCustomizedWithBuilder];
-  [self testingVectorialGeometry];
+  //[self testingVectorialGeometry];
 
-  //[self testElevationNavigation];
+  [self testElevationNavigation];
   
   //  [self initWithMapBooBuilder];
   

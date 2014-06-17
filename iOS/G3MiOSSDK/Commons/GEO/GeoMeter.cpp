@@ -61,6 +61,8 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
   const Geodetic2D center = Geodetic2D::fromDegrees((minLat + maxLat) / 2, (minLon + maxLon)/2);
 
   double accumulatedArea = 0.0;
+  
+  /*
 #ifdef C_CODE
   const Geodetic2D* previousVertex = polygon[0];
 
@@ -73,6 +75,14 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
   Geodetic2D previousVertex = polygon.get(0);
   Vector3D previousVertexNormal = new Vector3D(previousVertex._longitude._degrees - center._longitude._degrees, previousVertex._latitude._degrees - center._latitude._degrees, 0);
 #endif
+   */
+  
+  const Geodetic2D* previousVertex = polygon[0];
+  
+  const Vector3D* previousVertexNormal =
+  new Vector3D(previousVertex->_longitude._degrees - center._longitude._degrees,
+               previousVertex->_latitude._degrees - center._latitude._degrees,
+               0);
 
   double previousVertexDistToCenter = getDistance(*previousVertex, center);
   IMathUtils* mu = IMathUtils::instance();

@@ -231,7 +231,7 @@ public:
 
   //virtual void addShape(Shape* shape);
 
-  void addShape(Shape* shape);
+  virtual void addShape(Shape* shape);
   
 /*  void addShape(Shape* shape) {
     _shapes.push_back(shape);
