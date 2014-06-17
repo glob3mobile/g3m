@@ -284,8 +284,8 @@ Mesh* createSectorMesh(const Planet* planet,
   [super viewDidLoad];
   
   // Tests for Cotesa
-  //[self testingVectorialGeometry];
-  [self testElevationNavigation];
+  [self testingVectorialGeometry];
+  //[self testElevationNavigation];
 
   
   

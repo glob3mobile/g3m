@@ -43,7 +43,8 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
     if (p->getAttributesCode() != attributesCode ||
         p->getUniformsCode() != uniformsCode) {
       //#warning GIVE MORE DETAIL
-      ILogger::instance()->logError("New compiled program does not match GL state.");
+#warning MESSAGE SUPRESSED FOR SHAPES WITH LIGHT AND NO TEXTURED YET (ONLY AT THIS BRANCH)
+      //ILogger::instance()->logError("New compiled program does not match GL state.");
     }
   }
 

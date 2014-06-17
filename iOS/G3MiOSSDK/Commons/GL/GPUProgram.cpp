@@ -383,7 +383,8 @@ GPUAttribute* GPUProgram::getGPUAttributeVecXFloat(int key, int x) const{
 void GPUProgram::setGPUUniformValue(int key, GPUUniformValue* v) {
   GPUUniform* u = _uniforms[key];
   if (u == NULL) {
-    ILogger::instance()->logError("Uniform [key=%d] not found", key);
+#warning MESSAGE SUPRESSED FOR SHAPES WITH LIGHT AND NO TEXTURED YET (ONLY AT THIS BRANCH)
+    //ILogger::instance()->logError("Uniform [key=%d] not found", key);
     return;
   }
   u->set(v);
@@ -392,7 +393,8 @@ void GPUProgram::setGPUUniformValue(int key, GPUUniformValue* v) {
 void GPUProgram::setGPUAttributeValue(int key, GPUAttributeValue* v) {
   GPUAttribute* a = _attributes[key];
   if (a == NULL) {
-    ILogger::instance()->logError("Attribute [key=%d] not found", key);
+#warning MESSAGE SUPRESSED FOR SHAPES WITH LIGHT AND NO TEXTURED YET (ONLY AT THIS BRANCH)
+    //ILogger::instance()->logError("Attribute [key=%d] not found", key);
     return;
   }
   a->set(v);
