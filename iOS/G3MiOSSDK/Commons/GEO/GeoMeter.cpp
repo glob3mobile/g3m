@@ -151,7 +151,12 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
       ILogger::instance()->logError("NaN sub-area.");
     } else{
 
+#ifdef C_CODE
       const Vector3D crossedVector = vertexNormal->cross(*previousVertexNormal);
+#else
+      const Vector3D crossedVector = vertexNormal->cross(previousVertexNormal);
+#endif
+      
       const bool outerFace = crossedVector._z >= 0;
       if (outerFace){
         accumulatedArea += T;
