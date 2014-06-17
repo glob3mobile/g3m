@@ -283,14 +283,17 @@ Mesh* createSectorMesh(const Planet* planet,
 {
   [super viewDidLoad];
   
+  // Tests for Cotesa
+  [self testingVectorialGeometry];
+  //[self testElevationNavigation];
+
+  
+  
   // initialize a customized widget without using a builder
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
   
   //[self initCustomizedWithBuilder];
-  //[self testingVectorialGeometry];
-
-  [self testElevationNavigation];
   
   //  [self initWithMapBooBuilder];
   

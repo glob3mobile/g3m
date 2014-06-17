@@ -77,7 +77,11 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
 #endif
    */
   
+#ifdef C_CODE
   const Geodetic2D* previousVertex = polygon[0];
+#else
+  Geodetic2D previousVertex = polygon.get(0);
+#endif
   
   const Vector3D* previousVertexNormal =
   new Vector3D(previousVertex->_longitude._degrees - center._longitude._degrees,
