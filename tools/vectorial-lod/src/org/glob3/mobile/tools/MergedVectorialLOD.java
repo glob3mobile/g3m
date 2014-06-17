@@ -5,7 +5,6 @@ package org.glob3.mobile.tools;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,9 +13,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
-import java.util.Properties;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.GEOJSONParser;
@@ -36,13 +37,18 @@ import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJson;
 import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 
 public class MergedVectorialLOD {
 
    //-- Internal constants definition ------------------------------------------------------------------
 
-   final static String  DEFAULT_PARAMETERS_FILE  = "parameters.merged.xml";
+   final static String  DEFAULT_PARAMETERS_FILE  = "parameters.xml";
    final static String  METADATA_FILENAME        = "metadata.json";
    final static String  EMPTY_GEOJSON            = "{\"type\":\"FeatureCollection\",\"features\":null}";
    final static String  INTERNAL_SRID            = "4326";
@@ -94,9 +100,9 @@ public class MergedVectorialLOD {
    private static int                        REPLACE_FILTERED   = 20;
 
    //-- Data source and filter parameters --------------------------------------------------------------
-   private static String[]                   DATABASE_TABLES;
-   private static String[]                   FILTER_CRITERIA;
-   private static String[][]                 PROPERTIES;
+   //   private static String[]                   DATABASE_TABLES;
+   //   private static String[]                   FILTER_CRITERIA;
+   //   private static String[][]                 PROPERTIES;
 
    //-- Common variables for all data sources -----------------------------------------------------------
    private static DataBaseService            _dataBaseService   = null;
@@ -275,26 +281,27 @@ public class MergedVectorialLOD {
 
    /**
     * 
-    * @param dataSourceTable
-    *           : table from postgis database containing the vectorial data
+    * @param dataSource
+    *           : Object of class DataSource, containing the following data: * sourceTable: name of the table from postgis
+    *           database containing the vectorial data * geomFilterCriteria: filter criteria using pure database query format that
+    *           will be included in a where clause. i.e. "continent" like 'Euro%' AND "pop_est" > 10000000" * includeProperties:
+    *           fields/columns associated to the vectorial data that shall be included as feature properties in the resultant
+    *           geoJson data. * boundSector: for all the geometries in the table * geomType: type of geometries contained in the
+    *           table (POINT, MULTIPOINT, LINESTRING, MULTILINESTRING, POLIGON, or MULTIPOLYGON. * theGeomColumnName: name of the
+    *           geometry column on this table. * geomSRID: the SRID for the geometries on this table.
     * @param sector
     *           : geometry bounding sector for any of the tiles
     * @param qualityFactor
     *           : value used to adjust simplification tolerance during Douglas-Peucker simplification. Greater values entail less
     *           tolerance, and so on less vertex filtered and more vertex generate for the resultant geometry. Usual values
     *           between 1.0 to 10.0.
-    * @param geomFilterCriteria
-    *           : filter criteria using pure database query format that will be included in a where clause. i.e. "continent" like
-    *           'Euro%' AND "pop_est" > 10000000"
-    * @param includeProperties
-    *           : fields/columns associated to the vectorial data that shall be included as feature properties in the resultant
-    *           geoJson data.
+    * @param areaFactor
+    *           : value used to compute de small areas to be filtered.
     * @return : String with the vectorial data in geoJson format.
     * 
     */
-   //TODO: update header comments
    public static GPair<String, String> selectGeometries(final DataSource dataSource,
-                                                        final Sector sector,
+                                                        final TileSector sector,
                                                         final float qualityFactor,
                                                         final int areaFactor) {
 
@@ -319,7 +326,7 @@ public class MergedVectorialLOD {
          final String fullQuery = buildSelectQuery(dataSource, bboxQuery, propsQuery, filterCriteria, simplifyTolerance);
 
          if (fullQuery == null) {
-            ILogger.instance().logError("Invalid data for sector: " + sector.toString() + ". ");
+            ILogger.instance().logError("Invalid data for sector: " + sector.label() + ". ");
             return new GPair<String, String>(null, null);
          }
 
@@ -339,7 +346,7 @@ public class MergedVectorialLOD {
          return new GPair<String, String>(geoJsonResult, filteredResult);
       }
       catch (final SQLException e) {
-         ILogger.instance().logError("SQL error getting data for sector: " + sector.toString() + ". " + e.getMessage());
+         ILogger.instance().logError("SQL error getting data for sector: " + sector.label() + ". " + e.getMessage());
       }
 
       return new GPair<String, String>(geoJsonResult, filteredResult);
@@ -1267,6 +1274,7 @@ public class MergedVectorialLOD {
       }
 
       _globalBoundSector = getGlobalBoundSector(dataSources);
+      System.out.println();
       System.out.println("Global bound sector: " + _globalBoundSector.toString());
 
       //assume full sphere topSector for tiles pyramid generation
@@ -1314,7 +1322,7 @@ public class MergedVectorialLOD {
          long numVertex = 0;
          int numAttemps = 0;
          boolean optimizeArea = true;
-         boolean outRange = true;
+         boolean outLimit = true;
 
          do {
             geoJsonResult = null;
@@ -1333,7 +1341,7 @@ public class MergedVectorialLOD {
                //            }
 
                final GPair<String, String> geomResult = selectGeometries(ds, //
-                        sector.getSector(), //
+                        sector, //
                         qf, //
                         af);
 
@@ -1354,7 +1362,7 @@ public class MergedVectorialLOD {
 
             if ((numVertex <= MAX_VERTEX)) {
                //System.out.println("numAttemps: " + numAttemps);
-               outRange = false;
+               outLimit = false;
             }
             else {
                //to force alternative optimization. first attemp, try area; second attempt try quality factor
@@ -1370,7 +1378,7 @@ public class MergedVectorialLOD {
                optimizeArea = !optimizeArea;
             }
          }
-         while ((outRange) && (numAttemps < MAX_TUNNING_ATTEMPS));
+         while ((outLimit) && (numAttemps < MAX_TUNNING_ATTEMPS));
 
          if (!isEmptyString(geoJsonResult)) {
             geoJsonResult = addFeatureToExistingGeojson(geoJsonResult, filteredResult);
@@ -1387,7 +1395,6 @@ public class MergedVectorialLOD {
       }
 
       if (containsData) { //stop subdivision when there are not data inside this sector
-         //final List<TileSector> subSectors = sector.getSubTileSectors();
          final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
          for (final TileSector s : subSectors) {
             processSubSectors(s, dataSources);
@@ -1813,248 +1820,503 @@ public class MergedVectorialLOD {
    }
 
 
-   private static boolean initializeFromFile(final String fileName) {
+   //   private static boolean initializeFromFile(final String fileName) {
+   //
+   //      if (new File(fileName).exists()) {
+   //
+   //         System.out.println("Initializing from file.. ");
+   //
+   //         final Properties properties = new Properties();
+   //         properties.clear();
+   //         try {
+   //            final BufferedInputStream stream = new BufferedInputStream(new FileInputStream(fileName));
+   //            properties.loadFromXML(stream);
+   //
+   //            String tmp;
+   //            tmp = properties.getProperty("HOST");
+   //
+   //            if (!isEmptyString(tmp)) {
+   //               HOST = tmp.trim();
+   //               System.out.println("HOST: " + HOST);
+   //            }
+   //            else {
+   //               System.err.println("Invalid HOST argument.");
+   //               System.exit(1);
+   //            }
+   //
+   //            tmp = properties.getProperty("PORT");
+   //            if (!isEmptyString(tmp)) {
+   //               PORT = tmp.trim();
+   //               System.out.println("PORT: " + PORT);
+   //            }
+   //            else {
+   //               System.err.println("Invalid PORT argument.");
+   //               System.exit(1);
+   //            }
+   //
+   //            tmp = properties.getProperty("USER");
+   //            if (!isEmptyString(tmp)) {
+   //               USER = tmp.trim();
+   //               System.out.println("USER: " + USER);
+   //            }
+   //            else {
+   //               System.err.println("Invalid USER argument.");
+   //               System.exit(1);
+   //            }
+   //
+   //            tmp = properties.getProperty("PASSWORD");
+   //            if (!isEmptyString(tmp)) {
+   //               PASSWORD = tmp.trim();
+   //               System.out.println("PASSWORD: " + PASSWORD);
+   //            }
+   //            else {
+   //               System.err.println("Invalid PASSWORD argument.");
+   //               System.exit(1);
+   //            }
+   //
+   //            tmp = properties.getProperty("DATABASE_NAME");
+   //            if (!isEmptyString(tmp)) {
+   //               DATABASE_NAME = tmp.trim();
+   //               System.out.println("DATABASE_NAME: " + DATABASE_NAME);
+   //            }
+   //            else {
+   //               System.err.println("Invalid DATABASE_NAME argument.");
+   //               System.exit(1);
+   //            }
+   //
+   //            //            tmp = properties.getProperty("QUALITY_FACTOR");
+   //            //            if (!isEmptyString(tmp)) {
+   //            //               QUALITY_FACTOR = Float.parseFloat(tmp.trim());
+   //            //               System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
+   //            //            }
+   //            //            else {
+   //            //               System.out.println();
+   //            //               System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR: " + QUALITY_FACTOR);
+   //            //            }
+   //
+   //            tmp = properties.getProperty("MERCATOR");
+   //            if (!isEmptyString(tmp)) {
+   //               MERCATOR = Boolean.parseBoolean(tmp.trim());
+   //               if (MERCATOR) {
+   //                  System.out.println("MERCATOR projection");
+   //               }
+   //               else {
+   //                  System.out.println("WGS84 projection");
+   //               }
+   //            }
+   //            else {
+   //               System.err.println("Invalid PROJECTION specification.");
+   //               System.exit(1);
+   //            }
+   //
+   //            tmp = properties.getProperty("FIRST_LEVEL");
+   //            if (!isEmptyString(tmp)) {
+   //               FIRST_LEVEL = Integer.parseInt(tmp.trim());
+   //               System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
+   //            }
+   //            else {
+   //               System.err.println("Invalid FIRST_LEVEL argument.");
+   //               System.exit(1);
+   //            }
+   //
+   //            tmp = properties.getProperty("MAX_LEVEL");
+   //            if (!isEmptyString(tmp)) {
+   //               MAX_LEVEL = Integer.parseInt(tmp.trim());
+   //               System.out.println("MAX_LEVEL: " + MAX_LEVEL);
+   //               //NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
+   //               //MAX_DB_CONNECTIONS = NUM_LEVELS;
+   //            }
+   //            else {
+   //               System.err.println("Invalid MAX_LEVEL argument.");
+   //               System.exit(1);
+   //            }
+   //
+   //            tmp = properties.getProperty("OUTPUT_FORMAT");
+   //            if (!isEmptyString(tmp)) {
+   //               OUTPUT_FORMAT = tmp.trim();
+   //               System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
+   //            }
+   //            else {
+   //               System.err.println("Invalid OUTPUT_FORMAT argument.");
+   //               System.exit(1);
+   //            }
+   //
+   //            tmp = properties.getProperty("OUTPUT_FOLDER");
+   //            if (!isEmptyString(tmp)) {
+   //               ROOT_FOLDER = tmp.trim();
+   //               System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
+   //            }
+   //            else {
+   //               System.out.println();
+   //               System.err.println("Invalid OUTPUT_FOLDER argument. Using default output folder: " + ROOT_FOLDER);
+   //            }
+   //
+   //            tmp = properties.getProperty("MAX_VERTEX");
+   //            if (!isEmptyString(tmp)) {
+   //               MAX_VERTEX = Long.parseLong(tmp.trim());
+   //               System.out.println("MAX_VERTEX: " + MAX_VERTEX);
+   //            }
+   //            else {
+   //               System.out.println();
+   //               System.err.println("Invalid MAX_VERTEX argument. Using default value: " + MAX_VERTEX);
+   //            }
+   //
+   //            tmp = properties.getProperty("REPLACE_FILTERED");
+   //            if (!isEmptyString(tmp)) {
+   //               REPLACE_FILTERED = Integer.parseInt(tmp.trim());
+   //               System.out.println("REPLACE_FILTERED: " + REPLACE_FILTERED);
+   //
+   //            }
+   //            else {
+   //               System.out.println();
+   //               System.err.println("Invalid REPLACE_FILTERED argument. Using default value: " + REPLACE_FILTERED);
+   //            }
+   //
+   //            //---------
+   //            String dataBaseTables = properties.getProperty("DATABASE_TABLE");
+   //
+   //            if (!isEmptyString(dataBaseTables)) {
+   //               dataBaseTables = dataBaseTables.trim();
+   //               System.out.println("DATABASE TABLES: " + dataBaseTables);
+   //               DATABASE_TABLES = parseDataFromFile(dataBaseTables, "/");
+   //            }
+   //            else {
+   //               System.out.println();
+   //               System.err.println("Non database table argument. Exit application.");
+   //               System.exit(1);
+   //            }
+   //
+   //            //---------
+   //            //-- default initialization
+   //            FILTER_CRITERIA = new String[DATABASE_TABLES.length];
+   //            for (int i = 0; i < DATABASE_TABLES.length; i++) {
+   //               FILTER_CRITERIA[i] = "true";
+   //            }
+   //
+   //            String filterCriteria = properties.getProperty("FILTER_CRITERIA");
+   //
+   //            if (!isEmptyString(filterCriteria)) {
+   //               filterCriteria = filterCriteria.trim();
+   //               System.out.println("FILTER CRITERIA: " + filterCriteria);
+   //               final String[] criteria = parseDataFromFile(filterCriteria, "/");
+   //               for (int i = 0; i < criteria.length; i++) {
+   //                  if (!isEmptyString(criteria[i])) {
+   //                     FILTER_CRITERIA[i] = criteria[i];
+   //                  }
+   //               }
+   //               //System.out.println();
+   //            }
+   //            else {
+   //               for (int i = 0; i < DATABASE_TABLES.length; i++) {
+   //                  FILTER_CRITERIA[i] = "true";
+   //               }
+   //               System.out.println();
+   //               System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
+   //            }
+   //            //---------
+   //
+   //            //-- default initialization
+   //            PROPERTIES = new String[DATABASE_TABLES.length][];
+   //            for (int i = 0; i < DATABASE_TABLES.length; i++) {
+   //               PROPERTIES[i] = null;
+   //            }
+   //
+   //            String includeProperties = properties.getProperty("PROPERTIES");
+   //
+   //            if (!isEmptyString(includeProperties)) {
+   //               includeProperties = includeProperties.trim();
+   //               System.out.println("PROPERTIES: " + includeProperties);
+   //               final String[] propertiesList = parseDataFromFile(includeProperties, "/");
+   //
+   //               for (int i = 0; i < propertiesList.length; i++) {
+   //                  if (!isEmptyString(propertiesList[i])) {
+   //                     final String[] props = parseDataFromFile(propertiesList[i], ",");
+   //                     if ((props != null) && (props.length > 0)) {
+   //                        PROPERTIES[i] = props;
+   //                        //                        System.out.print(propertiesList[i]);
+   //                     }
+   //                  }
+   //               }
+   //               System.out.println();
+   //            }
+   //            else {
+   //               System.out.println();
+   //               System.err.println("Non PROPERTIES argument. No property included from datasource.");
+   //            }
+   //
+   //            //-- Initialize data sources -----------------------------------------
+   //            for (int i = 0; i < DATABASE_TABLES.length; i++) {
+   //               final DataSource ds = new DataSource(DATABASE_TABLES[i], FILTER_CRITERIA[i], PROPERTIES[i]);
+   //               _dataSources.add(ds);
+   //            }
+   //
+   //            return true;
+   //         }
+   //         catch (final FileNotFoundException e) {
+   //            ILogger.instance().logError("Initialization file: " + fileName + ", not found !");
+   //         }
+   //         catch (final InvalidPropertiesFormatException e) {
+   //            ILogger.instance().logError("Initialization file invalid format: " + e.getMessage());
+   //         }
+   //         catch (final IOException e) {
+   //            ILogger.instance().logError("Initialization file IO error: " + e.getMessage());
+   //         }
+   //
+   //      }
+   //
+   //      ILogger.instance().logError("Initialization file: " + fileName + ", not found !");
+   //      return false;
+   //   }
+
+
+   private static boolean initializeFromXMLFile(final String fileName) {
 
       if (new File(fileName).exists()) {
 
          System.out.println("Initializing from file.. ");
 
-         final Properties properties = new Properties();
-         properties.clear();
+
+         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
          try {
-            final BufferedInputStream stream = new BufferedInputStream(new FileInputStream(fileName));
-            properties.loadFromXML(stream);
+            final BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(fileName));
 
-            String tmp;
-            tmp = properties.getProperty("HOST");
+            //Get the DOM Builder
+            final DocumentBuilder builder = factory.newDocumentBuilder();
+            //Load and Parse the XML document
+            //document contains the complete XML as a Tree.
+            final Document document = builder.parse(inputStream);
 
-            if (!isEmptyString(tmp)) {
-               HOST = tmp.trim();
-               System.out.println("HOST: " + HOST);
-            }
-            else {
-               System.err.println("Invalid HOST argument.");
-               System.exit(1);
-            }
+            //Iterating through the nodes and extracting the data.
+            final NodeList nodeList = document.getDocumentElement().getChildNodes();
 
-            tmp = properties.getProperty("PORT");
-            if (!isEmptyString(tmp)) {
-               PORT = tmp.trim();
-               System.out.println("PORT: " + PORT);
-            }
-            else {
-               System.err.println("Invalid PORT argument.");
-               System.exit(1);
-            }
+            for (int i = 0; i < nodeList.getLength(); i++) {
 
-            tmp = properties.getProperty("USER");
-            if (!isEmptyString(tmp)) {
-               USER = tmp.trim();
-               System.out.println("USER: " + USER);
-            }
-            else {
-               System.err.println("Invalid USER argument.");
-               System.exit(1);
-            }
+               //We have encountered an <employee> tag.
+               final Node node = nodeList.item(i);
 
-            tmp = properties.getProperty("PASSWORD");
-            if (!isEmptyString(tmp)) {
-               PASSWORD = tmp.trim();
-               System.out.println("PASSWORD: " + PASSWORD);
-            }
-            else {
-               System.err.println("Invalid PASSWORD argument.");
-               System.exit(1);
-            }
-
-            tmp = properties.getProperty("DATABASE_NAME");
-            if (!isEmptyString(tmp)) {
-               DATABASE_NAME = tmp.trim();
-               System.out.println("DATABASE_NAME: " + DATABASE_NAME);
-            }
-            else {
-               System.err.println("Invalid DATABASE_NAME argument.");
-               System.exit(1);
-            }
-
-            //            tmp = properties.getProperty("QUALITY_FACTOR");
-            //            if (!isEmptyString(tmp)) {
-            //               QUALITY_FACTOR = Float.parseFloat(tmp.trim());
-            //               System.out.println("QUALITY_FACTOR: " + QUALITY_FACTOR);
-            //            }
-            //            else {
-            //               System.out.println();
-            //               System.err.println("Invalid QUALITY_FACTOR argument. Using default QUALITY_FACTOR: " + QUALITY_FACTOR);
-            //            }
-
-            tmp = properties.getProperty("MERCATOR");
-            if (!isEmptyString(tmp)) {
-               MERCATOR = Boolean.parseBoolean(tmp.trim());
-               if (MERCATOR) {
-                  System.out.println("MERCATOR projection");
-               }
-               else {
-                  System.out.println("WGS84 projection");
-               }
-            }
-            else {
-               System.err.println("Invalid PROJECTION specification.");
-               System.exit(1);
-            }
-
-            tmp = properties.getProperty("FIRST_LEVEL");
-            if (!isEmptyString(tmp)) {
-               FIRST_LEVEL = Integer.parseInt(tmp.trim());
-               System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
-            }
-            else {
-               System.err.println("Invalid FIRST_LEVEL argument.");
-               System.exit(1);
-            }
-
-            tmp = properties.getProperty("MAX_LEVEL");
-            if (!isEmptyString(tmp)) {
-               MAX_LEVEL = Integer.parseInt(tmp.trim());
-               System.out.println("MAX_LEVEL: " + MAX_LEVEL);
-               //NUM_LEVELS = (MAX_LEVEL - FIRST_LEVEL) + 1;
-               //MAX_DB_CONNECTIONS = NUM_LEVELS;
-            }
-            else {
-               System.err.println("Invalid MAX_LEVEL argument.");
-               System.exit(1);
-            }
-
-            tmp = properties.getProperty("OUTPUT_FORMAT");
-            if (!isEmptyString(tmp)) {
-               OUTPUT_FORMAT = tmp.trim();
-               System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
-            }
-            else {
-               System.err.println("Invalid OUTPUT_FORMAT argument.");
-               System.exit(1);
-            }
-
-            tmp = properties.getProperty("OUTPUT_FOLDER");
-            if (!isEmptyString(tmp)) {
-               ROOT_FOLDER = tmp.trim();
-               System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
-            }
-            else {
-               System.out.println();
-               System.err.println("Invalid OUTPUT_FOLDER argument. Using default output folder: " + ROOT_FOLDER);
-            }
-
-            tmp = properties.getProperty("MAX_VERTEX");
-            if (!isEmptyString(tmp)) {
-               MAX_VERTEX = Long.parseLong(tmp.trim());
-               System.out.println("MAX_VERTEX: " + MAX_VERTEX);
-            }
-            else {
-               System.out.println();
-               System.err.println("Invalid MAX_VERTEX argument. Using default value: " + MAX_VERTEX);
-            }
-
-            tmp = properties.getProperty("REPLACE_FILTERED");
-            if (!isEmptyString(tmp)) {
-               REPLACE_FILTERED = Integer.parseInt(tmp.trim());
-               System.out.println("REPLACE_FILTERED: " + REPLACE_FILTERED);
-
-            }
-            else {
-               System.out.println();
-               System.err.println("Invalid REPLACE_FILTERED argument. Using default value: " + REPLACE_FILTERED);
-            }
-
-            //---------
-            String dataBaseTables = properties.getProperty("DATABASE_TABLE");
-
-            if (!isEmptyString(dataBaseTables)) {
-               dataBaseTables = dataBaseTables.trim();
-               System.out.println("DATABASE TABLES: " + dataBaseTables);
-               DATABASE_TABLES = parseDataFromFile(dataBaseTables, "/");
-            }
-            else {
-               System.out.println();
-               System.err.println("Non database table argument. Exit application.");
-               System.exit(1);
-            }
-
-            //---------
-            //-- default initialization
-            FILTER_CRITERIA = new String[DATABASE_TABLES.length];
-            for (int i = 0; i < DATABASE_TABLES.length; i++) {
-               FILTER_CRITERIA[i] = "true";
-            }
-
-            String filterCriteria = properties.getProperty("FILTER_CRITERIA");
-
-            if (!isEmptyString(filterCriteria)) {
-               filterCriteria = filterCriteria.trim();
-               System.out.println("FILTER CRITERIA: " + filterCriteria);
-               final String[] criteria = parseDataFromFile(filterCriteria, "/");
-               for (int i = 0; i < criteria.length; i++) {
-                  if (!isEmptyString(criteria[i])) {
-                     FILTER_CRITERIA[i] = criteria[i];
-                  }
-               }
-               //System.out.println();
-            }
-            else {
-               for (int i = 0; i < DATABASE_TABLES.length; i++) {
-                  FILTER_CRITERIA[i] = "true";
-               }
-               System.out.println();
-               System.err.println("Invalid FILTER_CRITERIA argument. Using default FILTER_CRITERIA=true.");
-            }
-            //---------
-
-            //-- default initialization
-            PROPERTIES = new String[DATABASE_TABLES.length][];
-            for (int i = 0; i < DATABASE_TABLES.length; i++) {
-               PROPERTIES[i] = null;
-            }
-
-            String includeProperties = properties.getProperty("PROPERTIES");
-
-            if (!isEmptyString(includeProperties)) {
-               includeProperties = includeProperties.trim();
-               System.out.println("PROPERTIES: " + includeProperties);
-               final String[] propertiesList = parseDataFromFile(includeProperties, "/");
-
-               for (int i = 0; i < propertiesList.length; i++) {
-                  if (!isEmptyString(propertiesList[i])) {
-                     final String[] props = parseDataFromFile(propertiesList[i], ",");
-                     if ((props != null) && (props.length > 0)) {
-                        PROPERTIES[i] = props;
-                        //                        System.out.print(propertiesList[i]);
+               if (node instanceof Element) {
+                  String tmp;
+                  if (node.getNodeName().equals("host")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        HOST = tmp.trim();
+                        System.out.println("HOST: " + HOST);
+                     }
+                     else {
+                        System.err.println("Invalid HOST argument.");
+                        System.exit(1);
                      }
                   }
-               }
-               System.out.println();
-            }
-            else {
-               System.out.println();
-               System.err.println("Non PROPERTIES argument. No property included from datasource.");
-            }
+                  else if (node.getNodeName().equals("port")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        PORT = tmp.trim();
+                        System.out.println("PORT: " + PORT);
+                     }
+                     else {
+                        System.err.println("Invalid PORT argument.");
+                        System.exit(1);
+                     }
+                  }
+                  else if (node.getNodeName().equals("user")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        USER = tmp.trim();
+                        System.out.println("USER: " + USER);
+                     }
+                     else {
+                        System.err.println("Invalid USER argument.");
+                        System.exit(1);
+                     }
+                  }
+                  else if (node.getNodeName().equals("password")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        PASSWORD = tmp.trim();
+                        System.out.println("PASSWORD: " + PASSWORD);
+                     }
+                     else {
+                        System.err.println("Invalid PASSWORD argument.");
+                        System.exit(1);
+                     }
+                  }
+                  else if (node.getNodeName().equals("database_name")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        DATABASE_NAME = tmp.trim();
+                        System.out.println("DATABASE_NAME: " + DATABASE_NAME);
+                     }
+                     else {
+                        System.err.println("Invalid DATABASE_NAME argument.");
+                        System.exit(1);
+                     }
+                  }
+                  else if (node.getNodeName().equals("mercator")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        MERCATOR = Boolean.parseBoolean(tmp.trim());
+                        if (MERCATOR) {
+                           System.out.println("MERCATOR projection");
+                        }
+                        else {
+                           System.out.println("WGS84 projection");
+                        }
+                     }
+                     else {
+                        System.err.println("Invalid PROJECTION specification.");
+                        System.exit(1);
+                     }
+                  }
+                  else if (node.getNodeName().equals("first_level")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        FIRST_LEVEL = Integer.parseInt(tmp.trim());
+                        System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
+                     }
+                     else {
+                        System.err.println("Invalid FIRST_LEVEL argument.");
+                        System.exit(1);
+                     }
+                  }
+                  else if (node.getNodeName().equals("max_level")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        MAX_LEVEL = Integer.parseInt(tmp.trim());
+                        System.out.println("MAX_LEVEL: " + MAX_LEVEL);
+                     }
+                     else {
+                        System.err.println("Invalid MAX_LEVEL argument.");
+                        System.exit(1);
+                     }
+                  }
+                  else if (node.getNodeName().equals("output_format")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        OUTPUT_FORMAT = tmp.trim();
+                        System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
+                     }
+                     else {
+                        System.err.println("Invalid OUTPUT_FORMAT argument.");
+                        System.exit(1);
+                     }
+                  }
+                  else if (node.getNodeName().equals("output_folder")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        ROOT_FOLDER = tmp.trim();
+                        System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
+                     }
+                     else {
+                        System.out.println();
+                        System.err.println("Invalid OUTPUT_FOLDER argument. Using default output folder: " + ROOT_FOLDER);
+                     }
+                  }
+                  else if (node.getNodeName().equals("max_vertex")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        MAX_VERTEX = Long.parseLong(tmp.trim());
+                        System.out.println("MAX_VERTEX: " + MAX_VERTEX);
+                     }
+                     else {
+                        System.out.println();
+                        System.err.println("Invalid MAX_VERTEX argument. Using default value: " + MAX_VERTEX);
+                     }
+                  }
+                  else if (node.getNodeName().equals("replace_filtered")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        REPLACE_FILTERED = Integer.parseInt(tmp.trim());
+                        System.out.println("REPLACE_FILTERED: " + REPLACE_FILTERED);
 
-            //-- Initialize data sources -----------------------------------------
-            for (int i = 0; i < DATABASE_TABLES.length; i++) {
-               final DataSource ds = new DataSource(DATABASE_TABLES[i], FILTER_CRITERIA[i], PROPERTIES[i]);
-               _dataSources.add(ds);
-            }
+                     }
+                     else {
+                        System.out.println();
+                        System.err.println("Invalid REPLACE_FILTERED argument. Using default value: " + REPLACE_FILTERED);
+                     }
+                  }
+                  else if (node.getNodeName().equals("data_sources")) {
+
+                     final NodeList childNodes = node.getChildNodes();
+                     for (int j = 0; j < childNodes.getLength(); j++) {
+                        final Node cNode = childNodes.item(j);
+                        if (cNode instanceof Element) {
+                           if (cNode.getNodeName().equals("datasource")) {
+                              String tableName = null;
+                              tmp = ((Element) cNode).getAttribute("name");
+                              if (!isEmptyString(tmp)) {
+                                 tableName = tmp.trim();
+                                 System.out.println("TABLE: " + tableName);
+                              }
+                              else {
+                                 System.out.println();
+                                 System.err.println("Non database table argument. Exit application.");
+                                 System.exit(1);
+                              }
+
+                              final NodeList childChildNodes = cNode.getChildNodes();
+                              String filterCriteria = "true";
+                              String[] properties = null;
+                              for (int k = 0; k < childChildNodes.getLength(); k++) {
+                                 final Node ccNode = childChildNodes.item(k);
+                                 if (ccNode instanceof Element) {
+                                    if (ccNode.getNodeName().equals("filter_criteria")) {
+                                       if (ccNode.getLastChild() != null) {
+                                          tmp = ccNode.getLastChild().getTextContent();
+                                          if (!isEmptyString(tmp)) {
+                                             filterCriteria = tmp.trim();
+                                          }
+                                       }
+                                       else {
+                                          System.out.println();
+                                          System.err.println("Invalid FILTER_CRITERIA argument. Using default.");
+                                       }
+                                       System.out.println("   filter_criteria: " + tmp);
+                                    }
+                                    else if (ccNode.getNodeName().equals("properties")) {
+                                       if (ccNode.getLastChild() != null) {
+                                          tmp = ccNode.getLastChild().getTextContent().trim();
+                                          if (!isEmptyString(tmp)) {
+                                             properties = parseDataFromFile(tmp, ",");
+                                             System.out.println("   properties: " + tmp);
+                                          }
+                                          else {
+                                             System.out.println("   properties: null");
+                                          }
+                                       }
+                                       else {
+                                          System.out.println();
+                                          System.err.println("Non PROPERTIES argument. No property included from datasource.");
+                                          System.out.println("   properties: null");
+                                       }
+                                    }
+                                 }
+                              }
+                              final DataSource ds = new DataSource(tableName, filterCriteria, properties);
+                              _dataSources.add(ds);
+                           } // datasource
+                        }
+                     }
+                  }
+
+               } // if (node instanceof Element)
+
+            } //for nodeList
 
             return true;
+
          }
-         catch (final FileNotFoundException e) {
-            ILogger.instance().logError("Initialization file: " + fileName + ", not found !");
+         catch (final ParserConfigurationException e) {
+            ILogger.instance().logError("Initialization file parsing error: " + e.getMessage());
          }
-         catch (final InvalidPropertiesFormatException e) {
+         catch (final SAXException e) {
             ILogger.instance().logError("Initialization file invalid format: " + e.getMessage());
          }
          catch (final IOException e) {
             ILogger.instance().logError("Initialization file IO error: " + e.getMessage());
          }
 
+         return false;
       }
 
       ILogger.instance().logError("Initialization file: " + fileName + ", not found !");
@@ -2090,8 +2352,10 @@ public class MergedVectorialLOD {
 
       PARAMETERS_FILE = readConfigurationFile(args);
 
-      if (initializeFromFile(PARAMETERS_FILE)) {
+      //if (initializeFromFile(PARAMETERS_FILE)) {
+      if (initializeFromXMLFile(PARAMETERS_FILE)) {
 
+         System.out.println();
          System.out.print("Connecting to " + DATABASE_NAME + " postGIS database.. ");
 
          if (createDataBaseService(HOST, PORT, USER, PASSWORD, DATABASE_NAME)) {
