@@ -346,7 +346,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
         getTransformMatrix(rc.getPlanet()); //Applying transform to _glState
         _glState.setParent(parentGLState);
         rawRender(rc, _glState, renderNotReadyShapes);
-        if (isSelected() && !isRaster())
+        if (isSelected())
         {
           BoundingVolume boundingVolume = getBoundingVolume(rc);
           if (boundingVolume != null)
@@ -459,5 +459,13 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public abstract void zRawRender(G3MRenderContext rc, GLState parentGLState);
 
+  public double getLength()
+  {
+    return 0;
+  }
 
+  public double getArea()
+  {
+    return 0;
+  }
 }

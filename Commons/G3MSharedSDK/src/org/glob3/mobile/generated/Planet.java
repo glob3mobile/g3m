@@ -111,13 +111,6 @@ public abstract class Planet
 
   public abstract void applyCameraConstrainers(Camera previousCamera, Camera nextCamera);
 
-<<<<<<< HEAD
-  public abstract Geodetic3D getDefaultCameraPosition(Sector rendereSector);
-=======
-<<<<<<< HEAD
-  public abstract Geodetic3D getDefaultCameraPosition(Sector shownSector);
->>>>>>> origin/shape-intersection-gus
-
   public final MutableMatrix44D createTransformMatrix(Geodetic3D position, Angle heading, Angle pitch, Angle roll, Vector3D scale, Vector3D translation)
   {
     final MutableMatrix44D geodeticTransform = createGeodeticTransformMatrix(position);
@@ -129,6 +122,7 @@ public abstract class Planet
     final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(rollRotation).multiply(translationM).multiply(scaleM);
     return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
+  public abstract Geodetic3D getDefaultCameraPosition(Sector rendereSector);
 
   public final CoordinateSystem getCoordinateSystemAt(Geodetic3D geo)
   {
@@ -139,9 +133,5 @@ public abstract class Planet
     Vector3D x = y.cross(z);
   
     return new CoordinateSystem(x,y,z, origin);
-<<<<<<< HEAD
-=======
->>>>>>> origin/purgatory
->>>>>>> origin/shape-intersection-gus
   }
 }

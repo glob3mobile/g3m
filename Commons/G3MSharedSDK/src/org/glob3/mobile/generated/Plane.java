@@ -41,10 +41,6 @@ public class Plane
      _dF = (float) d;
   }
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/shape-intersection-gus
   public static Plane fromPointAndNormal(Vector3D point0, Vector3D normal)
   {
     final Vector3D myNormal = normal.normalized();
@@ -58,10 +54,6 @@ public class Plane
      _d = - normal._x * point._x - normal._y * point._y - normal._z * point._z;
      _normalF = new Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized();
      _dF = (float) _d;
-<<<<<<< HEAD
-=======
->>>>>>> origin/purgatory
->>>>>>> origin/shape-intersection-gus
   }
 
   public Plane(double a, double b, double c, double d)

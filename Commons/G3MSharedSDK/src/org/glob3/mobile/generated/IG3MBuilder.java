@@ -43,11 +43,8 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MarksRenderer;
 //class ErrorRenderer;
-<<<<<<< HEAD
 //class ShapesEditorRenderer;
-=======
 //class InfoDisplay;
->>>>>>> origin/senderos-gc
 
 
 public abstract class IG3MBuilder
@@ -74,9 +71,9 @@ public abstract class IG3MBuilder
   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
   private SceneLighting _sceneLighting;
   private Sector _shownSector;
-  private InfoDisplay _infoDisplay;
 
   private ShapesEditorRenderer _shapesEditorRenderer;
+  private InfoDisplay _infoDisplay;
 
 
   /**
@@ -494,11 +491,8 @@ public abstract class IG3MBuilder
      _userData = null;
      _sceneLighting = null;
      _shownSector = null;
-<<<<<<< HEAD
      _shapesEditorRenderer = null;
-=======
      _infoDisplay = null;
->>>>>>> origin/senderos-gc
   }
 
   public void dispose()
@@ -1080,7 +1074,6 @@ public abstract class IG3MBuilder
     return marksRenderer;
   }
 
-<<<<<<< HEAD
   public final ShapesEditorRenderer createShapesEditorRenderer()
   {
     // Tile rasterizer to create raster shapes
@@ -1096,7 +1089,7 @@ public abstract class IG3MBuilder
     _shapesEditorRenderer = new ShapesEditorRenderer(geoTileRasterizer);
     addRenderer(_shapesEditorRenderer);
     return _shapesEditorRenderer;
-=======
+  }
   public final void setInfoDisplay(InfoDisplay infoDisplay)
   {
     if (_infoDisplay != null)
@@ -1105,7 +1098,6 @@ public abstract class IG3MBuilder
       return;
     }
     _infoDisplay = infoDisplay;
->>>>>>> origin/senderos-gc
   }
 
 }

@@ -527,10 +527,6 @@ public class Camera
     return sector.contains(position._latitude, position._longitude) && height >= position._height;
   }
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/shape-intersection-gus
   // data to compute frustum
   public final FrustumData getFrustumData()
   {
@@ -554,10 +550,6 @@ public class Camera
 
   //In case any of the angles is NAN it would be inferred considering the vieport ratio
   public final void setFOV(Angle vertical, Angle horizontal)
-<<<<<<< HEAD
-=======
->>>>>>> origin/purgatory
->>>>>>> origin/shape-intersection-gus
   {
     final Angle halfHFOV = horizontal.div(2.0);
     final Angle halfVFOV = vertical.div(2.0);

@@ -406,15 +406,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return false;
   }
 
-<<<<<<< HEAD
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long texturePriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener)
-=======
   private float _frustumCullingFactor;
 
   private TileCache _tileCache;
   private boolean _deleteTexturesOfInvisibleTiles;
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, int sizeOfTileCache, boolean deleteTexturesOfInvisibleTiles)
->>>>>>> origin/senderos-gc
   {
      _tessellator = tessellator;
      _elevationDataProvider = elevationDataProvider;
@@ -537,6 +533,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
+  
+    //printf ("--camera height = %.2f\n", _lastCamera->getGeodeticPosition()._height);
+  
+  
+  
     _statistics.clear();
   
     final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
@@ -549,10 +550,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     final Vector3D cameraNormalizedPosition = _lastCamera.getNormalizedPosition();
     double cameraAngle2HorizonInRadians = _lastCamera.getAngle2HorizonInRadians();
     final Frustum cameraFrustumInModelCoordinates = _lastCamera.getFrustumInModelCoordinates();
-<<<<<<< HEAD
-=======
     final Frustum cameraWiderFrustumInModelCoordinates = _lastCamera.getWiderFrustumInModelCoordinates(_frustumCullingFactor);
->>>>>>> origin/senderos-gc
   
     //Texture Size for every tile
     int texWidth = layerTilesRenderParameters._tileTextureResolution._x;
@@ -578,11 +576,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       for (int i = 0; i < firstLevelTilesCount; i++)
       {
         Tile tile = _firstLevelTiles.get(i);
-<<<<<<< HEAD
-        tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _texturePriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
-=======
         tile.render(rc, _glState, null, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, cameraWiderFrustumInModelCoordinates, _statistics, _verticalExaggeration, layerTilesRenderParameters, _texturizer, _tilesRenderParameters, _lastSplitTimer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerSet, _renderedSector, _firstRender, _tileDownloadPriority, texWidthSquared, texHeightSquared, nowInMS, _renderTileMeshes, _logTilesPetitions, _tileRenderingListener); // if first render, force full render
->>>>>>> origin/senderos-gc
       }
     }
     else
@@ -1166,8 +1160,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     return _renderedTiles.size();
   }
 
-<<<<<<< HEAD
-=======
   public final LayerTilesRenderParameters getLayerTilesRenderParameters()
   {
     if (_layerTilesRenderParametersDirty)
@@ -1202,5 +1194,4 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   {
     _frustumCullingFactor = frustumCullingFactor;
   }
->>>>>>> origin/senderos-gc
 }

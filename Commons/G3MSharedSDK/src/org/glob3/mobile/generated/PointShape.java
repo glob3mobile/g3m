@@ -37,8 +37,8 @@ public class PointShape extends AbstractMeshShape
       _cartesianPosition = new Vector3D(planet.toCartesian(getPosition()));
     double distanceToCamera = camera.getCartesianPosition().distanceTo(_cartesianPosition);
     FrustumData frustum = camera.getFrustumData();
-    final int pixelWidth = 11;
-    double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera.getHeight() / frustum._znear;
+    final int pixelWidth = 10;
+    double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera.getViewPortHeight() / frustum._znear;
     final Vector3D upper = new Vector3D(scale, scale, scale);
     final Vector3D lower = upper.times(-1);
     return new OrientedBox(lower, upper, getTransformMatrix(planet));

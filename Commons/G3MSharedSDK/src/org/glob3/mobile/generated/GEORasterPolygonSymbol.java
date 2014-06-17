@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class GEO2DPolygonData;
 
 
-public class GEORasterPolygonSymbol extends GEORasterSymbol
+public abstract class GEORasterPolygonSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
   private final GEO2DLineRasterStyle      _lineStyle;

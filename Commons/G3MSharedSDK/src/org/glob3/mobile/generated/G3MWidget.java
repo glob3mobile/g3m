@@ -493,7 +493,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   {
     _shapesEditorRenderer = shapesEditorRenderer;
     if (_shapesEditorRenderer != null)
-    	_shapesEditorRenderer.activateEdition(getPlanetRenderer());
+      _shapesEditorRenderer.activateEdition(getPlanetRenderer());
   }
 
   public final ShapesEditorRenderer getShapesEditorRenderer()
@@ -711,6 +711,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   
       // update ground height in camera class
       _nextCamera.setGroundHeightFromCartesianPoint(pos);
+      _currentCamera.setGroundHeightFromCartesianPoint(pos);
       return pos;
     }
     else
@@ -820,9 +821,11 @@ public class G3MWidget implements ChangedRendererInfoListener
   private ErrorRenderer _errorRenderer;
   private Renderer _hudRenderer;
   private RenderState _rendererState;
-  private ProtoRenderer _selectedRenderer;
+  //Renderer*           _selectedRenderer;
 
   private ShapesEditorRenderer _shapesEditorRenderer;
+
+  private ProtoRenderer _selectedRenderer;
 
   private EffectsScheduler _effectsScheduler;
 

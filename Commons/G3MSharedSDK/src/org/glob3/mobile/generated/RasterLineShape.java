@@ -38,7 +38,7 @@ public class RasterLineShape extends Shape
     double distanceToCamera = camera.getCartesianPosition().distanceTo(_cartesianStartPos);
     FrustumData frustum = camera.getFrustumData();
     final int pixelWidth = 10;
-    double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera.getHeight() / frustum._znear;
+    double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera.getViewPortHeight() / frustum._znear;
     final Vector3D upper = new Vector3D(scale, scale, 1);
     final Vector3D lower = new Vector3D(-scale, -scale, 0);
     return new OrientedBox(lower, upper, getTransformMatrix(planet));
@@ -83,6 +83,10 @@ public class RasterLineShape extends Shape
      _color = new Color(color);
   }
 
+
+  ///#include "GEORasterLineSymbol.hpp"
+  
+  
   public void dispose()
   {
     if (_color != null)
@@ -164,7 +168,10 @@ public class RasterLineShape extends Shape
     coordinates.add(_geodeticEndPos);
     float[] dashLengths = {};
     GEO2DLineRasterStyle lineStyle = new GEO2DLineRasterStyle(_color, _width, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, 0, 0);
-    return new GEORasterLineSymbol(coordinates, lineStyle);
+    //return new GEORasterLineSymbol(&coordinates, lineStyle);
+  
+    final GEO2DCoordinatesData coordinatesData = new GEO2DCoordinatesData(coordinates);
+    return new GEOLineRasterSymbol(coordinatesData, lineStyle);
   }
 
   public final java.util.ArrayList<Geodetic2D> getCopyRasterCoordinates()
@@ -192,6 +199,11 @@ public class RasterLineShape extends Shape
 
   public void zRawRender(G3MRenderContext rc, GLState parentGLState)
   {
+  }
+
+  public final double getLength()
+  {
+    return GeoMeter.getDistance(_geodeticStartPos, _geodeticEndPos);
   }
 
 }

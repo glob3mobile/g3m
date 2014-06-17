@@ -38,7 +38,7 @@ public class RasterPolygonShape extends Shape
     double distanceToCamera = camera.getCartesianPosition().distanceTo(_cartesianStartPos);
     FrustumData frustum = camera.getFrustumData();
     final int pixelWidth = 10;
-    double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera.getHeight() / frustum._znear;
+    double scale = 2 * pixelWidth * distanceToCamera * frustum._top / camera.getViewPortHeight() / frustum._znear;
     double incZ = scale - (_maxZ - _minZ);
     if (incZ < 0)
        incZ = 0;
@@ -114,6 +114,10 @@ public class RasterPolygonShape extends Shape
     _surfaceColor = new Color(surfaceColor);
   }
 
+
+  ///#include "GeoRasterPolygonSymbol.hpp"
+  
+  
   public void dispose()
   {
     if (_borderColor != null)
@@ -199,7 +203,9 @@ public class RasterPolygonShape extends Shape
     GEO2DPolygonData polygonData = new GEO2DPolygonData(coordinates, null);
     GEO2DLineRasterStyle lineStyle = new GEO2DLineRasterStyle(_borderColor, _borderWidth, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, 0, 0);
     GEO2DSurfaceRasterStyle surfaceStyle = new GEO2DSurfaceRasterStyle(_surfaceColor);
-    return new GEORasterPolygonSymbol(polygonData, lineStyle, surfaceStyle);
+    //return new GEORasterPolygonSymbol(&polygonData, lineStyle, surfaceStyle);
+  
+    return new GEOPolygonRasterSymbol(polygonData, lineStyle, surfaceStyle);
   }
 
   public final java.util.ArrayList<Geodetic2D> getCopyRasterCoordinates()
@@ -236,8 +242,24 @@ public class RasterPolygonShape extends Shape
 
   public final void zRawRender(G3MRenderContext rc, GLState parentGLState)
   {
-
   }
 
+  public final double getLength()
+  {
+    double length = 0;
+    int size = _coordinates.size();
+    for (int n = 0; n<size; n++)
+    {
+      Geodetic2D pos0 = _coordinates.get(n);
+      Geodetic2D pos1 = _coordinates.get((n+1)%size);
+      length += GeoMeter.getDistance(pos0, pos1);
+    }
+    return length;
+  }
 
+  public final double getArea()
+  {
+    java.util.ArrayList<Geodetic2D> coordinates = getCopyRasterCoordinates();
+    return IMathUtils.instance().abs(GeoMeter.getArea(coordinates));
+  }
 }

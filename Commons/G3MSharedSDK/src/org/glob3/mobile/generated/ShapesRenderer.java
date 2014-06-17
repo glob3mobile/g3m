@@ -1,4 +1,8 @@
 package org.glob3.mobile.generated; 
+//class ShapesRenderer : public LeafRenderer {
+
+//class ShapesRenderer : public LeafRenderer {
+
 public class ShapesRenderer extends DefaultRenderer
 {
   private static class LoadQueueItem
@@ -41,18 +45,10 @@ public class ShapesRenderer extends DefaultRenderer
 
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
-<<<<<<< HEAD
   private ShapeTouchListener _shapeTouchListener;
   private boolean _autoDeleteShapeTouchListener;
 
 
-  private G3MContext _context;
-=======
-<<<<<<< HEAD
->>>>>>> origin/senderos-gc
-=======
->>>>>>> origin/purgatory
->>>>>>> origin/shape-intersection-gus
   private Camera    _lastCamera;
 
   private GLState _glState;
@@ -156,31 +152,22 @@ public class ShapesRenderer extends DefaultRenderer
      _glState = new GLState();
      _glStateTransparent = new GLState();
      _lastCamera = null;
-<<<<<<< HEAD
      _autoDeleteShapeTouchListener = false;
      _shapeTouchListener = null;
      _geoTileRasterizer = null;
-=======
-    _context = null;
->>>>>>> origin/senderos-gc
   }
 
   public ShapesRenderer(GEOTileRasterizer geoTileRasterizer)
+//  _context(NULL),
   {
      _geoTileRasterizer = geoTileRasterizer;
      _renderNotReadyShapes = true;
-     _context = null;
      _glState = new GLState();
      _glStateTransparent = new GLState();
      _lastCamera = null;
      _autoDeleteShapeTouchListener = false;
      _shapeTouchListener = null;
-<<<<<<< HEAD
-=======
-=======
     _context = null;
->>>>>>> origin/purgatory
->>>>>>> origin/shape-intersection-gus
   }
 
 
@@ -209,7 +196,9 @@ public class ShapesRenderer extends DefaultRenderer
 
   }
 
-  public void addShape(Shape shape)
+  //virtual void addShape(Shape* shape);
+
+  public final void addShape(Shape shape)
   {
     _shapes.add(shape);
     if (_context != null)
@@ -223,6 +212,13 @@ public class ShapesRenderer extends DefaultRenderer
         _geoTileRasterizer.addSymbol(geoRasterSymbol);
     }
   }
+
+/*  void addShape(Shape* shape) {
+    _shapes.push_back(shape);
+    if (_context != NULL) {
+      shape->initialize(_context);
+    }
+  }*/
 
   public final void removeShape(Shape shape)
   {

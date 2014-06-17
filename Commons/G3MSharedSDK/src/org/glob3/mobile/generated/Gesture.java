@@ -21,10 +21,7 @@ package org.glob3.mobile.generated;
 
 
 
-<<<<<<< HEAD
-=======
 //class RenderState;
->>>>>>> origin/senderos-gc
 //class CameraEventHandler;
 //class MeshRenderer;
 

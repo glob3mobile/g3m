@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 
-public class GEORasterLineSymbol extends GEORasterSymbol
+public abstract class GEORasterLineSymbol extends GEORasterSymbol
 {
   private java.util.ArrayList<Geodetic2D> _coordinates;
   private final GEO2DLineRasterStyle      _style;
@@ -48,7 +48,7 @@ public class GEORasterLineSymbol extends GEORasterSymbol
   
       for (int i = 0; i < size; i++)
       {
-        final Geodetic2D coordinate = _coordinates.get(i);
+        final Geodetic2D coordinate = _coordinates.at(i);
         if (coordinate != null)
            coordinate.dispose();
       }
@@ -64,7 +64,8 @@ public class GEORasterLineSymbol extends GEORasterSymbol
   {
     if (_style.apply(canvas))
     {
-      rasterLine(_coordinates, canvas, projection);
+      final GEO2DCoordinatesData coordinatesData = new GEO2DCoordinatesData(_coordinates);
+      rasterLine(coordinatesData, canvas, projection);
     }
   }
 
