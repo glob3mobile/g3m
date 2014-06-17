@@ -82,17 +82,34 @@ public class GeoMeter
     final Geodetic2D center = Geodetic2D.fromDegrees((minLat + maxLat) / 2, (minLon + maxLon)/2);
   
     double accumulatedArea = 0.0;
+  
+    /*
+  #ifdef C_CODE
+    const Geodetic2D* previousVertex = polygon[0];
+  
+    const Vector3D* previousVertexNormal =
+    new Vector3D(previousVertex->_longitude._degrees - center._longitude._degrees,
+                 previousVertex->_latitude._degrees - center._latitude._degrees,
+                 0);
+  #endif
+  #ifdef JAVA_CODE
     Geodetic2D previousVertex = polygon.get(0);
     Vector3D previousVertexNormal = new Vector3D(previousVertex._longitude._degrees - center._longitude._degrees, previousVertex._latitude._degrees - center._latitude._degrees, 0);
+  #endif
+     */
   
-    double previousVertexDistToCenter = getDistance(*previousVertex, center);
+    final Geodetic2D previousVertex = polygon.get(0);
+  
+    final Vector3D previousVertexNormal = new Vector3D(previousVertex._longitude._degrees - center._longitude._degrees, previousVertex._latitude._degrees - center._latitude._degrees, 0);
+  
+    double previousVertexDistToCenter = getDistance(previousVertex, center);
     IMathUtils mu = IMathUtils.instance();
     for (int i = 1; i < size; i++)
     {
   
       final Geodetic2D vertex = polygon.get(i);
   
-      final double distToPreviousVertex = getDistance(vertex, *previousVertex);
+      final double distToPreviousVertex = getDistance(vertex, previousVertex);
       final double vertexDistToCenter = getDistance(vertex, center);
   
       final Vector3D vertexNormal = new Vector3D(vertex._longitude._degrees - center._longitude._degrees, vertex._latitude._degrees - center._latitude._degrees, 0);
@@ -162,11 +179,13 @@ public class GeoMeter
       previousVertexDistToCenter = vertexDistToCenter;
       previousVertex = vertex;
   
-      previousVertexNormal = null;
+      if (previousVertexNormal != null)
+         previousVertexNormal.dispose();
       previousVertexNormal = vertexNormal;
     }
   
-    previousVertexNormal = null;
+    if (previousVertexNormal != null)
+       previousVertexNormal.dispose();
   
     return accumulatedArea;
   

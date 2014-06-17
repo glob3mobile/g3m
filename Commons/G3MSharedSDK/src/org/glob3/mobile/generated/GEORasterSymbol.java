@@ -31,7 +31,7 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
   private final int _minTileLevel;
   private final int _maxTileLevel;
 
-  protected final Sector _sector;
+  //const Sector* _sector;
 
   //static std::vector<std::vector<Geodetic2D*>*>* copyCoordinatesArray(const std::vector<std::vector<Geodetic2D*>*>* coordinatesArray);
 

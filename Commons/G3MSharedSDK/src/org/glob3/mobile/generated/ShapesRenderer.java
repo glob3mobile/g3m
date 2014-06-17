@@ -198,7 +198,7 @@ public class ShapesRenderer extends DefaultRenderer
 
   //virtual void addShape(Shape* shape);
 
-  public final void addShape(Shape shape)
+  public void addShape(Shape shape)
   {
     _shapes.add(shape);
     if (_context != null)
