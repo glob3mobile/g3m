@@ -163,6 +163,7 @@ public class GeoMeter
       else
       {
   
+  
         final boolean outerFace = vertexNormal.crosspreviousVertexNormal._z >= 0;
         if (outerFace)
         {
