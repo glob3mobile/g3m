@@ -24,6 +24,7 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GEOTileRasterizer;
 import org.glob3.mobile.generated.GInitializationTask;
+import org.glob3.mobile.generated.GeoMeter;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.HUDQuadWidget;
@@ -278,6 +279,36 @@ Activity {
 		return true;
 	}
 
+	
+
+	public void testingGeometer()
+	{
+		// measure distance from Las Palmas to Madrid
+		Geodetic2D g1 = Geodetic2D.fromDegrees(28.129064150616994, -15.423265639110468); //LP
+		Geodetic2D g2 = Geodetic2D.fromDegrees(40.41677540051771, -3.7037901976145804); //MADRID
+		double dist = GeoMeter.getDistance(g1, g2);
+		ILogger.instance().logInfo("Distance Las Palmas - Madrid: %.3f Km\n", dist*1e-3);
+
+		// measure area of Gran Canaria island
+		java.util.ArrayList<Geodetic2D> polygon = new java.util.ArrayList<Geodetic2D>();
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.1801128508277), Angle.fromDegrees(-15.401893797679804)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.0468737992174), Angle.fromDegrees(-15.412880125804804)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.993531872334557), Angle.fromDegrees(-15.368934813304804)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.864917930859935), Angle.fromDegrees(-15.38404101447668)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.80419790643659), Angle.fromDegrees(-15.43347949103918)));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.743443929681458), Angle.fromDegrees(-15.569435301586054)));		
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.75559743885222), Angle.fromDegrees( -15.687538328929804 ) ));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.835776559501845), Angle.fromDegrees( -15.791908446117304 ) ));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(27.91468298115362), Angle.fromDegrees( -15.83722704963293 ) ));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.021418448958062), Angle.fromDegrees( -15.81525439338293 ) ));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.088074450524935), Angle.fromDegrees( -15.71363085822668 ) ));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.17406012312459), Angle.fromDegrees( -15.70264453010168 ) ));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.172849536482957), Angle.fromDegrees( -15.629860106273554 ) ));
+		polygon.add(new Geodetic2D(Angle.fromDegrees(28.149845787838487), Angle.fromDegrees( -15.47193163947668 ) ));
+		double area = GeoMeter.getArea(polygon);
+		ILogger.instance().logInfo("Gran Canaria area: %.3f Km2\n", area*1e-6);
+	}
+
 	public void testElevationNavigation() {
 		final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
@@ -285,7 +316,7 @@ Activity {
 		//const Planet* planet = Planet::createSphericalEarth();
 		final Planet planet = Planet.createFlatEarth();
 		builder.setPlanet(planet);
-
+		
 		// set camera handlers
 		CameraRenderer cameraRenderer = createCameraRenderer();
 		builder.setCameraRenderer(cameraRenderer);
@@ -349,6 +380,9 @@ Activity {
 		// GeoTileRasterizer is needed to draw RasterShapes
 		GEOTileRasterizer geoTileRasterizer = new GEOTileRasterizer();
 		builder.getPlanetRendererBuilder().addTileRasterizer(geoTileRasterizer);
+		
+		// testing Geometer
+		testingGeometer();
 		
 		// set camera handlers
 		CameraRenderer cameraRenderer = createCameraRenderer();
@@ -557,6 +591,11 @@ Activity {
 							shape.select();
 						}
 					}
+
+					if (_selectedShape != null)
+						ILogger.instance().logInfo("Shape length = %.3f Km.   Shape area = %.3f Km2\n", 
+								shape.getLength()*1e-3, shape.getArea()*1e-6);
+
 					return true;
 				}
 			};
