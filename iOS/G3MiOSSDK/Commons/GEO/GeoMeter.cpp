@@ -88,13 +88,23 @@ double GeoMeter::getArea(const std::vector<Geodetic2D*>& polygon){
                previousVertex->_latitude._degrees - center._latitude._degrees,
                0);
 
+#ifdef C_CODE
   double previousVertexDistToCenter = getDistance(*previousVertex, center);
+#else
+  double previousVertexDistToCenter = getDistance(previousVertex, center);
+#endif
+  
   IMathUtils* mu = IMathUtils::instance();
   for (int i = 1; i < size; i++) {
 
     const Geodetic2D* vertex = polygon[i];
 
+#ifdef C_CODE
     const double distToPreviousVertex = getDistance(*vertex, *previousVertex);
+#else
+    const double distToPreviousVertex = getDistance(*vertex, previousVertex);
+#endif
+    
     const double vertexDistToCenter = getDistance(*vertex, center);
 
     const Vector3D* vertexNormal =
