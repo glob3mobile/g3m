@@ -164,7 +164,8 @@ public class GeoMeter
       else
       {
   
-        final Vector3D crossedVector = vertexNormal.cross(*previousVertexNormal);
+        final Vector3D crossedVector = vertexNormal.cross(previousVertexNormal);
+  
         final boolean outerFace = crossedVector._z >= 0;
         if (outerFace)
         {
