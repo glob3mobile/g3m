@@ -12,7 +12,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -45,6 +47,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import es.igosoftware.util.GProgress;
+import es.igosoftware.util.GStringUtils;
 import es.igosoftware.util.GUndeterminateProgress;
 
 
@@ -1038,33 +1041,33 @@ public class VectorialLOD {
    //   }
 
 
-   private static String getTimeMessage(final long ms) {
-      return getTimeMessage(ms, true);
-   }
+   //   private static String getTimeMessage(final long ms) {
+   //      return getTimeMessage(ms, true);
+   //   }
 
 
    //   public String getSectorString(final Sector sector) {
    //      return "Sector [level=" + sector._level + ", row=" + sector._row + ", column=" + sector._column+"]";
    //   }
 
-   private static String getTimeMessage(final long ms,
-                                        final boolean rounded) {
-      if (ms < 1000) {
-         return ms + "ms";
-      }
-
-      if (ms < 60000) {
-         final double seconds = ms / 1000d;
-         return (rounded ? Math.round(seconds) : seconds) + "s";
-      }
-
-      final long minutes = ms / 60000;
-      final double seconds = (ms - (minutes * 60000d)) / 1000d;
-      if (seconds <= 0) {
-         return minutes + "m";
-      }
-      return minutes + "m " + (rounded ? Math.round(seconds) : seconds) + "s";
-   }
+   //   private static String getTimeMessage(final long ms,
+   //                                        final boolean rounded) {
+   //      if (ms < 1000) {
+   //         return ms + "ms";
+   //      }
+   //
+   //      if (ms < 60000) {
+   //         final double seconds = ms / 1000d;
+   //         return (rounded ? Math.round(seconds) : seconds) + "s";
+   //      }
+   //
+   //      final long minutes = ms / 60000;
+   //      final double seconds = (ms - (minutes * 60000d)) / 1000d;
+   //      if (seconds <= 0) {
+   //         return minutes + "m";
+   //      }
+   //      return minutes + "m " + (rounded ? Math.round(seconds) : seconds) + "s";
+   //   }
 
 
    private static String getGeojsonFileName(final TileSector sector) {
@@ -1187,6 +1190,22 @@ public class VectorialLOD {
    }
 
 
+   private static void debuglnInfo(final String info) {
+
+      final String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+
+      System.out.println("[" + date + "] " + info);
+   }
+
+
+   private static void debugInfo(final String info) {
+
+      final String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+
+      System.out.print("[" + date + "] " + info);
+   }
+
+
    private static ArrayList<TileSector> createFirstLevelTileSectors(final List<DataSource> dataSources) {
 
       final ArrayList<TileSector> levelZeroTileSectors = new ArrayList<TileSector>();
@@ -1233,7 +1252,7 @@ public class VectorialLOD {
    private static void launchVectorialLODProcessing(final List<DataSource> dataSources) {
 
       final long start = System.currentTimeMillis();
-      System.out.println("Starting vectorial LOD generation of datasources: ");
+      debuglnInfo("Starting vectorial LOD generation of datasources: ");
       for (final DataSource ds : dataSources) {
          System.out.println("    " + ds._sourceTable);
       }
@@ -1282,15 +1301,18 @@ public class VectorialLOD {
       System.out.println();
       System.out.println("Global bound sector: " + _globalBoundSector.toString());
 
+      //write computed data at before processing
+      writeMetadataFile(FIRST_LEVEL, MAX_LEVEL);
+
       //assume full sphere topSector for tiles pyramid generation
       final ArrayList<TileSector> firstLevelTileSectors = createFirstLevelTileSectors(dataSources);
 
-      estimateVectorialLODProgress(dataSources, firstLevelTileSectors);
+      estimateVectorialLODProgress(firstLevelTileSectors);
 
-      System.out.println("Generating.. await termination...");
+      debuglnInfo("Generating.. await termination...");
 
       //create progress reporter
-      final GProgress progress = new GProgress(_progressCounter.get()) {
+      final GProgress progress = new GProgress(_progressCounter.get(), 60) {
          @Override
          public void informProgress(final long stepsDone,
                                     final double percent,
@@ -1313,10 +1335,13 @@ public class VectorialLOD {
 
       _dataBaseService.releaseConnections();
 
-      writeMetadataFile();
+      // check if data has changed during process and re-write if necessary
+      if (metadataHasChanged()) {
+         writeMetadataFile(_firstLevelCreated, _lastLevelCreated);
+      }
 
       final long time = System.currentTimeMillis() - start;
-      System.out.println("Vectorial LOD generation finished in " + getTimeMessage(time));
+      debuglnInfo("Vectorial LOD generation finished in " + GStringUtils.getTimeMessage(time));
    }
 
 
@@ -1453,23 +1478,22 @@ public class VectorialLOD {
    }
 
 
-   private static void estimateVectorialLODProgress(final List<DataSource> dataSources,
-                                                    final ArrayList<TileSector> firstLevelTileSectors) {
+   private static void estimateVectorialLODProgress(final ArrayList<TileSector> firstLevelTileSectors) {
 
       System.out.println();
-      System.out.println("Estimating for progress indication.. please, wait..");
+      debuglnInfo("Estimating for progress indication.. please, wait..");
 
-      final GUndeterminateProgress progress = new GUndeterminateProgress() {
+      final GUndeterminateProgress progress = new GUndeterminateProgress(5) {
          @Override
          public void informProgress(final long stepsDone,
                                     final long elapsed) {
-            //System.out.println("Loading \"" + file.getName() + "\" " + progressString(stepsDone, elapsed));
+
             System.out.println("Preprocessing.. " + progressString(stepsDone, elapsed));
          }
       };
 
       for (final TileSector sector : firstLevelTileSectors) {
-         estimateVectorialLOD(sector, dataSources, progress);
+         estimateVectorialLOD(sector, progress);
       }
 
       _concurrentService.awaitTermination();
@@ -1482,7 +1506,6 @@ public class VectorialLOD {
 
 
    private static void estimateVectorialLOD(final TileSector sector,
-                                            final List<DataSource> dataSources,
                                             final GUndeterminateProgress progress) {
 
       if (sector._level > MAX_LEVEL) {
@@ -1501,14 +1524,12 @@ public class VectorialLOD {
       //over-estimation: assume all the tiles contains data
       final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
       for (final TileSector s : subSectors) {
-         estimateSubSectors(s, dataSources, progress);
+         estimateSubSectors(s, progress);
       }
-
    }
 
 
    private static void estimateSubSectors(final TileSector sector,
-                                          final List<DataSource> dataSources,
                                           final GUndeterminateProgress progress) {
 
       if (sector._level > MAX_LEVEL) {
@@ -1518,7 +1539,7 @@ public class VectorialLOD {
       final Runnable task = new Runnable() {
          @Override
          public void run() {
-            estimateVectorialLOD(sector, dataSources, progress);
+            estimateVectorialLOD(sector, progress);
          }
       };
 
@@ -1526,68 +1547,85 @@ public class VectorialLOD {
    }
 
 
-   private static boolean sectorContainsData(final DataSource dataSource,
-                                             final Sector sector) {
+   //   private static boolean sectorContainsData(final DataSource dataSource,
+   //                                             final Sector sector) {
+   //
+   //      final String checkQuery = buildCheckQuery(dataSource, sector);
+   //      //System.out.println("checkQuery: " + checkQuery);
+   //
+   //      if (checkQuery == null) {
+   //         return false;
+   //      }
+   //
+   //      final Connection conn = _dataBaseService.getConnection();
+   //      try {
+   //         final Statement st = conn.createStatement();
+   //         final ResultSet rs = st.executeQuery(checkQuery);
+   //         if (!rs.next()) {
+   //            st.close();
+   //            return false; //no data on this bbox
+   //         }
+   //
+   //         final int result = rs.getInt(1);
+   //         st.close();
+   //
+   //         //         if (result > 0) {
+   //         //            System.out.println("SECTOR CONTAINS DATA: " + result);
+   //         //         }
+   //         return (result > 0);
+   //      }
+   //      catch (final SQLException e) {
+   //         ILogger.instance().logError("SQL error getting geometries intersection: " + e.getMessage());
+   //      }
+   //
+   //      return false;
+   //   }
+   //
+   //
+   //   private static String buildCheckQuery(final DataSource dataSource,
+   //                                         final Sector sector) {
+   //
+   //      //--i.e: SELECT COUNT(the_geom) FROM roads WHERE ST_Intersects(the_geom, ST_SetSRID(ST_MakeBox2D(ST_Point(-15.5,1.43), ST_Point(15.5,50.24)),4326)) 
+   //      final String baseQuery0 = "SELECT COUNT(";
+   //      final String baseQuery1 = ") FROM ";
+   //      final String baseQuery2 = " WHERE ST_Intersects(";
+   //
+   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
+   //      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
+   //
+   //      if (bboxQuery == null) {
+   //         return null;
+   //      }
+   //
+   //      final String checkQuery = baseQuery0 + dataSource._theGeomColumnName + baseQuery1 + dataSource._sourceTable + baseQuery2
+   //                                + dataSource._theGeomColumnName + "," + bboxQuery + ")";
+   //
+   //      return checkQuery;
+   //   }
 
-      final String checkQuery = buildCheckQuery(dataSource, sector);
-      //System.out.println("checkQuery: " + checkQuery);
 
-      if (checkQuery == null) {
-         return false;
-      }
-
-      final Connection conn = _dataBaseService.getConnection();
-      try {
-         final Statement st = conn.createStatement();
-         final ResultSet rs = st.executeQuery(checkQuery);
-         if (!rs.next()) {
-            st.close();
-            return false; //no data on this bbox
-         }
-
-         final int result = rs.getInt(1);
-         st.close();
-
-         //         if (result > 0) {
-         //            System.out.println("SECTOR CONTAINS DATA: " + result);
-         //         }
-         return (result > 0);
-      }
-      catch (final SQLException e) {
-         ILogger.instance().logError("SQL error getting geometries intersection: " + e.getMessage());
-      }
-
-      return false;
-   }
-
-
-   private static String buildCheckQuery(final DataSource dataSource,
-                                         final Sector sector) {
-
-      //--i.e: SELECT COUNT(the_geom) FROM roads WHERE ST_Intersects(the_geom, ST_SetSRID(ST_MakeBox2D(ST_Point(-15.5,1.43), ST_Point(15.5,50.24)),4326)) 
-      final String baseQuery0 = "SELECT COUNT(";
-      final String baseQuery1 = ") FROM ";
-      final String baseQuery2 = " WHERE ST_Intersects(";
-
-      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
-
-      if (bboxQuery == null) {
-         return null;
-      }
-
-      final String checkQuery = baseQuery0 + dataSource._theGeomColumnName + baseQuery1 + dataSource._sourceTable + baseQuery2
-                                + dataSource._theGeomColumnName + "," + bboxQuery + ")";
-
-      return checkQuery;
-   }
-
-
-   private static void writeMetadataFile() {
+   private static boolean metadataHasChanged() {
 
       if (_firstLevelCreated > _lastLevelCreated) {
          _firstLevelCreated = _lastLevelCreated;
       }
+      else if (_lastLevelCreated < _firstLevelCreated) {
+         _lastLevelCreated = _firstLevelCreated;
+      }
+
+      return (_firstLevelCreated > FIRST_LEVEL) || (_lastLevelCreated < MAX_LEVEL);
+   }
+
+
+   private static void writeMetadataFile(final int firstLevelCreated,
+                                         final int lastLevelCreated) {
+
+      //      if (_firstLevelCreated > _lastLevelCreated) {
+      //         _firstLevelCreated = _lastLevelCreated;
+      //      }
+      //      else if (_lastLevelCreated < _firstLevelCreated) {
+      //         _lastLevelCreated = _firstLevelCreated;
+      //      }
 
       //pyramid: { type: "epsg:4326", topSector: [], splitByLatitude: 1, splitsByLongitude: 1 }
 
@@ -1599,19 +1637,15 @@ public class VectorialLOD {
                              + _renderParameters._topSectorSplitsByLatitude + ", splitsByLongitude: "
                              + _renderParameters._topSectorSplitsByLongitude + " }";
 
-      //      final String metadata = "{ sector: [" + _boundSector._lower._latitude._degrees + ", "
-      //                              + _boundSector._lower._longitude._degrees + ", " + _boundSector._upper._latitude._degrees + ", "
-      //                              + _boundSector._upper._longitude._degrees + "], minLevel: " + _firstLevelCreated + ", maxLevel: "
-      //                              + _lastLevelCreated + ", projection: " + _projection + " }";
-
       final String metadata = "{ sector: [" + _globalBoundSector._lower._latitude._degrees + ", "
                               + _globalBoundSector._lower._longitude._degrees + ", "
                               + _globalBoundSector._upper._latitude._degrees + ", "
-                              + _globalBoundSector._upper._longitude._degrees + "], minLevel: " + _firstLevelCreated
-                              + ", maxLevel: " + _lastLevelCreated + ", pyramid: " + pyramid + " }";
+                              + _globalBoundSector._upper._longitude._degrees + "], minLevel: " + firstLevelCreated
+                              + ", maxLevel: " + lastLevelCreated + ", pyramid: " + pyramid + " }";
 
       _metadataFileName = _lodFolder + File.separatorChar + METADATA_FILENAME;
       final File metadataFile = new File(_metadataFileName);
+
       try {
          if (metadataFile.exists()) {
             metadataFile.delete();
@@ -1623,7 +1657,7 @@ public class VectorialLOD {
          file.flush();
          file.close();
          System.out.println();
-         System.out.println("File " + METADATA_FILENAME + " created.");
+         debuglnInfo("File " + METADATA_FILENAME + " created.");
       }
       catch (final IOException e) {
          ILogger.instance().logError("IO error creating metadata file: " + e.getMessage());
@@ -2424,6 +2458,9 @@ public class VectorialLOD {
 
    private static String readConfigurationFile(final String[] args) {
 
+      debuglnInfo("Reading config file..");
+      System.out.println();
+
       if (args.length == 0) {
          System.err.println();
          System.err.println("Configuration file not provided. Use default: " + DEFAULT_PARAMETERS_FILE);
@@ -2454,7 +2491,7 @@ public class VectorialLOD {
       if (initializeFromXMLFile(PARAMETERS_FILE)) {
 
          System.out.println();
-         System.out.print("Connecting to " + DATABASE_NAME + " postGIS database.. ");
+         debugInfo("Connecting to " + DATABASE_NAME + " postGIS database.. ");
 
          if (createDataBaseService(HOST, PORT, USER, PASSWORD, DATABASE_NAME)) {
 
@@ -2467,7 +2504,7 @@ public class VectorialLOD {
 
          }
          else {
-            System.out.println("Failed. Error connecting to database.");
+            ILogger.instance().logError("Failed. Error connecting to database.");
          }
       }
       else {

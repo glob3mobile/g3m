@@ -93,7 +93,7 @@ public class GConcurrentService {
 
          final TaskCompleteListener listener = new TaskCompleteListener() {
             @Override
-            public void taskCompleted(final Runnable task) {
+            public void taskCompleted(final Runnable ltask) {
                _taskCounter.decrementAndGet();
                //System.out.println("Ending.. " + _taskCounter.get());
             }
