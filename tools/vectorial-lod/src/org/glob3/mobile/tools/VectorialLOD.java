@@ -1489,25 +1489,21 @@ public class VectorialLOD {
          return;
       }
 
-      //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
       if (!_globalBoundSector.intersects(sector)) {
          return;
       }
-
-      //over-estimation: assume all the tiles contains data
-      final boolean containsData = true;
 
       if (sector._level >= FIRST_LEVEL) {
          _progressCounter.incrementAndGet();
          progress.stepDone();
       }
 
-      if (containsData) { //stop subdivision when there are not data inside this sector
-         final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
-         for (final TileSector s : subSectors) {
-            estimateSubSectors(s, dataSources, progress);
-         }
+      //over-estimation: assume all the tiles contains data
+      final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
+      for (final TileSector s : subSectors) {
+         estimateSubSectors(s, dataSources, progress);
       }
+
    }
 
 
