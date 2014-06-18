@@ -1500,14 +1500,6 @@ public class VectorialLOD {
       if (sector._level >= FIRST_LEVEL) {
          _progressCounter.incrementAndGet();
          progress.stepDone();
-         //         containsData = false;
-         //         for (final DataSource ds : dataSources) {
-         //            //TODO: -- provisional: dejarlo comentado mientras generemos tiles vacios. Descomentar luego --
-         //            //            if (!ds._boundSector.intersects(sector)) {
-         //            //               continue;
-         //            //            }
-         //            containsData = containsData || sectorContainsData(ds, sector);
-         //         }
       }
 
       if (containsData) { //stop subdivision when there are not data inside this sector
