@@ -14,24 +14,26 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class GConcurrentService {
 
-   public static final boolean      VERBOSE      = false;
-   public static final long         ALIVE_PERIOD = 5000;
-   private static final int         SCALE_FACTOR = 2;
+   public static final boolean      VERBOSE        = false;
+   public static final long         ALIVE_PERIOD   = 4000;
+   private static final int         SCALE_FACTOR   = 2;
 
-   private final static AtomicLong  _taskCounter = new AtomicLong(0);
+   private final static AtomicLong  _threadCounter = new AtomicLong(0);
+   private final static AtomicLong  _taskCounter   = new AtomicLong(0);
    private final ThreadPoolExecutor _executor;
-   private int                      _maxThreads  = Runtime.getRuntime().availableProcessors();
+   private int                      _maxThreads    = Runtime.getRuntime().availableProcessors();
 
 
-   public interface TaskCompleteListener {
-      void taskCompleted(final Thread thread);
+   public interface ThreadCompleteListener {
+      void threadCompleted(final Thread thread);
    }
+
 
    public static class SmartThread
             extends
                Thread {
 
-      private final Set<TaskCompleteListener> _listeners = new CopyOnWriteArraySet<TaskCompleteListener>();
+      private final Set<ThreadCompleteListener> _listeners = new CopyOnWriteArraySet<ThreadCompleteListener>();
 
 
       public SmartThread(final ThreadGroup group,
@@ -39,6 +41,70 @@ public class GConcurrentService {
                          final String name,
                          final long stackSize) {
          super(group, target, name, stackSize);
+      }
+
+
+      public final void addListener(final ThreadCompleteListener listener) {
+         _listeners.add(listener);
+      }
+
+
+      public final void removeListener(final ThreadCompleteListener listener) {
+         _listeners.remove(listener);
+      }
+
+
+      private final void notifyListeners() {
+         for (final ThreadCompleteListener listener : _listeners) {
+            listener.threadCompleted(this);
+         }
+      }
+
+
+      @Override
+      public final void run() {
+         try {
+            super.run();
+         }
+         finally {
+            notifyListeners();
+         }
+      }
+   }
+
+   public interface TaskCompleteListener {
+      void taskCompleted(final Runnable task);
+   }
+
+   public static class SmartTask
+            implements
+               Runnable {
+
+      final Runnable                          _task;
+
+      private final Set<TaskCompleteListener> _listeners = new CopyOnWriteArraySet<TaskCompleteListener>();
+
+
+      public SmartTask(final Runnable task) {
+         _task = task;
+
+         _taskCounter.incrementAndGet();
+         //System.out.println("Pending: " + _taskCounter.get());
+
+         final TaskCompleteListener listener = new TaskCompleteListener() {
+            @Override
+            public void taskCompleted(final Runnable task) {
+               _taskCounter.decrementAndGet();
+               //System.out.println("Ending.. " + _taskCounter.get());
+            }
+         };
+
+         this.addListener(listener);
+      }
+
+
+      private void doRun() {
+         _task.run();
       }
 
 
@@ -62,7 +128,7 @@ public class GConcurrentService {
       @Override
       public final void run() {
          try {
-            super.run();
+            doRun();
          }
          finally {
             notifyListeners();
@@ -95,13 +161,13 @@ public class GConcurrentService {
 
          final SmartThread t = new SmartThread(_group, runnable, _namePrefix + _threadNumber.getAndIncrement(), 0);
 
-         _taskCounter.incrementAndGet();
+         _threadCounter.incrementAndGet();
          //System.out.println("Started: " + _taskCounter.incrementAndGet());
 
-         final TaskCompleteListener listener = new TaskCompleteListener() {
+         final ThreadCompleteListener listener = new ThreadCompleteListener() {
             @Override
-            public void taskCompleted(final Thread thread) {
-               _taskCounter.decrementAndGet();
+            public void threadCompleted(final Thread thread) {
+               _threadCounter.decrementAndGet();
                //System.out.println("Pending.. " + _taskCounter.decrementAndGet());
                //System.out.println("Ending: " + Thread.currentThread().getName());
             }
@@ -141,7 +207,8 @@ public class GConcurrentService {
 
    public void execute(final Runnable task) {
       //System.out.println("Started: " + _taskCounter.incrementAndGet());
-      _executor.execute(task);
+      final SmartTask smartTask = new SmartTask(task);
+      _executor.execute(smartTask);
    }
 
 
@@ -154,7 +221,7 @@ public class GConcurrentService {
          }
 
          _executor.shutdown();
-         _executor.awaitTermination(4, TimeUnit.DAYS);
+         _executor.awaitTermination(1, TimeUnit.DAYS);
       }
       catch (final InterruptedException e) {
          throw new RuntimeException(e);

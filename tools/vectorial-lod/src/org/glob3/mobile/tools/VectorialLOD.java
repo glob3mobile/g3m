@@ -1287,6 +1287,8 @@ public class VectorialLOD {
 
       estimateVectorialLODProgress(dataSources, firstLevelTileSectors);
 
+      System.out.println("Generating.. await termination...");
+
       //create progress reporter
       final GProgress progress = new GProgress(_progressCounter.get()) {
          @Override
@@ -1299,7 +1301,6 @@ public class VectorialLOD {
          }
       };
 
-      System.out.println("Generating.. await termination...");
       for (final TileSector sector : firstLevelTileSectors) {
          generateMergedVectorialLOD(sector, dataSources, progress);
          //processSubSectors(sector, dataSource);
@@ -1456,14 +1457,14 @@ public class VectorialLOD {
                                                     final ArrayList<TileSector> firstLevelTileSectors) {
 
       System.out.println();
-      System.out.println("Estimating for progress indication.. please, await termination...");
+      System.out.println("Estimating for progress indication.. please, wait..");
 
       final GUndeterminateProgress progress = new GUndeterminateProgress() {
          @Override
          public void informProgress(final long stepsDone,
                                     final long elapsed) {
             //System.out.println("Loading \"" + file.getName() + "\" " + progressString(stepsDone, elapsed));
-            System.out.println("Processing.. " + progressString(stepsDone, elapsed));
+            System.out.println("Preprocessing.. " + progressString(stepsDone, elapsed));
          }
       };
 
