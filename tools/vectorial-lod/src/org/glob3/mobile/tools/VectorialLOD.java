@@ -55,28 +55,29 @@ public class VectorialLOD {
 
    //-- Internal constants definition ------------------------------------------------------------------
 
-   final static String  DEFAULT_PARAMETERS_FILE  = "parameters.xml";
-   final static String  METADATA_FILENAME        = "metadata.json";
-   final static String  EMPTY_GEOJSON            = "{\"type\":\"FeatureCollection\",\"features\":null}";
-   final static String  INTERNAL_SRID            = "4326";
-   final static String  MERCATOR_PYRAMID         = "MERCATOR";
-   final static String  WGS84_PYRAMID            = "WGS84";
+   final static String  DEFAULT_PARAMETERS_FILE       = "parameters.xml";
+   final static String  METADATA_FILENAME             = "metadata.json";
+   final static String  EMPTY_GEOJSON                 = "{\"type\":\"FeatureCollection\",\"features\":null}";
+   final static String  INTERNAL_SRID                 = "4326";
+   final static String  MERCATOR_PYRAMID              = "MERCATOR";
+   final static String  WGS84_PYRAMID                 = "WGS84";
 
-   final static int     CONNECTIONS_SCALE_FACTOR = 2;
-   final static float   QUALITY_FACTOR           = 1.0f;
-   final static double  OVERLAP_PERCENTAGE       = 5.0;
-   final static int     CONNECTION_TIMEOUT       = 5;                                                   //seconds
-   final static int     PIXELS_PER_TILE          = 256;
-   final static int     SQUARED_PIXELS_PER_TILE  = (int) Math.pow(
-                                                          (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
-                                                          2);
-   //final static long    VERTEX_THRESHOLD        = 10000;
-   final static int     INITIAL_AREA_FACTOR      = 3;
-   final static int     MAX_TUNNING_ATTEMPS      = 10;
-   final static int     AREA_STEP                = 1;
-   final static float   QF_STEP                  = 2.0f;
+   final static int     CONNECTIONS_SCALE_FACTOR      = 2;
+   final static float   QUALITY_FACTOR                = 1.0f;
+   final static double  OVERLAP_PERCENTAGE            = 5.0;
+   final static int     CONNECTION_TIMEOUT            = 5;                                                   //seconds
+   final static int     PIXELS_PER_TILE               = 256;
+   final static int     SQUARED_PIXELS_PER_TILE       = (int) Math.pow(
+                                                               (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
+                                                               2);
 
-   final static boolean VERBOSE                  = false;
+   final static int     INITIAL_AREA_FACTOR           = 3;
+   final static int     MAX_TUNNING_ATTEMPS           = 10;
+   final static int     AREA_STEP                     = 1;
+   final static float   QF_STEP                       = 2.0f;
+   final static double  EMPTY_TILES_CORRECTION_FACTOR = 1.0;                                                 // assume worst case: 100% of tiles contains data
+
+   final static boolean VERBOSE                       = false;
 
    private enum GeomType {
       POINT,
@@ -116,7 +117,7 @@ public class VectorialLOD {
    private static String                     _lodFolder         = null;
    private static String                     _geojsonFolder     = null;
    private static String                     _geobsonFolder     = null;
-   private static String                     _metadataFileName  = null;
+   //private static String                     _metadataFileName  = null;
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
    private static String                     _projection        = null;
@@ -1252,6 +1253,8 @@ public class VectorialLOD {
    private static void launchVectorialLODProcessing(final List<DataSource> dataSources) {
 
       final long start = System.currentTimeMillis();
+      final Date startDate = new Date();
+
       debuglnInfo("Starting vectorial LOD generation of datasources: ");
       for (final DataSource ds : dataSources) {
          System.out.println("    " + ds._sourceTable);
@@ -1340,8 +1343,10 @@ public class VectorialLOD {
          writeMetadataFile(_firstLevelCreated, _lastLevelCreated);
       }
 
-      final long time = System.currentTimeMillis() - start;
-      debuglnInfo("Vectorial LOD generation finished in " + GStringUtils.getTimeMessage(time));
+      //      final long time = System.currentTimeMillis() - start;
+      //      debuglnInfo("Vectorial LOD generation finished in " + GStringUtils.getTimeMessage(time));
+      debuglnInfo("Vectorial LOD generation finished.");
+      displaySummary(start, startDate);
    }
 
 
@@ -1361,8 +1366,6 @@ public class VectorialLOD {
       boolean containsData = true;
 
       if (sector._level >= FIRST_LEVEL) {
-
-         progress.stepDone();
 
          String geoJsonResult = "";
          String filteredResult = "";
@@ -1441,6 +1444,9 @@ public class VectorialLOD {
          else {
             writeEmptyFile(sector);
          }
+
+         //progress report
+         progress.stepDone();
       }
 
       if (containsData) { //stop subdivision when there are not data inside this sector
@@ -1498,6 +1504,9 @@ public class VectorialLOD {
 
       _concurrentService.awaitTermination();
       progress.finish();
+
+      //-- correct the result based on a estimation of empty tiles
+      _progressCounter.set((long) (_progressCounter.get() * EMPTY_TILES_CORRECTION_FACTOR));
       System.out.println("Number of tiles to process estimation: " + _progressCounter.get());
 
       //restart concurrent service for later processing
@@ -1521,10 +1530,25 @@ public class VectorialLOD {
          progress.stepDone();
       }
 
-      //over-estimation: assume all the tiles contains data
-      final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
-      for (final TileSector s : subSectors) {
-         estimateSubSectors(s, progress);
+      //-- over-estimation: assume that all sectors contains data
+      final boolean containsData = true;
+
+      //      if (sector._level >= FIRST_LEVEL) {
+      //         containsData = false;
+      //
+      //         for (final DataSource ds : dataSources) {
+      //            containsData = containsData || sectorContainsData(ds, sector);
+      //         }
+      //
+      //         _progressCounter.incrementAndGet();
+      //         progress.stepDone();
+      //      }
+
+      if (containsData) { //stop subdivision when there are not data inside this sector
+         final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
+         for (final TileSector s : subSectors) {
+            estimateSubSectors(s, progress);
+         }
       }
    }
 
@@ -1604,6 +1628,55 @@ public class VectorialLOD {
    //   }
 
 
+   private static void displaySummary(final long startTime,
+                                      final Date startDate) {
+
+      final long expentTime = System.currentTimeMillis() - startTime;
+      final Date endDate = new Date();
+      final String outputFormat = (OUTPUT_FORMAT.equalsIgnoreCase("both")) ? "geojson & geobson" : OUTPUT_FORMAT;
+
+      System.out.println();
+      System.out.println("=================================================================================================");
+      System.out.println("==                                    PROCESS SUMMARY                                            ");
+      System.out.println("=================================================================================================");
+      System.out.println("==");
+      System.out.println("== START TIME: " + getFormattedDate(startDate));
+      System.out.println("== END TIME: " + getFormattedDate(endDate));
+      System.out.println("== PROCESSING TIME: " + GStringUtils.getTimeMessage(expentTime));
+      System.out.println("==");
+      System.out.println("== DATABASE: " + DATABASE_NAME);
+      System.out.println("== PYRAMID TYPE: " + _projection);
+      System.out.println("== FIRST LEVEL: " + _firstLevelCreated);
+      System.out.println("== LAST LEVEL: " + _lastLevelCreated);
+      System.out.println("== OUTPUT FORMAT: " + outputFormat);
+      System.out.println("== OUTPUT FOLDER: " + ROOT_FOLDER);
+      System.out.println("==");
+
+      System.out.println("== DATA SOURCES:");
+      for (final DataSource ds : _dataSources) {
+         System.out.println("==    TABLE: " + ds._sourceTable);
+         System.out.println("==       Geometry column: " + ds._theGeomColumnName);
+         System.out.println("==       Geometry SRID: " + ds._geomSRID);
+         System.out.println("==       Geometry type: " + ds._geomType);
+         System.out.println("==       Geometry BOUND: " + ds._boundSector.toString());
+         System.out.println("==");
+      }
+
+      if (_dataSources.size() > 1) {
+         System.out.println("==    GLOBAL BOUND: " + _globalBoundSector.toString());
+         System.out.println("==");
+      }
+
+      System.out.println("=================================================================================================");
+   }
+
+
+   private static String getFormattedDate(final Date date) {
+
+      return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(date);
+   }
+
+
    private static boolean metadataHasChanged() {
 
       if (_firstLevelCreated > _lastLevelCreated) {
@@ -1643,25 +1716,39 @@ public class VectorialLOD {
                               + _globalBoundSector._upper._longitude._degrees + "], minLevel: " + firstLevelCreated
                               + ", maxLevel: " + lastLevelCreated + ", pyramid: " + pyramid + " }";
 
-      _metadataFileName = _lodFolder + File.separatorChar + METADATA_FILENAME;
-      final File metadataFile = new File(_metadataFileName);
+      //final String metadataFileName = _lodFolder + File.separatorChar + METADATA_FILENAME;
+      final ArrayList<String> metadataFileNames = new ArrayList<String>();
 
-      try {
-         if (metadataFile.exists()) {
-            metadataFile.delete();
+      if (generateGeojson()) {
+         metadataFileNames.add(_geojsonFolder + File.separatorChar + METADATA_FILENAME);
+      }
+      if (generateGeobson()) {
+         metadataFileNames.add(_geobsonFolder + File.separatorChar + METADATA_FILENAME);
+      }
+
+      for (final String metadataFileName : metadataFileNames) {
+
+         final File metadataFile = new File(metadataFileName);
+
+         try {
+            if (metadataFile.exists()) {
+               metadataFile.delete();
+            }
+            new File(metadataFileName).createNewFile();
+
+            final FileWriter file = new FileWriter(metadataFileName);
+            file.write(metadata);
+            file.flush();
+            file.close();
+            //            System.out.println();
+            //            debuglnInfo("File " + METADATA_FILENAME + " created.");
          }
-         new File(_metadataFileName).createNewFile();
-
-         final FileWriter file = new FileWriter(_metadataFileName);
-         file.write(metadata);
-         file.flush();
-         file.close();
-         System.out.println();
-         debuglnInfo("File " + METADATA_FILENAME + " created.");
+         catch (final IOException e) {
+            ILogger.instance().logError("IO error creating metadata file: " + e.getMessage());
+         }
       }
-      catch (final IOException e) {
-         ILogger.instance().logError("IO error creating metadata file: " + e.getMessage());
-      }
+      System.out.println();
+      debuglnInfo("File " + METADATA_FILENAME + " created.");
    }
 
 
