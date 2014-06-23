@@ -75,7 +75,7 @@ public class VectorialLOD {
    final static int     MAX_TUNNING_ATTEMPS           = 10;
    final static int     AREA_STEP                     = 1;
    final static float   QF_STEP                       = 2.0f;
-   final static double  EMPTY_TILES_CORRECTION_FACTOR = 1.0;                                                 // assume worst case: 100% of tiles contains data
+   final static double  EMPTY_TILES_CORRECTION_FACTOR = 1.0;                                                 // 1.0 = assume worst case: 100% of tiles contains data
 
    final static boolean VERBOSE                       = false;
 
@@ -556,7 +556,7 @@ public class VectorialLOD {
       String baseQuery5 = ") and ";
       final String baseQuery6 = ") As lg ) As f ) As fc";
 
-      final String compCriteria = buildComplementaryFilterCriterium(filterCriteria);
+      final String compCriteria = buildComplementaryFilterCriterium(filterCriteria, dataSource._theGeomColumnName);
       if (compCriteria.toUpperCase().trim().startsWith("ORDER")) {
          baseQuery5 = ") ";
       }
@@ -791,9 +791,9 @@ public class VectorialLOD {
 
       final float tolerance = (float) (hypotenuse / (qualityFactor * 512f));
 
-      if (VERBOSE) {
-         System.out.println("tolerance: " + tolerance);
-      }
+      //      if (VERBOSE) {
+      //         System.out.println("tolerance: " + tolerance);
+      //      }
 
       return tolerance;
    }
@@ -832,15 +832,22 @@ public class VectorialLOD {
    }
 
 
-   private static String buildComplementaryFilterCriterium(final String fullCriteria) {
+   private static String buildComplementaryFilterCriterium(final String fullCriteria,
+                                                           final String theGeomColumn) {
 
       String complementaryCriterium = "";
       if (fullCriteria.contains("ST_Area(Box2D(")) {
          complementaryCriterium = fullCriteria.replace(">", "<=");
+         //         complementaryCriterium = complementaryCriterium.replace(" and ", " or ");
+         //         complementaryCriterium = complementaryCriterium.replace(" AND ", " OR ");
          if (!complementaryCriterium.toUpperCase().contains("LIMIT")) {
-            complementaryCriterium = complementaryCriterium + " LIMIT " + REPLACE_FILTERED;
+            //complementaryCriterium = complementaryCriterium + " LIMIT " + REPLACE_FILTERED;
+            complementaryCriterium = complementaryCriterium + " ORDER BY ST_Area(Box2D(" + theGeomColumn + ")) DESC LIMIT "
+                                     + REPLACE_FILTERED;
          }
       }
+
+      //      System.out.println("complementaryCriterium: " + complementaryCriterium);
 
       return complementaryCriterium;
    }
@@ -1487,7 +1494,7 @@ public class VectorialLOD {
    private static void estimateVectorialLODProgress(final ArrayList<TileSector> firstLevelTileSectors) {
 
       System.out.println();
-      debuglnInfo("Estimating for progress indication.. please, wait..");
+      debuglnInfo("Estimation for progress indication.. please, wait..");
 
       final GUndeterminateProgress progress = new GUndeterminateProgress(5) {
          @Override
@@ -1967,6 +1974,9 @@ public class VectorialLOD {
       _renderParameters = mercator ? LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel)
                                   : LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
 
+      _firstLevelCreated = MAX_LEVEL;
+      _lastLevelCreated = FIRST_LEVEL;
+      _projection = (_renderParameters._mercator) ? MERCATOR_PYRAMID : WGS84_PYRAMID;
    }
 
 
@@ -1992,19 +2002,19 @@ public class VectorialLOD {
    }
 
 
-   private static void initialize() {
-
-      //      initializeUtils();
-
-      initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
-
-      //initializeConcurrentService();
-
-      _firstLevelCreated = MAX_LEVEL;
-      _lastLevelCreated = FIRST_LEVEL;
-      _projection = (_renderParameters._mercator) ? MERCATOR_PYRAMID : WGS84_PYRAMID;
-
-   }
+   //   private static void initialize() {
+   //
+   //      //      initializeUtils();
+   //
+   //      initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
+   //
+   //      //initializeConcurrentService();
+   //
+   //      _firstLevelCreated = MAX_LEVEL;
+   //      _lastLevelCreated = FIRST_LEVEL;
+   //      _projection = (_renderParameters._mercator) ? MERCATOR_PYRAMID : WGS84_PYRAMID;
+   //
+   //   }
 
 
    //   private static String[] parsePropertiesFromFile(final String propList) {
@@ -2584,11 +2594,10 @@ public class VectorialLOD {
 
             System.out.println("done.");
 
-            initialize();
+            initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
 
             // batch mode to generate full LOD pyramid for a vectorial data source
             launchVectorialLODProcessing(_dataSources);
-
          }
          else {
             ILogger.instance().logError("Failed. Error connecting to database.");
