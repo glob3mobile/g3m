@@ -21,7 +21,9 @@ LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];
   }
-  _tileImageProvider->_release();
+  if (_tileImageProvider != NULL) {
+    _tileImageProvider->_release();
+  }
 }
 
 bool LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
