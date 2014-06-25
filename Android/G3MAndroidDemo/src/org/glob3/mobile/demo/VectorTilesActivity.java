@@ -65,6 +65,7 @@ public class VectorTilesActivity
       builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
       _g3mWidget = builder.createWidget();
 
+
       _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(47.39987642274313d, 8.544022519285223d, 1300),
                TimeInterval.fromSeconds(5));
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
@@ -95,9 +96,9 @@ public class VectorTilesActivity
 
 
       //  final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
-      final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
+      final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
       final int firstLevel = 2;
-      final int maxLevel = 16;
+      final int maxLevel = 15;
 
       final Geodetic2D lower = new Geodetic2D( //
                Angle.fromDegrees(45.8176852), //
@@ -120,7 +121,7 @@ public class VectorTilesActivity
                TimeInterval.fromDays(30), // timeToCache
                true, // readExpired
                1, // transparency
-               new LevelTileCondition(14, 21), // condition
+               new LevelTileCondition(10, 21), // condition
                "" // disclaimerInfo
       );
       layerSet.addLayer(tiledVectorLayer);
@@ -148,8 +149,8 @@ public class VectorTilesActivity
 
 
       private static GEO2DSurfaceRasterStyle createPolygonSurfaceRasterStyle(final GEOGeometry geometry) {
-         final JSONObject properties = geometry.getFeature().getProperties();
-         //final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
+         //          final JSONObject properties = geometry.getFeature().getProperties();
+         //         final int colorIndex = (int) properties.getAsNumber("mapcolor7", 0);
          final Color color = FROM_COLOR.wheelStep(7, _colorIndex);
          return new GEO2DSurfaceRasterStyle(color);
       }
