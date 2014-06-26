@@ -5,8 +5,6 @@ package org.glob3.mobile.demo;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BingMapType;
-import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GEO2DLineRasterStyle;
 import org.glob3.mobile.generated.GEO2DLineStringGeometry;
@@ -26,6 +24,7 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
@@ -66,8 +65,8 @@ public class VectorTilesActivity
       _g3mWidget = builder.createWidget();
 
 
-      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(47.39987642274313d, 8.544022519285223d, 1300),
-               TimeInterval.fromSeconds(5));
+      //   _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(47.39987642274313d, 8.544022519285223d, 1300),
+      _g3mWidget.setAnimatedCameraPosition(Geodetic3D.fromDegrees(55.9531d, -3.1889d, 1300), TimeInterval.fromSeconds(5));
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       placeHolder.addView(_g3mWidget);
 
@@ -91,21 +90,37 @@ public class VectorTilesActivity
       //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
 
-      layerSet.addLayer(new BingMapsLayer(BingMapType.AerialWithLabels(),
-               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30)));
+      //      layerSet.addLayer(new BingMapsLayer(BingMapType.AerialWithLabels(),
+      //               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30)));
 
+      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
 
       //  final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
-      final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
-      final int firstLevel = 2;
-      final int maxLevel = 15;
+      //final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
 
+      final String urlTemplate = "http://192.168.1.12:8000/vectorial/scotland_buildings/GEOJSON/{level}/{x}/{y}.geojson";
+
+      final int firstLevel = 2;
+      final int maxLevel = 17;
+
+
+      // SWITZERLAND      
+      //      final Geodetic2D lower = new Geodetic2D( //
+      //               Angle.fromDegrees(45.8176852), //
+      //               Angle.fromDegrees(5.956216));
+      //      final Geodetic2D upper = new Geodetic2D( //
+      //               Angle.fromDegrees(47.803029), //
+      //               Angle.fromDegrees(10.492264));
+      //      
+
+
+      //SCOTLAND       
       final Geodetic2D lower = new Geodetic2D( //
-               Angle.fromDegrees(45.8176852), //
-               Angle.fromDegrees(5.956216));
+               Angle.fromDegrees(54.7226296), //
+               Angle.fromDegrees(-7.6536084));
       final Geodetic2D upper = new Geodetic2D( //
-               Angle.fromDegrees(47.803029), //
-               Angle.fromDegrees(10.492264));
+               Angle.fromDegrees(60.855646), //
+               Angle.fromDegrees(-0.7279944));
 
       final Sector sector = new Sector(lower, upper);
 
