@@ -62,13 +62,61 @@ WebGL/G3MWebGLTemplate/war/WEB-INF/deploy/
 
 *.xccheckout
 
-*.sdf
-*.opensdf
+#Visual studio (list according to https://github.com/github/gitignore/blob/master/VisualStudio.gitignore)
 *.suo
-*.v12.suo
-*.vxproj.user
+*.user
+*.sln.docstates
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
 
-Windows/Generated\ Files/
-Windows/Debug
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
+
+*_i.c
+*_p.c
+*_i.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+
+*.psess
+*.vsp
+*.vspx
 
 
