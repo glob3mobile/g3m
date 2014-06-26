@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{10b8b134-9e76-4582-8875-28eb22ca645e}</ItemsProjectGuid>
+    <ItemsRootNamespace>G3MWindows8App</ItemsRootNamespace>
+    <ItemsProjectName>G3MWindows8App.Shared</ItemsProjectName>
+    <SharedGUID>854ecc90-d8cf-40c8-8bc3-0a45912bcd9a</SharedGUID>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Main.cpp" />
+  </ItemGroup>
+</Project>

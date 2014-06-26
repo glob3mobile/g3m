@@ -1,0 +1,2060 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{f033870e-c50c-44ce-b726-63fb2e4d304d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Specific">
+      <UniqueIdentifier>{35dbc66e-46de-4ad9-b6b1-2dd897a05fd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Basic">
+      <UniqueIdentifier>{89bc0a09-3ed0-48b2-a9f5-eb0f92fcebf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Cameras">
+      <UniqueIdentifier>{dc15e238-20a5-4760-a747-f4e6ae2ed108}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Downloader">
+      <UniqueIdentifier>{3997468a-265a-4e52-8099-7827ff14a8eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\GEO">
+      <UniqueIdentifier>{c6302421-a116-47f1-a877-ea16bb983eae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Geometry">
+      <UniqueIdentifier>{d8b889e2-4d7b-4890-98d3-10bb9386bda1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\GL">
+      <UniqueIdentifier>{d498321f-d4f3-4d35-a687-19c8848ce8e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Interfaces">
+      <UniqueIdentifier>{dd9dd726-3e10-49b2-b8d9-d6a34bcb3f1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\JSON">
+      <UniqueIdentifier>{0fc31c67-2a8b-44a3-9b02-4bca7a3b6d89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Layers">
+      <UniqueIdentifier>{282b423d-ce44-438f-b5c6-84896fd1fdb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Math">
+      <UniqueIdentifier>{71c6ffec-b2c1-445d-984e-af66ea52fde3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Mesh">
+      <UniqueIdentifier>{d15dc8ee-668f-4433-b8ac-570bbf49a3fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Rendererers">
+      <UniqueIdentifier>{332d8e9d-7abc-4cc1-8aa2-d0b37774f824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D">
+      <UniqueIdentifier>{abd7f320-0d60-46fe-a16d-45c8d3758cc2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\DeviceInfo_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MWidget_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\IntBuffer_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Logger_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\NativeGL_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\ShortBuffer_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Storage_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\StringUtils_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\ThreadUtils_win8.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\AbstractImageBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\BalloonCanvasElement.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\BilParser.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\BufferElevationData.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ByteBufferBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ByteBufferIterator.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasElement.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasImageBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasTileImageProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasTileRasterizer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSLexer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSParser.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSSymbolizer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSTokens.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ChangedInfoListener.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ChangedListener.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ChessboardTileImageProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Color.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ColumnCanvasElement.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CompositeElevationData.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CompositeElevationDataProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CompositeTileImageContribution.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CompositeTileImageProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Context.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DebugTileImageProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DebugTileRasterizer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DecimatedSubviewElevationData.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DefaultTileTexturizer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DownloaderImageBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DownloadPriority.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Effects.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ElevationData.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ElevationDataProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferBuilderFromGeodetic.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferElevationData.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FrameTask.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FrameTasksExecutor.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\G3MWidget.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GenericQuadTree.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GFont.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GroupCanvasElement.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IBuffer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ICanvas.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IG3MBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IImageBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IImageUtils.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\InfoDisplay.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\InitialCameraPositionProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IntBufferBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\InterpolatedSubviewElevationData.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IThreadUtils.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\LabelImageBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\LayerBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MapBooBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Mark.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MercatorUtils.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MultiLayerTileTexturizer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\OrderedRenderable.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Petition.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\PlanetRendererBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\PlanetTileTessellator.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\QuadTree.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\RasterLayerTileImageProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\RCObject.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SceneLighting.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ShortBufferBuilder.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ShortBufferElevationData.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SingleBilElevationDataProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SubviewElevationData.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SurfaceElevationProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TextCanvasElement.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TextureIDReference.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TexturesHandler.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Tile.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TiledVectorLayerTileImageProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileElevationDataRequest.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileImageContribution.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileImageProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRasterizer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRasterizerContext.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileTessellator.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileTexturizer.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TimeInterval.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TouchEvent.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\URL.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\WMSBilElevationDataProvider.cpp">
+      <Filter>Common\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\Camera.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraDoubleDragHandler.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraDoubleTapHandler.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraEffects.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraRenderer.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraRotationHandler.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraSingleDragHandler.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraZoomAndRotateHandler.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\ICameraConstrainer.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\SectorAndHeightCameraConstrainer.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\SimpleCameraConstrainer.cpp">
+      <Filter>Common\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\IWebSocket.cpp">
+      <Filter>Common\Downloader</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\NullStorage.cpp">
+      <Filter>Common\Downloader</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\CompositeTileRasterizer.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DCoordinatesArrayData.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DCoordinatesData.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DLineRasterStyle.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DLineStringGeometry.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DMultiLineStringGeometry.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DMultiPolygonGeometry.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DPointGeometry.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DPolygonData.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DPolygonGeometry.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DSurfaceRasterStyle.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOFeature.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOFeatureCollection.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOGeometry.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOGeometry2D.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOJSONParser.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOLabelRasterSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOLine2DMeshSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOLine2DStyle.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOLineRasterSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOMarkSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOMeshSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOMultiLine2DMeshSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOMultiLineRasterSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOObject.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOPolygonRasterSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORasterProjection.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORasterSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORasterSymbolizer.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORenderer.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOShapeSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOStyle.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOSymbol.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOSymbolizer.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOTileRasterizer.cpp">
+      <Filter>Common\GEO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Angle.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\BoundingArea.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Box.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\CoordinateSystem.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Ellipsoid.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\EllipsoidalPlanet.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\FlatPlanet.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Frustum.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Geodetic2D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Geodetic3D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\LayoutUtils.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Matrix44D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Matrix44DProvider.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\MutableMatrix44D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\MutableVector2D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\MutableVector2I.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\MutableVector3D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\NormalsUtils.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Plane.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Planet.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Quadric.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\RectangleI.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Sector.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Sphere.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\SphericalPlanet.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\TaitBryanAngles.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector2D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector2F.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector2I.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector3D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector3F.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector4D.cpp">
+      <Filter>Common\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GL.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLConstants.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLFeature.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLFeatureGroup.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLGlobalState.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLState.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUAttribute.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUUniform.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUVariable.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUVariableValueSet.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\CachedDownloader.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ICanvasUtils.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IDeviceInfo.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IFactory.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ILogger.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IMathUtils.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IStringBuilder.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IStringUtils.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ITextUtils.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\Storage.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\BSONGenerator.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\BSONParser.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\IJSONParser.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONArray.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONBaseObject.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONBoolean.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONDouble.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONFloat.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONGenerator.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONInteger.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONLong.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONNull.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONNumber.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONObject.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONString.cpp">
+      <Filter>Common\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\AndTileCondition.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\BingMapsLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\CartoDBLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\GoogleMapsLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\HereLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\Layer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\LayerSet.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\LevelTileCondition.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\MapBoxLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\MapQuestLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\MercatorTiledLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\OSMLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\RasterLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\SectorTileCondition.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\TiledVectorLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\TMSLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\URLTemplateLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\VectorLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\WMSLayer.cpp">
+      <Filter>Common\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Math\BilinearInterpolator.cpp">
+      <Filter>Common\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Math\Interpolator.cpp">
+      <Filter>Common\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\AbstractGeometryMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\AbstractMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\CompositeMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\DirectMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\FlatColorMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\G3MMeshMaterial.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\G3MMeshParser.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\IndexedGeometryMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\IndexedMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\LeveledMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\LeveledTexturedMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\Mesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\MeshHolder.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\MultiTextureMapping.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\SimpleTextureMapping.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\TexturedMesh.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\TextureMapping.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\TransformableTextureMapping.cpp">
+      <Filter>Common\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\AbstractMeshShape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\BoxShape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\BusyMeshRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\BusyQuadRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ChangedRendererInfoListener.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ChildRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\CircleShape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\CompositeRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\CompositeShape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\DefaultRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\EllipsoidShape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ErrorRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\GLErrorRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDAbsolutePosition.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDAbsoluteSize.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDErrorRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDImageRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDPosition.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDQuadWidget.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDRelativePosition.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDRelativeSize.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDSize.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDWidget.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\LayerTilesRenderParameters.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MarksRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MeshRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MeshShape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MultiTexturedHUDQuadWidget.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\PlanetRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ProtoRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\QuadShape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\Renderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\RenderState.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SceneJSParserStatistics.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SceneJSShapesParser.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGGeometryNode.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGLayerNode.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGMaterialNode.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGNode.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGRotateNode.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGShape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGTextureNode.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGTranslateNode.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\Shape.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapeFullPositionEffect.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapeOrbitCameraEffect.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapePositionEffect.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapeScaleEffect.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapesRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\TerrainTouchListener.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\TilesRenderParameters.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\TrailsRenderer.cpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\D3D\D3DRenderer.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\DeviceInfo_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Downloader_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Factory_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MWidget_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\IntBuffer_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Logger_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\MathUtils_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\NativeGL_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ShortBuffer_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Storage_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\StringBuilder_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\StringUtils_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ThreadUtils_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Timer_win8.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\AbstractImageBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\BalloonCanvasElement.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\BasicShadersGL2.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\BilParser.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\BufferElevationData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ByteBufferBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ByteBufferIterator.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CameraGoToPositionEffect.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasElement.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasImageBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasTileImageProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CanvasTileRasterizer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSLexer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSParser.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSSymbolizer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CartoCSSTokens.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ChangedInfoListener.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ChangedListener.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ChessboardTileImageProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Color.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ColumnCanvasElement.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CompositeElevationData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CompositeElevationDataProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CompositeTileImageContribution.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\CompositeTileImageProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Context.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DebugTileImageProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DebugTileRasterizer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DecimatedSubviewElevationData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DefaultTileTexturizer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DownloaderImageBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\DownloadPriority.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Effects.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ElevationData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ElevationDataProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ErrorHandling.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferBuilderFromCartesian2D.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferBuilderFromCartesian3D.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferBuilderFromColor.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferBuilderFromGeodetic.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FloatBufferElevationData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FrameTask.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\FrameTasksExecutor.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\G3MWidget.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GenericQuadTree.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GFont.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GInitializationTask.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GroupCanvasElement.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\GTask.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IBuffer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ICanvas.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IFloatBuffer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IG3MBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IImageBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IImageBuilderListener.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IImageUtils.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IIntBuffer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\InfoDisplay.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\InitialCameraPositionProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IntBufferBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\InterpolatedSubviewElevationData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IShortBuffer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ITexturizerData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\IThreadUtils.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\LabelImageBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\LabelPosition.h">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\LayerBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\LayerTouchEventListener.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MapBooBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Mark.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MercatorUtils.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\MultiLayerTileTexturizer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\OrderedRenderable.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\PeriodicalTask.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Petition.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\PlanetRendererBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\PlanetTileTessellator.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\QuadTree.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\RasterLayerTileImageProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\RCObject.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SceneLighting.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ShortBufferBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\ShortBufferElevationData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SimpleFloatBufferBuilder.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SingleBilElevationDataProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SubviewElevationData.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\SurfaceElevationProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TextCanvasElement.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TextureIDReference.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TexturesHandler.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\Tile.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TiledVectorLayerTileImageProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileElevationDataRequest.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileImageContribution.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileImageListener.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileImageProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRasterizer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRasterizerContext.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileRenderingListener.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileTessellator.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TileTexturizer.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TimeInterval.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\TouchEvent.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\URL.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\WMSBilElevationDataProvider.hpp">
+      <Filter>Common\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\Camera.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraDoubleDragHandler.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraDoubleTapHandler.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraEffects.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraEventHandler.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraRenderer.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraRotationHandler.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraSingleDragHandler.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\CameraZoomAndRotateHandler.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\ICameraConstrainer.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\SectorAndHeightCameraConstrainer.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras\SimpleCameraConstrainer.hpp">
+      <Filter>Common\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\IBufferDownloadListener.hpp">
+      <Filter>Common\Downloader</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\IImageDownloadListener.hpp">
+      <Filter>Common\Downloader</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\IWebSocket.hpp">
+      <Filter>Common\Downloader</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\IWebSocketListener.hpp">
+      <Filter>Common\Downloader</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader\NullStorage.hpp">
+      <Filter>Common\Downloader</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\CompositeTileRasterizer.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DCoordinatesArrayData.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DCoordinatesData.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DLineRasterStyle.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DLineStringGeometry.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DMultiLineStringGeometry.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DMultiPolygonGeometry.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DPointGeometry.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DPolygonData.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DPolygonGeometry.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEO2DSurfaceRasterStyle.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOFeature.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOFeatureCollection.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOGeometry.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOGeometry2D.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOJSONParser.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOLabelRasterSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOLine2DMeshSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOLine2DStyle.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOLineRasterSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOMarkSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOMeshSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOMultiLine2DMeshSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOMultiLineRasterSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOObject.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOPolygonRasterSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORasterProjection.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORasterSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORasterSymbolizer.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEORenderer.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOShapeSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOStyle.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOSymbol.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOSymbolizer.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GEO\GEOTileRasterizer.hpp">
+      <Filter>Common\GEO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Angle.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\BoundingArea.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\BoundingVolume.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Box.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\CoordinateSystem.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Ellipsoid.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\EllipsoidalPlanet.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Extent.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\FlatPlanet.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Frustum.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Geodetic2D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Geodetic3D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\LayoutUtils.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Matrix44D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Matrix44DProvider.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\MutableMatrix44D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\MutableVector2D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\MutableVector2I.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\MutableVector3D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\NormalsUtils.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Plane.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Planet.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Quadric.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Rectangle.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\RectangleF.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\RectangleI.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Sector.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Sphere.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\SphericalPlanet.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\TaitBryanAngles.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector2D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector2F.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector2I.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector3D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector3F.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry\Vector4D.hpp">
+      <Filter>Common\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GL.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLConstants.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLFeature.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLFeatureGroup.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLGlobalState.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLState.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUAttribute.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUUniform.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUVariable.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUVariableValueSet.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\CachedDownloader.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IByteBuffer.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ICameraActivityListener.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ICanvasUtils.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IDeviceInfo.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IDownloader.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IFactory.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGLTextureId.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGLUniformID.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IImage.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IImageListener.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ILogger.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IMathUtils.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\INativeGL.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IStringBuilder.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IStringUtils.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ITextUtils.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ITileVisitor.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ITimer.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\Storage.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\BSONGenerator.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\BSONParser.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\IJSONParser.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONArray.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONBaseObject.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONBoolean.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONDouble.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONFloat.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONGenerator.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONInteger.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONLong.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONNull.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONNumber.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONObject.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONString.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\JSON\JSONVisitor.hpp">
+      <Filter>Common\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\AndTileCondition.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\BingMapsLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\CartoDBLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\GoogleMapsLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\HereLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\Layer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\LayerCondition.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\LayerSet.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\LevelTileCondition.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\MapBoxLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\MapQuestLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\MercatorTiledLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\OSMLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\RasterLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\SectorTileCondition.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\TiledVectorLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\TMSLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\URLTemplateLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\VectorLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Layers\WMSLayer.hpp">
+      <Filter>Common\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Math\BilinearInterpolator.hpp">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Math\Interpolator.hpp">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\AbstractGeometryMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\AbstractMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\CompositeMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\DirectMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\FlatColorMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\G3MMeshMaterial.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\G3MMeshParser.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\IndexedGeometryMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\IndexedMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\LeveledMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\LeveledTexturedMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\Mesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\MeshHolder.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\MultiTextureMapping.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\SimpleTextureMapping.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\TexturedMesh.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\TextureMapping.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh\TransformableTextureMapping.hpp">
+      <Filter>Common\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\AbstractMeshShape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\BoxShape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\BusyMeshRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\BusyQuadRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ChangedRendererInfoListener.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ChildRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\CircleShape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\CompositeRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\CompositeShape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\DefaultRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\EllipsoidShape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ErrorRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\GLErrorRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDAbsolutePosition.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDAbsoluteSize.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDErrorRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDImageRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDPosition.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDQuadWidget.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDRelativePosition.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDRelativeSize.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDSize.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\HUDWidget.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\LayerTilesRenderParameters.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MarksRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MarkTouchListener.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MeshRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MeshShape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\MultiTexturedHUDQuadWidget.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\PlanetRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ProtoRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\QuadShape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\Renderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\RenderState.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SceneJSParserStatistics.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SceneJSShapesParser.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGGeometryNode.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGLayerNode.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGMaterialNode.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGNode.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGRotateNode.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGShape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGTextureNode.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\SGTranslateNode.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\Shape.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapeFullPositionEffect.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapeOrbitCameraEffect.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapePositionEffect.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapeScaleEffect.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\ShapesRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\TerrainTouchListener.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\TilesRenderParameters.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\TrailsRenderer.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers\VisibleSectorListener.hpp">
+      <Filter>Common\Rendererers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\D3D\D3DRenderer.hpp">
+      <Filter>D3D</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\G3MWidget.cpp.orig">
+      <Filter>Common\Basic</Filter>
+    </None>
+  </ItemGroup>
+</Project>
