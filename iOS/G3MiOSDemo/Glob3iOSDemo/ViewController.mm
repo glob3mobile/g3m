@@ -281,7 +281,8 @@ Mesh* createSectorMesh(const Planet* planet,
   
   //[self initCustomizedWithBuilder];
   
-  [self testElevationNavigation];
+  [self testGCElevations];
+  //[self testElevationNavigation];
   
   //  [self initWithMapBooBuilder];
   
@@ -3947,6 +3948,81 @@ public:
   Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
   [self G3MWidget].widget->setCameraPosition(position);
   [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
+}
+
+- (void) testGCElevations
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  //const Planet* planet = Planet::createEarth();
+  //const Planet* planet = Planet::createSphericalEarth();
+  const Planet* planet = Planet::createFlatEarth();
+  builder.setPlanet(planet);
+  
+  // create wmslayer from Grafcan
+  LayerSet* layerSet = new LayerSet();
+  WMSLayer* grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+                                        URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),//gcSector,
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 17),
+                                        TimeInterval::fromDays(30),
+                                        true);
+  layerSet->addLayer(grafcanLIDAR);
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  // create elevations for Bandama
+  Sector bandamaBilSector = Sector::fromDegrees (28.0186134922002,                  // min latitude
+                                         -15.466485021954,                // min longitude
+                                         28.0501903939333,                 // max latitude
+                                         -15.4475303331328);               // max longitude
+  Vector2I bandamaExtent = Vector2I(371, 702);           // image resolution
+  URL bandamaurl = URL("file:///mdt1_bandama.bil", false);
+  ElevationDataProvider* elevationDataProviderBandama = new SingleBilElevationDataProvider(bandamaurl, bandamaBilSector, bandamaExtent);
+  
+  // create elevations for GC
+  Sector gcSector = Sector::fromDegrees (27.7116484957735,                  // min latitude
+                                       -15.90589160041418,                // min longitude
+                                       28.225913322423995,                 // max latitude
+                                       -15.32910937385168);               // max longitude
+  Vector2I extent = Vector2I(1000, 1000);           // image resolution
+  URL url = URL("file:///gc.bil", false);
+  ElevationDataProvider* elevationDataProviderGC = new SingleBilElevationDataProvider(url, gcSector, extent);
+  
+  // set elevation data provider
+  CompositeElevationDataProvider* elevationDataProvider = new CompositeElevationDataProvider();
+  elevationDataProvider->addElevationDataProvider(elevationDataProviderGC);
+  elevationDataProvider->addElevationDataProvider(elevationDataProviderBandama);
+  builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
+  float verticalExaggeration = 1.0f;
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
+  
+ // create camera renderers
+  CameraRenderer* cameraRenderer = [self createCameraRenderer];
+  builder.setCameraRenderer(cameraRenderer);
+  
+  /* webgl optimization
+   bool testingTileCache = true;
+   if (testingTileCache){
+   builder.getPlanetRendererBuilder()->setTileCacheSize(200);
+   builder.getPlanetRendererBuilder()->setDeleteTexturesOfInvisibleTiles(false);
+   }*/
+  
+  // initialization
+  builder.initializeWidget();
+  
+  // set frustumCullingFactor
+  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
+  
+  // set camera looking at Tenerife
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(28.017), Angle::fromDegrees(-15.525), 5800);
+  [self G3MWidget].widget->setCameraPosition(position);
+  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-36.5));
+  [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-25.29));
 }
 
 @end
