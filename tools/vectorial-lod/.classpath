@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/G3MSharedSDK"/>
+	<classpathentry kind="lib" path="lib/postgis.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-9.3-1100.jdbc4.jar"/>
+	<classpathentry kind="src" path="/G3MJavaDesktopSDK"/>
+	<classpathentry kind="lib" path="lib/igolibs.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<parameters>
+
+<!-- =================================================================================================== --> 
+<!-- Postgis database parameters -->  
+
+   <!-- Url address for postgis database host access -->
+   <host>192.168.1.14</host>
+   <!-- <host>igosoftware.dyndns.org</host> -->
+   
+   <!-- Port number for postgis database access -->
+   <port>5432</port>
+   <!-- <port>5414</port> -->
+   
+   <!-- User name for postgis database access -->
+   <user>postgres</user>
+   
+   <!-- User password for postgis database access -->
+   <password>postgres1g0</password>
+   
+   <!-- Name of the accessed postgis database -->
+   <database_name>vectorial_test</database_name>
+
+
+<!-- =================================================================================================== --> 
+<!-- LOD parameters -->   
+
+   <pyramid>
+	<type>epsg:900913</type>
+	<top_sector>-90.0, -180.0, 90.0, 180.0</top_sector>
+	<splitsByLatitude>1</splitsByLatitude>
+	<splitsByLongitude>1</splitsByLongitude>
+   </pyramid>
+   
+   <!-- Projection selection. true=MERCATOR (epsg:900913 Google) / false=WGS84 (epsg:4326) -->
+   <mercator>true</mercator>
+   
+   <!-- first level of tiles to be generated -->
+   <first_level>5</first_level>
+   
+   <!-- last level of tiles to be generated -->
+   <max_level>5</max_level>
+   
+   <!-- valid output format: geojson, geobson, both -->
+   <output_format>both</output_format>
+   
+   <!-- output folder path, using the correct operating system path separator. By default, LOD folder -->
+   <!-- shall be used at the current path. -->
+   <output_folder>/home/fpulido/Escritorio/LOD</output_folder>
+   
+   <!-- maximum number of vertex in a geojson/geobson file -->
+   <max_vertex>10000</max_vertex>
+   
+   <!-- Geometry replacement allowed or not. -->
+   <!-- (MULTI)LINE or (MULTI)POLYGON filtered during processing will be replaced by POINT. -->
+   <!-- REPLACE_FILTERED == 0, means substitutions not allowed.  -->
+   <!-- REPLACE_FILTERED > 0, this number is the maximun number of substitutions per tile -->
+   <replace_filtered>20</replace_filtered>
+   
+   <!-- maximum number of attemps to reduce the number of vertex in a file -->
+   <!-- <entry key="MAX_TUNNING_ATTEMPS">10</entry> -->
+   
+
+<!-- =================================================================================================== --> 
+<!-- Parameters for specific vectorial data -->  
+
+   <data_sources>
+      <!-- datasource: name of the table in the database with the target vectorial data -->
+
+      <!-- filter criteria: using pure database query format that will be included in a where clause -->
+      <!-- i.e. "continent" like 'Euro%' AND "pop_est" > 10000000 -->
+
+      <!-- properties: list of fields/columns associated to the vectorial data that shall be included as -->
+      <!-- feature properties in the resultant geoJson file. Use a comma separated list -->
+
+      <datasource name = "ne_10m_admin_0_countries">
+         <filter_criteria>true</filter_criteria>
+         <properties>mapcolor7</properties>
+      </datasource>
+
+      <datasource name = "ne_10m_admin_0_boundary_lines_land">
+         <filter_criteria>true</filter_criteria>
+         <properties>scalerank, labelrank</properties>
+      </datasource>
+
+      <!-- <datasource name = "ne_10m_populated_places">
+         <filter_criteria>ORDER BY "LABELRANK" DESC LIMIT 20</filter_criteria>
+         <properties>LABELRANK</properties>
+      </datasource> -->
+
+   </data_sources>
+
+</parameters>
