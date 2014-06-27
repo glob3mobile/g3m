@@ -136,9 +136,10 @@ public class SubviewElevationData extends ElevationData
      return _hasNoData;
   }
 
-  public final float getBufferPointer()
+  public final float[] getBufferPointer()
   {
      return _buffer;
   }
+
 
 }
