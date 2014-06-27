@@ -197,7 +197,8 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   model->getLayerSet()->addLayer(rasterLayer);
 
 //  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
-  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
+//  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
+  const std::string urlTemplate = "http://192.168.1.12/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
   const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
                                                  47.803029, 10.492264);
   const int firstLevel = 2;
