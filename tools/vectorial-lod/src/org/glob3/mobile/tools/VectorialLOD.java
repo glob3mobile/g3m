@@ -46,6 +46,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import es.igosoftware.util.GPair;
 import es.igosoftware.util.GProgress;
 import es.igosoftware.util.GStringUtils;
 import es.igosoftware.util.GUndeterminateProgress;
@@ -55,29 +56,30 @@ public class VectorialLOD {
 
    //-- Internal constants definition ------------------------------------------------------------------
 
-   final static String  DEFAULT_PARAMETERS_FILE       = "parameters.xml";
-   final static String  METADATA_FILENAME             = "metadata.json";
-   final static String  EMPTY_GEOJSON                 = "{\"type\":\"FeatureCollection\",\"features\":null}";
-   final static String  INTERNAL_SRID                 = "4326";
-   final static String  MERCATOR_PYRAMID              = "MERCATOR";
-   final static String  WGS84_PYRAMID                 = "WGS84";
+   final static String  DEFAULT_PARAMETERS_FILE  = "parameters.xml";
+   final static String  METADATA_FILENAME        = "metadata.json";
+   final static String  EMPTY_GEOJSON            = "{\"type\":\"FeatureCollection\",\"features\":null}";
+   final static String  INTERNAL_SRID            = "4326";
+   final static String  MERCATOR_PYRAMID         = "MERCATOR";
+   final static String  WGS84_PYRAMID            = "WGS84";
+   final static String  FILTERED_TYPE_LABEL      = "lodType";
 
-   final static int     CONNECTIONS_SCALE_FACTOR      = 2;
-   final static float   QUALITY_FACTOR                = 1.0f;
-   final static double  OVERLAP_PERCENTAGE            = 5.0;
-   final static int     CONNECTION_TIMEOUT            = 5;                                                   //seconds
-   final static int     PIXELS_PER_TILE               = 256;
-   final static int     SQUARED_PIXELS_PER_TILE       = (int) Math.pow(
-                                                               (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
-                                                               2);
+   final static int     CONNECTIONS_SCALE_FACTOR = 2;
+   final static float   QUALITY_FACTOR           = 1.0f;
+   //final static double  OVERLAP_PERCENTAGE            = 5.0;
+   final static int     CONNECTION_TIMEOUT       = 5;                                                   //seconds
+   final static int     PIXELS_PER_TILE          = 256;
+   //   final static int     SQUARED_PIXELS_PER_TILE       = (int) Math.pow(
+   //                                                               (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100))),
+   //                                                               2);
 
-   final static int     INITIAL_AREA_FACTOR           = 3;
-   final static int     MAX_TUNNING_ATTEMPS           = 10;
-   final static int     AREA_STEP                     = 1;
-   final static float   QF_STEP                       = 2.0f;
-   final static double  EMPTY_TILES_CORRECTION_FACTOR = 1.0;                                                 // 1.0 = assume worst case: 100% of tiles contains data
+   //   final static int     MAX_TUNNING_ATTEMPS      = 10;
+   final static int     INITIAL_AREA_FACTOR      = 3;
+   final static int     AREA_STEP                = 1;
+   final static float   QF_STEP                  = 4.0f;
+   //final static double  EMPTY_TILES_CORRECTION_FACTOR = 1.0;                                                 // 1.0 = assume worst case: 100% of tiles contains data
 
-   final static boolean VERBOSE                       = false;
+   final static boolean VERBOSE                  = false;
 
    private enum GeomType {
       POINT,
@@ -89,23 +91,26 @@ public class VectorialLOD {
    }
 
    //-- Data base connection parameters ----------------------------------------------------------------
-   private static String                     HOST               = "igosoftware.dyndns.org";
-   private static String                     PORT               = "5414";
-   private static String                     USER               = "postgres";
-   private static String                     PASSWORD           = "postgres1g0";
-   private static String                     DATABASE_NAME      = "vectorial_test";
+   private static String                     HOST                     = "";
+   private static String                     PORT                     = "";
+   private static String                     USER                     = "";
+   private static String                     PASSWORD                 = "";
+   private static String                     DATABASE_NAME            = "";
 
    //-- Vectorial LOD generation algorithm parameters --------------------------------------------------
-   private static String                     PARAMETERS_FILE    = DEFAULT_PARAMETERS_FILE;
+   private static String                     PARAMETERS_FILE          = DEFAULT_PARAMETERS_FILE;
    //private static float                      QUALITY_FACTOR     = 1.0f;
-   private static boolean                    MERCATOR           = true;                         // MERCATOR: EPSG:3857, EPSG:900913 (Google)
-   private static int                        FIRST_LEVEL        = 0;
-   private static int                        MAX_LEVEL          = 3;
-   private static int                        MAX_DB_CONNECTIONS = 2;
-   private static String                     OUTPUT_FORMAT      = "geojson";                    // valid values: geojson, geobson, both
-   private static String                     ROOT_FOLDER        = "LOD";
-   private static long                       MAX_VERTEX         = 10000;
-   private static int                        REPLACE_FILTERED   = 20;
+   private static boolean                    MERCATOR                 = true;                                                                            // MERCATOR: EPSG:3857, EPSG:900913 (Google)
+   private static int                        FIRST_LEVEL              = 0;
+   private static int                        MAX_LEVEL                = 3;
+   private static int                        MAX_DB_CONNECTIONS       = 2;
+   private static String                     OUTPUT_FORMAT            = "geojson";                                                                       // valid values: geojson, geobson, both
+   private static String                     ROOT_FOLDER              = "LOD";
+   private static long                       MAX_VERTEX               = 5000;
+   private static int                        REPLACE_FILTERED         = 20;
+   private static double                     OVERLAP_PERCENTAGE       = 5.0;                                                                             // default value
+   private static float                      PIXELS_PER_EXTENDED_TILE = (float) (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100)));
+   private static int                        SQUARED_PIXELS_PER_TILE  = (int) Math.pow(PIXELS_PER_EXTENDED_TILE, 2);
 
    //-- Data source and filter parameters --------------------------------------------------------------
    //   private static String[]                   DATABASE_TABLES;
@@ -113,27 +118,27 @@ public class VectorialLOD {
    //   private static String[][]                 PROPERTIES;
 
    //-- Common variables for all data sources -----------------------------------------------------------
-   private static DataBaseService            _dataBaseService   = null;
-   private static String                     _lodFolder         = null;
-   private static String                     _geojsonFolder     = null;
-   private static String                     _geobsonFolder     = null;
+   private static DataBaseService            _dataBaseService         = null;
+   private static String                     _lodFolder               = null;
+   private static String                     _geojsonFolder           = null;
+   private static String                     _geobsonFolder           = null;
    //private static String                     _metadataFileName  = null;
    private static GConcurrentService         _concurrentService;
    private static LayerTilesRenderParameters _renderParameters;
-   private static String                     _projection        = null;
-   private static int                        _firstLevelCreated = 0;
-   private static int                        _lastLevelCreated  = 0;
-   private static AtomicLong                 _progressCounter   = new AtomicLong(0);
+   private static String                     _projection              = null;
+   private static int                        _firstLevelCreated       = 0;
+   private static int                        _lastLevelCreated        = 0;
+   private static AtomicLong                 _progressCounter         = new AtomicLong(0);
 
    //-- Different variables for any data source ---------------------------------------------------------
-   private static TileSector                 _globalBoundSector = TileSector.FULL_SPHERE_SECTOR;
+   private static TileSector                 _globalBoundSector       = TileSector.FULL_SPHERE_SECTOR;
    //   private static GeomType                   _geomType          = null;
    //   private static String                     _theGeomColumnName = null;                         //"the_geom"; 
    //   private static String                     _geomSRID          = null;
 
    //-- New for merged vectorial LOD ---------------------------------------------------
 
-   private static List<DataSource>           _dataSources       = new ArrayList<DataSource>();
+   private static List<DataSource>           _dataSources             = new ArrayList<DataSource>();
 
    //----------------------------------------------------------------------------------
 
@@ -372,7 +377,7 @@ public class VectorialLOD {
       if (filteredQuery != null) {
          filteredResult = executeQuery(filteredQuery, conn);
          if (!isEmptyString(filteredResult)) {
-            filteredResult = addPropertyToExistingGeojson(filteredResult, "lodType", lodProperty);
+            filteredResult = addPropertyToExistingGeojson(filteredResult, FILTERED_TYPE_LABEL, lodProperty);
             //System.out.println("filteredResult: " + filteredResult);
          }
       }
@@ -789,11 +794,8 @@ public class VectorialLOD {
       final double hypotenuse = Math.sqrt(Math.pow(sector._deltaLatitude._degrees, 2)
                                           + Math.pow(sector._deltaLongitude._degrees, 2));
 
-      final float tolerance = (float) (hypotenuse / (qualityFactor * 512f));
-
-      //      if (VERBOSE) {
-      //         System.out.println("tolerance: " + tolerance);
-      //      }
+      //final float tolerance = (float) (hypotenuse / (qualityFactor * 512f));
+      final float tolerance = (float) (hypotenuse / (qualityFactor * PIXELS_PER_EXTENDED_TILE));
 
       return tolerance;
    }
@@ -1098,7 +1100,7 @@ public class VectorialLOD {
       final String folderName = baseFolder + File.separatorChar + sector._level;
       if (!new File(folderName).exists()) {
          new File(folderName).mkdir();
-         //TODO: -- provisional: dejarlo comentado mientras generemos tiles vacios. Descomentar luego --
+         //TODO: -- provisional: left commented while we generate empty tiles. Uncomment after --
          //         if (sector._level <= _firstLevelCreated) {
          //            _firstLevelCreated = sector._level;
          //         }
@@ -1365,7 +1367,7 @@ public class VectorialLOD {
          return;
       }
 
-      //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
+      //TODO: -- provisional: left at this point while we generate empty tiles. Remove after --
       if (!_globalBoundSector.intersects(sector)) {
          return;
       }
@@ -1379,22 +1381,23 @@ public class VectorialLOD {
          int af = INITIAL_AREA_FACTOR;
          float qf = QUALITY_FACTOR;
          long numVertex = 0;
-         int numAttemps = 0;
+         long numVertexBefore = 1000000;
+         //int numAttemps = 0;
          boolean optimizeArea = true;
-         boolean outLimit = true;
+         boolean overLimit = true;
 
          do {
             geoJsonResult = null;
             filteredResult = null;
             containsData = false;
 
-            if (numAttemps > 0) {
-               ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.label());
-            }
+            //            if (numAttemps > 0) {
+            //               ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.label());
+            //            }
 
             for (final DataSource ds : dataSources) {
 
-               //TODO: -- provisional: dejarlo comentado mientras generemos tiles vacios. Descomentar luego --
+               //TODO: -- provisional: left commented while we generate empty tiles. Uncomment after --
                //            if (!ds._boundSector.intersects(sector)) {
                //               continue;
                //            }
@@ -1419,11 +1422,13 @@ public class VectorialLOD {
                numVertex = getGeomVertexCount(geoJsonResult);
             }
 
-            if ((numVertex <= MAX_VERTEX)) {
+            if ((numVertex <= MAX_VERTEX) || (numVertex >= numVertexBefore)) {
                //System.out.println("numAttemps: " + numAttemps);
-               outLimit = false;
+               overLimit = false;
             }
             else {
+               ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.label());
+
                //to force alternative optimization. first attemp, try area; second attempt try quality factor
                if (optimizeArea) {
                   // first attempt: increase area filter factor
@@ -1433,11 +1438,14 @@ public class VectorialLOD {
                   // second attempt: reduce quality factor
                   qf = qf / QF_STEP;
                }
-               numAttemps++;
+
+               //numAttemps++;
+               numVertexBefore = numVertex;
                optimizeArea = !optimizeArea;
             }
          }
-         while ((outLimit) && (numAttemps < MAX_TUNNING_ATTEMPS));
+         while (overLimit);
+         //while ((overLimit) && (numAttemps < MAX_TUNNING_ATTEMPS));
 
          if (!isEmptyString(geoJsonResult)) {
             geoJsonResult = addFeatureToExistingGeojson(geoJsonResult, filteredResult);
@@ -1513,7 +1521,7 @@ public class VectorialLOD {
       progress.finish();
 
       //-- correct the result based on a estimation of empty tiles
-      _progressCounter.set((long) (_progressCounter.get() * EMPTY_TILES_CORRECTION_FACTOR));
+      //_progressCounter.set((long) (_progressCounter.get() * EMPTY_TILES_CORRECTION_FACTOR));
       System.out.println("Number of tiles to process estimation: " + _progressCounter.get());
 
       //restart concurrent service for later processing
@@ -1656,7 +1664,7 @@ public class VectorialLOD {
       System.out.println("== FIRST LEVEL: " + _firstLevelCreated);
       System.out.println("== LAST LEVEL: " + _lastLevelCreated);
       System.out.println("== OUTPUT FORMAT: " + outputFormat);
-      System.out.println("== OUTPUT FOLDER: " + ROOT_FOLDER);
+      System.out.println("== OUTPUT FOLDER: " + _lodFolder);
       System.out.println("==");
 
       System.out.println("== DATA SOURCES:");
@@ -1781,7 +1789,7 @@ public class VectorialLOD {
                                        final TileSector sector) {
 
       try {
-         //TODO: -- provisional: dejarlo aqui mientras generemos tiles vacios. Quitar luego --
+         //TODO: -- provisional: left at this point while we generate empty tiles. Remove after --
          if (sector._level < _firstLevelCreated) {
             _firstLevelCreated = sector._level;
          }
@@ -1973,6 +1981,17 @@ public class VectorialLOD {
 
       _renderParameters = mercator ? LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel)
                                   : LayerTilesRenderParameters.createDefaultWGS84(Sector.fullSphere(), firstLevel, maxLevel);
+
+   }
+
+
+   private static void initilializeData() {
+
+      initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
+
+      //recompute after reading overlap percentage from config file
+      PIXELS_PER_EXTENDED_TILE = (int) (PIXELS_PER_TILE + (PIXELS_PER_TILE * ((2 * OVERLAP_PERCENTAGE) / 100)));
+      SQUARED_PIXELS_PER_TILE = (int) Math.pow(PIXELS_PER_EXTENDED_TILE, 2);
 
       _firstLevelCreated = MAX_LEVEL;
       _lastLevelCreated = FIRST_LEVEL;
@@ -2374,7 +2393,7 @@ public class VectorialLOD {
                      tmp = node.getLastChild().getTextContent().trim();
                      if (!isEmptyString(tmp)) {
                         DATABASE_NAME = tmp.trim();
-                        System.out.println("DATABASE_NAME: " + DATABASE_NAME);
+                        System.out.println("DATABASE NAME: " + DATABASE_NAME);
                      }
                      else {
                         System.err.println("Invalid DATABASE_NAME argument.");
@@ -2401,7 +2420,7 @@ public class VectorialLOD {
                      tmp = node.getLastChild().getTextContent().trim();
                      if (!isEmptyString(tmp)) {
                         FIRST_LEVEL = Integer.parseInt(tmp.trim());
-                        System.out.println("FIRST_LEVEL: " + FIRST_LEVEL);
+                        System.out.println("FIRST LEVEL: " + FIRST_LEVEL);
                      }
                      else {
                         System.err.println("Invalid FIRST_LEVEL argument.");
@@ -2412,7 +2431,7 @@ public class VectorialLOD {
                      tmp = node.getLastChild().getTextContent().trim();
                      if (!isEmptyString(tmp)) {
                         MAX_LEVEL = Integer.parseInt(tmp.trim());
-                        System.out.println("MAX_LEVEL: " + MAX_LEVEL);
+                        System.out.println("MAX LEVEL: " + MAX_LEVEL);
                      }
                      else {
                         System.err.println("Invalid MAX_LEVEL argument.");
@@ -2423,7 +2442,7 @@ public class VectorialLOD {
                      tmp = node.getLastChild().getTextContent().trim();
                      if (!isEmptyString(tmp)) {
                         OUTPUT_FORMAT = tmp.trim();
-                        System.out.println("OUTPUT_FORMAT: " + OUTPUT_FORMAT);
+                        System.out.println("OUTPUT FORMAT: " + OUTPUT_FORMAT);
                      }
                      else {
                         System.err.println("Invalid OUTPUT_FORMAT argument.");
@@ -2434,7 +2453,7 @@ public class VectorialLOD {
                      tmp = node.getLastChild().getTextContent().trim();
                      if (!isEmptyString(tmp)) {
                         ROOT_FOLDER = tmp.trim();
-                        System.out.println("OUTPUT_FOLDER: " + ROOT_FOLDER);
+                        System.out.println("OUTPUT FOLDER: " + ROOT_FOLDER);
                      }
                      else {
                         System.out.println();
@@ -2445,7 +2464,7 @@ public class VectorialLOD {
                      tmp = node.getLastChild().getTextContent().trim();
                      if (!isEmptyString(tmp)) {
                         MAX_VERTEX = Long.parseLong(tmp.trim());
-                        System.out.println("MAX_VERTEX: " + MAX_VERTEX);
+                        System.out.println("MAX VERTEX: " + MAX_VERTEX);
                      }
                      else {
                         System.out.println();
@@ -2456,12 +2475,24 @@ public class VectorialLOD {
                      tmp = node.getLastChild().getTextContent().trim();
                      if (!isEmptyString(tmp)) {
                         REPLACE_FILTERED = Integer.parseInt(tmp.trim());
-                        System.out.println("REPLACE_FILTERED: " + REPLACE_FILTERED);
+                        System.out.println("REPLACE FILTERED: " + REPLACE_FILTERED);
 
                      }
                      else {
                         System.out.println();
                         System.err.println("Invalid REPLACE_FILTERED argument. Using default value: " + REPLACE_FILTERED);
+                     }
+                  }
+                  else if (node.getNodeName().equals("overlap_percentage")) {
+                     tmp = node.getLastChild().getTextContent().trim();
+                     if (!isEmptyString(tmp)) {
+                        OVERLAP_PERCENTAGE = Double.parseDouble(tmp.trim());
+                        System.out.println("OVERLAP PERCENTAGE: " + OVERLAP_PERCENTAGE);
+
+                     }
+                     else {
+                        System.out.println();
+                        System.err.println("Invalid OVERLAP_PERCENTAGE argument. Using default value: " + OVERLAP_PERCENTAGE);
                      }
                   }
                   else if (node.getNodeName().equals("data_sources")) {
@@ -2594,7 +2625,7 @@ public class VectorialLOD {
 
             System.out.println("done.");
 
-            initilializeRenderParameters(MERCATOR, FIRST_LEVEL, MAX_LEVEL);
+            initilializeData();
 
             // batch mode to generate full LOD pyramid for a vectorial data source
             launchVectorialLODProcessing(_dataSources);

@@ -3,8 +3,7 @@
 ===============================================
 
 RELEASE:
-1.0 (2014/04/25)
-2.0 (2014/06/17)
+1.0 (2014/06/23)
   - Support for multiple data sources
 
 -------------------------------------------------------------------------------
@@ -39,6 +38,7 @@ REQUIREMENTS:
 - postgis: 1.5 or superior
 - pgAdmin: 1.18 or superior
 
+* Performance reasons makes absolutely necessary the creation of a spatial index in the postgis data source tables, either during the import data process or after it. Use the 'gist' (Generalized Search Tree) function for this purpose. i.e. CREATE INDEX italy_buildings_geom_index ON italy_buildings USING gist(the_geom);
 
 -------------------------------------------------------------------------------
 USER PARAMETERS:
@@ -69,6 +69,7 @@ This configuration file will include the following parameters (as tags in XML fo
 - output_folder: output folder path, using the correct operating system path separator. By default, LOD folder shall be used at the current path.
 - max_vertex: maximum number of vertex in a geojson/geobson file. If number of vertex obtained is over this limit, a optimization/filtering process shall be launched.
 - replace_filtered: Geometry replacement allowed or not. (MULTI)LINE or (MULTI)POLYGON filtered during processing will be replaced by POINT in the output file. REPLACE_FILTERED == 0, means substitutions not allowed. REPLACE_FILTERED > 0, this number is the maximun number of substitutions per tile.
+- overlap_percentage: percentage (%) of overlapping for neighbor tiles (use 0% for generation of tiles for open layers)
 
 //========================================================================================
 ** Parameters for specific vectorial data:

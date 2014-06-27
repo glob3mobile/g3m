@@ -25,6 +25,13 @@
 
 <!-- =================================================================================================== --> 
 <!-- LOD parameters -->   
+
+   <pyramid>
+	<type>epsg:900913</type>
+	<top_sector>-90.0, -180.0, 90.0, 180.0</top_sector>
+	<splitsByLatitude>1</splitsByLatitude>
+	<splitsByLongitude>1</splitsByLongitude>
+   </pyramid>
    
    <!-- Projection selection. true=MERCATOR (epsg:900913 Google) / false=WGS84 (epsg:4326) -->
    <mercator>true</mercator>
