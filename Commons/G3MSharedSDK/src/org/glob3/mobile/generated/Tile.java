@@ -178,7 +178,7 @@ public class Tile
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning THIS LINE IS PROBLEMATIC WHEN ELEVATIONDATAPROVIDER IS ASYNCHRONOUS
-    return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraFrustumInModelCoordinates));
+    return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraWiderFrustumInModelCoordinates));
   }
 
   private boolean _lastMeetsRenderCriteriaResult;
@@ -287,7 +287,7 @@ public class Tile
     if (_level > GlobalMembersTile.MAX_LOD)
     {
       GlobalMembersTile.MAX_LOD = _level;
-      ILogger.instance().logInfo("MAXLOD = %d\n", _level);
+      //ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
     }
   
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);

@@ -533,6 +533,11 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     // Saving camera for use in onTouchEvent
     _lastCamera = rc.getCurrentCamera();
   
+  
+    //printf ("--camera height = %.2f\n", _lastCamera->getGeodeticPosition()._height);
+  
+  
+  
     _statistics.clear();
   
     final IDeviceInfo deviceInfo = IFactory.instance().getDeviceInfo();
