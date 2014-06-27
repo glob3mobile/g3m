@@ -187,7 +187,7 @@ public class MeshRenderer extends DefaultRenderer
     {
       Mesh mesh = _meshes.get(i);
       final BoundingVolume boundingVolume = mesh.getBoundingVolume();
-      if (boundingVolume.touchesFrustum(frustum))
+      if (boundingVolume != null && boundingVolume.touchesFrustum(frustum))
       {
         mesh.render(rc, _glState);
       }
