@@ -110,7 +110,10 @@ public class LayerSet implements ChangedInfoListener
       if (_layers.get(i) != null)
          _layers.get(i).dispose();
     }
-    _tileImageProvider._release();
+    if (_tileImageProvider != null)
+    {
+      _tileImageProvider._release();
+    }
   }
 
   public final void removeAllLayers(boolean deleteLayers)

@@ -155,48 +155,54 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
     final JSONObject jsonObject = jsonBaseObject.asObject();
     if (jsonObject == null)
     {
-      ILogger.instance().logError("Invalid format for \"%s\"", _url._path);
+      ILogger.instance().logError("Invalid format for 'base object' of \"%s\"", _url._path);
     }
     else
     {
       final JSONArray jsonCoordinates = jsonObject.getAsArray("coordinates");
-
-      FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_context.getPlanet());
-
-      final int coordinatesSize = jsonCoordinates.size();
-      for (int i = 0; i < coordinatesSize; i += 3)
+      if (jsonCoordinates == null)
       {
-        final double latInDegrees = jsonCoordinates.getAsNumber(i, 0);
-        final double lonInDegrees = jsonCoordinates.getAsNumber(i + 1, 0);
-        final double height = jsonCoordinates.getAsNumber(i + 2, 0);
-
-        vertices.add(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height);
+        ILogger.instance().logError("Invalid format for 'coordinates' of \"%s\"", _url._path);
+        ILogger.instance().logInfo("\"%s\"", jsonObject.description());
       }
-
-      final JSONArray jsonNormals = jsonObject.getAsArray("normals");
-      final int normalsSize = jsonNormals.size();
-      IFloatBuffer normals = IFactory.instance().createFloatBuffer(normalsSize);
-      for (int i = 0; i < normalsSize; i++)
+      else
       {
-        normals.put(i, (float) jsonNormals.getAsNumber(i, 0));
+        FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_context.getPlanet());
+
+        final int coordinatesSize = jsonCoordinates.size();
+        for (int i = 0; i < coordinatesSize; i += 3)
+        {
+          final double latInDegrees = jsonCoordinates.getAsNumber(i, 0);
+          final double lonInDegrees = jsonCoordinates.getAsNumber(i + 1, 0);
+          final double height = jsonCoordinates.getAsNumber(i + 2, 0);
+
+          vertices.add(Angle.fromDegrees(latInDegrees), Angle.fromDegrees(lonInDegrees), height);
+        }
+
+        final JSONArray jsonNormals = jsonObject.getAsArray("normals");
+        final int normalsSize = jsonNormals.size();
+        IFloatBuffer normals = IFactory.instance().createFloatBuffer(normalsSize);
+        for (int i = 0; i < normalsSize; i++)
+        {
+          normals.put(i, (float) jsonNormals.getAsNumber(i, 0));
+        }
+
+        final JSONArray jsonIndices = jsonObject.getAsArray("indices");
+        final int indicesSize = jsonIndices.size();
+        IShortBuffer indices = IFactory.instance().createShortBuffer(indicesSize);
+        for (int i = 0; i < indicesSize; i++)
+        {
+          indices.put(i, (short) jsonIndices.getAsNumber(i, 0));
+        }
+
+        _mesh = new IndexedMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), indices, 1, 1, _color, null, 1, true, normals); // depthTest, -  colorsIntensity, -  colors, -  flatColor -  pointSize -  lineWidth
+
+        if (vertices != null)
+           vertices.dispose();
+
+        _color = null;
       }
-
-      final JSONArray jsonIndices = jsonObject.getAsArray("indices");
-      final int indicesSize = jsonIndices.size();
-      IShortBuffer indices = IFactory.instance().createShortBuffer(indicesSize);
-      for (int i = 0; i < indicesSize; i++)
-      {
-        indices.put(i, (short) jsonIndices.getAsNumber(i, 0));
-      }
-
-      _mesh = new IndexedMesh(GLPrimitive.triangles(), true, vertices.getCenter(), vertices.create(), indices, 1, 1, _color, null, 1, true, normals); // depthTest, -  colorsIntensity, -  colors, -  flatColor -  pointSize -  lineWidth
-
-      if (vertices != null)
-         vertices.dispose();
-
-      _color = null;
     }
-
   }
 
 
