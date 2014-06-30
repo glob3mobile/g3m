@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */; };
+		349B218B196160F300F3397C /* GEORectangleRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */; };
 		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
 		383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
@@ -718,6 +720,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				349B218B196160F300F3397C /* GEORectangleRasterSymbol.hpp in CopyFiles */,
 				CF6CCE3A19254BA900AA3ED7 /* ChessboardLayer.hpp in CopyFiles */,
 				CF6CCE3B19254BA900AA3ED7 /* ProceduralLayer.hpp in CopyFiles */,
 				CF8649021921616B001D643A /* ICanvasUtils.hpp in CopyFiles */,
@@ -1095,6 +1098,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORectangleRasterSymbol.cpp; path = Commons/GEO/GEORectangleRasterSymbol.cpp; sourceTree = "<group>"; };
+		349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORectangleRasterSymbol.hpp; path = Commons/GEO/GEORectangleRasterSymbol.hpp; sourceTree = "<group>"; };
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
 		382D4B95159DC26B00FE9296 /* IStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStorage.hpp; path = Commons/Interfaces/IStorage.hpp; sourceTree = "<group>"; };
 		383BD3791577EDC00012AC53 /* Factory_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Factory_iOS.hpp; path = Specific/Derived/Factory_iOS.hpp; sourceTree = "<group>"; };
@@ -2551,6 +2556,8 @@
 				CF86B90717E2426C00E5659C /* CompositeTileRasterizer.hpp */,
 				CFAC9E9D18CE277D00EE57EF /* GEOLabelRasterSymbol.cpp */,
 				CFAC9E9E18CE277D00EE57EF /* GEOLabelRasterSymbol.hpp */,
+				349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */,
+				349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */,
 			);
 			name = GEO;
 			sourceTree = "<group>";
@@ -3186,6 +3193,7 @@
 				FBC2309B17973100009343FC /* CameraEffects.cpp in Sources */,
 				CFE60469190442FE00E6C78B /* TextureMapping.cpp in Sources */,
 				4436A82018ED518100CB6792 /* ChangedInfoListener.cpp in Sources */,
+				349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */,
 				FBBDBCDC17AB940C00077004 /* FlatPlanet.cpp in Sources */,
 				CF5363DF178B3D1A00EE3D49 /* TileRasterizer.cpp in Sources */,
 				CF5363E3178B44AC00EE3D49 /* DebugTileRasterizer.cpp in Sources */,

@@ -116,6 +116,68 @@ void GEORasterSymbol::rasterPolygon(const GEO2DPolygonData*    polygonData,
   }
 }
 
+void GEORasterSymbol::rasterRectangle(const GEO2DPolygonData*    rectangleData,
+                                      const Vector2F            rectangleSize,
+                                      bool                       rasterSurface,
+                                      bool                       rasterBoundary,
+                                      ICanvas*                   canvas,
+                                      const GEORasterProjection* projection) const {
+    
+    if (rasterSurface || rasterBoundary) {
+        const std::vector<Geodetic2D*>* coordinates = rectangleData->getCoordinates();
+        const int coordinatesCount = coordinates->size();
+        
+        if (coordinatesCount > 1) {
+            canvas->beginPath();
+            
+            canvas->moveTo( projection->project(coordinates->at(0)) );
+            
+            for (int i = 1; i < coordinatesCount; i++) {
+                const Geodetic2D* coordinate = coordinates->at(i);
+                
+                canvas->lineTo( projection->project(coordinate) );
+            }
+            
+            canvas->closePath();
+            
+            if (rasterBoundary) {
+                if (rasterSurface) {
+                    canvas->fillAndStroke();
+                }
+                else {
+                    canvas->stroke();
+                }
+            }
+            else {
+                canvas->fill();
+            }
+        }
+        else if (coordinatesCount == 1) {
+            
+            const Geodetic2D* coordinate = coordinates->at(0);
+            
+            Vector2F center = projection->project(coordinate);
+            Vector2F topLeft = Vector2F(center._x-(rectangleSize._x/2.0f),center._y-(rectangleSize._y/2.0f));
+            
+            if (rasterBoundary) {
+                if (rasterSurface) {
+                    canvas->fillAndStrokeRectangle(topLeft._x, topLeft._y,
+                                                   rectangleSize._x, rectangleSize._y);
+                }
+                else {
+                    canvas->strokeRectangle(topLeft._x, topLeft._y,
+                                            rectangleSize._x, rectangleSize._y);
+                }
+            }
+            else {
+                canvas->fillRectangle(topLeft._x, topLeft._y,
+                                      rectangleSize._x, rectangleSize._y);
+            }
+        }
+        
+    }
+}
+
 void GEORasterSymbol::rasterize(ICanvas*                   canvas,
                                 const GEORasterProjection* projection,
                                 int tileLevel) const {

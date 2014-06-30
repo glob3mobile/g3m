@@ -142,6 +142,7 @@
 #import <G3MiOSSDK/GEORasterSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
 #import <G3MiOSSDK/ChessboardLayer.hpp>
+#import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
@@ -1405,6 +1406,84 @@ private:
                                 dashCount,
                                 0);
   }
+    
+    static GEO2DLineRasterStyle createPointLineRasterStyle(const GEOGeometry* geometry) {
+        
+        const JSONObject* properties = geometry->getFeature()->getProperties();
+        const std::string geoType = properties->getAsString("lodType", "");
+        
+        if(geoType != ""){
+            if (geoType=="LINESTRING" || geoType=="MULTILINESTRING"){
+                const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
+                
+                //const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+                float dashLengths[] = {};
+                int dashCount = 0;
+                
+                return GEO2DLineRasterStyle(color,
+                                            1,
+                                            CAP_ROUND,
+                                            JOIN_ROUND,
+                                            1,
+                                            dashLengths,
+                                            dashCount,
+                                            0);
+            }
+            else if(geoType=="POLYGON" || geoType=="MULTIPOLYGON"){
+                return createPolygonLineRasterStyle(geometry);
+//                const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+//                float dashLengths[] = {};
+//                int dashCount = 0;
+//                
+//                return GEO2DLineRasterStyle(color,
+//                                            1,
+//                                            CAP_ROUND,
+//                                            JOIN_ROUND,
+//                                            1,
+//                                            dashLengths,
+//                                            dashCount,
+//                                            0);
+            }
+        }
+        
+        // for POINTS and MULTIPOINTS
+        float dashLengths[] = {};
+        int dashCount = 0;
+        
+        return GEO2DLineRasterStyle(Color::white(),
+                                    1,
+                                    CAP_ROUND,
+                                    JOIN_ROUND,
+                                    1,
+                                    dashLengths,
+                                    dashCount,
+                                    0);
+    }
+    
+    static GEO2DSurfaceRasterStyle createPointSurfaceRasterStyle(const GEOGeometry* geometry) {
+        
+        const JSONObject* properties = geometry->getFeature()->getProperties();
+        const std::string geoType = properties->getAsString("lodType", "");
+        
+        if(geoType != ""){
+            if (geoType=="LINESTRING" || geoType=="MULTILINESTRING"){
+                const Color color = Color::fromRGBA(0.85, 0.5, 0.5, 0.75).muchDarker();
+                
+                //const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+                
+                return GEO2DSurfaceRasterStyle(color);
+            }
+            else if(geoType=="POLYGON" || geoType=="MULTIPOLYGON"){
+                return createPolygonSurfaceRasterStyle(geometry);
+//                const Color color = Color::fromRGBA(0.1, 1.0, 0.1, 0.95);
+//                
+//                return GEO2DSurfaceRasterStyle(color);
+            }
+        }
+        
+        // for POINTS and MULTIPOINTS
+        return GEO2DSurfaceRasterStyle(Color::white());
+    }
 
 public:
   GEORasterSymbolizer* copy() const {
@@ -1412,7 +1491,19 @@ public:
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DPointGeometry* geometry) const {
-    return NULL;
+    //return NULL;
+    std::vector<GEORasterSymbol*>* symbols = new std::vector<GEORasterSymbol*>();
+    std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
+    coordinates->push_back(new Geodetic2D(geometry->getPosition()));
+      
+    GEO2DPolygonData* rectangleData = new GEO2DPolygonData(coordinates, NULL);
+      
+    symbols->push_back( new GEORectangleRasterSymbol(rectangleData,
+                                                    Vector2F(3.0f,3.0f),
+                                                    createPointLineRasterStyle(geometry),
+                                                    createPointSurfaceRasterStyle(geometry)));
+      
+    return symbols;
   }
 
   std::vector<GEORasterSymbol*>* createSymbols(const GEO2DLineStringGeometry* geometry) const {
@@ -1612,6 +1703,8 @@ public:
     //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
     //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-roads/{level}/{x}/{y}.geojson";
 
+    const std::string scotlandUrl = "http://192.168.1.12:8000/vectorial/scotland_buildings/GEOJSON/{level}/{x}/{y}.geojson";
+      
     const int firstLevel = 2;
     const int maxLevel = 17;
     const Sector virginiaSector = Sector::fromDegrees(34.991, -83.9755,
@@ -1624,20 +1717,22 @@ public:
     const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
                                                    47.803029, 10.492264);
 
+    const Sector scotlandSector = Sector::fromDegrees(54.7226296, -7.6536084,
+                                                      60.855646, -0.7279944);
 
     const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
 
     layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
-                                                     urlTemplate,
+                                                     scotlandUrl,
                                                      //Sector::fullSphere(),       // sector
-                                                     swissSector,
+                                                     scotlandSector,
                                                      firstLevel,
                                                      maxLevel,
                                                      TimeInterval::fromDays(30), // timeToCache
                                                      true,                       // readExpired
                                                      1,                          // transparency
                                                      //NULL,                       // condition
-                                                     new LevelTileCondition(14, 21),
+                                                     new LevelTileCondition(1, 17),
                                                      ""                          // disclaimerInfo
                                                      ));
   }
