@@ -142,6 +142,7 @@
 #import <G3MiOSSDK/GEORasterSymbolizer.hpp>
 #import <G3MiOSSDK/GEO2DPolygonData.hpp>
 #import <G3MiOSSDK/ChessboardLayer.hpp>
+#import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
 
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
