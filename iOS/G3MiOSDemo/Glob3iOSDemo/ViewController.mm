@@ -4019,13 +4019,13 @@ public:
   builder.initializeWidget();
   
   // set frustumCullingFactor
-  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(2.0);
+  [self G3MWidget].widget->getPlanetRenderer()->setFrustumCullingFactor(1.0);
   
-  // set camera looking at Tenerife
-  Geodetic3D position = Geodetic3D(Angle::fromDegrees(28.017), Angle::fromDegrees(-15.525), 5800);
+  // set camera looking at GC
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(28.0198), Angle::fromDegrees(-15.4475), 1065.401);
   [self G3MWidget].widget->setCameraPosition(position);
-  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-36.5));
-  [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(-25.29));
+  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-34.25));
+  [self G3MWidget].widget->setCameraHeading(Angle::fromDegrees(35.07));
 }
 
 @end
