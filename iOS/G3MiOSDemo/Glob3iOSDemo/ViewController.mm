@@ -3959,6 +3959,9 @@ public:
   const Planet* planet = Planet::createFlatEarth();
   builder.setPlanet(planet);
   
+  // debug
+  builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  
   // create wmslayer from Grafcan
   LayerSet* layerSet = new LayerSet();
   WMSLayer* grafcanLIDAR = new WMSLayer("LIDAR_MTL",
