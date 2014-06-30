@@ -128,6 +128,73 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     }
   }
 
+  protected final void rasterRectangle(GEO2DPolygonData rectangleData, Vector2F rectangleSize, boolean rasterSurface, boolean rasterBoundary, ICanvas canvas, GEORasterProjection projection)
+  {
+  
+      if (rasterSurface || rasterBoundary)
+      {
+          final java.util.ArrayList<Geodetic2D> coordinates = rectangleData.getCoordinates();
+          final int coordinatesCount = coordinates.size();
+  
+          if (coordinatesCount > 1)
+          {
+              canvas.beginPath();
+  
+              canvas.moveTo(projection.project(coordinates.get(0)));
+  
+              for (int i = 1; i < coordinatesCount; i++)
+              {
+                  final Geodetic2D coordinate = coordinates.get(i);
+  
+                  canvas.lineTo(projection.project(coordinate));
+              }
+  
+              canvas.closePath();
+  
+              if (rasterBoundary)
+              {
+                  if (rasterSurface)
+                  {
+                      canvas.fillAndStroke();
+                  }
+                  else
+                  {
+                      canvas.stroke();
+                  }
+              }
+              else
+              {
+                  canvas.fill();
+              }
+          }
+          else if (coordinatesCount == 1)
+          {
+  
+              final Geodetic2D coordinate = coordinates.get(0);
+  
+              Vector2F center = projection.project(coordinate);
+              Vector2F topLeft = new Vector2F(center._x-(rectangleSize._x/2.0f),center._y-(rectangleSize._y/2.0f));
+  
+              if (rasterBoundary)
+              {
+                  if (rasterSurface)
+                  {
+                      canvas.fillAndStrokeRectangle(topLeft._x, topLeft._y, rectangleSize._x, rectangleSize._y);
+                  }
+                  else
+                  {
+                      canvas.strokeRectangle(topLeft._x, topLeft._y, rectangleSize._x, rectangleSize._y);
+                  }
+              }
+              else
+              {
+                  canvas.fillRectangle(topLeft._x, topLeft._y, rectangleSize._x, rectangleSize._y);
+              }
+          }
+  
+      }
+  }
+
   protected abstract void rawRasterize(ICanvas canvas, GEORasterProjection projection);
 
 
