@@ -676,7 +676,7 @@ public:
     builder.setSceneLighting(light);
   }
 
-  if (false) { //HUD
+  if (true) { //HUD
     HUDRenderer* hudRenderer = new HUDRenderer();
     builder.setHUDRenderer(hudRenderer);
 
@@ -1699,42 +1699,42 @@ public:
 
 //    const std::string urlTemplate = "http://192.168.1.15/vectorial/portugal-buildings/{level}/{x}/{y}.geojson";
 
-    const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
-    //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
-    //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-roads/{level}/{x}/{y}.geojson";
-
-    const std::string scotlandUrl = "http://192.168.1.12:8000/vectorial/scotland_buildings/GEOJSON/{level}/{x}/{y}.geojson";
-      
-    const int firstLevel = 2;
-    const int maxLevel = 17;
-    const Sector virginiaSector = Sector::fromDegrees(34.991, -83.9755,
-                                                      39.728, -74.749);
-
-//    (-17.2631249 32.6339646,-6.1857279 42.141711)
-    const Sector portugalSector = Sector::fromDegrees(32.6339646, -17.2631249,
-                                                      42.14171, -6.1857279);
-
-    const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
-                                                   47.803029, 10.492264);
-
-    const Sector scotlandSector = Sector::fromDegrees(54.7226296, -7.6536084,
-                                                      60.855646, -0.7279944);
-
-    const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
-
-    layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
-                                                     scotlandUrl,
-                                                     //Sector::fullSphere(),       // sector
-                                                     scotlandSector,
-                                                     firstLevel,
-                                                     maxLevel,
-                                                     TimeInterval::fromDays(30), // timeToCache
-                                                     true,                       // readExpired
-                                                     1,                          // transparency
-                                                     //NULL,                       // condition
-                                                     new LevelTileCondition(1, 17),
-                                                     ""                          // disclaimerInfo
-                                                     ));
+//    const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+//    //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
+//    //const std::string urlTemplate = "http://192.168.1.15/vectorial/swiss-roads/{level}/{x}/{y}.geojson";
+//
+//    const std::string scotlandUrl = "http://192.168.1.12:8000/vectorial/scotland_buildings/GEOJSON/{level}/{x}/{y}.geojson";
+//      
+//    const int firstLevel = 2;
+//    const int maxLevel = 17;
+//    const Sector virginiaSector = Sector::fromDegrees(34.991, -83.9755,
+//                                                      39.728, -74.749);
+//
+////    (-17.2631249 32.6339646,-6.1857279 42.141711)
+//    const Sector portugalSector = Sector::fromDegrees(32.6339646, -17.2631249,
+//                                                      42.14171, -6.1857279);
+//
+//    const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
+//                                                   47.803029, 10.492264);
+//
+//    const Sector scotlandSector = Sector::fromDegrees(54.7226296, -7.6536084,
+//                                                      60.855646, -0.7279944);
+//
+//    const GEORasterSymbolizer* symbolizer = new SampleRasterSymbolizer();
+//
+//    layerSet->addLayer(TiledVectorLayer::newMercator(symbolizer,
+//                                                     scotlandUrl,
+//                                                     //Sector::fullSphere(),       // sector
+//                                                     scotlandSector,
+//                                                     firstLevel,
+//                                                     maxLevel,
+//                                                     TimeInterval::fromDays(30), // timeToCache
+//                                                     true,                       // readExpired
+//                                                     1,                          // transparency
+//                                                     //NULL,                       // condition
+//                                                     new LevelTileCondition(1, 17),
+//                                                     ""                          // disclaimerInfo
+//                                                     ));
   }
 
   const bool useCartoDB = false;
