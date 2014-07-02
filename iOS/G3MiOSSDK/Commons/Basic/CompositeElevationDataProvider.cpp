@@ -221,7 +221,9 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent)
      
      */
 #warning PROBANDO COSAS PARA SENDEROS
-    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *(each->getSectors()[0]));
+    const Sector* sector0 = each->getSectors().at(0);
+    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *sector0);
+    //double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *(each->getSectors()[0]));
     
     if (res <= selectedRes)
     {
