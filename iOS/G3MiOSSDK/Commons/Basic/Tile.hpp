@@ -76,8 +76,6 @@ private:
   float _verticalExaggeration;
   TileTessellatorMeshData _tileTessellatorMeshData;
 
-  BoundingVolume* _boundingVolume;
-
   Vector3D* _northWestPoint;
   Vector3D* _northEastPoint;
   Vector3D* _southWestPoint;

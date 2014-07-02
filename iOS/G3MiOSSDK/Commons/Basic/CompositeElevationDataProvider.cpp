@@ -197,9 +197,9 @@ CompositeElevationDataProvider_Request::getSquaredGridResolutionInDegreesSquared
 
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
-popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent, const Sector& sector) const{
-
-  double bestRes = getSquaredGridResolutionInDegreesSquared(extent, sector);
+popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const{
+  
+  double bestRes = extent.squaredLength();
   double selectedRes = IMathUtils::instance()->maxDouble();
   double selectedResDistance = IMathUtils::instance()->maxDouble();
   IMathUtils *mu = IMathUtils::instance();
@@ -211,14 +211,21 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent,
   int selectedIndex = -1;
   for (int i = 0; i < psSize; i++) {
     ElevationDataProvider* each = ps[i];
-    
-    const Sector* sector0 = each->getSectors().at(0);
-    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *sector0);
+
+    /*
+    const double res = each->getMinResolution().squaredLength();
     const double newResDistance = mu->abs(bestRes - res);
 
     if (newResDistance < selectedResDistance || //Closer Resolution
         (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
-      selectedResDistance = newResDistance;
+     
+     */
+#warning PROBANDO COSAS PARA SENDEROS
+    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *(each->getSectors()[0]));
+    
+    if (res <= selectedRes)
+    {
+      selectedResDistance = res;
       selectedRes = res;
       selectedIndex = i;
       provider = each;
@@ -238,7 +245,7 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent,
 }
 
 bool CompositeElevationDataProvider::CompositeElevationDataProvider_Request::launchNewStep() {
-  _currentProvider = popBestProvider(_providers, _resolution, _sector);
+  _currentProvider = popBestProvider(_providers, _resolution);
   if (_currentProvider != NULL) {
     _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
 

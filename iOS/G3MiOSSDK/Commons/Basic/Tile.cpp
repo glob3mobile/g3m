@@ -76,7 +76,6 @@ _verticalExaggeration(0),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
-_boundingVolume(NULL),
 _lastMeetsRenderCriteriaTimeInMS(0),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
@@ -271,17 +270,17 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
                                               const TileTessellator* tessellator,
                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
                                               const TilesRenderParameters* tilesRenderParameters) {
-  if (_boundingVolume == NULL) {
+
     Mesh* mesh = getTessellatorMesh(rc,
                                     elevationDataProvider,
                                     tessellator,
                                     layerTilesRenderParameters,
                                     tilesRenderParameters);
     if (mesh != NULL) {
-      _boundingVolume = mesh->getBoundingVolume();
+      return mesh->getBoundingVolume();
+    } else{
+      return NULL;
     }
-  }
-  return _boundingVolume;
 }
 
 bool Tile::isVisible(const G3MRenderContext* rc,
@@ -305,9 +304,7 @@ bool Tile::isVisible(const G3MRenderContext* rc,
                                                            tessellator,
                                                            layerTilesRenderParameters,
                                                            tilesRenderParameters);
-  
-#warning THIS LINE IS PROBLEMATIC WHEN ELEVATIONDATAPROVIDER IS ASYNCHRONOUS
-  return ((boundingVolume != NULL)  &&
+    return ((boundingVolume != NULL)  &&
           boundingVolume->touchesFrustum(cameraWiderFrustumInModelCoordinates));
 }
 
@@ -487,7 +484,7 @@ void Tile::rawRender(const G3MRenderContext* rc,
 
   if (_level > MAX_LOD){
     MAX_LOD = _level;
-    //ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
+    ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
   }
 
   //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
