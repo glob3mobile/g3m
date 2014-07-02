@@ -21,8 +21,6 @@ public class Tile
   private float _verticalExaggeration;
   private TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
 
-  private BoundingVolume _boundingVolume;
-
   private Vector3D _northWestPoint;
   private Vector3D _northEastPoint;
   private Vector3D _southWestPoint;
@@ -175,10 +173,7 @@ public class Tile
     }
   
     final BoundingVolume boundingVolume = getBoundingVolume(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning THIS LINE IS PROBLEMATIC WHEN ELEVATIONDATAPROVIDER IS ASYNCHRONOUS
-    return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraWiderFrustumInModelCoordinates));
+      return ((boundingVolume != null) && boundingVolume.touchesFrustum(cameraWiderFrustumInModelCoordinates));
   }
 
   private boolean _lastMeetsRenderCriteriaResult;
@@ -287,7 +282,7 @@ public class Tile
     if (_level > GlobalMembersTile.MAX_LOD)
     {
       GlobalMembersTile.MAX_LOD = _level;
-      //ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
+      ILogger.instance().logInfo("MAXLOD = %d\n", _level);
     }
   
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
@@ -376,15 +371,16 @@ public class Tile
 
   private BoundingVolume getBoundingVolume(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
   {
-    if (_boundingVolume == null)
-    {
+  
       Mesh mesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
       if (mesh != null)
       {
-        _boundingVolume = mesh.getBoundingVolume();
+        return mesh.getBoundingVolume();
       }
-    }
-    return _boundingVolume;
+      else
+      {
+        return null;
+      }
   }
 
   private void setRendered(boolean rendered, TileRenderingListener tileRenderingListener)
@@ -450,7 +446,6 @@ public class Tile
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
-     _boundingVolume = null;
      _lastMeetsRenderCriteriaTimeInMS = 0;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;

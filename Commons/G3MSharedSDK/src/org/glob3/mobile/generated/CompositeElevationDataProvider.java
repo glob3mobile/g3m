@@ -124,10 +124,10 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       return latResInDegrees * latResInDegrees + lonResInDegrees * lonResInDegrees;
     }
 
-    public final ElevationDataProvider popBestProvider(java.util.ArrayList<ElevationDataProvider> ps, Vector2I extent, Sector sector)
+    public final ElevationDataProvider popBestProvider(java.util.ArrayList<ElevationDataProvider> ps, Vector2I extent)
     {
     
-      double bestRes = getSquaredGridResolutionInDegreesSquared(extent, sector);
+      double bestRes = extent.squaredLength();
       double selectedRes = IMathUtils.instance().maxDouble();
       double selectedResDistance = IMathUtils.instance().maxDouble();
       IMathUtils mu = IMathUtils.instance();
@@ -141,13 +141,21 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       {
         ElevationDataProvider each = ps.get(i);
     
-        final Sector sector0 = each.getSectors().get(0);
-        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), sector0);
-        final double newResDistance = mu.abs(bestRes - res);
+        /*
+        const double res = each->getMinResolution().squaredLength();
+        const double newResDistance = mu->abs(bestRes - res);
     
-        if (newResDistance < selectedResDistance || (newResDistance == selectedResDistance && res < selectedRes)) //or equal and higher resolution - Closer Resolution
+        if (newResDistance < selectedResDistance || //Closer Resolution
+            (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
+        
+         */
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning PROBANDO COSAS PARA SENDEROS
+        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), *(each.getSectors().get(0)));
+    
+        if (res <= selectedRes)
         {
-          selectedResDistance = newResDistance;
+          selectedResDistance = res;
           selectedRes = res;
           selectedIndex = i;
           provider = each;
@@ -181,7 +189,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public final boolean launchNewStep()
     {
-      _currentProvider = popBestProvider(_providers, _resolution, _sector);
+      _currentProvider = popBestProvider(_providers, _resolution);
       if (_currentProvider != null)
       {
         _currentStep = new CompositeElevationDataProvider_RequestStepListener(this);
