@@ -151,7 +151,9 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
          */
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning PROBANDO COSAS PARA SENDEROS
-        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), *(each.getSectors().get(0)));
+        final Sector sector0 = each.getSectors().get(0);
+        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), sector0);
+        //double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *(each->getSectors()[0]));
     
         if (res <= selectedRes)
         {
