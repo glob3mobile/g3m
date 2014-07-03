@@ -127,11 +127,7 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
     public final ElevationDataProvider popBestProvider(java.util.ArrayList<ElevationDataProvider> ps, Vector2I extent)
     {
     
-      double bestRes = extent.squaredLength();
       double selectedRes = IMathUtils.instance().maxDouble();
-      double selectedResDistance = IMathUtils.instance().maxDouble();
-      IMathUtils mu = IMathUtils.instance();
-    
     
       ElevationDataProvider provider = null;
     
@@ -140,23 +136,12 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       for (int i = 0; i < psSize; i++)
       {
         ElevationDataProvider each = ps.get(i);
-
-        final Sector sector = each.getSectors().get(0);
-        
-<<<<<<< HEAD
-        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), sector);
-=======
-         */
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning PROBANDO COSAS PARA SENDEROS
+    
         final Sector sector0 = each.getSectors().get(0);
         double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), sector0);
-        //double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *(each->getSectors()[0]));
->>>>>>> 192f5ddba2879ff87118dc1e7742164c9e0a8da8
     
         if (res <= selectedRes)
         {
-          selectedResDistance = res;
           selectedRes = res;
           selectedIndex = i;
           provider = each;
