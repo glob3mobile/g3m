@@ -140,18 +140,10 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       for (int i = 0; i < psSize; i++)
       {
         ElevationDataProvider each = ps.get(i);
-    
-        /*
-        const double res = each->getMinResolution().squaredLength();
-        const double newResDistance = mu->abs(bestRes - res);
-    
-        if (newResDistance < selectedResDistance || //Closer Resolution
-            (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
+
+        final Sector sector = each.getSectors().get(0);
         
-         */
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning PROBANDO COSAS PARA SENDEROS
-        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), *(each.getSectors().get(0)));
+        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), sector);
     
         if (res <= selectedRes)
         {

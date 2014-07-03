@@ -557,7 +557,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     int texHeight = layerTilesRenderParameters._tileTextureResolution._y;
   
     final double factor = _tilesRenderParameters._texturePixelsPerInch; //UNIT: Dots / Inch^2 (ppi)
-    final double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+    double correctionFactor = (deviceInfo.getDPI() * deviceQualityFactor) / factor;
+    
+    correctionFactor = 1.0;
   
     texWidth *= correctionFactor;
     texHeight *= correctionFactor;
