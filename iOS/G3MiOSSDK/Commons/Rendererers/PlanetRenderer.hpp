@@ -286,8 +286,6 @@ private:
 #endif
   std::vector<std::string> _errors;
 
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
-
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
 
 //  std::list<Tile*> _tilesRenderedInLastFrame;
@@ -465,6 +463,8 @@ public:
       _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
     }
   }
+  
+  const LayerTilesRenderParameters* getLayerTilesRenderParameters();
   
 };
 

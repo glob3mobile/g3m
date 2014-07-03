@@ -625,7 +625,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     const int firstLevelTilesCount = _firstLevelTiles.size();
     for (int i = 0; i < firstLevelTilesCount; i++) {
       Tile* tile = _firstLevelTiles[i];
-      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
+      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _tileDownloadPriority, &_statistics, _logTilesPetitions);
     }
   } else{
     
@@ -636,7 +636,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
          iter++) {
       Tile* tile = *iter;
       
-      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _texturePriority, &_statistics);
+      tile->performRawRender(rc, _glState, _texturizer, _elevationDataProvider, _tessellator, _tileRasterizer, _layerTilesRenderParameters, _layerSet, _tilesRenderParameters, _firstRender, _tileDownloadPriority, &_statistics, _logTilesPetitions);
     }
   }
   
@@ -644,20 +644,11 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     _statistics.log( rc->getLogger() );
   }
   
-  
-  const Sector* renderedSector = _statistics.getRenderedSector();
-  if (renderedSector != NULL) {
-    if ( (_lastVisibleSector == NULL) || !renderedSector->isEquals(*_lastVisibleSector) ) {
-      delete _lastVisibleSector;
-      _lastVisibleSector = new Sector(*renderedSector);
-    }
-  }
-  
+  _lastVisibleSector = _statistics.updateVisibleSector(_lastVisibleSector);
   if (_lastVisibleSector != NULL) {
     const int visibleSectorListenersCount = _visibleSectorListeners.size();
     for (int i = 0; i < visibleSectorListenersCount; i++) {
       VisibleSectorListenerEntry* entry = _visibleSectorListeners[i];
-      
       entry->tryToNotifyListener(_lastVisibleSector, rc);
     }
   }
