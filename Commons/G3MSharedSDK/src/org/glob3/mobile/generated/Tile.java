@@ -237,6 +237,35 @@ public class Tile
     final double distanceInPixelsSquaredArcWest = (distanceInPixelsWest * distanceInPixelsWest) * _westArcSegmentRatioSquared;
     final double distanceInPixelsSquaredArcEast = (distanceInPixelsEast * distanceInPixelsEast) * _eastArcSegmentRatioSquared;
   
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ÑAPA
+    double augmentedFactor = 1.0;
+    for (int i = 0; i < _lODAugmentedSectors.size(); i++)
+    {
+      Sector sector = _lODAugmentedSectors.get(i)._sector;
+      if (_sector.touchesWith(sector))
+      {
+        augmentedFactor = _lODAugmentedSectors.get(i)._lodFactor;
+      }
+    }
+  
+    if (augmentedFactor != 1.0)
+    {
+      augmentedFactor *= augmentedFactor;
+      texHeightSquared /= augmentedFactor;
+      texWidthSquared /= augmentedFactor;
+    }
+  
+  
+  //  Sector bandamaSector = Sector::fromDegrees(28.0184736385041, -15.4667703990175,
+  //                                             28.0501939378331, -15.447509868283);
+  //
+  //  if (_sector.touchesWith(bandamaSector)){
+  //    texHeightSquared /= 16.0;
+  //    texWidthSquared /= 16.0;
+  //  }
+  
     _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) && (distanceInPixelsSquaredArcSouth <= texHeightSquared) && (distanceInPixelsSquaredArcWest <= texWidthSquared) && (distanceInPixelsSquaredArcEast <= texWidthSquared));
   
     return _lastMeetsRenderCriteriaResult;
@@ -413,6 +442,28 @@ public class Tile
 
   private TileCache _tileCache;
   private boolean _deleteTextureWhenNotVisible;
+
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ÑAPA BANDAMA
+  private static class LODAugmentedSector
+  {
+    public Sector _sector;
+    public double _lodFactor;
+
+    public LODAugmentedSector(Sector sector, double factor)
+    {
+       _sector = new Sector(sector);
+       _lodFactor = factor;
+    }
+
+    //CANT DO THIS
+//    ~LODAugmentedSector(){
+//      delete _sector;
+//    }
+  }
+  private static java.util.ArrayList<LODAugmentedSector> _lODAugmentedSectors = new java.util.ArrayList<LODAugmentedSector>();
+
   public final Sector _sector ;
   public final boolean _mercator;
   public final int _level;
@@ -1213,9 +1264,9 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     }
   }
 
-}
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark ElevationData methods
+  public static void addLODAugmentedForSector(Sector sector, double factor)
+  {
+    _lODAugmentedSectors.add(new LODAugmentedSector(sector, factor));
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#pragma mark TileCache
+}
