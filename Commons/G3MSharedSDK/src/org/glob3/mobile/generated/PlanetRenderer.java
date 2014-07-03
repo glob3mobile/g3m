@@ -1148,4 +1148,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   }
 
 
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ÑAPA BANDAMA
+  public static java.util.ArrayList<LODAugmentedSector> _lODAugmentedSectors = new java.util.ArrayList<LODAugmentedSector>();
+
+  public final void addLODAugmentedForSector(Sector sector, double factor)
+  {
+    _lODAugmentedSectors.add(new LODAugmentedSector(sector, factor));
+  }
+
 }

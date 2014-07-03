@@ -39,17 +39,3 @@ public class GetTilesURLVisitor implements ITileVisitor
   }
 
 }
-//std::vector<std::string> PlanetRenderer::getInfo() {
-//  _info.clear();
-//  std::vector<std::string> info = _layerSet->getInfo();
-//  
-///#ifdef C_CODE
-//      _info.insert(_info.end(),info.begin(), info.end());
-///#endif
-///#ifdef JAVA_CODE
-//      _infos.add(info);
-///#endif
-//  
-//  return _info;
-//}
-

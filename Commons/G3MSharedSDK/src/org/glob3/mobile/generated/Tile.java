@@ -241,12 +241,12 @@ public class Tile
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ÑAPA
     double augmentedFactor = 1.0;
-    for (int i = 0; i < _lODAugmentedSectors.size(); i++)
+    for (int i = 0; i < _planetRenderer._lODAugmentedSectors.size(); i++)
     {
-      Sector sector = _lODAugmentedSectors.get(i)._sector;
+      Sector sector = _planetRenderer._lODAugmentedSectors[i]._sector;
       if (_sector.touchesWith(sector))
       {
-        augmentedFactor = _lODAugmentedSectors.get(i)._lodFactor;
+        augmentedFactor = _planetRenderer._lODAugmentedSectors[i]._lodFactor;
       }
     }
   
@@ -271,6 +271,9 @@ public class Tile
     return _lastMeetsRenderCriteriaResult;
   }
 
+
+  //int MAX_LOD = -1;
+  
   private void rawRender(G3MRenderContext rc, GLState glState, TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, TileRasterizer tileRasterizer, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean forceFullRender, long tileDownloadPriority, boolean logTilesPetitions)
   {
   
@@ -308,11 +311,10 @@ public class Tile
       }
     }
   
-    if (_level > GlobalMembersTile.MAX_LOD)
-    {
-      GlobalMembersTile.MAX_LOD = _level;
-      ILogger.instance().logInfo("MAXLOD = %d\n", _level);
-    }
+  //  if (_level > MAX_LOD){
+  //    MAX_LOD = _level;
+  //    ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
+  //  }
   
     //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
     //  boundingVolume->render(rc, parentState);
@@ -442,11 +444,6 @@ public class Tile
 
   private TileCache _tileCache;
   private boolean _deleteTextureWhenNotVisible;
-
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ÑAPA BANDAMA
-  private static java.util.ArrayList<LODAugmentedSector> _lODAugmentedSectors = new java.util.ArrayList<LODAugmentedSector>();
 
   public final Sector _sector ;
   public final boolean _mercator;
@@ -1248,9 +1245,10 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     }
   }
 
-  public static void addLODAugmentedForSector(Sector sector, double factor)
-  {
-    _lODAugmentedSectors.add(new LODAugmentedSector(sector, factor));
-  }
 
 }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark ElevationData methods
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark TileCache
