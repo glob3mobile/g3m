@@ -505,6 +505,8 @@ public:
   void setFrustumCullingFactor(float frustumCullingFactor) {
     _frustumCullingFactor = frustumCullingFactor;
   }
+
+  
 };
 
 

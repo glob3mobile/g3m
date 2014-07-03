@@ -199,12 +199,8 @@ ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
 popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const{
   
-  double bestRes = extent.squaredLength();
   double selectedRes = IMathUtils::instance()->maxDouble();
-  double selectedResDistance = IMathUtils::instance()->maxDouble();
-  IMathUtils *mu = IMathUtils::instance();
-
-
+  
   ElevationDataProvider* provider = NULL;
   
   const int psSize = ps.size();
@@ -212,28 +208,11 @@ popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent)
   for (int i = 0; i < psSize; i++) {
     ElevationDataProvider* each = ps[i];
 
-<<<<<<< HEAD
-    const Sector* sector = each->getSectors().at(0);
-    
-    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *sector);
-=======
-    /*
-    const double res = each->getMinResolution().squaredLength();
-    const double newResDistance = mu->abs(bestRes - res);
-
-    if (newResDistance < selectedResDistance || //Closer Resolution
-        (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
-     
-     */
-#warning PROBANDO COSAS PARA SENDEROS
     const Sector* sector0 = each->getSectors().at(0);
     double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *sector0);
-    //double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *(each->getSectors()[0]));
->>>>>>> 192f5ddba2879ff87118dc1e7742164c9e0a8da8
     
     if (res <= selectedRes)
     {
-      selectedResDistance = res;
       selectedRes = res;
       selectedIndex = i;
       provider = each;
