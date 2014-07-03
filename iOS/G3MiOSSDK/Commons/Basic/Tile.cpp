@@ -1359,8 +1359,8 @@ bool TileCache::has4SubTilesCached(const Tile* tile) {
 }
 
 #warning ÑAPA
-std::vector<Tile::LODAugmentedSector> Tile::_lODAugmentedSectors;
-Tile::LODAugmentedSector::LODAugmentedSector(const Sector& sector, double factor):_sector( new Sector(sector)), _lodFactor(factor){}
+std::vector<LODAugmentedSector> Tile::_lODAugmentedSectors;
+LODAugmentedSector::LODAugmentedSector(const Sector& sector, double factor):_sector( new Sector(sector)), _lodFactor(factor){}
 
 void Tile::addLODAugmentedForSector(const Sector& sector, double factor){
   _lODAugmentedSectors.push_back(LODAugmentedSector(sector, factor));

@@ -55,6 +55,19 @@ public:
   bool has4SubTilesCached(const Tile* tile);
 };
 
+struct LODAugmentedSector{
+public:
+  Sector* _sector;
+  double _lodFactor;
+  
+  LODAugmentedSector(const Sector& sector, double factor);
+  
+  //CANT DO THIS
+  //    ~LODAugmentedSector(){
+  //      delete _sector;
+  //    }
+};
+
 
 class Tile {
 private:
@@ -201,18 +214,6 @@ private:
   
   
 #warning ÑAPA BANDAMA
-  struct LODAugmentedSector{
-  public:
-    Sector* _sector;
-    double _lodFactor;
-    
-    LODAugmentedSector(const Sector& sector, double factor);
-    
-    //CANT DO THIS
-//    ~LODAugmentedSector(){
-//      delete _sector;
-//    }
-  };
   static std::vector<LODAugmentedSector> _lODAugmentedSectors;
   
 public:
