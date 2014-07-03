@@ -369,6 +369,31 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const double distanceInPixelsSquaredArcWest  = (distanceInPixelsWest  * distanceInPixelsWest)  * _westArcSegmentRatioSquared;
   const double distanceInPixelsSquaredArcEast  = (distanceInPixelsEast  * distanceInPixelsEast)  * _eastArcSegmentRatioSquared;
   
+  
+#warning ÑAPA
+  double augmentedFactor = 1.0;
+  for (int i = 0; i < _lODAugmentedSectors.size(); i++) {
+    Sector* sector = _lODAugmentedSectors[i]._sector;
+    if (_sector.touchesWith(*sector)){
+      augmentedFactor = _lODAugmentedSectors[i]._lodFactor;
+    }
+  }
+  
+  if (augmentedFactor != 1.0){
+    augmentedFactor *= augmentedFactor;
+    texHeightSquared /= augmentedFactor ;
+    texWidthSquared /= augmentedFactor;
+  }
+  
+  
+//  Sector bandamaSector = Sector::fromDegrees(28.0184736385041, -15.4667703990175,
+//                                             28.0501939378331, -15.447509868283);
+//  
+//  if (_sector.touchesWith(bandamaSector)){
+//    texHeightSquared /= 16.0;
+//    texWidthSquared /= 16.0;
+//  }
+  
   _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) &&
                                     (distanceInPixelsSquaredArcSouth <= texHeightSquared) &&
                                     (distanceInPixelsSquaredArcWest  <= texWidthSquared ) &&
@@ -1331,4 +1356,12 @@ bool TileCache::has4SubTilesCached(const Tile* tile) {
   }
   
   return false;
+}
+
+#warning ÑAPA
+std::vector<Tile::LODAugmentedSector> Tile::_lODAugmentedSectors;
+Tile::LODAugmentedSector::LODAugmentedSector(const Sector& sector, double factor):_sector( new Sector(sector)), _lodFactor(factor){}
+
+void Tile::addLODAugmentedForSector(const Sector& sector, double factor){
+  _lODAugmentedSectors.push_back(LODAugmentedSector(sector, factor));
 }

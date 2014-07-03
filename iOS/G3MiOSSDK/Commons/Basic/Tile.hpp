@@ -14,6 +14,8 @@
 #include "TileTessellator.hpp"
 #include "Sector.hpp"
 
+#include <vector>
+
 class TileTexturizer;
 class Mesh;
 class TileElevationDataRequest;
@@ -196,6 +198,23 @@ private:
   
   TileCache* _tileCache;
   bool _deleteTextureWhenNotVisible;
+  
+  
+#warning ÑAPA BANDAMA
+  struct LODAugmentedSector{
+  public:
+    Sector* _sector;
+    double _lodFactor;
+    
+    LODAugmentedSector(const Sector& sector, double factor);
+    
+    //CANT DO THIS
+//    ~LODAugmentedSector(){
+//      delete _sector;
+//    }
+  };
+  static std::vector<LODAugmentedSector> _lODAugmentedSectors;
+  
 public:
   const Sector      _sector;
   const bool        _mercator;
@@ -416,6 +435,8 @@ void actualizeQuadTree(const G3MRenderContext* rc,
   }
 
   void deleteTexturizedMesh(TileTexturizer* texturizer);
+  
+  static void addLODAugmentedForSector(const Sector& sector, double factor);
   
 };
 
