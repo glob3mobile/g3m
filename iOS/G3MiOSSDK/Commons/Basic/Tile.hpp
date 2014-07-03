@@ -55,20 +55,6 @@ public:
   bool has4SubTilesCached(const Tile* tile);
 };
 
-struct LODAugmentedSector{
-public:
-  Sector* _sector;
-  double _lodFactor;
-  
-  LODAugmentedSector(const Sector& sector, double factor);
-  
-  //CANT DO THIS
-  //    ~LODAugmentedSector(){
-  //      delete _sector;
-  //    }
-};
-
-
 class Tile {
 private:
   TileTexturizer* _texturizer;
@@ -211,10 +197,6 @@ private:
   
   TileCache* _tileCache;
   bool _deleteTextureWhenNotVisible;
-  
-  
-#warning ÑAPA BANDAMA
-  static std::vector<LODAugmentedSector> _lODAugmentedSectors;
   
 public:
   const Sector      _sector;
@@ -437,7 +419,6 @@ void actualizeQuadTree(const G3MRenderContext* rc,
 
   void deleteTexturizedMesh(TileTexturizer* texturizer);
   
-  static void addLODAugmentedForSector(const Sector& sector, double factor);
   
 };
 

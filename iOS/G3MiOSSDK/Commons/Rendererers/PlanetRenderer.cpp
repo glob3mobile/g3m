@@ -1118,3 +1118,13 @@ int PlanetRenderer::getNumberOfRenderedTiles() const{
 //  return _info;
 //}
 
+
+#warning ÑAPA
+std::vector<LODAugmentedSector> PlanetRenderer::_lODAugmentedSectors;
+LODAugmentedSector::LODAugmentedSector(const Sector& sector, double factor):_sector( new Sector(sector)), _lodFactor(factor){}
+
+void PlanetRenderer::addLODAugmentedForSector(const Sector& sector, double factor){
+  _lODAugmentedSectors.push_back(LODAugmentedSector(sector, factor));
+}
+
+

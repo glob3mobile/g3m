@@ -36,6 +36,20 @@ class EllipsoidShape;
 class TileRasterizer;
 
 
+struct LODAugmentedSector{
+public:
+  Sector* _sector;
+  double _lodFactor;
+  
+  LODAugmentedSector(const Sector& sector, double factor);
+  
+  //CANT DO THIS
+  //    ~LODAugmentedSector(){
+  //      delete _sector;
+  //    }
+};
+
+
 class TilesStatistics {
 private:
   long _tilesProcessed;
@@ -505,9 +519,18 @@ public:
   void setFrustumCullingFactor(float frustumCullingFactor) {
     _frustumCullingFactor = frustumCullingFactor;
   }
-
+  
+  
+  
+#warning ÑAPA BANDAMA
+  static std::vector<LODAugmentedSector> _lODAugmentedSectors;
+  
+  void addLODAugmentedForSector(const Sector& sector, double factor);
   
 };
+
+
+
 
 
 #endif

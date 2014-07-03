@@ -372,10 +372,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   
 #warning ÑAPA
   double augmentedFactor = 1.0;
-  for (int i = 0; i < _lODAugmentedSectors.size(); i++) {
-    Sector* sector = _lODAugmentedSectors[i]._sector;
+  for (int i = 0; i < _planetRenderer->_lODAugmentedSectors.size(); i++) {
+    Sector* sector = _planetRenderer->_lODAugmentedSectors[i]._sector;
     if (_sector.touchesWith(*sector)){
-      augmentedFactor = _lODAugmentedSectors[i]._lodFactor;
+      augmentedFactor = _planetRenderer->_lODAugmentedSectors[i]._lodFactor;
     }
   }
   
@@ -450,7 +450,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
   }
 }
 
-int MAX_LOD = -1;
+//int MAX_LOD = -1;
 
 void Tile::rawRender(const G3MRenderContext* rc,
                      const GLState* glState,
@@ -507,10 +507,10 @@ void Tile::rawRender(const G3MRenderContext* rc,
     }
   }
 
-  if (_level > MAX_LOD){
-    MAX_LOD = _level;
-    ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
-  }
+//  if (_level > MAX_LOD){
+//    MAX_LOD = _level;
+//    ILogger::instance()->logInfo("MAXLOD = %d\n", _level);
+//  }
 
   //  const BoundingVolume* boundingVolume = getBoundingVolume(rc, trc);
   //  boundingVolume->render(rc, parentState);
@@ -1356,12 +1356,4 @@ bool TileCache::has4SubTilesCached(const Tile* tile) {
   }
   
   return false;
-}
-
-#warning ÑAPA
-std::vector<LODAugmentedSector> Tile::_lODAugmentedSectors;
-LODAugmentedSector::LODAugmentedSector(const Sector& sector, double factor):_sector( new Sector(sector)), _lodFactor(factor){}
-
-void Tile::addLODAugmentedForSector(const Sector& sector, double factor){
-  _lODAugmentedSectors.push_back(LODAugmentedSector(sector, factor));
 }
