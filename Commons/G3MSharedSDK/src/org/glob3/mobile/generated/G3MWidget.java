@@ -695,6 +695,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   
       // update ground height in camera class
       _nextCamera.setGroundHeightFromCartesianPoint(pos);
+      _currentCamera.setGroundHeightFromCartesianPoint(pos);
       return pos;
     }
     else

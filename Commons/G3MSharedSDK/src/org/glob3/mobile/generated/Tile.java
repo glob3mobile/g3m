@@ -680,6 +680,11 @@ public class Tile
   
     boolean rendered = false;
   
+    Geodetic2D pos = new Geodetic2D(Angle.fromDegrees(28.2097), Angle.fromDegrees(-16.6158));
+    //if (_sector.contains(pos) && _level>15)
+      //printf ("Zrender: preguntando tile nivel %d\n", _level);
+  
+  
     if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
     {
       setIsVisible(true, texturizer);
