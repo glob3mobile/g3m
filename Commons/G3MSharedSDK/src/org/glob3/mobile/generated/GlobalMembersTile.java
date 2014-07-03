@@ -12,5 +12,5 @@ public class GlobalMembersTile
 
    //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
    //#warning ÑAPA
-   public static java.util.ArrayList<Tile.LODAugmentedSector> _lODAugmentedSectors = new java.util.ArrayList<Tile.LODAugmentedSector>();
+   public static java.util.ArrayList<LODAugmentedSector> _lODAugmentedSectors = new java.util.ArrayList<LODAugmentedSector>();
 }

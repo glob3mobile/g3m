@@ -446,22 +446,6 @@ public class Tile
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ÑAPA BANDAMA
-  private static class LODAugmentedSector
-  {
-    public Sector _sector;
-    public double _lodFactor;
-
-    public LODAugmentedSector(Sector sector, double factor)
-    {
-       _sector = new Sector(sector);
-       _lodFactor = factor;
-    }
-
-    //CANT DO THIS
-//    ~LODAugmentedSector(){
-//      delete _sector;
-//    }
-  }
   private static java.util.ArrayList<LODAugmentedSector> _lODAugmentedSectors = new java.util.ArrayList<LODAugmentedSector>();
 
   public final Sector _sector ;
