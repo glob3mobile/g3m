@@ -243,10 +243,10 @@ public class Tile
     double augmentedFactor = 1.0;
     for (int i = 0; i < _planetRenderer._lODAugmentedSectors.size(); i++)
     {
-      Sector sector = _planetRenderer._lODAugmentedSectors.get(i)._sector;
+      Sector sector = _planetRenderer._lODAugmentedSectors.at(i)._sector;
       if (_sector.touchesWith(sector))
       {
-        augmentedFactor = _planetRenderer._lODAugmentedSectors.get(i)._lodFactor;
+        augmentedFactor = _planetRenderer._lODAugmentedSectors.at(i)._lodFactor;
       }
     }
   
@@ -1245,7 +1245,10 @@ public final void actualizeQuadTree(G3MRenderContext rc, java.util.LinkedList<Ti
     }
   }
 
-
+  public final Vector2I getLastTileMeshResolution()
+  {
+    return new Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY);
+  }
 }
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#pragma mark ElevationData methods
