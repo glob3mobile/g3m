@@ -160,7 +160,7 @@ public:
   _farPlane(Plane(Vector3D(0, 0, -1), -zfar)),
   _boundingVolume(NULL)
   {
-    printf ("znear=%f\n", znear);
+    //printf ("znear=%f\n", znear);
   }
   
   Frustum (const FrustumData& data);

@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.CircleShape;
 import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.CompositeElevationDataProvider;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DirectMesh;
 import org.glob3.mobile.generated.ElevationDataProvider;
@@ -146,8 +147,9 @@ public class G3MWebGLTestingApplication
          // initialize a default widget by using a builder
          //initDefaultWithBuilder();
     	  
-    	  testBranch_zrender_touchhandlers();
+    	  //testBranch_zrender_touchhandlers();
     	  //testBILGC();
+    	  testBandama();
     	  
          // initialize a customized widget by using a builder
          //initCustomizedWithBuilder();
@@ -1627,7 +1629,81 @@ public class G3MWebGLTestingApplication
 		   _widget.setCameraPosition(position);
 		   _widget.setCameraHeading(Angle.fromDegrees(-35.65));
 		   _widget.setCameraPitch(Angle.fromDegrees(-64.75));
-
 	  }
+
+	   public void testBandama() {
+		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+
+		   final Planet planet = Planet.createFlatEarth();
+		   builder.setPlanet(planet);
+
+		   // wms layer
+		   final LayerTilesRenderParameters ltrp = new LayerTilesRenderParameters(Sector.fullSphere(), 2, 4, 0, 19, 
+				   new Vector2I(256, 256), 
+				   new Vector2I(16,16), false);
+		   LayerSet	layerSet = new LayerSet();
+		  
+		   /* WMSLayer grafcanLIDAR = new WMSLayer("LIDAR_MTL",
+				   new URL("http://idecan1.grafcan.es/ServicioWMS/MTL?", false),
+				   WMSServerVersion.WMS_1_1_0,
+				   Sector.fullSphere(),//gcSector,
+				   "image/jpeg",
+				   "EPSG:4326",
+				   "",
+				   false,
+				   new LevelTileCondition(0, 17),
+				   TimeInterval.fromDays(30),
+				   true,
+				   ltrp);
+		   layerSet.addLayer(grafcanLIDAR);*/
+
+		   WMSLayer grafcanOrto = new WMSLayer("WMS_OrtoExpress",
+	               new URL("http://idecan1.grafcan.es/ServicioWMS/OrtoExpress?", false),
+	               WMSServerVersion.WMS_1_1_0,
+	               Sector.fullSphere(),
+	               "image/jpeg",
+	               "EPSG:4326",
+	               "",
+	               false,
+	               new LevelTileCondition(0, 17),
+	               TimeInterval.fromDays(30),
+	               true,
+	               ltrp);
+		   layerSet.addLayer(grafcanOrto);
+		   builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+
+		   
+		   // create elevations for GC
+		   Sector sectorGC = Sector.fromDegrees(27.7116484957735, -15.90589160041418, 28.225913322423995, -15.32910937385168 );
+		   Vector2I extentGC = new Vector2I(1000, 1000);                             // bil resolution
+		   URL urlGC = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/SenderosGC/resources/gc.bil", false);
+		   ElevationDataProvider elevationDataProviderGC = new SingleBilElevationDataProvider(urlGC, sectorGC, extentGC);
+
+		   // create elevation for Bandama
+		   Sector bandamaBilSector = Sector.fromDegrees(28.0186134922002,-15.466485021954,28.0501903939333,-15.4475303331328);
+		   Vector2I extentBandama = new Vector2I(371, 702); 
+		   URL urlBandama = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/SenderosGC/resources/mdt1_bandama.bil",false);
+		   ElevationDataProvider elevationDataProviderBandama = new SingleBilElevationDataProvider(urlBandama, bandamaBilSector,
+				   extentBandama);
+
+		   // create composite elevation provider
+		   CompositeElevationDataProvider elevationDataProvider = new CompositeElevationDataProvider();
+		   elevationDataProvider.addElevationDataProvider(elevationDataProviderBandama);
+		   elevationDataProvider.addElevationDataProvider(elevationDataProviderGC);
+		   builder.getPlanetRendererBuilder().setElevationDataProvider(elevationDataProvider);
+		   builder.getPlanetRendererBuilder().setVerticalExaggeration(1.0f);
+
+		   _widget = builder.createWidget();
+		   
+		   // increase LOD detail in Bandama
+		   _widget.getPlanetRenderer().addLODAugmentedForSector(bandamaBilSector, 4.0);
+
+		   // set camera looking at GranCanaria
+		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28.0196), Angle.fromDegrees(-15.4589), 603.9);
+		   _widget.setCameraPosition(position);
+		   _widget.setCameraHeading(Angle.fromDegrees(-15.40));
+		   _widget.setCameraPitch(Angle.fromDegrees(-12.75));
+	   }
+
 
 }
