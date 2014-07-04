@@ -2051,6 +2051,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\D3D\D3DRenderer.hpp">
       <Filter>D3D</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgramFactory.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Basic\G3MWidget.cpp.orig">

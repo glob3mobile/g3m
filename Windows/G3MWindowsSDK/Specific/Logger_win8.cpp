@@ -10,29 +10,33 @@
 
 void Logger_win8::logInfo(const std::string x, ...) const {
 	if (_level <= InfoLevel) {
-
-		 //   printf("Info: ");
-			//va_list args;
-			//_crt_va_start(args, x);
-		 //   vprintf(x.c_str(), args);
-		 //   printf("\n");
 			OutputDebugString(L"Info: ");
-			OutputDebugStringA(x.c_str());
-			OutputDebugStringA("\n");
+
+			va_list marker;
+			char szBuf[256];
+
+			va_start(marker, x);
+			vsprintf_s(szBuf, x.c_str(), marker);
+			va_end(marker);
+
+			OutputDebugStringA(szBuf);
+			OutputDebugString(TEXT("\r\n"));
 	}
 
 }
 
 void Logger_win8::logWarning(const std::string x, ...) const {
 	if (_level <= WarningLevel) {
-		//printf("Warning: ");
-		//va_list args;
-		//_crt_va_start(args, x);
-		//vprintf(x.c_str(), args);
-		//printf("\n");
 		OutputDebugString(L"Warning: ");
-		OutputDebugStringA(x.c_str());
-		OutputDebugStringA("\n");
+		va_list marker;
+		char szBuf[256];
+
+		va_start(marker, x);
+		vsprintf_s(szBuf, x.c_str(), marker);
+		va_end(marker);
+
+		OutputDebugStringA(szBuf);
+		OutputDebugString(TEXT("\r\n"));
 	}
 
 }
@@ -40,20 +44,20 @@ void Logger_win8::logWarning(const std::string x, ...) const {
 void Logger_win8::logError(const std::string x, ...) const {
 	if (_level <= ErrorLevel) {
 		OutputDebugString(L"Error: ");
-		
-		/*std::string temp = NULL;
-		va_list args;
 
-		va_start(args, x);
-		temp += va_arg(args, std::string);
-		while (temp != ""){
-			buf += va_arg(args, std::string);
-			temp = va_arg(args, std::string);
-		}		
-		va_end(args);*/
+		va_list marker;
+		char szBuf[256];
 
-		OutputDebugStringA(x.c_str());
-		OutputDebugStringA("\n");
+		va_start(marker, x);
+		vsprintf_s(szBuf, x.c_str(), marker);
+		va_end(marker);
+
+		OutputDebugStringA(szBuf);
+		OutputDebugString(TEXT("\r\n"));
+
+
+		//OutputDebugStringA(x.c_str());
+		//OutputDebugStringA("\n");
 
 		
 	}
