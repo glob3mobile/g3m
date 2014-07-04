@@ -1681,12 +1681,19 @@ public class G3MWebGLTestingApplication
 		   URL urlGC = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/SenderosGC/resources/gc.bil", false);
 		   ElevationDataProvider elevationDataProviderGC = new SingleBilElevationDataProvider(urlGC, sectorGC, extentGC);
 
-		   // create elevation for Bandama
+		   /*// create elevation for Bandama (5m/pixel)
 		   Sector bandamaBilSector = Sector.fromDegrees(28.0186134922002,-15.466485021954,28.0501903939333,-15.4475303331328);
 		   Vector2I extentBandama = new Vector2I(371, 702); 
 		   URL urlBandama = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/SenderosGC/resources/mdt1_bandama.bil",false);
-		   ElevationDataProvider elevationDataProviderBandama = new SingleBilElevationDataProvider(urlBandama, bandamaBilSector,
-				   extentBandama);
+		   ElevationDataProvider elevationDataProviderBandama5 = new SingleBilElevationDataProvider(urlBandama, 
+				   bandamaBilSector, extentBandama);*/
+		   
+		   // create elevation for Bandama (1m/pixel)
+		   Sector bandamaBilSector = Sector.fromDegrees(28.0186134922002,-15.466485021954,28.0501903939333,-15.4475303331328);
+		   Vector2I extentBandama = new Vector2I(1881, 3522); 
+		   URL urlBandama = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/SenderosGC/resources/mdt.bil",false);
+		   ElevationDataProvider elevationDataProviderBandama = new SingleBilElevationDataProvider(urlBandama, 
+				   bandamaBilSector, extentBandama);
 
 		   // create composite elevation provider
 		   CompositeElevationDataProvider elevationDataProvider = new CompositeElevationDataProvider();
