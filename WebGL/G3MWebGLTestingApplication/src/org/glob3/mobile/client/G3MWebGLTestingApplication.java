@@ -1633,7 +1633,7 @@ public class G3MWebGLTestingApplication
 	  }
 
 	   public void testBandama() {
-		   final MyG3MWidget_WebGL widgetJS = new MyG3MWidget_WebGL(null);
+		   final MyG3MWidget_WebGL widgetJS = new MyG3MWidget_WebGL();
 		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL(widgetJS);
 
 		   final Planet planet = Planet.createFlatEarth();
@@ -1667,7 +1667,7 @@ public class G3MWebGLTestingApplication
 	               "EPSG:4326",
 	               "",
 	               false,
-	               new LevelTileCondition(0, 17),
+	               new LevelTileCondition(0, 19),
 	               TimeInterval.fromDays(30),
 	               true,
 	               ltrp);
@@ -1698,7 +1698,7 @@ public class G3MWebGLTestingApplication
 		   _widget = builder.createWidget();
 		   
 		   // increase LOD detail in Bandama
-		   //_widget.getPlanetRenderer().addLODAugmentedForSector(bandamaBilSector, 4.0);
+		   widgetJS.setSectorForLODAugmented(bandamaBilSector);
 
 		   // set camera looking at GranCanaria
 		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28.0196), Angle.fromDegrees(-15.4589), 603.9);
