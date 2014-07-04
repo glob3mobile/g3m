@@ -620,7 +620,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           Vector3D SW = planet.toCartesian(tile._sector.getSW());
           double distanceNS = NW.distanceTo(SW);
           double distancePerVertex = distanceNS / (tile.getLastTileMeshResolution()._y-1);
-          ILogger.instance().logInfo("-- Tile level %d: approx. 1 vertex every %.2f meters\n", tile._level, distancePerVertex);
+          ILogger.instance().logInfo("-- Tile level %d: approx. 1 vertex every %f meters\n", tile._level, distancePerVertex);
   
           if (_texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet))
           {
