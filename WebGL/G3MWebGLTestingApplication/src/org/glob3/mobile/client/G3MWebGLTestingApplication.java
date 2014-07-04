@@ -1685,7 +1685,7 @@ public class G3MWebGLTestingApplication
 		   Sector bandamaBilSector = Sector.fromDegrees(28.0186134922002,-15.466485021954,28.0501903939333,-15.4475303331328);
 		   Vector2I extentBandama = new Vector2I(371, 702); 
 		   URL urlBandama = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/SenderosGC/resources/mdt1_bandama.bil",false);
-		   ElevationDataProvider elevationDataProviderBandama5 = new SingleBilElevationDataProvider(urlBandama, 
+		   ElevationDataProvider elevationDataProviderBandama = new SingleBilElevationDataProvider(urlBandama, 
 				   bandamaBilSector, extentBandama);*/
 		   
 		   // create elevation for Bandama (1m/pixel)
