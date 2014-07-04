@@ -709,11 +709,16 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
     for (int i = 0; i < firstLevelTilesCount; i++) {
       const Tile* tile = _firstLevelTiles[i]->getDeepestTileContaining(position);
       if (tile != NULL) {
-        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
         ILogger::instance()->logInfo("Camera position=%s heading=%f pitch=%f",
                                      _lastCamera->getGeodeticPosition().description().c_str(),
                                      _lastCamera->getHeading()._degrees,
                                      _lastCamera->getPitch()._degrees);
+        ILogger::instance()->logInfo("Touched on %s", tile->description().c_str());
+        Vector3D NW = planet->toCartesian(tile->_sector.getNW());
+        Vector3D SW = planet->toCartesian(tile->_sector.getSW());
+        double distanceNS = NW.distanceTo(SW);
+        double distancePerVertex = distanceNS / (tile->getLastTileMeshResolution()._y-1);
+        ILogger::instance()->logInfo("-- Tile level %d: approx. 1 vertex every %.2f meters\n", tile->_level, distancePerVertex);
 
         if (_texturizer->onTerrainTouchEvent(ec, position, tile, _layerSet)) {
           return true;

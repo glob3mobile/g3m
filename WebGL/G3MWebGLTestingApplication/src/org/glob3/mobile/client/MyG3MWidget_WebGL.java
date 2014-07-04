@@ -28,8 +28,8 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 			$wnd.G3M.doble = $entry(function(numero) {
 				return that.@org.glob3.mobile.client.MyG3MWidget_WebGL::doble(I)(numero);
 			});
-			$wnd.G3M.addLODAugmented = $entry(function(factor) {
-				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::addLODAugmented(D)(factor);
+			$wnd.G3M.setLODAugmentedFactor = $entry(function(factor) {
+				that.@org.glob3.mobile.client.MyG3MWidget_WebGL::setLODAugmentedFactor(D)(factor);
 			});
 	   }-*/;
 
@@ -37,7 +37,7 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 	      return 2*numero;
 	   }
 	   
-	   private void addLODAugmented (final double factor) {
+	   private void setLODAugmentedFactor (final double factor) {
 		   getPlanetRenderer().addLODAugmentedForSector(_sector, factor);
 	   }
 }

@@ -419,7 +419,9 @@ void actualizeQuadTree(const G3MRenderContext* rc,
 
   void deleteTexturizedMesh(TileTexturizer* texturizer);
   
-  
+  Vector2I getLastTileMeshResolution() const {
+    return Vector2I(_lastTileMeshResolutionX, _lastTileMeshResolutionY);
+  }
 };
 
 #endif
