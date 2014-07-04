@@ -185,35 +185,47 @@ _compData(NULL),
 _currentStep(NULL) {
 }
 
+
+double CompositeElevationDataProvider::
+CompositeElevationDataProvider_Request::getSquaredGridResolutionInDegreesSquared(const Vector2I& extent,
+                                                                                 const Sector& sector) const{
+  
+  double latResInDegrees = sector._deltaLatitude._degrees / extent._y;
+  double lonResInDegrees = sector._deltaLongitude._degrees / extent._x;
+  
+  return latResInDegrees * latResInDegrees + lonResInDegrees * lonResInDegrees;
+}
+
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
 popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const{
-
+  
   double bestRes = extent.squaredLength();
   double selectedRes = IMathUtils::instance()->maxDouble();
   double selectedResDistance = IMathUtils::instance()->maxDouble();
   IMathUtils *mu = IMathUtils::instance();
-
-
+  
+  
   ElevationDataProvider* provider = NULL;
   
   const int psSize = ps.size();
   int selectedIndex = -1;
   for (int i = 0; i < psSize; i++) {
     ElevationDataProvider* each = ps[i];
-
-    const double res = each->getMinResolution().squaredLength();
-    const double newResDistance = mu->abs(bestRes - res);
-
-    if (newResDistance < selectedResDistance || //Closer Resolution
-        (newResDistance == selectedResDistance && res < selectedRes)) { //or equal and higher resolution
-      selectedResDistance = newResDistance;
+    
+    const Sector* sector = each->getSectors().at(0);
+    
+    double res = getSquaredGridResolutionInDegreesSquared(each->getMinResolution(), *sector);
+    
+    if (res <= selectedRes)
+    {
+      selectedResDistance = res;
       selectedRes = res;
       selectedIndex = i;
       provider = each;
     }
   }
-
+  
   if (provider != NULL) {
 #ifdef C_CODE
     ps.erase(ps.begin() + selectedIndex);

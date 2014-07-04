@@ -145,7 +145,9 @@ _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
 _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
-_tileRenderingListener(tileRenderingListener)
+_tileRenderingListener(tileRenderingListener),
+_maxDEMDevianceInPixels(3.0),
+_maxTexelSizeInPixels(3.0)
 {
   _context = NULL;
   _layerSet->setChangeListener(this);

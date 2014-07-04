@@ -381,19 +381,19 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   
   //int texHeight = (int) mu->sqrt(texHeightSquared);
   
-  bool lastLMRCR = _lastMeetsRenderCriteriaResult;
+//  bool lastLMRCR = _lastMeetsRenderCriteriaResult;
   
   //CRITERIA
-  _lastMeetsRenderCriteriaResult = (visibleDeviation < 1.0) && (maxPixelsPerTexel < 1.0);
+  _lastMeetsRenderCriteriaResult = (visibleDeviation < 3.0) && (maxPixelsPerTexel < 3.0);
   
-  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
-    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
-           _tileTessellatorMeshData._deviation,
-           distanceToTile,
-           visibleDeviation,
-           maxTexelWidth,
-           maxPixelsPerTexel);
-  }
+//  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
+//    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
+//           _tileTessellatorMeshData._deviation,
+//           distanceToTile,
+//           visibleDeviation,
+//           maxTexelWidth,
+//           maxPixelsPerTexel);
+//  }
   
   return _lastMeetsRenderCriteriaResult;
 }

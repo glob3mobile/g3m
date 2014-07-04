@@ -290,6 +290,9 @@ private:
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
   
+  double _maxTexelSizeInPixels;
+  double _maxDEMDevianceInPixels;
+  
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,
@@ -456,6 +459,18 @@ public:
     if (_changedInfoListener != NULL) {
       _changedInfoListener->changedRendererInfo(_rendererIdentifier, info);
     }
+  }
+  
+  void setLODParameters(double maxTexelSizeInPixels,
+                        double maxDEMDevianceInPixels){
+    
+    if (maxTexelSizeInPixels < 1.0 || maxDEMDevianceInPixels < 1.0){
+      ILogger::instance()->logError("Invalid LOD Parameters");
+      return;
+    }
+    
+    _maxTexelSizeInPixels = maxTexelSizeInPixels;
+    _maxDEMDevianceInPixels = maxDEMDevianceInPixels;
   }
   
 };

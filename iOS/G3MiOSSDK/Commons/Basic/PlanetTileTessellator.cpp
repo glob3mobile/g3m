@@ -334,7 +334,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   int rx2 = rx*2-1;
   int ry2 = ry*2-1;
   Vector3D* grid[rx2][ry2];
-  bool gridElevationNAN[rx2][ry2];
+  double gridElevation[rx2][ry2];
+  
   for (int j = 0; j < ry2; j++) {
     //V = Latitude
     const double v = (double) j / (ry2 - 1);
@@ -351,7 +352,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         bool nanElev = ISNAN(rawElevation);
         elevation = nanElev? 0 : rawElevation * verticalExaggeration;
         
-        gridElevationNAN[i][j] = nanElev;
+        gridElevation[i][j] = rawElevation * verticalExaggeration;
         
         //MIN
         if (elevation < minElevation) {
@@ -365,8 +366,9 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         
         //AVERAGE
         averageElevation += elevation;
-      } else{
-        gridElevationNAN[i][j] = true;
+      }
+      else{
+        gridElevation[i][j] = 0.0;
       }
       
       Vector3D newVertex = vertices->getPlanet()->toCartesian(position, elevation);
@@ -399,6 +401,12 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   
   //Analyzing grid //////////////////////////////////////////////////////////////////
   
+  Vector3D* firstVertex = grid[0][0];
+  Vector3D* lastVertex = grid[(rx-1) *2][(ry-1) *2];
+  
+  double meshDiagonalLength = firstVertex->sub(*lastVertex).length();
+  double maxValidDEMGap = meshDiagonalLength * 0.01;
+  
   double deviationSquared = 0;
   double maxVerticesDistanceInLongitudeSquared = 0;
   double maxVerticesDistanceInLatitudeSquared = 0;
@@ -408,63 +416,62 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
       int lonIndex = i*2;
       int latIndex = j*2;
       Vector3D* vertex = grid[lonIndex][latIndex];
-      bool elevNAN = gridElevationNAN[lonIndex][latIndex];
       
-      if (lonIndex > 1){
-        
-        bool checkDeviationLon =  gridElevationNAN[lonIndex - 2][latIndex] == elevNAN &&
-                                  gridElevationNAN[lonIndex - 1][latIndex] == elevNAN;
-        
-        
-        Vector3D* prevLatV = grid[lonIndex - 2][latIndex];
-        if (checkDeviationLon){
-          Vector3D* realLatV = grid[lonIndex - 1][latIndex];
-          
-          Vector3D interpolatedLatV = prevLatV->add(*vertex).div(2.0);
-          
-          double newDeviation = realLatV->sub(interpolatedLatV).squaredLength();
-          if (newDeviation > deviationSquared){
-            deviationSquared = newDeviation;
-          }
-          
-          //Computing maxVerticesDistance
-          double dist = vertex->sub(*prevLatV).squaredLength();
-          if (maxVerticesDistanceInLongitudeSquared < dist){
-            maxVerticesDistanceInLongitudeSquared = dist;
-          }
-        }
-
-      }
+      double currentElevation = gridElevation[lonIndex][latIndex];
       
-      if (latIndex > 1){
+      if (!ISNAN(currentElevation)){
         
-        bool checkDeviationLat =  gridElevationNAN[lonIndex][latIndex - 2] == elevNAN &&
-                                  gridElevationNAN[lonIndex][latIndex - 1] == elevNAN;
-        
-        Vector3D* prevLonV = grid[lonIndex][latIndex - 2];
-        if (checkDeviationLat){
-          Vector3D* realLonV = grid[lonIndex][latIndex - 1];
+        if (lonIndex > 1){
           
-          Vector3D interpolatedLonV = prevLonV->add(*vertex).div(2.0);
+          double prevLonElevation = gridElevation[lonIndex - 2][latIndex];
+          bool checkDeviationLon = !ISNAN(prevLonElevation) && (mu->abs(currentElevation - prevLonElevation) < maxValidDEMGap);
           
-          double newDeviation = realLonV->sub(interpolatedLonV).squaredLength();
-          
-          if (newDeviation > deviationSquared){
-            deviationSquared = newDeviation;
+          if (checkDeviationLon){
+            Vector3D* prevLatV = grid[lonIndex - 2][latIndex];
+            Vector3D* realLatV = grid[lonIndex - 1][latIndex];
+            
+            Vector3D interpolatedLatV = prevLatV->add(*vertex).div(2.0);
+            
+            double eastDeviation = realLatV->sub(interpolatedLatV).squaredLength();
+            if (eastDeviation > deviationSquared){
+              deviationSquared = eastDeviation;
+            }
+            
+            //Computing maxVerticesDistance
+            double dist = vertex->sub(*prevLatV).squaredLength();
+            if (maxVerticesDistanceInLongitudeSquared < dist){
+              maxVerticesDistanceInLongitudeSquared = dist;
+            }
           }
           
-          //Computing maxVerticesDistance
-          double dist = vertex->sub(*prevLonV).squaredLength();
-          if (maxVerticesDistanceInLatitudeSquared < dist){
-            maxVerticesDistanceInLatitudeSquared = dist;
-          }
         }
         
+        if (latIndex > 1){
+          
+          double prevLatElevation = gridElevation[lonIndex][latIndex - 2] ;
+          bool checkDeviationLat = !ISNAN(prevLatElevation) && (mu->abs(currentElevation - prevLatElevation) < maxValidDEMGap);
+          
+          if (checkDeviationLat){
+            Vector3D* prevLonV = grid[lonIndex][latIndex - 2];
+            Vector3D* realLonV = grid[lonIndex][latIndex - 1];
+            
+            Vector3D interpolatedLonV = prevLonV->add(*vertex).div(2.0);
+            
+            double southDeviation = realLonV->sub(interpolatedLonV).squaredLength();
+            if (southDeviation > deviationSquared){
+              deviationSquared = southDeviation;
+            }
+            
+            //Computing maxVerticesDistance
+            double dist = vertex->sub(*prevLonV).squaredLength();
+            if (maxVerticesDistanceInLatitudeSquared < dist){
+              maxVerticesDistanceInLatitudeSquared = dist;
+            }
+          }
+          
+        }
+        
       }
-      
-//      if (meshSector.contains(Geodetic2D::fromDegrees(28.291563700768705, -16.629130401997827))){
-//        printf("DEV: %f\n", deviationSquared);
-//      }
       
     }
   }
