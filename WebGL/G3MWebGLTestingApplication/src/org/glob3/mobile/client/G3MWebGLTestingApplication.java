@@ -100,6 +100,7 @@ import org.glob3.mobile.specific.G3MBuilder_WebGL;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 import org.glob3.mobile.specific.ThreadUtils_WebGL;
 
+import org.glob3.mobile.client.MyG3MWidget_WebGL;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -1632,7 +1633,8 @@ public class G3MWebGLTestingApplication
 	  }
 
 	   public void testBandama() {
-		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+		   final MyG3MWidget_WebGL widgetJS = new MyG3MWidget_WebGL(null);
+		   final G3MBuilder_WebGL builder = new G3MBuilder_WebGL(widgetJS);
 
 		   final Planet planet = Planet.createFlatEarth();
 		   builder.setPlanet(planet);
@@ -1696,7 +1698,7 @@ public class G3MWebGLTestingApplication
 		   _widget = builder.createWidget();
 		   
 		   // increase LOD detail in Bandama
-		   _widget.getPlanetRenderer().addLODAugmentedForSector(bandamaBilSector, 4.0);
+		   //_widget.getPlanetRenderer().addLODAugmentedForSector(bandamaBilSector, 4.0);
 
 		   // set camera looking at GranCanaria
 		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28.0196), Angle.fromDegrees(-15.4589), 603.9);
