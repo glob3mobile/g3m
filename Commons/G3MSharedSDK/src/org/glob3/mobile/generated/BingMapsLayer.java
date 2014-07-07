@@ -402,11 +402,8 @@ public class BingMapsLayer extends RasterLayer
     {
       return RenderState.error(_errors);
     }
-    if (!_isInitialized)
-    {
-      return RenderState.busy();
-    }
-    return RenderState.ready();
+  
+    return _isInitialized ? RenderState.ready() : RenderState.busy();
   }
 
   public final Sector getDataSector()

@@ -598,8 +598,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         final GEOObjectHolder geoObjectHolder = entry._geoObjectHolder;
         geoObjectHolder._retain();
         return geoObjectHolder;
-  
-        //return entry->_geoObject->deepCopy();
       }
     }
     return null;
