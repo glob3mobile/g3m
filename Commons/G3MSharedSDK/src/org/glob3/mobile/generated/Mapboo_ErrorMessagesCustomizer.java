@@ -25,10 +25,7 @@ public class Mapboo_ErrorMessagesCustomizer implements ErrorMessagesCustomizer
         customizedErrorMessages.add("Oops, application not found!");
         break;
       }
-      else
-      {
-        customizedErrorMessages.add(error);
-      }
+      customizedErrorMessages.add(error);
     }
 
     return customizedErrorMessages;
