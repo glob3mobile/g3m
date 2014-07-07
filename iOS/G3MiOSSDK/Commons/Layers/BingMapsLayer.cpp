@@ -389,10 +389,8 @@ RenderState BingMapsLayer::getRenderState() {
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }
-  if (!_isInitialized) {
-    return RenderState::busy();
-  }
-  return RenderState::ready();
+
+  return _isInitialized ? RenderState::ready() : RenderState::busy();
 }
 
 const TileImageContribution* BingMapsLayer::rawContribution(const Tile* tile) const {
