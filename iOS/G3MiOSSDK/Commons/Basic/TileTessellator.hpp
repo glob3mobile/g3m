@@ -21,6 +21,7 @@ class Sector;
 
 #include "Vector2I.hpp"
 #include "Vector2F.hpp"
+#include "Vector3D.hpp"
 
 class TileTessellatorMeshData{
 public:
@@ -33,6 +34,12 @@ public:
   int _surfaceResolutionX;
   int _surfaceResolutionY;
   double _radius;
+  
+  Vector3D* _meshCenter;
+  
+  ~TileTessellatorMeshData(){
+    delete _meshCenter;
+  }
 };
 
 

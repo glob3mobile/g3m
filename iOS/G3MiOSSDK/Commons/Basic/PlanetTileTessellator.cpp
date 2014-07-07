@@ -502,6 +502,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   data._surfaceResolutionX = meshResolution._x;
   data._surfaceResolutionY = meshResolution._y;
   data._radius = planet->toCartesian(tileSector.getNE()).sub(planet->toCartesian(tileSector.getSW())).length() / 2.0;
+  data._meshCenter = new Vector3D(planet->toCartesian(meshSector._center));
+  
 #ifdef C_CODE
   for (int j = 0; j < ry2; j++) {
     for (int i = 0; i < rx2; i++) {
