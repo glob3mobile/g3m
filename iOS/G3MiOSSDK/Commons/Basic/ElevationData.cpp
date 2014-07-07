@@ -193,6 +193,12 @@ double ElevationData::getElevationAt(const Angle& latitude,
 
   const int x = (int) dX;
   const int y = (int) dY;
+  
+  IMathUtils* mu = IMathUtils::instance();
+  if (mu->abs(((double)x) - dX) < 0.1 && mu->abs(((double)y) - dY) < 0.1){
+    return getElevationAt(x, y);
+  }
+  
   const int nextX = x + 1;
   const int nextY = y + 1;
   const double alphaY = dY - y;

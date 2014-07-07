@@ -222,6 +222,13 @@ public abstract class ElevationData
   
     final int x = (int) dX;
     final int y = (int) dY;
+    
+    IMathUtils mu = IMathUtils.instance();
+    if (mu.abs(((double)x) - dX) < 0.1 && mu.abs(((double)y) - dY) < 0.1){
+      return getElevationAt(x, y);
+    }
+
+    
     final int nextX = x + 1;
     final int nextY = y + 1;
     final double alphaY = dY - y;

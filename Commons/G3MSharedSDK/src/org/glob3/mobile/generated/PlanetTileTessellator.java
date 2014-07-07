@@ -198,7 +198,7 @@ public class PlanetTileTessellator extends TileTessellator
     Vector3D firstVertex = grid[0][0];
     Vector3D lastVertex = grid[(rx-1) *2][(ry-1) *2];
   
-    double meshDiagonalLength = firstVertex.sublastVertex.length();
+    double meshDiagonalLength = firstVertex.sub(lastVertex).length();
     double maxValidDEMGap = meshDiagonalLength * 0.01;
   
     double deviationSquared = 0;
@@ -229,7 +229,7 @@ public class PlanetTileTessellator extends TileTessellator
               Vector3D prevLatV = grid[lonIndex - 2][latIndex];
               Vector3D realLatV = grid[lonIndex - 1][latIndex];
   
-              Vector3D interpolatedLatV = prevLatV.addvertex.div(2.0);
+              Vector3D interpolatedLatV = prevLatV.add(vertex).div(2.0);
   
               double eastDeviation = realLatV.sub(interpolatedLatV).squaredLength();
               if (eastDeviation > deviationSquared)
@@ -238,7 +238,7 @@ public class PlanetTileTessellator extends TileTessellator
               }
   
               //Computing maxVerticesDistance
-              double dist = vertex.subprevLatV.squaredLength();
+              double dist = vertex.sub(prevLatV).squaredLength();
               if (maxVerticesDistanceInLongitudeSquared < dist)
               {
                 maxVerticesDistanceInLongitudeSquared = dist;
@@ -258,7 +258,7 @@ public class PlanetTileTessellator extends TileTessellator
               Vector3D prevLonV = grid[lonIndex][latIndex - 2];
               Vector3D realLonV = grid[lonIndex][latIndex - 1];
   
-              Vector3D interpolatedLonV = prevLonV.addvertex.div(2.0);
+              Vector3D interpolatedLonV = prevLonV.add(vertex).div(2.0);
   
               double southDeviation = realLonV.sub(interpolatedLonV).squaredLength();
               if (southDeviation > deviationSquared)
@@ -267,7 +267,7 @@ public class PlanetTileTessellator extends TileTessellator
               }
   
               //Computing maxVerticesDistance
-              double dist = vertex.subprevLonV.squaredLength();
+              double dist = vertex.sub(prevLonV).squaredLength();
               if (maxVerticesDistanceInLatitudeSquared < dist)
               {
                 maxVerticesDistanceInLatitudeSquared = dist;

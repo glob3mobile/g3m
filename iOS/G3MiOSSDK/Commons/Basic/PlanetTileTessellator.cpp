@@ -339,6 +339,10 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   
   const Planet* planet = vertices->getPlanet();
   
+//  printf("MS: %s\n", meshSector.description().c_str());
+//  printf("EDS: %s\n", elevationData->getSector().description().c_str());
+
+  
   for (int j = 0; j < ry2; j++) {
     //V = Latitude
     const double v = (double) j / (ry2 - 1);
@@ -410,7 +414,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   Vector3D* firstVertex = grid[0][0];
   Vector3D* lastVertex = grid[(rx-1) *2][(ry-1) *2];
   
-  double meshDiagonalLength = firstVertex->sub(*lastVertex).length();
+  double meshDiagonalLength = firstVertex->sub( *lastVertex ).length();
   double maxValidDEMGap = meshDiagonalLength * 0.01;
   
   double deviationSquared = 0;
@@ -436,7 +440,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
             Vector3D* prevLatV = grid[lonIndex - 2][latIndex];
             Vector3D* realLatV = grid[lonIndex - 1][latIndex];
             
-            Vector3D interpolatedLatV = prevLatV->add(*vertex).div(2.0);
+            Vector3D interpolatedLatV = prevLatV->add( *vertex ).div(2.0);
             
             double eastDeviation = realLatV->sub(interpolatedLatV).squaredLength();
             if (eastDeviation > deviationSquared){
@@ -444,7 +448,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
             }
             
             //Computing maxVerticesDistance
-            double dist = vertex->sub(*prevLatV).squaredLength();
+            double dist = vertex->sub( *prevLatV ).squaredLength();
             if (maxVerticesDistanceInLongitudeSquared < dist){
               maxVerticesDistanceInLongitudeSquared = dist;
             }
@@ -461,7 +465,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
             Vector3D* prevLonV = grid[lonIndex][latIndex - 2];
             Vector3D* realLonV = grid[lonIndex][latIndex - 1];
             
-            Vector3D interpolatedLonV = prevLonV->add(*vertex).div(2.0);
+            Vector3D interpolatedLonV = prevLonV->add( *vertex ).div(2.0);
             
             double southDeviation = realLonV->sub(interpolatedLonV).squaredLength();
             if (southDeviation > deviationSquared){
@@ -469,7 +473,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
             }
             
             //Computing maxVerticesDistance
-            double dist = vertex->sub(*prevLonV).squaredLength();
+            double dist = vertex->sub( *prevLonV ).squaredLength();
             if (maxVerticesDistanceInLatitudeSquared < dist){
               maxVerticesDistanceInLatitudeSquared = dist;
             }
