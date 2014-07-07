@@ -37,4 +37,5 @@ public class TileTessellatorMeshData
   public double _maxVerticesDistanceInLatitude;
   public int _surfaceResolutionX;
   public int _surfaceResolutionY;
+  public double _radius;
 }

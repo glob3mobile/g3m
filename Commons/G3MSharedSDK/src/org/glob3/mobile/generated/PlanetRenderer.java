@@ -929,4 +929,14 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _maxDEMDevianceInPixels = maxDEMDevianceInPixels;
   }
 
+  public final double getMaxTexelSizeInPixels()
+  {
+    return _maxTexelSizeInPixels;
+  }
+
+  public final double getMaxDEMDevianceInPixels()
+  {
+    return _maxDEMDevianceInPixels;
+  }
+
 }

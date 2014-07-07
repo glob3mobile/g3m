@@ -62,115 +62,25 @@ public class Tile
   private TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
 
   private BoundingVolume _boundingVolume;
-
-  private Vector3D _northWestPoint;
-  private Vector3D _northEastPoint;
-  private Vector3D _southWestPoint;
-  private Vector3D _southEastPoint;
-
-  private static double getSquaredArcSegmentRatio(Vector3D a, Vector3D b)
-  {
-    /*
-     Arco = ang * Cuerda / (2 * sen(ang/2))
-     */
-  
-    final double angleInRadians = a.angleInRadiansBetween(b);
-    final double halfAngleSin = java.lang.Math.sin(angleInRadians / 2);
-    final double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
-    return (arcSegmentRatio * arcSegmentRatio);
-  }
-
-  private void computeTileCorners(Planet planet)
-  {
-  
-    if (_tessellatorMesh == null)
-    {
-      ILogger.instance().logError("Error in Tile::computeTileCorners");
-      return;
-    }
-  
-  //  delete _middleWestPoint;
-  //  delete _middleEastPoint;
-  //  delete _middleNorthPoint;
-  //  delete _middleSouthPoint;
-    if (_northWestPoint != null)
-       _northWestPoint.dispose();
-    if (_northEastPoint != null)
-       _northEastPoint.dispose();
-    if (_southWestPoint != null)
-       _southWestPoint.dispose();
-    if (_southEastPoint != null)
-       _southEastPoint.dispose();
-  
-  
-    final double mediumHeight = _tileTessellatorMeshData._averageHeight;
-  
-  //  const Geodetic2D center = _sector.getCenter();
-  //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
-  //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
-  //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
-  //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
-  //
-  //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
-  //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
-  //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
-  //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
-  
-    _northWestPoint = new Vector3D(planet.toCartesian(_sector.getNW(), mediumHeight));
-    _northEastPoint = new Vector3D(planet.toCartesian(_sector.getNE(), mediumHeight));
-    _southWestPoint = new Vector3D(planet.toCartesian(_sector.getSW(), mediumHeight));
-    _southEastPoint = new Vector3D(planet.toCartesian(_sector.getSE(), mediumHeight));
-  }
-
-  private double _northArcSegmentRatioSquared;
-  private double _southArcSegmentRatioSquared;
-  private double _eastArcSegmentRatioSquared;
-  private double _westArcSegmentRatioSquared;
-
-
-  private void prepareTestLODData(Planet planet)
-  {
-  
-  //  if (_middleNorthPoint == NULL) {
-  //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
-  //    return;
-  //  }
-  //
-  //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
-  //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
-  //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
-  //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
-  //
-  //  const Angle latitudeAngle = nN.angleBetween(nS);
-  //  double latRad = latitudeAngle._radians;
-  //  const double sin_lat_2 = SIN(latRad / 2);
-  //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
-  //
-  //  const Angle longitudeAngle = nE.angleBetween(nW);
-  //  const double lonRad = longitudeAngle._radians;
-  //  const double sin_lon_2 = SIN(lonRad / 2);
-  //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
-  //
-  //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
-  //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
-  
-    if ((_northWestPoint == null) || (_northEastPoint == null) || (_southWestPoint == null) || (_southEastPoint == null))
-    {
-      ILogger.instance().logError("Error in Tile::prepareTestLODData");
-      return;
-    }
-  
-    final Vector3D normalNW = planet.centricSurfaceNormal(_northWestPoint);
-    final Vector3D normalNE = planet.centricSurfaceNormal(_northEastPoint);
-    final Vector3D normalSW = planet.centricSurfaceNormal(_southWestPoint);
-    final Vector3D normalSE = planet.centricSurfaceNormal(_southEastPoint);
-  
-    _northArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalNE);
-    _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
-    _eastArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNE, normalSE);
-    _westArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalSW);
-  }
-
+//
+//  Vector3D* _northWestPoint;
+//  Vector3D* _northEastPoint;
+//  Vector3D* _southWestPoint;
+//  Vector3D* _southEastPoint;
+//
+//  static double getSquaredArcSegmentRatio(const Vector3D& a,
+//                                          const Vector3D& b);
+//
+//  void computeTileCorners(const Planet* planet);
+//
+//  double _northArcSegmentRatioSquared;
+//  double _southArcSegmentRatioSquared;
+//  double _eastArcSegmentRatioSquared;
+//  double _westArcSegmentRatioSquared;
+//
+//
+//  void prepareTestLODData(const Planet* planet);
+//
   private Mesh getTessellatorMesh(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
   {
   
@@ -189,7 +99,7 @@ public class Tile
         // no elevation data provider, just create a simple mesh without elevation
         _tessellatorMesh = tessellator.createTileMesh(rc.getPlanet(), layerTilesRenderParameters._tileMeshResolution, this, null, _verticalExaggeration, tilesRenderParameters._renderDebug, _tileTessellatorMeshData);
   
-        computeTileCorners(rc.getPlanet());
+  //      computeTileCorners(rc->getPlanet());
       }
       else
       {
@@ -206,7 +116,7 @@ public class Tile
           meshHolder.setMesh(tessellatorMesh);
         }
   
-        computeTileCorners(rc.getPlanet());
+  //      computeTileCorners(rc->getPlanet());
       }
   
       //Notifying when the tile is first created and every time the elevation data changes
@@ -289,13 +199,18 @@ public class Tile
     final Camera camera = rc.getCurrentCamera();
     IMathUtils mu = IMathUtils.instance();
   
-    if ((_northArcSegmentRatioSquared == 0) || (_southArcSegmentRatioSquared == 0) || (_eastArcSegmentRatioSquared == 0) || (_westArcSegmentRatioSquared == 0))
-    {
-      prepareTestLODData(rc.getPlanet());
-    }
-  
+  //  if ((_northArcSegmentRatioSquared == 0) ||
+  //      (_southArcSegmentRatioSquared == 0) ||
+  //      (_eastArcSegmentRatioSquared  == 0) ||
+  //      (_westArcSegmentRatioSquared  == 0)) {
+  //    prepareTestLODData( rc->getPlanet() );
+  //  }
+  //
     //Computing distance to tile
-    double tileRadius = _northEastPoint.sub(_southWestPoint).length() / 2.0;
+    double tileRadius = _tileTessellatorMeshData._radius; // _northEastPoint->sub(*_southWestPoint).length() / 2.0;
+    //
+    //  printf("%f, %f\n", tileRadius, _tileTessellatorMeshData._radius);
+    //
     Vector3D center = rc.getPlanet().toCartesian(_sector._center);
     double distanceToTile = camera.getCartesianPosition().sub(center).length();
     distanceToTile -= tileRadius;
@@ -307,38 +222,48 @@ public class Tile
       visibleDeviation = camera.getPixelsForObjectSize(distanceToTile, _tileTessellatorMeshData._deviation);
     }
   
-    //Pixel size in meters
-    final int texWidth = (int) mu.sqrt(texWidthSquared);
-    final int texelsBetweenVerticesLongitude = texWidth / _tileTessellatorMeshData._surfaceResolutionX;
-    final double maxTexelWidth = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLongitude;
+    boolean deviationCriteria = visibleDeviation < _planetRenderer.getMaxDEMDevianceInPixels();
+    boolean texelCriteria = false;
   
-    final int texHeight = (int) mu.sqrt(texHeightSquared);
-    final int texelsBetweenVerticesLatitude = texHeight / _tileTessellatorMeshData._surfaceResolutionY;
-    final double maxTexelHeight = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLatitude;
-  
-    final double maxTexelSize = (maxTexelHeight > maxTexelWidth) ? maxTexelHeight : maxTexelWidth;
-  
-    double maxPixelsPerTexel = mu.maxDouble();
-    if (maxPixelsPerTexel > 0.0)
+    if (deviationCriteria)
     {
-      maxPixelsPerTexel = camera.getPixelsForObjectSize(distanceToTile, maxTexelSize);
+  
+      //Pixel size in meters
+      final int texWidth = (int) mu.sqrt(texWidthSquared);
+      final int texelsBetweenVerticesLongitude = texWidth / _tileTessellatorMeshData._surfaceResolutionX;
+      final double maxTexelWidth = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLongitude;
+  
+      final int texHeight = (int) mu.sqrt(texHeightSquared);
+      final int texelsBetweenVerticesLatitude = texHeight / _tileTessellatorMeshData._surfaceResolutionY;
+      final double maxTexelHeight = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLatitude;
+  
+      final double maxTexelSize = (maxTexelHeight > maxTexelWidth) ? maxTexelHeight : maxTexelWidth;
+  
+      double maxPixelsPerTexel = mu.maxDouble();
+      if (maxPixelsPerTexel > 0.0)
+      {
+        maxPixelsPerTexel = camera.getPixelsForObjectSize(distanceToTile, maxTexelSize);
+      }
+  
+      texelCriteria = maxPixelsPerTexel < _planetRenderer.getMaxTexelSizeInPixels();
+  
     }
   
     //int texHeight = (int) mu->sqrt(texHeightSquared);
   
-  //  bool lastLMRCR = _lastMeetsRenderCriteriaResult;
+    //  bool lastLMRCR = _lastMeetsRenderCriteriaResult;
   
     //CRITERIA
-    _lastMeetsRenderCriteriaResult = (visibleDeviation < 3.0) && (maxPixelsPerTexel < 3.0);
+    _lastMeetsRenderCriteriaResult = deviationCriteria && texelCriteria;
   
-  //  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
-  //    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
-  //           _tileTessellatorMeshData._deviation,
-  //           distanceToTile,
-  //           visibleDeviation,
-  //           maxTexelWidth,
-  //           maxPixelsPerTexel);
-  //  }
+    //  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
+    //    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
+    //           _tileTessellatorMeshData._deviation,
+    //           distanceToTile,
+    //           visibleDeviation,
+    //           maxTexelWidth,
+    //           maxPixelsPerTexel);
+    //  }
   
     return _lastMeetsRenderCriteriaResult;
   }
@@ -514,6 +439,14 @@ public class Tile
   public final String _id;
 
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer)
+  //_northWestPoint(NULL),
+  //_northEastPoint(NULL),
+  //_southWestPoint(NULL),
+  //_southEastPoint(NULL),
+  //_northArcSegmentRatioSquared(0),
+  //_southArcSegmentRatioSquared(0),
+  //_eastArcSegmentRatioSquared(0),
+  //_westArcSegmentRatioSquared(0),
   {
      _texturizer = texturizer;
      _parent = parent;
@@ -543,14 +476,6 @@ public class Tile
      _lastMeetsRenderCriteriaTimeInMS = 0;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
-     _northWestPoint = null;
-     _northEastPoint = null;
-     _southWestPoint = null;
-     _southEastPoint = null;
-     _northArcSegmentRatioSquared = 0;
-     _southArcSegmentRatioSquared = 0;
-     _eastArcSegmentRatioSquared = 0;
-     _westArcSegmentRatioSquared = 0;
      _rendered = false;
      _tileRenderingListener = null;
      _id = createTileId(level, row, column);
@@ -608,15 +533,11 @@ public class Tile
   
     if (_tessellatorData != null)
        _tessellatorData.dispose();
-  
-    if (_northWestPoint != null)
-       _northWestPoint.dispose();
-    if (_northEastPoint != null)
-       _northEastPoint.dispose();
-    if (_southWestPoint != null)
-       _southWestPoint.dispose();
-    if (_southEastPoint != null)
-       _southEastPoint.dispose();
+  //
+  //  delete _northWestPoint;
+  //  delete _northEastPoint;
+  //  delete _southWestPoint;
+  //  delete _southEastPoint;
   }
 
   //Change to public for TileCache
@@ -1126,6 +1047,99 @@ public class Tile
   
   }
 
+  //
+  //void Tile::prepareTestLODData(const Planet* planet) {
+  //  
+  //  //  if (_middleNorthPoint == NULL) {
+  //  //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
+  //  //    return;
+  //  //  }
+  //  //
+  //  //  const Vector3D nN = planet->centricSurfaceNormal(*_middleNorthPoint);
+  //  //  const Vector3D nS = planet->centricSurfaceNormal(*_middleSouthPoint);
+  //  //  const Vector3D nE = planet->centricSurfaceNormal(*_middleEastPoint);
+  //  //  const Vector3D nW = planet->centricSurfaceNormal(*_middleWestPoint);
+  //  //
+  //  //  const Angle latitudeAngle = nN.angleBetween(nS);
+  //  //  double latRad = latitudeAngle._radians;
+  //  //  const double sin_lat_2 = SIN(latRad / 2);
+  //  //  const double latitudeArcSegmentRatio = (sin_lat_2 == 0) ? 1 : latRad / (2 * sin_lat_2);
+  //  //
+  //  //  const Angle longitudeAngle = nE.angleBetween(nW);
+  //  //  const double lonRad = longitudeAngle._radians;
+  //  //  const double sin_lon_2 = SIN(lonRad / 2);
+  //  //  const double longitudeArcSegmentRatio = (sin_lon_2 == 0) ? 1 : lonRad / (2 * sin_lon_2);
+  //  //
+  //  //  _latitudeArcSegmentRatioSquared  = latitudeArcSegmentRatio * latitudeArcSegmentRatio;
+  //  //  _longitudeArcSegmentRatioSquared = longitudeArcSegmentRatio * longitudeArcSegmentRatio;
+  //  
+  //  if ((_northWestPoint == NULL) ||
+  //      (_northEastPoint == NULL) ||
+  //      (_southWestPoint == NULL) ||
+  //      (_southEastPoint == NULL)) {
+  //    ILogger::instance()->logError("Error in Tile::prepareTestLODData");
+  //    return;
+  //  }
+  //  
+  //  const Vector3D normalNW = planet->centricSurfaceNormal(*_northWestPoint);
+  //  const Vector3D normalNE = planet->centricSurfaceNormal(*_northEastPoint);
+  //  const Vector3D normalSW = planet->centricSurfaceNormal(*_southWestPoint);
+  //  const Vector3D normalSE = planet->centricSurfaceNormal(*_southEastPoint);
+  //  
+  //  _northArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalNW, normalNE);
+  //  _southArcSegmentRatioSquared = getSquaredArcSegmentRatio(normalSW, normalSE);
+  //  _eastArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNE, normalSE);
+  //  _westArcSegmentRatioSquared  = getSquaredArcSegmentRatio(normalNW, normalSW);
+  //}
+  //
+  //double Tile::getSquaredArcSegmentRatio(const Vector3D& a,
+  //                                       const Vector3D& b) {
+  //  /*
+  //   Arco = ang * Cuerda / (2 * sen(ang/2))
+  //   */
+  //  
+  //  const double angleInRadians = a.angleInRadiansBetween(b);
+  //  const double halfAngleSin = SIN(angleInRadians / 2);
+  //  const double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
+  //  return (arcSegmentRatio * arcSegmentRatio);
+  //}
+  //
+  //void Tile::computeTileCorners(const Planet* planet) {
+  //  
+  //  if (_tessellatorMesh == NULL) {
+  //    ILogger::instance()->logError("Error in Tile::computeTileCorners");
+  //    return;
+  //  }
+  //  
+  //  //  delete _middleWestPoint;
+  //  //  delete _middleEastPoint;
+  //  //  delete _middleNorthPoint;
+  //  //  delete _middleSouthPoint;
+  //  delete _northWestPoint;
+  //  delete _northEastPoint;
+  //  delete _southWestPoint;
+  //  delete _southEastPoint;
+  //  
+  //  
+  //  const double mediumHeight = _tileTessellatorMeshData._averageHeight;
+  //  
+  //  //  const Geodetic2D center = _sector.getCenter();
+  //  //  const Geodetic3D gN( Geodetic2D(_sector.getNorth(), center._longitude), mediumHeight);
+  //  //  const Geodetic3D gS( Geodetic2D(_sector.getSouth(), center._longitude), mediumHeight);
+  //  //  const Geodetic3D gW( Geodetic2D(center._latitude, _sector.getWest()), mediumHeight);
+  //  //  const Geodetic3D gE( Geodetic2D(center._latitude, _sector.getEast()), mediumHeight);
+  //  //
+  //  //  _middleNorthPoint = new Vector3D(planet->toCartesian(gN));
+  //  //  _middleSouthPoint = new Vector3D(planet->toCartesian(gS));
+  //  //  _middleEastPoint = new Vector3D(planet->toCartesian(gE));
+  //  //  _middleWestPoint = new Vector3D(planet->toCartesian(gW));
+  //  
+  //  _northWestPoint = new Vector3D( planet->toCartesian( _sector.getNW(), mediumHeight ) );
+  //  _northEastPoint = new Vector3D( planet->toCartesian( _sector.getNE(), mediumHeight ) );
+  //  _southWestPoint = new Vector3D( planet->toCartesian( _sector.getSW(), mediumHeight ) );
+  //  _southEastPoint = new Vector3D( planet->toCartesian( _sector.getSE(), mediumHeight ) );
+  //}
+  
   public final Vector2I getNormalizedPixelsFromPosition(Geodetic2D position2D, Vector2I tileDimension)
   {
     final IMathUtils math = IMathUtils.instance();
