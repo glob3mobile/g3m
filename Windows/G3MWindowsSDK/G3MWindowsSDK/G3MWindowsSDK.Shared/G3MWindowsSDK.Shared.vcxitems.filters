@@ -981,6 +981,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\D3D\D3DRenderer.cpp">
       <Filter>D3D</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgramFactory_D3D.cpp">
+      <Filter>Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory_OGL.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.hpp">
@@ -2053,6 +2059,12 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgramFactory.hpp">
       <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgramFactory_D3D.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory_OGL.hpp">
+      <Filter>Common\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

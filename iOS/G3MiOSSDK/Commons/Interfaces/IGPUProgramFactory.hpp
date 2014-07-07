@@ -18,7 +18,7 @@ class GPUProgram;
 class IGPUProgramFactory{
 
 public:
-	virtual void initialize() const = 0;
+	//virtual void initialize() const = 0;
 	virtual const GPUProgram* get(const std::string& name) const = 0;
 
 	virtual ~IGPUProgramFactory(){};
