@@ -307,6 +307,7 @@ Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const{
 #endif
 }
 
+
 double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             const Sector& meshSector,
                                             const Vector2I& meshResolution,
@@ -336,6 +337,8 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   Vector3D* grid[rx2][ry2];
   double gridElevation[rx2][ry2];
   
+  const Planet* planet = vertices->getPlanet();
+  
   for (int j = 0; j < ry2; j++) {
     //V = Latitude
     const double v = (double) j / (ry2 - 1);
@@ -350,9 +353,12 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         const double rawElevation = elevationData->getElevationAt(position);
         
         bool nanElev = ISNAN(rawElevation);
-        elevation = nanElev? 0 : rawElevation * verticalExaggeration;
         
-        gridElevation[i][j] = rawElevation * verticalExaggeration;
+        double meshElevation = rawElevation * verticalExaggeration;
+        
+        elevation = nanElev? 0 : meshElevation;
+        
+        gridElevation[i][j] = meshElevation;
         
         //MIN
         if (elevation < minElevation) {
@@ -371,7 +377,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
         gridElevation[i][j] = 0.0;
       }
       
-      Vector3D newVertex = vertices->getPlanet()->toCartesian(position, elevation);
+      Vector3D newVertex = planet->toCartesian(position, elevation);
       
       grid[i][j] = new Vector3D(newVertex);
       
@@ -486,17 +492,19 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   data._minHeight = minElevation;
   data._maxHeight = maxElevation;
   data._averageHeight = averageElevation / (rx * ry);
-  data._deviation = IMathUtils::instance()->sqrt(deviationSquared);
-  data._maxVerticesDistanceInLongitude = IMathUtils::instance()->sqrt(maxVerticesDistanceInLongitudeSquared);
-  data._maxVerticesDistanceInLatitude = IMathUtils::instance()->sqrt(maxVerticesDistanceInLatitudeSquared);
+  data._deviation = mu->sqrt(deviationSquared);
+  data._maxVerticesDistanceInLongitude = mu->sqrt(maxVerticesDistanceInLongitudeSquared);
+  data._maxVerticesDistanceInLatitude = mu->sqrt(maxVerticesDistanceInLatitudeSquared);
   data._surfaceResolutionX = meshResolution._x;
   data._surfaceResolutionY = meshResolution._y;
-  
+  data._radius = planet->toCartesian(tileSector.getNE()).sub(planet->toCartesian(tileSector.getSW())).length() / 2.0;
+#ifdef C_CODE
   for (int j = 0; j < ry2; j++) {
     for (int i = 0; i < rx2; i++) {
       delete grid[i][j];
     }
   }
+#endif
   
   //INDEX///////////////////////////////////////////////////////////////
   for (short j = 0; j < (ry-1); j++) {

@@ -32,6 +32,7 @@ public:
   double _maxVerticesDistanceInLatitude;
   int _surfaceResolutionX;
   int _surfaceResolutionY;
+  double _radius;
 };
 
 

@@ -473,6 +473,14 @@ public:
     _maxDEMDevianceInPixels = maxDEMDevianceInPixels;
   }
   
+  double getMaxTexelSizeInPixels() const{
+    return _maxTexelSizeInPixels;
+  }
+  
+  double getMaxDEMDevianceInPixels() const{
+    return _maxDEMDevianceInPixels;
+  }
+  
 };
 
 

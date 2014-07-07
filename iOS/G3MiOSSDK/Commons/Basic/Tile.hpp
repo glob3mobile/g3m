@@ -59,25 +59,25 @@ private:
   TileTessellatorMeshData _tileTessellatorMeshData;
 
   BoundingVolume* _boundingVolume;
-
-  Vector3D* _northWestPoint;
-  Vector3D* _northEastPoint;
-  Vector3D* _southWestPoint;
-  Vector3D* _southEastPoint;
-
-  static double getSquaredArcSegmentRatio(const Vector3D& a,
-                                          const Vector3D& b);
-
-  void computeTileCorners(const Planet* planet);
-
-  double _northArcSegmentRatioSquared;
-  double _southArcSegmentRatioSquared;
-  double _eastArcSegmentRatioSquared;
-  double _westArcSegmentRatioSquared;
-
-
-  void prepareTestLODData(const Planet* planet);
-
+//
+//  Vector3D* _northWestPoint;
+//  Vector3D* _northEastPoint;
+//  Vector3D* _southWestPoint;
+//  Vector3D* _southEastPoint;
+//
+//  static double getSquaredArcSegmentRatio(const Vector3D& a,
+//                                          const Vector3D& b);
+//
+//  void computeTileCorners(const Planet* planet);
+//
+//  double _northArcSegmentRatioSquared;
+//  double _southArcSegmentRatioSquared;
+//  double _eastArcSegmentRatioSquared;
+//  double _westArcSegmentRatioSquared;
+//
+//
+//  void prepareTestLODData(const Planet* planet);
+//
   inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   ElevationDataProvider* elevationDataProvider,
                                   const TileTessellator* tessellator,

@@ -295,7 +295,7 @@ public class Tile
     }
   
     //Computing distance to tile
-    double tileRadius = _northEastPoint.sub_southWestPoint.length() / 2.0;
+    double tileRadius = _northEastPoint.sub(_southWestPoint).length() / 2.0;
     Vector3D center = rc.getPlanet().toCartesian(_sector._center);
     double distanceToTile = camera.getCartesianPosition().sub(center).length();
     distanceToTile -= tileRadius;
