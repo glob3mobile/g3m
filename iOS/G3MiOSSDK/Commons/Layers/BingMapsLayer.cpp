@@ -376,14 +376,12 @@ RenderState BingMapsLayer::getRenderState() {
   if (_key.compare("") == 0) {
     _errors.push_back("Missing layer parameter: key");
   }
-
+  
   if (_errors.size() > 0) {
     return RenderState::error(_errors);
   }
-  if (!_isInitialized) {
-    return RenderState::busy();
-  }
-  return RenderState::ready();
+  
+  return _isInitialized ? RenderState::ready() : RenderState::busy();
 }
 
 const TileImageContribution* BingMapsLayer::rawContribution(const Tile* tile) const {

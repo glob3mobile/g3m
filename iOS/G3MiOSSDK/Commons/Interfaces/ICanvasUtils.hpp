@@ -32,7 +32,7 @@ enum HorizontalAlignment {
 
 class ICanvasUtils {
 public:
-  static Vector2F drawStringsOn(const std::vector<std::string> &strings,
+  static void drawStringsOn(const std::vector<std::string> &strings,
                                 ICanvas *canvas,
                                 const int width,
                                 const int height,

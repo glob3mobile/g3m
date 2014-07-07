@@ -12,7 +12,7 @@
 #include "ColumnCanvasElement.hpp"
 #include "TextCanvasElement.hpp"
 
-Vector2F ICanvasUtils::drawStringsOn(const std::vector<std::string> &strings,
+void ICanvasUtils::drawStringsOn(const std::vector<std::string> &strings,
                                      ICanvas *canvas,
                                      const int width,
                                      const int height,
@@ -27,33 +27,23 @@ Vector2F ICanvasUtils::drawStringsOn(const std::vector<std::string> &strings,
                                      const int padding,
                                      const int cornerRadius) {
   
+  if (strings.empty()) {
+    return;
+  }
+  
+  const int maxWidth = width - (2 * padding);
   const int stringsSize = strings.size();
+  
   int fontSize = maxFontSize;
-  if (stringsSize > 0 ) {
-    int longestTextIndex = 0;
-    int maxLength = strings.at(longestTextIndex).length();
-    for (int i = 1; i < stringsSize; i++) {
-      const int itemLength = strings.at(i).length();
-      if (maxLength < itemLength) {
-        maxLength = itemLength;
-        longestTextIndex = i;
-      }
-    }
-    
-    
-    
-    const int maxWidth = width - (2 * padding);
-    bool fit = false;
-    while (!fit && fontSize > minFontSize) {
-      GFont labelFont = GFont::sansSerif(fontSize);
-      const std::string longestText = strings.at(longestTextIndex);
-      canvas->setFont(labelFont);
-      const Vector2F extent = canvas->textExtent(longestText);
-      if (extent._x <= maxWidth) {
-        fit = true;
-      }
-      else {
+  bool allFit = true;
+  while (!allFit && (fontSize > minFontSize)) {
+    canvas->setFont( GFont::sansSerif(fontSize) );
+    for (int i = 0; i < stringsSize; i++) {
+      const Vector2F extent = canvas->textExtent(strings[i]);
+      if (extent._x > maxWidth) {
+        allFit = false;
         fontSize--;
+        continue;
       }
     }
   }
@@ -76,8 +66,6 @@ Vector2F ICanvasUtils::drawStringsOn(const std::vector<std::string> &strings,
                                         hAlign,
                                         vAlign);
   column.drawAt(position._x, position._y, canvas);
-  
-  return extent;
 }
 
 

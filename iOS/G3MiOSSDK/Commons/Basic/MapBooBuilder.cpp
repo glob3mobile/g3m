@@ -597,9 +597,7 @@ public:
         customizedErrorMessages.push_back("Oops, application not found!");
         break;
       }
-      else {
-        customizedErrorMessages.push_back(error);
-      }
+      customizedErrorMessages.push_back(error);
     }
     
     return customizedErrorMessages;
