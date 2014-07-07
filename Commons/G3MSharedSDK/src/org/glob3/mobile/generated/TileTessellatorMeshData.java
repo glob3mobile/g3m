@@ -38,4 +38,12 @@ public class TileTessellatorMeshData
   public int _surfaceResolutionX;
   public int _surfaceResolutionY;
   public double _radius;
+
+  public Vector3D _meshCenter;
+
+  public void dispose()
+  {
+    if (_meshCenter != null)
+       _meshCenter.dispose();
+  }
 }

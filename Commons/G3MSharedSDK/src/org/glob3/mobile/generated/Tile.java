@@ -211,8 +211,8 @@ public class Tile
     //
     //  printf("%f, %f\n", tileRadius, _tileTessellatorMeshData._radius);
     //
-    Vector3D center = rc.getPlanet().toCartesian(_sector._center);
-    double distanceToTile = camera.getCartesianPosition().sub(center).length();
+    Vector3D center = _tileTessellatorMeshData._meshCenter; //rc->getPlanet()->toCartesian(_sector._center);
+    double distanceToTile = camera.getCartesianPosition().subcenter.length();
     distanceToTile -= tileRadius;
   
     //Deviation

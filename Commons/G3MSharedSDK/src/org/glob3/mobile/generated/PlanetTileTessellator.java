@@ -118,6 +118,10 @@ public class PlanetTileTessellator extends TileTessellator
   
     final Planet planet = vertices.getPlanet();
   
+  //  printf("MS: %s\n", meshSector.description().c_str());
+  //  printf("EDS: %s\n", elevationData->getSector().description().c_str());
+  
+  
     for (int j = 0; j < ry2; j++)
     {
       //V = Latitude
@@ -198,7 +202,7 @@ public class PlanetTileTessellator extends TileTessellator
     Vector3D firstVertex = grid[0][0];
     Vector3D lastVertex = grid[(rx-1) *2][(ry-1) *2];
   
-    double meshDiagonalLength = firstVertex.sub(lastVertex).length();
+    double meshDiagonalLength = firstVertex.sublastVertex .length();
     double maxValidDEMGap = meshDiagonalLength * 0.01;
   
     double deviationSquared = 0;
@@ -229,7 +233,7 @@ public class PlanetTileTessellator extends TileTessellator
               Vector3D prevLatV = grid[lonIndex - 2][latIndex];
               Vector3D realLatV = grid[lonIndex - 1][latIndex];
   
-              Vector3D interpolatedLatV = prevLatV.add(vertex).div(2.0);
+              Vector3D interpolatedLatV = prevLatV.addvertex .div(2.0);
   
               double eastDeviation = realLatV.sub(interpolatedLatV).squaredLength();
               if (eastDeviation > deviationSquared)
@@ -238,7 +242,7 @@ public class PlanetTileTessellator extends TileTessellator
               }
   
               //Computing maxVerticesDistance
-              double dist = vertex.sub(prevLatV).squaredLength();
+              double dist = vertex.subprevLatV .squaredLength();
               if (maxVerticesDistanceInLongitudeSquared < dist)
               {
                 maxVerticesDistanceInLongitudeSquared = dist;
@@ -258,7 +262,7 @@ public class PlanetTileTessellator extends TileTessellator
               Vector3D prevLonV = grid[lonIndex][latIndex - 2];
               Vector3D realLonV = grid[lonIndex][latIndex - 1];
   
-              Vector3D interpolatedLonV = prevLonV.add(vertex).div(2.0);
+              Vector3D interpolatedLonV = prevLonV.addvertex .div(2.0);
   
               double southDeviation = realLonV.sub(interpolatedLonV).squaredLength();
               if (southDeviation > deviationSquared)
@@ -267,7 +271,7 @@ public class PlanetTileTessellator extends TileTessellator
               }
   
               //Computing maxVerticesDistance
-              double dist = vertex.sub(prevLonV).squaredLength();
+              double dist = vertex.subprevLonV .squaredLength();
               if (maxVerticesDistanceInLatitudeSquared < dist)
               {
                 maxVerticesDistanceInLatitudeSquared = dist;
@@ -299,6 +303,8 @@ public class PlanetTileTessellator extends TileTessellator
     data._surfaceResolutionX = meshResolution._x;
     data._surfaceResolutionY = meshResolution._y;
     data._radius = planet.toCartesian(tileSector.getNE()).sub(planet.toCartesian(tileSector.getSW())).length() / 2.0;
+    data._meshCenter = new Vector3D(planet.toCartesian(meshSector._center));
+  
   
     //INDEX///////////////////////////////////////////////////////////////
     for (short j = 0; j < (ry-1); j++)
