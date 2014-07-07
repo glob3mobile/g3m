@@ -115,6 +115,15 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
 
     public java.util.ArrayList<ElevationDataProvider> _providers = new java.util.ArrayList<ElevationDataProvider>();
 
+    public final double getSquaredGridResolutionInDegreesSquared(Vector2I extent, Sector sector)
+    {
+    
+      double latResInDegrees = sector._deltaLatitude._degrees / extent._y;
+      double lonResInDegrees = sector._deltaLongitude._degrees / extent._x;
+    
+      return latResInDegrees * latResInDegrees + lonResInDegrees * lonResInDegrees;
+    }
+
     public final ElevationDataProvider popBestProvider(java.util.ArrayList<ElevationDataProvider> ps, Vector2I extent)
     {
     
@@ -132,12 +141,13 @@ public class CompositeElevationDataProvider extends ElevationDataProvider
       {
         ElevationDataProvider each = ps.get(i);
     
-        final double res = each.getMinResolution().squaredLength();
-        final double newResDistance = mu.abs(bestRes - res);
+        final Sector sector = each.getSectors().get(0);
     
-        if (newResDistance < selectedResDistance || (newResDistance == selectedResDistance && res < selectedRes)) //or equal and higher resolution - Closer Resolution
+        double res = getSquaredGridResolutionInDegreesSquared(each.getMinResolution(), sector);
+    
+        if (res <= selectedRes)
         {
-          selectedResDistance = newResDistance;
+          selectedResDistance = res;
           selectedRes = res;
           selectedIndex = i;
           provider = each;

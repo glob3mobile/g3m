@@ -283,25 +283,62 @@ public class Tile
   
     _lastMeetsRenderCriteriaTimeInMS = nowInMS; //Storing time of result
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning JM at Work
+  
+    final Camera camera = rc.getCurrentCamera();
+    IMathUtils mu = IMathUtils.instance();
   
     if ((_northArcSegmentRatioSquared == 0) || (_southArcSegmentRatioSquared == 0) || (_eastArcSegmentRatioSquared == 0) || (_westArcSegmentRatioSquared == 0))
     {
       prepareTestLODData(rc.getPlanet());
     }
   
-    final Camera camera = rc.getCurrentCamera();
+    //Computing distance to tile
+    double tileRadius = _northEastPoint.sub_southWestPoint.length() / 2.0;
+    Vector3D center = rc.getPlanet().toCartesian(_sector._center);
+    double distanceToTile = camera.getCartesianPosition().sub(center).length();
+    distanceToTile -= tileRadius;
   
-    final double distanceInPixelsNorth = camera.getEstimatedPixelDistance(_northWestPoint, _northEastPoint);
-    final double distanceInPixelsSouth = camera.getEstimatedPixelDistance(_southWestPoint, _southEastPoint);
-    final double distanceInPixelsWest = camera.getEstimatedPixelDistance(_northWestPoint, _southWestPoint);
-    final double distanceInPixelsEast = camera.getEstimatedPixelDistance(_northEastPoint, _southEastPoint);
+    //Deviation
+    double visibleDeviation = mu.maxDouble();
+    if (distanceToTile > 0.0)
+    {
+      visibleDeviation = camera.getPixelsForObjectSize(distanceToTile, _tileTessellatorMeshData._deviation);
+    }
   
-    final double distanceInPixelsSquaredArcNorth = (distanceInPixelsNorth * distanceInPixelsNorth) * _northArcSegmentRatioSquared;
-    final double distanceInPixelsSquaredArcSouth = (distanceInPixelsSouth * distanceInPixelsSouth) * _southArcSegmentRatioSquared;
-    final double distanceInPixelsSquaredArcWest = (distanceInPixelsWest * distanceInPixelsWest) * _westArcSegmentRatioSquared;
-    final double distanceInPixelsSquaredArcEast = (distanceInPixelsEast * distanceInPixelsEast) * _eastArcSegmentRatioSquared;
+    //Pixel size in meters
+    final int texWidth = (int) mu.sqrt(texWidthSquared);
+    final int texelsBetweenVerticesLongitude = texWidth / _tileTessellatorMeshData._surfaceResolutionX;
+    final double maxTexelWidth = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLongitude;
   
-    _lastMeetsRenderCriteriaResult = ((distanceInPixelsSquaredArcNorth <= texHeightSquared) && (distanceInPixelsSquaredArcSouth <= texHeightSquared) && (distanceInPixelsSquaredArcWest <= texWidthSquared) && (distanceInPixelsSquaredArcEast <= texWidthSquared));
+    final int texHeight = (int) mu.sqrt(texHeightSquared);
+    final int texelsBetweenVerticesLatitude = texHeight / _tileTessellatorMeshData._surfaceResolutionY;
+    final double maxTexelHeight = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLatitude;
+  
+    final double maxTexelSize = (maxTexelHeight > maxTexelWidth) ? maxTexelHeight : maxTexelWidth;
+  
+    double maxPixelsPerTexel = mu.maxDouble();
+    if (maxPixelsPerTexel > 0.0)
+    {
+      maxPixelsPerTexel = camera.getPixelsForObjectSize(distanceToTile, maxTexelSize);
+    }
+  
+    //int texHeight = (int) mu->sqrt(texHeightSquared);
+  
+  //  bool lastLMRCR = _lastMeetsRenderCriteriaResult;
+  
+    //CRITERIA
+    _lastMeetsRenderCriteriaResult = (visibleDeviation < 3.0) && (maxPixelsPerTexel < 3.0);
+  
+  //  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
+  //    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
+  //           _tileTessellatorMeshData._deviation,
+  //           distanceToTile,
+  //           visibleDeviation,
+  //           maxTexelWidth,
+  //           maxPixelsPerTexel);
+  //  }
   
     return _lastMeetsRenderCriteriaResult;
   }
@@ -653,15 +690,19 @@ public class Tile
       _verticalExaggeration = verticalExaggeration;
     }
   
+    final boolean tileVisible = isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters);
+  
+    final boolean tileMeetsRenderCriteria = meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS);
+  
     boolean rendered = false;
   
-    if (isVisible(rc, planet, cameraNormalizedPosition, cameraAngle2HorizonInRadians, cameraFrustumInModelCoordinates, elevationDataProvider, renderedSector, tessellator, layerTilesRenderParameters, tilesRenderParameters))
+    if (tileVisible)
     {
       setIsVisible(true, texturizer);
   
       tilesStatistics.computeVisibleTile(this);
   
-      final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, layerTilesRenderParameters, texturizer, tilesRenderParameters, tilesStatistics, lastSplitTimer, texWidthSquared, texHeightSquared, nowInMS) || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
+      final boolean isRawRender = ((toVisitInNextIteration == null) || tileMeetsRenderCriteria || (tilesRenderParameters._incrementalTileQuality && !_textureSolved));
   
       if (isRawRender)
       {
@@ -703,8 +744,10 @@ public class Tile
     else
     {
       setIsVisible(false, texturizer);
-  
-      prune(texturizer, elevationDataProvider);
+      if (!tileMeetsRenderCriteria)
+      {
+        prune(texturizer, elevationDataProvider);
+      }
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   
@@ -1018,7 +1061,11 @@ public class Tile
     {
   
       final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
-      _elevationDataRequest = new TileElevationDataRequest(this, res, elevationDataProvider);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning JM at work
+      final Vector2I res2 = new Vector2I(res._x * 2, res._y *2);
+  
+      _elevationDataRequest = new TileElevationDataRequest(this, res2, elevationDataProvider);
       _elevationDataRequest.sendRequest();
     }
   

@@ -57,6 +57,11 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   }
 
 
+  public final Planet getPlanet()
+  {
+     return _planet;
+  }
+
   public static FloatBufferBuilderFromGeodetic builderWithoutCenter(Planet planet)
   {
     return new FloatBufferBuilderFromGeodetic(CenterStrategy.NO_CENTER, planet, Vector3D.zero);
@@ -86,6 +91,30 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   {
     final Vector3D vector = _planet.toCartesian(latitude, longitude, height);
   
+    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
+    {
+      if (_values.size() == 0)
+      {
+        setCenter(vector);
+      }
+    }
+  
+    if (_centerStrategy == CenterStrategy.NO_CENTER)
+    {
+      _values.push_back((float) vector._x);
+      _values.push_back((float) vector._y);
+      _values.push_back((float) vector._z);
+    }
+    else
+    {
+      _values.push_back((float)(vector._x - _cx));
+      _values.push_back((float)(vector._y - _cy));
+      _values.push_back((float)(vector._z - _cz));
+    }
+  }
+
+  public final void add(Vector3D vector)
+  {
     if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
     {
       if (_values.size() == 0)

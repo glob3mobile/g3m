@@ -317,6 +317,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
+  private double _maxTexelSizeInPixels;
+  private double _maxDEMDevianceInPixels;
+
   public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, TileRasterizer tileRasterizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener)
   {
      _tessellator = tessellator;
@@ -343,6 +346,8 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
+     _maxDEMDevianceInPixels = 3.0;
+     _maxTexelSizeInPixels = 3.0;
     _context = null;
     _layerSet.setChangeListener(this);
     _layerSet.setChangedInfoListener(this);
@@ -909,6 +914,19 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _changedInfoListener.changedRendererInfo(_rendererIdentifier, info);
     }
+  }
+
+  public final void setLODParameters(double maxTexelSizeInPixels, double maxDEMDevianceInPixels)
+  {
+
+    if (maxTexelSizeInPixels < 1.0 || maxDEMDevianceInPixels < 1.0)
+    {
+      ILogger.instance().logError("Invalid LOD Parameters");
+      return;
+    }
+
+    _maxTexelSizeInPixels = maxTexelSizeInPixels;
+    _maxDEMDevianceInPixels = maxDEMDevianceInPixels;
   }
 
 }

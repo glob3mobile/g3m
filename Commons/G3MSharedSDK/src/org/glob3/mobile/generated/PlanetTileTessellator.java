@@ -110,13 +110,21 @@ public class PlanetTileTessellator extends TileTessellator
     double minElevation = mu.maxDouble();
     double maxElevation = mu.minDouble();
     double averageElevation = 0;
-    for (int j = 0; j < ry; j++)
-    {
-      final double v = (double) j / (ry - 1);
   
-      for (int i = 0; i < rx; i++)
+    int rx2 = rx *2-1;
+    int ry2 = ry *2-1;
+    Vector3D[][] grid = new Vector3D[rx2][ry2];
+    double[][] gridElevation = new double[rx2][ry2];
+  
+    for (int j = 0; j < ry2; j++)
+    {
+      //V = Latitude
+      final double v = (double) j / (ry2 - 1);
+  
+      for (int i = 0; i < rx2; i++)
       {
-        final double u = (double) i / (rx - 1);
+        //U = Longitude
+        final double u = (double) i / (rx2 - 1);
         final Geodetic2D position = meshSector.getInnerPoint(u, v);
         double elevation = 0;
   
@@ -124,7 +132,10 @@ public class PlanetTileTessellator extends TileTessellator
         {
           final double rawElevation = elevationData.getElevationAt(position);
   
-          elevation = (rawElevation != rawElevation)? 0 : rawElevation * verticalExaggeration;
+          boolean nanElev = (rawElevation != rawElevation);
+          elevation = nanElev? 0 : rawElevation * verticalExaggeration;
+  
+          gridElevation[i][j] = rawElevation * verticalExaggeration;
   
           //MIN
           if (elevation < minElevation)
@@ -141,26 +152,127 @@ public class PlanetTileTessellator extends TileTessellator
           //AVERAGE
           averageElevation += elevation;
         }
-  
-        vertices.add(position, elevation);
-  
-        //TEXT COORDS
-        if (mercator)
-        {
-          //U
-          final double m_u = tileSector.getUCoordinate(position._longitude);
-  
-          //V
-          final double mercatorGlobalV = MercatorUtils.getMercatorV(position._latitude);
-          final double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-  
-          textCoords.add((float)m_u, (float)m_v);
-        }
         else
         {
-          Vector2D uv = tileSector.getUVCoordinates(position);
-          textCoords.add(uv);
+          gridElevation[i][j] = 0.0;
         }
+  
+        Vector3D newVertex = vertices.getPlanet().toCartesian(position, elevation);
+  
+        grid[i][j] = new Vector3D(newVertex);
+  
+        if (i % 2 == 0 && j % 2 == 0)
+        {
+          vertices.add(newVertex);
+  
+          //TEXT COORDS
+          if (mercator)
+          {
+            //U
+            final double m_u = tileSector.getUCoordinate(position._longitude);
+  
+            //V
+            final double mercatorGlobalV = MercatorUtils.getMercatorV(position._latitude);
+            final double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
+  
+            textCoords.add((float)m_u, (float)m_v);
+          }
+          else
+          {
+            Vector2D uv = tileSector.getUVCoordinates(position);
+            textCoords.add(uv);
+          }
+        }
+      }
+  
+  
+    }
+  
+    //Analyzing grid //////////////////////////////////////////////////////////////////
+  
+    Vector3D firstVertex = grid[0][0];
+    Vector3D lastVertex = grid[(rx-1) *2][(ry-1) *2];
+  
+    double meshDiagonalLength = firstVertex.sublastVertex.length();
+    double maxValidDEMGap = meshDiagonalLength * 0.01;
+  
+    double deviationSquared = 0;
+    double maxVerticesDistanceInLongitudeSquared = 0;
+    double maxVerticesDistanceInLatitudeSquared = 0;
+  
+    for (int j = 0; j < ry; j++)
+    {
+      for (int i = 0; i < rx; i++)
+      {
+        int lonIndex = i *2;
+        int latIndex = j *2;
+        Vector3D vertex = grid[lonIndex][latIndex];
+  
+        double currentElevation = gridElevation[lonIndex][latIndex];
+  
+        if (!(currentElevation != currentElevation))
+        {
+  
+          if (lonIndex > 1)
+          {
+  
+            double prevLonElevation = gridElevation[lonIndex - 2][latIndex];
+            boolean checkDeviationLon = !(prevLonElevation != prevLonElevation) && (mu.abs(currentElevation - prevLonElevation) < maxValidDEMGap);
+  
+            if (checkDeviationLon)
+            {
+              Vector3D prevLatV = grid[lonIndex - 2][latIndex];
+              Vector3D realLatV = grid[lonIndex - 1][latIndex];
+  
+              Vector3D interpolatedLatV = prevLatV.addvertex.div(2.0);
+  
+              double eastDeviation = realLatV.sub(interpolatedLatV).squaredLength();
+              if (eastDeviation > deviationSquared)
+              {
+                deviationSquared = eastDeviation;
+              }
+  
+              //Computing maxVerticesDistance
+              double dist = vertex.subprevLatV.squaredLength();
+              if (maxVerticesDistanceInLongitudeSquared < dist)
+              {
+                maxVerticesDistanceInLongitudeSquared = dist;
+              }
+            }
+  
+          }
+  
+          if (latIndex > 1)
+          {
+  
+            double prevLatElevation = gridElevation[lonIndex][latIndex - 2];
+            boolean checkDeviationLat = !(prevLatElevation != prevLatElevation) && (mu.abs(currentElevation - prevLatElevation) < maxValidDEMGap);
+  
+            if (checkDeviationLat)
+            {
+              Vector3D prevLonV = grid[lonIndex][latIndex - 2];
+              Vector3D realLonV = grid[lonIndex][latIndex - 1];
+  
+              Vector3D interpolatedLonV = prevLonV.addvertex.div(2.0);
+  
+              double southDeviation = realLonV.sub(interpolatedLonV).squaredLength();
+              if (southDeviation > deviationSquared)
+              {
+                deviationSquared = southDeviation;
+              }
+  
+              //Computing maxVerticesDistance
+              double dist = vertex.subprevLonV.squaredLength();
+              if (maxVerticesDistanceInLatitudeSquared < dist)
+              {
+                maxVerticesDistanceInLatitudeSquared = dist;
+              }
+            }
+  
+          }
+  
+        }
+  
       }
     }
   
@@ -176,6 +288,20 @@ public class PlanetTileTessellator extends TileTessellator
     data._minHeight = minElevation;
     data._maxHeight = maxElevation;
     data._averageHeight = averageElevation / (rx * ry);
+    data._deviation = IMathUtils.instance().sqrt(deviationSquared);
+    data._maxVerticesDistanceInLongitude = IMathUtils.instance().sqrt(maxVerticesDistanceInLongitudeSquared);
+    data._maxVerticesDistanceInLatitude = IMathUtils.instance().sqrt(maxVerticesDistanceInLatitudeSquared);
+    data._surfaceResolutionX = meshResolution._x;
+    data._surfaceResolutionY = meshResolution._y;
+  
+    for (int j = 0; j < ry2; j++)
+    {
+      for (int i = 0; i < rx2; i++)
+      {
+        if (grid[i][j] != null)
+           grid[i][j].dispose();
+      }
+    }
   
     //INDEX///////////////////////////////////////////////////////////////
     for (short j = 0; j < (ry-1); j++)
@@ -192,6 +318,9 @@ public class PlanetTileTessellator extends TileTessellator
       }
       indices.add((short)(jTimesResolution + 2 *rx - 1));
     }
+  
+  
+    //printf("DEVIATION: %f\n", deviation);
   
     return minElevation;
   }
@@ -419,8 +548,8 @@ public class PlanetTileTessellator extends TileTessellator
     IFloatBuffer verticesB = vertices.create();
     IShortBuffer indicesB = indices.create();
     IFloatBuffer normals = null;
-  ///#warning Testing_Terrain_Normals;
-  //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
+    ///#warning Testing_Terrain_Normals;
+    //  IFloatBuffer* normals = NormalsUtils::createTriangleStripSmoothNormals(verticesB, indicesB);
   
     Mesh result = new IndexedGeometryMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), verticesB, true, normals, true, indicesB, true);
   

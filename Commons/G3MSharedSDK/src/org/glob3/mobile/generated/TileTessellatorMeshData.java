@@ -32,4 +32,9 @@ public class TileTessellatorMeshData
   public double _minHeight;
   public double _maxHeight;
   public double _averageHeight;
+  public double _deviation;
+  public double _maxVerticesDistanceInLongitude;
+  public double _maxVerticesDistanceInLatitude;
+  public int _surfaceResolutionX;
+  public int _surfaceResolutionY;
 }
