@@ -495,8 +495,6 @@ const TiledVectorLayerTileImageProvider::GEOObjectHolder* TiledVectorLayerTileIm
       const GEOObjectHolder* geoObjectHolder = entry->_geoObjectHolder;
       geoObjectHolder->_retain();
       return geoObjectHolder;
-
-      //return entry->_geoObject->deepCopy();
     }
   }
   return NULL;

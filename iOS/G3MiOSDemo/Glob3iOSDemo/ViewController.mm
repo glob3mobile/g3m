@@ -879,7 +879,7 @@ public:
           degrees -= 360;
         }
         const std::string degreesText = IStringUtils::instance()->toString( IMathUtils::instance()->round( degrees )  );
-        _labelBuilder->setText( degreesText );
+        _labelBuilder->setText( "     " + degreesText );
 
         //        _compass1->setTexCoordsRotation(_angleInRadians,
         //                                        0.5f, 0.5f);
