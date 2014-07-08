@@ -52,11 +52,10 @@ public:
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
   }
   
   Vector3D getRadii() const{
-    return _ellipsoid.getRadii();
+    return _ellipsoid._radii;
   }
   
   Vector3D centricSurfaceNormal(const Vector3D& positionOnEllipsoidalPlanet) const {
@@ -64,14 +63,13 @@ public:
   }
   
   Vector3D geodeticSurfaceNormal(const Vector3D& positionOnEllipsoidalPlanet) const {
-    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized();
+    return positionOnEllipsoidalPlanet.times(_ellipsoid._oneOverRadiiSquared).normalized();
   }
   
   Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoidalPlanet) const {
-    return positionOnEllipsoidalPlanet.times(_ellipsoid.getOneOverRadiiSquared()).normalized().asVector3D();
+    return positionOnEllipsoidalPlanet.times(_ellipsoid._oneOverRadiiSquared).normalized().asVector3D();
   }
-  
-  
+
   Vector3D geodeticSurfaceNormal(const Angle& latitude,
                                  const Angle& longitude) const;
   
@@ -83,11 +81,20 @@ public:
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
   
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const {
-    return _ellipsoid.intersectionsDistances(origin, direction);
+  std::vector<double> intersectionsDistances(double originX,
+                                             double originY,
+                                             double originZ,
+                                             double directionX,
+                                             double directionY,
+                                             double directionZ) const {
+    return _ellipsoid.intersectionsDistances(originX,
+                                             originY,
+                                             originZ,
+                                             directionX,
+                                             directionY,
+                                             directionZ);
   }
-  
+
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,
                        const double height) const;
@@ -179,8 +186,6 @@ public:
                       height);
   }
 
-
 };
-
 
 #endif

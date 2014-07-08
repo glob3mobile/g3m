@@ -120,7 +120,7 @@ private:
 
 
 public:
-  Trail(Color color,
+  Trail(const Color& color,
         float ribbonWidth,
         float heightDelta):
   _visible(true),

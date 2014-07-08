@@ -43,9 +43,20 @@ public:
   
   virtual Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const = 0;
   virtual Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const = 0;
-  virtual std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                                     const Vector3D& direction) const = 0;
-  
+
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const;
+
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const MutableVector3D& direction) const;
+
+  virtual std::vector<double> intersectionsDistances(double originX,
+                                                     double originY,
+                                                     double originZ,
+                                                     double directionX,
+                                                     double directionY,
+                                                     double directionZ) const = 0;
+
   virtual Vector3D toCartesian(const Angle& latitude,
                                const Angle& longitude,
                                const double height) const = 0;

@@ -128,6 +128,8 @@ public:
                     _z - v._z);
   }
 
+  Vector3D sub(const MutableVector3D& v) const;
+
   Vector3D sub(double d) const {
     return Vector3D(_x - d,
                     _y - d,
@@ -167,7 +169,24 @@ public:
   Angle angleBetween(const Vector3D& other) const;
   double angleInRadiansBetween(const Vector3D& other) const;
   Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const;
-  
+
+  static double normalizedDot(const Vector3D& a,
+                              const Vector3D& b);
+
+  static double normalizedDot(const Vector3D& a,
+                              const MutableVector3D& b);
+
+  static double angleInRadiansBetween(const Vector3D& a,
+                                      const Vector3D& b);
+
+  static double angleInRadiansBetween(const Vector3D& a,
+                                      const MutableVector3D& b);
+
+  static Angle angleBetween(const Vector3D& a,
+                            const Vector3D& b) {
+    return Angle::fromRadians(angleInRadiansBetween(a, b));
+  }
+
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
 

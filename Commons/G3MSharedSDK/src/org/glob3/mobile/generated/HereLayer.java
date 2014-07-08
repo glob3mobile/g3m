@@ -55,7 +55,21 @@ public class HereLayer extends RasterLayer
 
   protected final TileImageContribution rawContribution(Tile tile)
   {
-    return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
+    final Tile tileP = getParentTileOfSuitableLevel(tile);
+    if (tileP == null)
+    {
+      return null;
+    }
+    else if (tile == tileP)
+    {
+      //Most common case tile of suitable level being fully coveraged by layer
+      return ((_transparency < 1) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
+    }
+    else
+    {
+      final Sector requestedImageSector = tileP._sector;
+      return ((_transparency < 1) ? TileImageContribution.partialCoverageTransparent(requestedImageSector, _transparency) : TileImageContribution.partialCoverageOpaque(requestedImageSector));
+    }
   }
 
   protected final URL createURL(Tile tile)

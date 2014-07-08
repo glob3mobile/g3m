@@ -396,7 +396,20 @@ RenderState BingMapsLayer::getRenderState() {
 }
 
 const TileImageContribution* BingMapsLayer::rawContribution(const Tile* tile) const {
-  return ((_transparency < 1)
-          ? TileImageContribution::fullCoverageTransparent(_transparency)
-          : TileImageContribution::fullCoverageOpaque());
+  const Tile* tileP = getParentTileOfSuitableLevel(tile);
+  if (tileP == NULL) {
+    return NULL;
+  }
+  else if (tile == tileP) {
+    //Most common case tile of suitable level being fully coveraged by layer
+    return ((_transparency < 1)
+            ? TileImageContribution::fullCoverageTransparent(_transparency)
+            : TileImageContribution::fullCoverageOpaque());
+  }
+  else {
+    const Sector requestedImageSector = tileP->_sector;
+    return ((_transparency < 1)
+            ? TileImageContribution::partialCoverageTransparent(requestedImageSector, _transparency)
+            : TileImageContribution::partialCoverageOpaque(requestedImageSector));
+  }
 }

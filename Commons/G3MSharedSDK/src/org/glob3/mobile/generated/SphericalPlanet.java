@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 public class SphericalPlanet extends Planet
 {
   private Sphere _sphere;
+  private final Vector3D _radii ;
 
   private MutableVector3D _origin = new MutableVector3D();
   private MutableVector3D _initialPoint = new MutableVector3D();
@@ -40,7 +41,7 @@ public class SphericalPlanet extends Planet
   public SphericalPlanet(Sphere sphere)
   {
      _sphere = sphere;
-  
+     _radii = new Vector3D(new Vector3D(sphere._radius, sphere._radius, sphere._radius));
   }
 
   public void dispose()
@@ -51,7 +52,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D getRadii()
   {
-    return new Vector3D(_sphere._radius, _sphere._radius, _sphere._radius);
+    return _radii;
   }
 
   public final Vector3D centricSurfaceNormal(Vector3D position)
@@ -92,16 +93,16 @@ public class SphericalPlanet extends Planet
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
+  public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     // By laborious algebraic manipulation....
-    final double a = direction._x * direction._x + direction._y * direction._y + direction._z * direction._z;
+    final double a = directionX * directionX + directionY * directionY + directionZ * directionZ;
   
-    final double b = 2.0 * (origin._x * direction._x + origin._y * direction._y + origin._z * direction._z);
+    final double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
   
-    final double c = origin._x * origin._x + origin._y * origin._y + origin._z * origin._z - _sphere._radiusSquared;
+    final double c = originX * originX + originY * originY + originZ * originZ - _sphere._radiusSquared;
   
     // Solve the quadratic equation: ax^2 + bx + c = 0.
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -332,7 +333,7 @@ public class SphericalPlanet extends Planet
 
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
+    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
     if (distances.isEmpty())
     {
       return Vector3D.nan();
@@ -356,8 +357,10 @@ public class SphericalPlanet extends Planet
 
   public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
   {
-    _origin = origin.asMutableVector3D();
-    _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+  //  _origin = origin.asMutableVector3D();
+  //  _initialPoint = closestIntersection(origin, initialRay).asMutableVector3D();
+    _origin.copyFrom(origin);
+    _initialPoint.copyFrom(closestIntersection(origin, initialRay));
     _validSingleDrag = false;
   }
 
@@ -373,7 +376,8 @@ public class SphericalPlanet extends Planet
     if (finalPoint.isNan())
     {
       //printf ("--invalid final point in drag!!\n");
-      finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+  //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
+      finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
     }
   
     // compute the rotation axis
@@ -386,7 +390,8 @@ public class SphericalPlanet extends Planet
        return MutableMatrix44D.invalid();
   
     // save params for possible inertial animations
-    _lastDragAxis = rotationAxis.asMutableVector3D();
+  //  _lastDragAxis = rotationAxis.asMutableVector3D();
+    _lastDragAxis.copyFrom(rotationAxis);
     double radians = rotationDelta._radians;
     _lastDragRadiansStep = radians - _lastDragRadians;
     _lastDragRadians = radians;
@@ -405,19 +410,25 @@ public class SphericalPlanet extends Planet
 
   public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D initialRay0, Vector3D initialRay1)
   {
-    _origin = origin.asMutableVector3D();
-    _centerRay = centerRay.asMutableVector3D();
-    _initialPoint0 = closestIntersection(origin, initialRay0).asMutableVector3D();
-    _initialPoint1 = closestIntersection(origin, initialRay1).asMutableVector3D();
+  //  _origin = origin.asMutableVector3D();
+  //  _centerRay = centerRay.asMutableVector3D();
+  //  _initialPoint0 = closestIntersection(origin, initialRay0).asMutableVector3D();
+  //  _initialPoint1 = closestIntersection(origin, initialRay1).asMutableVector3D();
+    _origin.copyFrom(origin);
+    _centerRay.copyFrom(centerRay);
+    _initialPoint0.copyFrom(closestIntersection(origin, initialRay0));
+    _initialPoint1.copyFrom(closestIntersection(origin, initialRay1));
     _angleBetweenInitialPoints = _initialPoint0.angleBetween(_initialPoint1)._degrees;
-    _centerPoint = closestIntersection(origin, centerRay).asMutableVector3D();
+  //  _centerPoint = closestIntersection(origin, centerRay).asMutableVector3D();
+    _centerPoint.copyFrom(closestIntersection(origin, centerRay));
     _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1)._degrees;
   
     // middle point in 3D
     Geodetic2D g0 = toGeodetic2D(_initialPoint0.asVector3D());
     Geodetic2D g1 = toGeodetic2D(_initialPoint1.asVector3D());
     Geodetic2D g = getMidPoint(g0, g1);
-    _initialPoint = toCartesian(g).asMutableVector3D();
+  //  _initialPoint = toCartesian(g).asMutableVector3D();
+    _initialPoint.copyFrom(toCartesian(g));
   }
 
   public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
@@ -453,7 +464,7 @@ public class SphericalPlanet extends Planet
     d = mu.abs((distance-d)*0.3);
     if (angle0 < _angleBetweenInitialPoints)
        d*=-1;
-    translation = MutableMatrix44D.createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+    translation.copyValue(MutableMatrix44D.createTranslationMatrix(_centerRay.asVector3D().normalized().times(d)));
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     dAccum += d;
     {
@@ -474,7 +485,7 @@ public class SphericalPlanet extends Planet
       // iter++;
       if ((angle_n1-angle_n)/(angle_n-_angleBetweenInitialPoints) < 0)
          d*=-0.5;
-      translation = MutableMatrix44D.createTranslationMatrix(_centerRay.asVector3D().normalized().times(d));
+      translation.copyValue(MutableMatrix44D.createTranslationMatrix(_centerRay.asVector3D().normalized().times(d)));
       positionCamera = positionCamera.transformedBy(translation, 1.0);
       dAccum += d;
       angle_n1 = angle_n;
@@ -507,14 +518,16 @@ public class SphericalPlanet extends Planet
       viewDirection = viewDirection.transformedBy(rotation, 0.0);
       ray0 = ray0.transformedBy(rotation, 0.0);
       ray1 = ray1.transformedBy(rotation, 0.0);
-      matrix = rotation.multiply(matrix);
+  //    matrix.copyValue(rotation.multiply(matrix));
+      matrix.copyValueOfMultiplication(rotation, matrix);
     }
   
     // move the camera forward
     {
       MutableMatrix44D translation2 = MutableMatrix44D.createTranslationMatrix(viewDirection.asVector3D().normalized().times(dAccum));
       positionCamera = positionCamera.transformedBy(translation2, 1.0);
-      matrix = translation2.multiply(matrix);
+  //    matrix.copyValue(translation2.multiply(matrix));
+      matrix.copyValueOfMultiplication(translation2, matrix);
     }
   
     // compute 3D point of view center
@@ -537,7 +550,8 @@ public class SphericalPlanet extends Planet
       viewDirection = viewDirection.transformedBy(rotation, 0.0);
       ray0 = ray0.transformedBy(rotation, 0.0);
       ray1 = ray1.transformedBy(rotation, 0.0);
-      matrix = rotation.multiply(matrix);
+  //    matrix.copyValue(rotation.multiply(matrix));
+      matrix.copyValueOfMultiplication(rotation, matrix);
     }
   
     // camera rotation
@@ -551,7 +565,8 @@ public class SphericalPlanet extends Planet
       if (sign<0)
          angle = -angle;
       MutableMatrix44D rotation = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(angle), normal, centerPoint2);
-      matrix = rotation.multiply(matrix);
+  //    matrix.copyValue(rotation.multiply(matrix));
+      matrix.copyValueOfMultiplication(rotation, matrix);
     }
   
     return matrix;

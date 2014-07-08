@@ -618,9 +618,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   const int firstLevelTilesCount = _firstLevelTiles.size();
 
-  const Planet* planet = rc->getPlanet();
-  const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
-  double cameraAngle2HorizonInRadians            = _lastCamera->getAngle2HorizonInRadians();
+  //const Planet* planet = rc->getPlanet();
+  //const Vector3D& cameraNormalizedPosition       = _lastCamera->getNormalizedPosition();
+  //const double cameraAngle2HorizonInRadians      = _lastCamera->getAngle2HorizonInRadians();
   const Frustum* cameraFrustumInModelCoordinates = _lastCamera->getFrustumInModelCoordinates();
 
   //Texture Size for every tile
@@ -647,9 +647,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
       tile->render(rc,
                    *_glState,
                    NULL,
-                   planet,
-                   cameraNormalizedPosition,
-                   cameraAngle2HorizonInRadians,
+                   //planet,
+                   //cameraNormalizedPosition,
+                   //cameraAngle2HorizonInRadians,
                    cameraFrustumInModelCoordinates,
                    &_statistics,
                    _verticalExaggeration,
@@ -675,24 +675,32 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
     _firstRender = false;
   }
   else {
-    std::vector<Tile*> toVisit;
+#ifdef C_CODE
+    _toVisit = _firstLevelTiles;
+#endif
+#ifdef JAVA_CODE
+    _toVisit.clear();
+    //_toVisit.addAll(_firstLevelTiles);
+//    for (final Tile tile : _firstLevelTiles) {
+//      _toVisit.add(tile);
+//    }
     for (int i = 0; i < firstLevelTilesCount; i++) {
-      toVisit.push_back(_firstLevelTiles[i]);
+      _toVisit.add( _firstLevelTiles.get(i) );
     }
+#endif
 
-    std::vector<Tile*> toVisitInNextIteration;
-    while (!toVisit.empty()) {
-      toVisitInNextIteration.clear();
+    while (!_toVisit.empty()) {
+      _toVisitInNextIteration.clear();
 
-      const int toVisitSize = toVisit.size();
+      const int toVisitSize = _toVisit.size();
       for (int i = 0; i < toVisitSize; i++) {
-        Tile* tile = toVisit[i];
+        Tile* tile = _toVisit[i];
         tile->render(rc,
                      *_glState,
-                     &toVisitInNextIteration,
-                     planet,
-                     cameraNormalizedPosition,
-                     cameraAngle2HorizonInRadians,
+                     &_toVisitInNextIteration,
+                     //planet,
+                     //cameraNormalizedPosition,
+                     //cameraAngle2HorizonInRadians,
                      cameraFrustumInModelCoordinates,
                      &_statistics,
                      _verticalExaggeration,
@@ -712,16 +720,22 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      nowInMS,
                      _renderTileMeshes,
                      _logTilesPetitions,
-                     _tileRenderingListener
-                     );
+                     _tileRenderingListener);
       }
 
 #ifdef C_CODE
-      toVisit = toVisitInNextIteration;
+      _toVisit = _toVisitInNextIteration;
 #endif
 #ifdef JAVA_CODE
-      toVisit.clear();
-      toVisit.addAll(toVisitInNextIteration);
+      _toVisit.clear();
+      //_toVisit.addAll(_toVisitInNextIteration);
+//      for (final Tile tile : _toVisitInNextIteration) {
+//        _toVisit.add(tile);
+//      }
+      final int toVisitInNextIterationSize = _toVisitInNextIteration.size();
+      for (int i = 0; i < toVisitInNextIterationSize; i++) {
+        _toVisit.add( _toVisitInNextIteration.get(i) );
+      }
 #endif
     }
   }

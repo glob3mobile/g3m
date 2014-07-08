@@ -93,7 +93,7 @@ void DebugTileRasterizer::rawRasterize(const IImage* image,
 
   canvas->removeShadow();
 
-  canvas->drawImage(image, 0, 0);
+  canvas->drawImage(image, 0.f, 0.f);
 
   if (_showTileBounds) {
     canvas->setLineColor(_color);

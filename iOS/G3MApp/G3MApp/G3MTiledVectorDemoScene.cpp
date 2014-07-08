@@ -157,6 +157,31 @@ public:
 };
 
 
+class RainbowRasterSymbolizer : public SampleRasterSymbolizer {
+private:
+  mutable int _geometryCounter;
+protected:
+  const Color baseColorForGeometry(const GEOGeometry* geometry) const {
+    _geometryCounter++;
+    const int wheelSize = 32;
+
+    const int colorIndex = _geometryCounter % wheelSize;
+
+    return Color::fromRGBA(0.6, 0.92, 0.65, 0.6).wheelStep(wheelSize, colorIndex);
+  }
+
+public:
+  RainbowRasterSymbolizer() :
+  _geometryCounter(0)
+  {
+  }
+
+  GEORasterSymbolizer* copy() const {
+    return new RainbowRasterSymbolizer();
+  }
+};
+
+
 void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
@@ -165,17 +190,19 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
 
-  BingMapsLayer* rasterLayer = new BingMapsLayer(//BingMapType::AerialWithLabels(),
-                                                 BingMapType::Aerial(),
+  BingMapsLayer* rasterLayer = new BingMapsLayer(BingMapType::Aerial(),
                                                  "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
                                                  TimeInterval::fromDays(30));
+
   model->getLayerSet()->addLayer(rasterLayer);
 
-  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+//  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
+  const std::string urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";
   const Sector swissSector = Sector::fromDegrees(45.8176852, 5.956216,
                                                  47.803029, 10.492264);
   const int firstLevel = 2;
-  const int maxLevel = 17;
+  const int maxLevel = 16;
+//  const int maxLevel = 17;
 
   const GEORasterSymbolizer* symbolizer = new PinkishRasterSymbolizer();
 
@@ -187,7 +214,8 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
                                                     TimeInterval::fromDays(30), // timeToCache
                                                     true,                       // readExpired
                                                     1,                          // transparency
-                                                    new LevelTileCondition(15, 21),
+                                                    //new LevelTileCondition(15, 21),
+                                                    new LevelTileCondition(10, 21),
                                                     ""                          // disclaimerInfo
                                                     );
   model->getLayerSet()->addLayer(_tiledVectorLayer);
@@ -204,8 +232,11 @@ void G3MTiledVectorDemoScene::rawSelectOption(const std::string& option,
   if (option == "Pinkish") {
     _tiledVectorLayer->setSymbolizer( new PinkishRasterSymbolizer(), true );
   }
-  else {
+  else if (option == "Greenish") {
     _tiledVectorLayer->setSymbolizer( new GreenishRasterSymbolizer(), true );
+  }
+  else {
+    _tiledVectorLayer->setSymbolizer( new RainbowRasterSymbolizer(), true );
   }
 }
 

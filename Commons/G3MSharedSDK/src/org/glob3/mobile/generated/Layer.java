@@ -90,12 +90,12 @@ public abstract class Layer
   protected final Tile getParentTileOfSuitableLevel(Tile tile)
   {
       final int maxLevel = _parameters._maxLevel;
-      Tile tileP = tile;
-      while (tileP._level > maxLevel)
+      Tile result = tile;
+      while ((result != null) && (result._level > maxLevel))
       {
-          tileP = tileP.getParent();
+          result = result.getParent();
       }
-      return tileP;
+      return result;
   }
 
 

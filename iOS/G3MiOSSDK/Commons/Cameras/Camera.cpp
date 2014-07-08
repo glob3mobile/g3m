@@ -35,32 +35,62 @@ void Camera::copyFrom(const Camera &that) {
 
   _planet = that._planet;
 
-  _position = MutableVector3D(that._position);
-  _center   = MutableVector3D(that._center);
-  _up       = MutableVector3D(that._up);
-  _normalizedPosition = MutableVector3D(that._normalizedPosition);
+//  _position = MutableVector3D(that._position);
+//  _center   = MutableVector3D(that._center);
+//  _up       = MutableVector3D(that._up);
+//  _normalizedPosition = MutableVector3D(that._normalizedPosition);
+  _position.copyFrom(that._position);
+  _center.copyFrom(that._center);
+  _up.copyFrom(that._up);
+  _normalizedPosition.copyFrom(that._normalizedPosition);
 
   _dirtyFlags.copyFrom(that._dirtyFlags);
 
+#ifdef C_CODE
   _frustumData = FrustumData(that._frustumData);
+#endif
+#ifdef JAVA_CODE
+  _frustumData = that._frustumData;
+#endif
 
   _projectionMatrix.copyValue(that._projectionMatrix);
   _modelMatrix.copyValue(that._modelMatrix);
   _modelViewMatrix.copyValue(that._modelViewMatrix);
 
-  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
+//  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
+  _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
 
+#ifdef C_CODE
   delete _geodeticCenterOfView;
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
+#endif
+#ifdef JAVA_CODE
+  _geodeticCenterOfView = that._geodeticCenterOfView;
+#endif
 
+#ifdef C_CODE
   delete _frustum;
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
+#endif
+#ifdef JAVA_CODE
+  _frustum = that._frustum;
+#endif
 
+#ifdef C_CODE
   delete _frustumInModelCoordinates;
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
+#endif
+#ifdef JAVA_CODE
+  _frustumInModelCoordinates = that._frustumInModelCoordinates;
+#endif
 
+#ifdef C_CODE
   delete _geodeticPosition;
   _geodeticPosition = ((that._geodeticPosition == NULL) ? NULL : new Geodetic3D(*that._geodeticPosition));
+#endif
+#ifdef JAVA_CODE
+  _geodeticPosition = that._geodeticPosition;
+#endif
   _angle2Horizon = that._angle2Horizon;
 
   _tanHalfVerticalFieldOfView   = that._tanHalfVerticalFieldOfView;
@@ -249,7 +279,7 @@ Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
     return Angle::nan();
   }
 
-  return point0.angleBetween(point1);
+  return Vector3D::angleBetween(point0, point1);
 }
 
 void Camera::setPointOfView(const Geodetic3D& center,
@@ -384,8 +414,11 @@ CoordinateSystem Camera::getCameraCoordinateSystem() const{
 }
 
 void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
-  _center = _position.add(rs._y.asMutableVector3D());
-  _up = rs._z.asMutableVector3D();
+//  _center = _position.add(rs._y.asMutableVector3D());
+  _center.copyFrom(_position);
+  _center.addInPlace(rs._y);
+//  _up = rs._z.asMutableVector3D();
+  _up.copyFrom(rs._z);
   _dirtyFlags.setAll(true);  //Recalculate Everything
 }
 
@@ -405,9 +438,13 @@ void Camera::setHeadingPitchRoll(const Angle& heading,
 
 double Camera::getEstimatedPixelDistance(const Vector3D& point0,
                                          const Vector3D& point1) const {
-  const Vector3D ray0 = _position.sub(point0);
-  const Vector3D ray1 = _position.sub(point1);
-  const double angleInRadians = ray1.angleInRadiansBetween(ray0);
+//  const Vector3D ray0 = _position.sub(point0);
+//  const Vector3D ray1 = _position.sub(point1);
+//  const double angleInRadians = ray1.angleInRadiansBetween(ray0);
+
+  _ray0.putSub(_position, point0);
+  _ray1.putSub(_position, point1);
+  const double angleInRadians = MutableVector3D::angleInRadiansBetween(_ray1, _ray0);
   const FrustumData frustumData = getFrustumData();
   const double distanceInMeters = frustumData._znear * IMathUtils::instance()->tan(angleInRadians/2);
   return distanceInMeters * _viewPortHeight / frustumData._top;

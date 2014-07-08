@@ -8,15 +8,15 @@ package org.glob3.mobile.generated;
 //
 
 
+//class GEORasterSymbolizer;
+//class ICanvas;
+//class GEORasterProjection;
 //class G3MRenderContext;
 //class GEOSymbolizer;
 //class MeshRenderer;
 //class ShapesRenderer;
 //class MarksRenderer;
 //class GEOTileRasterizer;
-//class GEORasterSymbolizer;
-//class ICanvas;
-//class GEORasterProjection;
 
 
 public abstract class GEOObject

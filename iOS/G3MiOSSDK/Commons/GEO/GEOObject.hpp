@@ -9,15 +9,15 @@
 #ifndef __G3MiOSSDK__GEOObject__
 #define __G3MiOSSDK__GEOObject__
 
+class GEORasterSymbolizer;
+class ICanvas;
+class GEORasterProjection;
 class G3MRenderContext;
 class GEOSymbolizer;
 class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
 class GEOTileRasterizer;
-class GEORasterSymbolizer;
-class ICanvas;
-class GEORasterProjection;
 
 
 class GEOObject {

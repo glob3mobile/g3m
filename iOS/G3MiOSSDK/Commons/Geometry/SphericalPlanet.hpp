@@ -24,6 +24,7 @@ private:
 #ifdef JAVA_CODE
   private Sphere _sphere;
 #endif
+  const Vector3D _radii;
 
   mutable MutableVector3D _origin;
   mutable MutableVector3D _initialPoint;
@@ -51,7 +52,7 @@ public:
   }
 
   Vector3D getRadii() const{
-    return Vector3D(_sphere._radius, _sphere._radius, _sphere._radius);
+    return _radii;
   }
 
   Vector3D centricSurfaceNormal(const Vector3D& position) const {
@@ -78,8 +79,12 @@ public:
     return geodeticSurfaceNormal(geodetic._latitude, geodetic._longitude);
   }
 
-  std::vector<double> intersectionsDistances(const Vector3D& origin,
-                                             const Vector3D& direction) const;
+  std::vector<double> intersectionsDistances(double originX,
+                                             double originY,
+                                             double originZ,
+                                             double directionX,
+                                             double directionY,
+                                             double directionZ) const;
 
   Vector3D toCartesian(const Angle& latitude,
                        const Angle& longitude,

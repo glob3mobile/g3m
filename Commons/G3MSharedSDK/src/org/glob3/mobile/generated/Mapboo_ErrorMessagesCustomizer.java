@@ -2,13 +2,16 @@ package org.glob3.mobile.generated;
 public class Mapboo_ErrorMessagesCustomizer implements ErrorMessagesCustomizer
 {
   private MapBooBuilder _mbBuilder;
+
   public Mapboo_ErrorMessagesCustomizer(MapBooBuilder mbBuilder)
   {
     _mbBuilder = mbBuilder;
   }
+
   public void dispose()
   {
   }
+
   public final java.util.ArrayList<String> customize(java.util.ArrayList<String> errors)
   {
     java.util.ArrayList<String> customizedErrorMessages = new java.util.ArrayList<String>();
@@ -25,10 +28,7 @@ public class Mapboo_ErrorMessagesCustomizer implements ErrorMessagesCustomizer
         customizedErrorMessages.add("Oops, application not found!");
         break;
       }
-      else
-      {
-        customizedErrorMessages.add(error);
-      }
+      customizedErrorMessages.add(error);
     }
 
     return customizedErrorMessages;

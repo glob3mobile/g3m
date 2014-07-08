@@ -30,6 +30,7 @@ public:
   {
     _options.push_back("Pinkish");
     _options.push_back("Greenish");
+    _options.push_back("Rainbow");
   }
 
   void deactivate(const G3MContext* context);

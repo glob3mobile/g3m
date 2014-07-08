@@ -95,9 +95,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         return;
       }
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning JM at work
-      //const bool simpleCase = (_contributionsSize == 1) && ((contributionSector == NULL) || _tileSector.isEquals(*contributionSector));
       boolean simpleCase;
       if (_contributionsSize == 1)
       {
@@ -294,8 +291,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         final ChildResult result = _results.get(i);
         imageId += result._imageId + "|";
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning JM at Work
         final IImage image = result._image;
         final float alpha = result._contribution._alpha;
         final Sector imageSector = result._contribution.getSector();

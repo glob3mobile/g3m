@@ -268,9 +268,9 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
 }
 
 bool Tile::isVisible(const G3MRenderContext* rc,
-                     const Planet* planet,
-                     const Vector3D& cameraNormalizedPosition,
-                     double cameraAngle2HorizonInRadians,
+                     //const Planet* planet,
+                     //const Vector3D& cameraNormalizedPosition,
+                     //double cameraAngle2HorizonInRadians,
                      const Frustum* cameraFrustumInModelCoordinates,
                      ElevationDataProvider* elevationDataProvider,
                      const Sector* renderedSector,
@@ -581,9 +581,9 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
 void Tile::render(const G3MRenderContext* rc,
                   const GLState& parentState,
                   std::vector<Tile*>* toVisitInNextIteration,
-                  const Planet* planet,
-                  const Vector3D& cameraNormalizedPosition,
-                  double cameraAngle2HorizonInRadians,
+                  //const Planet* planet,
+                  //const Vector3D& cameraNormalizedPosition,
+                  //double cameraAngle2HorizonInRadians,
                   const Frustum* cameraFrustumInModelCoordinates,
                   TilesStatistics* tilesStatistics,
                   const float verticalExaggeration,
@@ -615,9 +615,9 @@ void Tile::render(const G3MRenderContext* rc,
   bool rendered = false;
 
   if (isVisible(rc,
-                planet,
-                cameraNormalizedPosition,
-                cameraAngle2HorizonInRadians,
+                //planet,
+                //cameraNormalizedPosition,
+                //cameraAngle2HorizonInRadians,
                 cameraFrustumInModelCoordinates,
                 elevationDataProvider,
                 renderedSector,
@@ -779,6 +779,10 @@ std::vector<Tile*>* Tile::createSubTiles(const Angle& splitLatitude,
                                        column2 + 1,
                                        setParent) );
   }
+
+#ifdef JAVA_CODE
+  subTiles.trimToSize();
+#endif
 
   return subTiles;
 }
@@ -990,7 +994,7 @@ double Tile::getSquaredArcSegmentRatio(const Vector3D& a,
    Arco = ang * Cuerda / (2 * sen(ang/2))
    */
 
-  const double angleInRadians = a.angleInRadiansBetween(b);
+  const double angleInRadians = Vector3D::angleInRadiansBetween(a, b);
   const double halfAngleSin = SIN(angleInRadians / 2);
   const double arcSegmentRatio = (halfAngleSin == 0) ? 1 : angleInRadians / (2 * halfAngleSin);
   return (arcSegmentRatio * arcSegmentRatio);

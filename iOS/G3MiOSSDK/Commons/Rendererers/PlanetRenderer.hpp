@@ -289,7 +289,10 @@ private:
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
-  
+
+  std::vector<Tile*> _toVisit;
+  std::vector<Tile*> _toVisitInNextIteration;
+
 public:
   PlanetRenderer(TileTessellator*             tessellator,
                  ElevationDataProvider*       elevationDataProvider,

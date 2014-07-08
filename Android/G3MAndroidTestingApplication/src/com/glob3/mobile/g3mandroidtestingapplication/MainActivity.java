@@ -21,7 +21,7 @@ import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbolizer;
 import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
@@ -66,12 +66,20 @@ public class MainActivity
       final RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       placeHolder.addView(_g3mWidget);
 
-      ILogger.instance().logError("processors:" + Runtime.getRuntime().availableProcessors());
+
+      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(47.371716253228562721, 8.5409432031508725203, 1040);
+      _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
+               Angle.fromDegrees(-90));
+
    }
 
 
    private G3MWidget_Android createWidget() {
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+
+      final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
+      final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
+      final boolean saveInBackground = true;
 
       builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
@@ -164,14 +172,16 @@ public class MainActivity
       //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
 
 
-      layerSet.addLayer(new BingMapsLayer(BingMapType.AerialWithLabels(),
-               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30)));
+      final BingMapsLayer rasterLayer = new BingMapsLayer( //
+               BingMapType.AerialWithLabels(), //
+               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", //
+               TimeInterval.fromDays(30));
+      layerSet.addLayer(rasterLayer);
 
 
-      //  final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
-      final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson/{level}/{x}/{y}.bson";
+      final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
       final int firstLevel = 2;
-      final int maxLevel = 16;
+      final int maxLevel = 17;
 
       final Geodetic2D lower = new Geodetic2D( //
                Angle.fromDegrees(45.8176852), //
@@ -193,7 +203,7 @@ public class MainActivity
                TimeInterval.fromDays(30), // timeToCache
                true, // readExpired
                1, // transparency
-               new LevelTileCondition(14, 21), // condition
+               new LevelTileCondition(15, 21), // condition
                "" // disclaimerInfo
       );
       layerSet.addLayer(tiledVectorLayer);

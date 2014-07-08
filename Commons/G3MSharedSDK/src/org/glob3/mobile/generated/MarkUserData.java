@@ -26,7 +26,6 @@ package org.glob3.mobile.generated;
 //class GPUProgramState;
 //class TextureIDReference;
 
-
 public class MarkUserData
 {
   public void dispose()
