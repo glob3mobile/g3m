@@ -49,7 +49,7 @@ private:
 
 public:
 	GPUProgramFactory_OGL();
-	const GPUProgram* get(GL* gl, const std::string& name) const;
+	GPUProgram* get(GL* gl, const std::string& name) const;
 	
 };
 

@@ -14,7 +14,7 @@
 class GPUProgramFactory_D3D: public IGPUProgramFactory {
 public:
 	GPUProgramFactory_D3D();
-	const GPUProgram* get(const std::string& name) const;
+	GPUProgram* get(GL* gl, const std::string& name) const;
 
 };
 

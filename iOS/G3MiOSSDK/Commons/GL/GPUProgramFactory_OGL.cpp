@@ -18,7 +18,7 @@ GPUProgramFactory_OGL::GPUProgramFactory_OGL(){
 	}
 }
 
-const GPUProgram* GPUProgramFactory_OGL::get(GL* gl, const std::string& name) const{
+GPUProgram* GPUProgramFactory_OGL::get(GL* gl, const std::string& name) const{
 	//Get the source code for the shader
 	const GPUProgramSources* ps = getSource(name);
 	GPUProgram* prog;
@@ -30,6 +30,7 @@ const GPUProgram* GPUProgramFactory_OGL::get(GL* gl, const std::string& name) co
 			ILogger::instance()->logError("Problem at creating program named %s.", name.c_str());
 			return NULL;
 		}
+		return prog;
 	}
 	else{
 		ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());

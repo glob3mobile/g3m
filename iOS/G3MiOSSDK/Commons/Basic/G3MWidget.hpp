@@ -14,6 +14,7 @@ class ProtoRenderer;
 class TouchEvent;
 class Planet;
 class ILogger;
+class IGPUProgramFactory;
 class GL;
 class TexturesHandler;
 class Downloader;
@@ -99,7 +100,8 @@ public:
                              IStringBuilder*     stringBuilder,
                              IMathUtils*         mathUtils,
                              IJSONParser*        jsonParser,
-                             ITextUtils*         textUtils);
+                             ITextUtils*         textUtils,
+							 IGPUProgramFactory* GPUProgramFactory);
 
   static G3MWidget* create(GL*                                  gl,
                            Storage*                            storage,

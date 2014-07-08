@@ -10,16 +10,29 @@
 #define __G3MiOSSDK_IGPUProgramFactory__
 
 #include <string>
+#include "ILogger.hpp"
 
 class GPUProgram;
-
-
+class GL;
 
 class IGPUProgramFactory{
+protected:
+	static IGPUProgramFactory* _instance;
 
 public:
-	//virtual void initialize() const = 0;
-	virtual const GPUProgram* get(const std::string& name) const = 0;
+	static void setInstance(IGPUProgramFactory* factory) {
+		if (_instance != NULL) {
+			ILogger::instance()->logWarning("IGPUProgramFactory instance already set!");
+			delete _instance;
+		}
+		_instance = factory;
+	}
+
+	static IGPUProgramFactory* instance() {
+		return _instance;
+	}
+
+	virtual GPUProgram* get(GL* gl, const std::string& name) const = 0;
 
 	virtual ~IGPUProgramFactory(){};
 

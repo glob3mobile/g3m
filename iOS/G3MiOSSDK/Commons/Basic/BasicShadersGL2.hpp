@@ -9,9 +9,16 @@
 #ifndef G3MiOSSDK_BasicShadersGL2_h
 #define G3MiOSSDK_BasicShadersGL2_h
 
-#include "GPUProgramFactory.hpp"
+#include "GPUProgramFactory_OGL.hpp"
 
-class BasicShadersGL2: public GPUProgramFactory{
+//class BasicShadersGL2: public GPUProgramFactory{
+class BasicShadersGL2{
+private :
+	std::vector<GPUProgramSources> _sources;
+
+
+
+
 
 public:
   BasicShadersGL2(){
@@ -509,6 +516,28 @@ public:
 "} \n ");
     this->add(sourcesTransformedTexCoorTexturedMesh_DirectionLight);
 
+  }
+
+  int size() const{
+	  return _sources.size();
+  }
+
+  void add(const GPUProgramSources& ps) {
+	  _sources.push_back(ps);
+  }
+
+  /*GPUProgramSources* get(const std::string& name) const{
+	  const int size = _sources.size();
+	  for (int i = 0; i < size; i++) {
+		  if (_sources[i]._name.compare(name) == 0) {
+			  return &(_sources[i]);
+		  }
+	  }
+	  return NULL;
+  }*/
+
+  GPUProgramSources get(int i) const{
+	  return _sources[i];
   }
 
 };

@@ -7,12 +7,13 @@
 //
 
 #include "GPUProgramManager.hpp"
+#include "IGPUProgramFactory.hpp"
 
 #include "GLState.hpp"
 
 GPUProgramManager::~GPUProgramManager() {
 #ifdef C_CODE
-  delete _factory;
+  //delete _factory;
   for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
     delete it->second;
   }
@@ -137,7 +138,14 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
 
   GPUProgram* prog = getCompiledProgram(name);
   if (prog == NULL) {
-    const GPUProgramSources* ps = _factory->get(name);
+
+	  prog = IGPUProgramFactory::instance()->get(gl, name);
+	  if (prog != NULL){
+		  _programs[name] = prog;
+	  }
+
+
+    /*const GPUProgramSources* ps = _factory->get(name);
 
     //Compile new Program
     if (ps != NULL) {
@@ -154,7 +162,7 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
       _programs[name] = prog;
     } else{
       ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());
-    }
+    }*/
 
   }
   return prog;

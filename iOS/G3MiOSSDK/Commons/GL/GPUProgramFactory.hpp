@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 
-class GPUProgramSources {
+/*class GPUProgramSources {
 public:
   std::string _name;
   std::string _vertexSource;
@@ -83,6 +83,6 @@ public:
   
   
   
-};
+};*/
 
 #endif

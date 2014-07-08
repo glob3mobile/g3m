@@ -27,7 +27,6 @@ class Planet;
 class Renderer;
 class ProtoRenderer;
 class WidgetUserData;
-class GPUProgramSources;
 class GPUProgramManager;
 class SceneLighting;
 class Sector;
@@ -65,7 +64,6 @@ private:
   bool                              _logFPS;
   bool                              _logDownloaderStatistics;
   WidgetUserData*                   _userData;
-  std::vector<GPUProgramSources>    _sources;
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
   InfoDisplay*                      _infoDisplay;
@@ -175,8 +173,6 @@ public:
 
   const Planet* getPlanet();
   PlanetRendererBuilder* getPlanetRendererBuilder();
-
-  void addGPUProgramSources(const GPUProgramSources& s);
 
   void setSceneLighting(SceneLighting* sceneLighting);
   SceneLighting* getSceneLighting();

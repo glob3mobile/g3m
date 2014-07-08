@@ -5,6 +5,7 @@
 #include "StringUtils_win8.hpp"
 #include "StringBuilder_win8.hpp"
 #include "Factory_win8.hpp"
+#include "GPUProgramFactory_D3D.hpp"
 
 #include "G3MWidget.hpp"
 #include "D3DRenderer.hpp"
@@ -46,6 +47,7 @@ void G3MWidget_win8::initSingletons() const{
 	IMathUtils* mathUtils = new MathUtils_win8();
 	IJSONParser* jsonParser = NULL;
 	ITextUtils* textUtils = NULL;
+	IGPUProgramFactory* shaderFactory = new GPUProgramFactory_D3D();
 
-	G3MWidget::initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+	G3MWidget::initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, shaderFactory);
 }

@@ -192,7 +192,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUAttribute.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory_OGL.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUUniform.cpp" />
@@ -202,6 +201,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ICanvasUtils.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IDeviceInfo.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IFactory.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgramFactory.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ILogger.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IMathUtils.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IStringBuilder.cpp" />
@@ -534,7 +534,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLState.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUAttribute.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory_OGL.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUUniform.hpp" />

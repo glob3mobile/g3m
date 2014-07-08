@@ -24,7 +24,6 @@
 #include "CompositeRenderer.hpp"
 #include "SimpleCameraConstrainer.hpp"
 #include "GPUProgramManager.hpp"
-#include "GPUProgramFactory.hpp"
 #include "SceneLighting.hpp"
 #include "Sector.hpp"
 #include "SectorAndHeightCameraConstrainer.hpp"
@@ -157,6 +156,7 @@ IThreadUtils* IG3MBuilder::getThreadUtils() {
 ICameraActivityListener* IG3MBuilder::getCameraActivityListener() {
   return _cameraActivityListener;
 }
+
 
 
 /**
@@ -798,9 +798,9 @@ bool IG3MBuilder::containsPlanetRenderer(std::vector<Renderer*> renderers) {
   return false;
 }
 
-void IG3MBuilder::addGPUProgramSources(const GPUProgramSources& s) {
+/*void IG3MBuilder::addGPUProgramSources(const GPUProgramSources& s) {
   _sources.push_back(s);
-}
+}*/
 
 void IG3MBuilder::setSceneLighting(SceneLighting* sceneLighting) {
   _sceneLighting = sceneLighting;
@@ -808,11 +808,11 @@ void IG3MBuilder::setSceneLighting(SceneLighting* sceneLighting) {
 
 GPUProgramManager* IG3MBuilder::getGPUProgramManager() {
   //GPU Program Manager
-  GPUProgramFactory * gpuProgramFactory = new GPUProgramFactory();
-  for(int i = 0; i < _sources.size(); i++) {
-    gpuProgramFactory->add(_sources[i]);
-  }
-  GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+  //IGPUProgramFactory * gpuProgramFactory = new GPUProgramFactory_OGL();
+	//IGPUProgramFactory* gpuProgramFactory = getGPUProgramFactory();
+ 
+  //GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+	GPUProgramManager * gpuProgramManager = new GPUProgramManager();
   return gpuProgramManager;
 }
 

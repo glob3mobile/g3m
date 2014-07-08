@@ -612,9 +612,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.cpp">
       <Filter>Common\GL</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory.cpp">
-      <Filter>Common\GL</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.cpp">
       <Filter>Common\GL</Filter>
     </ClCompile>
@@ -986,6 +983,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory_OGL.cpp">
       <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgramFactory.cpp">
+      <Filter>Common\Interfaces</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1644,9 +1644,6 @@
       <Filter>Common\GL</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.hpp">
-      <Filter>Common\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory.hpp">
       <Filter>Common\GL</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.hpp">

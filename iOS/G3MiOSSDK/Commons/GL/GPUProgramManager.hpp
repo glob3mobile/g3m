@@ -12,7 +12,7 @@
 #include <map>
 #include <string>
 
-#include "GPUProgramFactory.hpp"
+//#include "GPUProgramFactory.hpp"
 #include "GPUProgram.hpp"
 #include "GL.hpp"
 
@@ -20,7 +20,7 @@ class GPUProgramManager {
 
   std::map<std::string, GPUProgram*> _programs;
 
-  GPUProgramFactory *_factory;
+  //GPUProgramFactory *_factory;
 
   GPUProgram* getCompiledProgram(const std::string& name);
 
@@ -31,7 +31,7 @@ class GPUProgramManager {
   GPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);
 public:
 
-  GPUProgramManager(GPUProgramFactory *factory):_factory(factory) {}
+  //GPUProgramManager(GPUProgramFactory *factory):_factory(factory) {}
 
   ~GPUProgramManager();
 
