@@ -47,6 +47,7 @@ public class GPUProgramFactory_OGL extends IGPUProgramFactory
       else
       {
          ILogger.instance().logError("No shader sources for program named %s.", name);
+         return null;
       }
    }
 
