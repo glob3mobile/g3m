@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class G3MWidget implements ChangedRendererInfoListener
 {
 
-  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils)
+  public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ITextUtils textUtils, IGPUProgramFactory GPUProgramFactory)
   {
     if (ILogger.instance() == null)
     {
@@ -13,6 +13,7 @@ public class G3MWidget implements ChangedRendererInfoListener
       IMathUtils.setInstance(mathUtils);
       IJSONParser.setInstance(jsonParser);
       ITextUtils.setInstance(textUtils);
+     IGPUProgramFactory.setInstance(GPUProgramFactory);
     }
     else
     {

@@ -9,8 +9,14 @@ package org.glob3.mobile.generated;
 
 
 
-public class BasicShadersGL2 extends GPUProgramFactory
+//class BasicShadersGL2: public GPUProgramFactory{
+public class BasicShadersGL2
 {
+   private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
+
+
+
+
 
   public BasicShadersGL2()
   {
@@ -61,6 +67,31 @@ public class BasicShadersGL2 extends GPUProgramFactory
     GPUProgramSources sourcesTransformedTexCoorTexturedMesh_DirectionLight = new GPUProgramSources("TransformedTexCoorTexturedMesh_DirectionLight", emptyString + "attribute vec4 aPosition; \n " + "attribute vec2 aTextureCoord; \n " + "attribute vec3 aNormal; \n " + "uniform mat4 uModelview; \n " + "uniform mat4 uModel; \n " + "uniform float uPointSize; \n " + "varying vec2 TextureCoordOut; \n " + "uniform mediump vec2 uTranslationTexCoord; \n " + "uniform mediump vec2 uScaleTexCoord; \n " + "uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED \n " + "varying float diffuseLightIntensity; \n " + "uniform vec3 uAmbientLightColor; \n " + "uniform vec3 uDiffuseLightColor; \n " + "varying vec3 lightColor; \n " + "void main() { \n " + "vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) )); \n " + "vec3 lightDirNormalized = normalize( uDiffuseLightDirection ); \n " + "float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0); \n " + "gl_Position = uModelview * aPosition; \n " + "TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord; \n " + "gl_PointSize = uPointSize; \n " + "lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity; \n " + "lightColor.x = min(lightColor.x, 1.0); \n " + "lightColor.y = min(lightColor.y, 1.0); \n " + "lightColor.z = min(lightColor.z, 1.0); \n " + "} \n ", emptyString + "precision highp float; \n " + "varying mediump vec2 TextureCoordOut; \n " + "uniform sampler2D Sampler; \n " + "varying vec3 lightColor; \n " + "void main() { \n " + "vec4 texColor = texture2D(Sampler, TextureCoordOut); \n " + "gl_FragColor.r = texColor.r * lightColor.r; \n " + "gl_FragColor.g = texColor.g * lightColor.r; \n " + "gl_FragColor.b = texColor.b * lightColor.r; \n " + "gl_FragColor.a = texColor.a; \n " + "} \n ");
     this.add(sourcesTransformedTexCoorTexturedMesh_DirectionLight);
 
+  }
+
+  public final int size()
+  {
+     return _sources.size();
+  }
+
+  public final void add(GPUProgramSources ps)
+  {
+     _sources.add(ps);
+  }
+
+  /*GPUProgramSources* get(const std::string& name) const{
+     const int size = _sources.size();
+     for (int i = 0; i < size; i++) {
+        if (_sources[i]._name.compare(name) == 0) {
+           return &(_sources[i]);
+        }
+     }
+     return NULL;
+  }*/
+
+  public final GPUProgramSources get(int i)
+  {
+     return _sources.get(i);
   }
 
 }

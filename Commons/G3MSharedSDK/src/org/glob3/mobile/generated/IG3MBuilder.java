@@ -33,7 +33,6 @@ package org.glob3.mobile.generated;
 //class Renderer;
 //class ProtoRenderer;
 //class WidgetUserData;
-//class GPUProgramSources;
 //class GPUProgramManager;
 //class SceneLighting;
 //class Sector;
@@ -67,7 +66,6 @@ public abstract class IG3MBuilder
   private boolean _logFPS;
   private boolean _logDownloaderStatistics;
   private WidgetUserData _userData;
-  private java.util.ArrayList<GPUProgramSources> _sources = new java.util.ArrayList<GPUProgramSources>();
   private SceneLighting _sceneLighting;
   private Sector _shownSector;
   private InfoDisplay _infoDisplay;
@@ -285,12 +283,11 @@ public abstract class IG3MBuilder
   private GPUProgramManager getGPUProgramManager()
   {
     //GPU Program Manager
-    GPUProgramFactory gpuProgramFactory = new GPUProgramFactory();
-    for(int i = 0; i < _sources.size(); i++)
-    {
-      gpuProgramFactory.add(_sources.get(i));
-    }
-    GPUProgramManager gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+    //IGPUProgramFactory * gpuProgramFactory = new GPUProgramFactory_OGL();
+     //IGPUProgramFactory* gpuProgramFactory = getGPUProgramFactory();
+  
+    //GPUProgramManager * gpuProgramManager = new GPUProgramManager(gpuProgramFactory);
+     GPUProgramManager gpuProgramManager = new GPUProgramManager();
     return gpuProgramManager;
   }
   private java.util.ArrayList<ICameraConstrainer> createDefaultCameraConstraints()
@@ -1003,11 +1000,11 @@ public abstract class IG3MBuilder
     return _planetRendererBuilder;
   }
 
-  public final void addGPUProgramSources(GPUProgramSources s)
-  {
-    _sources.add(s);
-  }
 
+  /*void IG3MBuilder::addGPUProgramSources(const GPUProgramSources& s) {
+    _sources.push_back(s);
+  }*/
+  
   public final void setSceneLighting(SceneLighting sceneLighting)
   {
     _sceneLighting = sceneLighting;

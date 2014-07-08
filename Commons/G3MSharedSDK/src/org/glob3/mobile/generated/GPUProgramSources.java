@@ -1,9 +1,17 @@
 package org.glob3.mobile.generated; 
 //
-//  GPUProgramFactory.hpp
+//  GPUProgramFactory_OGL.cpp
 //  G3MiOSSDK
 //
-//  Created by Jose Miguel SN on 02/04/13.
+//  Created by Oliver Koehler on 06/07/14.
+//
+//
+
+//
+//  GPUProgramFactory_OGL.hpp
+//  G3MiOSSDK
+//
+//  Created by Oliver Koehler on 06/07/14.
 //
 //
 
@@ -11,25 +19,25 @@ package org.glob3.mobile.generated;
 
 public class GPUProgramSources
 {
-  public String _name;
-  public String _vertexSource;
-  public String _fragmentSource;
+   public String _name;
+   public String _vertexSource;
+   public String _fragmentSource;
 
-  public GPUProgramSources()
-  {
-  }
+   public GPUProgramSources()
+   {
+   }
 
-  public GPUProgramSources(String name, String vertexSource, String fragmentSource)
-  {
-     _name = name;
-     _vertexSource = vertexSource;
-     _fragmentSource = fragmentSource;
-  }
+   public GPUProgramSources(String name, String vertexSource, String fragmentSource)
+   {
+      _name = name;
+      _vertexSource = vertexSource;
+      _fragmentSource = fragmentSource;
+   }
 
-  public GPUProgramSources(GPUProgramSources that)
-  {
-     _name = that._name;
-     _vertexSource = that._vertexSource;
-     _fragmentSource = that._fragmentSource;
-  }
+   public GPUProgramSources(GPUProgramSources that)
+   {
+      _name = that._name;
+      _vertexSource = that._vertexSource;
+      _fragmentSource = that._fragmentSource;
+   }
 }

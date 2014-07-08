@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class TouchEvent;
 //class Planet;
 //class ILogger;
+//class IGPUProgramFactory;
 //class GL;
 //class TexturesHandler;
 //class Downloader;

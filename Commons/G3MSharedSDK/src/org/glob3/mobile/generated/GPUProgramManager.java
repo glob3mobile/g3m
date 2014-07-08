@@ -17,13 +17,14 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "GPUProgramFactory.hpp"
 
 public class GPUProgramManager
 {
 
   private java.util.HashMap<String, GPUProgram> _programs = new java.util.HashMap<String, GPUProgram>();
 
-  private GPUProgramFactory _factory;
+  //GPUProgramFactory *_factory;
 
   private GPUProgram getCompiledProgram(String name)
   {
@@ -36,25 +37,32 @@ public class GPUProgramManager
     GPUProgram prog = getCompiledProgram(name);
     if (prog == null)
     {
-      final GPUProgramSources ps = _factory.get(name);
+  
+       prog = IGPUProgramFactory.instance().get(gl, name);
+       if (prog != null)
+       {
+          _programs.put(name, prog);
+       }
+  
+  
+      /*const GPUProgramSources* ps = _factory->get(name);
   
       //Compile new Program
-      if (ps != null)
-      {
-        prog = GPUProgram.createProgram(gl, ps._name, ps._vertexSource, ps._fragmentSource);
-        ///#warning DETECT COLISSION WITH COLLECTION OF GPUPROGRAM
-        if (prog == null)
-        {
-          ILogger.instance().logError("Problem at creating program named %s.", name);
-          return null;
+      if (ps != NULL) {
+        prog = GPUProgram::createProgram(gl,
+                                         ps->_name,
+                                         ps->_vertexSource,
+                                         ps->_fragmentSource);
+        //#warning DETECT COLISSION WITH COLLECTION OF GPUPROGRAM
+        if (prog == NULL) {
+          ILogger::instance()->logError("Problem at creating program named %s.", name.c_str());
+          return NULL;
         }
   
-        _programs.put(name, prog);
-      }
-      else
-      {
-        ILogger.instance().logError("No shader sources for program named %s.", name);
-      }
+        _programs[name] = prog;
+      } else{
+        ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());
+      }*/
   
     }
     return prog;
@@ -154,10 +162,7 @@ public class GPUProgramManager
     return null;
   }
 
-  public GPUProgramManager(GPUProgramFactory factory)
-  {
-     _factory = factory;
-  }
+  //GPUProgramManager(GPUProgramFactory *factory):_factory(factory) {}
 
   public void dispose()
   {
