@@ -23,7 +23,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.GEOJSONParser;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
@@ -64,6 +63,7 @@ public class VectorialLOD {
    final static String  WGS84_PYRAMID            = "WGS84";
    final static String  FILTERED_TYPE_LABEL      = "lodType";
 
+   final static int     FIRST_CHECK_LEVEL        = 1;
    final static int     CONNECTIONS_SCALE_FACTOR = 2;
    final static float   QUALITY_FACTOR           = 1.0f;
    //final static double  OVERLAP_PERCENTAGE            = 5.0;
@@ -437,7 +437,19 @@ public class VectorialLOD {
 
    private static long getGeomVertexCount(final String geoJson) {
 
-      return GEOJSONParser.parseJSON(geoJson, false).getCoordinatesCount();
+      //TODO: workaround meanwhile GEOJSONParser cannot parse GeometryCollections
+      long counter = 0;
+      for (int index = 0; index < geoJson.length(); index++) {
+         if (geoJson.charAt(index) == '.') {
+            counter++;
+         }
+      }
+
+      final long result = counter / 2;
+
+      return result;
+
+      //return GEOJSONParser.parseJSON(geoJson, false).getCoordinatesCount();
    }
 
 
@@ -1023,6 +1035,51 @@ public class VectorialLOD {
    }
 
 
+   private static void verifyDatasourceProperties(final DataSource ds) {
+
+      if (ds._includeProperties == null) {
+         return;
+      }
+
+      Connection conn = null;
+      Statement st = null;
+      ResultSet rs = null;
+      try {
+         conn = _dataBaseService.getConnection();
+         for (final String prop : ds._includeProperties) {
+            if (prop != null) {
+
+               final String columnExitsQuery = "SELECT COUNT(*) FROM information_schema.columns WHERE table_name='"
+                                               + ds._sourceTable + "'" + " AND column_name='" + prop + "'";
+
+               st = conn.createStatement();
+               rs = st.executeQuery(columnExitsQuery);
+
+               if (!rs.next()) {
+                  ILogger.instance().logError("");
+                  System.err.println("Invalid column name: \"" + prop + "\" for the table: \"" + ds._sourceTable
+                                     + "\" at the parameters file: \"" + PARAMETERS_FILE + "\". Review values and try again.");
+                  System.exit(1);
+               }
+
+               final int columnCount = rs.getInt(1);
+
+               if (columnCount != 1) {
+                  ILogger.instance().logError("");
+                  System.err.println("Invalid column name: \"" + prop + "\" for the table: \"" + ds._sourceTable
+                                     + "\" at the parameters file: \"" + PARAMETERS_FILE + "\". Review values and try again.");
+                  System.exit(1);
+               }
+               st.close();
+            }
+         }
+      }
+      catch (final SQLException e) {
+         ILogger.instance().logError("SQL error verifying column existence for table: " + ds._sourceTable + ". " + e.getMessage());
+      }
+   }
+
+
    //   private static String getGeometriesSRID(final String dataSourceTable) {
    //
    //      //-- SELECT Find_SRID('public', 'tiger_us_state_2007', 'the_geom_4269')
@@ -1307,6 +1364,8 @@ public class VectorialLOD {
 
          final TileSector boundSector = getGeometriesBound(ds);
          ds.setBoundSector(boundSector);
+
+         verifyDatasourceProperties(ds);
       }
 
       _globalBoundSector = getGlobalBoundSector(dataSources);
@@ -1336,8 +1395,8 @@ public class VectorialLOD {
       };
 
       for (final TileSector sector : firstLevelTileSectors) {
-         generateMergedVectorialLOD(sector, dataSources, progress);
-         //processSubSectors(sector, dataSource);
+         //generateMergedVectorialLOD(sector, dataSources, progress);
+         processSubSectors(sector, dataSources, progress);
       }
 
       //System.out.println("Running MAIN at: " + Thread.currentThread().getName());
@@ -1367,22 +1426,29 @@ public class VectorialLOD {
          return;
       }
 
-      //TODO: -- provisional: left at this point while we generate empty tiles. Remove after --
       if (!_globalBoundSector.intersects(sector)) {
          return;
       }
 
       boolean containsData = true;
 
-      if (sector._level >= FIRST_LEVEL) {
+      if ((sector._level >= FIRST_CHECK_LEVEL) && (sector._level < FIRST_LEVEL)) {
+
+         if (_globalBoundSector.fullContains(sector)) {
+            containsData = sectorContainsData(dataSources, sector);
+            if (!containsData) {
+               progress.stepsDone(calcNumberOfPruneTiles(sector._level));
+            }
+         }
+      }
+      else if (sector._level >= FIRST_LEVEL) {
 
          String geoJsonResult = "";
          String filteredResult = "";
          int af = INITIAL_AREA_FACTOR;
          float qf = QUALITY_FACTOR;
          long numVertex = 0;
-         long numVertexBefore = 1000000;
-         //int numAttemps = 0;
+         long numVertexBefore = 1000000; //big enough?
          boolean optimizeArea = true;
          boolean overLimit = true;
 
@@ -1391,16 +1457,7 @@ public class VectorialLOD {
             filteredResult = null;
             containsData = false;
 
-            //            if (numAttemps > 0) {
-            //               ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.label());
-            //            }
-
             for (final DataSource ds : dataSources) {
-
-               //TODO: -- provisional: left commented while we generate empty tiles. Uncomment after --
-               //            if (!ds._boundSector.intersects(sector)) {
-               //               continue;
-               //            }
 
                final GPair<String, String> geomResult = selectGeometries(ds, //
                         sector, //
@@ -1423,7 +1480,6 @@ public class VectorialLOD {
             }
 
             if ((numVertex <= MAX_VERTEX) || (numVertex >= numVertexBefore)) {
-               //System.out.println("numAttemps: " + numAttemps);
                overLimit = false;
             }
             else {
@@ -1439,13 +1495,11 @@ public class VectorialLOD {
                   qf = qf / QF_STEP;
                }
 
-               //numAttemps++;
                numVertexBefore = numVertex;
                optimizeArea = !optimizeArea;
             }
          }
          while (overLimit);
-         //while ((overLimit) && (numAttemps < MAX_TUNNING_ATTEMPS));
 
          if (!isEmptyString(geoJsonResult)) {
             geoJsonResult = addFeatureToExistingGeojson(geoJsonResult, filteredResult);
@@ -1473,16 +1527,10 @@ public class VectorialLOD {
    }
 
 
-   /*
-    * release 0.2
-    * A new task will be created to process any subsector of the parent sector
-    * 
-    */
    private static void processSubSectors(final TileSector sector,
                                          final List<DataSource> dataSources,
                                          final GProgress progress) {
 
-      //final int subSectorLevel = sector._level;
       if (sector._level > MAX_LEVEL) {
          return;
       }
@@ -1497,6 +1545,134 @@ public class VectorialLOD {
 
       _concurrentService.execute(task);
    }
+
+
+   //   private static void generateMergedVectorialLOD(final TileSector sector,
+   //                                                  final List<DataSource> dataSources,
+   //                                                  final GProgress progress) {
+   //
+   //      if (sector._level > MAX_LEVEL) {
+   //         return;
+   //      }
+   //
+   //      //TODO: -- provisional: left at this point while we generate empty tiles. Remove after --
+   //      if (!_globalBoundSector.intersects(sector)) {
+   //         return;
+   //      }
+   //
+   //      boolean containsData = true;
+   //
+   //      if (sector._level >= FIRST_LEVEL) {
+   //
+   //         String geoJsonResult = "";
+   //         String filteredResult = "";
+   //         int af = INITIAL_AREA_FACTOR;
+   //         float qf = QUALITY_FACTOR;
+   //         long numVertex = 0;
+   //         long numVertexBefore = 1000000;
+   //         boolean optimizeArea = true;
+   //         boolean overLimit = true;
+   //
+   //         do {
+   //            geoJsonResult = null;
+   //            filteredResult = null;
+   //            containsData = false;
+   //
+   //            for (final DataSource ds : dataSources) {
+   //
+   //               //: -- provisional: left commented while we generate empty tiles. Uncomment after --
+   //               //            if (!ds._boundSector.intersects(sector)) {
+   //               //               continue;
+   //               //            }
+   //
+   //               final GPair<String, String> geomResult = selectGeometries(ds, //
+   //                        sector, //
+   //                        qf, //
+   //                        af);
+   //
+   //               final String geoJson = geomResult._first;
+   //               final String filtered = geomResult._second;
+   //
+   //               if (geoJson != null) {
+   //                  geoJsonResult = addFeatureToExistingGeojson(geoJsonResult, geoJson);
+   //               }
+   //               if (filtered != null) {
+   //                  filteredResult = addFeatureToExistingGeojson(filteredResult, filtered);
+   //               }
+   //            }
+   //
+   //            if (geoJsonResult != null) {
+   //               numVertex = getGeomVertexCount(geoJsonResult);
+   //            }
+   //
+   //            if ((numVertex <= MAX_VERTEX) || (numVertex >= numVertexBefore)) {
+   //               //System.out.println("numAttemps: " + numAttemps);
+   //               overLimit = false;
+   //            }
+   //            else {
+   //               ILogger.instance().logWarning("Too much vertex (" + numVertex + ") for sector: " + sector.label());
+   //
+   //               //to force alternative optimization. first attemp, try area; second attempt try quality factor
+   //               if (optimizeArea) {
+   //                  // first attempt: increase area filter factor
+   //                  af += AREA_STEP;
+   //               }
+   //               else {
+   //                  // second attempt: reduce quality factor
+   //                  qf = qf / QF_STEP;
+   //               }
+   //
+   //               numVertexBefore = numVertex;
+   //               optimizeArea = !optimizeArea;
+   //            }
+   //         }
+   //         while (overLimit);
+   //         //while ((overLimit) && (numAttemps < MAX_TUNNING_ATTEMPS));
+   //
+   //         if (!isEmptyString(geoJsonResult)) {
+   //            geoJsonResult = addFeatureToExistingGeojson(geoJsonResult, filteredResult);
+   //            writeOutputFile(geoJsonResult, sector);
+   //            containsData = true;
+   //         }
+   //         else if (!isEmptyString(filteredResult)) {
+   //            writeOutputFile(filteredResult, sector);
+   //            containsData = true;
+   //         }
+   //         else {
+   //            writeEmptyFile(sector);
+   //         }
+   //
+   //         //progress report
+   //         progress.stepDone();
+   //      }
+   //
+   //      if (containsData) { //stop subdivision when there are not data inside this sector
+   //         final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
+   //         for (final TileSector s : subSectors) {
+   //            processSubSectors(s, dataSources, progress);
+   //         }
+   //      }
+   //   }
+
+   //   private static void processSubSectors(final TileSector sector,
+   //                                         final List<DataSource> dataSources,
+   //                                         final GProgress progress) {
+   //
+   //      //final int subSectorLevel = sector._level;
+   //      if (sector._level > MAX_LEVEL) {
+   //         return;
+   //      }
+   //
+   //      final Runnable task = new Runnable() {
+   //         @Override
+   //         public void run() {
+   //            //System.out.println("Running at: " + Thread.currentThread().getName());
+   //            generateMergedVectorialLOD(sector, dataSources, progress);
+   //         }
+   //      };
+   //
+   //      _concurrentService.execute(task);
+   //   }
 
 
    private static void estimateVectorialLODProgress(final ArrayList<TileSector> firstLevelTileSectors) {
@@ -1545,26 +1721,12 @@ public class VectorialLOD {
          progress.stepDone();
       }
 
-      //-- over-estimation: assume that all sectors contains data
-      final boolean containsData = true;
-
-      //      if (sector._level >= FIRST_LEVEL) {
-      //         containsData = false;
-      //
-      //         for (final DataSource ds : dataSources) {
-      //            containsData = containsData || sectorContainsData(ds, sector);
-      //         }
-      //
-      //         _progressCounter.incrementAndGet();
-      //         progress.stepDone();
-      //      }
-
-      if (containsData) { //stop subdivision when there are not data inside this sector
-         final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
-         for (final TileSector s : subSectors) {
-            estimateSubSectors(s, progress);
-         }
+      //if (containsData) { //stop subdivision when there are not data inside this sector
+      final List<TileSector> subSectors = sector.getSubTileSectors(_renderParameters._mercator);
+      for (final TileSector s : subSectors) {
+         estimateSubSectors(s, progress);
       }
+      //}
    }
 
 
@@ -1619,28 +1781,84 @@ public class VectorialLOD {
    //
    //      return false;
    //   }
-   //
-   //
-   //   private static String buildCheckQuery(final DataSource dataSource,
-   //                                         final Sector sector) {
-   //
-   //      //--i.e: SELECT COUNT(the_geom) FROM roads WHERE ST_Intersects(the_geom, ST_SetSRID(ST_MakeBox2D(ST_Point(-15.5,1.43), ST_Point(15.5,50.24)),4326)) 
-   //      final String baseQuery0 = "SELECT COUNT(";
-   //      final String baseQuery1 = ") FROM ";
-   //      final String baseQuery2 = " WHERE ST_Intersects(";
-   //
-   //      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
-   //      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
-   //
-   //      if (bboxQuery == null) {
-   //         return null;
-   //      }
-   //
-   //      final String checkQuery = baseQuery0 + dataSource._theGeomColumnName + baseQuery1 + dataSource._sourceTable + baseQuery2
-   //                                + dataSource._theGeomColumnName + "," + bboxQuery + ")";
-   //
-   //      return checkQuery;
-   //   }
+
+   private static boolean sectorContainsData(final List<DataSource> dataSources,
+                                             final Sector sector) {
+
+      if ((dataSources == null) || (sector == null)) {
+         return false;
+      }
+
+      boolean containsData = false;
+
+      final Connection conn = _dataBaseService.getConnection();
+      try {
+         for (final DataSource ds : dataSources) {
+            final String checkQuery = buildCheckQuery(ds, sector);
+
+            if (checkQuery == null) {
+               continue;
+            }
+            final Statement st = conn.createStatement();
+            final ResultSet rs = st.executeQuery(checkQuery);
+            if (!rs.next()) {
+               st.close();
+               continue; //no data on this bbox
+            }
+
+            final int result = rs.getInt(1);
+            st.close();
+
+            containsData = containsData || (result > 0);
+         }
+      }
+      catch (final SQLException e) {
+         ILogger.instance().logError("SQL error checking contains data: " + e.getMessage());
+      }
+
+      return containsData;
+   }
+
+
+   private static String buildCheckQuery(final DataSource dataSource,
+                                         final Sector sector) {
+
+      //--i.e: SELECT COUNT(the_geom) FROM roads WHERE ST_Intersects(the_geom, ST_SetSRID(ST_MakeBox2D(ST_Point(-15.5,1.43), ST_Point(15.5,50.24)),4326)) 
+      final String baseQuery0 = "SELECT COUNT(";
+      final String baseQuery1 = ") FROM ";
+      final String baseQuery2 = " WHERE ST_Intersects(";
+
+      final List<Sector> extendedSector = TileSector.getExtendedSector(sector, OVERLAP_PERCENTAGE);
+      final String bboxQuery = buildSectorQuery(dataSource, extendedSector);
+
+      if (bboxQuery == null) {
+         return null;
+      }
+
+      final String checkQuery = baseQuery0 + dataSource._theGeomColumnName + baseQuery1 + dataSource._sourceTable + baseQuery2
+                                + dataSource._theGeomColumnName + "," + bboxQuery + ")";
+
+      return checkQuery;
+   }
+
+
+   private static long calcDescendantsNumber(final int from,
+                                             final int to) {
+
+      return (long) Math.pow(2, (2 * (to - from)));
+   }
+
+
+   private static long calcNumberOfPruneTiles(final int initLevel) {
+
+      long total = 0;
+      for (int level = FIRST_LEVEL; level <= MAX_LEVEL; level++) {
+
+         total += calcDescendantsNumber(initLevel, level);
+      }
+
+      return total;
+   }
 
 
    private static void displaySummary(final long startTime,
