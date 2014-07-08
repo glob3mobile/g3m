@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
@@ -12,17 +11,17 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GInitializationTask;
 import org.glob3.mobile.generated.GL;
-import org.glob3.mobile.generated.GPUProgramFactory;
+import org.glob3.mobile.generated.GPUProgramFactory_OGL;
 import org.glob3.mobile.generated.GPUProgramManager;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraActivityListener;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IGPUProgramFactory;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.Storage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.ITextUtils;
@@ -33,6 +32,7 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SceneLighting;
+import org.glob3.mobile.generated.Storage;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
@@ -164,8 +164,9 @@ public final class G3MWidget_Android
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final ITextUtils textUtils = new TextUtils_Android();
+      final IGPUProgramFactory gpuFactory = new GPUProgramFactory_OGL();
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, gpuFactory);
    }
 
 
@@ -267,7 +268,7 @@ public final class G3MWidget_Android
 
 
    private GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory factory = new BasicShadersGL2();
+      // final GPUProgramFactory factory = new BasicShadersGL2();
 
       /*
       factory.add(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader, GL2Shaders._billboardFragmentShader));
@@ -293,7 +294,7 @@ public final class G3MWidget_Android
                GL2Shaders._FlatColorMesh_DirectionLightFragmentShader));
       */
 
-      return new GPUProgramManager(factory);
+      return new GPUProgramManager();
    }
 
 

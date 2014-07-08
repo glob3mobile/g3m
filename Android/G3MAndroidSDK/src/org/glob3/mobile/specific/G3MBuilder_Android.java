@@ -2,12 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.BasicShadersGL2;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MBuilder;
-import org.glob3.mobile.generated.Storage;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.Storage;
 import org.glob3.mobile.generated.TimeInterval;
 
 import android.content.Context;
@@ -30,10 +29,10 @@ public class G3MBuilder_Android
    public G3MWidget_Android createWidget() {
       //Adding Default Program Sources
 
-      final BasicShadersGL2 shaders = new BasicShadersGL2();
-      for (int i = 0; i < shaders.size(); i++) {
-         addGPUProgramSources(shaders.get(i));
-      }
+      //      final BasicShadersGL2 shaders = new BasicShadersGL2();
+      //      for (int i = 0; i < shaders.size(); i++) {
+      //         addGPUProgramSources(shaders.get(i));
+      //      }
 
       //      addGPUProgramSources(new GPUProgramSources("Billboard", GL2Shaders._billboardVertexShader,
       //               GL2Shaders._billboardFragmentShader));
