@@ -34,6 +34,7 @@ GPUProgram* GPUProgramFactory_OGL::get(GL* gl, const std::string& name) const{
 	}
 	else{
 		ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());
+		return NULL;
 	}
 }
 
