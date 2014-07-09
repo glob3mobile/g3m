@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 
 //class SingleBilElevationDataProvider_BufferDownloadListener;
 //class IDownloader;
+//class IThreadUtils;
 
 public class SingleBilElevationDataProvider_Request
 {

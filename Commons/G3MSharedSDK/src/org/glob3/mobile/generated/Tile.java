@@ -61,7 +61,7 @@ public class Tile
   private float _verticalExaggeration;
   private TileTessellatorMeshData _tileTessellatorMeshData = new TileTessellatorMeshData();
 
-  private BoundingVolume _boundingVolume;
+//  BoundingVolume* _boundingVolume;
 //
 //  Vector3D* _northWestPoint;
 //  Vector3D* _northEastPoint;
@@ -212,7 +212,7 @@ public class Tile
     //  printf("%f, %f\n", tileRadius, _tileTessellatorMeshData._radius);
     //
     Vector3D center = _tileTessellatorMeshData._meshCenter; //rc->getPlanet()->toCartesian(_sector._center);
-    double distanceToTile = camera.getCartesianPosition().sub(center).length();
+    double distanceToTile = camera.getCartesianPosition().subcenter.length();
     distanceToTile -= tileRadius;
   
     //Deviation
@@ -412,15 +412,14 @@ public class Tile
 
   private BoundingVolume getBoundingVolume(G3MRenderContext rc, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, TilesRenderParameters tilesRenderParameters)
   {
-    if (_boundingVolume == null)
-    {
+  //  if (_boundingVolume == NULL) {
       Mesh mesh = getTessellatorMesh(rc, elevationDataProvider, tessellator, layerTilesRenderParameters, tilesRenderParameters);
       if (mesh != null)
       {
-        _boundingVolume = mesh.getBoundingVolume();
+        return mesh.getBoundingVolume();
       }
-    }
-    return _boundingVolume;
+  //  }
+    return null;
   }
 
   private boolean _rendered;
@@ -439,6 +438,7 @@ public class Tile
   public final String _id;
 
   public Tile(TileTexturizer texturizer, Tile parent, Sector sector, boolean mercator, int level, int row, int column, PlanetRenderer planetRenderer)
+  //_boundingVolume(NULL),
   //_northWestPoint(NULL),
   //_northEastPoint(NULL),
   //_southWestPoint(NULL),
@@ -472,7 +472,6 @@ public class Tile
      _mustActualizeMeshDueToNewElevationData = false;
      _lastTileMeshResolutionX = -1;
      _lastTileMeshResolutionY = -1;
-     _boundingVolume = null;
      _lastMeetsRenderCriteriaTimeInMS = 0;
      _planetRenderer = planetRenderer;
      _tessellatorData = null;
@@ -984,7 +983,7 @@ public class Tile
       final Vector2I res = tessellator.getTileMeshResolution(planet, tileMeshResolution, this, renderDebug);
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning JM at work
-      final Vector2I res2 = new Vector2I(res._x * 2, res._y *2);
+      final Vector2I res2 = new Vector2I((res._x * 2) - 1, (res._y *2) - 1);
   
       _elevationDataRequest = new TileElevationDataRequest(this, res2, elevationDataProvider);
       _elevationDataRequest.sendRequest();

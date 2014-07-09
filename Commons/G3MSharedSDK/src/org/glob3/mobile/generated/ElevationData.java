@@ -220,14 +220,17 @@ public abstract class ElevationData
     final double dX = u * (_width - 1);
     final double dY = (1.0 - v) * (_height - 1);
   
-    final int x = (int) dX;
-    final int y = (int) dY;
   
     IMathUtils mu = IMathUtils.instance();
-    if (mu.abs(((double)x) - dX) < 0.1 && mu.abs(((double)y) - dY) < 0.1)
+    final int rX = (int) mu.round(dX);
+    final int rY = (int) mu.round(dY);
+    if (mu.abs(rX - dX) < 0.1 && mu.abs(rY - dY) < 0.1)
     {
-      return getElevationAt(x, y);
+      return getElevationAt(rX, rY);
     }
+  
+    final int x = (int) dX;
+    final int y = (int) dY;
   
     final int nextX = x + 1;
     final int nextY = y + 1;

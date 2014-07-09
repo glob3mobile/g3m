@@ -49,6 +49,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   private IDownloader _downloader;
   private long _requestToDownloaderID;
   private SingleBilElevationDataProvider_BufferDownloadListener _listener;
+  private final IThreadUtils _threadUtils;
 
   public SingleBilElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent)
   {
@@ -67,6 +68,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
      _downloader = null;
      _requestToDownloaderID = -1;
      _listener = null;
+     _threadUtils = null;
   
   }
 
@@ -97,6 +99,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     if (!_elevationDataResolved || _listener != null)
     {
       _downloader = context.getDownloader();
+      _threadUtils = context.getThreadUtils();
   
       _listener = new SingleBilElevationDataProvider_BufferDownloadListener(this, _sector, _extentWidth, _extentHeight, _deltaHeight);
   
@@ -117,6 +120,12 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
     }
     else
     {
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning THIS LINE DOES NOT WORK COZ TILES DOES NOT SUPPORT ASYNC EDP
+  //    _threadUtils->invokeAsyncTask(new SubviewEDTask(_elevationData, sector, extent, listener, autodeleteListener), true);
+  
+  
       //int _DGD_working_on_terrain;
       ElevationData elevationData = new InterpolatedSubviewElevationData(_elevationData, sector, extent);
       listener.onData(sector, extent, elevationData);
