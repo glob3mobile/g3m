@@ -49,7 +49,7 @@ public class SingleBilElevationDataProvider extends ElevationDataProvider
   private IDownloader _downloader;
   private long _requestToDownloaderID;
   private SingleBilElevationDataProvider_BufferDownloadListener _listener;
-  private final IThreadUtils _threadUtils;
+  private IThreadUtils _threadUtils;
 
   public SingleBilElevationDataProvider(URL bilUrl, Sector sector, Vector2I extent)
   {
