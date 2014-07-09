@@ -342,19 +342,26 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
 //  printf("MS: %s\n", meshSector.description().c_str());
 //  printf("EDS: %s\n", elevationData->getSector().description().c_str());
 
+  bool elevationDataMatchVertices = (elevationData != NULL &&
+                         meshSector.isEquals(tileSector) &&
+                         rx2 == elevationData->getExtent()._x &&
+                         ry2 == elevationData->getExtent()._y);
   
-  for (int j = 0; j < ry2; j++) {
-    //V = Latitude
-    const double v = (double) j / (ry2 - 1);
+  double latGap = meshSector._deltaLatitude._degrees / (ry2 - 1);
+  double lonGap = meshSector._deltaLongitude._degrees / (rx2 -1);
+  double minLat = meshSector._lower._latitude._degrees;
+  double minLon = meshSector._lower._longitude._degrees;
+  
+  for (int j = 0; j < ry2; j++) {     //V = Latitude
     
-    for (int i = 0; i < rx2; i++) {
-      //U = Longitude
-      const double u = (double) i / (rx2 - 1);
-      const Geodetic2D position = meshSector.getInnerPoint(u, v);
+    for (int i = 0; i < rx2; i++) {       //U = Longitude
+
+      const Geodetic2D position = Geodetic2D::fromDegrees(minLat + (latGap * (ry2 - j - 1)), minLon + (lonGap * i));
       double elevation = 0;
       
       if (elevationData != NULL) {
-        const double rawElevation = elevationData->getElevationAt(position);
+        const double rawElevation = elevationDataMatchVertices? elevationData->getElevationAt(i, ry2- j - 1) :
+                                                                elevationData->getElevationAt(position);
         
         bool nanElev = ISNAN(rawElevation);
         

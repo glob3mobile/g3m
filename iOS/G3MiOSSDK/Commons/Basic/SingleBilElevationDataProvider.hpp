@@ -20,6 +20,7 @@
 
 class SingleBilElevationDataProvider_BufferDownloadListener;
 class IDownloader;
+class IThreadUtils;
 
 struct SingleBilElevationDataProvider_Request {
   const Sector _sector;
@@ -82,6 +83,7 @@ private:
   IDownloader* _downloader;
   long long    _requestToDownloaderID;
   SingleBilElevationDataProvider_BufferDownloadListener* _listener;
+  const IThreadUtils* _threadUtils;
 
 public:
   SingleBilElevationDataProvider(const URL& bilUrl,

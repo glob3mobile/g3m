@@ -16,6 +16,8 @@
 #include "InterpolatedSubviewElevationData.hpp"
 #include "ShortBufferElevationData.hpp"
 
+#include "IFactory.hpp"
+#include "IThreadUtils.hpp"
 
 SingleBilElevationDataProvider::SingleBilElevationDataProvider(const URL& bilUrl,
                                                                  const Sector& sector,
@@ -31,7 +33,8 @@ _elevationDataResolved(false),
 _currentRequestID(0),
 _downloader(NULL),
 _requestToDownloaderID(-1),
-_listener(NULL)
+_listener(NULL),
+_threadUtils(NULL)
 {
 
 }
@@ -128,6 +131,7 @@ void SingleBilElevationDataProvider::onElevationData(ElevationData* elevationDat
 void SingleBilElevationDataProvider::initialize(const G3MContext* context) {
   if (!_elevationDataResolved || _listener != NULL) {
     _downloader = context->getDownloader();
+    _threadUtils = context->getThreadUtils();
 
     _listener = new SingleBilElevationDataProvider_BufferDownloadListener(this,
                                                                            _sector,
@@ -144,6 +148,50 @@ void SingleBilElevationDataProvider::initialize(const G3MContext* context) {
   }
 }
 
+class SubviewEDTask: public GAsyncTask {
+public:
+  
+  ElevationData* _ed;
+  ElevationData* _subview;
+  const Sector _sector;
+  const Vector2I& _extent;
+  IElevationDataListener* _listener;
+  bool _autodelete;
+  
+  SubviewEDTask(ElevationData* ed, const Sector& sector, const Vector2I& extent,
+                IElevationDataListener* listener, bool autodelete):
+  _ed(ed),
+  _sector(sector),
+  _extent(extent),
+  _subview(NULL),
+  _listener(listener),
+  _autodelete(autodelete)
+  {
+    
+  }
+  
+  virtual void runInBackground(const G3MContext* context){
+    
+    _subview = new InterpolatedSubviewElevationData(_ed,
+                                                                        _sector,
+                                                                        _extent);
+    
+  }
+  
+  virtual void onPostExecute(const G3MContext* context){
+    
+    _listener->onData(_sector,
+                     _extent,
+                     _subview);
+    
+    if (_autodelete) {
+      delete _listener;
+    }
+    
+  }
+  
+};
+
 const long long SingleBilElevationDataProvider::requestElevationData(const Sector& sector,
                                                                       const Vector2I& extent,
                                                                       IElevationDataListener* listener,
@@ -159,6 +207,11 @@ const long long SingleBilElevationDataProvider::requestElevationData(const Secto
     listener->onError(sector, extent);
   }
   else {
+    
+#warning THIS LINE DOES NOT WORK COZ TILES DOES NOT SUPPORT ASYNC EDP
+//    _threadUtils->invokeAsyncTask(new SubviewEDTask(_elevationData, sector, extent, listener, autodeleteListener), true);
+    
+    
     //int _DGD_working_on_terrain;
     ElevationData *elevationData = new InterpolatedSubviewElevationData(_elevationData,
                                                                         sector,

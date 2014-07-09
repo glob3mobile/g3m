@@ -74,7 +74,7 @@ _verticalExaggeration(0),
 _mustActualizeMeshDueToNewElevationData(false),
 _lastTileMeshResolutionX(-1),
 _lastTileMeshResolutionY(-1),
-_boundingVolume(NULL),
+//_boundingVolume(NULL),
 _lastMeetsRenderCriteriaTimeInMS(0),
 _planetRenderer(planetRenderer),
 _tessellatorData(NULL),
@@ -260,17 +260,17 @@ const BoundingVolume* Tile::getBoundingVolume(const G3MRenderContext* rc,
                                               const TileTessellator* tessellator,
                                               const LayerTilesRenderParameters* layerTilesRenderParameters,
                                               const TilesRenderParameters* tilesRenderParameters) {
-  if (_boundingVolume == NULL) {
+//  if (_boundingVolume == NULL) {
     Mesh* mesh = getTessellatorMesh(rc,
                                     elevationDataProvider,
                                     tessellator,
                                     layerTilesRenderParameters,
                                     tilesRenderParameters);
     if (mesh != NULL) {
-      _boundingVolume = mesh->getBoundingVolume();
+      return mesh->getBoundingVolume();
     }
-  }
-  return _boundingVolume;
+//  }
+  return NULL;
 }
 
 bool Tile::isVisible(const G3MRenderContext* rc,
@@ -937,7 +937,7 @@ void Tile::initializeElevationData(ElevationDataProvider* elevationDataProvider,
                                                             this,
                                                             renderDebug);
 #warning JM at work
-    const Vector2I res2(res._x * 2, res._y *2);
+    const Vector2I res2((res._x * 2) - 1 , (res._y *2) - 1);
     
     _elevationDataRequest = new TileElevationDataRequest(this, res2, elevationDataProvider);
     _elevationDataRequest->sendRequest();
