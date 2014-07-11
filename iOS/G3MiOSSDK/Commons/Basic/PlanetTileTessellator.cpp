@@ -424,7 +424,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   double meshDiagonalLength = firstVertex->sub( *lastVertex ).length();
   double maxValidDEMGap = meshDiagonalLength * 0.01;
   
-  double deviationSquared = 0;
+  double deviation = 0;
   double maxVerticesDistanceInLongitudeSquared = 0;
   double maxVerticesDistanceInLatitudeSquared = 0;
   
@@ -444,18 +444,22 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
           bool checkDeviationLon = !ISNAN(prevLonElevation) && (mu->abs(currentElevation - prevLonElevation) < maxValidDEMGap);
           
           if (checkDeviationLon){
-            Vector3D* prevLatV = grid[lonIndex - 2][latIndex];
-            Vector3D* realLatV = grid[lonIndex - 1][latIndex];
+            Vector3D* prevLonV = grid[lonIndex - 2][latIndex];
+//            Vector3D* realLonV = grid[lonIndex - 1][latIndex];
             
-            Vector3D interpolatedLatV = prevLatV->add( *vertex ).div(2.0);
+//            Vector3D interpolatedLonV = prevLonV->add( *vertex ).div(2.0);
             
-            double eastDeviation = realLatV->sub(interpolatedLatV).squaredLength();
-            if (eastDeviation > deviationSquared){
-              deviationSquared = eastDeviation;
+            double meshInterpolatedLonElevation = (prevLonElevation + currentElevation) / 2.0;
+            double realInterpolatedLonElevation = gridElevation[lonIndex-1][latIndex];
+            double eastDeviation = (meshInterpolatedLonElevation - realInterpolatedLonElevation);
+            
+//            double eastDeviation = realLonV->sub(interpolatedLonV).squaredLength();
+            if (eastDeviation > deviation){
+              deviation = eastDeviation;
             }
             
             //Computing maxVerticesDistance
-            double dist = vertex->sub( *prevLatV ).squaredLength();
+            double dist = vertex->sub( *prevLonV ).squaredLength();
             if (maxVerticesDistanceInLongitudeSquared < dist){
               maxVerticesDistanceInLongitudeSquared = dist;
             }
@@ -469,18 +473,24 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
           bool checkDeviationLat = !ISNAN(prevLatElevation) && (mu->abs(currentElevation - prevLatElevation) < maxValidDEMGap);
           
           if (checkDeviationLat){
-            Vector3D* prevLonV = grid[lonIndex][latIndex - 2];
-            Vector3D* realLonV = grid[lonIndex][latIndex - 1];
+            Vector3D* prevLatV = grid[lonIndex][latIndex - 2];
+//            Vector3D* realLatV = grid[lonIndex][latIndex - 1];
             
-            Vector3D interpolatedLonV = prevLonV->add( *vertex ).div(2.0);
+//            Vector3D interpolatedLonV = prevLatV->add( *vertex ).div(2.0);
             
-            double southDeviation = realLonV->sub(interpolatedLonV).squaredLength();
-            if (southDeviation > deviationSquared){
-              deviationSquared = southDeviation;
+            double meshInterpolatedLatElevation = (prevLatElevation + currentElevation) / 2.0;
+            double realInterpolatedLatElevation = gridElevation[lonIndex][latIndex-1];
+            double southDeviation = (meshInterpolatedLatElevation - realInterpolatedLatElevation);
+
+            
+            
+            //double southDeviation = realLatV->sub(interpolatedLonV).squaredLength();
+            if (southDeviation > deviation){
+              deviation = southDeviation;
             }
             
             //Computing maxVerticesDistance
-            double dist = vertex->sub( *prevLonV ).squaredLength();
+            double dist = vertex->sub( *prevLatV ).squaredLength();
             if (maxVerticesDistanceInLatitudeSquared < dist){
               maxVerticesDistanceInLatitudeSquared = dist;
             }
@@ -503,7 +513,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   data._minHeight = minElevation;
   data._maxHeight = maxElevation;
   data._averageHeight = averageElevation / (rx * ry);
-  data._deviation = mu->sqrt(deviationSquared);
+  data._deviation = deviation;
   data._maxVerticesDistanceInLongitude = mu->sqrt(maxVerticesDistanceInLongitudeSquared);
   data._maxVerticesDistanceInLatitude = mu->sqrt(maxVerticesDistanceInLatitudeSquared);
   data._surfaceResolutionX = meshResolution._x;
