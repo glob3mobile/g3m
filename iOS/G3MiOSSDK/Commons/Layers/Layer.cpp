@@ -84,48 +84,53 @@ bool Layer::isEquals(const Layer* that) const {
   if (this == that) {
     return true;
   }
-
+  
   if (that == NULL) {
     return false;
   }
-
+  
   if (getLayerType() != that->getLayerType()) {
     return false;
   }
-
+  
   if (_condition != that->_condition) {
     return false;
   }
-
+  
   const int thisListenersSize = _listeners.size();
   const int thatListenersSize = that->_listeners.size();
   if (thisListenersSize != thatListenersSize) {
     return false;
   }
-
+  
   for (int i = 0; i < thisListenersSize; i++) {
     if (_listeners[i] != that->_listeners[i]) {
       return false;
     }
   }
-
+  
   if (_enable != that->_enable) {
     return false;
   }
-
-  if (!_parameters->isEquals(that->_parameters)) {
+  
+  if (_parameters != NULL && that->_parameters != NULL) {
+    if (!_parameters->isEquals(that->_parameters)) {
+      return false;
+    }
+  }
+  else {
     return false;
   }
-
-
+  
+  
   if (!(_info == that->_info)) {
     return false;
   }
-
+  
   if (!(_disclaimerInfo == that->_disclaimerInfo)) {
     return false;
   }
-
+  
   return rawIsEquals(that);
 }
 
@@ -161,15 +166,15 @@ std::vector<std::string> Layer::getInfos() {
 }
 
 const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const{
-    const int maxLevel = _parameters->_maxLevel;
+  const int maxLevel = _parameters->_maxLevel;
 #ifdef C_CODE
-    const Tile* tileP = tile;
+  const Tile* tileP = tile;
 #endif
 #ifdef JAVA_CODE
-    Tile tileP = tile;
+  Tile tileP = tile;
 #endif
-    while (tileP->_level > maxLevel) {
-        tileP = tileP->getParent();
-    }
-    return tileP;
+  while (tileP->_level > maxLevel) {
+    tileP = tileP->getParent();
+  }
+  return tileP;
 }
