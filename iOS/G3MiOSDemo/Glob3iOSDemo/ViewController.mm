@@ -278,9 +278,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
   
-  //[self testAvoidingCameraCollisionToGround];
+  [self testAvoidingCameraCollisionToGround];
 
   //  [self initWithMapBooBuilder];
 
@@ -3739,7 +3739,7 @@ public:
   layerSet->addLayer(grafcanLIDAR);
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   
-  /*
+  
   // create elevations for Tenerife from bil file
   Sector sector = Sector::fromDegrees (27.967811065876,                  // min latitude
                                        -17.0232177085356,                // min longitude
@@ -3752,7 +3752,7 @@ public:
   ElevationDataProvider* elevationDataProvider = new SingleBilElevationDataProvider(url, sector, extent);
   builder.getPlanetRendererBuilder()->setElevationDataProvider(elevationDataProvider);
   float verticalExaggeration = 2.0f;
-  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);*/
+  builder.getPlanetRendererBuilder()->setVerticalExaggeration(verticalExaggeration);
   
   // create camera renderers
   CameraRenderer* cameraRenderer = [self createCameraRenderer];
