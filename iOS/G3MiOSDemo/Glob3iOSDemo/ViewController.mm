@@ -278,9 +278,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  //[self initCustomizedWithBuilder];
+  [self initCustomizedWithBuilder];
   
-  [self testAvoidingCameraCollisionToGround];
+  //[self testAvoidingCameraCollisionToGround];
 
   //  [self initWithMapBooBuilder];
 
@@ -596,7 +596,7 @@ public:
   //                                  NULL)
   //                     );
 
-  bool useElevations = true;
+  bool useElevations = false;
   if (useElevations) {
     [self initializeElevationDataProvider: builder];
   }
@@ -1080,10 +1080,10 @@ public:
 // initialization
 builder.initializeWidget();
 //  [self testGenericQuadTree:geoTileRasterizer];
-  
-  Geodetic3D position = Geodetic3D(Angle::fromDegrees(27.60), Angle::fromDegrees(-16.54), 55000);
+
+  Geodetic3D position = Geodetic3D(Angle::fromDegrees(0), Angle::fromDegrees(0), 5000000);
   [self G3MWidget].widget->setCameraPosition(position);
-  [self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
+  //[self G3MWidget].widget->setCameraPitch(Angle::fromDegrees(-50));
   
 
 }
