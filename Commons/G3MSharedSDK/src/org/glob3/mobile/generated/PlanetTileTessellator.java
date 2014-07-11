@@ -205,10 +205,10 @@ public class PlanetTileTessellator extends TileTessellator
     Vector3D firstVertex = grid[0][0];
     Vector3D lastVertex = grid[(rx-1) *2][(ry-1) *2];
   
-    double meshDiagonalLength = firstVertex.sub(lastVertex).length();
+    double meshDiagonalLength = firstVertex.sublastVertex .length();
     double maxValidDEMGap = meshDiagonalLength * 0.01;
   
-    double deviationSquared = 0;
+    double deviation = 0;
     double maxVerticesDistanceInLongitudeSquared = 0;
     double maxVerticesDistanceInLatitudeSquared = 0;
   
@@ -233,19 +233,23 @@ public class PlanetTileTessellator extends TileTessellator
   
             if (checkDeviationLon)
             {
-              Vector3D prevLatV = grid[lonIndex - 2][latIndex];
-              Vector3D realLatV = grid[lonIndex - 1][latIndex];
+              Vector3D prevLonV = grid[lonIndex - 2][latIndex];
+  //            Vector3D* realLonV = grid[lonIndex - 1][latIndex];
   
-              Vector3D interpolatedLatV = prevLatV.add(vertex).div(2.0);
+  //            Vector3D interpolatedLonV = prevLonV->add( *vertex ).div(2.0);
   
-              double eastDeviation = realLatV.sub(interpolatedLatV).squaredLength();
-              if (eastDeviation > deviationSquared)
+              double meshInterpolatedLonElevation = (prevLonElevation + currentElevation) / 2.0;
+              double realInterpolatedLonElevation = gridElevation[lonIndex-1][latIndex];
+              double eastDeviation = (meshInterpolatedLonElevation - realInterpolatedLonElevation);
+  
+  //            double eastDeviation = realLonV->sub(interpolatedLonV).squaredLength();
+              if (eastDeviation > deviation)
               {
-                deviationSquared = eastDeviation;
+                deviation = eastDeviation;
               }
   
               //Computing maxVerticesDistance
-              double dist = vertex.sub(prevLatV).squaredLength();
+              double dist = vertex.subprevLonV .squaredLength();
               if (maxVerticesDistanceInLongitudeSquared < dist)
               {
                 maxVerticesDistanceInLongitudeSquared = dist;
@@ -262,19 +266,25 @@ public class PlanetTileTessellator extends TileTessellator
   
             if (checkDeviationLat)
             {
-              Vector3D prevLonV = grid[lonIndex][latIndex - 2];
-              Vector3D realLonV = grid[lonIndex][latIndex - 1];
+              Vector3D prevLatV = grid[lonIndex][latIndex - 2];
+  //            Vector3D* realLatV = grid[lonIndex][latIndex - 1];
   
-              Vector3D interpolatedLonV = prevLonV.add(vertex).div(2.0);
+  //            Vector3D interpolatedLonV = prevLatV->add( *vertex ).div(2.0);
   
-              double southDeviation = realLonV.sub(interpolatedLonV).squaredLength();
-              if (southDeviation > deviationSquared)
+              double meshInterpolatedLatElevation = (prevLatElevation + currentElevation) / 2.0;
+              double realInterpolatedLatElevation = gridElevation[lonIndex][latIndex-1];
+              double southDeviation = (meshInterpolatedLatElevation - realInterpolatedLatElevation);
+  
+  
+  
+              //double southDeviation = realLatV->sub(interpolatedLonV).squaredLength();
+              if (southDeviation > deviation)
               {
-                deviationSquared = southDeviation;
+                deviation = southDeviation;
               }
   
               //Computing maxVerticesDistance
-              double dist = vertex.sub(prevLonV).squaredLength();
+              double dist = vertex.subprevLatV .squaredLength();
               if (maxVerticesDistanceInLatitudeSquared < dist)
               {
                 maxVerticesDistanceInLatitudeSquared = dist;
@@ -300,7 +310,7 @@ public class PlanetTileTessellator extends TileTessellator
     data._minHeight = minElevation;
     data._maxHeight = maxElevation;
     data._averageHeight = averageElevation / (rx * ry);
-    data._deviation = mu.sqrt(deviationSquared);
+    data._deviation = deviation;
     data._maxVerticesDistanceInLongitude = mu.sqrt(maxVerticesDistanceInLongitudeSquared);
     data._maxVerticesDistanceInLatitude = mu.sqrt(maxVerticesDistanceInLatitudeSquared);
     data._surfaceResolutionX = meshResolution._x;
