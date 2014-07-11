@@ -10,10 +10,29 @@
 #define __G3MWindowsSDK_Storage_win8__
 
 #include "Storage.hpp"
+#include <string>
+#include <sqlite3.h>
+#include "SQDatabase.hpp"
+
+//using  SQLite;
 
 class Storage_win8 : public Storage {
+
+private:
+
+	const char* _databaseName;
+
+	SQDatabase* _readDB;
+	SQDatabase* _writeDB;
+
+	std::string* getDBPath() const;
+	void showStatistics() const;
+	//bool addSkipBackupAttributeToItemAtPath(std::string* path);
+
 public:
-	void initialize(const G3MContext* context);
+	Storage_win8(const std::string &databaseName);
+
+	//void initialize(const G3MContext* context);
 	IByteBufferResult readBuffer(const URL& url, bool readExpired);
 	IImageResult readImage(const URL& url, bool readExpired);
 	void saveBuffer(const URL& url, const IByteBuffer* buffer, const TimeInterval& timeToExpires, bool saveInBackground);

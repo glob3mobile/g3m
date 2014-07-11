@@ -10,10 +10,20 @@
 
 #include <string>
 
+Storage_win8::Storage_win8(const std::string &databaseName)
+{
+	_databaseName = databaseName.c_str();
+
+	sqlite3 *db;
+	int rc = sqlite3_open(_databaseName, &db);
+}
+
+/*
 void Storage_win8::initialize(const G3MContext* context){
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
+*/
 
 IByteBufferResult Storage_win8::readBuffer(const URL& url, bool readExpired){
 	std::string errMsg("TODO: Implementation");
@@ -51,6 +61,6 @@ void Storage_win8::onDestroy(const G3MContext* context){
 }
 
 bool Storage_win8::isAvailable(){
-	std::string errMsg("TODO: Implementation");
-	throw std::exception(errMsg.c_str());
+	std::string errMsg("TODO: isAvailable() test pending..");
+	return (_readDB != NULL) && (_writeDB != NULL);
 }
