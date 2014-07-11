@@ -141,6 +141,9 @@ public:
                        const Vector3D& touchedPosition0,
                        const Vector3D& touchedPosition1) const;
   
+  MutableMatrix44D doubleDrag_old(const Vector3D& finalRay0,
+                              const Vector3D& finalRay1,
+                              bool allowRotation) const;
   MutableMatrix44D doubleDrag(const Vector3D& finalRay0,
                               const Vector3D& finalRay1,
                               bool allowRotation) const;

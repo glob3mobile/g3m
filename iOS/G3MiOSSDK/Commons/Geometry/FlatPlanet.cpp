@@ -187,24 +187,26 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   // test if initialPoints are valid
   if (_initialPoint0.isNan() || _initialPoint1.isNan())
     return MutableMatrix44D::invalid();
-
+  
   // init params
   const IMathUtils* mu = IMathUtils::instance();
   MutableVector3D positionCamera = _origin;
-
-  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf 
+  
+  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
   /*
-  // compute distance to translate camera
-  double d0 = _distanceBetweenInitialPoints;
-  const Vector3D r1 = finalRay0;
-  const Vector3D r2 = finalRay1;
-  double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) +
-              (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
-  double zc = _origin.z();
-  double uz = _centerRay.z();
-  double t2 = (d0 / mu->sqrt(k) - zc) / uz;
-  */
-
+   // compute distance to translate camera
+   double d0 = _distanceBetweenInitialPoints;
+   const Vector3D r1 = finalRay0;
+   const Vector3D r2 = finalRay1;
+   double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) +
+   (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
+   double zc = _origin.z();
+   double uz = _centerRay.z();
+   double t2 = (d0 / mu->sqrt(k) - zc) / uz;
+   */
+  
+  printf ("double drag...\n");
+  
   // compute distance to translate camera
   double d0 = _distanceBetweenInitialPoints;
   const Vector3D r1 = finalRay0;
@@ -233,14 +235,28 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   } else {
     t2 -= _correctionT2;
   }
-    
+  
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
   positionCamera = _origin;
   MutableVector3D viewDirection = _centerRay;
   MutableVector3D ray0 = finalRay0.asMutableVector3D();
   MutableVector3D ray1 = finalRay1.asMutableVector3D();
+  
+  MutableVector3D delta = viewDirection.times(t2);
+  MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(delta.asVector3D());
+  positionCamera = positionCamera.transformedBy(translation, 1.0);
+  matrix = translation.multiply(matrix);
+  
+  // compute final point
+  MutableVector3D finalDragPoint = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), finalRay0, _dragHeight0).asMutableVector3D();
+  if (finalDragPoint.isNan()) return MutableMatrix44D::invalid();
+  MutableMatrix44D translationDrag = MutableMatrix44D::createTranslationMatrix(_initialPoint0.sub(finalDragPoint).asVector3D());
+  matrix = translationDrag.multiply(matrix);
+  
+  return matrix;
 
+  
   // drag from initialPoint to centerPoint and move the camera forward
   {
     MutableVector3D delta = _initialPoint.sub((_centerPoint));
@@ -249,12 +265,12 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
   }
-
+  
   // compute middle point in 3D
   Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
   Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D(), _dragHeight1);
   Vector3D finalPoint = P0.add(P1).times(0.5);
- 
+  
   // compute the corrected center point
   if (t2==0) {
     MutableVector3D delta = _initialPoint.sub((_centerPoint));
@@ -268,7 +284,7 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     positionCamera = positionCamera.transformedBy(translation, 1.0);
     matrix = translation.multiply(matrix);
   }
-
+  
   // camera rotation
   if (allowRotation) {
     Vector3D normal = geodeticSurfaceNormal(correctedCenterPoint);
@@ -281,7 +297,112 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, correctedCenterPoint);
     matrix = rotation.multiply(matrix);
   }
+  
+  return matrix;
+}
 
+MutableMatrix44D FlatPlanet::doubleDrag_old(const Vector3D& finalRay0,
+                                        const Vector3D& finalRay1,
+                                        bool allowRotation) const
+{
+  // test if initialPoints are valid
+  if (_initialPoint0.isNan() || _initialPoint1.isNan())
+    return MutableMatrix44D::invalid();
+  
+  // init params
+  const IMathUtils* mu = IMathUtils::instance();
+  MutableVector3D positionCamera = _origin;
+  
+  // following math in http://serdis.dis.ulpgc.es/~atrujill/glob3m/IGO/DoubleDrag.pdf
+  /*
+   // compute distance to translate camera
+   double d0 = _distanceBetweenInitialPoints;
+   const Vector3D r1 = finalRay0;
+   const Vector3D r2 = finalRay1;
+   double k = ((r1._x/r1._z - r2._x/r2._z) * (r1._x/r1._z - r2._x/r2._z) +
+   (r1._y/r1._z - r2._y/r2._z) * (r1._y/r1._z - r2._y/r2._z));
+   double zc = _origin.z();
+   double uz = _centerRay.z();
+   double t2 = (d0 / mu->sqrt(k) - zc) / uz;
+   */
+  
+  // compute distance to translate camera
+  double d0 = _distanceBetweenInitialPoints;
+  const Vector3D r1 = finalRay0;
+  const Vector3D r2 = finalRay1;
+  double zA = _dragHeight0;
+  double zB = _dragHeight1;
+  double zc = _origin.z();
+  double uz = _centerRay.z();
+  double Rx = r2._x / r2._z - r1._x / r1._z;
+  double Ry = r2._y / r2._z - r1._y / r1._z;
+  double Kx = zc*Rx + zA*r1._x/r1._z - zB*r2._x/r2._z;
+  double Ky = zc*Ry + zA*r1._y/r1._z - zB*r2._y/r2._z;
+  double a = uz*uz * (Rx*Rx + Ry*Ry);
+  double b = 2 * uz * (Rx*Kx + Ry*Ky);
+  double c = Kx*Kx + Ky*Ky + (zA-zB)*(zA-zB) - d0*d0;
+  double root = b*b - 4*a*c;
+  if (root<0) return MutableMatrix44D::invalid();
+  double squareRoot = mu->sqrt(root);
+  double t2 = (-b - squareRoot) / (2*a);
+  
+  // the first time, t2 must be corrected
+  if (_firstDoubleDragMovement) {
+    _firstDoubleDragMovement = false;
+    _correctionT2 = t2;
+    t2 = 0;
+  } else {
+    t2 -= _correctionT2;
+  }
+  
+  // start to compound matrix
+  MutableMatrix44D matrix = MutableMatrix44D::identity();
+  positionCamera = _origin;
+  MutableVector3D viewDirection = _centerRay;
+  MutableVector3D ray0 = finalRay0.asMutableVector3D();
+  MutableVector3D ray1 = finalRay1.asMutableVector3D();
+  
+  // drag from initialPoint to centerPoint and move the camera forward
+  {
+    MutableVector3D delta = _initialPoint.sub((_centerPoint));
+    delta = delta.add(viewDirection.times(t2));
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(delta.asVector3D());
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
+    matrix = translation.multiply(matrix);
+  }
+  
+  // compute middle point in 3D
+  Vector3D P0 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
+  Vector3D P1 = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray1.asVector3D(), _dragHeight1);
+  Vector3D finalPoint = P0.add(P1).times(0.5);
+  
+  // compute the corrected center point
+  if (t2==0) {
+    MutableVector3D delta = _initialPoint.sub((_centerPoint));
+    _correctedCenterPoint = finalPoint.asMutableVector3D().sub(delta);
+  }
+  Vector3D correctedCenterPoint = _correctedCenterPoint.asVector3D();
+  
+  // drag globe from centerPoint to finalPoint
+  {
+    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(correctedCenterPoint.sub(finalPoint));
+    positionCamera = positionCamera.transformedBy(translation, 1.0);
+    matrix = translation.multiply(matrix);
+  }
+  
+  // camera rotation
+  if (allowRotation) {
+    Vector3D normal = geodeticSurfaceNormal(correctedCenterPoint);
+    Vector3D v0     = _initialPoint0.asVector3D().sub(correctedCenterPoint).projectionInPlane(normal);
+    Vector3D p0     = Plane::intersectionXYPlaneWithRay(positionCamera.asVector3D(), ray0.asVector3D(), _dragHeight0);
+    Vector3D v1     = p0.sub(correctedCenterPoint).projectionInPlane(normal);
+    double angle    = v0.angleBetween(v1)._degrees;
+    double sign     = v1.cross(v0).dot(normal);
+    if (sign<0) angle = -angle;
+    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal, correctedCenterPoint);
+    matrix = rotation.multiply(matrix);
+  }
+  
   return matrix;
 }
 
