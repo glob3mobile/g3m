@@ -196,13 +196,35 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   // compute final points
   Vector3D finalPoint0 = Plane::intersectionXYPlaneWithRay(origin, finalRay0, _dragHeight0);
   if (finalPoint0.isNan()) return MutableMatrix44D::invalid();
-  Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(origin, finalRay1, _dragHeight1);
-  if (finalPoint1.isNan()) return MutableMatrix44D::invalid();
 
   // drag initial point 0 to final point 0
   MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(_initialPoint0.sub(finalPoint0));
   
   // rotate around point0
+  Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+  Vector3D draggedFinalRay1 = finalRay1.transformedBy(matrix, 0.0);
+  
+  
+  Vector3D draggedCenterRay = _centerRay.transformedBy(matrix, 0.0).asVector3D();
+  
+  
+  Vector3D draggedInitialPoint0 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, finalRay0.transformedBy(matrix,0), _dragHeight0);
+  
+  
+  
+  Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
+  Vector3D v0 = _initialPoint1.sub(_initialPoint0).asVector3D().projectionInPlane(draggedCenterRay);
+  Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, draggedFinalRay1, _dragHeight1);
+  if (finalPoint1.isNan()) return MutableMatrix44D::invalid();
+  Vector3D v1 = finalPoint1.sub(_initialPoint0.asVector3D()).projectionInPlane(draggedCenterRay);
+  double angle = v0.angleBetween(v1)._degrees;
+  double sign = v0.cross(v1).dot(normal0);
+  if (sign>0) angle = -angle;
+  MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal0, _initialPoint0.asVector3D());
+  matrix = rotation.multiply(matrix);
+  
+  
+/*  // rotate around point0
   Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
   MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(finalPoint0.sub(_initialPoint0.asVector3D()));
   Vector3D draggedInitialPoint1 = _initialPoint1.asVector3D().transformedBy(translation, 1.0);
@@ -212,7 +234,18 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   double sign = v0.cross(v1).dot(normal0);
   if (sign>0) angle = -angle;
   MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal0, _initialPoint0.asVector3D());
-  matrix = rotation.multiply(matrix);
+  matrix = rotation.multiply(matrix);*/
+  
+  
+  printf ("--------------\n");
+  printf ("A0=(%.0f,%.0f,%.0f)  B0=(%.0f,%.0f,%.0f)\n", _initialPoint0.x(),_initialPoint0.y(),_initialPoint0.z(),
+          _initialPoint1.x(),_initialPoint1.y(),_initialPoint1.z());
+  printf ("B0=(%.0f,%.0f,%.0f)  B1=(%.0f,%.0f,%.0f) \n", draggedInitialPoint0._x,draggedInitialPoint0._y,draggedInitialPoint0._z,
+          finalPoint1._x,finalPoint1._y,finalPoint1._z);
+  printf ("   angle=%.2f   v0=(%.2f, %.2f, %.2f) atan=%.2f    v1=(%.2f, %.2f, %.2f) atan=%.2f\n",
+          angle, v0._x, v0._y, v0._z, atan2(v0._y, v0._x)/3.1416*180,v1._x, v1._y, v1._z,atan2(v1._y, v1._x)/3.1416*180);
+  
+  
   
   // zoom camera
   // see chuleta en pdf
