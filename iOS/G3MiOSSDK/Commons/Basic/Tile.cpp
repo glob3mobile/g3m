@@ -372,11 +372,11 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   if (deviationCriteria){
     
     //Pixel size in meters
-    const int texWidth = (int) mu->sqrt(texWidthSquared);
+    const int texWidth = layerTilesRenderParameters->_tileTextureResolution._x; // (int) mu->sqrt(texWidthSquared);
     const int texelsBetweenVerticesLongitude = texWidth / _tileTessellatorMeshData._surfaceResolutionX;
     const double maxTexelWidth = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLongitude;
     
-    const int texHeight = (int) mu->sqrt(texHeightSquared);
+    const int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;// (int) mu->sqrt(texHeightSquared);
     const int texelsBetweenVerticesLatitude = texHeight / _tileTessellatorMeshData._surfaceResolutionY;
     const double maxTexelHeight = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLatitude;
     
