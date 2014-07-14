@@ -1557,7 +1557,7 @@ public abstract class MapBooBuilder
         Layer overlayLayer = (jboOverlayLayer != null) ? parseLayer(jboOverlayLayer.asObject()) : oldOverlayLayer;
   
         final boolean hasWarnings = jsonObject.getAsBoolean("hasWarnings", false);
-        final boolean queryable = jsonObject.getAsBoolean("queryable", false);
+        final boolean queryable = jsonObject.getAsBoolean("queryable", oldScene.isQueryable());
         final boolean cameraPositionChaged = (jboCameraPosition != null);
   
         MapBoo_Scene newScene = new MapBoo_Scene(sceneToBeUpdatedID, name, description, screenshot, backgroundColor, cameraPosition, sector, baseLayer, overlayLayer, queryable, hasWarnings);
