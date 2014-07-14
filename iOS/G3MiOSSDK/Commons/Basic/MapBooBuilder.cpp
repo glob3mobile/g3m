@@ -1194,7 +1194,7 @@ void MapBooBuilder::parseSceneEventAndUpdateScene(const JSONObject* jsonObject) 
       Layer* overlayLayer = (jboOverlayLayer != NULL) ? parseLayer(jboOverlayLayer->asObject()) : oldOverlayLayer;
       
       const bool hasWarnings = jsonObject->getAsBoolean("hasWarnings", false);
-      const bool queryable = jsonObject->getAsBoolean("queryable", false);
+      const bool queryable = jsonObject->getAsBoolean("queryable", oldScene->isQueryable());
       const bool cameraPositionChaged = (jboCameraPosition != NULL);
       
       MapBoo_Scene* newScene = new MapBoo_Scene(sceneToBeUpdatedID, //
