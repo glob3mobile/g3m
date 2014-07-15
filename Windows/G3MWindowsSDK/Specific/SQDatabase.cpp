@@ -384,5 +384,5 @@ bool SQDatabase::beginDeferredTransaction() const{
 }
 
 SQDatabase::~SQDatabase(){
-
+	//TODO: 
 }
