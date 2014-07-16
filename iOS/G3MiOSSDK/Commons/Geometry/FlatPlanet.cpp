@@ -200,7 +200,93 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   // drag initial point 0 to final point 0
   MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(_initialPoint0.sub(finalPoint0));
   
-  // rotate around point0
+  // transform points to set axis origin in initialPoint0 (will be different in spherical planet)
+  {
+    Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+    Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, finalRay1.transformedBy(matrix,0), _dragHeight1);
+    MutableMatrix44D traslation = MutableMatrix44D::createTranslationMatrix(_initialPoint0.times(-1).asVector3D());
+    Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(traslation, 1.0).asVector3D();
+    Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(traslation, 1.0);
+    Vector3D transformedCameraPos = draggedCameraPos.transformedBy(traslation, 1.0);
+    Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
+    Vector3D v1 = transformedCameraPos.times(-1);
+    Vector3D planeNormal = v0.cross(v1).normalized();
+    double a = planeNormal._x;
+    double b = planeNormal._y;
+    double c = planeNormal._z;
+    double xb = transformedInitialPoint1._x;
+    double yb = transformedInitialPoint1._y;
+    double zb = transformedInitialPoint1._z;
+    double A = a*xb + b*yb;
+    double B = b*xb - a*yb;
+    double C = c*zb;
+    
+    double ap = A*A + B*B;
+    double bp = 2*B*C;
+    double cp = C*C - A*A;
+    double root = bp*bp - 4*ap*cp;
+    if (root<0) return MutableMatrix44D::invalid();
+    double squareRoot = mu->sqrt(root);
+    double sinTita1 = (-bp + squareRoot) / (2*ap);
+    double sinTita2 = (-bp - squareRoot) / (2*ap);
+    double cosTita1 = sqrt(1-sinTita1*sinTita1);
+    double cosTita2 = sqrt(1-sinTita2*sinTita2);
+    double eq1 = A*cosTita1 + B*sinTita1+C;
+    double eq2 = -A*cosTita1 + B*sinTita1+C;
+    double eq3 = A*cosTita2 + B*sinTita2+C;
+    double eq4 = -A*cosTita2 + B*sinTita2+C;
+    
+    printf ("cosTita1=%f cosTita2=%f    sinTita1=%f sinTita2=%f    eq1=%f eq2=%f eq3=%f eq4=%f\n",
+            cosTita1, cosTita2, sinTita1, sinTita2, eq1, eq2, eq3, eq4);
+    double angulo, angulo1, angulo2;
+    if (mu->abs(eq1)<mu->abs(eq2))
+      angulo1 = atan2(sinTita1, cosTita1)/3.14159*180;
+    else
+      angulo1 = atan2(sinTita1, -cosTita1)/3.14159*180;
+    if (mu->abs(eq3)<mu->abs(eq4))
+      angulo2 = atan2(sinTita2, cosTita2)/3.14159*180;
+    else
+      angulo2 = atan2(sinTita2, -cosTita2)/3.14159*180;
+    if (mu->abs(eq1)<mu->abs(eq2))
+      angulo = angulo1;
+    else
+      angulo = angulo2;
+    printf ("    angulo1=%.2f  angulo2=%.2f  ANGULO FINAL = %.2f\n", angulo1, angulo2, angulo);
+    
+    /*
+    double ap = A*A + B*B;
+    double bp = 2*A*C;
+    double cp = C*C - B*B;
+    double root = bp*bp - 4*ap*cp;
+    if (root<0) return MutableMatrix44D::invalid();
+    double squareRoot = mu->sqrt(root);
+    double cosTita1 = (-bp + squareRoot) / (2*ap);
+    double cosTita2 = (-bp - squareRoot) / (2*ap);
+    double sinTita1 = sqrt(1-cosTita1*cosTita1);
+    double sinTita2 = sqrt(1-cosTita2*cosTita2);
+    double eq1 = A*cosTita1 + B*sinTita1+C;
+    double eq2 = A*cosTita1 - B*sinTita1+C;
+    double eq3 = A*cosTita2 + B*sinTita2+C;
+    double eq4 = A*cosTita2 - B*sinTita2+C;
+    
+    printf ("cosTita1=%f cosTita2=%f    sinTita1=%f sinTita2=%f    eq1=%f eq2=%f eq3=%f eq4=%f\n",
+            cosTita1, cosTita2, sinTita1, sinTita2, eq1, eq2, eq3, eq4);
+    if (mu->abs(eq1)<mu->abs(eq2))
+      printf ("      angulo1=%f ", atan2(sinTita1, cosTita1)/3.14159*180);
+    else
+      printf ("      angulo1=%f ", atan2(-sinTita1, cosTita1)/3.14159*180);
+    if (mu->abs(eq3)<mu->abs(eq4))
+      printf ("angulo2=%f \n", atan2(sinTita2, cosTita2)/3.14159*180);
+    else
+      printf ("angulo2=%f \n", atan2(-sinTita2, cosTita2)/3.14159*180);
+     */
+    
+
+  }
+  
+  
+  
+/*  // rotate around point0
   Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
   Vector3D draggedFinalRay1 = finalRay1.transformedBy(matrix, 0.0);
   
@@ -222,6 +308,7 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   if (sign>0) angle = -angle;
   MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal0, _initialPoint0.asVector3D());
   matrix = rotation.multiply(matrix);
+ */
   
   
 /*  // rotate around point0
@@ -236,7 +323,7 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal0, _initialPoint0.asVector3D());
   matrix = rotation.multiply(matrix);*/
   
-  
+/*
   printf ("--------------\n");
   printf ("A0=(%.0f,%.0f,%.0f)  B0=(%.0f,%.0f,%.0f)\n", _initialPoint0.x(),_initialPoint0.y(),_initialPoint0.z(),
           _initialPoint1.x(),_initialPoint1.y(),_initialPoint1.z());
@@ -244,31 +331,33 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
           finalPoint1._x,finalPoint1._y,finalPoint1._z);
   printf ("   angle=%.2f   v0=(%.2f, %.2f, %.2f) atan=%.2f    v1=(%.2f, %.2f, %.2f) atan=%.2f\n",
           angle, v0._x, v0._y, v0._z, atan2(v0._y, v0._x)/3.1416*180,v1._x, v1._y, v1._z,atan2(v1._y, v1._x)/3.1416*180);
-  
+*/
   
   
   // zoom camera
   // see chuleta en pdf
-  Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
-  Vector3D B    = _initialPoint1.asVector3D();
-  Vector3D B0   = B.sub(P0);
-  Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0);
-  Vector3D Rb   = finalRay1.transformedBy(matrix, 0.0).normalized();
-  double a      = Ra.squaredLength();
-  double b      = -2 * (B0.dot(Ra));
-  double c      = B0.squaredLength();
-  double h      = -Ra.squaredLength();
-  double k      = Ra.dot(B0);
-  double RaRb2  = Ra.dot(Rb) * Ra.dot(Rb);
-  double at     = a*RaRb2 - h*h;
-  double bt     = b*RaRb2 - 2*h*k;
-  double ct     = c*RaRb2 - k*k;
-  double root   = bt*bt - 4*at*ct;
-  if (root<0) return MutableMatrix44D::invalid();
-  double squareRoot = mu->sqrt(root);
-  double t = (-bt + squareRoot) / (2*at);
-  MutableMatrix44D zoom = MutableMatrix44D::createTranslationMatrix(Ra.times(t));
-  matrix = zoom.multiply(matrix);
+  {
+    Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+    Vector3D B    = _initialPoint1.asVector3D();
+    Vector3D B0   = B.sub(P0);
+    Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0);
+    Vector3D Rb   = finalRay1.transformedBy(matrix, 0.0).normalized();
+    double a      = Ra.squaredLength();
+    double b      = -2 * (B0.dot(Ra));
+    double c      = B0.squaredLength();
+    double h      = -Ra.squaredLength();
+    double k      = Ra.dot(B0);
+    double RaRb2  = Ra.dot(Rb) * Ra.dot(Rb);
+    double at     = a*RaRb2 - h*h;
+    double bt     = b*RaRb2 - 2*h*k;
+    double ct     = c*RaRb2 - k*k;
+    double root   = bt*bt - 4*at*ct;
+    if (root<0) return MutableMatrix44D::invalid();
+    double squareRoot = mu->sqrt(root);
+    double t = (-bt + squareRoot) / (2*at);
+    MutableMatrix44D zoom = MutableMatrix44D::createTranslationMatrix(Ra.times(t));
+    matrix = zoom.multiply(matrix);
+  }
   
   return matrix;
 }
