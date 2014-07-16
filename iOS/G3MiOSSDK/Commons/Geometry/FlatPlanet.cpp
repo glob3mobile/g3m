@@ -220,7 +220,6 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     double A = a*xb + b*yb;
     double B = b*xb - a*yb;
     double C = c*zb;
-    
     double ap = A*A + B*B;
     double bp = 2*B*C;
     double cp = C*C - A*A;
@@ -240,18 +239,18 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
             cosTita1, cosTita2, sinTita1, sinTita2, eq1, eq2, eq3, eq4);
     double angulo, angulo1, angulo2;
     if (mu->abs(eq1)<mu->abs(eq2))
-      angulo1 = atan2(sinTita1, cosTita1)/3.14159*180;
+      angulo1 = atan2(sinTita1, cosTita1);
     else
-      angulo1 = atan2(sinTita1, -cosTita1)/3.14159*180;
+      angulo1 = atan2(sinTita1, -cosTita1);
     if (mu->abs(eq3)<mu->abs(eq4))
-      angulo2 = atan2(sinTita2, cosTita2)/3.14159*180;
+      angulo2 = atan2(sinTita2, cosTita2);
     else
-      angulo2 = atan2(sinTita2, -cosTita2)/3.14159*180;
+      angulo2 = atan2(sinTita2, -cosTita2);
     if (mu->abs(eq1)<mu->abs(eq2))
-      angulo = angulo1;
+      angulo = (abs(angulo1)<3.14159/4)? angulo1 : angulo2;
     else
-      angulo = angulo2;
-    printf ("    angulo1=%.2f  angulo2=%.2f  ANGULO FINAL = %.2f\n", angulo1, angulo2, angulo);
+      angulo = (abs(angulo2)<3.14159/4)? angulo2 : angulo1;
+    printf ("    angulo1=%.2f  angulo2=%.2f  ANGULO FINAL = %.2f\n", angulo1/3.14159*180, angulo2/3.14159*180, angulo/3.14159*180);
     
     /*
     double ap = A*A + B*B;
@@ -281,7 +280,9 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
       printf ("angulo2=%f \n", atan2(-sinTita2, cosTita2)/3.14159*180);
      */
     
-
+    Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
+    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-angulo), normal0, _initialPoint0.asVector3D());
+    matrix = rotation.multiply(matrix);
   }
   
   
