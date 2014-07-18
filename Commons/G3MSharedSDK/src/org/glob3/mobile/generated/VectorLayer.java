@@ -43,12 +43,12 @@ public abstract class VectorLayer extends Layer
     super.dispose();
   }
 
-  protected final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
+  public final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
   {
     return _parametersVector;
   }
 
-  protected final void selectLayerTilesRenderParameters(int index)
+  public final void selectLayerTilesRenderParameters(int index)
   {
     _selectedLayerTilesRenderParametersIndex = index;
   }

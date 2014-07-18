@@ -99,7 +99,8 @@ public class GEOVectorTileImageProvider extends TileImageProvider
     private final Sector _tileSector ;
     private final boolean _tileMercator;
     private final int _tileLevel;
-    private final Vector2I _resolution = new Vector2I();
+    private final int _resolutionWidth;
+    private final int _resolutionHeight;
     private TileImageListener _listener;
     private final boolean _deleteListener;
     private boolean _isCanceled;
@@ -112,7 +113,8 @@ public class GEOVectorTileImageProvider extends TileImageProvider
        _tileSector = new Sector(tileSector);
        _tileMercator = tileMercator;
        _tileLevel = tileLevel;
-       _resolution = new Vector2I(resolution);
+       _resolutionWidth = resolution._x;
+       _resolutionHeight = resolution._y;
        _listener = listener;
        _deleteListener = deleteListener;
        _isCanceled = false;
@@ -145,7 +147,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
 
     public final void execute(G3MRenderContext rc)
     {
-      _geoVectorTileImageProvider.rasterize(_contribution, _tileId, _tileSector, _tileMercator, _tileLevel, _resolution, _listener, _deleteListener);
+      _geoVectorTileImageProvider.rasterize(_contribution, _tileId, _tileSector, _tileMercator, _tileLevel, _resolutionWidth, _resolutionHeight, _listener, _deleteListener);
       _listener = null; // moves ownership to _geoVectorTileImageProvider
       _contribution = null; // moves ownership to _geoVectorTileImageProvider
     }
@@ -205,15 +207,12 @@ public class GEOVectorTileImageProvider extends TileImageProvider
   //  }
   }
 
-  public final void rasterize(TileImageContribution contribution, String tileId, Sector tileSector, boolean tileMercator, int tileLevel, Vector2I resolution, TileImageListener listener, boolean deleteListener)
+  public final void rasterize(TileImageContribution contribution, String tileId, Sector tileSector, boolean tileMercator, int tileLevel, int resolutionWidth, int resolutionHeight, TileImageListener listener, boolean deleteListener)
   {
-    final int width = resolution._x;
-    final int height = resolution._y;
-  
     ICanvas canvas = IFactory.instance().createCanvas();
-    canvas.initialize(width, height);
+    canvas.initialize(resolutionWidth, resolutionHeight);
   
-    GEORasterProjection projection = new GEORasterProjection(tileSector, tileMercator, width, height);
+    GEORasterProjection projection = new GEORasterProjection(tileSector, tileMercator, resolutionWidth, resolutionHeight);
   
     _layer.getQuadTree().acceptVisitor(tileSector, new GEORasterizerQuadTreeVisitor(canvas, projection, tileLevel));
   

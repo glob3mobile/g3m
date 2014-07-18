@@ -30,12 +30,12 @@ public abstract class ProceduralLayer extends Layer
      _selectedLayerTilesRenderParametersIndex = -1;
   }
 
-  protected final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
+  public final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
   {
     return _parametersVector;
   }
 
-  protected final void selectLayerTilesRenderParameters(int index)
+  public final void selectLayerTilesRenderParameters(int index)
   {
     _selectedLayerTilesRenderParametersIndex = index;
   }
