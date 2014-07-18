@@ -7,28 +7,31 @@
 //
 
 #include "Storage_win8.hpp"
-//#include <sqlite3.h>
-#include <string>
 #include "IStringBuilder.hpp"
 #include "GTask.hpp"
 #include "TimeInterval.hpp"
 #include "ByteBuffer_win8.hpp"
 #include "Image_win8.hpp"
 #include "URL.hpp"
-//#include <System.IO::Path>
-
+#include "IFactory.hpp"
+#include "Context.hpp"
+#include "ThreadUtils_win8.hpp"
 #include <msclr\marshal_cppstd.h>
+//#include <vcclr.h>
+
 using namespace msclr::interop;
 using namespace System::IO;
+//using namespace System::Runtime::InteropServices;
 
 //#include <windows.h>
 //using namespace Windows;
 
 
+
 Storage_win8::Storage_win8(const std::string &databaseName)
 {
 	_databaseName = databaseName.c_str();
-
+	
 	//_lock = [[NSLock alloc] init]; TODO: ???
 
 	std::string* dbPath = getDBPath();
@@ -129,19 +132,59 @@ std::string* Storage_win8::getDBPath() const{
 	//std::string dbPath = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, dbName);
 	Windows::Storage::StorageFolder^ localFolder = Windows::Storage::ApplicationData::Current->LocalFolder;
 	Platform::String^ folderPath = localFolder->Path;
-	//std::string stdFolderPath = marshal_as<std::string>(folderPath);
-	//std::string dbPath = stdFolderPath.append("\\", _databaseName);
 	System::String^ combinedPath = Path::Combine(folderPath, _databaseName);
 	std::string dbPath = marshal_as<std::string>(combinedPath);
+	//std::string dbPath = nullptr;
+	//MarshalString(combinedPath, dbPath);
 
 	ILogger::instance()->logInfo("Data base path: %s", dbPath);
 
 	return &dbPath;
 }
 
+/*
+bool To_string(System::String^ source, std::string &target)
+{
+	pin_ptr<const wchar_t> wch = PtrToStringChars(source);
+	int len = ((source->Length + 1) * 2);
+	char *ch = new char[len];
+	bool result = wcstombs(ch, wch, len) != -1;
+	target = ch;
+	delete ch;
+	return result;
+}
+*/
+
+/*
+void MarshalString(System::String^ s, std::string& os) {
+	//using namespace Runtime::InteropServices;
+	const char* chars =
+		(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
+	os = chars;
+	Marshal::FreeHGlobal(System::IntPtr((void*)chars));
+}
+*/
+
+time_t incrementTime(time_t init, long seconds) {
+	if (init == NULL) return NULL;
+	struct tm* tm = localtime(&init);
+	tm->tm_sec += seconds;
+	return mktime(tm);
+}
+
+double timeDifferenceFromNow(double then) {
+
+	time_t now = time(NULL);
+	std::string nowS = marshal_as<std::string>(now.ToString());
+	double nowD = atof(nowS.c_str());
+
+	return (then - nowD);
+}
+
+
 void Storage_win8::rawSave(std::string* table,
 	std::string* name,
-	void* contents,
+	unsigned char* contents,
 	const TimeInterval& timeToExpires) {
 	
 	//[_lock lock]; TODO: ??
@@ -150,17 +193,19 @@ void Storage_win8::rawSave(std::string* table,
 	IStringBuilder* stmBuilder = IStringBuilder::newStringBuilder();
 	stmBuilder->addString("INSERT OR REPLACE INTO ");
 	stmBuilder->addString(*table);
-	stmBuilder->addString(" (name, contents, expiration) VALUES(? , ? , ? )");
+	stmBuilder->addString(" (name, contents, expiration) VALUES (? , ? , ?)");
 
-	const std::string statement = stmBuilder->getString();
-
-
-	NSDate* expiration = [NSDate dateWithTimeIntervalSinceNow : timeToExpires.seconds()];
-
-	std::string* expirationS = [NSString stringWithFormat : @"%f", [expiration timeIntervalSince1970]];
-
-	if (![_writeDB executeNonQuery : statement, name, contents, expirationS]) {
-		printf("Can't save \"%s\"\n", [name cStringUsingEncoding : NSUTF8StringEncoding]);
+	std::string statement = stmBuilder->getString();
+	delete stmBuilder;
+	//NSDate* expiration = [NSDate dateWithTimeIntervalSinceNow : timeToExpires.seconds()];
+	//std::string* expirationS = [NSString stringWithFormat : @"%f", [expiration timeIntervalSince1970]];
+	std::time_t currentTime = std::time(NULL);
+	//time_t expiration = currentTime + (long) timeToExpires.seconds();
+	time_t expiration = incrementTime(currentTime, timeToExpires.seconds());
+	std::string expirationS = marshal_as<std::string>(expiration.ToString());
+	
+	if (!_writeDB->executeNonQuery(&statement, name, contents, expirationS)){
+		ILogger::instance()->logError("Can't save \"%s\"\n", name);
 	}
 
 	//[_lock unlock];
@@ -180,14 +225,14 @@ private:
 	Storage_win8* _storage;
 	std::string*          _table;
 	std::string*          _name;
-	void*            _contents;
+	unsigned char*            _contents;
 	const TimeInterval _timeToExpires;
 
 public:
 	SaverTask(Storage_win8* storage,
 		std::string* table,
 		std::string* name,
-		void* contents,
+		unsigned char* contents,
 		const TimeInterval timeToExpires) :
 		_storage(storage),
 		_table(table),
@@ -213,27 +258,32 @@ IByteBufferResult Storage_win8::readBuffer(const URL& url, bool readExpired){
 
 	//SQResultSet* rs = [_readDB executeQuery : @"SELECT contents, expiration FROM buffer2 WHERE (name = ?)", name];
 	IStringBuilder* queryBuilder = IStringBuilder::newStringBuilder();
-	queryBuilder->addString("SELECT contents, expiration FROM buffer2 WHERE (name = ";
+	queryBuilder->addString("SELECT contents, expiration FROM buffer2 WHERE (name = ");
 	queryBuilder->addString(name);
 	queryBuilder->addString(")");
-
 	std::string query = queryBuilder->getString();
+	delete queryBuilder;
+
 	SQResultSet* rs = _readDB->executeQuery(&query);
 
 	if (rs->next()) {
 		//NSData* nsData = [rs dataColumnByIndex : 0];
-		const void* data = rs->dataColumnByIndex(0);
-		const double expirationInterval = [[rs stringColumnByIndex : 1] doubleValue];
-		NSDate* expiration = [NSDate dateWithTimeIntervalSince1970 : expirationInterval];
+		const unsigned char* data = rs->dataColumnByIndex(0);
+		//const double expirationInterval = [[rs stringColumnByIndex : 1] doubleValue];
+		std::string* expirationIntervalS = rs->stringColumnByIndex(1);
+		const double expirationInterval = atof(expirationIntervalS->c_str());
+		//NSDate* expiration = [NSDate dateWithTimeIntervalSince1970 : expirationInterval];
 
-		expired = [expiration compare : [NSDate date]] != NSOrderedDescending;
+		//expired = [expiration compare : [NSDate date]] != NSOrderedDescending;
+		expired = timeDifferenceFromNow(expirationInterval) <= 0;
 
 		if (readExpired || !expired) {
-			NSUInteger length = [nsData length];
+			//NSUInteger length = [nsData length];
+			unsigned char* dataArr = (unsigned char*)data;
+			int length = strlen((char*)dataArr); //TODO: funcionara esto??
 			unsigned char* bytes = new unsigned char[length];
-			[nsData getBytes : bytes
-			length : length];
-
+			//[nsData getBytes : bytes length : length];
+			memcpy(bytes, data, length);
 			buffer = IFactory::instance()->createByteBuffer(bytes, length);
 		}
 	}
@@ -252,34 +302,37 @@ IImageResult Storage_win8::readImage(const URL& url, bool readExpired){
 	std::string name = url._path;
 	//SQResultSet* rs = [_readDB executeQuery : @"SELECT contents, expiration FROM image2 WHERE (name = ?)", name];
 	IStringBuilder* queryBuilder = IStringBuilder::newStringBuilder();
-	queryBuilder->addString("SELECT contents, expiration FROM image2 WHERE (name = ";
+	queryBuilder->addString("SELECT contents, expiration FROM image2 WHERE (name = ");
 	queryBuilder->addString(name);
 	queryBuilder->addString(")");
-
 	std::string query = queryBuilder->getString();
+	delete queryBuilder;
+
 	SQResultSet* rs = _readDB->executeQuery(&query);
 
 	if (rs->next()) {
 		//NSData* data = [rs dataColumnByIndex : 0];
-		unsigned char* data = rs->dataColumnByIndex(0);
+		const unsigned char* data = rs->dataColumnByIndex(0);
 		//const double expirationInterval = [[rs stringColumnByIndex : 1] doubleValue];
-		const double expirationInterval = (double) rs->stringColumnByIndex(1);
-		NSDate* expiration = [NSDate dateWithTimeIntervalSince1970 : expirationInterval];
+		std::string* expirationIntervalS = rs->stringColumnByIndex(1);
+		const double expirationInterval = atof(expirationIntervalS->c_str());
+		//NSDate* expiration = [NSDate dateWithTimeIntervalSince1970 : expirationInterval];
 
-		expired = ([expiration compare : [NSDate date]] != NSOrderedDescending);
+		//expired = ([expiration compare : [NSDate date]] != NSOrderedDescending);
+		expired = timeDifferenceFromNow(expirationInterval) <= 0;
 
 		if (readExpired || !expired) {
-			//      NSDate* startParse = [NSDate date];
+			/*
 			UIImage* uiImage = UIImage->imageWithData(data);
-			//      parsedTime = ([startParse timeIntervalSinceNow] * -1000.0);
 
 			if (uiImage) {
 				image = new Image_iOS(uiImage,
-					NULL /* data is not needed */);
+					NULL); // data is not needed 
 			}
 			else {
 				ILogger::instance()->logError("Can't create image with contents of storage.");
 			}
+			*/
 		}
 	}
 
@@ -292,40 +345,41 @@ void Storage_win8::saveBuffer(const URL& url, const IByteBuffer* buffer, const T
 	
 	const ByteBuffer_win8* buffer_win8 = (const ByteBuffer_win8*)buffer;
 
-	const std::string name = url._path; // [NSString stringWithCppString : url._path];
+	std::string name = url._path; // [NSString stringWithCppString : url._path];
 	unsigned char* contents = buffer_win8->getPointer();
-
-	if (saveInBackground) {
-		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, "buffer2", name, contents, timeToExpires),
-			true);
+	std::string table = "buffer2";
+	
+	if (saveInBackground) { 
+		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, contents, timeToExpires), true);
 	}
 	else {
-		rawSave("buffer2", name, contents, timeToExpires);
+		rawSave(&table, &name, contents, timeToExpires);
 	}
 }
 
 void Storage_win8::saveImage(const URL& url, const IImage* image, const TimeInterval& timeToExpires, bool saveInBackground){
 	
 	const Image_win8* image_win8 = (const Image_win8*)image;
-	UIImage* uiImage = image_win8->getUIImage();
+	//UIImage* uiImage = image_win8->getUIImage();
 
 	//NSString* name = [NSString stringWithCppString : url._path];
 	std::string name = url._path;
-
-	NSData* contents = image_win8->getSourceBuffer();
+	std::string table = "image2";
+	
+	unsigned char* contents = image_win8->getSourceBuffer();
+	/*
 	if (contents == NULL) {
 		contents = UIImagePNGRepresentation(uiImage);
 	}
 	else {
 		image_iOS->releaseSourceBuffer();
 	}
-
+	*/
 	if (saveInBackground) {
-		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"image2", name, contents, timeToExpires),
-			true);
+		_context->getThreadUtils()->invokeInBackground(new SaverTask(this, &table, &name, contents, timeToExpires), true);
 	}
 	else {
-		rawSave(@"image2", name, contents, timeToExpires);
+		rawSave(&table, &name, contents, timeToExpires);
 	}
 }
 

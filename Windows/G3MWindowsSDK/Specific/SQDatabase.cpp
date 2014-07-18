@@ -4,7 +4,7 @@
 #include <thread>
 #include <ctime>
 
-SQResultSet* SQResultSet::initWithDatabase(const SQDatabase* db, std::string* query, std::vector<void*> args){
+SQResultSet* SQResultSet::initWithDatabase(const SQDatabase* db, std::string* query, std::vector<unsigned char*> args){
 
 	try{
 		return new SQResultSet(db, query, args);
@@ -15,7 +15,7 @@ SQResultSet* SQResultSet::initWithDatabase(const SQDatabase* db, std::string* qu
 	return NULL;
 }
 
-SQResultSet::SQResultSet(const SQDatabase* db, std::string* query, std::vector<void*> args){
+SQResultSet::SQResultSet(const SQDatabase* db, std::string* query, std::vector<unsigned char*> args){
 
 	_db = db;
 	_stmt = NULL;
@@ -28,7 +28,10 @@ SQResultSet::SQResultSet(const SQDatabase* db, std::string* query, std::vector<v
 		errBuilder->addString(": ");
 		errBuilder->addString(*_db->errorMessage());
 
-		throw std::exception(errBuilder->getString().c_str());
+		std::string error = errBuilder->getString();
+		delete errBuilder;
+
+		throw std::exception(error.c_str());
 	}
 
 	_queryParamCount = sqlite3_bind_parameter_count(_stmt);
@@ -81,7 +84,7 @@ std::string* SQResultSet::stringColumnByIndex(int index) const{
 	return &str;
 }
 
-const void* SQResultSet::dataColumnByIndex(int index) const{
+const unsigned char* SQResultSet::dataColumnByIndex(int index) const{
 	int columnType = sqlite3_column_type(_stmt, index);
 
 	if (columnType == SQLITE_NULL) {
@@ -193,7 +196,7 @@ SQResultSet* SQDatabase::executeQuery(std::string* sql, ...) const{
 	return this->executeQuery(sql, argsArray);
 }
 
-SQResultSet* SQDatabase::executeQuery(std::string* sql, std::vector<void*> args) const{
+SQResultSet* SQDatabase::executeQuery(std::string* sql, std::vector<unsigned char*> args) const{
 
 	return SQResultSet::initWithDatabase(this, sql, args);
 }
@@ -268,13 +271,13 @@ const std::string* SQDatabase::errorMessage() const{
 	return &str;
 }
 
-void SQDatabase::bindObjectAtColumnToStatement(void* obj, int idx, sqlite3_stmt* stmt) const{
+void SQDatabase::bindObjectAtColumnToStatement(unsigned char* obj, int idx, sqlite3_stmt* stmt) const{
 
 	if (obj == NULL) {
 		sqlite3_bind_null(stmt, idx);
 	}
 	//else if	(dynamic_cast<void*>(obj) != NULL)
-	else if (typeid(obj).name() == "void"){ //TODO:
+	else if (typeid(obj).name() == "unsigned char"){ //TODO:
 		sqlite3_bind_blob(stmt, idx, obj, sizeof(obj), SQLITE_STATIC);
 	}
 	else if (typeid(obj).name() == "time_t"){ //TODO:
@@ -343,7 +346,7 @@ bool SQDatabase::executeNonQuery(std::string* sql, ...) const{
 	return this->executeNonQuery(sql, args);
 }
 
-bool SQDatabase::executeNonQuery(std::string* sql, std::vector<void*> args) const{
+bool SQDatabase::executeNonQuery(std::string* sql, std::vector<unsigned char*> args) const{
 
 	sqlite3_stmt *sqlStmt;
 

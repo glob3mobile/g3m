@@ -11,8 +11,8 @@
 
 #include "Storage.hpp"
 #include <string>
+#include <ctime>
 #include "SQDatabase.hpp"
-
 
 class Storage_win8 : public Storage {
 
@@ -31,7 +31,7 @@ public:
 	Storage_win8(const std::string &databaseName);
 
 	//void initialize(const G3MContext* context);
-	void rawSave(std::string* table, std::string* name, void* contents, const TimeInterval& timeToExpires);
+	void rawSave(std::string* table, std::string* name, unsigned char* contents, const TimeInterval& timeToExpires);
 	IByteBufferResult readBuffer(const URL& url, bool readExpired);
 	IImageResult readImage(const URL& url, bool readExpired);
 	void saveBuffer(const URL& url, const IByteBuffer* buffer, const TimeInterval& timeToExpires, bool saveInBackground);

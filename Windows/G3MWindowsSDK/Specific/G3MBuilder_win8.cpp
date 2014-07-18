@@ -29,12 +29,12 @@ IThreadUtils* G3MBuilder_win8::createDefaultThreadUtils(){
 	return NULL;
 }
 
-Storage*     G3MBuilder_win8::createDefaultStorage(){
-	//return new Storage_win8();
-	return NULL;
+Storage* G3MBuilder_win8::createDefaultStorage(){
+	return new Storage_win8("sqlite_win8_db");
+	//return NULL;
 }
 
-IDownloader*  G3MBuilder_win8::createDefaultDownloader(){
+IDownloader* G3MBuilder_win8::createDefaultDownloader(){
 	//return new Downloader_win8();
 	return NULL;
 }
