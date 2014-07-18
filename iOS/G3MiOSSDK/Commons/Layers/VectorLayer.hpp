@@ -16,9 +16,8 @@ class VectorLayer : public Layer {
 protected:
 #ifdef C_CODE
   const std::vector<const LayerTilesRenderParameters*> _parametersVector;
-#endif
-#ifdef JAVA_CODE
-  private final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector;
+#else
+  std::vector<const LayerTilesRenderParameters*> _parametersVector;
 #endif
   int _selectedLayerTilesRenderParametersIndex;
 
