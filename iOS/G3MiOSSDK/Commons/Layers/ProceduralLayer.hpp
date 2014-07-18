@@ -30,6 +30,7 @@ protected:
   {
   }
 
+public:
   const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const {
     return _parametersVector;
   }

@@ -81,7 +81,8 @@ public:
     const Sector                 _tileSector;
     const bool                   _tileMercator;
     const int                    _tileLevel;
-    const Vector2I               _resolution;
+    const int                    _resolutionWidth;
+    const int                    _resolutionHeight;
     TileImageListener*           _listener;
     const bool                   _deleteListener;
     bool                         _isCanceled;
@@ -102,7 +103,8 @@ public:
     _tileSector(tileSector),
     _tileMercator(tileMercator),
     _tileLevel(tileLevel),
-    _resolution(resolution),
+    _resolutionWidth(resolution._x),
+    _resolutionHeight(resolution._y),
     _listener(listener),
     _deleteListener(deleteListener),
     _isCanceled(false)
@@ -151,7 +153,8 @@ public:
                  const Sector& tileSector,
                  bool tileMercator,
                  int tileLevel,
-                 const Vector2I& resolution,
+                 int resolutionWidth,
+                 int resolutionHeight,
                  TileImageListener* listener,
                  bool deleteListener);
   

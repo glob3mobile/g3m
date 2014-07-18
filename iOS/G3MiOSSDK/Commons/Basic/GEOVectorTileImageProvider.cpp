@@ -63,7 +63,8 @@ void GEOVectorTileImageProvider::GEORasterizerFrameTask::execute(const G3MRender
                                          _tileSector,
                                          _tileMercator,
                                          _tileLevel,
-                                         _resolution,
+                                         _resolutionWidth,
+                                         _resolutionHeight,
                                          _listener,
                                          _deleteListener);
   _listener     = NULL; // moves ownership to _geoVectorTileImageProvider
@@ -105,18 +106,16 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
                                            const Sector& tileSector,
                                            bool tileMercator,
                                            int tileLevel,
-                                           const Vector2I& resolution,
+                                           int resolutionWidth,
+                                           int resolutionHeight,
                                            TileImageListener* listener,
                                            bool deleteListener) {
-  const int width  = resolution._x;
-  const int height = resolution._y;
-
   ICanvas* canvas = IFactory::instance()->createCanvas();
-  canvas->initialize(width, height);
+  canvas->initialize(resolutionWidth, resolutionHeight);
 
   GEORasterProjection* projection = new GEORasterProjection(tileSector,
                                                             tileMercator,
-                                                            width, height);
+                                                            resolutionWidth, resolutionHeight);
 
   _layer->getQuadTree().acceptVisitor(tileSector,
                                       GEORasterizerQuadTreeVisitor(canvas, projection, tileLevel));
