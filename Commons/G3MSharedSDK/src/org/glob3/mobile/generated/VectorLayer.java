@@ -23,11 +23,13 @@ public abstract class VectorLayer extends Layer
   protected final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
   protected int _selectedLayerTilesRenderParametersIndex;
 
-  protected VectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition, String disclaimerInfo)
-  {
-     super(transparency, condition, disclaimerInfo);
-     _parametersVector = parametersVector;
-     _selectedLayerTilesRenderParametersIndex = -1;
+  protected VectorLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
+                        final float transparency,
+                        final LayerCondition condition,
+                        final String disclaimerInfo) {
+    super(transparency, condition, disclaimerInfo);
+    _parametersVector.addAll(parametersVector);
+    _selectedLayerTilesRenderParametersIndex = -1;
   }
 
   public void dispose()

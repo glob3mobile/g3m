@@ -23,11 +23,13 @@ public abstract class ProceduralLayer extends Layer
 
   protected int _selectedLayerTilesRenderParametersIndex;
 
-  protected ProceduralLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition, String disclaimerInfo)
-  {
-     super(transparency, condition, disclaimerInfo);
-     _parametersVector = parametersVector;
-     _selectedLayerTilesRenderParametersIndex = -1;
+  protected ProceduralLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
+                            final float transparency,
+                            final LayerCondition condition,
+                            final String disclaimerInfo) {
+    super(transparency, condition, disclaimerInfo);
+    _parametersVector.addAll(parametersVector);
+    _selectedLayerTilesRenderParametersIndex = -1;
   }
 
   public final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
