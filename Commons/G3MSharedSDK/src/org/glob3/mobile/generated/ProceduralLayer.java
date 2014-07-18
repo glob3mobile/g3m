@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public abstract class ProceduralLayer extends Layer
 {
-  private final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector;
+  private final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
 
   protected int _selectedLayerTilesRenderParametersIndex;
 
