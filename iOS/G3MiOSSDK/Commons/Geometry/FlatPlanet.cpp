@@ -249,7 +249,7 @@ MutableMatrix44D FlatPlanet::drag(const Geodetic3D& origin, const Geodetic3D& de
 }
 
 void FlatPlanet::applyCameraConstrainers(const Camera* previousCamera,
-                                         Camera* nextCamera) const{
+                                         Camera* nextCamera) const {
 //  Vector3D pos = nextCamera->getCartesianPosition();
 //  Vector3D origin = _origin.asVector3D();
 //  double maxDist = _size.length() * 1.5;

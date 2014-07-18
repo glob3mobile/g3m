@@ -54,6 +54,15 @@ private:
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
+  bool checkLayersDataSector(const bool forceFirstLevelTilesRenderOnStart,
+                             std::vector<std::string>& errors) const;
+
+  bool checkLayersRenderState(std::vector<std::string>& errors,
+                              std::vector<Layer*>& enableLayers) const;
+
+  LayerTilesRenderParameters* checkAndComposeLayerTilesRenderParameters(const std::vector<Layer*>& enableLayers,
+                                                                        std::vector<std::string>& errors) const;
+
 public:
   LayerSet() :
   _listener(NULL),

@@ -20,7 +20,8 @@ class GEOSymbolizer;
 class MeshRenderer;
 class MarksRenderer;
 class ShapesRenderer;
-class GEOTileRasterizer;
+class GEOVectorLayer;
+//class GEOTileRasterizer;
 class GEORenderer_ObjectSymbolizerPair;
 
 class GEORenderer : public DefaultRenderer {
@@ -70,10 +71,11 @@ private:
 
   const GEOSymbolizer* _defaultSymbolizer;
 
-  MeshRenderer*      _meshRenderer;
-  ShapesRenderer*    _shapesRenderer;
-  MarksRenderer*     _marksRenderer;
-  GEOTileRasterizer* _geoTileRasterizer;
+  MeshRenderer*   _meshRenderer;
+  ShapesRenderer* _shapesRenderer;
+  MarksRenderer*  _marksRenderer;
+//  GEOTileRasterizer* _geoTileRasterizer;
+  GEOVectorLayer*  _geoVectorLayer;
 
   std::vector<LoadQueueItem*> _loadQueue;
 
@@ -94,18 +96,22 @@ public:
    meshRenderer:   Can be NULL as long as no GEOMarkSymbol is used in any symbolizer.
    shapesRenderer: Can be NULL as long as no GEOShapeSymbol is used in any symbolizer.
    marksRenderer:  Can be NULL as long as no GEOMeshSymbol is used in any symbolizer.
+   geoVectorLayer: Can be NULL as long as no GEORasterSymbol is used in any symbolizer.
 
    */
   GEORenderer(const GEOSymbolizer* defaultSymbolizer,
               MeshRenderer*        meshRenderer,
               ShapesRenderer*      shapesRenderer,
               MarksRenderer*       marksRenderer,
-              GEOTileRasterizer*   geoTileRasterizer) :
+              GEOVectorLayer*      geoVectorLayer
+//              GEOTileRasterizer*   geoTileRasterizer
+              ) :
   _defaultSymbolizer(defaultSymbolizer),
   _meshRenderer(meshRenderer),
   _shapesRenderer(shapesRenderer),
   _marksRenderer(marksRenderer),
-  _geoTileRasterizer(geoTileRasterizer)
+  _geoVectorLayer(geoVectorLayer)
+//  _geoTileRasterizer(geoTileRasterizer)
   {
     initialize(NULL);
   }
@@ -132,21 +138,28 @@ public:
 
   }
 
-  MeshRenderer* getMeshRenderer() {
+  MeshRenderer* getMeshRenderer() const {
     return _meshRenderer;
   }
 
-  MarksRenderer* getMarksRenderer() {
+  MarksRenderer* getMarksRenderer() const {
     return _marksRenderer;
   }
 
-  ShapesRenderer* getShapesRenderer() {
+  ShapesRenderer* getShapesRenderer() const {
     return _shapesRenderer;
   }
 
-  GEOTileRasterizer* getGEOTileRasterizer() {
-    return _geoTileRasterizer;
+//  GEOTileRasterizer* getGEOTileRasterizer() const {
+//    return _geoTileRasterizer;
+//  }
+
+  GEOVectorLayer* getGEOVectorLayer() const {
+    return _geoVectorLayer;
   }
+
+  void setGEOVectorLayer(GEOVectorLayer* geoVectorLayer,
+                         bool deletePrevious);
 
   void loadJSON(const URL& url) {
     loadJSON(url,

@@ -324,7 +324,7 @@ bool GenericQuadTree_Node::acceptVisitor(const Geodetic2D& geo,
   return false;
 }
 
-bool GenericQuadTree_Node::acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const{
+bool GenericQuadTree_Node::acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const {
   if (visitor.visitNode(this)) {
     return true;
   }
@@ -339,7 +339,7 @@ bool GenericQuadTree_Node::acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor
   return false;
 }
 
-double GenericQuadTree_Node::getInsertionCostInSquaredDegrees(const Sector& sector) const{
+double GenericQuadTree_Node::getInsertionCostInSquaredDegrees(const Sector& sector) const {
 
   Sector newSector = _sector->mergedWith(sector);
   double areaAfter = newSector.getAngularAreaInSquaredDegrees();
@@ -348,7 +348,7 @@ double GenericQuadTree_Node::getInsertionCostInSquaredDegrees(const Sector& sect
   return areaAfter - areaNow;
 }
 
-double GenericQuadTree_Node::getAreaInSquaredDegreesAfterInsertion(const Sector& sector) const{
+double GenericQuadTree_Node::getAreaInSquaredDegreesAfterInsertion(const Sector& sector) const {
   Sector newSector = _sector->mergedWith(sector);
   return newSector.getAngularAreaInSquaredDegrees();
 }
@@ -359,7 +359,7 @@ void GenericQuadTree_Node::increaseNodeSector(GenericQuadTree_Element* element) 
   _sector = new Sector(s.mergedWith(element->getSector()));
 }
 
-void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const{
+void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const {
 
   if (_elements.size() > 0) {
     std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
@@ -403,7 +403,7 @@ void GenericQuadTree_Node::symbolize(GEOTileRasterizer* geoTileRasterizer) const
 
 }
 
-void GenericQuadTree_Node::getGeodetics(std::vector<Geodetic2D*>& geo) const{
+void GenericQuadTree_Node::getGeodetics(std::vector<Geodetic2D*>& geo) const {
   for (int i = 0; i < _elements.size(); i++) {
     if (!_elements[i]->isSectorElement()) {
       geo.push_back( new Geodetic2D(_elements[i]->getCenter()) );
@@ -418,7 +418,7 @@ void GenericQuadTree_Node::getGeodetics(std::vector<Geodetic2D*>& geo) const{
 
 }
 
-void GenericQuadTree_Node::getSectors(std::vector<Sector*>& sectors) const{
+void GenericQuadTree_Node::getSectors(std::vector<Sector*>& sectors) const {
   for (int i = 0; i < _elements.size(); i++) {
     if (_elements[i]->isSectorElement()) {
       sectors.push_back( new Sector(_elements[i]->getSector()) );

@@ -12,13 +12,29 @@
 #include "Layer.hpp"
 
 class VectorLayer : public Layer {
+
 protected:
-  VectorLayer(const LayerTilesRenderParameters* parameters,
-              const float                       transparency,
-              const LayerCondition*             condition,
-              const std::string&                disclaimerInfo) :
-  Layer(parameters, transparency, condition, disclaimerInfo)
+  std::vector<const LayerTilesRenderParameters*> _parametersVector;
+  int _selectedLayerTilesRenderParametersIndex;
+
+  VectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
+              const float                                           transparency,
+              const LayerCondition*                                 condition,
+              const std::string&                                    disclaimerInfo) :
+  Layer(transparency, condition, disclaimerInfo),
+  _parametersVector(parametersVector),
+  _selectedLayerTilesRenderParametersIndex(-1)
   {
+  }
+
+  ~VectorLayer();
+
+  const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const {
+    return _parametersVector;
+  }
+
+  void selectLayerTilesRenderParameters(int index) {
+    _selectedLayerTilesRenderParametersIndex = index;
   }
 
 };

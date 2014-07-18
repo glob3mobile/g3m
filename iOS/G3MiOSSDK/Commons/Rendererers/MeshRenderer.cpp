@@ -718,7 +718,7 @@ void MeshRenderer::disableAll() {
   }
 }
 
-void MeshRenderer::showNormals(bool v) const{
+void MeshRenderer::showNormals(bool v) const {
   _showNormals = v;
   const int meshesCount = _meshes.size();
   for (int i = 0; i < meshesCount; i++) {

@@ -26,7 +26,7 @@ TaitBryanAngles TaitBryanAngles::fromDegrees(double heading, double pitch, doubl
                          Angle::fromDegrees(roll));
 }
 
-std::string TaitBryanAngles::description() const{
+std::string TaitBryanAngles::description() const {
 
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("(TaitBryanAngles Heading= ");

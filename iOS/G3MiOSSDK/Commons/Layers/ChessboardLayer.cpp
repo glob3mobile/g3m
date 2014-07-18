@@ -13,43 +13,31 @@
 #include "LayerCondition.hpp"
 #include "ChessboardTileImageProvider.hpp"
 
-ChessboardLayer* ChessboardLayer::newMercator(const Color&          backgroundColor,
-                                              const Color&          boxColor,
-                                              const int             splits,
-                                              const Sector&         dataSector,
-                                              const int             firstLevel,
-                                              const int             maxLevel,
-                                              const float           transparency,
-                                              const LayerCondition* condition,
-                                              const std::string&    disclaimerInfo) {
-  return new ChessboardLayer(backgroundColor,
-                             boxColor,
-                             splits,
-                             dataSector,
-                             LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel),
-                             transparency,
-                             condition,
-                             disclaimerInfo);
+ChessboardLayer::ChessboardLayer(const int             mercatorFirstLevel,
+                                 const int             mercatorMaxLevel,
+                                 const int             wgs84firstLevel,
+                                 const int             wgs84maxLevel,
+                                 const Color&          backgroundColor,
+                                 const Color&          boxColor,
+                                 const int             splits,
+                                 const Sector&         dataSector,
+                                 const float           transparency,
+                                 const LayerCondition* condition,
+                                 const std::string&    disclaimerInfo) :
+ProceduralLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
+                                                                         mercatorMaxLevel,
+                                                                         wgs84firstLevel,
+                                                                         wgs84maxLevel),
+                transparency,
+                condition,
+                disclaimerInfo),
+_dataSector(dataSector),
+_backgroundColor(backgroundColor),
+_boxColor(boxColor),
+_splits(splits)
+{
 }
 
-ChessboardLayer* ChessboardLayer::newWGS84(const Color&          backgroundColor,
-                                           const Color&          boxColor,
-                                           const int             splits,
-                                           const Sector&         dataSector,
-                                           const int             firstLevel,
-                                           const int             maxLevel,
-                                           const float           transparency,
-                                           const LayerCondition* condition,
-                                           const std::string&    disclaimerInfo) {
-  return new ChessboardLayer(backgroundColor,
-                             boxColor,
-                             splits,
-                             dataSector,
-                             LayerTilesRenderParameters::createDefaultWGS84(firstLevel, maxLevel),
-                             transparency,
-                             condition,
-                             disclaimerInfo);
-}
 
 RenderState ChessboardLayer::getRenderState() {
   return RenderState::ready();
@@ -68,11 +56,11 @@ URL ChessboardLayer::getFeatureInfoURL(const Geodetic2D& position,
 }
 
 ChessboardLayer* ChessboardLayer::copy() const {
-  return new ChessboardLayer(_backgroundColor,
+  return new ChessboardLayer(createParametersVectorCopy(),
+                             _backgroundColor,
                              _boxColor,
                              _splits,
                              _dataSector,
-                             _parameters->copy(),
                              _transparency,
                              (_condition == NULL) ? NULL : _condition->copy(),
                              _disclaimerInfo);
@@ -89,14 +77,14 @@ bool ChessboardLayer::rawIsEquals(const Layer* that) const {
   if (!_backgroundColor.isEquals(t->_backgroundColor)) {
     return  false;
   }
-
+  
   if (!_boxColor.isEquals(t->_boxColor)) {
     return  false;
   }
-
+  
   if (_splits != t->_splits) {
     return false;
   }
-
+  
   return _dataSector.isEquals(t->_dataSector);
 }

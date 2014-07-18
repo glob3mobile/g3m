@@ -8,7 +8,7 @@
 
 #include "Matrix44DProvider.hpp"
 
-void Matrix44DMultiplicationHolder::pullMatrixes() const{
+void Matrix44DMultiplicationHolder::pullMatrixes() const {
   for (int j = 0; j < _matricesSize; j++) {
     const Matrix44D* newMatrix = _providers[j]->getMatrix();
 

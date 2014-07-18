@@ -37,14 +37,15 @@ void GEOFeature::symbolize(const G3MRenderContext* rc,
                            MeshRenderer*           meshRenderer,
                            ShapesRenderer*         shapesRenderer,
                            MarksRenderer*          marksRenderer,
-                           GEOTileRasterizer*      geoTileRasterizer) const {
+                           GEOVectorLayer*         geoVectorLayer
+                           ) const {
   if (_geometry != NULL) {
     _geometry->symbolize(rc,
                          symbolizer,
                          meshRenderer,
                          shapesRenderer,
                          marksRenderer,
-                         geoTileRasterizer);
+                         geoVectorLayer);
   }
 }
 

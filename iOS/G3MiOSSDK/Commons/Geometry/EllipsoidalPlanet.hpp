@@ -54,7 +54,7 @@ public:
 #endif
   }
   
-  Vector3D getRadii() const{
+  Vector3D getRadii() const {
     return _ellipsoid._radii;
   }
   
@@ -177,7 +177,7 @@ public:
   void applyCameraConstrainers(const Camera* previousCamera,
                                Camera* nextCamera) const;
 
-  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const{
+  Geodetic3D getDefaultCameraPosition(const Sector& rendereSector) const {
     const Vector3D asw = toCartesian(rendereSector.getSW());
     const Vector3D ane = toCartesian(rendereSector.getNE());
     const double height = asw.sub(ane).length() * 1.9;

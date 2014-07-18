@@ -48,15 +48,15 @@ private:
 #endif
   mutable TileImageProvider* _tileImageProvider;
 
-  TiledVectorLayer(const GEORasterSymbolizer*        symbolizer,
-                   const std::string&                urlTemplate,
-                   const Sector&                     dataSector,
-                   const LayerTilesRenderParameters* parameters,
-                   const TimeInterval&               timeToCache,
-                   const bool                        readExpired,
-                   const float                       transparency,
-                   const LayerCondition*             condition,
-                   const std::string&                disclaimerInfo);
+  TiledVectorLayer(const GEORasterSymbolizer*                            symbolizer,
+                   const std::string&                                    urlTemplate,
+                   const Sector&                                         dataSector,
+                   const std::vector<const LayerTilesRenderParameters*>& parametersVector,
+                   const TimeInterval&                                   timeToCache,
+                   const bool                                            readExpired,
+                   const float                                           transparency,
+                   const LayerCondition*                                 condition,
+                   const std::string&                                    disclaimerInfo);
 
   const URL createURL(const Tile* tile) const;
 
@@ -100,13 +100,6 @@ public:
 
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
-
-//  long long requestGEOJSONBuffer(const Tile* tile,
-//                                 IDownloader* downloader,
-//                                 long long tileDownloadPriority,
-//                                 bool logDownloadActivity,
-//                                 IBufferDownloadListener* listener,
-//                                 bool deleteListener) const;
 
   class RequestGEOJSONBufferData {
   public:

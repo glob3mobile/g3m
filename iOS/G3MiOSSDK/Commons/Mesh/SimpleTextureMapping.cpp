@@ -48,7 +48,7 @@ SimpleTextureMapping::~SimpleTextureMapping() {
 #endif
 }
 
-void SimpleTextureMapping::modifyGLState(GLState& state) const{
+void SimpleTextureMapping::modifyGLState(GLState& state) const {
   if (_texCoords == NULL) {
     ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");
   }

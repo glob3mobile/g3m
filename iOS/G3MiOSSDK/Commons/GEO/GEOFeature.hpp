@@ -46,7 +46,8 @@ public:
                  MeshRenderer*           meshRenderer,
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
-                 GEOTileRasterizer*      geoTileRasterizer) const;
+                 GEOVectorLayer*         geoVectorLayer
+                 ) const;
 
   void rasterize(const GEORasterSymbolizer* symbolizer,
                  ICanvas* canvas,

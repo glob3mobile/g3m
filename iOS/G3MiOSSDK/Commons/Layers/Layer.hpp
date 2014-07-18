@@ -30,6 +30,9 @@ class TileImageProvider;
 
 
 class Layer {
+private:
+  bool isEqualsParameters(const Layer* that) const;
+
 protected:
   std::vector<LayerTouchEventListener*> _listeners;
   std::vector<std::string>              _errors;
@@ -41,12 +44,6 @@ protected:
   std::string              _disclaimerInfo;
   std::vector<std::string> _infos;
 
-#ifdef C_CODE
-  const LayerTilesRenderParameters* _parameters;
-#endif
-#ifdef JAVA_CODE
-  protected LayerTilesRenderParameters _parameters;
-#endif
 
   const float           _transparency;
   const LayerCondition* _condition;
@@ -55,18 +52,17 @@ protected:
 
   std::string _title;
 
-  Layer(const LayerTilesRenderParameters* parameters,
-        const float                       transparency,
-        const LayerCondition*             condition,
-        const std::string&                disclaimerInfo);
-
-  void setParameters(const LayerTilesRenderParameters* parameters);
+  Layer(const float           transparency,
+        const LayerCondition* condition,
+        const std::string&    disclaimerInfo);
 
   virtual std::string getLayerType() const = 0;
 
   virtual bool rawIsEquals(const Layer* that) const = 0;
-    
-  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
+
+  //  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
+
+  const std::vector<const LayerTilesRenderParameters*> createParametersVectorCopy() const;
 
 public:
 
@@ -104,9 +100,9 @@ public:
 
   void removeLayerSet(LayerSet* layerSet);
 
-  const LayerTilesRenderParameters* getLayerTilesRenderParameters() const {
-    return _parameters;
-  }
+  virtual const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const = 0;
+
+  virtual void selectLayerTilesRenderParameters(int index) = 0;
 
   virtual const std::string description() const = 0;
 #ifdef JAVA_CODE

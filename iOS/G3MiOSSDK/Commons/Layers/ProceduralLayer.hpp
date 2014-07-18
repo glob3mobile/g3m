@@ -12,16 +12,30 @@
 #include "Layer.hpp"
 
 class ProceduralLayer : public Layer {
+private:
+  const std::vector<const LayerTilesRenderParameters*> _parametersVector;
+
 protected:
-  ProceduralLayer(const LayerTilesRenderParameters* parameters,
-                  const float                       transparency,
-                  const LayerCondition*             condition,
-                  const std::string&                disclaimerInfo) :
-  Layer(parameters,
-        transparency,
+  int _selectedLayerTilesRenderParametersIndex;
+
+  ProceduralLayer(const std::vector<const LayerTilesRenderParameters*> parametersVector,
+                  const float                                          transparency,
+                  const LayerCondition*                                condition,
+                  const std::string&                                   disclaimerInfo) :
+  Layer(transparency,
         condition,
-        disclaimerInfo)
+        disclaimerInfo),
+  _parametersVector(parametersVector),
+  _selectedLayerTilesRenderParametersIndex(-1)
   {
+  }
+
+  const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const {
+    return _parametersVector;
+  }
+
+  void selectLayerTilesRenderParameters(int index) {
+    _selectedLayerTilesRenderParametersIndex = index;
   }
 
 };

@@ -16,8 +16,8 @@ class GEOSymbolizer;
 class MeshRenderer;
 class ShapesRenderer;
 class MarksRenderer;
-class GEOTileRasterizer;
-
+//class GEOTileRasterizer;
+class GEOVectorLayer;
 
 class GEOSymbol {
 public:
@@ -29,7 +29,9 @@ public:
                          MeshRenderer*           meshRenderer,
                          ShapesRenderer*         shapesRenderer,
                          MarksRenderer*          marksRenderer,
-                         GEOTileRasterizer*      geoTileRasterizer) const = 0 ;
+                         GEOVectorLayer*         geoVectorLayer
+//                         GEOTileRasterizer*      geoTileRasterizer
+                         ) const = 0 ;
 
 };
 

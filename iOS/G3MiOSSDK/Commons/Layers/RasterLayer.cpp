@@ -13,6 +13,16 @@
 #include "Context.hpp"
 #include "IDownloader.hpp"
 #include "URL.hpp"
+#include "LayerTilesRenderParameters.hpp"
+#include "Tile.hpp"
+#include "ErrorHandling.hpp"
+
+RasterLayer::~RasterLayer() {
+  delete _parameters;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
 
 RasterLayer::RasterLayer(const TimeInterval&               timeToCache,
                          const bool                        readExpired,
@@ -20,9 +30,10 @@ RasterLayer::RasterLayer(const TimeInterval&               timeToCache,
                          const float                       transparency,
                          const LayerCondition*             condition,
                          const std::string&                disclaimerInfo) :
-Layer(parameters, transparency, condition, disclaimerInfo),
+Layer(transparency, condition, disclaimerInfo),
 _timeToCache(timeToCache),
-_readExpired(readExpired)
+_readExpired(readExpired),
+_parameters(parameters)
 {
 }
 
@@ -75,4 +86,38 @@ long long RasterLayer::requestImage(const Tile* tile,
                                   _readExpired,
                                   listener,
                                   deleteListener);
+}
+
+const std::vector<const LayerTilesRenderParameters*> RasterLayer::getLayerTilesRenderParametersVector() const {
+  std::vector<const LayerTilesRenderParameters*> parametersVector;
+  if (_parameters != NULL) {
+    parametersVector.push_back(_parameters);
+  }
+  return parametersVector;
+}
+
+void RasterLayer::setParameters(const LayerTilesRenderParameters* parameters) {
+  if (_parameters != parameters) {
+    delete _parameters;
+    _parameters = parameters;
+    notifyChanges();
+  }
+}
+
+const Tile* RasterLayer::getParentTileOfSuitableLevel(const Tile* tile) const {
+  const int maxLevel = _parameters->_maxLevel;
+#ifdef C_CODE
+  const Tile* result = tile;
+#endif
+#ifdef JAVA_CODE
+  Tile result = tile;
+#endif
+  while ((result != NULL) && (result->_level > maxLevel)) {
+    result = result->getParent();
+  }
+  return result;
+}
+
+void RasterLayer::selectLayerTilesRenderParameters(int index) {
+  THROW_EXCEPTION("Logic error");
 }

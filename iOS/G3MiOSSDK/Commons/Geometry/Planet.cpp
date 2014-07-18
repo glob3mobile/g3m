@@ -32,7 +32,7 @@ const Planet* Planet::createFlatEarth() {
   return new FlatPlanet(Vector2D(4*6378137.0, 2*6378137.0));
 }
 
-CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const{
+CoordinateSystem Planet::getCoordinateSystemAt(const Geodetic3D& geo) const {
 
   Vector3D origin = toCartesian(geo);
   Vector3D z = centricSurfaceNormal(origin);

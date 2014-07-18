@@ -29,7 +29,7 @@ void GEOFeatureCollection::symbolize(const G3MRenderContext* rc,
                                      MeshRenderer*           meshRenderer,
                                      ShapesRenderer*         shapesRenderer,
                                      MarksRenderer*          marksRenderer,
-                                     GEOTileRasterizer*      geoTileRasterizer) const {
+                                     GEOVectorLayer*         geoVectorLayer) const {
   const int featuresCount = _features.size();
   for (int i = 0; i < featuresCount; i++) {
     GEOFeature* feature = _features[i];
@@ -38,7 +38,7 @@ void GEOFeatureCollection::symbolize(const G3MRenderContext* rc,
                        meshRenderer,
                        shapesRenderer,
                        marksRenderer,
-                       geoTileRasterizer);
+                       geoVectorLayer);
   }
 }
 

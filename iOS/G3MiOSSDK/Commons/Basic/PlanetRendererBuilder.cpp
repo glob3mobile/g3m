@@ -14,10 +14,11 @@
 #include "LayerBuilder.hpp"
 #include "DownloadPriority.hpp"
 #include "ElevationDataProvider.hpp"
-#include "TileRasterizer.hpp"
+//#include "TileRasterizer.hpp"
 #include "TileRenderingListener.hpp"
+#include "GEOVectorLayer.hpp"
 
-#include "CompositeTileRasterizer.hpp"
+//#include "CompositeTileRasterizer.hpp"
 
 PlanetRendererBuilder::PlanetRendererBuilder() :
 _showStatistics(false),
@@ -48,10 +49,16 @@ PlanetRendererBuilder::~PlanetRendererBuilder() {
   delete _layerSet;
   delete _texturizer;
 
-  const int tileRasterizersSize = _tileRasterizers.size();
-  for (int i = 0 ; i < tileRasterizersSize; i++) {
-    TileRasterizer* tileRasterizer = _tileRasterizers[i];
-    delete tileRasterizer;
+//  const int tileRasterizersSize = _tileRasterizers.size();
+//  for (int i = 0 ; i < tileRasterizersSize; i++) {
+//    TileRasterizer* tileRasterizer = _tileRasterizers[i];
+//    delete tileRasterizer;
+//  }
+
+  const int geoVectorLayersSize = _geoVectorLayers.size();
+  for (int i = 0; i < geoVectorLayersSize; i++) {
+    GEOVectorLayer* geoVectorLayer = _geoVectorLayers[i];
+    delete geoVectorLayer;
   }
 
   delete _tileTessellator;
@@ -75,23 +82,23 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() {
   return _tileTessellator;
 }
 
-TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
-  const int tileRasterizersSize = _tileRasterizers.size();
-
-  if (tileRasterizersSize == 0) {
-    return NULL;
-  }
-
-  if (tileRasterizersSize == 1) {
-    return _tileRasterizers[0];
-  }
-
-  CompositeTileRasterizer* result = new CompositeTileRasterizer();
-  for (int i = 0; i < tileRasterizersSize; i++) {
-    result->addTileRasterizer(_tileRasterizers[i]);
-  }
-  return result;
-}
+//TileRasterizer* PlanetRendererBuilder::getTileRasterizer() {
+//  const int tileRasterizersSize = _tileRasterizers.size();
+//
+//  if (tileRasterizersSize == 0) {
+//    return NULL;
+//  }
+//
+//  if (tileRasterizersSize == 1) {
+//    return _tileRasterizers[0];
+//  }
+//
+//  CompositeTileRasterizer* result = new CompositeTileRasterizer();
+//  for (int i = 0; i < tileRasterizersSize; i++) {
+//    result->addTileRasterizer(_tileRasterizers[i]);
+//  }
+//  return result;
+//}
 
 /**
  * Returns the _texturizer.
@@ -235,9 +242,9 @@ void PlanetRendererBuilder::setTileTessellator(TileTessellator *tileTessellator)
   _tileTessellator = tileTessellator;
 }
 
-void PlanetRendererBuilder::addTileRasterizer(TileRasterizer* tileRasterizer) {
-  _tileRasterizers.push_back(tileRasterizer);
-}
+//void PlanetRendererBuilder::addTileRasterizer(TileRasterizer* tileRasterizer) {
+//  _tileRasterizers.push_back(tileRasterizer);
+//}
 
 void PlanetRendererBuilder::setTileTexturizer(TileTexturizer *tileTexturizer) {
   if (_texturizer) {
@@ -348,13 +355,21 @@ TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
 }
 
 PlanetRenderer* PlanetRendererBuilder::create() {
+
+  LayerSet* layerSet = getLayerSet();
+  const int geoVectorLayersSize = _geoVectorLayers.size();
+  for (int i = 0; i < geoVectorLayersSize; i++) {
+    GEOVectorLayer* geoVectorLayer = _geoVectorLayers[i];
+    layerSet->addLayer(geoVectorLayer);
+  }
+
   PlanetRenderer* planetRenderer = new PlanetRenderer(getTileTessellator(),
                                                       getElevationDataProvider(),
                                                       true,
                                                       getVerticalExaggeration(),
                                                       getTexturizer(),
-                                                      getTileRasterizer(),
-                                                      getLayerSet(),
+//                                                      getTileRasterizer(),
+                                                      layerSet,
                                                       getParameters(),
                                                       getShowStatistics(),
                                                       getTileDownloadPriority(),
@@ -385,7 +400,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
 
   _tileRenderingListener = NULL;
 
-  _tileRasterizers.clear();
+//  _tileRasterizers.clear();
+  _geoVectorLayers.clear();
 
   return planetRenderer;
 }
@@ -431,8 +447,15 @@ Sector PlanetRendererBuilder::getRenderedSector() {
   return *_renderedSector;
 }
 
-GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
-  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
-  addTileRasterizer(geoTileRasterizer);
-  return geoTileRasterizer;
+//GEOTileRasterizer* PlanetRendererBuilder::createGEOTileRasterizer() {
+//  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+//  addTileRasterizer(geoTileRasterizer);
+//  return geoTileRasterizer;
+//}
+
+
+GEOVectorLayer* PlanetRendererBuilder::createGEOVectorLayer() {
+  GEOVectorLayer* geoVectorLayer = new GEOVectorLayer();
+  _geoVectorLayers.push_back(geoVectorLayer);
+  return geoVectorLayer;
 }

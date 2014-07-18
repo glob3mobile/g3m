@@ -46,7 +46,7 @@ public:
                  MeshRenderer*           meshRenderer,
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
-                 GEOTileRasterizer*      geoTileRasterizer) const;
+                 GEOVectorLayer*         geoVectorLayer) const;
 
   virtual GEOGeometry* deepCopy() const = 0;
 

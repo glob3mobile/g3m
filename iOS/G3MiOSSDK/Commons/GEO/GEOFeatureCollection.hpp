@@ -38,10 +38,15 @@ public:
                  MeshRenderer*           meshRenderer,
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
-                 GEOTileRasterizer*      geoTileRasterizer) const;
+                 GEOVectorLayer*         geoVectorLayer) const;
 
-  GEOFeature* get(int i) const{ return _features[i];}
-  int size() const{ return _features.size();}
+  GEOFeature* get(int i) const {
+    return _features[i];
+  }
+  
+  int size() const {
+    return _features.size();
+  }
 
   void rasterize(const GEORasterSymbolizer* symbolizer,
                  ICanvas* canvas,

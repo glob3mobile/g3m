@@ -280,7 +280,7 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
-  void forceMatrixCreation() const{
+  void forceMatrixCreation() const {
     getGeodeticCenterOfView();
     //getXYZCenterOfView();
     _getCartesianCenterOfView();
@@ -290,15 +290,15 @@ public:
     getModelViewMatrix().asMatrix44D();
   }
 
-  Matrix44D* getModelMatrix44D() const{
+  Matrix44D* getModelMatrix44D() const {
     return getModelMatrix().asMatrix44D();
   }
 
-  Matrix44D* getProjectionMatrix44D() const{
+  Matrix44D* getProjectionMatrix44D() const {
     return getProjectionMatrix().asMatrix44D();
   }
 
-  Matrix44D* getModelViewMatrix44D() const{
+  Matrix44D* getModelViewMatrix44D() const {
     return getModelViewMatrix().asMatrix44D();
   }
 
@@ -437,7 +437,7 @@ private:
   FrustumData calculateFrustumData() const;
 
   // opengl projection matrix
-  const MutableMatrix44D& getProjectionMatrix() const{
+  const MutableMatrix44D& getProjectionMatrix() const {
     if (_dirtyFlags._projectionMatrixDirty) {
       _dirtyFlags._projectionMatrixDirty = false;
       _projectionMatrix.copyValue(MutableMatrix44D::createProjectionMatrix(getFrustumData()));

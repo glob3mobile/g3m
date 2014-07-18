@@ -23,7 +23,7 @@
 #include "MercatorUtils.hpp"
 #include "EllipsoidShape.hpp"
 #include "Color.hpp"
-#include "TileRasterizer.hpp"
+//#include "TileRasterizer.hpp"
 #include "ElevationData.hpp"
 #include "TerrainTouchListener.hpp"
 #include "IDeviceInfo.hpp"
@@ -112,7 +112,7 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                bool                         ownsElevationDataProvider,
                                float                        verticalExaggeration,
                                TileTexturizer*              texturizer,
-                               TileRasterizer*              tileRasterizer,
+//                               TileRasterizer*              tileRasterizer,
                                LayerSet*                    layerSet,
                                const TilesRenderParameters* tilesRenderParameters,
                                bool                         showStatistics,
@@ -127,7 +127,7 @@ _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
 _verticalExaggeration(verticalExaggeration),
 _texturizer(texturizer),
-_tileRasterizer(tileRasterizer),
+//_tileRasterizer(tileRasterizer),
 _layerSet(layerSet),
 _tilesRenderParameters(tilesRenderParameters),
 _showStatistics(showStatistics),
@@ -150,10 +150,10 @@ _tileRenderingListener(tileRenderingListener)
   _context = NULL;
   _layerSet->setChangeListener(this);
   _layerSet->setChangedInfoListener(this);
-  if (_tileRasterizer != NULL) {
-    _tileRasterizer->setChangeListener(this);
-  }
-  
+//  if (_tileRasterizer != NULL) {
+//    _tileRasterizer->setChangeListener(this);
+//  }
+
   _changedInfoListener = changedInfoListener;
 }
 
@@ -423,9 +423,9 @@ void PlanetRenderer::initialize(const G3MContext* context) {
   if (_elevationDataProvider != NULL) {
     _elevationDataProvider->initialize(context);
   }
-  if (_tileRasterizer != NULL) {
-    _tileRasterizer->initialize(context);
-  }
+//  if (_tileRasterizer != NULL) {
+//    _tileRasterizer->initialize(context);
+//  }
 }
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
@@ -459,7 +459,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _texturizer,
                                       _elevationDataProvider,
                                       _tessellator,
-                                      _tileRasterizer,
+//                                      _tileRasterizer,
                                       layerTilesRenderParameters,
                                       _layerSet,
                                       _tilesRenderParameters,
@@ -659,7 +659,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _lastSplitTimer,
                    _elevationDataProvider,
                    _tessellator,
-                   _tileRasterizer,
+//                   _tileRasterizer,
                    _layerSet,
                    _renderedSector,
                    _firstRender, /* if first render, force full render */
@@ -710,7 +710,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                      _lastSplitTimer,
                      _elevationDataProvider,
                      _tessellator,
-                     _tileRasterizer,
+//                     _tileRasterizer,
                      _layerSet,
                      _renderedSector,
                      _firstRender, /* if first render, forceFullRender */
@@ -842,7 +842,7 @@ bool PlanetRenderer::removeListener(SurfaceElevationListener* listener) {
   return _elevationListenersTree.remove(listener);
 }
 
-void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const{
+void PlanetRenderer::sectorElevationChanged(ElevationData* elevationData) const {
   if (elevationData != NULL) {
     _elevationListenersTree.notifyListeners(elevationData, _verticalExaggeration);
   }

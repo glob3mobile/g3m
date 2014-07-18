@@ -64,7 +64,7 @@ public:
                  MeshRenderer*           meshRenderer,
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
-                 GEOTileRasterizer*      geoTileRasterizer) const;
+                 GEOVectorLayer*         geoVectorLayer) const;
 
   virtual const Sector* getSector() const = 0;
 

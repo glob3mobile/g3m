@@ -27,7 +27,7 @@ void GEOGeometry::symbolize(const G3MRenderContext* rc,
                             MeshRenderer*           meshRenderer,
                             ShapesRenderer*         shapesRenderer,
                             MarksRenderer*          marksRenderer,
-                            GEOTileRasterizer*      geoTileRasterizer) const {
+                            GEOVectorLayer*         geoVectorLayer) const {
   std::vector<GEOSymbol*>* symbols = createSymbols(symbolizer);
   if (symbols != NULL) {
 
@@ -40,7 +40,7 @@ void GEOGeometry::symbolize(const G3MRenderContext* rc,
                                                     meshRenderer,
                                                     shapesRenderer,
                                                     marksRenderer,
-                                                    geoTileRasterizer);
+                                                    geoVectorLayer);
         if (deleteSymbol) {
           delete symbol;
         }

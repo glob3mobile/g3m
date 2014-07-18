@@ -22,15 +22,17 @@ private:
   const int   _splits;
 
 
-  ChessboardLayer(const Color&                      backgroundColor,
-                  const Color&                      boxColor,
-                  const int                         splits,
-                  const Sector&                     dataSector,
-                  const LayerTilesRenderParameters* parameters,
-                  const float                       transparency,
-                  const LayerCondition*             condition,
-                  const std::string&                disclaimerInfo) :
-  ProceduralLayer(parameters,
+public:
+
+  ChessboardLayer(const std::vector<const LayerTilesRenderParameters*> parametersVector,
+                  const Color&                                         backgroundColor = Color::white(),
+                  const Color&                                         boxColor        = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1.0f),
+                  const int                                            splits          = 8,
+                  const Sector&                                        dataSector      = Sector::fullSphere(),
+                  const float                                          transparency    = 1.0f,
+                  const LayerCondition*                                condition       = NULL,
+                  const std::string&                                   disclaimerInfo  = "") :
+  ProceduralLayer(parametersVector,
                   transparency,
                   condition,
                   disclaimerInfo),
@@ -41,27 +43,17 @@ private:
   {
   }
 
-public:
-
-  static ChessboardLayer* newMercator(const Color&          backgroundColor = Color::white(),
-                                      const Color&          boxColor        = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1),
-                                      const int             splits          = 8,
-                                      const Sector&         dataSector      = Sector::fullSphere(),
-                                      const int             firstLevel      = 2,
-                                      const int             maxLevel        = 18,
-                                      const float           transparency    = 1,
-                                      const LayerCondition* condition       = NULL,
-                                      const std::string&    disclaimerInfo  = "");
-
-  static ChessboardLayer* newWGS84(const Color&          backgroundColor = Color::white(),
-                                   const Color&          boxColor        = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1),
-                                   const int             splits          = 8,
-                                   const Sector&         dataSector      = Sector::fullSphere(),
-                                   const int             firstLevel      = 2,
-                                   const int             maxLevel        = 18,
-                                   const float           transparency    = 1,
-                                   const LayerCondition* condition       = NULL,
-                                   const std::string&    disclaimerInfo  = "");
+  ChessboardLayer(const int             mercatorFirstLevel = 2,
+                  const int             mercatorMaxLevel   = 18,
+                  const int             wgs84firstLevel    = 0,
+                  const int             wgs84maxLevel      = 18,
+                  const Color&          backgroundColor    = Color::white(),
+                  const Color&          boxColor           = Color::fromRGBA(0.9f, 0.9f, 0.35f, 1.0f),
+                  const int             splits             = 8,
+                  const Sector&         dataSector         = Sector::fullSphere(),
+                  const float           transparency       = 1.0f,
+                  const LayerCondition* condition          = NULL,
+                  const std::string&    disclaimerInfo     = "");
 
   std::string getLayerType() const {
     return "ChessboardLayer";
@@ -90,7 +82,7 @@ public:
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
   bool rawIsEquals(const Layer* that) const;
-  
+
 };
 
 #endif

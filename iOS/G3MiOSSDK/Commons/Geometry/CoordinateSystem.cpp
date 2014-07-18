@@ -40,11 +40,11 @@ bool CoordinateSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const 
   return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);
 }
 
-CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const{
+CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const {
   return CoordinateSystem(_x, _y, _z, newOrigin);
 }
 
-Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const{
+Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color& yColor, const Color& zColor) const {
 
   FloatBufferBuilderFromColor colors;
 
@@ -81,7 +81,7 @@ Mesh* CoordinateSystem::createMesh(double size, const Color& xColor, const Color
   return dm;
 }
 
-TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& global) const{
+TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& global) const {
 
   //We know...
 
@@ -142,11 +142,11 @@ TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& glo
                          roll);
 }
 
-CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const TaitBryanAngles& angles) const{
+CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const TaitBryanAngles& angles) const {
   return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);
 }
 
-CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll) const{
+CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, const Angle& pitch, const Angle& roll) const {
 
   //Check out Agustin Trujillo's review of this topic
   //This implementation is purposely explicit on every step
@@ -189,7 +189,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading, co
 }
 
 
-bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const{
+bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const {
   return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }
 

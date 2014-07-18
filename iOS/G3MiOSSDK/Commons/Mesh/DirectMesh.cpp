@@ -34,7 +34,7 @@ AbstractMesh(primitive,
 {
 }
 
-void DirectMesh::rawRender(const G3MRenderContext* rc) const{
+void DirectMesh::rawRender(const G3MRenderContext* rc) const {
   GL* gl = rc->getGL();
 
   const int verticesCount = getVertexCount();

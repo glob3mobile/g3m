@@ -8,23 +8,24 @@
 
 #include "GEORasterSymbol.hpp"
 
-#include "GEOTileRasterizer.hpp"
+//#include "GEOTileRasterizer.hpp"
 #include "ICanvas.hpp"
 #include "GEORasterProjection.hpp"
 #include "GEO2DPolygonData.hpp"
+#include "GEOVectorLayer.hpp"
 
 bool GEORasterSymbol::symbolize(const G3MRenderContext* rc,
                                 const GEOSymbolizer*    symbolizer,
                                 MeshRenderer*           meshRenderer,
                                 ShapesRenderer*         shapesRenderer,
                                 MarksRenderer*          marksRenderer,
-                                GEOTileRasterizer*      geoTileRasterizer) const {
-  if (geoTileRasterizer == NULL) {
-    ILogger::instance()->logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
+                                GEOVectorLayer*         geoVectorLayer) const {
+  if (geoVectorLayer == NULL) {
+    ILogger::instance()->logError("Can't symbolize with RasterSymbol, GEOVectorLayer was not set");
     return true;
   }
 
-  geoTileRasterizer->addSymbol( this );
+  geoVectorLayer->addSymbol( this );
 
   return false;
 }

@@ -78,7 +78,7 @@ public:
     return MutableVector3D(NAND, NAND, NAND);
   }
 
-  bool equalTo(const MutableVector3D& v) const{
+  bool equalTo(const MutableVector3D& v) const {
     return (v._x == _x && v._y == _y && v._z == _z);
   }
 

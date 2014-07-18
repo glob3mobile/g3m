@@ -86,7 +86,7 @@ public:
   }
 #endif
 
-  float getLayerTransparency() const{
+  float getLayerTransparency() const {
     return _layerTransparency;
   }
   

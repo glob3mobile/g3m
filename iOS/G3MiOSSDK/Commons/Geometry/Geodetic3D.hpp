@@ -34,7 +34,7 @@ public:
     return Geodetic3D(Angle::nan(), Angle::nan(), 0);
   }
 
-  bool isNan() const{
+  bool isNan() const {
     return _latitude.isNan() || _longitude.isNan();
   }
 

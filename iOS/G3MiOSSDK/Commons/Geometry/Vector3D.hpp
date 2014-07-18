@@ -106,7 +106,7 @@ public:
     return _x * v._x + _y * v._y + _z * v._z;
   }
 
-  bool isPerpendicularTo(const Vector3D& v) const{
+  bool isPerpendicularTo(const Vector3D& v) const {
     return IMathUtils::instance()->abs(_x * v._x + _y * v._y + _z * v._z) < 0.00001;
   }
   

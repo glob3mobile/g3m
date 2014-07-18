@@ -12,7 +12,8 @@
 #include "CompositeRenderer.hpp"
 #include "PlanetRenderer.hpp"
 #include "PlanetTileTessellator.hpp"
-#include "MultiLayerTileTexturizer.hpp"
+//#include "MultiLayerTileTexturizer.hpp"
+#include "DefaultTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "DownloadPriority.hpp"
 #include "G3MWidget.hpp"
@@ -492,8 +493,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
 
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
-  TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-  TileRasterizer* tileRasterizer = NULL;
+  TileTexturizer* texturizer = new DefaultTileTexturizer();
+//  TileRasterizer* tileRasterizer = NULL;
 
   const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
@@ -524,7 +525,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               true,
                                               verticalExaggeration,
                                               texturizer,
-                                              tileRasterizer,
+//                                              tileRasterizer,
                                               _layerSet,
                                               parameters,
                                               showStatistics,

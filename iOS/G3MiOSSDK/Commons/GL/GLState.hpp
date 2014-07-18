@@ -61,7 +61,7 @@ public:
     _features = new GLFeatureSet();
   }
 
-  int getTimeStamp() const { return _timeStamp;}
+  int getTimeStamp() const { return _timeStamp; }
 
   GLFeatureSet* getAccumulatedFeatures() const;
 //  GLFeatureSet* createAccumulatedFeatures() const;

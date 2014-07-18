@@ -187,7 +187,7 @@ _currentStep(NULL) {
 
 ElevationDataProvider* CompositeElevationDataProvider::
 CompositeElevationDataProvider_Request::
-popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const{
+popBestProvider(std::vector<ElevationDataProvider*>& ps, const Vector2I& extent) const {
 
   double bestRes = extent.squaredLength();
   double selectedRes = IMathUtils::instance()->maxDouble();

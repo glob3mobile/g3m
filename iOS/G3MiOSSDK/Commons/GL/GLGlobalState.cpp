@@ -18,7 +18,7 @@
 bool GLGlobalState::_initializationAvailable = false;
 
 
-void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const{
+void GLGlobalState::applyChanges(GL* gl, GLGlobalState& currentState) const {
 
   INativeGL* nativeGL = gl->getNative();
 

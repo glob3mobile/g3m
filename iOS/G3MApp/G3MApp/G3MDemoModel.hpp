@@ -15,22 +15,29 @@
 class G3MDemoListener;
 class G3MDemoScene;
 class LayerSet;
-class GEORenderer;
+//class GEORenderer;
 class G3MWidget;
 class G3MContext;
-class GEOTileRasterizer;
+//class GEOTileRasterizer;
+class GEOVectorLayer;
 class MarksRenderer;
 class MeshRenderer;
 class ShapesRenderer;
 class PlanetRenderer;
 
+class GEORenderer;
+
 class G3MDemoModel {
 private:
-  G3MDemoListener* _listener;
-
   G3MWidget* _g3mWidget;
 
+  G3MDemoListener* _listener;
+
+
   LayerSet*       _layerSet;
+  MeshRenderer*   _meshRenderer;
+  ShapesRenderer* _shapesRenderer;
+  MarksRenderer*  _marksRenderer;
   GEORenderer*    _geoRenderer;
 
   G3MDemoScene*              _selectedScene;
@@ -41,8 +48,12 @@ private:
 public:
 
   G3MDemoModel(G3MDemoListener* listener,
-               LayerSet* layerSet,
-               GEORenderer* geoRenderer);
+               LayerSet*        layerSet,
+               MeshRenderer*    meshRenderer,
+               ShapesRenderer*  shapesRenderer,
+               MarksRenderer*   marksRenderer,
+               GEORenderer*     geoRenderer);
+
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
 
@@ -60,13 +71,19 @@ public:
     return _geoRenderer;
   }
 
-  GEOTileRasterizer* getGEOTileRasterizer() const;
+//  GEOVectorLayer* getGEOVectorLayer() const;
 
-  MarksRenderer* getMarksRenderer() const;
+  MarksRenderer* getMarksRenderer() const {
+    return _marksRenderer;
+  }
 
-  MeshRenderer* getMeshRenderer() const;
+  MeshRenderer* getMeshRenderer() const {
+    return _meshRenderer;
+  }
 
-  ShapesRenderer* getShapesRenderer() const;
+  ShapesRenderer* getShapesRenderer() const {
+    return _shapesRenderer;
+  }
 
   PlanetRenderer* getPlanetRenderer() const;
 

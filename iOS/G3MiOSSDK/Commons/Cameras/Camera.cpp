@@ -137,7 +137,7 @@ void Camera::print() {
   ILogger::instance()->logInfo("Viewport width: %d, height %d\n", _viewPortWidth, _viewPortHeight);
 }
 
-const Angle Camera::getHeading() const{
+const Angle Camera::getHeading() const {
   return getHeadingPitchRoll()._heading;
 }
 
@@ -363,12 +363,12 @@ double Camera::getProjectedSphereArea(const Sphere& sphere) const {
   return PI * rScreen * rScreen;
 }
 
-bool Camera::isPositionWithin(const Sector& sector, double height) const{
+bool Camera::isPositionWithin(const Sector& sector, double height) const {
   const Geodetic3D position = getGeodeticPosition();
   return sector.contains(position._latitude, position._longitude) && height >= position._height;
 }
 
-bool Camera::isCenterOfViewWithin(const Sector& sector, double height) const{
+bool Camera::isCenterOfViewWithin(const Sector& sector, double height) const {
   const Geodetic3D position = getGeodeticCenterOfView();
   return sector.contains(position._latitude, position._longitude) && height >= position._height;
 }
@@ -405,11 +405,11 @@ Angle Camera::getRoll() const {
   return getHeadingPitchRoll()._roll;
 }
 
-CoordinateSystem Camera::getLocalCoordinateSystem() const{
+CoordinateSystem Camera::getLocalCoordinateSystem() const {
   return _planet->getCoordinateSystemAt(getGeodeticPosition());
 }
 
-CoordinateSystem Camera::getCameraCoordinateSystem() const{
+CoordinateSystem Camera::getCameraCoordinateSystem() const {
   return CoordinateSystem(getViewDirection(), getUp(), getCartesianPosition());
 }
 
@@ -422,7 +422,7 @@ void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
   _dirtyFlags.setAll(true);  //Recalculate Everything
 }
 
-TaitBryanAngles Camera::getHeadingPitchRoll() const{
+TaitBryanAngles Camera::getHeadingPitchRoll() const {
   const CoordinateSystem localRS = getLocalCoordinateSystem();
   const CoordinateSystem cameraRS = getCameraCoordinateSystem();
   return cameraRS.getTaitBryanAngles(localRS);

@@ -365,7 +365,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    TileTexturizer* texturizer,
                                    ElevationDataProvider* elevationDataProvider,
                                    const TileTessellator* tessellator,
-                                   TileRasterizer* tileRasterizer,
+//                                   TileRasterizer* tileRasterizer,
                                    const LayerTilesRenderParameters* layerTilesRenderParameters,
                                    const LayerSet* layerSet,
                                    const TilesRenderParameters* tilesRenderParameters,
@@ -396,7 +396,7 @@ void Tile::prepareForFullRendering(const G3MRenderContext* rc,
     if (needsToCallTexturizer) {
       _texturizedMesh = texturizer->texturize(rc,
                                               tessellator,
-                                              tileRasterizer,
+//                                              tileRasterizer,
                                               layerTilesRenderParameters,
                                               layerSet,
                                               forceFullRender,
@@ -414,7 +414,7 @@ void Tile::rawRender(const G3MRenderContext* rc,
                      TileTexturizer* texturizer,
                      ElevationDataProvider* elevationDataProvider,
                      const TileTessellator* tessellator,
-                     TileRasterizer* tileRasterizer,
+//                     TileRasterizer* tileRasterizer,
                      const LayerTilesRenderParameters* layerTilesRenderParameters,
                      const LayerSet* layerSet,
                      const TilesRenderParameters* tilesRenderParameters,
@@ -440,7 +440,7 @@ void Tile::rawRender(const G3MRenderContext* rc,
     if (needsToCallTexturizer) {
       _texturizedMesh = texturizer->texturize(rc,
                                               tessellator,
-                                              tileRasterizer,
+//                                              tileRasterizer,
                                               layerTilesRenderParameters,
                                               layerSet,
                                               forceFullRender,
@@ -593,7 +593,7 @@ void Tile::render(const G3MRenderContext* rc,
                   ITimer* lastSplitTimer,
                   ElevationDataProvider* elevationDataProvider,
                   const TileTessellator* tessellator,
-                  TileRasterizer* tileRasterizer,
+//                  TileRasterizer* tileRasterizer,
                   const LayerSet* layerSet,
                   const Sector* renderedSector,
                   bool forceFullRender,
@@ -655,7 +655,7 @@ void Tile::render(const G3MRenderContext* rc,
                   texturizer,
                   elevationDataProvider,
                   tessellator,
-                  tileRasterizer,
+//                  tileRasterizer,
                   layerTilesRenderParameters,
                   layerSet,
                   tilesRenderParameters,
@@ -911,7 +911,7 @@ void Tile::ancestorChangedElevationData(Tile* ancestor) {
   }
 }
 
-ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) const{
+ElevationData* Tile::createElevationDataSubviewFromAncestor(Tile* ancestor) const {
   ElevationData* ed = ancestor->getElevationData();
 
   if (ed == NULL) {
@@ -1037,7 +1037,7 @@ void Tile::computeTileCorners(const Planet* planet) {
 }
 
 Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
-                                               const Vector2I& tileDimension) const{
+                                               const Vector2I& tileDimension) const {
   const IMathUtils* math = IMathUtils::instance();
   const Vector2D uv = _sector.getUVCoordinates(position2D);
   return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));

@@ -530,7 +530,7 @@ MutableMatrix44D SphericalPlanet::drag(const Geodetic3D& origin, const Geodetic3
 }
 
 void SphericalPlanet::applyCameraConstrainers(const Camera* previousCamera,
-                                              Camera* nextCamera) const{
+                                              Camera* nextCamera) const {
 
   //  Vector3D pos = nextCamera->getCartesianPosition();
   //  Vector3D origin = _origin.asVector3D();

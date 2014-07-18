@@ -19,16 +19,16 @@
 #include "MercatorUtils.hpp"
 #include "GEORasterSymbolizer.hpp"
 
-TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*        symbolizer,
-                                   const std::string&                urlTemplate,
-                                   const Sector&                     dataSector,
-                                   const LayerTilesRenderParameters* parameters,
-                                   const TimeInterval&               timeToCache,
-                                   const bool                        readExpired,
-                                   const float                       transparency,
-                                   const LayerCondition*             condition,
-                                   const std::string&                disclaimerInfo) :
-VectorLayer(parameters, transparency, condition, disclaimerInfo),
+TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*                            symbolizer,
+                                   const std::string&                                    urlTemplate,
+                                   const Sector&                                         dataSector,
+                                   const std::vector<const LayerTilesRenderParameters*>& parametersVector,
+                                   const TimeInterval&                                   timeToCache,
+                                   const bool                                            readExpired,
+                                   const float                                           transparency,
+                                   const LayerCondition*                                 condition,
+                                   const std::string&                                    disclaimerInfo) :
+VectorLayer(parametersVector, transparency, condition, disclaimerInfo),
 _symbolizer(symbolizer),
 _urlTemplate(urlTemplate),
 _dataSector(dataSector),
@@ -71,10 +71,12 @@ TiledVectorLayer* TiledVectorLayer::newMercator(const GEORasterSymbolizer* symbo
                                                 const float                transparency,
                                                 const LayerCondition*      condition,
                                                 const std::string&         disclaimerInfo) {
+  std::vector<const LayerTilesRenderParameters*> parametersVector;
+  parametersVector.push_back( LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel) );
   return new TiledVectorLayer(symbolizer,
                               urlTemplate,
                               dataSector,
-                              LayerTilesRenderParameters::createDefaultMercator(firstLevel, maxLevel),
+                              parametersVector,
                               timeToCache,
                               readExpired,
                               transparency,
@@ -106,10 +108,11 @@ const std::string TiledVectorLayer::description() const {
 }
 
 TiledVectorLayer* TiledVectorLayer::copy() const {
+  
   return new TiledVectorLayer(_symbolizer->copy(),
                               _urlTemplate,
                               _dataSector,
-                              _parameters->copy(),
+                              createParametersVectorCopy(),
                               _timeToCache,
                               _readExpired,
                               _transparency,
@@ -156,11 +159,14 @@ const URL TiledVectorLayer::createURL(const Tile* tile) const {
 
   const Sector sector = tile->_sector;
 
-  const Vector2I tileTextureResolution = _parameters->_tileTextureResolution;
+
+  const LayerTilesRenderParameters* parameters = _parametersVector[_selectedLayerTilesRenderParametersIndex];
+
+  const Vector2I tileTextureResolution = parameters->_tileTextureResolution;
 
   const int level   = tile->_level;
   const int column  = tile->_column;
-  const int numRows = (int) (_parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
+  const int numRows = (int) (parameters->_topSectorSplitsByLatitude * _mu->pow(2.0, level));
   const int row     = numRows - tile->_row - 1;
 
   const double north = MercatorUtils::latitudeToMeters( sector._upper._latitude );
@@ -191,40 +197,10 @@ const GEORasterSymbolizer*  TiledVectorLayer::symbolizerCopy() const {
   return _symbolizer->copy();
 }
 
-
-//long long TiledVectorLayer::requestGEOJSONBuffer(const Tile* tile,
-//                                                 IDownloader* downloader,
-//                                                 long long tileDownloadPriority,
-//                                                 bool logDownloadActivity,
-//                                                 IBufferDownloadListener* listener,
-//                                                 bool deleteListener) const {
-//
-//  if (tile->_level > _parameters->_maxLevel) {
-//    const Tile* parentTile = tile->getParent();
-//    if (parentTile != NULL) {
-//      return requestGEOJSONBuffer(parentTile,
-//                                  downloader,
-//                                  tileDownloadPriority,
-//                                  logDownloadActivity,
-//                                  listener,
-//                                  deleteListener);
-//    }
-//  }
-//
-//  const URL url = createURL(tile);
-//  if (logDownloadActivity) {
-//    ILogger::instance()->logInfo("Downloading %s", url._path.c_str());
-//  }
-//  return downloader->requestBuffer(url,
-//                                   tileDownloadPriority,
-//                                   _timeToCache,
-//                                   _readExpired,
-//                                   listener,
-//                                   deleteListener);
-//}
-
 TiledVectorLayer::RequestGEOJSONBufferData* TiledVectorLayer::getRequestGEOJSONBufferData(const Tile* tile) const {
-  if (tile->_level > _parameters->_maxLevel) {
+  const LayerTilesRenderParameters* parameters = _parametersVector[_selectedLayerTilesRenderParametersIndex];
+
+  if (tile->_level > parameters->_maxLevel) {
     const Tile* parentTile = tile->getParent();
     if (parentTile != NULL) {
       return getRequestGEOJSONBufferData(parentTile);
@@ -235,4 +211,3 @@ TiledVectorLayer::RequestGEOJSONBufferData* TiledVectorLayer::getRequestGEOJSONB
                                       _timeToCache,
                                       _readExpired);
 }
-

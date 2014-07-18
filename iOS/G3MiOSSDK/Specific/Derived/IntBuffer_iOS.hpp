@@ -35,7 +35,7 @@ public:
     }
   }
 
-  long long getID() const{
+  long long getID() const {
     return _id;
   }
 

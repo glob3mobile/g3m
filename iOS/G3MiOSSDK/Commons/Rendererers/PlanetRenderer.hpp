@@ -33,7 +33,7 @@ class ChangedInfoListener;
 
 
 class EllipsoidShape;
-class TileRasterizer;
+//class TileRasterizer;
 
 
 class TilesStatistics {
@@ -212,7 +212,7 @@ private:
   ElevationDataProvider*       _elevationDataProvider;
   bool                         _ownsElevationDataProvider;
   TileTexturizer*              _texturizer;
-  TileRasterizer*              _tileRasterizer;
+//  TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
@@ -299,7 +299,7 @@ public:
                  bool                         ownsElevationDataProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
-                 TileRasterizer*              tileRasterizer,
+//                 TileRasterizer*              tileRasterizer,
                  LayerSet*                    layerSet,
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
@@ -431,7 +431,7 @@ public:
 
   void sectorElevationChanged(ElevationData* elevationData) const;
 
-  const Sector* getRenderedSector() const{
+  const Sector* getRenderedSector() const {
     return _renderedSector;
   }
 
@@ -443,7 +443,7 @@ public:
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
 
-  ElevationDataProvider* getElevationDataProvider() const{
+  ElevationDataProvider* getElevationDataProvider() const {
     return _elevationDataProvider;
   }
 

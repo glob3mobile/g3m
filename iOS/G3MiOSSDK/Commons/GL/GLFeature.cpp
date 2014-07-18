@@ -73,7 +73,7 @@ _lineWidth(lineWidth)
   }
 }
 
-void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
   if (_depthTestEnabled) {
     state->enableDepthTest();
   }
@@ -265,7 +265,7 @@ void TextureGLFeature::setRotationAngleInRadiansAndRotationCenter(float angle, f
   }
 }
 
-void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+void TextureGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
   blendingOnGlobalGLState(state);
   state->bindTexture(_target, _texID);
 }
@@ -297,7 +297,7 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_ID, 4),
 _texID(texID) {
 }
 
-void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+void TextureIDGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
   state->bindTexture(_texID);
 }
 
@@ -305,7 +305,7 @@ BlendingModeGLFeature::BlendingModeGLFeature(bool blend, int sFactor, int dFacto
 GLColorGroupFeature(GLF_BLENDING_MODE, 4, blend, sFactor, dFactor) {
 }
 
-void BlendingModeGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+void BlendingModeGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
   blendingOnGlobalGLState(state);
 }
 
@@ -343,7 +343,7 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
   }
 
 }
-void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const{
+void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
 
 }
 

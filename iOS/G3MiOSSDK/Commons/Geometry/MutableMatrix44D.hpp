@@ -179,7 +179,7 @@ public:
     
   }
 
-  Matrix44D* asMatrix44D() const{
+  Matrix44D* asMatrix44D() const {
     if (_matrix44D == NULL) {
       _matrix44D = new Matrix44D(_m00, _m10, _m20, _m30,
                                  _m01, _m11, _m21, _m31,
@@ -191,7 +191,7 @@ public:
 
   void copyValue(const MutableMatrix44D &m);
 
-  bool isEquals(const MutableMatrix44D& m) const{
+  bool isEquals(const MutableMatrix44D& m) const {
     return (
             (_m00 == m._m00) && (_m01 == m._m01) && (_m02 == m._m02) && (_m03 == m._m03) &&
             (_m10 == m._m10) && (_m11 == m._m11) && (_m12 == m._m12) && (_m13 == m._m13) &&

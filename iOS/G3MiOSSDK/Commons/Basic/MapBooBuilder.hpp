@@ -490,7 +490,6 @@ public:
   public void dispose() { }
 #endif
 
-  
 };
 
 class MapBoo_ErrorRenderer : public DefaultRenderer {
