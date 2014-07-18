@@ -13,7 +13,12 @@
 
 class ProceduralLayer : public Layer {
 private:
+#ifdef C_CODE
   const std::vector<const LayerTilesRenderParameters*> _parametersVector;
+#endif
+#ifdef JAVA_CODE
+  private final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector;
+#endif
 
 protected:
   int _selectedLayerTilesRenderParametersIndex;

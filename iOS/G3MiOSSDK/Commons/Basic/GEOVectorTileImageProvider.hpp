@@ -76,7 +76,12 @@ public:
   class GEORasterizerFrameTask : public FrameTask {
   private:
     GEOVectorTileImageProvider*  _geoVectorTileImageProvider;
+#ifdef C_CODE
     const TileImageContribution* _contribution;
+#endif
+#ifdef JAVA_CODE
+    private TileImageContribution _contribution;
+#endif
     const std::string            _tileId;
     const Sector                 _tileSector;
     const bool                   _tileMercator;
