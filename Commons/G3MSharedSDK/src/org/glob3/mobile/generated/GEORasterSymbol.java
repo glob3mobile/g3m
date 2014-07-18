@@ -203,15 +203,18 @@ public abstract class GEORasterSymbol extends GEOSymbol implements QuadTree_Cont
     super.dispose();
   }
 
-  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
+
+  ///#include "GEOTileRasterizer.hpp"
+  
+  public final boolean symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
-    if (geoTileRasterizer == null)
+    if (geoVectorLayer == null)
     {
-      ILogger.instance().logError("Can't simbolize with RasterSymbol, GEOTileRasterizer was not set");
+      ILogger.instance().logError("Can't symbolize with RasterSymbol, GEOVectorLayer was not set");
       return true;
     }
   
-    geoTileRasterizer.addSymbol(this);
+    geoVectorLayer.addSymbol(this);
   
     return false;
   }

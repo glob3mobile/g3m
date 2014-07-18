@@ -22,14 +22,17 @@ package org.glob3.mobile.generated;
 
 public abstract class RasterLayer extends Layer
 {
+  protected LayerTilesRenderParameters _parameters;
+
   protected final TimeInterval _timeToCache;
   protected final boolean _readExpired;
 
   protected RasterLayer(TimeInterval timeToCache, boolean readExpired, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(parameters, transparency, condition, disclaimerInfo);
+     super(transparency, condition, disclaimerInfo);
      _timeToCache = timeToCache;
      _readExpired = readExpired;
+     _parameters = parameters;
   }
 
   protected final TimeInterval getTimeToCache()
@@ -45,6 +48,48 @@ public abstract class RasterLayer extends Layer
   protected abstract TileImageContribution rawContribution(Tile tile);
 
   protected abstract URL createURL(Tile tile);
+
+  protected final void setParameters(LayerTilesRenderParameters parameters)
+  {
+    if (_parameters != parameters)
+    {
+      _parameters = null;
+      _parameters = parameters;
+      notifyChanges();
+    }
+  }
+
+  public void dispose()
+  {
+    _parameters = null;
+    super.dispose();
+  }
+
+  protected final Tile getParentTileOfSuitableLevel(Tile tile)
+  {
+    final int maxLevel = _parameters._maxLevel;
+    Tile result = tile;
+    while ((result != null) && (result._level > maxLevel))
+    {
+      result = result.getParent();
+    }
+    return result;
+  }
+
+  public final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
+  {
+    final java.util.ArrayList<LayerTilesRenderParameters> parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
+    if (_parameters != null)
+    {
+      parametersVector.add(_parameters);
+    }
+    return parametersVector;
+  }
+
+  public final void selectLayerTilesRenderParameters(int index)
+  {
+    throw new RuntimeException("Logic error");
+  }
 
   public final boolean isEquals(Layer that)
   {

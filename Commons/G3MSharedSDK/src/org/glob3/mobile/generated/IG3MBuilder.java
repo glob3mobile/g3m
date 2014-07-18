@@ -29,7 +29,6 @@ package org.glob3.mobile.generated;
 //class G3MWidget;
 //class PlanetRendererBuilder;
 //class Planet;
-//TODO
 //class Renderer;
 //class ProtoRenderer;
 //class WidgetUserData;
@@ -130,7 +129,7 @@ public abstract class IG3MBuilder
 
   /**
    * Returns the _cameraConstraints list. If it does not exist, it will be default initializated.
-   * @see IG3MBuilder#createDefaultCameraConstraints() 
+   * @see IG3MBuilder#createDefaultCameraConstraints()
    *
    * @return _cameraConstraints: std::vector<ICameraConstrainer*>
    */
@@ -355,7 +354,7 @@ public abstract class IG3MBuilder
 
 
   /**
-   * Returns TRUE if the given renderer list contains, at least, an instance of 
+   * Returns TRUE if the given renderer list contains, at least, an instance of
    * the PlanetRenderer class. Returns FALSE if not.
    *
    * @return bool
@@ -700,7 +699,7 @@ public abstract class IG3MBuilder
 
 
   /**
-   * Sets the camera constraints list, ignoring the default camera constraints list 
+   * Sets the camera constraints list, ignoring the default camera constraints list
    * and the camera constraints previously added, if added.
    *
    * @param cameraConstraints - std::vector<ICameraConstrainer*>
@@ -989,7 +988,7 @@ public abstract class IG3MBuilder
   }
 
   /**
-   * Returns the _planetRendererBuilder. If it does not exist, it will be default initializated. 
+   * Returns the _planetRendererBuilder. If it does not exist, it will be default initializated.
    *
    * @return _planetRendererBuilder: PlanetRendererBuilder*
    */
@@ -1037,20 +1036,21 @@ public abstract class IG3MBuilder
     final boolean createMeshRenderer = true;
     final boolean createShapesRenderer = true;
     final boolean createMarksRenderer = true;
-    final boolean createGEOTileRasterizer = true;
+    final boolean createGEOVectorLayer = true;
 
-    return createGEORenderer(symbolizer, createMeshRenderer, createShapesRenderer, createMarksRenderer, createGEOTileRasterizer);
+    return createGEORenderer(symbolizer, createMeshRenderer, createShapesRenderer, createMarksRenderer, createGEOVectorLayer);
   }
 
-  public final GEORenderer createGEORenderer(GEOSymbolizer symbolizer, boolean createMeshRenderer, boolean createShapesRenderer, boolean createMarksRenderer, boolean createGEOTileRasterizer)
+  public final GEORenderer createGEORenderer(GEOSymbolizer symbolizer, boolean createMeshRenderer, boolean createShapesRenderer, boolean createMarksRenderer, boolean createGEOVectorLayer)
   {
   
     MeshRenderer meshRenderer = createMeshRenderer ? this.createMeshRenderer() : null;
     ShapesRenderer shapesRenderer = createShapesRenderer ? this.createShapesRenderer() : null;
     MarksRenderer marksRenderer = createMarksRenderer ? this.createMarksRenderer() : null;
-    GEOTileRasterizer geoTileRasterizer = createGEOTileRasterizer ? getPlanetRendererBuilder().createGEOTileRasterizer() : null;
+    GEOVectorLayer geoVectorLayer = createGEOVectorLayer ? getPlanetRendererBuilder().createGEOVectorLayer() : null;
+    //  GEOTileRasterizer* geoTileRasterizer = createGEOVectorLayer ? getPlanetRendererBuilder()->createGEOTileRasterizer() : NULL;
   
-    GEORenderer geoRenderer = new GEORenderer(symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
+    GEORenderer geoRenderer = new GEORenderer(symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoVectorLayer);
     addRenderer(geoRenderer);
   
     return geoRenderer;

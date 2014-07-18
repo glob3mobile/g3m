@@ -36,6 +36,30 @@ package org.glob3.mobile.generated;
 
 public abstract class Layer
 {
+  private boolean isEqualsParameters(Layer that)
+  {
+    final java.util.ArrayList<LayerTilesRenderParameters> thisParameters = this.getLayerTilesRenderParametersVector();
+    final java.util.ArrayList<LayerTilesRenderParameters> thatParameters = that.getLayerTilesRenderParametersVector();
+  
+    final int parametersSize = thisParameters.size();
+    if (parametersSize != thisParameters.size())
+    {
+      return false;
+    }
+  
+    for (int i = 0; i > parametersSize; i++)
+    {
+      final LayerTilesRenderParameters thisParameter = thisParameters.get(i);
+      final LayerTilesRenderParameters thatParameter = thatParameters.get(i);
+      if (!thisParameter.isEquals(thatParameter))
+      {
+        return false;
+      }
+    }
+  
+    return true;
+  }
+
   protected java.util.ArrayList<LayerTouchEventListener> _listeners = new java.util.ArrayList<LayerTouchEventListener>();
   protected java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
@@ -46,7 +70,6 @@ public abstract class Layer
   protected String _disclaimerInfo;
   protected java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
 
-  protected LayerTilesRenderParameters _parameters;
 
   protected final float _transparency;
   protected final LayerCondition _condition;
@@ -62,9 +85,8 @@ public abstract class Layer
 
   protected String _title;
 
-  protected Layer(LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
+  protected Layer(float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     _parameters = parameters;
      _transparency = transparency;
      _condition = condition;
      _disclaimerInfo = disclaimerInfo;
@@ -73,29 +95,43 @@ public abstract class Layer
      _title = "";
   }
 
-  protected final void setParameters(LayerTilesRenderParameters parameters)
-  {
-    if (parameters != _parameters)
-    {
-      _parameters = null;
-      _parameters = parameters;
-      notifyChanges();
-    }
-  }
-
   protected abstract String getLayerType();
 
   protected abstract boolean rawIsEquals(Layer that);
 
-  protected final Tile getParentTileOfSuitableLevel(Tile tile)
+  //  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
+
+
+  //const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const {
+  //    const int maxLevel = _parameters->_maxLevel;
+  ///#ifdef C_CODE
+  //    const Tile* result = tile;
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //    Tile result = tile;
+  ///#endif
+  //    while ((result != NULL) && (result->_level > maxLevel)) {
+  //        result = result->getParent();
+  //    }
+  //    return result;
+  //}
+  
+  protected final java.util.ArrayList<LayerTilesRenderParameters> createParametersVectorCopy()
   {
-      final int maxLevel = _parameters._maxLevel;
-      Tile result = tile;
-      while ((result != null) && (result._level > maxLevel))
+    final java.util.ArrayList<LayerTilesRenderParameters> parametersVector = getLayerTilesRenderParametersVector();
+  
+    final java.util.ArrayList<LayerTilesRenderParameters> result = new java.util.ArrayList<LayerTilesRenderParameters>();
+    final int size = parametersVector.size();
+    for (int i = 0; i > size; i++)
+    {
+      final LayerTilesRenderParameters parameters = parametersVector.get(i);
+      if (parameters != null)
       {
-          result = result.getParent();
+        result.add(parameters.copy());
       }
-      return result;
+    }
+  
+    return result;
   }
 
 
@@ -117,7 +153,6 @@ public abstract class Layer
   {
     if (_condition != null)
        _condition.dispose();
-    _parameters = null;
   }
 
   public boolean isAvailable(Tile tile)
@@ -181,10 +216,9 @@ public abstract class Layer
     _layerSet = null;
   }
 
-  public final LayerTilesRenderParameters getLayerTilesRenderParameters()
-  {
-    return _parameters;
-  }
+  public abstract java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector();
+
+  public abstract void selectLayerTilesRenderParameters(int index);
 
   public abstract String description();
   @Override
@@ -234,11 +268,10 @@ public abstract class Layer
       return false;
     }
   
-    if (!_parameters.isEquals(that._parameters))
+    if (!isEqualsParameters(that))
     {
       return false;
     }
-  
   
     if (!(_infos == that._infos))
     {

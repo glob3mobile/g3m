@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MarksRenderer;
 //class GEOTileRasterizer;
-
+//class GEOVectorLayer;
 
 public abstract class GEOObject
 {
@@ -27,7 +27,8 @@ public abstract class GEOObject
 
   public abstract void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel);
 
-  public abstract void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer);
+  public abstract void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer);
+//                         GEOTileRasterizer*      geoTileRasterizer
 
   public abstract long getCoordinatesCount();
 

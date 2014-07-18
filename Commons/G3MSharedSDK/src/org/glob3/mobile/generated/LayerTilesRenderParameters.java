@@ -118,6 +118,30 @@ public class LayerTilesRenderParameters
     return new LayerTilesRenderParameters(topSector, topSectorSplitsByLatitude, topSectorSplitsByLongitude, firstLevel, maxLevel, LayerTilesRenderParameters.defaultTileTextureResolution(), LayerTilesRenderParameters.defaultTileMeshResolution(), mercator);
   }
 
+  public static java.util.ArrayList<LayerTilesRenderParameters> createDefaultMultiProjection(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel)
+  {
+     return createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, 18);
+  }
+  public static java.util.ArrayList<LayerTilesRenderParameters> createDefaultMultiProjection(int mercatorFirstLevel, int mercatorMaxLevel)
+  {
+     return createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, 0, 18);
+  }
+  public static java.util.ArrayList<LayerTilesRenderParameters> createDefaultMultiProjection(int mercatorFirstLevel)
+  {
+     return createDefaultMultiProjection(mercatorFirstLevel, 18, 0, 18);
+  }
+  public static java.util.ArrayList<LayerTilesRenderParameters> createDefaultMultiProjection()
+  {
+     return createDefaultMultiProjection(2, 18, 0, 18);
+  }
+  public static java.util.ArrayList<LayerTilesRenderParameters> createDefaultMultiProjection(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel)
+  {
+    final java.util.ArrayList<LayerTilesRenderParameters> result = new java.util.ArrayList<LayerTilesRenderParameters>();
+    result.add(LayerTilesRenderParameters.createDefaultWGS84(wgs84firstLevel, wgs84maxLevel)); // WGS84 tiles-pyramid layout is preferred
+    result.add(LayerTilesRenderParameters.createDefaultMercator(mercatorFirstLevel, mercatorMaxLevel));
+    return result;
+  }
+
   public void dispose()
   {
   }

@@ -26,96 +26,95 @@ public class ChessboardLayer extends ProceduralLayer
   private final int _splits;
 
 
-  private ChessboardLayer(Color backgroundColor, Color boxColor, int splits, Sector dataSector, LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
+
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency, LayerCondition condition)
   {
-     super(parameters, transparency, condition, disclaimerInfo);
+     this(parametersVector, backgroundColor, boxColor, splits, dataSector, transparency, condition, "");
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency)
+  {
+     this(parametersVector, backgroundColor, boxColor, splits, dataSector, transparency, null, "");
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits, Sector dataSector)
+  {
+     this(parametersVector, backgroundColor, boxColor, splits, dataSector, 1.0f, null, "");
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits)
+  {
+     this(parametersVector, backgroundColor, boxColor, splits, Sector.fullSphere(), 1.0f, null, "");
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor)
+  {
+     this(parametersVector, backgroundColor, boxColor, 8, Sector.fullSphere(), 1.0f, null, "");
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor)
+  {
+     this(parametersVector, backgroundColor, Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, "");
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector)
+  {
+     this(parametersVector, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, "");
+  }
+  public ChessboardLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency, LayerCondition condition, String disclaimerInfo)
+  {
+     super(parametersVector, transparency, condition, disclaimerInfo);
      _dataSector = new Sector(dataSector);
      _backgroundColor = new Color(backgroundColor);
      _boxColor = new Color(boxColor);
      _splits = splits;
   }
 
-
-  public static ChessboardLayer newMercator(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency, LayerCondition condition)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency, LayerCondition condition)
   {
-     return newMercator(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, transparency, condition, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, splits, dataSector, transparency, condition, "");
   }
-  public static ChessboardLayer newMercator(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency)
   {
-     return newMercator(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, transparency, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, splits, dataSector, transparency, null, "");
   }
-  public static ChessboardLayer newMercator(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits, Sector dataSector)
   {
-     return newMercator(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, 1, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, splits, dataSector, 1.0f, null, "");
   }
-  public static ChessboardLayer newMercator(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits)
   {
-     return newMercator(backgroundColor, boxColor, splits, dataSector, firstLevel, 18, 1, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, splits, Sector.fullSphere(), 1.0f, null, "");
   }
-  public static ChessboardLayer newMercator(Color backgroundColor, Color boxColor, int splits, Sector dataSector)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor)
   {
-     return newMercator(backgroundColor, boxColor, splits, dataSector, 2, 18, 1, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, boxColor, 8, Sector.fullSphere(), 1.0f, null, "");
   }
-  public static ChessboardLayer newMercator(Color backgroundColor, Color boxColor, int splits)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor)
   {
-     return newMercator(backgroundColor, boxColor, splits, Sector.fullSphere(), 2, 18, 1, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, backgroundColor, Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, "");
   }
-  public static ChessboardLayer newMercator(Color backgroundColor, Color boxColor)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel)
   {
-     return newMercator(backgroundColor, boxColor, 8, Sector.fullSphere(), 2, 18, 1, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, "");
   }
-  public static ChessboardLayer newMercator(Color backgroundColor)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel)
   {
-     return newMercator(backgroundColor, Color.fromRGBA(0.9f, 0.9f, 0.35f, 1), 8, Sector.fullSphere(), 2, 18, 1, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, 18, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, "");
   }
-  public static ChessboardLayer newMercator()
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel)
   {
-     return newMercator(Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1), 8, Sector.fullSphere(), 2, 18, 1, null, "");
+     this(mercatorFirstLevel, mercatorMaxLevel, 0, 18, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, "");
   }
-  public static ChessboardLayer newMercator(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency, LayerCondition condition, String disclaimerInfo)
+  public ChessboardLayer(int mercatorFirstLevel)
   {
-    return new ChessboardLayer(backgroundColor, boxColor, splits, dataSector, LayerTilesRenderParameters.createDefaultMercator(firstLevel, maxLevel), transparency, condition, disclaimerInfo);
+     this(mercatorFirstLevel, 18, 0, 18, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, "");
   }
-
-  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency, LayerCondition condition)
+  public ChessboardLayer()
   {
-     return newWGS84(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, transparency, condition, "");
+     this(2, 18, 0, 18, Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1.0f), 8, Sector.fullSphere(), 1.0f, null, "");
   }
-  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency)
+  public ChessboardLayer(int mercatorFirstLevel, int mercatorMaxLevel, int wgs84firstLevel, int wgs84maxLevel, Color backgroundColor, Color boxColor, int splits, Sector dataSector, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     return newWGS84(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, transparency, null, "");
-  }
-  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel)
-  {
-     return newWGS84(backgroundColor, boxColor, splits, dataSector, firstLevel, maxLevel, 1, null, "");
-  }
-  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel)
-  {
-     return newWGS84(backgroundColor, boxColor, splits, dataSector, firstLevel, 18, 1, null, "");
-  }
-  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector)
-  {
-     return newWGS84(backgroundColor, boxColor, splits, dataSector, 2, 18, 1, null, "");
-  }
-  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits)
-  {
-     return newWGS84(backgroundColor, boxColor, splits, Sector.fullSphere(), 2, 18, 1, null, "");
-  }
-  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor)
-  {
-     return newWGS84(backgroundColor, boxColor, 8, Sector.fullSphere(), 2, 18, 1, null, "");
-  }
-  public static ChessboardLayer newWGS84(Color backgroundColor)
-  {
-     return newWGS84(backgroundColor, Color.fromRGBA(0.9f, 0.9f, 0.35f, 1), 8, Sector.fullSphere(), 2, 18, 1, null, "");
-  }
-  public static ChessboardLayer newWGS84()
-  {
-     return newWGS84(Color.white(), Color.fromRGBA(0.9f, 0.9f, 0.35f, 1), 8, Sector.fullSphere(), 2, 18, 1, null, "");
-  }
-  public static ChessboardLayer newWGS84(Color backgroundColor, Color boxColor, int splits, Sector dataSector, int firstLevel, int maxLevel, float transparency, LayerCondition condition, String disclaimerInfo)
-  {
-    return new ChessboardLayer(backgroundColor, boxColor, splits, dataSector, LayerTilesRenderParameters.createDefaultWGS84(firstLevel, maxLevel), transparency, condition, disclaimerInfo);
+     super(LayerTilesRenderParameters.createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel), transparency, condition, disclaimerInfo);
+     _dataSector = new Sector(dataSector);
+     _backgroundColor = new Color(backgroundColor);
+     _boxColor = new Color(boxColor);
+     _splits = splits;
   }
 
   public final String getLayerType()
@@ -151,7 +150,7 @@ public class ChessboardLayer extends ProceduralLayer
 
   public final ChessboardLayer copy()
   {
-    return new ChessboardLayer(_backgroundColor, _boxColor, _splits, _dataSector, _parameters.copy(), _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
+    return new ChessboardLayer(createParametersVectorCopy(), _backgroundColor, _boxColor, _splits, _dataSector, _transparency, (_condition == null) ? null : _condition.copy(), _disclaimerInfo);
   }
 
   public final TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)

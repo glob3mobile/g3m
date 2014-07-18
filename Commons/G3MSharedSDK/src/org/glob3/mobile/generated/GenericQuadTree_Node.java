@@ -7,14 +7,11 @@ public class GenericQuadTree_Node
   private final int _depth;
   private Sector _sector;
 
-  //  Sector* _elementsSector;
-
   private java.util.ArrayList<GenericQuadTree_Element> _elements = new java.util.ArrayList<GenericQuadTree_Element>();
 
   private GenericQuadTree_Node[] _children;
 
-  private GenericQuadTree_Node(Sector sector, GenericQuadTree_Node parent) //,
-  //  _elementsSector(new Sector(sector))
+  private GenericQuadTree_Node(Sector sector, GenericQuadTree_Node parent)
   {
      _sector = new Sector(sector);
      _depth = parent._depth + 1;
@@ -68,8 +65,6 @@ public class GenericQuadTree_Node
     //
     //  _elements.clear();
   }
-
-  //  void computeElementsSector();
 
   private GenericQuadTree_Node getBestNodeForInsertion(GenericQuadTree_Element element, double childAreaProportion)
   {
@@ -136,8 +131,7 @@ public class GenericQuadTree_Node
     _sector = new Sector(s.mergedWith(element.getSector()));
   }
 
-  public GenericQuadTree_Node(Sector sector) //,
-  //  _elementsSector(new Sector(sector))
+  public GenericQuadTree_Node(Sector sector)
   {
      _sector = new Sector(sector);
      _depth = 1;
@@ -170,9 +164,8 @@ public class GenericQuadTree_Node
 
   public final Sector getSector()
   {
-     return _sector;
+    return _sector;
   }
-  //  Sector getElementsSector() const { return *_elementsSector;}
 
   public final boolean add(GenericQuadTree_Element element, int maxElementsPerNode, int maxDepth, double childAreaProportion)
   {
@@ -369,15 +362,17 @@ public class GenericQuadTree_Node
 
   public final int getDepth()
   {
-     return _depth;
+    return _depth;
   }
+
   public final int getNElements()
   {
-     return _elements.size();
+    return _elements.size();
   }
+
   public final boolean isLeaf()
   {
-     return _children == null;
+    return _children == null;
   }
 
   public final int getSubtreeNElements()

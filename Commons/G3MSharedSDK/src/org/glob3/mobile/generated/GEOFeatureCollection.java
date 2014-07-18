@@ -59,23 +59,24 @@ public class GEOFeatureCollection extends GEOObject
   
   }
 
-  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOTileRasterizer geoTileRasterizer)
+  public final void symbolize(G3MRenderContext rc, GEOSymbolizer symbolizer, MeshRenderer meshRenderer, ShapesRenderer shapesRenderer, MarksRenderer marksRenderer, GEOVectorLayer geoVectorLayer)
   {
     final int featuresCount = _features.size();
     for (int i = 0; i < featuresCount; i++)
     {
       GEOFeature feature = _features.get(i);
-      feature.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoTileRasterizer);
+      feature.symbolize(rc, symbolizer, meshRenderer, shapesRenderer, marksRenderer, geoVectorLayer);
     }
   }
 
   public final GEOFeature get(int i)
   {
-     return _features.get(i);
+    return _features.get(i);
   }
+
   public final int size()
   {
-     return _features.size();
+    return _features.size();
   }
 
   public final void rasterize(GEORasterSymbolizer symbolizer, ICanvas canvas, GEORasterProjection projection, int tileLevel)

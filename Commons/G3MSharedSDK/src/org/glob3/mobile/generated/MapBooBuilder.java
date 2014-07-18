@@ -44,8 +44,8 @@ public abstract class MapBooBuilder
   
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
-    TileTexturizer texturizer = new MultiLayerTileTexturizer();
-    TileRasterizer tileRasterizer = null;
+    TileTexturizer texturizer = new DefaultTileTexturizer();
+  //  TileRasterizer* tileRasterizer = NULL;
   
     final boolean renderDebug = false;
     final boolean useTilesSplitBudget = true;
@@ -67,7 +67,8 @@ public abstract class MapBooBuilder
   
     ChangedRendererInfoListener changedRendererInfoListener = null;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, tileRasterizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener);
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener);
+  //                                              tileRasterizer,
   
     if (_enableNotifications)
     {

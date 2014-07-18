@@ -19,9 +19,25 @@ package org.glob3.mobile.generated;
 
 public abstract class ProceduralLayer extends Layer
 {
-  protected ProceduralLayer(LayerTilesRenderParameters parameters, float transparency, LayerCondition condition, String disclaimerInfo)
+  private final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
+
+  protected int _selectedLayerTilesRenderParametersIndex;
+
+  protected ProceduralLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition, String disclaimerInfo)
   {
-     super(parameters, transparency, condition, disclaimerInfo);
+     super(transparency, condition, disclaimerInfo);
+     _parametersVector = parametersVector;
+     _selectedLayerTilesRenderParametersIndex = -1;
+  }
+
+  protected final java.util.ArrayList<LayerTilesRenderParameters> getLayerTilesRenderParametersVector()
+  {
+    return _parametersVector;
+  }
+
+  protected final void selectLayerTilesRenderParameters(int index)
+  {
+    _selectedLayerTilesRenderParametersIndex = index;
   }
 
 }
