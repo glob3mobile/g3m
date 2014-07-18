@@ -64,7 +64,7 @@ public class TiledVectorLayer extends VectorLayer
     final Sector sector = tile._sector;
   
   
-    final LayerTilesRenderParameters parameters = _parametersVector.get(_selectedLayerTilesRenderParametersIndex);
+    final LayerTilesRenderParameters parameters = _parametersVector[_selectedLayerTilesRenderParametersIndex];
   
     final Vector2I tileTextureResolution = parameters._tileTextureResolution;
   
@@ -215,7 +215,7 @@ public class TiledVectorLayer extends VectorLayer
 
   public final TiledVectorLayer.RequestGEOJSONBufferData getRequestGEOJSONBufferData(Tile tile)
   {
-    final LayerTilesRenderParameters parameters = _parametersVector.get(_selectedLayerTilesRenderParametersIndex);
+    final LayerTilesRenderParameters parameters = _parametersVector[_selectedLayerTilesRenderParametersIndex];
   
     if (tile._level > parameters._maxLevel)
     {

@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 public abstract class VectorLayer extends Layer
 {
 
-  protected final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
+  private final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector;
   protected int _selectedLayerTilesRenderParametersIndex;
 
   protected VectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition, String disclaimerInfo)
@@ -35,7 +35,7 @@ public abstract class VectorLayer extends Layer
     final int parametersVectorSize = _parametersVector.size();
     for (int i = 0; i < parametersVectorSize; i++)
     {
-      final LayerTilesRenderParameters parameters = _parametersVector.get(i);
+      final LayerTilesRenderParameters parameters = _parametersVector[i];
       if (parameters != null)
          parameters.dispose();
     }

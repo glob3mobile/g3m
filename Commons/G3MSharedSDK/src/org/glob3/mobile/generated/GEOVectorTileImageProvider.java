@@ -94,7 +94,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
   public static class GEORasterizerFrameTask extends FrameTask
   {
     private GEOVectorTileImageProvider _geoVectorTileImageProvider;
-    private final TileImageContribution _contribution;
+    private TileImageContribution _contribution;
     private final String _tileId;
     private final Sector _tileSector ;
     private final boolean _tileMercator;
