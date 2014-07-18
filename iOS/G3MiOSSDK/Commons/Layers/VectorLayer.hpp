@@ -21,6 +21,7 @@ protected:
 #endif
   int _selectedLayerTilesRenderParametersIndex;
 
+#ifdef C_CODE
   VectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
               const float                                           transparency,
               const LayerCondition*                                 condition,
@@ -30,6 +31,17 @@ protected:
   _selectedLayerTilesRenderParametersIndex(-1)
   {
   }
+#endif
+#ifdef JAVA_CODE
+  protected VectorLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
+                        final float transparency,
+                        final LayerCondition condition,
+                        final String disclaimerInfo) {
+    super(transparency, condition, disclaimerInfo);
+    _parametersVector.addAll(parametersVector);
+    _selectedLayerTilesRenderParametersIndex = -1;
+  }
+#endif
 
   ~VectorLayer();
 

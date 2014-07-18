@@ -18,10 +18,11 @@ private:
 #else
   std::vector<const LayerTilesRenderParameters*> _parametersVector;
 #endif
-  
+
 protected:
   int _selectedLayerTilesRenderParametersIndex;
 
+#ifdef C_CODE
   ProceduralLayer(const std::vector<const LayerTilesRenderParameters*> parametersVector,
                   const float                                          transparency,
                   const LayerCondition*                                condition,
@@ -33,6 +34,17 @@ protected:
   _selectedLayerTilesRenderParametersIndex(-1)
   {
   }
+#endif
+#ifdef JAVA_CODE
+  protected ProceduralLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
+                            final float transparency,
+                            final LayerCondition condition,
+                            final String disclaimerInfo) {
+    super(transparency, condition, disclaimerInfo);
+    _parametersVector.addAll(parametersVector);
+    _selectedLayerTilesRenderParametersIndex = -1;
+  }
+#endif
 
 public:
   const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const {
