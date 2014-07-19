@@ -180,6 +180,14 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
 }
 
 
+/* ********************
+ TODO ESTA FUNCION ES PARA ORDENARLA, DOCUMENTARLA EN CHULETA PARA WEB, EXPLICARLA A JM
+ Y QUE LA PASE AL PAPER GESTOS DESPUÉS DEL VERANO.
+ Y TODAVIA FALTARA PROBARLO EN PLANETAS ESFERICOS
+ AQUI DEBE SER PRACTICAMENTE IGUAL EXCEPTO LA MATRIZ DEL PASO 2 PARA PONER EL ORIGEN DE COORDENADAS
+ SOBRE EL DRAGGED INITIAL POINT, QUE AHORA SOLO ES TRASLACION, PERO LUEGO SERA UNA MATRIZ
+ DE CAMBIO DE SISTEMA
+ *****/
 MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
                                         const Vector3D& finalRay1,
                                         bool allowRotation) const
@@ -200,7 +208,9 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   // drag initial point 0 to final point 0
   MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(_initialPoint0.sub(finalPoint0));
   
-  // transform points to set axis origin in initialPoint0 (will be different in spherical planet)
+  // transform points to set axis origin in initialPoint0
+  // (en el mundo plano es solo una traslacion)
+  // (en el esférico será un cambio de sistema de referencia: traslacion + rotacion, usando el sistema local normal en ese punto)
   {
     Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
     Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, finalRay1.transformedBy(matrix,0), _dragHeight1);
@@ -235,6 +245,18 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     double eq3 = A*cosTita2 + B*sinTita2+C;
     double eq4 = -A*cosTita2 + B*sinTita2+C;
     
+    // estimamos el angulo entre dedos para decidir cual de las 4 soluciones trigonométricas escoger
+    double fingerAngle;
+    {
+    Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(origin, finalRay1, _dragHeight1);
+    Vector3D draggedCenterRay = _centerRay.asVector3D().transformedBy(matrix, 0.0);
+    Vector3D projectedV0 = finalPoint1.sub(finalPoint0).projectionInPlane(draggedCenterRay);
+    Vector3D projectedV1 = _initialPoint1.sub(_initialPoint0.asVector3D()).projectionInPlane(draggedCenterRay);
+    fingerAngle = projectedV0.angleBetween(projectedV1)._degrees;
+    double sign = projectedV0.cross(projectedV1).dot(draggedCenterRay);
+    if (sign<0) fingerAngle = -fingerAngle;
+    }
+    
     printf ("cosTita1=%f cosTita2=%f    sinTita1=%f sinTita2=%f    eq1=%f eq2=%f eq3=%f eq4=%f\n",
             cosTita1, cosTita2, sinTita1, sinTita2, eq1, eq2, eq3, eq4);
     double angulo, angulo1, angulo2;
@@ -246,97 +268,41 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
       angulo2 = atan2(sinTita2, cosTita2);
     else
       angulo2 = atan2(sinTita2, -cosTita2);
-    if (mu->abs(eq1)<mu->abs(eq2))
-      angulo = (abs(angulo1)<3.14159/4)? angulo1 : angulo2;
-    else
-      angulo = (abs(angulo2)<3.14159/4)? angulo2 : angulo1;
-    printf ("    angulo1=%.2f  angulo2=%.2f  ANGULO FINAL = %.2f\n", angulo1/3.14159*180, angulo2/3.14159*180, angulo/3.14159*180);
     
+    if (fingerAngle > 45)
+      angulo = angulo1;
+    else if (fingerAngle < -45)
+      angulo = angulo2;
+    else
+      angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo1 : angulo2;
+    
+    
+    double halfPi = 3.14159/2;
+    double difAngles = mu->abs(angulo1+angulo2);
     /*
-    double ap = A*A + B*B;
-    double bp = 2*A*C;
-    double cp = C*C - B*B;
-    double root = bp*bp - 4*ap*cp;
-    if (root<0) return MutableMatrix44D::invalid();
-    double squareRoot = mu->sqrt(root);
-    double cosTita1 = (-bp + squareRoot) / (2*ap);
-    double cosTita2 = (-bp - squareRoot) / (2*ap);
-    double sinTita1 = sqrt(1-cosTita1*cosTita1);
-    double sinTita2 = sqrt(1-cosTita2*cosTita2);
-    double eq1 = A*cosTita1 + B*sinTita1+C;
-    double eq2 = A*cosTita1 - B*sinTita1+C;
-    double eq3 = A*cosTita2 + B*sinTita2+C;
-    double eq4 = A*cosTita2 - B*sinTita2+C;
+    if (difAngles > halfPi)
+      angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo1 : angulo2;
+    else
+      angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo2 : angulo1;*/
     
-    printf ("cosTita1=%f cosTita2=%f    sinTita1=%f sinTita2=%f    eq1=%f eq2=%f eq3=%f eq4=%f\n",
-            cosTita1, cosTita2, sinTita1, sinTita2, eq1, eq2, eq3, eq4);
-    if (mu->abs(eq1)<mu->abs(eq2))
-      printf ("      angulo1=%f ", atan2(sinTita1, cosTita1)/3.14159*180);
+   /* if (mu->abs(eq1)<mu->abs(eq2))
+      angulo = angulo1;
+      //angulo = (mu->abs(angulo1)<3.14159/4)? angulo1 : angulo2;
     else
-      printf ("      angulo1=%f ", atan2(-sinTita1, cosTita1)/3.14159*180);
-    if (mu->abs(eq3)<mu->abs(eq4))
-      printf ("angulo2=%f \n", atan2(sinTita2, cosTita2)/3.14159*180);
-    else
-      printf ("angulo2=%f \n", atan2(-sinTita2, cosTita2)/3.14159*180);
-     */
+      angulo = angulo2;
+      //angulo = (mu->abs(angulo2)<3.14159/4)? angulo2 : angulo1;*/
+    
+    printf ("    angulo1=%.2f  angulo2=%.2f  ANGULO FINAL = %.2f   fingersAngle=%.2f, difAngles=%.2f\n",
+            angulo1/3.14159*180, angulo2/3.14159*180, angulo/3.14159*180, fingerAngle, difAngles/3.14159*180);
     
     Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
     MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-angulo), normal0, _initialPoint0.asVector3D());
     matrix = rotation.multiply(matrix);
   }
   
-  
-  
-/*  // rotate around point0
-  Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
-  Vector3D draggedFinalRay1 = finalRay1.transformedBy(matrix, 0.0);
-  
-  
-  Vector3D draggedCenterRay = _centerRay.transformedBy(matrix, 0.0).asVector3D();
-  
-  
-  Vector3D draggedInitialPoint0 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, finalRay0.transformedBy(matrix,0), _dragHeight0);
-  
-  
-  
-  Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
-  Vector3D v0 = _initialPoint1.sub(_initialPoint0).asVector3D().projectionInPlane(draggedCenterRay);
-  Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, draggedFinalRay1, _dragHeight1);
-  if (finalPoint1.isNan()) return MutableMatrix44D::invalid();
-  Vector3D v1 = finalPoint1.sub(_initialPoint0.asVector3D()).projectionInPlane(draggedCenterRay);
-  double angle = v0.angleBetween(v1)._degrees;
-  double sign = v0.cross(v1).dot(normal0);
-  if (sign>0) angle = -angle;
-  MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal0, _initialPoint0.asVector3D());
-  matrix = rotation.multiply(matrix);
- */
-  
-  
-/*  // rotate around point0
-  Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
-  MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(finalPoint0.sub(_initialPoint0.asVector3D()));
-  Vector3D draggedInitialPoint1 = _initialPoint1.asVector3D().transformedBy(translation, 1.0);
-  Vector3D v0 = draggedInitialPoint1.sub(finalPoint0).projectionInPlane(normal0);
-  Vector3D v1 = finalPoint1.sub(finalPoint0).projectionInPlane(normal0);
-  double angle = v0.angleBetween(v1)._degrees;
-  double sign = v0.cross(v1).dot(normal0);
-  if (sign>0) angle = -angle;
-  MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(angle), normal0, _initialPoint0.asVector3D());
-  matrix = rotation.multiply(matrix);*/
-  
-/*
-  printf ("--------------\n");
-  printf ("A0=(%.0f,%.0f,%.0f)  B0=(%.0f,%.0f,%.0f)\n", _initialPoint0.x(),_initialPoint0.y(),_initialPoint0.z(),
-          _initialPoint1.x(),_initialPoint1.y(),_initialPoint1.z());
-  printf ("B0=(%.0f,%.0f,%.0f)  B1=(%.0f,%.0f,%.0f) \n", draggedInitialPoint0._x,draggedInitialPoint0._y,draggedInitialPoint0._z,
-          finalPoint1._x,finalPoint1._y,finalPoint1._z);
-  printf ("   angle=%.2f   v0=(%.2f, %.2f, %.2f) atan=%.2f    v1=(%.2f, %.2f, %.2f) atan=%.2f\n",
-          angle, v0._x, v0._y, v0._z, atan2(v0._y, v0._x)/3.1416*180,v1._x, v1._y, v1._z,atan2(v1._y, v1._x)/3.1416*180);
-*/
-  
-  
-  // zoom camera
-  // see chuleta en pdf
+  // zoom camera (see chuleta en pdf)
+  // ahora mismo lo que se hace es buscar cuánto acercar para que el angulo de las dos parejas de vectores
+  // sea el mismo
   {
     Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
     Vector3D B    = _initialPoint1.asVector3D();
