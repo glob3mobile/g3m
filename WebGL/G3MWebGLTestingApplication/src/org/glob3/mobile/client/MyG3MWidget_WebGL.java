@@ -37,7 +37,7 @@ public class MyG3MWidget_WebGL extends G3MWidget_WebGL {
 	      return 2*numero;
 	   }
 	   
-	   private void setLODAugmentedFactor (final double factor) {
+	   public void setLODAugmentedFactor (final double factor) {
 		   getPlanetRenderer().addLODAugmentedForSector(_sector, factor);
 	   }
 }

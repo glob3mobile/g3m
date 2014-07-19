@@ -1681,14 +1681,14 @@ public class G3MWebGLTestingApplication
 		   URL urlGC = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/SenderosGC/resources/gc.bil", false);
 		   ElevationDataProvider elevationDataProviderGC = new SingleBilElevationDataProvider(urlGC, sectorGC, extentGC);
 
-		   /*// create elevation for Bandama (5m/pixel)
+		   // create elevation for Bandama (5m/pixel)
 		   Sector bandamaBilSector = Sector.fromDegrees(28.0186134922002,-15.466485021954,28.0501903939333,-15.4475303331328);
 		   Vector2I extentBandama = new Vector2I(371, 702); 
 		   URL urlBandama = new URL("http://serdis.dis.ulpgc.es/~atrujill/glob3m/SenderosGC/resources/mdt1_bandama.bil",false);
 		   ElevationDataProvider elevationDataProviderBandama = new SingleBilElevationDataProvider(urlBandama, 
-				   bandamaBilSector, extentBandama);*/
+				   bandamaBilSector, extentBandama);
 		   
-		   // create elevation for Bandama (1m/pixel)
+		   /*// create elevation for Bandama (1m/pixel)
 		   Sector bandamaBilSector = Sector.fromDegrees(28.0186134922002,-15.466485021954,28.0501903939333,-15.4475303331328);
 		   Vector2I extentBandama = new Vector2I(1881, 3522); 
 		   // this url format is for executing in local
@@ -1696,7 +1696,7 @@ public class G3MWebGLTestingApplication
 		   // this url format is for executing in web
 		   URL urlBandama = new URL("mdt.bil", false);
 		   ElevationDataProvider elevationDataProviderBandama = new SingleBilElevationDataProvider(urlBandama, 
-				   bandamaBilSector, extentBandama);
+				   bandamaBilSector, extentBandama);*/
 
 		   // create composite elevation provider
 		   CompositeElevationDataProvider elevationDataProvider = new CompositeElevationDataProvider();
@@ -1709,6 +1709,7 @@ public class G3MWebGLTestingApplication
 		   
 		   // increase LOD detail in Bandama
 		   widgetJS.setSectorForLODAugmented(bandamaBilSector);
+		   widgetJS.setLODAugmentedFactor(3.0);
 
 		   // set camera looking at GranCanaria
 		   Geodetic3D position = new Geodetic3D(Angle.fromDegrees(28.0196), Angle.fromDegrees(-15.4589), 603.9);
