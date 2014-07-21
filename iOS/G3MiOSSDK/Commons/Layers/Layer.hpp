@@ -60,8 +60,6 @@ protected:
 
   virtual bool rawIsEquals(const Layer* that) const = 0;
 
-  //  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
-
   const std::vector<const LayerTilesRenderParameters*> createParametersVectorCopy() const;
 
 public:
