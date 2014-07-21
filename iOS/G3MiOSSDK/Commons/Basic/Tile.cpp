@@ -344,6 +344,33 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   const Camera* camera = rc->getCurrentCamera();
   IMathUtils* mu = IMathUtils::instance();
   
+  
+  if (    _sector.contains(Geodetic2D::fromDegrees(28.10000, -15.41700))){
+    int a = 0;
+    a++;
+  }
+
+  
+  //LOD Test without mesh
+  if (_tessellatorMesh == NULL){
+
+    
+    Vector3D ne = rc->getPlanet()->toCartesian(_sector.getNE());
+    Vector3D sw = rc->getPlanet()->toCartesian(_sector.getSW());
+    double tileRadius = ne.sub(sw).length() / 2.0;
+
+    Vector3D center = rc->getPlanet()->toCartesian(_sector.getCenter());
+    double distanceToTile = camera->getCartesianPosition().sub(center).length();
+    distanceToTile -= tileRadius;
+
+    double minTexelSize = getMinimumTexelSideSize(rc->getPlanet(), layerTilesRenderParameters);
+    double minTexelSizeInPixels = camera->getPixelsForObjectSize(distanceToTile, minTexelSize);
+    if (minTexelSizeInPixels > _planetRenderer->getMaxTexelSizeInPixels()){
+      printf("TILE LOD %d DISMISSED\n", _level);
+      return false;
+    }
+  }
+
 //  if ((_northArcSegmentRatioSquared == 0) ||
 //      (_southArcSegmentRatioSquared == 0) ||
 //      (_eastArcSegmentRatioSquared  == 0) ||
@@ -359,6 +386,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   Vector3D* center = _tileTessellatorMeshData._meshCenter; //rc->getPlanet()->toCartesian(_sector._center);
   double distanceToTile = camera->getCartesianPosition().sub( *center).length();
   distanceToTile -= tileRadius;
+  
+  if (distanceToTile < 0){ //If we are inside the bounding volume we should split the tile
+    return false;
+  }
   
   //Deviation
   double visibleDeviation = mu->maxDouble();
@@ -378,7 +409,7 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
     
     const int texHeight = layerTilesRenderParameters->_tileTextureResolution._y;// (int) mu->sqrt(texHeightSquared);
     const int texelsBetweenVerticesLatitude = texHeight / _tileTessellatorMeshData._surfaceResolutionY;
-    const double maxTexelHeight = _tileTessellatorMeshData._maxVerticesDistanceInLongitude / texelsBetweenVerticesLatitude;
+    const double maxTexelHeight = _tileTessellatorMeshData._maxVerticesDistanceInLatitude / texelsBetweenVerticesLatitude;
     
     const double maxTexelSize = (maxTexelHeight > maxTexelWidth) ? maxTexelHeight : maxTexelWidth;
     
@@ -397,6 +428,10 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext* rc,
   
   //CRITERIA
   _lastMeetsRenderCriteriaResult = deviationCriteria  && texelCriteria;
+  
+  if (_lastMeetsRenderCriteriaResult){
+    printf("TILE LOD %d RENDERED\n", _level);
+  }
   
   //  if (_lastMeetsRenderCriteriaResult && !lastLMRCR){
   //    printf("Deviation: %f, Distance: %f, Visible deviation: %f pixels.\nMaxTexelWidth: %f, %f pixels per texel\n",
@@ -654,6 +689,9 @@ void Tile::render(const G3MRenderContext* rc,
                   bool logTilesPetitions,
                   TileRenderingListener* tileRenderingListener) {
   
+  
+  
+  
   tilesStatistics->computeTileProcessed(this);
   
   if (verticalExaggeration != _verticalExaggeration) {
@@ -703,6 +741,9 @@ void Tile::render(const G3MRenderContext* rc,
       
       rendered = true;
       if (renderTileMeshes) {
+        
+        
+        //printf("RENDERING TILE LOD %d\n", _level);
         rawRender(rc,
                   &parentState,
                   texturizer,
@@ -1098,4 +1139,22 @@ Vector2I Tile::getNormalizedPixelsFromPosition(const Geodetic2D& position2D,
   const IMathUtils* math = IMathUtils::instance();
   const Vector2D uv = _sector.getUVCoordinates(position2D);
   return Vector2I(math->toInt(tileDimension._x * uv._x), math->toInt(tileDimension._y * uv._y));
+}
+
+double Tile::getMinimumTexelSideSize(const Planet* planet,
+                                     const LayerTilesRenderParameters* layerTilesRenderParameters) const{
+  
+  Vector3D ne = planet->toCartesian(_sector.getNE());
+  Vector3D nw = planet->toCartesian(_sector.getNW());
+  Vector3D se = planet->toCartesian(_sector.getSE());
+  //Vector3D sw = planet->toCartesian(_sector.getSW());
+  
+  
+  double lon = ne.sub(nw).length();
+  double lat = se.sub(ne).length();
+  
+  double texelLon = lon / layerTilesRenderParameters->defaultTileTextureResolution()._x;
+  double texelLat = lat / layerTilesRenderParameters->defaultTileTextureResolution()._y;
+  
+  return texelLat > texelLon? texelLat : texelLon;
 }

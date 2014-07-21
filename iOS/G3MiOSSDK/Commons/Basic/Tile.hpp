@@ -175,6 +175,10 @@ private:
   static std::string createTileId(int level,
                                   int row,
                                   int column);
+  
+  
+  double getMinimumTexelSideSize(const Planet* planet,
+                                 const LayerTilesRenderParameters* layerTilesRenderParameters) const;
 
 public:
   const Sector      _sector;
