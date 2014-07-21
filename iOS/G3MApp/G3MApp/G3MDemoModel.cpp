@@ -144,7 +144,6 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
     }
     _selectedScene->activateOptions(_context);
   }
-
 }
 
 void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
@@ -157,9 +156,7 @@ void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
   if (_listener != NULL) {
     _listener->onChangeSceneOption(scene, option, optionIndex);
   }
-
 }
-
 
 void G3MDemoModel::showDialog(const std::string& title,
                               const std::string& message) const {
@@ -170,5 +167,4 @@ void G3MDemoModel::showDialog(const std::string& title,
   if (_listener != NULL) {
     _listener->showDialog(title, message);
   }
-
 }
