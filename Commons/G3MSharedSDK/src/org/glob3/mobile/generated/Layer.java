@@ -42,7 +42,7 @@ public abstract class Layer
     final java.util.ArrayList<LayerTilesRenderParameters> thatParameters = that.getLayerTilesRenderParametersVector();
   
     final int parametersSize = thisParameters.size();
-    if (parametersSize != thisParameters.size())
+    if (parametersSize != thatParameters.size())
     {
       return false;
     }
