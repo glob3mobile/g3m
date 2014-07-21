@@ -522,8 +522,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
   }
 
   private java.util.LinkedList<CacheEntry> _geoObjectsCache = new java.util.LinkedList<CacheEntry>();
-  private long _geoObjectsCacheRequests;
-  private long _geoObjectsCacheHits;
+//  long long _geoObjectsCacheRequests;
+//  long long _geoObjectsCacheHits;
 
   public void dispose()
   {
@@ -540,12 +540,12 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
 
   public TiledVectorLayerTileImageProvider(TiledVectorLayer layer, IDownloader downloader, IThreadUtils threadUtils)
+//  _geoObjectsCacheRequests(0),
+//  _geoObjectsCacheHits(0)
   {
      _layer = layer;
      _downloader = downloader;
      _threadUtils = threadUtils;
-     _geoObjectsCacheRequests = 0;
-     _geoObjectsCacheHits = 0;
   }
 
 
@@ -582,14 +582,14 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
   public final TiledVectorLayerTileImageProvider.GEOObjectHolder getGEOObjectFor(URL url)
   {
-    _geoObjectsCacheRequests++;
+  //  _geoObjectsCacheRequests++;
     final String path = url._path;
     for (java.util.Iterator<CacheEntry> it = _geoObjectsCache.iterator(); it.hasNext();)
     {
       CacheEntry entry = it.next();
       if (entry._path.equals(path))
       {
-        _geoObjectsCacheHits++;
+  //      _geoObjectsCacheHits++;
   
         // move hit entry to the top of the cache (LRU rules)
         it.remove();

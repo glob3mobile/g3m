@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 
 
 //class GEOVectorLayer;
-//class IThreadUtils;
 
 public class GEOVectorTileImageProvider extends TileImageProvider
 {
@@ -142,10 +141,6 @@ public class GEOVectorTileImageProvider extends TileImageProvider
 
     public final boolean isCanceled(G3MRenderContext rc)
     {
-    //  if (_isCanceled) {
-    ///#warning REMOVE THIS!
-    //    printf("break point on me\n");
-    //  }
       return _isCanceled;
     }
 
@@ -165,19 +160,13 @@ public class GEOVectorTileImageProvider extends TileImageProvider
 
 
   private final GEOVectorLayer _layer;
-  private final IThreadUtils _threadUtils;
 
   private final java.util.HashMap<String, GEORasterizerFrameTask> _rasterizers = new java.util.HashMap<String, GEORasterizerFrameTask>();
 
 
-
-  ///#include "TileImageProvider.hpp"
-  
-  public GEOVectorTileImageProvider(GEOVectorLayer layer, IThreadUtils threadUtils)
+  public GEOVectorTileImageProvider(GEOVectorLayer layer)
   {
      _layer = layer;
-     _threadUtils = threadUtils;
-  
   }
 
   public final TileImageContribution contribution(Tile tile)
@@ -206,10 +195,6 @@ public class GEOVectorTileImageProvider extends TileImageProvider
   public final void rasterizerDeleted(String tileId)
   {
     _rasterizers.remove(tileId);
-  //  final GEORasterizerFrameTask rasterizer = _rasterizers.remove(tileId);
-  //  if (rasterizer != null) {
-  //    rasterizer.dispose();
-  //  }
   }
 
   public final void rasterize(TileImageContribution contribution, String tileId, Sector tileSector, boolean tileMercator, int tileLevel, int resolutionWidth, int resolutionHeight, TileImageListener listener, boolean deleteListener)

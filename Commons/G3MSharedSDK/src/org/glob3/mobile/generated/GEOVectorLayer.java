@@ -137,7 +137,7 @@ public class GEOVectorLayer extends VectorLayer
   {
     if (_tileImageProvider == null)
     {
-      _tileImageProvider = new GEOVectorTileImageProvider(this, rc.getThreadUtils());
+      _tileImageProvider = new GEOVectorTileImageProvider(this);
     }
     _tileImageProvider._retain();
     return _tileImageProvider;
