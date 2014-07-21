@@ -101,24 +101,8 @@ public abstract class Layer
 
   //  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
 
-
-  //const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const {
-  //    const int maxLevel = _parameters->_maxLevel;
-  ///#ifdef C_CODE
-  //    const Tile* result = tile;
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //    Tile result = tile;
-  ///#endif
-  //    while ((result != NULL) && (result->_level > maxLevel)) {
-  //        result = result->getParent();
-  //    }
-  //    return result;
-  //}
-  
   protected final java.util.ArrayList<LayerTilesRenderParameters> createParametersVectorCopy()
   {
-<<<<<<< HEAD
     final java.util.ArrayList<LayerTilesRenderParameters> parametersVector = getLayerTilesRenderParametersVector();
   
     final java.util.ArrayList<LayerTilesRenderParameters> result = new java.util.ArrayList<LayerTilesRenderParameters>();
@@ -133,15 +117,6 @@ public abstract class Layer
     }
   
     return result;
-=======
-    final int maxLevel = _parameters._maxLevel;
-    Tile tileP = tile;
-    while (tileP._level > maxLevel)
-    {
-      tileP = tileP.getParent();
-    }
-    return tileP;
->>>>>>> purgatory
   }
 
 
@@ -278,18 +253,7 @@ public abstract class Layer
       return false;
     }
   
-<<<<<<< HEAD
     if (!isEqualsParameters(that))
-=======
-    if (_parameters != null && that._parameters != null)
-    {
-      if (!_parameters.isEquals(that._parameters))
-      {
-        return false;
-      }
-    }
-    else
->>>>>>> purgatory
     {
       return false;
     }
