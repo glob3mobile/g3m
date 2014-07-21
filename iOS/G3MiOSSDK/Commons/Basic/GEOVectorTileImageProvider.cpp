@@ -51,9 +51,14 @@ GEOVectorTileImageProvider::GEORasterizerFrameTask::~GEORasterizerFrameTask() {
 
 void GEOVectorTileImageProvider::GEORasterizerFrameTask::cancel() {
   _isCanceled = true;
+  _listener->imageCreationCanceled(_tileId);
 }
 
 bool GEOVectorTileImageProvider::GEORasterizerFrameTask::isCanceled(const G3MRenderContext* rc) {
+//  if (_isCanceled) {
+//#warning REMOVE THIS!
+//    printf("break point on me\n");
+//  }
   return _isCanceled;
 }
 
