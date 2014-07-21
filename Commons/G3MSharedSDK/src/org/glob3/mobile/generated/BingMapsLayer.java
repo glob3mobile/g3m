@@ -15,10 +15,13 @@ public class BingMapsLayer extends RasterLayer
   private String _imageUrl;
   private java.util.ArrayList<String> _imageUrlSubdomains = new java.util.ArrayList<String>();
 
+  private java.util.ArrayList<String> _metadataErrors = new java.util.ArrayList<String>();
+
   private void processMetadata(String brandLogoUri, String copyright, String imageUrl, java.util.ArrayList<String> imageUrlSubdomains, int imageWidth, int imageHeight, int zoomMin, int zoomMax)
   {
     _brandLogoUri = brandLogoUri;
     _copyright = copyright;
+    _disclaimerInfo = copyright;
     _imageUrl = imageUrl;
     _imageUrlSubdomains = imageUrlSubdomains;
   
@@ -253,6 +256,7 @@ public class BingMapsLayer extends RasterLayer
 
   public final void initialize(G3MContext context)
   {
+    _metadataErrors.clear();
     final URL url = new URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata/" + _imagerySet + "?key=" + _key, false);
   
     context.getDownloader().requestBuffer(url, DownloadPriority.HIGHEST, TimeInterval.fromDays(1), true, new BingMapsLayer_MetadataBufferDownloadListener(this), true);
@@ -265,6 +269,7 @@ public class BingMapsLayer extends RasterLayer
     final JSONBaseObject jsonBaseObject = parser.parse(buffer);
     if (jsonBaseObject == null)
     {
+      _metadataErrors.add("BingMapsLayer: Can't parse json metadata.");
       ILogger.instance().logError("BingMapsLayer: Can't parse json metadata.");
       return;
     }
@@ -272,6 +277,7 @@ public class BingMapsLayer extends RasterLayer
     final JSONObject jsonObject = jsonBaseObject.asObject();
     if (jsonObject == null)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, root object is not an json-object.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, root object is not an json-object.");
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -283,6 +289,7 @@ public class BingMapsLayer extends RasterLayer
     final JSONArray resourceSets = jsonObject.getAsArray("resourceSets");
     if (resourceSets == null)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, resourceSets field not found.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, resourceSets field not found.");
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -290,6 +297,7 @@ public class BingMapsLayer extends RasterLayer
   
     if (resourceSets.size() != 1)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, resourceSets has more elements than the current implementation can handle.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, resourceSets has %d elements (the current implementation can only handle 1 element).", resourceSets.size());
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -298,6 +306,7 @@ public class BingMapsLayer extends RasterLayer
     final JSONObject resource = resourceSets.getAsObject(0);
     if (resource == null)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, can't find resource jsonobject.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, can't find resource jsonobject.");
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -306,6 +315,7 @@ public class BingMapsLayer extends RasterLayer
     final JSONArray resources = resource.getAsArray("resources");
     if (resources.size() != 1)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, resources has more elements than the current implementation can handle.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, resources has %d elements (the current implementation can only handle 1 element).", resources.size());
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -314,6 +324,7 @@ public class BingMapsLayer extends RasterLayer
     final JSONObject meanfulResource = resources.getAsObject(0);
     if (meanfulResource == null)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, can't find a meanfulResource JSONObject.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, can't find a meanfulResource JSONObject.");
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -322,6 +333,7 @@ public class BingMapsLayer extends RasterLayer
     final String imageUrl = meanfulResource.getAsString("imageUrl", "");
     if (imageUrl.length() == 0)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, can't find a imageUrl String.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, can't find a imageUrl String.");
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -336,6 +348,7 @@ public class BingMapsLayer extends RasterLayer
     final JSONArray imageUrlSubdomainsJS = meanfulResource.getAsArray("imageUrlSubdomains");
     if (imageUrlSubdomainsJS == null)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, can't find a imageUrlSubdomains JSONArray.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, can't find a imageUrlSubdomains JSONArray.");
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -353,6 +366,7 @@ public class BingMapsLayer extends RasterLayer
   
     if (imageUrlSubdomains.size() == 0)
     {
+      _metadataErrors.add("BingMapsLayer: Error while parsing json metadata, can't find any imageUrlSubdomain String.");
       ILogger.instance().logError("BingMapsLayer: Error while parsing json metadata, can't find any imageUrlSubdomain String.");
       parser.deleteJSONData(jsonBaseObject);
       return;
@@ -369,6 +383,8 @@ public class BingMapsLayer extends RasterLayer
   }
   public final void onDownloadErrorMetadata()
   {
+    _metadataErrors.add("BingMapsLayer: Error while downloading metadata. Please review your key");
+    notifyChanges();
     ILogger.instance().logError("BingMapsLayer: Error while downloading metadata.");
   }
 
@@ -389,6 +405,11 @@ public class BingMapsLayer extends RasterLayer
   public final RenderState getRenderState()
   {
     _errors.clear();
+    if (_metadataErrors.size() > 0)
+    {
+      _errors.addAll(_metadataErrors);
+    }
+  
     if (_imagerySet.compareTo("") == 0)
     {
       _errors.add("Missing layer parameter: imagerySet");

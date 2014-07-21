@@ -92,31 +92,31 @@ bool Layer::isEquals(const Layer* that) const {
   if (this == that) {
     return true;
   }
-
+  
   if (that == NULL) {
     return false;
   }
-
+  
   if (getLayerType() != that->getLayerType()) {
     return false;
   }
-
+  
   if (_condition != that->_condition) {
     return false;
   }
-
+  
   const int thisListenersSize = _listeners.size();
   const int thatListenersSize = that->_listeners.size();
   if (thisListenersSize != thatListenersSize) {
     return false;
   }
-
+  
   for (int i = 0; i < thisListenersSize; i++) {
     if (_listeners[i] != that->_listeners[i]) {
       return false;
     }
   }
-
+  
   if (_enable != that->_enable) {
     return false;
   }
@@ -128,11 +128,11 @@ bool Layer::isEquals(const Layer* that) const {
   if (!(_infos == that->_infos)) {
     return false;
   }
-
+  
   if (!(_disclaimerInfo == that->_disclaimerInfo)) {
     return false;
   }
-
+  
   return rawIsEquals(that);
 }
 
@@ -166,20 +166,6 @@ const std::vector<std::string> Layer::getInfos() {
   _infos.push_back(layerInfo);
   return _infos;
 }
-
-//const Tile* Layer::getParentTileOfSuitableLevel(const Tile* tile) const {
-//    const int maxLevel = _parameters->_maxLevel;
-//#ifdef C_CODE
-//    const Tile* result = tile;
-//#endif
-//#ifdef JAVA_CODE
-//    Tile result = tile;
-//#endif
-//    while ((result != NULL) && (result->_level > maxLevel)) {
-//        result = result->getParent();
-//    }
-//    return result;
-//}
 
 const std::vector<const LayerTilesRenderParameters*> Layer::createParametersVectorCopy() const {
   const std::vector<const LayerTilesRenderParameters*> parametersVector = getLayerTilesRenderParametersVector();
