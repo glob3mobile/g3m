@@ -142,6 +142,10 @@ public class GEOVectorTileImageProvider extends TileImageProvider
 
     public final boolean isCanceled(G3MRenderContext rc)
     {
+    //  if (_isCanceled) {
+    ///#warning REMOVE THIS!
+    //    printf("break point on me\n");
+    //  }
       return _isCanceled;
     }
 
@@ -155,6 +159,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
     public final void cancel()
     {
       _isCanceled = true;
+      _listener.imageCreationCanceled(_tileId);
     }
   }
 
