@@ -73,7 +73,7 @@ bool Layer::isEqualsParameters(const Layer* that) const {
   const std::vector<const LayerTilesRenderParameters*> thatParameters = that->getLayerTilesRenderParametersVector();
 
   const int parametersSize = thisParameters.size() ;
-  if (parametersSize != thisParameters.size()) {
+  if (parametersSize != thatParameters.size()) {
     return false;
   }
 
