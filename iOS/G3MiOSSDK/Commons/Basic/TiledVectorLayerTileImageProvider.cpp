@@ -474,14 +474,14 @@ void TiledVectorLayerTileImageProvider::takeGEOObjectFor(const URL& url,
 }
 
 const TiledVectorLayerTileImageProvider::GEOObjectHolder* TiledVectorLayerTileImageProvider::getGEOObjectFor(const URL& url) {
-  _geoObjectsCacheRequests++;
+//  _geoObjectsCacheRequests++;
   const std::string path = url._path;
   for (std::list<CacheEntry*>::iterator it = _geoObjectsCache.begin();
        it != _geoObjectsCache.end();
        ++it) {
     CacheEntry* entry = *it;
     if (entry->_path == path) {
-      _geoObjectsCacheHits++;
+//      _geoObjectsCacheHits++;
 
       // move hit entry to the top of the cache (LRU rules)
 #ifdef C_CODE

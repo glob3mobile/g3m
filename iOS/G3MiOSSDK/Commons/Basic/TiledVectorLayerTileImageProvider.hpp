@@ -260,8 +260,8 @@ private:
   };
 
   std::list<CacheEntry*> _geoObjectsCache;
-  long long _geoObjectsCacheRequests;
-  long long _geoObjectsCacheHits;
+//  long long _geoObjectsCacheRequests;
+//  long long _geoObjectsCacheHits;
 
 protected:
   ~TiledVectorLayerTileImageProvider();
@@ -273,9 +273,9 @@ public:
                                     const IThreadUtils*     threadUtils) :
   _layer(layer),
   _downloader(downloader),
-  _threadUtils(threadUtils),
-  _geoObjectsCacheRequests(0),
-  _geoObjectsCacheHits(0)
+  _threadUtils(threadUtils)
+//  _geoObjectsCacheRequests(0),
+//  _geoObjectsCacheHits(0)
   {
   }
 

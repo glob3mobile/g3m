@@ -18,7 +18,6 @@
 #include "IImageListener.hpp"
 
 class GEOVectorLayer;
-class IThreadUtils;
 
 class GEOVectorTileImageProvider : public TileImageProvider {
 public:
@@ -129,14 +128,12 @@ public:
 
 private:
   const GEOVectorLayer* _layer;
-  const IThreadUtils*   _threadUtils;
 
   std::map<const std::string, GEORasterizerFrameTask*> _rasterizers;
 
 public:
 
-  GEOVectorTileImageProvider(const GEOVectorLayer* layer,
-                             const IThreadUtils*   threadUtils);
+  GEOVectorTileImageProvider(const GEOVectorLayer* layer);
 
   const TileImageContribution* contribution(const Tile* tile);
 

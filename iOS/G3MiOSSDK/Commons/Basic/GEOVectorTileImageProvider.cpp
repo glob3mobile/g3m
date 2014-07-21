@@ -13,17 +13,13 @@
 #include "Tile.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
-//#include "TileImageProvider.hpp"
 #include "TileImageListener.hpp"
 #include "GEORasterProjection.hpp"
 #include "TileImageContribution.hpp"
 
-GEOVectorTileImageProvider::GEOVectorTileImageProvider(const GEOVectorLayer* layer,
-                                                       const IThreadUtils*   threadUtils) :
-_layer(layer),
-_threadUtils(threadUtils)
+GEOVectorTileImageProvider::GEOVectorTileImageProvider(const GEOVectorLayer* layer) :
+_layer(layer)
 {
-
 }
 
 const TileImageContribution* GEOVectorTileImageProvider::contribution(const Tile* tile) {
@@ -55,10 +51,6 @@ void GEOVectorTileImageProvider::GEORasterizerFrameTask::cancel() {
 }
 
 bool GEOVectorTileImageProvider::GEORasterizerFrameTask::isCanceled(const G3MRenderContext* rc) {
-//  if (_isCanceled) {
-//#warning REMOVE THIS!
-//    printf("break point on me\n");
-//  }
   return _isCanceled;
 }
 
@@ -132,7 +124,7 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
                                                            listener,
                                                            deleteListener),
                       true /* autodelete */);
-  
+
   delete canvas;
 }
 
@@ -178,16 +170,10 @@ void GEOVectorTileImageProvider::cancel(const std::string& tileId) {
 void GEOVectorTileImageProvider::rasterizerDeleted(const std::string& tileId) {
 #ifdef C_CODE
   if (_rasterizers.find(tileId) != _rasterizers.end()) {
-//    GEORasterizerFrameTask* rasterizer = _rasterizers[tileId];
-//    delete rasterizer;
     _rasterizers.erase(tileId);
   }
 #endif
 #ifdef JAVA_CODE
   _rasterizers.remove(tileId);
-//  final GEORasterizerFrameTask rasterizer = _rasterizers.remove(tileId);
-//  if (rasterizer != null) {
-//    rasterizer.dispose();
-//  }
 #endif
 }

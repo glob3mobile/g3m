@@ -11,7 +11,6 @@
 #include "RenderState.hpp"
 #include "LayerTilesRenderParameters.hpp"
 #include "GEOVectorTileImageProvider.hpp"
-#include "Context.hpp"
 #include "LayerCondition.hpp"
 #include "Tile.hpp"
 #include "TileImageContribution.hpp"
@@ -110,8 +109,7 @@ GEOVectorLayer* GEOVectorLayer::copy() const {
 TileImageProvider* GEOVectorLayer::createTileImageProvider(const G3MRenderContext* rc,
                                                            const LayerTilesRenderParameters* layerTilesRenderParameters) const {
   if (_tileImageProvider == NULL) {
-    _tileImageProvider = new GEOVectorTileImageProvider(this,
-                                                        rc->getThreadUtils());
+    _tileImageProvider = new GEOVectorTileImageProvider(this);
   }
   _tileImageProvider->_retain();
   return _tileImageProvider;
