@@ -93,27 +93,9 @@ void G3MDemoModel::reset() {
   getMarksRenderer()->removeAllMarks();
   getMeshRenderer()->clearMeshes();
   getShapesRenderer()->removeAllShapes(true);
-#warning how to clear GEOVectorLayer? destruction is enough?
-//  getGEOVectorLayer()->clear();
 
   _layerSet->removeAllLayers(true);
 }
-
-//GEOVectorLayer* G3MDemoModel::getGEOVectorLayer() const {
-//  return _geoRenderer->getGEOVectorLayer();
-//}
-//
-//MarksRenderer* G3MDemoModel::getMarksRenderer() const {
-//  return _geoRenderer->getMarksRenderer();
-//}
-//
-//MeshRenderer* G3MDemoModel::getMeshRenderer() const {
-//  return _geoRenderer->getMeshRenderer();
-//}
-//
-//ShapesRenderer* G3MDemoModel::getShapesRenderer() const {
-//  return _geoRenderer->getShapesRenderer();
-//}
 
 PlanetRenderer* G3MDemoModel::getPlanetRenderer() const {
   return _g3mWidget->getPlanetRenderer();

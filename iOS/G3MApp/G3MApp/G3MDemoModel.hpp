@@ -71,8 +71,6 @@ public:
     return _geoRenderer;
   }
 
-//  GEOVectorLayer* getGEOVectorLayer() const;
-
   MarksRenderer* getMarksRenderer() const {
     return _marksRenderer;
   }
