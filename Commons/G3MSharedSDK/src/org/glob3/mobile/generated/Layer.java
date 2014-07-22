@@ -99,8 +99,6 @@ public abstract class Layer
 
   protected abstract boolean rawIsEquals(Layer that);
 
-  //  const Tile* getParentTileOfSuitableLevel(const Tile* tile) const;
-
   protected final java.util.ArrayList<LayerTilesRenderParameters> createParametersVectorCopy()
   {
     final java.util.ArrayList<LayerTilesRenderParameters> parametersVector = getLayerTilesRenderParametersVector();
