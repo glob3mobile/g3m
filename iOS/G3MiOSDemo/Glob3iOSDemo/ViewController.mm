@@ -504,10 +504,10 @@ public:
 
 //  builder.getPlanetRendererBuilder()->setTileRenderingListener(new SampleTileRenderingListener());
 
-  GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
+  //GEOTileRasterizer* geoTileRasterizer = new GEOTileRasterizer();
 
   //builder.getPlanetRendererBuilder()->addTileRasterizer(new DebugTileRasterizer());
-  builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
+  //builder.getPlanetRendererBuilder()->addTileRasterizer(geoTileRasterizer);
 
   bool showingPNOA = true;
   if (showingPNOA){
@@ -538,10 +538,10 @@ public:
 
 
     const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
-    GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
+    //GEOLineRasterSymbol * symbol = new GEOLineRasterSymbol(coordinatesData, ls);
     coordinatesData->_release();
 
-    geoTileRasterizer->addSymbol(symbol);
+    //geoTileRasterizer->addSymbol(symbol);
   }
 
 //#warning Diego at work!
@@ -664,7 +664,7 @@ public:
   GEORenderer* geoRenderer = [self createGEORendererMeshRenderer: meshRenderer
                                                   shapesRenderer: shapesRenderer
                                                    marksRenderer: marksRenderer
-                                               geoTileRasterizer: geoTileRasterizer
+                                                  geoVectorLayer: NULL
                                                           planet: builder.getPlanet()];
   builder.addRenderer(geoRenderer);
 
@@ -1621,7 +1621,7 @@ public:
 //                                        );
 //    layerSet->addLayer(blueMarble);
 
-    layerSet->addLayer( ChessboardLayer::newWGS84() );
+    //layerSet->addLayer( ChessboardLayer::newWGS84() );
 
 //      WMSLayer* bing = new WMSLayer("ve",
 //                                    URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
@@ -2825,17 +2825,16 @@ public:
 - (GEORenderer*) createGEORendererMeshRenderer: (MeshRenderer*) meshRenderer
                                 shapesRenderer: (ShapesRenderer*) shapesRenderer
                                  marksRenderer: (MarksRenderer*) marksRenderer
-                             geoTileRasterizer: (GEOTileRasterizer*) geoTileRasterizer
+                             geoVectorLayer: (GEOVectorLayer*) geoVectorLayer
                                         planet: (const Planet*) planet
 {
   GEOSymbolizer* symbolizer = new SampleSymbolizer(planet);
-
 
   GEORenderer* geoRenderer = new GEORenderer(symbolizer,
                                              meshRenderer,
                                              shapesRenderer,
                                              marksRenderer,
-                                             geoTileRasterizer);
+                                             geoVectorLayer);
 
   return geoRenderer;
 }
