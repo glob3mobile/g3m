@@ -13,7 +13,7 @@
 #include "LayerTouchEventListener.hpp"
 #include "LayerTilesRenderParameters.hpp"
 
-Layer::Layer(const float           transparency,
+Layer::Layer(float           transparency,
              const LayerCondition* condition,
              const std::string&    disclaimerInfo) :
 _transparency(transparency),
@@ -24,6 +24,14 @@ _enable(true),
 _title("")
 {
 }
+
+void Layer::setTransparency(float transparency) {
+  if (_transparency != transparency) {
+    _transparency = transparency;
+    //notifyChanges();
+  }
+}
+
 
 Layer::~Layer() {
   delete _condition;

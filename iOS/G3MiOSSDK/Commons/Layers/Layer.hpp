@@ -45,14 +45,14 @@ protected:
   std::vector<std::string> _infos;
 
 
-  const float           _transparency;
+  float           _transparency;
   const LayerCondition* _condition;
 
   void notifyChanges() const;
 
   std::string _title;
 
-  Layer(const float           transparency,
+  Layer(float           transparency,
         const LayerCondition* condition,
         const std::string&    disclaimerInfo);
 
@@ -64,6 +64,8 @@ protected:
 
 public:
 
+  void setTransparency(float transparency);
+  
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
       _enable = enable;
