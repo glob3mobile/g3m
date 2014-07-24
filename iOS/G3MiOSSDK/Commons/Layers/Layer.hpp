@@ -64,6 +64,10 @@ protected:
 
 public:
 
+  const float getTransparency() const {
+    return _transparency;
+  }
+  
   void setTransparency(float transparency);
   
   virtual void setEnable(bool enable) {

@@ -28,7 +28,7 @@ _title("")
 void Layer::setTransparency(float transparency) {
   if (_transparency != transparency) {
     _transparency = transparency;
-    //notifyChanges();
+    notifyChanges();
   }
 }
 
