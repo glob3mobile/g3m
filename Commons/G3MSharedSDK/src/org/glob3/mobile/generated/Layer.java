@@ -71,7 +71,7 @@ public abstract class Layer
   protected java.util.ArrayList<String> _infos = new java.util.ArrayList<String>();
 
 
-  protected final float _transparency;
+  protected float _transparency;
   protected final LayerCondition _condition;
 
   protected final void notifyChanges()
@@ -117,6 +117,15 @@ public abstract class Layer
     return result;
   }
 
+
+  public final void setTransparency(float transparency)
+  {
+    if (_transparency != transparency)
+    {
+      _transparency = transparency;
+      //notifyChanges();
+    }
+  }
 
   public void setEnable(boolean enable)
   {
