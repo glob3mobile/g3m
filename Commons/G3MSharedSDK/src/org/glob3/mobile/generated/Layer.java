@@ -118,12 +118,17 @@ public abstract class Layer
   }
 
 
+  public final float getTransparency()
+  {
+    return _transparency;
+  }
+
   public final void setTransparency(float transparency)
   {
     if (_transparency != transparency)
     {
       _transparency = transparency;
-      //notifyChanges();
+      notifyChanges();
     }
   }
 
