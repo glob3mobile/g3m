@@ -9,6 +9,8 @@ public abstract class MapBooBuilder
 
   private MapBooApplicationChangeListener _applicationListener;
 
+  private FeatureInfoDownloadListener _featureInfoDownloadListener;
+
   private final boolean _enableNotifications;
 
   private String _applicationId;
@@ -943,6 +945,69 @@ public abstract class MapBooBuilder
     return new URL(path, false);
   }
 
+  private URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_serverURL._path);
+  
+    isb.addString("/Public/applications/");
+    isb.addString(_applicationId);
+    isb.addString("/scenes/");
+  
+    final MapBoo_Scene scene = getApplicationCurrentScene();
+    isb.addString(scene.getId());
+  
+    isb.addString("/getinfo?");
+  
+    isb.addString("tileX=");
+    isb.addInt(tile._column);
+  
+    isb.addString("&tileY=");
+    isb.addInt(tile._row);
+  
+    isb.addString("&tileLevel=");
+    isb.addInt(tile._level);
+  
+  
+    //Sector
+    isb.addString("&upperLat=");
+    isb.addDouble(tile._sector._upper._latitude._degrees);
+    isb.addString("&lowerLat=");
+    isb.addDouble(tile._sector._lower._latitude._degrees);
+    isb.addString("&upperLon=");
+    isb.addDouble(tile._sector._upper._longitude._degrees);
+    isb.addString("&lowerLon=");
+    isb.addDouble(tile._sector._lower._longitude._degrees);
+  
+  
+    isb.addString("&tileBBox=");
+    isb.addString("TODO");
+  
+    isb.addString("&tileWidth=");
+    isb.addInt(tileDimension._x);
+  
+    isb.addString("&tileHeight=");
+    isb.addInt(tileDimension._y);
+  
+    isb.addString("&pixelX=");
+    isb.addInt(pixelPosition._x);
+  
+    isb.addString("&pixelY=");
+    isb.addInt(pixelPosition._y);
+  
+    isb.addString("&lat=");
+    isb.addDouble(position._latitude._degrees);
+  
+    isb.addString("&lon=");
+    isb.addDouble(position._longitude._degrees);
+  
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    return new URL(path, false);
+  
+  }
   protected MapBooBuilder(URL serverURL, URL tubesURL, String applicationId, MapBoo_ViewType viewType, MapBooApplicationChangeListener applicationListener, boolean enableNotifications, String token)
   {
      _serverURL = serverURL;
@@ -973,7 +1038,7 @@ public abstract class MapBooBuilder
      _webSocket = null;
      _marksRenderer = null;
      _hasParsedApplication = false;
-  
+    _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
   }
 
   public void dispose()
@@ -1764,68 +1829,9 @@ public abstract class MapBooBuilder
     return _serverURL;
   }
 
-  public final URL createGetFeatureInfoRestURL(Tile tile, Vector2I tileDimension, Vector2I pixelPosition, Geodetic3D position)
+  public final void requestGetFeatureInfo(Tile tile, Vector2I size, Vector2I pixel, Geodetic3D position)
   {
-    IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString(_serverURL._path);
-  
-    isb.addString("/Public/applications/");
-    isb.addString(_applicationId);
-    isb.addString("/scenes/");
-  
-    final MapBoo_Scene scene = getApplicationCurrentScene();
-    isb.addString(scene.getId());
-  
-    isb.addString("/getinfo?");
-  
-    isb.addString("tileX=");
-    isb.addInt(tile._column);
-  
-    isb.addString("&tileY=");
-    isb.addInt(tile._row);
-  
-    isb.addString("&tileLevel=");
-    isb.addInt(tile._level);
-  
-  
-    //Sector
-    isb.addString("&upperLat=");
-    isb.addDouble(tile._sector._upper._latitude._degrees);
-    isb.addString("&lowerLat=");
-    isb.addDouble(tile._sector._lower._latitude._degrees);
-    isb.addString("&upperLon=");
-    isb.addDouble(tile._sector._upper._longitude._degrees);
-    isb.addString("&lowerLon=");
-    isb.addDouble(tile._sector._lower._longitude._degrees);
-  
-  
-    isb.addString("&tileBBox=");
-    isb.addString("TODO");
-  
-    isb.addString("&tileWidth=");
-    isb.addInt(tileDimension._x);
-  
-    isb.addString("&tileHeight=");
-    isb.addInt(tileDimension._y);
-  
-    isb.addString("&pixelX=");
-    isb.addInt(pixelPosition._x);
-  
-    isb.addString("&pixelY=");
-    isb.addInt(pixelPosition._y);
-  
-    isb.addString("&lat=");
-    isb.addDouble(position._latitude._degrees);
-  
-    isb.addString("&lon=");
-    isb.addDouble(position._longitude._degrees);
-  
-    final String path = isb.getString();
-    if (isb != null)
-       isb.dispose();
-  
-    return new URL(path, false);
-  
+    _g3mWidget.getG3MContext().getDownloader().requestBuffer(createGetFeatureInfoRestURL(tile, size, pixel, position), DownloadPriority.HIGHER, TimeInterval.zero(), false, _featureInfoDownloadListener, false);
   }
 
   /** Private to MapbooBuilder, don't call it */
