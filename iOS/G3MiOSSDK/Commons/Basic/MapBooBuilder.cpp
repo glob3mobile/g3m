@@ -221,7 +221,7 @@ _webSocket(NULL),
 _marksRenderer(NULL),
 _hasParsedApplication(false)
 {
-
+  _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
 }
 
 GPUProgramManager* MapBooBuilder::getGPUProgramManager() {
@@ -2104,6 +2104,13 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
   
   return URL(path, false);
   
+}
+
+const void MapBooBuilder::requestGetFeatureInfo(const Tile* tile,
+                                 const Vector2I& size,
+                                 const Vector2I& pixel,
+                                 const Geodetic3D& position) {
+  _g3mWidget->getG3MContext()->getDownloader()->requestBuffer(createGetFeatureInfoRestURL(tile, size, pixel, position), DownloadPriority::HIGHER, TimeInterval::zero(), false, _featureInfoDownloadListener, false);
 }
 
 
