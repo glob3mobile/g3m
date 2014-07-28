@@ -69,7 +69,9 @@ public abstract class MapBooBuilder
   
     ChangedRendererInfoListener changedRendererInfoListener = null;
   
-    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener);
+    TouchEventType touchEventTypeOfTerrainTouchListener = TouchEventType.DownUp;
+  
+    PlanetRenderer result = new PlanetRenderer(tessellator, elevationDataProvider, true, verticalExaggeration, texturizer, _layerSet, parameters, showStatistics, tileDownloadPriority, renderedSector, renderTileMeshes, logTilesPetitions, tileRenderingListener, changedRendererInfoListener, touchEventTypeOfTerrainTouchListener);
   //                                              tileRasterizer,
   
     if (_enableNotifications)

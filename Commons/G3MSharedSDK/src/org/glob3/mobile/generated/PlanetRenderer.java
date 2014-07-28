@@ -316,10 +316,13 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private java.util.ArrayList<TerrainTouchListener> _terrainTouchListeners = new java.util.ArrayList<TerrainTouchListener>();
 
+  private TouchEventType _touchEventTypeOfTerrainTouchListener;
+
+
   private java.util.ArrayList<Tile> _toVisit = new java.util.ArrayList<Tile>();
   private java.util.ArrayList<Tile> _toVisitInNextIteration = new java.util.ArrayList<Tile>();
 
-  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener)
+  public PlanetRenderer(TileTessellator tessellator, ElevationDataProvider elevationDataProvider, boolean ownsElevationDataProvider, float verticalExaggeration, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters tilesRenderParameters, boolean showStatistics, long tileDownloadPriority, Sector renderedSector, boolean renderTileMeshes, boolean logTilesPetitions, TileRenderingListener tileRenderingListener, ChangedRendererInfoListener changedInfoListener, TouchEventType touchEventTypeOfTerrainTouchListener)
   //                               TileRasterizer*              tileRasterizer,
   //_tileRasterizer(tileRasterizer),
   {
@@ -346,6 +349,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _renderTileMeshes = renderTileMeshes;
      _logTilesPetitions = logTilesPetitions;
      _tileRenderingListener = tileRenderingListener;
+     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
     _context = null;
     _layerSet.setChangeListener(this);
     _layerSet.setChangedInfoListener(this);
@@ -542,7 +546,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       return false;
     }
   
-    if (touchEvent.getType() == TouchEventType.LongPress)
+    if (touchEvent.getType() == _touchEventTypeOfTerrainTouchListener)
     {
       final Vector2I pixel = touchEvent.getTouch(0).getPos();
       final Vector3D ray = _lastCamera.pixel2Ray(pixel);
@@ -585,7 +589,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
           return false;
         }
       }
-  
     }
   
     return false;

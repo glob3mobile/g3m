@@ -269,9 +269,17 @@ public class PlanetRendererBuilder
 
   private ChangedRendererInfoListener _changedInfoListener;
 
+  private TouchEventType _touchEventTypeOfTerrainTouchListener;
+
+  private TouchEventType getTouchEventTypeOfTerrainTouchListener()
+  {
+    return _touchEventTypeOfTerrainTouchListener;
+  }
+
 
   ///#include "MultiLayerTileTexturizer.hpp"
   ///#include "TileRasterizer.hpp"
+  
   
   ///#include "CompositeTileRasterizer.hpp"
   
@@ -297,6 +305,7 @@ public class PlanetRendererBuilder
      _logTilesPetitions = false;
      _tileRenderingListener = null;
      _changedInfoListener = null;
+     _touchEventTypeOfTerrainTouchListener = TouchEventType.LongPress;
   }
   public void dispose()
   {
@@ -343,7 +352,7 @@ public class PlanetRendererBuilder
       layerSet.addLayer(geoVectorLayer);
     }
   
-    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener());
+    PlanetRenderer planetRenderer = new PlanetRenderer(getTileTessellator(), getElevationDataProvider(), true, getVerticalExaggeration(), getTexturizer(), layerSet, getParameters(), getShowStatistics(), getTileDownloadPriority(), getRenderedSector(), getRenderTileMeshes(), getLogTilesPetitions(), getTileRenderingListener(), getChangedRendererInfoListener(), getTouchEventTypeOfTerrainTouchListener());
   //                                                      getTileRasterizer(),
   
     for (int i = 0; i < getVisibleSectorListeners().size(); i++)
@@ -547,5 +556,10 @@ public class PlanetRendererBuilder
       _changedInfoListener = changedInfoListener;
       ILogger.instance().logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
     }
+  }
+
+  public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
+  {
+    _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
   }
 }
