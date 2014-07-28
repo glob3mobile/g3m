@@ -196,11 +196,12 @@ public abstract class MapBooBuilder
       return null;
     }
   
+    final boolean transparent = jsonLayer.getAsBoolean("transparent", false);
     final String layerType = jsonLayer.getAsString("layer", "<layer not present>");
     Layer layer;
     if (layerType.compareTo("OSM") == 0)
     {
-      layer = new OSMLayer(defaultTimeToCache);
+      layer = new OSMLayer(defaultTimeToCache, true, 2, 1, null, ""); //disclaimerInfo -  condition, -  transparency, -  initialLevel, -  readExpired,
     }
     else if (layerType.compareTo("MapQuest") == 0)
     {
@@ -212,7 +213,7 @@ public abstract class MapBooBuilder
     }
     else if (layerType.compareTo("CartoDB") == 0)
     {
-      layer = parseCartoDBLayer(jsonLayer, defaultTimeToCache);
+      layer = parseCartoDBLayer(jsonLayer, transparent, defaultTimeToCache);
     }
     else if (layerType.compareTo("MapBox") == 0)
     {
@@ -220,11 +221,11 @@ public abstract class MapBooBuilder
     }
     else if (layerType.compareTo("WMS") == 0)
     {
-      layer = parseWMSLayer(jsonLayer);
+      layer = parseWMSLayer(jsonLayer, transparent);
     }
     else if (layerType.compareTo("URLTemplate") == 0)
     {
-      layer = parseURLTemplateLayer(jsonLayer);
+      layer = parseURLTemplateLayer(jsonLayer, transparent);
     }
     else
     {
@@ -258,15 +259,15 @@ public abstract class MapBooBuilder
     final String key = jsonLayer.getAsString("key", "");
     final String imagerySet = jsonLayer.getAsString("imagerySet", "Aerial");
   
-    return new BingMapsLayer(imagerySet, key, timeToCache);
+    return new BingMapsLayer(imagerySet, key, timeToCache, true, 2, 25, 1, null, ""); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
   }
 
-  private CartoDBLayer parseCartoDBLayer(JSONObject jsonLayer, TimeInterval timeToCache)
+  private CartoDBLayer parseCartoDBLayer(JSONObject jsonLayer, boolean transparent, TimeInterval timeToCache)
   {
     final String userName = jsonLayer.getAsString("userName", "");
     final String table = jsonLayer.getAsString("table", "");
   
-    return new CartoDBLayer(userName, table, timeToCache);
+    return new CartoDBLayer(userName, table, timeToCache, true, 1, transparent, null, ""); // disclaimerInfo -  condition, -  isTransparent -  transparency -  readExpired
   }
 
 
@@ -274,10 +275,10 @@ public abstract class MapBooBuilder
   {
     final String mapKey = jsonLayer.getAsString("mapKey", "");
   
-    return new MapBoxLayer(mapKey, timeToCache);
+    return new MapBoxLayer(mapKey, timeToCache, true, 1, 19, 1, null, ""); // disclaimerInfo -  condition -  transparency -  maxLevel -  initialLevel -  readExpired
   }
 
-  private WMSLayer parseWMSLayer(JSONObject jsonLayer)
+  private WMSLayer parseWMSLayer(JSONObject jsonLayer, boolean transparent)
   {
   
     final String mapLayer = jsonLayer.getAsString("layerName", "");
@@ -304,20 +305,17 @@ public abstract class MapBooBuilder
     {
       layerTilesRenderParameters = LayerTilesRenderParameters.createDefaultMercator(0, 17);
     }
-    final boolean isTransparent = jsonLayer.getAsBoolean("transparent", false);
     final double expiration = jsonLayer.getAsNumber("expiration", 0);
     final long milliseconds = IMathUtils.instance().round(expiration);
     final TimeInterval timeToCache = TimeInterval.fromMilliseconds(milliseconds);
     final boolean readExpired = jsonLayer.getAsBoolean("acceptExpiration", false);
   
-    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, srs, style, isTransparent, null, timeToCache, readExpired, layerTilesRenderParameters);
+    return new WMSLayer(mapLayer, mapServerURL, mapServerVersion, queryLayer, queryServerURL, queryServerVersion, sector, imageFormat, srs, style, transparent, null, timeToCache, readExpired, layerTilesRenderParameters);
   }
 
-  private URLTemplateLayer parseURLTemplateLayer(JSONObject jsonLayer)
+  private URLTemplateLayer parseURLTemplateLayer(JSONObject jsonLayer, boolean transparent)
   {
     final String urlTemplate = jsonLayer.getAsString("url", "");
-  
-    final boolean transparent = jsonLayer.getAsBoolean("transparent", true);
   
     final int firstLevel = (int) jsonLayer.getAsNumber("firstLevel", 1);
     final int maxLevel = (int) jsonLayer.getAsNumber("maxLevel", 19);
