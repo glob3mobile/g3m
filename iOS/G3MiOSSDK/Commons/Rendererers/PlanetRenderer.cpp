@@ -121,7 +121,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const bool                   renderTileMeshes,
                                const bool                   logTilesPetitions,
                                TileRenderingListener*       tileRenderingListener,
-                               ChangedRendererInfoListener*         changedInfoListener) :
+                               ChangedRendererInfoListener*         changedInfoListener,
+                               TouchEventType touchEventTypeOfTerrainTouchListener) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -145,7 +146,8 @@ _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
 _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
-_tileRenderingListener(tileRenderingListener)
+_tileRenderingListener(tileRenderingListener),
+_touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;
   _layerSet->setChangeListener(this);
@@ -767,7 +769,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
     return false;
   } 
 
-  if (touchEvent->getType() == LongPress) {
+  if ( touchEvent->getType() == _touchEventTypeOfTerrainTouchListener ) {
     const Vector2I pixel = touchEvent->getTouch(0)->getPos();
     const Vector3D ray = _lastCamera->pixel2Ray(pixel);
     const Vector3D origin = _lastCamera->getCartesianPosition();
@@ -806,7 +808,6 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
         return false;
       }
     }
-
   }
 
   return false;

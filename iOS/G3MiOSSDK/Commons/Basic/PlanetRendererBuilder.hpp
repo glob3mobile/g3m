@@ -74,6 +74,10 @@ private:
   TileRenderingListener* _tileRenderingListener;
   
   ChangedRendererInfoListener* _changedInfoListener;
+  
+  TouchEventType _touchEventTypeOfTerrainTouchListener;
+  
+  TouchEventType getTouchEventTypeOfTerrainTouchListener();
 
 public:
   PlanetRendererBuilder();
@@ -120,6 +124,8 @@ public:
   ChangedRendererInfoListener* getChangedRendererInfoListener();
   
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
+  
+  void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
 };
 
 #endif

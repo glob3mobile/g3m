@@ -520,6 +520,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   
   ChangedRendererInfoListener* changedRendererInfoListener = NULL;
 
+  TouchEventType touchEventTypeOfTerrainTouchListener = DownUp;
+  
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
                                               true,
@@ -534,7 +536,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               renderTileMeshes,
                                               logTilesPetitions,
                                               tileRenderingListener,
-                                              changedRendererInfoListener);
+                                              changedRendererInfoListener,
+                                              touchEventTypeOfTerrainTouchListener);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));

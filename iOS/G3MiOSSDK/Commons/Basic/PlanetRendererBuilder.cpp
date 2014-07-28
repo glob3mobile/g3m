@@ -17,6 +17,8 @@
 //#include "TileRasterizer.hpp"
 #include "TileRenderingListener.hpp"
 #include "GEOVectorLayer.hpp"
+#include "TouchEvent.hpp"
+
 
 //#include "CompositeTileRasterizer.hpp"
 
@@ -40,7 +42,8 @@ _renderedSector(NULL),
 _renderTileMeshes(true),
 _logTilesPetitions(false),
 _tileRenderingListener(NULL),
-_changedInfoListener(NULL)
+_changedInfoListener(NULL),
+_touchEventTypeOfTerrainTouchListener(LongPress)
 {
 }
 
@@ -350,6 +353,17 @@ void PlanetRendererBuilder::setChangedRendererInfoListener(ChangedRendererInfoLi
   }
 }
 
+void PlanetRendererBuilder::setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener) {
+  _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+}
+
+TouchEventType PlanetRendererBuilder::getTouchEventTypeOfTerrainTouchListener() {
+  return _touchEventTypeOfTerrainTouchListener;
+}
+
+
+
+
 TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
   return _tileRenderingListener;
 }
@@ -377,7 +391,8 @@ PlanetRenderer* PlanetRendererBuilder::create() {
                                                       getRenderTileMeshes(),
                                                       getLogTilesPetitions(),
                                                       getTileRenderingListener(),
-                                                      getChangedRendererInfoListener());
+                                                      getChangedRendererInfoListener(),
+                                                      getTouchEventTypeOfTerrainTouchListener());
 
   for (int i = 0; i < getVisibleSectorListeners()->size(); i++) {
     planetRenderer->addVisibleSectorListener(getVisibleSectorListeners()->at(i),
