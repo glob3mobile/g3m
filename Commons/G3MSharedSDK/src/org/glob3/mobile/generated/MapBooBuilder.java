@@ -1108,7 +1108,9 @@ public abstract class MapBooBuilder
     InfoDisplay infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
     infoDisplay.showDisplay();
   
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    final boolean doubleClickEnabled = false;
+  
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay, doubleClickEnabled); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   
