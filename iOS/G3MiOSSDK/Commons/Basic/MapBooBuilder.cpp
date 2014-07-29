@@ -1625,6 +1625,8 @@ G3MWidget* MapBooBuilder::create() {
   MapBoo_HUDRenderer* hudRenderer = new MapBoo_HUDRenderer();
   InfoDisplay* infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
   infoDisplay->showDisplay();
+  
+  const bool doubleClickEnabled = false;
 
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
@@ -1647,7 +1649,8 @@ G3MWidget* MapBooBuilder::create() {
                                  getGPUProgramManager(),
                                  createSceneLighting(),
                                  icpp,
-                                 infoDisplay);
+                                 infoDisplay,
+                                 doubleClickEnabled);
   delete cameraConstraints;
   delete periodicalTasks;
 

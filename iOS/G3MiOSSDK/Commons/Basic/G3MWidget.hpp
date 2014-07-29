@@ -122,7 +122,8 @@ public:
                            GPUProgramManager*                   gpuProgramManager,
                            SceneLighting*                       sceneLighting,
                            const InitialCameraPositionProvider* initialCameraPositionProvider,
-                           InfoDisplay* infoDisplay);
+                           InfoDisplay* infoDisplay,
+                           bool doubleClickEnabled);
 
   ~G3MWidget();
 
@@ -316,6 +317,8 @@ private:
   bool _forceBusyRenderer;
   
   InfoDisplay* _infoDisplay;
+  
+  bool _isDoubleClickEnabled;
 
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
@@ -338,7 +341,8 @@ private:
             GPUProgramManager*               gpuProgramManager,
             SceneLighting*                   sceneLighting,
             const InitialCameraPositionProvider* initialCameraPositionProvider,
-            InfoDisplay* infoDisplay);
+            InfoDisplay* infoDisplay,
+            bool isDoubleClickEnabled);
 
   void notifyTouchEvent(const G3MEventContext &ec,
                         const TouchEvent* touchEvent) const;

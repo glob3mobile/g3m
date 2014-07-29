@@ -208,7 +208,6 @@ public:
   MarksRenderer* createMarksRenderer();
   
   void setInfoDisplay(InfoDisplay* infoDisplay);
-  
 };
 
 #endif

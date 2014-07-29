@@ -615,7 +615,7 @@ private:
 #endif
 
   bool        _isApplicationTubeOpen;
-  
+    
   MapBoo_ErrorRenderer* _mbErrorRenderer;
 
   LayerSet* _layerSet;
