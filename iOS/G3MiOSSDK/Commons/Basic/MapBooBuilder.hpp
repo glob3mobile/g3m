@@ -653,15 +653,18 @@ private:
                                     const TimeInterval& timeToCache) const;
 
   CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonLayer,
+                                  const bool transparent,
                                   const TimeInterval& timeToCache) const;
 
 
   MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonLayer,
                                 const TimeInterval& timeToCache) const;
 
-  WMSLayer* parseWMSLayer(const JSONObject* jsonLayer) const;
+  WMSLayer* parseWMSLayer(const JSONObject* jsonLayer,
+                          const bool transparent) const;
 
-  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer) const;
+  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer,
+                                          const bool transparent) const;
 
   const std::string getApplicationCurrentSceneId();
   const MapBoo_Scene* getApplicationCurrentScene();
