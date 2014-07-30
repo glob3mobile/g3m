@@ -319,6 +319,7 @@ public final class G3MWidget_Android
                           final WidgetUserData userData,
                           final InfoDisplay infoDisplay) {
 
+      final boolean doubleClickEnabled = true;
 
       _g3mWidget = G3MWidget.create(//
                getGL(), //
@@ -342,7 +343,8 @@ public final class G3MWidget_Android
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay);
+               infoDisplay,//
+               doubleClickEnabled);
 
       _g3mWidget.setUserData(userData);
    }
