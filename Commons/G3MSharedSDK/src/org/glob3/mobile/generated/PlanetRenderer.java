@@ -557,6 +557,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
       if (positionCartesian.isNan())
       {
+        ILogger.instance().logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
         return false;
       }
   

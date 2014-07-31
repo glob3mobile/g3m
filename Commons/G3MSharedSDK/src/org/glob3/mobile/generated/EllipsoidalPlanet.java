@@ -342,17 +342,6 @@ public class EllipsoidalPlanet extends Planet
     return result;
   }
 
-  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
-  {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
-    if (distances.isEmpty())
-    {
-      return Vector3D.nan();
-    }
-    return pos.add(ray.times(distances.get(0)));
-  }
-
-
   public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
@@ -389,6 +378,11 @@ public class EllipsoidalPlanet extends Planet
       //printf ("--invalid final point in drag!!\n");
   //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
       finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
+      if (finalPoint.isNan())
+      {
+        ILogger.instance().logWarning("EllipsoidalPlanet::singleDrag-> finalPoint is NaN");
+        return MutableMatrix44D.invalid();
+      }
     }
   
     // compute the rotation axis

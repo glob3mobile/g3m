@@ -110,6 +110,14 @@ public class Vector3D
 
   public final Vector3D normalized()
   {
+    if (isNan())
+    {
+      return nan();
+    }
+    if (isZero())
+    {
+      return zero;
+    }
     final double d = length();
     return new Vector3D(_x / d, _y / d, _z / d);
   }

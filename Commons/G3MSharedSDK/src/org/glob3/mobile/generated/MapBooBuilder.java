@@ -101,7 +101,7 @@ public abstract class MapBooBuilder
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
     cameraRenderer.addHandler(new CameraDoubleDragHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
-    cameraRenderer.addHandler(new CameraDoubleTapHandler());
+    //cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
     return cameraRenderer;
   }
@@ -1108,9 +1108,7 @@ public abstract class MapBooBuilder
     InfoDisplay infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
     infoDisplay.showDisplay();
   
-    final boolean doubleClickEnabled = false;
-  
-    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay, doubleClickEnabled); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
+    _g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), cameraActivityListener, planet, cameraConstraints, createCameraRenderer(), mainRenderer, createBusyRenderer(), createErrorRenderer(), hudRenderer, Color.black(), false, false, initializationTask, true, periodicalTasks, getGPUProgramManager(), createSceneLighting(), icpp, infoDisplay); // autoDeleteInitializationTask -  logDownloaderStatistics -  logFPS
     cameraConstraints = null;
     periodicalTasks = null;
   

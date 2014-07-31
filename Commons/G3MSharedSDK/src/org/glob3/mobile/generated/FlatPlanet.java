@@ -171,17 +171,6 @@ public class FlatPlanet extends Planet
     return computePreciseLatLonDistance(g1, g2);
   }
 
-  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
-  {
-    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
-    if (distances.isEmpty())
-    {
-      return Vector3D.nan();
-    }
-    return pos.add(ray.times(distances.get(0)));
-  }
-
-
   public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
     return MutableMatrix44D.createTranslationMatrix(toCartesian(position));

@@ -265,20 +265,28 @@ public class ShapesRenderer extends DefaultRenderer
         final Vector3D origin = _lastCamera.getCartesianPosition();
         final Vector2I pixel = touchEvent.getTouch(0).getPos();
         final Vector3D direction = _lastCamera.pixel2Ray(pixel);
-        java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
-  
-        if (!shapeDistances.isEmpty())
+        if (!direction.isNan())
         {
-          //        printf ("Found %d intersections with shapes:\n",
-          //                (int)shapeDistances.size());
-          for (int i = 0; i<shapeDistances.size(); i++)
+          java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+  
+          if (!shapeDistances.isEmpty())
           {
-            //          printf ("   %d: shape %x to distance %f\n",
-            //                  i+1,
-            //                  (unsigned int)shapeDistances[i]._shape,
-            //                  shapeDistances[i]._distance);
+            //        printf ("Found %d intersections with shapes:\n",
+            //                (int)shapeDistances.size());
+            for (int i = 0; i<shapeDistances.size(); i++)
+            {
+              //          printf ("   %d: shape %x to distance %f\n",
+              //                  i+1,
+              //                  (unsigned int)shapeDistances[i]._shape,
+              //                  shapeDistances[i]._distance);
+            }
           }
         }
+        else
+        {
+          ILogger.instance().logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
+        }
+  
       }
     }
     return false;
