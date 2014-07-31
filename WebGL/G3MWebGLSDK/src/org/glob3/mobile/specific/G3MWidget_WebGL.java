@@ -427,8 +427,6 @@ public class G3MWidget_WebGL
                           final InitialCameraPositionProvider initialCameraPositionProvider,
                           final InfoDisplay infoDisplay) {
 
-      final boolean doubleClickEnabled = true;
-
 
       _g3mWidget = G3MWidget.create(//
                _gl, //
@@ -452,8 +450,7 @@ public class G3MWidget_WebGL
                createGPUProgramManager(), //
                sceneLighting, //
                initialCameraPositionProvider, //
-               infoDisplay,//
-               doubleClickEnabled);
+               infoDisplay);
 
       _g3mWidget.setUserData(userData);
 
