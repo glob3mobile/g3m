@@ -199,18 +199,23 @@ bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
       const Vector3D origin = _lastCamera->getCartesianPosition();
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
-      std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
-
-      if (!shapeDistances.empty()) {
-        //        printf ("Found %d intersections with shapes:\n",
-        //                (int)shapeDistances.size());
-        for (int i=0; i<shapeDistances.size(); i++) {
-          //          printf ("   %d: shape %x to distance %f\n",
-          //                  i+1,
-          //                  (unsigned int)shapeDistances[i]._shape,
-          //                  shapeDistances[i]._distance);
+      if (!direction.isNan()) {
+        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(origin, direction);
+        
+        if (!shapeDistances.empty()) {
+          //        printf ("Found %d intersections with shapes:\n",
+          //                (int)shapeDistances.size());
+          for (int i=0; i<shapeDistances.size(); i++) {
+            //          printf ("   %d: shape %x to distance %f\n",
+            //                  i+1,
+            //                  (unsigned int)shapeDistances[i]._shape,
+            //                  shapeDistances[i]._distance);
+          }
         }
+      } else {
+        ILogger::instance()->logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
       }
+      
     }
   }
   return false;

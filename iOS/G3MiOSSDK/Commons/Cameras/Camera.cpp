@@ -184,6 +184,7 @@ const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
                                                       0, 0, _viewPortWidth, _viewPortHeight);
   if (obj.isNan()) {
+    ILogger::instance()->logWarning("Pixel to Ray return NaN");
     return obj;
   }
 

@@ -570,7 +570,7 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
-  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  //cameraRenderer->addHandler(new CameraDoubleTapHandler());
 
   return cameraRenderer;
 }
@@ -1626,8 +1626,6 @@ G3MWidget* MapBooBuilder::create() {
   InfoDisplay* infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
   infoDisplay->showDisplay();
   
-  const bool doubleClickEnabled = false;
-
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
                                  getDownloader(),
@@ -1649,8 +1647,7 @@ G3MWidget* MapBooBuilder::create() {
                                  getGPUProgramManager(),
                                  createSceneLighting(),
                                  icpp,
-                                 infoDisplay,
-                                 doubleClickEnabled);
+                                 infoDisplay);
   delete cameraConstraints;
   delete periodicalTasks;
 

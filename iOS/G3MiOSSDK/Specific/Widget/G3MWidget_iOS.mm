@@ -75,9 +75,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                                               Color::white());
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-  
-  const bool doubleClickEnabled = true;
-  
+    
   _widgetVP = G3MWidget::create([_renderer getGL],
                                 storage,
                                 downloader,
@@ -99,8 +97,7 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
                                 gpuProgramManager,
                                 sceneLighting,
                                 icpp,
-                                infoDisplay,
-                                doubleClickEnabled);
+                                infoDisplay);
 
   [self widget]->setUserData(userData);
 }

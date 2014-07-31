@@ -119,9 +119,6 @@ public:
   
   double computeFastLatLonDistance(const Geodetic2D& g1,
                                    const Geodetic2D& g2) const;
-    
-  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
-  
   
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   

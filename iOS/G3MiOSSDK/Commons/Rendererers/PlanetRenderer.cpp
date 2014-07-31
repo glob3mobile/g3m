@@ -778,6 +778,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
 
     const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
     if (positionCartesian.isNan()) {
+      ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
       return false;
     }
 

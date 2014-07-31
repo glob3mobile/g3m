@@ -13,6 +13,8 @@
 #include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
+#include "ErrorHandling.hpp"
+
 
 CoordinateSystem CoordinateSystem::global() {
   return CoordinateSystem(Vector3D::upX(), Vector3D::upY(), Vector3D::upZ(), Vector3D::zero);
@@ -22,19 +24,32 @@ CoordinateSystem::CoordinateSystem(const Vector3D& x, const Vector3D& y, const V
 _x(x.normalized()),_y(y.normalized()),_z(z.normalized()), _origin(origin)
 {
   //TODO CHECK CONSISTENCY
-  if (!areOrtogonal(x, y, z)) {
+  if (!checkConsistency(x, y, z)) {
     ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
+    THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
   }
 }
 
 //For camera
-CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin):
-_x(viewDirection.cross(up).normalized()),
-_y(viewDirection.normalized()),
-_z(up.normalized()),
-_origin(origin)
+CoordinateSystem::CoordinateSystem(const Vector3D& viewDirection, const Vector3D& up, const Vector3D& origin) :
+  _x(viewDirection.cross(up).normalized()),
+  _y(viewDirection.normalized()),
+  _z(up.normalized()),
+  _origin(origin)
 {
+  if (!checkConsistency(_x, _y, _z)) {
+    ILogger::instance()->logError("Inconsistent CoordinateSystem created.");
+    THROW_EXCEPTION("Inconsistent CoordinateSystem created.");
+  }
 }
+
+bool CoordinateSystem::checkConsistency(const Vector3D& x, const Vector3D& y, const Vector3D& z) {
+  if (x.isNan() || y.isNan() || z.isNan()) {
+    return false;
+  }
+  return areOrtogonal(x, y, z);
+}
+
 
 bool CoordinateSystem::areOrtogonal(const Vector3D& x, const Vector3D& y, const Vector3D& z) {
   return x.isPerpendicularTo(y) && x.isPerpendicularTo(z) && y.isPerpendicularTo(z);

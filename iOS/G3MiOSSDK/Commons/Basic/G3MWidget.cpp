@@ -80,8 +80,7 @@ G3MWidget::G3MWidget(GL*                                  gl,
                      GPUProgramManager*                   gpuProgramManager,
                      SceneLighting*                       sceneLighting,
                      const InitialCameraPositionProvider* initialCameraPositionProvider,
-                     InfoDisplay* infoDisplay,
-                     bool isDoubleClickEnabled):
+                     InfoDisplay* infoDisplay):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl(gl),
@@ -137,8 +136,7 @@ _initialCameraPositionProvider(initialCameraPositionProvider),
 _initialCameraPositionHasBeenSet(false),
 _forceBusyRenderer(false),
 _nFramesBeetweenProgramsCleanUp(500),
-_infoDisplay(infoDisplay),
-_isDoubleClickEnabled(isDoubleClickEnabled)
+_infoDisplay(infoDisplay)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -213,8 +211,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                              GPUProgramManager*                   gpuProgramManager,
                              SceneLighting*                       sceneLighting,
                              const InitialCameraPositionProvider* initialCameraPositionProvider,
-                             InfoDisplay* infoDisplay,
-                             bool doubleClickEnabled) {
+                             InfoDisplay* infoDisplay) {
 
   return new G3MWidget(gl,
                        storage,
@@ -237,8 +234,7 @@ G3MWidget* G3MWidget::create(GL*                                  gl,
                        gpuProgramManager,
                        sceneLighting,
                        initialCameraPositionProvider,
-                       infoDisplay,
-                       doubleClickEnabled);
+                       infoDisplay);
 }
 
 G3MWidget::~G3MWidget() {
@@ -341,17 +337,11 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _storage,
                      _surfaceElevationProvider);
   
-  
-  if (_isDoubleClickEnabled || touchEvent->getTapCount() != 2) {
-    
     // notify the original event
     notifyTouchEvent(ec, touchEvent);
     
-    
     // creates DownUp event when a Down is immediately followed by an Up
-    ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
-    
-    //ILogger::instance()->logInfo("Tapcount: %i",touchEvent->getTapCount());
+    //ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
     if (touchEvent->getTouchCount() == 1) {
       const TouchEventType eventType = touchEvent->getType();
       if (eventType == Down) {
@@ -377,7 +367,7 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
       _clickOnProcess = false;
     }
   }
-}
+
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   G3MEventContext ec(IFactory::instance(),

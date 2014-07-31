@@ -699,8 +699,6 @@ G3MWidget* IG3MBuilder::create() {
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
   
-  const bool doubleClickEnabled = true;
-
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),
@@ -722,8 +720,7 @@ G3MWidget* IG3MBuilder::create() {
                                             getGPUProgramManager(),
                                             getSceneLighting(),
                                             icpp,
-                                            getInfoDisplay(),
-                                            doubleClickEnabled);
+                                            getInfoDisplay());
 
   g3mWidget->setUserData(getUserData());
 
