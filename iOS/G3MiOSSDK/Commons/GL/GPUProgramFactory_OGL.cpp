@@ -9,6 +9,7 @@
 #include "GPUProgramFactory_OGL.hpp"
 #include "BasicShadersGL2.hpp"
 #include "GL.hpp"
+#include "GPUProgram_OGL.hpp"
 
 
 GPUProgramFactory_OGL::GPUProgramFactory_OGL(){
@@ -18,13 +19,13 @@ GPUProgramFactory_OGL::GPUProgramFactory_OGL(){
 	}
 }
 
-GPUProgram* GPUProgramFactory_OGL::get(GL* gl, const std::string& name) const{
+IGPUProgram* GPUProgramFactory_OGL::get(GL* gl, const std::string& name){
 	//Get the source code for the shader
 	const GPUProgramSources* ps = getSource(name);
-	GPUProgram* prog;
-	//Compile if the sources exist
+	GPUProgram_OGL* prog;
+	//Compile if the sources exist...
 	if (ps != NULL) {
-		prog = GPUProgram::createProgram(gl, ps->_name, ps->_vertexSource, ps->_fragmentSource);
+		prog = GPUProgram_OGL::createProgram(gl, ps->_name, ps->_vertexSource, ps->_fragmentSource);
 
 		if (prog == NULL) {
 			ILogger::instance()->logError("Problem at creating program named %s.", name.c_str());
@@ -32,6 +33,7 @@ GPUProgram* GPUProgramFactory_OGL::get(GL* gl, const std::string& name) const{
 		}
 		return prog;
 	}
+	//...or show an error if it does not
 	else{
 		ILogger::instance()->logError("No shader sources for program named %s.", name.c_str());
 		return NULL;

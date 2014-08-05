@@ -3,4 +3,8 @@
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\ColorMeshV.hlsl" />
+    <FxCompile Include="$(MSBuildThisFileDirectory)..\..\..\G3MWindowsSDK\Shaders\ColorMeshP.hlsl" />
+  </ItemGroup>
 </Project>

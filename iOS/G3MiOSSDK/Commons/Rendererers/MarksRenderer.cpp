@@ -16,7 +16,7 @@
 #include "MarkTouchListener.hpp"
 #include "DownloadPriority.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "Vector2F.hpp"
 

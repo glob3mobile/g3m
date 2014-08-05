@@ -30,7 +30,7 @@ class GPUProgramManager;
 class GPUProgramState;
 class GLState;
 
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 
 class GL {
 private:
@@ -40,7 +40,7 @@ private:
   /////////////////////////////////////////////////
   //CURRENT GL STATUS
   GLGlobalState* _currentGLGlobalState;
-  GPUProgram*    _currentGPUProgram;
+  IGPUProgram*    _currentGPUProgram;
   /////////////////////////////////////////////////
 
   std::list<const IGLTextureId*> _texturesIdBag;
@@ -51,7 +51,7 @@ private:
   const IGLTextureId* getGLTextureId();
 
   //Get Locations warning of errors
-  IGLUniformID* checkedGetUniformLocation(GPUProgram* program,
+  IGLUniformID* checkedGetUniformLocation(IGPUProgram* program,
                                           const std::string& name);
 //  const bool _verbose;
 
@@ -174,7 +174,7 @@ public:
     _nativeGL->linkProgram(program);
   }
   
-  bool deleteProgram(const GPUProgram* program) {
+  bool deleteProgram(const IGPUProgram* program) {
 
     if (program == NULL) {
       return false;
@@ -226,25 +226,25 @@ public:
     _nativeGL->vertexAttribPointer(index, size, normalized, stride, buffer);
   }
   
-  void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const{
+  void bindAttribLocation(const IGPUProgram* program, int loc, const std::string& name) const{
     _nativeGL->bindAttribLocation(program, loc, name);
   }
   
-  int getProgramiv(const GPUProgram* program, int pname) const{
+  int getProgramiv(const IGPUProgram* program, int pname) const{
     return _nativeGL->getProgramiv(program, pname);
   }
   
-  GPUUniform* getActiveUniform(const GPUProgram* program, int i) const{
+  GPUUniform* getActiveUniform(const IGPUProgram* program, int i) const{
     return _nativeGL->getActiveUniform(program, i);
   }
   
-  GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const{
+  GPUAttribute* getActiveAttribute(const IGPUProgram* program, int i) const{
     return _nativeGL->getActiveAttribute(program, i);
   }
   
   //  GLGlobalState* getCurrentState() const{ return _currentState;}
   
-  void useProgram(GPUProgram* program) ;
+  void useProgram(IGPUProgram* program) ;
   
   void enableVertexAttribArray(int location) const{
     _nativeGL->enableVertexAttribArray(location);

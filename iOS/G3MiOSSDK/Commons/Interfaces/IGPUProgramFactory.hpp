@@ -12,7 +12,7 @@
 #include <string>
 #include "ILogger.hpp"
 
-class GPUProgram;
+class IGPUProgram;
 class GL;
 
 class IGPUProgramFactory{
@@ -32,7 +32,7 @@ public:
 		return _instance;
 	}
 
-	virtual GPUProgram* get(GL* gl, const std::string& name) const = 0;
+	virtual IGPUProgram* get(GL* gl, const std::string& name) = 0;
 
 	virtual ~IGPUProgramFactory(){};
 

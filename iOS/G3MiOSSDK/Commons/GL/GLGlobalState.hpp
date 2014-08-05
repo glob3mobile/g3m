@@ -24,7 +24,7 @@ class IFloatBuffer;
 class GL;
 struct AttributesStruct;
 class UniformsStruct;
-class GPUProgram;
+class IGPUProgram;
 
 #define MAX_N_TEXTURES 4
 

@@ -8,11 +8,15 @@
 
 #ifndef __G3MWindowsSDK_NativeGL_win8__
 #define __G3MWindowsSDK_NativeGL_win8__
-
-#include "INativeGL.hpp"
+//#define NOMINMAX
 
 #include <wrl/client.h>
 #include <d3d11_2.h>
+
+#include "INativeGL.hpp"
+
+
+
 
 #define DEPTH_BUFFER_BIT 1
 #define COLOR_BUFFER_BIT 2
@@ -37,6 +41,7 @@
 
 class NativeGL_win8 :public INativeGL {
 private:
+	Microsoft::WRL::ComPtr<ID3D11Device1> _device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext1> _deviceContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> _renderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> _depthStencilView;
@@ -57,9 +62,11 @@ private:
 
 public:
 
-	NativeGL_win8(Microsoft::WRL::ComPtr<ID3D11DeviceContext1> dc,
-		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv,
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv) :
+	NativeGL_win8(Microsoft::WRL::ComPtr<ID3D11Device1>& device,
+		Microsoft::WRL::ComPtr<ID3D11DeviceContext1>& dc,
+		Microsoft::WRL::ComPtr<ID3D11RenderTargetView>& rtv,
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>& dsv) :
+		_device(device),
 		_deviceContext(dc),
 		_renderTargetView(rtv),
 		_depthStencilView(dsv)
@@ -67,9 +74,13 @@ public:
 
 	}
 
+	Microsoft::WRL::ComPtr<ID3D11Device1> getDevice(){
+		return _device;
+	}
+
 	//d3d: colors as const FLOAT ColorRGBA[4], clear color is passed as an argument of buffer-specific API-call
 	void clearColor(float red, float green, float blue, float alpha) const;
-	void useProgram(GPUProgram* program) const;
+	void useProgram(IGPUProgram* program) const;
 
 	//d3d: Uniforms dont exist, use constant buffers
 	//TODO: ID?
@@ -178,12 +189,12 @@ public:
 	bool linkProgram(int program) const;
 	void printProgramInfoLog(int program) const;
 
-	void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const;
+	void bindAttribLocation(const IGPUProgram* program, int loc, const std::string& name) const;
 
-	int getProgramiv(const GPUProgram* program, int param) const;
+	int getProgramiv(const IGPUProgram* program, int param) const;
 
-	GPUUniform* getActiveUniform(const GPUProgram* program, int i) const;
-	GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const;
+	GPUUniform* getActiveUniform(const IGPUProgram* program, int i) const;
+	GPUAttribute* getActiveAttribute(const IGPUProgram* program, int i) const;
 
 	void depthMask(bool v) const;
 

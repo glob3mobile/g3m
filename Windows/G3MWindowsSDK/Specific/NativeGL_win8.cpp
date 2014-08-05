@@ -15,7 +15,7 @@ void NativeGL_win8::clearColor(float red, float green, float blue, float alpha) 
 	_clearColor[3] = alpha;
 }
 
-void NativeGL_win8::useProgram(GPUProgram* program) const{
+void NativeGL_win8::useProgram(IGPUProgram* program) const{
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
@@ -479,22 +479,22 @@ void NativeGL_win8::printProgramInfoLog(int program) const{
 	throw std::exception(errMsg.c_str());
 }
 
-void NativeGL_win8::bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const{
+void NativeGL_win8::bindAttribLocation(const IGPUProgram* program, int loc, const std::string& name) const{
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
 
-int NativeGL_win8::getProgramiv(const GPUProgram* program, int param) const{
+int NativeGL_win8::getProgramiv(const IGPUProgram* program, int param) const{
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
 
-GPUUniform* NativeGL_win8::getActiveUniform(const GPUProgram* program, int i) const{
+GPUUniform* NativeGL_win8::getActiveUniform(const IGPUProgram* program, int i) const{
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }
 
-GPUAttribute* NativeGL_win8::getActiveAttribute(const GPUProgram* program, int i) const{
+GPUAttribute* NativeGL_win8::getActiveAttribute(const IGPUProgram* program, int i) const{
 	std::string errMsg("TODO: Implementation");
 	throw std::exception(errMsg.c_str());
 }

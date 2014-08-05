@@ -30,7 +30,7 @@ void GPUVariableValueSet::combineWith(const GPUVariableValueSet* vs) {
   }
 }
 
-void GPUVariableValueSet::applyValuesToProgram(GPUProgram* prog) const{
+void GPUVariableValueSet::applyValuesToProgram(IGPUProgram* prog) const{
   for (int i = 0; i <= _highestUniformKey; i++) {
     GPUUniformValue* u = _uniformValues[i];
     if (u != NULL) {

@@ -20,9 +20,9 @@ class Matrix44D;
 #include <vector>
 #include <string>
 
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 
-class GPUProgram;
+class IGPUProgram;
 
 class GPUUniform;
 class GPUAttribute;
@@ -33,7 +33,7 @@ public:
   virtual ~INativeGL() {
   }
 
-  virtual void useProgram(GPUProgram* program) const = 0;
+  virtual void useProgram(IGPUProgram* program) const = 0;
 
   virtual void uniform2f(const IGLUniformID* loc,
                          float x,
@@ -195,12 +195,12 @@ public:
   virtual bool linkProgram(int program) const = 0;
   virtual void printProgramInfoLog(int program) const = 0;
   
-  virtual void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const = 0;
+  virtual void bindAttribLocation(const IGPUProgram* program, int loc, const std::string& name) const = 0;
   
-  virtual int getProgramiv(const GPUProgram* program, int param) const = 0;
+  virtual int getProgramiv(const IGPUProgram* program, int param) const = 0;
   
-  virtual GPUUniform* getActiveUniform(const GPUProgram* program, int i) const = 0;
-  virtual GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const = 0;
+  virtual GPUUniform* getActiveUniform(const IGPUProgram* program, int i) const = 0;
+  virtual GPUAttribute* getActiveAttribute(const IGPUProgram* program, int i) const = 0;
 
   virtual void depthMask(bool v) const = 0;
 

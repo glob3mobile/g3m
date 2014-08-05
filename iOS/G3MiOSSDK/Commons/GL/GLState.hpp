@@ -12,7 +12,7 @@
 #define __G3MiOSSDK__GLState__
 
 #include "GLGlobalState.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 
 #include "GLFeatureGroup.hpp"
@@ -32,7 +32,7 @@ private:
   mutable GPUVariableValueSet* _valuesSet;
   mutable GLGlobalState*   _globalState;
 
-  mutable GPUProgram* _linkedProgram;
+  mutable IGPUProgram* _linkedProgram;
 
 #ifdef C_CODE
   mutable const GLState* _parentGLState;

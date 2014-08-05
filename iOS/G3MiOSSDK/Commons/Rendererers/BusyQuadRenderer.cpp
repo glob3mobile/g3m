@@ -23,7 +23,7 @@
 #include "ShortBufferBuilder.hpp"
 
 #include "GLConstants.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "Camera.hpp"
 
 

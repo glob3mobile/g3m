@@ -18,7 +18,7 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "GLConstants.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "Camera.hpp"
 #include "DirectMesh.hpp"
 #include "ICanvas.hpp"

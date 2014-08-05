@@ -59,6 +59,7 @@ public:
 	}
 
 
+
 };
 
 ref class G3MViewSource sealed : public Windows::ApplicationModel::Core::IFrameworkViewSource

@@ -20,7 +20,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "ShortBufferBuilder.hpp"
 #include "GLConstants.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "GPUUniform.hpp"
 #include "Camera.hpp"

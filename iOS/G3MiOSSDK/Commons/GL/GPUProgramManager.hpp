@@ -13,29 +13,29 @@
 #include <string>
 
 //#include "GPUProgramFactory.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "GL.hpp"
 
 class GPUProgramManager {
 
-  std::map<std::string, GPUProgram*> _programs;
+  std::map<std::string, IGPUProgram*> _programs;
 
   //GPUProgramFactory *_factory;
 
-  GPUProgram* getCompiledProgram(const std::string& name);
+  IGPUProgram* getCompiledProgram(const std::string& name);
 
-  GPUProgram* compileProgramWithName(GL* gl, const std::string& name);
+  IGPUProgram* compileProgramWithName(GL* gl, const std::string& name);
 
-  GPUProgram* getNewProgram(GL* gl, int uniformsCode, int attributesCode);
+  IGPUProgram* getNewProgram(GL* gl, int uniformsCode, int attributesCode);
 
-  GPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);
+  IGPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);
 public:
 
   //GPUProgramManager(GPUProgramFactory *factory):_factory(factory) {}
 
   ~GPUProgramManager();
 
-  GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode);
+  IGPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode);
 
   void removeUnused();
 };

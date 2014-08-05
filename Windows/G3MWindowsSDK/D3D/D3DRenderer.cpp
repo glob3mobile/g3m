@@ -11,7 +11,7 @@ D3DRenderer::D3DRenderer()
 	createSwapChain();
 	createDeviceDependentResources();
 
-	this->_nativeGL = new NativeGL_win8(deviceContext, d3dRenderTargetView, d3dDepthStencilView);
+	this->_nativeGL = new NativeGL_win8(device, deviceContext, d3dRenderTargetView, d3dDepthStencilView);
 	this->_gl = new GL(_nativeGL, true);
 
 	_isInitialized = true;

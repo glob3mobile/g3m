@@ -72,13 +72,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(WindowsPhoneSDK_LibraryPath_x86)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WindowsPhoneCore.lib;RuntimeObject.lib;PhoneAppModelHost.lib;DXGI.lib;D3D11.lib;D2D1.lib;DWrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>WindowsPhoneCore.lib;RuntimeObject.lib;PhoneAppModelHost.lib;DXGI.lib;D3D11.lib;D2D1.lib;DWrite.lib;windowscodecs.lib;dwrite.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers;..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh;..\..\..\..\iOS\G3MiOSSDK\Commons\Math;..\..\..\..\iOS\G3MiOSSDK\Commons\Layers;..\..\..\..\iOS\G3MiOSSDK\Commons\JSON;..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces;..\..\..\..\iOS\G3MiOSSDK\Commons\GL;..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry;..\..\..\..\iOS\G3MiOSSDK\Commons\GEO;..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader;..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras;..\..\..\..\iOS\G3MiOSSDK\Commons\Basic;..\..\..\G3MWindowsSDK\D3D;..\..\..\G3MWindowsSDK\Specific;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>C_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>C_CODE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -127,7 +127,7 @@ public:
 
   void combineWith(const GPUVariableValueSet* vs);
 
-  void applyValuesToProgram(GPUProgram* prog) const;
+  void applyValuesToProgram(IGPUProgram* prog) const;
 
   int getUniformsCode() const;
 

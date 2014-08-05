@@ -159,6 +159,22 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
 
 GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
 
+#ifdef WINAPI_FAMILY
+	if (name.compare("POSITION") == 0) {
+		return POSITION;
+	}
+	if (name.compare("COLOR") == 0) {
+		return COLOR;
+	}
+	if (name.compare("TEXCOORD") == 0) {
+		return TEXTURE_COORDS;
+	}
+	if (name.compare("NORMAL") == 0) {
+		return NORMAL;
+	}
+#endif
+
+
   if (name.compare("aPosition") == 0) {
     return POSITION;
   }

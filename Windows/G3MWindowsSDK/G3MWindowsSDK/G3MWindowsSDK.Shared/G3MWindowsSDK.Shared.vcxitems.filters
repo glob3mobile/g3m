@@ -46,6 +46,9 @@
     <Filter Include="D3D">
       <UniqueIdentifier>{abd7f320-0d60-46fe-a16d-45c8d3758cc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{e2e3151e-95c9-4482-a30a-b71cbea2df81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\ByteBuffer_win8.cpp">
@@ -609,9 +612,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUAttribute.cpp">
       <Filter>Common\GL</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.cpp">
-      <Filter>Common\GL</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.cpp">
       <Filter>Common\GL</Filter>
     </ClCompile>
@@ -986,6 +986,15 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgramFactory.cpp">
       <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgram.cpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram_OGL.cpp">
+      <Filter>Common\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgram_D3D.cpp">
+      <Filter>Specific</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1643,9 +1652,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUAttribute.hpp">
       <Filter>Common\GL</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.hpp">
-      <Filter>Common\GL</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.hpp">
       <Filter>Common\GL</Filter>
     </ClInclude>
@@ -2062,6 +2068,18 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory_OGL.hpp">
       <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgram.hpp">
+      <Filter>Common\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram_OGL.hpp">
+      <Filter>Common\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgram_D3D.hpp">
+      <Filter>Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GLUniformID_win8.hpp">
+      <Filter>Specific</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

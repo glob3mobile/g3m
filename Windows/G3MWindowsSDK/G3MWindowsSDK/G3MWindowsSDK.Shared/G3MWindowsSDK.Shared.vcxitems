@@ -191,9 +191,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLGlobalState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLState.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUAttribute.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory_OGL.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram_OGL.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUUniform.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUVariable.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUVariableValueSet.cpp" />
@@ -201,6 +201,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ICanvasUtils.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IDeviceInfo.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IFactory.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgram.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgramFactory.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\ILogger.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IMathUtils.cpp" />
@@ -323,6 +324,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MWidget_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgramFactory_D3D.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgram_D3D.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\IntBuffer_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\Logger_win8.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Specific\NativeGL_win8.cpp" />
@@ -533,9 +535,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLGlobalState.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GLState.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUAttribute.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramFactory_OGL.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgramManager.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUProgram_OGL.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUUniform.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUVariable.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\GL\GPUVariableValueSet.hpp" />
@@ -548,6 +550,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IFactory.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGLTextureId.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGLUniformID.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgram.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IGPUProgramFactory.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IImage.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces\IImageListener.hpp" />
@@ -679,7 +682,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\FloatBuffer_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MBuilder_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\G3MWidget_win8.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GLUniformID_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgramFactory_D3D.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\GPUProgram_D3D.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\IntBuffer_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\Logger_win8.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Specific\MathUtils_win8.hpp" />

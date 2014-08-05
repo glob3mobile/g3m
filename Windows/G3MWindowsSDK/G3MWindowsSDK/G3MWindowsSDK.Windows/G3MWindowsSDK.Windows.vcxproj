@@ -115,7 +115,7 @@
       <CompileAsWinRT>true</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\D3D;..\..\Specific;..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers;..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh;..\..\..\..\iOS\G3MiOSSDK\Commons\Math;..\..\..\..\iOS\G3MiOSSDK\Commons\Layers;..\..\..\..\iOS\G3MiOSSDK\Commons\JSON;..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces;..\..\..\..\iOS\G3MiOSSDK\Commons\GL;..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry;..\..\..\..\iOS\G3MiOSSDK\Commons\GEO;..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader;..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras;..\..\..\..\iOS\G3MiOSSDK\Commons\Basic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>C_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>C_CODE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>

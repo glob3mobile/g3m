@@ -11,7 +11,7 @@
 #include "Vector3D.hpp"
 #include "GL.hpp"
 #include "TextureIDReference.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "GPUProgramManager.hpp"
 #include "Camera.hpp"
 #include "GLState.hpp"

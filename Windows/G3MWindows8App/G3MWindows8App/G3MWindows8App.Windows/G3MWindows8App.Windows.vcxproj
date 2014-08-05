@@ -128,7 +128,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
-      <AdditionalDependencies>d2d1.lib; d3d11.lib; dxgi.lib; ole32.lib; windowscodecs.lib; dwrite.lib; %(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;dwrite.lib;dxguid.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories); $(VCInstallDir)\lib\store; $(VCInstallDir)\lib</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
@@ -137,7 +137,7 @@
       <AdditionalIncludeDirectories>..\..\..\G3MWindowsSDK\Specific;..\..\..\G3MWindowsSDK\D3D;..\..\..\..\iOS\G3MiOSSDK\Commons\Basic;..\..\..\..\iOS\G3MiOSSDK\Commons\Cameras;..\..\..\..\iOS\G3MiOSSDK\Commons\Downloader;..\..\..\..\iOS\G3MiOSSDK\Commons\GEO;..\..\..\..\iOS\G3MiOSSDK\Commons\Geometry;..\..\..\..\iOS\G3MiOSSDK\Commons\GL;..\..\..\..\iOS\G3MiOSSDK\Commons\Interfaces;..\..\..\..\iOS\G3MiOSSDK\Commons\JSON;..\..\..\..\iOS\G3MiOSSDK\Commons\Layers;..\..\..\..\iOS\G3MiOSSDK\Commons\Math;..\..\..\..\iOS\G3MiOSSDK\Commons\Mesh;..\..\..\..\iOS\G3MiOSSDK\Commons\Rendererers;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_DEBUG;C_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;C_CODE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <FxCompile />
@@ -197,6 +197,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="ColorMeshV.cso">
+      <FileType>Document</FileType>
+    </None>
     <None Include="G3MWindows8App.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

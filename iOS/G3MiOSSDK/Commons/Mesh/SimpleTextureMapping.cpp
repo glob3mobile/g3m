@@ -12,7 +12,7 @@
 #include "Context.hpp"
 #include "GL.hpp"
 #include "GPUProgramManager.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "GLState.hpp"
 #include "TextureIDReference.hpp"
 

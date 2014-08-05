@@ -11,7 +11,7 @@
 #include "IFloatBuffer.hpp"
 #include "IGLTextureId.hpp"
 
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "INativeGL.hpp"
 #include "GL.hpp"
 

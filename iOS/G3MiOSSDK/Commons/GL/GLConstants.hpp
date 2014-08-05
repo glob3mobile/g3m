@@ -151,11 +151,11 @@ public:
   static void init(const INativeGL* ngl) {
     _triangles     = ngl->Primitive_Triangles();
     _triangleStrip = ngl->Primitive_TriangleStrip();
-    _triangleFan   = ngl->Primitive_TriangleFan();
+    //_triangleFan   = ngl->Primitive_TriangleFan();
     
     _lines     = ngl->Primitive_Lines();
     _lineStrip = ngl->Primitive_LineStrip();
-    _lineLoop  = ngl->Primitive_LineLoop();
+    //_lineLoop  = ngl->Primitive_LineLoop();
     
     _points = ngl->Primitive_Points();
   }

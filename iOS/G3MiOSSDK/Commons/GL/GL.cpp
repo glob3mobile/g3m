@@ -17,7 +17,7 @@
 #include "IShortBuffer.hpp"
 #include "IGLTextureId.hpp"
 
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 #include "GPUUniform.hpp"
 #include "GPUProgramManager.hpp"
 
@@ -246,7 +246,7 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
   }
 }
 
-void GL::useProgram(GPUProgram* program) {
+void GL::useProgram(IGPUProgram* program) {
   if (program != NULL) {
     if (_currentGPUProgram != program) {
 

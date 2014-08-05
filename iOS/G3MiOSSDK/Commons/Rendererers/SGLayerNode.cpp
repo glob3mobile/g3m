@@ -18,7 +18,7 @@
 #include "TextureIDReference.hpp"
 #include "IStringBuilder.hpp"
 #include "GPUProgramManager.hpp"
-#include "GPUProgram.hpp"
+#include "IGPUProgram.hpp"
 
 #define TEXTURES_DOWNLOAD_PRIORITY 1000000
 

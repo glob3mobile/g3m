@@ -14,14 +14,14 @@
 GPUProgramManager::~GPUProgramManager() {
 #ifdef C_CODE
   //delete _factory;
-  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+  for (std::map<std::string, IGPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
     delete it->second;
   }
 #endif
 }
 
-GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attributesCode) {
-  GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
+IGPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attributesCode) {
+  IGPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
   if (p == NULL) {
     p = getNewProgram(gl, uniformsCode, attributesCode);
     if (p == NULL) {
@@ -33,6 +33,10 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
     if (p->getAttributesCode() != attributesCode ||
         p->getUniformsCode() != uniformsCode) {
       //#warning GIVE MORE DETAIL
+		ILogger::instance()->logInfo("Program AttCode: %i", p->getAttributesCode());
+		ILogger::instance()->logInfo("State AttCode: %i", attributesCode);
+		ILogger::instance()->logInfo("Program UniCode: %i", p->getUniformsCode());
+		ILogger::instance()->logInfo("State UniCode: %i", uniformsCode);
       ILogger::instance()->logError("New compiled program does not match GL state.");
     }
   }
@@ -42,7 +46,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
   return p;
 }
 
-GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
+IGPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
 
   const bool texture     = GPUVariable::hasAttribute(attributesCode, TEXTURE_COORDS);
   const bool flatColor   = GPUVariable::hasUniform(uniformsCode,     FLAT_COLOR);
@@ -113,18 +117,18 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   return NULL;
 }
 
-GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode) {
+IGPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode) {
 #ifdef C_CODE
-  for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
+  for (std::map<std::string, IGPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
     //#warning GPUProgram getUniformsCode avoid call
-    GPUProgram* p = it->second;
+    IGPUProgram* p = it->second;
     if (p->getUniformsCode() == uniformsCode && p->getAttributesCode() == attributesCode) {
       return p;
     }
   }
 #endif
 #ifdef JAVA_CODE
-  for (final GPUProgram p : _programs.values()) {
+  for (final IGPUProgram p : _programs.values()) {
     if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
       return p;
     }
@@ -133,10 +137,10 @@ GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attribut
   return NULL;
 }
 
-GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
+IGPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
                                                       const std::string& name) {
 
-  GPUProgram* prog = getCompiledProgram(name);
+  IGPUProgram* prog = getCompiledProgram(name);
   if (prog == NULL) {
 
 	  prog = IGPUProgramFactory::instance()->get(gl, name);
@@ -168,9 +172,9 @@ GPUProgram* GPUProgramManager::compileProgramWithName(GL* gl,
   return prog;
 }
 
-GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
+IGPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 #ifdef C_CODE
-  std::map<std::string, GPUProgram*>::iterator it = _programs.find(name);
+  std::map<std::string, IGPUProgram*>::iterator it = _programs.find(name);
   if (it != _programs.end()) {
     return it->second;
   } else{
@@ -184,7 +188,7 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 
 void GPUProgramManager::removeUnused() {
 #ifdef C_CODE
-  std::map<std::string, GPUProgram*>::iterator it = _programs.begin();
+  std::map<std::string, IGPUProgram*>::iterator it = _programs.begin();
   while (it != _programs.end()) {
     if (it->second->getNReferences() == 0) {
       ILogger::instance()->logInfo("Deleting program %s", it->second->getName().c_str() );
@@ -199,7 +203,7 @@ void GPUProgramManager::removeUnused() {
   java.util.Iterator it = _programs.entrySet().iterator();
   while (it.hasNext()) {
     java.util.Map.Entry pairs = (java.util.Map.Entry)it.next();
-    GPUProgram program = (GPUProgram) pairs.getValue();
+    IGPUProgram program = (IGPUProgram) pairs.getValue();
     if (program.getNReferences() == 0) {
       ILogger.instance().logInfo("Deleting program %s", program.getName() );
       it.remove();

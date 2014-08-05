@@ -133,7 +133,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const {
     //prog->onUnused(); //Uncomment to check that all GPUProgramStates are complete
   }
   else {
-    ILogger::instance()->logError("No GPUProgram found.");
+    ILogger::instance()->logError("No IGPUProgram found.");
   }
 
 }

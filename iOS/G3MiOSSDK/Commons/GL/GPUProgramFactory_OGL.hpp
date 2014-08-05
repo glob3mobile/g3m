@@ -46,10 +46,11 @@ private:
 	std::vector<GPUProgramSources> _sources;
 	void addGPUProgramSources(const GPUProgramSources& s);
 	const GPUProgramSources* getSource(const std::string& name) const;
+	
 
 public:
 	GPUProgramFactory_OGL();
-	GPUProgram* get(GL* gl, const std::string& name) const;
+	IGPUProgram* get(GL* gl, const std::string& name);
 	
 };
 
