@@ -141,9 +141,6 @@ public:
   
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
   
-  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
-  
-  
   MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
   
   bool isFlat() const { return false; }

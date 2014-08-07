@@ -221,7 +221,7 @@ _webSocket(NULL),
 _marksRenderer(NULL),
 _hasParsedApplication(false)
 {
-
+  _featureInfoDownloadListener = new FeatureInfoDownloadListener(_applicationListener);
 }
 
 GPUProgramManager* MapBooBuilder::getGPUProgramManager() {
@@ -520,6 +520,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   
   ChangedRendererInfoListener* changedRendererInfoListener = NULL;
 
+  TouchEventType touchEventTypeOfTerrainTouchListener = DownUp;
+  
   PlanetRenderer* result = new PlanetRenderer(tessellator,
                                               elevationDataProvider,
                                               true,
@@ -534,7 +536,8 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                               renderTileMeshes,
                                               logTilesPetitions,
                                               tileRenderingListener,
-                                              changedRendererInfoListener);
+                                              changedRendererInfoListener,
+                                              touchEventTypeOfTerrainTouchListener);
 
   if (_enableNotifications) {
     result->addTerrainTouchListener(new MapBooBuilder_TerrainTouchListener(this));
@@ -567,7 +570,7 @@ CameraRenderer* MapBooBuilder::createCameraRenderer() {
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
-  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  //cameraRenderer->addHandler(new CameraDoubleTapHandler());
 
   return cameraRenderer;
 }
@@ -628,25 +631,49 @@ BingMapsLayer* MapBooBuilder::parseBingMapsLayer(const JSONObject* jsonLayer,
   const std::string key = jsonLayer->getAsString("key", "");
   const std::string imagerySet = jsonLayer->getAsString("imagerySet", "Aerial");
 
-  return new BingMapsLayer(imagerySet, key, timeToCache);
+  return new BingMapsLayer(imagerySet,
+                           key,
+                           timeToCache,
+                           true, // readExpired
+                           2, // initialLevel
+                           25, // maxLevel
+                           1, // transparency
+                           NULL, // condition
+                           ""); // disclaimerInfo
 }
 
 CartoDBLayer* MapBooBuilder::parseCartoDBLayer(const JSONObject* jsonLayer,
+                                               const bool transparent,
                                                const TimeInterval& timeToCache) const {
   const std::string userName = jsonLayer->getAsString("userName", "");
   const std::string table    = jsonLayer->getAsString("table",    "");
 
-  return new CartoDBLayer(userName, table, timeToCache);
+  return new CartoDBLayer(userName, //
+                          table, //
+                          timeToCache, //
+                          true, // readExpired
+                          1, // transparency
+                          transparent, // isTransparent
+                          NULL, // condition,
+                          ""); // disclaimerInfo
 }
 
 MapBoxLayer* MapBooBuilder::parseMapBoxLayer(const JSONObject* jsonLayer,
                                              const TimeInterval& timeToCache) const {
   const std::string mapKey = jsonLayer->getAsString("mapKey", "");
 
-  return new MapBoxLayer(mapKey, timeToCache);
+  return new MapBoxLayer(mapKey,
+                         timeToCache,
+                         true, // readExpired
+                         1, // initialLevel
+                         19, // maxLevel
+                         1, // transparency
+                         NULL, // condition
+                         ""); // disclaimerInfo
 }
 
-WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
+WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer,
+                                       const bool transparent) const {
 
   const std::string mapLayer = jsonLayer->getAsString("layerName", "");
   const URL mapServerURL = URL(jsonLayer->getAsString("server", ""), false);
@@ -669,7 +696,6 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
   else if (srs.compare("EPSG:3857") == 0) {
     layerTilesRenderParameters = LayerTilesRenderParameters::createDefaultMercator(0, 17);
   }
-  const bool isTransparent = jsonLayer->getAsBoolean("transparent", false);
   const double expiration = jsonLayer->getAsNumber("expiration", 0);
   const long long milliseconds = IMathUtils::instance()->round(expiration);
   const TimeInterval timeToCache = TimeInterval::fromMilliseconds(milliseconds);
@@ -685,17 +711,16 @@ WMSLayer* MapBooBuilder::parseWMSLayer(const JSONObject* jsonLayer) const {
                       imageFormat,
                       srs,
                       style,
-                      isTransparent,
+                      transparent,
                       NULL,
                       timeToCache,
                       readExpired,
                       layerTilesRenderParameters);
 }
 
-URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLayer) const {
+URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLayer,
+                                                       const bool transparent) const {
   const std::string urlTemplate = jsonLayer->getAsString("url", "");
-
-  const bool transparent = jsonLayer->getAsBoolean("transparent", true);
 
   const int firstLevel = (int) jsonLayer->getAsNumber("firstLevel", 1);
   const int maxLevel   = (int) jsonLayer->getAsNumber("maxLevel", 19);
@@ -743,10 +768,16 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
     return NULL;
   }
 
+  const bool transparent = jsonLayer->getAsBoolean("transparent", false);
   const std::string layerType = jsonLayer->getAsString("layer", "<layer not present>");
   Layer* layer;
   if (layerType.compare("OSM") == 0) {
-    layer = new OSMLayer(defaultTimeToCache);
+    layer = new OSMLayer(defaultTimeToCache,
+                         true, // readExpired,
+                         2, // initialLevel,
+                         1, // transparency,
+                         NULL, // condition,
+                         ""); //disclaimerInfo
   }
   else if (layerType.compare("MapQuest") == 0) {
     layer = parseMapQuestLayer(jsonLayer, defaultTimeToCache);
@@ -755,16 +786,16 @@ Layer* MapBooBuilder::parseLayer(const JSONBaseObject* jsonBaseObjectLayer) cons
     layer = parseBingMapsLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("CartoDB") == 0) {
-    layer = parseCartoDBLayer(jsonLayer, defaultTimeToCache);
+    layer = parseCartoDBLayer(jsonLayer, transparent, defaultTimeToCache);
   }
   else if (layerType.compare("MapBox") == 0) {
     layer = parseMapBoxLayer(jsonLayer, defaultTimeToCache);
   }
   else if (layerType.compare("WMS") == 0) {
-    layer = parseWMSLayer(jsonLayer);
+    layer = parseWMSLayer(jsonLayer, transparent);
   }
   else if (layerType.compare("URLTemplate") == 0) {
-    layer = parseURLTemplateLayer(jsonLayer);
+    layer = parseURLTemplateLayer(jsonLayer, transparent);
   }
   else {
     ILogger::instance()->logError("Unsupported layer type \"%s\"", layerType.c_str());
@@ -1594,7 +1625,7 @@ G3MWidget* MapBooBuilder::create() {
   MapBoo_HUDRenderer* hudRenderer = new MapBoo_HUDRenderer();
   InfoDisplay* infoDisplay = new MapBoo_HUDRendererInfoDisplay(hudRenderer);
   infoDisplay->showDisplay();
-
+  
   _g3mWidget = G3MWidget::create(getGL(),
                                  getStorage(),
                                  getDownloader(),
@@ -2104,6 +2135,13 @@ const URL MapBooBuilder::createGetFeatureInfoRestURL(const Tile* tile,
   
   return URL(path, false);
   
+}
+
+const void MapBooBuilder::requestGetFeatureInfo(const Tile* tile,
+                                 const Vector2I& size,
+                                 const Vector2I& pixel,
+                                 const Geodetic3D& position) {
+  _g3mWidget->getG3MContext()->getDownloader()->requestBuffer(createGetFeatureInfoRestURL(tile, size, pixel, position), DownloadPriority::HIGHER, TimeInterval::zero(), false, _featureInfoDownloadListener, false);
 }
 
 

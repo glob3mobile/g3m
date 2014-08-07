@@ -698,7 +698,7 @@ G3MWidget* IG3MBuilder::create() {
                                                           initialCameraPosition._height * 1.2));
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
-
+  
   G3MWidget * g3mWidget = G3MWidget::create(getGL(),
                                             getStorage(),
                                             getDownloader(),

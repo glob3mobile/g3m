@@ -94,7 +94,19 @@ public abstract class Planet
 
   //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
 
-  public abstract Vector3D closestIntersection(Vector3D pos, Vector3D ray);
+  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  {
+    if (pos.isNan() || ray.isNan())
+    {
+      return Vector3D.nan();
+    }
+    java.util.ArrayList<Double> distances = intersectionsDistances(pos._x, pos._y, pos._z, ray._x, ray._y, ray._z);
+    if (distances.isEmpty())
+    {
+      return Vector3D.nan();
+    }
+    return pos.add(ray.times(distances.get(0)));
+  }
 
 
   public abstract MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position);

@@ -1086,5 +1086,4 @@ public abstract class IG3MBuilder
     }
     _infoDisplay = infoDisplay;
   }
-
 }

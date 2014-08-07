@@ -86,20 +86,6 @@ double FlatPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   return computePreciseLatLonDistance(g1, g2);
 }
 
-Vector3D FlatPlanet::closestIntersection(const Vector3D& pos,
-                                         const Vector3D& ray) const {
-  std::vector<double> distances = intersectionsDistances(pos._x,
-                                                         pos._y,
-                                                         pos._z,
-                                                         ray._x,
-                                                         ray._y,
-                                                         ray._z);
-  if (distances.empty()) {
-    return Vector3D::nan();
-  }
-  return pos.add(ray.times(distances[0]));
-}
-
 MutableMatrix44D FlatPlanet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
   return MutableMatrix44D::createTranslationMatrix( toCartesian(position) );
 }

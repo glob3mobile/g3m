@@ -121,7 +121,8 @@ PlanetRenderer::PlanetRenderer(TileTessellator*             tessellator,
                                const bool                   renderTileMeshes,
                                const bool                   logTilesPetitions,
                                TileRenderingListener*       tileRenderingListener,
-                               ChangedRendererInfoListener*         changedInfoListener) :
+                               ChangedRendererInfoListener*         changedInfoListener,
+                               TouchEventType touchEventTypeOfTerrainTouchListener) :
 _tessellator(tessellator),
 _elevationDataProvider(elevationDataProvider),
 _ownsElevationDataProvider(ownsElevationDataProvider),
@@ -145,7 +146,8 @@ _layerTilesRenderParameters(NULL),
 _layerTilesRenderParametersDirty(true),
 _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
-_tileRenderingListener(tileRenderingListener)
+_tileRenderingListener(tileRenderingListener),
+_touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
 {
   _context = NULL;
   _layerSet->setChangeListener(this);
@@ -431,7 +433,13 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
-    return _errors.empty() ? RenderState::busy() : RenderState::error(_errors);
+    if (_errors.empty()) {
+      if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
+        return RenderState::busy();
+      }
+    } else {
+      return RenderState::error(_errors);
+    }
   }
 
   const RenderState layerSetRenderState = _layerSet->getRenderState();
@@ -767,7 +775,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
     return false;
   } 
 
-  if (touchEvent->getType() == LongPress) {
+  if ( touchEvent->getType() == _touchEventTypeOfTerrainTouchListener ) {
     const Vector2I pixel = touchEvent->getTouch(0)->getPos();
     const Vector3D ray = _lastCamera->pixel2Ray(pixel);
     const Vector3D origin = _lastCamera->getCartesianPosition();
@@ -776,6 +784,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
 
     const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
     if (positionCartesian.isNan()) {
+      ILogger::instance()->logWarning("PlanetRenderer::onTouchEvent: positionCartesian ( - planet->closestIntersection(origin, ray) - ) is NaN");
       return false;
     }
 
@@ -806,7 +815,6 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
         return false;
       }
     }
-
   }
 
   return false;

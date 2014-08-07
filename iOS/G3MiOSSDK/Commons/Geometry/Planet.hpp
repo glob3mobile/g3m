@@ -87,8 +87,8 @@ public:
                                            const Geodetic2D& g2) const = 0;
   
   //virtual Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const = 0;
-  
-  virtual Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const = 0;
+
+  Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
   
   
   virtual MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const = 0;

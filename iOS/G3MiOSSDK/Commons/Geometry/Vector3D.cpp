@@ -16,6 +16,12 @@ Vector3D Vector3D::zero = Vector3D(0,0,0);
 
 
 Vector3D Vector3D::normalized() const {
+  if (isNan()) {
+    return nan();
+  }
+  if (isZero()) {
+    return zero;
+  }
   const double d = length();
   return Vector3D(_x / d, _y / d, _z / d);
 }

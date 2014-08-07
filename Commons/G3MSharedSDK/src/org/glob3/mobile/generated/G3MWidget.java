@@ -308,44 +308,42 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider);
   
+      // notify the original event
+      notifyTouchEvent(ec, touchEvent);
   
-    // notify the original event
-    notifyTouchEvent(ec, touchEvent);
-  
-  
-    // creates DownUp event when a Down is immediately followed by an Up
-    if (touchEvent.getTouchCount() == 1)
-    {
-      final TouchEventType eventType = touchEvent.getType();
-      if (eventType == TouchEventType.Down)
+      // creates DownUp event when a Down is immediately followed by an Up
+      //ILogger::instance()->logInfo("Touch Event: %i. Taps: %i. Touchs: %i",touchEvent->getType(), touchEvent->getTapCount(), touchEvent->getTouchCount());
+      if (touchEvent.getTouchCount() == 1)
       {
-        _clickOnProcess = true;
+        final TouchEventType eventType = touchEvent.getType();
+        if (eventType == TouchEventType.Down)
+        {
+          _clickOnProcess = true;
+        }
+        else
+        {
+          if (eventType == TouchEventType.Up)
+          {
+            if (_clickOnProcess)
+            {
+  
+              final Touch touch = touchEvent.getTouch(0);
+              final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
+  
+              notifyTouchEvent(ec, downUpEvent);
+  
+              if (downUpEvent != null)
+                 downUpEvent.dispose();
+            }
+          }
+          _clickOnProcess = false;
+        }
       }
       else
       {
-        if (eventType == TouchEventType.Up)
-        {
-          if (_clickOnProcess)
-          {
-  
-            final Touch touch = touchEvent.getTouch(0);
-            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
-  
-            notifyTouchEvent(ec, downUpEvent);
-  
-            if (downUpEvent != null)
-               downUpEvent.dispose();
-          }
-        }
         _clickOnProcess = false;
       }
     }
-    else
-    {
-      _clickOnProcess = false;
-    }
-  
-  }
 
   public final void onResizeViewportEvent(int width, int height)
   {

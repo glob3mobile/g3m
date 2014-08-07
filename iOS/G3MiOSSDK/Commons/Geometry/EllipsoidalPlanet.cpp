@@ -231,22 +231,6 @@ double EllipsoidalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   return dist * PI / 180 * R;
 }
 
-
-Vector3D EllipsoidalPlanet::closestIntersection(const Vector3D& pos,
-                                                const Vector3D& ray) const {
-  std::vector<double> distances = intersectionsDistances(pos._x,
-                                                         pos._y,
-                                                         pos._z,
-                                                         ray._x,
-                                                         ray._y,
-                                                         ray._z);
-  if (distances.empty()) {
-    return Vector3D::nan();
-  }
-  return pos.add(ray.times(distances[0]));
-}
-
-
 Vector3D EllipsoidalPlanet::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
   const IMathUtils* mu = IMathUtils::instance();
 
@@ -319,6 +303,10 @@ MutableMatrix44D EllipsoidalPlanet::singleDrag(const Vector3D& finalRay) const
     //printf ("--invalid final point in drag!!\n");
 //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
     finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
+    if (finalPoint.isNan()) {
+      ILogger::instance()->logWarning("EllipsoidalPlanet::singleDrag-> finalPoint is NaN");
+      return MutableMatrix44D::invalid();
+    }
   }
 
   // compute the rotation axis

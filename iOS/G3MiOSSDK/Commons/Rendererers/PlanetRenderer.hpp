@@ -29,6 +29,7 @@ class ChangedInfoListener;
 #include "ITileVisitor.hpp"
 #include "SurfaceElevationProvider.hpp"
 #include "ChangedListener.hpp"
+#include "TouchEvent.hpp"
 
 
 
@@ -289,6 +290,9 @@ private:
   const LayerTilesRenderParameters* getLayerTilesRenderParameters();
 
   std::vector<TerrainTouchListener*> _terrainTouchListeners;
+  
+  TouchEventType _touchEventTypeOfTerrainTouchListener;
+
 
   std::vector<Tile*> _toVisit;
   std::vector<Tile*> _toVisitInNextIteration;
@@ -308,7 +312,8 @@ public:
                  const bool                   renderTileMeshes,
                  const bool                   logTilesPetitions,
                  TileRenderingListener*       tileRenderingListener,
-                 ChangedRendererInfoListener* changedInfoListener);
+                 ChangedRendererInfoListener* changedInfoListener,
+                 TouchEventType _touchEventTypeOfTerrainTouchListener);
 
   ~PlanetRenderer();
 

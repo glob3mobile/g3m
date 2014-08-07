@@ -50,6 +50,8 @@ class MapBooBuilder;
 class Vector2I;
 class URLTemplateLayer;
 class Sector;
+class IByteBuffer;
+class IBufferDownloadListener;
 
 #include <vector>
 #include <string>
@@ -60,6 +62,8 @@ class Sector;
 #include "InfoDisplay.hpp"
 #include "HUDImageRenderer.hpp"
 #include "GroupCanvasElement.hpp"
+#include "IBufferDownloadListener.hpp"
+
 
 
 class MapBooApplicationChangeListener {
@@ -102,7 +106,65 @@ public:
                               const Camera*          camera,
                               const Geodetic3D&      position,
                               const Tile*            tile) = 0;
+  
+  virtual void onFeatureInfoReceived(IByteBuffer* buffer) = 0;
 
+};
+
+class FeatureInfoDownloadListener : public IBufferDownloadListener {
+private:
+  MapBooApplicationChangeListener* _applicationListener;
+public:
+  
+  /**
+   Callback method invoked on a successful download.  The buffer has to be deleted in C++ / .disposed() in Java
+   */
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+    if (_applicationListener != NULL) {
+      _applicationListener->onFeatureInfoReceived(buffer);
+    }
+  }
+  
+  /**
+   Callback method invoke after an error trying to download url
+   */
+  void onError(const URL& url) {
+    
+  }
+  
+  /**
+   Callback method invoke after canceled request
+   */
+  void onCancel(const URL& url) {
+    
+  }
+  
+  /**
+   This method will be call, before onCancel, when the data arrived before the cancelation.
+   
+   The buffer WILL be deleted/disposed after the method finishs.  If you need to keep the buffer, use shallowCopy() to store a copy of the buffer.
+   */
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    
+  }
+  
+  FeatureInfoDownloadListener(MapBooApplicationChangeListener* applicationListener) : _applicationListener(applicationListener)
+  {
+    
+  }
+  
+  virtual ~FeatureInfoDownloadListener()
+  {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+    
+  }
+  
 };
 
 
@@ -521,6 +583,8 @@ private:
   MapBoo_ViewType _viewType;
 
   MapBooApplicationChangeListener* _applicationListener;
+  
+  FeatureInfoDownloadListener* _featureInfoDownloadListener;
 
   const bool _enableNotifications;
 
@@ -551,7 +615,7 @@ private:
 #endif
 
   bool        _isApplicationTubeOpen;
-  
+    
   MapBoo_ErrorRenderer* _mbErrorRenderer;
 
   LayerSet* _layerSet;
@@ -589,15 +653,18 @@ private:
                                     const TimeInterval& timeToCache) const;
 
   CartoDBLayer* parseCartoDBLayer(const JSONObject* jsonLayer,
+                                  const bool transparent,
                                   const TimeInterval& timeToCache) const;
 
 
   MapBoxLayer* parseMapBoxLayer(const JSONObject* jsonLayer,
                                 const TimeInterval& timeToCache) const;
 
-  WMSLayer* parseWMSLayer(const JSONObject* jsonLayer) const;
+  WMSLayer* parseWMSLayer(const JSONObject* jsonLayer,
+                          const bool transparent) const;
 
-  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer) const;
+  URLTemplateLayer* parseURLTemplateLayer(const JSONObject* jsonLayer,
+                                          const bool transparent) const;
 
   const std::string getApplicationCurrentSceneId();
   const MapBoo_Scene* getApplicationCurrentScene();
@@ -659,6 +726,10 @@ private:
   
   const URL createApplicationCurrentSceneURL() const;
 
+  const URL createGetFeatureInfoRestURL(const Tile* tile,
+                                        const Vector2I& size,
+                                        const Vector2I& pixel,
+                                        const Geodetic3D& position);
 protected:
   MapBooBuilder(const URL& serverURL,
                 const URL& tubesURL,
@@ -811,11 +882,11 @@ public:
     return _serverURL;
   }
   
-  const URL createGetFeatureInfoRestURL(const Tile* tile,
-                                        const Vector2I& size,
-                                        const Vector2I& pixel,
-                                        const Geodetic3D& position);
-
+  const void requestGetFeatureInfo(const Tile* tile,
+                                   const Vector2I& size,
+                                   const Vector2I& pixel,
+                                   const Geodetic3D& position);
+  
   /** Private to MapbooBuilder, don't call it */
   void pollApplicationDataFromServer(const G3MContext* context);
   

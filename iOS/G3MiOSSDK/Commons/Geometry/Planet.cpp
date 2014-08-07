@@ -61,3 +61,21 @@ std::vector<double> Planet::intersectionsDistances(const Vector3D& origin,
                                 direction.y(),
                                 direction.z());
 }
+
+Vector3D Planet::closestIntersection(const Vector3D& pos,
+                                              const Vector3D& ray) const {
+  if (pos.isNan() || ray.isNan()) {
+    return Vector3D::nan();
+  }
+  std::vector<double> distances = intersectionsDistances(pos._x,
+                                                         pos._y,
+                                                         pos._z,
+                                                         ray._x,
+                                                         ray._y,
+                                                         ray._z);
+  if (distances.empty()) {
+    return Vector3D::nan();
+  }
+  return pos.add(ray.times(distances[0]));
+}
+

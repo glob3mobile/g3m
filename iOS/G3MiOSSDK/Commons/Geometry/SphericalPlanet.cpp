@@ -209,19 +209,6 @@ double SphericalPlanet::computeFastLatLonDistance(const Geodetic2D& g1,
   return dist * PI / 180 * R;
 }
 
-Vector3D SphericalPlanet::closestIntersection(const Vector3D& pos,
-                                              const Vector3D& ray) const {
-  std::vector<double> distances = intersectionsDistances(pos._x,
-                                                         pos._y,
-                                                         pos._z,
-                                                         ray._x,
-                                                         ray._y,
-                                                         ray._z);
-  if (distances.empty()) {
-    return Vector3D::nan();
-  }
-  return pos.add(ray.times(distances[0]));
-}
 
 Vector3D SphericalPlanet::closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const {
   const IMathUtils* mu = IMathUtils::instance();
@@ -285,7 +272,7 @@ void SphericalPlanet::beginSingleDrag(const Vector3D& origin, const Vector3D& in
 
 MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
 {
-  // test if initialPoint is valid
+  // check if initialPoint is valid
   if (_initialPoint.isNan()) return MutableMatrix44D::invalid();
 
   // compute final point
@@ -295,6 +282,10 @@ MutableMatrix44D SphericalPlanet::singleDrag(const Vector3D& finalRay) const
     //printf ("--invalid final point in drag!!\n");
 //    finalPoint = closestPointToSphere(origin, finalRay).asMutableVector3D();
     finalPoint.copyFrom(closestPointToSphere(origin, finalRay));
+    if (finalPoint.isNan()) {
+      ILogger::instance()->logWarning("SphericalPlanet::singleDrag-> finalPoint is NaN");
+      return MutableMatrix44D::invalid();
+    }
   }
 
   // compute the rotation axis

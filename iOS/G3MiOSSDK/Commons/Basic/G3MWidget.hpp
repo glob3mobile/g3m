@@ -316,7 +316,7 @@ private:
   bool _forceBusyRenderer;
   
   InfoDisplay* _infoDisplay;
-
+  
   G3MWidget(GL*                              gl,
             IStorage*                        storage,
             IDownloader*                     downloader,
