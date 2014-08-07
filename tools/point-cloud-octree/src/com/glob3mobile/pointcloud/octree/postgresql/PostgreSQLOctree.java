@@ -10,7 +10,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Geodetic3D;
 
 import com.glob3mobile.pointcloud.octree.JDBCUtils;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
@@ -21,18 +26,45 @@ implements
 PersistentOctree {
 
 
+   private static final int DEFAULT_BUFFER_SIZE = 1024 * 32;
+
+
    public static PostgreSQLOctree get(final String server,
                                       final String db,
                                       final String user,
                                       final String password,
                                       final String cloudName,
                                       final boolean createIfNotExists) {
-      return new PostgreSQLOctree(server, db, user, password, cloudName, createIfNotExists);
+      return get(server, db, user, password, cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE);
    }
 
 
-   private final Connection _connection;
-   private final String     _cloudName;
+   public static PostgreSQLOctree get(final String server,
+                                      final String db,
+                                      final String user,
+                                      final String password,
+                                      final String cloudName,
+                                      final boolean createIfNotExists,
+                                      final int bufferSize) {
+      return new PostgreSQLOctree(server, db, user, password, cloudName, createIfNotExists, bufferSize);
+   }
+
+
+   private final Connection       _connection;
+   private final String           _cloudName;
+   private List<PostgreSQLNode>   _nodes;
+
+   private final List<Geodetic3D> _buffer;
+   private final int              _bufferSize;
+   private double                 _minLatitudeInRadians;
+   private double                 _minLongitudeInRadians;
+   private double                 _minHeight;
+   private double                 _maxLatitudeInRadians;
+   private double                 _maxLongitudeInRadians;
+   private double                 _maxHeight;
+   private double                 _sumLatitudeInRadians;
+   private double                 _sumLongitudeInRadians;
+   private double                 _sumHeight;
 
 
    private PostgreSQLOctree(final String server,
@@ -40,8 +72,13 @@ PersistentOctree {
                             final String user,
                             final String password,
                             final String cloudName,
-                            final boolean createIfNotExists) {
+                            final boolean createIfNotExists,
+                            final int bufferSize) {
       final String url = "jdbc:postgresql://" + server + "/" + db;
+
+      _bufferSize = bufferSize;
+      _buffer = new ArrayList<>(bufferSize);
+      resetBufferBounds();
 
       try {
          _connection = DriverManager.getConnection(url, user, password);
@@ -63,8 +100,14 @@ PersistentOctree {
 
 
    private void readNodes() {
-      log("reading nodes");
-      final int TODO;
+      log("reading nodes...");
+      try {
+         _nodes = PostgreSQLNode.getAll(_connection, getQuotedNodeTableName());
+      }
+      catch (final SQLException e) {
+         throw new RuntimeException(e);
+      }
+      log("read " + _nodes.size() + " nodes");
    }
 
 
@@ -240,6 +283,9 @@ PersistentOctree {
 
    @Override
    public void close() {
+
+      flush();
+
       JDBCUtils.close(_connection);
    }
 
@@ -264,4 +310,110 @@ PersistentOctree {
          throw new RuntimeException("Can't connect", e);
       }
    }
+
+
+   private static Geodetic3D fromRadians(final double latitudeInRadians,
+                                         final double longitudeInRadians,
+                                         final double height) {
+      return new Geodetic3D( //
+               Angle.fromRadians(latitudeInRadians), //
+               Angle.fromRadians(longitudeInRadians), //
+               height);
+   }
+
+
+   private void flush() {
+      final int bufferSize = _buffer.size();
+      if (bufferSize > 0) {
+
+         final Geodetic3D lowerPoint = fromRadians(_minLatitudeInRadians, _minLongitudeInRadians, _minHeight);
+         final Geodetic3D upperPoint = fromRadians(_maxLatitudeInRadians, _maxLongitudeInRadians, _maxHeight);
+
+         final double averageLatitudeInRadians = _sumLatitudeInRadians / bufferSize;
+         final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;
+         final double averageHeight = _sumHeight / bufferSize;
+
+         final Geodetic3D averagePoint = fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
+
+         log("Flushing buffer of " + bufferSize + ", average=" + toString(averagePoint) + ", bounds=(" + toString(lowerPoint)
+                  + " / " + toString(upperPoint) + ")...");
+
+
+         for (final Geodetic3D point : _buffer) {
+
+         }
+
+         _buffer.clear();
+
+         resetBufferBounds();
+      }
+   }
+
+
+   private static String toString(final Geodetic3D point) {
+      return "(lat=" + toString(point._latitude) + ", lon=" + toString(point._longitude) + ", height=" + point._height + ")";
+   }
+
+
+   private static String toString(final Angle angle) {
+      return angle._degrees + "d";
+   }
+
+
+   private void resetBufferBounds() {
+      _minLatitudeInRadians = Double.POSITIVE_INFINITY;
+      _minLongitudeInRadians = Double.POSITIVE_INFINITY;
+      _minHeight = Double.POSITIVE_INFINITY;
+
+      _maxLatitudeInRadians = Double.NEGATIVE_INFINITY;
+      _maxLongitudeInRadians = Double.NEGATIVE_INFINITY;
+      _maxHeight = Double.NEGATIVE_INFINITY;
+
+      _sumLatitudeInRadians = 0.0;
+      _sumLongitudeInRadians = 0.0;
+      _sumHeight = 0.0;
+   }
+
+
+   @Override
+   public void addPoint(final Geodetic3D point) {
+      _buffer.add(point);
+
+      final double latitudeInRadians = point._latitude._radians;
+      final double longitudeInRadians = point._longitude._radians;
+      final double height = point._height;
+
+      _sumLatitudeInRadians += latitudeInRadians;
+      _sumLongitudeInRadians += longitudeInRadians;
+      _sumHeight += height;
+
+
+      if (latitudeInRadians < _minLatitudeInRadians) {
+         _minLatitudeInRadians = latitudeInRadians;
+      }
+      if (latitudeInRadians > _maxLatitudeInRadians) {
+         _maxLatitudeInRadians = latitudeInRadians;
+      }
+
+      if (longitudeInRadians < _minLongitudeInRadians) {
+         _minLongitudeInRadians = longitudeInRadians;
+      }
+      if (longitudeInRadians > _maxLongitudeInRadians) {
+         _maxLongitudeInRadians = longitudeInRadians;
+      }
+
+      if (height < _minHeight) {
+         _minHeight = height;
+      }
+      if (height > _maxHeight) {
+         _maxHeight = height;
+      }
+
+
+      if (_buffer.size() == _bufferSize) {
+         flush();
+      }
+   }
+
+
 }
