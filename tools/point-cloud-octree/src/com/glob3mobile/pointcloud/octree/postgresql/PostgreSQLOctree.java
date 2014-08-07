@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.pointcloud.octree;
+package com.glob3mobile.pointcloud.octree.postgresql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -12,10 +12,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.glob3mobile.pointcloud.octree.JDBCUtils;
+import com.glob3mobile.pointcloud.octree.PersistentOctree;
+
 
 public class PostgreSQLOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
 
    public static PostgreSQLOctree get(final String server,
@@ -67,29 +70,9 @@ public class PostgreSQLOctree
 
    private void create() {
       try {
-         try (final Statement st = _connection.createStatement()) {
-            log("creating metadata table");
-            st.executeUpdate(getCreateMetadataTableSQL());
-         }
-
-         try (final Statement st = _connection.createStatement()) {
-            st.executeUpdate("INSERT INTO " + getQuotedMetadataTableName() + " (name) VALUES ('" + _cloudName + "');");
-         }
-
-
-         try (final Statement st = _connection.createStatement()) {
-            log("creating node table");
-            st.executeUpdate(getCreateNodeTableSQL());
-         }
-
-         log("creating node table indexes");
-         createNodeTableIndex("lowerLatitude");
-         createNodeTableIndex("lowerLongitude");
-         createNodeTableIndex("lowerHeight");
-
-         createNodeTableIndex("upperLatitude");
-         createNodeTableIndex("upperLongitude");
-         createNodeTableIndex("upperHeight");
+         createMetadataTable();
+         createNodeTable();
+         createNodeDataTable();
       }
       catch (final SQLException e) {
          throw new RuntimeException("Can't create", e);
@@ -97,10 +80,47 @@ public class PostgreSQLOctree
    }
 
 
+   private void createMetadataTable() throws SQLException {
+      try (final Statement st = _connection.createStatement()) {
+         log("creating metadata table");
+         st.executeUpdate(getCreateMetadataTableSQL());
+      }
+
+      try (final Statement st = _connection.createStatement()) {
+         st.executeUpdate("INSERT INTO " + getQuotedMetadataTableName() + " (name) VALUES ('" + _cloudName + "');");
+      }
+   }
+
+
+   private void createNodeTable() throws SQLException {
+      try (final Statement st = _connection.createStatement()) {
+         log("creating node table");
+         st.executeUpdate(getCreateNodeTableSQL());
+      }
+
+      log("creating node table indexes");
+      createNodeTableIndex("lower_latitude");
+      createNodeTableIndex("lower_longitude");
+      createNodeTableIndex("lower_height");
+
+      createNodeTableIndex("upper_latitude");
+      createNodeTableIndex("upper_longitude");
+      createNodeTableIndex("upper_height");
+   }
+
+
+   private void createNodeDataTable() throws SQLException {
+      try (final Statement st = _connection.createStatement()) {
+         log("creating node_data table");
+         st.executeUpdate(getCreateNodeDataTableSQL());
+      }
+   }
+
+
    private void createNodeTableIndex(final String columnName) throws SQLException {
       try (final Statement st = _connection.createStatement()) {
          st.executeUpdate("CREATE INDEX \"" + getNodeTableName() + "_" + columnName + "\" ON " + getQuotedNodeTableName() + " ("
-                          + columnName + ")");
+                  + columnName + ")");
       }
    }
 
@@ -122,30 +142,48 @@ public class PostgreSQLOctree
 
    private String getCreateMetadataTableSQL() {
       return "CREATE TABLE " + getQuotedMetadataTableName() + " " + //
-             "(name TEXT NOT NULL)";
+               "(name TEXT NOT NULL)";
    }
 
 
    private String getCreateNodeTableSQL() {
       return "CREATE TABLE " + getQuotedNodeTableName() + " " + //
-             "(id smallint[] NOT NULL," + //
-             "lowerLatitude float8 NOT NULL," + //
-             "lowerLongitude float8 NOT NULL," + //
-             "lowerHeight float8 NOT NULL," + //
-             "upperLatitude float8 NOT NULL," + //
-             "upperLongitude float8 NOT NULL," + //
-             "upperHeight float8 NOT NULL," + //
-             " CONSTRAINT \"" + getNodeTableName() + "_id_primary_key\" PRIMARY KEY (id))";
+               "(id smallint[] NOT NULL," + //
+               "lower_latitude float8 NOT NULL," + //
+               "lower_longitude float8 NOT NULL," + //
+               "lower_height float8 NOT NULL," + //
+               "upper_latitude float8 NOT NULL," + //
+               "upper_longitude float8 NOT NULL," + //
+               "upper_height float8 NOT NULL," + //
+               "points_count bigint NOT NULL," + //
+               "average_latitude float8 NOT NULL," + //
+               "average_longitude float8 NOT NULL," + //
+               "average_height float8 NOT NULL," + //
+               " CONSTRAINT \"" + getNodeTableName() + "_id_primary_key\" PRIMARY KEY (id))";
+   }
+
+
+   private String getCreateNodeDataTableSQL() {
+      return "CREATE TABLE " + getQuotedNodeDataTableName() + " " + //
+               "(id smallint[] NOT NULL," + //
+               "format smallint NOT NULL," + //
+               "points float4[] NOT NULL," + //
+               " CONSTRAINT \"" + getNodeDataTableName() + "_id_primary_key\" PRIMARY KEY (id))";
    }
 
 
    private String getMetadataTableName() {
-      return "OT_metadata_" + _cloudName;
+      return "OT_" + _cloudName + "_metadata";
    }
 
 
    private String getNodeTableName() {
-      return "OT_node_" + _cloudName;
+      return "OT_" + _cloudName + "_node";
+   }
+
+
+   private String getNodeDataTableName() {
+      return "OT_" + _cloudName + "_node_data";
    }
 
 
@@ -159,15 +197,22 @@ public class PostgreSQLOctree
    }
 
 
+   private String getQuotedNodeDataTableName() {
+      return "\"" + getNodeDataTableName() + "\"";
+   }
+
+
    private boolean exists() {
-      boolean nodeExists = false;
       boolean metadataExists = false;
+      boolean nodeExists = false;
+      boolean nodeDataExists = false;
       try {
          final DatabaseMetaData md = _connection.getMetaData();
 
          try (final ResultSet rs = md.getTables(null, null, "%", null)) {
             final String metadataTableName = getMetadataTableName();
             final String nodeTableName = getNodeTableName();
+            final String nodeDataTableName = getNodeDataTableName();
 
             while (rs.next()) {
                final String tableType = rs.getString("TABLE_TYPE");
@@ -179,6 +224,9 @@ public class PostgreSQLOctree
                   if (tableName.equals(nodeTableName)) {
                      nodeExists = true;
                   }
+                  if (tableName.equals(nodeDataTableName)) {
+                     nodeDataExists = true;
+                  }
                }
             }
          }
@@ -186,7 +234,7 @@ public class PostgreSQLOctree
       catch (final SQLException e) {
          throw new RuntimeException("Can't connect", e);
       }
-      return nodeExists & metadataExists;
+      return metadataExists & nodeExists & nodeDataExists;
    }
 
 
@@ -206,6 +254,10 @@ public class PostgreSQLOctree
          try (final Statement st = _connection.createStatement()) {
             log("removing node table");
             st.executeUpdate("DROP TABLE " + getQuotedNodeTableName() + ";");
+         }
+         try (final Statement st = _connection.createStatement()) {
+            log("removing node_data table");
+            st.executeUpdate("DROP TABLE " + getQuotedNodeDataTableName() + ";");
          }
       }
       catch (final SQLException e) {

@@ -2,6 +2,8 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import com.glob3mobile.pointcloud.octree.postgresql.PostgreSQLOctree;
+
 
 public class Main {
    private static final String SERVER     = "192.168.1.12";
