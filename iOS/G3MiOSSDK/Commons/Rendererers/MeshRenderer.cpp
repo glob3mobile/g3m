@@ -645,6 +645,10 @@ public:
   void onError(const URL& url) {
     ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
 
+    if (_listener != NULL) {
+      _listener->onError(url);
+    }
+    
     if (_deleteListener) {
       delete _listener;
     }

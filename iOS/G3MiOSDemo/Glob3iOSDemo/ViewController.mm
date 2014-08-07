@@ -476,6 +476,9 @@ public:
 
 class TestMeshLoadListener : public MeshLoadListener {
 public:
+  void onError(const URL& url) {
+  }
+  
   void onBeforeAddMesh(Mesh* mesh) {
   }
 
