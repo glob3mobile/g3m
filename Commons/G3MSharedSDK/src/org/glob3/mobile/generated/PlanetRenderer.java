@@ -605,7 +605,17 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     final LayerTilesRenderParameters layerTilesRenderParameters = getLayerTilesRenderParameters();
     if (layerTilesRenderParameters == null)
     {
-      return _errors.isEmpty() ? RenderState.busy() : RenderState.error(_errors);
+      if (_errors.isEmpty())
+      {
+        if (_tilesRenderParameters._forceFirstLevelTilesRenderOnStart)
+        {
+          return RenderState.busy();
+        }
+      }
+      else
+      {
+        return RenderState.error(_errors);
+      }
     }
   
     final RenderState layerSetRenderState = _layerSet.getRenderState();
