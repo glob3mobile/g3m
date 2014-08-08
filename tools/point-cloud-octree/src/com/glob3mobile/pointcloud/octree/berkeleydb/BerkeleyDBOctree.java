@@ -21,14 +21,13 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-import com.sleepycat.je.Transaction;
 
 import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -183,7 +182,6 @@ PersistentOctree {
    synchronized public void flush() {
       final int bufferSize = _buffer.size();
       if (bufferSize > 0) {
-
          final Geodetic3D lower = Utils.fromRadians(_minLatitudeInRadians, _minLongitudeInRadians, _minHeight);
          final Geodetic3D upper = Utils.fromRadians(_maxLatitudeInRadians, _maxLongitudeInRadians, _maxHeight);
 
@@ -221,14 +219,12 @@ PersistentOctree {
 
    @Override
    public void acceptVisitor(final PersistentOctree.Visitor visitor) {
-
       visitor.start();
 
       final CursorConfig config = new CursorConfig();
       config.setReadUncommitted(false);
-      final Transaction txn = null;
 
-      try (final Cursor cursor = _nodeDB.openCursor(txn, config)) {
+      try (final Cursor cursor = _nodeDB.openCursor(null, config)) {
          final DatabaseEntry keyEntry = new DatabaseEntry();
          final DatabaseEntry dataEntry = new DatabaseEntry();
 
@@ -245,7 +241,6 @@ PersistentOctree {
       }
 
       visitor.stop();
-
    }
 
 

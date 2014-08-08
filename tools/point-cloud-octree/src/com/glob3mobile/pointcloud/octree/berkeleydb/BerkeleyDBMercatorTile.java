@@ -25,8 +25,8 @@ import com.sleepycat.je.TransactionConfig;
 
 
 public class BerkeleyDBMercatorTile
-         implements
-            PersistentOctree.Node {
+implements
+PersistentOctree.Node {
 
 
    private static enum Format {
@@ -214,7 +214,7 @@ public class BerkeleyDBMercatorTile
    }
 
 
-   int getLevel() {
+   private int getLevel() {
       return _id.length;
    }
 
@@ -242,7 +242,11 @@ public class BerkeleyDBMercatorTile
 
    @Override
    public String toString() {
-      return "MercatorTile [id=" + getID() + ", sector=" + Utils.toString(_sector) + ", level=" + getLevel() + "]";
+      return "MercatorTile [id=" + getID() + //
+               ", sector=" + Utils.toString(_sector) + //
+               ", level=" + getLevel() + //
+               ", points=" + _pointsCount + //
+               "]";
    }
 
 
@@ -390,7 +394,8 @@ public class BerkeleyDBMercatorTile
 
       final Geodetic3D averagePoint = new Geodetic3D( //
                Angle.fromRadians(averageLatitude), //
-               Angle.fromRadians(averageLongitude), averageHeight);
+               Angle.fromRadians(averageLongitude), //
+               averageHeight);
 
 
       final byte formatID = byteBuffer.get();
@@ -454,6 +459,12 @@ public class BerkeleyDBMercatorTile
             throw new RuntimeException("Unsupported format: " + _format);
       }
 
+   }
+
+
+   @Override
+   public Geodetic3D getAveragePoint() {
+      return _averagePoint;
    }
 
 

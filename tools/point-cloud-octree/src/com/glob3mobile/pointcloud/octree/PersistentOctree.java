@@ -9,8 +9,8 @@ import org.glob3.mobile.generated.Sector;
 
 
 public interface PersistentOctree
-extends
-AutoCloseable {
+         extends
+            AutoCloseable {
 
 
    public interface Node {
@@ -25,6 +25,9 @@ AutoCloseable {
 
 
       List<Geodetic3D> getPoints();
+
+
+      Geodetic3D getAveragePoint();
 
 
       Sector getSector();

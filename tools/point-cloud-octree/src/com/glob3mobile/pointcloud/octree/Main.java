@@ -132,9 +132,12 @@ public class Main {
             @Override
             public boolean visit(final PersistentOctree.Node node) {
                final int pointsCount = node.getPoints().size();
-               // final int pointsCount = node.getPointsCount();
+               //               final int pointsCount = node.getPointsCount();
 
-               System.out.println(" node=" + node.getID() + ", points=" + pointsCount);
+               final Geodetic3D averagePoint = node.getAveragePoint();
+               System.out.println(" node=" + node.getID() + ", points=" + pointsCount + ", average="
+                                  + averagePoint._latitude._degrees + "/" + averagePoint._longitude._degrees + "/"
+                                  + averagePoint._height);
                _counter++;
                _totalPoints += pointsCount;
                return true;
