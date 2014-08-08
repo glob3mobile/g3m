@@ -80,9 +80,7 @@ public class Main {
             final IVector2 sourcePoint = new GVector2D(x, y);
             final IVector2 projectedPointInRadians = projection.transformPoint(targetProjection, sourcePoint);
 
-
-            final Geodetic3D point = fromRadians(projectedPointInRadians.y(), projectedPointInRadians.x(), z);
-            octree.addPoint(point);
+            octree.addPoint(fromRadians(projectedPointInRadians.y(), projectedPointInRadians.x(), z));
 
             progress.stepDone();
          }
