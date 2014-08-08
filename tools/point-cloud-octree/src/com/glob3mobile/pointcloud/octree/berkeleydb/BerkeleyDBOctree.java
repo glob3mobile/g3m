@@ -4,8 +4,8 @@ package com.glob3mobile.pointcloud.octree.berkeleydb;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ implements
 PersistentOctree {
 
    private static final ILogger LOGGER              = GLogger.instance();
-
+   private static final Charset UTF8                = Charset.forName("UTF-8");
 
    private static final int     DEFAULT_BUFFER_SIZE = 1024 * 64;
    private static final String  NODE_DATABASE_NAME  = "Node";
@@ -121,8 +121,15 @@ PersistentOctree {
       dbConfig.setDeferredWrite(true);
       //      dbConfig.setTransactionalVoid(true);
 
-      //      final Comparator<byte[]> btreeComparator;
-      //      dbConfig.setBtreeComparator(btreeComparator);
+      //      dbConfig.setBtreeComparator(new Comparator<byte[]>() {
+      //         @Override
+      //         public int compare(final byte[] o1,
+      //                            final byte[] o2) {
+      //            final String s1 = new String(o1, UTF8);
+      //            final String s2 = new String(o2, UTF8);
+      //            return s1.compareTo(s2);
+      //         }
+      //      });
 
       //      Comparator<byte[]> duplicateComparator;
       //      dbConfig.setDuplicateComparator(duplicateComparator);
@@ -350,23 +357,14 @@ PersistentOctree {
    private void saveNode(final MercatorTile tile,
                          final Geodetic3D averagePoint,
                          final float[] values) {
+      final String key = tile.getIDString();
+      final DatabaseEntry keyEntry = new DatabaseEntry(key.getBytes(UTF8));
+      final DatabaseEntry dataEntry = new DatabaseEntry(createDataEntry(tile, averagePoint, values, _compress));
 
-      try {
-         final String key = tile.getIDString();
-         final DatabaseEntry keyEntry = new DatabaseEntry(key.getBytes("UTF-8"));
+      final Transaction txn = null;
+      _nodeDB.put(txn, keyEntry, dataEntry);
 
-         // final String data = "test";
-         // final DatabaseEntry dataEntry = new DatabaseEntry(data.getBytes("UTF-8"));
-         final DatabaseEntry dataEntry = new DatabaseEntry(createDataEntry(tile, averagePoint, values, _compress));
-
-         final Transaction txn = null;
-         _nodeDB.put(txn, keyEntry, dataEntry);
-
-         _nodeDB.sync();
-      }
-      catch (final UnsupportedEncodingException e) {
-         throw new RuntimeException(e);
-      }
+      _nodeDB.sync();
    }
 
 
