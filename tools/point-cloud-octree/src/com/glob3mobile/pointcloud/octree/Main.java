@@ -4,7 +4,6 @@ package com.glob3mobile.pointcloud.octree;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
@@ -23,7 +22,25 @@ import es.igosoftware.util.XStringTokenizer;
 
 public class Main {
 
-   private static final String CLOUD_NAME = "Loudoun-VA";
+
+   public static void main(final String[] args) throws IOException {
+      System.out.println("PointClout OcTree 0.1");
+      System.out.println("---------------------\n");
+
+
+      final String cloudName = "Loudoun-VA";
+
+      final boolean createOT = false;
+      if (createOT) {
+         createOT(cloudName);
+      }
+
+      final boolean visitOT = true;
+      if (visitOT) {
+         visitOT(cloudName);
+      }
+
+   }
 
 
    private static Geodetic3D fromRadians(final double latitudeInRadians,
@@ -36,8 +53,9 @@ public class Main {
    }
 
 
-   private static void load(final PersistentOctree octree,
-                            final String fileName) throws IOException, FileNotFoundException {
+   private static void loadOT(final PersistentOctree octree,
+                              final String fileName,
+                              final GProjection projection) throws IOException {
       final GUndeterminateProgress progress = new GUndeterminateProgress(5, true) {
          @Override
          public void informProgress(final long stepsDone,
@@ -46,7 +64,6 @@ public class Main {
          }
       };
 
-      final GProjection projection = GProjection.EPSG_26918;
       final GProjection targetProjection = GProjection.EPSG_4326;
 
       try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(
@@ -77,74 +94,60 @@ public class Main {
    }
 
 
-   public static void main(final String[] args) throws IOException {
-      System.out.println("PointClout OcTree 0.1");
-      System.out.println("---------------------\n");
+   private static void createOT(final String cloudName) throws IOException {
+      BerkeleyDBOctree.delete(cloudName);
+
+      final boolean loadPoints = true;
+      if (loadPoints) {
+         final boolean createIfNotExists = true;
+         try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists)) {
+            final long start = System.currentTimeMillis();
+
+            final GProjection projection = GProjection.EPSG_26918;
+            loadOT(octree, "18STJ6448.txt.gz", projection);
+
+            final long elapsed = System.currentTimeMillis() - start;
+            System.out.println("\n- loaded in " + elapsed + "ms");
+         }
+      }
+   }
 
 
-      final boolean createOT = false;
-      final boolean visitOT = true;
-
-      // 5813329 steps [Finished in 24s] 265.7kB/sec (avr=233.7kB/sec)
-      // ** Visited 89 nodes with 5813329 points in 548ms
-
-
-      if (createOT) {
-         BerkeleyDBOctree.delete(CLOUD_NAME);
-
-         final boolean loadPoints = true;
-         if (loadPoints) {
-            final String fileName = "18STJ6448.txt.gz";
-            final boolean createIfNotExists = true;
+   private static void visitOT(final String cloudName) {
+      final boolean createIfNotExists = false;
+      try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists);) {
+         octree.acceptVisitor(new PersistentOctree.Visitor() {
+            private int  _counter;
+            private long _started;
+            private long _totalPoints;
 
 
-            try (final PersistentOctree octree = BerkeleyDBOctree.open(CLOUD_NAME, createIfNotExists)) {
-               final long start = System.currentTimeMillis();
-               load(octree, fileName);
-               final long elapsed = System.currentTimeMillis() - start;
-               System.out.println("\n- loaded in " + elapsed + "ms");
+            @Override
+            public void start() {
+               _counter = 0;
+               _started = System.currentTimeMillis();
+               _totalPoints = 0;
             }
-         }
+
+
+            @Override
+            public boolean visit(final PersistentOctree.Node node) {
+               // System.out.println(node);
+               final int pointsCount = node.getPoints().size();
+               System.out.println(node.getID() + ", points=" + pointsCount);
+               _counter++;
+               _totalPoints += pointsCount;
+               return true;
+            }
+
+
+            @Override
+            public void stop() {
+               final long elapsed = System.currentTimeMillis() - _started;
+               System.out.println("** Visited " + _counter + " nodes with " + _totalPoints + " points in " + elapsed + "ms");
+            }
+         });
       }
-
-
-      if (visitOT) {
-         final boolean createIfNotExists = false;
-         try (final PersistentOctree octree = BerkeleyDBOctree.open(CLOUD_NAME, createIfNotExists);) {
-            octree.acceptVisitor(new PersistentOctree.Visitor() {
-               private int  _counter;
-               private long _started;
-               private long _totalPoints;
-
-
-               @Override
-               public void start() {
-                  _counter = 0;
-                  _started = System.currentTimeMillis();
-                  _totalPoints = 0;
-               }
-
-
-               @Override
-               public boolean visit(final PersistentOctree.Node node) {
-                  // System.out.println(node);
-                  final int pointsCount = node.getPoints().size();
-                  System.out.println(node.getID() + ", points=" + pointsCount);
-                  _counter++;
-                  _totalPoints += pointsCount;
-                  return true;
-               }
-
-
-               @Override
-               public void stop() {
-                  final long elapsed = System.currentTimeMillis() - _started;
-                  System.out.println("** Visited " + _counter + " nodes with " + _totalPoints + " points in " + elapsed + "ms");
-               }
-            });
-         }
-      }
-
    }
 
 
