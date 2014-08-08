@@ -28,8 +28,8 @@ import es.igosoftware.logging.ILogger;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    private static final ILogger LOGGER              = GLogger.instance();
    private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -50,6 +50,7 @@ PersistentOctree {
       catch (final IOException e) {
          throw new RuntimeException(e);
       }
+
 
       //      final EnvironmentConfig envConfig = new EnvironmentConfig();
       //      try (final Environment env = new Environment(envHome, envConfig)) {
@@ -263,7 +264,7 @@ PersistentOctree {
 
 
       Format(final byte formatID,
-               final int floatsPerPoint) {
+             final int floatsPerPoint) {
          _formatID = formatID;
          _floatsPerPoint = floatsPerPoint;
       }
@@ -301,17 +302,17 @@ PersistentOctree {
       final byte formatID = format._formatID;
 
       final int entrySize = sizeOf(version) + //
-               sizeOf(subversion) + //
-               sizeOf(lowerLatitude) + //
-               sizeOf(lowerLongitude) + //
-               sizeOf(upperLatitude) + //
-               sizeOf(upperLongitude) + //
-               sizeOf(pointsCount) + //
-               sizeOf(averageLatitude) + //
-               sizeOf(averageLongitude) + //
-               sizeOf(averageHeight) + //
-               sizeOf(formatID) + //
-               format.sizeOf(values);
+                            sizeOf(subversion) + //
+                            sizeOf(lowerLatitude) + //
+                            sizeOf(lowerLongitude) + //
+                            sizeOf(upperLatitude) + //
+                            sizeOf(upperLongitude) + //
+                            sizeOf(pointsCount) + //
+                            sizeOf(averageLatitude) + //
+                            sizeOf(averageLongitude) + //
+                            sizeOf(averageHeight) + //
+                            sizeOf(formatID) + //
+                            format.sizeOf(values);
 
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
