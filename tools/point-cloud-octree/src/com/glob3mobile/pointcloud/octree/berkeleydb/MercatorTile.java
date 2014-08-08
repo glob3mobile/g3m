@@ -2,23 +2,62 @@
 
 package com.glob3mobile.pointcloud.octree.berkeleydb;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.List;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Sector;
 
 import com.glob3mobile.pointcloud.octree.Utils;
+import com.sleepycat.je.Database;
+import com.sleepycat.je.DatabaseEntry;
+import com.sleepycat.je.Environment;
+import com.sleepycat.je.Transaction;
+import com.sleepycat.je.TransactionConfig;
+
+import es.igosoftware.io.GIOUtils;
 
 
 public class MercatorTile {
 
 
-   private static final Byte[] ROOT_ID = {};
+   private static final byte[]       ROOT_ID   = {};
+   private static final MercatorTile ROOT_TILE = new MercatorTile(ROOT_ID, Sector.FULL_SPHERE);
 
 
-   public static MercatorTile deepestEnclosingTile(final Sector targetSector) {
-      return deepestEnclosingTile(root(), targetSector);
+   public static MercatorTile createDeepestEnclosingTile(final Sector targetSector,
+                                                         final Geodetic3D averagePoint,
+                                                         final List<Geodetic3D> buffer) {
+      final MercatorTile tile = deepestEnclosingTile(targetSector);
+
+      final int bufferSize = buffer.size();
+      final double averageLatitudeInRadians = averagePoint._latitude._radians;
+      final double averageLongitudeInRadians = averagePoint._longitude._radians;
+      final double averageHeight = averagePoint._height;
+
+      final float[] values = new float[bufferSize * 3];
+      int i = 0;
+      for (final Geodetic3D point : buffer) {
+         final float deltaLatitudeInRadians = (float) (point._latitude._radians - averageLatitudeInRadians);
+         final float deltaLongitudeInRadians = (float) (point._longitude._radians - averageLongitudeInRadians);
+         final float deltaHeight = (float) (point._height - averageHeight);
+
+         values[i++] = deltaLatitudeInRadians;
+         values[i++] = deltaLongitudeInRadians;
+         values[i++] = deltaHeight;
+      }
+
+      tile.setValues(averagePoint, values);
+
+      return tile;
+   }
+
+
+   private static MercatorTile deepestEnclosingTile(final Sector targetSector) {
+      return deepestEnclosingTile(ROOT_TILE, targetSector);
    }
 
 
@@ -68,13 +107,10 @@ public class MercatorTile {
    }
 
 
-   private static MercatorTile root() {
-      return new MercatorTile(ROOT_ID, Sector.FULL_SPHERE);
-   }
-
-
-   private final Byte[] _id;
+   private final byte[] _id;
    private final Sector _sector;
+   private Geodetic3D   _averagePoint = null;
+   private float[]      _values       = null;
 
 
    private MercatorTile[] createChildren() {
@@ -112,17 +148,27 @@ public class MercatorTile {
    private MercatorTile createChild(final byte index,
                                     final Sector sector) {
       final int length = getLevel();
-      final Byte[] childId = new Byte[length + 1];
+      final byte[] childId = new byte[length + 1];
       System.arraycopy(_id, 0, childId, 0, length);
       childId[length] = index;
       return new MercatorTile(childId, sector);
    }
 
 
-   private MercatorTile(final Byte[] id,
+   private MercatorTile(final byte[] id,
                         final Sector sector) {
       _id = id;
       _sector = sector;
+   }
+
+
+   private void setValues(final Geodetic3D averagePoint,
+                          final float[] values) {
+      if (_values != null) {
+         throw new RuntimeException("values already set");
+      }
+      _averagePoint = averagePoint;
+      _values = values;
    }
 
 
@@ -131,7 +177,7 @@ public class MercatorTile {
    }
 
 
-   public Byte[] getID() {
+   public byte[] getID() {
       return Arrays.copyOf(_id, _id.length);
    }
 
@@ -155,5 +201,119 @@ public class MercatorTile {
       return "MercatorTile [id=" + getIDString() + ", sector=" + Utils.toString(_sector) + ", level=" + getLevel() + "]";
    }
 
+
+   private static enum Format {
+      LatLonHeight((byte) 1, 3);
+
+      private final byte _formatID;
+      private final int  _floatsPerPoint;
+
+
+      Format(final byte formatID,
+             final int floatsPerPoint) {
+         _formatID = formatID;
+         _floatsPerPoint = floatsPerPoint;
+      }
+
+
+      private int sizeOf(final float[] values) {
+         return values.length * 4;
+      }
+   }
+
+
+   @SuppressWarnings("unused")
+   private static int sizeOf(final double any) {
+      return 8;
+   }
+
+
+   @SuppressWarnings("unused")
+   private static int sizeOf(final int any) {
+      return 4;
+   }
+
+
+   @SuppressWarnings("unused")
+   private static int sizeOf(final byte any) {
+      return 1;
+   }
+
+
+   private byte[] createDataEntry(final boolean compress) {
+
+      final Format format = Format.LatLonHeight;
+
+      final byte version = 1;
+      final byte subversion = 0;
+
+      final Sector sector = getSector();
+      final double lowerLatitude = sector._lower._latitude._radians;
+      final double lowerLongitude = sector._lower._longitude._radians;
+      final double upperLatitude = sector._upper._latitude._radians;
+      final double upperLongitude = sector._upper._longitude._radians;
+
+      final int pointsCount = _values.length / format._floatsPerPoint;
+
+      final double averageLatitude = _averagePoint._latitude._radians;
+      final double averageLongitude = _averagePoint._longitude._radians;
+      final double averageHeight = _averagePoint._height;
+
+
+      final byte formatID = format._formatID;
+
+      final int entrySize = sizeOf(version) + //
+                            sizeOf(subversion) + //
+                            sizeOf(lowerLatitude) + //
+                            sizeOf(lowerLongitude) + //
+                            sizeOf(upperLatitude) + //
+                            sizeOf(upperLongitude) + //
+                            sizeOf(pointsCount) + //
+                            sizeOf(averageLatitude) + //
+                            sizeOf(averageLongitude) + //
+                            sizeOf(averageHeight) + //
+                            sizeOf(formatID) + //
+                            format.sizeOf(_values);
+
+
+      final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
+      byteBuffer.put(version);
+      byteBuffer.put(subversion);
+      byteBuffer.putDouble(lowerLatitude);
+      byteBuffer.putDouble(lowerLongitude);
+      byteBuffer.putDouble(upperLatitude);
+      byteBuffer.putDouble(upperLongitude);
+      byteBuffer.putInt(pointsCount);
+      byteBuffer.putDouble(averageLatitude);
+      byteBuffer.putDouble(averageLongitude);
+      byteBuffer.putDouble(averageHeight);
+      byteBuffer.put(formatID);
+      for (final float value : _values) {
+         byteBuffer.putFloat(value);
+      }
+
+      final byte[] array = compress ? GIOUtils.compress(byteBuffer.array()) : byteBuffer.array();
+      //      LOGGER.logInfo("Generated buffer of " + array.length + " bytes");
+      return array;
+   }
+
+
+   void save(final Environment env,
+             final Database nodeDB,
+             final boolean compress) {
+      //      final String key = tile.getIDString();
+      //      final DatabaseEntry keyEntry = new DatabaseEntry(key.getBytes(UTF8));
+
+      final DatabaseEntry keyEntry = new DatabaseEntry(getID());
+      final DatabaseEntry dataEntry = new DatabaseEntry(createDataEntry(compress));
+
+      //      _nodeDB.put(null, keyEntry, dataEntry);
+      //      _nodeDB.sync();
+
+      final TransactionConfig tnxConfig = new TransactionConfig();
+      final Transaction txn = env.beginTransaction(null, tnxConfig);
+      nodeDB.put(txn, keyEntry, dataEntry);
+      txn.commit();
+   }
 
 }

@@ -4,8 +4,6 @@ package com.glob3mobile.pointcloud.octree.berkeleydb;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +14,8 @@ import com.glob3mobile.pointcloud.octree.PersistentOctree;
 import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
-import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
-import com.sleepycat.je.Transaction;
 
 import es.igosoftware.io.GIOUtils;
 import es.igosoftware.logging.GLogger;
@@ -31,7 +27,7 @@ public class BerkeleyDBOctree
             PersistentOctree {
 
    private static final ILogger LOGGER              = GLogger.instance();
-   private static final Charset UTF8                = Charset.forName("UTF-8");
+   // private static final Charset UTF8                = Charset.forName("UTF-8");
 
    private static final int     DEFAULT_BUFFER_SIZE = 1024 * 64;
    private static final String  NODE_DATABASE_NAME  = "Node";
@@ -51,13 +47,13 @@ public class BerkeleyDBOctree
       }
 
 
-      //      final EnvironmentConfig envConfig = new EnvironmentConfig();
-      //      try (final Environment env = new Environment(envHome, envConfig)) {
-      //         for (final String dbName : env.getDatabaseNames()) {
-      //            LOGGER.logInfo("Removing database \"" + dbName + "\"...");
-      //            env.removeDatabase(null, dbName);
-      //         }
-      //      }
+      // final EnvironmentConfig envConfig = new EnvironmentConfig();
+      // try (final Environment env = new Environment(envHome, envConfig)) {
+      // for (final String dbName : env.getDatabaseNames()) {
+      // LOGGER.logInfo("Removing database \"" + dbName + "\"...");
+      // env.removeDatabase(null, dbName);
+      // }
+      // }
    }
 
 
@@ -118,21 +114,21 @@ public class BerkeleyDBOctree
 
       final DatabaseConfig dbConfig = new DatabaseConfig();
       dbConfig.setAllowCreate(createIfNotExists);
-      dbConfig.setDeferredWrite(true);
-      //      dbConfig.setTransactionalVoid(true);
+      // dbConfig.setDeferredWrite(true);
+      dbConfig.setTransactionalVoid(true);
 
-      //      dbConfig.setBtreeComparator(new Comparator<byte[]>() {
-      //         @Override
-      //         public int compare(final byte[] o1,
-      //                            final byte[] o2) {
-      //            final String s1 = new String(o1, UTF8);
-      //            final String s2 = new String(o2, UTF8);
-      //            return s1.compareTo(s2);
-      //         }
-      //      });
+      // dbConfig.setBtreeComparator(new Comparator<byte[]>() {
+      // @Override
+      // public int compare(final byte[] o1,
+      // final byte[] o2) {
+      // final String s1 = new String(o1, UTF8);
+      // final String s2 = new String(o2, UTF8);
+      // return s1.compareTo(s2);
+      // }
+      // });
 
-      //      Comparator<byte[]> duplicateComparator;
-      //      dbConfig.setDuplicateComparator(duplicateComparator);
+      // Comparator<byte[]> duplicateComparator;
+      // dbConfig.setDuplicateComparator(duplicateComparator);
 
 
       dbConfig.setKeyPrefixing(true);
@@ -218,165 +214,33 @@ public class BerkeleyDBOctree
 
          final Sector targetSector = new Sector(lower.asGeodetic2D(), upper.asGeodetic2D());
 
-         final MercatorTile tile = MercatorTile.deepestEnclosingTile(targetSector);
-
-         //         final String tileID = tile.getIDString();
-
          final double averageLatitudeInRadians = _sumLatitudeInRadians / bufferSize;
          final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;
          final double averageHeight = _sumHeight / bufferSize;
 
          final Geodetic3D averagePoint = Utils.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
 
-         //         LOGGER.logInfo("Flushing buffer of " + bufferSize + //
-         //                  // ", average=" + Utils.toString(averagePoint) + //
-         //                  // ", bounds=(" + Utils.toString(lowerPoint) + " / " + Utils.toString(upperPoint) + ")" + //
-         //                  " into tile=" + tile.getIDString() + " level=" + tile.getLevel() + "...");
-
-
-         final float[] values = new float[bufferSize * 3];
-         int i = 0;
-         for (final Geodetic3D point : _buffer) {
-            final float deltaLatitudeInRadians = (float) (point._latitude._radians - averageLatitudeInRadians);
-            final float deltaLongitudeInRadians = (float) (point._longitude._radians - averageLongitudeInRadians);
-            final float deltaHeight = (float) (point._height - averageHeight);
-
-            values[i++] = deltaLatitudeInRadians;
-            values[i++] = deltaLongitudeInRadians;
-            values[i++] = deltaHeight;
-         }
+         final MercatorTile tile = MercatorTile.createDeepestEnclosingTile(targetSector, averagePoint, _buffer);
 
 
          _buffer.clear();
          resetBufferBounds();
 
-         saveNode(tile, averagePoint, values);
+         tile.save(_env, _nodeDB, _compress);
       }
-   }
-
-
-   private static enum Format {
-      LatLonHeight((byte) 1, 3);
-
-      private final byte _formatID;
-      private final int  _floatsPerPoint;
-
-
-      Format(final byte formatID,
-             final int floatsPerPoint) {
-         _formatID = formatID;
-         _floatsPerPoint = floatsPerPoint;
-      }
-
-
-      private int sizeOf(final float[] values) {
-         return values.length * 4;
-      }
-   }
-
-
-   private static byte[] createDataEntry(final MercatorTile tile,
-                                         final Geodetic3D averagePoint,
-                                         final float[] values,
-                                         final boolean compress) {
-
-      final Format format = Format.LatLonHeight;
-
-      final byte version = 1;
-      final byte subversion = 0;
-
-      final Sector sector = tile.getSector();
-      final double lowerLatitude = sector._lower._latitude._radians;
-      final double lowerLongitude = sector._lower._longitude._radians;
-      final double upperLatitude = sector._upper._latitude._radians;
-      final double upperLongitude = sector._upper._longitude._radians;
-
-      final int pointsCount = values.length / format._floatsPerPoint;
-
-      final double averageLatitude = averagePoint._latitude._radians;
-      final double averageLongitude = averagePoint._longitude._radians;
-      final double averageHeight = averagePoint._height;
-
-
-      final byte formatID = format._formatID;
-
-      final int entrySize = sizeOf(version) + //
-                            sizeOf(subversion) + //
-                            sizeOf(lowerLatitude) + //
-                            sizeOf(lowerLongitude) + //
-                            sizeOf(upperLatitude) + //
-                            sizeOf(upperLongitude) + //
-                            sizeOf(pointsCount) + //
-                            sizeOf(averageLatitude) + //
-                            sizeOf(averageLongitude) + //
-                            sizeOf(averageHeight) + //
-                            sizeOf(formatID) + //
-                            format.sizeOf(values);
-
-
-      final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
-      byteBuffer.put(version);
-      byteBuffer.put(subversion);
-      byteBuffer.putDouble(lowerLatitude);
-      byteBuffer.putDouble(lowerLongitude);
-      byteBuffer.putDouble(upperLatitude);
-      byteBuffer.putDouble(upperLongitude);
-      byteBuffer.putInt(pointsCount);
-      byteBuffer.putDouble(averageLatitude);
-      byteBuffer.putDouble(averageLongitude);
-      byteBuffer.putDouble(averageHeight);
-      byteBuffer.put(formatID);
-      for (final float value : values) {
-         byteBuffer.putFloat(value);
-      }
-
-      final byte[] array = compress ? GIOUtils.compress(byteBuffer.array()) : byteBuffer.array();
-      //      LOGGER.logInfo("Generated buffer of " + array.length + " bytes");
-      return array;
-   }
-
-
-   @SuppressWarnings("unused")
-   private static int sizeOf(final double any) {
-      return 8;
-   }
-
-
-   @SuppressWarnings("unused")
-   private static int sizeOf(final int any) {
-      return 4;
-   }
-
-
-   @SuppressWarnings("unused")
-   private static int sizeOf(final byte any) {
-      return 1;
-   }
-
-
-   private void saveNode(final MercatorTile tile,
-                         final Geodetic3D averagePoint,
-                         final float[] values) {
-      final String key = tile.getIDString();
-      final DatabaseEntry keyEntry = new DatabaseEntry(key.getBytes(UTF8));
-      final DatabaseEntry dataEntry = new DatabaseEntry(createDataEntry(tile, averagePoint, values, _compress));
-
-      final Transaction txn = null;
-      _nodeDB.put(txn, keyEntry, dataEntry);
-
-      _nodeDB.sync();
    }
 
 
    @Override
    synchronized public void optimize() {
-      LOGGER.logInfo("Optimizing...");
-      final long start = System.currentTimeMillis();
+      // LOGGER.logInfo("Optimizing...");
+      // final long start = System.currentTimeMillis();
+
       _env.compress();
       _env.cleanLog();
 
-      final long elapsed = System.currentTimeMillis() - start;
-      LOGGER.logInfo("Optimized in " + elapsed + "ms");
+      // final long elapsed = System.currentTimeMillis() - start;
+      //LOGGER.logInfo("Optimized in " + elapsed + "ms");
    }
 
 
