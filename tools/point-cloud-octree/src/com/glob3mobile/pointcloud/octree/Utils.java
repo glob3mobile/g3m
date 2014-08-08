@@ -34,4 +34,14 @@ public class Utils {
 
    }
 
+
+   public static Geodetic3D fromRadians(final double latitudeInRadians,
+                                        final double longitudeInRadians,
+                                        final double height) {
+      return new Geodetic3D( //
+               Angle.fromRadians(latitudeInRadians), //
+               Angle.fromRadians(longitudeInRadians), //
+               height);
+   }
+
 }

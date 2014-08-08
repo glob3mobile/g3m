@@ -14,17 +14,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Sector;
 
 import com.glob3mobile.pointcloud.octree.JDBCUtils;
+import com.glob3mobile.pointcloud.octree.MercatorTile;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
+import com.glob3mobile.pointcloud.octree.Utils;
 
 
 public class PostgreSQLOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
 
    private static final int DEFAULT_BUFFER_SIZE = 1024 * 64;
@@ -33,23 +34,23 @@ public class PostgreSQLOctree
    //   private static final int DEFAULT_BUFFER_SIZE = 1024 * 16;
 
 
-   public static PostgreSQLOctree get(final String server,
-                                      final String db,
-                                      final String user,
-                                      final String password,
-                                      final String cloudName,
-                                      final boolean createIfNotExists) {
-      return get(server, db, user, password, cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE);
+   public static PostgreSQLOctree open(final String server,
+                                       final String db,
+                                       final String user,
+                                       final String password,
+                                       final String cloudName,
+                                       final boolean createIfNotExists) {
+      return open(server, db, user, password, cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE);
    }
 
 
-   public static PostgreSQLOctree get(final String server,
-                                      final String db,
-                                      final String user,
-                                      final String password,
-                                      final String cloudName,
-                                      final boolean createIfNotExists,
-                                      final int bufferSize) {
+   public static PostgreSQLOctree open(final String server,
+                                       final String db,
+                                       final String user,
+                                       final String password,
+                                       final String cloudName,
+                                       final boolean createIfNotExists,
+                                       final int bufferSize) {
       return new PostgreSQLOctree(server, db, user, password, cloudName, createIfNotExists, bufferSize);
    }
 
@@ -165,7 +166,7 @@ public class PostgreSQLOctree
    private void createNodeTableIndex(final String columnName) throws SQLException {
       try (final Statement st = _connection.createStatement()) {
          st.executeUpdate("CREATE INDEX \"" + getNodeTableName() + "_" + columnName + "\" ON " + getQuotedNodeTableName() + " ("
-                          + columnName + ")");
+                  + columnName + ")");
       }
    }
 
@@ -187,33 +188,33 @@ public class PostgreSQLOctree
 
    private String getCreateMetadataTableSQL() {
       return "CREATE TABLE " + getQuotedMetadataTableName() + " " + //
-             "(name TEXT NOT NULL)";
+               "(name TEXT NOT NULL)";
    }
 
 
    private String getCreateNodeTableSQL() {
       return "CREATE TABLE " + getQuotedNodeTableName() + " " + //
-             "(id smallint[] NOT NULL," + //
-             "lower_latitude float8 NOT NULL," + //
-             "lower_longitude float8 NOT NULL," + //
-             "upper_latitude float8 NOT NULL," + //
-             "upper_longitude float8 NOT NULL," + //
-             "points_count int NOT NULL," + //
-             "average_latitude float8 NOT NULL," + //
-             "average_longitude float8 NOT NULL," + //
-             "average_height float8 NOT NULL," + //
-             "format smallint NOT NULL," + //
-             "points float4[] NOT NULL," + //
-             " CONSTRAINT \"" + getNodeTableName() + "_id_primary_key\" PRIMARY KEY (id))";
+               "(id smallint[] NOT NULL," + //
+               "lower_latitude float8 NOT NULL," + //
+               "lower_longitude float8 NOT NULL," + //
+               "upper_latitude float8 NOT NULL," + //
+               "upper_longitude float8 NOT NULL," + //
+               "points_count int NOT NULL," + //
+               "average_latitude float8 NOT NULL," + //
+               "average_longitude float8 NOT NULL," + //
+               "average_height float8 NOT NULL," + //
+               "format smallint NOT NULL," + //
+               "points float4[] NOT NULL," + //
+               " CONSTRAINT \"" + getNodeTableName() + "_id_primary_key\" PRIMARY KEY (id))";
    }
 
 
    private String getCreateNodeDataTableSQL() {
       return "CREATE TABLE " + getQuotedNodeDataTableName() + " " + //
-             "(id smallint[] NOT NULL," + //
-             "format smallint NOT NULL," + //
-             "points float4[] NOT NULL," + //
-             " CONSTRAINT \"" + getNodeDataTableName() + "_id_primary_key\" PRIMARY KEY (id))";
+               "(id smallint[] NOT NULL," + //
+               "format smallint NOT NULL," + //
+               "points float4[] NOT NULL," + //
+               " CONSTRAINT \"" + getNodeDataTableName() + "_id_primary_key\" PRIMARY KEY (id))";
    }
 
 
@@ -285,56 +286,41 @@ public class PostgreSQLOctree
 
    @Override
    public void close() {
-
-      try {
-         flush();
-      }
-      catch (final SQLException e) {
-         throw new RuntimeException(e);
-      }
+      flush();
 
       JDBCUtils.close(_connection);
    }
 
 
+   //   @Override
+   //   public void remove() {
+   //      try {
+   //         try (final Statement st = _connection.createStatement()) {
+   //            log("removing metadata table");
+   //            st.executeUpdate("DROP TABLE " + getQuotedMetadataTableName() + ";");
+   //         }
+   //         try (final Statement st = _connection.createStatement()) {
+   //            log("removing node table");
+   //            st.executeUpdate("DROP TABLE " + getQuotedNodeTableName() + ";");
+   //         }
+   //         try (final Statement st = _connection.createStatement()) {
+   //            log("removing node_data table");
+   //            st.executeUpdate("DROP TABLE " + getQuotedNodeDataTableName() + ";");
+   //         }
+   //      }
+   //      catch (final SQLException e) {
+   //         throw new RuntimeException("Can't connect", e);
+   //      }
+   //   }
+
+
    @Override
-   public void remove() {
-      try {
-         try (final Statement st = _connection.createStatement()) {
-            log("removing metadata table");
-            st.executeUpdate("DROP TABLE " + getQuotedMetadataTableName() + ";");
-         }
-         try (final Statement st = _connection.createStatement()) {
-            log("removing node table");
-            st.executeUpdate("DROP TABLE " + getQuotedNodeTableName() + ";");
-         }
-         try (final Statement st = _connection.createStatement()) {
-            log("removing node_data table");
-            st.executeUpdate("DROP TABLE " + getQuotedNodeDataTableName() + ";");
-         }
-      }
-      catch (final SQLException e) {
-         throw new RuntimeException("Can't connect", e);
-      }
-   }
-
-
-   private static Geodetic3D fromRadians(final double latitudeInRadians,
-                                         final double longitudeInRadians,
-                                         final double height) {
-      return new Geodetic3D( //
-               Angle.fromRadians(latitudeInRadians), //
-               Angle.fromRadians(longitudeInRadians), //
-               height);
-   }
-
-
-   private void flush() throws SQLException {
+   public void flush() {
       final int bufferSize = _buffer.size();
       if (bufferSize > 0) {
 
-         final Geodetic3D lower = fromRadians(_minLatitudeInRadians, _minLongitudeInRadians, _minHeight);
-         final Geodetic3D upper = fromRadians(_maxLatitudeInRadians, _maxLongitudeInRadians, _maxHeight);
+         final Geodetic3D lower = Utils.fromRadians(_minLatitudeInRadians, _minLongitudeInRadians, _minHeight);
+         final Geodetic3D upper = Utils.fromRadians(_maxLatitudeInRadians, _maxLongitudeInRadians, _maxHeight);
 
          final Sector targetSector = new Sector(lower.asGeodetic2D(), upper.asGeodetic2D());
 
@@ -346,12 +332,12 @@ public class PostgreSQLOctree
          final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;
          final double averageHeight = _sumHeight / bufferSize;
 
-         final Geodetic3D averagePoint = fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
+         final Geodetic3D averagePoint = Utils.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
 
          log("Flushing buffer of " + bufferSize + //
-             //             ", average=" + Utils.toString(averagePoint) + //
-                  //                  ", bounds=(" + Utils.toString(lowerPoint) + " / " + Utils.toString(upperPoint) + ")" + //
-                  " into tile=" + tile.getIDString() + " level=" + tile.getLevel() + "...");
+                  //             ", average=" + Utils.toString(averagePoint) + //
+             //                  ", bounds=(" + Utils.toString(lowerPoint) + " / " + Utils.toString(upperPoint) + ")" + //
+             " into tile=" + tile.getIDString() + " level=" + tile.getLevel() + "...");
 
 
          final Float[] values = new Float[bufferSize * 3];
@@ -369,7 +355,12 @@ public class PostgreSQLOctree
          _buffer.clear();
          resetBufferBounds();
 
-         PostgreSQLNode.save(_connection, getQuotedNodeTableName(), tile, averagePoint, values);
+         try {
+            PostgreSQLNode.save(_connection, getQuotedNodeTableName(), tile, averagePoint, values);
+         }
+         catch (final SQLException e) {
+            throw new RuntimeException(e);
+         }
       }
    }
 
@@ -425,13 +416,13 @@ public class PostgreSQLOctree
 
 
       if (_buffer.size() == _bufferSize) {
-         try {
-            flush();
-         }
-         catch (final SQLException e) {
-            throw new RuntimeException(e);
-         }
+         flush();
       }
+   }
+
+
+   @Override
+   public void optimize() {
    }
 
 

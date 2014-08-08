@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/G3MSharedSDK"/>
 	<classpathentry kind="src" path="/euclid"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/igolibs"/>
+	<classpathentry kind="lib" path="lib/je-6.1.5.jar" sourcepath="/Users/dgd/Desktop/BerkeleyDB-JavaEdition/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

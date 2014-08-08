@@ -15,6 +15,8 @@ import java.util.List;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Sector;
 
+import com.glob3mobile.pointcloud.octree.MercatorTile;
+
 
 public class PostgreSQLNode {
 
@@ -31,7 +33,7 @@ public class PostgreSQLNode {
 
 
    static List<PostgreSQLNode> getAll(final Connection connection,
-                                      final String quotedNodeTableName) throws SQLException {
+            final String quotedNodeTableName) throws SQLException {
       final ArrayList<PostgreSQLNode> result = new ArrayList<PostgreSQLNode>();
 
       try (Statement st = connection.createStatement()) {
@@ -66,7 +68,7 @@ public class PostgreSQLNode {
 
 
       final String sql = //
-               "INSERT INTO " + quotedNodeTableName + //
+      "INSERT INTO " + quotedNodeTableName + //
                " (" + //
                "id, " + //
                "lower_latitude, lower_longitude, " + //

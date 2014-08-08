@@ -4,15 +4,15 @@ package com.glob3mobile.pointcloud.octree;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Random;
 import java.util.zip.GZIPInputStream;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic3D;
 
-import com.glob3mobile.pointcloud.octree.postgresql.PostgreSQLOctree;
+import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
 import es.igosoftware.euclid.projection.GProjection;
 import es.igosoftware.euclid.vector.GVector2D;
@@ -22,10 +22,6 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class Main {
-   private static final String SERVER     = "192.168.1.12";
-   private static final String DB_NAME    = "TESTING";
-   private static final String USER       = "postgres";
-   private static final String PASSWORD   = "postgres";
 
    private static final String CLOUD_NAME = "Loudoun-VA";
 
@@ -45,17 +41,43 @@ public class Main {
       System.out.println("---------------------\n");
 
 
-      cleanupOctree();
+      BerkeleyDBOctree.delete(CLOUD_NAME);
 
 
-      final boolean createIfNotExists = true;
-      final PersistentOctree octree = PostgreSQLOctree.get(SERVER, DB_NAME, USER, PASSWORD, CLOUD_NAME, createIfNotExists);
+      final boolean loadPoints = true;
+      if (loadPoints) {
+         final String fileName = "18STJ6448.txt.gz";
+         final boolean createIfNotExists = true;
+         final boolean compress = true;
 
-      //      createRandomPoints(octree, 100000);
+         /*
+          NO compress / NO keyPrefix
+             - loaded in 40757ms
+             - 140M
 
-      final String fileName = "18STJ6448.txt.gz";
+          YES compress / NO keyPrefix
+             - loaded in 39416ms
+             - 109M
 
-      final GUndeterminateProgress progress = new GUndeterminateProgress() {
+          YES compress / YES keyPrefix
+             - loaded in 39851ms
+             - 109M
+          */
+
+         final PersistentOctree octree = BerkeleyDBOctree.open(CLOUD_NAME, createIfNotExists, compress);
+         final long start = System.currentTimeMillis();
+         load(octree, fileName);
+         final long elapsed = System.currentTimeMillis() - start;
+         System.out.println("\n- loaded in " + elapsed + "ms");
+
+         octree.close();
+      }
+   }
+
+
+   private static void load(final PersistentOctree octree,
+                            final String fileName) throws IOException, FileNotFoundException {
+      final GUndeterminateProgress progress = new GUndeterminateProgress(5, true) {
          @Override
          public void informProgress(final long stepsDone,
                                     final long elapsed) {
@@ -90,49 +112,8 @@ public class Main {
 
       progress.finish();
 
-      //      final GXYZLoader loader =new GXYZLoader(final GVectorPrecision vectorPrecision,
-      //               final GColorPrecision colorPrecision,
-      //               final GProjection projection,
-      //               final boolean intensitiesFromColor,
-      //               final int flags,
-      //               final GFileName... fileNames);
-
-      //      final GVectorPrecision vectorPrecision = GVectorPrecision.DOUBLE;
-      //      final GColorPrecision colorPrecision = GColorPrecision.INT;
-      //      final GProjection projection = GProjection.EPSG_26918;
-      //      final boolean intensitiesFromColor = false;
-      //      final int flags = GXYZLoader.VERBOSE;
-      //      final GFileName fileName = GFileName.relative("18STJ6448.txt");
-      //      final GXYZLoader loader = new GXYZLoader(vectorPrecision, colorPrecision, projection, intensitiesFromColor, flags, fileName);
-      //
-      //      loader.load();
-      //      final IUnstructuredVertexContainer<IVector3, Vertex<IVector3>, ?> vertices = loader.getVertices();
-
-
-      octree.close();
-
-
+      octree.optimize();
    }
 
-
-   private static void cleanupOctree() {
-      final boolean createIfNotExists = true;
-      final PersistentOctree octree = PostgreSQLOctree.get(SERVER, DB_NAME, USER, PASSWORD, CLOUD_NAME, createIfNotExists);
-      octree.remove();
-      octree.close();
-   }
-
-
-   private static void createRandomPoints(final PersistentOctree octree,
-                                          final int pointsCount) {
-      final Random rnd = new Random(0);
-      for (int i = 0; i < pointsCount; i++) {
-         final Angle latitude = Angle.fromDegrees((rnd.nextDouble() * 180) - 90);
-         final Angle longitude = Angle.fromDegrees((rnd.nextDouble() * 360) - 180);
-         final double height = (rnd.nextDouble() * 500) + 250;
-
-         octree.addPoint(new Geodetic3D(latitude, longitude, height));
-      }
-   }
 
 }

@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.pointcloud.octree.postgresql;
+package com.glob3mobile.pointcloud.octree;
 
 import java.util.Arrays;
 
@@ -16,16 +16,6 @@ public class MercatorTile {
 
    private static final Byte[] ROOT_ID = {};
 
-   private final Byte[]        _id;
-   private final Sector        _sector;
-
-
-   //   public static MercatorTile deepestEnclosingTile(final Geodetic2D lower,
-   //                                                   final Geodetic2D upper) {
-   //      final Sector targetSector = new Sector(lower, upper);
-   //
-   //      return deepestEnclosingTile(root(), targetSector);
-   //   }
 
    public static MercatorTile deepestEnclosingTile(final Sector targetSector) {
       return deepestEnclosingTile(root(), targetSector);
@@ -78,6 +68,15 @@ public class MercatorTile {
    }
 
 
+   private static MercatorTile root() {
+      return new MercatorTile(ROOT_ID, Sector.FULL_SPHERE);
+   }
+
+
+   private final Byte[] _id;
+   private final Sector _sector;
+
+
    private MercatorTile[] createChildren() {
       final Geodetic2D lower = _sector._lower;
       final Geodetic2D upper = _sector._upper;
@@ -120,11 +119,6 @@ public class MercatorTile {
    }
 
 
-   private static MercatorTile root() {
-      return new MercatorTile(ROOT_ID, Sector.FULL_SPHERE);
-   }
-
-
    private MercatorTile(final Byte[] id,
                         final Sector sector) {
       _id = id;
@@ -137,6 +131,11 @@ public class MercatorTile {
    }
 
 
+   public Byte[] getID() {
+      return Arrays.copyOf(_id, _id.length);
+   }
+
+
    public String getIDString() {
       final StringBuilder builder = new StringBuilder();
       for (final byte each : _id) {
@@ -146,36 +145,14 @@ public class MercatorTile {
    }
 
 
+   public Sector getSector() {
+      return _sector;
+   }
+
+
    @Override
    public String toString() {
       return "MercatorTile [id=" + getIDString() + ", sector=" + Utils.toString(_sector) + ", level=" + getLevel() + "]";
-   }
-
-
-   //   public static void main(final String[] args) {
-   //      //      final Geodetic2D lower = Sector.FULL_SPHERE._lower;
-   //      //      final Geodetic2D upper = Sector.FULL_SPHERE._upper;
-   //
-   //      //      final Geodetic2D lower = Geodetic2D.zero();
-   //      //      final Geodetic2D upper = Sector.FULL_SPHERE._upper;
-   //      //      final Geodetic2D lower = Geodetic2D.fromDegrees(87, 170);
-   //      //      final Geodetic2D upper = Geodetic2D.fromDegrees(87.01, 170.01);
-   //      final Geodetic2D lower = Geodetic2D.fromDegrees(0.001, 0.001);
-   //      final Geodetic2D upper = Geodetic2D.fromDegrees(0.002, 0.002);
-   //
-   //      final Sector sector = new Sector(lower, upper);
-   //
-   //      System.out.println(deepestEnclosingTile(sector));
-   //   }
-
-
-   public Byte[] getID() {
-      return Arrays.copyOf(_id, _id.length);
-   }
-
-
-   public Sector getSector() {
-      return _sector;
    }
 
 
