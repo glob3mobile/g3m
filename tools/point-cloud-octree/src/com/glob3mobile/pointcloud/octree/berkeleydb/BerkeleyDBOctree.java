@@ -12,7 +12,6 @@ import java.util.List;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Sector;
 
-import com.glob3mobile.pointcloud.octree.MercatorTile;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
 import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Database;
