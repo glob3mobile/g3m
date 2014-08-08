@@ -18,13 +18,15 @@ import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.Environment;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
 import com.sleepycat.je.Transaction;
 import com.sleepycat.je.TransactionConfig;
 
 
 public class BerkeleyDBMercatorTile
-implements
-PersistentOctree.Node {
+         implements
+            PersistentOctree.Node {
 
 
    private static final byte[]                 ROOT_ID   = {};
@@ -110,11 +112,15 @@ PersistentOctree.Node {
    }
 
 
-   private final byte[]           _id;
-   private final Sector           _sector;
-   private Geodetic3D             _averagePoint = null;
-   private float[]                _values       = null;
-   private final List<Geodetic3D> _points;
+   private final byte[]     _id;
+   private final Sector     _sector;
+   private Geodetic3D       _averagePoint = null;
+   private float[]          _values       = null;
+
+   private final Format     _format;
+   private final int        _pointsCount;
+   private final Database   _nodeDataDB;
+   private List<Geodetic3D> _points       = null;
 
 
    private BerkeleyDBMercatorTile[] createChildren() {
@@ -164,15 +170,24 @@ PersistentOctree.Node {
       _id = id;
       _sector = sector;
       _points = null;
+      _format = null;
+      _nodeDataDB = null;
+      _pointsCount = -1;
    }
 
 
-   public BerkeleyDBMercatorTile(final byte[] id,
-                                 final Sector sector,
-                                 final List<Geodetic3D> points) {
+   private BerkeleyDBMercatorTile(final byte[] id,
+                                  final Sector sector,
+                                  final int pointsCount,
+                                  final Geodetic3D averagePoint,
+                                  final Format format,
+                                  final Database nodeDataDB) {
       _id = id;
       _sector = sector;
-      _points = Collections.unmodifiableList(points);
+      _pointsCount = pointsCount;
+      _averagePoint = averagePoint;
+      _format = format;
+      _nodeDataDB = nodeDataDB;
    }
 
 
@@ -191,7 +206,7 @@ PersistentOctree.Node {
    }
 
 
-   byte[] getIDBinary() {
+   byte[] getBerkeleyDBKey() {
       return Arrays.copyOf(_id, _id.length);
    }
 
@@ -206,7 +221,8 @@ PersistentOctree.Node {
    }
 
 
-   Sector getSector() {
+   @Override
+   public Sector getSector() {
       return _sector;
    }
 
@@ -225,7 +241,7 @@ PersistentOctree.Node {
 
 
       Format(final byte formatID,
-             final int floatsPerPoint) {
+               final int floatsPerPoint) {
          _formatID = formatID;
          _floatsPerPoint = floatsPerPoint;
       }
@@ -265,10 +281,7 @@ PersistentOctree.Node {
    }
 
 
-   private byte[] createDataEntry() {
-
-      final Format format = Format.LatLonHeight;
-
+   private byte[] createNodeEntry(final Format format) {
       final byte version = 1;
       final byte subversion = 0;
 
@@ -288,17 +301,18 @@ PersistentOctree.Node {
       final byte formatID = format._formatID;
 
       final int entrySize = sizeOf(version) + //
-                            sizeOf(subversion) + //
-                            sizeOf(lowerLatitude) + //
-                            sizeOf(lowerLongitude) + //
-                            sizeOf(upperLatitude) + //
-                            sizeOf(upperLongitude) + //
-                            sizeOf(pointsCount) + //
-                            sizeOf(averageLatitude) + //
-                            sizeOf(averageLongitude) + //
-                            sizeOf(averageHeight) + //
-                            sizeOf(formatID) + //
-                            format.sizeOf(_values);
+               sizeOf(subversion) + //
+               sizeOf(lowerLatitude) + //
+               sizeOf(lowerLongitude) + //
+               sizeOf(upperLatitude) + //
+               sizeOf(upperLongitude) + //
+               sizeOf(pointsCount) + //
+               sizeOf(averageLatitude) + //
+               sizeOf(averageLongitude) + //
+               sizeOf(averageHeight) + //
+               sizeOf(formatID);
+      //               + //
+      //               format.sizeOf(_values);
 
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
@@ -313,32 +327,48 @@ PersistentOctree.Node {
       byteBuffer.putDouble(averageLongitude);
       byteBuffer.putDouble(averageHeight);
       byteBuffer.put(formatID);
+      //      for (final float value : _values) {
+      //         byteBuffer.putFloat(value);
+      //      }
+
+      return byteBuffer.array();
+   }
+
+
+   private byte[] createNodeDataEntry(final Format format) {
+      final int entrySize = format.sizeOf(_values);
+
+
+      final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       for (final float value : _values) {
          byteBuffer.putFloat(value);
       }
 
-      final byte[] array = byteBuffer.array();
-      //      LOGGER.logInfo("Generated buffer of " + array.length + " bytes");
-      return array;
+      return byteBuffer.array();
    }
 
 
    void save(final Environment env,
-             final Database nodeDB) {
-      final DatabaseEntry keyEntry = new DatabaseEntry(getIDBinary());
-      final DatabaseEntry dataEntry = new DatabaseEntry(createDataEntry());
+             final Database nodeDB,
+             final Database nodeDataDB) {
+      final Format format = Format.LatLonHeight;
+
+      final DatabaseEntry key = new DatabaseEntry(getBerkeleyDBKey());
 
       final TransactionConfig tnxConfig = new TransactionConfig();
       final Transaction txn = env.beginTransaction(null, tnxConfig);
-      nodeDB.put(txn, keyEntry, dataEntry);
+
+      nodeDB.put(txn, key, new DatabaseEntry(createNodeEntry(format)));
+      nodeDataDB.put(txn, key, new DatabaseEntry(createNodeDataEntry(format)));
+
       txn.commit();
    }
 
 
    static BerkeleyDBMercatorTile fromDB(final byte[] id,
-                                        final byte[] data) {
+                                        final byte[] data,
+                                        final Database nodeDataDB) {
       final ByteBuffer byteBuffer = ByteBuffer.wrap(data);
-
 
       final byte version = byteBuffer.get();
       if (version != 1) {
@@ -361,14 +391,72 @@ PersistentOctree.Node {
       final double averageLatitude = byteBuffer.getDouble();
       final double averageLongitude = byteBuffer.getDouble();
       final double averageHeight = byteBuffer.getDouble();
+
+      final Geodetic3D averagePoint = new Geodetic3D( //
+               Angle.fromRadians(averageLatitude), //
+               Angle.fromRadians(averageLongitude), averageHeight);
+
+
       final byte formatID = byteBuffer.get();
       final Format format = Format.getFromID(formatID);
 
-      switch (format) {
-         case LatLonHeight:
-            final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
+      return new BerkeleyDBMercatorTile(id, sector, pointsCount, averagePoint, format, nodeDataDB);
 
-            for (int i = 0; i < pointsCount; i++) {
+      //      switch (format) {
+      //         case LatLonHeight:
+      //            final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
+      //
+      //            for (int i = 0; i < pointsCount; i++) {
+      //               final double lat = byteBuffer.getFloat() + averageLatitude;
+      //               final double lon = byteBuffer.getFloat() + averageLongitude;
+      //               final double height = byteBuffer.getFloat() + averageHeight;
+      //
+      //               final Geodetic3D point = new Geodetic3D( //
+      //                        Angle.fromRadians(lat), //
+      //                        Angle.fromRadians(lon), //
+      //                        height);
+      //               points.add(point);
+      //            }
+      //
+      //            return new BerkeleyDBMercatorTile(id, sector, points);
+      //
+      //         default:
+      //            throw new RuntimeException("Unsupported format: " + format);
+      //      }
+
+   }
+
+
+   @Override
+   public List<Geodetic3D> getPoints() {
+      if (_points == null) {
+         _points = loadPoints();
+      }
+      return _points;
+   }
+
+
+   private List<Geodetic3D> loadPoints() {
+      switch (_format) {
+         case LatLonHeight:
+
+            final Transaction txn = null;
+            final DatabaseEntry key = new DatabaseEntry(_id);
+            final DatabaseEntry data = new DatabaseEntry();
+            final OperationStatus status = _nodeDataDB.get(txn, key, data, LockMode.READ_COMMITTED);
+            if (status != OperationStatus.SUCCESS) {
+               throw new RuntimeException("Unsupported status=" + status);
+            }
+
+            final ByteBuffer byteBuffer = ByteBuffer.wrap(data.getData());
+
+            final List<Geodetic3D> points = new ArrayList<Geodetic3D>(_pointsCount);
+
+            final double averageLatitude = _averagePoint._latitude._radians;
+            final double averageLongitude = _averagePoint._longitude._radians;
+            final double averageHeight = _averagePoint._height;
+
+            for (int i = 0; i < _pointsCount; i++) {
                final double lat = byteBuffer.getFloat() + averageLatitude;
                final double lon = byteBuffer.getFloat() + averageLongitude;
                final double height = byteBuffer.getFloat() + averageHeight;
@@ -380,18 +468,19 @@ PersistentOctree.Node {
                points.add(point);
             }
 
-            return new BerkeleyDBMercatorTile(id, sector, points);
+            return Collections.unmodifiableList(points);
 
          default:
-            throw new RuntimeException("Unsupported format: " + format);
+            throw new RuntimeException("Unsupported format: " + _format);
       }
+
 
    }
 
 
    @Override
-   public List<Geodetic3D> getPoints() {
-      return _points;
+   public int getPointsCount() {
+      return _pointsCount;
    }
 
 }

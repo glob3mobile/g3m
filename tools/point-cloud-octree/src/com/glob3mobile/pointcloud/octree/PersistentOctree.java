@@ -5,22 +5,29 @@ package com.glob3mobile.pointcloud.octree;
 import java.util.List;
 
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.Sector;
 
 
 public interface PersistentOctree
-         extends
-            AutoCloseable {
+extends
+AutoCloseable {
 
 
    public interface Node {
       @Override
-      public String toString();
+      String toString();
 
 
-      public String getID();
+      String getID();
 
 
-      public List<Geodetic3D> getPoints();
+      int getPointsCount();
+
+
+      List<Geodetic3D> getPoints();
+
+
+      Sector getSector();
    }
 
 

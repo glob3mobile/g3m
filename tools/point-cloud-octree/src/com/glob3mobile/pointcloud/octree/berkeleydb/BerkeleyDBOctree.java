@@ -33,8 +33,9 @@ PersistentOctree {
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE = 1024 * 64;
-   private static final String NODE_DATABASE_NAME  = "Node";
+   private static final int    DEFAULT_BUFFER_SIZE     = 1024 * 64;
+   private static final String NODE_DATABASE_NAME      = "Node";
+   private static final String NODE_DATA_DATABASE_NAME = "NodeData";
 
 
    public static void delete(final String cloudName) {
@@ -49,15 +50,6 @@ PersistentOctree {
       catch (final IOException e) {
          throw new RuntimeException(e);
       }
-
-
-      // final EnvironmentConfig envConfig = new EnvironmentConfig();
-      // try (final Environment env = new Environment(envHome, envConfig)) {
-      // for (final String dbName : env.getDatabaseNames()) {
-      // LOGGER.logInfo("Removing database \"" + dbName + "\"...");
-      // env.removeDatabase(null, dbName);
-      // }
-      // }
    }
 
 
@@ -67,9 +59,9 @@ PersistentOctree {
    }
 
 
-   private static PersistentOctree open(final String cloudName,
-                                        final boolean createIfNotExists,
-                                        final int bufferSize) {
+   public static PersistentOctree open(final String cloudName,
+                                       final boolean createIfNotExists,
+                                       final int bufferSize) {
       return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize);
    }
 
@@ -88,6 +80,7 @@ PersistentOctree {
 
    private final Environment      _env;
    private final Database         _nodeDB;
+   private final Database         _nodeDataDB;
 
 
    private BerkeleyDBOctree(final String cloudName,
@@ -117,12 +110,14 @@ PersistentOctree {
       dbConfig.setSortedDuplicates(true);
 
       _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
+      _nodeDataDB = _env.openDatabase(null, NODE_DATA_DATABASE_NAME, dbConfig);
    }
 
 
    @Override
    synchronized public void close() {
       flush();
+      _nodeDataDB.close();
       _nodeDB.close();
       _env.close();
    }
@@ -206,7 +201,7 @@ PersistentOctree {
          _buffer.clear();
          resetBufferBounds();
 
-         tile.save(_env, _nodeDB);
+         tile.save(_env, _nodeDB, _nodeDataDB);
       }
    }
 
@@ -232,6 +227,7 @@ PersistentOctree {
       final CursorConfig config = new CursorConfig();
       config.setReadUncommitted(false);
       final Transaction txn = null;
+
       try (final Cursor cursor = _nodeDB.openCursor(txn, config)) {
          final DatabaseEntry keyEntry = new DatabaseEntry();
          final DatabaseEntry dataEntry = new DatabaseEntry();
@@ -240,7 +236,7 @@ PersistentOctree {
             final byte[] key = keyEntry.getData();
             final byte[] data = dataEntry.getData();
 
-            final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.fromDB(key, data);
+            final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.fromDB(key, data, _nodeDataDB);
             final boolean keepGoing = visitor.visit(tile);
             if (!keepGoing) {
                break;
