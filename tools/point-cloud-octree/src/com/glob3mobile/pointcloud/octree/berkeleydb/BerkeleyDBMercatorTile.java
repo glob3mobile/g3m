@@ -29,47 +29,111 @@ public class BerkeleyDBMercatorTile
             PersistentOctree.Node {
 
 
-   private static final byte[]                 ROOT_ID   = {};
-   private static final BerkeleyDBMercatorTile ROOT_TILE = new BerkeleyDBMercatorTile(ROOT_ID, Sector.FULL_SPHERE);
+   private static enum Format {
+      LatLonHeight((byte) 1);
+
+      private final byte _formatID;
+
+
+      Format(final byte formatID) {
+         _formatID = formatID;
+      }
+
+
+      private int sizeOf(final float[] values) {
+         return values.length * 4;
+      }
+
+
+      private static Format getFromID(final byte formatID) {
+         for (final Format each : Format.values()) {
+            if (each._formatID == formatID) {
+               return each;
+            }
+         }
+         throw new RuntimeException("Invalid FormatID=" + formatID);
+      }
+   }
+
+
+   private static class TileHeader {
+      private final byte[] _id;
+      private final Sector _sector;
+
+
+      private TileHeader(final byte[] id,
+                         final Sector sector) {
+         _id = id;
+         _sector = sector;
+      }
+
+
+      private TileHeader[] createChildren() {
+         final Geodetic2D lower = _sector._lower;
+         final Geodetic2D upper = _sector._upper;
+
+         final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
+         final Angle splitLatitude = calculateSplitLatitude(lower._latitude, upper._latitude);
+
+         final Sector s0 = new Sector( //
+                  new Geodetic2D(splitLatitude, lower._longitude), //
+                  new Geodetic2D(upper._latitude, splitLongitude));
+
+         final Sector s1 = new Sector( //
+                  new Geodetic2D(splitLatitude, splitLongitude), //
+                  new Geodetic2D(upper._latitude, upper._longitude));
+
+         final Sector s2 = new Sector( //
+                  new Geodetic2D(lower._latitude, lower._longitude), //
+                  new Geodetic2D(splitLatitude, splitLongitude));
+
+         final Sector s3 = new Sector( //
+                  new Geodetic2D(lower._latitude, splitLongitude), //
+                  new Geodetic2D(splitLatitude, upper._longitude));
+
+
+         final TileHeader child0 = createChild((byte) 0, s0);
+         final TileHeader child1 = createChild((byte) 1, s1);
+         final TileHeader child2 = createChild((byte) 2, s2);
+         final TileHeader child3 = createChild((byte) 3, s3);
+         return new TileHeader[] { child0, child1, child2, child3 };
+      }
+
+
+      private TileHeader createChild(final byte index,
+                                     final Sector sector) {
+         final int length = _id.length;
+         final byte[] childId = new byte[length + 1];
+         System.arraycopy(_id, 0, childId, 0, length);
+         childId[length] = index;
+         return new TileHeader(childId, sector);
+      }
+
+   }
+
+
+   private static final byte[]     ROOT_ID          = {};
+   private static final TileHeader ROOT_TILE_HEADER = new TileHeader(ROOT_ID, Sector.FULL_SPHERE);
 
 
    static BerkeleyDBMercatorTile createDeepestEnclosingTile(final Sector targetSector,
                                                             final Geodetic3D averagePoint,
-                                                            final List<Geodetic3D> buffer) {
-      final BerkeleyDBMercatorTile tile = deepestEnclosingTile(targetSector);
+                                                            final List<Geodetic3D> points) {
+      final TileHeader tile = deepestEnclosingTile(targetSector);
 
-      final int bufferSize = buffer.size();
-      final double averageLatitudeInRadians = averagePoint._latitude._radians;
-      final double averageLongitudeInRadians = averagePoint._longitude._radians;
-      final double averageHeight = averagePoint._height;
-
-      final float[] values = new float[bufferSize * 3];
-      int i = 0;
-      for (final Geodetic3D point : buffer) {
-         final float deltaLatitudeInRadians = (float) (point._latitude._radians - averageLatitudeInRadians);
-         final float deltaLongitudeInRadians = (float) (point._longitude._radians - averageLongitudeInRadians);
-         final float deltaHeight = (float) (point._height - averageHeight);
-
-         values[i++] = deltaLatitudeInRadians;
-         values[i++] = deltaLongitudeInRadians;
-         values[i++] = deltaHeight;
-      }
-
-      tile.setValues(averagePoint, values);
-
-      return tile;
+      return new BerkeleyDBMercatorTile(tile._id, tile._sector, averagePoint, new ArrayList<>(points));
    }
 
 
-   private static BerkeleyDBMercatorTile deepestEnclosingTile(final Sector targetSector) {
-      return deepestEnclosingTile(ROOT_TILE, targetSector);
+   private static TileHeader deepestEnclosingTile(final Sector targetSector) {
+      return deepestEnclosingTile(ROOT_TILE_HEADER, targetSector);
    }
 
 
-   private static BerkeleyDBMercatorTile deepestEnclosingTile(final BerkeleyDBMercatorTile candidate,
-                                                              final Sector targetSector) {
-      final BerkeleyDBMercatorTile[] children = candidate.createChildren();
-      for (final BerkeleyDBMercatorTile child : children) {
+   private static TileHeader deepestEnclosingTile(final TileHeader candidate,
+                                                  final Sector targetSector) {
+      final TileHeader[] children = candidate.createChildren();
+      for (final TileHeader child : children) {
          if (child._sector.fullContains(targetSector)) {
             return deepestEnclosingTile(child, targetSector);
          }
@@ -114,66 +178,11 @@ public class BerkeleyDBMercatorTile
 
    private final byte[]     _id;
    private final Sector     _sector;
-   private Geodetic3D       _averagePoint = null;
-   private float[]          _values       = null;
-
+   private final Geodetic3D _averagePoint;
    private final Format     _format;
    private final int        _pointsCount;
    private final Database   _nodeDataDB;
-   private List<Geodetic3D> _points       = null;
-
-
-   private BerkeleyDBMercatorTile[] createChildren() {
-      final Geodetic2D lower = _sector._lower;
-      final Geodetic2D upper = _sector._upper;
-
-      final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
-      final Angle splitLatitude = calculateSplitLatitude(lower._latitude, upper._latitude);
-
-      final Sector s0 = new Sector( //
-               new Geodetic2D(splitLatitude, lower._longitude), //
-               new Geodetic2D(upper._latitude, splitLongitude));
-
-      final Sector s1 = new Sector( //
-               new Geodetic2D(splitLatitude, splitLongitude), //
-               new Geodetic2D(upper._latitude, upper._longitude));
-
-      final Sector s2 = new Sector( //
-               new Geodetic2D(lower._latitude, lower._longitude), //
-               new Geodetic2D(splitLatitude, splitLongitude));
-
-      final Sector s3 = new Sector( //
-               new Geodetic2D(lower._latitude, splitLongitude), //
-               new Geodetic2D(splitLatitude, upper._longitude));
-
-
-      final BerkeleyDBMercatorTile child0 = createChild((byte) 0, s0);
-      final BerkeleyDBMercatorTile child1 = createChild((byte) 1, s1);
-      final BerkeleyDBMercatorTile child2 = createChild((byte) 2, s2);
-      final BerkeleyDBMercatorTile child3 = createChild((byte) 3, s3);
-      return new BerkeleyDBMercatorTile[] { child0, child1, child2, child3 };
-   }
-
-
-   private BerkeleyDBMercatorTile createChild(final byte index,
-                                              final Sector sector) {
-      final int length = getLevel();
-      final byte[] childId = new byte[length + 1];
-      System.arraycopy(_id, 0, childId, 0, length);
-      childId[length] = index;
-      return new BerkeleyDBMercatorTile(childId, sector);
-   }
-
-
-   private BerkeleyDBMercatorTile(final byte[] id,
-                                  final Sector sector) {
-      _id = id;
-      _sector = sector;
-      _points = null;
-      _format = null;
-      _nodeDataDB = null;
-      _pointsCount = -1;
-   }
+   private List<Geodetic3D> _points = null;
 
 
    private BerkeleyDBMercatorTile(final byte[] id,
@@ -191,13 +200,17 @@ public class BerkeleyDBMercatorTile
    }
 
 
-   private void setValues(final Geodetic3D averagePoint,
-                          final float[] values) {
-      if (_values != null) {
-         throw new RuntimeException("values already set");
-      }
+   private BerkeleyDBMercatorTile(final byte[] id,
+                                  final Sector sector,
+                                  final Geodetic3D averagePoint,
+                                  final List<Geodetic3D> points) {
+      _id = id;
+      _sector = sector;
+      _pointsCount = points.size();
+      _points = points;
       _averagePoint = averagePoint;
-      _values = values;
+      _format = null;
+      _nodeDataDB = null;
    }
 
 
@@ -233,36 +246,6 @@ public class BerkeleyDBMercatorTile
    }
 
 
-   private static enum Format {
-      LatLonHeight((byte) 1, 3);
-
-      private final byte _formatID;
-      private final int  _floatsPerPoint;
-
-
-      Format(final byte formatID,
-               final int floatsPerPoint) {
-         _formatID = formatID;
-         _floatsPerPoint = floatsPerPoint;
-      }
-
-
-      private int sizeOf(final float[] values) {
-         return values.length * 4;
-      }
-
-
-      private static Format getFromID(final byte formatID) {
-         for (final Format each : Format.values()) {
-            if (each._formatID == formatID) {
-               return each;
-            }
-         }
-         throw new RuntimeException("Invalid FormatID=" + formatID);
-      }
-   }
-
-
    @SuppressWarnings("unused")
    private static int sizeOf(final double any) {
       return 8;
@@ -291,12 +274,9 @@ public class BerkeleyDBMercatorTile
       final double upperLatitude = sector._upper._latitude._radians;
       final double upperLongitude = sector._upper._longitude._radians;
 
-      final int pointsCount = _values.length / format._floatsPerPoint;
-
       final double averageLatitude = _averagePoint._latitude._radians;
       final double averageLongitude = _averagePoint._longitude._radians;
       final double averageHeight = _averagePoint._height;
-
 
       final byte formatID = format._formatID;
 
@@ -306,14 +286,11 @@ public class BerkeleyDBMercatorTile
                sizeOf(lowerLongitude) + //
                sizeOf(upperLatitude) + //
                sizeOf(upperLongitude) + //
-               sizeOf(pointsCount) + //
+               sizeOf(_pointsCount) + //
                sizeOf(averageLatitude) + //
                sizeOf(averageLongitude) + //
                sizeOf(averageHeight) + //
                sizeOf(formatID);
-      //               + //
-      //               format.sizeOf(_values);
-
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -322,25 +299,44 @@ public class BerkeleyDBMercatorTile
       byteBuffer.putDouble(lowerLongitude);
       byteBuffer.putDouble(upperLatitude);
       byteBuffer.putDouble(upperLongitude);
-      byteBuffer.putInt(pointsCount);
+      byteBuffer.putInt(_pointsCount);
       byteBuffer.putDouble(averageLatitude);
       byteBuffer.putDouble(averageLongitude);
       byteBuffer.putDouble(averageHeight);
       byteBuffer.put(formatID);
-      //      for (final float value : _values) {
-      //         byteBuffer.putFloat(value);
-      //      }
 
       return byteBuffer.array();
    }
 
 
-   private byte[] createNodeDataEntry(final Format format) {
-      final int entrySize = format.sizeOf(_values);
+   private float[] createValues() {
+      final int bufferSize = _points.size();
+      final double averageLatitudeInRadians = _averagePoint._latitude._radians;
+      final double averageLongitudeInRadians = _averagePoint._longitude._radians;
+      final double averageHeight = _averagePoint._height;
 
+      final float[] values = new float[bufferSize * 3];
+      int i = 0;
+      for (final Geodetic3D point : _points) {
+         final float deltaLatitudeInRadians = (float) (point._latitude._radians - averageLatitudeInRadians);
+         final float deltaLongitudeInRadians = (float) (point._longitude._radians - averageLongitudeInRadians);
+         final float deltaHeight = (float) (point._height - averageHeight);
+
+         values[i++] = deltaLatitudeInRadians;
+         values[i++] = deltaLongitudeInRadians;
+         values[i++] = deltaHeight;
+      }
+
+      return values;
+   }
+
+
+   private byte[] createNodeDataEntry(final Format format) {
+      final float[] values = createValues();
+      final int entrySize = format.sizeOf(values);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
-      for (final float value : _values) {
+      for (final float value : values) {
          byteBuffer.putFloat(value);
       }
 
@@ -401,29 +397,6 @@ public class BerkeleyDBMercatorTile
       final Format format = Format.getFromID(formatID);
 
       return new BerkeleyDBMercatorTile(id, sector, pointsCount, averagePoint, format, nodeDataDB);
-
-      //      switch (format) {
-      //         case LatLonHeight:
-      //            final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
-      //
-      //            for (int i = 0; i < pointsCount; i++) {
-      //               final double lat = byteBuffer.getFloat() + averageLatitude;
-      //               final double lon = byteBuffer.getFloat() + averageLongitude;
-      //               final double height = byteBuffer.getFloat() + averageHeight;
-      //
-      //               final Geodetic3D point = new Geodetic3D( //
-      //                        Angle.fromRadians(lat), //
-      //                        Angle.fromRadians(lon), //
-      //                        height);
-      //               points.add(point);
-      //            }
-      //
-      //            return new BerkeleyDBMercatorTile(id, sector, points);
-      //
-      //         default:
-      //            throw new RuntimeException("Unsupported format: " + format);
-      //      }
-
    }
 
 
@@ -433,6 +406,12 @@ public class BerkeleyDBMercatorTile
          _points = loadPoints();
       }
       return _points;
+   }
+
+
+   @Override
+   public int getPointsCount() {
+      return _pointsCount;
    }
 
 
@@ -475,13 +454,7 @@ public class BerkeleyDBMercatorTile
             throw new RuntimeException("Unsupported format: " + _format);
       }
 
-
    }
 
-
-   @Override
-   public int getPointsCount() {
-      return _pointsCount;
-   }
 
 }

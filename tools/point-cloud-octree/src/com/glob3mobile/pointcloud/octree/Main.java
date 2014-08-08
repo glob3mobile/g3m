@@ -132,9 +132,9 @@ public class Main {
             @Override
             public boolean visit(final PersistentOctree.Node node) {
                final int pointsCount = node.getPoints().size();
-               //final int pointsCount = node.getPointsCount();
+               // final int pointsCount = node.getPointsCount();
 
-               System.out.println(node.getID() + ", points=" + pointsCount);
+               System.out.println(" node=" + node.getID() + ", points=" + pointsCount);
                _counter++;
                _totalPoints += pointsCount;
                return true;
