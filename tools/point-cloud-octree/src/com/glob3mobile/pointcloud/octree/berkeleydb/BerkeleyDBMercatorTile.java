@@ -3,7 +3,9 @@
 package com.glob3mobile.pointcloud.octree.berkeleydb;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.glob3.mobile.generated.Angle;
@@ -11,6 +13,7 @@ import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.Sector;
 
+import com.glob3mobile.pointcloud.octree.PersistentOctree;
 import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
@@ -18,20 +21,20 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.Transaction;
 import com.sleepycat.je.TransactionConfig;
 
-import es.igosoftware.io.GIOUtils;
+
+public class BerkeleyDBMercatorTile
+implements
+PersistentOctree.Node {
 
 
-public class MercatorTile {
+   private static final byte[]                 ROOT_ID   = {};
+   private static final BerkeleyDBMercatorTile ROOT_TILE = new BerkeleyDBMercatorTile(ROOT_ID, Sector.FULL_SPHERE);
 
 
-   private static final byte[]       ROOT_ID   = {};
-   private static final MercatorTile ROOT_TILE = new MercatorTile(ROOT_ID, Sector.FULL_SPHERE);
-
-
-   public static MercatorTile createDeepestEnclosingTile(final Sector targetSector,
-                                                         final Geodetic3D averagePoint,
-                                                         final List<Geodetic3D> buffer) {
-      final MercatorTile tile = deepestEnclosingTile(targetSector);
+   static BerkeleyDBMercatorTile createDeepestEnclosingTile(final Sector targetSector,
+                                                            final Geodetic3D averagePoint,
+                                                            final List<Geodetic3D> buffer) {
+      final BerkeleyDBMercatorTile tile = deepestEnclosingTile(targetSector);
 
       final int bufferSize = buffer.size();
       final double averageLatitudeInRadians = averagePoint._latitude._radians;
@@ -56,15 +59,15 @@ public class MercatorTile {
    }
 
 
-   private static MercatorTile deepestEnclosingTile(final Sector targetSector) {
+   private static BerkeleyDBMercatorTile deepestEnclosingTile(final Sector targetSector) {
       return deepestEnclosingTile(ROOT_TILE, targetSector);
    }
 
 
-   private static MercatorTile deepestEnclosingTile(final MercatorTile candidate,
-                                                    final Sector targetSector) {
-      final MercatorTile[] children = candidate.createChildren();
-      for (final MercatorTile child : children) {
+   private static BerkeleyDBMercatorTile deepestEnclosingTile(final BerkeleyDBMercatorTile candidate,
+                                                              final Sector targetSector) {
+      final BerkeleyDBMercatorTile[] children = candidate.createChildren();
+      for (final BerkeleyDBMercatorTile child : children) {
          if (child._sector.fullContains(targetSector)) {
             return deepestEnclosingTile(child, targetSector);
          }
@@ -107,13 +110,14 @@ public class MercatorTile {
    }
 
 
-   private final byte[] _id;
-   private final Sector _sector;
-   private Geodetic3D   _averagePoint = null;
-   private float[]      _values       = null;
+   private final byte[]           _id;
+   private final Sector           _sector;
+   private Geodetic3D             _averagePoint = null;
+   private float[]                _values       = null;
+   private final List<Geodetic3D> _points;
 
 
-   private MercatorTile[] createChildren() {
+   private BerkeleyDBMercatorTile[] createChildren() {
       final Geodetic2D lower = _sector._lower;
       final Geodetic2D upper = _sector._upper;
 
@@ -137,28 +141,38 @@ public class MercatorTile {
                new Geodetic2D(splitLatitude, upper._longitude));
 
 
-      final MercatorTile child0 = createChild((byte) 0, s0);
-      final MercatorTile child1 = createChild((byte) 1, s1);
-      final MercatorTile child2 = createChild((byte) 2, s2);
-      final MercatorTile child3 = createChild((byte) 3, s3);
-      return new MercatorTile[] { child0, child1, child2, child3 };
+      final BerkeleyDBMercatorTile child0 = createChild((byte) 0, s0);
+      final BerkeleyDBMercatorTile child1 = createChild((byte) 1, s1);
+      final BerkeleyDBMercatorTile child2 = createChild((byte) 2, s2);
+      final BerkeleyDBMercatorTile child3 = createChild((byte) 3, s3);
+      return new BerkeleyDBMercatorTile[] { child0, child1, child2, child3 };
    }
 
 
-   private MercatorTile createChild(final byte index,
-                                    final Sector sector) {
+   private BerkeleyDBMercatorTile createChild(final byte index,
+                                              final Sector sector) {
       final int length = getLevel();
       final byte[] childId = new byte[length + 1];
       System.arraycopy(_id, 0, childId, 0, length);
       childId[length] = index;
-      return new MercatorTile(childId, sector);
+      return new BerkeleyDBMercatorTile(childId, sector);
    }
 
 
-   private MercatorTile(final byte[] id,
-                        final Sector sector) {
+   private BerkeleyDBMercatorTile(final byte[] id,
+                                  final Sector sector) {
       _id = id;
       _sector = sector;
+      _points = null;
+   }
+
+
+   public BerkeleyDBMercatorTile(final byte[] id,
+                                 final Sector sector,
+                                 final List<Geodetic3D> points) {
+      _id = id;
+      _sector = sector;
+      _points = Collections.unmodifiableList(points);
    }
 
 
@@ -172,17 +186,18 @@ public class MercatorTile {
    }
 
 
-   public int getLevel() {
+   int getLevel() {
       return _id.length;
    }
 
 
-   public byte[] getID() {
+   byte[] getIDBinary() {
       return Arrays.copyOf(_id, _id.length);
    }
 
 
-   public String getIDString() {
+   @Override
+   public String getID() {
       final StringBuilder builder = new StringBuilder();
       for (final byte each : _id) {
          builder.append(each);
@@ -191,14 +206,14 @@ public class MercatorTile {
    }
 
 
-   public Sector getSector() {
+   Sector getSector() {
       return _sector;
    }
 
 
    @Override
    public String toString() {
-      return "MercatorTile [id=" + getIDString() + ", sector=" + Utils.toString(_sector) + ", level=" + getLevel() + "]";
+      return "MercatorTile [id=" + getID() + ", sector=" + Utils.toString(_sector) + ", level=" + getLevel() + "]";
    }
 
 
@@ -218,6 +233,16 @@ public class MercatorTile {
 
       private int sizeOf(final float[] values) {
          return values.length * 4;
+      }
+
+
+      private static Format getFromID(final byte formatID) {
+         for (final Format each : Format.values()) {
+            if (each._formatID == formatID) {
+               return each;
+            }
+         }
+         throw new RuntimeException("Invalid FormatID=" + formatID);
       }
    }
 
@@ -240,7 +265,7 @@ public class MercatorTile {
    }
 
 
-   private byte[] createDataEntry(final boolean compress) {
+   private byte[] createDataEntry() {
 
       final Format format = Format.LatLonHeight;
 
@@ -292,28 +317,81 @@ public class MercatorTile {
          byteBuffer.putFloat(value);
       }
 
-      final byte[] array = compress ? GIOUtils.compress(byteBuffer.array()) : byteBuffer.array();
+      final byte[] array = byteBuffer.array();
       //      LOGGER.logInfo("Generated buffer of " + array.length + " bytes");
       return array;
    }
 
 
    void save(final Environment env,
-             final Database nodeDB,
-             final boolean compress) {
-      //      final String key = tile.getIDString();
-      //      final DatabaseEntry keyEntry = new DatabaseEntry(key.getBytes(UTF8));
-
-      final DatabaseEntry keyEntry = new DatabaseEntry(getID());
-      final DatabaseEntry dataEntry = new DatabaseEntry(createDataEntry(compress));
-
-      //      _nodeDB.put(null, keyEntry, dataEntry);
-      //      _nodeDB.sync();
+             final Database nodeDB) {
+      final DatabaseEntry keyEntry = new DatabaseEntry(getIDBinary());
+      final DatabaseEntry dataEntry = new DatabaseEntry(createDataEntry());
 
       final TransactionConfig tnxConfig = new TransactionConfig();
       final Transaction txn = env.beginTransaction(null, tnxConfig);
       nodeDB.put(txn, keyEntry, dataEntry);
       txn.commit();
+   }
+
+
+   static BerkeleyDBMercatorTile fromDB(final byte[] id,
+                                        final byte[] data) {
+      final ByteBuffer byteBuffer = ByteBuffer.wrap(data);
+
+
+      final byte version = byteBuffer.get();
+      if (version != 1) {
+         throw new RuntimeException("Invalid version=" + version);
+      }
+      final byte subversion = byteBuffer.get();
+      if (subversion != 0) {
+         throw new RuntimeException("Invalid subversion=" + subversion);
+      }
+
+      final double lowerLatitude = byteBuffer.getDouble();
+      final double lowerLongitude = byteBuffer.getDouble();
+      final double upperLatitude = byteBuffer.getDouble();
+      final double upperLongitude = byteBuffer.getDouble();
+      final Sector sector = new Sector( //
+               Geodetic2D.fromRadians(lowerLatitude, lowerLongitude), //
+               Geodetic2D.fromRadians(upperLatitude, upperLongitude));
+
+      final int pointsCount = byteBuffer.getInt();
+      final double averageLatitude = byteBuffer.getDouble();
+      final double averageLongitude = byteBuffer.getDouble();
+      final double averageHeight = byteBuffer.getDouble();
+      final byte formatID = byteBuffer.get();
+      final Format format = Format.getFromID(formatID);
+
+      switch (format) {
+         case LatLonHeight:
+            final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
+
+            for (int i = 0; i < pointsCount; i++) {
+               final double lat = byteBuffer.getFloat() + averageLatitude;
+               final double lon = byteBuffer.getFloat() + averageLongitude;
+               final double height = byteBuffer.getFloat() + averageHeight;
+
+               final Geodetic3D point = new Geodetic3D( //
+                        Angle.fromRadians(lat), //
+                        Angle.fromRadians(lon), //
+                        height);
+               points.add(point);
+            }
+
+            return new BerkeleyDBMercatorTile(id, sector, points);
+
+         default:
+            throw new RuntimeException("Unsupported format: " + format);
+      }
+
+   }
+
+
+   @Override
+   public List<Geodetic3D> getPoints() {
+      return _points;
    }
 
 }

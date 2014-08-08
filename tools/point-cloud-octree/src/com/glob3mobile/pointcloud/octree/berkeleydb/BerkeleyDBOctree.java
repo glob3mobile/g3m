@@ -12,10 +12,16 @@ import org.glob3.mobile.generated.Sector;
 
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
 import com.glob3mobile.pointcloud.octree.Utils;
+import com.sleepycat.je.Cursor;
+import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
+import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
+import com.sleepycat.je.Transaction;
 
 import es.igosoftware.io.GIOUtils;
 
@@ -56,21 +62,17 @@ PersistentOctree {
 
 
    public static PersistentOctree open(final String cloudName,
-                                       final boolean createIfNotExists,
-                                       final boolean compress) {
-      return open(cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE, compress);
+                                       final boolean createIfNotExists) {
+      return open(cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE);
    }
 
 
    private static PersistentOctree open(final String cloudName,
                                         final boolean createIfNotExists,
-                                        final int bufferSize,
-                                        final boolean compress) {
-      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize, compress);
+                                        final int bufferSize) {
+      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize);
    }
 
-
-   private final boolean          _compress;
 
    private final List<Geodetic3D> _buffer;
    private final int              _bufferSize;
@@ -90,9 +92,7 @@ PersistentOctree {
 
    private BerkeleyDBOctree(final String cloudName,
                             final boolean createIfNotExists,
-                            final int bufferSize,
-                            final boolean compress) {
-      _compress = compress;
+                            final int bufferSize) {
 
       _bufferSize = bufferSize;
       _buffer = new ArrayList<>(bufferSize);
@@ -200,13 +200,13 @@ PersistentOctree {
 
          final Geodetic3D averagePoint = Utils.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
 
-         final MercatorTile tile = MercatorTile.createDeepestEnclosingTile(targetSector, averagePoint, _buffer);
-
+         final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.createDeepestEnclosingTile(targetSector, averagePoint,
+                  _buffer);
 
          _buffer.clear();
          resetBufferBounds();
 
-         tile.save(_env, _nodeDB, _compress);
+         tile.save(_env, _nodeDB);
       }
    }
 
@@ -221,6 +221,35 @@ PersistentOctree {
 
       // final long elapsed = System.currentTimeMillis() - start;
       //LOGGER.logInfo("Optimized in " + elapsed + "ms");
+   }
+
+
+   @Override
+   public void acceptVisitor(final PersistentOctree.Visitor visitor) {
+
+      visitor.start();
+
+      final CursorConfig config = new CursorConfig();
+      config.setReadUncommitted(false);
+      final Transaction txn = null;
+      try (final Cursor cursor = _nodeDB.openCursor(txn, config)) {
+         final DatabaseEntry keyEntry = new DatabaseEntry();
+         final DatabaseEntry dataEntry = new DatabaseEntry();
+
+         while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+            final byte[] key = keyEntry.getData();
+            final byte[] data = dataEntry.getData();
+
+            final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.fromDB(key, data);
+            final boolean keepGoing = visitor.visit(tile);
+            if (!keepGoing) {
+               break;
+            }
+         }
+      }
+
+      visitor.stop();
+
    }
 
 

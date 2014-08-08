@@ -2,12 +2,38 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.util.List;
+
 import org.glob3.mobile.generated.Geodetic3D;
 
 
 public interface PersistentOctree
-extends
-AutoCloseable {
+         extends
+            AutoCloseable {
+
+
+   public interface Node {
+      @Override
+      public String toString();
+
+
+      public String getID();
+
+
+      public List<Geodetic3D> getPoints();
+   }
+
+
+   public interface Visitor {
+      void start();
+
+
+      boolean visit(PersistentOctree.Node node);
+
+
+      void stop();
+   }
+
 
    void addPoint(Geodetic3D point);
 
@@ -21,5 +47,7 @@ AutoCloseable {
    @Override
    void close();
 
+
+   void acceptVisitor(PersistentOctree.Visitor visitor);
 
 }

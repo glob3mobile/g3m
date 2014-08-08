@@ -36,45 +36,6 @@ public class Main {
    }
 
 
-   public static void main(final String[] args) throws IOException {
-      System.out.println("PointClout OcTree 0.1");
-      System.out.println("---------------------\n");
-
-
-      BerkeleyDBOctree.delete(CLOUD_NAME);
-
-
-      final boolean loadPoints = true;
-      if (loadPoints) {
-         final String fileName = "18STJ6448.txt.gz";
-         final boolean createIfNotExists = true;
-         final boolean compress = true;
-
-         /*
-          NO compress / NO keyPrefix
-             - loaded in 40757ms
-             - 140M
-
-          YES compress / NO keyPrefix
-             - loaded in 39416ms
-             - 109M
-
-          YES compress / YES keyPrefix
-             - loaded in 39851ms
-             - 109M
-          */
-
-         final PersistentOctree octree = BerkeleyDBOctree.open(CLOUD_NAME, createIfNotExists, compress);
-         final long start = System.currentTimeMillis();
-         load(octree, fileName);
-         final long elapsed = System.currentTimeMillis() - start;
-         System.out.println("\n- loaded in " + elapsed + "ms");
-
-         octree.close();
-      }
-   }
-
-
    private static void load(final PersistentOctree octree,
                             final String fileName) throws IOException, FileNotFoundException {
       final GUndeterminateProgress progress = new GUndeterminateProgress(5, true) {
@@ -113,6 +74,77 @@ public class Main {
       progress.finish();
 
       octree.optimize();
+   }
+
+
+   public static void main(final String[] args) throws IOException {
+      System.out.println("PointClout OcTree 0.1");
+      System.out.println("---------------------\n");
+
+
+      final boolean createOT = false;
+      final boolean visitOT = true;
+
+      // 5813329 steps [Finished in 24s] 265.7kB/sec (avr=233.7kB/sec)
+      // ** Visited 89 nodes with 5813329 points in 548ms
+
+
+      if (createOT) {
+         BerkeleyDBOctree.delete(CLOUD_NAME);
+
+         final boolean loadPoints = true;
+         if (loadPoints) {
+            final String fileName = "18STJ6448.txt.gz";
+            final boolean createIfNotExists = true;
+
+
+            try (final PersistentOctree octree = BerkeleyDBOctree.open(CLOUD_NAME, createIfNotExists)) {
+               final long start = System.currentTimeMillis();
+               load(octree, fileName);
+               final long elapsed = System.currentTimeMillis() - start;
+               System.out.println("\n- loaded in " + elapsed + "ms");
+            }
+         }
+      }
+
+
+      if (visitOT) {
+         final boolean createIfNotExists = false;
+         try (final PersistentOctree octree = BerkeleyDBOctree.open(CLOUD_NAME, createIfNotExists);) {
+            octree.acceptVisitor(new PersistentOctree.Visitor() {
+               private int  _counter;
+               private long _started;
+               private long _totalPoints;
+
+
+               @Override
+               public void start() {
+                  _counter = 0;
+                  _started = System.currentTimeMillis();
+                  _totalPoints = 0;
+               }
+
+
+               @Override
+               public boolean visit(final PersistentOctree.Node node) {
+                  // System.out.println(node);
+                  final int pointsCount = node.getPoints().size();
+                  System.out.println(node.getID() + ", points=" + pointsCount);
+                  _counter++;
+                  _totalPoints += pointsCount;
+                  return true;
+               }
+
+
+               @Override
+               public void stop() {
+                  final long elapsed = System.currentTimeMillis() - _started;
+                  System.out.println("** Visited " + _counter + " nodes with " + _totalPoints + " points in " + elapsed + "ms");
+               }
+            });
+         }
+      }
+
    }
 
 
