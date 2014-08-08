@@ -440,15 +440,13 @@ public class BerkeleyDBMercatorTile
       switch (_format) {
          case LatLonHeight:
 
-            final Transaction txn = null;
-            final DatabaseEntry key = new DatabaseEntry(_id);
-            final DatabaseEntry data = new DatabaseEntry();
-            final OperationStatus status = _nodeDataDB.get(txn, key, data, LockMode.READ_COMMITTED);
+            final DatabaseEntry dataEntry = new DatabaseEntry();
+            final OperationStatus status = _nodeDataDB.get(null, new DatabaseEntry(_id), dataEntry, LockMode.READ_COMMITTED);
             if (status != OperationStatus.SUCCESS) {
                throw new RuntimeException("Unsupported status=" + status);
             }
 
-            final ByteBuffer byteBuffer = ByteBuffer.wrap(data.getData());
+            final ByteBuffer byteBuffer = ByteBuffer.wrap(dataEntry.getData());
 
             final List<Geodetic3D> points = new ArrayList<Geodetic3D>(_pointsCount);
 
@@ -468,6 +466,9 @@ public class BerkeleyDBMercatorTile
                points.add(point);
             }
 
+            if (_pointsCount != points.size()) {
+               throw new RuntimeException("Inconsistency in pointsCount");
+            }
             return Collections.unmodifiableList(points);
 
          default:
