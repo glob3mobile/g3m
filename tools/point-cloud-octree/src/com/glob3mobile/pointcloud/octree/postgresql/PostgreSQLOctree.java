@@ -16,17 +16,21 @@ import java.util.List;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.Sector;
 
 import com.glob3mobile.pointcloud.octree.JDBCUtils;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
 
 
 public class PostgreSQLOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
 
-   private static final int DEFAULT_BUFFER_SIZE = 1024 * 32;
+   private static final int DEFAULT_BUFFER_SIZE = 1024 * 64;
+
+
+   //   private static final int DEFAULT_BUFFER_SIZE = 1024 * 16;
 
 
    public static PostgreSQLOctree get(final String server,
@@ -144,11 +148,9 @@ PersistentOctree {
       log("creating node table indexes");
       createNodeTableIndex("lower_latitude");
       createNodeTableIndex("lower_longitude");
-      createNodeTableIndex("lower_height");
 
       createNodeTableIndex("upper_latitude");
       createNodeTableIndex("upper_longitude");
-      createNodeTableIndex("upper_height");
    }
 
 
@@ -163,7 +165,7 @@ PersistentOctree {
    private void createNodeTableIndex(final String columnName) throws SQLException {
       try (final Statement st = _connection.createStatement()) {
          st.executeUpdate("CREATE INDEX \"" + getNodeTableName() + "_" + columnName + "\" ON " + getQuotedNodeTableName() + " ("
-                  + columnName + ")");
+                          + columnName + ")");
       }
    }
 
@@ -185,33 +187,33 @@ PersistentOctree {
 
    private String getCreateMetadataTableSQL() {
       return "CREATE TABLE " + getQuotedMetadataTableName() + " " + //
-               "(name TEXT NOT NULL)";
+             "(name TEXT NOT NULL)";
    }
 
 
    private String getCreateNodeTableSQL() {
       return "CREATE TABLE " + getQuotedNodeTableName() + " " + //
-               "(id smallint[] NOT NULL," + //
-               "lower_latitude float8 NOT NULL," + //
-               "lower_longitude float8 NOT NULL," + //
-               "lower_height float8 NOT NULL," + //
-               "upper_latitude float8 NOT NULL," + //
-               "upper_longitude float8 NOT NULL," + //
-               "upper_height float8 NOT NULL," + //
-               "points_count bigint NOT NULL," + //
-               "average_latitude float8 NOT NULL," + //
-               "average_longitude float8 NOT NULL," + //
-               "average_height float8 NOT NULL," + //
-               " CONSTRAINT \"" + getNodeTableName() + "_id_primary_key\" PRIMARY KEY (id))";
+             "(id smallint[] NOT NULL," + //
+             "lower_latitude float8 NOT NULL," + //
+             "lower_longitude float8 NOT NULL," + //
+             "upper_latitude float8 NOT NULL," + //
+             "upper_longitude float8 NOT NULL," + //
+             "points_count int NOT NULL," + //
+             "average_latitude float8 NOT NULL," + //
+             "average_longitude float8 NOT NULL," + //
+             "average_height float8 NOT NULL," + //
+             "format smallint NOT NULL," + //
+             "points float4[] NOT NULL," + //
+             " CONSTRAINT \"" + getNodeTableName() + "_id_primary_key\" PRIMARY KEY (id))";
    }
 
 
    private String getCreateNodeDataTableSQL() {
       return "CREATE TABLE " + getQuotedNodeDataTableName() + " " + //
-               "(id smallint[] NOT NULL," + //
-               "format smallint NOT NULL," + //
-               "points float4[] NOT NULL," + //
-               " CONSTRAINT \"" + getNodeDataTableName() + "_id_primary_key\" PRIMARY KEY (id))";
+             "(id smallint[] NOT NULL," + //
+             "format smallint NOT NULL," + //
+             "points float4[] NOT NULL," + //
+             " CONSTRAINT \"" + getNodeDataTableName() + "_id_primary_key\" PRIMARY KEY (id))";
    }
 
 
@@ -284,7 +286,12 @@ PersistentOctree {
    @Override
    public void close() {
 
-      flush();
+      try {
+         flush();
+      }
+      catch (final SQLException e) {
+         throw new RuntimeException(e);
+      }
 
       JDBCUtils.close(_connection);
    }
@@ -322,12 +329,18 @@ PersistentOctree {
    }
 
 
-   private void flush() {
+   private void flush() throws SQLException {
       final int bufferSize = _buffer.size();
       if (bufferSize > 0) {
 
-         final Geodetic3D lowerPoint = fromRadians(_minLatitudeInRadians, _minLongitudeInRadians, _minHeight);
-         final Geodetic3D upperPoint = fromRadians(_maxLatitudeInRadians, _maxLongitudeInRadians, _maxHeight);
+         final Geodetic3D lower = fromRadians(_minLatitudeInRadians, _minLongitudeInRadians, _minHeight);
+         final Geodetic3D upper = fromRadians(_maxLatitudeInRadians, _maxLongitudeInRadians, _maxHeight);
+
+         final Sector targetSector = new Sector(lower.asGeodetic2D(), upper.asGeodetic2D());
+
+         final MercatorTile tile = MercatorTile.deepestEnclosingTile(targetSector);
+
+         //         final String tileID = tile.getIDString();
 
          final double averageLatitudeInRadians = _sumLatitudeInRadians / bufferSize;
          final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;
@@ -335,28 +348,29 @@ PersistentOctree {
 
          final Geodetic3D averagePoint = fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
 
-         log("Flushing buffer of " + bufferSize + ", average=" + toString(averagePoint) + ", bounds=(" + toString(lowerPoint)
-                  + " / " + toString(upperPoint) + ")...");
+         log("Flushing buffer of " + bufferSize + //
+             //             ", average=" + Utils.toString(averagePoint) + //
+                  //                  ", bounds=(" + Utils.toString(lowerPoint) + " / " + Utils.toString(upperPoint) + ")" + //
+                  " into tile=" + tile.getIDString() + " level=" + tile.getLevel() + "...");
 
 
+         final Float[] values = new Float[bufferSize * 3];
+         int i = 0;
          for (final Geodetic3D point : _buffer) {
+            final float deltaLatitudeInRadians = (float) (point._latitude._radians - averageLatitudeInRadians);
+            final float deltaLongitudeInRadians = (float) (point._longitude._radians - averageLongitudeInRadians);
+            final float deltaHeight = (float) (point._height - averageHeight);
 
+            values[i++] = deltaLatitudeInRadians;
+            values[i++] = deltaLongitudeInRadians;
+            values[i++] = deltaHeight;
          }
 
          _buffer.clear();
-
          resetBufferBounds();
+
+         PostgreSQLNode.save(_connection, getQuotedNodeTableName(), tile, averagePoint, values);
       }
-   }
-
-
-   private static String toString(final Geodetic3D point) {
-      return "(lat=" + toString(point._latitude) + ", lon=" + toString(point._longitude) + ", height=" + point._height + ")";
-   }
-
-
-   private static String toString(final Angle angle) {
-      return angle._degrees + "d";
    }
 
 
@@ -411,7 +425,12 @@ PersistentOctree {
 
 
       if (_buffer.size() == _bufferSize) {
-         flush();
+         try {
+            flush();
+         }
+         catch (final SQLException e) {
+            throw new RuntimeException(e);
+         }
       }
    }
 
