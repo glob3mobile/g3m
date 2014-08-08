@@ -97,7 +97,7 @@ public class Main {
             final double x = Double.valueOf(tokens[0]);
             final double y = Double.valueOf(tokens[1]);
             final double z = Double.valueOf(tokens[2]);
-            final double intensity = Double.valueOf(tokens[2]);
+            // final double intensity = Double.valueOf(tokens[2]);
 
             final IVector2 sourcePoint = new GVector2D(x, y);
             final IVector2 projectedPointInRadians = projection.transformPoint(targetProjection, sourcePoint);

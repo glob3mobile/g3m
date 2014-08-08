@@ -18,19 +18,17 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 
 import es.igosoftware.io.GIOUtils;
-import es.igosoftware.logging.GLogger;
-import es.igosoftware.logging.ILogger;
 
 
 public class BerkeleyDBOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
-   private static final ILogger LOGGER              = GLogger.instance();
+   // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int     DEFAULT_BUFFER_SIZE = 1024 * 64;
-   private static final String  NODE_DATABASE_NAME  = "Node";
+   private static final int    DEFAULT_BUFFER_SIZE = 1024 * 64;
+   private static final String NODE_DATABASE_NAME  = "Node";
 
 
    public static void delete(final String cloudName) {
@@ -114,23 +112,7 @@ public class BerkeleyDBOctree
 
       final DatabaseConfig dbConfig = new DatabaseConfig();
       dbConfig.setAllowCreate(createIfNotExists);
-      // dbConfig.setDeferredWrite(true);
       dbConfig.setTransactionalVoid(true);
-
-      // dbConfig.setBtreeComparator(new Comparator<byte[]>() {
-      // @Override
-      // public int compare(final byte[] o1,
-      // final byte[] o2) {
-      // final String s1 = new String(o1, UTF8);
-      // final String s2 = new String(o2, UTF8);
-      // return s1.compareTo(s2);
-      // }
-      // });
-
-      // Comparator<byte[]> duplicateComparator;
-      // dbConfig.setDuplicateComparator(duplicateComparator);
-
-
       dbConfig.setKeyPrefixing(true);
       dbConfig.setSortedDuplicates(true);
 
@@ -141,9 +123,7 @@ public class BerkeleyDBOctree
    @Override
    synchronized public void close() {
       flush();
-
       _nodeDB.close();
-
       _env.close();
    }
 
