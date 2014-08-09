@@ -61,7 +61,7 @@ public class Main {
          @Override
          public void informProgress(final long stepsDone,
                                     final long elapsed) {
-            System.out.println("Loading \"" + fileName + "\" " + progressString(stepsDone, elapsed));
+            System.out.println("- loading \"" + fileName + "\"" + progressString(stepsDone, elapsed));
          }
       };
 
@@ -100,13 +100,8 @@ public class Main {
       if (loadPoints) {
          final boolean createIfNotExists = true;
          try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists)) {
-            final long start = System.currentTimeMillis();
-
             final GProjection projection = GProjection.EPSG_26918;
             loadOT(octree, "18STJ6448.txt.gz", projection);
-
-            final long elapsed = System.currentTimeMillis() - start;
-            System.out.println("\n- loaded in " + elapsed + "ms");
          }
       }
    }
@@ -132,12 +127,12 @@ public class Main {
             @Override
             public boolean visit(final PersistentOctree.Node node) {
                final int pointsCount = node.getPoints().size();
-               //               final int pointsCount = node.getPointsCount();
+               //final int pointsCount = node.getPointsCount();
 
-               final Geodetic3D averagePoint = node.getAveragePoint();
-               System.out.println(" node=" + node.getID() + ", points=" + pointsCount + ", average="
-                        + averagePoint._latitude._degrees + "/" + averagePoint._longitude._degrees + "/"
-                        + averagePoint._height);
+               //               final Geodetic3D averagePoint = node.getAveragePoint();
+               //               System.out.println(" node=" + node.getID() + ", points=" + pointsCount + ", average="
+               //                                  + averagePoint._latitude._degrees + "/" + averagePoint._longitude._degrees + "/"
+               //                                  + averagePoint._height);
                _counter++;
                _totalPoints += pointsCount;
                return true;

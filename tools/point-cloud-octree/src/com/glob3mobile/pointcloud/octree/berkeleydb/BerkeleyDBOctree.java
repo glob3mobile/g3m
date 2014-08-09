@@ -34,9 +34,10 @@ PersistentOctree {
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE     = 1024 * 16;
-   private static final String NODE_DATABASE_NAME      = "Node";
-   private static final String NODE_DATA_DATABASE_NAME = "NodeData";
+   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 4;
+   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 4;
+   private static final String NODE_DATABASE_NAME           = "Node";
+   private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
 
 
    public static void delete(final String cloudName) {
@@ -56,19 +57,21 @@ PersistentOctree {
 
    public static PersistentOctree open(final String cloudName,
                                        final boolean createIfNotExists) {
-      return open(cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE);
+      return open(cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE);
    }
 
 
    public static PersistentOctree open(final String cloudName,
                                        final boolean createIfNotExists,
-                                       final int bufferSize) {
-      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize);
+                                       final int bufferSize,
+                                       final int maxPointsPerTitle) {
+      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize, maxPointsPerTitle);
    }
 
 
    private final List<Geodetic3D> _buffer;
    private final int              _bufferSize;
+   private final int              _maxPointsPerTitle;
    private double                 _minLatitudeInRadians;
    private double                 _minLongitudeInRadians;
    private double                 _minHeight;
@@ -86,11 +89,14 @@ PersistentOctree {
 
    private BerkeleyDBOctree(final String cloudName,
                             final boolean createIfNotExists,
-                            final int bufferSize) {
+                            final int bufferSize,
+                            final int maxPointsPerTitle) {
 
       _bufferSize = bufferSize;
       _buffer = new ArrayList<>(bufferSize);
       resetBufferBounds();
+
+      _maxPointsPerTitle = maxPointsPerTitle;
 
       final File envHome = new File(cloudName);
       if (createIfNotExists) {
@@ -112,6 +118,11 @@ PersistentOctree {
 
       _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
       _nodeDataDB = _env.openDatabase(null, NODE_DATA_DATABASE_NAME, dbConfig);
+   }
+
+
+   int getMaxPointsPerTile() {
+      return _maxPointsPerTitle;
    }
 
 
@@ -240,7 +251,7 @@ PersistentOctree {
             final byte[] key = keyEntry.getData();
             final byte[] data = dataEntry.getData();
 
-            final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.fromDB(this, key, data, false);
+            final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.fromDB(null, this, key, data, false);
             final boolean keepGoing = visitor.visit(tile);
             if (!keepGoing) {
                break;
@@ -273,9 +284,9 @@ PersistentOctree {
       final DatabaseEntry keyEntry = new DatabaseEntry(id);
       final DatabaseEntry dataEntry = new DatabaseEntry();
 
-      final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.READ_COMMITTED);
+      final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
       if (status == OperationStatus.SUCCESS) {
-         return BerkeleyDBMercatorTile.fromDB(this, id, dataEntry.getData(), loadPoints);
+         return BerkeleyDBMercatorTile.fromDB(txn, this, id, dataEntry.getData(), loadPoints);
       }
       return null;
    }

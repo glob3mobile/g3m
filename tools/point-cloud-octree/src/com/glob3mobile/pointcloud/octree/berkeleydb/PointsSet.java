@@ -13,15 +13,15 @@ class PointsSet {
 
 
    PointsSet(final List<Geodetic3D> points,
-            final Geodetic3D averagePoint) {
+             final Geodetic3D averagePoint) {
       _points = points;
       _averagePoint = averagePoint;
    }
 
 
-   boolean isEmpty() {
-      return _points.isEmpty();
-   }
+   //   boolean isEmpty() {
+   //      return _points.isEmpty();
+   //   }
 
 
    int size() {

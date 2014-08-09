@@ -29,7 +29,7 @@ public class BerkeleyDBMercatorTile
 implements
 PersistentOctree.Node {
 
-   private static final int MAX_POINTS_PER_TILE = 1024 * 64;
+   //   private static final int MAX_POINTS_PER_TILE = 1024 * 4;
 
 
    private static enum Format {
@@ -110,6 +110,11 @@ PersistentOctree.Node {
          System.arraycopy(_id, 0, childId, 0, length);
          childId[length] = index;
          return new TileHeader(childId, sector);
+      }
+
+
+      private int getLevel() {
+         return _id.length;
       }
 
    }
@@ -362,7 +367,8 @@ PersistentOctree.Node {
    }
 
 
-   private static List<BerkeleyDBMercatorTile> getDescendants(final BerkeleyDBOctree octree,
+   private static List<BerkeleyDBMercatorTile> getDescendants(final Transaction txn,
+                                                              final BerkeleyDBOctree octree,
                                                               final byte[] id,
                                                               final boolean loadPoints) {
       final List<BerkeleyDBMercatorTile> result = new ArrayList<BerkeleyDBMercatorTile>();
@@ -371,19 +377,24 @@ PersistentOctree.Node {
 
       final CursorConfig cursorConfig = new CursorConfig();
 
-      try (final Cursor cursor = nodeDB.openCursor(null, cursorConfig)) {
+      try (final Cursor cursor = nodeDB.openCursor(txn, cursorConfig)) {
          final DatabaseEntry keyEntry = new DatabaseEntry(id);
          final DatabaseEntry dataEntry = new DatabaseEntry();
          final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.DEFAULT);
          if (status == OperationStatus.SUCCESS) {
-            result.add(fromDB(octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
+            byte[] key = keyEntry.getData();
+            if (Utils.isGreaterThan(key, id)) {
+               return result;
+            }
+
+            result.add(fromDB(txn, octree, key, dataEntry.getData(), loadPoints));
 
             while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
-               final byte[] key = keyEntry.getData();
+               key = keyEntry.getData();
                if (Utils.isGreaterThan(key, id)) {
                   break;
                }
-               result.add(fromDB(octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
+               result.add(fromDB(txn, octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
             }
          }
       }
@@ -406,18 +417,48 @@ PersistentOctree.Node {
          return;
       }
 
-      final List<BerkeleyDBMercatorTile> descendants = getDescendants(octree, id, true);
+      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
       if ((descendants != null) && !descendants.isEmpty()) {
-         final StringBuilder builder = new StringBuilder();
 
-         builder.append("[ ");
-         for (final BerkeleyDBMercatorTile e : descendants) {
-            builder.append(e.getID());
-            builder.append(" ");
+         int descendantsMaxLevel = -1;
+         final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsSet._points);
+         for (final BerkeleyDBMercatorTile descendant : descendants) {
+            final PointsSet descendantPointsSet = extractPoints(descendant._sector, points);
+            if (descendantPointsSet != null) {
+               //               System.out.println(">>> tile " + toString(header._id) + " split " + descendantPointsSet.size()
+               //                        + " points into descendant " + toString(descendant._id) + " (" + points.size()
+               //                                  + " points not yet distributed)");
+
+               descendant.mergePoints(txn, descendantPointsSet);
+            }
+            if (descendant.getLevel() > descendantsMaxLevel) {
+               descendantsMaxLevel = descendant.getLevel();
+            }
          }
-         builder.append("]");
 
-         System.out.println(">>> tile " + toString(id) + " has " + descendants.size() + " descendants " + builder.toString());
+         if (descendantsMaxLevel == header.getLevel()) {
+            throw new RuntimeException("Logic error!");
+         }
+
+         if (!points.isEmpty()) {
+            //            final List<TileHeader> descendantsHeaders = createHeaders(descendantsMaxLevel, header._sector);
+
+            final List<TileHeader> descendantsHeaders = descendantsHeadersOfLevel(header, descendantsMaxLevel);
+            for (final TileHeader descendantHeader : descendantsHeaders) {
+               final PointsSet descendantPointsSet = extractPoints(descendantHeader._sector, points);
+               if (descendantPointsSet != null) {
+                  //                  System.out.println(">>> 2ND tile " + toString(header._id) + " split " + descendantPointsSet.size()
+                  //                           + " points into descendant " + toString(descendantHeader._id) + " (" + points.size()
+                  //                                     + " points not yet distributed)");
+                  //
+                  save(txn, octree, descendantHeader, descendantPointsSet);
+               }
+            }
+
+            if (!points.isEmpty()) {
+               throw new RuntimeException("Logic error!");
+            }
+         }
 
          return;
       }
@@ -427,13 +468,52 @@ PersistentOctree.Node {
    }
 
 
+   private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
+                                                             final int level) {
+      final List<TileHeader> result = new ArrayList<TileHeader>();
+
+      descendantsHeadersOfLevel(result, level, header);
+
+      return result;
+   }
+
+
+   private static void descendantsHeadersOfLevel(final List<TileHeader> result,
+                                                 final int level,
+                                                 final TileHeader header) {
+      if (header.getLevel() == level) {
+         result.add(header);
+      }
+      else {
+         final TileHeader[] children = header.createChildren();
+         for (final TileHeader child : children) {
+            descendantsHeadersOfLevel(result, level, child);
+         }
+      }
+   }
+
+
    private void rawSave(final Transaction txn) {
+
       final Database nodeDB = _octree.getNodeDB();
       final Database nodeDataDB = _octree.getNodeDataDB();
 
       final Format format = Format.LatLonHeight;
 
-      final DatabaseEntry key = new DatabaseEntry(getBerkeleyDBKey());
+      final byte[] id = getBerkeleyDBKey();
+
+      // 03201002301333
+      // 0320100230133302
+      // 032010023013332
+
+      if (Arrays.equals(id, new byte[] { 0, 3, 2, 0, 1, 0, 0, 2, 3, 0, 1, 3, 3, 3 }) || //
+               Arrays.equals(id, new byte[] { 0, 3, 2, 0, 1, 0, 0, 2, 3, 0, 1, 3, 3, 3, 0, 2 }) || //
+               Arrays.equals(id, new byte[] { 0, 3, 2, 0, 1, 0, 0, 2, 3, 0, 1, 3, 3, 3, 2 })) {
+
+         System.out.println("    => saving tile " + toString(id) + " points=" + getPointsCount());
+      }
+
+      final DatabaseEntry key = new DatabaseEntry(id);
 
       nodeDB.put(txn, key, new DatabaseEntry(createNodeEntry(format)));
       nodeDataDB.put(txn, key, new DatabaseEntry(createNodeDataEntry(format)));
@@ -443,7 +523,7 @@ PersistentOctree.Node {
    private void mergePoints(final Transaction txn,
                             final PointsSet newPointsSet) {
       final int mergedPointsLength = getPointsCount() + newPointsSet.size();
-      if (mergedPointsLength > MAX_POINTS_PER_TILE) {
+      if (mergedPointsLength > _octree.getMaxPointsPerTile()) {
          split(txn, newPointsSet);
       }
       else {
@@ -458,13 +538,13 @@ PersistentOctree.Node {
       double sumLongitudeInRadians = 0;
       double sumHeight = 0;
 
-      final List<Geodetic3D> result = new ArrayList<Geodetic3D>();
+      final List<Geodetic3D> extracted = new ArrayList<Geodetic3D>();
 
       final Iterator<Geodetic3D> iterator = points.iterator();
       while (iterator.hasNext()) {
          final Geodetic3D point = iterator.next();
          if (sector.contains(point._latitude, point._longitude)) {
-            result.add(point);
+            extracted.add(point);
 
             sumLatitudeInRadians += point._latitude._radians;
             sumLongitudeInRadians += point._longitude._radians;
@@ -474,14 +554,19 @@ PersistentOctree.Node {
          }
       }
 
-      final int bufferSize = result.size();
-      final double averageLatitudeInRadians = sumLatitudeInRadians / bufferSize;
-      final double averageLongitudeInRadians = sumLongitudeInRadians / bufferSize;
-      final double averageHeight = sumHeight / bufferSize;
+
+      final int extractedSize = extracted.size();
+      if (extractedSize == 0) {
+         return null;
+      }
+
+      final double averageLatitudeInRadians = sumLatitudeInRadians / extractedSize;
+      final double averageLongitudeInRadians = sumLongitudeInRadians / extractedSize;
+      final double averageHeight = sumHeight / extractedSize;
 
       final Geodetic3D averagePoint = Utils.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
 
-      return new PointsSet(result, averagePoint);
+      return new PointsSet(extracted, averagePoint);
    }
 
 
@@ -495,7 +580,7 @@ PersistentOctree.Node {
       final int mergedPointsSize = oldPointsCount + newPointsSize;
 
       final List<Geodetic3D> mergedPoints = new ArrayList<Geodetic3D>(mergedPointsSize);
-      mergedPoints.addAll(getPoints());
+      mergedPoints.addAll(getPoints(txn));
       mergedPoints.addAll(newPointsSet._points);
 
 
@@ -504,8 +589,8 @@ PersistentOctree.Node {
       for (final TileHeader child : children) {
          final PointsSet childPointsSet = extractPoints(child._sector, mergedPoints);
 
-         if (!childPointsSet.isEmpty()) {
-            System.out.println(">>> tile " + getID() + " split " + childPointsSet.size() + " points into " + toString(child._id));
+         if (childPointsSet != null) {
+            //System.out.println(">>> tile " + getID() + " split " + childPointsSet.size() + " points into " + toString(child._id));
 
             save(txn, _octree, child, childPointsSet);
          }
@@ -568,14 +653,14 @@ PersistentOctree.Node {
       final int mergedPointsSize = oldPointsCount + newPointsSize;
 
       final List<Geodetic3D> mergedPoints = new ArrayList<Geodetic3D>(mergedPointsSize);
-      mergedPoints.addAll(getPoints());
+      mergedPoints.addAll(getPoints(txn));
       mergedPoints.addAll(newPointsSet._points);
 
       final Geodetic3D mergedAveragePoints = weightedAverage( //
                _averagePoint, oldPointsCount, //
                newPointsSet._averagePoint, newPointsSize);
 
-      System.out.println(" merged " + mergedPointsSize + " points, old=" + oldPointsCount + ", new=" + newPointsSize);
+      //System.out.println(" merged " + mergedPointsSize + " points, old=" + oldPointsCount + ", new=" + newPointsSize);
 
       _pointsCount = mergedPointsSize;
       _points = mergedPoints;
@@ -608,7 +693,8 @@ PersistentOctree.Node {
    }
 
 
-   static BerkeleyDBMercatorTile fromDB(final BerkeleyDBOctree octree,
+   static BerkeleyDBMercatorTile fromDB(final Transaction txn,
+                                        final BerkeleyDBOctree octree,
                                         final byte[] id,
                                         final byte[] data,
                                         final boolean loadPoints) {
@@ -647,7 +733,7 @@ PersistentOctree.Node {
 
       final BerkeleyDBMercatorTile tile = new BerkeleyDBMercatorTile(octree, id, sector, pointsCount, averagePoint, format);
       if (loadPoints) {
-         tile.getPoints(); // force points load
+         tile._points = tile.loadPoints(txn);
       }
       return tile;
    }
@@ -655,8 +741,13 @@ PersistentOctree.Node {
 
    @Override
    public List<Geodetic3D> getPoints() {
+      return getPoints(null);
+   }
+
+
+   private List<Geodetic3D> getPoints(final Transaction txn) {
       if (_points == null) {
-         _points = loadPoints();
+         _points = loadPoints(txn);
       }
       return _points;
    }
@@ -668,14 +759,14 @@ PersistentOctree.Node {
    }
 
 
-   private List<Geodetic3D> loadPoints() {
+   private List<Geodetic3D> loadPoints(final Transaction txn) {
       switch (_format) {
          case LatLonHeight:
 
             final Database nodeDataDB = _octree.getNodeDataDB();
 
             final DatabaseEntry dataEntry = new DatabaseEntry();
-            final OperationStatus status = nodeDataDB.get(null, new DatabaseEntry(_id), dataEntry, LockMode.READ_COMMITTED);
+            final OperationStatus status = nodeDataDB.get(txn, new DatabaseEntry(_id), dataEntry, LockMode.DEFAULT);
             if (status != OperationStatus.SUCCESS) {
                throw new RuntimeException("Unsupported status=" + status);
             }
