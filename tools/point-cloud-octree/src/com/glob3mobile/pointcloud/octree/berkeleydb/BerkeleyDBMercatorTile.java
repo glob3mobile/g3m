@@ -27,8 +27,8 @@ import com.sleepycat.je.TransactionConfig;
 
 
 public class BerkeleyDBMercatorTile
-implements
-PersistentOctree.Node {
+         implements
+            PersistentOctree.Node {
 
    private static final int MAX_POINTS_PER_TILE = 1024 * 256;
 
@@ -249,10 +249,10 @@ PersistentOctree.Node {
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-               ", sector=" + Utils.toString(_sector) + //
-               ", level=" + getLevel() + //
-               ", points=" + _pointsCount + //
-               "]";
+             ", sector=" + Utils.toString(_sector) + //
+             ", level=" + getLevel() + //
+             ", points=" + _pointsCount + //
+             "]";
    }
 
 
@@ -291,16 +291,16 @@ PersistentOctree.Node {
       final byte formatID = format._formatID;
 
       final int entrySize = sizeOf(version) + //
-               sizeOf(subversion) + //
-               sizeOf(lowerLatitude) + //
-               sizeOf(lowerLongitude) + //
-               sizeOf(upperLatitude) + //
-               sizeOf(upperLongitude) + //
-               sizeOf(_pointsCount) + //
-               sizeOf(averageLatitude) + //
-               sizeOf(averageLongitude) + //
-               sizeOf(averageHeight) + //
-               sizeOf(formatID);
+                            sizeOf(subversion) + //
+                            sizeOf(lowerLatitude) + //
+                            sizeOf(lowerLongitude) + //
+                            sizeOf(upperLatitude) + //
+                            sizeOf(upperLongitude) + //
+                            sizeOf(_pointsCount) + //
+                            sizeOf(averageLatitude) + //
+                            sizeOf(averageLongitude) + //
+                            sizeOf(averageHeight) + //
+                            sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -449,6 +449,12 @@ PersistentOctree.Node {
                       final List<Geodetic3D> newPoints) {
       final int TODO;
       System.out.println("**> split for " + getID() + " not yet implemented");
+
+      final TileHeader header = new TileHeader(_id, _sector);
+      final TileHeader[] children = header.createChildren();
+      for (final TileHeader child : children) {
+
+      }
    }
 
 
