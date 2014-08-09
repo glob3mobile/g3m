@@ -21,6 +21,8 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
+import com.sleepycat.je.Transaction;
+import com.sleepycat.je.TransactionConfig;
 
 import es.igosoftware.io.GIOUtils;
 
@@ -32,7 +34,7 @@ PersistentOctree {
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE     = 1024 * 32;
+   private static final int    DEFAULT_BUFFER_SIZE     = 1024 * 16;
    private static final String NODE_DATABASE_NAME      = "Node";
    private static final String NODE_DATA_DATABASE_NAME = "NodeData";
 
@@ -193,13 +195,19 @@ PersistentOctree {
 
          final Geodetic3D averagePoint = Utils.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
 
-         final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.createDeepestEnclosingTile(this, targetSector, averagePoint,
-                  _buffer);
+         final BerkeleyDBMercatorTile.TileHeader header = BerkeleyDBMercatorTile.deepestEnclosingTileHeader(targetSector);
+
+         final TransactionConfig txnConfig = new TransactionConfig();
+         final Transaction txn = _env.beginTransaction(null, txnConfig);
+
+
+         final PointsSet pointsSet = new PointsSet(new ArrayList<Geodetic3D>(_buffer), averagePoint);
+         BerkeleyDBMercatorTile.save(txn, this, header, pointsSet);
+
+         txn.commit();
 
          _buffer.clear();
          resetBufferBounds();
-
-         tile.save();
       }
    }
 
@@ -232,7 +240,7 @@ PersistentOctree {
             final byte[] key = keyEntry.getData();
             final byte[] data = dataEntry.getData();
 
-            final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.fromDB(this, key, data);
+            final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.fromDB(this, key, data, false);
             final boolean keepGoing = visitor.visit(tile);
             if (!keepGoing) {
                break;
@@ -259,12 +267,15 @@ PersistentOctree {
    }
 
 
-   BerkeleyDBMercatorTile readTile(final byte[] id) {
+   BerkeleyDBMercatorTile readTile(final Transaction txn,
+                                   final byte[] id,
+                                   final boolean loadPoints) {
       final DatabaseEntry keyEntry = new DatabaseEntry(id);
       final DatabaseEntry dataEntry = new DatabaseEntry();
-      final OperationStatus status = _nodeDB.get(null, keyEntry, dataEntry, LockMode.READ_COMMITTED);
+
+      final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.READ_COMMITTED);
       if (status == OperationStatus.SUCCESS) {
-         return BerkeleyDBMercatorTile.fromDB(this, id, dataEntry.getData());
+         return BerkeleyDBMercatorTile.fromDB(this, id, dataEntry.getData(), loadPoints);
       }
       return null;
    }
