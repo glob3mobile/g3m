@@ -30,7 +30,7 @@ public class Main {
 
       final String cloudName = "Loudoun-VA";
 
-      final boolean createOT = false;
+      final boolean createOT = true;
       final boolean visitOT = true;
 
       if (createOT) {
@@ -136,8 +136,8 @@ public class Main {
 
                final Geodetic3D averagePoint = node.getAveragePoint();
                System.out.println(" node=" + node.getID() + ", points=" + pointsCount + ", average="
-                                  + averagePoint._latitude._degrees + "/" + averagePoint._longitude._degrees + "/"
-                                  + averagePoint._height);
+                        + averagePoint._latitude._degrees + "/" + averagePoint._longitude._degrees + "/"
+                        + averagePoint._height);
                _counter++;
                _totalPoints += pointsCount;
                return true;

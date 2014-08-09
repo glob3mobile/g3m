@@ -44,4 +44,26 @@ public class Utils {
                height);
    }
 
+
+   public static int compare(final byte[] left,
+                             final byte[] right) {
+      final int leftLength = left.length;
+      final int rightLength = right.length;
+      final int compareLenght = Math.min(leftLength, rightLength);
+      for (int i = 0; i < compareLenght; i++) {
+         final int leftValue = (left[i] & 0xff);
+         final int rightValue = (right[i] & 0xff);
+         if (leftValue != rightValue) {
+            return leftValue - rightValue;
+         }
+      }
+      return leftLength - rightLength;
+   }
+
+
+   public static boolean isGreaterThan(final byte[] id,
+                                       final byte[] thatId) {
+      return compare(id, thatId) > 0;
+   }
+
 }
