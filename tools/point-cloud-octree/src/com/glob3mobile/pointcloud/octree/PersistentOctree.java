@@ -9,8 +9,8 @@ import org.glob3.mobile.generated.Sector;
 
 
 public interface PersistentOctree
-         extends
-            AutoCloseable {
+extends
+AutoCloseable {
 
 
    public interface Node {
@@ -31,6 +31,9 @@ public interface PersistentOctree
 
 
       Sector getSector();
+
+
+      int getLevel();
    }
 
 

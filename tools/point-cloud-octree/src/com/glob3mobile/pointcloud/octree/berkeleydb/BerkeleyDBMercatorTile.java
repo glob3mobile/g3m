@@ -211,7 +211,8 @@ public class BerkeleyDBMercatorTile
    }
 
 
-   private int getLevel() {
+   @Override
+   public int getLevel() {
       return _id.length;
    }
 
@@ -435,7 +436,6 @@ public class BerkeleyDBMercatorTile
                                                   final TileHeader header,
                                                   final PointsSet pointsSet,
                                                   final List<BerkeleyDBMercatorTile> descendants) {
-      int descendantsMaxLevel = -1;
       final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsSet._points);
       for (final BerkeleyDBMercatorTile descendant : descendants) {
          final PointsSet descendantPointsSet = extractPoints(descendant._sector, points);
@@ -446,17 +446,10 @@ public class BerkeleyDBMercatorTile
 
             descendant.mergePoints(txn, descendantPointsSet);
          }
-         if (descendant.getLevel() > descendantsMaxLevel) {
-            descendantsMaxLevel = descendant.getLevel();
-         }
-      }
-
-      if (descendantsMaxLevel == header.getLevel()) {
-         throw new RuntimeException("Logic error!");
       }
 
       if (!points.isEmpty()) {
-         final List<TileHeader> descendantsHeaders = descendantsHeadersOfLevel(header, descendantsMaxLevel);
+         final List<TileHeader> descendantsHeaders = descendantsHeadersOfLevel(header, header.getLevel() + 1);
          for (final TileHeader descendantHeader : descendantsHeaders) {
             final PointsSet descendantPointsSet = extractPoints(descendantHeader._sector, points);
             if (descendantPointsSet != null) {
