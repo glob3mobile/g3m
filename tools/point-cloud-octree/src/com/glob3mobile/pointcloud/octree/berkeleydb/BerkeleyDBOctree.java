@@ -28,8 +28,8 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -68,6 +68,7 @@ PersistentOctree {
       return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize, maxPointsPerTitle);
    }
 
+   private final String           _cloudName;
 
    private final List<Geodetic3D> _buffer;
    private final int              _bufferSize;
@@ -91,6 +92,7 @@ PersistentOctree {
                             final boolean createIfNotExists,
                             final int bufferSize,
                             final int maxPointsPerTitle) {
+      _cloudName = cloudName;
 
       _bufferSize = bufferSize;
       _buffer = new ArrayList<>(bufferSize);
@@ -291,5 +293,63 @@ PersistentOctree {
       return null;
    }
 
+
+   @Override
+   public void showStatistics() {
+
+      final PersistentOctree.Visitor visitor = new PersistentOctree.Visitor() {
+         private long _nodesCount;
+         private long _pointsCount;
+         private long _sumLevel;
+         private int  _minLevel;
+         private int  _maxLevel;
+
+
+         @Override
+         public void start() {
+            _nodesCount = 0;
+            _pointsCount = 0;
+            _sumLevel = 0;
+            _minLevel = Integer.MAX_VALUE;
+            _maxLevel = Integer.MIN_VALUE;
+         }
+
+
+         @Override
+         public boolean visit(final PersistentOctree.Node node) {
+            _nodesCount++;
+            _pointsCount += node.getPointsCount();
+
+            final int level = node.getLevel();
+            _sumLevel += level;
+            if (level < _minLevel) {
+               _minLevel = level;
+            }
+            if (level > _maxLevel) {
+               _maxLevel = level;
+            }
+            return true;
+         }
+
+
+         @Override
+         public void stop() {
+            System.out.println("======================================================================");
+            System.out.println("  " + _cloudName);
+            System.out.println();
+            System.out.println("    Points: " + _pointsCount);
+            System.out.println("    Nodes: " + _nodesCount + ", Average Points Per Node= " + ((float) _pointsCount / _nodesCount));
+            System.out.println("    Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
+            System.out.println("======================================================================");
+
+            //            final StatsConfig config = new StatsConfig();
+            //            final EnvironmentStats stats = _env.getStats(config);
+            //            System.out.println(stats);
+         }
+      };
+
+      acceptVisitor(visitor);
+
+   }
 
 }

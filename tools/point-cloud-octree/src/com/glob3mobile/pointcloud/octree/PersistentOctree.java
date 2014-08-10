@@ -9,8 +9,8 @@ import org.glob3.mobile.generated.Sector;
 
 
 public interface PersistentOctree
-extends
-AutoCloseable {
+         extends
+            AutoCloseable {
 
 
    public interface Node {
@@ -62,5 +62,8 @@ AutoCloseable {
 
 
    void acceptVisitor(PersistentOctree.Visitor visitor);
+
+
+   void showStatistics();
 
 }

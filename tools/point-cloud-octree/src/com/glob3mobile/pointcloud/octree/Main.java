@@ -31,7 +31,8 @@ public class Main {
       final String cloudName = "Loudoun-VA";
 
       final boolean createOT = false;
-      final boolean visitOT = true;
+      final boolean visitOT = false;
+      final boolean showStatisticsOT = true;
 
       if (createOT) {
          createOT(cloudName);
@@ -41,6 +42,12 @@ public class Main {
 
       if (visitOT) {
          visitOT(cloudName);
+      }
+
+      System.out.println();
+
+      if (showStatisticsOT) {
+         showStatisticsOT(cloudName);
       }
 
    }
@@ -111,7 +118,7 @@ public class Main {
 
    private static void visitOT(final String cloudName) {
       final boolean createIfNotExists = false;
-      try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists);) {
+      try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists)) {
          octree.acceptVisitor(new PersistentOctree.Visitor() {
             private int  _counter;
             private long _started;
@@ -131,14 +138,16 @@ public class Main {
                final int pointsCount = node.getPoints().size();
                //final int pointsCount = node.getPointsCount();
 
-               //               final Geodetic3D avrPoint = node.getAveragePoint();
-               //               final String avrPointStr = avrPoint._latitude._degrees + "/" + avrPoint._longitude._degrees + "/"
-               //                                          + avrPoint._height;
+               // final Geodetic3D avrPoint = node.getAveragePoint();
+               // final String avrPointStr = avrPoint._latitude._degrees + "/" + avrPoint._longitude._degrees + "/"
+               // + avrPoint._height;
+
                System.out.println(" node=" + node.getID() + //
-                                  ", level=" + node.getLevel() + //
-                                  ", points=" + pointsCount //
-               // ", average=" + avrPointStr //
-               );
+                        ", level=" + node.getLevel() + //
+                        ", points=" + pointsCount //
+                        // ", average=" + avrPointStr //
+                        );
+
                _counter++;
                _totalPoints += pointsCount;
                return true;
@@ -149,9 +158,17 @@ public class Main {
             public void stop() {
                final long elapsed = System.currentTimeMillis() - _started;
                System.out.println("** Visited " + _counter + " nodes with " + _totalPoints + " points in " + elapsed + "ms");
-               System.out.println("** Averge Points per Tile=" + ((float) _totalPoints / _counter));
+               System.out.println("** Average Points per Tile=" + ((float) _totalPoints / _counter));
             }
          });
+      }
+   }
+
+
+   private static void showStatisticsOT(final String cloudName) {
+      final boolean createIfNotExists = false;
+      try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists)) {
+         octree.showStatistics();
       }
    }
 
