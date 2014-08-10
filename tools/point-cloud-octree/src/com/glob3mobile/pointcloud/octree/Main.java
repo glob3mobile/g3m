@@ -30,7 +30,7 @@ public class Main {
 
       final String cloudName = "Loudoun-VA";
 
-      final boolean createOT = true;
+      final boolean createOT = false;
       final boolean visitOT = true;
 
       if (createOT) {
@@ -129,10 +129,10 @@ public class Main {
                final int pointsCount = node.getPoints().size();
                //final int pointsCount = node.getPointsCount();
 
-               //               final Geodetic3D averagePoint = node.getAveragePoint();
-               //               System.out.println(" node=" + node.getID() + ", points=" + pointsCount + ", average="
-               //                                  + averagePoint._latitude._degrees + "/" + averagePoint._longitude._degrees + "/"
-               //                                  + averagePoint._height);
+               final Geodetic3D averagePoint = node.getAveragePoint();
+               System.out.println(" node=" + node.getID() + ", points=" + pointsCount + ", average="
+                                  + averagePoint._latitude._degrees + "/" + averagePoint._longitude._degrees + "/"
+                                  + averagePoint._height);
                _counter++;
                _totalPoints += pointsCount;
                return true;
@@ -143,6 +143,7 @@ public class Main {
             public void stop() {
                final long elapsed = System.currentTimeMillis() - _started;
                System.out.println("** Visited " + _counter + " nodes with " + _totalPoints + " points in " + elapsed + "ms");
+               System.out.println("** Averge Points per Tile=" + ((float) _totalPoints / _counter));
             }
          });
       }

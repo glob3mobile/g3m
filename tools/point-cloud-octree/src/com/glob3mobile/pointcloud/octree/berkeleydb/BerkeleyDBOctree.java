@@ -34,8 +34,8 @@ PersistentOctree {
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 4;
-   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 4;
+   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 8;
+   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 8;
    private static final String NODE_DATABASE_NAME           = "Node";
    private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
 
@@ -213,7 +213,7 @@ PersistentOctree {
 
 
          final PointsSet pointsSet = new PointsSet(new ArrayList<Geodetic3D>(_buffer), averagePoint);
-         BerkeleyDBMercatorTile.save(txn, this, header, pointsSet);
+         BerkeleyDBMercatorTile.insertPoints(txn, this, header, pointsSet);
 
          txn.commit();
 

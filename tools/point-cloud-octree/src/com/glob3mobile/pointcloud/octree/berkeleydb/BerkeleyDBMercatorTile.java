@@ -26,8 +26,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBMercatorTile
-implements
-PersistentOctree.Node {
+         implements
+            PersistentOctree.Node {
 
    //   private static final int MAX_POINTS_PER_TILE = 1024 * 4;
 
@@ -247,10 +247,10 @@ PersistentOctree.Node {
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-               ", sector=" + Utils.toString(_sector) + //
-               ", level=" + getLevel() + //
-               ", points=" + _pointsCount + //
-               "]";
+             ", sector=" + Utils.toString(_sector) + //
+             ", level=" + getLevel() + //
+             ", points=" + _pointsCount + //
+             "]";
    }
 
 
@@ -289,16 +289,16 @@ PersistentOctree.Node {
       final byte formatID = format._formatID;
 
       final int entrySize = sizeOf(version) + //
-               sizeOf(subversion) + //
-               sizeOf(lowerLatitude) + //
-               sizeOf(lowerLongitude) + //
-               sizeOf(upperLatitude) + //
-               sizeOf(upperLongitude) + //
-               sizeOf(_pointsCount) + //
-               sizeOf(averageLatitude) + //
-               sizeOf(averageLongitude) + //
-               sizeOf(averageHeight) + //
-               sizeOf(formatID);
+                            sizeOf(subversion) + //
+                            sizeOf(lowerLatitude) + //
+                            sizeOf(lowerLongitude) + //
+                            sizeOf(upperLatitude) + //
+                            sizeOf(upperLongitude) + //
+                            sizeOf(_pointsCount) + //
+                            sizeOf(averageLatitude) + //
+                            sizeOf(averageLongitude) + //
+                            sizeOf(averageHeight) + //
+                            sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -368,9 +368,9 @@ PersistentOctree.Node {
 
 
    private static List<BerkeleyDBMercatorTile> getDescendants(final Transaction txn,
-                                                              final BerkeleyDBOctree octree,
-                                                              final byte[] id,
-                                                              final boolean loadPoints) {
+            final BerkeleyDBOctree octree,
+            final byte[] id,
+            final boolean loadPoints) {
       final List<BerkeleyDBMercatorTile> result = new ArrayList<BerkeleyDBMercatorTile>();
 
       final Database nodeDB = octree.getNodeDB();
@@ -383,18 +383,22 @@ PersistentOctree.Node {
          final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.DEFAULT);
          if (status == OperationStatus.SUCCESS) {
             byte[] key = keyEntry.getData();
-            if (Utils.isGreaterThan(key, id)) {
+
+            if (!Utils.hasSamePrefix(key, id)) {
                return result;
             }
-
-            result.add(fromDB(txn, octree, key, dataEntry.getData(), loadPoints));
+            if (Utils.isGreaterThan(key, id)) {
+               result.add(fromDB(txn, octree, key, dataEntry.getData(), loadPoints));
+            }
 
             while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
                key = keyEntry.getData();
-               if (Utils.isGreaterThan(key, id)) {
-                  break;
+               if (!Utils.hasSamePrefix(key, id)) {
+                  return result;
                }
-               result.add(fromDB(txn, octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
+               if (Utils.isGreaterThan(key, id)) {
+                  result.add(fromDB(txn, octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
+               }
             }
          }
       }
@@ -403,22 +407,18 @@ PersistentOctree.Node {
    }
 
 
-   static void save(final Transaction txn,
-                    final BerkeleyDBOctree octree,
-                    final TileHeader header,
-                    final PointsSet pointsSet) {
+   static void insertPoints(final Transaction txn,
+                            final BerkeleyDBOctree octree,
+                            final TileHeader header,
+                            final PointsSet pointsSet) {
       final byte[] id = header._id;
 
       final BerkeleyDBMercatorTile ancestor = getAncestorOrSameLevel(txn, octree, id);
-      //      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
-      //      if ((ancestor != null) && (descendants != null) && !descendants.isEmpty()) {
-      //         System.out.println("**** LOGIC ERROR ****");
-      //      }
       if (ancestor != null) {
          //System.out.println("==> found ancestor (" + ancestor.getID() + ") for tile " + toString(id));
 
-         ancestor.mergePoints(txn, pointsSet);
-         return;
+                  ancestor.mergePoints(txn, pointsSet);
+                  return;
       }
 
       final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
@@ -455,7 +455,7 @@ PersistentOctree.Node {
                   //                           + " points into descendant " + toString(descendantHeader._id) + " (" + points.size()
                   //                                     + " points not yet distributed)");
                   //
-                  save(txn, octree, descendantHeader, descendantPointsSet);
+                  insertPoints(txn, octree, descendantHeader, descendantPointsSet);
                }
             }
 
@@ -473,7 +473,7 @@ PersistentOctree.Node {
 
 
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
-                                                             final int level) {
+            final int level) {
       final List<TileHeader> result = new ArrayList<TileHeader>();
 
       descendantsHeadersOfLevel(result, level, header);
@@ -498,7 +498,6 @@ PersistentOctree.Node {
 
 
    private void rawSave(final Transaction txn) {
-
       final Database nodeDB = _octree.getNodeDB();
       final Database nodeDataDB = _octree.getNodeDataDB();
 
@@ -506,21 +505,40 @@ PersistentOctree.Node {
 
       final byte[] id = getBerkeleyDBKey();
 
-      // 03201002301333
-      // 0320100230133302
-      // 032010023013332
-
-      if (Arrays.equals(id, new byte[] { 0, 3, 2, 0, 1, 0, 0, 2, 3, 0, 1, 3, 3, 3 }) || //
-               Arrays.equals(id, new byte[] { 0, 3, 2, 0, 1, 0, 0, 2, 3, 0, 1, 3, 3, 3, 0, 2 }) || //
-               Arrays.equals(id, new byte[] { 0, 3, 2, 0, 1, 0, 0, 2, 3, 0, 1, 3, 3, 3, 2 })) {
-
-         System.out.println("    => saving tile " + toString(id) + " points=" + getPointsCount());
-      }
-
       final DatabaseEntry key = new DatabaseEntry(id);
 
       nodeDB.put(txn, key, new DatabaseEntry(createNodeEntry(format)));
       nodeDataDB.put(txn, key, new DatabaseEntry(createNodeDataEntry(format)));
+
+      //checkInvariants(txn);
+   }
+
+
+   private static BerkeleyDBMercatorTile getAncestor(final Transaction txn,
+                                                     final BerkeleyDBOctree octree,
+                                                     final byte[] id) {
+      byte[] ancestorId = removeTrailing(id);
+      while (ancestorId != null) {
+         final BerkeleyDBMercatorTile ancestor = octree.readTile(txn, ancestorId, true);
+         if (ancestor != null) {
+            return ancestor;
+         }
+         ancestorId = removeTrailing(ancestorId);
+      }
+      return null;
+   }
+
+
+   private void checkInvariants(final Transaction txn) {
+      final BerkeleyDBMercatorTile ancestor = getAncestor(txn, _octree, _id);
+
+      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, _octree, _id, false);
+
+      if ((ancestor != null) || !descendants.isEmpty()) {
+         System.out.println("***** INVARIANT FAILED: for tile=" + toString(_id) + ", ancestor=" + ancestor + ", descendants="
+                            + descendants);
+         System.out.println();
+      }
    }
 
 
@@ -596,7 +614,7 @@ PersistentOctree.Node {
          if (childPointsSet != null) {
             //System.out.println(">>> tile " + getID() + " split " + childPointsSet.size() + " points into " + toString(child._id));
 
-            save(txn, _octree, child, childPointsSet);
+            insertPoints(txn, _octree, child, childPointsSet);
          }
       }
 
