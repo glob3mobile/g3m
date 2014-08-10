@@ -410,6 +410,10 @@ PersistentOctree.Node {
       final byte[] id = header._id;
 
       final BerkeleyDBMercatorTile ancestor = getAncestorOrSameLevel(txn, octree, id);
+      //      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
+      //      if ((ancestor != null) && (descendants != null) && !descendants.isEmpty()) {
+      //         System.out.println("**** LOGIC ERROR ****");
+      //      }
       if (ancestor != null) {
          //System.out.println("==> found ancestor (" + ancestor.getID() + ") for tile " + toString(id));
 
