@@ -30,12 +30,14 @@ public class Main {
 
       final String cloudName = "Loudoun-VA";
 
-      final boolean createOT = false;
+      final boolean createOT = true;
       final boolean visitOT = true;
 
       if (createOT) {
          createOT(cloudName);
       }
+
+      System.out.println();
 
       if (visitOT) {
          visitOT(cloudName);

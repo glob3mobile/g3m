@@ -26,10 +26,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBMercatorTile
-         implements
-            PersistentOctree.Node {
-
-   //   private static final int MAX_POINTS_PER_TILE = 1024 * 4;
+implements
+PersistentOctree.Node {
 
 
    private static enum Format {
@@ -247,10 +245,10 @@ public class BerkeleyDBMercatorTile
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-             ", sector=" + Utils.toString(_sector) + //
-             ", level=" + getLevel() + //
-             ", points=" + _pointsCount + //
-             "]";
+               // ", sector=" + Utils.toString(_sector) + //
+               ", level=" + getLevel() + //
+               ", points=" + _pointsCount + //
+               "]";
    }
 
 
@@ -289,16 +287,16 @@ public class BerkeleyDBMercatorTile
       final byte formatID = format._formatID;
 
       final int entrySize = sizeOf(version) + //
-                            sizeOf(subversion) + //
-                            sizeOf(lowerLatitude) + //
-                            sizeOf(lowerLongitude) + //
-                            sizeOf(upperLatitude) + //
-                            sizeOf(upperLongitude) + //
-                            sizeOf(_pointsCount) + //
-                            sizeOf(averageLatitude) + //
-                            sizeOf(averageLongitude) + //
-                            sizeOf(averageHeight) + //
-                            sizeOf(formatID);
+               sizeOf(subversion) + //
+               sizeOf(lowerLatitude) + //
+               sizeOf(lowerLongitude) + //
+               sizeOf(upperLatitude) + //
+               sizeOf(upperLongitude) + //
+               sizeOf(_pointsCount) + //
+               sizeOf(averageLatitude) + //
+               sizeOf(averageLongitude) + //
+               sizeOf(averageHeight) + //
+               sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -368,9 +366,9 @@ public class BerkeleyDBMercatorTile
 
 
    private static List<BerkeleyDBMercatorTile> getDescendants(final Transaction txn,
-            final BerkeleyDBOctree octree,
-            final byte[] id,
-            final boolean loadPoints) {
+                                                              final BerkeleyDBOctree octree,
+                                                              final byte[] id,
+                                                              final boolean loadPoints) {
       final List<BerkeleyDBMercatorTile> result = new ArrayList<BerkeleyDBMercatorTile>();
 
       final Database nodeDB = octree.getNodeDB();
@@ -415,55 +413,15 @@ public class BerkeleyDBMercatorTile
 
       final BerkeleyDBMercatorTile ancestor = getAncestorOrSameLevel(txn, octree, id);
       if (ancestor != null) {
-         //System.out.println("==> found ancestor (" + ancestor.getID() + ") for tile " + toString(id));
+         // System.out.println("==> found ancestor (" + ancestor.getID() + ") for tile " + toString(id));
 
-                  ancestor.mergePoints(txn, pointsSet);
-                  return;
+         ancestor.mergePoints(txn, pointsSet);
+         return;
       }
 
       final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
       if ((descendants != null) && !descendants.isEmpty()) {
-
-         int descendantsMaxLevel = -1;
-         final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsSet._points);
-         for (final BerkeleyDBMercatorTile descendant : descendants) {
-            final PointsSet descendantPointsSet = extractPoints(descendant._sector, points);
-            if (descendantPointsSet != null) {
-               //               System.out.println(">>> tile " + toString(header._id) + " split " + descendantPointsSet.size()
-               //                        + " points into descendant " + toString(descendant._id) + " (" + points.size()
-               //                                  + " points not yet distributed)");
-
-               descendant.mergePoints(txn, descendantPointsSet);
-            }
-            if (descendant.getLevel() > descendantsMaxLevel) {
-               descendantsMaxLevel = descendant.getLevel();
-            }
-         }
-
-         if (descendantsMaxLevel == header.getLevel()) {
-            throw new RuntimeException("Logic error!");
-         }
-
-         if (!points.isEmpty()) {
-            //            final List<TileHeader> descendantsHeaders = createHeaders(descendantsMaxLevel, header._sector);
-
-            final List<TileHeader> descendantsHeaders = descendantsHeadersOfLevel(header, descendantsMaxLevel);
-            for (final TileHeader descendantHeader : descendantsHeaders) {
-               final PointsSet descendantPointsSet = extractPoints(descendantHeader._sector, points);
-               if (descendantPointsSet != null) {
-                  //                  System.out.println(">>> 2ND tile " + toString(header._id) + " split " + descendantPointsSet.size()
-                  //                           + " points into descendant " + toString(descendantHeader._id) + " (" + points.size()
-                  //                                     + " points not yet distributed)");
-                  //
-                  insertPoints(txn, octree, descendantHeader, descendantPointsSet);
-               }
-            }
-
-            if (!points.isEmpty()) {
-               throw new RuntimeException("Logic error!");
-            }
-         }
-
+         splitPointsIntoDescendants(txn, octree, header, pointsSet, descendants);
          return;
       }
 
@@ -472,12 +430,55 @@ public class BerkeleyDBMercatorTile
    }
 
 
+   private static void splitPointsIntoDescendants(final Transaction txn,
+                                                  final BerkeleyDBOctree octree,
+                                                  final TileHeader header,
+                                                  final PointsSet pointsSet,
+                                                  final List<BerkeleyDBMercatorTile> descendants) {
+      int descendantsMaxLevel = -1;
+      final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsSet._points);
+      for (final BerkeleyDBMercatorTile descendant : descendants) {
+         final PointsSet descendantPointsSet = extractPoints(descendant._sector, points);
+         if (descendantPointsSet != null) {
+            // System.out.println(">>> tile " + toString(header._id) + " split " + descendantPointsSet.size()
+            // + " points into descendant " + toString(descendant._id) + " (" + points.size()
+            // + " points not yet distributed)");
+
+            descendant.mergePoints(txn, descendantPointsSet);
+         }
+         if (descendant.getLevel() > descendantsMaxLevel) {
+            descendantsMaxLevel = descendant.getLevel();
+         }
+      }
+
+      if (descendantsMaxLevel == header.getLevel()) {
+         throw new RuntimeException("Logic error!");
+      }
+
+      if (!points.isEmpty()) {
+         final List<TileHeader> descendantsHeaders = descendantsHeadersOfLevel(header, descendantsMaxLevel);
+         for (final TileHeader descendantHeader : descendantsHeaders) {
+            final PointsSet descendantPointsSet = extractPoints(descendantHeader._sector, points);
+            if (descendantPointsSet != null) {
+               // System.out.println(">>> 2ND tile " + toString(header._id) + " split " + descendantPointsSet.size()
+               // + " points into descendant " + toString(descendantHeader._id) + " (" + points.size()
+               // + " points not yet distributed)");
+
+               insertPoints(txn, octree, descendantHeader, descendantPointsSet);
+            }
+         }
+
+         if (!points.isEmpty()) {
+            throw new RuntimeException("Logic error!");
+         }
+      }
+   }
+
+
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
-            final int level) {
+                                                             final int level) {
       final List<TileHeader> result = new ArrayList<TileHeader>();
-
       descendantsHeadersOfLevel(result, level, header);
-
       return result;
    }
 
@@ -510,7 +511,21 @@ public class BerkeleyDBMercatorTile
       nodeDB.put(txn, key, new DatabaseEntry(createNodeEntry(format)));
       nodeDataDB.put(txn, key, new DatabaseEntry(createNodeDataEntry(format)));
 
-      //checkInvariants(txn);
+      final boolean checkInvariants = false;
+      if (checkInvariants) {
+         checkInvariants(txn);
+      }
+   }
+
+
+   private void checkInvariants(final Transaction txn) {
+      final BerkeleyDBMercatorTile ancestor = getAncestor(txn, _octree, _id);
+      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, _octree, _id, false);
+
+      if ((ancestor != null) || !descendants.isEmpty()) {
+         System.out.println("***** INVARIANT FAILED: for tile=" + toString(_id) + ", ancestor=" + ancestor + ", descendants="
+                  + descendants);
+      }
    }
 
 
@@ -526,19 +541,6 @@ public class BerkeleyDBMercatorTile
          ancestorId = removeTrailing(ancestorId);
       }
       return null;
-   }
-
-
-   private void checkInvariants(final Transaction txn) {
-      final BerkeleyDBMercatorTile ancestor = getAncestor(txn, _octree, _id);
-
-      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, _octree, _id, false);
-
-      if ((ancestor != null) || !descendants.isEmpty()) {
-         System.out.println("***** INVARIANT FAILED: for tile=" + toString(_id) + ", ancestor=" + ancestor + ", descendants="
-                            + descendants);
-         System.out.println();
-      }
    }
 
 
@@ -692,20 +694,6 @@ public class BerkeleyDBMercatorTile
    }
 
 
-   //   private BerkeleyDBMercatorTile getAncestorOrSameLevel() {
-   //      //      byte[] ancestorId = removeTrailing(_id);
-   //      byte[] ancestorId = _id;
-   //      while (ancestorId != null) {
-   //         final BerkeleyDBMercatorTile ancestor = _octree.readTile(ancestorId);
-   //         if (ancestor != null) {
-   //            return ancestor;
-   //         }
-   //         ancestorId = removeTrailing(ancestorId);
-   //      }
-   //      return null;
-   //   }
-
-
    private static byte[] removeTrailing(final byte[] id) {
       final int length = id.length;
       if (length == 0) {
@@ -784,44 +772,49 @@ public class BerkeleyDBMercatorTile
    private List<Geodetic3D> loadPoints(final Transaction txn) {
       switch (_format) {
          case LatLonHeight:
-
-            final Database nodeDataDB = _octree.getNodeDataDB();
-
-            final DatabaseEntry dataEntry = new DatabaseEntry();
-            final OperationStatus status = nodeDataDB.get(txn, new DatabaseEntry(_id), dataEntry, LockMode.DEFAULT);
-            if (status != OperationStatus.SUCCESS) {
-               throw new RuntimeException("Unsupported status=" + status);
-            }
-
-            final ByteBuffer byteBuffer = ByteBuffer.wrap(dataEntry.getData());
-
-            final List<Geodetic3D> points = new ArrayList<Geodetic3D>(_pointsCount);
-
-            final double averageLatitude = _averagePoint._latitude._radians;
-            final double averageLongitude = _averagePoint._longitude._radians;
-            final double averageHeight = _averagePoint._height;
-
-            for (int i = 0; i < _pointsCount; i++) {
-               final double lat = byteBuffer.getFloat() + averageLatitude;
-               final double lon = byteBuffer.getFloat() + averageLongitude;
-               final double height = byteBuffer.getFloat() + averageHeight;
-
-               final Geodetic3D point = new Geodetic3D( //
-                        Angle.fromRadians(lat), //
-                        Angle.fromRadians(lon), //
-                        height);
-               points.add(point);
-            }
-
-            if (_pointsCount != points.size()) {
-               throw new RuntimeException("Inconsistency in pointsCount");
-            }
-            return Collections.unmodifiableList(points);
+            return loadPointsFormatLatLonHeight(txn);
 
          default:
             throw new RuntimeException("Unsupported format: " + _format);
       }
 
+   }
+
+
+   private List<Geodetic3D> loadPointsFormatLatLonHeight(final Transaction txn) {
+      final Database nodeDataDB = _octree.getNodeDataDB();
+
+      final DatabaseEntry dataEntry = new DatabaseEntry();
+      final OperationStatus status = nodeDataDB.get(txn, new DatabaseEntry(_id), dataEntry, LockMode.DEFAULT);
+      if (status != OperationStatus.SUCCESS) {
+         throw new RuntimeException("Unsupported status=" + status);
+      }
+
+      final ByteBuffer byteBuffer = ByteBuffer.wrap(dataEntry.getData());
+
+      final List<Geodetic3D> points = new ArrayList<Geodetic3D>(_pointsCount);
+
+      final double averageLatitude = _averagePoint._latitude._radians;
+      final double averageLongitude = _averagePoint._longitude._radians;
+      final double averageHeight = _averagePoint._height;
+
+      for (int i = 0; i < _pointsCount; i++) {
+         final double lat = byteBuffer.getFloat() + averageLatitude;
+         final double lon = byteBuffer.getFloat() + averageLongitude;
+         final double height = byteBuffer.getFloat() + averageHeight;
+
+         final Geodetic3D point = new Geodetic3D( //
+                  Angle.fromRadians(lat), //
+                  Angle.fromRadians(lon), //
+                  height);
+         points.add(point);
+      }
+
+      if (_pointsCount != points.size()) {
+         throw new RuntimeException("Inconsistency in pointsCount");
+      }
+
+      return Collections.unmodifiableList(points);
    }
 
 

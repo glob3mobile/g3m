@@ -28,14 +28,14 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 8;
-   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 8;
+   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 32;
+   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 32;
    private static final String NODE_DATABASE_NAME           = "Node";
    private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
 
