@@ -8,13 +8,22 @@ public class Sector {
    public static final Sector FULL_SPHERE = Sector.fromDegrees(-90, -180, 90, 180);
 
 
-   public static Sector fromDegrees(final double minLat,
-                                    final double minLon,
-                                    final double maxLat,
-                                    final double maxLon) {
-      final Geodetic2D lower = new Geodetic2D(Angle.fromDegrees(minLat), Angle.fromDegrees(minLon));
-      final Geodetic2D upper = new Geodetic2D(Angle.fromDegrees(maxLat), Angle.fromDegrees(maxLon));
+   public static Sector fromDegrees(final double minLatitudeInDegrees,
+                                    final double minLongitudeInDegrees,
+                                    final double maxLatitudeInDegrees,
+                                    final double maxLongitudeInDegrees) {
+      final Geodetic2D lower = Geodetic2D.fromDegrees(minLatitudeInDegrees, minLongitudeInDegrees);
+      final Geodetic2D upper = Geodetic2D.fromDegrees(maxLatitudeInDegrees, maxLongitudeInDegrees);
+      return new Sector(lower, upper);
+   }
 
+
+   public static Sector fromRadians(final double minLatitudeInRadians,
+                                    final double minLongitudeInRadians,
+                                    final double maxLatitudeInRadians,
+                                    final double maxLongitudeInRadians) {
+      final Geodetic2D lower = Geodetic2D.fromRadians(minLatitudeInRadians, minLongitudeInRadians);
+      final Geodetic2D upper = Geodetic2D.fromRadians(maxLatitudeInRadians, maxLongitudeInRadians);
       return new Sector(lower, upper);
    }
 
@@ -30,14 +39,31 @@ public class Sector {
    }
 
 
+   public Sector(final Angle lowerLatitude,
+                 final Angle lowerLongitude,
+                 final Angle upperLatitude,
+                 final Angle upperLongitude) {
+      _lower = new Geodetic2D(lowerLatitude, lowerLongitude);
+      _upper = new Geodetic2D(upperLatitude, upperLongitude);
+   }
+
+
    public final boolean contains(final Angle latitude,
                                  final Angle longitude) {
-      return (latitude.isBetween(_lower._latitude, _upper._latitude) && longitude.isBetween(_lower._longitude, _upper._longitude));
+      return latitude.isBetween(_lower._latitude, _upper._latitude) && //
+             longitude.isBetween(_lower._longitude, _upper._longitude);
    }
 
 
    public final boolean fullContains(final Sector that) {
-      return (contains(that._upper._latitude, that._upper._longitude) && contains(that._lower._latitude, that._lower._longitude));
+      return contains(that._lower._latitude, that._lower._longitude) && //
+               contains(that._upper._latitude, that._upper._longitude);
+   }
+
+
+   @Override
+   public String toString() {
+      return "[Sector lower=" + _lower + ", upper=" + _upper + "]";
    }
 
 

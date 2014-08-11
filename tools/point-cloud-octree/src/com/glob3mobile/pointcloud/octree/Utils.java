@@ -3,41 +3,9 @@
 package com.glob3mobile.pointcloud.octree;
 
 
-
 public class Utils {
 
    private Utils() {
-   }
-
-
-   public static String toString(final Angle angle) {
-      return angle._degrees + "d";
-   }
-
-
-   public static String toString(final Geodetic3D point) {
-      return "(lat=" + toString(point._latitude) + ", lon=" + toString(point._longitude) + ", height=" + point._height + ")";
-   }
-
-
-   public static String toString(final Geodetic2D point) {
-      return "(lat=" + toString(point._latitude) + ", lon=" + toString(point._longitude) + ")";
-   }
-
-
-   public static String toString(final Sector sector) {
-      return "(lower=" + toString(sector._lower) + ", upper=" + toString(sector._upper) + ")";
-
-   }
-
-
-   public static Geodetic3D fromRadians(final double latitudeInRadians,
-                                        final double longitudeInRadians,
-                                        final double height) {
-      return new Geodetic3D( //
-               Angle.fromRadians(latitudeInRadians), //
-               Angle.fromRadians(longitudeInRadians), //
-               height);
    }
 
 
@@ -87,5 +55,15 @@ public class Utils {
       //System.out.println(isGreaterThan(left, right));
       System.out.println(hasSamePrefix(left, right));
    }
+
+
+   public static String toIDString(final byte[] id) {
+      final StringBuilder builder = new StringBuilder();
+      for (final byte each : id) {
+         builder.append(each);
+      }
+      return builder.toString();
+   }
+
 
 }

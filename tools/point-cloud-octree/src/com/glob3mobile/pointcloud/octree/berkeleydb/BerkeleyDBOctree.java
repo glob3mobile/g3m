@@ -10,7 +10,6 @@ import java.util.List;
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
 import com.glob3mobile.pointcloud.octree.Sector;
-import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;
@@ -212,22 +211,23 @@ PersistentOctree {
    synchronized public void flush() {
       final int bufferSize = _buffer.size();
       if (bufferSize > 0) {
-         final Geodetic3D lower = Utils.fromRadians(_minLatitudeInRadians, _minLongitudeInRadians, _minHeight);
-         final Geodetic3D upper = Utils.fromRadians(_maxLatitudeInRadians, _maxLongitudeInRadians, _maxHeight);
+         final Sector targetSector = Sector.fromRadians( //
+                  _minLatitudeInRadians, _minLongitudeInRadians, //
+                  _maxLatitudeInRadians, _maxLongitudeInRadians);
 
-         final Sector targetSector = new Sector(lower.asGeodetic2D(), upper.asGeodetic2D());
+         final BerkeleyDBMercatorTile.TileHeader header = BerkeleyDBMercatorTile.deepestEnclosingTileHeader(targetSector);
+
 
          final double averageLatitudeInRadians = _sumLatitudeInRadians / bufferSize;
          final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;
          final double averageHeight = _sumHeight / bufferSize;
 
-         final Geodetic3D averagePoint = Utils.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
+         final Geodetic3D averagePoint = Geodetic3D.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians,
+                  averageHeight);
 
-         final BerkeleyDBMercatorTile.TileHeader header = BerkeleyDBMercatorTile.deepestEnclosingTileHeader(targetSector);
 
          final TransactionConfig txnConfig = new TransactionConfig();
          final Transaction txn = _env.beginTransaction(null, txnConfig);
-
 
          final PointsSet pointsSet = new PointsSet(new ArrayList<Geodetic3D>(_buffer), averagePoint);
          BerkeleyDBMercatorTile.insertPoints(txn, this, header, pointsSet);

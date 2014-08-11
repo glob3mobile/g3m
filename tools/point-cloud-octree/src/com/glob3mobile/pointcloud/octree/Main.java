@@ -75,16 +75,6 @@ public class Main {
    }
 
 
-   private static Geodetic3D fromRadians(final double latitudeInRadians,
-                                         final double longitudeInRadians,
-                                         final double height) {
-      return new Geodetic3D( //
-               Angle.fromRadians(latitudeInRadians), //
-               Angle.fromRadians(longitudeInRadians), //
-               height);
-   }
-
-
    private static void loadOT(final PersistentOctree octree,
                               final GProjection projection,
                               final String fileName,
@@ -112,7 +102,7 @@ public class Main {
             final IVector2 sourcePoint = new GVector2D(x, y);
             final IVector2 projectedPointInRadians = projection.transformPoint(targetProjection, sourcePoint);
 
-            octree.addPoint(fromRadians(projectedPointInRadians.y(), projectedPointInRadians.x(), z));
+            octree.addPoint(Geodetic3D.fromRadians(projectedPointInRadians.y(), projectedPointInRadians.x(), z));
 
             progress.stepDone();
          }
@@ -186,10 +176,10 @@ public class Main {
                // + avrPoint._height;
 
                System.out.println(" node=" + node.getID() + //
-                                  ", level=" + node.getLevel() + //
-                                  ", points=" + pointsCount //
-               // ", average=" + avrPointStr //
-               );
+                        ", level=" + node.getLevel() + //
+                        ", points=" + pointsCount //
+                        // ", average=" + avrPointStr //
+                        );
 
                _counter++;
                _totalPoints += pointsCount;
