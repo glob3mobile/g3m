@@ -26,8 +26,8 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -217,6 +217,14 @@ PersistentOctree {
 
          final BerkeleyDBMercatorTile.TileHeader header = BerkeleyDBMercatorTile.deepestEnclosingTileHeader(targetSector);
 
+         for (final Geodetic3D point : _buffer) {
+            if (!targetSector.contains(point._latitude, point._longitude)) {
+               throw new RuntimeException("Logic Error");
+            }
+            if (!header._sector.contains(point._latitude, point._longitude)) {
+               throw new RuntimeException("Logic Error");
+            }
+         }
 
          final double averageLatitudeInRadians = _sumLatitudeInRadians / bufferSize;
          final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;

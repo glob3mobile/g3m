@@ -51,19 +51,61 @@ public class Sector {
    public final boolean contains(final Angle latitude,
                                  final Angle longitude) {
       return latitude.isBetween(_lower._latitude, _upper._latitude) && //
-             longitude.isBetween(_lower._longitude, _upper._longitude);
+               longitude.isBetween(_lower._longitude, _upper._longitude);
    }
 
 
    public final boolean fullContains(final Sector that) {
       return contains(that._lower._latitude, that._lower._longitude) && //
-               contains(that._upper._latitude, that._upper._longitude);
+             contains(that._upper._latitude, that._upper._longitude);
    }
 
 
    @Override
    public String toString() {
       return "[Sector lower=" + _lower + ", upper=" + _upper + "]";
+   }
+
+
+   @Override
+   public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = (prime * result) + ((_lower == null) ? 0 : _lower.hashCode());
+      result = (prime * result) + ((_upper == null) ? 0 : _upper.hashCode());
+      return result;
+   }
+
+
+   @Override
+   public boolean equals(final Object obj) {
+      if (this == obj) {
+         return true;
+      }
+      if (obj == null) {
+         return false;
+      }
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+      final Sector other = (Sector) obj;
+      if (_lower == null) {
+         if (other._lower != null) {
+            return false;
+         }
+      }
+      else if (!_lower.equals(other._lower)) {
+         return false;
+      }
+      if (_upper == null) {
+         if (other._upper != null) {
+            return false;
+         }
+      }
+      else if (!_upper.equals(other._upper)) {
+         return false;
+      }
+      return true;
    }
 
 

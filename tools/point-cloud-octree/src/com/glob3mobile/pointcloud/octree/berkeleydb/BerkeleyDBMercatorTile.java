@@ -57,8 +57,8 @@ PersistentOctree.Node {
 
 
    static class TileHeader {
-      private final byte[] _id;
-      private final Sector _sector;
+      final byte[] _id;
+      final Sector _sector;
 
 
       private TileHeader(final byte[] id,
@@ -69,44 +69,56 @@ PersistentOctree.Node {
 
 
       private TileHeader[] createChildren() {
-         final Geodetic2D lower = _sector._lower;
-         final Geodetic2D upper = _sector._upper;
+         return new TileHeader[] { createChild((byte) 0), createChild((byte) 1), createChild((byte) 2), createChild((byte) 3) };
+      }
+
+
+      private static Sector createSectorForChild(final Sector sector,
+                                                 final byte index) {
+         final Geodetic2D lower = sector._lower;
+         final Geodetic2D upper = sector._upper;
 
          final Angle splitLatitude = calculateSplitLatitude(lower._latitude, upper._latitude);
          final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
 
-         final Sector sector0 = new Sector(//
-                  splitLatitude, lower._longitude, //
-                  upper._latitude, splitLongitude);
-
-         final Sector sector1 = new Sector( //
-                  splitLatitude, splitLongitude, //
-                  upper._latitude, upper._longitude);
-
-         final Sector sector2 = new Sector( //
-                  lower._latitude, lower._longitude, //
-                  splitLatitude, splitLongitude);
-
-         final Sector sector3 = new Sector( //
-                  lower._latitude, splitLongitude, //
-                  splitLatitude, upper._longitude);
-
-         final TileHeader child0 = createChild((byte) 0, sector0);
-         final TileHeader child1 = createChild((byte) 1, sector1);
-         final TileHeader child2 = createChild((byte) 2, sector2);
-         final TileHeader child3 = createChild((byte) 3, sector3);
-
-         return new TileHeader[] { child0, child1, child2, child3 };
+         switch (index) {
+            case 0:
+               return new Sector(//
+                        splitLatitude, lower._longitude, //
+                        upper._latitude, splitLongitude);
+            case 1:
+               return new Sector( //
+                        splitLatitude, splitLongitude, //
+                        upper._latitude, upper._longitude);
+            case 2:
+               return new Sector( //
+                        lower._latitude, lower._longitude, //
+                        splitLatitude, splitLongitude);
+            case 3:
+               return new Sector( //
+                        lower._latitude, splitLongitude, //
+                        splitLatitude, upper._longitude);
+            default:
+               throw new RuntimeException("Invalid index=" + index);
+         }
       }
 
 
-      private TileHeader createChild(final byte index,
-                                     final Sector sector) {
+      private TileHeader createChild(final byte index) {
          final int length = _id.length;
          final byte[] childId = new byte[length + 1];
          System.arraycopy(_id, 0, childId, 0, length);
          childId[length] = index;
-         return new TileHeader(childId, sector);
+         return new TileHeader(childId, createSectorForChild(_sector, index));
+      }
+
+
+      private static Sector sectorFor(final byte[] id) {
+         Sector currentSector = Sector.FULL_SPHERE;
+         for (final byte b : id) {
+            currentSector = createSectorForChild(currentSector, b);
+         }
+         return currentSector;
       }
 
 
@@ -119,6 +131,7 @@ PersistentOctree.Node {
       public String toString() {
          return "[TileHeader id=" + Utils.toIDString(_id) + ", sector=" + _sector + "]";
       }
+
 
    }
 
@@ -199,6 +212,9 @@ PersistentOctree.Node {
       _pointsCount = pointsCount;
       _averagePoint = averagePoint;
       _format = format;
+
+      final int remove_debug_code;
+      checkConsistency();
    }
 
 
@@ -213,6 +229,17 @@ PersistentOctree.Node {
       _points = pointsSet._points;
       _averagePoint = pointsSet._averagePoint;
       _format = null;
+
+      final int remove_debug_code;
+      checkConsistency();
+   }
+
+
+   private void checkConsistency() {
+      final Sector sector = TileHeader.sectorFor(_id);
+      if (!sector.equals(_sector)) {
+         throw new RuntimeException("Logic error");
+      }
    }
 
 
@@ -398,6 +425,16 @@ PersistentOctree.Node {
          }
       }
 
+      final int REMOVE_DEBUG_CODE;
+      for (final BerkeleyDBMercatorTile descendant : result) {
+         if (!Utils.hasSamePrefix(id, descendant._id)) {
+            throw new RuntimeException("Logic error");
+         }
+         if (!Utils.isGreaterThan(descendant._id, id)) {
+            throw new RuntimeException("Logic error");
+         }
+      }
+
       return result;
    }
 
@@ -412,8 +449,8 @@ PersistentOctree.Node {
       if (ancestor != null) {
          // System.out.println("==> found ancestor (" + ancestor.getID() + ") for tile " + toString(id));
 
-                  ancestor.mergePoints(txn, pointsSet);
-                  return;
+         ancestor.mergePoints(txn, pointsSet);
+         return;
       }
 
       final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
@@ -715,7 +752,6 @@ PersistentOctree.Node {
          final PointsSet childPointsSet = extractPoints(child._sector, mergedPoints);
          if (childPointsSet != null) {
             // System.out.println(">>> tile " + getID() + " split " + childPointsSet.size() + " points into " + toString(child._id));
-
             insertPoints(txn, _octree, child, childPointsSet);
          }
       }
@@ -823,20 +859,17 @@ PersistentOctree.Node {
       final double lowerLongitude = byteBuffer.getDouble();
       final double upperLatitude = byteBuffer.getDouble();
       final double upperLongitude = byteBuffer.getDouble();
-      final Sector sector = new Sector( //
-               Geodetic2D.fromRadians(lowerLatitude, lowerLongitude), //
-               Geodetic2D.fromRadians(upperLatitude, upperLongitude));
+
+      final Sector sector = Sector.fromRadians(//
+               lowerLatitude, lowerLongitude, //
+               upperLatitude, upperLongitude);
 
       final int pointsCount = byteBuffer.getInt();
       final double averageLatitude = byteBuffer.getDouble();
       final double averageLongitude = byteBuffer.getDouble();
       final double averageHeight = byteBuffer.getDouble();
 
-      final Geodetic3D averagePoint = new Geodetic3D( //
-               Angle.fromRadians(averageLatitude), //
-               Angle.fromRadians(averageLongitude), //
-               averageHeight);
-
+      final Geodetic3D averagePoint = Geodetic3D.fromRadians(averageLatitude, averageLongitude, averageHeight);
 
       final byte formatID = byteBuffer.get();
       final Format format = Format.getFromID(formatID);

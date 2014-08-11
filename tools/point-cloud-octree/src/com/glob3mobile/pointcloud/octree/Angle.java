@@ -46,4 +46,39 @@ public class Angle {
    }
 
 
+   @Override
+   public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      long temp;
+      temp = Double.doubleToLongBits(_degrees);
+      result = (prime * result) + (int) (temp ^ (temp >>> 32));
+      temp = Double.doubleToLongBits(_radians);
+      result = (prime * result) + (int) (temp ^ (temp >>> 32));
+      return result;
+   }
+
+
+   @Override
+   public boolean equals(final Object obj) {
+      if (this == obj) {
+         return true;
+      }
+      if (obj == null) {
+         return false;
+      }
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+      final Angle other = (Angle) obj;
+      if (Double.doubleToLongBits(_degrees) != Double.doubleToLongBits(other._degrees)) {
+         return false;
+      }
+      if (Double.doubleToLongBits(_radians) != Double.doubleToLongBits(other._radians)) {
+         return false;
+      }
+      return true;
+   }
+
+
 }
