@@ -4,7 +4,7 @@ package com.glob3mobile.pointcloud.octree.berkeleydb;
 
 import java.util.List;
 
-import org.glob3.mobile.generated.Geodetic3D;
+import com.glob3mobile.pointcloud.octree.Geodetic3D;
 
 
 class PointsSet {
@@ -13,7 +13,7 @@ class PointsSet {
 
 
    PointsSet(final List<Geodetic3D> points,
-             final Geodetic3D averagePoint) {
+            final Geodetic3D averagePoint) {
       _points = points;
       _averagePoint = averagePoint;
    }

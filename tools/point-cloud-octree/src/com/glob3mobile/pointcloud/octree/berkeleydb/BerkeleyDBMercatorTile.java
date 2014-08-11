@@ -8,14 +8,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.Sector;
-
+import com.glob3mobile.pointcloud.octree.Angle;
+import com.glob3mobile.pointcloud.octree.Geodetic2D;
+import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
+import com.glob3mobile.pointcloud.octree.Sector;
 import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
@@ -74,30 +72,30 @@ PersistentOctree.Node {
          final Geodetic2D lower = _sector._lower;
          final Geodetic2D upper = _sector._upper;
 
-         final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
          final Angle splitLatitude = calculateSplitLatitude(lower._latitude, upper._latitude);
+         final Angle splitLongitude = Angle.midAngle(lower._longitude, upper._longitude);
 
-         final Sector s0 = new Sector( //
+         final Sector sector0 = new Sector( //
                   new Geodetic2D(splitLatitude, lower._longitude), //
                   new Geodetic2D(upper._latitude, splitLongitude));
 
-         final Sector s1 = new Sector( //
+         final Sector sector1 = new Sector( //
                   new Geodetic2D(splitLatitude, splitLongitude), //
                   new Geodetic2D(upper._latitude, upper._longitude));
 
-         final Sector s2 = new Sector( //
+         final Sector sector2 = new Sector( //
                   new Geodetic2D(lower._latitude, lower._longitude), //
                   new Geodetic2D(splitLatitude, splitLongitude));
 
-         final Sector s3 = new Sector( //
+         final Sector sector3 = new Sector( //
                   new Geodetic2D(lower._latitude, splitLongitude), //
                   new Geodetic2D(splitLatitude, upper._longitude));
 
+         final TileHeader child0 = createChild((byte) 0, sector0);
+         final TileHeader child1 = createChild((byte) 1, sector1);
+         final TileHeader child2 = createChild((byte) 2, sector2);
+         final TileHeader child3 = createChild((byte) 3, sector3);
 
-         final TileHeader child0 = createChild((byte) 0, s0);
-         final TileHeader child1 = createChild((byte) 1, s1);
-         final TileHeader child2 = createChild((byte) 2, s2);
-         final TileHeader child3 = createChild((byte) 3, s3);
          return new TileHeader[] { child0, child1, child2, child3 };
       }
 
@@ -368,9 +366,9 @@ PersistentOctree.Node {
 
 
    private static List<BerkeleyDBMercatorTile> getDescendants(final Transaction txn,
-                                                              final BerkeleyDBOctree octree,
-                                                              final byte[] id,
-                                                              final boolean loadPoints) {
+            final BerkeleyDBOctree octree,
+            final byte[] id,
+            final boolean loadPoints) {
       final List<BerkeleyDBMercatorTile> result = new ArrayList<BerkeleyDBMercatorTile>();
 
       final Database nodeDB = octree.getNodeDB();
@@ -417,68 +415,68 @@ PersistentOctree.Node {
       if (ancestor != null) {
          // System.out.println("==> found ancestor (" + ancestor.getID() + ") for tile " + toString(id));
 
-         ancestor.mergePoints(txn, pointsSet);
+                  ancestor.mergePoints(txn, pointsSet);
+                  return;
+      }
+
+      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
+      if ((descendants != null) && !descendants.isEmpty()) {
+         splitPointsIntoDescendants(txn, octree, header, pointsSet, descendants);
          return;
       }
 
-      //      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
-      //      if ((descendants != null) && !descendants.isEmpty()) {
-      //         splitPointsIntoDescendants(txn, octree, header, pointsSet, descendants);
+
+      //      final AtomicBoolean descendantsFound = new AtomicBoolean(false);
+      //      final DescendantsVisitor visitor = new DescendantsVisitor() {
+      //         private List<Geodetic3D> _points;
+      //
+      //
+      //         @Override
+      //         public void visit(final BerkeleyDBMercatorTile descendant) {
+      //            descendantsFound.set(true);
+      //
+      //            if (_points == null) {
+      //               _points = new ArrayList<Geodetic3D>(pointsSet._points);
+      //            }
+      //
+      //            final PointsSet descendantPointsSet = extractPoints(descendant._sector, _points);
+      //            if (descendantPointsSet != null) {
+      //               // System.out.println(">>> tile " + toString(header._id) + " split " + descendantPointsSet.size()
+      //               // + " points into descendant " + toString(descendant._id) + " (" + points.size()
+      //               // + " points not yet distributed)");
+      //
+      //               descendant.mergePoints(txn, descendantPointsSet);
+      //            }
+      //
+      //         }
+      //
+      //
+      //         @Override
+      //         public void finished() {
+      //            if ((_points != null) && !_points.isEmpty()) {
+      //               final List<TileHeader> descendantsHeaders = descendantsHeadersOfLevel(header, header.getLevel() + 1);
+      //               for (final TileHeader descendantHeader : descendantsHeaders) {
+      //                  final PointsSet descendantPointsSet = extractPoints(descendantHeader._sector, _points);
+      //                  if (descendantPointsSet != null) {
+      //                     // System.out.println(">>> 2ND tile " + toString(header._id) + " split " + descendantPointsSet.size()
+      //                     // + " points into descendant " + toString(descendantHeader._id) + " (" + points.size()
+      //                     // + " points not yet distributed)");
+      //
+      //                     insertPoints(txn, octree, descendantHeader, descendantPointsSet);
+      //                  }
+      //               }
+      //
+      //               if (!_points.isEmpty()) {
+      //                  throw new RuntimeException("Logic error!");
+      //               }
+      //            }
+      //
+      //         }
+      //      };
+      //      visitDescendants(txn, octree, id, true, visitor);
+      //      if (descendantsFound.get()) {
       //         return;
       //      }
-
-
-      final AtomicBoolean descendantsFound = new AtomicBoolean(false);
-      final DescendantsVisitor visitor = new DescendantsVisitor() {
-         private List<Geodetic3D> _points;
-
-
-         @Override
-         public void visit(final BerkeleyDBMercatorTile descendant) {
-            descendantsFound.set(true);
-
-            if (_points == null) {
-               _points = new ArrayList<Geodetic3D>(pointsSet._points);
-            }
-
-            final PointsSet descendantPointsSet = extractPoints(descendant._sector, _points);
-            if (descendantPointsSet != null) {
-               // System.out.println(">>> tile " + toString(header._id) + " split " + descendantPointsSet.size()
-               // + " points into descendant " + toString(descendant._id) + " (" + points.size()
-               // + " points not yet distributed)");
-
-               descendant.mergePoints(txn, descendantPointsSet);
-            }
-
-         }
-
-
-         @Override
-         public void finished() {
-            if ((_points != null) && !_points.isEmpty()) {
-               final List<TileHeader> descendantsHeaders = descendantsHeadersOfLevel(header, header.getLevel() + 1);
-               for (final TileHeader descendantHeader : descendantsHeaders) {
-                  final PointsSet descendantPointsSet = extractPoints(descendantHeader._sector, _points);
-                  if (descendantPointsSet != null) {
-                     // System.out.println(">>> 2ND tile " + toString(header._id) + " split " + descendantPointsSet.size()
-                     // + " points into descendant " + toString(descendantHeader._id) + " (" + points.size()
-                     // + " points not yet distributed)");
-
-                     insertPoints(txn, octree, descendantHeader, descendantPointsSet);
-                  }
-               }
-
-               if (!_points.isEmpty()) {
-                  throw new RuntimeException("Logic error!");
-               }
-            }
-
-         }
-      };
-      visitDescendants(txn, octree, id, true, visitor);
-      if (descendantsFound.get()) {
-         return;
-      }
 
 
       final BerkeleyDBMercatorTile tile = new BerkeleyDBMercatorTile(octree, id, header._sector, pointsSet);
@@ -573,7 +571,7 @@ PersistentOctree.Node {
 
 
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
-                                                             final int level) {
+            final int level) {
       final List<TileHeader> result = new ArrayList<TileHeader>();
       descendantsHeadersOfLevel(result, level, header);
       return result;
@@ -645,6 +643,13 @@ PersistentOctree.Node {
 
    private void mergePoints(final Transaction txn,
                             final PointsSet newPointsSet) {
+
+      for (final Geodetic3D p : newPointsSet._points) {
+         if (!_sector.contains(p._latitude, p._longitude)) {
+            throw new RuntimeException("LOGIC ERROR!!");
+         }
+      }
+
       final int mergedPointsLength = getPointsCount() + newPointsSet.size();
       if (mergedPointsLength > _octree.getMaxPointsPerTile()) {
          split(txn, newPointsSet);
@@ -711,9 +716,8 @@ PersistentOctree.Node {
       final TileHeader[] children = header.createChildren();
       for (final TileHeader child : children) {
          final PointsSet childPointsSet = extractPoints(child._sector, mergedPoints);
-
          if (childPointsSet != null) {
-            //System.out.println(">>> tile " + getID() + " split " + childPointsSet.size() + " points into " + toString(child._id));
+            System.out.println(">>> tile " + getID() + " split " + childPointsSet.size() + " points into " + toString(child._id));
 
             insertPoints(txn, _octree, child, childPointsSet);
          }

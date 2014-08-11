@@ -2,10 +2,6 @@
 
 package com.glob3mobile.pointcloud.octree;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.Sector;
 
 
 public class Utils {

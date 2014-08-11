@@ -7,10 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.Sector;
-
+import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentOctree;
+import com.glob3mobile.pointcloud.octree.Sector;
 import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
@@ -28,8 +27,8 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");

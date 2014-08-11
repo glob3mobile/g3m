@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Geodetic3D;
-
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
 import es.igosoftware.euclid.projection.GProjection;
@@ -68,7 +65,9 @@ public class Main {
          @Override
          public boolean accept(final File dir,
                                final String name) {
-            return name.endsWith(".txt") || name.endsWith(".txt.gz");
+            //return name.endsWith(".txt") || name.endsWith(".txt.gz");
+            final int TODO_add_GZ;
+            return name.endsWith(".txt");
          }
       });
 
