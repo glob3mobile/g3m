@@ -34,11 +34,27 @@ public class BerkeleyDBOctree
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 32;
-   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 32;
+   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 16;
+   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 16;
    private static final String NODE_DATABASE_NAME           = "Node";
    private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
 
+
+   /*
+
+      32K
+     =====
+
+       - loading "18STJ6448.txt.gz" 1/1 [ done ] 5813329 steps [Finished in 1m 2s] 54.1kB/sec (avr=91.5kB/sec)
+      ======================================================================
+         Loudoun-VA
+         Points: 5813329
+         Nodes: 405
+         Levels: 14/19, Average=18.71852
+         Points/Node: 14353.898
+      ======================================================================
+
+    */
 
    public static void delete(final String cloudName) {
       final File envHome = new File(cloudName);
@@ -335,16 +351,17 @@ public class BerkeleyDBOctree
          @Override
          public void stop() {
             System.out.println("======================================================================");
-            System.out.println("  " + _cloudName);
-            System.out.println();
-            System.out.println("    Points: " + _pointsCount);
-            System.out.println("    Nodes: " + _nodesCount + ", Average Points Per Node= " + ((float) _pointsCount / _nodesCount));
-            System.out.println("    Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
+            System.out.println(" " + _cloudName);
+            System.out.println("   Points: " + _pointsCount);
+            System.out.println("   Nodes: " + _nodesCount);
+            System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
+            System.out.println("   Points/Node: " + ((float) _pointsCount / _nodesCount));
             System.out.println("======================================================================");
 
-            //            final StatsConfig config = new StatsConfig();
-            //            final EnvironmentStats stats = _env.getStats(config);
-            //            System.out.println(stats);
+
+            // final StatsConfig config = new StatsConfig();
+            // final EnvironmentStats stats = _env.getStats(config);
+            // System.out.println(stats);
          }
       };
 

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic2D;
@@ -26,8 +27,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBMercatorTile
-         implements
-            PersistentOctree.Node {
+implements
+PersistentOctree.Node {
 
 
    private static enum Format {
@@ -246,10 +247,10 @@ public class BerkeleyDBMercatorTile
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-             // ", sector=" + Utils.toString(_sector) + //
-             ", level=" + getLevel() + //
-             ", points=" + _pointsCount + //
-             "]";
+               // ", sector=" + Utils.toString(_sector) + //
+               ", level=" + getLevel() + //
+               ", points=" + _pointsCount + //
+               "]";
    }
 
 
@@ -288,16 +289,16 @@ public class BerkeleyDBMercatorTile
       final byte formatID = format._formatID;
 
       final int entrySize = sizeOf(version) + //
-                            sizeOf(subversion) + //
-                            sizeOf(lowerLatitude) + //
-                            sizeOf(lowerLongitude) + //
-                            sizeOf(upperLatitude) + //
-                            sizeOf(upperLongitude) + //
-                            sizeOf(_pointsCount) + //
-                            sizeOf(averageLatitude) + //
-                            sizeOf(averageLongitude) + //
-                            sizeOf(averageHeight) + //
-                            sizeOf(formatID);
+               sizeOf(subversion) + //
+               sizeOf(lowerLatitude) + //
+               sizeOf(lowerLongitude) + //
+               sizeOf(upperLatitude) + //
+               sizeOf(upperLongitude) + //
+               sizeOf(_pointsCount) + //
+               sizeOf(averageLatitude) + //
+               sizeOf(averageLongitude) + //
+               sizeOf(averageHeight) + //
+               sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -367,9 +368,9 @@ public class BerkeleyDBMercatorTile
 
 
    private static List<BerkeleyDBMercatorTile> getDescendants(final Transaction txn,
-            final BerkeleyDBOctree octree,
-            final byte[] id,
-            final boolean loadPoints) {
+                                                              final BerkeleyDBOctree octree,
+                                                              final byte[] id,
+                                                              final boolean loadPoints) {
       final List<BerkeleyDBMercatorTile> result = new ArrayList<BerkeleyDBMercatorTile>();
 
       final Database nodeDB = octree.getNodeDB();
@@ -416,18 +417,121 @@ public class BerkeleyDBMercatorTile
       if (ancestor != null) {
          // System.out.println("==> found ancestor (" + ancestor.getID() + ") for tile " + toString(id));
 
-                  ancestor.mergePoints(txn, pointsSet);
-                  return;
-      }
-
-      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
-      if ((descendants != null) && !descendants.isEmpty()) {
-         splitPointsIntoDescendants(txn, octree, header, pointsSet, descendants);
+         ancestor.mergePoints(txn, pointsSet);
          return;
       }
 
+      //      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
+      //      if ((descendants != null) && !descendants.isEmpty()) {
+      //         splitPointsIntoDescendants(txn, octree, header, pointsSet, descendants);
+      //         return;
+      //      }
+
+
+      final AtomicBoolean descendantsFound = new AtomicBoolean(false);
+      final DescendantsVisitor visitor = new DescendantsVisitor() {
+         private List<Geodetic3D> _points;
+
+
+         @Override
+         public void visit(final BerkeleyDBMercatorTile descendant) {
+            descendantsFound.set(true);
+
+            if (_points == null) {
+               _points = new ArrayList<Geodetic3D>(pointsSet._points);
+            }
+
+            final PointsSet descendantPointsSet = extractPoints(descendant._sector, _points);
+            if (descendantPointsSet != null) {
+               // System.out.println(">>> tile " + toString(header._id) + " split " + descendantPointsSet.size()
+               // + " points into descendant " + toString(descendant._id) + " (" + points.size()
+               // + " points not yet distributed)");
+
+               descendant.mergePoints(txn, descendantPointsSet);
+            }
+
+         }
+
+
+         @Override
+         public void finished() {
+            if ((_points != null) && !_points.isEmpty()) {
+               final List<TileHeader> descendantsHeaders = descendantsHeadersOfLevel(header, header.getLevel() + 1);
+               for (final TileHeader descendantHeader : descendantsHeaders) {
+                  final PointsSet descendantPointsSet = extractPoints(descendantHeader._sector, _points);
+                  if (descendantPointsSet != null) {
+                     // System.out.println(">>> 2ND tile " + toString(header._id) + " split " + descendantPointsSet.size()
+                     // + " points into descendant " + toString(descendantHeader._id) + " (" + points.size()
+                     // + " points not yet distributed)");
+
+                     insertPoints(txn, octree, descendantHeader, descendantPointsSet);
+                  }
+               }
+
+               if (!_points.isEmpty()) {
+                  throw new RuntimeException("Logic error!");
+               }
+            }
+
+         }
+      };
+      visitDescendants(txn, octree, id, true, visitor);
+      if (descendantsFound.get()) {
+         return;
+      }
+
+
       final BerkeleyDBMercatorTile tile = new BerkeleyDBMercatorTile(octree, id, header._sector, pointsSet);
       tile.rawSave(txn);
+   }
+
+
+   private static interface DescendantsVisitor {
+      void visit(BerkeleyDBMercatorTile descendant);
+
+
+      void finished();
+   }
+
+
+   private static void visitDescendants(final Transaction txn,
+                                        final BerkeleyDBOctree octree,
+                                        final byte[] id,
+                                        final boolean loadPoints,
+                                        final DescendantsVisitor visitor) {
+      final Database nodeDB = octree.getNodeDB();
+
+      final CursorConfig cursorConfig = new CursorConfig();
+
+      try (final Cursor cursor = nodeDB.openCursor(txn, cursorConfig)) {
+         final DatabaseEntry keyEntry = new DatabaseEntry(id);
+         final DatabaseEntry dataEntry = new DatabaseEntry();
+         final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.DEFAULT);
+         if (status == OperationStatus.SUCCESS) {
+            byte[] key = keyEntry.getData();
+
+            if (!Utils.hasSamePrefix(key, id)) {
+               visitor.finished();
+               return;
+            }
+            if (Utils.isGreaterThan(key, id)) {
+               visitor.visit(fromDB(txn, octree, key, dataEntry.getData(), loadPoints));
+            }
+
+            while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+               key = keyEntry.getData();
+               if (!Utils.hasSamePrefix(key, id)) {
+                  visitor.finished();
+                  return;
+               }
+               if (Utils.isGreaterThan(key, id)) {
+                  visitor.visit(fromDB(txn, octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
+               }
+            }
+         }
+      }
+
+      visitor.finished();
    }
 
 
@@ -469,7 +573,7 @@ public class BerkeleyDBMercatorTile
 
 
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
-            final int level) {
+                                                             final int level) {
       final List<TileHeader> result = new ArrayList<TileHeader>();
       descendantsHeadersOfLevel(result, level, header);
       return result;
@@ -517,9 +621,9 @@ public class BerkeleyDBMercatorTile
 
       if ((ancestor != null) || !descendants.isEmpty()) {
          System.out.println("***** INVARIANT FAILED: " + //
-                            "for tile=" + toString(_id) + //
-                            ", ancestor=" + ancestor + //
-                            ", descendants=" + descendants);
+                  "for tile=" + toString(_id) + //
+                  ", ancestor=" + ancestor + //
+                  ", descendants=" + descendants);
       }
    }
 

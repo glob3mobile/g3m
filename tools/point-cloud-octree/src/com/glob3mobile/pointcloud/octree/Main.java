@@ -3,7 +3,9 @@
 package com.glob3mobile.pointcloud.octree;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
@@ -30,12 +32,19 @@ public class Main {
 
       final String cloudName = "Loudoun-VA";
 
-      final boolean createOT = false;
+      final boolean deleteOT = true;
+      final boolean loadOT = true;
+      final boolean renameDone = false;
       final boolean visitOT = false;
       final boolean showStatisticsOT = true;
 
-      if (createOT) {
-         createOT(cloudName);
+      if (deleteOT) {
+         BerkeleyDBOctree.delete(cloudName);
+      }
+
+      if (loadOT) {
+         //"18STJ6448.txt.gz"
+         loadOT(cloudName, renameDone, getFilesToLoad());
       }
 
       System.out.println();
@@ -53,6 +62,20 @@ public class Main {
    }
 
 
+   private static String[] getFilesToLoad() {
+      final File wd = new File(System.getProperty("user.dir"));
+      final String[] filesNames = wd.list(new FilenameFilter() {
+         @Override
+         public boolean accept(final File dir,
+                               final String name) {
+            return name.endsWith(".txt") || name.endsWith(".txt.gz");
+         }
+      });
+
+      return filesNames;
+   }
+
+
    private static Geodetic3D fromRadians(final double latitudeInRadians,
                                          final double longitudeInRadians,
                                          final double height) {
@@ -64,20 +87,20 @@ public class Main {
 
 
    private static void loadOT(final PersistentOctree octree,
+                              final GProjection projection,
                               final String fileName,
-                              final GProjection projection) throws IOException {
-      final GUndeterminateProgress progress = new GUndeterminateProgress(5, true) {
+                              final String extraMsg) throws IOException {
+      final GUndeterminateProgress progress = new GUndeterminateProgress(10, true) {
          @Override
          public void informProgress(final long stepsDone,
                                     final long elapsed) {
-            System.out.println("- loading \"" + fileName + "\"" + progressString(stepsDone, elapsed));
+            System.out.println("- loading \"" + fileName + "\" " + extraMsg + progressString(stepsDone, elapsed));
          }
       };
 
       final GProjection targetProjection = GProjection.EPSG_4326;
 
-      try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(
-               fileName))))) {
+      try (final BufferedReader reader = open(fileName)) {
          String line;
          while ((line = reader.readLine()) != null) {
             final String[] tokens = XStringTokenizer.getAllTokens(line, ",");
@@ -96,21 +119,42 @@ public class Main {
          }
       }
 
+      octree.flush();
       progress.finish();
 
-      octree.optimize();
+      octree.showStatistics();
    }
 
 
-   private static void createOT(final String cloudName) throws IOException {
-      BerkeleyDBOctree.delete(cloudName);
+   private static BufferedReader open(final String fileName) throws IOException {
+      if (fileName.toLowerCase().endsWith(".gz")) {
+         return new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(fileName))));
+      }
+      return new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
+   }
 
+
+   private static void loadOT(final String cloudName,
+                              final boolean renameDone,
+                              final String... filesNames) throws IOException {
       final boolean loadPoints = true;
       if (loadPoints) {
          final boolean createIfNotExists = true;
          try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists)) {
             final GProjection projection = GProjection.EPSG_26918;
-            loadOT(octree, "18STJ6448.txt.gz", projection);
+
+            final int filesNamesLength = filesNames.length;
+            for (int i = 0; i < filesNamesLength; i++) {
+               final String fileName = filesNames[i];
+               final String extraMsg = (i + 1) + "/" + filesNamesLength;
+               loadOT(octree, projection, fileName, extraMsg);
+
+               if (renameDone) {
+                  new File(fileName).renameTo(new File(fileName + ".DONE"));
+               }
+            }
+
+            octree.optimize();
          }
       }
    }
@@ -143,10 +187,10 @@ public class Main {
                // + avrPoint._height;
 
                System.out.println(" node=" + node.getID() + //
-                        ", level=" + node.getLevel() + //
-                        ", points=" + pointsCount //
-                        // ", average=" + avrPointStr //
-                        );
+                                  ", level=" + node.getLevel() + //
+                                  ", points=" + pointsCount //
+               // ", average=" + avrPointStr //
+               );
 
                _counter++;
                _totalPoints += pointsCount;
