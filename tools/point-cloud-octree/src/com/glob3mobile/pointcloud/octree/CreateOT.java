@@ -109,7 +109,7 @@ public class CreateOT {
       octree.flush();
       progress.finish();
 
-      octree.showStatistics();
+      octree.getStatistics(false).show();
    }
 
 
@@ -199,7 +199,7 @@ public class CreateOT {
    private static void showStatisticsOT(final String cloudName) {
       final boolean createIfNotExists = false;
       try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists)) {
-         octree.showStatistics();
+         octree.getStatistics(false).show();
       }
    }
 

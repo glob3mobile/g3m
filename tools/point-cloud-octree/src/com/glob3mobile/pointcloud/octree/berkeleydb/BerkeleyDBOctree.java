@@ -23,6 +23,7 @@ import com.sleepycat.je.Transaction;
 import com.sleepycat.je.TransactionConfig;
 
 import es.igosoftware.io.GIOUtils;
+import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
@@ -307,63 +308,106 @@ PersistentOctree {
    }
 
 
-   @Override
-   public void showStatistics() {
+   private static class BerkeleyDBStatistics
+            implements
+               PersistentOctree.Visitor,
+               PersistentOctree.Statistics {
+      private final String                 _cloudName;
+      private final GUndeterminateProgress _progress;
 
-      final PersistentOctree.Visitor visitor = new PersistentOctree.Visitor() {
-         private long _nodesCount;
-         private long _pointsCount;
-         private long _sumLevel;
-         private int  _minLevel;
-         private int  _maxLevel;
+      private long                         _nodesCount;
+      private long                         _pointsCount;
+      private long                         _sumLevel;
+      private int                          _minLevel;
+      private int                          _maxLevel;
 
 
-         @Override
-         public void start() {
-            _nodesCount = 0;
-            _pointsCount = 0;
-            _sumLevel = 0;
-            _minLevel = Integer.MAX_VALUE;
-            _maxLevel = Integer.MIN_VALUE;
+      private BerkeleyDBStatistics(final String cloudName,
+                                   final GUndeterminateProgress progress) {
+         _cloudName = cloudName;
+         _progress = progress;
+      }
+
+
+      @Override
+      public void start() {
+         _nodesCount = 0;
+         _pointsCount = 0;
+         _sumLevel = 0;
+         _minLevel = Integer.MAX_VALUE;
+         _maxLevel = Integer.MIN_VALUE;
+      }
+
+
+      @Override
+      public boolean visit(final PersistentOctree.Node node) {
+         if (_progress != null) {
+            _progress.stepDone();
          }
 
+         _nodesCount++;
+         _pointsCount += node.getPointsCount();
 
-         @Override
-         public boolean visit(final PersistentOctree.Node node) {
-            _nodesCount++;
-            _pointsCount += node.getPointsCount();
-
-            final int level = node.getLevel();
-            _sumLevel += level;
-            if (level < _minLevel) {
-               _minLevel = level;
-            }
-            if (level > _maxLevel) {
-               _maxLevel = level;
-            }
-            return true;
+         final int level = node.getLevel();
+         _sumLevel += level;
+         if (level < _minLevel) {
+            _minLevel = level;
          }
-
-
-         @Override
-         public void stop() {
-            System.out.println("======================================================================");
-            System.out.println(" " + _cloudName);
-            System.out.println("   Points: " + _pointsCount);
-            System.out.println("   Nodes: " + _nodesCount);
-            System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
-            System.out.println("   Points/Node: " + ((float) _pointsCount / _nodesCount));
-            System.out.println("======================================================================");
-
-
-            // final StatsConfig config = new StatsConfig();
-            // final EnvironmentStats stats = _env.getStats(config);
-            // System.out.println(stats);
+         if (level > _maxLevel) {
+            _maxLevel = level;
          }
-      };
+         return true;
+      }
 
-      acceptVisitor(visitor);
+
+      @Override
+      public void stop() {
+         if (_progress != null) {
+            _progress.finish();
+         }
+      }
+
+
+      @Override
+      public void show() {
+         System.out.println("======================================================================");
+         System.out.println(" " + _cloudName);
+         System.out.println("   Points: " + _pointsCount);
+         System.out.println("   Nodes: " + _nodesCount);
+         System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
+         System.out.println("   Points/Node: " + ((float) _pointsCount / _nodesCount));
+         System.out.println("======================================================================");
+
+
+         // final StatsConfig config = new StatsConfig();
+         // final EnvironmentStats stats = _env.getStats(config);
+         // System.out.println(stats);
+      }
 
    }
+
+
+   @Override
+   public PersistentOctree.Statistics getStatistics(final boolean showProgress) {
+
+      final GUndeterminateProgress progress;
+      if (showProgress) {
+         progress = new GUndeterminateProgress(10, true) {
+            @Override
+            public void informProgress(final long stepsDone,
+                                       final long elapsed) {
+               System.out.println("- gathering statistics for \"" + _cloudName + "\"" + progressString(stepsDone, elapsed));
+            }
+         };
+      }
+      else {
+         progress = null;
+      }
+
+      final BerkeleyDBStatistics statistics = new BerkeleyDBStatistics(_cloudName, progress);
+      acceptVisitor(statistics);
+      return statistics;
+   }
+
 
 }
