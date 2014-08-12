@@ -32,7 +32,7 @@ public class CreateOT {
       final boolean deleteOT = true;
       final boolean loadOT = true;
       final boolean renameDone = false;
-      final boolean visitOT = true;
+      final boolean visitOT = false;
       final boolean showStatisticsOT = true;
 
       if (deleteOT) {
