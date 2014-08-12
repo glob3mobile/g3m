@@ -19,12 +19,12 @@ import es.igosoftware.util.GUndeterminateProgress;
 import es.igosoftware.util.XStringTokenizer;
 
 
-public class Main {
+public class CreateOT {
 
 
    public static void main(final String[] args) throws IOException {
-      System.out.println("PointClout OcTree 0.1");
-      System.out.println("---------------------\n");
+      System.out.println("CreateOT 0.1");
+      System.out.println("------------\n");
 
 
       final String cloudName = "Loudoun-VA";
