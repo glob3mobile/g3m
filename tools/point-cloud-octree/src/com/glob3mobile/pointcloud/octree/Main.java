@@ -29,10 +29,10 @@ public class Main {
 
       final String cloudName = "Loudoun-VA";
 
-      final boolean deleteOT = true;
-      final boolean loadOT = true;
+      final boolean deleteOT = false;
+      final boolean loadOT = false;
       final boolean renameDone = false;
-      final boolean visitOT = false;
+      final boolean visitOT = true;
       final boolean showStatisticsOT = true;
 
       if (deleteOT) {
@@ -65,9 +65,7 @@ public class Main {
          @Override
          public boolean accept(final File dir,
                                final String name) {
-            //return name.endsWith(".txt") || name.endsWith(".txt.gz");
-            final int TODO_add_GZ;
-            return name.endsWith(".txt");
+            return name.endsWith(".txt") || name.endsWith(".txt.gz");
          }
       });
 
@@ -175,11 +173,11 @@ public class Main {
                // final String avrPointStr = avrPoint._latitude._degrees + "/" + avrPoint._longitude._degrees + "/"
                // + avrPoint._height;
 
-               System.out.println(" node=" + node.getID() + //
-                        ", level=" + node.getLevel() + //
-                        ", points=" + pointsCount //
-                        // ", average=" + avrPointStr //
-                        );
+               //               System.out.println(" node=" + node.getID() + //
+               //                        ", level=" + node.getLevel() + //
+               //                        ", points=" + pointsCount //
+               //                        // ", average=" + avrPointStr //
+               //                        );
 
                _counter++;
                _totalPoints += pointsCount;
