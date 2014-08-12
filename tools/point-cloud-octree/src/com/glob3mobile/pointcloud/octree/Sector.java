@@ -2,6 +2,8 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.util.List;
+
 
 public class Sector {
 
@@ -28,6 +30,44 @@ public class Sector {
    }
 
 
+   public static Sector getBounds(final List<Geodetic3D> points) {
+      if ((points == null) || points.isEmpty()) {
+         return null;
+      }
+
+      final Geodetic3D firstPoint = points.get(0);
+      double minLatitudeInRadians = firstPoint._latitude._radians;
+      double minLongitudeInRadians = firstPoint._longitude._radians;
+
+      double maxLatitudeInRadians = firstPoint._latitude._radians;
+      double maxLongitudeInRadians = firstPoint._longitude._radians;
+
+      for (int i = 1; i < points.size(); i++) {
+         final Geodetic3D point = points.get(i);
+         final double latitudeInRadians = point._latitude._radians;
+         final double longitudeInRadians = point._longitude._radians;
+
+         if (latitudeInRadians < minLatitudeInRadians) {
+            minLatitudeInRadians = latitudeInRadians;
+         }
+         if (latitudeInRadians > maxLatitudeInRadians) {
+            maxLatitudeInRadians = latitudeInRadians;
+         }
+
+         if (longitudeInRadians < minLongitudeInRadians) {
+            minLongitudeInRadians = longitudeInRadians;
+         }
+         if (longitudeInRadians > maxLongitudeInRadians) {
+            maxLongitudeInRadians = longitudeInRadians;
+         }
+      }
+
+      return Sector.fromRadians( //
+               minLatitudeInRadians, minLongitudeInRadians, //
+               maxLatitudeInRadians, maxLongitudeInRadians);
+   }
+
+
    public final Geodetic2D _lower;
    public final Geodetic2D _upper;
 
@@ -51,13 +91,13 @@ public class Sector {
    public final boolean contains(final Angle latitude,
                                  final Angle longitude) {
       return latitude.isBetween(_lower._latitude, _upper._latitude) && //
-               longitude.isBetween(_lower._longitude, _upper._longitude);
+             longitude.isBetween(_lower._longitude, _upper._longitude);
    }
 
 
    public final boolean fullContains(final Sector that) {
       return contains(that._lower._latitude, that._lower._longitude) && //
-             contains(that._upper._latitude, that._upper._longitude);
+               contains(that._upper._latitude, that._upper._longitude);
    }
 
 

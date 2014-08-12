@@ -7,12 +7,14 @@ public class Angle {
 
 
    public static Angle fromRadians(final double radians) {
-      return new Angle((radians * (180.0 / 3.14159265358979323846264338327950288)), radians);
+      // return new Angle((radians * (180.0 / 3.14159265358979323846264338327950288)), radians);
+      return new Angle(Math.toDegrees(radians), radians);
    }
 
 
    public static Angle fromDegrees(final double degrees) {
-      return new Angle(degrees, ((degrees / 180.0) * 3.14159265358979323846264338327950288));
+      // return new Angle(degrees, ((degrees / 180.0) * 3.14159265358979323846264338327950288));
+      return new Angle(degrees, Math.toRadians(degrees));
    }
 
 

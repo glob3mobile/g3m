@@ -25,8 +25,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBMercatorTile
-         implements
-            PersistentOctree.Node {
+implements
+PersistentOctree.Node {
 
 
    private static enum Format {
@@ -40,8 +40,13 @@ public class BerkeleyDBMercatorTile
       }
 
 
-      private int sizeOf(final float[] values) {
-         return values.length * 4;
+      //      private int sizeOf(final float[] values) {
+      //         return values.length * 4;
+      //      }
+
+
+      private int sizeOf(final double[] values) {
+         return values.length * 8;
       }
 
 
@@ -113,13 +118,13 @@ public class BerkeleyDBMercatorTile
       }
 
 
-      private static Sector sectorFor(final byte[] id) {
-         Sector currentSector = Sector.FULL_SPHERE;
-         for (final byte b : id) {
-            currentSector = createSectorForChild(currentSector, b);
-         }
-         return currentSector;
-      }
+      //      private static Sector sectorFor(final byte[] id) {
+      //         Sector currentSector = Sector.FULL_SPHERE;
+      //         for (final byte b : id) {
+      //            currentSector = createSectorForChild(currentSector, b);
+      //         }
+      //         return currentSector;
+      //      }
 
 
       private int getLevel() {
@@ -213,8 +218,8 @@ public class BerkeleyDBMercatorTile
       _averagePoint = averagePoint;
       _format = format;
 
-      final int remove_debug_code;
-      checkConsistency();
+      //      final int remove_debug_code;
+      //      checkConsistency();
    }
 
 
@@ -230,17 +235,17 @@ public class BerkeleyDBMercatorTile
       _averagePoint = pointsSet._averagePoint;
       _format = null;
 
-      final int remove_debug_code;
-      checkConsistency();
+      //      final int remove_debug_code;
+      //      checkConsistency();
    }
 
 
-   private void checkConsistency() {
-      final Sector sector = TileHeader.sectorFor(_id);
-      if (!sector.equals(_sector)) {
-         throw new RuntimeException("Logic error");
-      }
-   }
+   //   private void checkConsistency() {
+   //      final Sector sector = TileHeader.sectorFor(_id);
+   //      if (!sector.equals(_sector)) {
+   //         throw new RuntimeException("Logic error");
+   //      }
+   //   }
 
 
    @Override
@@ -269,10 +274,10 @@ public class BerkeleyDBMercatorTile
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-             ", level=" + getLevel() + //
-             ", points=" + _pointsCount + //
-             ", sector=" + _sector + //
-             "]";
+               ", level=" + getLevel() + //
+               ", points=" + _pointsCount + //
+               ", sector=" + _sector + //
+               "]";
    }
 
 
@@ -311,16 +316,16 @@ public class BerkeleyDBMercatorTile
       final byte formatID = format._formatID;
 
       final int entrySize = sizeOf(version) + //
-                            sizeOf(subversion) + //
-                            sizeOf(lowerLatitude) + //
-                            sizeOf(lowerLongitude) + //
-                            sizeOf(upperLatitude) + //
-                            sizeOf(upperLongitude) + //
-                            sizeOf(_pointsCount) + //
-                            sizeOf(averageLatitude) + //
-                            sizeOf(averageLongitude) + //
-                            sizeOf(averageHeight) + //
-                            sizeOf(formatID);
+               sizeOf(subversion) + //
+               sizeOf(lowerLatitude) + //
+               sizeOf(lowerLongitude) + //
+               sizeOf(upperLatitude) + //
+               sizeOf(upperLongitude) + //
+               sizeOf(_pointsCount) + //
+               sizeOf(averageLatitude) + //
+               sizeOf(averageLongitude) + //
+               sizeOf(averageHeight) + //
+               sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -339,22 +344,37 @@ public class BerkeleyDBMercatorTile
    }
 
 
-   private float[] createValues() {
-      final int bufferSize = _points.size();
-      final double averageLatitudeInRadians = _averagePoint._latitude._radians;
-      final double averageLongitudeInRadians = _averagePoint._longitude._radians;
-      final double averageHeight = _averagePoint._height;
+   //   private float[] createValues() {
+   //      final int bufferSize = _points.size();
+   //      final double averageLatitudeInRadians = _averagePoint._latitude._radians;
+   //      final double averageLongitudeInRadians = _averagePoint._longitude._radians;
+   //      final double averageHeight = _averagePoint._height;
+   //
+   //      final float[] values = new float[bufferSize * 3];
+   //      int i = 0;
+   //      for (final Geodetic3D point : _points) {
+   //         final float deltaLatitudeInRadians = (float) (point._latitude._radians - averageLatitudeInRadians);
+   //         final float deltaLongitudeInRadians = (float) (point._longitude._radians - averageLongitudeInRadians);
+   //         final float deltaHeight = (float) (point._height - averageHeight);
+   //
+   //         values[i++] = deltaLatitudeInRadians;
+   //         values[i++] = deltaLongitudeInRadians;
+   //         values[i++] = deltaHeight;
+   //      }
+   //
+   //      return values;
+   //   }
 
-      final float[] values = new float[bufferSize * 3];
+
+   private double[] createValues() {
+      final int bufferSize = _points.size();
+
+      final double[] values = new double[bufferSize * 3];
       int i = 0;
       for (final Geodetic3D point : _points) {
-         final float deltaLatitudeInRadians = (float) (point._latitude._radians - averageLatitudeInRadians);
-         final float deltaLongitudeInRadians = (float) (point._longitude._radians - averageLongitudeInRadians);
-         final float deltaHeight = (float) (point._height - averageHeight);
-
-         values[i++] = deltaLatitudeInRadians;
-         values[i++] = deltaLongitudeInRadians;
-         values[i++] = deltaHeight;
+         values[i++] = point._latitude._radians;
+         values[i++] = point._longitude._radians;
+         values[i++] = point._height;
       }
 
       return values;
@@ -362,12 +382,21 @@ public class BerkeleyDBMercatorTile
 
 
    private byte[] createNodeDataEntry(final Format format) {
-      final float[] values = createValues();
+      //      final float[] values = createValues();
+      //      final int entrySize = format.sizeOf(values);
+      //
+      //      final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
+      //      for (final float value : values) {
+      //         byteBuffer.putFloat(value);
+      //      }
+      //
+      //      return byteBuffer.array();
+      final double[] values = createValues();
       final int entrySize = format.sizeOf(values);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
-      for (final float value : values) {
-         byteBuffer.putFloat(value);
+      for (final double value : values) {
+         byteBuffer.putDouble(value);
       }
 
       return byteBuffer.array();
@@ -390,9 +419,9 @@ public class BerkeleyDBMercatorTile
 
 
    private static List<BerkeleyDBMercatorTile> getDescendants(final Transaction txn,
-                                                              final BerkeleyDBOctree octree,
-                                                              final byte[] id,
-                                                              final boolean loadPoints) {
+            final BerkeleyDBOctree octree,
+            final byte[] id,
+            final boolean loadPoints) {
       final List<BerkeleyDBMercatorTile> result = new ArrayList<BerkeleyDBMercatorTile>();
 
       final Database nodeDB = octree.getNodeDB();
@@ -425,15 +454,15 @@ public class BerkeleyDBMercatorTile
          }
       }
 
-      final int REMOVE_DEBUG_CODE;
-      for (final BerkeleyDBMercatorTile descendant : result) {
-         if (!Utils.hasSamePrefix(id, descendant._id)) {
-            throw new RuntimeException("Logic error");
-         }
-         if (!Utils.isGreaterThan(descendant._id, id)) {
-            throw new RuntimeException("Logic error");
-         }
-      }
+      //      final int REMOVE_DEBUG_CODE;
+      //      for (final BerkeleyDBMercatorTile descendant : result) {
+      //         if (!Utils.hasSamePrefix(id, descendant._id)) {
+      //            throw new RuntimeException("Logic error");
+      //         }
+      //         if (!Utils.isGreaterThan(descendant._id, id)) {
+      //            throw new RuntimeException("Logic error");
+      //         }
+      //      }
 
       return result;
    }
@@ -518,53 +547,53 @@ public class BerkeleyDBMercatorTile
    }
 
 
-   private static interface DescendantsVisitor {
-      void visit(BerkeleyDBMercatorTile descendant);
+   //   private static interface DescendantsVisitor {
+   //      void visit(BerkeleyDBMercatorTile descendant);
+   //
+   //
+   //      void finished();
+   //   }
 
 
-      void finished();
-   }
-
-
-   private static void visitDescendants(final Transaction txn,
-                                        final BerkeleyDBOctree octree,
-                                        final byte[] id,
-                                        final boolean loadPoints,
-                                        final DescendantsVisitor visitor) {
-      final Database nodeDB = octree.getNodeDB();
-
-      final CursorConfig cursorConfig = new CursorConfig();
-
-      try (final Cursor cursor = nodeDB.openCursor(txn, cursorConfig)) {
-         final DatabaseEntry keyEntry = new DatabaseEntry(id);
-         final DatabaseEntry dataEntry = new DatabaseEntry();
-         final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.DEFAULT);
-         if (status == OperationStatus.SUCCESS) {
-            byte[] key = keyEntry.getData();
-
-            if (!Utils.hasSamePrefix(key, id)) {
-               visitor.finished();
-               return;
-            }
-            if (Utils.isGreaterThan(key, id)) {
-               visitor.visit(fromDB(txn, octree, key, dataEntry.getData(), loadPoints));
-            }
-
-            while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
-               key = keyEntry.getData();
-               if (!Utils.hasSamePrefix(key, id)) {
-                  visitor.finished();
-                  return;
-               }
-               if (Utils.isGreaterThan(key, id)) {
-                  visitor.visit(fromDB(txn, octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
-               }
-            }
-         }
-      }
-
-      visitor.finished();
-   }
+   //   private static void visitDescendants(final Transaction txn,
+   //                                        final BerkeleyDBOctree octree,
+   //                                        final byte[] id,
+   //                                        final boolean loadPoints,
+   //                                        final DescendantsVisitor visitor) {
+   //      final Database nodeDB = octree.getNodeDB();
+   //
+   //      final CursorConfig cursorConfig = new CursorConfig();
+   //
+   //      try (final Cursor cursor = nodeDB.openCursor(txn, cursorConfig)) {
+   //         final DatabaseEntry keyEntry = new DatabaseEntry(id);
+   //         final DatabaseEntry dataEntry = new DatabaseEntry();
+   //         final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.DEFAULT);
+   //         if (status == OperationStatus.SUCCESS) {
+   //            byte[] key = keyEntry.getData();
+   //
+   //            if (!Utils.hasSamePrefix(key, id)) {
+   //               visitor.finished();
+   //               return;
+   //            }
+   //            if (Utils.isGreaterThan(key, id)) {
+   //               visitor.visit(fromDB(txn, octree, key, dataEntry.getData(), loadPoints));
+   //            }
+   //
+   //            while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+   //               key = keyEntry.getData();
+   //               if (!Utils.hasSamePrefix(key, id)) {
+   //                  visitor.finished();
+   //                  return;
+   //               }
+   //               if (Utils.isGreaterThan(key, id)) {
+   //                  visitor.visit(fromDB(txn, octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
+   //               }
+   //            }
+   //         }
+   //      }
+   //
+   //      visitor.finished();
+   //   }
 
 
    private static void splitPointsIntoDescendants(final Transaction txn,
@@ -610,7 +639,7 @@ public class BerkeleyDBMercatorTile
 
 
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
-                                                             final int level) {
+            final int level) {
       final List<TileHeader> result = new ArrayList<TileHeader>();
       descendantsHeadersOfLevel(result, level, header);
       return result;
@@ -665,9 +694,9 @@ public class BerkeleyDBMercatorTile
 
       if ((ancestor != null) || !descendants.isEmpty()) {
          System.out.println("***** INVARIANT FAILED: " + //
-                            "for tile=" + Utils.toIDString(_id) + //
-                            ", ancestor=" + ancestor + //
-                            ", descendants=" + descendants);
+                  "for tile=" + Utils.toIDString(_id) + //
+                  ", ancestor=" + ancestor + //
+                  ", descendants=" + descendants);
       }
    }
 
@@ -762,8 +791,7 @@ public class BerkeleyDBMercatorTile
       }
 
       if (!mergedPoints.isEmpty()) {
-         //throw new RuntimeException("Logic error!");
-         System.out.println("*** LOGIC-ERROR: Skipping points " + mergedPoints);
+         throw new RuntimeException("Logic error!");
       }
    }
 
@@ -933,14 +961,18 @@ public class BerkeleyDBMercatorTile
 
       final List<Geodetic3D> points = new ArrayList<Geodetic3D>(_pointsCount);
 
-      final double averageLatitude = _averagePoint._latitude._radians;
-      final double averageLongitude = _averagePoint._longitude._radians;
-      final double averageHeight = _averagePoint._height;
+      //      final double averageLatitude = _averagePoint._latitude._radians;
+      //      final double averageLongitude = _averagePoint._longitude._radians;
+      //      final double averageHeight = _averagePoint._height;
 
       for (int i = 0; i < _pointsCount; i++) {
-         final double lat = byteBuffer.getFloat() + averageLatitude;
-         final double lon = byteBuffer.getFloat() + averageLongitude;
-         final double height = byteBuffer.getFloat() + averageHeight;
+         //         final double lat = byteBuffer.getFloat() + averageLatitude;
+         //         final double lon = byteBuffer.getFloat() + averageLongitude;
+         //         final double height = byteBuffer.getFloat() + averageHeight;
+
+         final double lat = byteBuffer.getDouble();
+         final double lon = byteBuffer.getDouble();
+         final double height = byteBuffer.getDouble();
 
          final Geodetic3D point = new Geodetic3D( //
                   Angle.fromRadians(lat), //
