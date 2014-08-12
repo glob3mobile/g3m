@@ -47,6 +47,9 @@ public interface PersistentOctree
 
    public interface Statistics {
       void show();
+
+
+      long getPointsCount();
    }
 
 
@@ -70,5 +73,8 @@ public interface PersistentOctree
 
 
    PersistentOctree.Statistics getStatistics(boolean showProgress);
+
+
+   String getCloudName();
 
 }

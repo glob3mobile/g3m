@@ -29,8 +29,8 @@ public class CreateOT {
 
       final String cloudName = "Loudoun-VA";
 
-      final boolean deleteOT = false;
-      final boolean loadOT = false;
+      final boolean deleteOT = true;
+      final boolean loadOT = true;
       final boolean renameDone = false;
       final boolean visitOT = true;
       final boolean showStatisticsOT = true;
@@ -40,7 +40,6 @@ public class CreateOT {
       }
 
       if (loadOT) {
-         //"18STJ6448.txt.gz"
          loadOT(cloudName, renameDone, getFilesToLoad());
       }
 

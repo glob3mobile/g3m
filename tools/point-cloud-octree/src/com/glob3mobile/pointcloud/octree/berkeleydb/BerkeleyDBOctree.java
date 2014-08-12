@@ -320,6 +320,8 @@ PersistentOctree {
       private long                         _sumLevel;
       private int                          _minLevel;
       private int                          _maxLevel;
+      private long                         _minPointsCountPerNode;
+      private long                         _maxPointsCountPerNode;
 
 
       private BerkeleyDBStatistics(final String cloudName,
@@ -333,6 +335,8 @@ PersistentOctree {
       public void start() {
          _nodesCount = 0;
          _pointsCount = 0;
+         _minPointsCountPerNode = Long.MAX_VALUE;
+         _maxPointsCountPerNode = Long.MIN_VALUE;
          _sumLevel = 0;
          _minLevel = Integer.MAX_VALUE;
          _maxLevel = Integer.MIN_VALUE;
@@ -346,7 +350,14 @@ PersistentOctree {
          }
 
          _nodesCount++;
-         _pointsCount += node.getPointsCount();
+         final int nodePointsCount = node.getPointsCount();
+         _pointsCount += nodePointsCount;
+         if (nodePointsCount < _minPointsCountPerNode) {
+            _minPointsCountPerNode = nodePointsCount;
+         }
+         if (nodePointsCount > _maxPointsCountPerNode) {
+            _maxPointsCountPerNode = nodePointsCount;
+         }
 
          final int level = node.getLevel();
          _sumLevel += level;
@@ -375,13 +386,21 @@ PersistentOctree {
          System.out.println("   Points: " + _pointsCount);
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
-         System.out.println("   Points/Node: " + ((float) _pointsCount / _nodesCount));
+         System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 
          // final StatsConfig config = new StatsConfig();
          // final EnvironmentStats stats = _env.getStats(config);
          // System.out.println(stats);
+      }
+
+
+      @Override
+      public long getPointsCount() {
+         return _pointsCount;
       }
 
    }
@@ -407,6 +426,12 @@ PersistentOctree {
       final BerkeleyDBStatistics statistics = new BerkeleyDBStatistics(_cloudName, progress);
       acceptVisitor(statistics);
       return statistics;
+   }
+
+
+   @Override
+   public String getCloudName() {
+      return _cloudName;
    }
 
 
