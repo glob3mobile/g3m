@@ -25,8 +25,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBMercatorTile
-implements
-PersistentOctree.Node {
+         implements
+            PersistentOctree.Node {
 
 
    private static enum Format {
@@ -269,10 +269,10 @@ PersistentOctree.Node {
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-               ", level=" + getLevel() + //
-               ", points=" + _pointsCount + //
-               ", sector=" + _sector + //
-               "]";
+             ", level=" + getLevel() + //
+             ", points=" + _pointsCount + //
+             ", sector=" + _sector + //
+             "]";
    }
 
 
@@ -311,16 +311,16 @@ PersistentOctree.Node {
       final byte formatID = format._formatID;
 
       final int entrySize = sizeOf(version) + //
-               sizeOf(subversion) + //
-               sizeOf(lowerLatitude) + //
-               sizeOf(lowerLongitude) + //
-               sizeOf(upperLatitude) + //
-               sizeOf(upperLongitude) + //
-               sizeOf(_pointsCount) + //
-               sizeOf(averageLatitude) + //
-               sizeOf(averageLongitude) + //
-               sizeOf(averageHeight) + //
-               sizeOf(formatID);
+                            sizeOf(subversion) + //
+                            sizeOf(lowerLatitude) + //
+                            sizeOf(lowerLongitude) + //
+                            sizeOf(upperLatitude) + //
+                            sizeOf(upperLongitude) + //
+                            sizeOf(_pointsCount) + //
+                            sizeOf(averageLatitude) + //
+                            sizeOf(averageLongitude) + //
+                            sizeOf(averageHeight) + //
+                            sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -390,9 +390,9 @@ PersistentOctree.Node {
 
 
    private static List<BerkeleyDBMercatorTile> getDescendants(final Transaction txn,
-            final BerkeleyDBOctree octree,
-            final byte[] id,
-            final boolean loadPoints) {
+                                                              final BerkeleyDBOctree octree,
+                                                              final byte[] id,
+                                                              final boolean loadPoints) {
       final List<BerkeleyDBMercatorTile> result = new ArrayList<BerkeleyDBMercatorTile>();
 
       final Database nodeDB = octree.getNodeDB();
@@ -453,7 +453,7 @@ PersistentOctree.Node {
          return;
       }
 
-      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, true);
+      final List<BerkeleyDBMercatorTile> descendants = getDescendants(txn, octree, id, false);
       if ((descendants != null) && !descendants.isEmpty()) {
          splitPointsIntoDescendants(txn, octree, header, pointsSet, descendants);
          return;
@@ -580,7 +580,12 @@ PersistentOctree.Node {
             // + " points into descendant " + toString(descendant._id) + " (" + points.size()
             // + " points not yet distributed)");
 
+            final int TODO;
+            descendant.getPoints(txn);
+
             descendant.mergePoints(txn, descendantPointsSet);
+
+            descendant._points = null;
          }
       }
 
@@ -605,7 +610,7 @@ PersistentOctree.Node {
 
 
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
-            final int level) {
+                                                             final int level) {
       final List<TileHeader> result = new ArrayList<TileHeader>();
       descendantsHeadersOfLevel(result, level, header);
       return result;
@@ -660,9 +665,9 @@ PersistentOctree.Node {
 
       if ((ancestor != null) || !descendants.isEmpty()) {
          System.out.println("***** INVARIANT FAILED: " + //
-                  "for tile=" + Utils.toIDString(_id) + //
-                  ", ancestor=" + ancestor + //
-                  ", descendants=" + descendants);
+                            "for tile=" + Utils.toIDString(_id) + //
+                            ", ancestor=" + ancestor + //
+                            ", descendants=" + descendants);
       }
    }
 
@@ -757,7 +762,8 @@ PersistentOctree.Node {
       }
 
       if (!mergedPoints.isEmpty()) {
-         throw new RuntimeException("Logic error!");
+         //throw new RuntimeException("Logic error!");
+         System.out.println("*** LOGIC-ERROR: Skipping points " + mergedPoints);
       }
    }
 
