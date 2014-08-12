@@ -27,14 +27,14 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
 
-   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 8;
-   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 8;
+   private static final int    DEFAULT_BUFFER_SIZE          = 1024 * 64;
+   private static final int    DEFAULT_MAX_POINTS_PER_TITLE = 1024 * 64;
    private static final String NODE_DATABASE_NAME           = "Node";
    private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
 
@@ -309,9 +309,9 @@ PersistentOctree {
 
 
    private static class BerkeleyDBStatistics
-            implements
-               PersistentOctree.Visitor,
-               PersistentOctree.Statistics {
+   implements
+   PersistentOctree.Visitor,
+   PersistentOctree.Statistics {
       private final String                 _cloudName;
       private final GUndeterminateProgress _progress;
 
@@ -387,8 +387,8 @@ PersistentOctree {
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                            ", Min=" + _minPointsCountPerNode + //
-                            ", Max=" + _maxPointsCountPerNode);
+                  ", Min=" + _minPointsCountPerNode + //
+                  ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 

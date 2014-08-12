@@ -22,28 +22,6 @@ public class ProcessOT {
       final int targetBufferSize = 1024 * 64;
       final int targetMaxPointsPerTitle = 1024 * 64;
 
-      // 128K
-      // ====
-      //      loading "Loudoun-VA-SORTED" [######################################################################] 100.00% [Finished in 7m 25s] | 67.6kB/s l10=34.9kB/s avr=34.2kB/s |
-      //               ======================================================================
-      //                Loudoun-VA-SORTED
-      //                  Points: 15571874
-      //                  Nodes: 245
-      //                  Levels: 14/18, Average=17.420408
-      //                  Points/Node: Average=63558.668, Min=545, Max=128099
-      //               ======================================================================
-      //
-      // 64K
-      // ===
-      //      loading "Loudoun-VA-SORTED" [######################################################################] 100.00% [Finished in 3m 27s] | 6.3MB/s l10=69.4kB/s avr=73.6kB/s |
-      //               ======================================================================
-      //                Loudoun-VA-SORTED
-      //                  Points: 15571874
-      //                  Nodes: 542
-      //                  Levels: 14/19, Average=17.998156
-      //                  Points/Node: Average=28730.395, Min=545, Max=64920
-      //               ======================================================================
-
 
       if (recreateTargetOT) {
          BerkeleyDBOctree.delete(targetCloudName);
@@ -76,7 +54,7 @@ public class ProcessOT {
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("  loading \"" + targetOctree.getCloudName() + "\" "
-                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
 
