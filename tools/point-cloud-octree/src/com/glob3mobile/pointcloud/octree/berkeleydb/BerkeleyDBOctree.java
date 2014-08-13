@@ -64,8 +64,14 @@ public class BerkeleyDBOctree
                                        final boolean createIfNotExists,
                                        final int bufferSize,
                                        final int maxPointsPerTitle) {
-      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize, maxPointsPerTitle);
+      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize, maxPointsPerTitle, false);
    }
+
+
+   public static PersistentOctree openReadOnly(final String cloudName) {
+      return new BerkeleyDBOctree(cloudName, false, 0, 0, false);
+   }
+
 
    private final String           _cloudName;
 
@@ -85,12 +91,15 @@ public class BerkeleyDBOctree
    private final Environment      _env;
    private final Database         _nodeDB;
    private final Database         _nodeDataDB;
+   private final boolean          _readOnly;
 
 
    private BerkeleyDBOctree(final String cloudName,
                             final boolean createIfNotExists,
                             final int bufferSize,
-                            final int maxPointsPerTitle) {
+                            final int maxPointsPerTitle,
+                            final boolean readOnly) {
+      _readOnly = readOnly;
       _cloudName = cloudName;
 
       _bufferSize = bufferSize;
@@ -109,12 +118,14 @@ public class BerkeleyDBOctree
       final EnvironmentConfig envConfig = new EnvironmentConfig();
       envConfig.setAllowCreate(createIfNotExists);
       envConfig.setTransactional(true);
+      envConfig.setReadOnly(readOnly);
       _env = new Environment(envHome, envConfig);
 
       final DatabaseConfig dbConfig = new DatabaseConfig();
       dbConfig.setAllowCreate(createIfNotExists);
       dbConfig.setTransactionalVoid(true);
       dbConfig.setKeyPrefixing(true);
+      dbConfig.setReadOnly(readOnly);
       //      dbConfig.setSortedDuplicates(true);
 
       _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
@@ -153,6 +164,10 @@ public class BerkeleyDBOctree
 
    @Override
    synchronized public void addPoint(final Geodetic3D point) {
+      if (_readOnly) {
+         throw new RuntimeException("Can't add points to readonly OT");
+      }
+
       _buffer.add(point);
 
       final double latitudeInRadians = point._latitude._radians;

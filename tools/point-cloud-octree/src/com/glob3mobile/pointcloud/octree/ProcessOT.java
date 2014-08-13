@@ -20,10 +20,45 @@ import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.PersistentOctree.Node;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
+import es.igosoftware.euclid.colors.GColorF;
+import es.igosoftware.util.GMath;
 import es.igosoftware.util.GProgress;
 
 
 public class ProcessOT {
+
+   private static final GColorF[] RAMP = new GColorF[] { GColorF.CYAN, GColorF.GREEN, GColorF.YELLOW, GColorF.RED };
+
+
+   private static GColorF interpolateColorFromRamp(final GColorF colorFrom,
+                                                   final GColorF[] ramp,
+                                                   final float alpha) {
+      final float rampStep = 1f / ramp.length;
+
+      final int toI;
+      if (GMath.closeTo(alpha, 1)) {
+         toI = ramp.length - 1;
+      }
+      else {
+         toI = (int) (alpha / rampStep);
+      }
+
+      final GColorF from;
+      if (toI == 0) {
+         from = colorFrom;
+      }
+      else {
+         from = ramp[toI - 1];
+      }
+
+      final float colorAlpha = (alpha % rampStep) / rampStep;
+      return from.mixedWidth(ramp[toI], colorAlpha);
+   }
+
+
+   private static Color toAWTColor(final GColorF color) {
+      return new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
+   }
 
 
    public static void main(final String[] args) {
@@ -56,7 +91,7 @@ public class ProcessOT {
       //         targetOctree.getStatistics(true).show();
       //      }
 
-      try (final PersistentOctree sourceOctree = BerkeleyDBOctree.open(sourceCloudName, false)) {
+      try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
          final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
          final long pointsCount = statistics.getPointsCount();
          statistics.show();
@@ -96,14 +131,27 @@ public class ProcessOT {
                   sortPoints(points, sortedVertices, lodIndices);
                }
 
-               progress.stepsDone(pointsSize);
+               double minHeight = Double.POSITIVE_INFINITY;
+               double maxHeight = Double.NEGATIVE_INFINITY;
+               for (final Geodetic3D point : points) {
+                  final double height = point._height;
+                  if (height < minHeight) {
+                     minHeight = height;
+                  }
+                  if (height > maxHeight) {
+                     maxHeight = height;
+                  }
+               }
 
                final boolean isExemplar = node.getID().equals("032010023013302231");
                System.out.println(node.getID() + " " + lodIndices);
 
                if (isExemplar) {
-                  createDebugImage(node, points, sortedVertices, lodIndices);
+                  createDebugImage(node, points, sortedVertices, lodIndices, minHeight, maxHeight);
                }
+
+               progress.stepsDone(pointsSize);
+
 
                final boolean keepWorking = !isExemplar;
                //final boolean keepWorking = false;
@@ -114,11 +162,14 @@ public class ProcessOT {
             private void createDebugImage(final Node node,
                                           final List<Geodetic3D> points,
                                           final List<Integer> sortedVertices,
-                                          final List<Integer> lodIndices) {
+                                          final List<Integer> lodIndices,
+                                          final double minHeight,
+                                          final double maxHeight) {
                final Sector sector = node.getSector();
 
-               final int width = 512;
-               final int height = 512;
+               final int width = 1024;
+               final int height = 1024;
+
 
                //               final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
                //
@@ -161,13 +212,22 @@ public class ProcessOT {
                int cursor = 0;
                int lodLevel = 0;
 
+               final double deltaHeight = maxHeight - minHeight;
+
                for (final int maxLODIndex : lodIndices) {
                   final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
                   final Graphics2D g = image.createGraphics();
 
                   g.setColor(Color.WHITE);
+                  cursor = 0;
                   while (cursor <= maxLODIndex) {
                      final Geodetic3D point = points.get(sortedVertices.get(cursor));
+
+                     final float alpha = (float) ((point._height - minHeight) / deltaHeight);
+                     final GColorF color = interpolateColorFromRamp(GColorF.BLUE, RAMP, alpha);
+                     g.setColor(toAWTColor(color));
+
+
                      final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * width));
                      final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * height));
                      g.drawRect(x, y, 1, 1);
