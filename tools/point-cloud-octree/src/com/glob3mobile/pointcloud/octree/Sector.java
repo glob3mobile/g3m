@@ -70,12 +70,16 @@ public class Sector {
 
    public final Geodetic2D _lower;
    public final Geodetic2D _upper;
+   private final Angle     _deltaLatitude;
+   private final Angle     _deltaLongitude;
 
 
    public Sector(final Geodetic2D lower,
                  final Geodetic2D upper) {
       _lower = lower;
       _upper = upper;
+      _deltaLatitude = _upper._latitude.sub(_lower._latitude);
+      _deltaLongitude = _upper._longitude.sub(_lower._longitude);
    }
 
 
@@ -85,6 +89,8 @@ public class Sector {
                  final Angle upperLongitude) {
       _lower = new Geodetic2D(lowerLatitude, lowerLongitude);
       _upper = new Geodetic2D(upperLatitude, upperLongitude);
+      _deltaLatitude = _upper._latitude.sub(_lower._latitude);
+      _deltaLongitude = _upper._longitude.sub(_lower._longitude);
    }
 
 
@@ -104,6 +110,16 @@ public class Sector {
    @Override
    public String toString() {
       return "[Sector lower=" + _lower + ", upper=" + _upper + "]";
+   }
+
+
+   public final double getUCoordinate(final Angle longitude) {
+      return (longitude._radians - _lower._longitude._radians) / _deltaLongitude._radians;
+   }
+
+
+   public final double getVCoordinate(final Angle latitude) {
+      return (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians;
    }
 
 

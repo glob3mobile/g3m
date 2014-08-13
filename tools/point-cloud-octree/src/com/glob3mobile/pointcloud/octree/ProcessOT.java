@@ -3,8 +3,15 @@
 package com.glob3mobile.pointcloud.octree;
 
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import com.glob3mobile.pointcloud.kdtree.KDInnerNode;
 import com.glob3mobile.pointcloud.kdtree.KDMonoLeafNode;
@@ -13,6 +20,7 @@ import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.PersistentOctree.Node;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
+import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.util.GProgress;
 
 
@@ -61,7 +69,7 @@ public class ProcessOT {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
 
@@ -93,14 +101,55 @@ public class ProcessOT {
 
                System.out.println(lodIndices);
 
+               final Sector sector = node.getSector();
+
+               final int width = 512;
+               final int height = 512;
+               final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+
+               final Graphics2D g = image.createGraphics();
+
+               int cursor = 0;
+               int lodLevel = 0;
+
+               final GColorF[] wheel = GColorF.RED.wheel(lodIndices.size());
+
+               for (final int lodIndex : lodIndices) {
+                  //                  final float alpha = (float) lodLevel / lodIndices.size();
+                  //                  final GColorF levelColor = GColorF.RED.mixedWidth(GColorF.BLUE, alpha);
+                  final Color levelColor = new Color(wheel[lodLevel].getRed(), wheel[lodLevel].getGreen(),
+                           wheel[lodLevel].getBlue(), 1);
+
+                  while (cursor <= lodIndex) {
+                     //                     g.setColor(new Color(levelColor.getRed(), levelColor.getGreen(), levelColor.getBlue(), 1));
+                     g.setColor(levelColor);
+                     final Geodetic3D point = points.get(cursor);
+                     final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * width));
+                     final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * height));
+                     g.drawRect(x, y, 1, 1);
+
+                     cursor++;
+                  }
+                  lodLevel++;
+               }
+
+               g.dispose();
+
+               try {
+                  ImageIO.write(image, "png", new File(node.getID() + ".png"));
+               }
+               catch (final IOException e) {
+                  throw new RuntimeException(e);
+               }
+
                final boolean keepWorking = false;
                return keepWorking;
             }
 
 
             private void sortPoints(final List<Geodetic3D> points,
-                                     final List<Integer> sortedVertices,
-                                     final List<Integer> lodIndices) {
+                                    final List<Integer> sortedVertices,
+                                    final List<Integer> lodIndices) {
                final KDTree tree = new KDTree(points);
 
                final KDTreeVisitor visitor = new KDTreeVisitor() {
@@ -162,7 +211,6 @@ public class ProcessOT {
 
       }
    }
-
 
    //   private static void loadTargetOT(final PersistentOctree sourceOctree,
    //                                    final long pointsCount,

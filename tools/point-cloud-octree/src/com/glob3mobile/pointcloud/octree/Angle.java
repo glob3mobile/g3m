@@ -3,6 +3,7 @@
 package com.glob3mobile.pointcloud.octree;
 
 
+
 public class Angle {
 
 
@@ -80,6 +81,11 @@ public class Angle {
          return false;
       }
       return true;
+   }
+
+
+   public final Angle sub(final Angle that) {
+      return Angle.fromRadians(_radians - that._radians);
    }
 
 
