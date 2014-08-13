@@ -29,18 +29,18 @@ public abstract class KDNode {
    }
 
 
-   private static int compareYXZ(final GVector3D point1,
-                                 final GVector3D point2) {
-      final int compareY = Double.compare(point1._y, point2._y);
-      if (compareY != 0) {
-         return compareY;
-      }
-      final int compareX = Double.compare(point1._x, point2._x);
-      if (compareX != 0) {
-         return compareX;
-      }
-      return Double.compare(point1._z, point2._z);
-   }
+   //   private static int compareYXZ(final GVector3D point1,
+   //                                 final GVector3D point2) {
+   //      final int compareY = Double.compare(point1._y, point2._y);
+   //      if (compareY != 0) {
+   //         return compareY;
+   //      }
+   //      final int compareX = Double.compare(point1._x, point2._x);
+   //      if (compareX != 0) {
+   //         return compareX;
+   //      }
+   //      return Double.compare(point1._z, point2._z);
+   //   }
 
 
    private static int compareXYZ(final GVector3D point1,
@@ -54,6 +54,20 @@ public abstract class KDNode {
          return compareY;
       }
       return Double.compare(point1._z, point2._z);
+   }
+
+
+   private static int compareYZX(final GVector3D point1,
+                                 final GVector3D point2) {
+      final int compareY = Double.compare(point1._y, point2._y);
+      if (compareY != 0) {
+         return compareY;
+      }
+      final int compareZ = Double.compare(point1._z, point2._z);
+      if (compareZ != 0) {
+         return compareZ;
+      }
+      return Double.compare(point1._x, point2._x);
    }
 
 
@@ -87,7 +101,7 @@ public abstract class KDNode {
                case X:
                   return compareXYZ(point1, point2);
                case Y:
-                  return compareYXZ(point1, point2);
+                  return compareYZX(point1, point2);
                case Z:
                   return compareZXY(point1, point2);
             }
@@ -98,6 +112,9 @@ public abstract class KDNode {
 
 
       final int medianI = (indexesSize / 2);
+
+      //      final GVector3D average = average(positions._cartesianPoints, indexes);
+      //      final int medianI = findNearest(average, positions._cartesianPoints, indexes);
 
       final int[] leftVerticesIndexes = Arrays.copyOfRange(indexes, 0, medianI);
       final int[] rightVerticesIndexes = Arrays.copyOfRange(indexes, medianI + 1, indexesSize);
@@ -111,6 +128,23 @@ public abstract class KDNode {
       //                            ", right side=" + rightVerticesIndexes.length);
 
       return new KDInnerNode(parent, positions, axis, medianVertexIndex, leftVerticesIndexes, rightVerticesIndexes);
+   }
+
+
+   private static int findNearest(final GVector3D average,
+                                  final List<GVector3D> cartesianPoints,
+                                  final int[] indexes) {
+      double shortestDistance = cartesianPoints.get(indexes[0]).squaredDistance(average);
+      int shortestI = 0;
+      for (int i = 1; i < indexes.length; i++) {
+         final GVector3D point = cartesianPoints.get(indexes[i]);
+         final double distance = point.squaredDistance(average);
+         if (distance < shortestDistance) {
+            shortestDistance = distance;
+            shortestI = i;
+         }
+      }
+      return shortestI;
    }
 
 
@@ -143,6 +177,25 @@ public abstract class KDNode {
       final GVector3D lower = new GVector3D(minX, minY, minZ);
       final GVector3D upper = new GVector3D(maxX, maxY, maxZ);
       return new GAxisAlignedBox(lower, upper);
+   }
+
+
+   private static GVector3D average(final List<GVector3D> cartesianPoints,
+                                    final int[] indexes) {
+      double sumX = 0;
+      double sumY = 0;
+      double sumZ = 0;
+      for (final int index : indexes) {
+         final GVector3D point = cartesianPoints.get(index);
+         sumX += point._x;
+         sumY += point._y;
+         sumZ += point._z;
+      }
+      final int indexesSize = indexes.length;
+      return new GVector3D( //
+               sumX / indexesSize, //
+               sumY / indexesSize, //
+               sumZ / indexesSize);
    }
 
 
