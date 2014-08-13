@@ -88,7 +88,7 @@ public abstract class KDNode {
 
       final GAxisAlignedBox cartesianBounds = getBounds(positions._cartesianPoints, indexes);
       final Axis axis = Axis.largestAxis(cartesianBounds);
-      //System.out.println("==> max axis=" + axis + "  " + cartesianBounds._extent);
+      // System.out.println("==> max axis=" + axis + "  " + cartesianBounds._extent);
 
 
       final IComparatorInt comparator = new IComparatorInt() {

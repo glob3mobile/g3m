@@ -116,37 +116,42 @@ public class ProcessOT {
 
                //               System.out.println("=> " + node.getID() + " level=" + node.getLevel() + ", points=" + node.getPoints().size());
 
-               final List<Geodetic3D> points = node.getPoints();
+               final int pointsSize = node.getPointsCount();
 
-               final int pointsSize = points.size();
-               final List<Integer> sortedVertices = new ArrayList<Integer>(pointsSize);
-               final List<Integer> lodIndices = new ArrayList<Integer>();
-
-               if (pointsSize == 1) {
-                  // just one vertex, no need to sort
-                  lodIndices.add(0);
-                  sortedVertices.add(0);
-               }
-               else {
-                  sortPoints(points, sortedVertices, lodIndices);
-               }
-
-               double minHeight = Double.POSITIVE_INFINITY;
-               double maxHeight = Double.NEGATIVE_INFINITY;
-               for (final Geodetic3D point : points) {
-                  final double height = point._height;
-                  if (height < minHeight) {
-                     minHeight = height;
-                  }
-                  if (height > maxHeight) {
-                     maxHeight = height;
-                  }
-               }
-
-               final boolean isExemplar = node.getID().equals("032010023013302231");
-               System.out.println(node.getID() + " " + lodIndices);
+               //final boolean isExemplar = node.getID().equals("032010023013302231");
+               final boolean isExemplar = pointsSize == 64920;
 
                if (isExemplar) {
+
+                  final List<Geodetic3D> points = node.getPoints();
+
+                  //final int pointsSize = points.size();
+                  final List<Integer> sortedVertices = new ArrayList<Integer>(pointsSize);
+                  final List<Integer> lodIndices = new ArrayList<Integer>();
+
+                  if (pointsSize == 1) {
+                     // just one vertex, no need to sort
+                     lodIndices.add(0);
+                     sortedVertices.add(0);
+                  }
+                  else {
+                     sortPoints(points, sortedVertices, lodIndices);
+                  }
+
+                  System.out.println(node.getID() + " " + lodIndices);
+
+                  double minHeight = Double.POSITIVE_INFINITY;
+                  double maxHeight = Double.NEGATIVE_INFINITY;
+                  for (final Geodetic3D point : points) {
+                     final double height = point._height;
+                     if (height < minHeight) {
+                        minHeight = height;
+                     }
+                     if (height > maxHeight) {
+                        maxHeight = height;
+                     }
+                  }
+
                   createDebugImage(node, points, sortedVertices, lodIndices, minHeight, maxHeight);
                }
 
@@ -335,45 +340,6 @@ public class ProcessOT {
 
       }
    }
-
-   //   private static void loadTargetOT(final PersistentOctree sourceOctree,
-   //                                    final long pointsCount,
-   //                                    final PersistentOctree targetOctree) {
-   //      final GProgress progress = new GProgress(pointsCount, true) {
-   //         @Override
-   //         public void informProgress(final long stepsDone,
-   //                                    final double percent,
-   //                                    final long elapsed,
-   //                                    final long estimatedMsToFinish) {
-   //            System.out.println("  loading \"" + targetOctree.getCloudName() + "\" "
-   //                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
-   //         }
-   //      };
-   //
-   //      sourceOctree.acceptVisitor(new PersistentOctree.Visitor() {
-   //         @Override
-   //         public boolean visit(final Node node) {
-   //            for (final Geodetic3D point : node.getPoints()) {
-   //               targetOctree.addPoint(point);
-   //               progress.stepDone();
-   //            }
-   //            return true;
-   //         }
-   //
-   //
-   //         @Override
-   //         public void stop() {
-   //            progress.finish();
-   //         }
-   //
-   //
-   //         @Override
-   //         public void start() {
-   //         }
-   //      });
-   //
-   //      targetOctree.flush();
-   //   }
 
 
 }

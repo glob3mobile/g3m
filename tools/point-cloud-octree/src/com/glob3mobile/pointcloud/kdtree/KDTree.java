@@ -13,8 +13,6 @@ public class KDTree {
 
 
    public KDTree(final List<Geodetic3D> positions) {
-      //      final long start = System.currentTimeMillis();
-
       final PositionsSet positionsSet = new PositionsSet(positions);
       final int indexesSize = positions.size();
       final int[] indexes = new int[indexesSize];
@@ -23,9 +21,6 @@ public class KDTree {
       }
 
       _root = KDNode.create(null, positionsSet, indexes);
-
-      //      final long elapsed = System.currentTimeMillis() - start;
-      //      System.out.println("==> created KDTree in " + elapsed + "ms");
    }
 
 
