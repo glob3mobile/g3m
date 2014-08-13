@@ -103,7 +103,7 @@ public class ProcessOT {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
 
