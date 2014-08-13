@@ -23,9 +23,9 @@ public class EllipsoidalPlanet {
    public EllipsoidalPlanet(final GVector3D radii) {
       _radii = radii;
       _radiiSquared = new GVector3D( //
-               radii._x * radii._x, //
-               radii._y * radii._y, //
-               radii._z * radii._z);
+               _radii._x * _radii._x, //
+               _radii._y * _radii._y, //
+               _radii._z * _radii._z);
 
       //      _radiiToTheFourth = new GVector3D( //
       //               _radiiSquared._x * _radiiSquared._x, //

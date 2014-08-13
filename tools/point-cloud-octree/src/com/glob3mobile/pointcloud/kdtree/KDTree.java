@@ -29,4 +29,17 @@ public class KDTree {
    }
 
 
+   public void breadthFirstAcceptVisitor(final KDTreeVisitor visitor) {
+      visitor.startVisiting(this);
+
+      try {
+         _root.breadthFirstAcceptVisitor(visitor);
+      }
+      catch (final KDTreeVisitor.AbortVisiting e) {
+      }
+
+      visitor.endVisiting(this);
+   }
+
+
 }

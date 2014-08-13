@@ -3,6 +3,7 @@
 package com.glob3mobile.pointcloud.kdtree;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import es.igosoftware.euclid.bounding.GAxisAlignedBox;
@@ -154,6 +155,22 @@ public abstract class KDNode {
       _parent = parent;
       _positions = positions;
    }
+
+
+   void breadthFirstAcceptVisitor(final KDTreeVisitor visitor) throws KDTreeVisitor.AbortVisiting {
+      final LinkedList<KDNode> queue = new LinkedList<KDNode>();
+      queue.addLast(this);
+
+      while (!queue.isEmpty()) {
+         final KDNode current = queue.removeFirst();
+
+         current.breadthFirstAcceptVisitor(visitor, queue);
+      }
+   }
+
+
+   protected abstract void breadthFirstAcceptVisitor(KDTreeVisitor visitor,
+                                                     LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting;
 
 
 }
