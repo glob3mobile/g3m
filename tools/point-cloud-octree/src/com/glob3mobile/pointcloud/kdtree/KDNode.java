@@ -169,8 +169,12 @@ public abstract class KDNode {
    }
 
 
-   protected abstract void breadthFirstAcceptVisitor(KDTreeVisitor visitor,
-                                                     LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting;
+   abstract void breadthFirstAcceptVisitor(KDTreeVisitor visitor,
+                                           LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting;
 
+
+   public final int getDepth() {
+      return (_parent == null) ? 0 : _parent.getDepth() + 1;
+   }
 
 }

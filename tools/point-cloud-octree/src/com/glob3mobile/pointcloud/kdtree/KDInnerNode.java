@@ -5,9 +5,9 @@ package com.glob3mobile.pointcloud.kdtree;
 import java.util.LinkedList;
 
 
-class KDInnerNode
-extends
-KDNode {
+public class KDInnerNode
+         extends
+            KDNode {
    private final Axis   _splitAxis;
    private final int    _medianVertexIndex;
    private final KDNode _leftNode;
@@ -15,11 +15,11 @@ KDNode {
 
 
    KDInnerNode(final KDNode parent,
-            final PositionsSet positions,
-            final Axis splitAxis,
-            final int medianVertexIndex,
-            final int[] leftVerticesIndexes,
-            final int[] rightVerticesIndexes) {
+               final PositionsSet positions,
+               final Axis splitAxis,
+               final int medianVertexIndex,
+               final int[] leftVerticesIndexes,
+               final int[] rightVerticesIndexes) {
       super(parent, positions);
       _splitAxis = splitAxis;
       _medianVertexIndex = medianVertexIndex;
@@ -29,8 +29,8 @@ KDNode {
 
 
    @Override
-   protected void breadthFirstAcceptVisitor(final KDTreeVisitor visitor,
-                                            final LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting {
+   void breadthFirstAcceptVisitor(final KDTreeVisitor visitor,
+                                  final LinkedList<KDNode> queue) throws KDTreeVisitor.AbortVisiting {
       visitor.visitInnerNode(this);
 
       if (_leftNode != null) {
@@ -39,6 +39,11 @@ KDNode {
       if (_rightNode != null) {
          queue.addLast(_rightNode);
       }
+   }
+
+
+   public int getVertexIndex() {
+      return _medianVertexIndex;
    }
 
 }

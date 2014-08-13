@@ -3,9 +3,13 @@
 package com.glob3mobile.pointcloud.octree;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.glob3mobile.pointcloud.kdtree.KDInnerNode;
+import com.glob3mobile.pointcloud.kdtree.KDMonoLeafNode;
 import com.glob3mobile.pointcloud.kdtree.KDTree;
+import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.PersistentOctree.Node;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
@@ -57,7 +61,7 @@ public class ProcessOT {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
 
@@ -71,12 +75,76 @@ public class ProcessOT {
                //               System.out.println("=> " + node.getID() + " level=" + node.getLevel() + ", points=" + node.getPoints().size());
 
                final List<Geodetic3D> points = node.getPoints();
+
+               final int pointsSize = points.size();
+               final List<Integer> sortedVertices = new ArrayList<Integer>(pointsSize);
+               final List<Integer> lodIndices = new ArrayList<Integer>();
+
+               if (pointsSize == 1) {
+                  // just one vertex, no need to sort
+                  lodIndices.add(0);
+                  sortedVertices.add(0);
+               }
+               else {
+                  sortPoints(points, sortedVertices, lodIndices);
+               }
+
+               progress.stepsDone(pointsSize);
+
+               System.out.println(lodIndices);
+
+               final boolean keepWorking = false;
+               return keepWorking;
+            }
+
+
+            private void sortPoints(final List<Geodetic3D> points,
+                                     final List<Integer> sortedVertices,
+                                     final List<Integer> lodIndices) {
                final KDTree tree = new KDTree(points);
 
-               progress.stepsDone(points.size());
+               final KDTreeVisitor visitor = new KDTreeVisitor() {
+                  private int _lastDepth = 0;
 
-               final boolean keepWorking = true;
-               return keepWorking;
+
+                  @Override
+                  public void startVisiting(final KDTree tree1) {
+                  }
+
+
+                  @Override
+                  public void visitInnerNode(final KDInnerNode innerNode) {
+                     pushVertexIndex(innerNode.getVertexIndex(), innerNode.getDepth());
+                  }
+
+
+                  @Override
+                  public void visitLeafNode(final KDMonoLeafNode leafNode) {
+                     pushVertexIndex(leafNode.getVertexIndex(), leafNode.getDepth());
+                  }
+
+
+                  private void pushVertexIndex(final int vertexIndex,
+                                               final int depth) {
+                     if (_lastDepth != depth) {
+                        _lastDepth = depth;
+
+                        final int sortedVerticesCount = sortedVertices.size();
+                        if (sortedVerticesCount > 0) {
+                           lodIndices.add(sortedVerticesCount - 1);
+                        }
+                     }
+
+                     sortedVertices.add(vertexIndex);
+                  }
+
+
+                  @Override
+                  public void endVisiting(final KDTree tree1) {
+                  }
+               };
+               tree.breadthFirstAcceptVisitor(visitor);
+               lodIndices.add(sortedVertices.size() - 1);
             }
 
 
