@@ -20,7 +20,6 @@ import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.PersistentOctree.Node;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
-import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.util.GProgress;
 
 
@@ -69,7 +68,7 @@ public class ProcessOT {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
 
@@ -99,51 +98,97 @@ public class ProcessOT {
 
                progress.stepsDone(pointsSize);
 
-               System.out.println(lodIndices);
+               final boolean isExemplar = node.getID().equals("032010023013302231");
+               System.out.println(node.getID() + " " + lodIndices);
 
+               if (isExemplar) {
+                  createDebugImage(node, points, sortedVertices, lodIndices);
+               }
+
+               final boolean keepWorking = !isExemplar;
+               //final boolean keepWorking = false;
+               return keepWorking;
+            }
+
+
+            private void createDebugImage(final Node node,
+                                          final List<Geodetic3D> points,
+                                          final List<Integer> sortedVertices,
+                                          final List<Integer> lodIndices) {
                final Sector sector = node.getSector();
 
                final int width = 512;
                final int height = 512;
-               final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 
-               final Graphics2D g = image.createGraphics();
+               //               final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+               //
+               //               final Graphics2D g = image.createGraphics();
+               //
+               //               int cursor = 0;
+               //               int lodLevel = 0;
+               //
+               //               final GColorF[] wheel = GColorF.RED.wheel(lodIndices.size());
+               //
+               //               for (final int lodIndex : lodIndices) {
+               //                  //                  final float alpha = (float) lodLevel / lodIndices.size();
+               //                  //                  final GColorF levelColor = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
+               //                  final Color levelColor = new Color(wheel[lodLevel].getRed(), wheel[lodLevel].getGreen(),
+               //                           wheel[lodLevel].getBlue(), 1);
+               //
+               //                  while (cursor <= lodIndex) {
+               //                     // g.setColor(new Color(levelColor.getRed(), levelColor.getGreen(), levelColor.getBlue(), 1));
+               //                     g.setColor(levelColor);
+               //                     final Geodetic3D point = points.get(sortedVertices.get(cursor));
+               //                     final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * width));
+               //                     final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * height));
+               //                     g.drawRect(x, y, 1, 1);
+               //
+               //                     cursor++;
+               //                  }
+               //                  lodLevel++;
+               //               }
+               //
+               //               g.dispose();
+               //
+               //               try {
+               //                  ImageIO.write(image, "png", new File("_DEBUG_" + node.getID() + ".png"));
+               //               }
+               //               catch (final IOException e) {
+               //                  throw new RuntimeException(e);
+               //               }
+
 
                int cursor = 0;
                int lodLevel = 0;
 
-               final GColorF[] wheel = GColorF.RED.wheel(lodIndices.size());
+               for (final int maxLODIndex : lodIndices) {
+                  final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+                  final Graphics2D g = image.createGraphics();
 
-               for (final int lodIndex : lodIndices) {
-                  //                  final float alpha = (float) lodLevel / lodIndices.size();
-                  //                  final GColorF levelColor = GColorF.RED.mixedWidth(GColorF.BLUE, alpha);
-                  final Color levelColor = new Color(wheel[lodLevel].getRed(), wheel[lodLevel].getGreen(),
-                           wheel[lodLevel].getBlue(), 1);
-
-                  while (cursor <= lodIndex) {
-                     //                     g.setColor(new Color(levelColor.getRed(), levelColor.getGreen(), levelColor.getBlue(), 1));
-                     g.setColor(levelColor);
-                     final Geodetic3D point = points.get(cursor);
+                  g.setColor(Color.WHITE);
+                  while (cursor <= maxLODIndex) {
+                     final Geodetic3D point = points.get(sortedVertices.get(cursor));
                      final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * width));
                      final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * height));
                      g.drawRect(x, y, 1, 1);
 
                      cursor++;
                   }
+
+                  g.dispose();
+
+                  try {
+                     ImageIO.write(image, "png", new File("_DEBUG_" + node.getID() + "_lod_" + lodLevel + ".png"));
+                  }
+                  catch (final IOException e) {
+                     throw new RuntimeException(e);
+                  }
+
+
                   lodLevel++;
                }
 
-               g.dispose();
 
-               try {
-                  ImageIO.write(image, "png", new File(node.getID() + ".png"));
-               }
-               catch (final IOException e) {
-                  throw new RuntimeException(e);
-               }
-
-               final boolean keepWorking = false;
-               return keepWorking;
             }
 
 
