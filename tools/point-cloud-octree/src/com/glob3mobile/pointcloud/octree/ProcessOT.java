@@ -3,8 +3,13 @@
 package com.glob3mobile.pointcloud.octree;
 
 
+import java.util.List;
+
+import com.glob3mobile.pointcloud.kdtree.KDTree;
 import com.glob3mobile.pointcloud.octree.PersistentOctree.Node;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
+
+import es.igosoftware.util.GProgress;
 
 
 public class ProcessOT {
@@ -42,19 +47,19 @@ public class ProcessOT {
 
       try (final PersistentOctree sourceOctree = BerkeleyDBOctree.open(sourceCloudName, false)) {
          final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
-         //final long pointsCount = statistics.getPointsCount();
+         final long pointsCount = statistics.getPointsCount();
          statistics.show();
 
-         //         final GProgress progress = new GProgress(pointsCount, true) {
-         //            @Override
-         //            public void informProgress(final long stepsDone,
-         //                                       final double percent,
-         //                                       final long elapsed,
-         //                                       final long estimatedMsToFinish) {
-         //               System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-         //                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
-         //            }
-         //         };
+         final GProgress progress = new GProgress(pointsCount, true) {
+            @Override
+            public void informProgress(final long stepsDone,
+                                       final double percent,
+                                       final long elapsed,
+                                       final long estimatedMsToFinish) {
+               System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            }
+         };
 
          sourceOctree.acceptVisitor(new PersistentOctree.Visitor() {
             @Override
@@ -63,7 +68,13 @@ public class ProcessOT {
                //                  progress.stepDone();
                //               }
 
-               System.out.println("=> " + node.getID() + " level=" + node.getLevel() + ", points=" + node.getPoints().size());
+               //               System.out.println("=> " + node.getID() + " level=" + node.getLevel() + ", points=" + node.getPoints().size());
+
+               final List<Geodetic3D> points = node.getPoints();
+               final KDTree tree = new KDTree(points);
+
+               progress.stepsDone(points.size());
+
                final boolean keepWorking = true;
                return keepWorking;
             }
@@ -71,7 +82,7 @@ public class ProcessOT {
 
             @Override
             public void stop() {
-               //               progress.finish();
+               progress.finish();
             }
 
 
