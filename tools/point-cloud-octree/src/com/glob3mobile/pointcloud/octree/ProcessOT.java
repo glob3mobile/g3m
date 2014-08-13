@@ -14,7 +14,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import com.glob3mobile.pointcloud.kdtree.KDInnerNode;
-import com.glob3mobile.pointcloud.kdtree.KDMonoLeafNode;
+import com.glob3mobile.pointcloud.kdtree.KDLeafNode;
 import com.glob3mobile.pointcloud.kdtree.KDTree;
 import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.PersistentOctree.Node;
@@ -103,7 +103,7 @@ public class ProcessOT {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
 
@@ -261,25 +261,19 @@ public class ProcessOT {
                                     final List<Integer> sortedVertices,
                                     final List<Integer> lodIndices) {
 
+
+               final KDTree tree = new KDTree(points, 2);
+
                /*
-                 Median-Pivot
-                 ============
+                  arity=2
+                  032010023321221112 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4094, 8190, 16382, 33381, 64919]
 
-                 0320100230133020 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4094, 7062]
-                 0320100230133021 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4094, 8190, 16382, 32766, 44109]
-                 03201002301330221 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4094, 8190, 16382, 32766, 43098]
-                 032010023013302231 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4094, 8190, 16382, 32766, 51726]
-                 processing "Loudoun-VA" [######################################################################] 100.00% [Finished in 4s] | 3.5MB/s l2=3.5MB/s avr=3.5MB/s |
+                  arity=3
+                  032010023321221112 [1, 7, 25, 79, 241, 727, 2185, 6559, 19681, 64919]
 
-                 0320100230133020 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4062, 6474, 7031, 7061, 7062]
-                 0320100230133021 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4094, 8187, 16244, 29741, 40588, 43635, 44043, 44086, 44103, 44109]
-                 03201002301330221 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4093, 8182, 16319, 30782, 40987, 42694, 42972, 43067, 43097, 43098]
-                 032010023013302231 [0, 2, 6, 14, 30, 62, 126, 254, 510, 1022, 2046, 4094, 8182, 16255, 30532, 45117, 50814, 51668, 51723, 51726]
-                 processing "Loudoun-VA" [######################################################################] 100.00% [Finished in 7s] | 2.2MB/s l2=2.2MB/s avr=2.2MB/s |
-
+                  arity=4
+                  032010023321221112 [2, 14, 62, 254, 1022, 4094, 16382, 62777, 64919]
                 */
-
-               final KDTree tree = new KDTree(points);
 
                final KDTreeVisitor visitor = new KDTreeVisitor() {
                   private int _lastDepth = 0;
@@ -292,17 +286,17 @@ public class ProcessOT {
 
                   @Override
                   public void visitInnerNode(final KDInnerNode innerNode) {
-                     pushVertexIndex(innerNode.getVertexIndex(), innerNode.getDepth());
+                     pushVertexIndex(innerNode.getVertexIndexes(), innerNode.getDepth());
                   }
 
 
                   @Override
-                  public void visitLeafNode(final KDMonoLeafNode leafNode) {
-                     pushVertexIndex(leafNode.getVertexIndex(), leafNode.getDepth());
+                  public void visitLeafNode(final KDLeafNode leafNode) {
+                     pushVertexIndex(leafNode.getVertexIndexes(), leafNode.getDepth());
                   }
 
 
-                  private void pushVertexIndex(final int vertexIndex,
+                  private void pushVertexIndex(final int[] vertexIndexes,
                                                final int depth) {
                      if (_lastDepth != depth) {
                         _lastDepth = depth;
@@ -313,7 +307,9 @@ public class ProcessOT {
                         }
                      }
 
-                     sortedVertices.add(vertexIndex);
+                     for (final int vertexIndex : vertexIndexes) {
+                        sortedVertices.add(vertexIndex);
+                     }
                   }
 
 

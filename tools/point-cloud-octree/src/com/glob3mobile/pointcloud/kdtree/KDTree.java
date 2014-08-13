@@ -12,7 +12,12 @@ public class KDTree {
    private final KDNode _root;
 
 
-   public KDTree(final List<Geodetic3D> positions) {
+   public KDTree(final List<Geodetic3D> positions,
+                 final int arity) {
+      if (arity < 2) {
+         throw new RuntimeException("Invalid arity: " + arity);
+      }
+
       final PositionsSet positionsSet = new PositionsSet(positions);
       final int indexesSize = positions.size();
       final int[] indexes = new int[indexesSize];
@@ -20,7 +25,7 @@ public class KDTree {
          indexes[i] = i;
       }
 
-      _root = KDNode.create(null, positionsSet, indexes);
+      _root = KDNode.create(null, positionsSet, indexes, arity);
    }
 
 

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class KDMonoLeafNode
          extends
-            KDNode {
+            KDLeafNode {
 
    private final int _vertexIndex;
 
@@ -29,6 +29,12 @@ public class KDMonoLeafNode
 
    public int getVertexIndex() {
       return _vertexIndex;
+   }
+
+
+   @Override
+   public int[] getVertexIndexes() {
+      return new int[] { _vertexIndex };
    }
 
 

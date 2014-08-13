@@ -73,7 +73,8 @@ public abstract class KDNode {
 
    static KDNode create(final KDNode parent,
                         final PositionsSet positions,
-                        final int[] indexes) {
+                        final int[] indexes,
+                        final int arity) {
 
       final int indexesSize = indexes.length;
 
@@ -85,10 +86,13 @@ public abstract class KDNode {
          return new KDMonoLeafNode(parent, positions, indexes[0]);
       }
 
+      if (indexesSize <= arity) {
+         return new KDMultiLeafNode(parent, positions, indexes);
+      }
 
       final GAxisAlignedBox cartesianBounds = getBounds(positions._cartesianPoints, indexes);
-      final Axis axis = Axis.largestAxis(cartesianBounds);
-      // System.out.println("==> max axis=" + axis + "  " + cartesianBounds._extent);
+      final Axis splitAxis = Axis.largestAxis(cartesianBounds);
+      // System.out.println("==> max axis=" + splitAxis + "  " + cartesianBounds._extent);
 
 
       final IComparatorInt comparator = new IComparatorInt() {
@@ -97,7 +101,7 @@ public abstract class KDNode {
                             final int index2) {
             final GVector3D point1 = positions._cartesianPoints.get(index1);
             final GVector3D point2 = positions._cartesianPoints.get(index2);
-            switch (axis) {
+            switch (splitAxis) {
                case X:
                   return compareXYZ(point1, point2);
                case Y:
@@ -105,47 +109,62 @@ public abstract class KDNode {
                case Z:
                   return compareZXY(point1, point2);
             }
-            throw new RuntimeException("Axis type not known: " + axis);
+            throw new RuntimeException("Axis type not known: " + splitAxis);
          }
       };
       GCollections.quickSort(indexes, 0, indexesSize - 1, comparator);
 
 
-      final int medianI = (indexesSize / 2);
+      //      final int medianI = (indexesSize / 2);
+      //
+      //      //      final GVector3D average = average(positions._cartesianPoints, indexes);
+      //      //      final int medianI = findNearest(average, positions._cartesianPoints, indexes);
+      //
+      //      final int[] leftVerticesIndexes = Arrays.copyOfRange(indexes, 0, medianI);
+      //      final int[] rightVerticesIndexes = Arrays.copyOfRange(indexes, medianI + 1, indexesSize);
+      //
+      //      final int medianVertexIndex = indexes[medianI];
 
-      //      final GVector3D average = average(positions._cartesianPoints, indexes);
-      //      final int medianI = findNearest(average, positions._cartesianPoints, indexes);
+      //      return new KDInnerNode(parent, positions, axis, medianVertexIndex, leftVerticesIndexes, rightVerticesIndexes);
 
-      final int[] leftVerticesIndexes = Arrays.copyOfRange(indexes, 0, medianI);
-      final int[] rightVerticesIndexes = Arrays.copyOfRange(indexes, medianI + 1, indexesSize);
-
-      final int medianVertexIndex = indexes[medianI];
-
-      //         System.out.println(" ==> medianVertexIndex=" + medianVertexIndex + //
-      //                            ", median=" + positions._positions.get(medianVertexIndex) + //
-      //                            ", cartesian=" + positions._cartesianPoints.get(medianVertexIndex) + //
-      //                            ", left side=" + leftVerticesIndexes.length + //
-      //                            ", right side=" + rightVerticesIndexes.length);
-
-      return new KDInnerNode(parent, positions, axis, medianVertexIndex, leftVerticesIndexes, rightVerticesIndexes);
-   }
-
-
-   private static int findNearest(final GVector3D average,
-                                  final List<GVector3D> cartesianPoints,
-                                  final int[] indexes) {
-      double shortestDistance = cartesianPoints.get(indexes[0]).squaredDistance(average);
-      int shortestI = 0;
-      for (int i = 1; i < indexes.length; i++) {
-         final GVector3D point = cartesianPoints.get(indexes[i]);
-         final double distance = point.squaredDistance(average);
-         if (distance < shortestDistance) {
-            shortestDistance = distance;
-            shortestI = i;
-         }
+      final int[] mediansVertexIndexes = new int[arity - 1];
+      final int[] mediansIs = new int[arity - 1];
+      for (int i = 1; i < arity; i++) {
+         final int eachMedianI = (indexesSize / arity) * i;
+         mediansIs[i - 1] = eachMedianI;
+         mediansVertexIndexes[i - 1] = indexes[eachMedianI];
       }
-      return shortestI;
+      final int[][] childrenVerticesIndexes = new int[arity][];
+      int from = 0;
+      for (int i = 0; i < arity; i++) {
+         final int to = (i == (arity - 1)) ? indexesSize : mediansIs[i];
+         childrenVerticesIndexes[i] = Arrays.copyOfRange(indexes, from, to);
+         from = to + 1;
+      }
+
+
+      //      final boolean ok1 = Arrays.equals(leftVerticesIndexes, childrenVerticesIndexes[0]);
+      //      final boolean ok2 = Arrays.equals(rightVerticesIndexes, childrenVerticesIndexes[1]);
+
+      return new KDInnerNode(parent, positions, splitAxis, mediansVertexIndexes, childrenVerticesIndexes, arity);
    }
+
+
+   //   private static int findNearest(final GVector3D average,
+   //                                  final List<GVector3D> cartesianPoints,
+   //                                  final int[] indexes) {
+   //      double shortestDistance = cartesianPoints.get(indexes[0]).squaredDistance(average);
+   //      int shortestI = 0;
+   //      for (int i = 1; i < indexes.length; i++) {
+   //         final GVector3D point = cartesianPoints.get(indexes[i]);
+   //         final double distance = point.squaredDistance(average);
+   //         if (distance < shortestDistance) {
+   //            shortestDistance = distance;
+   //            shortestI = i;
+   //         }
+   //      }
+   //      return shortestI;
+   //   }
 
 
    private static GAxisAlignedBox getBounds(final List<GVector3D> cartesianPoints,
@@ -180,23 +199,23 @@ public abstract class KDNode {
    }
 
 
-   private static GVector3D average(final List<GVector3D> cartesianPoints,
-                                    final int[] indexes) {
-      double sumX = 0;
-      double sumY = 0;
-      double sumZ = 0;
-      for (final int index : indexes) {
-         final GVector3D point = cartesianPoints.get(index);
-         sumX += point._x;
-         sumY += point._y;
-         sumZ += point._z;
-      }
-      final int indexesSize = indexes.length;
-      return new GVector3D( //
-               sumX / indexesSize, //
-               sumY / indexesSize, //
-               sumZ / indexesSize);
-   }
+   //   private static GVector3D average(final List<GVector3D> cartesianPoints,
+   //                                    final int[] indexes) {
+   //      double sumX = 0;
+   //      double sumY = 0;
+   //      double sumZ = 0;
+   //      for (final int index : indexes) {
+   //         final GVector3D point = cartesianPoints.get(index);
+   //         sumX += point._x;
+   //         sumY += point._y;
+   //         sumZ += point._z;
+   //      }
+   //      final int indexesSize = indexes.length;
+   //      return new GVector3D( //
+   //               sumX / indexesSize, //
+   //               sumY / indexesSize, //
+   //               sumZ / indexesSize);
+   //   }
 
 
    private final KDNode       _parent;
@@ -216,7 +235,6 @@ public abstract class KDNode {
 
       while (!queue.isEmpty()) {
          final KDNode current = queue.removeFirst();
-
          current.breadthFirstAcceptVisitor(visitor, queue);
       }
    }
@@ -229,5 +247,8 @@ public abstract class KDNode {
    public final int getDepth() {
       return (_parent == null) ? 0 : _parent.getDepth() + 1;
    }
+
+
+   public abstract int[] getVertexIndexes();
 
 }
