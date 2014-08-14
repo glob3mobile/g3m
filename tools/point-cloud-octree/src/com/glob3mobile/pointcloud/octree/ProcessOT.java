@@ -90,11 +90,11 @@ public class ProcessOT {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
 
-         sourceOctree.acceptVisitor(new SortingTask(progress));
+         sourceOctree.acceptVisitor(new SortingTask(sourceCloudName + "_LOD", progress));
 
          //sourceOctree.acceptVisitor(new CreateMapTask(progress, statistics, 2048 * 2));
 
