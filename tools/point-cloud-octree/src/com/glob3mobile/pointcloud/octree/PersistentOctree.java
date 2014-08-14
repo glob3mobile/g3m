@@ -50,6 +50,15 @@ AutoCloseable {
 
 
       long getPointsCount();
+
+
+      Sector getSector();
+
+
+      double getMinHeigth();
+
+
+      double getMaxHeigth();
    }
 
 

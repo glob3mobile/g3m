@@ -337,6 +337,9 @@ public class BerkeleyDBOctree
       private int                          _maxLevel;
       private long                         _minPointsCountPerNode;
       private long                         _maxPointsCountPerNode;
+      private Sector                       _sector;
+      private double                       _minHeigth = Double.POSITIVE_INFINITY;
+      private double                       _maxHeigth = Double.NEGATIVE_INFINITY;
 
 
       private BerkeleyDBStatistics(final String cloudName,
@@ -360,8 +363,21 @@ public class BerkeleyDBOctree
 
       @Override
       public boolean visit(final PersistentOctree.Node node) {
+         final Sector nodeSector = node.getSector();
+         _sector = (_sector == null) ? nodeSector : _sector.mergedWith(nodeSector);
+
          if (_progress != null) {
             _progress.stepDone();
+         }
+
+         for (final Geodetic3D point : node.getPoints()) {
+            final double height = point._height;
+            if (height < _minHeigth) {
+               _minHeigth = height;
+            }
+            if (height > _maxHeigth) {
+               _maxHeigth = height;
+            }
          }
 
          _nodesCount++;
@@ -399,6 +415,8 @@ public class BerkeleyDBOctree
          System.out.println("======================================================================");
          System.out.println(" " + _cloudName);
          System.out.println("   Points: " + _pointsCount);
+         System.out.println("   Sector: " + _sector);
+         System.out.println("   Heights: " + _minHeigth + "/" + _maxHeigth + " (delta=" + (_maxHeigth - _minHeigth) + ")");
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
@@ -416,6 +434,24 @@ public class BerkeleyDBOctree
       @Override
       public long getPointsCount() {
          return _pointsCount;
+      }
+
+
+      @Override
+      public Sector getSector() {
+         return _sector;
+      }
+
+
+      @Override
+      public double getMinHeigth() {
+         return _minHeigth;
+      }
+
+
+      @Override
+      public double getMaxHeigth() {
+         return _maxHeigth;
       }
 
    }

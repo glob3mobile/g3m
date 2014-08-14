@@ -110,56 +110,52 @@ public class ProcessOT {
          sourceOctree.acceptVisitor(new PersistentOctree.Visitor() {
             @Override
             public boolean visit(final Node node) {
-               //               for (final Geodetic3D point : node.getPoints()) {
-               //                  progress.stepDone();
-               //               }
-
                //               System.out.println("=> " + node.getID() + " level=" + node.getLevel() + ", points=" + node.getPoints().size());
 
                final int pointsSize = node.getPointsCount();
 
                //final boolean isExemplar = node.getID().equals("032010023013302231");
-               final boolean isExemplar = pointsSize == 64920;
+               //final boolean isExemplar = pointsSize == 64920;
 
-               if (isExemplar) {
+               //               if (isExemplar) {
 
-                  final List<Geodetic3D> points = node.getPoints();
+               final List<Geodetic3D> points = node.getPoints();
 
-                  //final int pointsSize = points.size();
-                  final List<Integer> sortedVertices = new ArrayList<Integer>(pointsSize);
-                  final List<Integer> lodIndices = new ArrayList<Integer>();
+               //final int pointsSize = points.size();
+               final List<Integer> sortedVertices = new ArrayList<Integer>(pointsSize);
+               final List<Integer> lodIndices = new ArrayList<Integer>();
 
-                  if (pointsSize == 1) {
-                     // just one vertex, no need to sort
-                     lodIndices.add(0);
-                     sortedVertices.add(0);
-                  }
-                  else {
-                     sortPoints(points, sortedVertices, lodIndices);
-                  }
-
-                  System.out.println(node.getID() + " " + lodIndices);
-
-                  double minHeight = Double.POSITIVE_INFINITY;
-                  double maxHeight = Double.NEGATIVE_INFINITY;
-                  for (final Geodetic3D point : points) {
-                     final double height = point._height;
-                     if (height < minHeight) {
-                        minHeight = height;
-                     }
-                     if (height > maxHeight) {
-                        maxHeight = height;
-                     }
-                  }
-
-                  createDebugImage(node, points, sortedVertices, lodIndices, minHeight, maxHeight);
+               if (pointsSize == 1) {
+                  // just one vertex, no need to sort
+                  lodIndices.add(0);
+                  sortedVertices.add(0);
                }
+               else {
+                  sortPoints(points, sortedVertices, lodIndices);
+               }
+
+               //System.out.println(node.getID() + " " + lodIndices);
+
+               double minHeight = Double.POSITIVE_INFINITY;
+               double maxHeight = Double.NEGATIVE_INFINITY;
+               for (final Geodetic3D point : points) {
+                  final double height = point._height;
+                  if (height < minHeight) {
+                     minHeight = height;
+                  }
+                  if (height > maxHeight) {
+                     maxHeight = height;
+                  }
+               }
+
+               //createDebugImage(node, points, sortedVertices, lodIndices, minHeight, maxHeight);
+               //               }
 
                progress.stepsDone(pointsSize);
 
 
-               final boolean keepWorking = !isExemplar;
-               //final boolean keepWorking = false;
+               //final boolean keepWorking = !isExemplar;
+               final boolean keepWorking = true;
                return keepWorking;
             }
 

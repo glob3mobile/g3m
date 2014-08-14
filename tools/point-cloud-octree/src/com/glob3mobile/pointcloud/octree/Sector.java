@@ -97,13 +97,13 @@ public class Sector {
    public final boolean contains(final Angle latitude,
                                  final Angle longitude) {
       return latitude.isBetween(_lower._latitude, _upper._latitude) && //
-             longitude.isBetween(_lower._longitude, _upper._longitude);
+               longitude.isBetween(_lower._longitude, _upper._longitude);
    }
 
 
    public final boolean fullContains(final Sector that) {
       return contains(that._lower._latitude, that._lower._longitude) && //
-               contains(that._upper._latitude, that._upper._longitude);
+             contains(that._upper._latitude, that._upper._longitude);
    }
 
 
@@ -164,5 +164,17 @@ public class Sector {
       return true;
    }
 
+
+   public final Sector mergedWith(final Sector that) {
+      final Angle lowLat = Angle.min(_lower._latitude, that._lower._latitude);
+      final Angle lowLon = Angle.min(_lower._longitude, that._lower._longitude);
+      final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
+
+      final Angle upLat = Angle.max(_upper._latitude, that._upper._latitude);
+      final Angle upLon = Angle.max(_upper._longitude, that._upper._longitude);
+      final Geodetic2D up = new Geodetic2D(upLat, upLon);
+
+      return new Sector(low, up);
+   }
 
 }

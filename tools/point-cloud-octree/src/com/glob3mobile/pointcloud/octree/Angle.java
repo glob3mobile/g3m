@@ -3,7 +3,6 @@
 package com.glob3mobile.pointcloud.octree;
 
 
-
 public class Angle {
 
 
@@ -45,7 +44,8 @@ public class Angle {
 
    @Override
    public String toString() {
-      return _degrees + "d/" + _radians + "r";
+      //      return _degrees + "d/" + _radians + "r";
+      return _degrees + "d";
    }
 
 
@@ -86,6 +86,18 @@ public class Angle {
 
    public final Angle sub(final Angle that) {
       return Angle.fromRadians(_radians - that._radians);
+   }
+
+
+   public static Angle min(final Angle a1,
+                           final Angle a2) {
+      return (a1._radians < a2._radians) ? a1 : a2;
+   }
+
+
+   public static Angle max(final Angle a1,
+                           final Angle a2) {
+      return (a1._radians > a2._radians) ? a1 : a2;
    }
 
 
