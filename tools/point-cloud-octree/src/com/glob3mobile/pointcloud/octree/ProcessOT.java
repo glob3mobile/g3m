@@ -63,8 +63,8 @@ public class ProcessOT {
 
 
    private static class SortingTask
-   implements
-   PersistentOctree.Visitor {
+            implements
+               PersistentOctree.Visitor {
       private final GProgress _progress;
 
 
@@ -296,8 +296,8 @@ public class ProcessOT {
 
 
    private static class CreateMapTask
-   implements
-   PersistentOctree.Visitor {
+            implements
+               PersistentOctree.Visitor {
 
       private final GProgress _progress;
       private final Sector    _mapSector;
@@ -410,7 +410,7 @@ public class ProcessOT {
       //      }
 
       try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
-         final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true, true);
+         final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
          final long pointsCount = statistics.getPointsCount();
          statistics.show();
 
@@ -421,7 +421,7 @@ public class ProcessOT {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
 

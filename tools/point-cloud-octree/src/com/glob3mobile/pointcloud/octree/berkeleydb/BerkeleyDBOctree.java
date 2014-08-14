@@ -3,7 +3,12 @@
 package com.glob3mobile.pointcloud.octree.berkeleydb;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +97,7 @@ PersistentOctree {
    private final Database         _nodeDB;
    private final Database         _nodeDataDB;
    private final boolean          _readOnly;
+   private final File             _cachedStatisticsFile;
 
 
    private BerkeleyDBOctree(final String cloudName,
@@ -130,6 +136,8 @@ PersistentOctree {
 
       _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
       _nodeDataDB = _env.openDatabase(null, NODE_DATA_DATABASE_NAME, dbConfig);
+
+      _cachedStatisticsFile = new File("_stats_" + cloudName + ".ser");
    }
 
 
@@ -211,6 +219,8 @@ PersistentOctree {
    synchronized public void flush() {
       final int bufferSize = _buffer.size();
       if (bufferSize > 0) {
+         deleteCachedStatistics();
+
          final Sector targetSector = Sector.fromRadians( //
                   _minLatitudeInRadians, _minLongitudeInRadians, //
                   _maxLatitudeInRadians, _maxLongitudeInRadians);
@@ -326,21 +336,25 @@ PersistentOctree {
    private static class BerkeleyDBStatistics
             implements
                PersistentOctree.Visitor,
-               PersistentOctree.Statistics {
-      private final String                 _cloudName;
-      private final GUndeterminateProgress _progress;
+               PersistentOctree.Statistics,
+               Serializable {
 
-      private long                         _nodesCount;
-      private long                         _pointsCount;
-      private long                         _sumLevel;
-      private int                          _minLevel;
-      private int                          _maxLevel;
-      private int                          _minPointsCountPerNode;
-      private int                          _maxPointsCountPerNode;
-      private Sector                       _sector;
-      private double                       _minHeigth = Double.POSITIVE_INFINITY;
-      private double                       _maxHeigth = Double.NEGATIVE_INFINITY;
-      private final boolean                _fast;
+      private static final long      serialVersionUID = 1L;
+
+      private final String           _cloudName;
+      private GUndeterminateProgress _progress;
+
+      private long                   _nodesCount;
+      private long                   _pointsCount;
+      private long                   _sumLevel;
+      private int                    _minLevel;
+      private int                    _maxLevel;
+      private int                    _minPointsCountPerNode;
+      private int                    _maxPointsCountPerNode;
+      private Sector                 _sector;
+      private double                 _minHeigth       = Double.POSITIVE_INFINITY;
+      private double                 _maxHeigth       = Double.NEGATIVE_INFINITY;
+      private final boolean          _fast;
 
 
       private BerkeleyDBStatistics(final String cloudName,
@@ -411,6 +425,7 @@ PersistentOctree {
       public void stop() {
          if (_progress != null) {
             _progress.finish();
+            _progress = null;
          }
       }
 
@@ -475,9 +490,56 @@ PersistentOctree {
    }
 
 
+   private void deleteCachedStatistics() {
+      if (_cachedStatisticsFile.exists()) {
+         _cachedStatisticsFile.delete();
+      }
+   }
+
+
+   private BerkeleyDBStatistics getCachedStatistics() {
+      if (!_cachedStatisticsFile.exists()) {
+         return null;
+      }
+
+      try (final ObjectInputStream in = new ObjectInputStream(new FileInputStream(_cachedStatisticsFile))) {
+         return (BerkeleyDBStatistics) in.readObject();
+      }
+      catch (final ClassNotFoundException e) {
+         throw new RuntimeException(e);
+      }
+      catch (final IOException e) {
+         throw new RuntimeException(e);
+      }
+
+   }
+
+
+   private void saveCachedStatistics(final BerkeleyDBStatistics statistics) {
+      if (_cachedStatisticsFile.exists()) {
+         _cachedStatisticsFile.delete();
+      }
+
+      try (final ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(_cachedStatisticsFile, false))) {
+         out.writeObject(statistics);
+         out.flush();
+      }
+      catch (final IOException e) {
+         throw new RuntimeException(e);
+      }
+   }
+
+
    @Override
    public PersistentOctree.Statistics getStatistics(final boolean fast,
                                                     final boolean showProgress) {
+
+      final BerkeleyDBStatistics cachedStatistics = getCachedStatistics();
+      if (cachedStatistics != null) {
+         if (fast || !cachedStatistics._fast) {
+            return cachedStatistics;
+         }
+      }
 
       final GUndeterminateProgress progress;
       if (showProgress) {
@@ -495,6 +557,7 @@ PersistentOctree {
 
       final BerkeleyDBStatistics statistics = new BerkeleyDBStatistics(_cloudName, fast, progress);
       acceptVisitor(statistics);
+      saveCachedStatistics(statistics);
       return statistics;
    }
 

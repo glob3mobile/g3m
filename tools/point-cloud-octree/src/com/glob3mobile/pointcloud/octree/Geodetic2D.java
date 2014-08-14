@@ -2,8 +2,15 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.io.Serializable;
 
-public class Geodetic2D {
+
+public class Geodetic2D
+         implements
+            Serializable {
+
+
+   private static final long serialVersionUID = 1L;
 
 
    public static Geodetic2D fromRadians(final double lat,

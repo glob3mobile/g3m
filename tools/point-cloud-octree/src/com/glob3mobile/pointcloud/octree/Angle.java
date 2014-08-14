@@ -2,8 +2,15 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.io.Serializable;
 
-public class Angle {
+
+public class Angle
+         implements
+            Serializable {
+
+
+   private static final long serialVersionUID = 1L;
 
 
    public static Angle fromRadians(final double radians) {
