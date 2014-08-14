@@ -221,7 +221,7 @@ public class BerkeleyDBOctree
          }
 
 
-         final BerkeleyDBMercatorTile.TileHeader header = BerkeleyDBMercatorTile.deepestEnclosingTileHeader(targetSector);
+         final TileHeader header = TileHeader.deepestEnclosingTileHeader(targetSector);
 
          for (final Geodetic3D point : _buffer) {
             if (!targetSector.contains(point._latitude, point._longitude)) {
@@ -244,7 +244,7 @@ public class BerkeleyDBOctree
          final Transaction txn = _env.beginTransaction(null, txnConfig);
 
          final PointsSet pointsSet = new PointsSet(new ArrayList<Geodetic3D>(_buffer), averagePoint);
-         BerkeleyDBMercatorTile.insertPoints(txn, this, header, pointsSet);
+         BerkeleyDBOctreeNode.insertPoints(txn, this, header, pointsSet);
 
          txn.commit();
 
@@ -282,7 +282,7 @@ public class BerkeleyDBOctree
             final byte[] key = keyEntry.getData();
             final byte[] data = dataEntry.getData();
 
-            final BerkeleyDBMercatorTile tile = BerkeleyDBMercatorTile.fromDB(null, this, key, data, false);
+            final BerkeleyDBOctreeNode tile = BerkeleyDBOctreeNode.fromDB(null, this, key, data, false);
             final boolean keepGoing = visitor.visit(tile);
             if (!keepGoing) {
                break;
@@ -309,15 +309,15 @@ public class BerkeleyDBOctree
    }
 
 
-   BerkeleyDBMercatorTile readTile(final Transaction txn,
-                                   final byte[] id,
-                                   final boolean loadPoints) {
+   BerkeleyDBOctreeNode readTile(final Transaction txn,
+                                 final byte[] id,
+                                 final boolean loadPoints) {
       final DatabaseEntry keyEntry = new DatabaseEntry(id);
       final DatabaseEntry dataEntry = new DatabaseEntry();
 
       final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
       if (status == OperationStatus.SUCCESS) {
-         return BerkeleyDBMercatorTile.fromDB(txn, this, id, dataEntry.getData(), loadPoints);
+         return BerkeleyDBOctreeNode.fromDB(txn, this, id, dataEntry.getData(), loadPoints);
       }
       return null;
    }
