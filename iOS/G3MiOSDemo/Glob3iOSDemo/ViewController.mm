@@ -144,6 +144,9 @@
 #import <G3MiOSSDK/ChessboardLayer.hpp>
 #import <G3MiOSSDK/GEORectangleRasterSymbol.hpp>
 
+#import <G3MiOSSDK/DefaultInfoDisplay.hpp>
+
+
 
 //class TestVisibleSectorListener : public VisibleSectorListener {
 //public:
@@ -277,7 +280,9 @@ Mesh* createSectorMesh(const Planet* planet,
   //[[self G3MWidget] initSingletons];
   // [self initWithoutBuilder];
 
-  [self initCustomizedWithBuilder];
+  //[self initCustomizedWithBuilder];
+  
+  [self initTestingTileImageProvider];
 
   //  [self initWithMapBooBuilder];
 
@@ -380,6 +385,74 @@ public:
 //
 //};
 
+#pragma testing tile image provider
+#warning working now
+- (void) initTestingTileImageProvider
+{
+  G3MBuilder_iOS builder([self G3MWidget]);
+  
+  LayerSet* layerSet = new LayerSet();
+  const bool forceFirstLevelTilesRenderOnStart = true;
+  std::vector<std::string> errors;
+  layerSet->createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, errors);
+  
+  
+  
+  
+  
+  
+  MapQuestLayer* osm = MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10);
+  
+  //layerSet->addLayer(osm);
+  
+  WMSLayer *pnoa = new WMSLayer("PNOA",
+                                URL("http://www.idee.es/wms/PNOA/PNOA", false),
+                                WMS_1_1_0,
+                                Sector::fromDegrees(40.1640143280790858, -5.8564874640814313,
+                                                    40.3323148480663158, -5.5216079822178570),
+                                "image/png",
+                                "EPSG:4326",
+                                "",
+                                true,
+                                NULL,
+                                TimeInterval::fromDays(30),
+                                true,
+                                NULL,
+                                1);
+  
+  layerSet->addLayer(pnoa);
+  
+//  layerSet->addLayer(new WMSLayer("precipitation", //
+//                                  URL("http://wms.openweathermap.org/service", false), //
+//                                  WMS_1_1_0, //
+//                                  Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+//                                  "image/png", //
+//                                  "EPSG:4326", //
+//                                  "", //
+//                                  true, //
+//                                  NULL,
+//                                  TimeInterval::fromDays(30),
+//                                  true,
+//                                  NULL,
+//                                  1));
+
+  //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
+  builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
+  
+  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
+                                            40.3423148480663158, -5.5116079822178570);
+  
+  Default_HUDRenderer* hudRenderer = new Default_HUDRenderer();
+  InfoDisplay* infoDisplay = new DefaultInfoDisplay(hudRenderer);
+  //infoDisplay->showDisplay();
+  
+  builder.setHUDRenderer(hudRenderer);
+  builder.setInfoDisplay(infoDisplay);
+  
+  builder.setShownSector(sector);
+  builder.getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart);
+  builder.initializeWidget();
+}
 
 - (void) initWithBuilderAndSegmentedWorld
 {

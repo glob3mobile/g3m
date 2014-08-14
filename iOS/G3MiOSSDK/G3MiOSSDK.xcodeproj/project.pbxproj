@@ -36,6 +36,8 @@
 		4436A82118ED7B8F00CB6792 /* ChangedInfoListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4436A81F18ED518100CB6792 /* ChangedInfoListener.hpp */; };
 		44A0049417550C7300C6686D /* ICameraActivityListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44A00492175500B900C6686D /* ICameraActivityListener.hpp */; };
 		44D33CEE18DB07BC0027B892 /* ProtoRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */; };
+		44D922721998D1EA0066D180 /* DefaultInfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */; };
+		44D922731998D69D0066D180 /* DefaultInfoDisplay.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */; };
 		A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5607161B54A400340256 /* IJSONParser.cpp */; };
 		A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A70F560C161B5CD800340256 /* JSONParser_iOS.mm */; };
 		A70F5612161C4F8F00340256 /* JSONNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5611161C4F8F00340256 /* JSONNumber.cpp */; };
@@ -723,6 +725,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				44D922731998D69D0066D180 /* DefaultInfoDisplay.hpp in CopyFiles */,
 				CF9EDC65197835DC00F7351E /* GEOVectorTileImageProvider.hpp in CopyFiles */,
 				CF547B4B196C4921002DBBDD /* GEOVectorLayer.hpp in CopyFiles */,
 				349B218B196160F300F3397C /* GEORectangleRasterSymbol.hpp in CopyFiles */,
@@ -1153,6 +1156,8 @@
 		44846F7B16C0FF6700D067BB /* ITileVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ITileVisitor.hpp; path = Commons/Interfaces/ITileVisitor.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44A00492175500B900C6686D /* ICameraActivityListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ICameraActivityListener.hpp; path = Commons/Interfaces/ICameraActivityListener.hpp; sourceTree = "<group>"; };
 		44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ProtoRenderer.hpp; path = Commons/Rendererers/ProtoRenderer.hpp; sourceTree = "<group>"; };
+		44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DefaultInfoDisplay.cpp; path = Commons/Basic/DefaultInfoDisplay.cpp; sourceTree = "<group>"; };
+		44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultInfoDisplay.hpp; path = Commons/Basic/DefaultInfoDisplay.hpp; sourceTree = "<group>"; };
 		A70F5604161B53D000340256 /* IJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = IJSONParser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A70F5607161B54A400340256 /* IJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IJSONParser.cpp; sourceTree = "<group>"; };
 		A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = JSONParser_iOS.hpp; path = Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2213,6 +2218,8 @@
 				4435E3CC19052B860064A7D7 /* InfoDisplay.hpp */,
 				CF9EDC621978357D00F7351E /* GEOVectorTileImageProvider.cpp */,
 				CF9EDC631978357D00F7351E /* GEOVectorTileImageProvider.hpp */,
+				44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */,
+				44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2925,6 +2932,7 @@
 				D88EE1C71869B70C00AED85A /* MultiTexturedHUDQuadWidget.cpp in Sources */,
 				383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */,
 				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,
+				44D922721998D1EA0066D180 /* DefaultInfoDisplay.cpp in Sources */,
 				383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */,
 				D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */,
 				CFB57DA61860E4EF00D5B094 /* HUDRenderer.cpp in Sources */,

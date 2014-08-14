@@ -407,6 +407,9 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
   sortTiles(_firstLevelTiles);
 
   context->getLogger()->logInfo("Created %d first level tiles", _firstLevelTiles.size());
+  if (_firstLevelTiles.size() > 64) {
+    context->getLogger()->logWarning("%d tiles are many for the first level. We recommend a number of those less than 64. You can review some parameters (Render Sector and/or First Level) to reduce the number of tiles.", _firstLevelTiles.size());
+  }
 
   _firstLevelTilesJustCreated = true;
 }
@@ -476,8 +479,9 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
                                       _verticalExaggeration,
                                       _logTilesPetitions);
       }
+    } else {
+      
     }
-
     if (_texturizer != NULL) {
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
@@ -486,8 +490,7 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
     }
   }
 
-  if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart) {
-    if (!_allFirstLevelTilesAreTextureSolved) {
+  if (_tilesRenderParameters->_forceFirstLevelTilesRenderOnStart && !_allFirstLevelTilesAreTextureSolved) {
       const int firstLevelTilesCount = _firstLevelTiles.size();
       for (int i = 0; i < firstLevelTilesCount; i++) {
         Tile* tile = _firstLevelTiles[i];
@@ -511,7 +514,6 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
 
       _allFirstLevelTilesAreTextureSolved = true;
     }
-  }
 
   return RenderState::ready();
 }
@@ -902,6 +904,17 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
   if (_verticalExaggeration != verticalExaggeration) {
     _verticalExaggeration = verticalExaggeration;
     changed();
+  }
+}
+
+void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
+  if (_changedInfoListener != NULL) {
+    ILogger::instance()->logError("Changed Renderer Info Listener of PlanetRenderer already set");
+  }
+  _changedInfoListener = changedInfoListener;
+  
+  if(_changedInfoListener != NULL){
+    _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
   }
 }
 

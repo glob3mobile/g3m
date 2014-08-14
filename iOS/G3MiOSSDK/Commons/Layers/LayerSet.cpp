@@ -16,6 +16,8 @@
 #include "Context.hpp"
 #include "TileImageProvider.hpp"
 #include "CompositeTileImageProvider.hpp"
+#include "Color.hpp"
+#include "ChessboardTileImageProvider.hpp"
 
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
@@ -410,7 +412,8 @@ public:
 };
 
 
-LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(const std::vector<Layer*>& enableLayers,
+LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(const bool forceFirstLevelTilesRenderOnStart,
+                                                                                const std::vector<Layer*>& enableLayers,
                                                                                 std::vector<std::string>& errors) const {
 
   MutableLayerTilesRenderParameters mutableLayerTilesRenderParameters;
@@ -442,8 +445,19 @@ LayerTilesRenderParameters* LayerSet::checkAndComposeLayerTilesRenderParameters(
       return NULL;
     }
   }
+  
+  LayerTilesRenderParameters* params = mutableLayerTilesRenderParameters.create(errors);
 
-  return mutableLayerTilesRenderParameters.create(errors);
+  //if (!forceFirstLevelTilesRenderOnStart && params == NULL) {
+  if (params == NULL) {
+    errors.clear();
+    delete params;
+    mutableLayerTilesRenderParameters.update(LayerTilesRenderParameters::createDefaultMercator(2, 16), errors);
+    params = mutableLayerTilesRenderParameters.create(errors);
+  }
+  
+  
+  return params;
 }
 
 
@@ -459,7 +473,7 @@ LayerTilesRenderParameters* LayerSet::createLayerTilesRenderParameters(const boo
     return NULL;
   }
 
-  return checkAndComposeLayerTilesRenderParameters(enableLayers, errors);
+  return checkAndComposeLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, enableLayers, errors);
 }
 
 void LayerSet::takeLayersFrom(LayerSet* that) {
@@ -547,7 +561,10 @@ TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
       }
     }
   }
-
+  if (singleTileImageProvider == NULL) {
+    singleTileImageProvider = new ChessboardTileImageProvider(Color::black(), Color::white(), 4);
+  }
+  
   return (compositeTileImageProvider == NULL) ? singleTileImageProvider : compositeTileImageProvider;
 }
 
@@ -562,12 +579,17 @@ TileImageProvider* LayerSet::getTileImageProvider(const G3MRenderContext* rc,
 const std::vector<std::string> LayerSet::getInfo() {
   _infos.clear();
   const int layersCount = _layers.size();
+  bool anyEnabled = false;
   for (int i = 0; i < layersCount; i++) {
     Layer* layer = _layers[i];
     if (layer->isEnable()) {
+      anyEnabled = true;
       const std::string layerInfo = layer->getInfo();
       _infos.push_back(layerInfo);
     }
+  }
+  if (!anyEnabled) {
+    _infos.push_back("Can't find any enabled Layer at this zoom level");
   }
   return _infos;
 }
@@ -584,5 +606,7 @@ void LayerSet::setChangedInfoListener(ChangedInfoListener* changedInfoListener) 
     return;
   }
   _changedInfoListener = changedInfoListener;
-  changedInfo(getInfo());
+  if (_changedInfoListener != NULL) {
+    _changedInfoListener->changedInfo(getInfo());
+  }
 }

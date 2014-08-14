@@ -60,7 +60,8 @@ private:
   bool checkLayersRenderState(std::vector<std::string>& errors,
                               std::vector<Layer*>& enableLayers) const;
 
-  LayerTilesRenderParameters* checkAndComposeLayerTilesRenderParameters(const std::vector<Layer*>& enableLayers,
+  LayerTilesRenderParameters* checkAndComposeLayerTilesRenderParameters (const bool forceFirstLevelTilesRenderOnStart,
+                                                                        const std::vector<Layer*>& enableLayers,
                                                                         std::vector<std::string>& errors) const;
 
 public:

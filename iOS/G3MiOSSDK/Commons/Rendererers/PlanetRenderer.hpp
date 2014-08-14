@@ -466,6 +466,8 @@ public:
     }
   }
   
+  void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier);
+  
 };
 
 
