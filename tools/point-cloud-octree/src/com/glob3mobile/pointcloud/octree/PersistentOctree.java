@@ -59,6 +59,12 @@ AutoCloseable {
 
 
       double getMaxHeigth();
+
+
+      int getMinPointsPerNode();
+
+
+      int getMaxPointsPerNode();
    }
 
 
@@ -78,7 +84,8 @@ AutoCloseable {
    void acceptVisitor(PersistentOctree.Visitor visitor);
 
 
-   PersistentOctree.Statistics getStatistics(boolean showProgress);
+   PersistentOctree.Statistics getStatistics(boolean fast,
+                                             boolean showProgress);
 
 
    String getCloudName();

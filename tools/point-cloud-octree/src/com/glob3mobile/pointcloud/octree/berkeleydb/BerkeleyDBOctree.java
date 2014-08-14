@@ -27,8 +27,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -324,9 +324,9 @@ public class BerkeleyDBOctree
 
 
    private static class BerkeleyDBStatistics
-   implements
-   PersistentOctree.Visitor,
-   PersistentOctree.Statistics {
+            implements
+               PersistentOctree.Visitor,
+               PersistentOctree.Statistics {
       private final String                 _cloudName;
       private final GUndeterminateProgress _progress;
 
@@ -335,16 +335,19 @@ public class BerkeleyDBOctree
       private long                         _sumLevel;
       private int                          _minLevel;
       private int                          _maxLevel;
-      private long                         _minPointsCountPerNode;
-      private long                         _maxPointsCountPerNode;
+      private int                          _minPointsCountPerNode;
+      private int                          _maxPointsCountPerNode;
       private Sector                       _sector;
       private double                       _minHeigth = Double.POSITIVE_INFINITY;
       private double                       _maxHeigth = Double.NEGATIVE_INFINITY;
+      private final boolean                _fast;
 
 
       private BerkeleyDBStatistics(final String cloudName,
+                                   final boolean fast,
                                    final GUndeterminateProgress progress) {
          _cloudName = cloudName;
+         _fast = fast;
          _progress = progress;
       }
 
@@ -353,8 +356,8 @@ public class BerkeleyDBOctree
       public void start() {
          _nodesCount = 0;
          _pointsCount = 0;
-         _minPointsCountPerNode = Long.MAX_VALUE;
-         _maxPointsCountPerNode = Long.MIN_VALUE;
+         _minPointsCountPerNode = Integer.MAX_VALUE;
+         _maxPointsCountPerNode = Integer.MIN_VALUE;
          _sumLevel = 0;
          _minLevel = Integer.MAX_VALUE;
          _maxLevel = Integer.MIN_VALUE;
@@ -370,13 +373,15 @@ public class BerkeleyDBOctree
             _progress.stepDone();
          }
 
-         for (final Geodetic3D point : node.getPoints()) {
-            final double height = point._height;
-            if (height < _minHeigth) {
-               _minHeigth = height;
-            }
-            if (height > _maxHeigth) {
-               _maxHeigth = height;
+         if (!_fast) {
+            for (final Geodetic3D point : node.getPoints()) {
+               final double height = point._height;
+               if (height < _minHeigth) {
+                  _minHeigth = height;
+               }
+               if (height > _maxHeigth) {
+                  _maxHeigth = height;
+               }
             }
          }
 
@@ -420,8 +425,8 @@ public class BerkeleyDBOctree
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 
@@ -454,11 +459,25 @@ public class BerkeleyDBOctree
          return _maxHeigth;
       }
 
+
+      @Override
+      public int getMinPointsPerNode() {
+         return _minPointsCountPerNode;
+      }
+
+
+      @Override
+      public int getMaxPointsPerNode() {
+         // TODO Auto-generated method stub
+         return _maxPointsCountPerNode;
+      }
+
    }
 
 
    @Override
-   public PersistentOctree.Statistics getStatistics(final boolean showProgress) {
+   public PersistentOctree.Statistics getStatistics(final boolean fast,
+                                                    final boolean showProgress) {
 
       final GUndeterminateProgress progress;
       if (showProgress) {
@@ -474,7 +493,7 @@ public class BerkeleyDBOctree
          progress = null;
       }
 
-      final BerkeleyDBStatistics statistics = new BerkeleyDBStatistics(_cloudName, progress);
+      final BerkeleyDBStatistics statistics = new BerkeleyDBStatistics(_cloudName, fast, progress);
       acceptVisitor(statistics);
       return statistics;
    }

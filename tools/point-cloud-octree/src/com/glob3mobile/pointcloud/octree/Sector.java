@@ -70,8 +70,8 @@ public class Sector {
 
    public final Geodetic2D _lower;
    public final Geodetic2D _upper;
-   private final Angle     _deltaLatitude;
-   private final Angle     _deltaLongitude;
+   public final Angle      _deltaLatitude;
+   public final Angle      _deltaLongitude;
 
 
    public Sector(final Geodetic2D lower,
@@ -97,13 +97,13 @@ public class Sector {
    public final boolean contains(final Angle latitude,
                                  final Angle longitude) {
       return latitude.isBetween(_lower._latitude, _upper._latitude) && //
-               longitude.isBetween(_lower._longitude, _upper._longitude);
+             longitude.isBetween(_lower._longitude, _upper._longitude);
    }
 
 
    public final boolean fullContains(final Sector that) {
       return contains(that._lower._latitude, that._lower._longitude) && //
-             contains(that._upper._latitude, that._upper._longitude);
+               contains(that._upper._latitude, that._upper._longitude);
    }
 
 
