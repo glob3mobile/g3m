@@ -1,3 +1,5 @@
+
+
 package com.glob3mobile.pointcloud.octree;
 
 import java.awt.Graphics2D;
@@ -13,6 +15,7 @@ import com.glob3mobile.pointcloud.octree.PersistentOctree.Statistics;
 import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.util.GProgress;
 
+
 class CreateMapTask
 implements
 PersistentOctree.Visitor {
@@ -27,10 +30,19 @@ PersistentOctree.Visitor {
    private final int       _maxPointsPerNode;
 
 
-   CreateMapTask(final GProgress progress,
-                         final Statistics statistics,
-                         final int imageWidth) {
-      _progress = progress;
+   CreateMapTask(final String sourceCloudName,
+            final Statistics statistics,
+            final int imageWidth) {
+      _progress = new GProgress(statistics.getPointsCount(), true) {
+         @Override
+         public void informProgress(final long stepsDone,
+                                    final double percent,
+                                    final long elapsed,
+                                    final long estimatedMsToFinish) {
+            System.out.println("- drawing map \"" + sourceCloudName + "\" "
+                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+         }
+      };
       _mapSector = statistics.getSector();
       _minPointsPerNode = statistics.getMinPointsPerNode();
       _maxPointsPerNode = statistics.getMaxPointsPerNode();

@@ -14,6 +14,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
+import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
 import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.util.GMath;
@@ -63,55 +64,66 @@ public class ProcessOT {
       final String sourceCloudName = "Loudoun-VA";
       final String lodCloudName = sourceCloudName + "_LOD";
 
-      //      try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
-      //         final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
-      //         final long pointsCount = statistics.getPointsCount();
-      //         statistics.show();
-      //
-      //         final boolean createLOD = true;
-      //         if (createLOD) {
-      //            BerkeleyDBLOD.delete(lodCloudName);
-      //            final int maxPointsPerLeaf = 24 * 1024;
-      //            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
-      //         }
-      //
-      //         //sourceOctree.acceptVisitor(new CreateMapTask(progress, statistics, 2048 * 2));
-      //      }
+      final boolean createLOD = false;
+      final boolean createSourceMap = true;
+      final boolean showLODStats = false;
+      final boolean drawSampleLODNode = false;
 
-      System.out.println();
+      if (createLOD) {
+         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
+            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
+            final long pointsCount = statistics.getPointsCount();
+            statistics.show();
 
-      final boolean showLODStats = true;
+            BerkeleyDBLOD.delete(lodCloudName);
+            final int maxPointsPerLeaf = 24 * 1024;
+            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
+
+         }
+         System.out.println();
+      }
+
+      if (createSourceMap) {
+         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
+            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
+            statistics.show();
+
+            sourceOctree.acceptDepthFirstVisitor(new CreateMapTask(sourceCloudName, statistics, 2048 * 2));
+         }
+      }
+
       if (showLODStats) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
-            //            lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
-
-
-            final boolean drawSampleNode = true;
-            if (drawSampleNode) {
-               System.out.println();
-
-               //final String id = "032010023013302133";
-               final String id = "0320100233212300003";
-
-               final Sector sector = lodDB.getSector(id);
-
-               final long start = System.currentTimeMillis();
-               final List<PersistentLOD.Level> levels = lodDB.getLODLevels(id);
-               final long elapsed = System.currentTimeMillis() - start;
-               System.out.println("== " + elapsed + "ms");
-
-               final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
-               long totalPoints = 0;
-               for (final PersistentLOD.Level level : levels) {
-                  System.out.println(level);
-                  totalPoints += level.size();
-
-                  accumulatedPoints.addAll(level.getPoints());
-                  generateImage(id, level.getLevel(), sector, accumulatedPoints);
-               }
-               System.out.println("* Total Points=" + totalPoints);
-            }
+            lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
          }
+         System.out.println();
+      }
+
+      if (drawSampleLODNode) {
+         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
+
+            //final String id = "032010023013302133";
+            final String id = "0320100233212300003";
+
+            final Sector sector = lodDB.getSector(id);
+
+            final long start = System.currentTimeMillis();
+            final List<PersistentLOD.Level> levels = lodDB.getLODLevels(id);
+            final long elapsed = System.currentTimeMillis() - start;
+            System.out.println("== " + elapsed + "ms");
+
+            final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
+            long totalPoints = 0;
+            for (final PersistentLOD.Level level : levels) {
+               System.out.println(level);
+               totalPoints += level.size();
+
+               accumulatedPoints.addAll(level.getPoints());
+               generateImage(id, level.getLevel(), sector, accumulatedPoints);
+            }
+            System.out.println("* Total Points=" + totalPoints);
+         }
+         System.out.println();
       }
 
    }
