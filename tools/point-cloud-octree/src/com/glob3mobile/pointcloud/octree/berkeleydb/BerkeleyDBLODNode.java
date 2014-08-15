@@ -11,11 +11,11 @@ import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
 import com.glob3mobile.pointcloud.octree.Sector;
 import com.glob3mobile.pointcloud.octree.Utils;
+import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD.BerkeleyDBTransaction;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBLODNode
@@ -23,27 +23,30 @@ public class BerkeleyDBLODNode
             PersistentLOD.Node {
 
 
+   private static final int MAX_POINTS_IN_HEADER = 512;
+
+
    static BerkeleyDBLODNode create(final BerkeleyDBLOD db,
                                    final byte[] id,
-                                   final boolean dirty,
+                                   final int level,
                                    final List<Geodetic3D> points) {
-      return new BerkeleyDBLODNode(db, id, dirty, points);
+      return new BerkeleyDBLODNode(db, id, level, points);
    }
 
 
-   static BerkeleyDBLODNode fromDB(final com.sleepycat.je.Transaction txn,
-                                   final BerkeleyDBLOD db,
-                                   final byte[] id,
-                                   final boolean loadPoints) {
-      final DatabaseEntry keyEntry = new DatabaseEntry(id);
-      final DatabaseEntry dataEntry = new DatabaseEntry();
-
-      final OperationStatus status = db.getNodeDB().get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
-      if (status == OperationStatus.SUCCESS) {
-         return BerkeleyDBLODNode.fromDBData(txn, db, id, dataEntry.getData(), loadPoints);
-      }
-      return null;
-   }
+   //   static BerkeleyDBLODNode fromDB(final com.sleepycat.je.Transaction txn,
+   //                                   final BerkeleyDBLOD db,
+   //                                   final byte[] id,
+   //                                   final boolean loadPoints) {
+   //      final DatabaseEntry keyEntry = new DatabaseEntry(id);
+   //      final DatabaseEntry dataEntry = new DatabaseEntry();
+   //
+   //      final OperationStatus status = db.getNodeDB().get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
+   //      if (status == OperationStatus.SUCCESS) {
+   //         return BerkeleyDBLODNode.fromDBData(txn, db, id, dataEntry.getData(), loadPoints);
+   //      }
+   //      return null;
+   //   }
 
 
    static BerkeleyDBLODNode fromDB(final com.sleepycat.je.Transaction txn,
@@ -51,15 +54,6 @@ public class BerkeleyDBLODNode
                                    final byte[] id,
                                    final byte[] data,
                                    final boolean loadPoints) {
-      return BerkeleyDBLODNode.fromDBData(txn, db, id, data, loadPoints);
-   }
-
-
-   private static BerkeleyDBLODNode fromDBData(final Transaction txn,
-                                               final BerkeleyDBLOD db,
-                                               final byte[] id,
-                                               final byte[] data,
-                                               final boolean loadPoints) {
       final ByteBuffer byteBuffer = ByteBuffer.wrap(data);
 
       final byte version = byteBuffer.get();
@@ -71,26 +65,29 @@ public class BerkeleyDBLODNode
          throw new RuntimeException("Invalid subversion=" + subversion);
       }
 
-      final boolean dirty = byteBuffer.get() != 0;
+      final int level = byteBuffer.getInt();
 
       final int pointsCount = byteBuffer.getInt();
 
       final byte formatID = byteBuffer.get();
       final Format format = Format.getFromID(formatID);
 
-      final BerkeleyDBLODNode tile = new BerkeleyDBLODNode(db, id, dirty, pointsCount, format);
-
-      if (loadPoints) {
-         tile._points = tile.loadPoints(txn);
+      final BerkeleyDBLODNode tile = new BerkeleyDBLODNode(db, id, level, pointsCount, format);
+      if (pointsCount <= MAX_POINTS_IN_HEADER) {
+         tile._points = ByteBufferUtils.getPoints(byteBuffer, format, pointsCount);
+      }
+      else {
+         if (loadPoints) {
+            tile._points = tile.loadPoints(txn);
+         }
       }
       return tile;
    }
 
-
    private final BerkeleyDBLOD _db;
    private final byte[]        _id;
-   private boolean             _dirty;
-   private int                 _pointsCount;
+   private final int           _level;
+   private final int           _pointsCount;
    private List<Geodetic3D>    _points;
    private final Format        _format;
    private Sector              _sector = null;
@@ -98,11 +95,11 @@ public class BerkeleyDBLODNode
 
    private BerkeleyDBLODNode(final BerkeleyDBLOD db,
                              final byte[] id,
-                             final boolean dirty,
+                             final int level,
                              final List<Geodetic3D> points) {
       _db = db;
       _id = id;
-      _dirty = dirty;
+      _level = level;
       _pointsCount = points.size();
       _points = new ArrayList<Geodetic3D>(points);
       _format = null;
@@ -111,23 +108,23 @@ public class BerkeleyDBLODNode
 
    private BerkeleyDBLODNode(final BerkeleyDBLOD db,
                              final byte[] id,
-                             final boolean dirty,
+                             final int level,
                              final int pointsCount,
                              final Format format) {
       _db = db;
       _id = id;
-      _dirty = dirty;
+      _level = level;
       _pointsCount = pointsCount;
       _points = null;
       _format = format;
    }
 
 
-   private List<Geodetic3D> loadPoints(final Transaction txn) {
+   private List<Geodetic3D> loadPoints(final com.sleepycat.je.Transaction txn) {
       final Database nodeDataDB = _db.getNodeDataDB();
 
       final DatabaseEntry dataEntry = new DatabaseEntry();
-      final OperationStatus status = nodeDataDB.get(txn, new DatabaseEntry(_id), dataEntry, LockMode.DEFAULT);
+      final OperationStatus status = nodeDataDB.get(txn, createNodeDataKey(), dataEntry, LockMode.DEFAULT);
       if (status != OperationStatus.SUCCESS) {
          throw new RuntimeException("Unsupported status=" + status);
       }
@@ -145,68 +142,90 @@ public class BerkeleyDBLODNode
    }
 
 
-   private byte[] createNodeEntry(final Format format) {
+   private DatabaseEntry createNodeDataKey() {
+      final int size = ByteBufferUtils.sizeOf(_id) + //
+                       ByteBufferUtils.sizeOf((byte) 255) + //
+                       ByteBufferUtils.sizeOf(_level);
+      final ByteBuffer byteBuffer = ByteBuffer.allocate(size);
+      byteBuffer.put(_id);
+      byteBuffer.put((byte) 255);
+      byteBuffer.putInt(_level);
+      return new DatabaseEntry(byteBuffer.array());
+   }
+
+
+   private DatabaseEntry createNodeEntry(final Format format) {
       final byte version = 1;
       final byte subversion = 0;
       final byte formatID = format._formatID;
 
-      final byte dirtyByte = _dirty ? (byte) 1 : (byte) 0;
-
       final int entrySize = ByteBufferUtils.sizeOf(version) + //
                ByteBufferUtils.sizeOf(subversion) + //
-                            ByteBufferUtils.sizeOf(dirtyByte) + //
+               ByteBufferUtils.sizeOf(_level) + //
                             ByteBufferUtils.sizeOf(_pointsCount) + //
                             ByteBufferUtils.sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
       byteBuffer.put(subversion);
-      byteBuffer.put(dirtyByte);
+      byteBuffer.putInt(_level);
       byteBuffer.putInt(_pointsCount);
       byteBuffer.put(formatID);
 
-      return byteBuffer.array();
+      return new DatabaseEntry(byteBuffer.array());
    }
 
 
-   private byte[] createNodeDataEntry(final Format format) {
+   private DatabaseEntry createNodeWithPointsEntry(final Format format) {
+      final byte version = 1;
+      final byte subversion = 0;
+      final byte formatID = format._formatID;
+
+      final int entrySize = ByteBufferUtils.sizeOf(version) + //
+                            ByteBufferUtils.sizeOf(subversion) + //
+                            ByteBufferUtils.sizeOf(_level) + //
+                            ByteBufferUtils.sizeOf(_pointsCount) + //
+                            ByteBufferUtils.sizeOf(formatID) + //
+                            ByteBufferUtils.sizeOf(format, _points);
+
+      final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
+      byteBuffer.put(version);
+      byteBuffer.put(subversion);
+      byteBuffer.putInt(_level);
+      byteBuffer.putInt(_pointsCount);
+      byteBuffer.put(formatID);
+      ByteBufferUtils.put(byteBuffer, format, _points);
+
+      return new DatabaseEntry(byteBuffer.array());
+   }
+
+
+   private DatabaseEntry createNodeDataEntry(final Format format) {
       final int entrySize = ByteBufferUtils.sizeOf(format, _points);
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       ByteBufferUtils.put(byteBuffer, format, _points);
-      return byteBuffer.array();
+      return new DatabaseEntry(byteBuffer.array());
    }
 
 
-   void save(final Transaction txn) {
-      //      if (getPoints().size() >= _octree.getMaxPointsPerTile()) {
-      //         split(txn);
-      //         return;
-      //      }
-      //
-      //      if (getPoints().size() >= _octree.getMaxPointsPerTile()) {
-      //         System.out.println("***** logic error, tile " + getID() + " has more points than threshold (" + getPoints().size() + ">"
-      //                            + _octree.getMaxPointsPerTile() + ")");
-      //      }
-
-
+   void save(final com.sleepycat.je.Transaction txn) {
       final Database nodeDB = _db.getNodeDB();
       final Database nodeDataDB = _db.getNodeDataDB();
 
       final Format format = Format.LatLonHeight;
 
-      final DatabaseEntry key = new DatabaseEntry(_id);
-
-      nodeDB.put(txn, key, new DatabaseEntry(createNodeEntry(format)));
-      nodeDataDB.put(txn, key, new DatabaseEntry(createNodeDataEntry(format)));
-
-      //      final boolean checkInvariants = false;
-      //      if (checkInvariants) {
-      //         checkInvariants(txn);
-      //      }
+      final DatabaseEntry idEntry = new DatabaseEntry(_id);
+      if (getPointsCount() <= MAX_POINTS_IN_HEADER) {
+         nodeDB.put(txn, idEntry, createNodeWithPointsEntry(format));
+      }
+      else {
+         nodeDB.put(txn, idEntry, createNodeEntry(format));
+         nodeDataDB.put(txn, createNodeDataKey(), createNodeDataEntry(format));
+      }
    }
 
 
-   private List<Geodetic3D> getPoints(final Transaction txn) {
+   private List<Geodetic3D> pvtGetPoints(final com.sleepycat.je.Transaction txn) {
       if (_points == null) {
          _points = loadPoints(txn);
       }
@@ -214,30 +233,19 @@ public class BerkeleyDBLODNode
    }
 
 
-   void addPoints(final Transaction txn,
-                  final List<Geodetic3D> newPoints) {
-      final List<Geodetic3D> mergedPoints = new ArrayList<Geodetic3D>(newPoints.size() + _pointsCount);
-      mergedPoints.addAll(getPoints(txn));
-      mergedPoints.addAll(newPoints);
-      _points = mergedPoints;
-      _pointsCount = mergedPoints.size();
-   }
-
-
-   void setDirty(final boolean dirty) {
-      _dirty = dirty;
-   }
+   //   void addPoints(final com.sleepycat.je.Transaction txn,
+   //                  final List<Geodetic3D> newPoints) {
+   //      final List<Geodetic3D> mergedPoints = new ArrayList<Geodetic3D>(newPoints.size() + _pointsCount);
+   //      mergedPoints.addAll(pvtGetPoints(txn));
+   //      mergedPoints.addAll(newPoints);
+   //      _points = mergedPoints;
+   //      _pointsCount = mergedPoints.size();
+   //   }
 
 
    @Override
    public String getID() {
       return Utils.toIDString(_id);
-   }
-
-
-   @Override
-   public boolean isDirty() {
-      return _dirty;
    }
 
 
@@ -254,6 +262,14 @@ public class BerkeleyDBLODNode
 
 
    @Override
+   public List<Geodetic3D> getPoints(final PersistentLOD.Transaction transaction) {
+      final BerkeleyDBTransaction berkeleyDBTransaction = (BerkeleyDBLOD.BerkeleyDBTransaction) transaction;
+      final com.sleepycat.je.Transaction txn = (berkeleyDBTransaction == null) ? null : berkeleyDBTransaction._txn;
+      return pvtGetPoints(txn);
+   }
+
+
+   @Override
    public Sector getSector() {
       if (_sector == null) {
          _sector = TileHeader.sectorFor(_id);
@@ -264,7 +280,7 @@ public class BerkeleyDBLODNode
 
    @Override
    public int getLevel() {
-      return _id.length;
+      return _level;
    }
 
 

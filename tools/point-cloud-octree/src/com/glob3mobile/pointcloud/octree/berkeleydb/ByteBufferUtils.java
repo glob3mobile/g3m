@@ -54,6 +54,11 @@ public class ByteBufferUtils {
    }
 
 
+   public static int sizeOf(final byte[] any) {
+      return any.length;
+   }
+
+
    public static void put(final ByteBuffer byteBuffer,
                           final Sector sector) {
       byteBuffer.putDouble(sector._lower._latitude._radians);
@@ -142,8 +147,8 @@ public class ByteBufferUtils {
 
 
    public static List<Geodetic3D> getPoints(final ByteBuffer byteBuffer,
-            final Format format,
-            final int pointsCount) {
+                                            final Format format,
+                                            final int pointsCount) {
       switch (format) {
          case LatLonHeight:
             final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
@@ -158,4 +163,6 @@ public class ByteBufferUtils {
       }
 
    }
+
+
 }

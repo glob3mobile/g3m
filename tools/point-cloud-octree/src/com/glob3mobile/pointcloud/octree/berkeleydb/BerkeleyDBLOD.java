@@ -5,6 +5,7 @@ package com.glob3mobile.pointcloud.octree.berkeleydb;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
@@ -26,8 +27,8 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBLOD
-implements
-PersistentLOD {
+         implements
+            PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final String cloudName) {
@@ -91,7 +92,7 @@ PersistentLOD {
       dbConfig.setTransactionalVoid(true);
       dbConfig.setKeyPrefixing(true);
       dbConfig.setReadOnly(readOnly);
-      //      dbConfig.setSortedDuplicates(true);
+      dbConfig.setSortedDuplicates(true);
 
       _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
       _nodeDataDB = _env.openDatabase(null, NODE_DATA_DATABASE_NAME, dbConfig);
@@ -112,11 +113,11 @@ PersistentLOD {
    }
 
 
-   private static class BerkeleyDBTransaction
-   implements
-   PersistentLOD.Transaction {
+   static class BerkeleyDBTransaction
+            implements
+               PersistentLOD.Transaction {
 
-      private final com.sleepycat.je.Transaction _txn;
+      final com.sleepycat.je.Transaction _txn;
 
 
       private BerkeleyDBTransaction(final com.sleepycat.je.Transaction txn) {
@@ -158,7 +159,8 @@ PersistentLOD {
    @Override
    public void put(final PersistentLOD.Transaction transaction,
                    final String id,
-                   final boolean dirty,
+                   //final boolean dirty,
+                   final int level,
                    final List<Geodetic3D> points) {
       if (_readOnly) {
          throw new RuntimeException("Can't add points to readonly OT");
@@ -167,29 +169,30 @@ PersistentLOD {
       final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
       final byte[] binaryID = Utils.toBinaryID(id);
 
-      final BerkeleyDBLODNode node = BerkeleyDBLODNode.create(this, binaryID, dirty, points);
+      final BerkeleyDBLODNode node = BerkeleyDBLODNode.create(this, binaryID, level, points);
       node.save(txn);
    }
 
 
-   @Override
-   public void putOrMerge(final Transaction transaction,
-                          final String id,
-                          final boolean dirty,
-                          final List<Geodetic3D> points) {
-      final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
-      final byte[] binaryID = Utils.toBinaryID(id);
-
-      final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, binaryID, true);
-      if (node == null) {
-         put(transaction, id, dirty, points);
-      }
-      else {
-         node.addPoints(txn, points);
-         node.setDirty(dirty);
-         node.save(txn);
-      }
-   }
+   //   @Override
+   //   public void putOrMerge(final Transaction transaction,
+   //                          final String id,
+   //                          //final boolean dirty,
+   //                          final int level,
+   //                          final List<Geodetic3D> points) {
+   //      final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
+   //      final byte[] binaryID = Utils.toBinaryID(id);
+   //
+   //      final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, binaryID, true);
+   //      if (node == null) {
+   //         put(transaction, id, dirty, points);
+   //      }
+   //      else {
+   //         node.addPoints(txn, points);
+   //         node.setDirty(dirty);
+   //         node.save(txn);
+   //      }
+   //   }
 
 
    @Override
@@ -249,23 +252,153 @@ PersistentLOD {
    }
 
 
-   @Override
-   public List<PersistentLOD.Level> getLODLevels(final String id) {
-      final byte[] binaryID = Utils.toBinaryID(id);
-      final List<byte[]> ancestorsIDs = Utils.getPathFromRoot(binaryID);
+   private static enum Situation {
+      NotFoundSelfNorDescendants,
+      FoundDescendants,
+      FoundSelf,
+      FoundNothing;
+   }
 
-      final Sector sector = TileHeader.sectorFor(binaryID);
 
-      final List<PersistentLOD.Level> result = new ArrayList<PersistentLOD.Level>(ancestorsIDs.size());
+   private Situation getCursorSituation(final Cursor cursor,
+                                        final DatabaseEntry keyEntry,
+                                        final DatabaseEntry dataEntry,
+                                        final byte[] id) {
+      final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.DEFAULT);
+      switch (status) {
+         case SUCCESS: {
+            final byte[] key = keyEntry.getData();
 
-      for (final byte[] ancestorID : ancestorsIDs) {
-         final PersistentLOD.Level level = getAncestorContribution(ancestorID, sector);
-         if (level != null) {
-            result.add(level);
+            if (!Utils.hasSamePrefix(key, id)) {
+               return Situation.NotFoundSelfNorDescendants;
+            }
+            else if (Utils.isGreaterThan(key, id)) {
+               return Situation.FoundDescendants;
+            }
+            else {
+               return Situation.FoundSelf;
+            }
          }
+         case NOTFOUND: {
+            return Situation.FoundNothing;
+         }
+         default:
+            throw new RuntimeException("Status not supported: " + status);
+      }
+
+   }
+
+
+   private List<PersistentLOD.Level> getLODLevelsForSelf(final Cursor cursor,
+            final DatabaseEntry keyEntry,
+                                                         final DatabaseEntry dataEntry,
+                                                         final byte[] id) {
+
+      final List<PersistentLOD.Level> result = new ArrayList<PersistentLOD.Level>();
+
+      final com.sleepycat.je.Transaction txn = null;
+      BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), true);
+      result.add(new PersistentLOD.Level(node.getLevel(), node.getPoints()));
+
+      while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+         final byte[] key = keyEntry.getData();
+         if (Utils.isGreaterThan(key, id)) {
+            break;
+         }
+         node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), true);
+         result.add(new PersistentLOD.Level(node.getLevel(), node.getPoints()));
       }
 
       return result;
+   }
+
+
+   @Override
+   public List<PersistentLOD.Level> getLODLevels(final String id) {
+      //      final byte[] binaryID = Utils.toBinaryID(id);
+      //      final List<byte[]> ancestorsIDs = Utils.getPathFromRoot(binaryID);
+      //
+      //      final Sector sector = TileHeader.sectorFor(binaryID);
+      //
+      //      final List<PersistentLOD.Level> result = new ArrayList<PersistentLOD.Level>(ancestorsIDs.size());
+      //
+      //      for (final byte[] ancestorID : ancestorsIDs) {
+      //         final PersistentLOD.Level level = getAncestorContribution(ancestorID, sector);
+      //         if (level != null) {
+      //            result.add(level);
+      //         }
+      //      }
+
+      final byte[] binaryID = Utils.toBinaryID(id);
+
+
+      final CursorConfig cursorConfig = new CursorConfig();
+
+      final com.sleepycat.je.Transaction txn = null;
+      try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
+         final DatabaseEntry keyEntry = new DatabaseEntry(binaryID);
+         final DatabaseEntry dataEntry = new DatabaseEntry();
+         final Situation situation = getCursorSituation(cursor, keyEntry, dataEntry, binaryID);
+         System.out.println(situation);
+
+         switch (situation) {
+            //                     case NotFoundSelfNorDescendants:
+            //                        return getLODLevelsForParent(binaryID);
+            //
+            //                     case FoundDescendants:
+            //                        return getLODLevelsFromDescendants(binaryID);
+
+            case FoundSelf:
+               return getLODLevelsForSelf(cursor, keyEntry, dataEntry, binaryID);
+
+            case FoundNothing:
+               return Collections.emptyList();
+
+            default:
+               throw new RuntimeException("Invalid situation: " + situation);
+         }
+
+      }
+
+
+      //      final CursorConfig cursorConfig = new CursorConfig();
+      //
+      //      final com.sleepycat.je.Transaction txn = null;
+      //      try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
+      //         final DatabaseEntry keyEntry = new DatabaseEntry(binaryID);
+      //         final DatabaseEntry dataEntry = new DatabaseEntry();
+      //         final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.DEFAULT);
+      //         if (status == OperationStatus.SUCCESS) {
+      //            byte[] key = keyEntry.getData();
+      //
+      //            Situation situation;
+      //
+      //            if (!Utils.hasSamePrefix(key, binaryID)) {
+      //               situation = Situation.NotFoundSelfNorDescendants;
+      //               return result;
+      //            }
+      //            if (Utils.isGreaterThan(key, binaryID)) {
+      //               situation = Situation.FoundDescendants;
+      //               result.add(fromDB(txn, octree, key, dataEntry.getData(), loadPoints));
+      //            }
+      //            else {
+      //               situation = Situation.FoundSelf;
+      //            }
+      //
+      //            while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+      //               key = keyEntry.getData();
+      //               if (!Utils.hasSamePrefix(key, binaryID)) {
+      //                  return result;
+      //               }
+      //               if (Utils.isGreaterThan(key, binaryID)) {
+      //                  result.add(fromDB(txn, octree, keyEntry.getData(), dataEntry.getData(), loadPoints));
+      //               }
+      //            }
+      //         }
+      //      }
+
+
+      //      return result;
    }
 
 

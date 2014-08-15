@@ -59,7 +59,7 @@ AutoCloseable {
       String getID();
 
 
-      boolean isDirty();
+      //      boolean isDirty();
 
 
       int getPointsCount();
@@ -68,10 +68,15 @@ AutoCloseable {
       List<Geodetic3D> getPoints();
 
 
+      List<Geodetic3D> getPoints(PersistentLOD.Transaction transaction);
+
+
       Sector getSector();
 
 
       int getLevel();
+
+
    }
 
    public interface Visitor {
@@ -103,14 +108,15 @@ AutoCloseable {
 
    void put(PersistentLOD.Transaction transaction,
             String id,
-            boolean dirty,
+            int level,
+            //boolean dirty,
             List<Geodetic3D> points);
 
 
-   void putOrMerge(PersistentLOD.Transaction transaction,
-                   String id,
-                   boolean dirty,
-                   List<Geodetic3D> points);
+   //   void putOrMerge(PersistentLOD.Transaction transaction,
+   //                   String id,
+   //                   boolean dirty,
+   //                   List<Geodetic3D> points);
 
 
    @Override

@@ -2,6 +2,8 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.util.List;
+
 import es.igosoftware.util.GStringUtils;
 
 
@@ -29,9 +31,12 @@ final class LODShowStatistics
    @Override
    public boolean visit(final PersistentLOD.Transaction transaction,
                         final PersistentLOD.Node node) {
+      final List<Geodetic3D> points = node.getPoints(transaction);
+
       final int pointsCount = node.getPointsCount();
       final double value = pointsCount * 3 * 8;
       System.out.println("[" + node.getID() + "]" + //
+               " level=" + node.getLevel() + //
                          " points=" + pointsCount + //
                          " estimatesSize=" + GStringUtils.getSpaceMessage(value));
       _pointsCount += pointsCount;

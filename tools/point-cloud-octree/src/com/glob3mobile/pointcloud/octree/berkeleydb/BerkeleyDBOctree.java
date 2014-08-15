@@ -32,8 +32,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -326,18 +326,22 @@ PersistentOctree {
       final DatabaseEntry dataEntry = new DatabaseEntry();
 
       final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
-      if (status == OperationStatus.SUCCESS) {
-         return BerkeleyDBOctreeNode.fromDB(txn, this, id, dataEntry.getData(), loadPoints);
+      switch (status) {
+         case SUCCESS:
+            return BerkeleyDBOctreeNode.fromDB(txn, this, id, dataEntry.getData(), loadPoints);
+         case NOTFOUND:
+            return null;
+         default:
+            throw new RuntimeException("Status not supported: " + status);
       }
-      return null;
    }
 
 
    private static class BerkeleyDBStatistics
-            implements
-               PersistentOctree.Visitor,
-               PersistentOctree.Statistics,
-               Serializable {
+   implements
+   PersistentOctree.Visitor,
+   PersistentOctree.Statistics,
+   Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -440,8 +444,8 @@ PersistentOctree {
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                            ", Min=" + _minPointsCountPerNode + //
-                            ", Max=" + _maxPointsCountPerNode);
+                  ", Min=" + _minPointsCountPerNode + //
+                  ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 

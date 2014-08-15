@@ -29,9 +29,9 @@ public class ProcessOT {
       final String lodCloudName = sourceCloudName + "_LOD";
 
       final boolean createMapForSourceOT = false;
-      final boolean createLOD = true;
-      final boolean showLODStats = true;
-      final boolean drawSampleLODNode = false;
+      final boolean createLOD = false;
+      final boolean showLODStats = false;
+      final boolean drawSampleLODNode = true;
 
       if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
@@ -40,6 +40,7 @@ public class ProcessOT {
 
             sourceOctree.acceptDepthFirstVisitor(new CreateMapTask(sourceCloudName, statistics, 2048 * 2));
          }
+         System.out.println();
       }
 
       if (createLOD) {
@@ -49,13 +50,12 @@ public class ProcessOT {
             statistics.show();
 
             BerkeleyDBLOD.delete(lodCloudName);
-            final int maxPointsPerLeaf = 4 * 1024;
-            //final int maxPointsPerLeaf = Integer.MAX_VALUE;
+            //final int maxPointsPerLeaf = 4 * 1024;
+            final int maxPointsPerLeaf = Integer.MAX_VALUE;
             sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
          }
          System.out.println();
       }
-
 
       if (showLODStats) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
@@ -66,7 +66,13 @@ public class ProcessOT {
 
       if (drawSampleLODNode) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
-            final String id = "0320100230133020333";
+            final String id = "032010023321230000"; // FoundSelf -> OK
+            // final String id = "333333333333333"; // FoundNothing -> OK
+
+            // final String id = "032010023321230000333"; // NotFoundSelfNorDescendants **** PENDING ***
+
+            // final String id = "03201002332123000"; // FoundDescendants **** PENDING ***
+            // final String id = "03201002332"; // FoundDescendants **** PENDING ***
 
             final Sector sector = lodDB.getSector(id);
 

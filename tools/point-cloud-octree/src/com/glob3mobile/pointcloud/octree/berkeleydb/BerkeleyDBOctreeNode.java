@@ -357,8 +357,14 @@ PersistentOctree.Node {
 
       final DatabaseEntry key = new DatabaseEntry(id);
 
-      nodeDB.put(txn, key, new DatabaseEntry(createNodeEntry(format)));
-      nodeDataDB.put(txn, key, new DatabaseEntry(createNodeDataEntry(format)));
+      OperationStatus status = nodeDB.put(txn, key, new DatabaseEntry(createNodeEntry(format)));
+      if (status != OperationStatus.SUCCESS) {
+         throw new RuntimeException("Status not supported: " + status);
+      }
+      status = nodeDataDB.put(txn, key, new DatabaseEntry(createNodeDataEntry(format)));
+      if (status != OperationStatus.SUCCESS) {
+         throw new RuntimeException("Status not supported: " + status);
+      }
 
       final boolean checkInvariants = false;
       if (checkInvariants) {
