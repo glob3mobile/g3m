@@ -10,7 +10,6 @@ import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
 import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.util.GMath;
-import es.igosoftware.util.GProgress;
 
 
 public class ProcessOT {
@@ -53,56 +52,32 @@ public class ProcessOT {
       System.out.println("ProcessOT 0.1");
       System.out.println("-------------\n");
 
+
       final String sourceCloudName = "Loudoun-VA";
-      //      final String targetCloudName = "Loudoun-VA-SORTED";
-      //      final boolean recreateTargetOT = true;
-      //      final int targetBufferSize = 1024 * 64;
-      //      final int targetMaxPointsPerTitle = 1024 * 64;
-
-
-      //      if (recreateTargetOT) {
-      //         BerkeleyDBOctree.delete(targetCloudName);
-      //      }
-      //
-      //      try (final PersistentOctree targetOctree = BerkeleyDBOctree.open(targetCloudName, recreateTargetOT, targetBufferSize,
-      //               targetMaxPointsPerTitle)) {
-      //         if (recreateTargetOT) {
-      //            try (final PersistentOctree sourceOctree = BerkeleyDBOctree.open(sourceCloudName, false)) {
-      //               final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
-      //               final long pointsCount = statistics.getPointsCount();
-      //               statistics.show();
-      //
-      //               loadTargetOT(sourceOctree, pointsCount, targetOctree);
-      //            }
-      //         }
-      //
-      //         targetOctree.getStatistics(true).show();
-      //      }
+      final String lodCloudName = sourceCloudName + "_LOD";
 
       try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
          final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
          final long pointsCount = statistics.getPointsCount();
          statistics.show();
 
-         final GProgress progress = new GProgress(pointsCount, true) {
-            @Override
-            public void informProgress(final long stepsDone,
-                                       final double percent,
-                                       final long elapsed,
-                                       final long estimatedMsToFinish) {
-               System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
-            }
-         };
-
-
-         final String lodCloudName = sourceCloudName + "_LOD";
-         BerkeleyDBLOD.delete(lodCloudName);
-         sourceOctree.acceptDepthFirstVisitor(new SortingTask(lodCloudName, progress));
+         final boolean createLOD = true;
+         if (createLOD) {
+            BerkeleyDBLOD.delete(lodCloudName);
+            final int maxPointsPerLeaf = 16 * 1024;
+            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
+         }
 
          //sourceOctree.acceptVisitor(new CreateMapTask(progress, statistics, 2048 * 2));
       }
-   }
 
+      final boolean showLODStats = true;
+      if (showLODStats) {
+         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
+            lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
+         }
+      }
+
+   }
 
 }

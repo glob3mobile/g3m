@@ -23,8 +23,8 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBLOD
-         implements
-            PersistentLOD {
+implements
+PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final String cloudName) {
@@ -120,8 +120,8 @@ public class BerkeleyDBLOD
 
 
    private static class BerkeleyDBTransaction
-            implements
-               PersistentLOD.Transaction {
+   implements
+   PersistentLOD.Transaction {
 
       private final com.sleepycat.je.Transaction _txn;
 
@@ -207,7 +207,7 @@ public class BerkeleyDBLOD
       final CursorConfig config = new CursorConfig();
       config.setReadUncommitted(false);
 
-      final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
+      final com.sleepycat.je.Transaction txn = transaction == null ? null : ((BerkeleyDBTransaction) transaction)._txn;
       try (final Cursor cursor = _nodeDB.openCursor(txn, config)) {
          final DatabaseEntry keyEntry = new DatabaseEntry();
          final DatabaseEntry dataEntry = new DatabaseEntry();
