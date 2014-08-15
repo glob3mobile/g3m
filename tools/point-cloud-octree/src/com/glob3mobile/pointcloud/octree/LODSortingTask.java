@@ -27,6 +27,7 @@ class LODSortingTask
    private long            _sortedPointsCount;
    private long            _totalPointsCount;
    private final int       _maxPointsPerLeaf;
+   private int             _counter;
 
 
    LODSortingTask(final String lodCloudName,
@@ -53,7 +54,7 @@ class LODSortingTask
       final List<Geodetic3D> points = node.getPoints();
       final int pointsSize = points.size();
 
-      final boolean keepWorking = false;
+      final boolean keepWorking = _counter++ < 10;
       if (pointsSize == 0) {
          return keepWorking;
       }
@@ -61,10 +62,9 @@ class LODSortingTask
       final PersistentLOD.Transaction transaction = _lodDB.createTransaction();
       final int sortedPointsCount;
       if (pointsSize > _maxPointsPerLeaf) {
-         //System.out.println("  => source node " + node.getID() + " has too many points (" + pointsSize + ")");
-
          final byte[] binaryID = Utils.toBinaryID(node.getID());
-         sortedPointsCount = splitPoints(transaction, _lodDB, binaryID, TileHeader.sectorFor(binaryID), points, _maxPointsPerLeaf);
+         final Sector sector = TileHeader.sectorFor(binaryID);
+         sortedPointsCount = splitPoints(transaction, _lodDB, binaryID, sector, points, _maxPointsPerLeaf);
       }
       else {
          sortedPointsCount = process(transaction, _lodDB, node.getID(), points);
@@ -465,6 +465,8 @@ class LODSortingTask
 
       _totalPointsCount = 0;
       _sortedPointsCount = 0;
+
+      _counter = 0;
    }
 
 

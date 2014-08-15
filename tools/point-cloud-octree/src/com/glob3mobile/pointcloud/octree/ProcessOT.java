@@ -28,12 +28,12 @@ public class ProcessOT {
       final String sourceCloudName = "Loudoun-VA";
       final String lodCloudName = sourceCloudName + "_LOD";
 
-      final boolean createSourceBitmapMap = false;
+      final boolean createMapForSourceOT = false;
       final boolean createLOD = true;
       final boolean showLODStats = true;
-      final boolean drawSampleLODNode = true;
+      final boolean drawSampleLODNode = false;
 
-      if (createSourceBitmapMap) {
+      if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
             final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
             statistics.show();
