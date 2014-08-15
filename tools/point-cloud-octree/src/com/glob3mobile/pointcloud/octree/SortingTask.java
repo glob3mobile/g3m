@@ -17,17 +17,17 @@ import es.igosoftware.util.GProgress;
 
 
 class SortingTask
-         implements
-            PersistentOctree.Visitor {
+implements
+PersistentOctree.Visitor {
    private final GProgress _progress;
    private final String    _lodCloudName;
    private PersistentLOD   _lodDB;
-   private int             _sortedPointsCount;
-   private int             _totalPointsCount;
+   private long            _sortedPointsCount;
+   private long            _totalPointsCount;
 
 
    SortingTask(final String lodCloudName,
-            final GProgress progress) {
+               final GProgress progress) {
       _lodCloudName = lodCloudName;
       _progress = progress;
    }
@@ -295,8 +295,8 @@ class SortingTask
 
 
    private static class SortDirties
-   implements
-   PersistentLOD.Visitor {
+            implements
+               PersistentLOD.Visitor {
       PersistentLOD           _lodDB;
       private final GProgress _progress;
 
@@ -316,8 +316,8 @@ class SortingTask
                                        final double percent,
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
-               System.out.println("  processing \"" + lodDB.getCloudName() + "\" iteration #" + iteration
-                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+               System.out.println("  processing \"" + lodDB.getCloudName() + "\" iteration #" + iteration + " "
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
       }
@@ -370,13 +370,14 @@ class SortingTask
          _progress.finish();
 
          final long previousTotalPoints = _previousSortedPointsCount + _previousDirtyPointsCount;
-         System.out.println("(2) FINISHED: previous (sortedPoints=" + _previousSortedPointsCount + //
-                  ", dirtyPoints=" + _previousDirtyPointsCount + //
-                  ", total=" + previousTotalPoints + //
-                  ")  /  NEW= sorted " + _sortedPointsCount + //
-                  " dirty=" + _dirtyPointsCount);
+         //         System.out.println("(2) FINISHED: previous (sortedPoints=" + _previousSortedPointsCount + //
+         //                  ", dirtyPoints=" + _previousDirtyPointsCount + //
+         //                  ", total=" + previousTotalPoints + //
+         //                  ")  /  NEW= sorted " + _sortedPointsCount + //
+         //                  " dirty=" + _dirtyPointsCount);
+         System.out.println("(2) FINISHED: SortedInIteration=" + _sortedPointsCount + //
+                            ", dirty=" + _dirtyPointsCount + "  (total=" + previousTotalPoints + ")");
       }
-
    }
 
 
@@ -391,16 +392,20 @@ class SortingTask
 
    @Override
    public void stop() {
-      final int dirtyPointsCount = _totalPointsCount - _sortedPointsCount;
+      long dirtyPointsCount = _totalPointsCount - _sortedPointsCount;
       System.out.println("** FINISHED: sortedPoints=" + _sortedPointsCount + //
-               ", dirtyPoints=" + dirtyPointsCount + //
-               ", total=" + _totalPointsCount);
+                         ", dirtyPoints=" + dirtyPointsCount + //
+                         ", total=" + _totalPointsCount);
 
-      if (dirtyPointsCount > 0) {
-         final int iteration = 1;
+      int iteration = 0;
+      while (dirtyPointsCount > 0) {
+         iteration++;
          final PersistentLOD.Transaction transaction = _lodDB.createTransaction();
-         _lodDB.acceptDepthFirstVisitor(transaction, new SortDirties(_lodDB, iteration, _totalPointsCount));
+         final SortDirties visitor = new SortDirties(_lodDB, iteration, _totalPointsCount);
+         _lodDB.acceptDepthFirstVisitor(transaction, visitor);
          transaction.commit();
+
+         dirtyPointsCount = visitor._dirtyPointsCount;
       }
 
       _lodDB.close();
