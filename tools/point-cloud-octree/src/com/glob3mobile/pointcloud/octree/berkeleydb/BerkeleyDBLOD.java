@@ -8,10 +8,15 @@ import java.util.List;
 
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
+import com.sleepycat.je.Cursor;
+import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
+import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
 import com.sleepycat.je.TransactionConfig;
 
 import es.igosoftware.io.GIOUtils;
@@ -114,23 +119,6 @@ PersistentLOD {
    }
 
 
-   @Override
-   public void put(final PersistentLOD.Transaction transaction,
-                   final String id,
-                   final List<Geodetic3D> points,
-                   final boolean dirty) {
-      if (_readOnly) {
-         throw new RuntimeException("Can't add points to readonly OT");
-      }
-
-      final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
-      final byte[] binaryID = toBinaryID(id);
-
-      final BerkeleyDBLODNode node = BerkeleyDBLODNode.create(this, binaryID, points, dirty);
-      node.save(txn);
-   }
-
-
    private static class BerkeleyDBTransaction
    implements
    PersistentLOD.Transaction {
@@ -171,6 +159,75 @@ PersistentLOD {
 
    Database getNodeDataDB() {
       return _nodeDataDB;
+   }
+
+
+   @Override
+   public void put(final PersistentLOD.Transaction transaction,
+                   final String id,
+                   final boolean dirty,
+                   final List<Geodetic3D> points) {
+      if (_readOnly) {
+         throw new RuntimeException("Can't add points to readonly OT");
+      }
+
+      final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
+      final byte[] binaryID = toBinaryID(id);
+
+      final BerkeleyDBLODNode node = BerkeleyDBLODNode.create(this, binaryID, dirty, points);
+      node.save(txn);
+   }
+
+
+   @Override
+   public void putOrMerge(final Transaction transaction,
+                          final String id,
+                          final boolean dirty,
+                          final List<Geodetic3D> points) {
+      final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
+      final byte[] binaryID = toBinaryID(id);
+
+      final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, binaryID, true);
+      if (node == null) {
+         put(transaction, id, dirty, points);
+      }
+      else {
+         node.addPoints(txn, points);
+         node.setDirty(dirty);
+         node.save(txn);
+      }
+   }
+
+
+   @Override
+   public void acceptDepthFirstVisitor(final PersistentLOD.Visitor visitor) {
+      visitor.start();
+
+      final CursorConfig config = new CursorConfig();
+      config.setReadUncommitted(false);
+
+      try (final Cursor cursor = _nodeDB.openCursor(null, config)) {
+         final DatabaseEntry keyEntry = new DatabaseEntry();
+         final DatabaseEntry dataEntry = new DatabaseEntry();
+
+         while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+            final byte[] key = keyEntry.getData();
+            final byte[] data = dataEntry.getData();
+
+            //            final com.sleepycat.je.Transaction txn,
+            //            final BerkeleyDBLOD db,
+            //            final byte[] id,
+            //            final boolean loadPoints
+
+            final BerkeleyDBLODNode tile = BerkeleyDBLODNode.fromDB(null, this, key, data, false);
+            final boolean keepGoing = visitor.visit(tile);
+            if (!keepGoing) {
+               break;
+            }
+         }
+      }
+
+      visitor.stop();
    }
 
 

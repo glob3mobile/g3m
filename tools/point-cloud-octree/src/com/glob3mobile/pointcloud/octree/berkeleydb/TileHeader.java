@@ -35,7 +35,7 @@ class TileHeader {
 
 
    TileHeader(final byte[] id,
-            final Sector sector) {
+              final Sector sector) {
       _id = id;
       _sector = sector;
    }
@@ -86,13 +86,13 @@ class TileHeader {
    }
 
 
-   //   private static Sector sectorFor(final byte[] id) {
-   //      Sector currentSector = Sector.FULL_SPHERE;
-   //      for (final byte b : id) {
-   //         currentSector = createSectorForChild(currentSector, b);
-   //      }
-   //      return currentSector;
-   //   }
+   static Sector sectorFor(final byte[] id) {
+      Sector currentSector = Sector.FULL_SPHERE;
+      for (final byte b : id) {
+         currentSector = createSectorForChild(currentSector, b);
+      }
+      return currentSector;
+   }
 
 
    int getLevel() {

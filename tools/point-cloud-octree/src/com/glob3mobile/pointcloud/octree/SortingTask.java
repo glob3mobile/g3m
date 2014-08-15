@@ -3,49 +3,50 @@
 package com.glob3mobile.pointcloud.octree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.glob3mobile.pointcloud.kdtree.KDInnerNode;
 import com.glob3mobile.pointcloud.kdtree.KDLeafNode;
 import com.glob3mobile.pointcloud.kdtree.KDTree;
 import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
-import com.glob3mobile.pointcloud.octree.PersistentOctree.Node;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 
 import es.igosoftware.util.GProgress;
 
 
 class SortingTask
-         implements
-            PersistentOctree.Visitor {
+implements
+PersistentOctree.Visitor {
    private final GProgress _progress;
    private final String    _lodCloudName;
    private PersistentLOD   _lodDB;
+   private boolean         _putAnyDirty;
+   private int             _sortedPointsCount;
+   private int             _dirtyPointsCount;
 
 
    SortingTask(final String lodCloudName,
-            final GProgress progress) {
+               final GProgress progress) {
       _lodCloudName = lodCloudName;
       _progress = progress;
    }
 
 
    @Override
-   public boolean visit(final Node node) {
-      //               System.out.println("=> " + node.getID() + " level=" + node.getLevel() + ", points=" + node.getPoints().size());
-
-      final int pointsSize = node.getPointsCount();
-
-      //final boolean isExemplar = node.getID().equals("032010023013302231");
-      //final boolean isExemplar = pointsSize == 64920;
-
-      //               if (isExemplar) {
+   public boolean visit(final PersistentOctree.Node node) {
+      final boolean keepWorking = true;
 
       final List<Geodetic3D> points = node.getPoints();
+      //final List<Geodetic3D> points = node.getPoints().subList(0, 400);
+      final int pointsSize = points.size();
 
-      //final int pointsSize = points.size();
+      if (pointsSize == 0) {
+         return keepWorking;
+      }
+
       final List<Integer> sortedVertices = new ArrayList<Integer>(pointsSize);
-      final List<Integer> lodIndices = new ArrayList<Integer>();
+      final LinkedList<Integer> lodIndices = new LinkedList<Integer>();
 
       if (pointsSize == 1) {
          // just one vertex, no need to sort
@@ -56,28 +57,76 @@ class SortingTask
          sortPoints(points, sortedVertices, lodIndices);
       }
 
-      //System.out.println(node.getID() + " " + lodIndices);
+      //      System.out.println(node.getID() + //
+      //                         " lodLevels=" + lodIndices.size() + //
+      //                         ", points=" + pointsSize + //
+      //                         ", lodIndices=" + lodIndices);
 
-      double minHeight = Double.POSITIVE_INFINITY;
-      double maxHeight = Double.NEGATIVE_INFINITY;
-      for (final Geodetic3D point : points) {
-         final double height = point._height;
-         if (height < minHeight) {
-            minHeight = height;
+      while (lodIndices.size() > 1) {
+         final int candidateLevel = lodIndices.peekFirst();
+         if (candidateLevel > 128) {
+            break;
          }
-         if (height > maxHeight) {
-            maxHeight = height;
-         }
+         lodIndices.pollFirst();
       }
 
-      //createDebugImage(node, points, sortedVertices, lodIndices, minHeight, maxHeight);
-      //               }
+      final int lodLevels = lodIndices.size();
+
+      final String nodeID = node.getID();
+      final String parentID = parentID(nodeID);
+
+      //      System.out.println(nodeID + //
+      //                         " lodLevels=" + lodLevels + //
+      //                         ", points=" + pointsSize + //
+      //                         ", lodIndices=" + lodIndices);
+
+      final PersistentLOD.Transaction transaction = _lodDB.createTransaction();
+      if ((lodLevels == 1) || (parentID == null)) {
+         final List<Geodetic3D> sortedPoints = new ArrayList<Geodetic3D>(pointsSize);
+         for (final int index : sortedVertices) {
+            sortedPoints.add(points.get(index));
+         }
+         _lodDB.put(transaction, nodeID, false, sortedPoints);
+
+         _sortedPointsCount += sortedPoints.size();
+      }
+      else {
+         final int lastLevelFrom = lodIndices.get(lodLevels - 2);
+         final int lastLevelTo = lodIndices.get(lodLevels - 1);
+         final int lastLevelPointsCount = lastLevelTo - lastLevelFrom;
+
+         final List<Geodetic3D> parentLevelPoints = new ArrayList<Geodetic3D>(pointsSize - lastLevelPointsCount);
+         final List<Geodetic3D> lastLevelPoints = new ArrayList<Geodetic3D>(lastLevelPointsCount);
+
+         for (final int index : sortedVertices) {
+            final Geodetic3D point = points.get(index);
+            if (index <= lastLevelFrom) {
+               parentLevelPoints.add(point);
+            }
+            else {
+               lastLevelPoints.add(point);
+            }
+         }
+
+         _lodDB.put(transaction, nodeID, false, lastLevelPoints);
+         _lodDB.putOrMerge(transaction, parentID, true, parentLevelPoints);
+         _putAnyDirty = true;
+
+         _sortedPointsCount += lastLevelPoints.size();
+         _dirtyPointsCount += parentLevelPoints.size();
+
+         //         System.out.println("**** lastLevelFrom=" + lastLevelFrom + //
+         //                            ",  lastLevelTo=" + lastLevelTo + //
+         //                            ", count=" + lastLevelPointsCount + //
+         //                            ", parentLevelPoints=" + parentLevelPoints.size() + //
+         //                            ", lastLevelPoints=" + lastLevelPoints.size());
+      }
+      transaction.commit();
+
+      //beastLODLevel = lodI
 
       _progress.stepsDone(pointsSize);
 
-
-      //final boolean keepWorking = !isExemplar;
-      final boolean keepWorking = true;
       return keepWorking;
    }
 
@@ -175,6 +224,11 @@ class SortingTask
    //   }
 
 
+   private static String parentID(final String id) {
+      return id.isEmpty() ? null : id.substring(0, id.length() - 1);
+   }
+
+
    private void sortPoints(final List<Geodetic3D> points,
                            final List<Integer> sortedVertices,
                            final List<Integer> lodIndices) {
@@ -224,12 +278,67 @@ class SortingTask
          }
       };
       tree.breadthFirstAcceptVisitor(visitor);
-      lodIndices.add(sortedVertices.size() - 1);
+
+      final int sortedVerticesCount = sortedVertices.size();
+      if (sortedVerticesCount > 0) {
+         lodIndices.add(sortedVerticesCount - 1);
+      }
+   }
+
+
+   private static class SortDirties
+            implements
+               PersistentLOD.Visitor {
+      private int _dirtyPointsCount;
+      private int _sortedPointsCount;
+
+
+      @Override
+      public void start() {
+         _dirtyPointsCount = 0;
+         _sortedPointsCount = 0;
+      }
+
+
+      @Override
+      public boolean visit(final PersistentLOD.Node node) {
+         final String id = node.getID();
+         final boolean isDirty = node.isDirty();
+         final int pointsCounts = node.getPointsCount();
+         //System.out.println("#" + id + " dirty=" + isDirty + ", pointsCount=" + pointsCounts);
+
+         if (isDirty) {
+            _dirtyPointsCount += pointsCounts;
+         }
+         else {
+            _sortedPointsCount += pointsCounts;
+         }
+
+         return true;
+      }
+
+
+      @Override
+      public void stop() {
+         System.out.println("(2) FINISHED: sortedPoints=" + _sortedPointsCount + //
+                            ", dirtyPoints=" + _dirtyPointsCount + //
+                            ", total=" + (_sortedPointsCount + _dirtyPointsCount));
+      }
+
    }
 
 
    @Override
    public void stop() {
+      System.out.println("(1) FINISHED: sortedPoints=" + _sortedPointsCount + //
+                         ", dirtyPoints=" + _dirtyPointsCount + //
+                         ", total=" + (_sortedPointsCount + _dirtyPointsCount));
+
+      if (_putAnyDirty) {
+         System.out.println("**** Leaved dirty nodes");
+         _lodDB.acceptDepthFirstVisitor(new SortDirties());
+      }
+
       _lodDB.close();
       _lodDB = null;
 
@@ -239,8 +348,11 @@ class SortingTask
 
    @Override
    public void start() {
-      BerkeleyDBLOD.delete(_lodCloudName);
       _lodDB = BerkeleyDBLOD.open(_lodCloudName, true);
+      _putAnyDirty = false;
+
+      _sortedPointsCount = 0;
+      _dirtyPointsCount = 0;
    }
 
 

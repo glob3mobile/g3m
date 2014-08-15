@@ -6,8 +6,8 @@ import java.util.List;
 
 
 public interface PersistentOctree
-extends
-AutoCloseable {
+         extends
+            AutoCloseable {
 
 
    public interface Node {
@@ -81,7 +81,7 @@ AutoCloseable {
    void close();
 
 
-   void acceptVisitor(PersistentOctree.Visitor visitor);
+   void acceptDepthFirstVisitor(PersistentOctree.Visitor visitor);
 
 
    PersistentOctree.Statistics getStatistics(boolean fast,

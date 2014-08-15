@@ -278,7 +278,7 @@ PersistentOctree {
 
 
    @Override
-   public void acceptVisitor(final PersistentOctree.Visitor visitor) {
+   public void acceptDepthFirstVisitor(final PersistentOctree.Visitor visitor) {
       visitor.start();
 
       final CursorConfig config = new CursorConfig();
@@ -556,7 +556,7 @@ PersistentOctree {
       }
 
       final BerkeleyDBStatistics statistics = new BerkeleyDBStatistics(_cloudName, fast, progress);
-      acceptVisitor(statistics);
+      acceptDepthFirstVisitor(statistics);
       saveCachedStatistics(statistics);
       return statistics;
    }

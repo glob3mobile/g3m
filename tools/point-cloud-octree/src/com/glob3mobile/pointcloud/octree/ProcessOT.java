@@ -5,6 +5,7 @@ package com.glob3mobile.pointcloud.octree;
 
 import java.awt.Color;
 
+import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
 import es.igosoftware.euclid.colors.GColorF;
@@ -90,14 +91,16 @@ public class ProcessOT {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + sourceOctree.getCloudName() + "\" "
-                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
 
-         sourceOctree.acceptVisitor(new SortingTask(sourceCloudName + "_LOD", progress));
+
+         final String lodCloudName = sourceCloudName + "_LOD";
+         BerkeleyDBLOD.delete(lodCloudName);
+         sourceOctree.acceptDepthFirstVisitor(new SortingTask(lodCloudName, progress));
 
          //sourceOctree.acceptVisitor(new CreateMapTask(progress, statistics, 2048 * 2));
-
       }
    }
 

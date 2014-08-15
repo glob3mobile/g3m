@@ -149,7 +149,7 @@ public class CreateOT {
    private static void visitOT(final String cloudName) {
       final boolean createIfNotExists = false;
       try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudName, createIfNotExists)) {
-         octree.acceptVisitor(new PersistentOctree.Visitor() {
+         octree.acceptDepthFirstVisitor(new PersistentOctree.Visitor() {
             private int  _counter;
             private long _started;
             private long _totalPoints;
