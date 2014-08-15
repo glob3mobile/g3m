@@ -34,13 +34,14 @@ AutoCloseable {
 
    public interface Visitor {
 
-      void start();
+      void start(PersistentLOD.Transaction transaction);
 
 
-      void stop();
+      void stop(PersistentLOD.Transaction transaction);
 
 
-      boolean visit(PersistentLOD.Node node);
+      boolean visit(PersistentLOD.Transaction transaction,
+                    PersistentLOD.Node node);
 
    }
 
@@ -77,6 +78,7 @@ AutoCloseable {
    String getCloudName();
 
 
-   void acceptDepthFirstVisitor(PersistentLOD.Visitor visitor);
+   void acceptDepthFirstVisitor(PersistentLOD.Transaction transaction,
+                                PersistentLOD.Visitor visitor);
 
 }

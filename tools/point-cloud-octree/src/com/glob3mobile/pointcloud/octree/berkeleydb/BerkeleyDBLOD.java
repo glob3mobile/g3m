@@ -23,8 +23,8 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBLOD
-implements
-PersistentLOD {
+         implements
+            PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final String cloudName) {
@@ -120,8 +120,8 @@ PersistentLOD {
 
 
    private static class BerkeleyDBTransaction
-   implements
-   PersistentLOD.Transaction {
+            implements
+               PersistentLOD.Transaction {
 
       private final com.sleepycat.je.Transaction _txn;
 
@@ -200,13 +200,15 @@ PersistentLOD {
 
 
    @Override
-   public void acceptDepthFirstVisitor(final PersistentLOD.Visitor visitor) {
-      visitor.start();
+   public void acceptDepthFirstVisitor(final PersistentLOD.Transaction transaction,
+                                       final PersistentLOD.Visitor visitor) {
+      visitor.start(transaction);
 
       final CursorConfig config = new CursorConfig();
       config.setReadUncommitted(false);
 
-      try (final Cursor cursor = _nodeDB.openCursor(null, config)) {
+      final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
+      try (final Cursor cursor = _nodeDB.openCursor(txn, config)) {
          final DatabaseEntry keyEntry = new DatabaseEntry();
          final DatabaseEntry dataEntry = new DatabaseEntry();
 
@@ -219,15 +221,15 @@ PersistentLOD {
             //            final byte[] id,
             //            final boolean loadPoints
 
-            final BerkeleyDBLODNode tile = BerkeleyDBLODNode.fromDB(null, this, key, data, false);
-            final boolean keepGoing = visitor.visit(tile);
+            final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, key, data, false);
+            final boolean keepGoing = visitor.visit(transaction, node);
             if (!keepGoing) {
                break;
             }
          }
       }
 
-      visitor.stop();
+      visitor.stop(transaction);
    }
 
 
