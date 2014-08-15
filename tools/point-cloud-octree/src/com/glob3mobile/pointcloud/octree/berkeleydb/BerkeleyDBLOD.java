@@ -226,7 +226,6 @@ PersistentLOD {
       final DatabaseEntry dataEntry = new DatabaseEntry();
       final com.sleepycat.je.Transaction txn = null;
       final OperationStatus status = _nodeDB.get(txn, new DatabaseEntry(id), dataEntry, LockMode.DEFAULT);
-
       switch (status) {
          case NOTFOUND: {
             return null;
@@ -247,27 +246,6 @@ PersistentLOD {
             throw new RuntimeException("Unsupported status=" + status);
          }
       }
-
-
-      //      if (status == OperationStatus.NOTFOUND) {
-      //         return null;
-      //      }
-      //      else if (status == OperationStatus.SUCCESS) {
-      //         final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), true);
-      //
-      //         final List<Geodetic3D> resultPoints = new ArrayList<Geodetic3D>(node.getPointsCount());
-      //         for (final Geodetic3D point : node.getPoints()) {
-      //            if (sector.contains(point._latitude, point._longitude)) {
-      //               resultPoints.add(point);
-      //            }
-      //         }
-      //
-      //         return resultPoints.isEmpty() ? null : new PersistentLOD.Level(id.length, resultPoints);
-      //      }
-      //      else {
-      //         throw new RuntimeException("Unsupported status=" + status);
-      //      }
-
    }
 
 
