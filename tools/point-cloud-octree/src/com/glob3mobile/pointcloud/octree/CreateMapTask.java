@@ -17,8 +17,8 @@ import es.igosoftware.util.GProgress;
 
 
 class CreateMapTask
-implements
-PersistentOctree.Visitor {
+         implements
+            PersistentOctree.Visitor {
 
    private final GProgress _progress;
    private final Sector    _mapSector;
@@ -31,8 +31,8 @@ PersistentOctree.Visitor {
 
 
    CreateMapTask(final String sourceCloudName,
-            final Statistics statistics,
-            final int imageWidth) {
+                 final Statistics statistics,
+                 final int imageWidth) {
       _progress = new GProgress(statistics.getPointsCount(), true) {
          @Override
          public void informProgress(final long stepsDone,
@@ -40,7 +40,7 @@ PersistentOctree.Visitor {
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- drawing map \"" + sourceCloudName + "\" "
-                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
       _mapSector = statistics.getSector();
@@ -77,10 +77,10 @@ PersistentOctree.Visitor {
       final int yTo = Math.round((float) (_mapSector.getVCoordinate(nodeSector._lower._latitude) * _imageHeight));
       final int width = xTo - xFrom;
       final int height = yTo - yFrom;
-      _g.setColor(ProcessOT.toAWTColor(color));
+      _g.setColor(Utils.toAWTColor(color));
       _g.fillRect(xFrom, yFrom, width, height);
 
-      _g.setColor(ProcessOT.toAWTColor(GColorF.YELLOW));
+      _g.setColor(Utils.toAWTColor(GColorF.YELLOW));
       _g.drawRect(xFrom, yFrom, width, height);
 
       //         _g.drawString("" + pointsCount, (xTo + xFrom) / 2, (yTo + yFrom) / 2);

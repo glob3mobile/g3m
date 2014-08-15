@@ -26,8 +26,8 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBLOD
-         implements
-            PersistentLOD {
+implements
+PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final String cloudName) {
@@ -113,8 +113,8 @@ public class BerkeleyDBLOD
 
 
    private static class BerkeleyDBTransaction
-            implements
-               PersistentLOD.Transaction {
+   implements
+   PersistentLOD.Transaction {
 
       private final com.sleepycat.je.Transaction _txn;
 
@@ -226,23 +226,48 @@ public class BerkeleyDBLOD
       final DatabaseEntry dataEntry = new DatabaseEntry();
       final com.sleepycat.je.Transaction txn = null;
       final OperationStatus status = _nodeDB.get(txn, new DatabaseEntry(id), dataEntry, LockMode.DEFAULT);
-      if (status == OperationStatus.NOTFOUND) {
-         return null;
-      }
-      if (status != OperationStatus.SUCCESS) {
-         throw new RuntimeException("Unsupported status=" + status);
-      }
 
-      final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), true);
+      switch (status) {
+         case NOTFOUND: {
+            return null;
+         }
+         case SUCCESS: {
+            final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), true);
 
-      final List<Geodetic3D> resultPoints = new ArrayList<Geodetic3D>(node.getPointsCount());
-      for (final Geodetic3D point : node.getPoints()) {
-         if (sector.contains(point._latitude, point._longitude)) {
-            resultPoints.add(point);
+            final List<Geodetic3D> resultPoints = new ArrayList<Geodetic3D>(node.getPointsCount());
+            for (final Geodetic3D point : node.getPoints()) {
+               if (sector.contains(point._latitude, point._longitude)) {
+                  resultPoints.add(point);
+               }
+            }
+
+            return resultPoints.isEmpty() ? null : new PersistentLOD.Level(id.length, resultPoints);
+         }
+         default: {
+            throw new RuntimeException("Unsupported status=" + status);
          }
       }
 
-      return resultPoints.isEmpty() ? null : new PersistentLOD.Level(id.length, resultPoints);
+
+      //      if (status == OperationStatus.NOTFOUND) {
+      //         return null;
+      //      }
+      //      else if (status == OperationStatus.SUCCESS) {
+      //         final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), true);
+      //
+      //         final List<Geodetic3D> resultPoints = new ArrayList<Geodetic3D>(node.getPointsCount());
+      //         for (final Geodetic3D point : node.getPoints()) {
+      //            if (sector.contains(point._latitude, point._longitude)) {
+      //               resultPoints.add(point);
+      //            }
+      //         }
+      //
+      //         return resultPoints.isEmpty() ? null : new PersistentLOD.Level(id.length, resultPoints);
+      //      }
+      //      else {
+      //         throw new RuntimeException("Unsupported status=" + status);
+      //      }
+
    }
 
 

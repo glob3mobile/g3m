@@ -16,44 +16,8 @@ import javax.imageio.ImageIO;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
-import es.igosoftware.euclid.colors.GColorF;
-import es.igosoftware.util.GMath;
-
 
 public class ProcessOT {
-
-   static final GColorF[] RAMP = new GColorF[] { GColorF.CYAN, GColorF.GREEN, GColorF.YELLOW, GColorF.RED };
-
-
-   static GColorF interpolateColorFromRamp(final GColorF colorFrom,
-                                           final GColorF[] ramp,
-                                           final float alpha) {
-      final float rampStep = 1f / ramp.length;
-
-      final int toI;
-      if (GMath.closeTo(alpha, 1)) {
-         toI = ramp.length - 1;
-      }
-      else {
-         toI = (int) (alpha / rampStep);
-      }
-
-      final GColorF from;
-      if (toI == 0) {
-         from = colorFrom;
-      }
-      else {
-         from = ramp[toI - 1];
-      }
-
-      final float colorAlpha = (alpha % rampStep) / rampStep;
-      return from.mixedWidth(ramp[toI], colorAlpha);
-   }
-
-
-   static Color toAWTColor(final GColorF color) {
-      return new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
-   }
 
 
    public static void main(final String[] args) {
@@ -64,12 +28,12 @@ public class ProcessOT {
       final String sourceCloudName = "Loudoun-VA";
       final String lodCloudName = sourceCloudName + "_LOD";
 
-      final boolean createSourceMap = false;
-      final boolean createLOD = false;
-      final boolean showLODStats = false;
+      final boolean createSourceBitmapMap = false;
+      final boolean createLOD = true;
+      final boolean showLODStats = true;
       final boolean drawSampleLODNode = true;
 
-      if (createSourceMap) {
+      if (createSourceBitmapMap) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
             final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
             statistics.show();
@@ -85,8 +49,8 @@ public class ProcessOT {
             statistics.show();
 
             BerkeleyDBLOD.delete(lodCloudName);
-            //final int maxPointsPerLeaf = 24 * 1024;
-            final int maxPointsPerLeaf = Integer.MAX_VALUE;
+            final int maxPointsPerLeaf = 4 * 1024;
+            //final int maxPointsPerLeaf = Integer.MAX_VALUE;
             sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
          }
          System.out.println();
@@ -102,11 +66,7 @@ public class ProcessOT {
 
       if (drawSampleLODNode) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
-
-            //final String id = "032010023013302133";
-            //final String id = "0320100233212300003";
-            final String id = "032010023321230002";
-
+            final String id = "0320100230133020333";
 
             final Sector sector = lodDB.getSector(id);
 

@@ -19,8 +19,8 @@ import es.igosoftware.util.GProgress;
 
 
 class LODSortingTask
-implements
-PersistentOctree.Visitor {
+         implements
+            PersistentOctree.Visitor {
    private final GProgress _progress;
    private final String    _lodCloudName;
    private PersistentLOD   _lodDB;
@@ -30,9 +30,9 @@ PersistentOctree.Visitor {
 
 
    LODSortingTask(final String lodCloudName,
-            final String sourceCloudName,
-            final long pointsCount,
-            final int maxPointsPerLeaf) {
+                  final String sourceCloudName,
+                  final long pointsCount,
+                  final int maxPointsPerLeaf) {
       _lodCloudName = lodCloudName;
       _progress = new GProgress(pointsCount, true) {
          @Override
@@ -41,7 +41,7 @@ PersistentOctree.Visitor {
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- importing \"" + sourceCloudName + "\" "
-                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
       _maxPointsPerLeaf = maxPointsPerLeaf;
@@ -53,8 +53,9 @@ PersistentOctree.Visitor {
       final List<Geodetic3D> points = node.getPoints();
       final int pointsSize = points.size();
 
+      final boolean keepWorking = false;
       if (pointsSize == 0) {
-         return true;
+         return keepWorking;
       }
 
       final PersistentLOD.Transaction transaction = _lodDB.createTransaction();
@@ -75,12 +76,12 @@ PersistentOctree.Visitor {
 
       _progress.stepsDone(pointsSize);
 
-      return true;
+      return keepWorking;
    }
 
 
    private static List<Geodetic3D> extractPoints(final Sector sector,
-            final List<Geodetic3D> points) {
+                                                 final List<Geodetic3D> points) {
 
       final List<Geodetic3D> extracted = new ArrayList<Geodetic3D>();
 
@@ -153,18 +154,18 @@ PersistentOctree.Visitor {
          sortPoints(points, sortedVertices, lodIndices);
       }
 
-      //      System.out.println(node.getID() + //
-      //                         " lodLevels=" + lodIndices.size() + //
-      //                         ", points=" + pointsSize + //
-      //                         ", lodIndices=" + lodIndices);
-
-      while (lodIndices.size() > 1) {
-         final int candidateLevel = lodIndices.peekFirst();
-         if (candidateLevel > 128) {
-            break;
-         }
-         lodIndices.pollFirst();
-      }
+      System.out.println(nodeID + //
+               " lodLevels=" + lodIndices.size() + //
+               ", points=" + pointsSize + //
+               ", lodIndices=" + lodIndices);
+      final int _DGD_AT_WORK;
+      //      while (lodIndices.size() > 1) {
+      //         final int candidateLevel = lodIndices.peekFirst();
+      //         if (candidateLevel > 128) {
+      //            break;
+      //         }
+      //         lodIndices.pollFirst();
+      //      }
 
       final int lodLevels = lodIndices.size();
 
@@ -375,8 +376,8 @@ PersistentOctree.Visitor {
 
 
    private static class SortDirties
-            implements
-               PersistentLOD.Visitor {
+   implements
+   PersistentLOD.Visitor {
       PersistentLOD           _lodDB;
       private final GProgress _progress;
 
@@ -399,7 +400,7 @@ PersistentOctree.Visitor {
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("- processing dirties \"" + lodDB.getCloudName() + "\" iteration #" + iteration + " "
-                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
       }
@@ -451,9 +452,9 @@ PersistentOctree.Visitor {
       public void stop(final PersistentLOD.Transaction transaction) {
          _progress.finish();
 
-         final long previousTotalPoints = _previousSortedPointsCount + _previousDirtyPointsCount;
-         System.out.println("** processing dirties iteration #" + _iteration + " SortedInIteration=" + _sortedPointsCount + //
-                            ", dirty=" + _dirtyPointsCount + "  (total=" + previousTotalPoints + ")");
+         //         final long previousTotalPoints = _previousSortedPointsCount + _previousDirtyPointsCount;
+         //         System.out.println("** processing dirties iteration #" + _iteration + " SortedInIteration=" + _sortedPointsCount + //
+         //                            ", dirty=" + _dirtyPointsCount + "  (total=" + previousTotalPoints + ")");
       }
    }
 
@@ -469,10 +470,12 @@ PersistentOctree.Visitor {
 
    @Override
    public void stop() {
+      _progress.finish();
+
       long dirtyPointsCount = _totalPointsCount - _sortedPointsCount;
-      System.out.println("** initial import: sortedPoints=" + _sortedPointsCount + //
-                         ", dirtyPoints=" + dirtyPointsCount + //
-                         ", total=" + _totalPointsCount);
+      //      System.out.println("** initial import: sortedPoints=" + _sortedPointsCount + //
+      //                         ", dirtyPoints=" + dirtyPointsCount + //
+      //                         ", total=" + _totalPointsCount);
 
       int iteration = 0;
       while (dirtyPointsCount > 0) {
@@ -488,7 +491,6 @@ PersistentOctree.Visitor {
       _lodDB.close();
       _lodDB = null;
 
-      _progress.finish();
    }
 
 }

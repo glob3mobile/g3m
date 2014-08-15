@@ -2,9 +2,13 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import es.igosoftware.euclid.colors.GColorF;
+import es.igosoftware.util.GMath;
 
 
 public class Utils {
@@ -82,6 +86,40 @@ public class Utils {
          parentIDLenght++;
       }
       return result;
+   }
+
+
+   static final GColorF[] RAMP = new GColorF[] { GColorF.CYAN, GColorF.GREEN, GColorF.YELLOW, GColorF.RED };
+
+
+   public static GColorF interpolateColorFromRamp(final GColorF colorFrom,
+                                                  final GColorF[] ramp,
+                                                  final float alpha) {
+      final float rampStep = 1f / ramp.length;
+
+      final int toI;
+      if (GMath.closeTo(alpha, 1)) {
+         toI = ramp.length - 1;
+      }
+      else {
+         toI = (int) (alpha / rampStep);
+      }
+
+      final GColorF from;
+      if (toI == 0) {
+         from = colorFrom;
+      }
+      else {
+         from = ramp[toI - 1];
+      }
+
+      final float colorAlpha = (alpha % rampStep) / rampStep;
+      return from.mixedWidth(ramp[toI], colorAlpha);
+   }
+
+
+   public static Color toAWTColor(final GColorF color) {
+      return new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
    }
 
 
