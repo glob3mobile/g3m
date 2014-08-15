@@ -242,7 +242,7 @@ public class BerkeleyDBLOD
          }
       }
 
-      return new PersistentLOD.Level(id.length, resultPoints);
+      return resultPoints.isEmpty() ? null : new PersistentLOD.Level(id.length, resultPoints);
    }
 
 
@@ -256,10 +256,19 @@ public class BerkeleyDBLOD
       final List<PersistentLOD.Level> result = new ArrayList<PersistentLOD.Level>(ancestorsIDs.size());
 
       for (final byte[] ancestorID : ancestorsIDs) {
-         result.add(getAncestorContribution(ancestorID, sector));
+         final PersistentLOD.Level level = getAncestorContribution(ancestorID, sector);
+         if (level != null) {
+            result.add(level);
+         }
       }
 
       return result;
+   }
+
+
+   @Override
+   public Sector getSector(final String id) {
+      return TileHeader.sectorFor(Utils.toBinaryID(id));
    }
 
 
