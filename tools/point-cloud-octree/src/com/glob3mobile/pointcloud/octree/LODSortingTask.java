@@ -40,7 +40,7 @@ PersistentOctree.Visitor {
                                     final double percent,
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
-            System.out.println("  processing \"" + sourceCloudName + "\" "
+            System.out.println("- importing \"" + sourceCloudName + "\" "
                                + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
@@ -398,7 +398,7 @@ PersistentOctree.Visitor {
                                        final double percent,
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
-               System.out.println("  processing \"" + lodDB.getCloudName() + "\" iteration #" + iteration + " "
+               System.out.println("- processing dirties \"" + lodDB.getCloudName() + "\" iteration #" + iteration + " "
                                   + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };

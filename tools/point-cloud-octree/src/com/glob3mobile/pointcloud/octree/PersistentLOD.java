@@ -2,12 +2,51 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.util.Collections;
 import java.util.List;
 
 
 public interface PersistentLOD
 extends
 AutoCloseable {
+
+
+   public class Level {
+
+      private final int              _level;
+      private final List<Geodetic3D> _points;
+
+
+      public Level(final int level,
+                   final List<Geodetic3D> points) {
+         _level = level;
+         _points = Collections.unmodifiableList(points);
+      }
+
+
+      @Override
+      public String toString() {
+         return "[Level " + _level + " points=" + _points.size() + "]";
+      }
+
+
+      public int size() {
+         return _points.size();
+      }
+
+
+      public int getLevel() {
+         return _level;
+      }
+
+
+      public List<Geodetic3D> getPoints() {
+         return _points;
+      }
+
+
+   }
+
 
    public interface Node {
       @Override
@@ -80,5 +119,8 @@ AutoCloseable {
 
    void acceptDepthFirstVisitor(PersistentLOD.Transaction transaction,
                                 PersistentLOD.Visitor visitor);
+
+
+   List<PersistentLOD.Level> getLODLevels(String id);
 
 }

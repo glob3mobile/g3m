@@ -4,9 +4,9 @@ package com.glob3mobile.pointcloud.octree;
 
 
 import java.awt.Color;
+import java.util.List;
 
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
-import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
 import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.util.GMath;
@@ -56,27 +56,44 @@ public class ProcessOT {
       final String sourceCloudName = "Loudoun-VA";
       final String lodCloudName = sourceCloudName + "_LOD";
 
-      try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
-         final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
-         final long pointsCount = statistics.getPointsCount();
-         statistics.show();
-
-         final boolean createLOD = true;
-         if (createLOD) {
-            BerkeleyDBLOD.delete(lodCloudName);
-            final int maxPointsPerLeaf = 24 * 1024;
-            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
-         }
-
-         //sourceOctree.acceptVisitor(new CreateMapTask(progress, statistics, 2048 * 2));
-      }
+      //      try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
+      //         final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
+      //         final long pointsCount = statistics.getPointsCount();
+      //         statistics.show();
+      //
+      //         final boolean createLOD = true;
+      //         if (createLOD) {
+      //            BerkeleyDBLOD.delete(lodCloudName);
+      //            final int maxPointsPerLeaf = 24 * 1024;
+      //            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
+      //         }
+      //
+      //         //sourceOctree.acceptVisitor(new CreateMapTask(progress, statistics, 2048 * 2));
+      //      }
 
       System.out.println();
 
       final boolean showLODStats = true;
       if (showLODStats) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
-            lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
+            //lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
+
+
+            System.out.println();
+            final long start = System.currentTimeMillis();
+            //final List<PersistentLOD.Level> levels = lodDB.getLODLevels("032010023013302133");
+            final List<PersistentLOD.Level> levels = lodDB.getLODLevels("0320100230133021");
+            //final List<PersistentLOD.Level> levels = lodDB.getLODLevels("0320100230133021332");
+            //final List<PersistentLOD.Level> levels = lodDB.getLODLevels("0320100230133021333");
+            System.out.println("== " + (System.currentTimeMillis() - start) + "ms");
+
+            long totalPoints = 0;
+            for (final PersistentLOD.Level level : levels) {
+               final int levelSize = level.size();
+               System.out.println(" Level=" + level.getLevel() + " points=" + levelSize);
+               totalPoints += levelSize;
+            }
+            System.out.println("* Total Points=" + totalPoints);
          }
       }
 

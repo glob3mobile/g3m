@@ -4,10 +4,12 @@ package com.glob3mobile.pointcloud.octree.berkeleydb;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
+import com.glob3mobile.pointcloud.octree.Sector;
 import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
@@ -207,11 +209,6 @@ public class BerkeleyDBLOD
             final byte[] key = keyEntry.getData();
             final byte[] data = dataEntry.getData();
 
-            //            final com.sleepycat.je.Transaction txn,
-            //            final BerkeleyDBLOD db,
-            //            final byte[] id,
-            //            final boolean loadPoints
-
             final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, key, data, false);
             final boolean keepGoing = visitor.visit(transaction, node);
             if (!keepGoing) {
@@ -221,6 +218,48 @@ public class BerkeleyDBLOD
       }
 
       visitor.stop(transaction);
+   }
+
+
+   private PersistentLOD.Level getAncestorContribution(final byte[] id,
+                                                       final Sector sector) {
+      final DatabaseEntry dataEntry = new DatabaseEntry();
+      final com.sleepycat.je.Transaction txn = null;
+      final OperationStatus status = _nodeDB.get(txn, new DatabaseEntry(id), dataEntry, LockMode.DEFAULT);
+      if (status == OperationStatus.NOTFOUND) {
+         return null;
+      }
+      if (status != OperationStatus.SUCCESS) {
+         throw new RuntimeException("Unsupported status=" + status);
+      }
+
+      final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), true);
+
+      final List<Geodetic3D> resultPoints = new ArrayList<Geodetic3D>(node.getPointsCount());
+      for (final Geodetic3D point : node.getPoints()) {
+         if (sector.contains(point._latitude, point._longitude)) {
+            resultPoints.add(point);
+         }
+      }
+
+      return new PersistentLOD.Level(id.length, resultPoints);
+   }
+
+
+   @Override
+   public List<PersistentLOD.Level> getLODLevels(final String id) {
+      final byte[] binaryID = Utils.toBinaryID(id);
+      final List<byte[]> ancestorsIDs = Utils.getPathFromRoot(binaryID);
+
+      final Sector sector = TileHeader.sectorFor(binaryID);
+
+      final List<PersistentLOD.Level> result = new ArrayList<PersistentLOD.Level>(ancestorsIDs.size());
+
+      for (final byte[] ancestorID : ancestorsIDs) {
+         result.add(getAncestorContribution(ancestorID, sector));
+      }
+
+      return result;
    }
 
 

@@ -2,6 +2,10 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class Utils {
 
@@ -49,14 +53,6 @@ public class Utils {
    }
 
 
-   public static void main(final String[] args) {
-      final byte[] left = new byte[] { 1, 2, 3, 1 };
-      final byte[] right = new byte[] { 1, 22, 3 };
-      //System.out.println(isGreaterThan(left, right));
-      System.out.println(hasSamePrefix(left, right));
-   }
-
-
    public static String toIDString(final byte[] id) {
       final StringBuilder builder = new StringBuilder();
       for (final byte each : id) {
@@ -74,5 +70,19 @@ public class Utils {
       }
       return result;
    }
+
+
+   public static List<byte[]> getPathFromRoot(final byte[] id) {
+      final int length = id.length;
+      final List<byte[]> result = new ArrayList<byte[]>(length + 1);
+      int parentIDLenght = 0;
+      while (parentIDLenght <= length) {
+         final byte[] parentID = Arrays.copyOf(id, parentIDLenght);
+         result.add(parentID);
+         parentIDLenght++;
+      }
+      return result;
+   }
+
 
 }
