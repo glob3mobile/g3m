@@ -83,31 +83,34 @@ public class ProcessOT {
       final boolean showLODStats = true;
       if (showLODStats) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
-            //lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
+            //            lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
 
 
-            System.out.println();
+            final boolean drawSampleNode = true;
+            if (drawSampleNode) {
+               System.out.println();
 
-            final String id = "032010023013302133";
+               //final String id = "032010023013302133";
+               final String id = "0320100233212300003";
 
-            final Sector sector = lodDB.getSector(id);
+               final Sector sector = lodDB.getSector(id);
 
-            final long start = System.currentTimeMillis();
-            final List<PersistentLOD.Level> levels = lodDB.getLODLevels(id);
-            final long elapsed = System.currentTimeMillis() - start;
-            System.out.println("== " + elapsed + "ms");
+               final long start = System.currentTimeMillis();
+               final List<PersistentLOD.Level> levels = lodDB.getLODLevels(id);
+               final long elapsed = System.currentTimeMillis() - start;
+               System.out.println("== " + elapsed + "ms");
 
-            final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
-            long totalPoints = 0;
-            for (final PersistentLOD.Level level : levels) {
-               System.out.println(level);
-               totalPoints += level.size();
+               final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
+               long totalPoints = 0;
+               for (final PersistentLOD.Level level : levels) {
+                  System.out.println(level);
+                  totalPoints += level.size();
 
-               accumulatedPoints.addAll(level.getPoints());
-               generateImage(id, level.getLevel(), sector, accumulatedPoints);
+                  accumulatedPoints.addAll(level.getPoints());
+                  generateImage(id, level.getLevel(), sector, accumulatedPoints);
+               }
+               System.out.println("* Total Points=" + totalPoints);
             }
-            System.out.println("* Total Points=" + totalPoints);
-
          }
       }
 
