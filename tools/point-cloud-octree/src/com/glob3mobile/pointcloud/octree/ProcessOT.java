@@ -64,24 +64,10 @@ public class ProcessOT {
       final String sourceCloudName = "Loudoun-VA";
       final String lodCloudName = sourceCloudName + "_LOD";
 
+      final boolean createSourceMap = false;
       final boolean createLOD = false;
-      final boolean createSourceMap = true;
       final boolean showLODStats = false;
-      final boolean drawSampleLODNode = false;
-
-      if (createLOD) {
-         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
-            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
-            final long pointsCount = statistics.getPointsCount();
-            statistics.show();
-
-            BerkeleyDBLOD.delete(lodCloudName);
-            final int maxPointsPerLeaf = 24 * 1024;
-            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
-
-         }
-         System.out.println();
-      }
+      final boolean drawSampleLODNode = true;
 
       if (createSourceMap) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
@@ -91,6 +77,21 @@ public class ProcessOT {
             sourceOctree.acceptDepthFirstVisitor(new CreateMapTask(sourceCloudName, statistics, 2048 * 2));
          }
       }
+
+      if (createLOD) {
+         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
+            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
+            final long pointsCount = statistics.getPointsCount();
+            statistics.show();
+
+            BerkeleyDBLOD.delete(lodCloudName);
+            //final int maxPointsPerLeaf = 24 * 1024;
+            final int maxPointsPerLeaf = Integer.MAX_VALUE;
+            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
+         }
+         System.out.println();
+      }
+
 
       if (showLODStats) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
@@ -103,7 +104,9 @@ public class ProcessOT {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
 
             //final String id = "032010023013302133";
-            final String id = "0320100233212300003";
+            //final String id = "0320100233212300003";
+            final String id = "032010023321230002";
+
 
             final Sector sector = lodDB.getSector(id);
 
