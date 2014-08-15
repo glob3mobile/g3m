@@ -3,6 +3,7 @@
 package com.glob3mobile.pointcloud.octree;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,13 +13,14 @@ import com.glob3mobile.pointcloud.kdtree.KDTree;
 import com.glob3mobile.pointcloud.kdtree.KDTreeVisitor;
 import com.glob3mobile.pointcloud.octree.PersistentLOD.Transaction;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
+import com.glob3mobile.pointcloud.octree.berkeleydb.TileHeader;
 
 import es.igosoftware.util.GProgress;
 
 
 class LODSortingTask
-         implements
-            PersistentOctree.Visitor {
+implements
+PersistentOctree.Visitor {
    private final GProgress _progress;
    private final String    _lodCloudName;
    private PersistentLOD   _lodDB;
@@ -28,9 +30,9 @@ class LODSortingTask
 
 
    LODSortingTask(final String lodCloudName,
-                  final String sourceCloudName,
-                  final long pointsCount,
-                  final int maxPointsPerLeaf) {
+            final String sourceCloudName,
+            final long pointsCount,
+            final int maxPointsPerLeaf) {
       _lodCloudName = lodCloudName;
       _progress = new GProgress(pointsCount, true) {
          @Override
@@ -39,7 +41,7 @@ class LODSortingTask
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("  processing \"" + sourceCloudName + "\" "
-                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
       _maxPointsPerLeaf = maxPointsPerLeaf;
@@ -55,12 +57,17 @@ class LODSortingTask
          return true;
       }
 
-      if (pointsSize > _maxPointsPerLeaf) {
-         System.out.println("  => source node " + node.getID() + " has too many points (" + pointsSize + ")");
-      }
-
       final PersistentLOD.Transaction transaction = _lodDB.createTransaction();
-      final int sortedPointsCount = process(transaction, _lodDB, node.getID(), points);
+      final int sortedPointsCount;
+      if (pointsSize > _maxPointsPerLeaf) {
+         //System.out.println("  => source node " + node.getID() + " has too many points (" + pointsSize + ")");
+
+         final byte[] binaryID = Utils.toBinaryID(node.getID());
+         sortedPointsCount = splitPoints(transaction, _lodDB, binaryID, TileHeader.sectorFor(binaryID), points, _maxPointsPerLeaf);
+      }
+      else {
+         sortedPointsCount = process(transaction, _lodDB, node.getID(), points);
+      }
       transaction.commit();
 
       _sortedPointsCount += sortedPointsCount;
@@ -69,6 +76,62 @@ class LODSortingTask
       _progress.stepsDone(pointsSize);
 
       return true;
+   }
+
+
+   private static List<Geodetic3D> extractPoints(final Sector sector,
+            final List<Geodetic3D> points) {
+
+      final List<Geodetic3D> extracted = new ArrayList<Geodetic3D>();
+
+      final Iterator<Geodetic3D> iterator = points.iterator();
+      while (iterator.hasNext()) {
+         final Geodetic3D point = iterator.next();
+         if (sector.contains(point._latitude, point._longitude)) {
+            extracted.add(point);
+
+            iterator.remove();
+         }
+      }
+
+      final int extractedSize = extracted.size();
+      if (extractedSize == 0) {
+         return null;
+      }
+
+      return extracted;
+   }
+
+
+   private static int splitPoints(final Transaction transaction,
+                                  final PersistentLOD lodDB,
+                                  final byte[] nodeID,
+                                  final Sector nodeSector,
+                                  final List<Geodetic3D> nodePoints,
+                                  final int maxPointsPerLeaf) {
+
+      int sortedPointsCount = 0;
+
+      final List<Geodetic3D> points = new ArrayList<Geodetic3D>(nodePoints);
+
+      final TileHeader header = new TileHeader(nodeID, nodeSector);
+      for (final TileHeader child : header.createChildren()) {
+         final List<Geodetic3D> childPoints = extractPoints(child._sector, points);
+         if (childPoints != null) {
+            if (childPoints.size() > maxPointsPerLeaf) {
+               sortedPointsCount += splitPoints(transaction, lodDB, child._id, child._sector, childPoints, maxPointsPerLeaf);
+            }
+            else {
+               sortedPointsCount += process(transaction, lodDB, Utils.toIDString(child._id), childPoints);
+            }
+         }
+      }
+
+      if (!points.isEmpty()) {
+         throw new RuntimeException("Logic error!");
+      }
+
+      return sortedPointsCount;
    }
 
 
@@ -312,8 +375,8 @@ class LODSortingTask
 
 
    private static class SortDirties
-   implements
-   PersistentLOD.Visitor {
+            implements
+               PersistentLOD.Visitor {
       PersistentLOD           _lodDB;
       private final GProgress _progress;
 
@@ -321,12 +384,14 @@ class LODSortingTask
       private long            _previousSortedPointsCount;
       private long            _sortedPointsCount;
       private long            _dirtyPointsCount;
+      private final int       _iteration;
 
 
       private SortDirties(final PersistentLOD lodDB,
                           final int iteration,
                           final long totalPointsCount) {
          _lodDB = lodDB;
+         _iteration = iteration;
          _progress = new GProgress(totalPointsCount, true) {
             @Override
             public void informProgress(final long stepsDone,
@@ -334,7 +399,7 @@ class LODSortingTask
                                        final long elapsed,
                                        final long estimatedMsToFinish) {
                System.out.println("  processing \"" + lodDB.getCloudName() + "\" iteration #" + iteration + " "
-                        + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                                  + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
             }
          };
       }
@@ -353,7 +418,7 @@ class LODSortingTask
       @Override
       public boolean visit(final PersistentLOD.Transaction transaction,
                            final PersistentLOD.Node node) {
-         final String id = node.getID();
+         //final String id = node.getID();
          final boolean isDirty = node.isDirty();
          final int pointsCounts = node.getPointsCount();
          //System.out.println("#" + id + " dirty=" + isDirty + ", pointsCount=" + pointsCounts);
@@ -387,13 +452,8 @@ class LODSortingTask
          _progress.finish();
 
          final long previousTotalPoints = _previousSortedPointsCount + _previousDirtyPointsCount;
-         //         System.out.println("(2) FINISHED: previous (sortedPoints=" + _previousSortedPointsCount + //
-         //                  ", dirtyPoints=" + _previousDirtyPointsCount + //
-         //                  ", total=" + previousTotalPoints + //
-         //                  ")  /  NEW= sorted " + _sortedPointsCount + //
-         //                  " dirty=" + _dirtyPointsCount);
-         System.out.println("(2) FINISHED: SortedInIteration=" + _sortedPointsCount + //
-                  ", dirty=" + _dirtyPointsCount + "  (total=" + previousTotalPoints + ")");
+         System.out.println("** processing dirties iteration #" + _iteration + " SortedInIteration=" + _sortedPointsCount + //
+                            ", dirty=" + _dirtyPointsCount + "  (total=" + previousTotalPoints + ")");
       }
    }
 
@@ -410,9 +470,9 @@ class LODSortingTask
    @Override
    public void stop() {
       long dirtyPointsCount = _totalPointsCount - _sortedPointsCount;
-      System.out.println("** FINISHED: sortedPoints=" + _sortedPointsCount + //
-               ", dirtyPoints=" + dirtyPointsCount + //
-               ", total=" + _totalPointsCount);
+      System.out.println("** initial import: sortedPoints=" + _sortedPointsCount + //
+                         ", dirtyPoints=" + dirtyPointsCount + //
+                         ", total=" + _totalPointsCount);
 
       int iteration = 0;
       while (dirtyPointsCount > 0) {

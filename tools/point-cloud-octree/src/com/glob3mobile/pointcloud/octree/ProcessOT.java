@@ -64,12 +64,14 @@ public class ProcessOT {
          final boolean createLOD = true;
          if (createLOD) {
             BerkeleyDBLOD.delete(lodCloudName);
-            final int maxPointsPerLeaf = 16 * 1024;
+            final int maxPointsPerLeaf = 24 * 1024;
             sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
          }
 
          //sourceOctree.acceptVisitor(new CreateMapTask(progress, statistics, 2048 * 2));
       }
+
+      System.out.println();
 
       final boolean showLODStats = true;
       if (showLODStats) {

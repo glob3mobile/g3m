@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
+import com.glob3mobile.pointcloud.octree.Utils;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;
@@ -23,8 +24,8 @@ import es.igosoftware.io.GIOUtils;
 
 
 public class BerkeleyDBLOD
-implements
-PersistentLOD {
+         implements
+            PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final String cloudName) {
@@ -109,19 +110,9 @@ PersistentLOD {
    }
 
 
-   private static byte[] toBinaryID(final String id) {
-      final int length = id.length();
-      final byte[] result = new byte[length];
-      for (int i = 0; i < length; i++) {
-         result[i] = Byte.parseByte(Character.toString(id.charAt(i)));
-      }
-      return result;
-   }
-
-
    private static class BerkeleyDBTransaction
-   implements
-   PersistentLOD.Transaction {
+            implements
+               PersistentLOD.Transaction {
 
       private final com.sleepycat.je.Transaction _txn;
 
@@ -172,7 +163,7 @@ PersistentLOD {
       }
 
       final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
-      final byte[] binaryID = toBinaryID(id);
+      final byte[] binaryID = Utils.toBinaryID(id);
 
       final BerkeleyDBLODNode node = BerkeleyDBLODNode.create(this, binaryID, dirty, points);
       node.save(txn);
@@ -185,7 +176,7 @@ PersistentLOD {
                           final boolean dirty,
                           final List<Geodetic3D> points) {
       final com.sleepycat.je.Transaction txn = ((BerkeleyDBTransaction) transaction)._txn;
-      final byte[] binaryID = toBinaryID(id);
+      final byte[] binaryID = Utils.toBinaryID(id);
 
       final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, binaryID, true);
       if (node == null) {

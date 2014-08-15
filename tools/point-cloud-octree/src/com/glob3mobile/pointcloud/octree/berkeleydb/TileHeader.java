@@ -8,7 +8,7 @@ import com.glob3mobile.pointcloud.octree.Sector;
 import com.glob3mobile.pointcloud.octree.Utils;
 
 
-class TileHeader {
+public class TileHeader {
 
    private static final TileHeader ROOT_TILE_HEADER = new TileHeader(new byte[0], Sector.FULL_SPHERE);
 
@@ -30,18 +30,18 @@ class TileHeader {
    }
 
 
-   final byte[] _id;
-   final Sector _sector;
+   public final byte[] _id;
+   public final Sector _sector;
 
 
-   TileHeader(final byte[] id,
-              final Sector sector) {
+   public TileHeader(final byte[] id,
+                     final Sector sector) {
       _id = id;
       _sector = sector;
    }
 
 
-   TileHeader[] createChildren() {
+   public TileHeader[] createChildren() {
       return new TileHeader[] { createChild((byte) 0), createChild((byte) 1), createChild((byte) 2), createChild((byte) 3) };
    }
 
@@ -86,7 +86,7 @@ class TileHeader {
    }
 
 
-   static Sector sectorFor(final byte[] id) {
+   public static Sector sectorFor(final byte[] id) {
       Sector currentSector = Sector.FULL_SPHERE;
       for (final byte b : id) {
          currentSector = createSectorForChild(currentSector, b);

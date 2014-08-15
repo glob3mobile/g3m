@@ -66,4 +66,13 @@ public class Utils {
    }
 
 
+   public static byte[] toBinaryID(final String id) {
+      final int length = id.length();
+      final byte[] result = new byte[length];
+      for (int i = 0; i < length; i++) {
+         result[i] = Byte.parseByte(Character.toString(id.charAt(i)));
+      }
+      return result;
+   }
+
 }
