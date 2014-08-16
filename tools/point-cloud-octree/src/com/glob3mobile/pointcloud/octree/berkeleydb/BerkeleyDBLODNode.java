@@ -284,4 +284,9 @@ public class BerkeleyDBLODNode
    }
 
 
+   @Override
+   public String toString() {
+      return "[BerkeleyDBLODNode id=" + Utils.toIDString(_id) + ", level=" + _level + ", points=" + _pointsCount + "]";
+   }
+
 }

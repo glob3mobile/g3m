@@ -66,13 +66,14 @@ public class ProcessOT {
 
       if (drawSampleLODNode) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
-            final String id = "032010023321230000"; // FoundSelf -> OK
+            // final String id = "032010023321230000"; // FoundSelf -> OK
             // final String id = "333333333333333"; // FoundNothing -> OK
 
             // final String id = "032010023321230000333"; // NotFoundSelfNorDescendants **** PENDING ***
 
             // final String id = "03201002332123000"; // FoundDescendants **** PENDING ***
-            // final String id = "03201002332"; // FoundDescendants **** PENDING ***
+            // final String id = "0320100233212300"; // FoundDescendants **** PENDING ***
+            final String id = "03201002332"; // FoundDescendants **** PENDING ***
 
             final Sector sector = lodDB.getSector(id);
 
