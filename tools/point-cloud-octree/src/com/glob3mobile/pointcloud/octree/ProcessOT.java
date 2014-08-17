@@ -17,9 +17,38 @@ import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
 import es.igosoftware.euclid.colors.GColorF;
+import es.igosoftware.util.GMath;
 
 
 public class ProcessOT {
+
+   private static final GColorF[] RAMP = new GColorF[] { GColorF.CYAN, GColorF.GREEN, GColorF.YELLOW, GColorF.RED };
+
+
+   private static GColorF interpolateColorFromRamp(final GColorF colorFrom,
+                                                   final GColorF[] ramp,
+                                                   final float alpha) {
+      final float rampStep = 1f / ramp.length;
+
+      final int toI;
+      if (GMath.closeTo(alpha, 1)) {
+         toI = ramp.length - 1;
+      }
+      else {
+         toI = (int) (alpha / rampStep);
+      }
+
+      final GColorF from;
+      if (toI == 0) {
+         from = colorFrom;
+      }
+      else {
+         from = ramp[toI - 1];
+      }
+
+      final float colorAlpha = (alpha % rampStep) / rampStep;
+      return from.mixedWidth(ramp[toI], colorAlpha);
+   }
 
 
    public static void main(final String[] args) {
@@ -32,8 +61,8 @@ public class ProcessOT {
 
       final boolean createMapForSourceOT = false;
       final boolean createLOD = false;
-      final boolean showLODStats = true;
-      final boolean drawSampleLODNode = false;
+      final boolean showLODStats = false;
+      final boolean drawSampleLODNode = true;
 
       if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
@@ -121,22 +150,19 @@ public class ProcessOT {
       final BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
       final Graphics2D g = image.createGraphics();
 
-      g.setColor(Color.BLACK);
-      g.fillRect(0, 0, imageWidth, imageHeight);
+      //      g.setColor(Color.WHITE);
+      //      g.fillRect(0, 0, imageWidth, imageHeight);
 
 
-      //g.setColor(Color.WHITE);
+      g.setColor(Color.WHITE);
 
-      final double deltaHeight = maxHeight - minHeight;
-
+      //final double deltaHeight = maxHeight - minHeight;
 
       for (final Geodetic3D point : points) {
-
-         final float alpha = (float) ((point._height - minHeight) / deltaHeight);
-         System.out.println(alpha);
-         final GColorF color = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
-
-         g.setColor(Utils.toAWTColor(color));
+         //         final float alpha = (float) ((point._height - minHeight) / deltaHeight);
+         //         //final GColorF color = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
+         //         final GColorF color = ProcessOT.interpolateColorFromRamp(GColorF.BLUE, ProcessOT.RAMP, alpha);
+         //         g.setColor(Utils.toAWTColor(color));
 
          final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * imageWidth));
          final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * imageHeight));
