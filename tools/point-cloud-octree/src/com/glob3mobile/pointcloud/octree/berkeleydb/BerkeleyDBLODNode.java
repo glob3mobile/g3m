@@ -72,9 +72,10 @@ public class BerkeleyDBLODNode
       final byte formatID = byteBuffer.get();
       final Format format = Format.getFromID(formatID);
 
-      final BerkeleyDBLODNode tile = new BerkeleyDBLODNode(db, id, level, pointsCount, format);
-      if (pointsCount <= MAX_POINTS_IN_HEADER) {
-         tile._points = ByteBufferUtils.getPoints(byteBuffer, format, pointsCount);
+      final int absPointsCount = Math.abs(pointsCount);
+      final BerkeleyDBLODNode tile = new BerkeleyDBLODNode(db, id, level, absPointsCount, format);
+      if (pointsCount < 0) {
+         tile._points = ByteBufferUtils.getPoints(byteBuffer, format, absPointsCount);
       }
       else {
          if (loadPoints) {
@@ -86,7 +87,7 @@ public class BerkeleyDBLODNode
 
    private final BerkeleyDBLOD _db;
    private final byte[]        _id;
-   private final int           _level;
+   private final int           _lodLevel;
    private final int           _pointsCount;
    private List<Geodetic3D>    _points;
    private final Format        _format;
@@ -99,7 +100,7 @@ public class BerkeleyDBLODNode
                              final List<Geodetic3D> points) {
       _db = db;
       _id = id;
-      _level = level;
+      _lodLevel = level;
       _pointsCount = points.size();
       _points = new ArrayList<Geodetic3D>(points);
       _format = null;
@@ -113,7 +114,7 @@ public class BerkeleyDBLODNode
                              final Format format) {
       _db = db;
       _id = id;
-      _level = level;
+      _lodLevel = level;
       _pointsCount = pointsCount;
       _points = null;
       _format = format;
@@ -145,11 +146,11 @@ public class BerkeleyDBLODNode
    private DatabaseEntry createNodeDataKey() {
       final int size = ByteBufferUtils.sizeOf(_id) + //
                        ByteBufferUtils.sizeOf((byte) 255) + //
-                       ByteBufferUtils.sizeOf(_level);
+                       ByteBufferUtils.sizeOf(_lodLevel);
       final ByteBuffer byteBuffer = ByteBuffer.allocate(size);
       byteBuffer.put(_id);
       byteBuffer.put((byte) 255);
-      byteBuffer.putInt(_level);
+      byteBuffer.putInt(_lodLevel);
       return new DatabaseEntry(byteBuffer.array());
    }
 
@@ -161,14 +162,14 @@ public class BerkeleyDBLODNode
 
       final int entrySize = ByteBufferUtils.sizeOf(version) + //
                ByteBufferUtils.sizeOf(subversion) + //
-               ByteBufferUtils.sizeOf(_level) + //
+               ByteBufferUtils.sizeOf(_lodLevel) + //
                             ByteBufferUtils.sizeOf(_pointsCount) + //
                             ByteBufferUtils.sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
       byteBuffer.put(subversion);
-      byteBuffer.putInt(_level);
+      byteBuffer.putInt(_lodLevel);
       byteBuffer.putInt(_pointsCount);
       byteBuffer.put(formatID);
 
@@ -183,7 +184,7 @@ public class BerkeleyDBLODNode
 
       final int entrySize = ByteBufferUtils.sizeOf(version) + //
                             ByteBufferUtils.sizeOf(subversion) + //
-                            ByteBufferUtils.sizeOf(_level) + //
+                            ByteBufferUtils.sizeOf(_lodLevel) + //
                             ByteBufferUtils.sizeOf(_pointsCount) + //
                             ByteBufferUtils.sizeOf(formatID) + //
                             ByteBufferUtils.sizeOf(format, _points);
@@ -191,8 +192,8 @@ public class BerkeleyDBLODNode
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
       byteBuffer.put(subversion);
-      byteBuffer.putInt(_level);
-      byteBuffer.putInt(_pointsCount);
+      byteBuffer.putInt(_lodLevel);
+      byteBuffer.putInt(_pointsCount * -1); // negative pointsCount means the points are store in the header
       byteBuffer.put(formatID);
       ByteBufferUtils.put(byteBuffer, format, _points);
 
@@ -278,15 +279,20 @@ public class BerkeleyDBLODNode
    }
 
 
-   @Override
-   public int getLevel() {
-      return _level;
+   public int getLODLevel() {
+      return _lodLevel;
    }
 
 
    @Override
    public String toString() {
-      return "[BerkeleyDBLODNode id=" + Utils.toIDString(_id) + ", level=" + _level + ", points=" + _pointsCount + "]";
+      return "[BerkeleyDBLODNode id=" + Utils.toIDString(_id) + ", lodLevel=" + _lodLevel + ", points=" + _pointsCount + "]";
+   }
+
+
+   @Override
+   public int getDepth() {
+      return _id.length;
    }
 
 }

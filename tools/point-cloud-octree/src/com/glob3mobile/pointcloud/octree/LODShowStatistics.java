@@ -8,8 +8,8 @@ import es.igosoftware.util.GStringUtils;
 
 
 final class LODShowStatistics
-         implements
-            PersistentLOD.Visitor {
+implements
+PersistentLOD.Visitor {
    private long _pointsCount;
    private long _nodesCount;
 
@@ -36,9 +36,9 @@ final class LODShowStatistics
       final int pointsCount = node.getPointsCount();
       final double value = pointsCount * 3 * 8;
       System.out.println("[" + node.getID() + "]" + //
-               " level=" + node.getLevel() + //
-                         " points=" + pointsCount + //
-                         " estimatesSize=" + GStringUtils.getSpaceMessage(value));
+                         " depth=" + node.getDepth() + //
+               " points=" + pointsCount + //
+               " estimatesSize=" + GStringUtils.getSpaceMessage(value));
       _pointsCount += pointsCount;
       _nodesCount++;
       return true;

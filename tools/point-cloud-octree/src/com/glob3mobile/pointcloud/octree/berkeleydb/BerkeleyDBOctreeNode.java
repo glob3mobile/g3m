@@ -114,7 +114,7 @@ public class BerkeleyDBOctreeNode
 
 
    @Override
-   public int getLevel() {
+   public int getDepth() {
       return _id.length;
    }
 
@@ -139,7 +139,7 @@ public class BerkeleyDBOctreeNode
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-             ", level=" + getLevel() + //
+             ", depth=" + getDepth() + //
              ", points=" + _pointsCount + //
              ", sector=" + _sector + //
              "]";

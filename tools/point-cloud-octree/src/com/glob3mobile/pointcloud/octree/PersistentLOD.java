@@ -74,7 +74,7 @@ public interface PersistentLOD
       Sector getSector();
 
 
-      int getLevel();
+      int getDepth();
 
 
    }
@@ -100,6 +100,28 @@ public interface PersistentLOD
 
       void rollback();
 
+   }
+
+   public interface Statistics {
+      void show();
+
+
+      long getPointsCount();
+
+
+      Sector getSector();
+
+
+      double getMinHeigth();
+
+
+      double getMaxHeigth();
+
+
+      int getMinPointsPerNode();
+
+
+      int getMaxPointsPerNode();
    }
 
 
@@ -134,5 +156,9 @@ public interface PersistentLOD
 
 
    Sector getSector(String id);
+
+
+   PersistentLOD.Statistics getStatistics(boolean fast,
+                                          boolean showProgress);
 
 }

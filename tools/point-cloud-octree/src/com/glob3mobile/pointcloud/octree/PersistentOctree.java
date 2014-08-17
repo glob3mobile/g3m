@@ -6,8 +6,8 @@ import java.util.List;
 
 
 public interface PersistentOctree
-         extends
-            AutoCloseable {
+extends
+AutoCloseable {
 
 
    public interface Node {
@@ -30,7 +30,7 @@ public interface PersistentOctree
       Sector getSector();
 
 
-      int getLevel();
+      int getDepth();
    }
 
 

@@ -30,8 +30,8 @@ public class ProcessOT {
 
       final boolean createMapForSourceOT = false;
       final boolean createLOD = false;
-      final boolean showLODStats = false;
-      final boolean drawSampleLODNode = true;
+      final boolean showLODStats = true;
+      final boolean drawSampleLODNode = false;
 
       if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
@@ -59,21 +59,28 @@ public class ProcessOT {
 
       if (showLODStats) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
-            lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
+            final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
+            statistics.show();
+            //lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
          }
          System.out.println();
       }
 
       if (drawSampleLODNode) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
-            // final String id = "032010023321230000"; // FoundSelf -> OK
+
+            //            final double maxHeight = lodDB.getMaxHeight();
+            //            final double minHeight = lodDB.getMinHeight();
+
+
+            final String id = "032010023321230000"; // FoundSelf -> OK
             // final String id = "333333333333333"; // FoundNothing -> OK
 
-            final String id = "032010023321230000"; // NotFoundSelfNorDescendants **** PENDING ***
+            //            final String id = "03201002332123000000"; // NotFoundSelfNorDescendants **** PENDING ***
 
             // final String id = "03201002332123000"; // FoundDescendants -> OK
             // final String id = "0320100233212300"; // FoundDescendants -> OK
-            // final String id = "03201002332"; // FoundDescendants -> OK
+            //final String id = "03201002332"; // FoundDescendants -> OK
 
             final Sector sector = lodDB.getSector(id);
 

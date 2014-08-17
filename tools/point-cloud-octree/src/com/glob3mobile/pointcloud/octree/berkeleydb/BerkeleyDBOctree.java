@@ -32,8 +32,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-implements
-PersistentOctree {
+         implements
+            PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -338,10 +338,10 @@ PersistentOctree {
 
 
    private static class BerkeleyDBStatistics
-            implements
-               PersistentOctree.Visitor,
-               PersistentOctree.Statistics,
-               Serializable {
+   implements
+   PersistentOctree.Visitor,
+   PersistentOctree.Statistics,
+   Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -350,9 +350,9 @@ PersistentOctree {
 
       private long                   _nodesCount;
       private long                   _pointsCount;
-      private long                   _sumLevel;
-      private int                    _minLevel;
-      private int                    _maxLevel;
+      private long                   _sumDepth;
+      private int                    _minDepth;
+      private int                    _maxDepth;
       private int                    _minPointsCountPerNode;
       private int                    _maxPointsCountPerNode;
       private Sector                 _sector;
@@ -376,9 +376,9 @@ PersistentOctree {
          _pointsCount = 0;
          _minPointsCountPerNode = Integer.MAX_VALUE;
          _maxPointsCountPerNode = Integer.MIN_VALUE;
-         _sumLevel = 0;
-         _minLevel = Integer.MAX_VALUE;
-         _maxLevel = Integer.MIN_VALUE;
+         _sumDepth = 0;
+         _minDepth = Integer.MAX_VALUE;
+         _maxDepth = Integer.MIN_VALUE;
       }
 
 
@@ -413,13 +413,13 @@ PersistentOctree {
             _maxPointsCountPerNode = nodePointsCount;
          }
 
-         final int level = node.getLevel();
-         _sumLevel += level;
-         if (level < _minLevel) {
-            _minLevel = level;
+         final int depth = node.getDepth();
+         _sumDepth += depth;
+         if (depth < _minDepth) {
+            _minDepth = depth;
          }
-         if (level > _maxLevel) {
-            _maxLevel = level;
+         if (depth > _maxDepth) {
+            _maxDepth = depth;
          }
          return true;
       }
@@ -442,10 +442,10 @@ PersistentOctree {
          System.out.println("   Sector: " + _sector);
          System.out.println("   Heights: " + _minHeigth + "/" + _maxHeigth + " (delta=" + (_maxHeigth - _minHeigth) + ")");
          System.out.println("   Nodes: " + _nodesCount);
-         System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
+         System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                            ", Min=" + _minPointsCountPerNode + //
-                            ", Max=" + _maxPointsCountPerNode);
+                  ", Min=" + _minPointsCountPerNode + //
+                  ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 
