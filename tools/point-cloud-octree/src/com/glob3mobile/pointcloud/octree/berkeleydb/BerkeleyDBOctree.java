@@ -32,8 +32,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -319,7 +319,7 @@ public class BerkeleyDBOctree
    }
 
 
-   BerkeleyDBOctreeNode readTile(final Transaction txn,
+   BerkeleyDBOctreeNode readNode(final Transaction txn,
                                  final byte[] id,
                                  final boolean loadPoints) {
       final DatabaseEntry keyEntry = new DatabaseEntry(id);
@@ -338,10 +338,10 @@ public class BerkeleyDBOctree
 
 
    private static class BerkeleyDBStatistics
-   implements
-   PersistentOctree.Visitor,
-   PersistentOctree.Statistics,
-   Serializable {
+            implements
+               PersistentOctree.Visitor,
+               PersistentOctree.Statistics,
+               Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -444,8 +444,8 @@ public class BerkeleyDBOctree
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Levels: " + _minLevel + "/" + _maxLevel + ", Average=" + ((float) _sumLevel / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 

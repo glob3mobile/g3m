@@ -24,8 +24,8 @@ import com.sleepycat.je.Transaction;
 
 
 public class BerkeleyDBOctreeNode
-implements
-PersistentOctree.Node {
+         implements
+            PersistentOctree.Node {
 
 
    private static double _upperLimitInDegrees = 85.0511287798;
@@ -139,10 +139,10 @@ PersistentOctree.Node {
    @Override
    public String toString() {
       return "MercatorTile [id=" + getID() + //
-               ", level=" + getLevel() + //
-               ", points=" + _pointsCount + //
-               ", sector=" + _sector + //
-               "]";
+             ", level=" + getLevel() + //
+             ", points=" + _pointsCount + //
+             ", sector=" + _sector + //
+             "]";
    }
 
 
@@ -152,11 +152,11 @@ PersistentOctree.Node {
       final byte formatID = format._formatID;
 
       final int entrySize = ByteBufferUtils.sizeOf(version) + //
-               ByteBufferUtils.sizeOf(subversion) + //
-               ByteBufferUtils.sizeOf(_sector) + //
-               ByteBufferUtils.sizeOf(_pointsCount) + //
-               ByteBufferUtils.sizeOf(format, _averagePoint) + //
-               ByteBufferUtils.sizeOf(formatID);
+                            ByteBufferUtils.sizeOf(subversion) + //
+                            ByteBufferUtils.sizeOf(_sector) + //
+                            ByteBufferUtils.sizeOf(_pointsCount) + //
+                            ByteBufferUtils.sizeOf(format, _averagePoint) + //
+                            ByteBufferUtils.sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -183,20 +183,20 @@ PersistentOctree.Node {
                                                               final byte[] id) {
       byte[] ancestorId = id;
       while (ancestorId != null) {
-         final BerkeleyDBOctreeNode ancestor = octree.readTile(txn, ancestorId, true);
+         final BerkeleyDBOctreeNode ancestor = octree.readNode(txn, ancestorId, true);
          if (ancestor != null) {
             return ancestor;
          }
-         ancestorId = removeTrailing(ancestorId);
+         ancestorId = Utils.removeTrailing(ancestorId);
       }
       return null;
    }
 
 
    private static List<BerkeleyDBOctreeNode> getDescendants(final Transaction txn,
-            final BerkeleyDBOctree octree,
-            final byte[] id,
-            final boolean loadPoints) {
+                                                            final BerkeleyDBOctree octree,
+                                                            final byte[] id,
+                                                            final boolean loadPoints) {
       final List<BerkeleyDBOctreeNode> result = new ArrayList<BerkeleyDBOctreeNode>();
 
       final Database nodeDB = octree.getNodeDB();
@@ -231,7 +231,7 @@ PersistentOctree.Node {
 
       //      final int REMOVE_DEBUG_CODE;
       //      for (final BerkeleyDBMercatorTile descendant : result) {
-         //         if (!Utils.hasSamePrefix(id, descendant._id)) {
+      //         if (!Utils.hasSamePrefix(id, descendant._id)) {
       //            throw new RuntimeException("Logic error");
       //         }
       //         if (!Utils.isGreaterThan(descendant._id, id)) {
@@ -308,7 +308,7 @@ PersistentOctree.Node {
 
 
    private static List<TileHeader> descendantsHeadersOfLevel(final TileHeader header,
-            final int level) {
+                                                             final int level) {
       final List<TileHeader> result = new ArrayList<TileHeader>();
       descendantsHeadersOfLevel(result, level, header);
       return result;
@@ -344,7 +344,7 @@ PersistentOctree.Node {
 
       if (getPoints().size() >= _octree.getMaxPointsPerTile()) {
          System.out.println("***** logic error, tile " + getID() + " has more points than threshold (" + getPoints().size() + ">"
-                  + _octree.getMaxPointsPerTile() + ")");
+                            + _octree.getMaxPointsPerTile() + ")");
       }
 
 
@@ -379,9 +379,9 @@ PersistentOctree.Node {
 
       if ((ancestor != null) || !descendants.isEmpty()) {
          System.out.println("***** INVARIANT FAILED: " + //
-                  "for tile=" + Utils.toIDString(_id) + //
-                  ", ancestor=" + ancestor + //
-                  ", descendants=" + descendants);
+                            "for tile=" + Utils.toIDString(_id) + //
+                            ", ancestor=" + ancestor + //
+                            ", descendants=" + descendants);
       }
    }
 
@@ -389,13 +389,13 @@ PersistentOctree.Node {
    private static BerkeleyDBOctreeNode getAncestor(final Transaction txn,
                                                    final BerkeleyDBOctree octree,
                                                    final byte[] id) {
-      byte[] ancestorId = removeTrailing(id);
+      byte[] ancestorId = Utils.removeTrailing(id);
       while (ancestorId != null) {
-         final BerkeleyDBOctreeNode ancestor = octree.readTile(txn, ancestorId, true);
+         final BerkeleyDBOctreeNode ancestor = octree.readNode(txn, ancestorId, true);
          if (ancestor != null) {
             return ancestor;
          }
-         ancestorId = removeTrailing(ancestorId);
+         ancestorId = Utils.removeTrailing(ancestorId);
       }
       return null;
    }
@@ -568,15 +568,6 @@ PersistentOctree.Node {
       _averagePoint = mergedAveragePoints;
 
       rawSave(txn);
-   }
-
-
-   private static byte[] removeTrailing(final byte[] id) {
-      final int length = id.length;
-      if (length == 0) {
-         return null;
-      }
-      return Arrays.copyOf(id, length - 1);
    }
 
 

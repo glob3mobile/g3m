@@ -123,4 +123,13 @@ public class Utils {
    }
 
 
+   public static byte[] removeTrailing(final byte[] id) {
+      final int length = id.length;
+      if (length == 0) {
+         return null;
+      }
+      return Arrays.copyOf(id, length - 1);
+   }
+
+
 }

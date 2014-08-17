@@ -69,11 +69,11 @@ public class ProcessOT {
             // final String id = "032010023321230000"; // FoundSelf -> OK
             // final String id = "333333333333333"; // FoundNothing -> OK
 
-            // final String id = "032010023321230000333"; // NotFoundSelfNorDescendants **** PENDING ***
+            final String id = "032010023321230000"; // NotFoundSelfNorDescendants **** PENDING ***
 
-            // final String id = "03201002332123000"; // FoundDescendants **** PENDING ***
-            // final String id = "0320100233212300"; // FoundDescendants **** PENDING ***
-            final String id = "03201002332"; // FoundDescendants **** PENDING ***
+            // final String id = "03201002332123000"; // FoundDescendants -> OK
+            // final String id = "0320100233212300"; // FoundDescendants -> OK
+            // final String id = "03201002332"; // FoundDescendants -> OK
 
             final Sector sector = lodDB.getSector(id);
 
