@@ -9,8 +9,8 @@ import es.igosoftware.util.GStringUtils;
 
 
 public interface PersistentLOD
-         extends
-            AutoCloseable {
+extends
+AutoCloseable {
 
 
    public class Level {
@@ -29,8 +29,8 @@ public interface PersistentLOD
       public String toString() {
          final double estimatedSize = _points.size() * 3 * 8;
          return "[Level " + _level + //
-                  ", points=" + _points.size() + //
-                  ", estimatedSize=" + GStringUtils.getSpaceMessage(estimatedSize) + "]";
+                ", points=" + _points.size() + //
+                ", estimatedSize=" + GStringUtils.getSpaceMessage(estimatedSize) + "]";
       }
 
 
@@ -112,10 +112,10 @@ public interface PersistentLOD
       Sector getSector();
 
 
-      double getMinHeigth();
+      double getMinHeight();
 
 
-      double getMaxHeigth();
+      double getMaxHeight();
 
 
       int getMinPointsPerNode();

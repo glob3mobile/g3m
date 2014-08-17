@@ -16,6 +16,8 @@ import javax.imageio.ImageIO;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
 
+import es.igosoftware.euclid.colors.GColorF;
+
 
 public class ProcessOT {
 
@@ -68,9 +70,10 @@ public class ProcessOT {
 
       if (drawSampleLODNode) {
          try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
+            final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
 
-            //            final double maxHeight = lodDB.getMaxHeight();
-            //            final double minHeight = lodDB.getMinHeight();
+            final double minHeight = statistics.getMinHeight();
+            final double maxHeight = statistics.getMaxHeight();
 
 
             final String id = "032010023321230000"; // FoundSelf -> OK
@@ -96,7 +99,7 @@ public class ProcessOT {
                totalPoints += level.size();
 
                accumulatedPoints.addAll(level.getPoints());
-               generateImage(id, level.getLevel(), sector, accumulatedPoints);
+               generateImage(id, level.getLevel(), sector, accumulatedPoints, minHeight, maxHeight);
             }
             System.out.println("* Total Points=" + totalPoints);
          }
@@ -109,7 +112,9 @@ public class ProcessOT {
    private static void generateImage(final String id,
                                      final int level,
                                      final Sector sector,
-                                     final List<Geodetic3D> points) {
+                                     final List<Geodetic3D> points,
+                                     final double minHeight,
+                                     final double maxHeight) {
       final int imageWidth = 1024;
       final int imageHeight = 1024;
 
@@ -119,8 +124,20 @@ public class ProcessOT {
       g.setColor(Color.BLACK);
       g.fillRect(0, 0, imageWidth, imageHeight);
 
-      g.setColor(Color.WHITE);
+
+      //g.setColor(Color.WHITE);
+
+      final double deltaHeight = maxHeight - minHeight;
+
+
       for (final Geodetic3D point : points) {
+
+         final float alpha = (float) ((point._height - minHeight) / deltaHeight);
+         System.out.println(alpha);
+         final GColorF color = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
+
+         g.setColor(Utils.toAWTColor(color));
+
          final int x = Math.round((float) (sector.getUCoordinate(point._longitude) * imageWidth));
          final int y = Math.round((float) (sector.getVCoordinate(point._latitude) * imageHeight));
          g.fillRect(x, y, 1, 1);
@@ -136,5 +153,4 @@ public class ProcessOT {
          throw new RuntimeException(e);
       }
    }
-
 }

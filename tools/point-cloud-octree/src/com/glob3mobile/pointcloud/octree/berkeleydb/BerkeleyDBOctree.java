@@ -32,8 +32,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -338,10 +338,10 @@ public class BerkeleyDBOctree
 
 
    private static class BerkeleyDBStatistics
-   implements
-   PersistentOctree.Visitor,
-   PersistentOctree.Statistics,
-   Serializable {
+            implements
+               PersistentOctree.Visitor,
+               PersistentOctree.Statistics,
+               Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -356,8 +356,8 @@ public class BerkeleyDBOctree
       private int                    _minPointsCountPerNode;
       private int                    _maxPointsCountPerNode;
       private Sector                 _sector;
-      private double                 _minHeigth       = Double.POSITIVE_INFINITY;
-      private double                 _maxHeigth       = Double.NEGATIVE_INFINITY;
+      private double                 _minHeight       = Double.POSITIVE_INFINITY;
+      private double                 _maxHeight       = Double.NEGATIVE_INFINITY;
       private final boolean          _fast;
 
 
@@ -394,11 +394,11 @@ public class BerkeleyDBOctree
          if (!_fast) {
             for (final Geodetic3D point : node.getPoints()) {
                final double height = point._height;
-               if (height < _minHeigth) {
-                  _minHeigth = height;
+               if (height < _minHeight) {
+                  _minHeight = height;
                }
-               if (height > _maxHeigth) {
-                  _maxHeigth = height;
+               if (height > _maxHeight) {
+                  _maxHeight = height;
                }
             }
          }
@@ -440,12 +440,12 @@ public class BerkeleyDBOctree
          System.out.println(" " + _cloudName);
          System.out.println("   Points: " + _pointsCount);
          System.out.println("   Sector: " + _sector);
-         System.out.println("   Heights: " + _minHeigth + "/" + _maxHeigth + " (delta=" + (_maxHeigth - _minHeigth) + ")");
+         System.out.println("   Heights: " + _minHeight + "/" + _maxHeight + " (delta=" + (_maxHeight - _minHeight) + ")");
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 
@@ -468,14 +468,14 @@ public class BerkeleyDBOctree
 
 
       @Override
-      public double getMinHeigth() {
-         return _minHeigth;
+      public double getMinHeight() {
+         return _minHeight;
       }
 
 
       @Override
-      public double getMaxHeigth() {
-         return _maxHeigth;
+      public double getMaxHeight() {
+         return _maxHeight;
       }
 
 

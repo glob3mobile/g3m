@@ -6,8 +6,8 @@ import java.util.List;
 
 
 public interface PersistentOctree
-extends
-AutoCloseable {
+         extends
+            AutoCloseable {
 
 
    public interface Node {
@@ -55,10 +55,10 @@ AutoCloseable {
       Sector getSector();
 
 
-      double getMinHeigth();
+      double getMinHeight();
 
 
-      double getMaxHeigth();
+      double getMaxHeight();
 
 
       int getMinPointsPerNode();
