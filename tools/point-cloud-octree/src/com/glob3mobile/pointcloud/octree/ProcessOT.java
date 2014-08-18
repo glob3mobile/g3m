@@ -60,9 +60,9 @@ public class ProcessOT {
       final String lodCloudName = sourceCloudName + "_LOD";
 
       final boolean createMapForSourceOT = false;
-      final boolean createLOD = false;
-      final boolean showLODStats = false;
-      final boolean drawSampleLODNode = true;
+      final boolean createLOD = true;
+      final boolean showLODStats = true;
+      final boolean drawSampleLODNode = false;
 
       if (createMapForSourceOT) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
