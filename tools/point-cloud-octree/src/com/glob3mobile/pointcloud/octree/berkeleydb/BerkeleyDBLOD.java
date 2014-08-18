@@ -95,6 +95,8 @@ PersistentLOD {
       envConfig.setAllowCreate(createIfNotExists);
       envConfig.setTransactional(true);
       envConfig.setReadOnly(readOnly);
+      final int totalBytes = 1024 * 1024 * 1024;
+      envConfig.setCacheSize(totalBytes);
       _env = new Environment(envHome, envConfig);
 
       final DatabaseConfig dbConfig = new DatabaseConfig();
