@@ -21,11 +21,12 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-extends
-HttpServlet {
+         extends
+            HttpServlet {
+   private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
 
-   private static final long serialVersionUID = 1L;
-   private File              _cloudDirectory;
+   private static final long                serialVersionUID = 1L;
+   private File                             _cloudDirectory;
 
 
    @Override
@@ -39,8 +40,6 @@ HttpServlet {
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }
-
-   private final Map<String, PersistentLOD> _openedDBs = new HashMap<String, PersistentLOD>();
 
 
    private PersistentLOD getDB(final String cloudName) {
@@ -58,6 +57,31 @@ HttpServlet {
          }
          return result;
       }
+   }
+
+
+   @Override
+   public void destroy() {
+      super.destroy();
+      log("destroying " + getClass());
+
+      synchronized (_openedDBs) {
+         for (final Map.Entry<String, PersistentLOD> entry : _openedDBs.entrySet()) {
+            try {
+               entry.getValue().close();
+            }
+            catch (final Exception e) {
+               log("can't close DB \"" + entry.getKey() + "\"", e);
+            }
+         }
+         _openedDBs.clear();
+      }
+   }
+
+
+   private static void error(final HttpServletResponse response,
+                             final String msg) throws IOException {
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
    }
 
 
@@ -102,39 +126,23 @@ HttpServlet {
 
       final PersistentLOD.Statistics statistics = db.getStatistics(false, false);
       writer.print('{');
+
+      JSONUtils.sendJSON(writer, "projection", "EPSG:4326");
+
+      writer.print(',');
       JSONUtils.sendJSON(writer, "pointsCount", statistics.getPointsCount());
-      writer.print(",");
+
+      writer.print(',');
       JSONUtils.sendJSON(writer, "sector", statistics.getSector());
-      writer.print(",");
+
+      writer.print(',');
       JSONUtils.sendJSON(writer, "minHeight", statistics.getMinHeight());
-      writer.print(",");
+
+      writer.print(',');
       JSONUtils.sendJSON(writer, "maxHeight", statistics.getMaxHeight());
+
       writer.println('}');
    }
 
-
-   private static void error(final HttpServletResponse response,
-                             final String msg) throws IOException {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
-   }
-
-
-   @Override
-   public void destroy() {
-      super.destroy();
-      log("destroying " + getClass());
-
-      synchronized (_openedDBs) {
-         for (final Map.Entry<String, PersistentLOD> entry : _openedDBs.entrySet()) {
-            try {
-               entry.getValue().close();
-            }
-            catch (final Exception e) {
-               log("can't close DB \"" + entry.getKey() + "\"", e);
-            }
-         }
-         _openedDBs.clear();
-      }
-   }
 
 }

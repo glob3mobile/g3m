@@ -53,11 +53,22 @@ public class JSONUtils {
    }
 
 
-   public static void sendJSONKey(final PrintWriter writer,
-                                  final String key) {
+   private static void sendJSONKey(final PrintWriter writer,
+                                   final String key) {
       writer.print('"');
       writer.print(key);
       writer.print("\":");
    }
+
+
+   public static void sendJSON(final PrintWriter writer,
+                               final String key,
+                               final String value) {
+      sendJSONKey(writer, key);
+      writer.print('"');
+      writer.print(value);
+      writer.print('"');
+   }
+
 
 }
