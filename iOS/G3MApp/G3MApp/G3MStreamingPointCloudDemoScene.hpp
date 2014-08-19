@@ -16,8 +16,9 @@ protected:
   void rawActivate(const G3MContext* context);
 
   void rawSelectOption(const std::string& option,
-                       int optionIndex);
-
+                       int optionIndex) {
+    // do nothing
+  }
 
 public:
   G3MStreamingPointCloudDemoScene(G3MDemoModel* model) :

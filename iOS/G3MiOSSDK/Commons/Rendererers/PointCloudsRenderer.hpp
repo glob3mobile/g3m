@@ -13,10 +13,11 @@
 
 #include "URL.hpp"
 #include "IBufferDownloadListener.hpp"
+#include "TileRenderingListener.hpp"
 
 class Sector;
 
-class PointCloudsRenderer : public DefaultRenderer {
+class PointCloudsRenderer : public DefaultRenderer, public TileRenderingListener {
 private:
   class PointCloud;
 
@@ -83,6 +84,14 @@ private:
     void errorDownloadingMetadata();
 
     void downloadedMetadata(IByteBuffer* buffer);
+
+    void render(const G3MRenderContext* rc,
+                GLState* glState);
+
+    void startRendering(const Tile* tile);
+
+    void stopRendering(const Tile* tile);
+
   };
 
 
@@ -109,7 +118,12 @@ public:
                      const std::string& cloudName);
 
   void removeAllPointClouds();
-  
+
+
+  void startRendering(const Tile* tile);
+
+  void stopRendering(const Tile* tile);
+
 };
 
 #endif

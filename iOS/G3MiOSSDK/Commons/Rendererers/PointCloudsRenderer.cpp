@@ -14,6 +14,8 @@
 #include "IJSONParser.hpp"
 #include "JSONObject.hpp"
 #include "Sector.hpp"
+#include "Tile.hpp"
+
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -116,6 +118,29 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
   return RenderState::ready();
 }
 
+void PointCloudsRenderer::PointCloud::startRendering(const Tile* tile) {
+  if (_sector) {
+    if (tile->_sector.touchesWith(*_sector)) {
+#warning DGD at work!
+      ILogger::instance()->logInfo("Start rendering tile " + tile->_id + " for cloud " + _cloudName);
+    }
+  }
+}
+
+void PointCloudsRenderer::PointCloud::stopRendering(const Tile* tile) {
+  if (_sector) {
+    if (tile->_sector.touchesWith(*_sector)) {
+#warning DGD at work!
+      ILogger::instance()->logInfo("Stop rendering tile " + tile->_id + " for cloud " + _cloudName);
+    }
+  }
+}
+
+void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
+                                             GLState* glState) {
+#warning DGD at work!
+}
+
 PointCloudsRenderer::~PointCloudsRenderer() {
   const int cloudsSize = _clouds.size();
   for (int i = 0; i < cloudsSize; i++) {
@@ -188,10 +213,35 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
 }
 
 void PointCloudsRenderer::removeAllPointClouds() {
-#warning DGD at work!
+  const int cloudsSize = _clouds.size();
+  for (int i = 0; i < cloudsSize; i++) {
+    PointCloud* cloud = _clouds[i];
+    delete cloud;
+  }
+  _clouds.clear();
 }
 
 void PointCloudsRenderer::render(const G3MRenderContext* rc,
                                  GLState* glState) {
-#warning DGD at work!
+  const int cloudsSize = _clouds.size();
+  for (int i = 0; i < cloudsSize; i++) {
+    PointCloud* cloud = _clouds[i];
+    cloud->render(rc, glState);
+  }
+}
+
+void PointCloudsRenderer::startRendering(const Tile* tile) {
+  const int cloudsSize = _clouds.size();
+  for (int i = 0; i < cloudsSize; i++) {
+    PointCloud* cloud = _clouds[i];
+    cloud->startRendering(tile);
+  }
+}
+
+void PointCloudsRenderer::stopRendering(const Tile* tile) {
+  const int cloudsSize = _clouds.size();
+  for (int i = 0; i < cloudsSize; i++) {
+    PointCloud* cloud = _clouds[i];
+    cloud->stopRendering(tile);
+  }
 }

@@ -15,10 +15,6 @@
 
 #include "G3MDemoModel.hpp"
 
-void G3MStreamingPointCloudDemoScene::rawSelectOption(const std::string& option,
-                                                      int optionIndex) {
-
-}
 
 void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
@@ -33,4 +29,6 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
   model->getPointCloudsRenderer()->addPointCloud(URL("http://192.168.1.6:8080"),
                                                  "Loudoun-VA_LOD");
 
+  g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.102078762909024, -77.66098022460936, 75000) );
+  
 }
