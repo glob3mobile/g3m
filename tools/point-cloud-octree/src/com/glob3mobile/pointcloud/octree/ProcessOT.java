@@ -60,7 +60,7 @@ public class ProcessOT {
       final String lodCloudName = sourceCloudName + "_LOD";
 
       final boolean createMapForSourceOT = false;
-      final boolean createLOD = true;
+      final boolean createLOD = false;
       final boolean showLODStats = true;
       final boolean drawSampleLODNode = false;
 
