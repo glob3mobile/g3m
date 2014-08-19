@@ -36,8 +36,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBLOD
-         implements
-            PersistentLOD {
+implements
+PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final File cloudDirectory,
@@ -136,8 +136,8 @@ public class BerkeleyDBLOD
 
 
    static class BerkeleyDBTransaction
-            implements
-               PersistentLOD.Transaction {
+   implements
+   PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
 
@@ -295,9 +295,9 @@ public class BerkeleyDBLOD
 
 
    private List<PersistentLOD.Level> getLODLevelsForSelf(final Cursor cursor,
-            final DatabaseEntry keyEntry,
-                                                         final DatabaseEntry dataEntry,
-                                                         final byte[] id) {
+                                                         final DatabaseEntry keyEntry,
+            final DatabaseEntry dataEntry,
+            final byte[] id) {
 
       final List<PersistentLOD.Level> result = new ArrayList<PersistentLOD.Level>();
 
@@ -376,9 +376,9 @@ public class BerkeleyDBLOD
 
 
    private List<PersistentLOD.Level> getLODLevelsFromDescendants(final Cursor cursor,
-            final DatabaseEntry keyEntry,
-            final DatabaseEntry dataEntry,
-            final byte[] id) {
+                                                                 final DatabaseEntry keyEntry,
+                                                                 final DatabaseEntry dataEntry,
+                                                                 final byte[] id) {
 
       //      final List<BerkeleyDBLODNode> descendantLevels = new ArrayList<BerkeleyDBLODNode>();
 
@@ -426,8 +426,8 @@ public class BerkeleyDBLOD
 
 
    private List<BerkeleyDBLODNode> readNodeSet(final com.sleepycat.je.Transaction txn,
-            final byte[] id,
-            final boolean loadPoints) {
+                                               final byte[] id,
+                                               final boolean loadPoints) {
       final CursorConfig cursorConfig = new CursorConfig();
 
       final List<BerkeleyDBLODNode> result = new ArrayList<BerkeleyDBLODNode>();
@@ -459,8 +459,8 @@ public class BerkeleyDBLOD
 
 
    private List<BerkeleyDBLODNode> getAncestor(final com.sleepycat.je.Transaction txn,
-                                               final byte[] id,
-                                               final boolean loadPoints) {
+            final byte[] id,
+            final boolean loadPoints) {
       byte[] ancestorId = Utils.removeTrailing(id);
       while (ancestorId != null) {
          final List<BerkeleyDBLODNode> ancestorSet = readNodeSet(txn, ancestorId, loadPoints);
@@ -474,9 +474,9 @@ public class BerkeleyDBLOD
 
 
    private List<Level> getLODLevelsForParent(final Cursor cursor,
-            final DatabaseEntry keyEntry,
-            final DatabaseEntry dataEntry,
-            final byte[] id) {
+                                             final DatabaseEntry keyEntry,
+                                             final DatabaseEntry dataEntry,
+                                             final byte[] id) {
       final int _DIEGO_AT_WORK;
 
       final com.sleepycat.je.Transaction txn = null;
@@ -612,10 +612,10 @@ public class BerkeleyDBLOD
 
 
    private static class BerkeleyLODDBStatistics
-            implements
-               PersistentLOD.Visitor,
-               PersistentLOD.Statistics,
-               Serializable {
+   implements
+   PersistentLOD.Visitor,
+   PersistentLOD.Statistics,
+   Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -719,8 +719,8 @@ public class BerkeleyDBLOD
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                            ", Min=" + _minPointsCountPerNode + //
-                            ", Max=" + _maxPointsCountPerNode);
+                  ", Min=" + _minPointsCountPerNode + //
+                  ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 
@@ -763,6 +763,12 @@ public class BerkeleyDBLOD
       @Override
       public int getMaxPointsPerNode() {
          return _maxPointsCountPerNode;
+      }
+
+
+      @Override
+      public String getPointCloudName() {
+         return _cloudName;
       }
 
    }

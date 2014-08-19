@@ -21,8 +21,8 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-         extends
-            HttpServlet {
+extends
+HttpServlet {
    private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
 
    private static final long                serialVersionUID = 1L;
@@ -127,6 +127,9 @@ public class PCSSServlet
       final PersistentLOD.Statistics statistics = db.getStatistics(false, false);
       writer.print('{');
 
+      JSONUtils.sendJSON(writer, "name", statistics.getPointCloudName());
+
+      writer.print(',');
       JSONUtils.sendJSON(writer, "projection", "EPSG:4326");
 
       writer.print(',');

@@ -10,6 +10,8 @@
 #include <G3MiOSSDK/MapBoxLayer.hpp>
 #include <G3MiOSSDK/LayerSet.hpp>
 #include <G3MiOSSDK/G3MWidget.hpp>
+#include <G3MiOSSDK/PointCloudsRenderer.hpp>
+#include <G3MiOSSDK/URL.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -27,5 +29,7 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                        true,
                                        2);
   model->getLayerSet()->addLayer(layer);
+
+  model->getPointCloudsRenderer()->addPointCloud(URL("http://192.168.1.6:8080/Loudoun-VA_LOD/"));
 
 }

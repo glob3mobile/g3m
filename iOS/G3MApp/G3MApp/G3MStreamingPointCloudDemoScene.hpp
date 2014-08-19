@@ -1,5 +1,5 @@
 //
-//  G3MStreamingPointCloudDemoScene.h
+//  G3MStreamingPointCloudDemoScene.hpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 8/19/14.

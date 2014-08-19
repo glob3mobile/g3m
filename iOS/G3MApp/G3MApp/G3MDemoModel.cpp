@@ -19,6 +19,7 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PlanetRenderer.hpp>
 #include <G3MiOSSDK/GEOVectorLayer.hpp>
+#include <G3MiOSSDK/PointCloudsRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -34,12 +35,13 @@
 #include "G3MTiledVectorDemoScene.hpp"
 #include "G3MStreamingPointCloudDemoScene.hpp"
 
-G3MDemoModel::G3MDemoModel(G3MDemoListener* listener,
-                           LayerSet*        layerSet,
-                           MeshRenderer*    meshRenderer,
-                           ShapesRenderer*  shapesRenderer,
-                           MarksRenderer*   marksRenderer,
-                           GEORenderer*     geoRenderer) :
+G3MDemoModel::G3MDemoModel(G3MDemoListener*     listener,
+                           LayerSet*            layerSet,
+                           MeshRenderer*        meshRenderer,
+                           ShapesRenderer*      shapesRenderer,
+                           MarksRenderer*       marksRenderer,
+                           GEORenderer*         geoRenderer,
+                           PointCloudsRenderer* pointCloudsRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
@@ -47,6 +49,7 @@ _meshRenderer(meshRenderer),
 _shapesRenderer(shapesRenderer),
 _marksRenderer(marksRenderer),
 _geoRenderer(geoRenderer),
+_pointCloudsRenderer(pointCloudsRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
@@ -95,6 +98,7 @@ void G3MDemoModel::reset() {
   getMarksRenderer()->removeAllMarks();
   getMeshRenderer()->clearMeshes();
   getShapesRenderer()->removeAllShapes(true);
+  getPointCloudsRenderer()->removeAllPointClouds();
 
   _layerSet->removeAllLayers(true);
 }
