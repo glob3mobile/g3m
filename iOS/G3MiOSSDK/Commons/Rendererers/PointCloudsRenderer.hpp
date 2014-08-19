@@ -12,15 +12,64 @@
 #include "DefaultRenderer.hpp"
 
 #include "URL.hpp"
+#include "IBufferDownloadListener.hpp"
 
 class PointCloudsRenderer : public DefaultRenderer {
 private:
+  class PointCloud;
+
+  class PointCloudMetadataDownloadListener : public IBufferDownloadListener {
+  private:
+    PointCloud* _pointCloud;
+
+  public:
+    PointCloudMetadataDownloadListener(PointCloud* pointCloud) :
+    _pointCloud(pointCloud)
+    {
+    }
+
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired);
+
+    void onError(const URL& url);
+
+    void onCancel(const URL& url);
+
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* buffer,
+                            bool expired);
+
+  };
+  
 
   class PointCloud {
+  private:
+    const URL         _serverURL;
+    const std::string _cloudName;
+
+    bool _downloadingMetadata;
+    bool _errorDownloadingMetadata;
+    bool _errorParsingMetadata;
+    
   public:
+    PointCloud(const URL& serverURL,
+               const std::string& cloudName) :
+    _serverURL(serverURL),
+    _cloudName(cloudName),
+    _downloadingMetadata(false),
+    _errorDownloadingMetadata(false),
+    _errorParsingMetadata(false)
+    {
+    }
+
     void initialize(const G3MContext* context);
 
     RenderState getRenderState(const G3MRenderContext* rc);
+
+    void errorDownloadingMetadata();
+
+    void downloadedMetadata(IByteBuffer* buffer);
   };
 
 
@@ -43,7 +92,8 @@ public:
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
 
-  void addPointCloud(const URL& url);
+  void addPointCloud(const URL& serverURL,
+                     const std::string& cloudName);
 
   void removeAllPointClouds();
   
