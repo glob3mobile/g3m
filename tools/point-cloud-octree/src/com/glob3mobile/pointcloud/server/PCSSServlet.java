@@ -14,17 +14,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.glob3mobile.pointcloud.octree.Angle;
 import com.glob3mobile.pointcloud.octree.PersistentLOD;
-import com.glob3mobile.pointcloud.octree.Sector;
 import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
 
 import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-         extends
-            HttpServlet {
+extends
+HttpServlet {
 
    private static final long serialVersionUID = 1L;
    private File              _cloudDirectory;
@@ -71,97 +69,52 @@ public class PCSSServlet
 
       if (path.length == 0) {
          error(response, "Invalid request");
+         return;
+      }
+
+      final String cloudName = path[0];
+
+      if (cloudName.equals("favicon.ico")) {
+         error(response, "Invalid request");
+         return;
+      }
+
+      final PersistentLOD db = getDB(cloudName);
+      if (db == null) {
+         error(response, "Can't open DB \"" + cloudName + "\"");
+         return;
+      }
+
+      if (path.length == 1) {
+         sendMetadata(db, response);
       }
       else {
-         final String cloudName = path[0];
-
-         if (cloudName.equals("favicon.ico")) {
-            error(response, "Invalid request");
-         }
-         else {
-            if (path.length == 1) {
-               final PersistentLOD db = getDB(cloudName);
-               if (db == null) {
-                  error(response, "Can't open DB \"" + cloudName + "\"");
-               }
-               else {
-                  //                  response.setStatus(HttpServletResponse.SC_OK);
-                  //                  response.setContentType("text/html;charset=utf-8");
-                  //                  final PrintWriter writer = response.getWriter();
-                  //                  writer.println(cloudName);
-                  response.setStatus(HttpServletResponse.SC_OK);
-                  response.setContentType("application/json");
-                  final PrintWriter writer = response.getWriter();
-
-                  final PersistentLOD.Statistics s = db.getStatistics(false, false);
-                  writer.print('{');
-                  sendJSON(writer, "pointsCount", s.getPointsCount());
-                  writer.print(",");
-                  sendJSON(writer, "sector", s.getSector());
-                  writer.print(",");
-                  sendJSON(writer, "minHeight", s.getMinHeight());
-                  writer.print(",");
-                  sendJSON(writer, "maxHeight", s.getMaxHeight());
-                  writer.println('}');
-               }
-            }
-            else {
-               error(response, "Invalid request");
-            }
-         }
+         error(response, "Invalid request");
       }
    }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final Sector value) {
-      sendJSONKey(writer, key);
+   private static void sendMetadata(final PersistentLOD db,
+                                    final HttpServletResponse response) throws IOException {
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.setContentType("application/json");
+      final PrintWriter writer = response.getWriter();
+
+      final PersistentLOD.Statistics statistics = db.getStatistics(false, false);
       writer.print('{');
-      sendJSON(writer, "lowerLatitude", value._lower._latitude);
+      JSONUtils.sendJSON(writer, "pointsCount", statistics.getPointsCount());
       writer.print(",");
-      sendJSON(writer, "lowerLongitude", value._lower._longitude);
+      JSONUtils.sendJSON(writer, "sector", statistics.getSector());
       writer.print(",");
-      sendJSON(writer, "upperLatitude", value._upper._latitude);
+      JSONUtils.sendJSON(writer, "minHeight", statistics.getMinHeight());
       writer.print(",");
-      sendJSON(writer, "upperLongitude", value._upper._longitude);
-      writer.print('}');
+      JSONUtils.sendJSON(writer, "maxHeight", statistics.getMaxHeight());
+      writer.println('}');
    }
 
 
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final Angle value) {
-      sendJSON(writer, key, value._degrees);
-   }
-
-
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final double value) {
-      sendJSONKey(writer, key);
-      writer.print(value);
-   }
-
-
-   private static void sendJSON(final PrintWriter writer,
-                                final String key,
-                                final long value) {
-      sendJSONKey(writer, key);
-      writer.print(value);
-   }
-
-
-   private static void sendJSONKey(final PrintWriter writer,
-                                   final String key) {
-      writer.print('"');
-      writer.print(key);
-      writer.print("\":");
-   }
-
-
-   private void error(final HttpServletResponse response,
-                      final String msg) throws IOException {
+   private static void error(final HttpServletResponse response,
+                             final String msg) throws IOException {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
    }
 
