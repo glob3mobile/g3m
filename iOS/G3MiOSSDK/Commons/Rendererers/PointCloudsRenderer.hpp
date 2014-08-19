@@ -14,6 +14,8 @@
 #include "URL.hpp"
 #include "IBufferDownloadListener.hpp"
 
+class Sector;
+
 class PointCloudsRenderer : public DefaultRenderer {
 private:
   class PointCloud;
@@ -51,7 +53,12 @@ private:
     bool _downloadingMetadata;
     bool _errorDownloadingMetadata;
     bool _errorParsingMetadata;
-    
+
+    long long _pointsCount;
+    Sector* _sector;
+    double _minHeight;
+    double _maxHeight;
+
   public:
     PointCloud(const URL& serverURL,
                const std::string& cloudName) :
@@ -59,9 +66,15 @@ private:
     _cloudName(cloudName),
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
-    _errorParsingMetadata(false)
+    _errorParsingMetadata(false),
+    _pointsCount(-1),
+    _sector(NULL),
+    _minHeight(0),
+    _maxHeight(0)
     {
     }
+
+    ~PointCloud();
 
     void initialize(const G3MContext* context);
 

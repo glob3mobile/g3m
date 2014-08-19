@@ -12,6 +12,8 @@
 #include "IDownloader.hpp"
 #include "DownloadPriority.hpp"
 #include "IJSONParser.hpp"
+#include "JSONObject.hpp"
+#include "Sector.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -51,6 +53,11 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
                             true);
 }
 
+PointCloudsRenderer::PointCloud::~PointCloud() {
+  delete _sector;
+}
+
+
 void PointCloudsRenderer::PointCloud::errorDownloadingMetadata() {
   _downloadingMetadata = false;
   _errorDownloadingMetadata = true;
@@ -58,19 +65,38 @@ void PointCloudsRenderer::PointCloud::errorDownloadingMetadata() {
 
 void PointCloudsRenderer::PointCloud::downloadedMetadata(IByteBuffer* buffer) {
   _downloadingMetadata = false;
-  ILogger::instance()->logInfo("Downloaded metadata of \"%s\" from \"%s\"",
-                               _cloudName.c_str(),
-                               _serverURL.getPath().c_str());
 
   const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer, true);
   if (jsonBaseObject) {
+    const JSONObject* jsonObject = jsonBaseObject->asObject();
+    if (jsonObject) {
+      const std::string name = jsonObject->getAsString("name", "");
+      _pointsCount = (long long) jsonObject->getAsNumber("pointsCount", 0);
+
+      const JSONObject* sectorJSONObject = jsonObject->getAsObject("sector");
+      if (sectorJSONObject) {
+        const double lowerLatitude  = sectorJSONObject->getAsNumber("lowerLatitude", 0);
+        const double lowerLongitude = sectorJSONObject->getAsNumber("lowerLongitude", 0);
+        const double upperLatitude  = sectorJSONObject->getAsNumber("upperLatitude", 0);
+        const double upperLongitude = sectorJSONObject->getAsNumber("upperLongitude", 0);
+
+        _sector = new Sector(Geodetic2D::fromDegrees(lowerLatitude, lowerLongitude),
+                             Geodetic2D::fromDegrees(upperLatitude, upperLongitude));
+      }
+
+      _minHeight = jsonObject->getAsNumber("minHeight", 0);
+      _maxHeight = jsonObject->getAsNumber("maxHeight", 0);
+    }
+    else {
+      _errorParsingMetadata = true;
+    }
 
     delete jsonBaseObject;
   }
   else {
     _errorParsingMetadata = true;
   }
-
+  
   delete buffer;
 }
 
