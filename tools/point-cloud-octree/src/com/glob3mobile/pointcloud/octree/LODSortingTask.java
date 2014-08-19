@@ -2,6 +2,7 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,8 +20,8 @@ import es.igosoftware.util.GProgress;
 
 
 class LODSortingTask
-         implements
-            PersistentOctree.Visitor {
+implements
+PersistentOctree.Visitor {
    private final GProgress _progress;
    private final String    _lodCloudName;
    private PersistentLOD   _lodDB;
@@ -28,12 +29,15 @@ class LODSortingTask
    private final int       _maxPointsPerLeaf;
 
    private long            _processedPointsCount;
+   private final File      _cloudDirectory;
 
 
-   LODSortingTask(final String lodCloudName,
-                  final String sourceCloudName,
-                  final long pointsCount,
-                  final int maxPointsPerLeaf) {
+   LODSortingTask(final File cloudDirectory,
+                  final String lodCloudName,
+            final String sourceCloudName,
+            final long pointsCount,
+            final int maxPointsPerLeaf) {
+      _cloudDirectory = cloudDirectory;
       _lodCloudName = lodCloudName;
       _pointsCount = pointsCount;
       _progress = new GProgress(pointsCount, true) {
@@ -43,7 +47,7 @@ class LODSortingTask
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- importing \"" + sourceCloudName + "\" "
-                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
       _maxPointsPerLeaf = maxPointsPerLeaf;
@@ -78,7 +82,7 @@ class LODSortingTask
 
 
    private static List<Geodetic3D> extractPoints(final Sector sector,
-                                                 final List<Geodetic3D> points) {
+            final List<Geodetic3D> points) {
 
       final List<Geodetic3D> extracted = new ArrayList<Geodetic3D>();
 
@@ -356,7 +360,7 @@ class LODSortingTask
 
    @Override
    public void start() {
-      _lodDB = BerkeleyDBLOD.open(_lodCloudName, true);
+      _lodDB = BerkeleyDBLOD.open(_cloudDirectory, _lodCloudName, true);
 
       _processedPointsCount = 0;
    }

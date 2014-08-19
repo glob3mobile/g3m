@@ -36,23 +36,26 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBLOD
-implements
-PersistentLOD {
+         implements
+            PersistentLOD {
 
 
-   public static PersistentLOD openReadOnly(final String cloudName) {
-      return new BerkeleyDBLOD(cloudName, false, true);
+   public static PersistentLOD openReadOnly(final File cloudDirectory,
+                                            final String cloudName) {
+      return new BerkeleyDBLOD(cloudDirectory, cloudName, false, true);
    }
 
 
-   public static PersistentLOD open(final String cloudName,
+   public static PersistentLOD open(final File cloudDirectory,
+                                    final String cloudName,
                                     final boolean createIfNotExists) {
-      return new BerkeleyDBLOD(cloudName, createIfNotExists, false);
+      return new BerkeleyDBLOD(cloudDirectory, cloudName, createIfNotExists, false);
    }
 
 
-   public static void delete(final String cloudName) {
-      final File envHome = new File(cloudName);
+   public static void delete(final File cloudDirectory,
+                             final String cloudName) {
+      final File envHome = new File(cloudDirectory, cloudName);
       if (!envHome.exists()) {
          return;
       }
@@ -78,18 +81,23 @@ PersistentLOD {
    private final File          _cachedStatisticsFile;
 
 
-   private BerkeleyDBLOD(final String cloudName,
+   private BerkeleyDBLOD(final File cloudDirectory,
+                         final String cloudName,
                          final boolean createIfNotExists,
                          final boolean readOnly) {
       _readOnly = readOnly;
       _cloudName = cloudName;
 
-      final File envHome = new File(cloudName);
+      final File envHome = new File(cloudDirectory, cloudName);
       if (createIfNotExists) {
          if (!envHome.exists()) {
             envHome.mkdirs();
          }
       }
+
+      final String readOnlyMsg = readOnly ? " read-only" : " read-write";
+      System.out.println("- opening" + readOnlyMsg + " cloud name \"" + cloudName + "\" (" + envHome.getAbsoluteFile() + ")");
+
 
       final EnvironmentConfig envConfig = new EnvironmentConfig();
       envConfig.setAllowCreate(createIfNotExists);
@@ -109,7 +117,7 @@ PersistentLOD {
       _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
       _nodeDataDB = _env.openDatabase(null, NODE_DATA_DATABASE_NAME, dbConfig);
 
-      _cachedStatisticsFile = new File("_stats_" + cloudName + ".ser");
+      _cachedStatisticsFile = new File(cloudDirectory, "_stats_" + cloudName + ".ser");
    }
 
 
@@ -128,8 +136,8 @@ PersistentLOD {
 
 
    static class BerkeleyDBTransaction
-   implements
-   PersistentLOD.Transaction {
+            implements
+               PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
 
@@ -287,9 +295,9 @@ PersistentLOD {
 
 
    private List<PersistentLOD.Level> getLODLevelsForSelf(final Cursor cursor,
-                                                         final DatabaseEntry keyEntry,
-            final DatabaseEntry dataEntry,
-            final byte[] id) {
+            final DatabaseEntry keyEntry,
+                                                         final DatabaseEntry dataEntry,
+                                                         final byte[] id) {
 
       final List<PersistentLOD.Level> result = new ArrayList<PersistentLOD.Level>();
 
@@ -368,9 +376,9 @@ PersistentLOD {
 
 
    private List<PersistentLOD.Level> getLODLevelsFromDescendants(final Cursor cursor,
-                                                                 final DatabaseEntry keyEntry,
-                                                                 final DatabaseEntry dataEntry,
-                                                                 final byte[] id) {
+            final DatabaseEntry keyEntry,
+            final DatabaseEntry dataEntry,
+            final byte[] id) {
 
       //      final List<BerkeleyDBLODNode> descendantLevels = new ArrayList<BerkeleyDBLODNode>();
 
@@ -418,8 +426,8 @@ PersistentLOD {
 
 
    private List<BerkeleyDBLODNode> readNodeSet(final com.sleepycat.je.Transaction txn,
-                                               final byte[] id,
-                                               final boolean loadPoints) {
+            final byte[] id,
+            final boolean loadPoints) {
       final CursorConfig cursorConfig = new CursorConfig();
 
       final List<BerkeleyDBLODNode> result = new ArrayList<BerkeleyDBLODNode>();
@@ -451,8 +459,8 @@ PersistentLOD {
 
 
    private List<BerkeleyDBLODNode> getAncestor(final com.sleepycat.je.Transaction txn,
-            final byte[] id,
-            final boolean loadPoints) {
+                                               final byte[] id,
+                                               final boolean loadPoints) {
       byte[] ancestorId = Utils.removeTrailing(id);
       while (ancestorId != null) {
          final List<BerkeleyDBLODNode> ancestorSet = readNodeSet(txn, ancestorId, loadPoints);
@@ -466,9 +474,9 @@ PersistentLOD {
 
 
    private List<Level> getLODLevelsForParent(final Cursor cursor,
-                                             final DatabaseEntry keyEntry,
-                                             final DatabaseEntry dataEntry,
-                                             final byte[] id) {
+            final DatabaseEntry keyEntry,
+            final DatabaseEntry dataEntry,
+            final byte[] id) {
       final int _DIEGO_AT_WORK;
 
       final com.sleepycat.je.Transaction txn = null;
@@ -604,10 +612,10 @@ PersistentLOD {
 
 
    private static class BerkeleyLODDBStatistics
-   implements
-   PersistentLOD.Visitor,
-   PersistentLOD.Statistics,
-   Serializable {
+            implements
+               PersistentLOD.Visitor,
+               PersistentLOD.Statistics,
+               Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -711,8 +719,8 @@ PersistentLOD {
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 

@@ -55,6 +55,7 @@ public class ProcessOT {
       System.out.println("ProcessOT 0.1");
       System.out.println("-------------\n");
 
+      final File cloudDirectory = new File(System.getProperty("user.dir"));
 
       final String sourceCloudName = "Loudoun-VA";
       final String lodCloudName = sourceCloudName + "_LOD";
@@ -80,16 +81,17 @@ public class ProcessOT {
             final long pointsCount = statistics.getPointsCount();
             statistics.show();
 
-            BerkeleyDBLOD.delete(lodCloudName);
+            BerkeleyDBLOD.delete(cloudDirectory, lodCloudName);
             //final int maxPointsPerLeaf = 4 * 1024;
             final int maxPointsPerLeaf = Integer.MAX_VALUE;
-            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(lodCloudName, sourceCloudName, pointsCount, maxPointsPerLeaf));
+            sourceOctree.acceptDepthFirstVisitor(new LODSortingTask(cloudDirectory, lodCloudName, sourceCloudName, pointsCount,
+                     maxPointsPerLeaf));
          }
          System.out.println();
       }
 
       if (showLODStats) {
-         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
+         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName)) {
             final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
             statistics.show();
             //lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
@@ -98,7 +100,7 @@ public class ProcessOT {
       }
 
       if (drawSampleLODNode) {
-         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(lodCloudName)) {
+         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName)) {
             final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
 
             final double minHeight = statistics.getMinHeight();
