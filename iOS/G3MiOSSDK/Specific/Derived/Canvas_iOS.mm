@@ -156,7 +156,6 @@ void Canvas_iOS::_createImage(IImageListener* listener,
   UIImage* image = [UIImage imageWithCGImage: cgImage];
   CFRelease(cgImage);
 
-
   IImage* result = new Image_iOS(image, NULL);
   listener->imageCreated(result);
   if (autodelete) {
