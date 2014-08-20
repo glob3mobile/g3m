@@ -125,7 +125,7 @@ void Canvas_iOS::_setLineMiterLimit(float limit) {
 void Canvas_iOS::_setLineDash(float lengths[],
                               int count,
                               float phase) {
-//#warning UNCOMMENT
+  //#warning UNCOMMENT
   CGContextSetLineDash(_context,
                        phase,
                        lengths, count);
@@ -350,7 +350,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
 
 void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop, float destWidth, float destHeight) {
-
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
 
@@ -366,7 +365,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
 void Canvas_iOS::_drawImage(const IImage* image,
                             float srcLeft, float srcTop, float srcWidth, float srcHeight,
                             float destLeft, float destTop, float destWidth, float destHeight) {
-
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
 
@@ -404,7 +402,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
                             float srcLeft, float srcTop, float srcWidth, float srcHeight,
                             float destLeft, float destTop, float destWidth, float destHeight,
                             float transparency) {
-
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
 
@@ -440,13 +437,12 @@ void Canvas_iOS::_drawImage(const IImage* image,
     CGContextDrawImage(_context,
                        destRect,
                        cgCropImage);
-      
-      
-//      printf("Cropping image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(), srcLeft, srcTop, srcWidth, srcHeight);
-//      printf("Painting image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(),
-//             destLeft, _canvasHeight - (destTop + destHeight),
-//             destWidth,
-//             destHeight);
+
+    //      printf("Cropping image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(), srcLeft, srcTop, srcWidth, srcHeight);
+    //      printf("Painting image(%d, %d) to %f, %f, %f, %f\n", image->getWidth(), image->getHeight(),
+    //             destLeft, _canvasHeight - (destTop + destHeight),
+    //             destWidth,
+    //             destHeight);
 
     CGContextSetAlpha(_context, 1.0);
 
