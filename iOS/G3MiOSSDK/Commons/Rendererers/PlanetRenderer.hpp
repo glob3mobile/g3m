@@ -11,7 +11,6 @@
 
 class Tile;
 class TileTessellator;
-class TileTexturizer;
 class LayerSet;
 class VisibleSectorListenerEntry;
 class VisibleSectorListener;
@@ -19,6 +18,7 @@ class ElevationDataProvider;
 class LayerTilesRenderParameters;
 class TerrainTouchListener;
 class ChangedInfoListener;
+class TileRenderingListener;
 
 #include "IStringBuilder.hpp"
 #include "DefaultRenderer.hpp"
@@ -34,7 +34,6 @@ class ChangedInfoListener;
 
 
 class EllipsoidShape;
-//class TileRasterizer;
 
 
 class TilesStatistics {
@@ -213,7 +212,6 @@ private:
   ElevationDataProvider*       _elevationDataProvider;
   bool                         _ownsElevationDataProvider;
   TileTexturizer*              _texturizer;
-//  TileRasterizer*              _tileRasterizer;
   LayerSet*                    _layerSet;
   const TilesRenderParameters* _tilesRenderParameters;
   const bool                   _showStatistics;
@@ -221,6 +219,8 @@ private:
   ITileVisitor*                _tileVisitor = NULL;
 
   TileRenderingListener*       _tileRenderingListener;
+  std::vector<const Tile*>*    _tilesStartedRendering;
+  std::vector<const Tile*>*    _tilesStoppedRendering;
 
   TilesStatistics _statistics;
 
@@ -303,7 +303,6 @@ public:
                  bool                         ownsElevationDataProvider,
                  float                        verticalExaggeration,
                  TileTexturizer*              texturizer,
-//                 TileRasterizer*              tileRasterizer,
                  LayerSet*                    layerSet,
                  const TilesRenderParameters* tilesRenderParameters,
                  bool                         showStatistics,
@@ -313,7 +312,7 @@ public:
                  const bool                   logTilesPetitions,
                  TileRenderingListener*       tileRenderingListener,
                  ChangedRendererInfoListener* changedInfoListener,
-                 TouchEventType _touchEventTypeOfTerrainTouchListener);
+                 TouchEventType               touchEventTypeOfTerrainTouchListener);
 
   ~PlanetRenderer();
 

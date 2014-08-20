@@ -16,15 +16,18 @@ public:
   virtual ~TileRenderingListener() {
   }
 
-  /**
-   The given Tile started to be rendered
-   */
-  virtual void startRendering(const Tile* tile) = 0;
+//  /**
+//   The given Tile started to be rendered
+//   */
+//  virtual void startRendering(const Tile* tile) = 0;
+//
+//  /**
+//   The given Tile stopped to be rendered
+//   */
+//  virtual void stopRendering(const Tile* tile) = 0;
 
-  /**
-   The given Tile stoped to be rendered
-   */
-  virtual void stopRendering(const Tile* tile) = 0;
+  virtual void changedTileRendering(const std::vector<const Tile*>* tilesStartedRendering,
+                                    const std::vector<const Tile*>* tilesStoppedRendering) = 0;
 
 };
 

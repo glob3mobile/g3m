@@ -118,23 +118,45 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
   return RenderState::ready();
 }
 
-void PointCloudsRenderer::PointCloud::startRendering(const Tile* tile) {
-  if (_sector) {
-    if (tile->_sector.touchesWith(*_sector)) {
+
+void PointCloudsRenderer::PointCloud::changedTileRendering(const std::vector<const Tile*>* started,
+                                                           const std::vector<const Tile*>* stopped) {
 #warning DGD at work!
-      ILogger::instance()->logInfo("Start rendering tile " + tile->_id + " for cloud " + _cloudName);
+  if (_sector) {
+    ILogger::instance()->logInfo("changedTileRendering");
+    for (int i = 0; i < started->size(); i++) {
+      const Tile* tile = started->at(i);
+      if (tile->_sector.touchesWith(*_sector)) {
+        ILogger::instance()->logInfo("   Start rendering tile " + tile->_id + " for cloud " + _cloudName);
+      }
+    }
+
+    for (int i = 0; i < stopped->size(); i++) {
+      const Tile* tile = stopped->at(i);
+      if (tile->_sector.touchesWith(*_sector)) {
+        ILogger::instance()->logInfo("   Stop rendering tile " + tile->_id + " for cloud " + _cloudName);
+      }
     }
   }
 }
 
-void PointCloudsRenderer::PointCloud::stopRendering(const Tile* tile) {
-  if (_sector) {
-    if (tile->_sector.touchesWith(*_sector)) {
-#warning DGD at work!
-      ILogger::instance()->logInfo("Stop rendering tile " + tile->_id + " for cloud " + _cloudName);
-    }
-  }
-}
+//void PointCloudsRenderer::PointCloud::startRendering(const Tile* tile) {
+//  if (_sector) {
+//    if (tile->_sector.touchesWith(*_sector)) {
+//#warning DGD at work!
+//      ILogger::instance()->logInfo("Start rendering tile " + tile->_id + " for cloud " + _cloudName);
+//    }
+//  }
+//}
+//
+//void PointCloudsRenderer::PointCloud::stopRendering(const Tile* tile) {
+//  if (_sector) {
+//    if (tile->_sector.touchesWith(*_sector)) {
+//#warning DGD at work!
+//      ILogger::instance()->logInfo("Stop rendering tile " + tile->_id + " for cloud " + _cloudName);
+//    }
+//  }
+//}
 
 void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              GLState* glState) {
@@ -230,18 +252,27 @@ void PointCloudsRenderer::render(const G3MRenderContext* rc,
   }
 }
 
-void PointCloudsRenderer::startRendering(const Tile* tile) {
-  const int cloudsSize = _clouds.size();
-  for (int i = 0; i < cloudsSize; i++) {
-    PointCloud* cloud = _clouds[i];
-    cloud->startRendering(tile);
-  }
-}
+//void PointCloudsRenderer::startRendering(const Tile* tile) {
+//  const int cloudsSize = _clouds.size();
+//  for (int i = 0; i < cloudsSize; i++) {
+//    PointCloud* cloud = _clouds[i];
+//    cloud->startRendering(tile);
+//  }
+//}
+//
+//void PointCloudsRenderer::stopRendering(const Tile* tile) {
+//  const int cloudsSize = _clouds.size();
+//  for (int i = 0; i < cloudsSize; i++) {
+//    PointCloud* cloud = _clouds[i];
+//    cloud->stopRendering(tile);
+//  }
+//}
 
-void PointCloudsRenderer::stopRendering(const Tile* tile) {
+void PointCloudsRenderer::changedTileRendering(const std::vector<const Tile*>* started,
+                                               const std::vector<const Tile*>* stopped) {
   const int cloudsSize = _clouds.size();
   for (int i = 0; i < cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
-    cloud->stopRendering(tile);
+    cloud->changedTileRendering(started, stopped);
   }
 }

@@ -88,9 +88,12 @@ private:
     void render(const G3MRenderContext* rc,
                 GLState* glState);
 
-    void startRendering(const Tile* tile);
+//    void startRendering(const Tile* tile);
+//
+//    void stopRendering(const Tile* tile);
 
-    void stopRendering(const Tile* tile);
+    void changedTileRendering(const std::vector<const Tile*>* started,
+                              const std::vector<const Tile*>* stopped);
 
   };
 
@@ -120,9 +123,13 @@ public:
   void removeAllPointClouds();
 
 
-  void startRendering(const Tile* tile);
+//  void startRendering(const Tile* tile);
+//
+//  void stopRendering(const Tile* tile);
 
-  void stopRendering(const Tile* tile);
+  void changedTileRendering(const std::vector<const Tile*>* started,
+                            const std::vector<const Tile*>* stopped);
+
 
 };
 
