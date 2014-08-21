@@ -60,6 +60,9 @@ private:
     double _minHeight;
     double _maxHeight;
 
+    std::vector<const Sector*> _startedRendering;
+    std::vector<const Sector*> _stoppedRendering;
+
   public:
     PointCloud(const URL& serverURL,
                const std::string& cloudName) :
