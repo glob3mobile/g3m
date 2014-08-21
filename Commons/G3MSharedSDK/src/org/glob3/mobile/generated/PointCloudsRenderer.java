@@ -20,8 +20,7 @@ package org.glob3.mobile.generated;
 
 //class Sector;
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
+public class PointCloudsRenderer extends DefaultRenderer
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class PointCloud;
@@ -63,6 +62,10 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
     private final URL _serverURL = new URL();
     private final String _cloudName;
 
+    private final long _downloadPriority;
+    private final TimeInterval _timeToCache = new TimeInterval();
+    private final boolean _readExpired;
+
     private boolean _downloadingMetadata;
     private boolean _errorDownloadingMetadata;
     private boolean _errorParsingMetadata;
@@ -75,10 +78,13 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
     private final java.util.ArrayList<Sector> _startedRendering = new java.util.ArrayList<Sector>();
     private final java.util.ArrayList<Sector> _stoppedRendering = new java.util.ArrayList<Sector>();
 
-    public PointCloud(URL serverURL, String cloudName)
+    public PointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
     {
        _serverURL = new URL(serverURL);
        _cloudName = cloudName;
+       _downloadPriority = downloadPriority;
+       _timeToCache = new TimeInterval(timeToCache);
+       _readExpired = readExpired;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -97,15 +103,13 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
     public final void initialize(G3MContext context)
     {
       IDownloader downloader = context.getDownloader();
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: allows cache
       _downloadingMetadata = true;
       _errorDownloadingMetadata = false;
       _errorParsingMetadata = false;
     
       final URL metadataURL = new URL(_serverURL, _cloudName);
     
-      downloader.requestBuffer(metadataURL, DownloadPriority.HIGHEST, TimeInterval.zero(), true, new PointCloudsRenderer.PointCloudMetadataDownloadListener(this), true);
+      downloader.requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new PointCloudsRenderer.PointCloudMetadataDownloadListener(this), true);
     }
 
     public final RenderState getRenderState(G3MRenderContext rc)
@@ -184,20 +188,16 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
 //#warning DGD at work!
     }
 
-//    void startRendering(const Tile* tile);
-//
-//    void stopRendering(const Tile* tile);
-
-    public final void changedTileRendering(java.util.ArrayList<Tile> started, java.util.ArrayList<Tile> stopped)
+    public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning DGD at work!
       if (_sector != null)
       {
         //ILogger::instance()->logInfo("changedTileRendering");
-        for (int i = 0; i < started.size(); i++)
+        for (int i = 0; i < tilesStartedRendering.size(); i++)
         {
-          final Tile tile = started.get(i);
+          final Tile tile = tilesStartedRendering.get(i);
           if (tile._sector.touchesWith(_sector))
           {
             ILogger.instance().logInfo("   Start rendering tile " + tile._id + " for cloud " + _cloudName);
@@ -205,9 +205,9 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
           }
         }
     
-        for (int i = 0; i < stopped.size(); i++)
+        for (int i = 0; i < tilesStoppedRendering.size(); i++)
         {
-          final Tile tile = stopped.get(i);
+          final Tile tile = tilesStoppedRendering.get(i);
           if (tile._sector.touchesWith(_sector))
           {
             ILogger.instance().logInfo("   Stop rendering tile " + tile._id + " for cloud " + _cloudName);
@@ -227,9 +227,26 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
   }
 
 
+  private static class PointCloudsTileRenderingListener extends TileRenderingListener
+  {
+    private PointCloudsRenderer _pointCloudsRenderer;
+    public PointCloudsTileRenderingListener(PointCloudsRenderer pointCloudsRenderer)
+    {
+       _pointCloudsRenderer = pointCloudsRenderer;
+    }
+
+    public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
+    {
+      _pointCloudsRenderer.changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
+    }
+
+  }
+
+
   private java.util.ArrayList<PointCloud> _clouds = new java.util.ArrayList<PointCloud>();
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
+  private TileRenderingListener _tileRenderingListener;
 
   protected final void onChangedContext()
   {
@@ -241,6 +258,10 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
     }
   }
 
+  public PointCloudsRenderer()
+  {
+    _tileRenderingListener = new PointCloudsTileRenderingListener(this);
+  }
 
   public void dispose()
   {
@@ -251,6 +272,7 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
       if (cloud != null)
          cloud.dispose();
     }
+    super.dispose();
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
@@ -309,14 +331,19 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
   
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
   {
-    PointCloud pointCloud = new PointCloud(serverURL, cloudName);
+    PointCloud pointCloud = new PointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired);
     if (_context != null)
     {
       pointCloud.initialize(_context);
     }
     _clouds.add(pointCloud);
+  }
+
+  public final void addPointCloud(URL serverURL, String cloudName)
+  {
+    addPointCloud(serverURL, cloudName, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true);
   }
 
   public final void removeAllPointClouds()
@@ -332,19 +359,19 @@ public class PointCloudsRenderer extends DefaultRenderer, TileRenderingListener
   }
 
 
-//  void startRendering(const Tile* tile);
-//
-//  void stopRendering(const Tile* tile);
-
-  public final void changedTileRendering(java.util.ArrayList<Tile> started, java.util.ArrayList<Tile> stopped)
+  public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
   {
     final int cloudsSize = _clouds.size();
     for (int i = 0; i < cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
-      cloud.changedTileRendering(started, stopped);
+      cloud.changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
     }
   }
 
+  public final TileRenderingListener getTileRenderingListener()
+  {
+    return _tileRenderingListener;
+  }
 
 }

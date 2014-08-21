@@ -66,6 +66,14 @@ public abstract class DefaultRenderer implements Renderer
     _changedInfoListener = null;
   }
 
+  protected void onChangedContext()
+  {
+  }
+
+  protected void onLostContext()
+  {
+  }
+
 
   public final boolean isEnable()
   {
@@ -116,14 +124,6 @@ public abstract class DefaultRenderer implements Renderer
   {
     _context = null;
     onLostContext();
-  }
-
-  public void onChangedContext()
-  {
-  }
-
-  public void onLostContext()
-  {
   }
 
 

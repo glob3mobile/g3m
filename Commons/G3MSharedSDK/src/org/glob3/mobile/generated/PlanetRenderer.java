@@ -40,7 +40,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       if (!_tilesStartedRendering.isEmpty() || !_tilesStoppedRendering.isEmpty())
       {
-        _tileRenderingListener.changedTileRendering(_tilesStartedRendering, _tilesStoppedRendering);
+        _tileRenderingListener.changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
         _tilesStartedRendering.clear();
         _tilesStoppedRendering.clear();
       }
@@ -415,7 +415,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _tilesStoppedRendering = null;
   
     super.dispose();
-  
   }
 
   public final void initialize(G3MContext context)
@@ -536,7 +535,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       if (!_tilesStartedRendering.isEmpty() || !_tilesStoppedRendering.isEmpty())
       {
-        _tileRenderingListener.changedTileRendering(_tilesStartedRendering, _tilesStoppedRendering);
+        _tileRenderingListener.changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
         _tilesStartedRendering.clear();
         _tilesStoppedRendering.clear();
       }
