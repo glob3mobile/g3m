@@ -21,6 +21,11 @@
 #include "ITexturizerData.hpp"
 #include "TileImageContribution.hpp"
 
+#include "IFactory.hpp"
+#include "ICanvas.hpp"
+#include "RectangleF.hpp"
+#include "IImageListener.hpp"
+
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
 private:
   const Tile* _tile;
@@ -96,15 +101,30 @@ public:
 
 };
 
-
 class DTT_TileTextureBuilder;
+
+
+
+
 
 class DTT_TileImageListener : public TileImageListener {
 private:
   DTT_TileTextureBuilder* _builder;
-
+  const Tile* _tile;
+#ifdef C_CODE
+  const Vector2I       _tileTextureResolution;
+#endif
+#ifdef JAVA_CODE
+  private final Vector2I _tileTextureResolution;
+#endif
+  
+  RectangleF* getInnerRectangle(int wholeSectorWidth,
+                                int wholeSectorHeight,
+                                const Sector& wholeSector,
+                                const Sector& innerSector) const;
+  
 public:
-  DTT_TileImageListener(DTT_TileTextureBuilder* builder);
+  DTT_TileImageListener(DTT_TileTextureBuilder* builder, const Tile* tile, const Vector2I& tileTextureResolution);
 
   virtual ~DTT_TileImageListener();
 
@@ -117,6 +137,8 @@ public:
                           const std::string& error);
 
   void imageCreationCanceled(const std::string& tileId);
+  
+  
 };
 
 
@@ -231,7 +253,7 @@ public:
                                    _tileTextureResolution,
                                    _tileDownloadPriority,
                                    _logTilesPetitions,
-                                   new DTT_TileImageListener(this),
+                                   new DTT_TileImageListener(this, _tile, _tileTextureResolution),
                                    true,
                                    _frameTasksExecutor);
       }
@@ -300,18 +322,56 @@ public:
   void imageCreationCanceled() {
 #warning Diego at work
   }
+};
 
+class DTT_NotFullProviderImageListener : public IImageListener {
+private:
+  DTT_TileTextureBuilder* _builder;
+  const IImage* _image;
+  const std::string& _imageId;
+  const TileImageContribution* _contribution;
+  
+public:
+  DTT_NotFullProviderImageListener(DTT_TileTextureBuilder* builder,
+                                   const std::string& imageId,
+                                   const TileImageContribution* contribution) :
+  _builder(builder),
+  _imageId(imageId),
+  _contribution(contribution)
+  {
+    _builder->_retain();
+  }
+  
+  ~DTT_NotFullProviderImageListener() {
+    if (_builder != NULL) {
+      _builder->_release();
+    }
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
+  void imageCreated(const IImage* image) {
+    ILogger::instance()->logInfo("Image %s", image->description().c_str());
+    _builder->imageCreated(image,_imageId,_contribution);
+  }
 };
 
 
-DTT_TileImageListener::DTT_TileImageListener(DTT_TileTextureBuilder* builder) :
-_builder(builder)
+
+
+DTT_TileImageListener::DTT_TileImageListener(DTT_TileTextureBuilder* builder, const Tile* tile, const Vector2I& tileTextureResolution) :
+_builder(builder),
+_tile(tile),
+_tileTextureResolution(tileTextureResolution)
 {
   _builder->_retain();
 }
 
 DTT_TileImageListener::~DTT_TileImageListener() {
-  _builder->_release();
+  if (_builder != NULL) {
+    _builder->_release();
+  }
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -322,12 +382,78 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileId,
                                          const std::string&           imageId,
                                          const TileImageContribution* contribution) {
     
-#warning JM at WORK
-    if (!contribution->getSector()->isNan()){
-        ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile");
-    }
+#warning JM at WORK: CREAR CANVAS SOURCE RECTANGLE Y DEST RECTANGLE. EL LISTENER DEL CANVAS TIENE QUE HACER UN RETAIN Y UN RELEASE DEL BUILDER. METER DEFAULTIMAGEPROVIDER (CLASE QUE GENERA UNA IMAGEN). QUE RENDER STATE DEVUELVA BUSY HASTA QUE NO TENGA LA IMAGEN DEFAULT, PARA QUE PUEDA ARRANCAR EL GLOBO.
+  
+  
+  
+  
+  if (!contribution->isFullCoverageAndOpaque()){
+
+      std::string auxImageId = imageId + "|";
+      
+      // retain the singleResult->_contribution as the _listener take full ownership of the contribution
+      TileImageContribution::retainContribution(contribution);
+      
+      ILogger::instance()->logInfo("DTT_TileImageListener received image that does not fit tile. Building new Image....");
+
+      ICanvas* canvas = IFactory::instance()->createCanvas();
+      
+      const int _width =  _tileTextureResolution._x;
+      
+      const int _height =  _tileTextureResolution._y;
+
+      const Sector tileSector = _tile->_sector;
+
+      ILogger::instance()->logInfo("Tile " + _tile->description());
+
+      canvas->initialize(_width, _height);
+      
+      const float   alpha = contribution->_alpha;
+      const Sector* imageSector = contribution->getSector();
+      
+      const Sector visibleContributionSector = imageSector->intersection(tileSector);
+      
+      auxImageId += "_" + visibleContributionSector.description();
+
+      
+      const RectangleF* srcRect = getInnerRectangle(_width, _height,
+                                                    *imageSector,
+                                                    visibleContributionSector);
+      
+      const RectangleF* destRect = getInnerRectangle(_width, _height,
+                                                     tileSector,
+                                                     *imageSector);
     
-  _builder->imageCreated(image, imageId, contribution);
+      //We add "destRect->description()" to "auxImageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
+      auxImageId += "_" + destRect->description();
+
+    
+      ILogger::instance()->logInfo("destRect " + destRect->description());
+
+      
+      canvas->drawImage(image,
+                        //SRC RECT
+                        srcRect->_x, srcRect->_y,
+                        srcRect->_width, srcRect->_height,
+                        //DEST RECT
+                        destRect->_x, destRect->_y,
+                        destRect->_width, destRect->_height,
+                        alpha);
+      
+      canvas->setLineColor(Color::magenta());
+      canvas->strokeRectangle(destRect->_x, destRect->_y,
+                              destRect->_width, destRect->_height);
+      
+      
+      delete destRect;
+      delete srcRect;
+      
+      canvas->createImage(new DTT_NotFullProviderImageListener(_builder, auxImageId, contribution), true);
+      
+      delete canvas;
+    } else {
+      _builder->imageCreated(image, imageId, contribution);
+    }
 }
 
 void DTT_TileImageListener::imageCreationError(const std::string& tileId,
@@ -337,6 +463,25 @@ void DTT_TileImageListener::imageCreationError(const std::string& tileId,
 
 void DTT_TileImageListener::imageCreationCanceled(const std::string& tileId) {
   _builder->imageCreationCanceled();
+}
+
+RectangleF* DTT_TileImageListener::getInnerRectangle(int wholeSectorWidth,
+                                                                    int wholeSectorHeight,
+                                                                    const Sector& wholeSector,
+                                                                    const Sector& innerSector) const {
+  if (wholeSector.isNan() || innerSector.isNan() || wholeSector.isEquals(innerSector)){
+    return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
+  }
+  
+  const double widthFactor  = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
+  const double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
+  
+  const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
+  
+  return new RectangleF((float) (lowerUV._x   * wholeSectorWidth),
+                        (float) (lowerUV._y   * wholeSectorHeight),
+                        (float) (widthFactor  * wholeSectorWidth),
+                        (float) (heightFactor * wholeSectorHeight));
 }
 
 
@@ -392,6 +537,11 @@ public:
     return _builder->isCanceled();
   }
 };
+
+DefaultTileTexturizer::DefaultTileTexturizer(const IImageBuilder* defaultBackGroundImage) : _defaultBackGroundImage(defaultBackGroundImage) {
+  
+}
+
 
 LeveledTexturedMesh* DefaultTileTexturizer::getMesh(Tile* tile) const {
   DTT_TileTextureBuilderHolder* tileBuilderHolder = (DTT_TileTextureBuilderHolder*) tile->getTexturizerData();

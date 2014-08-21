@@ -16,6 +16,8 @@
 #include "FrameTasksExecutor.hpp"
 #include "Sector.hpp"
 
+#include "Color.hpp"
+
 CompositeTileImageProvider::~CompositeTileImageProvider() {
   for (int i = 0; i < _childrenSize; i++) {
     TileImageProvider* child = _children[i];
@@ -252,9 +254,9 @@ void CompositeTileImageProvider::Composer::mixResult() {
   ICanvas* canvas = IFactory::instance()->createCanvas();
 
   canvas->initialize(_width, _height);
-
+  
   std::string imageId = "";
-
+  
   for (int i = 0; i < _contributionsSize; i++) {
     const ChildResult* result = _results[i];
     imageId += result->_imageId + "|";
@@ -262,9 +264,14 @@ void CompositeTileImageProvider::Composer::mixResult() {
     const IImage* image = result->_image;
     const float   alpha = result->_contribution->_alpha;
     const Sector* imageSector = result->_contribution->getSector();
-
-    if (result->_contribution->isFullCoverageAndOpaque() && imageSector->isNan()) {
+    
+#warning Question: I (vtp) think it is not necessary to do this check: I think it is not necessary to do this check inside the "if clause": imageSector->isNan()
+    
+    if (result->_contribution->isFullCoverageAndOpaque() ) {
       canvas->drawImage(image, 0, 0);
+//      canvas->setLineWidth(5);
+//      canvas->setLineColor(Color::yellow());
+//      canvas->strokeRectangle(0, 0, image->getWidth(), image->getHeight());
     }
     else {
       const Sector visibleContributionSector = imageSector->intersection(_tileSector);
@@ -277,7 +284,9 @@ void CompositeTileImageProvider::Composer::mixResult() {
       const RectangleF* destRect = getInnerRectangle(_width, _height,
                                                      _tileSector,
                                                      visibleContributionSector);
-
+      //We add "destRect->description()" to "imageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
+      imageId += "_" + destRect->description();
+      
       canvas->drawImage(image,
                         //SRC RECT
                         srcRect->_x, srcRect->_y,
@@ -286,6 +295,16 @@ void CompositeTileImageProvider::Composer::mixResult() {
                         destRect->_x, destRect->_y,
                         destRect->_width, destRect->_height,
                         alpha);
+      canvas->setLineColor(Color::magenta());
+      canvas->strokeRectangle(destRect->_x, destRect->_y,
+                              destRect->_width, destRect->_height);
+//
+//      canvas->setLineColor(Color::white());
+//      
+//      canvas->strokeRectangle(destRect->_x,
+//                              _height - (destRect->_y + destRect->_height),
+//                              destRect->_width,
+//                              destRect->_height);
 
       delete destRect;
       delete srcRect;

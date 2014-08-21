@@ -21,7 +21,6 @@ import org.glob3.mobile.generated.GEOPolygonRasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbol;
 import org.glob3.mobile.generated.GEORasterSymbolizer;
 import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
@@ -30,6 +29,9 @@ import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.TiledVectorLayer;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -67,9 +69,9 @@ public class MainActivity
       placeHolder.addView(_g3mWidget);
 
 
-      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(47.371716253228562721, 8.5409432031508725203, 1040);
-      _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
-               Angle.fromDegrees(-90));
+      //      final Geodetic3D zurichPos = Geodetic3D.fromDegrees(47.371716253228562721, 8.5409432031508725203, 1040);
+      //      _g3mWidget.getG3MWidget().setAnimatedCameraPosition(TimeInterval.fromSeconds(5), zurichPos, Angle.zero(),
+      //               Angle.fromDegrees(-90));
 
    }
 
@@ -80,14 +82,36 @@ public class MainActivity
       final TimeInterval connectTimeout = TimeInterval.fromSeconds(60);
       final TimeInterval readTimeout = TimeInterval.fromSeconds(65);
       final boolean saveInBackground = true;
+      final LayerSet layerSet = new LayerSet();
+      final boolean forceFirstLevelTilesRenderOnStart = true;
+      layerSet.createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, new ArrayList<String>());
 
-      builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
+
+      final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA", false), WMSServerVersion.WMS_1_1_0,
+               Sector.fromDegrees(40.1640143280790858, -5.8564874640814313, 40.3323148480663158, -5.5216079822178570),
+               "image/png", "EPSG:4326", "", true, null, TimeInterval.fromDays(0), true, null, 1);
+
+
+      final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
+               WMSServerVersion.WMS_1_1_0, //
+               Sector.fromDegrees(40.1240143280790858, -5.8964874640814313, 40.3723148480663158, -5.4816079822178570),//
+               //               Sector.fromDegrees(0, -90, 45, 0),
+               "image/jpeg", "EPSG:4326", "", false, null, //new LevelTileCondition(0, 6),
+               //NULL,
+               TimeInterval.fromDays(0), true, null, 1);
+      layerSet.addLayer(blueMarble);
+      layerSet.addLayer(pnoa);
+
+
+      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
+      builder.getPlanetRendererBuilder().setRenderDebug(true);
+
+      //builder.getPlanetRendererBuilder().setLayerSet(createLayerSet());
       // builder.getPlanetRendererBuilder().setRenderDebug(true);
       // builder.getPlanetRendererBuilder().setLogTilesPetitions(true);
 
       return builder.createWidget();
    }
-
 
    private static class SampleRasterSymbolizer
             extends

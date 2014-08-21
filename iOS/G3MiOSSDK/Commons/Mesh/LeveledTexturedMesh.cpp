@@ -216,7 +216,8 @@ void LeveledTexturedMesh::rawRender(const G3MRenderContext* rc,
                                     const GLState* parentGLState) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping == NULL) {
-    ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");
+#warning uncomment
+    //ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");
     _mesh->render(rc, parentGLState);
   }
   else {

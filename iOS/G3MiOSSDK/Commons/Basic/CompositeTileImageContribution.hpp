@@ -38,12 +38,27 @@ private:
 #ifdef JAVA_CODE
   private final java.util.ArrayList<ChildContribution> _contributions;
 #endif
-
+  
   CompositeTileImageContribution(const std::vector<const ChildContribution*>& contributions) :
-  TileImageContribution(false, 1),
+  TileImageContribution(false, 1.0f),
   _contributions(contributions)
   {
+    
+    
   }
+  
+  
+//  CompositeTileImageContribution(const std::vector<const ChildContribution*>& contributions,
+//                                 const Sector& sector,
+//                                 bool isFullCoverage,
+//                                 bool isTransparent,
+//                                 float alpha) :
+//  TileImageContribution(sector, isFullCoverage, isTransparent, alpha),
+//  _contributions(contributions)
+//  {
+//    
+//    
+//  }
 
 protected:
   ~CompositeTileImageContribution();
@@ -56,11 +71,79 @@ public:
 
   const ChildContribution* get(int index) const {
 #ifdef C_CODE
-    return _contributions[index];
+    return _contributions.at(index);//[index];
 #endif
 #ifdef JAVA_CODE
     return _contributions.get(index);
 #endif
+  }
+  
+  static bool isFullCoverage(const std::vector<const ChildContribution*>& contributions) {
+    const int size = contributions.size();
+    for (int i = 0; i < size; i++) {
+      const ChildContribution* child = contributions.at(i);
+      if(child->_contribution->isFullCoverage()) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  static bool isFullCoverageAndOpaque(const std::vector<const ChildContribution*>& contributions) {
+    const int size = contributions.size();
+    for (int i = 0; i < size; i++) {
+      const ChildContribution* child = contributions.at(i);
+      const TileImageContribution* contribution = child->_contribution;
+      if(contribution->isFullCoverage() && !contribution->isTransparent() && contribution->isOpaque()) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  
+  static bool isOpaque(const std::vector<const ChildContribution*>& contributions) {
+    const int size = contributions.size();
+    for (int i = 0; i < size; i++) {
+      const ChildContribution* child = contributions.at(i);
+      const TileImageContribution* contribution = child->_contribution;
+      if(contribution->isOpaque()) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  static bool isTransparent(const std::vector<const ChildContribution*>& contributions) {
+    const int size = contributions.size();
+    for (int i = 0; i < size; i++) {
+      const ChildContribution* child = contributions.at(i);
+      const TileImageContribution* contribution = child->_contribution;
+      if(!contribution->isTransparent()) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  static const Sector* getSector(const std::vector<const ChildContribution*>& contributions) {
+    Sector* result = NULL;
+    const int size = contributions.size();
+    for (int i = 0; i < size; i++) {
+      const ChildContribution* child = contributions.at(i);
+      const TileImageContribution* contribution = child->_contribution;
+      if(result == NULL) {
+        result = new Sector(*contribution->getSector());
+      } else {
+        result->mergedWith(*contribution->getSector());
+      }
+    }
+    
+    return result;
   }
   
 };

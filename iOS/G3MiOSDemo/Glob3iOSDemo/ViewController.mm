@@ -304,6 +304,11 @@ Mesh* createSectorMesh(const Planet* planet,
 //                                                       Angle::fromDegrees(-5.714247),
 //                                                       Angle::fromDegrees(-5.297620));
 
+//    [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+//                                                         Geodetic3D::fromDegrees(40.3323148480663158,
+//                                                                                 -5.5216079822178570,
+//                                                                                 1000076.892613024946));
+//  
   [[self G3MWidget] startAnimation];
 
   /*
@@ -400,10 +405,13 @@ public:
   
   
   
-  
-  MapQuestLayer* osm = MapQuestLayer::newOSM(TimeInterval::fromDays(30), true, 10);
-  
-  //layerSet->addLayer(osm);
+  LayerTilesRenderParameters* ltrp = new LayerTilesRenderParameters(Sector::fromDegrees(40.1640143280790858, -5.8564874640814313,
+                                                     40.3323148480663158, -5.5216079822178570),
+                                 2, 4,
+                                 2, 16,
+                                 LayerTilesRenderParameters::defaultTileTextureResolution(),
+                                 LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                 false);
   
   WMSLayer *pnoa = new WMSLayer("PNOA",
                                 URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -415,33 +423,61 @@ public:
                                 "",
                                 true,
                                 NULL,
-                                TimeInterval::fromDays(30),
+                                TimeInterval::fromDays(0),
                                 true,
                                 NULL,
-                                1);
+                                0.3f);
   
-  layerSet->addLayer(pnoa);
-  
-//  layerSet->addLayer(new WMSLayer("precipitation", //
-//                                  URL("http://wms.openweathermap.org/service", false), //
-//                                  WMS_1_1_0, //
-//                                  Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
-//                                  "image/png", //
-//                                  "EPSG:4326", //
-//                                  "", //
-//                                  true, //
-//                                  NULL,
-//                                  TimeInterval::fromDays(30),
-//                                  true,
-//                                  NULL,
-//                                  1));
+//
+//   layerSet->addLayer(new WMSLayer("precipitation", //
+//                                    URL("http://wms.openweathermap.org/service", false), //
+//                                    WMS_1_1_0, //
+//                                    Sector::fromDegrees(40.1240143280790858, -5.8964874640814313,
+//                                                       40.3723148480663158, -5.4816079822178570),
+//                                    //Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+//                                    "image/png", //
+//                                    "EPSG:4326", //
+//                                    "", //
+//                                    true, //
+//                                    NULL,
+//                                    TimeInterval::fromDays(0),
+//                                    true,
+//                                   NULL,
+//                                   1));
+      WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                          URL("http://www.nasa.network.com/wms?", false),
+                                          WMS_1_1_0,
+                                          Sector::fromDegrees(40.1240143280790858,
+                                                              -5.8964874640814313,
+                                                              40.3723148480663158,
+                                                              -5.4816079822178570),
+//                                          Sector::fromDegrees(0,
+//                                                              -90,
+//                                                              45,
+//                                                              0),
+//                                          Sector::fullSphere(),
 
+                                          "image/jpeg",
+                                          "EPSG:4326",
+                                          "",
+                                          false,
+                                          NULL, //new LevelTileCondition(0, 6),
+                                          //NULL,
+                                          TimeInterval::fromDays(0),
+                                          true,
+                                          NULL,
+                                          1);
+  //layerSet->addLayer(blueMarble);
+  layerSet->addLayer(pnoa);
+
+  
+  
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-  
-  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
-                                            40.3423148480663158, -5.5116079822178570);
-  
+  builder.getPlanetRendererBuilder()->setRenderDebug(true);
+//  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
+//                                            40.3423148480663158, -5.5116079822178570);
+//  
   Default_HUDRenderer* hudRenderer = new Default_HUDRenderer();
   InfoDisplay* infoDisplay = new DefaultInfoDisplay(hudRenderer);
   //infoDisplay->showDisplay();
@@ -449,9 +485,14 @@ public:
   builder.setHUDRenderer(hudRenderer);
   builder.setInfoDisplay(infoDisplay);
   
-  builder.setShownSector(sector);
+  //builder.setShownSector(sector);
   builder.getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart);
   builder.initializeWidget();
+  //    [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+  //                                                         Geodetic3D::fromDegrees(40.3323148480663158,
+  //                                                                                 -5.5216079822178570,
+  //                                                                                 1000076.892613024946));
+  //
 }
 
 - (void) initWithBuilderAndSegmentedWorld
@@ -2568,7 +2609,7 @@ public:
   class QuadListener: public IImageListener {
     ShapesRenderer* _sr;
   public:
-
+#warning TODO vtp: probar con canvas los 4 casos de drawImage:
     QuadListener(ShapesRenderer* sr):_sr(sr) {
 
     }

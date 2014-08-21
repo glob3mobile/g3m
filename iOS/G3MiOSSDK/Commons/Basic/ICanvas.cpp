@@ -205,24 +205,26 @@ void ICanvas::drawImage(const IImage* image,
   if (!RectangleF::fullContains(0, 0, image->getWidth(), image->getHeight(),
                                 srcLeft, srcTop, srcWidth, srcHeight)) {
     ILogger::instance()->logError("Invalid source rectangle in drawImage");
+  } else {
+    if (transparency <= 0.0) {
+      return;
+    }
+    
+    if (transparency >= 1.0) {
+      _drawImage(image,
+                 srcLeft, srcTop, srcWidth, srcHeight,
+                 destLeft, destTop, destWidth, destHeight);
+    }
+    else {
+      _drawImage(image,
+                 srcLeft, srcTop, srcWidth, srcHeight,
+                 destLeft, destTop, destWidth, destHeight,
+                 transparency);
+    }
+
   }
 
-  if (transparency <= 0.0) {
-    return;
-  }
-
-  if (transparency >= 1.0) {
-    _drawImage(image,
-               srcLeft, srcTop, srcWidth, srcHeight,
-               destLeft, destTop, destWidth, destHeight, transparency);
-  }
-  else {
-    _drawImage(image,
-               srcLeft, srcTop, srcWidth, srcHeight,
-               destLeft, destTop, destWidth, destHeight,
-               transparency);
-  }
-
+  
 }
 
 void ICanvas::beginPath() {

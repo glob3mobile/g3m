@@ -11,6 +11,7 @@
 
 class LayerSet;
 class GEOVectorLayer;
+class IImageBuilder;
 
 #include "TilesRenderParameters.hpp"
 #include "PlanetRenderer.hpp"
@@ -78,6 +79,15 @@ private:
   TouchEventType _touchEventTypeOfTerrainTouchListener;
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener();
+  
+  IImageBuilder* _defaultTileBackGroundImage;
+  
+  const IImageBuilder* getDefaultTileBackGroundImage() const {
+    if (_defaultTileBackGroundImage == NULL) {
+      return NULL;//TODO new CheeseImage();
+    }
+    return _defaultTileBackGroundImage;
+  }
 
 public:
   PlanetRendererBuilder();
@@ -126,6 +136,10 @@ public:
   void setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener);
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
+  
+  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage) {
+    _defaultTileBackGroundImage = defaultTileBackGroundImage;
+  }
 };
 
 #endif

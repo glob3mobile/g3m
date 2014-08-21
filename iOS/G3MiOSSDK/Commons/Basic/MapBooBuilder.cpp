@@ -53,6 +53,8 @@
 #include "ICanvas.hpp"
 #include "ICanvasUtils.hpp"
 
+#include "CanvasImageBuilder.hpp"
+
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
@@ -493,6 +495,9 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
 
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
+  
+  CanvasImageBuilder* cib = new CanvasImageBuilder();
+  
   TileTexturizer* texturizer = new DefaultTileTexturizer();
 //  TileRasterizer* tileRasterizer = NULL;
 

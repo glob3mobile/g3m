@@ -339,7 +339,6 @@ void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop) {
   UIImage* uiImage = ((Image_iOS*) image)->getUIImage();
   CGImage* cgImage = [uiImage CGImage];
-
   CGContextDrawImage(_context,
                      CGRectMake(destLeft,
 #warning DIEGO Not same behaviour as _drawImage(const IImage* image, srcRect, srcDest) that inverts Y
@@ -372,6 +371,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
   CGImage* cgImage = [uiImage CGImage];
 
   CGRect destRect = CGRectMake(destLeft,
+                               //destTop,
                                _canvasHeight - (destTop + destHeight), // Bottom
                                destWidth,
                                destHeight);
@@ -410,6 +410,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
   CGImage* cgImage = [uiImage CGImage];
 
   CGRect destRect = CGRectMake(destLeft,
+                               //destTop,
                                _canvasHeight - (destTop + destHeight), // Bottom
                                destWidth,
                                destHeight);

@@ -39,5 +39,15 @@ CompositeTileImageContribution::~CompositeTileImageContribution() {
 
 
 const TileImageContribution* CompositeTileImageContribution::create(const std::vector<const ChildContribution*>& contributions) {
-  return (contributions.size() == 0) ? NULL : new CompositeTileImageContribution(contributions);
+  if (contributions.size() == 0) {
+    return NULL;
+  }
+  
+  return new CompositeTileImageContribution(contributions);
+  
+//  return new CompositeTileImageContribution(contributions,
+//                                            *CompositeTileImageContribution::getSector(contributions),
+//                                            CompositeTileImageContribution::isFullCoverage(contributions),
+//                                            CompositeTileImageContribution::isTransparent(contributions),
+//                                            1);
 }

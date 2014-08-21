@@ -10,15 +10,22 @@
 #define __G3MiOSSDK__DefaultTileTexturizer__
 
 #include "TileTexturizer.hpp"
+//#include "IImageBuilder.hpp"
+
 class LeveledTexturedMesh;
 class TextureIDReference;
+class IImageBuilder;
 
 
 class DefaultTileTexturizer : public TileTexturizer {
 private:
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
+  const IImageBuilder* _defaultBackGroundImage;
 
 public:
+  
+  DefaultTileTexturizer(const IImageBuilder* defaultBackGroundImage);
+
   virtual ~DefaultTileTexturizer() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -62,6 +69,10 @@ public:
                            const Geodetic3D& position,
                            const Tile* tile,
                            LayerSet* layerSet);
+  
+  const IImageBuilder* getDefaultBackGroundImage() const {
+    return _defaultBackGroundImage;
+  }
   
 };
 
