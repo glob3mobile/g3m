@@ -407,12 +407,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
     if (_renderedSector != null)
        _renderedSector.dispose();
-  
     if (_tileRenderingListener != null)
        _tileRenderingListener.dispose();
   
-    _tilesStartedRendering = null;
-    _tilesStoppedRendering = null;
   
     super.dispose();
   }
@@ -447,7 +444,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   
     updateGLState(rc);
-  ///#warning Testing Terrain Normals
+    ///#warning Testing Terrain Normals
     _glState.setParent(glState);
   
     // Saving camera for use in onTouchEvent
@@ -495,9 +492,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     {
       _toVisit.clear();
       //_toVisit.addAll(_firstLevelTiles);
-  //    for (final Tile tile : _firstLevelTiles) {
-  //      _toVisit.add(tile);
-  //    }
+      //    for (final Tile tile : _firstLevelTiles) {
+      //      _toVisit.add(tile);
+      //    }
       for (int i = 0; i < firstLevelTilesCount; i++) {
         _toVisit.add( _firstLevelTiles.get(i) );
       }
@@ -516,9 +513,9 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   
         _toVisit.clear();
         //_toVisit.addAll(_toVisitInNextIteration);
-  //      for (final Tile tile : _toVisitInNextIteration) {
-  //        _toVisit.add(tile);
-  //      }
+        //      for (final Tile tile : _toVisitInNextIteration) {
+        //        _toVisit.add(tile);
+        //      }
         final int toVisitInNextIterationSize = _toVisitInNextIteration.size();
         for (int i = 0; i < toVisitInNextIterationSize; i++) {
           _toVisit.add( _toVisitInNextIteration.get(i) );

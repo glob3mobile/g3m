@@ -63,7 +63,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private final String _cloudName;
 
     private final long _downloadPriority;
-    private final TimeInterval _timeToCache = new TimeInterval();
+    private final TimeInterval _timeToCache;
     private final boolean _readExpired;
 
     private boolean _downloadingMetadata;
@@ -83,7 +83,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _serverURL = new URL(serverURL);
        _cloudName = cloudName;
        _downloadPriority = downloadPriority;
-       _timeToCache = new TimeInterval(timeToCache);
+       _timeToCache = timeToCache;
        _readExpired = readExpired;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
