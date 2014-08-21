@@ -38,19 +38,19 @@ void PointCloudsRenderer::PointCloudMetadataDownloadListener::onCanceledDownload
 
 
 void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
-  IDownloader* downloader = context->getDownloader();
+  _downloader = context->getDownloader();
   _downloadingMetadata = true;
   _errorDownloadingMetadata = false;
   _errorParsingMetadata = false;
 
   const URL metadataURL(_serverURL, _cloudName);
 
-  downloader->requestBuffer(metadataURL,
-                            _downloadPriority,
-                            _timeToCache,
-                            _readExpired,
-                            new PointCloudsRenderer::PointCloudMetadataDownloadListener(this),
-                            true);
+  _downloader->requestBuffer(metadataURL,
+                             _downloadPriority,
+                             _timeToCache,
+                             _readExpired,
+                             new PointCloudsRenderer::PointCloudMetadataDownloadListener(this),
+                             true);
 }
 
 PointCloudsRenderer::PointCloud::~PointCloud() {
@@ -116,32 +116,52 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
   return RenderState::ready();
 }
 
+PointCloudsRenderer::PointCloudNodesLayoutFetcher::PointCloudNodesLayoutFetcher(IDownloader* downloader,
+                                                                                PointCloud* pointCloud,
+                                                                                const std::vector<const Tile*>& tilesStartedRendering,
+                                                                                const std::vector<const Tile*>& tilesStoppedRendering) :
+_pointCloud(pointCloud)
+{
+  const int tilesStartedRenderingSize = tilesStartedRendering.size();
+  for (int i = 0; i < tilesStartedRenderingSize; i++) {
+    const Tile* tile = tilesStartedRendering[i];
+
+
+  }
+}
+
 
 void PointCloudsRenderer::PointCloud::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
                                                             const std::vector<const Tile*>* tilesStoppedRendering) {
 #warning DGD at work!
   if (_sector) {
     //ILogger::instance()->logInfo("changedTileRendering");
-    for (int i = 0; i < tilesStartedRendering->size(); i++) {
+    const int tilesStartedRenderingSize = tilesStartedRendering->size();
+    for (int i = 0; i < tilesStartedRenderingSize; i++) {
       const Tile* tile = tilesStartedRendering->at(i);
       if (tile->_sector.touchesWith(*_sector)) {
         ILogger::instance()->logInfo("   Start rendering tile " + tile->_id + " for cloud " + _cloudName);
-        _startedRendering.push_back(new Sector(tile->_sector));
+        _tilesStartedRendering.push_back(tile);
       }
     }
 
-    for (int i = 0; i < tilesStoppedRendering->size(); i++) {
+    const int tilesStoppedRenderingSize = tilesStoppedRendering->size();
+    for (int i = 0; i < tilesStoppedRenderingSize; i++) {
       const Tile* tile = tilesStoppedRendering->at(i);
       if (tile->_sector.touchesWith(*_sector)) {
         ILogger::instance()->logInfo("   Stop rendering tile " + tile->_id + " for cloud " + _cloudName);
-        _stoppedRendering.push_back(new Sector(tile->_sector));
+        _tilesStoppedRendering.push_back(tile);
       }
     }
 
-    if (!_startedRendering.empty() || !_stoppedRendering.empty()) {
+    if (!_tilesStartedRendering.empty() || !_tilesStoppedRendering.empty()) {
+      PointCloudNodesLayoutFetcher* nodesLayoutFetcher = new PointCloudNodesLayoutFetcher(_downloader,
+                                                                                          this,
+                                                                                          _tilesStartedRendering,
+                                                                                          _tilesStoppedRendering);
 
-      _startedRendering.clear();
-      _stoppedRendering.clear();
+      _tilesStartedRendering.clear();
+      _tilesStoppedRendering.clear();
     }
   }
 }

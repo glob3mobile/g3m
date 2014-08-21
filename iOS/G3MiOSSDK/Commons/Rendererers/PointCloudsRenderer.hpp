@@ -15,12 +15,28 @@
 #include "IBufferDownloadListener.hpp"
 #include "TileRenderingListener.hpp"
 #include "TimeInterval.hpp"
+#include "RCObject.hpp"
 
 class Sector;
+class IDownloader;
 
 class PointCloudsRenderer : public DefaultRenderer {
 private:
   class PointCloud;
+
+  
+  class PointCloudNodesLayoutFetcher : public RCObject {
+  private:
+    PointCloud* _pointCloud;
+
+  public:
+    PointCloudNodesLayoutFetcher(IDownloader* downloader,
+                                 PointCloud* pointCloud,
+                                 const std::vector<const Tile*>& tilesStartedRendering,
+                                 const std::vector<const Tile*>& tilesStoppedRendering);
+
+  };
+
 
   class PointCloudMetadataDownloadListener : public IBufferDownloadListener {
   private:
@@ -49,7 +65,12 @@ private:
 
   class PointCloud {
   private:
+#ifdef C_CODE
     const URL         _serverURL;
+#endif
+#ifdef JAVA_CODE
+    private final URL _serverURL;
+#endif
     const std::string _cloudName;
 
     const long long    _downloadPriority;
@@ -60,6 +81,7 @@ private:
     private final TimeInterval _timeToCache;
 #endif
     const bool         _readExpired;
+    IDownloader* _downloader;
 
     bool _downloadingMetadata;
     bool _errorDownloadingMetadata;
@@ -70,8 +92,8 @@ private:
     double _minHeight;
     double _maxHeight;
 
-    std::vector<const Sector*> _startedRendering;
-    std::vector<const Sector*> _stoppedRendering;
+    std::vector<const Tile*> _tilesStartedRendering;
+    std::vector<const Tile*> _tilesStoppedRendering;
 
   public:
     PointCloud(const URL& serverURL,
@@ -84,6 +106,7 @@ private:
     _downloadPriority(downloadPriority),
     _timeToCache(timeToCache),
     _readExpired(readExpired),
+    _downloader(NULL),
     _downloadingMetadata(false),
     _errorDownloadingMetadata(false),
     _errorParsingMetadata(false),
