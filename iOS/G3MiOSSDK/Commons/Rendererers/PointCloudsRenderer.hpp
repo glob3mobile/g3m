@@ -53,7 +53,12 @@ private:
     const std::string _cloudName;
 
     const long long    _downloadPriority;
+#ifdef C_CODE
     const TimeInterval _timeToCache;
+#endif
+#ifdef JAVA_CODE
+    private final TimeInterval _timeToCache;
+#endif
     const bool         _readExpired;
 
     bool _downloadingMetadata;

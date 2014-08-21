@@ -227,11 +227,12 @@ PlanetRenderer::~PlanetRenderer() {
   }
 
   delete _renderedSector;
-
   delete _tileRenderingListener;
 
+#ifdef C_CODE
   delete _tilesStartedRendering;
   delete _tilesStoppedRendering;
+#endif
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -621,7 +622,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
   }
 
   updateGLState(rc);
-//#warning Testing Terrain Normals
+  //#warning Testing Terrain Normals
   _glState->setParent(glState);
 
   // Saving camera for use in onTouchEvent
@@ -692,9 +693,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #ifdef JAVA_CODE
     _toVisit.clear();
     //_toVisit.addAll(_firstLevelTiles);
-//    for (final Tile tile : _firstLevelTiles) {
-//      _toVisit.add(tile);
-//    }
+    //    for (final Tile tile : _firstLevelTiles) {
+    //      _toVisit.add(tile);
+    //    }
     for (int i = 0; i < firstLevelTilesCount; i++) {
       _toVisit.add( _firstLevelTiles.get(i) );
     }
@@ -738,9 +739,9 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #ifdef JAVA_CODE
       _toVisit.clear();
       //_toVisit.addAll(_toVisitInNextIteration);
-//      for (final Tile tile : _toVisitInNextIteration) {
-//        _toVisit.add(tile);
-//      }
+      //      for (final Tile tile : _toVisitInNextIteration) {
+      //        _toVisit.add(tile);
+      //      }
       final int toVisitInNextIterationSize = _toVisitInNextIteration.size();
       for (int i = 0; i < toVisitInNextIterationSize; i++) {
         _toVisit.add( _toVisitInNextIteration.get(i) );
@@ -782,7 +783,7 @@ bool PlanetRenderer::onTouchEvent(const G3MEventContext* ec,
                                   const TouchEvent* touchEvent) {
   if (_lastCamera == NULL) {
     return false;
-  } 
+  }
 
   if ( touchEvent->getType() == _touchEventTypeOfTerrainTouchListener ) {
     const Vector2I pixel = touchEvent->getTouch(0)->getPos();
