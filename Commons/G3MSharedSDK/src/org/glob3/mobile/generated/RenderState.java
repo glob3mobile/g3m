@@ -16,6 +16,12 @@ public class RenderState
   {
     return new RenderState(errors);
   }
+  public static RenderState error(String error)
+  {
+    java.util.ArrayList<String> errors = new java.util.ArrayList<String>();
+    errors.add(error);
+    return new RenderState(errors);
+  }
 
   public final RenderState_Type _type;
 

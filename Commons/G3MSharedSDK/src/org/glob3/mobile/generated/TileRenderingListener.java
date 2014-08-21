@@ -16,14 +16,16 @@ public abstract class TileRenderingListener
   {
   }
 
-  /**
-   The given Tile started to be rendered
-   */
-  public abstract void startRendering(Tile tile);
+//  /**
+//   The given Tile started to be rendered
+//   */
+//  virtual void startRendering(const Tile* tile) = 0;
+//
+//  /**
+//   The given Tile stopped to be rendered
+//   */
+//  virtual void stopRendering(const Tile* tile) = 0;
 
-  /**
-   The given Tile stoped to be rendered
-   */
-  public abstract void stopRendering(Tile tile);
+  public abstract void changedTileRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering);
 
 }
