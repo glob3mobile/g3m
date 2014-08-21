@@ -236,7 +236,6 @@ PlanetRenderer::~PlanetRenderer() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
-
 }
 
 void PlanetRenderer::clearFirstLevelTiles() {
