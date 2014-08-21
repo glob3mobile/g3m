@@ -12,6 +12,7 @@
 #include <G3MiOSSDK/G3MWidget.hpp>
 #include <G3MiOSSDK/PointCloudsRenderer.hpp>
 #include <G3MiOSSDK/URL.hpp>
+#include <G3MiOSSDK/DownloadPriority.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -26,9 +27,12 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                        2);
   model->getLayerSet()->addLayer(layer);
 
+#warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(URL("http://192.168.1.6:8080"),
-                                                 "Loudoun-VA_LOD");
+                                                 "Loudoun-VA_LOD",
+                                                 DownloadPriority::HIGHEST,
+                                                 TimeInterval::zero(),
+                                                 true);
 
   g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.102078762909024, -77.66098022460936, 75000) );
-  
 }

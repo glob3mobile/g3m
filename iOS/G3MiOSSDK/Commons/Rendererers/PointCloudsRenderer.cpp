@@ -10,12 +10,11 @@
 
 #include "Context.hpp"
 #include "IDownloader.hpp"
-#include "DownloadPriority.hpp"
 #include "IJSONParser.hpp"
 #include "JSONObject.hpp"
 #include "Sector.hpp"
 #include "Tile.hpp"
-
+#include "DownloadPriority.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -40,7 +39,6 @@ void PointCloudsRenderer::PointCloudMetadataDownloadListener::onCanceledDownload
 
 void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
   IDownloader* downloader = context->getDownloader();
-#warning TODO: allows cache
   _downloadingMetadata = true;
   _errorDownloadingMetadata = false;
   _errorParsingMetadata = false;
@@ -48,9 +46,9 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
   const URL metadataURL(_serverURL, _cloudName);
 
   downloader->requestBuffer(metadataURL,
-                            DownloadPriority::HIGHEST,
-                            TimeInterval::zero(),
-                            true,
+                            _downloadPriority,
+                            _timeToCache,
+                            _readExpired,
                             new PointCloudsRenderer::PointCloudMetadataDownloadListener(this),
                             true);
 }
@@ -119,21 +117,21 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
 }
 
 
-void PointCloudsRenderer::PointCloud::changedTileRendering(const std::vector<const Tile*>* started,
-                                                           const std::vector<const Tile*>* stopped) {
+void PointCloudsRenderer::PointCloud::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
+                                                            const std::vector<const Tile*>* tilesStoppedRendering) {
 #warning DGD at work!
   if (_sector) {
     //ILogger::instance()->logInfo("changedTileRendering");
-    for (int i = 0; i < started->size(); i++) {
-      const Tile* tile = started->at(i);
+    for (int i = 0; i < tilesStartedRendering->size(); i++) {
+      const Tile* tile = tilesStartedRendering->at(i);
       if (tile->_sector.touchesWith(*_sector)) {
         ILogger::instance()->logInfo("   Start rendering tile " + tile->_id + " for cloud " + _cloudName);
         _startedRendering.push_back(new Sector(tile->_sector));
       }
     }
 
-    for (int i = 0; i < stopped->size(); i++) {
-      const Tile* tile = stopped->at(i);
+    for (int i = 0; i < tilesStoppedRendering->size(); i++) {
+      const Tile* tile = tilesStoppedRendering->at(i);
       if (tile->_sector.touchesWith(*_sector)) {
         ILogger::instance()->logInfo("   Stop rendering tile " + tile->_id + " for cloud " + _cloudName);
         _stoppedRendering.push_back(new Sector(tile->_sector));
@@ -160,6 +158,9 @@ PointCloudsRenderer::~PointCloudsRenderer() {
     PointCloud* cloud = _clouds[i];
     delete cloud;
   }
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 void PointCloudsRenderer::onResizeViewportEvent(const G3MEventContext* ec,
@@ -218,7 +219,19 @@ RenderState PointCloudsRenderer::getRenderState(const G3MRenderContext* rc) {
 
 void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         const std::string& cloudName) {
-  PointCloud* pointCloud = new PointCloud(serverURL, cloudName);
+  addPointCloud(serverURL,
+                cloudName,
+                DownloadPriority::MEDIUM,
+                TimeInterval::fromDays(30),
+                true);
+}
+
+void PointCloudsRenderer::addPointCloud(const URL& serverURL,
+                                        const std::string& cloudName,
+                                        long long downloadPriority,
+                                        const TimeInterval& timeToCache,
+                                        bool readExpired) {
+  PointCloud* pointCloud = new PointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired);
   if (_context != NULL) {
     pointCloud->initialize(_context);
   }
@@ -243,11 +256,16 @@ void PointCloudsRenderer::render(const G3MRenderContext* rc,
   }
 }
 
-void PointCloudsRenderer::changedTileRendering(const std::vector<const Tile*>* started,
-                                               const std::vector<const Tile*>* stopped) {
+void PointCloudsRenderer::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
+                                                const std::vector<const Tile*>* tilesStoppedRendering) {
   const int cloudsSize = _clouds.size();
   for (int i = 0; i < cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
-    cloud->changedTileRendering(started, stopped);
+    cloud->changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
   }
+}
+
+void PointCloudsRenderer::PointCloudsTileRenderingListener::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
+                                                                                  const std::vector<const Tile*>* tilesStoppedRendering) {
+  _pointCloudsRenderer->changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
 }

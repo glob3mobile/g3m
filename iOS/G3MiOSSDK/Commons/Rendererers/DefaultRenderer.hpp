@@ -55,7 +55,11 @@ protected:
     _context = NULL;
     _changedInfoListener = NULL;
   }
-  
+
+  virtual void onChangedContext() { }
+
+  virtual void onLostContext() { }
+
 public:
   
   bool isEnable() const {
@@ -83,10 +87,6 @@ public:
     _context = NULL;
     onLostContext();
   }
-
-  virtual void onChangedContext() { }
-  
-  virtual void onLostContext() { }
 
 
   virtual RenderState getRenderState(const G3MRenderContext* rc) {

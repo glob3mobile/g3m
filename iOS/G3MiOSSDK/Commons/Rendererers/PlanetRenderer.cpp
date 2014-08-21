@@ -249,7 +249,7 @@ void PlanetRenderer::clearFirstLevelTiles() {
 
   if (_tileRenderingListener != NULL) {
     if (!_tilesStartedRendering->empty() || !_tilesStoppedRendering->empty()) {
-      _tileRenderingListener->changedTileRendering(_tilesStartedRendering, _tilesStoppedRendering);
+      _tileRenderingListener->changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
       _tilesStartedRendering->clear();
       _tilesStoppedRendering->clear();
     }
@@ -756,7 +756,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 
   if (_tileRenderingListener != NULL) {
     if (!_tilesStartedRendering->empty() || !_tilesStoppedRendering->empty()) {
-      _tileRenderingListener->changedTileRendering(_tilesStartedRendering, _tilesStoppedRendering);
+      _tileRenderingListener->changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
       _tilesStartedRendering->clear();
       _tilesStoppedRendering->clear();
     }
