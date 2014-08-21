@@ -19,11 +19,32 @@ package org.glob3.mobile.generated;
 
 
 //class Sector;
+//class IDownloader;
 
 public class PointCloudsRenderer extends DefaultRenderer
 {
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class PointCloud;
+
+
+  private static class PointCloudNodesLayoutFetcher extends RCObject
+  {
+    private PointCloud _pointCloud;
+
+    public PointCloudNodesLayoutFetcher(IDownloader downloader, PointCloud pointCloud, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
+    {
+       _pointCloud = pointCloud;
+      final int tilesStartedRenderingSize = tilesStartedRendering.size();
+      for (int i = 0; i < tilesStartedRenderingSize; i++)
+      {
+        final Tile tile = tilesStartedRendering.get(i);
+    
+    
+      }
+    }
+
+  }
+
 
   private static class PointCloudMetadataDownloadListener extends IBufferDownloadListener
   {
@@ -59,12 +80,13 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   private static class PointCloud
   {
-    private final URL _serverURL = new URL();
+    private final URL _serverURL;
     private final String _cloudName;
 
     private final long _downloadPriority;
     private final TimeInterval _timeToCache;
     private final boolean _readExpired;
+    private IDownloader _downloader;
 
     private boolean _downloadingMetadata;
     private boolean _errorDownloadingMetadata;
@@ -75,16 +97,17 @@ public class PointCloudsRenderer extends DefaultRenderer
     private double _minHeight;
     private double _maxHeight;
 
-    private final java.util.ArrayList<Sector> _startedRendering = new java.util.ArrayList<Sector>();
-    private final java.util.ArrayList<Sector> _stoppedRendering = new java.util.ArrayList<Sector>();
+    private final java.util.ArrayList<Tile> _tilesStartedRendering = new java.util.ArrayList<Tile>();
+    private final java.util.ArrayList<Tile> _tilesStoppedRendering = new java.util.ArrayList<Tile>();
 
     public PointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
     {
-       _serverURL = new URL(serverURL);
+       _serverURL = serverURL;
        _cloudName = cloudName;
        _downloadPriority = downloadPriority;
        _timeToCache = timeToCache;
        _readExpired = readExpired;
+       _downloader = null;
        _downloadingMetadata = false;
        _errorDownloadingMetadata = false;
        _errorParsingMetadata = false;
@@ -102,14 +125,14 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void initialize(G3MContext context)
     {
-      IDownloader downloader = context.getDownloader();
+      _downloader = context.getDownloader();
       _downloadingMetadata = true;
       _errorDownloadingMetadata = false;
       _errorParsingMetadata = false;
     
       final URL metadataURL = new URL(_serverURL, _cloudName);
     
-      downloader.requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new PointCloudsRenderer.PointCloudMetadataDownloadListener(this), true);
+      _downloader.requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new PointCloudsRenderer.PointCloudMetadataDownloadListener(this), true);
     }
 
     public final RenderState getRenderState(G3MRenderContext rc)
@@ -195,31 +218,34 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (_sector != null)
       {
         //ILogger::instance()->logInfo("changedTileRendering");
-        for (int i = 0; i < tilesStartedRendering.size(); i++)
+        final int tilesStartedRenderingSize = tilesStartedRendering.size();
+        for (int i = 0; i < tilesStartedRenderingSize; i++)
         {
           final Tile tile = tilesStartedRendering.get(i);
           if (tile._sector.touchesWith(_sector))
           {
             ILogger.instance().logInfo("   Start rendering tile " + tile._id + " for cloud " + _cloudName);
-            _startedRendering.add(new Sector(tile._sector));
+            _tilesStartedRendering.add(tile);
           }
         }
     
-        for (int i = 0; i < tilesStoppedRendering.size(); i++)
+        final int tilesStoppedRenderingSize = tilesStoppedRendering.size();
+        for (int i = 0; i < tilesStoppedRenderingSize; i++)
         {
           final Tile tile = tilesStoppedRendering.get(i);
           if (tile._sector.touchesWith(_sector))
           {
             ILogger.instance().logInfo("   Stop rendering tile " + tile._id + " for cloud " + _cloudName);
-            _stoppedRendering.add(new Sector(tile._sector));
+            _tilesStoppedRendering.add(tile);
           }
         }
     
-        if (!_startedRendering.isEmpty() || !_stoppedRendering.isEmpty())
+        if (!_tilesStartedRendering.isEmpty() || !_tilesStoppedRendering.isEmpty())
         {
+          PointCloudNodesLayoutFetcher nodesLayoutFetcher = new PointCloudNodesLayoutFetcher(_downloader, this, _tilesStartedRendering, _tilesStoppedRendering);
     
-          _startedRendering.clear();
-          _stoppedRendering.clear();
+          _tilesStartedRendering.clear();
+          _tilesStoppedRendering.clear();
         }
       }
     }
