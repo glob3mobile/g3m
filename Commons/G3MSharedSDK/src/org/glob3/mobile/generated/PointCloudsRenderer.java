@@ -39,7 +39,14 @@ public class PointCloudsRenderer extends DefaultRenderer
       {
         final Tile tile = tilesStartedRendering.get(i);
     
+        final String quadKey = BingMapsLayer.getQuadKey(tile);
     
+    //downloader->requestBuffer(<#const URL &url#>,
+    //                          <#long long priority#>,
+    //                          <#const TimeInterval &timeToCache#>,
+    //                          <#bool readExpired#>,
+    //                          <#IBufferDownloadListener *listener#>,
+    //                          <#bool deleteListener#>);
       }
     }
 

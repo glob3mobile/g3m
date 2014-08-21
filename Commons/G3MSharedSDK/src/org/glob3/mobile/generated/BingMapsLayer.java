@@ -32,13 +32,14 @@ public class BingMapsLayer extends RasterLayer
     setParameters(new LayerTilesRenderParameters(Sector.fullSphere(), 1, 1, mu.max(zoomMin, _initialLevel), mu.min(zoomMax, _maxLevel), new Vector2I(imageWidth, imageHeight), LayerTilesRenderParameters.defaultTileMeshResolution(), true));
   }
 
-  private String getQuadkey(int zoom, int column, int row)
+  private static String getQuadKey(int zoom, int column, int row)
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
   
     for (int i = 1; i <= zoom; i++)
     {
-      final int t = (((row >> (zoom - i)) & 1) << 1) | ((column >> (zoom - i)) & 1);
+      final int zoom_i = (zoom - i);
+      final int t = (((row >> zoom_i) & 1) << 1) | ((column >> zoom_i) & 1);
       isb.addInt(t);
     }
   
@@ -129,7 +130,7 @@ public class BingMapsLayer extends RasterLayer
       subdomain = _imageUrlSubdomains.get(subdomainsIndex);
     }
   
-    final String quadkey = getQuadkey(level, column, row);
+    final String quadkey = getQuadKey(level, column, row);
   
     String path = _imageUrl;
     path = su.replaceSubstring(path, "{subdomain}", subdomain);
@@ -139,6 +140,13 @@ public class BingMapsLayer extends RasterLayer
     return new URL(path, false);
   }
 
+  public static String getQuadKey(Tile tile)
+  {
+    final int level = tile._level;
+    final int numRows = (int) IMathUtils.instance().pow(2.0, level);
+    final int row = numRows - tile._row - 1;
+    return getQuadKey(level, tile._column, row);
+  }
 
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
@@ -239,7 +247,7 @@ public class BingMapsLayer extends RasterLayer
       subdomain = _imageUrlSubdomains.get(subdomainsIndex);
     }
   
-    final String quadkey = getQuadkey(level, column, row);
+    final String quadkey = getQuadKey(level, column, row);
   
     String path = _imageUrl;
     path = su.replaceSubstring(path, "{subdomain}", subdomain);
