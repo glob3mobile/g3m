@@ -272,13 +272,14 @@ URL BingMapsLayer::getFeatureInfoURL(const Geodetic2D& position,
   return URL();
 }
 
-const std::string BingMapsLayer::getQuadkey(const int zoom,
+const std::string BingMapsLayer::getQuadKey(const int zoom,
                                             const int column,
-                                            const int row) const {
+                                            const int row) {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   
   for (int i = 1; i <= zoom; i++) {
-    const int t = (((row >> (zoom - i)) & 1) << 1) | ((column >> (zoom - i)) & 1);
+    const int zoom_i = (zoom - i);
+    const int t = (((row >> zoom_i) & 1) << 1) | ((column >> zoom_i) & 1);
     isb->addInt(t);
   }
   
@@ -287,6 +288,13 @@ const std::string BingMapsLayer::getQuadkey(const int zoom,
   delete isb;
   
   return result;
+}
+
+const std::string BingMapsLayer::getQuadKey(const Tile* tile) {
+  const int level   = tile->_level;
+  const int numRows = (int) IMathUtils::instance()->pow(2.0, level);
+  const int row     = numRows - tile->_row - 1;
+  return getQuadKey(level, tile->_column, row);
 }
 
 std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderContext* rc,
@@ -309,7 +317,7 @@ std::vector<Petition*> BingMapsLayer::createTileMapPetitions(const G3MRenderCont
     subdomain = _imageUrlSubdomains[subdomainsIndex];
   }
   
-  const std::string quadkey = getQuadkey(level, column, row);
+  const std::string quadkey = getQuadKey(level, column, row);
   
   std::string path = _imageUrl;
   path = su->replaceSubstring(path, "{subdomain}", subdomain);
@@ -342,7 +350,7 @@ const URL BingMapsLayer::createURL(const Tile* tile) const {
     subdomain = _imageUrlSubdomains[subdomainsIndex];
   }
   
-  const std::string quadkey = getQuadkey(level, column, row);
+  const std::string quadkey = getQuadKey(level, column, row);
   
   std::string path = _imageUrl;
   path = su->replaceSubstring(path, "{subdomain}", subdomain);

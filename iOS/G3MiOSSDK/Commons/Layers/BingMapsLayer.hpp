@@ -64,9 +64,9 @@ private:
                        const int zoomMin,
                        const int zoomMax);
   
-  const std::string getQuadkey(const int level,
-                               const int column,
-                               const int row) const;
+  static const std::string getQuadKey(const int level,
+                                      const int column,
+                                      const int row);
   
 protected:
   std::string getLayerType() const {
@@ -88,7 +88,8 @@ protected:
   const URL createURL(const Tile* tile) const;
   
 public:
-  
+  static const std::string getQuadKey(const Tile* tile);
+
   /**
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http://msdn.microsoft.com/en-us/library/gg650598.aspx

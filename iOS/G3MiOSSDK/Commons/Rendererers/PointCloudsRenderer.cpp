@@ -15,6 +15,7 @@
 #include "Sector.hpp"
 #include "Tile.hpp"
 #include "DownloadPriority.hpp"
+#include "BingMapsLayer.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -126,7 +127,14 @@ _pointCloud(pointCloud)
   for (int i = 0; i < tilesStartedRenderingSize; i++) {
     const Tile* tile = tilesStartedRendering[i];
 
+    const std::string quadKey = BingMapsLayer::getQuadKey(tile);
 
+//downloader->requestBuffer(<#const URL &url#>,
+//                          <#long long priority#>,
+//                          <#const TimeInterval &timeToCache#>,
+//                          <#bool readExpired#>,
+//                          <#IBufferDownloadListener *listener#>,
+//                          <#bool deleteListener#>);
   }
 }
 
