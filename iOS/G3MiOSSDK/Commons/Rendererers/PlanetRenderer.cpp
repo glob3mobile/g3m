@@ -929,7 +929,7 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
 
 void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
   if (_changedInfoListener != NULL) {
-    ILogger::instance()->logError("Changed Renderer Info Listener of PlanetRenderer already set");
+    ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
   }
   _changedInfoListener = changedInfoListener;
   

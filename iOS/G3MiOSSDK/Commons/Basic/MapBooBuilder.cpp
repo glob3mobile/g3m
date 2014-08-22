@@ -497,7 +497,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
   
-  TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/img/logo_mapboo_320x80.png")));
+  TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
 //  TileRasterizer* tileRasterizer = NULL;
 
   const bool renderDebug = false;

@@ -16,8 +16,6 @@
 #include "FrameTasksExecutor.hpp"
 #include "Sector.hpp"
 
-#include "Color.hpp"
-
 CompositeTileImageProvider::~CompositeTileImageProvider() {
   for (int i = 0; i < _childrenSize; i++) {
     TileImageProvider* child = _children[i];
@@ -269,9 +267,6 @@ void CompositeTileImageProvider::Composer::mixResult() {
     
     if (result->_contribution->isFullCoverageAndOpaque() ) {
       canvas->drawImage(image, 0, 0);
-//      canvas->setLineWidth(5);
-//      canvas->setLineColor(Color::yellow());
-//      canvas->strokeRectangle(0, 0, image->getWidth(), image->getHeight());
     }
     else {
       const Sector visibleContributionSector = imageSector->intersection(_tileSector);
@@ -295,17 +290,7 @@ void CompositeTileImageProvider::Composer::mixResult() {
                         destRect->_x, destRect->_y,
                         destRect->_width, destRect->_height,
                         alpha);
-      canvas->setLineColor(Color::magenta());
-      canvas->strokeRectangle(destRect->_x, destRect->_y,
-                              destRect->_width, destRect->_height);
-//
-//      canvas->setLineColor(Color::white());
-//      
-//      canvas->strokeRectangle(destRect->_x,
-//                              _height - (destRect->_y + destRect->_height),
-//                              destRect->_width,
-//                              destRect->_height);
-
+      
       delete destRect;
       delete srcRect;
     }

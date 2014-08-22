@@ -22,7 +22,12 @@ private:
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
   IImageBuilder* _defaultBackGroundImageBuilder;
   bool _defaultBackGroundImageLoaded;
+#ifdef C_CODE
   const IImage* _defaultBackGroundImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage _defaultBackGroundImage;
+#endif
   std::string _defaultBackGroundImageName;
 
 public:

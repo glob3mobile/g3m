@@ -474,8 +474,8 @@ public:
   
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
-  builder.getPlanetRendererBuilder()->setRenderDebug(true);
-  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/Darth-Vader.png")));
+  //builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
 //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
 //                                            40.3423148480663158, -5.5116079822178570);
 //  
