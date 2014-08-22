@@ -17,7 +17,6 @@
 #include "TileImageProvider.hpp"
 #include "CompositeTileImageProvider.hpp"
 #include "Color.hpp"
-#include "ChessboardTileImageProvider.hpp"
 
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
@@ -560,9 +559,6 @@ TileImageProvider* LayerSet::createTileImageProvider(const G3MRenderContext* rc,
         }
       }
     }
-  }
-  if (singleTileImageProvider == NULL) {
-    singleTileImageProvider = new ChessboardTileImageProvider(Color::black(), Color::white(), 4);
   }
   
   return (compositeTileImageProvider == NULL) ? singleTileImageProvider : compositeTileImageProvider;

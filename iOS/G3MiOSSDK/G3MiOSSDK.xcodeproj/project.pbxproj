@@ -38,6 +38,8 @@
 		44D33CEE18DB07BC0027B892 /* ProtoRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */; };
 		44D922721998D1EA0066D180 /* DefaultInfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */; };
 		44D922731998D69D0066D180 /* DefaultInfoDisplay.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */; };
+		44EE3CDF19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44EE3CDD19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp */; };
+		44EE3CE019A60D2F00DDEF2B /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */; };
 		A70F5608161B54A400340256 /* IJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5607161B54A400340256 /* IJSONParser.cpp */; };
 		A70F560E161B5CD800340256 /* JSONParser_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A70F560C161B5CD800340256 /* JSONParser_iOS.mm */; };
 		A70F5612161C4F8F00340256 /* JSONNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A70F5611161C4F8F00340256 /* JSONNumber.cpp */; };
@@ -725,6 +727,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				44EE3CE019A60D2F00DDEF2B /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */,
 				44D922731998D69D0066D180 /* DefaultInfoDisplay.hpp in CopyFiles */,
 				CF9EDC65197835DC00F7351E /* GEOVectorTileImageProvider.hpp in CopyFiles */,
 				CF547B4B196C4921002DBBDD /* GEOVectorLayer.hpp in CopyFiles */,
@@ -1158,6 +1161,8 @@
 		44D33CEC18DB06D50027B892 /* ProtoRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ProtoRenderer.hpp; path = Commons/Rendererers/ProtoRenderer.hpp; sourceTree = "<group>"; };
 		44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DefaultInfoDisplay.cpp; path = Commons/Basic/DefaultInfoDisplay.cpp; sourceTree = "<group>"; };
 		44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultInfoDisplay.hpp; path = Commons/Basic/DefaultInfoDisplay.hpp; sourceTree = "<group>"; };
+		44EE3CDD19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DefaultChessCanvasImageBuilder.cpp; path = Commons/Basic/DefaultChessCanvasImageBuilder.cpp; sourceTree = "<group>"; };
+		44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DefaultChessCanvasImageBuilder.hpp; path = Commons/Basic/DefaultChessCanvasImageBuilder.hpp; sourceTree = "<group>"; };
 		A70F5604161B53D000340256 /* IJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = IJSONParser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A70F5607161B54A400340256 /* IJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IJSONParser.cpp; sourceTree = "<group>"; };
 		A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = JSONParser_iOS.hpp; path = Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2220,6 +2225,8 @@
 				CF9EDC631978357D00F7351E /* GEOVectorTileImageProvider.hpp */,
 				44D922701998D1EA0066D180 /* DefaultInfoDisplay.cpp */,
 				44D922711998D1EA0066D180 /* DefaultInfoDisplay.hpp */,
+				44EE3CDD19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp */,
+				44EE3CDE19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -3219,6 +3226,7 @@
 				CF5C1199178C7E33000ED715 /* GEOGeometry2D.cpp in Sources */,
 				CF5C119D178CA747000ED715 /* GEORasterSymbol.cpp in Sources */,
 				CF2DF7CE178DE79200FF5FF0 /* GEOTileRasterizer.cpp in Sources */,
+				44EE3CDF19A60A3B00DDEF2B /* DefaultChessCanvasImageBuilder.cpp in Sources */,
 				CF2DF7D2178DEA8900FF5FF0 /* QuadTree.cpp in Sources */,
 				CF2DF7D6178DECC400FF5FF0 /* GEOLineRasterSymbol.cpp in Sources */,
 				CF2DF7D9178DECF100FF5FF0 /* GEOMultiLineRasterSymbol.cpp in Sources */,

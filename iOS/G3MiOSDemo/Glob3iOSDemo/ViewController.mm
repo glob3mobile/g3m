@@ -426,7 +426,7 @@ public:
                                 TimeInterval::fromDays(0),
                                 true,
                                 NULL,
-                                0.3f);
+                                0.5f);
   
 //
 //   layerSet->addLayer(new WMSLayer("precipitation", //
@@ -467,7 +467,7 @@ public:
                                           true,
                                           NULL,
                                           1);
-  //layerSet->addLayer(blueMarble);
+  layerSet->addLayer(blueMarble);
   layerSet->addLayer(pnoa);
 
   
@@ -475,6 +475,7 @@ public:
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   builder.getPlanetRendererBuilder()->setRenderDebug(true);
+  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/Darth-Vader.png")));
 //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
 //                                            40.3423148480663158, -5.5116079822178570);
 //  

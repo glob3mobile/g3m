@@ -52,8 +52,7 @@
 #include "ErrorHandling.hpp"
 #include "ICanvas.hpp"
 #include "ICanvasUtils.hpp"
-
-#include "CanvasImageBuilder.hpp"
+#include "DownloaderImageBuilder.hpp"
 
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
@@ -489,6 +488,8 @@ bool MapBooBuilder::onTerrainTouch(const G3MEventContext* ec,
   return true;
 }
 
+
+
 PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   const bool skirted = true;
   TileTessellator* tessellator = new PlanetTileTessellator(skirted, Sector::fullSphere());
@@ -496,9 +497,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
   ElevationDataProvider* elevationDataProvider = NULL;
   const float verticalExaggeration = 1;
   
-  CanvasImageBuilder* cib = new CanvasImageBuilder();
-  
-  TileTexturizer* texturizer = new DefaultTileTexturizer();
+  TileTexturizer* texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(URL("http://www.mapboo.com/img/logo_mapboo_320x80.png")));
 //  TileRasterizer* tileRasterizer = NULL;
 
   const bool renderDebug = false;
@@ -512,6 +511,7 @@ PlanetRenderer* MapBooBuilder::createPlanetRenderer() {
                                                                       forceFirstLevelTilesRenderOnStart,
                                                                       incrementalTileQuality,
                                                                       quality);
+  
 
   const bool showStatistics = false;
   long long tileDownloadPriority = DownloadPriority::HIGHER;

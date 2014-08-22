@@ -420,7 +420,7 @@ void Canvas_iOS::_drawImage(const IImage* image,
       (srcWidth == image->getWidth()) &&
       (srcHeight == image->getHeight())) {
 
-    CGContextSetAlpha(_context, (float)transparency);
+    CGContextSetAlpha(_context, transparency);
 
     CGContextDrawImage(_context,
                        destRect,

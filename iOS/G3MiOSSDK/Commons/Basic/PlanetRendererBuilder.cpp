@@ -112,7 +112,7 @@ TileTexturizer* PlanetRendererBuilder::getTexturizer() {
   if (!_texturizer) {
 //    _texturizer = new MultiLayerTileTexturizer();
 #warning Diego at work!
-    _texturizer = new DefaultTileTexturizer(PlanetRendererBuilder::getDefaultTileBackGroundImage());
+    _texturizer = new DefaultTileTexturizer(PlanetRendererBuilder::getDefaultTileBackGroundImageBuilder());
   }
 
   return _texturizer;
@@ -346,11 +346,10 @@ ChangedRendererInfoListener* PlanetRendererBuilder::getChangedRendererInfoListen
 void PlanetRendererBuilder::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener) {
   if (_changedInfoListener != NULL) {
     ILogger::instance()->logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+    return;
   }
-  else {
-    _changedInfoListener = changedInfoListener;
-    ILogger::instance()->logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
-  }
+  _changedInfoListener = changedInfoListener;
+  ILogger::instance()->logInfo("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
 }
 
 void PlanetRendererBuilder::setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener) {
@@ -361,8 +360,16 @@ TouchEventType PlanetRendererBuilder::getTouchEventTypeOfTerrainTouchListener() 
   return _touchEventTypeOfTerrainTouchListener;
 }
 
+void PlanetRendererBuilder::setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage) {
+  _defaultTileBackGroundImage = defaultTileBackGroundImage;
+}
 
-
+IImageBuilder* PlanetRendererBuilder::getDefaultTileBackGroundImageBuilder() const {
+  if (_defaultTileBackGroundImage == NULL) {
+    return new DefaultChessCanvasImageBuilder(256, 256, Color::black(), Color::white(), 4);
+  }
+  return _defaultTileBackGroundImage;
+}
 
 TileRenderingListener* PlanetRendererBuilder::getTileRenderingListener() {
   return _tileRenderingListener;

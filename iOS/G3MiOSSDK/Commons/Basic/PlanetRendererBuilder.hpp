@@ -15,6 +15,9 @@ class IImageBuilder;
 
 #include "TilesRenderParameters.hpp"
 #include "PlanetRenderer.hpp"
+#include "DefaultChessCanvasImageBuilder.hpp"
+#include "DownloaderImageBuilder.hpp"
+
 
 
 class PlanetRendererBuilder {
@@ -80,14 +83,9 @@ private:
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener();
   
-  IImageBuilder* _defaultTileBackGroundImage;
+  IImageBuilder* _defaultTileBackGroundImage = NULL;
   
-  const IImageBuilder* getDefaultTileBackGroundImage() const {
-    if (_defaultTileBackGroundImage == NULL) {
-      return NULL;//TODO new CheeseImage();
-    }
-    return _defaultTileBackGroundImage;
-  }
+  IImageBuilder* getDefaultTileBackGroundImageBuilder() const;
 
 public:
   PlanetRendererBuilder();
@@ -137,9 +135,7 @@ public:
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType _touchEventTypeOfTerrainTouchListener);
   
-  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage) {
-    _defaultTileBackGroundImage = defaultTileBackGroundImage;
-  }
+  void setDefaultTileBackGroundImage(IImageBuilder* defaultTileBackGroundImage);
 };
 
 #endif

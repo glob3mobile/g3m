@@ -434,6 +434,7 @@ void PlanetRenderer::initialize(const G3MContext* context) {
 }
 
 RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
+  
   const LayerTilesRenderParameters* layerTilesRenderParameters = getLayerTilesRenderParameters();
   if (layerTilesRenderParameters == NULL) {
     if (_errors.empty()) {
@@ -455,6 +456,18 @@ RenderState PlanetRenderer::getRenderState(const G3MRenderContext* rc) {
       return RenderState::busy();
     }
   }
+  
+  if (_texturizer == NULL) {
+    std::vector<std::string> errors;
+    errors.push_back("Texturizer is null");
+    return RenderState::error(errors);
+  } else {
+    const RenderState texturizerRenderState = _texturizer->getRenderState(_layerSet);
+    if (texturizerRenderState._type != RENDER_READY) {
+      return texturizerRenderState;
+    }
+  }
+  
 
   if (_firstLevelTilesJustCreated) {
     _firstLevelTilesJustCreated = false;
@@ -682,7 +695,7 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
                    _tileRenderingListener);
     }
 
-    _firstRender = false;
+    
   }
   else {
 #ifdef C_CODE
@@ -749,6 +762,8 @@ void PlanetRenderer::render(const G3MRenderContext* rc,
 #endif
     }
   }
+  
+  _firstRender = false;
 
   if (_showStatistics) {
     _statistics.log( rc->getLogger() );

@@ -39,15 +39,19 @@ CompositeTileImageContribution::~CompositeTileImageContribution() {
 
 
 const TileImageContribution* CompositeTileImageContribution::create(const std::vector<const ChildContribution*>& contributions) {
-  if (contributions.size() == 0) {
+  if (contributions.empty()) {
     return NULL;
   }
   
-  return new CompositeTileImageContribution(contributions);
+  //if first contribution is opaque, then composite is opaque.
+#ifdef C_CODE
+  const ChildContribution* firsChild = contributions[0];
+#endif
+#ifdef JAVA_CODE
+  final ChildContribution firsChild = contributions.get(0);
+#endif
   
-//  return new CompositeTileImageContribution(contributions,
-//                                            *CompositeTileImageContribution::getSector(contributions),
-//                                            CompositeTileImageContribution::isFullCoverage(contributions),
-//                                            CompositeTileImageContribution::isTransparent(contributions),
-//                                            1);
+  return new CompositeTileImageContribution(contributions, firsChild->_contribution->isOpaque());
 }
+
+
