@@ -46,7 +46,8 @@ public abstract class MapBooBuilder
   
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
-    TileTexturizer texturizer = new DefaultTileTexturizer();
+  
+    TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/img/logo_mapboo_320x80.png")));
   //  TileRasterizer* tileRasterizer = NULL;
   
     final boolean renderDebug = false;
@@ -56,6 +57,7 @@ public abstract class MapBooBuilder
     final Quality quality = Quality.QUALITY_LOW;
   
     final TilesRenderParameters parameters = new TilesRenderParameters(renderDebug, useTilesSplitBudget, forceFirstLevelTilesRenderOnStart, incrementalTileQuality, quality);
+  
   
     final boolean showStatistics = false;
     long tileDownloadPriority = DownloadPriority.HIGHER;

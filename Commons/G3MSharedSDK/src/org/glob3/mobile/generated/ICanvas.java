@@ -292,20 +292,24 @@ public abstract class ICanvas
     {
       ILogger.instance().logError("Invalid source rectangle in drawImage");
     }
-  
-    if (transparency <= 0.0)
-    {
-      return;
-    }
-  
-    if (transparency >= 1.0)
-    {
-      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
-    }
     else
     {
-      _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
+      if (transparency <= 0.0)
+      {
+        return;
+      }
+  
+      if (transparency >= 1.0)
+      {
+        _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight);
+      }
+      else
+      {
+        _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
+      }
+  
     }
+  
   
   }
 

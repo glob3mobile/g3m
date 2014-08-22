@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 //class LayerSet;
 //class GEOVectorLayer;
+//class IImageBuilder;
+
 
 
 
@@ -90,7 +92,7 @@ public class PlanetRendererBuilder
   //    _texturizer = new MultiLayerTileTexturizer();
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work!
-      _texturizer = new DefaultTileTexturizer();
+      _texturizer = new DefaultTileTexturizer(this.getDefaultTileBackGroundImageBuilder());
     }
   
     return _texturizer;
@@ -274,6 +276,17 @@ public class PlanetRendererBuilder
   private TouchEventType getTouchEventTypeOfTerrainTouchListener()
   {
     return _touchEventTypeOfTerrainTouchListener;
+  }
+
+  private IImageBuilder _defaultTileBackGroundImage = null;
+
+  private IImageBuilder getDefaultTileBackGroundImageBuilder()
+  {
+    if (_defaultTileBackGroundImage == null)
+    {
+      return new DefaultChessCanvasImageBuilder(256, 256, Color.black(), Color.white(), 4);
+    }
+    return _defaultTileBackGroundImage;
   }
 
 
@@ -550,16 +563,19 @@ public class PlanetRendererBuilder
     if (_changedInfoListener != null)
     {
       ILogger.instance().logError("LOGIC ERROR: ChangedInfoListener in Planet Render Builder already set");
+      return;
     }
-    else
-    {
-      _changedInfoListener = changedInfoListener;
-      ILogger.instance().logError("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
-    }
+    _changedInfoListener = changedInfoListener;
+    ILogger.instance().logInfo("LOGIC INFO: ChangedInfoListener in Planet Render Builder set OK");
   }
 
   public final void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener)
   {
     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
+  }
+
+  public final void setDefaultTileBackGroundImage(IImageBuilder defaultTileBackGroundImage)
+  {
+    _defaultTileBackGroundImage = defaultTileBackGroundImage;
   }
 }

@@ -11,6 +11,8 @@ public class DTT_TileTextureBuilder extends RCObject
   private final long _tileDownloadPriority;
   private boolean _canceled;
   private FrameTasksExecutor _frameTasksExecutor;
+  private final IImage _backGroundTileImage;
+  private final String _backGroundTileImageName;
 
 
   private static TextureIDReference getTopLevelTextureIdForTile(Tile tile)
@@ -49,11 +51,13 @@ public class DTT_TileTextureBuilder extends RCObject
       ancestor = ancestor.getParent();
     }
 
+    //backGroundTextureMesh
+
     return new LeveledTexturedMesh(tessellatorMesh, false, mappings);
   }
 
 
-  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor)
+  public DTT_TileTextureBuilder(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters, TileImageProvider tileImageProvider, Tile tile, Mesh tessellatorMesh, TileTessellator tessellator, long tileDownloadPriority, boolean logTilesPetitions, FrameTasksExecutor frameTasksExecutor, IImage backGroundTileImage, String backGroundTileImageName)
   {
      _tileImageProvider = tileImageProvider;
      _texturesHandler = rc.getTexturesHandler();
@@ -65,6 +69,8 @@ public class DTT_TileTextureBuilder extends RCObject
      _tileDownloadPriority = tileDownloadPriority;
      _logTilesPetitions = logTilesPetitions;
      _frameTasksExecutor = frameTasksExecutor;
+     _backGroundTileImage = backGroundTileImage;
+     _backGroundTileImageName = backGroundTileImageName;
     _tileImageProvider._retain();
 
     _texturedMesh = createMesh(tile, tessellatorMesh, layerTilesRenderParameters._tileMeshResolution, tessellator);
@@ -84,12 +90,15 @@ public class DTT_TileTextureBuilder extends RCObject
       {
         if (_tile != null)
         {
-          _tile.setTextureSolved(true);
+          ILogger.instance().logInfo("Start without contribution...");
+          imageCreated(_backGroundTileImage.shallowCopy(), _backGroundTileImageName, TileImageContribution.fullCoverageOpaque());
+          //_tile->setTextureSolved(true);
         }
       }
       else
       {
-        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this), true, _frameTasksExecutor);
+        ILogger.instance().logInfo("Start with contribution...");
+        _tileImageProvider.create(_tile, contribution, _tileTextureResolution, _tileDownloadPriority, _logTilesPetitions, new DTT_TileImageListener(this, _tile, _tileTextureResolution, _backGroundTileImage, _backGroundTileImageName), true, _frameTasksExecutor);
       }
     }
   }
@@ -165,5 +174,4 @@ public class DTT_TileTextureBuilder extends RCObject
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning Diego at work
   }
-
 }

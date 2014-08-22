@@ -302,7 +302,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     {
       _changedInfoListener.changedRendererInfo(-1, getInfo());
     }
-    }
+  }
 
   public final void changedRendererInfo(int rendererIdentifier, java.util.ArrayList<String> info)
   {

@@ -177,7 +177,7 @@ public class LayerSet implements ChangedInfoListener
     return !layerSetNotReadyFlag;
   }
 
-  private LayerTilesRenderParameters checkAndComposeLayerTilesRenderParameters(java.util.ArrayList<Layer> enableLayers, java.util.ArrayList<String> errors)
+  private LayerTilesRenderParameters checkAndComposeLayerTilesRenderParameters(boolean forceFirstLevelTilesRenderOnStart, java.util.ArrayList<Layer> enableLayers, java.util.ArrayList<String> errors)
   {
   
     MutableLayerTilesRenderParameters mutableLayerTilesRenderParameters = new MutableLayerTilesRenderParameters();
@@ -217,7 +217,20 @@ public class LayerSet implements ChangedInfoListener
       }
     }
   
-    return mutableLayerTilesRenderParameters.create(errors);
+    LayerTilesRenderParameters params = mutableLayerTilesRenderParameters.create(errors);
+  
+    //if (!forceFirstLevelTilesRenderOnStart && params == NULL) {
+    if (params == null)
+    {
+      errors.clear();
+      if (params != null)
+         params.dispose();
+      mutableLayerTilesRenderParameters.update(LayerTilesRenderParameters.createDefaultMercator(2, 16), errors);
+      params = mutableLayerTilesRenderParameters.create(errors);
+    }
+  
+  
+    return params;
   }
 
   public LayerSet()
@@ -406,7 +419,7 @@ public class LayerSet implements ChangedInfoListener
       return null;
     }
   
-    return checkAndComposeLayerTilesRenderParameters(enableLayers, errors);
+    return checkAndComposeLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, enableLayers, errors);
   }
 
   public final boolean isEquals(LayerSet that)
@@ -529,21 +542,30 @@ public class LayerSet implements ChangedInfoListener
       return;
     }
     _changedInfoListener = changedInfoListener;
-    changedInfo(getInfo());
+    if (_changedInfoListener != null)
+    {
+      _changedInfoListener.changedInfo(getInfo());
+    }
   }
 
   public final java.util.ArrayList<String> getInfo()
   {
     _infos.clear();
     final int layersCount = _layers.size();
+    boolean anyEnabled = false;
     for (int i = 0; i < layersCount; i++)
     {
       Layer layer = _layers.get(i);
       if (layer.isEnable())
       {
+        anyEnabled = true;
         final String layerInfo = layer.getInfo();
         _infos.add(layerInfo);
       }
+    }
+    if (!anyEnabled)
+    {
+      _infos.add("Can't find any enabled Layer at this zoom level");
     }
     return _infos;
   }

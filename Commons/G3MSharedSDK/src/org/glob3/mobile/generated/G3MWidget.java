@@ -844,6 +844,7 @@ public class G3MWidget implements ChangedRendererInfoListener
   
     _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider);
   
+    _rendererState = calculateRendererState();
   }
 
   private void notifyTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
