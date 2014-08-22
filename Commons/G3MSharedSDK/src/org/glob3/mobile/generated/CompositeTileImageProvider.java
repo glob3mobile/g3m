@@ -301,9 +301,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
         if (result._contribution.isFullCoverageAndOpaque())
         {
           canvas.drawImage(image, 0, 0);
-    //      canvas->setLineWidth(5);
-    //      canvas->setLineColor(Color::yellow());
-    //      canvas->strokeRectangle(0, 0, image->getWidth(), image->getHeight());
         }
         else
         {
@@ -319,15 +316,6 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, destRect._x, destRect._y, destRect._width, destRect._height, alpha);
                             //SRC RECT
                             //DEST RECT
-          canvas.setLineColor(Color.magenta());
-          canvas.strokeRectangle(destRect._x, destRect._y, destRect._width, destRect._height);
-    //
-    //      canvas->setLineColor(Color::white());
-    //
-    //      canvas->strokeRectangle(destRect->_x,
-    //                              _height - (destRect->_y + destRect->_height),
-    //                              destRect->_width,
-    //                              destRect->_height);
     
           if (destRect != null)
              destRect.dispose();

@@ -47,7 +47,7 @@ public abstract class MapBooBuilder
     ElevationDataProvider elevationDataProvider = null;
     final float verticalExaggeration = 1F;
   
-    TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/img/logo_mapboo_320x80.png")));
+    TileTexturizer texturizer = new DefaultTileTexturizer(new DownloaderImageBuilder(new URL("http://www.mapboo.com/web/img/tileNotFound.jpg")));
   //  TileRasterizer* tileRasterizer = NULL;
   
     final boolean renderDebug = false;

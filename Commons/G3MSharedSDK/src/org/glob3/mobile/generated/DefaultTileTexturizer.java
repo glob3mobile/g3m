@@ -32,7 +32,7 @@ public class DefaultTileTexturizer extends TileTexturizer
   }
   private IImageBuilder _defaultBackGroundImageBuilder;
   private boolean _defaultBackGroundImageLoaded;
-  private final IImage _defaultBackGroundImage;
+  private IImage _defaultBackGroundImage;
   private String _defaultBackGroundImageName;
 
 

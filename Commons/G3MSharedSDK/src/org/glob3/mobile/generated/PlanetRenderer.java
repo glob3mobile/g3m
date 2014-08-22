@@ -979,7 +979,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   {
     if (_changedInfoListener != null)
     {
-      ILogger.instance().logError("Changed Renderer Info Listener of PlanetRenderer already set");
+      ILogger.instance().logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
     }
     _changedInfoListener = changedInfoListener;
   
