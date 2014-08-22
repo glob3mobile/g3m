@@ -32,8 +32,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBOctree
-         implements
-            PersistentOctree {
+implements
+PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -60,21 +60,25 @@ public class BerkeleyDBOctree
 
 
    public static PersistentOctree open(final String cloudName,
-                                       final boolean createIfNotExists) {
-      return open(cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE);
+                                       final boolean createIfNotExists,
+                                       final long cacheSizeInBytes) {
+      return open(cloudName, createIfNotExists, DEFAULT_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE, cacheSizeInBytes);
    }
 
 
    public static PersistentOctree open(final String cloudName,
                                        final boolean createIfNotExists,
                                        final int bufferSize,
-                                       final int maxPointsPerTitle) {
-      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize, maxPointsPerTitle, false);
+                                       final int maxPointsPerTitle,
+                                       final long cacheSizeInBytes) {
+
+      return new BerkeleyDBOctree(cloudName, createIfNotExists, bufferSize, maxPointsPerTitle, false, cacheSizeInBytes);
    }
 
 
-   public static PersistentOctree openReadOnly(final String cloudName) {
-      return new BerkeleyDBOctree(cloudName, false, 0, 0, false);
+   public static PersistentOctree openReadOnly(final String cloudName,
+                                               final long cacheSizeInBytes) {
+      return new BerkeleyDBOctree(cloudName, false, 0, 0, true, cacheSizeInBytes);
    }
 
 
@@ -104,7 +108,8 @@ public class BerkeleyDBOctree
                             final boolean createIfNotExists,
                             final int bufferSize,
                             final int maxPointsPerTitle,
-                            final boolean readOnly) {
+                            final boolean readOnly,
+                            final long cacheSizeInBytes) {
       final String readOnlyMsg = readOnly ? " read-only" : " read-write";
       System.out.println("- opening" + readOnlyMsg + " cloud name \"" + cloudName + "\"");
 
@@ -128,8 +133,9 @@ public class BerkeleyDBOctree
       envConfig.setAllowCreate(createIfNotExists);
       envConfig.setTransactional(true);
       envConfig.setReadOnly(readOnly);
-      final int totalBytes = 1024 * 1024 * 1024;
-      envConfig.setCacheSize(totalBytes);
+      if (cacheSizeInBytes > 0) {
+         envConfig.setCacheSize(cacheSizeInBytes);
+      }
       _env = new Environment(envHome, envConfig);
 
       final DatabaseConfig dbConfig = new DatabaseConfig();
@@ -343,10 +349,10 @@ public class BerkeleyDBOctree
 
 
    private static class BerkeleyDBStatistics
-   implements
-   PersistentOctree.Visitor,
-   PersistentOctree.Statistics,
-   Serializable {
+            implements
+               PersistentOctree.Visitor,
+               PersistentOctree.Statistics,
+               Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -449,8 +455,8 @@ public class BerkeleyDBOctree
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 

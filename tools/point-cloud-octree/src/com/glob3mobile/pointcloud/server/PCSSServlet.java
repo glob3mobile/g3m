@@ -33,10 +33,8 @@ HttpServlet {
    public void init(final ServletConfig config) throws ServletException {
       super.init(config);
 
-      _cloudDirectory = new File(System.getProperty("user.dir"));
-
-      System.out.println(_cloudDirectory.getAbsolutePath());
-
+      //      _cloudDirectory = new File(System.getProperty("user.dir"));
+      _cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }
@@ -47,7 +45,9 @@ HttpServlet {
          PersistentLOD result = _openedDBs.get(cloudName);
          if (result == null) {
             try {
-               result = BerkeleyDBLOD.openReadOnly(_cloudDirectory, cloudName);
+               result = BerkeleyDBLOD.openReadOnly(_cloudDirectory, cloudName, -1);
+               final PersistentLOD.Statistics statistics = result.getStatistics(true, true);
+               statistics.show();
             }
             catch (final Exception e) {
                log("Error opening \"" + cloudName + "\"", e);
@@ -85,6 +85,30 @@ HttpServlet {
    }
 
 
+   private static void sendMetadata(final PersistentLOD db,
+                                    final HttpServletResponse response) throws IOException {
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.setContentType("application/json");
+      final PrintWriter writer = response.getWriter();
+
+      final PersistentLOD.Statistics statistics = db.getStatistics(false, false);
+      // final String projection = "EPSG:4326";
+      JSONUtils.sendJSON(writer, statistics);
+   }
+
+
+   private static void sendNodeLayout(final PersistentLOD db,
+                                      final String nodeID,
+                                      final HttpServletResponse response) throws IOException {
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.setContentType("application/json");
+      final PrintWriter writer = response.getWriter();
+
+      final PersistentLOD.NodeLayout layout = db.getNodeLayout(nodeID);
+      JSONUtils.sendJSON(writer, layout);
+   }
+
+
    @Override
    protected void doGet(final HttpServletRequest request,
                         final HttpServletResponse response) throws IOException {
@@ -112,39 +136,13 @@ HttpServlet {
       if (path.length == 1) {
          sendMetadata(db, response);
       }
+      else if ((path.length == 3) && path[1].trim().equalsIgnoreCase("layout")) {
+         final String nodeID = path[2].trim();
+         sendNodeLayout(db, nodeID, response);
+      }
       else {
          error(response, "Invalid request");
       }
-   }
-
-
-   private static void sendMetadata(final PersistentLOD db,
-                                    final HttpServletResponse response) throws IOException {
-      response.setStatus(HttpServletResponse.SC_OK);
-      response.setContentType("application/json");
-      final PrintWriter writer = response.getWriter();
-
-      final PersistentLOD.Statistics statistics = db.getStatistics(false, false);
-      writer.print('{');
-
-      JSONUtils.sendJSON(writer, "name", statistics.getPointCloudName());
-
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "projection", "EPSG:4326");
-
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "pointsCount", statistics.getPointsCount());
-
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "sector", statistics.getSector());
-
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "minHeight", statistics.getMinHeight());
-
-      writer.print(',');
-      JSONUtils.sendJSON(writer, "maxHeight", statistics.getMaxHeight());
-
-      writer.println('}');
    }
 
 

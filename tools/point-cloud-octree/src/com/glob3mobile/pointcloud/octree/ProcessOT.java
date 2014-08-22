@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -60,13 +59,15 @@ public class ProcessOT {
       final String sourceCloudName = "Loudoun-VA";
       final String lodCloudName = sourceCloudName + "_LOD";
 
+      final int cacheSizeInBytes = 1024 * 1024 * 1024;
+
       final boolean createMapForSourceOT = false;
       final boolean createLOD = false;
       final boolean showLODStats = true;
       final boolean drawSampleLODNode = false;
 
       if (createMapForSourceOT) {
-         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
+         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName, cacheSizeInBytes)) {
             final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
             statistics.show();
 
@@ -76,7 +77,7 @@ public class ProcessOT {
       }
 
       if (createLOD) {
-         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName)) {
+         try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(sourceCloudName, cacheSizeInBytes)) {
             final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(false, true);
             final long pointsCount = statistics.getPointsCount();
             statistics.show();
@@ -91,7 +92,7 @@ public class ProcessOT {
       }
 
       if (showLODStats) {
-         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName)) {
+         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName, cacheSizeInBytes)) {
             final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
             statistics.show();
             //lodDB.acceptDepthFirstVisitor(null, new LODShowStatistics());
@@ -99,43 +100,43 @@ public class ProcessOT {
          System.out.println();
       }
 
-      if (drawSampleLODNode) {
-         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName)) {
-            final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
-
-            final double minHeight = statistics.getMinHeight();
-            final double maxHeight = statistics.getMaxHeight();
-
-
-            final String id = "032010023321230000"; // FoundSelf -> OK
-            // final String id = "333333333333333"; // FoundNothing -> OK
-
-            //            final String id = "03201002332123000000"; // NotFoundSelfNorDescendants **** PENDING ***
-
-            // final String id = "03201002332123000"; // FoundDescendants -> OK
-            // final String id = "0320100233212300"; // FoundDescendants -> OK
-            //final String id = "03201002332"; // FoundDescendants -> OK
-
-            final Sector sector = lodDB.getSector(id);
-
-            final long start = System.currentTimeMillis();
-            final List<PersistentLOD.Level> levels = lodDB.getLODLevels(id);
-            final long elapsed = System.currentTimeMillis() - start;
-            System.out.println("== " + elapsed + "ms");
-
-            final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
-            long totalPoints = 0;
-            for (final PersistentLOD.Level level : levels) {
-               System.out.println(level);
-               totalPoints += level.size();
-
-               accumulatedPoints.addAll(level.getPoints());
-               generateImage(id, level.getLevel(), sector, accumulatedPoints, minHeight, maxHeight);
-            }
-            System.out.println("* Total Points=" + totalPoints);
-         }
-         System.out.println();
-      }
+      //      if (drawSampleLODNode) {
+      //         try (final PersistentLOD lodDB = BerkeleyDBLOD.openReadOnly(cloudDirectory, lodCloudName)) {
+      //            final PersistentLOD.Statistics statistics = lodDB.getStatistics(false, true);
+      //
+      //            final double minHeight = statistics.getMinHeight();
+      //            final double maxHeight = statistics.getMaxHeight();
+      //
+      //
+      //            final String id = "032010023321230000"; // FoundSelf -> OK
+      //            // final String id = "333333333333333"; // FoundNothing -> OK
+      //
+      //            //            final String id = "03201002332123000000"; // NotFoundSelfNorDescendants **** PENDING ***
+      //
+      //            // final String id = "03201002332123000"; // FoundDescendants -> OK
+      //            // final String id = "0320100233212300"; // FoundDescendants -> OK
+      //            //final String id = "03201002332"; // FoundDescendants -> OK
+      //
+      //            final Sector sector = lodDB.getSector(id);
+      //
+      //            final long start = System.currentTimeMillis();
+      //            final List<PersistentLOD.Level> levels = lodDB.getLODLevels(id);
+      //            final long elapsed = System.currentTimeMillis() - start;
+      //            System.out.println("== " + elapsed + "ms");
+      //
+      //            final List<Geodetic3D> accumulatedPoints = new ArrayList<Geodetic3D>();
+      //            long totalPoints = 0;
+      //            for (final PersistentLOD.Level level : levels) {
+      //               System.out.println(level);
+      //               totalPoints += level.size();
+      //
+      //               accumulatedPoints.addAll(level.getPoints());
+      //               generateImage(id, level.getLevel(), sector, accumulatedPoints, minHeight, maxHeight);
+      //            }
+      //            System.out.println("* Total Points=" + totalPoints);
+      //         }
+      //         System.out.println();
+      //      }
 
    }
 

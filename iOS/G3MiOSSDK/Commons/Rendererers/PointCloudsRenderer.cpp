@@ -16,6 +16,7 @@
 #include "Tile.hpp"
 #include "DownloadPriority.hpp"
 #include "BingMapsLayer.hpp"
+#include "ErrorHandling.hpp"
 
 void PointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
                                                                          IByteBuffer* buffer,
@@ -129,6 +130,8 @@ _pointCloud(pointCloud)
 
     const std::string quadKey = BingMapsLayer::getQuadKey(tile);
 
+    ILogger::instance()->logInfo("id=" + quadKey + "\n");
+
 //downloader->requestBuffer(<#const URL &url#>,
 //                          <#long long priority#>,
 //                          <#const TimeInterval &timeToCache#>,
@@ -147,6 +150,11 @@ void PointCloudsRenderer::PointCloud::changedTilesRendering(const std::vector<co
     const int tilesStartedRenderingSize = tilesStartedRendering->size();
     for (int i = 0; i < tilesStartedRenderingSize; i++) {
       const Tile* tile = tilesStartedRendering->at(i);
+
+      if (!tile->_mercator) {
+        THROW_EXCEPTION("Tile has to be mercator");
+      }
+
       if (tile->_sector.touchesWith(*_sector)) {
         ILogger::instance()->logInfo("   Start rendering tile " + tile->_id + " for cloud " + _cloudName);
         _tilesStartedRendering.push_back(tile);

@@ -27,6 +27,7 @@ PersistentOctree.Visitor {
    private PersistentLOD   _lodDB;
    private final long      _pointsCount;
    private final int       _maxPointsPerLeaf;
+   private long            _sumLevelsCount;
 
    private long            _processedPointsCount;
    private final File      _cloudDirectory;
@@ -105,12 +106,12 @@ PersistentOctree.Visitor {
    }
 
 
-   private static void splitPoints(final Transaction transaction,
-                                   final PersistentLOD lodDB,
-                                   final byte[] nodeID,
-                                   final Sector nodeSector,
-                                   final List<Geodetic3D> points,
-                                   final int maxPointsPerLeaf) {
+   private void splitPoints(final Transaction transaction,
+                            final PersistentLOD lodDB,
+                            final byte[] nodeID,
+                            final Sector nodeSector,
+                            final List<Geodetic3D> points,
+                            final int maxPointsPerLeaf) {
 
       final TileHeader header = new TileHeader(nodeID, nodeSector);
       for (final TileHeader child : header.createChildren()) {
@@ -131,10 +132,10 @@ PersistentOctree.Visitor {
    }
 
 
-   private static void process(final Transaction transaction,
-                               final PersistentLOD lodDB,
-                               final String nodeID,
-                               final List<Geodetic3D> points) {
+   private void process(final Transaction transaction,
+                        final PersistentLOD lodDB,
+                        final String nodeID,
+                        final List<Geodetic3D> points) {
       final int pointsSize = points.size();
 
       final List<Integer> sortedVertices = new ArrayList<Integer>(pointsSize);
@@ -164,6 +165,7 @@ PersistentOctree.Visitor {
       //      }
 
       final int lodLevels = lodIndices.size();
+      _sumLevelsCount += lodLevels;
 
       //      final String parentID = parentID(nodeID);
 
@@ -360,9 +362,11 @@ PersistentOctree.Visitor {
 
    @Override
    public void start() {
-      _lodDB = BerkeleyDBLOD.open(_cloudDirectory, _lodCloudName, true);
+      final int cacheSizeInBytes = 1024 * 1024 * 1024;
+      _lodDB = BerkeleyDBLOD.open(_cloudDirectory, _lodCloudName, true, cacheSizeInBytes);
 
       _processedPointsCount = 0;
+      _sumLevelsCount = 0;
    }
 
 
@@ -372,6 +376,8 @@ PersistentOctree.Visitor {
       _lodDB = null;
 
       _progress.finish();
+
+      System.out.println("levels count=" + _sumLevelsCount);
 
       if (_processedPointsCount != _pointsCount) {
          throw new RuntimeException("Logic error");

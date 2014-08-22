@@ -19,8 +19,8 @@ import com.sleepycat.je.OperationStatus;
 
 
 public class BerkeleyDBLODNode
-         implements
-            PersistentLOD.Node {
+implements
+PersistentLOD.Node {
 
 
    private static final int MAX_POINTS_IN_HEADER = 512;
@@ -145,8 +145,8 @@ public class BerkeleyDBLODNode
 
    private DatabaseEntry createNodeDataKey() {
       final int size = ByteBufferUtils.sizeOf(_id) + //
-                       ByteBufferUtils.sizeOf((byte) 255) + //
-                       ByteBufferUtils.sizeOf(_lodLevel);
+               ByteBufferUtils.sizeOf((byte) 255) + //
+               ByteBufferUtils.sizeOf(_lodLevel);
       final ByteBuffer byteBuffer = ByteBuffer.allocate(size);
       byteBuffer.put(_id);
       byteBuffer.put((byte) 255);
@@ -161,10 +161,10 @@ public class BerkeleyDBLODNode
       final byte formatID = format._formatID;
 
       final int entrySize = ByteBufferUtils.sizeOf(version) + //
-               ByteBufferUtils.sizeOf(subversion) + //
-               ByteBufferUtils.sizeOf(_lodLevel) + //
-                            ByteBufferUtils.sizeOf(_pointsCount) + //
-                            ByteBufferUtils.sizeOf(formatID);
+                            ByteBufferUtils.sizeOf(subversion) + //
+                            ByteBufferUtils.sizeOf(_lodLevel) + //
+               ByteBufferUtils.sizeOf(_pointsCount) + //
+               ByteBufferUtils.sizeOf(formatID);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -183,11 +183,11 @@ public class BerkeleyDBLODNode
       final byte formatID = format._formatID;
 
       final int entrySize = ByteBufferUtils.sizeOf(version) + //
-                            ByteBufferUtils.sizeOf(subversion) + //
-                            ByteBufferUtils.sizeOf(_lodLevel) + //
-                            ByteBufferUtils.sizeOf(_pointsCount) + //
-                            ByteBufferUtils.sizeOf(formatID) + //
-                            ByteBufferUtils.sizeOf(format, _points);
+               ByteBufferUtils.sizeOf(subversion) + //
+               ByteBufferUtils.sizeOf(_lodLevel) + //
+               ByteBufferUtils.sizeOf(_pointsCount) + //
+               ByteBufferUtils.sizeOf(formatID) + //
+               ByteBufferUtils.sizeOf(format, _points);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
