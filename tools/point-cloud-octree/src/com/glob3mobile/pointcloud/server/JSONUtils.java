@@ -107,7 +107,8 @@ public class JSONUtils {
       //      sendJSONKey(writer, "nodes");
       writer.print('[');
       boolean first = true;
-      for (final PersistentLOD.Node node : layout.getNodes()) {
+      // for (final PersistentLOD.Node node : layout.getNodes()) {
+      for (final String nodeID : layout.getNodesIDs()) {
          if (first) {
             first = false;
          }
@@ -115,7 +116,7 @@ public class JSONUtils {
             writer.print(',');
          }
          writer.print('"');
-         writer.print(node.getID());
+         writer.print(nodeID);
          writer.print('"');
       }
       writer.println(']');

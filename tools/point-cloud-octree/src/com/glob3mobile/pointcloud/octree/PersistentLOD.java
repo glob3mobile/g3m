@@ -51,14 +51,14 @@ public interface PersistentLOD
 
 
    public static class NodeLayout {
-      private final String                   _id;
-      private final List<PersistentLOD.Node> _nodes;
+      private final String       _id;
+      private final List<String> _nodesIDs;
 
 
       public NodeLayout(final String id,
-                        final List<PersistentLOD.Node> nodes) {
+                        final List<String> nodesIDs) {
          _id = id;
-         _nodes = Collections.unmodifiableList(new ArrayList<>(nodes));
+         _nodesIDs = Collections.unmodifiableList(new ArrayList<>(nodesIDs));
       }
 
 
@@ -67,9 +67,14 @@ public interface PersistentLOD
       }
 
 
-      public List<PersistentLOD.Node> getNodes() {
-         return _nodes;
+      public List<String> getNodesIDs() {
+         return _nodesIDs;
       }
+
+
+      //      public List<PersistentLOD.Node> getNodes() {
+      //         return _nodes;
+      //      }
    }
 
 
