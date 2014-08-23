@@ -96,40 +96,40 @@ public class JSONUtils {
    }
 
 
-   public static void sendJSON(final PrintWriter writer,
-                               final PersistentLOD.NodeLayout layout) {
-
-      writer.print('{');
-
-      sendJSON(writer, "id", layout.getID());
-
-      writer.print(',');
-      sendJSONKey(writer, "nodes");
-      writer.print('[');
-      boolean first = true;
-      for (final PersistentLOD.NodeLayoutData data : layout.getData()) {
-         if (first) {
-            first = false;
-         }
-         else {
-            writer.print(',');
-         }
-         sendJSON(writer, data);
-      }
-      writer.print(']');
-
-      writer.println('}');
-   }
-
-
-   private static void sendJSON(final PrintWriter writer,
-                                final PersistentLOD.NodeLayoutData data) {
-      writer.print('{');
-
-      sendJSON(writer, "id", data.getID());
-
-      writer.print('}');
-   }
+   //   public static void sendJSON(final PrintWriter writer,
+   //                               final PersistentLOD.NodeLayout layout) {
+   //
+   //      writer.print('{');
+   //
+   //      sendJSON(writer, "id", layout.getID());
+   //
+   //      writer.print(',');
+   //      sendJSONKey(writer, "nodes");
+   //      writer.print('[');
+   //      boolean first = true;
+   //      for (final PersistentLOD.NodeLayoutData data : layout.getData()) {
+   //         if (first) {
+   //            first = false;
+   //         }
+   //         else {
+   //            writer.print(',');
+   //         }
+   //         sendJSON(writer, data);
+   //      }
+   //      writer.print(']');
+   //
+   //      writer.println('}');
+   //   }
+   //
+   //
+   //   private static void sendJSON(final PrintWriter writer,
+   //                                final PersistentLOD.NodeLayoutData data) {
+   //      writer.print('{');
+   //
+   //      sendJSON(writer, "id", data.getID());
+   //
+   //      writer.print('}');
+   //   }
 
 
 }

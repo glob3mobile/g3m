@@ -2,55 +2,23 @@
 
 package com.glob3mobile.pointcloud.octree;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
 public interface PersistentLOD
-extends
-AutoCloseable {
+         extends
+            AutoCloseable {
 
 
-   //   public class Level {
-   //      private final int              _level;
-   //      private final List<Geodetic3D> _points;
-   //
-   //
-   //      public Level(final int level,
-   //                   final List<Geodetic3D> points) {
-   //         _level = level;
-   //         _points = Collections.unmodifiableList(points);
-   //      }
-   //
-   //
-   //      @Override
-   //      public String toString() {
-   //         final double estimatedSize = _points.size() * 3 * 8;
-   //         return "[Level " + _level + //
-   //                ", points=" + _points.size() + //
-   //                ", estimatedSize=" + GStringUtils.getSpaceMessage(estimatedSize) + "]";
-   //      }
-   //
-   //
-   //      public int size() {
-   //         return _points.size();
-   //      }
-   //
-   //
-   //      public int getLevel() {
-   //         return _level;
-   //      }
-   //
-   //
-   //      public List<Geodetic3D> getPoints() {
-   //         return _points;
-   //      }
-   //
-   //   }
+   public static interface NodeLevel {
+      int getLevel();
 
 
-   public interface Node {
+      List<Geodetic3D> getPoints(PersistentLOD.Transaction transaction);
+   }
+
+
+   public static interface Node {
       @Override
       String toString();
 
@@ -61,10 +29,13 @@ AutoCloseable {
       int getPointsCount();
 
 
-      List<Geodetic3D> getPoints();
+      int getLevelsCount();
 
 
-      List<Geodetic3D> getPoints(PersistentLOD.Transaction transaction);
+      List<PersistentLOD.NodeLevel> getLevels();
+
+
+      int[] getLevelsPointsCount();
 
 
       Sector getSector();
@@ -74,45 +45,45 @@ AutoCloseable {
    }
 
 
-   public static class NodeLayoutData {
-      private final String _id;
+   //   public static class NodeLayoutData {
+   //      private final String _id;
+   //
+   //
+   //      public NodeLayoutData(final String id) {
+   //         _id = id;
+   //      }
+   //
+   //
+   //      public String getID() {
+   //         return _id;
+   //      }
+   //   }
+   //
+   //
+   //   public static class NodeLayout {
+   //      private final String                             _id;
+   //      private final List<PersistentLOD.NodeLayoutData> _data;
+   //
+   //
+   //      public NodeLayout(final String id,
+   //                        final List<PersistentLOD.NodeLayoutData> data) {
+   //         _id = id;
+   //         _data = Collections.unmodifiableList(new ArrayList<>(data));
+   //      }
+   //
+   //
+   //      public String getID() {
+   //         return _id;
+   //      }
+   //
+   //
+   //      public List<PersistentLOD.NodeLayoutData> getData() {
+   //         return _data;
+   //      }
+   //   }
 
 
-      public NodeLayoutData(final String id) {
-         _id = id;
-      }
-
-
-      public String getID() {
-         return _id;
-      }
-   }
-
-
-   public static class NodeLayout {
-      private final String                             _id;
-      private final List<PersistentLOD.NodeLayoutData> _data;
-
-
-      public NodeLayout(final String id,
-                        final List<PersistentLOD.NodeLayoutData> data) {
-         _id = id;
-         _data = Collections.unmodifiableList(new ArrayList<>(data));
-      }
-
-
-      public String getID() {
-         return _id;
-      }
-
-
-      public List<PersistentLOD.NodeLayoutData> getData() {
-         return _data;
-      }
-   }
-
-
-   public interface Visitor {
+   public static interface Visitor {
 
       void start(PersistentLOD.Transaction transaction);
 
@@ -135,7 +106,8 @@ AutoCloseable {
 
    }
 
-   public interface Statistics {
+
+   public static interface Statistics {
       void show();
 
 
@@ -143,6 +115,9 @@ AutoCloseable {
 
 
       long getPointsCount();
+
+
+      long getLevelsCount();
 
 
       Sector getSector();
@@ -168,7 +143,6 @@ AutoCloseable {
 
       double getAverageDepth();
 
-
    }
 
 
@@ -177,8 +151,7 @@ AutoCloseable {
 
    void put(PersistentLOD.Transaction transaction,
             String id,
-            int level,
-            List<Geodetic3D> points);
+            List<List<Geodetic3D>> levelsPoints);
 
 
    @Override
@@ -192,9 +165,6 @@ AutoCloseable {
                                 PersistentLOD.Visitor visitor);
 
 
-   //   List<PersistentLOD.Level> getLODLevels(String id);
-
-
    Sector getSector(String id);
 
 
@@ -202,6 +172,6 @@ AutoCloseable {
                                           boolean showProgress);
 
 
-   PersistentLOD.NodeLayout getNodeLayout(String id);
+   //   PersistentLOD.NodeLayout getNodeLayout(String id);
 
 }

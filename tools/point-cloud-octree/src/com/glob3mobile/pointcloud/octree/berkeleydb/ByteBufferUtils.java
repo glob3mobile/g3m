@@ -25,6 +25,11 @@ public class ByteBufferUtils {
 
    @SuppressWarnings("unused")
    public static int sizeOf(final int any) {
+      return sizeOfInt();
+   }
+
+
+   public static int sizeOfInt() {
       return 4;
    }
 

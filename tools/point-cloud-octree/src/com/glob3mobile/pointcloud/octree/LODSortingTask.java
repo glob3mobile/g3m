@@ -20,8 +20,8 @@ import es.igosoftware.util.GProgress;
 
 
 class LODSortingTask
-implements
-PersistentOctree.Visitor {
+         implements
+            PersistentOctree.Visitor {
    private final GProgress _progress;
    private final String    _lodCloudName;
    private PersistentLOD   _lodDB;
@@ -34,10 +34,10 @@ PersistentOctree.Visitor {
 
 
    LODSortingTask(final File cloudDirectory,
-                  final String lodCloudName,
-            final String sourceCloudName,
-            final long pointsCount,
-            final int maxPointsPerLeaf) {
+            final String lodCloudName,
+                  final String sourceCloudName,
+                  final long pointsCount,
+                  final int maxPointsPerLeaf) {
       _cloudDirectory = cloudDirectory;
       _lodCloudName = lodCloudName;
       _pointsCount = pointsCount;
@@ -48,7 +48,7 @@ PersistentOctree.Visitor {
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
             System.out.println("- importing \"" + sourceCloudName + "\" "
-                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                     + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
       _maxPointsPerLeaf = maxPointsPerLeaf;
@@ -83,7 +83,7 @@ PersistentOctree.Visitor {
 
 
    private static List<Geodetic3D> extractPoints(final Sector sector,
-            final List<Geodetic3D> points) {
+                                                 final List<Geodetic3D> points) {
 
       final List<Geodetic3D> extracted = new ArrayList<Geodetic3D>();
 
@@ -174,6 +174,7 @@ PersistentOctree.Visitor {
       //                         ", points=" + pointsSize + //
       //                         ", lodIndices=" + lodIndices);
 
+      final List<List<Geodetic3D>> levelsPoints = new ArrayList<List<Geodetic3D>>(lodLevels);
       int pointsCounter = 0;
       int fromIndexI = 0;
       for (int level = 0; level < lodLevels; level++) {
@@ -194,7 +195,8 @@ PersistentOctree.Visitor {
             throw new RuntimeException("Logic error!");
          }
 
-         lodDB.put(transaction, nodeID, level, levelPoints);
+         //lodDB.put(transaction, nodeID, level, levelPoints);
+         levelsPoints.add(levelPoints);
 
          fromIndexI = toIndexI + 1;
       }
@@ -202,6 +204,8 @@ PersistentOctree.Visitor {
       if (pointsCounter != pointsSize) {
          throw new RuntimeException("Logic error!");
       }
+
+      lodDB.put(transaction, nodeID, levelsPoints);
    }
 
 
