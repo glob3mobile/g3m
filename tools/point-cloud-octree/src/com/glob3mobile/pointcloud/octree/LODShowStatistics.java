@@ -3,14 +3,12 @@
 package com.glob3mobile.pointcloud.octree;
 
 
-import java.util.List;
-
 import es.igosoftware.util.GStringUtils;
 
 
 final class LODShowStatistics
-         implements
-            PersistentLOD.Visitor {
+implements
+PersistentLOD.Visitor {
    private long _pointsCount;
    private long _nodesCount;
 
@@ -33,16 +31,16 @@ final class LODShowStatistics
    public boolean visit(final PersistentLOD.Transaction transaction,
                         final PersistentLOD.Node node) {
       //final List<Geodetic3D> points = node.getPoints(transaction);
-      for (final PersistentLOD.NodeLevel level : node.getLevels()) {
-         final List<Geodetic3D> points = level.getPoints(transaction);
-      }
+      //      for (final PersistentLOD.NodeLevel level : node.getLevels()) {
+      //         final List<Geodetic3D> points = level.getPoints(transaction);
+      //      }
 
       final int pointsCount = node.getPointsCount();
       final double value = pointsCount * 3 * 8;
       System.out.println("[" + node.getID() + "]" + //
-               " depth=" + node.getDepth() + //
-                         " points=" + pointsCount + //
-                         " estimatesSize=" + GStringUtils.getSpaceMessage(value));
+                         " depth=" + node.getDepth() + //
+               " points=" + pointsCount + //
+               " estimatesSize=" + GStringUtils.getSpaceMessage(value));
       _pointsCount += pointsCount;
       _nodesCount++;
       return true;

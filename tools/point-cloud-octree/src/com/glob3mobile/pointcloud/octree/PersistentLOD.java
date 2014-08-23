@@ -70,11 +70,6 @@ public interface PersistentLOD
       public List<String> getNodesIDs() {
          return _nodesIDs;
       }
-
-
-      //      public List<PersistentLOD.Node> getNodes() {
-      //         return _nodes;
-      //      }
    }
 
 
