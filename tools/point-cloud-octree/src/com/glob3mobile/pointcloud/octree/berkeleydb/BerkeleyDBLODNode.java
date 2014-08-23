@@ -63,7 +63,7 @@ public class BerkeleyDBLODNode
          _id = id;
          _lodLevel = lodLevel;
          _pointsCount = points.size();
-         _points = new ArrayList<Geodetic3D>(points);
+         _points = Collections.unmodifiableList(new ArrayList<Geodetic3D>(points));
          _format = null;
       }
 
@@ -87,10 +87,7 @@ public class BerkeleyDBLODNode
                                                  final byte[] id,
                                                  final int lodLevel,
                                                  final Format format,
-               final int pointsCount) {
-         //throw new RuntimeException("not yet implemented");
-
-
+                                                 final int pointsCount) {
          final DatabaseEntry keyEntry = createNodeLevelDataKey(id, lodLevel);
          final DatabaseEntry dataEntry = new DatabaseEntry();
 
@@ -100,7 +97,13 @@ public class BerkeleyDBLODNode
          switch (status) {
             case SUCCESS: {
                final ByteBuffer byteBuffer = ByteBuffer.wrap(dataEntry.getData());
-               return ByteBufferUtils.getPoints(byteBuffer, format, pointsCount);
+               final List<Geodetic3D> points = ByteBufferUtils.getPoints(byteBuffer, format, pointsCount);
+
+               if (pointsCount != points.size()) {
+                  throw new RuntimeException("Inconsistency in pointsCount");
+               }
+
+               return Collections.unmodifiableList(points);
             }
             case NOTFOUND:
                throw new RuntimeException("Logic Error: data not found for node=" + Utils.toIDString(id) + ", level=" + lodLevel);
@@ -121,6 +124,7 @@ public class BerkeleyDBLODNode
       }
 
 
+      @Override
       public int getPointsCount() {
          return _pointsCount;
       }
@@ -145,46 +149,12 @@ public class BerkeleyDBLODNode
       }
 
 
-      //      private DatabaseEntry createNodeLevelWithPointsEntry(final Format format) {
-      //         final byte formatID = format._formatID;
-      //
-      //         final int entrySize = sizeOf(_lodLevel) + //
-      //                  sizeOf(_pointsCount) + //
-      //                  sizeOf(formatID) + //
-      //                  sizeOf(format, _points);
-      //
-      //         final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
-      //         byteBuffer.putInt(_lodLevel);
-      //         byteBuffer.putInt(_pointsCount * -1); // negative pointsCount means the points are store in the header
-      //         byteBuffer.put(formatID);
-      //         put(byteBuffer, format, _points);
-      //
-      //         return new DatabaseEntry(byteBuffer.array());
-      //      }
-
-
       private DatabaseEntry createNodeLevelDataEntry(final Format format) {
          final int entrySize = sizeOf(format, _points);
          final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
          put(byteBuffer, format, _points);
          return new DatabaseEntry(byteBuffer.array());
       }
-
-
-      //      private DatabaseEntry createNodeLevelEntry(final Format format) {
-      //         final byte formatID = format._formatID;
-      //
-      //         final int entrySize = sizeOf(_lodLevel) + //
-      //                  sizeOf(_pointsCount) + //
-      //                  sizeOf(formatID);
-      //
-      //         final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
-      //         byteBuffer.putInt(_lodLevel);
-      //         byteBuffer.putInt(_pointsCount);
-      //         byteBuffer.put(formatID);
-      //
-      //         return new DatabaseEntry(byteBuffer.array());
-      //      }
 
 
       private void save(final com.sleepycat.je.Transaction txn,
@@ -209,30 +179,6 @@ public class BerkeleyDBLODNode
       }
       return new BerkeleyDBLODNode(db, id, levels);
    }
-
-
-   //   static BerkeleyDBLODNode create(final BerkeleyDBLOD db,
-   //                                   final byte[] id,
-   //                                   final int level,
-   //                                   final List<Geodetic3D> points) {
-   //      return new BerkeleyDBLODNode(db, id, level, points);
-   //   }
-
-
-   //   static BerkeleyDBLODNode fromDB(final com.sleepycat.je.Transaction txn,
-   //                                   final BerkeleyDBLOD db,
-   //                                   final byte[] id,
-   //                                   final boolean loadLevels,
-   //                                   final boolean loadPoints) {
-   //      final DatabaseEntry keyEntry = new DatabaseEntry(id);
-   //      final DatabaseEntry dataEntry = new DatabaseEntry();
-   //
-   //      final OperationStatus status = db.getNodeDB().get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
-   //      if (status == OperationStatus.SUCCESS) {
-   //         return BerkeleyDBLODNode.fromDBData(txn, db, id, dataEntry.getData(), loadLevels, loadPoints);
-   //      }
-   //      return null;
-   //   }
 
 
    static BerkeleyDBLODNode fromDB(final com.sleepycat.je.Transaction txn,
@@ -273,33 +219,6 @@ public class BerkeleyDBLODNode
    private final int[]                        _levelsPointsCount;
    private final int                          _pointsCount;
    private Sector                             _sector = null;
-
-
-   //   private BerkeleyDBLODNode(final BerkeleyDBLOD db,
-   //                             final byte[] id,
-   //                             final int level,
-   //                             final List<Geodetic3D> points) {
-   //      _db = db;
-   //      _id = id;
-   //      _lodLevel = level;
-   //      _pointsCount = points.size();
-   //      _points = new ArrayList<Geodetic3D>(points);
-   //      _format = null;
-   //   }
-   //
-   //
-   //   private BerkeleyDBLODNode(final BerkeleyDBLOD db,
-   //                             final byte[] id,
-   //                             final int level,
-   //                             final int pointsCount,
-   //                             final Format format) {
-   //      _db = db;
-   //      _id = id;
-   //      _lodLevel = level;
-   //      _pointsCount = pointsCount;
-   //      _points = null;
-   //      _format = format;
-   //   }
 
 
    private BerkeleyDBLODNode(final BerkeleyDBLOD db,
@@ -344,40 +263,6 @@ public class BerkeleyDBLODNode
    }
 
 
-   //   private List<Geodetic3D> loadPoints(final com.sleepycat.je.Transaction txn) {
-   //      final Database nodeDataDB = _db.getNodeDataDB();
-   //
-   //      final DatabaseEntry dataEntry = new DatabaseEntry();
-   //      final OperationStatus status = nodeDataDB.get(txn, createNodeDataKey(), dataEntry, LockMode.DEFAULT);
-   //      if (status != OperationStatus.SUCCESS) {
-   //         throw new RuntimeException("Unsupported status=" + status);
-   //      }
-   //
-   //      final ByteBuffer byteBuffer = ByteBuffer.wrap(dataEntry.getData());
-   //
-   //
-   //      final List<Geodetic3D> points = getPoints(byteBuffer, _format, _pointsCount);
-   //
-   //      if (_pointsCount != points.size()) {
-   //         throw new RuntimeException("Inconsistency in pointsCount");
-   //      }
-   //
-   //      return Collections.unmodifiableList(points);
-   //   }
-
-
-   //   private DatabaseEntry createNodeDataKey() {
-   //      final int size = sizeOf(_id) + //
-   //               sizeOf((byte) 255) + //
-   //               sizeOf(_lodLevel);
-   //      final ByteBuffer byteBuffer = ByteBuffer.allocate(size);
-   //      byteBuffer.put(_id);
-   //      byteBuffer.put((byte) 255);
-   //      byteBuffer.putInt(_lodLevel);
-   //      return new DatabaseEntry(byteBuffer.array());
-   //   }
-
-
    private DatabaseEntry createNodeEntry(final Format format) {
       final byte version = 1;
       final byte subversion = 0;
@@ -419,24 +304,6 @@ public class BerkeleyDBLODNode
    }
 
 
-   //   private List<Geodetic3D> pvtGetPoints(final com.sleepycat.je.Transaction txn) {
-   //      if (_points == null) {
-   //         _points = loadPoints(txn);
-   //      }
-   //      return _points;
-   //   }
-
-
-   //   void addPoints(final com.sleepycat.je.Transaction txn,
-   //                  final List<Geodetic3D> newPoints) {
-   //      final List<Geodetic3D> mergedPoints = new ArrayList<Geodetic3D>(newPoints.size() + _pointsCount);
-   //      mergedPoints.addAll(pvtGetPoints(txn));
-   //      mergedPoints.addAll(newPoints);
-   //      _points = mergedPoints;
-   //      _pointsCount = mergedPoints.size();
-   //   }
-
-
    @Override
    public String getID() {
       return Utils.toIDString(_id);
@@ -447,20 +314,6 @@ public class BerkeleyDBLODNode
    public int getPointsCount() {
       return _pointsCount;
    }
-
-
-   //   @Override
-   //   public List<Geodetic3D> getPoints() {
-   //      return getPoints(null);
-   //   }
-   //
-   //
-   //   @Override
-   //   public List<Geodetic3D> getPoints(final PersistentLOD.Transaction transaction) {
-   //            final BerkeleyDBTransaction berkeleyDBTransaction = (BerkeleyDBLOD.BerkeleyDBTransaction) transaction;
-   //            final com.sleepycat.je.Transaction txn = (berkeleyDBTransaction == null) ? null : berkeleyDBTransaction._txn;
-   //      return pvtGetPoints(txn);
-   //   }
 
 
    @Override

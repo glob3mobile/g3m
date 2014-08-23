@@ -96,37 +96,64 @@ public class JSONUtils {
    }
 
 
-   //   public static void sendJSON(final PrintWriter writer,
-   //                               final PersistentLOD.NodeLayout layout) {
-   //
+   public static void sendNodeLayoutJSON(final PrintWriter writer,
+                                         final PersistentLOD.NodeLayout layout) {
+
+      //      writer.print('{');
+      //
+      //      sendJSON(writer, "id", layout.getID());
+      //
+      //      writer.print(',');
+      //      sendJSONKey(writer, "nodes");
+      writer.print('[');
+      boolean first = true;
+      for (final PersistentLOD.Node node : layout.getNodes()) {
+         if (first) {
+            first = false;
+         }
+         else {
+            writer.print(',');
+         }
+         writer.print('"');
+         writer.print(node.getID());
+         writer.print('"');
+      }
+      writer.println(']');
+
+      //      writer.println('}');
+   }
+
+
+   //   private static void sendNodeLayoutJSON(final PrintWriter writer,
+   //                                final PersistentLOD.Node node) {
    //      writer.print('{');
    //
-   //      sendJSON(writer, "id", layout.getID());
+   //      sendJSON(writer, "id", node.getID());
    //
    //      writer.print(',');
-   //      sendJSONKey(writer, "nodes");
+   //      sendJSONKey(writer, "levels");
    //      writer.print('[');
    //      boolean first = true;
-   //      for (final PersistentLOD.NodeLayoutData data : layout.getData()) {
+   //      for (final PersistentLOD.NodeLevel level : node.getLevels()) {
    //         if (first) {
    //            first = false;
    //         }
    //         else {
    //            writer.print(',');
    //         }
-   //         sendJSON(writer, data);
+   //         sendJSON(writer, level);
    //      }
    //      writer.print(']');
    //
-   //      writer.println('}');
+   //      writer.print('}');
    //   }
-   //
-   //
-   //   private static void sendJSON(final PrintWriter writer,
-   //                                final PersistentLOD.NodeLayoutData data) {
+
+
+   //   private static void sendNodeLayoutJSON(final PrintWriter writer,
+   //                                final PersistentLOD.NodeLevel level) {
    //      writer.print('{');
-   //
-   //      sendJSON(writer, "id", data.getID());
+   //      final int pointsCount = level.getPointsCount();
+   //      sendJSON(writer, "pointsCount", pointsCount);
    //
    //      writer.print('}');
    //   }

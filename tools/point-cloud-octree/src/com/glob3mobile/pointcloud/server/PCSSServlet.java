@@ -33,8 +33,8 @@ HttpServlet {
    public void init(final ServletConfig config) throws ServletException {
       super.init(config);
 
-      //      _cloudDirectory = new File(System.getProperty("user.dir"));
-      _cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      _cloudDirectory = new File(System.getProperty("user.dir"));
+      //_cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }
@@ -105,7 +105,7 @@ HttpServlet {
       final PrintWriter writer = response.getWriter();
 
       final PersistentLOD.NodeLayout layout = db.getNodeLayout(nodeID);
-      JSONUtils.sendJSON(writer, layout);
+      JSONUtils.sendNodeLayoutJSON(writer, layout);
    }
 
 

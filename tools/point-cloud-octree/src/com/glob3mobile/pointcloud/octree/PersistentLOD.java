@@ -2,6 +2,8 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -15,6 +17,9 @@ public interface PersistentLOD
 
 
       List<Geodetic3D> getPoints(PersistentLOD.Transaction transaction);
+
+
+      int getPointsCount();
    }
 
 
@@ -45,42 +50,27 @@ public interface PersistentLOD
    }
 
 
-   //   public static class NodeLayoutData {
-   //      private final String _id;
-   //
-   //
-   //      public NodeLayoutData(final String id) {
-   //         _id = id;
-   //      }
-   //
-   //
-   //      public String getID() {
-   //         return _id;
-   //      }
-   //   }
-   //
-   //
-   //   public static class NodeLayout {
-   //      private final String                             _id;
-   //      private final List<PersistentLOD.NodeLayoutData> _data;
-   //
-   //
-   //      public NodeLayout(final String id,
-   //                        final List<PersistentLOD.NodeLayoutData> data) {
-   //         _id = id;
-   //         _data = Collections.unmodifiableList(new ArrayList<>(data));
-   //      }
-   //
-   //
-   //      public String getID() {
-   //         return _id;
-   //      }
-   //
-   //
-   //      public List<PersistentLOD.NodeLayoutData> getData() {
-   //         return _data;
-   //      }
-   //   }
+   public static class NodeLayout {
+      private final String                   _id;
+      private final List<PersistentLOD.Node> _nodes;
+
+
+      public NodeLayout(final String id,
+                        final List<PersistentLOD.Node> nodes) {
+         _id = id;
+         _nodes = Collections.unmodifiableList(new ArrayList<>(nodes));
+      }
+
+
+      public String getID() {
+         return _id;
+      }
+
+
+      public List<PersistentLOD.Node> getNodes() {
+         return _nodes;
+      }
+   }
 
 
    public static interface Visitor {
@@ -172,6 +162,6 @@ public interface PersistentLOD
                                           boolean showProgress);
 
 
-   //   PersistentLOD.NodeLayout getNodeLayout(String id);
+   PersistentLOD.NodeLayout getNodeLayout(String id);
 
 }

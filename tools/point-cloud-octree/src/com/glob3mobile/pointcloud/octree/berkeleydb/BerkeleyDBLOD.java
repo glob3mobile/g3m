@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.glob3mobile.pointcloud.octree.Geodetic3D;
@@ -31,8 +33,8 @@ import es.igosoftware.util.GUndeterminateProgress;
 
 
 public class BerkeleyDBLOD
-         implements
-            PersistentLOD {
+implements
+PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final File cloudDirectory,
@@ -138,8 +140,8 @@ public class BerkeleyDBLOD
 
 
    static class BerkeleyDBTransaction
-            implements
-               PersistentLOD.Transaction {
+   implements
+   PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
 
@@ -547,77 +549,67 @@ public class BerkeleyDBLOD
    //   }
 
 
-   //   @Override
-   //   public PersistentLOD.NodeLayout getNodeLayout(final String id) {
-   //      final byte[] binaryID = Utils.toBinaryID(id);
-   //
-   //      final CursorConfig cursorConfig = new CursorConfig();
-   //
-   //      final com.sleepycat.je.Transaction txn = null;
-   //      try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
-   //         final DatabaseEntry keyEntry = new DatabaseEntry(binaryID);
-   //         final DatabaseEntry dataEntry = new DatabaseEntry();
-   //         final Situation situation = getCursorSituation(cursor, keyEntry, dataEntry, binaryID);
-   //         System.out.println(situation);
-   //
-   //         switch (situation) {
-   //         //            case NotFoundSelfNorDescendants:
-   //         //               return getLODLevelsForParent(cursor, keyEntry, dataEntry, binaryID);
-   //
-   //            case FoundDescendants:
-   //               return getNodeLayoutFromDescendants(cursor, keyEntry, dataEntry, binaryID);
-   //
-   //               //            case FoundSelf:
-   //               //               return getLODLevelsForSelf(cursor, keyEntry, dataEntry, binaryID);
-   //
-   //            case FoundNothing:
-   //               return new PersistentLOD.NodeLayout(id, Collections.<PersistentLOD.NodeLayoutData> emptyList());
-   //
-   //            default:
-   //               throw new RuntimeException("Invalid situation: " + situation);
-   //         }
-   //      }
-   //   }
+   @Override
+   public PersistentLOD.NodeLayout getNodeLayout(final String id) {
+      final byte[] binaryID = Utils.toBinaryID(id);
+
+      final CursorConfig cursorConfig = new CursorConfig();
+
+      final com.sleepycat.je.Transaction txn = null;
+      try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
+         final DatabaseEntry keyEntry = new DatabaseEntry(binaryID);
+         final DatabaseEntry dataEntry = new DatabaseEntry();
+         final Situation situation = getCursorSituation(cursor, keyEntry, dataEntry, binaryID);
+         //System.out.println(situation);
+
+         switch (situation) {
+         //            case NotFoundSelfNorDescendants:
+         //               return getLODLevelsForParent(cursor, keyEntry, dataEntry, binaryID);
+
+            case FoundDescendants:
+               return getNodeLayoutFromDescendants(cursor, keyEntry, dataEntry, binaryID);
+
+               //            case FoundSelf:
+               //               return getLODLevelsForSelf(cursor, keyEntry, dataEntry, binaryID);
+
+            case FoundNothing:
+               return new PersistentLOD.NodeLayout(id, Collections.<PersistentLOD.Node> emptyList());
+
+            default:
+               throw new RuntimeException("Invalid situation: " + situation);
+         }
+      }
+   }
 
 
-   //   private PersistentLOD.NodeLayout getNodeLayoutFromDescendants(final Cursor cursor,
-   //                                                                 final DatabaseEntry keyEntry,
-   //                                                                 final DatabaseEntry dataEntry,
-   //                                                                 final byte[] id) {
-   //      final int maxLevelDelta = 6;
-   //
-   //      //final com.sleepycat.je.Transaction txn = null;
-   //      byte[] key = keyEntry.getData();
-   //      //      BerkeleyDBLODNode descendant = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
-   //      //      NodeSet descendantSet = new NodeSet(key, descendant);
-   //      byte[] currentKey = key;
-   //      if (currentKey.length <= (id.length + maxLevelDelta)) {
-   //         System.out.println("==> Descendant= " + Utils.toIDString(currentKey));
-   //      }
-   //
-   //      while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
-   //         key = keyEntry.getData();
-   //         if (!Utils.hasSamePrefix(key, id)) {
-   //            break;
-   //         }
-   //         //descendant = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
-   //         if (!Arrays.equals(key, currentKey)) {
-   //            //            descendantSet.putInto(id.length, accumulated);
-   //            //            descendantSet = new NodeSet(key, descendant);
-   //            currentKey = key;
-   //            if (currentKey.length <= (id.length + maxLevelDelta)) {
-   //               System.out.println("==> Descendant= " + Utils.toIDString(currentKey));
-   //            }
-   //         }
-   //         //         else {
-   //         //            descendantSet.add(descendant);
-   //         //         }
-   //      }
-   //
-   //      //      descendantSet.putInto(id.length, accumulated);
-   //
-   //      return null;
-   //   }
+   private PersistentLOD.NodeLayout getNodeLayoutFromDescendants(final Cursor cursor,
+                                                                 final DatabaseEntry keyEntry,
+                                                                 final DatabaseEntry dataEntry,
+                                                                 final byte[] id) {
+      final int maxLevelDelta = 6;
+      final int maxDescendantDepth = id.length + maxLevelDelta;
+      //      final int maxDescendantDepth = 1000;
+
+      final List<Node> nodes = new ArrayList<PersistentLOD.Node>();
+
+      final com.sleepycat.je.Transaction txn = null;
+      byte[] key = keyEntry.getData();
+      if (key.length <= maxDescendantDepth) {
+         nodes.add(BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false));
+      }
+
+      while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+         key = keyEntry.getData();
+         if (!Utils.hasSamePrefix(key, id)) {
+            break;
+         }
+         if (key.length <= maxDescendantDepth) {
+            nodes.add(BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false));
+         }
+      }
+
+      return new NodeLayout(Utils.toIDString(id), nodes);
+   }
 
 
    @Override
@@ -627,10 +619,10 @@ public class BerkeleyDBLOD
 
 
    private static class BerkeleyLODDBStatistics
-            implements
-               PersistentLOD.Visitor,
-               PersistentLOD.Statistics,
-               Serializable {
+   implements
+   PersistentLOD.Visitor,
+   PersistentLOD.Statistics,
+   Serializable {
 
       private static final long      serialVersionUID = 1L;
 
@@ -743,8 +735,8 @@ public class BerkeleyDBLOD
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("    Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("    Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+                            ", Min=" + _minPointsCountPerNode + //
+                            ", Max=" + _maxPointsCountPerNode);
          System.out.println("   Levels: " + _nodeLevelsCount);
          System.out.println("    Levels/Node=" + ((float) _nodeLevelsCount / _nodesCount));
          System.out.println("    Points/Level: Average=" + ((float) _pointsCount / _nodeLevelsCount));
