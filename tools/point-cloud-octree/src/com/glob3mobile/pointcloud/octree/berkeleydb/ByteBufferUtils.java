@@ -59,6 +59,20 @@ public class ByteBufferUtils {
    }
 
 
+   @SuppressWarnings("unused")
+   public static int sizeOf(final Format format,
+                            final Geodetic3D any,
+                            final Geodetic3D averagePoint) {
+      switch (format) {
+         case LatLonHeight:
+            return 3 * 4; // 3 floats
+
+         default:
+            throw new RuntimeException("Unsupported format: " + format);
+      }
+   }
+
+
    public static int sizeOf(final byte[] any) {
       return any.length;
    }
@@ -73,9 +87,6 @@ public class ByteBufferUtils {
    }
 
 
-   /**
-    * @param format
-    */
    public static void put(final ByteBuffer byteBuffer,
                           final Format format,
                           final Geodetic3D point) {
@@ -92,25 +103,33 @@ public class ByteBufferUtils {
    }
 
 
+   public static void put(final ByteBuffer byteBuffer,
+                          final Format format,
+                          final Geodetic3D point,
+                          final Geodetic3D averagePoint) {
+      switch (format) {
+         case LatLonHeight:
+            byteBuffer.putFloat((float) (point._latitude._radians - averagePoint._latitude._radians));
+            byteBuffer.putFloat((float) (point._longitude._radians - averagePoint._longitude._radians));
+            byteBuffer.putFloat((float) (point._height - averagePoint._height));
+            break;
+
+         default:
+            throw new RuntimeException("Unsupported format: " + format);
+      }
+   }
+
+
    public static int sizeOf(final Format format,
                             final List<Geodetic3D> points) {
       return points.size() * sizeOf(format, points.get(0));
    }
 
 
-   public static void put(final ByteBuffer byteBuffer,
-                          final Format format,
-                          final List<Geodetic3D> points) {
-      switch (format) {
-         case LatLonHeight:
-            for (final Geodetic3D point : points) {
-               put(byteBuffer, format, point);
-            }
-            break;
-
-         default:
-            throw new RuntimeException("Unsupported format: " + format);
-      }
+   public static int sizeOf(final Format format,
+                            final List<Geodetic3D> points,
+                            final Geodetic3D averagePoint) {
+      return points.size() * sizeOf(format, points.get(0), averagePoint);
    }
 
 
@@ -151,9 +170,26 @@ public class ByteBufferUtils {
    }
 
 
+   public static Geodetic3D getGeodetic3D(final Format format,
+                                          final ByteBuffer byteBuffer,
+                                          final Geodetic3D averagePoint) {
+      switch (format) {
+         case LatLonHeight:
+            final double latitude = byteBuffer.getFloat() + averagePoint._latitude._radians;
+            final double longitude = byteBuffer.getFloat() + averagePoint._longitude._radians;
+            final double height = byteBuffer.getFloat() + averagePoint._height;
+
+            return Geodetic3D.fromRadians(latitude, longitude, height);
+
+         default:
+            throw new RuntimeException("Unsupported format: " + format);
+      }
+   }
+
+
    public static List<Geodetic3D> getPoints(final ByteBuffer byteBuffer,
-                                            final Format format,
-                                            final int pointsCount) {
+            final Format format,
+            final int pointsCount) {
       switch (format) {
          case LatLonHeight:
             final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
@@ -166,7 +202,58 @@ public class ByteBufferUtils {
          default:
             throw new RuntimeException("Unsupported format: " + format);
       }
+   }
 
+
+   public static void put(final ByteBuffer byteBuffer,
+                          final Format format,
+                          final List<Geodetic3D> points) {
+      switch (format) {
+         case LatLonHeight:
+            for (final Geodetic3D point : points) {
+               put(byteBuffer, format, point);
+            }
+            break;
+
+         default:
+            throw new RuntimeException("Unsupported format: " + format);
+      }
+   }
+
+
+   public static List<Geodetic3D> getPoints(final ByteBuffer byteBuffer,
+                                            final Format format,
+                                            final int pointsCount,
+                                            final Geodetic3D averagePoint) {
+      switch (format) {
+         case LatLonHeight:
+            final List<Geodetic3D> points = new ArrayList<Geodetic3D>(pointsCount);
+            for (int i = 0; i < pointsCount; i++) {
+               final Geodetic3D point = getGeodetic3D(format, byteBuffer, averagePoint);
+               points.add(point);
+            }
+            return points;
+
+         default:
+            throw new RuntimeException("Unsupported format: " + format);
+      }
+   }
+
+
+   public static void put(final ByteBuffer byteBuffer,
+                          final Format format,
+                          final List<Geodetic3D> points,
+                          final Geodetic3D averagePoint) {
+      switch (format) {
+         case LatLonHeight:
+            for (final Geodetic3D point : points) {
+               put(byteBuffer, format, point, averagePoint);
+            }
+            break;
+
+         default:
+            throw new RuntimeException("Unsupported format: " + format);
+      }
    }
 
 

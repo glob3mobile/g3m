@@ -2,10 +2,6 @@
 
 package com.glob3mobile.pointcloud.octree.berkeleydb;
 
-import static com.glob3mobile.pointcloud.octree.berkeleydb.ByteBufferUtils.put;
-import static com.glob3mobile.pointcloud.octree.berkeleydb.ByteBufferUtils.sizeOf;
-import static com.glob3mobile.pointcloud.octree.berkeleydb.ByteBufferUtils.sizeOfInt;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,12 +34,13 @@ public class BerkeleyDBLODNode
                                                    final byte[] id,
                                                    final int lodLevel,
                                                    final boolean loadPoints,
-                                                   final int pointsCount) {
+                                                   final int pointsCount,
+                                                   final Geodetic3D averagePoint) {
          if (loadPoints) {
-            final List<Geodetic3D> points = loadPoints(txn, db, id, lodLevel, format, pointsCount);
-            return new BerkeleyDBLODNodeLevel(db, id, lodLevel, points);
+            final List<Geodetic3D> points = loadPoints(txn, db, id, lodLevel, format, pointsCount, averagePoint);
+            return new BerkeleyDBLODNodeLevel(db, id, lodLevel, points, averagePoint);
          }
-         return new BerkeleyDBLODNodeLevel(db, id, lodLevel, pointsCount, format);
+         return new BerkeleyDBLODNodeLevel(db, id, lodLevel, pointsCount, format, averagePoint);
       }
 
 
@@ -53,18 +50,21 @@ public class BerkeleyDBLODNode
       private final int           _pointsCount;
       private List<Geodetic3D>    _points;
       private final Format        _format;
+      private final Geodetic3D    _averagePoint;
 
 
       private BerkeleyDBLODNodeLevel(final BerkeleyDBLOD db,
                                      final byte[] id,
                                      final int lodLevel,
-                                     final List<Geodetic3D> points) {
+                                     final List<Geodetic3D> points,
+                                     final Geodetic3D averagePoint) {
          _db = db;
          _id = id;
          _lodLevel = lodLevel;
          _pointsCount = points.size();
          _points = Collections.unmodifiableList(new ArrayList<Geodetic3D>(points));
          _format = null;
+         _averagePoint = averagePoint;
       }
 
 
@@ -72,13 +72,15 @@ public class BerkeleyDBLODNode
                                      final byte[] id,
                                      final int lodLevel,
                                      final int pointsCount,
-                                     final Format format) {
+                                     final Format format,
+                                     final Geodetic3D averagePoint) {
          _db = db;
          _id = id;
          _lodLevel = lodLevel;
          _pointsCount = pointsCount;
          _format = format;
          _points = null;
+         _averagePoint = averagePoint;
       }
 
 
@@ -87,7 +89,8 @@ public class BerkeleyDBLODNode
                                                  final byte[] id,
                                                  final int lodLevel,
                                                  final Format format,
-                                                 final int pointsCount) {
+                                                 final int pointsCount,
+               final Geodetic3D averagePoint) {
          final DatabaseEntry keyEntry = createNodeLevelDataKey(id, lodLevel);
          final DatabaseEntry dataEntry = new DatabaseEntry();
 
@@ -97,7 +100,7 @@ public class BerkeleyDBLODNode
          switch (status) {
             case SUCCESS: {
                final ByteBuffer byteBuffer = ByteBuffer.wrap(dataEntry.getData());
-               final List<Geodetic3D> points = ByteBufferUtils.getPoints(byteBuffer, format, pointsCount);
+               final List<Geodetic3D> points = ByteBufferUtils.getPoints(byteBuffer, format, pointsCount, averagePoint);
 
                if (pointsCount != points.size()) {
                   throw new RuntimeException("Inconsistency in pointsCount");
@@ -118,7 +121,7 @@ public class BerkeleyDBLODNode
          if (_points == null) {
             final BerkeleyDBTransaction berkeleyDBTransaction = (BerkeleyDBLOD.BerkeleyDBTransaction) transaction;
             final com.sleepycat.je.Transaction txn = (berkeleyDBTransaction == null) ? null : berkeleyDBTransaction._txn;
-            _points = loadPoints(txn, _db, _id, _lodLevel, _format, _pointsCount);
+            _points = loadPoints(txn, _db, _id, _lodLevel, _format, _pointsCount, _averagePoint);
          }
          return _points;
       }
@@ -138,9 +141,9 @@ public class BerkeleyDBLODNode
 
       private static DatabaseEntry createNodeLevelDataKey(final byte[] id,
                                                           final int lodLevel) {
-         final int size = sizeOf(id) + //
-                          sizeOf((byte) 255) + //
-                          sizeOf(lodLevel);
+         final int size = ByteBufferUtils.sizeOf(id) + //
+                  ByteBufferUtils.sizeOf((byte) 255) + //
+                          ByteBufferUtils.sizeOf(lodLevel);
          final ByteBuffer byteBuffer = ByteBuffer.allocate(size);
          byteBuffer.put(id);
          byteBuffer.put((byte) 255);
@@ -150,9 +153,9 @@ public class BerkeleyDBLODNode
 
 
       private DatabaseEntry createNodeLevelDataEntry(final Format format) {
-         final int entrySize = sizeOf(format, _points);
+         final int entrySize = ByteBufferUtils.sizeOf(format, _points, _averagePoint);
          final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
-         put(byteBuffer, format, _points);
+         ByteBufferUtils.put(byteBuffer, format, _points, _averagePoint);
          return new DatabaseEntry(byteBuffer.array());
       }
 
@@ -173,11 +176,31 @@ public class BerkeleyDBLODNode
                                    final List<List<Geodetic3D>> levelsPoints) {
       final int levelsCount = levelsPoints.size();
       final List<BerkeleyDBLODNodeLevel> levels = new ArrayList<BerkeleyDBLODNodeLevel>(levelsCount);
+      final Geodetic3D averagePoint = calculateAverage(levelsPoints);
       for (int i = 0; i < levelsCount; i++) {
          final List<Geodetic3D> levelPoints = levelsPoints.get(i);
-         levels.add(new BerkeleyDBLODNodeLevel(db, id, i, levelPoints));
+         levels.add(new BerkeleyDBLODNodeLevel(db, id, i, levelPoints, averagePoint));
       }
-      return new BerkeleyDBLODNode(db, id, levels);
+      return new BerkeleyDBLODNode(db, id, levels, averagePoint);
+   }
+
+
+   private static Geodetic3D calculateAverage(final List<List<Geodetic3D>> levelsPoints) {
+      double sumLatitude = 0;
+      double sumLongitude = 0;
+      double sumHeight = 0;
+      long pointsCount = 0;
+
+      for (final List<Geodetic3D> levelPoints : levelsPoints) {
+         for (final Geodetic3D point : levelPoints) {
+            sumLatitude += point._latitude._radians;
+            sumLongitude += point._longitude._radians;
+            sumHeight += point._height;
+            pointsCount++;
+         }
+      }
+
+      return Geodetic3D.fromRadians(sumLatitude / pointsCount, sumLongitude / pointsCount, sumHeight / pointsCount);
    }
 
 
@@ -209,7 +232,9 @@ public class BerkeleyDBLODNode
          levelsPointsCount[i] = byteBuffer.getInt();
       }
 
-      return new BerkeleyDBLODNode(txn, db, id, pointsCount, levelsPointsCount, format, loadPoints);
+      final Geodetic3D averagePoint = ByteBufferUtils.getGeodetic3D(format, byteBuffer);
+
+      return new BerkeleyDBLODNode(txn, db, id, pointsCount, levelsPointsCount, format, loadPoints, averagePoint);
    }
 
    private final BerkeleyDBLOD                _db;
@@ -219,11 +244,13 @@ public class BerkeleyDBLODNode
    private final int[]                        _levelsPointsCount;
    private final int                          _pointsCount;
    private Sector                             _sector = null;
+   private final Geodetic3D                   _averagePoint;
 
 
    private BerkeleyDBLODNode(final BerkeleyDBLOD db,
                              final byte[] id,
-                             final List<BerkeleyDBLODNodeLevel> levels) {
+                             final List<BerkeleyDBLODNodeLevel> levels,
+                             final Geodetic3D averagePoint) {
       _db = db;
       _id = id;
       _levels = levels;
@@ -237,6 +264,8 @@ public class BerkeleyDBLODNode
          _levelsPointsCount[i] = levelPointsCount;
       }
       _pointsCount = pointsCount;
+
+      _averagePoint = averagePoint;
    }
 
 
@@ -246,7 +275,8 @@ public class BerkeleyDBLODNode
                              final int pointsCount,
                              final int[] levelsPointsCount,
                              final Format format,
-                             final boolean loadPoints) {
+                             final boolean loadPoints,
+                             final Geodetic3D averagePoint) {
       _db = db;
       _id = id;
       _pointsCount = pointsCount;
@@ -254,11 +284,11 @@ public class BerkeleyDBLODNode
       _levelsCount = levelsPointsCount.length;
       _levelsPointsCount = levelsPointsCount;
 
+      _averagePoint = averagePoint;
+
       _levels = new ArrayList<BerkeleyDBLODNode.BerkeleyDBLODNodeLevel>(_levelsCount);
       for (int i = 0; i < _levelsCount; i++) {
-         final BerkeleyDBLODNodeLevel level = BerkeleyDBLODNodeLevel.fromDB(txn, db, format, id, i, loadPoints,
-                  _levelsPointsCount[i]);
-         _levels.add(level);
+         _levels.add(BerkeleyDBLODNodeLevel.fromDB(txn, db, format, id, i, loadPoints, _levelsPointsCount[i], _averagePoint));
       }
    }
 
@@ -269,12 +299,13 @@ public class BerkeleyDBLODNode
       final byte formatID = format._formatID;
 
       final int levelsCount = _levels.size();
-      final int entrySize = sizeOf(version) + //
-                            sizeOf(subversion) + //
-                            sizeOf(_pointsCount) + //
-                            sizeOf(formatID) + //
-                            sizeOf(levelsCount) + //
-                            (sizeOfInt() * levelsCount);
+      final int entrySize = ByteBufferUtils.sizeOf(version) + //
+               ByteBufferUtils.sizeOf(subversion) + //
+                            ByteBufferUtils.sizeOf(_pointsCount) + //
+                            ByteBufferUtils.sizeOf(formatID) + //
+                            ByteBufferUtils.sizeOf(levelsCount) + //
+                            (ByteBufferUtils.sizeOfInt() * levelsCount) + //
+                            ByteBufferUtils.sizeOf(format, _averagePoint);
 
       final ByteBuffer byteBuffer = ByteBuffer.allocate(entrySize);
       byteBuffer.put(version);
@@ -285,6 +316,7 @@ public class BerkeleyDBLODNode
       for (final BerkeleyDBLODNodeLevel level : _levels) {
          byteBuffer.putInt(level.getPointsCount());
       }
+      ByteBufferUtils.put(byteBuffer, format, _averagePoint);
 
       return new DatabaseEntry(byteBuffer.array());
    }
