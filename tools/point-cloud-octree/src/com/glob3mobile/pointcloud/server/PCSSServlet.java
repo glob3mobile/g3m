@@ -34,7 +34,7 @@ HttpServlet {
       super.init(config);
 
       _cloudDirectory = new File(System.getProperty("user.dir"));
-      //_cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
+      // _cloudDirectory = new File("/Volumes/My Passport/_LIDAR_COPY");
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }
