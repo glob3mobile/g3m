@@ -56,6 +56,7 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
 }
 
 PointCloudsRenderer::PointCloud::~PointCloud() {
+#ifdef C_CODE
   std::map<std::string, TileLayout*>::iterator it;
   for (it =  _visibleTiles.begin();
        it !=  _visibleTiles.end();
@@ -64,6 +65,16 @@ PointCloudsRenderer::PointCloud::~PointCloud() {
     ILogger::instance()->logInfo(" => (destructor) Stop rendering tile " + it->first + " for cloud \"" + _cloudName + "\"");
     delete tileLayout;
   }
+#endif
+#ifdef JAVA_CODE
+  for (final java.util.Map.Entry<String, TileLayout> entry : _visibleTiles.entrySet()) {
+    final TileLayout tileLayout = entry.getValue();
+    ILogger.instance().logInfo(" => (destructor) Stop rendering tile " + entry.getKey() + " for cloud \"" + _cloudName + "\"");
+    if (tileLayout != null) {
+      tileLayout.dispose();
+    }
+  }
+#endif
 
   delete _sector;
 }
