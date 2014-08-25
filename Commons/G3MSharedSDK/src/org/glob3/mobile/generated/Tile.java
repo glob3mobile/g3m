@@ -583,7 +583,7 @@ public class Tile
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
+  public final void render(G3MRenderContext rc, GLState parentState, java.util.ArrayList<Tile> toVisitInNextIteration, Frustum cameraFrustumInModelCoordinates, TilesStatistics tilesStatistics, float verticalExaggeration, LayerTilesRenderParameters layerTilesRenderParameters, TileTexturizer texturizer, TilesRenderParameters tilesRenderParameters, ITimer lastSplitTimer, ElevationDataProvider elevationDataProvider, TileTessellator tessellator, LayerSet layerSet, Sector renderedSector, boolean forceFullRender, long tileDownloadPriority, double texWidthSquared, double texHeightSquared, double nowInMS, boolean renderTileMeshes, boolean logTilesPetitions, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
   
     tilesStatistics.computeTileProcessed(this);
@@ -621,7 +621,7 @@ public class Tile
   
         tilesStatistics.computeTileRenderered(this);
   
-        prune(texturizer, elevationDataProvider);
+        prune(texturizer, elevationDataProvider, tilesStoppedRendering);
         //TODO: AVISAR CAMBIO DE TERRENO
       }
       else
@@ -645,7 +645,7 @@ public class Tile
     {
       setIsVisible(false, texturizer);
   
-      prune(texturizer, elevationDataProvider);
+      prune(texturizer, elevationDataProvider, tilesStoppedRendering);
       //TODO: AVISAR CAMBIO DE TERRENO
     }
   
@@ -664,7 +664,7 @@ public class Tile
       {
         if (tilesStoppedRendering != null)
         {
-          tilesStoppedRendering.add(this);
+          tilesStoppedRendering.add(_id);
         }
       }
     }
@@ -769,7 +769,7 @@ public class Tile
     return null;
   }
 
-  public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider)
+  public final void prune(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<String> tilesStoppedRendering)
   {
     if (texturizer == null && elevationDataProvider == null && _subtiles != null)
     {
@@ -790,12 +790,17 @@ public class Tile
   
         subtile.setIsVisible(false, texturizer);
   
-        subtile.prune(texturizer, elevationDataProvider);
+        subtile.prune(texturizer, elevationDataProvider, tilesStoppedRendering);
         if (texturizer != null)
         {
           texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
         }
   
+  //      if (_rendered) {
+  //        if (tilesStoppedRendering != NULL) {
+  //          tilesStoppedRendering->push_back(subtile);
+  //        }
+  //      }
         if (subtile != null)
            subtile.dispose();
       }
@@ -805,17 +810,17 @@ public class Tile
     }
   }
 
-  public final void toBeDeleted(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<Tile> tilesStoppedRendering)
+  public final void toBeDeleted(TileTexturizer texturizer, ElevationDataProvider elevationDataProvider, java.util.ArrayList<String> tilesStoppedRendering)
   {
     if (_rendered)
     {
       if (tilesStoppedRendering != null)
       {
-        tilesStoppedRendering.add(this);
+        tilesStoppedRendering.add(_id);
       }
     }
   
-    prune(texturizer, elevationDataProvider);
+    prune(texturizer, elevationDataProvider, tilesStoppedRendering);
   
     if (texturizer != null)
     {
