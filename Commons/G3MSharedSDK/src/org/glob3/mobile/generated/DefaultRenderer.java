@@ -188,7 +188,7 @@ public abstract class DefaultRenderer implements Renderer
 
 
 
-  public final void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
+  public void setChangedRendererInfoListener(ChangedRendererInfoListener changedInfoListener, int rendererIdentifier)
   {
     if (_changedInfoListener != null)
     {
