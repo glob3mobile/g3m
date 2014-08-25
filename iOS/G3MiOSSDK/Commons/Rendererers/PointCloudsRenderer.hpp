@@ -81,22 +81,22 @@ private:
 
   };
 
-  
+
   class TileLayout {
   private:
+    const std::string _cloudName;
+    const std::string _tileID;
     const std::string _tileQuadKey;
 
   public:
-    TileLayout(const std::string& tileQuadKey) :
-    _tileQuadKey(tileQuadKey)
-    {
-    }
+    TileLayout(const std::string& cloudName,
+               const std::string& tileID,
+               const std::string& tileQuadKey);
 
-    ~TileLayout() {
-    }
+    ~TileLayout();
   };
-
-
+  
+  
   class PointCloud {
   private:
 #ifdef C_CODE
@@ -126,12 +126,7 @@ private:
     double _minHeight;
     double _maxHeight;
 
-    std::vector<const Tile*> _tilesStartedRendering;
-    std::vector<std::string> _tilesStoppedRendering;
-
     std::map<std::string, TileLayout*> _visibleTiles;
-
-    void updateNodesLayout();
 
   public:
     PointCloud(const URL& serverURL,

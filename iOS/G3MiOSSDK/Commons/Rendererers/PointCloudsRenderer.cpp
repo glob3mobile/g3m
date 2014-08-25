@@ -62,14 +62,12 @@ PointCloudsRenderer::PointCloud::~PointCloud() {
        it !=  _visibleTiles.end();
        it++) {
     TileLayout* tileLayout = it->second;
-    ILogger::instance()->logInfo(" => (destructor) Stop rendering tile " + it->first + " for cloud \"" + _cloudName + "\"");
     delete tileLayout;
   }
 #endif
 #ifdef JAVA_CODE
   for (final java.util.Map.Entry<String, TileLayout> entry : _visibleTiles.entrySet()) {
     final TileLayout tileLayout = entry.getValue();
-    ILogger.instance().logInfo(" => (destructor) Stop rendering tile " + entry.getKey() + " for cloud \"" + _cloudName + "\"");
     if (tileLayout != null) {
       tileLayout.dispose();
     }
@@ -146,55 +144,51 @@ void PointCloudsRenderer::PointCloud::changedTilesRendering(const std::vector<co
       if (!tile->_mercator) {
         THROW_EXCEPTION("Tile has to be mercator");
       }
+
       if (tile->_sector.touchesWith(*_sector)) {
-        _tilesStartedRendering.push_back(tile);
+        const std::string tileID = tile->_id;
+        if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
+          THROW_EXCEPTION("Logic error");
+        }
+
+        _visibleTiles[tileID] = new PointCloudsRenderer::TileLayout(_cloudName,
+                                                                    tileID,
+                                                                    BingMapsLayer::getQuadKey(tile));
       }
     }
 
     const int tilesStoppedRenderingSize = tilesStoppedRendering->size();
     for (int i = 0; i < tilesStoppedRenderingSize; i++) {
       const std::string tileID = tilesStoppedRendering->at(i);
-      _tilesStoppedRendering.push_back( tileID );
-    }
-
-    if (!_tilesStartedRendering.empty() || !_tilesStoppedRendering.empty()) {
-      updateNodesLayout();
+      if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
+        PointCloudsRenderer::TileLayout* tileLayout = _visibleTiles[tileID];
+        delete tileLayout;
+        _visibleTiles.erase(tileID);
+      }
     }
   }
 }
 
-void PointCloudsRenderer::PointCloud::updateNodesLayout() {
-#warning DGD at work!
+PointCloudsRenderer::TileLayout::TileLayout(const std::string& cloudName,
+                                            const std::string& tileID,
+                                            const std::string& tileQuadKey) :
+_cloudName(cloudName),
+_tileID(tileID),
+_tileQuadKey(tileQuadKey)
+{
+  ILogger::instance()->logInfo(" => Start rendering tile " + _tileID + " for cloud \"" + _cloudName + "\"");
+}
 
-  for (int i = 0; i < _tilesStartedRendering.size(); i++) {
-    const Tile* tile = _tilesStartedRendering[i];
-    const std::string tileID = tile->_id;
-    ILogger::instance()->logInfo(" => Start rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
-
-    if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
-      THROW_EXCEPTION("Logic error");
-    }
-    _visibleTiles[tileID] = new PointCloudsRenderer::TileLayout( BingMapsLayer::getQuadKey(tile) );
-  }
-
-  for (int i = 0; i < _tilesStoppedRendering.size(); i++) {
-    const std::string tileID = _tilesStoppedRendering[i];
-
-    if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
-      PointCloudsRenderer::TileLayout* tileLayout = _visibleTiles[tileID];
-      ILogger::instance()->logInfo(" => Stop rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
-      delete tileLayout;
-      _visibleTiles.erase(tileID);
-    }
-  }
-
-  _tilesStartedRendering.clear();
-  _tilesStoppedRendering.clear();
+PointCloudsRenderer::TileLayout::~TileLayout() {
+  ILogger::instance()->logInfo(" => Stop rendering tile " + _tileID + " for cloud \"" + _cloudName + "\"");
 }
 
 void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              GLState* glState) {
 #warning DGD at work!
+//  if (_visibleTilesDirty) {
+//
+//  }
 }
 
 PointCloudsRenderer::~PointCloudsRenderer() {
