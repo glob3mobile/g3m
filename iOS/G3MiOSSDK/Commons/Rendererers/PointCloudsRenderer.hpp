@@ -91,6 +91,9 @@ private:
     _tileQuadKey(tileQuadKey)
     {
     }
+
+    ~TileLayout() {
+    }
   };
 
 
