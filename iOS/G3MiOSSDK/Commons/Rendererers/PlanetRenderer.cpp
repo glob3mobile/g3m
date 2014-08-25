@@ -927,16 +927,16 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
   }
 }
 
-//void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
-//  if (_changedInfoListener != NULL) {
-//    ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
-//  }
-//  _changedInfoListener = changedInfoListener;
-//  
-//  if(_changedInfoListener != NULL){
-//    _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
-//  }
-//}
+void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener, const int rendererIdentifier) {
+  if (_changedInfoListener != NULL) {
+    ILogger::instance()->logWarning("Changed Renderer Info Listener of PlanetRenderer already set");
+  }
+  _changedInfoListener = changedInfoListener;
+  
+  if(_changedInfoListener != NULL){
+    _changedInfoListener->changedRendererInfo(rendererIdentifier, _layerSet->getInfo());
+  }
+}
 
 //std::vector<std::string> PlanetRenderer::getInfo() {
 //  _info.clear();
