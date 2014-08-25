@@ -837,6 +837,13 @@ void PlanetRenderer::pruneFirstLevelTiles() {
     Tile* tile = _firstLevelTiles[i];
     tile->prune(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
   }
+  if (_tileRenderingListener != NULL) {
+    if (!_tilesStartedRendering->empty() || !_tilesStoppedRendering->empty()) {
+      _tileRenderingListener->changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
+      _tilesStartedRendering->clear();
+      _tilesStoppedRendering->clear();
+    }
+  }
 }
 
 void PlanetRenderer::addVisibleSectorListener(VisibleSectorListener* listener,

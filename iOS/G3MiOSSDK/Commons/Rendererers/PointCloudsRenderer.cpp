@@ -61,6 +61,7 @@ PointCloudsRenderer::PointCloud::~PointCloud() {
        it !=  _visibleTiles.end();
        it++) {
     TileLayout* tileLayout = it->second;
+    ILogger::instance()->logInfo(" => (destructor) Stop rendering tile " + it->first + " for cloud \"" + _cloudName + "\"");
     delete tileLayout;
   }
 
@@ -125,30 +126,6 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
   return RenderState::ready();
 }
 
-//PointCloudsRenderer::PointCloudNodesLayoutFetcher::PointCloudNodesLayoutFetcher(IDownloader* downloader,
-//                                                                                PointCloud* pointCloud,
-//                                                                                const std::vector<const Tile*>& tilesStartedRendering,
-//                                                                                const std::vector<const Tile*>& tilesStoppedRendering) :
-//_pointCloud(pointCloud)
-//{
-//  const int tilesStartedRenderingSize = tilesStartedRendering.size();
-//  for (int i = 0; i < tilesStartedRenderingSize; i++) {
-//    const Tile* tile = tilesStartedRendering[i];
-//
-//    const std::string quadKey = BingMapsLayer::getQuadKey(tile);
-//
-//    ILogger::instance()->logInfo("Tile QuadKey=" + quadKey + "\n");
-//
-////downloader->requestBuffer(<#const URL &url#>,
-////                          <#long long priority#>,
-////                          <#const TimeInterval &timeToCache#>,
-////                          <#bool readExpired#>,
-////                          <#IBufferDownloadListener *listener#>,
-////                          <#bool deleteListener#>);
-//  }
-//}
-
-
 void PointCloudsRenderer::PointCloud::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
                                                             const std::vector<std::string>* tilesStoppedRendering) {
   if (_sector) {
@@ -183,8 +160,7 @@ void PointCloudsRenderer::PointCloud::updateNodesLayout() {
     const std::string tileID = tile->_id;
     ILogger::instance()->logInfo(" => Start rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
 
-    TileLayout* tileLayout = _visibleTiles[tileID];
-    if (tileLayout != NULL) {
+    if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
       THROW_EXCEPTION("Logic error");
     }
     _visibleTiles[tileID] = new PointCloudsRenderer::TileLayout( BingMapsLayer::getQuadKey(tile) );
@@ -193,8 +169,8 @@ void PointCloudsRenderer::PointCloud::updateNodesLayout() {
   for (int i = 0; i < _tilesStoppedRendering.size(); i++) {
     const std::string tileID = _tilesStoppedRendering[i];
 
-    PointCloudsRenderer::TileLayout* tileLayout = _visibleTiles[tileID];
-    if (tileLayout != NULL) {
+    if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
+      PointCloudsRenderer::TileLayout* tileLayout = _visibleTiles[tileID];
       ILogger::instance()->logInfo(" => Stop rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
       delete tileLayout;
       _visibleTiles.erase(tileID);
