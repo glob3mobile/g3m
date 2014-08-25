@@ -21,41 +21,13 @@
 
 class Sector;
 class IDownloader;
+class ITimer;
 
 class PointCloudsRenderer : public DefaultRenderer {
 private:
 
-
-//  class TileData {
-//  public:
-//    const std::string _quadKey;
-//    const Sector      _sector;
-//
-//    TileData(const std::string& quadKey,
-//             const Sector&      sector) :
-//    _quadKey(quadKey),
-//    _sector(sector)
-//    {
-//
-//    }
-//  };
-
-
   class PointCloud;
 
-
-//  class PointCloudNodesLayoutFetcher : public RCObject {
-//  private:
-//    PointCloud* _pointCloud;
-//
-//  public:
-//    PointCloudNodesLayoutFetcher(IDownloader* downloader,
-//                                 PointCloud* pointCloud,
-//                                 const std::vector<const Tile*>& tilesStartedRendering,
-//                                 const std::vector<const Tile*>& tilesStoppedRendering);
-//
-//  };
-//
 
   class PointCloudMetadataDownloadListener : public IBufferDownloadListener {
   private:
@@ -82,21 +54,81 @@ private:
   };
 
 
-  class TileLayout {
+  class TileLayout;
+
+  class TileLayoutBufferDownloadListener : public IBufferDownloadListener {
   private:
+    TileLayout* _tileLayout;
+
+  public:
+    TileLayoutBufferDownloadListener(TileLayout* tileLayout);
+
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired);
+
+    void onError(const URL& url);
+
+    void onCancel(const URL& url);
+
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* buffer,
+                            bool expired) {
+      // do nothing
+    }
+  };
+
+
+  class TileLayout : public RCObject {
+  private:
+    PointCloud* _pointCloud;
+
     const std::string _cloudName;
     const std::string _tileID;
     const std::string _tileQuadKey;
 
+    bool _isInitialized;
+
+    IDownloader* _downloader;
+    long long _layoutRequestID;
+
+    bool _canceled;
+
+    std::vector<std::string> _nodesIDs;
+
+  protected:
+    ~TileLayout();
+
   public:
-    TileLayout(const std::string& cloudName,
+    TileLayout(PointCloud* pointCloud,
+               const std::string& cloudName,
                const std::string& tileID,
                const std::string& tileQuadKey);
 
-    ~TileLayout();
+
+    bool isInitialized() const {
+      return _isInitialized;
+    }
+
+    void initialize(const G3MContext* context,
+                    const URL& serverURL,
+                    long long downloadPriority,
+                    const TimeInterval& timeToCache,
+                    bool readExpired);
+
+    void onDownload(const URL& url,
+                    IByteBuffer* buffer,
+                    bool expired);
+
+    void onError(const URL& url);
+
+    void onCancel(const URL& url);
+
+    void cancel();
+
   };
-  
-  
+
+
   class PointCloud {
   private:
 #ifdef C_CODE
@@ -127,6 +159,8 @@ private:
     double _maxHeight;
 
     std::map<std::string, TileLayout*> _visibleTiles;
+    bool _visibleTilesNeedsInitialization;
+    ITimer* _initializationTimer;
 
   public:
     PointCloud(const URL& serverURL,
@@ -146,7 +180,9 @@ private:
     _pointsCount(-1),
     _sector(NULL),
     _minHeight(0),
-    _maxHeight(0)
+    _maxHeight(0),
+    _visibleTilesNeedsInitialization(false),
+    _initializationTimer(NULL)
     {
     }
 
@@ -165,6 +201,9 @@ private:
 
     void changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
                                const std::vector<std::string>* tilesStoppedRendering);
+
+    void createNode(const std::string& nodeID);
+    void removeNode(const std::string& nodeID);
 
   };
 
@@ -224,11 +263,11 @@ public:
 
   void changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
                              const std::vector<std::string>* tilesStoppedRendering);
-
+  
   TileRenderingListener* getTileRenderingListener() const {
     return _tileRenderingListener;
   }
-
+  
 };
 
 #endif
