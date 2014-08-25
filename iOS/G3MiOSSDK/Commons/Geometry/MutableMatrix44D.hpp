@@ -355,6 +355,12 @@ public:
   static MutableMatrix44D createModelMatrix(const MutableVector3D& pos,
                                             const MutableVector3D& center,
                                             const MutableVector3D& up);
+  
+  static MutableMatrix44D createModelMatrix(const MutableVector3D& u,
+                                            const MutableVector3D& v,
+                                            const MutableVector3D& w,
+                                            const MutableVector3D& pos);
+
 
   static MutableMatrix44D createProjectionMatrix(double left, double right,
                                                  double bottom, double top,

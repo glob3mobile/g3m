@@ -506,7 +506,21 @@ MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
                           u.y(), v.y(), -w.y(), 0,
                           u.z(), v.z(), -w.z(), 0,
                           -pos.dot(u), -pos.dot(v), pos.dot(w), 1);
+  
+}
 
+MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& u,
+                                                     const MutableVector3D& v,
+                                                     const MutableVector3D& w,
+                                                     const MutableVector3D& pos) {
+  const MutableVector3D normalizedU = u.normalized();
+  const MutableVector3D normalizedV = v.normalized();
+  const MutableVector3D normalizedW = w.normalized();
+  
+  return MutableMatrix44D(normalizedU.x(),  normalizedV.x(),  normalizedW.x(),  0,
+                          normalizedU.y(),  normalizedV.y(),  normalizedW.y(),  0,
+                          normalizedU.z(),  normalizedV.z(),  normalizedW.z(),  0,
+                          -pos.x(),         -pos.y(),         -pos.z(),         1);
 }
 
 MutableMatrix44D MutableMatrix44D::createOrthographicProjectionMatrix(double left, double right,

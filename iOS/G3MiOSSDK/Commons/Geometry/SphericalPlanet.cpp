@@ -267,6 +267,168 @@ Effect* SphericalPlanet::createEffectFromLastSingleDrag() const
   return new RotateWithAxisEffect(_lastDragAxis.asVector3D(), Angle::fromRadians(_lastDragRadiansStep));
 }
 
+
+void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
+                                      const Vector3D& centerRay,
+                                      const Vector3D& centerPosition,
+                                      const Vector3D& touchedPosition0,
+                                      const Vector3D& touchedPosition1) const
+{
+  _origin = origin.asMutableVector3D();
+  _centerRay = centerRay.asMutableVector3D();
+  //_initialPoint0 = Plane::intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
+  //_initialPoint1 = Plane::intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
+  _initialPoint0 = touchedPosition0.asMutableVector3D();
+  _dragHeight0 = toGeodetic3D(touchedPosition0)._height;
+  _initialPoint1 = touchedPosition1.asMutableVector3D();
+  _dragHeight1 = toGeodetic3D(touchedPosition1)._height;
+  _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
+  //_centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
+  _centerPoint = centerPosition.asMutableVector3D();
+  //  _angleBetweenInitialRays = initialRay0.angleBetween(initialRay1).degrees();
+  
+  // middle point in 3D
+  _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
+}
+
+
+MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
+                                             const Vector3D& finalRay1,
+                                             bool allowRotation) const
+{
+  // test if initialPoints are valid
+  if (_initialPoint0.isNan() || _initialPoint1.isNan())
+    return MutableMatrix44D::invalid();
+  
+  // init params
+  const IMathUtils* mu = IMathUtils::instance();
+  const Vector3D origin = _origin.asVector3D();
+  MutableVector3D positionCamera = _origin;
+  
+  // compute final points
+  Vector3D finalPoint0 = Plane::intersectionXYPlaneWithRay(origin, finalRay0, _dragHeight0);
+  if (finalPoint0.isNan()) return MutableMatrix44D::invalid();
+  
+  // drag initial point 0 to final point 0
+  MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(_initialPoint0.sub(finalPoint0));
+  
+  // transform points to set axis origin in initialPoint0
+  {
+    Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+    Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, finalRay1.transformedBy(matrix,0), _dragHeight1);
+    MutableMatrix44D traslation = MutableMatrix44D::createTranslationMatrix(_initialPoint0.times(-1).asVector3D());
+    Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(traslation, 1.0).asVector3D();
+    Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(traslation, 1.0);
+    Vector3D transformedCameraPos = draggedCameraPos.transformedBy(traslation, 1.0);
+    Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
+    Vector3D v1 = transformedCameraPos.times(-1);
+    Vector3D planeNormal = v0.cross(v1).normalized();
+    double a = planeNormal._x;
+    double b = planeNormal._y;
+    double c = planeNormal._z;
+    double xb = transformedInitialPoint1._x;
+    double yb = transformedInitialPoint1._y;
+    double zb = transformedInitialPoint1._z;
+    double A = a*xb + b*yb;
+    double B = b*xb - a*yb;
+    double C = c*zb;
+    double ap = A*A + B*B;
+    double bp = 2*B*C;
+    double cp = C*C - A*A;
+    double root = bp*bp - 4*ap*cp;
+    if (root<0) return MutableMatrix44D::invalid();
+    double squareRoot = mu->sqrt(root);
+    double sinTita1 = (-bp + squareRoot) / (2*ap);
+    double sinTita2 = (-bp - squareRoot) / (2*ap);
+    double cosTita1 = sqrt(1-sinTita1*sinTita1);
+    double cosTita2 = sqrt(1-sinTita2*sinTita2);
+    double eq1 = A*cosTita1 + B*sinTita1+C;
+    double eq2 = -A*cosTita1 + B*sinTita1+C;
+    double eq3 = A*cosTita2 + B*sinTita2+C;
+    double eq4 = -A*cosTita2 + B*sinTita2+C;
+    
+    // estimamos el angulo entre dedos para decidir cual de las 4 soluciones trigonométricas escoger
+    double fingerAngle;
+    {
+      Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(origin, finalRay1, _dragHeight1);
+      Vector3D draggedCenterRay = _centerRay.asVector3D().transformedBy(matrix, 0.0);
+      Vector3D projectedV0 = finalPoint1.sub(finalPoint0).projectionInPlane(draggedCenterRay);
+      Vector3D projectedV1 = _initialPoint1.sub(_initialPoint0.asVector3D()).projectionInPlane(draggedCenterRay);
+      fingerAngle = projectedV0.angleBetween(projectedV1)._degrees;
+      double sign = projectedV0.cross(projectedV1).dot(draggedCenterRay);
+      if (sign<0) fingerAngle = -fingerAngle;
+    }
+    
+    printf ("cosTita1=%f cosTita2=%f    sinTita1=%f sinTita2=%f    eq1=%f eq2=%f eq3=%f eq4=%f\n",
+            cosTita1, cosTita2, sinTita1, sinTita2, eq1, eq2, eq3, eq4);
+    double angulo, angulo1, angulo2;
+    if (mu->abs(eq1)<mu->abs(eq2))
+      angulo1 = atan2(sinTita1, cosTita1);
+    else
+      angulo1 = atan2(sinTita1, -cosTita1);
+    if (mu->abs(eq3)<mu->abs(eq4))
+      angulo2 = atan2(sinTita2, cosTita2);
+    else
+      angulo2 = atan2(sinTita2, -cosTita2);
+    
+    if (fingerAngle > 45)
+      angulo = angulo1;
+    else if (fingerAngle < -45)
+      angulo = angulo2;
+    else
+      angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo1 : angulo2;
+    
+    
+    double halfPi = 3.14159/2;
+    double difAngles = mu->abs(angulo1+angulo2);
+    /*
+     if (difAngles > halfPi)
+     angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo1 : angulo2;
+     else
+     angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo2 : angulo1;*/
+    
+    /* if (mu->abs(eq1)<mu->abs(eq2))
+     angulo = angulo1;
+     //angulo = (mu->abs(angulo1)<3.14159/4)? angulo1 : angulo2;
+     else
+     angulo = angulo2;
+     //angulo = (mu->abs(angulo2)<3.14159/4)? angulo2 : angulo1;*/
+    
+    printf ("    angulo1=%.2f  angulo2=%.2f  ANGULO FINAL = %.2f   fingersAngle=%.2f, difAngles=%.2f\n",
+            angulo1/3.14159*180, angulo2/3.14159*180, angulo/3.14159*180, fingerAngle, difAngles/3.14159*180);
+    
+    Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
+    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-angulo), normal0, _initialPoint0.asVector3D());
+    matrix = rotation.multiply(matrix);
+  }
+  
+  // zoom camera (see chuleta en pdf)
+  // ahora mismo lo que se hace es buscar cuánto acercar para que el angulo de las dos parejas de vectores
+  // sea el mismo
+  {
+    Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+    Vector3D B    = _initialPoint1.asVector3D();
+    Vector3D B0   = B.sub(P0);
+    Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0).normalized();
+    Vector3D Rb   = finalRay1.transformedBy(matrix, 0.0).normalized();
+    double b      = -2 * (B0.dot(Ra));
+    double c      = B0.squaredLength();
+    double k      = Ra.dot(B0);
+    double RaRb2  = Ra.dot(Rb) * Ra.dot(Rb);
+    double at     = RaRb2 - 1;
+    double bt     = b*RaRb2 + 2*k;
+    double ct     = c*RaRb2 - k*k;
+    double root   = bt*bt - 4*at*ct;
+    if (root<0) return MutableMatrix44D::invalid();
+    double squareRoot = mu->sqrt(root);
+    double t = (-bt + squareRoot) / (2*at);
+    MutableMatrix44D zoom = MutableMatrix44D::createTranslationMatrix(Ra.times(t));
+    matrix = zoom.multiply(matrix);
+  }
+  
+  return matrix;
+}
+
 /*
 void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
                                       const Vector3D& centerRay,
@@ -288,7 +450,7 @@ void SphericalPlanet::beginDoubleDrag(const Vector3D& origin,
   _initialPoint = toCartesian(g).asMutableVector3D();
 }*/
 
-
+/*
 MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
                                              const Vector3D& finalRay1,
                                              bool allowRotation) const
@@ -417,7 +579,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
 
   return matrix;
 }
-
+*/
 
 Effect* SphericalPlanet::createDoubleTapEffect(const Vector3D& origin,
                                                const Vector3D& centerRay,

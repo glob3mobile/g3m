@@ -14,8 +14,7 @@
 
 
 FlatPlanet::FlatPlanet(const Vector2D& size):
-_size(size),
-_firstDoubleDragMovement(false)
+_size(size)
 {
 
 }
@@ -175,8 +174,6 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
 
   // middle point in 3D
   _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
-  
-  _firstDoubleDragMovement = true;
 }
 
 
@@ -246,6 +243,8 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     double eq4 = -A*cosTita2 + B*sinTita2+C;
     
     // estimamos el angulo entre dedos para decidir cual de las 4 soluciones trigonométricas escoger
+    // de la pareja eq1,eq2, una de ellas no verifica la ecuación del plano y por tanto no es solución
+    // idem con la pareja eq3,eq4
     double fingerAngle;
     {
     Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(origin, finalRay1, _dragHeight1);
@@ -307,16 +306,14 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
     Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
     Vector3D B    = _initialPoint1.asVector3D();
     Vector3D B0   = B.sub(P0);
-    Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0);
+    Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0).normalized();
     Vector3D Rb   = finalRay1.transformedBy(matrix, 0.0).normalized();
-    double a      = Ra.squaredLength();
     double b      = -2 * (B0.dot(Ra));
     double c      = B0.squaredLength();
-    double h      = -Ra.squaredLength();
     double k      = Ra.dot(B0);
     double RaRb2  = Ra.dot(Rb) * Ra.dot(Rb);
-    double at     = a*RaRb2 - h*h;
-    double bt     = b*RaRb2 - 2*h*k;
+    double at     = RaRb2 - 1;
+    double bt     = b*RaRb2 + 2*k;
     double ct     = c*RaRb2 - k*k;
     double root   = bt*bt - 4*at*ct;
     if (root<0) return MutableMatrix44D::invalid();
@@ -437,16 +434,7 @@ MutableMatrix44D FlatPlanet::doubleDrag_old(const Vector3D& finalRay0,
   if (root<0) return MutableMatrix44D::invalid();
   double squareRoot = mu->sqrt(root);
   double t2 = (-b - squareRoot) / (2*a);
-  
-  // the first time, t2 must be corrected
-  if (_firstDoubleDragMovement) {
-    _firstDoubleDragMovement = false;
-    _correctionT2 = t2;
-    t2 = 0;
-  } else {
-    t2 -= _correctionT2;
-  }
-  
+    
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
   positionCamera = _origin;
