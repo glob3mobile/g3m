@@ -91,15 +91,21 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   private static class TileLayout
   {
+    private final String _cloudName;
+    private final String _tileID;
     private final String _tileQuadKey;
 
-    public TileLayout(String tileQuadKey)
+    public TileLayout(String cloudName, String tileID, String tileQuadKey)
     {
+       _cloudName = cloudName;
+       _tileID = tileID;
        _tileQuadKey = tileQuadKey;
+      ILogger.instance().logInfo(" => Start rendering tile " + _tileID + " for cloud \"" + _cloudName + "\"");
     }
 
     public void dispose()
     {
+      ILogger.instance().logInfo(" => Stop rendering tile " + _tileID + " for cloud \"" + _cloudName + "\"");
     }
   }
 
@@ -123,46 +129,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     private double _minHeight;
     private double _maxHeight;
 
-    private final java.util.ArrayList<Tile> _tilesStartedRendering = new java.util.ArrayList<Tile>();
-    private java.util.ArrayList<String> _tilesStoppedRendering = new java.util.ArrayList<String>();
-
     private java.util.HashMap<String, TileLayout> _visibleTiles = new java.util.HashMap<String, TileLayout>();
-
-    private void updateNodesLayout()
-    {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DGD at work!
-    
-      for (int i = 0; i < _tilesStartedRendering.size(); i++)
-      {
-        final Tile tile = _tilesStartedRendering.get(i);
-        final String tileID = tile._id;
-        ILogger.instance().logInfo(" => Start rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
-    
-        if (_visibleTiles.containsKey(tileID))
-        {
-          throw new RuntimeException("Logic error");
-        }
-        _visibleTiles.put(tileID, new PointCloudsRenderer.TileLayout(BingMapsLayer.getQuadKey(tile)));
-      }
-    
-      for (int i = 0; i < _tilesStoppedRendering.size(); i++)
-      {
-        final String tileID = _tilesStoppedRendering.get(i);
-    
-        if (_visibleTiles.containsKey(tileID))
-        {
-          PointCloudsRenderer.TileLayout tileLayout = _visibleTiles.get(tileID);
-          ILogger.instance().logInfo(" => Stop rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
-          if (tileLayout != null)
-             tileLayout.dispose();
-          _visibleTiles.remove(tileID);
-        }
-      }
-    
-      _tilesStartedRendering.clear();
-      _tilesStoppedRendering.clear();
-    }
 
     public PointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
     {
@@ -185,7 +152,6 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
       for (final java.util.Map.Entry<String, TileLayout> entry : _visibleTiles.entrySet()) {
         final TileLayout tileLayout = entry.getValue();
-        ILogger.instance().logInfo(" => (destructor) Stop rendering tile " + entry.getKey() + " for cloud \"" + _cloudName + "\"");
         if (tileLayout != null) {
           tileLayout.dispose();
         }
@@ -243,7 +209,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         final JSONObject jsonObject = jsonBaseObject.asObject();
         if (jsonObject != null)
         {
-          final String name = jsonObject.getAsString("name", "");
+          // const std::string name = jsonObject->getAsString("name", "");
           _pointsCount = (long) jsonObject.getAsNumber("pointsCount", 0);
     
           final JSONObject sectorJSONObject = jsonObject.getAsObject("sector");
@@ -281,6 +247,9 @@ public class PointCloudsRenderer extends DefaultRenderer
     {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning DGD at work!
+    //  if (_visibleTilesDirty) {
+    //
+    //  }
     }
 
     public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
@@ -295,9 +264,16 @@ public class PointCloudsRenderer extends DefaultRenderer
           {
             throw new RuntimeException("Tile has to be mercator");
           }
+    
           if (tile._sector.touchesWith(_sector))
           {
-            _tilesStartedRendering.add(tile);
+            final String tileID = tile._id;
+            if (_visibleTiles.containsKey(tileID))
+            {
+              throw new RuntimeException("Logic error");
+            }
+    
+            _visibleTiles.put(tileID, new PointCloudsRenderer.TileLayout(_cloudName, tileID, BingMapsLayer.getQuadKey(tile)));
           }
         }
     
@@ -305,12 +281,13 @@ public class PointCloudsRenderer extends DefaultRenderer
         for (int i = 0; i < tilesStoppedRenderingSize; i++)
         {
           final String tileID = tilesStoppedRendering.get(i);
-          _tilesStoppedRendering.add(tileID);
-        }
-    
-        if (!_tilesStartedRendering.isEmpty() || !_tilesStoppedRendering.isEmpty())
-        {
-          updateNodesLayout();
+          if (_visibleTiles.containsKey(tileID))
+          {
+            PointCloudsRenderer.TileLayout tileLayout = _visibleTiles.get(tileID);
+            if (tileLayout != null)
+               tileLayout.dispose();
+            _visibleTiles.remove(tileID);
+          }
         }
       }
     }
