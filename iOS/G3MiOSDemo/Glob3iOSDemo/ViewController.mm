@@ -397,7 +397,7 @@ public:
   G3MBuilder_iOS builder([self G3MWidget]);
   
   LayerSet* layerSet = new LayerSet();
-  const bool forceFirstLevelTilesRenderOnStart = true;
+  const bool forceFirstLevelTilesRenderOnStart = false;
   std::vector<std::string> errors;
   layerSet->createLayerTilesRenderParameters(forceFirstLevelTilesRenderOnStart, errors);
   
@@ -412,6 +412,16 @@ public:
                                  LayerTilesRenderParameters::defaultTileTextureResolution(),
                                  LayerTilesRenderParameters::defaultTileMeshResolution(),
                                  false);
+  
+  LayerTilesRenderParameters* ltrp2 = new LayerTilesRenderParameters(Sector::fullSphere(),
+                                                                     5,
+                                                                     10,
+                                                                     0,
+                                                                     17,
+                                                                     Vector2I(512, 512),
+                                                                     LayerTilesRenderParameters::defaultTileMeshResolution(),
+                                                                     false);
+  
   
   WMSLayer *pnoa = new WMSLayer("PNOA",
                                 URL("http://www.idee.es/wms/PNOA/PNOA", false),
@@ -447,15 +457,16 @@ public:
       WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                           URL("http://www.nasa.network.com/wms?", false),
                                           WMS_1_1_0,
-                                          Sector::fromDegrees(40.1240143280790858,
-                                                              -5.8964874640814313,
-                                                              40.3723148480663158,
-                                                              -5.4816079822178570),
+//                                          Sector::fromDegrees(40.1240143280790858,
+//                                                              -5.8964874640814313,
+//                                                              40.3723148480663158,
+//                                                              -5.4816079822178570),
 //                                          Sector::fromDegrees(0,
 //                                                              -90,
 //                                                              45,
 //                                                              0),
 //                                          Sector::fullSphere(),
+                                          Sector::fromDegrees(39.13, -6.86, 39.66, -6.05),
 
                                           "image/jpeg",
                                           "EPSG:4326",
@@ -465,17 +476,41 @@ public:
                                           //NULL,
                                           TimeInterval::fromDays(0),
                                           true,
-                                          NULL,
+                                          ltrp2,
                                           1);
-  layerSet->addLayer(blueMarble);
-  layerSet->addLayer(pnoa);
+  //layerSet->addLayer(blueMarble);
+  //layerSet->addLayer(pnoa);
+  
+ 
+  
+  layerSet->addLayer(new URLTemplateLayer("http://195.57.27.86:9080/geoserver/gwc/service/tms/1.0.0/sigaytocc:AytoCC/{level}/{x}/{y2}.png",
+                       Sector::fromDegrees(39.13, -6.86, 39.66, -6.05),
+                       true,
+                       TimeInterval::fromDays(30),
+                       true,
+                       new LevelTileCondition(5, 16),
+                                          ltrp2));
+                       
 
+  
+  
+//  layerSet->addLayer(URLTemplateLayer::newMercator("http://earthengine.google.org/static/hansen_2013/loss_forest_gain/{level}/{x}/{y}.png",
+//                                                   Sector::fullSphere(),
+//                                                   true,
+//                                                   4,
+//                                                   14,
+//                                                   TimeInterval::fromDays(30)));
+//
+//
   
   
   //  layerSet->addLayer(MapQuestLayer::newOSM(TimeInterval::fromDays(30)));
   builder.getPlanetRendererBuilder()->setLayerSet(layerSet);
   //builder.getPlanetRendererBuilder()->setRenderDebug(true);
-  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
+  
+  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTAxqqnjI5-2zr3pn4o6mpXLKWL-yyjQey798hEH2mrWuF7MuyL")));
+
+//  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
 //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
 //                                            40.3423148480663158, -5.5116079822178570);
 //  
@@ -489,11 +524,11 @@ public:
   //builder.setShownSector(sector);
   builder.getPlanetRendererBuilder()->setForceFirstLevelTilesRenderOnStart(forceFirstLevelTilesRenderOnStart);
   builder.initializeWidget();
-  //    [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-  //                                                         Geodetic3D::fromDegrees(40.3323148480663158,
-  //                                                                                 -5.5216079822178570,
-  //                                                                                 1000076.892613024946));
-  //
+      [[self G3MWidget] widget]->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                                           Geodetic3D::fromDegrees(39.13,
+                                                                                   -6.86,
+                                                                                   10076.892613024946));
+  
 }
 
 - (void) initWithBuilderAndSegmentedWorld

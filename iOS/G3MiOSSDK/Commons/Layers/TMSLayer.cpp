@@ -65,6 +65,7 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
   isb->addString(IStringUtils::instance()->replaceSubstring(_format, "image/", ""));
 
   ILogger::instance()->logInfo(isb->getString());
+  
 
   Petition *petition = new Petition(tileSector,
                                     URL(isb->getString(), false),
@@ -72,6 +73,9 @@ std::vector<Petition*> TMSLayer::createTileMapPetitions(const G3MRenderContext* 
                                     _readExpired,
                                     _isTransparent,
                                     _transparency);
+  
+  delete isb;
+  
   petitions.push_back(petition);
 
 	return petitions;

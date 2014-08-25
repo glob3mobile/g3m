@@ -54,6 +54,8 @@
 #include "ICanvasUtils.hpp"
 #include "DownloaderImageBuilder.hpp"
 
+#include "LevelTileCondition.hpp"
+
 const std::string MapBoo_CameraPosition::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
 
@@ -745,12 +747,20 @@ URLTemplateLayer* MapBooBuilder::parseURLTemplateLayer(const JSONObject* jsonLay
                                            TimeInterval::fromDays(30));
   }
   else {
-    result = URLTemplateLayer::newWGS84(urlTemplate,
-                                        sector,
-                                        transparent,
-                                        firstLevel,
-                                        maxLevel,
-                                        TimeInterval::fromDays(30));
+//    result = URLTemplateLayer::newWGS84(urlTemplate,
+//                                        sector,
+//                                        transparent,
+//                                        firstLevel,
+//                                        maxLevel,
+//                                        TimeInterval::fromDays(30));
+    
+    result = new URLTemplateLayer(urlTemplate,
+                                  sector,
+                                  transparent,
+                                  TimeInterval::fromDays(30),
+                                  true,
+                                  new LevelTileCondition(firstLevel, maxLevel),
+                                  LayerTilesRenderParameters::createDefaultWGS84(sector, 1, maxLevel));
   }
 
   return result;
