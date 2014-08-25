@@ -13,7 +13,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
 
   private TileRenderingListener _tileRenderingListener;
   private final java.util.ArrayList<Tile> _tilesStartedRendering;
-  private final java.util.ArrayList<Tile> _tilesStoppedRendering;
+  private java.util.ArrayList<String> _tilesStoppedRendering;
 
   private TilesStatistics _statistics = new TilesStatistics();
 
@@ -186,7 +186,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     for (int i = 0; i < firstLevelTilesCount; i++)
     {
       Tile tile = _firstLevelTiles.get(i);
-      tile.prune(_texturizer, _elevationDataProvider);
+      tile.prune(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
     }
   }
 
@@ -371,7 +371,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     else
     {
       _tilesStartedRendering = new java.util.ArrayList<Tile>();
-      _tilesStoppedRendering = new java.util.ArrayList<Tile>();
+      _tilesStoppedRendering = new java.util.ArrayList<String>();
     }
   }
 

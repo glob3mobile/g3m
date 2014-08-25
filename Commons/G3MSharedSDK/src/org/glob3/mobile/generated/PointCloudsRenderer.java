@@ -23,35 +23,39 @@ package org.glob3.mobile.generated;
 
 public class PointCloudsRenderer extends DefaultRenderer
 {
+
+
+//  class TileData {
+//  public:
+//    const std::string _quadKey;
+//    const Sector      _sector;
+//
+//    TileData(const std::string& quadKey,
+//             const Sector&      sector) :
+//    _quadKey(quadKey),
+//    _sector(sector)
+//    {
+//
+//    }
+//  };
+
+
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class PointCloud;
 
 
-  private static class PointCloudNodesLayoutFetcher extends RCObject
-  {
-    private PointCloud _pointCloud;
-
-    public PointCloudNodesLayoutFetcher(IDownloader downloader, PointCloud pointCloud, java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
-    {
-       _pointCloud = pointCloud;
-      final int tilesStartedRenderingSize = tilesStartedRendering.size();
-      for (int i = 0; i < tilesStartedRenderingSize; i++)
-      {
-        final Tile tile = tilesStartedRendering.get(i);
-    
-        final String quadKey = BingMapsLayer.getQuadKey(tile);
-    
-    //downloader->requestBuffer(<#const URL &url#>,
-    //                          <#long long priority#>,
-    //                          <#const TimeInterval &timeToCache#>,
-    //                          <#bool readExpired#>,
-    //                          <#IBufferDownloadListener *listener#>,
-    //                          <#bool deleteListener#>);
-      }
-    }
-
-  }
-
+//  class PointCloudNodesLayoutFetcher : public RCObject {
+//  private:
+//    PointCloud* _pointCloud;
+//
+//  public:
+//    PointCloudNodesLayoutFetcher(IDownloader* downloader,
+//                                 PointCloud* pointCloud,
+//                                 const std::vector<const Tile*>& tilesStartedRendering,
+//                                 const std::vector<const Tile*>& tilesStoppedRendering);
+//
+//  };
+//
 
   private static class PointCloudMetadataDownloadListener extends IBufferDownloadListener
   {
@@ -85,6 +89,17 @@ public class PointCloudsRenderer extends DefaultRenderer
   }
 
 
+  private static class TileLayout
+  {
+    private final String _tileQuadKey;
+
+    public TileLayout(String tileQuadKey)
+    {
+       _tileQuadKey = tileQuadKey;
+    }
+  }
+
+
   private static class PointCloud
   {
     private final URL _serverURL;
@@ -105,7 +120,46 @@ public class PointCloudsRenderer extends DefaultRenderer
     private double _maxHeight;
 
     private final java.util.ArrayList<Tile> _tilesStartedRendering = new java.util.ArrayList<Tile>();
-    private final java.util.ArrayList<Tile> _tilesStoppedRendering = new java.util.ArrayList<Tile>();
+    private java.util.ArrayList<String> _tilesStoppedRendering = new java.util.ArrayList<String>();
+
+    private java.util.HashMap<String, TileLayout> _visibleTiles = new java.util.HashMap<String, TileLayout>();
+
+    private void updateNodesLayout()
+    {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DGD at work!
+    
+      for (int i = 0; i < _tilesStartedRendering.size(); i++)
+      {
+        final Tile tile = _tilesStartedRendering.get(i);
+        final String tileID = tile._id;
+        ILogger.instance().logInfo(" => Start rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
+    
+        TileLayout tileLayout = _visibleTiles.get(tileID);
+        if (tileLayout != null)
+        {
+          throw new RuntimeException("Logic error");
+        }
+        _visibleTiles.put(tileID, new PointCloudsRenderer.TileLayout(BingMapsLayer.getQuadKey(tile)));
+      }
+    
+      for (int i = 0; i < _tilesStoppedRendering.size(); i++)
+      {
+        final String tileID = _tilesStoppedRendering.get(i);
+    
+        PointCloudsRenderer.TileLayout tileLayout = _visibleTiles.get(tileID);
+        if (tileLayout != null)
+        {
+          ILogger.instance().logInfo(" => Stop rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
+          if (tileLayout != null)
+             tileLayout.dispose();
+          _visibleTiles.remove(tileID);
+        }
+      }
+    
+      _tilesStartedRendering.clear();
+      _tilesStoppedRendering.clear();
+    }
 
     public PointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
     {
@@ -126,6 +180,14 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public void dispose()
     {
+      java.util.Iterator<String, TileLayout> it;
+      for (it = _visibleTiles.iterator(); it.hasNext();)
+      {
+        TileLayout tileLayout = it.next().getValue();
+        if (tileLayout != null)
+           tileLayout.dispose();
+      }
+    
       if (_sector != null)
          _sector.dispose();
     }
@@ -218,20 +280,45 @@ public class PointCloudsRenderer extends DefaultRenderer
 //#warning DGD at work!
     }
 
-    public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
+
+    //PointCloudsRenderer::PointCloudNodesLayoutFetcher::PointCloudNodesLayoutFetcher(IDownloader* downloader,
+    //                                                                                PointCloud* pointCloud,
+    //                                                                                const std::vector<const Tile*>& tilesStartedRendering,
+    //                                                                                const std::vector<const Tile*>& tilesStoppedRendering) :
+    //_pointCloud(pointCloud)
+    //{
+    //  const int tilesStartedRenderingSize = tilesStartedRendering.size();
+    //  for (int i = 0; i < tilesStartedRenderingSize; i++) {
+    //    const Tile* tile = tilesStartedRendering[i];
+    //
+    //    const std::string quadKey = BingMapsLayer::getQuadKey(tile);
+    //
+    //    ILogger::instance()->logInfo("Tile QuadKey=" + quadKey + "\n");
+    //
+    ////downloader->requestBuffer(<#const URL &url#>,
+    ////                          <#long long priority#>,
+    ////                          <#const TimeInterval &timeToCache#>,
+    ////                          <#bool readExpired#>,
+    ////                          <#IBufferDownloadListener *listener#>,
+    ////                          <#bool deleteListener#>);
+    //  }
+    //}
+    
+    
+    public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DGD at work!
       if (_sector != null)
       {
-        //ILogger::instance()->logInfo("changedTileRendering");
         final int tilesStartedRenderingSize = tilesStartedRendering.size();
         for (int i = 0; i < tilesStartedRenderingSize; i++)
         {
           final Tile tile = tilesStartedRendering.get(i);
+          if (!tile._mercator)
+          {
+            throw new RuntimeException("Tile has to be mercator");
+          }
           if (tile._sector.touchesWith(_sector))
           {
-            ILogger.instance().logInfo("   Start rendering tile " + tile._id + " for cloud " + _cloudName);
             _tilesStartedRendering.add(tile);
           }
         }
@@ -239,20 +326,13 @@ public class PointCloudsRenderer extends DefaultRenderer
         final int tilesStoppedRenderingSize = tilesStoppedRendering.size();
         for (int i = 0; i < tilesStoppedRenderingSize; i++)
         {
-          final Tile tile = tilesStoppedRendering.get(i);
-          if (tile._sector.touchesWith(_sector))
-          {
-            ILogger.instance().logInfo("   Stop rendering tile " + tile._id + " for cloud " + _cloudName);
-            _tilesStoppedRendering.add(tile);
-          }
+          final String tileID = tilesStoppedRendering.get(i);
+          _tilesStoppedRendering.add(tileID);
         }
     
         if (!_tilesStartedRendering.isEmpty() || !_tilesStoppedRendering.isEmpty())
         {
-          PointCloudNodesLayoutFetcher nodesLayoutFetcher = new PointCloudNodesLayoutFetcher(_downloader, this, _tilesStartedRendering, _tilesStoppedRendering);
-    
-          _tilesStartedRendering.clear();
-          _tilesStoppedRendering.clear();
+          updateNodesLayout();
         }
       }
     }
@@ -268,7 +348,7 @@ public class PointCloudsRenderer extends DefaultRenderer
        _pointCloudsRenderer = pointCloudsRenderer;
     }
 
-    public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
+    public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
     {
       _pointCloudsRenderer.changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
     }
@@ -277,14 +357,14 @@ public class PointCloudsRenderer extends DefaultRenderer
 
 
   private java.util.ArrayList<PointCloud> _clouds = new java.util.ArrayList<PointCloud>();
+  private int _cloudsSize;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private TileRenderingListener _tileRenderingListener;
 
   protected final void onChangedContext()
   {
-    final int cloudsSize = _clouds.size();
-    for (int i = 0; i < cloudsSize; i++)
+    for (int i = 0; i < _cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
       cloud.initialize(_context);
@@ -293,13 +373,13 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   public PointCloudsRenderer()
   {
+     _cloudsSize = 0;
     _tileRenderingListener = new PointCloudsTileRenderingListener(this);
   }
 
   public void dispose()
   {
-    final int cloudsSize = _clouds.size();
-    for (int i = 0; i < cloudsSize; i++)
+    for (int i = 0; i < _cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
       if (cloud != null)
@@ -314,8 +394,7 @@ public class PointCloudsRenderer extends DefaultRenderer
     boolean busyFlag = false;
     boolean errorFlag = false;
   
-    final int cloudsSize = _clouds.size();
-    for (int i = 0; i < cloudsSize; i++)
+    for (int i = 0; i < _cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
       final RenderState childRenderState = cloud.getRenderState(rc);
@@ -351,8 +430,7 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    final int cloudsSize = _clouds.size();
-    for (int i = 0; i < cloudsSize; i++)
+    for (int i = 0; i < _cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
       cloud.render(rc, glState);
@@ -372,6 +450,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       pointCloud.initialize(_context);
     }
     _clouds.add(pointCloud);
+    _cloudsSize = _clouds.size();
   }
 
   public final void addPointCloud(URL serverURL, String cloudName)
@@ -381,21 +460,20 @@ public class PointCloudsRenderer extends DefaultRenderer
 
   public final void removeAllPointClouds()
   {
-    final int cloudsSize = _clouds.size();
-    for (int i = 0; i < cloudsSize; i++)
+    for (int i = 0; i < _cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
       if (cloud != null)
          cloud.dispose();
     }
     _clouds.clear();
+    _cloudsSize = _clouds.size();
   }
 
 
-  public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<Tile> tilesStoppedRendering)
+  public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
   {
-    final int cloudsSize = _clouds.size();
-    for (int i = 0; i < cloudsSize; i++)
+    for (int i = 0; i < _cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
       cloud.changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
