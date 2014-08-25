@@ -336,7 +336,14 @@ public abstract class MapBooBuilder
     }
     else
     {
-      result = URLTemplateLayer.newWGS84(urlTemplate, sector, transparent, firstLevel, maxLevel, TimeInterval.fromDays(30));
+  //    result = URLTemplateLayer::newWGS84(urlTemplate,
+  //                                        sector,
+  //                                        transparent,
+  //                                        firstLevel,
+  //                                        maxLevel,
+  //                                        TimeInterval::fromDays(30));
+  
+      result = new URLTemplateLayer(urlTemplate, sector, transparent, TimeInterval.fromDays(30), true, new LevelTileCondition(firstLevel, maxLevel), LayerTilesRenderParameters.createDefaultWGS84(sector, 1, maxLevel));
     }
   
     return result;

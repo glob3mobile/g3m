@@ -42,6 +42,7 @@ public class MapBoo_CameraPosition
 
   ///#include "MultiLayerTileTexturizer.hpp"
   
+  
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();

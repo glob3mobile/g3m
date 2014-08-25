@@ -76,7 +76,12 @@ public abstract class TMSLayer extends RasterLayer
   
     ILogger.instance().logInfo(isb.getString());
   
+  
     Petition petition = new Petition(tileSector, new URL(isb.getString(), false), _timeToCache, _readExpired, _isTransparent, _transparency);
+  
+    if (isb != null)
+       isb.dispose();
+  
     petitions.add(petition);
   
      return petitions;
