@@ -220,7 +220,7 @@ private:
 
   TileRenderingListener*       _tileRenderingListener;
   std::vector<const Tile*>*    _tilesStartedRendering;
-  std::vector<const Tile*>*    _tilesStoppedRendering;
+  std::vector<std::string>*    _tilesStoppedRendering;
 
   TilesStatistics _statistics;
 

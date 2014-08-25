@@ -232,7 +232,7 @@ public:
               const bool renderTileMeshes,
               bool logTilesPetitions,
               std::vector<const Tile*>* tilesStartedRendering,
-              std::vector<const Tile*>* tilesStoppedRendering);
+              std::vector<std::string>* tilesStoppedRendering);
 
   void setTextureSolved(bool textureSolved);
 
@@ -266,12 +266,13 @@ public:
 
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
 
-  void prune(TileTexturizer*        texturizer,
-             ElevationDataProvider* elevationDataProvider);
+  void prune(TileTexturizer*           texturizer,
+             ElevationDataProvider*    elevationDataProvider,
+             std::vector<std::string>* tilesStoppedRendering);
 
   void toBeDeleted(TileTexturizer*        texturizer,
                    ElevationDataProvider* elevationDataProvider,
-                   std::vector<const Tile*>* tilesStoppedRendering);
+                   std::vector<std::string>* tilesStoppedRendering);
 
   const std::string description() const;
 #ifdef JAVA_CODE

@@ -158,7 +158,7 @@ _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener)
   }
   else {
     _tilesStartedRendering = new std::vector<const Tile*>();
-    _tilesStoppedRendering = new std::vector<const Tile*>();
+    _tilesStoppedRendering = new std::vector<std::string>();
   }
 }
 
@@ -835,7 +835,7 @@ void PlanetRenderer::pruneFirstLevelTiles() {
   const int firstLevelTilesCount = _firstLevelTiles.size();
   for (int i = 0; i < firstLevelTilesCount; i++) {
     Tile* tile = _firstLevelTiles[i];
-    tile->prune(_texturizer, _elevationDataProvider);
+    tile->prune(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
   }
 }
 

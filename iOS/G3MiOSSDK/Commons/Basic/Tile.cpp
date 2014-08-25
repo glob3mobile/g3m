@@ -495,14 +495,14 @@ std::vector<Tile*>* Tile::getSubTiles(const Angle& splitLatitude,
 
 void Tile::toBeDeleted(TileTexturizer*        texturizer,
                        ElevationDataProvider* elevationDataProvider,
-                       std::vector<const Tile*>* tilesStoppedRendering) {
+                       std::vector<std::string>* tilesStoppedRendering) {
   if (_rendered) {
     if (tilesStoppedRendering != NULL) {
-      tilesStoppedRendering->push_back(this);
+      tilesStoppedRendering->push_back(_id);
     }
   }
 
-  prune(texturizer, elevationDataProvider);
+  prune(texturizer, elevationDataProvider, tilesStoppedRendering);
 
   if (texturizer != NULL) {
     texturizer->tileToBeDeleted(this, _texturizedMesh);
@@ -515,8 +515,9 @@ void Tile::toBeDeleted(TileTexturizer*        texturizer,
   }
 }
 
-void Tile::prune(TileTexturizer*        texturizer,
-                 ElevationDataProvider* elevationDataProvider) {
+void Tile::prune(TileTexturizer*           texturizer,
+                 ElevationDataProvider*    elevationDataProvider,
+                 std::vector<std::string>* tilesStoppedRendering) {
   if (texturizer == NULL && elevationDataProvider == NULL && _subtiles != NULL) {
 #warning remove debug code
     printf("break point\n");
@@ -532,11 +533,16 @@ void Tile::prune(TileTexturizer*        texturizer,
 
       subtile->setIsVisible(false, texturizer);
 
-      subtile->prune(texturizer, elevationDataProvider);
+      subtile->prune(texturizer, elevationDataProvider, tilesStoppedRendering);
       if (texturizer != NULL) {
         texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
       }
 
+//      if (_rendered) {
+//        if (tilesStoppedRendering != NULL) {
+//          tilesStoppedRendering->push_back(subtile);
+//        }
+//      }
       delete subtile;
     }
 
@@ -598,7 +604,7 @@ void Tile::render(const G3MRenderContext* rc,
                   const bool renderTileMeshes,
                   bool logTilesPetitions,
                   std::vector<const Tile*>* tilesStartedRendering,
-                  std::vector<const Tile*>* tilesStoppedRendering) {
+                  std::vector<std::string>* tilesStoppedRendering) {
 
   tilesStatistics->computeTileProcessed(this);
 
@@ -660,7 +666,7 @@ void Tile::render(const G3MRenderContext* rc,
 
       tilesStatistics->computeTileRenderered(this);
 
-      prune(texturizer, elevationDataProvider);
+      prune(texturizer, elevationDataProvider, tilesStoppedRendering);
       //TODO: AVISAR CAMBIO DE TERRENO
     }
     else {
@@ -680,7 +686,7 @@ void Tile::render(const G3MRenderContext* rc,
   else {
     setIsVisible(false, texturizer);
 
-    prune(texturizer, elevationDataProvider);
+    prune(texturizer, elevationDataProvider, tilesStoppedRendering);
     //TODO: AVISAR CAMBIO DE TERRENO
   }
 
@@ -694,7 +700,7 @@ void Tile::render(const G3MRenderContext* rc,
     }
     else {
       if (tilesStoppedRendering != NULL) {
-        tilesStoppedRendering->push_back(this);
+        tilesStoppedRendering->push_back(_id);
       }
     }
   }

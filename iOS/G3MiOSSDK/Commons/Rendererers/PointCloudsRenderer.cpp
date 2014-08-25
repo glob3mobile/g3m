@@ -56,9 +56,16 @@ void PointCloudsRenderer::PointCloud::initialize(const G3MContext* context) {
 }
 
 PointCloudsRenderer::PointCloud::~PointCloud() {
+  std::map<std::string, TileLayout*>::iterator it;
+  for (it =  _visibleTiles.begin();
+       it !=  _visibleTiles.end();
+       it++) {
+    TileLayout* tileLayout = it->second;
+    delete tileLayout;
+  }
+
   delete _sector;
 }
-
 
 void PointCloudsRenderer::PointCloud::errorDownloadingMetadata() {
   _downloadingMetadata = false;
@@ -118,70 +125,85 @@ RenderState PointCloudsRenderer::PointCloud::getRenderState(const G3MRenderConte
   return RenderState::ready();
 }
 
-PointCloudsRenderer::PointCloudNodesLayoutFetcher::PointCloudNodesLayoutFetcher(IDownloader* downloader,
-                                                                                PointCloud* pointCloud,
-                                                                                const std::vector<const Tile*>& tilesStartedRendering,
-                                                                                const std::vector<const Tile*>& tilesStoppedRendering) :
-_pointCloud(pointCloud)
-{
-  const int tilesStartedRenderingSize = tilesStartedRendering.size();
-  for (int i = 0; i < tilesStartedRenderingSize; i++) {
-    const Tile* tile = tilesStartedRendering[i];
-
-    const std::string quadKey = BingMapsLayer::getQuadKey(tile);
-
-    ILogger::instance()->logInfo("id=" + quadKey + "\n");
-
-//downloader->requestBuffer(<#const URL &url#>,
-//                          <#long long priority#>,
-//                          <#const TimeInterval &timeToCache#>,
-//                          <#bool readExpired#>,
-//                          <#IBufferDownloadListener *listener#>,
-//                          <#bool deleteListener#>);
-  }
-}
+//PointCloudsRenderer::PointCloudNodesLayoutFetcher::PointCloudNodesLayoutFetcher(IDownloader* downloader,
+//                                                                                PointCloud* pointCloud,
+//                                                                                const std::vector<const Tile*>& tilesStartedRendering,
+//                                                                                const std::vector<const Tile*>& tilesStoppedRendering) :
+//_pointCloud(pointCloud)
+//{
+//  const int tilesStartedRenderingSize = tilesStartedRendering.size();
+//  for (int i = 0; i < tilesStartedRenderingSize; i++) {
+//    const Tile* tile = tilesStartedRendering[i];
+//
+//    const std::string quadKey = BingMapsLayer::getQuadKey(tile);
+//
+//    ILogger::instance()->logInfo("Tile QuadKey=" + quadKey + "\n");
+//
+////downloader->requestBuffer(<#const URL &url#>,
+////                          <#long long priority#>,
+////                          <#const TimeInterval &timeToCache#>,
+////                          <#bool readExpired#>,
+////                          <#IBufferDownloadListener *listener#>,
+////                          <#bool deleteListener#>);
+//  }
+//}
 
 
 void PointCloudsRenderer::PointCloud::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
-                                                            const std::vector<const Tile*>* tilesStoppedRendering) {
-#warning DGD at work!
+                                                            const std::vector<std::string>* tilesStoppedRendering) {
   if (_sector) {
-    //ILogger::instance()->logInfo("changedTileRendering");
     const int tilesStartedRenderingSize = tilesStartedRendering->size();
     for (int i = 0; i < tilesStartedRenderingSize; i++) {
       const Tile* tile = tilesStartedRendering->at(i);
-
       if (!tile->_mercator) {
         THROW_EXCEPTION("Tile has to be mercator");
       }
-
       if (tile->_sector.touchesWith(*_sector)) {
-        ILogger::instance()->logInfo("   Start rendering tile " + tile->_id + " for cloud " + _cloudName);
         _tilesStartedRendering.push_back(tile);
       }
     }
 
     const int tilesStoppedRenderingSize = tilesStoppedRendering->size();
     for (int i = 0; i < tilesStoppedRenderingSize; i++) {
-      const Tile* tile = tilesStoppedRendering->at(i);
-      if (tile->_sector.touchesWith(*_sector)) {
-        ILogger::instance()->logInfo("   Stop rendering tile " + tile->_id + " for cloud " + _cloudName);
-        _tilesStoppedRendering.push_back(tile);
-      }
+      const std::string tileID = tilesStoppedRendering->at(i);
+      _tilesStoppedRendering.push_back( tileID );
     }
 
     if (!_tilesStartedRendering.empty() || !_tilesStoppedRendering.empty()) {
-      PointCloudNodesLayoutFetcher* nodesLayoutFetcher = new PointCloudNodesLayoutFetcher(_downloader,
-                                                                                          this,
-                                                                                          _tilesStartedRendering,
-                                                                                          _tilesStoppedRendering);
-
-      _tilesStartedRendering.clear();
-      _tilesStoppedRendering.clear();
+      updateNodesLayout();
     }
   }
 }
 
+void PointCloudsRenderer::PointCloud::updateNodesLayout() {
+#warning DGD at work!
+
+  for (int i = 0; i < _tilesStartedRendering.size(); i++) {
+    const Tile* tile = _tilesStartedRendering[i];
+    const std::string tileID = tile->_id;
+    ILogger::instance()->logInfo(" => Start rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
+
+    TileLayout* tileLayout = _visibleTiles[tileID];
+    if (tileLayout != NULL) {
+      THROW_EXCEPTION("Logic error");
+    }
+    _visibleTiles[tileID] = new PointCloudsRenderer::TileLayout( BingMapsLayer::getQuadKey(tile) );
+  }
+
+  for (int i = 0; i < _tilesStoppedRendering.size(); i++) {
+    const std::string tileID = _tilesStoppedRendering[i];
+
+    PointCloudsRenderer::TileLayout* tileLayout = _visibleTiles[tileID];
+    if (tileLayout != NULL) {
+      ILogger::instance()->logInfo(" => Stop rendering tile " + tileID + " for cloud \"" + _cloudName + "\"");
+      delete tileLayout;
+      _visibleTiles.erase(tileID);
+    }
+  }
+
+  _tilesStartedRendering.clear();
+  _tilesStoppedRendering.clear();
+}
 
 void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              GLState* glState) {
@@ -189,8 +211,7 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
 }
 
 PointCloudsRenderer::~PointCloudsRenderer() {
-  const int cloudsSize = _clouds.size();
-  for (int i = 0; i < cloudsSize; i++) {
+  for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
     delete cloud;
   }
@@ -205,8 +226,7 @@ void PointCloudsRenderer::onResizeViewportEvent(const G3MEventContext* ec,
 }
 
 void PointCloudsRenderer::onChangedContext() {
-  const int cloudsSize = _clouds.size();
-  for (int i = 0; i < cloudsSize; i++) {
+  for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
     cloud->initialize(_context);
   }
@@ -217,8 +237,7 @@ RenderState PointCloudsRenderer::getRenderState(const G3MRenderContext* rc) {
   bool busyFlag  = false;
   bool errorFlag = false;
 
-  const int cloudsSize = _clouds.size();
-  for (int i = 0; i < cloudsSize; i++) {
+  for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
     const RenderState childRenderState = cloud->getRenderState(rc);
 
@@ -272,36 +291,35 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
     pointCloud->initialize(_context);
   }
   _clouds.push_back(pointCloud);
+  _cloudsSize = _clouds.size();
 }
 
 void PointCloudsRenderer::removeAllPointClouds() {
-  const int cloudsSize = _clouds.size();
-  for (int i = 0; i < cloudsSize; i++) {
+  for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
     delete cloud;
   }
   _clouds.clear();
+  _cloudsSize = _clouds.size();
 }
 
 void PointCloudsRenderer::render(const G3MRenderContext* rc,
                                  GLState* glState) {
-  const int cloudsSize = _clouds.size();
-  for (int i = 0; i < cloudsSize; i++) {
+  for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
     cloud->render(rc, glState);
   }
 }
 
 void PointCloudsRenderer::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
-                                                const std::vector<const Tile*>* tilesStoppedRendering) {
-  const int cloudsSize = _clouds.size();
-  for (int i = 0; i < cloudsSize; i++) {
+                                                const std::vector<std::string>* tilesStoppedRendering) {
+  for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
     cloud->changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
   }
 }
 
 void PointCloudsRenderer::PointCloudsTileRenderingListener::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
-                                                                                  const std::vector<const Tile*>* tilesStoppedRendering) {
+                                                                                  const std::vector<std::string>* tilesStoppedRendering) {
   _pointCloudsRenderer->changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
 }

@@ -17,7 +17,7 @@ public:
   }
 
   virtual void changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
-                                     const std::vector<const Tile*>* tilesStoppedRendering) = 0;
+                                     const std::vector<std::string>* tilesStoppedRendering) = 0;
 
 };
 

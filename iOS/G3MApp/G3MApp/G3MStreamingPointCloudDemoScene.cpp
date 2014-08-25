@@ -32,7 +32,7 @@ void G3MStreamingPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                  "Loudoun-VA_LOD",
                                                  DownloadPriority::HIGHEST,
                                                  TimeInterval::zero(),
-                                                 true);
+                                                 false);
 
   g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.102078762909024, -77.66098022460936, 75000) );
 }

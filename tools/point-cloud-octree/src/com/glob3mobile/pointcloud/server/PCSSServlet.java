@@ -21,11 +21,11 @@ import es.igosoftware.util.XStringTokenizer;
 
 
 public class PCSSServlet
-extends
-HttpServlet {
-   private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
-
+         extends
+            HttpServlet {
    private static final long                serialVersionUID = 1L;
+
+   private final Map<String, PersistentLOD> _openedDBs       = new HashMap<String, PersistentLOD>();
    private File                             _cloudDirectory;
 
 

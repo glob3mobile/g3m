@@ -16,27 +16,46 @@
 #include "TileRenderingListener.hpp"
 #include "TimeInterval.hpp"
 #include "RCObject.hpp"
+#include "Sector.hpp"
+#include <map>
 
 class Sector;
 class IDownloader;
 
 class PointCloudsRenderer : public DefaultRenderer {
 private:
+
+
+//  class TileData {
+//  public:
+//    const std::string _quadKey;
+//    const Sector      _sector;
+//
+//    TileData(const std::string& quadKey,
+//             const Sector&      sector) :
+//    _quadKey(quadKey),
+//    _sector(sector)
+//    {
+//
+//    }
+//  };
+
+
   class PointCloud;
 
-  
-  class PointCloudNodesLayoutFetcher : public RCObject {
-  private:
-    PointCloud* _pointCloud;
 
-  public:
-    PointCloudNodesLayoutFetcher(IDownloader* downloader,
-                                 PointCloud* pointCloud,
-                                 const std::vector<const Tile*>& tilesStartedRendering,
-                                 const std::vector<const Tile*>& tilesStoppedRendering);
-
-  };
-
+//  class PointCloudNodesLayoutFetcher : public RCObject {
+//  private:
+//    PointCloud* _pointCloud;
+//
+//  public:
+//    PointCloudNodesLayoutFetcher(IDownloader* downloader,
+//                                 PointCloud* pointCloud,
+//                                 const std::vector<const Tile*>& tilesStartedRendering,
+//                                 const std::vector<const Tile*>& tilesStoppedRendering);
+//
+//  };
+//
 
   class PointCloudMetadataDownloadListener : public IBufferDownloadListener {
   private:
@@ -61,7 +80,19 @@ private:
                             bool expired);
 
   };
+
   
+  class TileLayout {
+  private:
+    const std::string _tileQuadKey;
+
+  public:
+    TileLayout(const std::string& tileQuadKey) :
+    _tileQuadKey(tileQuadKey)
+    {
+    }
+  };
+
 
   class PointCloud {
   private:
@@ -93,7 +124,11 @@ private:
     double _maxHeight;
 
     std::vector<const Tile*> _tilesStartedRendering;
-    std::vector<const Tile*> _tilesStoppedRendering;
+    std::vector<std::string> _tilesStoppedRendering;
+
+    std::map<std::string, TileLayout*> _visibleTiles;
+
+    void updateNodesLayout();
 
   public:
     PointCloud(const URL& serverURL,
@@ -131,7 +166,7 @@ private:
                 GLState* glState);
 
     void changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
-                               const std::vector<const Tile*>* tilesStoppedRendering);
+                               const std::vector<std::string>* tilesStoppedRendering);
 
   };
 
@@ -146,12 +181,13 @@ private:
     }
 
     void changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
-                               const std::vector<const Tile*>* tilesStoppedRendering);
+                               const std::vector<std::string>* tilesStoppedRendering);
 
   };
 
 
   std::vector<PointCloud*> _clouds;
+  int _cloudsSize;
   std::vector<std::string> _errors;
 
   TileRenderingListener* _tileRenderingListener;
@@ -160,7 +196,8 @@ protected:
   void onChangedContext();
 
 public:
-  PointCloudsRenderer()
+  PointCloudsRenderer() :
+  _cloudsSize(0)
   {
     _tileRenderingListener = new PointCloudsTileRenderingListener(this);
   }
@@ -188,7 +225,7 @@ public:
 
 
   void changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
-                             const std::vector<const Tile*>* tilesStoppedRendering);
+                             const std::vector<std::string>* tilesStoppedRendering);
 
   TileRenderingListener* getTileRenderingListener() const {
     return _tileRenderingListener;
