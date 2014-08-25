@@ -89,7 +89,7 @@ void PointCloudsRenderer::PointCloud::downloadedMetadata(IByteBuffer* buffer) {
   if (jsonBaseObject) {
     const JSONObject* jsonObject = jsonBaseObject->asObject();
     if (jsonObject) {
-      const std::string name = jsonObject->getAsString("name", "");
+      // const std::string name = jsonObject->getAsString("name", "");
       _pointsCount = (long long) jsonObject->getAsNumber("pointsCount", 0);
 
       const JSONObject* sectorJSONObject = jsonObject->getAsObject("sector");
