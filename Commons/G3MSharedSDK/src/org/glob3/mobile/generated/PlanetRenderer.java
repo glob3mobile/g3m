@@ -188,6 +188,15 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       Tile tile = _firstLevelTiles.get(i);
       tile.prune(_texturizer, _elevationDataProvider, _tilesStoppedRendering);
     }
+    if (_tileRenderingListener != null)
+    {
+      if (!_tilesStartedRendering.isEmpty() || !_tilesStoppedRendering.isEmpty())
+      {
+        _tileRenderingListener.changedTilesRendering(_tilesStartedRendering, _tilesStoppedRendering);
+        _tilesStartedRendering.clear();
+        _tilesStoppedRendering.clear();
+      }
+    }
   }
 
   private Sector _lastVisibleSector;
