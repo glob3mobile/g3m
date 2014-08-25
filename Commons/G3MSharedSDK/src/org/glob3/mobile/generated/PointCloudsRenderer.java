@@ -183,13 +183,12 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public void dispose()
     {
-      java.util.Iterator<String, TileLayout> it;
-      for (it = _visibleTiles.iterator(); it.hasNext();)
-      {
-        TileLayout tileLayout = it.next().getValue();
-        ILogger.instance().logInfo(" => (destructor) Stop rendering tile " + it.next().getKey() + " for cloud \"" + _cloudName + "\"");
-        if (tileLayout != null)
-           tileLayout.dispose();
+      for (final java.util.Map.Entry<String, TileLayout> entry : _visibleTiles.entrySet()) {
+        final TileLayout tileLayout = entry.getValue();
+        ILogger.instance().logInfo(" => (destructor) Stop rendering tile " + entry.getKey() + " for cloud \"" + _cloudName + "\"");
+        if (tileLayout != null) {
+          tileLayout.dispose();
+        }
       }
     
       if (_sector != null)
