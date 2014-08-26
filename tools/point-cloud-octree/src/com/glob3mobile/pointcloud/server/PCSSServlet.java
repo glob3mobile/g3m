@@ -109,6 +109,24 @@ public class PCSSServlet
    }
 
 
+   private static void sendNodeMetadata(final PersistentLOD db,
+                                        final String nodeID,
+                                        final HttpServletResponse response) throws IOException {
+      final PrintWriter writer = response.getWriter();
+
+      final PersistentLOD.Node node = db.getNode(nodeID, false);
+      if (node == null) {
+         response.sendError(HttpServletResponse.SC_NOT_FOUND, "node #" + nodeID + " not found");
+      }
+      else {
+         response.setStatus(HttpServletResponse.SC_OK);
+         response.setContentType("application/json");
+
+         JSONUtils.sendNodeMetadataJSON(writer, node);
+      }
+   }
+
+
    @Override
    protected void doGet(final HttpServletRequest request,
                         final HttpServletResponse response) throws IOException {
@@ -139,6 +157,10 @@ public class PCSSServlet
       else if ((path.length == 3) && path[1].trim().equalsIgnoreCase("layout")) {
          final String nodeID = path[2].trim();
          sendNodeLayout(db, nodeID, response);
+      }
+      else if ((path.length == 3) && path[1].trim().equalsIgnoreCase("metadata")) {
+         final String nodeID = path[2].trim();
+         sendNodeMetadata(db, nodeID, response);
       }
       else {
          error(response, "Invalid request");

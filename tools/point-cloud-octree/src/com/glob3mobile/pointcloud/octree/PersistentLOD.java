@@ -164,4 +164,8 @@ public interface PersistentLOD
 
    PersistentLOD.NodeLayout getNodeLayout(String id);
 
+
+   PersistentLOD.Node getNode(String id,
+                              boolean loadPoints);
+
 }

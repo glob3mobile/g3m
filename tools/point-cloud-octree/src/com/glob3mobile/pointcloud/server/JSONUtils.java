@@ -125,6 +125,46 @@ public class JSONUtils {
    }
 
 
+   public static void sendNodeMetadataJSON(final PrintWriter writer,
+                                           final PersistentLOD.Node node) {
+
+      //         int getPointsCount();
+      //         int getLevelsCount();
+      //         List<PersistentLOD.NodeLevel> getLevels();
+      //         int[] getLevelsPointsCount();
+      //         Sector getSector();
+      //         int getDepth();
+
+
+      writer.print('{');
+      sendJSON(writer, "pointsCount", node.getPointsCount());
+      writer.print(',');
+      sendJSON(writer, "lodLevels", node.getLevelsPointsCount());
+      // bounds
+
+      writer.println('}');
+   }
+
+
+   private static void sendJSON(final PrintWriter writer,
+                                final String key,
+                                final int[] value) {
+      sendJSONKey(writer, key);
+      writer.print('[');
+      boolean first = true;
+      for (final int each : value) {
+         if (first) {
+            first = false;
+         }
+         else {
+            writer.print(',');
+         }
+         writer.write(Integer.toString(each));
+      }
+      writer.print(']');
+   }
+
+
    //   private static void sendNodeLayoutJSON(final PrintWriter writer,
    //                                final PersistentLOD.Node node) {
    //      writer.print('{');
@@ -134,16 +174,16 @@ public class JSONUtils {
    //      writer.print(',');
    //      sendJSONKey(writer, "levels");
    //      writer.print('[');
-   //      boolean first = true;
-   //      for (final PersistentLOD.NodeLevel level : node.getLevels()) {
-   //         if (first) {
-   //            first = false;
+   //         boolean first = true;
+   //         for (final PersistentLOD.NodeLevel level : node.getLevels()) {
+   //            if (first) {
+   //               first = false;
+   //            }
+   //            else {
+   //               writer.print(',');
+   //            }
+   //            sendJSON(writer, level);
    //         }
-   //         else {
-   //            writer.print(',');
-   //         }
-   //         sendJSON(writer, level);
-   //      }
    //      writer.print(']');
    //
    //      writer.print('}');

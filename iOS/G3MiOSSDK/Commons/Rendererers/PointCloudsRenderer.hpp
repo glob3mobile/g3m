@@ -90,7 +90,7 @@ private:
     int _stepsDone;
 
     ~TileLayoutStopper() {
-      
+
     }
 
   public:
@@ -142,6 +142,28 @@ private:
                     const TimeInterval& timeToCache,
                     bool readExpired);
 
+    void onDownload(IByteBuffer* buffer);
+
+    void onError();
+
+    void onCancel();
+
+    void cancel();
+
+  };
+
+
+  class PointCloudNode;
+
+  class NodeMetadataBufferDownloadListener : public IBufferDownloadListener {
+  private:
+    PointCloudNode* _node;
+
+  public:
+    NodeMetadataBufferDownloadListener(PointCloudNode* node);
+
+    ~NodeMetadataBufferDownloadListener();
+
     void onDownload(const URL& url,
                     IByteBuffer* buffer,
                     bool expired);
@@ -150,7 +172,77 @@ private:
 
     void onCancel(const URL& url);
 
+    void onCanceledDownload(const URL& url,
+                            IByteBuffer* buffer,
+                            bool expired) {
+      // do nothing
+    }
+  };
+
+
+  class PointCloudNode : public RCObject {
+  private:
+    PointCloud* _pointCloud;
+
+    const std::string _cloudName;
+    const std::string _id;
+
+    bool _isInitialized;
+    int _referenceCountFromPointCloud;
+
+    IDownloader* _downloader;
+    long long _metadataRequestID;
+
+    bool _canceled;
+
+  public:
+    PointCloudNode(PointCloud* pointCloud,
+                   const std::string& cloudName,
+                   const std::string& id) :
+    _pointCloud(pointCloud),
+    _cloudName(cloudName),
+    _id(id),
+    _referenceCountFromPointCloud(1),
+    _isInitialized(false),
+    _downloader(NULL),
+    _metadataRequestID(-1),
+    _canceled(false)
+    {
+    }
+
+    void retainFromPointCloud() {
+      _referenceCountFromPointCloud++;
+      _retain();
+    }
+
+    bool releaseFromPointCloud() {
+      _referenceCountFromPointCloud--;
+      return _release();
+    }
+
+    void releaseAllFromPointCloud() {
+      for (int i = 0; i < _referenceCountFromPointCloud; i++) {
+        releaseFromPointCloud();
+      }
+    }
+
+    bool isInitialized() const {
+      return _isInitialized;
+    }
+
+    void initialize(const G3MContext* context,
+                    const URL& serverURL,
+                    long long downloadPriority,
+                    const TimeInterval& timeToCache,
+                    bool readExpired);
+
     void cancel();
+
+    void onMetadataDownload(IByteBuffer* buffer);
+
+    void onMetadataError();
+
+    void onMetadataCancel();
 
   };
 
@@ -190,6 +282,9 @@ private:
     bool _visibleTilesNeedsInitialization;
     ITimer* _initializationTimer;
 
+    std::map<std::string, PointCloudNode*> _nodes;
+    bool _nodesNeedsInitialization;
+
   public:
     PointCloud(const URL& serverURL,
                const std::string& cloudName,
@@ -209,7 +304,8 @@ private:
     _sector(NULL),
     _minHeight(0),
     _maxHeight(0),
-//    _visibleTilesNeedsInitialization(false),
+    _visibleTilesNeedsInitialization(false),
+    _nodesNeedsInitialization(false),
     _initializationTimer(NULL)
     {
     }

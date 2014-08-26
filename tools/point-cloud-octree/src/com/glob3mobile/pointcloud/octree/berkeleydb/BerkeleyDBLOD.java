@@ -346,6 +346,28 @@ public class BerkeleyDBLOD
 
 
    @Override
+   public PersistentLOD.Node getNode(final String id,
+                                     final boolean loadPoints) {
+      final com.sleepycat.je.Transaction txn = null;
+
+      final byte[] binaryID = Utils.toBinaryID(id);
+
+      final DatabaseEntry keyEntry = new DatabaseEntry(binaryID);
+      final DatabaseEntry dataEntry = new DatabaseEntry();
+
+      final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
+      switch (status) {
+         case SUCCESS:
+            return BerkeleyDBLODNode.fromDB(txn, this, binaryID, dataEntry.getData(), loadPoints);
+         case NOTFOUND:
+            return null;
+         default:
+            throw new RuntimeException("Status not supported: " + status);
+      }
+   }
+
+
+   @Override
    public Sector getSector(final String id) {
       return TileHeader.sectorFor(Utils.toBinaryID(id));
    }

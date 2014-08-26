@@ -77,6 +77,15 @@ PointCloudsRenderer::PointCloud::~PointCloud() {
   }
 #endif
 
+  for (std::map<std::string, PointCloudNode*>::iterator it = _nodes.begin();
+       it != _nodes.end();
+       it++) {
+    PointCloudNode* node = it->second;
+    node->releaseAllFromPointCloud();
+    delete node;
+  }
+
+
   delete _initializationTimer;
 
   delete _sector;
@@ -306,15 +315,15 @@ PointCloudsRenderer::TileLayoutBufferDownloadListener::TileLayoutBufferDownloadL
 void PointCloudsRenderer::TileLayoutBufferDownloadListener::onDownload(const URL& url,
                                                                        IByteBuffer* buffer,
                                                                        bool expired) {
-  _tileLayout->onDownload(url, buffer, expired);
+  _tileLayout->onDownload(buffer);
 }
 
 void PointCloudsRenderer::TileLayoutBufferDownloadListener::onError(const URL& url) {
-  _tileLayout->onError(url);
+  _tileLayout->onError();
 }
 
 void PointCloudsRenderer::TileLayoutBufferDownloadListener::onCancel(const URL& url) {
-  _tileLayout->onCancel(url);
+  _tileLayout->onCancel();
 }
 
 PointCloudsRenderer::TileLayoutBufferDownloadListener::~TileLayoutBufferDownloadListener() {
@@ -344,9 +353,7 @@ void PointCloudsRenderer::TileLayoutStopper::stepDone() {
   }
 }
 
-void PointCloudsRenderer::TileLayout::onDownload(const URL& url,
-                                                 IByteBuffer* buffer,
-                                                 bool expired) {
+void PointCloudsRenderer::TileLayout::onDownload(IByteBuffer* buffer) {
   if (!_canceled) {
     const JSONBaseObject* jsonBaseObject  = IJSONParser::instance()->parse(buffer);
     if (jsonBaseObject != NULL) {
@@ -378,15 +385,15 @@ void PointCloudsRenderer::TileLayout::onDownload(const URL& url,
   }
 }
 
-void PointCloudsRenderer::TileLayout::onError(const URL& url) {
-  ILogger::instance()->logError("Error downloading %s", url.getPath().c_str());
+void PointCloudsRenderer::TileLayout::onError() {
+  ILogger::instance()->logError("Error downloading layout for %s", _tileQuadKey.c_str());
   _layoutRequestID = -1;
   if (_stopper != NULL) {
     _stopper->stepDone();
   }
 }
 
-void PointCloudsRenderer::TileLayout::onCancel(const URL& url) {
+void PointCloudsRenderer::TileLayout::onCancel() {
   _layoutRequestID = -1;
   if (_stopper != NULL) {
     _stopper->stepDone();
@@ -414,14 +421,16 @@ void PointCloudsRenderer::TileLayout::initialize(const G3MContext* context,
 
 void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
                                              GLState* glState) {
-  if (_visibleTilesNeedsInitialization) {
+  if (_visibleTilesNeedsInitialization || _nodesNeedsInitialization) {
     if (_initializationTimer == NULL) {
       _initializationTimer = rc->getFactory()->createTimer();
     }
     else {
       _initializationTimer->start();
     }
+  }
 
+  if (_visibleTilesNeedsInitialization) {
     _visibleTilesNeedsInitialization = false;
 #ifdef C_CODE
     for (std::map<std::string, TileLayout*>::iterator it = _visibleTiles.begin();
@@ -450,13 +459,29 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
 #endif
   }
 
-#warning DGD at work: render nodes
 
-//  for (std::map<std::string, TileLayout*>::iterator it = _visibleTiles.begin();
-//       it != _visibleTiles.end();
+  if (_nodesNeedsInitialization) {
+    _nodesNeedsInitialization = false;
+    for (std::map<std::string, PointCloudNode*>::iterator it = _nodes.begin();
+         it != _nodes.end();
+         it++) {
+      PointCloudNode* node = it->second;
+      if (!node->isInitialized()) {
+        node->initialize(rc, _serverURL, _downloadPriority, _timeToCache, _readExpired);
+        if (_initializationTimer->elapsedTimeInMilliseconds() > 20) {
+          _nodesNeedsInitialization = true; // force another initialization lap for the next frame
+          break;
+        }
+      }
+    }
+  }
+
+#warning DGD at work: render nodes
+//  for (std::map<std::string, PointCloudNode*>::iterator it = _nodes.begin();
+//       it != _nodes.end();
 //       it++) {
-//    TileLayout* tileLayout = it->second;
-//    tileLayout->render(rc, glState);
+//    PointCloudNode* node = it->second;
+//    node->render(rc, glState);
 //  }
 }
 
@@ -561,16 +586,6 @@ void PointCloudsRenderer::render(const G3MRenderContext* rc,
   }
 }
 
-void PointCloudsRenderer::PointCloud::createNode(const std::string& nodeID) {
-  ILogger::instance()->logInfo(" creating node: %s", nodeID.c_str());
-#warning DGD at work!
-}
-
-void PointCloudsRenderer::PointCloud::removeNode(const std::string& nodeID) {
-  ILogger::instance()->logInfo(" removing node: %s", nodeID.c_str());
-#warning DGD at work!
-}
-
 void PointCloudsRenderer::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
                                                 const std::vector<std::string>* tilesStoppedRendering) {
   for (int i = 0; i < _cloudsSize; i++) {
@@ -582,4 +597,106 @@ void PointCloudsRenderer::changedTilesRendering(const std::vector<const Tile*>* 
 void PointCloudsRenderer::PointCloudsTileRenderingListener::changedTilesRendering(const std::vector<const Tile*>* tilesStartedRendering,
                                                                                   const std::vector<std::string>* tilesStoppedRendering) {
   _pointCloudsRenderer->changedTilesRendering(tilesStartedRendering, tilesStoppedRendering);
+}
+
+void PointCloudsRenderer::PointCloud::createNode(const std::string& nodeID) {
+#warning DGD at work!
+
+  if (_nodes.find(nodeID) == _nodes.end()) {
+    ILogger::instance()->logInfo(" creating node: %s", nodeID.c_str());
+    _nodes[nodeID] = new PointCloudNode(this, _cloudName, nodeID);
+    _nodesNeedsInitialization = true;
+  }
+  else {
+    ILogger::instance()->logInfo(" retaining node: %s", nodeID.c_str());
+    _nodes[nodeID]->retainFromPointCloud();
+  }
+}
+
+void PointCloudsRenderer::PointCloud::removeNode(const std::string& nodeID) {
+#warning DGD at work!
+  if (_nodes.find(nodeID) == _nodes.end()) {
+    THROW_EXCEPTION("Logic error");
+  }
+  PointCloudNode* node = _nodes[nodeID];
+  if (node->releaseFromPointCloud()) {
+    ILogger::instance()->logInfo(" deleting node: %s", nodeID.c_str());
+    node->cancel();
+    delete node;
+    _nodes.erase(nodeID);
+  }
+  else {
+    ILogger::instance()->logInfo(" releasing node: %s", nodeID.c_str());
+  }
+}
+
+
+
+void PointCloudsRenderer::PointCloudNode::initialize(const G3MContext* context,
+                                                     const URL& serverURL,
+                                                     long long downloadPriority,
+                                                     const TimeInterval& timeToCache,
+                                                     bool readExpired) {
+  if (_downloader == NULL) {
+    _downloader = context->getDownloader();
+  }
+  _metadataRequestID = _downloader->requestBuffer(URL(serverURL, _cloudName + "/metadata/" + _id),
+                                                downloadPriority,
+                                                timeToCache,
+                                                readExpired,
+                                                new NodeMetadataBufferDownloadListener(this),
+                                                true);
+}
+
+void PointCloudsRenderer::PointCloudNode::cancel() {
+  _canceled = true;
+  if (_downloader != NULL && _metadataRequestID >= 0) {
+    ILogger::instance()->logInfo(" => Canceling initialization of node " + _id + " for cloud \"" + _cloudName + "\"");
+    _downloader->cancelRequest(_metadataRequestID);
+  }
+}
+
+
+PointCloudsRenderer::NodeMetadataBufferDownloadListener::NodeMetadataBufferDownloadListener(PointCloudNode* node) {
+  _node = node;
+  _node->_retain();
+}
+
+PointCloudsRenderer::NodeMetadataBufferDownloadListener::~NodeMetadataBufferDownloadListener() {
+  _node->_release();
+  _node = NULL;
+}
+
+void PointCloudsRenderer::NodeMetadataBufferDownloadListener::onDownload(const URL& url,
+                                                                         IByteBuffer* buffer,
+                                                                         bool expired) {
+  _node->onMetadataDownload(buffer);
+}
+
+void PointCloudsRenderer::NodeMetadataBufferDownloadListener::onError(const URL& url) {
+  _node->onMetadataError();
+}
+
+void PointCloudsRenderer::NodeMetadataBufferDownloadListener::onCancel(const URL& url) {
+  _node->onMetadataCancel();
+}
+
+
+void PointCloudsRenderer::PointCloudNode::onMetadataDownload(IByteBuffer* buffer) {
+  if (!_canceled) {
+#warning TODO parse json
+  }
+
+  delete buffer;
+
+  _metadataRequestID = -1;
+}
+
+void PointCloudsRenderer::PointCloudNode::onMetadataError() {
+  ILogger::instance()->logError("Error downloading metadata for node %s", _id.c_str());
+  _metadataRequestID = -1;
+}
+
+void PointCloudsRenderer::PointCloudNode::onMetadataCancel() {
+  _metadataRequestID = -1;
 }
