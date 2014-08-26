@@ -423,15 +423,15 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
     }
 
     _visibleTilesNeedsInitialization = false;
-#ifdef C_CODE
+//#ifdef C_CODE
     for (std::map<std::string, TileLayout*>::iterator it = _visibleTiles.begin();
          it != _visibleTiles.end();
          it++) {
       TileLayout* tileLayout = it->second;
-#endif
-#ifdef JAVA_CODE
-      for (final TileLayout tileLayout : _visibleTiles.values()) {
-#endif
+//#endif
+//#ifdef JAVA_CODE
+//      for (final TileLayout tileLayout : _visibleTiles.values()) {
+//#endif
       if (!tileLayout->isInitialized()) {
         tileLayout->initialize(rc, _serverURL, _downloadPriority, _timeToCache, _readExpired);
         if (_initializationTimer->elapsedTimeInMilliseconds() > 20) {
