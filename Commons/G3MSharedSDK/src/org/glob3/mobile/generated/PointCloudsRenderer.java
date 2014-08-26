@@ -434,19 +434,10 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
     
         _visibleTilesNeedsInitialization = false;
-    ///#ifdef C_CODE
-        for (java.util.Iterator<String, TileLayout> it = _visibleTiles.iterator(); it.hasNext();)
-        {
-          TileLayout tileLayout = it.next().getValue();
-    ///#endif
-    ///#ifdef JAVA_CODE
-    //      for (final TileLayout tileLayout : _visibleTiles.values()) {
-    ///#endif
-          if (!tileLayout.isInitialized())
-          {
+        for (final TileLayout tileLayout : _visibleTiles.values()) {
+          if (!tileLayout.isInitialized()) {
             tileLayout.initialize(rc, _serverURL, _downloadPriority, _timeToCache, _readExpired);
-            if (_initializationTimer.elapsedTimeInMilliseconds() > 20)
-            {
+            if (_initializationTimer.elapsedTimeInMilliseconds() > 20) {
               _visibleTilesNeedsInitialization = true; // force another initialization lap for the next frame
               break;
             }
