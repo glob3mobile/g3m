@@ -20,42 +20,14 @@ package org.glob3.mobile.generated;
 
 //class Sector;
 //class IDownloader;
+//class ITimer;
 
 public class PointCloudsRenderer extends DefaultRenderer
 {
 
-
-//  class TileData {
-//  public:
-//    const std::string _quadKey;
-//    const Sector      _sector;
-//
-//    TileData(const std::string& quadKey,
-//             const Sector&      sector) :
-//    _quadKey(quadKey),
-//    _sector(sector)
-//    {
-//
-//    }
-//  };
-
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class PointCloud;
 
-
-//  class PointCloudNodesLayoutFetcher : public RCObject {
-//  private:
-//    PointCloud* _pointCloud;
-//
-//  public:
-//    PointCloudNodesLayoutFetcher(IDownloader* downloader,
-//                                 PointCloud* pointCloud,
-//                                 const std::vector<const Tile*>& tilesStartedRendering,
-//                                 const std::vector<const Tile*>& tilesStoppedRendering);
-//
-//  };
-//
 
   private static class PointCloudMetadataDownloadListener extends IBufferDownloadListener
   {
@@ -89,24 +61,221 @@ public class PointCloudsRenderer extends DefaultRenderer
   }
 
 
-  private static class TileLayout
-  {
-    private final String _cloudName;
-    private final String _tileID;
-    private final String _tileQuadKey;
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
+//  class TileLayout;
 
-    public TileLayout(String cloudName, String tileID, String tileQuadKey)
+  private static class TileLayoutBufferDownloadListener extends IBufferDownloadListener
+  {
+    private TileLayout _tileLayout;
+
+    public TileLayoutBufferDownloadListener(TileLayout tileLayout)
     {
-       _cloudName = cloudName;
-       _tileID = tileID;
-       _tileQuadKey = tileQuadKey;
-      ILogger.instance().logInfo(" => Start rendering tile " + _tileID + " for cloud \"" + _cloudName + "\"");
+      _tileLayout = tileLayout;
+      _tileLayout._retain();
     }
 
     public void dispose()
     {
-      ILogger.instance().logInfo(" => Stop rendering tile " + _tileID + " for cloud \"" + _cloudName + "\"");
+      _tileLayout._release();
+      _tileLayout = null;
     }
+
+    public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      _tileLayout.onDownload(url, buffer, expired);
+    }
+
+    public final void onError(URL url)
+    {
+      _tileLayout.onError(url);
+    }
+
+    public final void onCancel(URL url)
+    {
+      _tileLayout.onCancel(url);
+    }
+
+    public final void onCanceledDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      // do nothing
+    }
+  }
+
+
+  private static class TileLayoutStopper extends RCObject
+  {
+    private PointCloud _pointCloud;
+    private final int _totalSteps;
+    private java.util.ArrayList<String> _tilesToStop = new java.util.ArrayList<String>();
+
+    private int _stepsDone;
+
+    public void dispose()
+    {
+
+    }
+
+    public TileLayoutStopper(PointCloud pointCloud, int totalSteps, java.util.ArrayList<String> tilesToStop)
+    {
+       _pointCloud = pointCloud;
+       _totalSteps = totalSteps;
+       _stepsDone = 0;
+      _tilesToStop = new java.util.ArrayList<String>(tilesToStop);
+    }
+
+
+    public final void stepDone()
+    {
+      _stepsDone++;
+      if (_stepsDone == _totalSteps)
+      {
+        _pointCloud.stopTiles(_tilesToStop);
+      }
+    }
+  }
+
+
+  private static class TileLayout extends RCObject
+  {
+    private PointCloud _pointCloud;
+
+    private final String _cloudName;
+    private final String _tileID;
+    private final String _tileQuadKey;
+    private TileLayoutStopper _stopper;
+
+    private boolean _isInitialized;
+
+    private IDownloader _downloader;
+    private long _layoutRequestID;
+
+    private boolean _canceled;
+
+    private java.util.ArrayList<String> _nodesIDs = new java.util.ArrayList<String>();
+
+    public void dispose()
+    {
+    //  ILogger::instance()->logInfo(" => Stop rendering tile " + _tileID + " (" + _tileQuadKey + ") for cloud \"" + _cloudName + "\"");
+      if (_stopper != null)
+      {
+        _stopper._release();
+      }
+    
+      super.dispose();
+    }
+
+    public TileLayout(PointCloud pointCloud, String cloudName, String tileID, String tileQuadKey, TileLayoutStopper stopper)
+    {
+       _pointCloud = pointCloud;
+       _cloudName = cloudName;
+       _tileID = tileID;
+       _tileQuadKey = tileQuadKey;
+       _stopper = stopper;
+       _isInitialized = false;
+       _downloader = null;
+       _layoutRequestID = -1;
+       _canceled = false;
+      //ILogger::instance()->logInfo(" => Start rendering tile " + _tileID + " (" + _tileQuadKey + ") for cloud \"" + _cloudName + "\"");
+      if (_stopper != null)
+      {
+        _stopper._retain();
+      }
+    }
+
+
+    public final boolean isInitialized()
+    {
+      return _isInitialized;
+    }
+
+    public final void initialize(G3MContext context, URL serverURL, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
+    {
+    
+    //  ILogger::instance()->logInfo("  => Initializing tile " + _tileID + " (" + _tileQuadKey + ") for cloud \"" + _cloudName + "\"");
+    
+      if (_downloader == null)
+      {
+        _downloader = context.getDownloader();
+      }
+      _layoutRequestID = _downloader.requestBuffer(new URL(serverURL, _cloudName + "/layout/" + _tileQuadKey), downloadPriority, timeToCache, readExpired, new TileLayoutBufferDownloadListener(this), true);
+    }
+
+    public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
+    {
+      if (!_canceled)
+      {
+        final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(buffer);
+        if (jsonBaseObject != null)
+        {
+          final JSONArray jsonArray = jsonBaseObject.asArray();
+          if (jsonArray != null)
+          {
+            //ILogger::instance()->logInfo("\"%s\" => %s", _tileQuadKey.c_str(), jsonArray->description().c_str());
+            //ILogger::instance()->logInfo("\"%s\"", _tileQuadKey.c_str());
+    
+            final int size = jsonArray.size();
+            for (int i = 0; i < size; i++)
+            {
+              final String nodeID = jsonArray.getAsString(i).value();
+              //ILogger::instance()->logInfo("  => %s", nodeID.c_str());
+              _pointCloud.createNode(nodeID);
+              _nodesIDs.add(nodeID);
+            }
+    
+            _isInitialized = true;
+          }
+          if (jsonBaseObject != null)
+             jsonBaseObject.dispose();
+        }
+      }
+    
+      if (buffer != null)
+         buffer.dispose();
+    
+      _layoutRequestID = -1;
+    
+      if (_stopper != null)
+      {
+        _stopper.stepDone();
+      }
+    }
+
+    public final void onError(URL url)
+    {
+      ILogger.instance().logError("Error downloading %s", url.getPath());
+      _layoutRequestID = -1;
+      if (_stopper != null)
+      {
+        _stopper.stepDone();
+      }
+    }
+
+    public final void onCancel(URL url)
+    {
+      _layoutRequestID = -1;
+      if (_stopper != null)
+      {
+        _stopper.stepDone();
+      }
+    }
+
+    public final void cancel()
+    {
+      _canceled = true;
+      if (_downloader != null && _layoutRequestID >= 0)
+      {
+        ILogger.instance().logInfo(" => Canceling initialization of tile " + _tileID + " (" + _tileQuadKey + ") for cloud \"" + _cloudName + "\"");
+        _downloader.cancelRequest(_layoutRequestID);
+      }
+    
+      final int size = _nodesIDs.size();
+      for (int i = 0; i < size; i++)
+      {
+        final String nodeID = _nodesIDs.get(i);
+        _pointCloud.removeNode(nodeID);
+      }
+    }
+
   }
 
 
@@ -129,9 +298,14 @@ public class PointCloudsRenderer extends DefaultRenderer
     private double _minHeight;
     private double _maxHeight;
 
+    private final java.util.ArrayList<Tile> _tilesStartedRendering = new java.util.ArrayList<Tile>();
+    private java.util.ArrayList<String> _tilesStoppedRendering = new java.util.ArrayList<String>();
     private java.util.HashMap<String, TileLayout> _visibleTiles = new java.util.HashMap<String, TileLayout>();
+    private boolean _visibleTilesNeedsInitialization;
+    private ITimer _initializationTimer;
 
     public PointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired)
+//    _visibleTilesNeedsInitialization(false),
     {
        _serverURL = serverURL;
        _cloudName = cloudName;
@@ -146,16 +320,19 @@ public class PointCloudsRenderer extends DefaultRenderer
        _sector = null;
        _minHeight = 0;
        _maxHeight = 0;
+       _initializationTimer = null;
     }
 
     public void dispose()
     {
       for (final java.util.Map.Entry<String, TileLayout> entry : _visibleTiles.entrySet()) {
         final TileLayout tileLayout = entry.getValue();
-        if (tileLayout != null) {
-          tileLayout.dispose();
-        }
+        tileLayout.cancel();
+        tileLayout._release();
       }
+    
+      if (_initializationTimer != null)
+         _initializationTimer.dispose();
     
       if (_sector != null)
          _sector.dispose();
@@ -245,10 +422,41 @@ public class PointCloudsRenderer extends DefaultRenderer
 
     public final void render(G3MRenderContext rc, GLState glState)
     {
+      if (_visibleTilesNeedsInitialization)
+      {
+        if (_initializationTimer == null)
+        {
+          _initializationTimer = rc.getFactory().createTimer();
+        }
+        else
+        {
+          _initializationTimer.start();
+        }
+    
+        _visibleTilesNeedsInitialization = false;
+        for (java.util.Iterator<String, TileLayout> it = _visibleTiles.iterator(); it.hasNext();)
+        {
+          TileLayout tileLayout = it.next().getValue();
+          if (!tileLayout.isInitialized())
+          {
+            tileLayout.initialize(rc, _serverURL, _downloadPriority, _timeToCache, _readExpired);
+            if (_initializationTimer.elapsedTimeInMilliseconds() > 20)
+            {
+              _visibleTilesNeedsInitialization = true; // force another initialization lap for the next frame
+              break;
+            }
+          }
+        }
+      }
+    
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DGD at work!
-    //  if (_visibleTilesDirty) {
-    //
+//#warning DGD at work: render nodes
+    
+    //  for (std::map<std::string, TileLayout*>::iterator it = _visibleTiles.begin();
+    //       it != _visibleTiles.end();
+    //       it++) {
+    //    TileLayout* tileLayout = it->second;
+    //    tileLayout->render(rc, glState);
     //  }
     }
 
@@ -267,13 +475,17 @@ public class PointCloudsRenderer extends DefaultRenderer
     
           if (tile._sector.touchesWith(_sector))
           {
-            final String tileID = tile._id;
-            if (_visibleTiles.containsKey(tileID))
-            {
-              throw new RuntimeException("Logic error");
-            }
-    
-            _visibleTiles.put(tileID, new PointCloudsRenderer.TileLayout(_cloudName, tileID, BingMapsLayer.getQuadKey(tile)));
+            _tilesStartedRendering.add(tile);
+    //        const std::string tileID = tile->_id;
+    //        if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
+    //          THROW_EXCEPTION("Logic error");
+    //        }
+    //
+    //        _visibleTiles[tileID] = new PointCloudsRenderer::TileLayout(this,
+    //                                                                    _cloudName,
+    //                                                                    tileID,
+    //                                                                    BingMapsLayer::getQuadKey(tile));
+    //        _visibleTilesNeedsInitialization = true;
           }
         }
     
@@ -281,17 +493,106 @@ public class PointCloudsRenderer extends DefaultRenderer
         for (int i = 0; i < tilesStoppedRenderingSize; i++)
         {
           final String tileID = tilesStoppedRendering.get(i);
-          if (_visibleTiles.containsKey(tileID))
+          _tilesStoppedRendering.add(tileID);
+    //      if (_visibleTiles.find(tileID) != _visibleTiles.end()) {
+    //        PointCloudsRenderer::TileLayout* tileLayout = _visibleTiles[tileID];
+    //        tileLayout->cancel();
+    //        tileLayout->_release();
+    //        _visibleTiles.erase(tileID);
+    //      }
+        }
+    
+        final int startedSize = _tilesStartedRendering.size();
+        final int stoppedSize = _tilesStoppedRendering.size();
+        final boolean anyStarted = startedSize > 0;
+        final boolean anyStopped = stoppedSize > 0;
+        if (anyStarted || anyStopped)
+        {
+          if (anyStarted)
           {
-            PointCloudsRenderer.TileLayout tileLayout = _visibleTiles.get(tileID);
-            if (tileLayout != null)
-               tileLayout.dispose();
-            _visibleTiles.remove(tileID);
+            if (anyStopped)
+            {
+              // wait initialization of started before proceeding with the stopped
+              // ILogger::instance()->logInfo("===> case 1: %d %d", startedSize, stoppedSize);
+    
+              TileLayoutStopper stopper = new TileLayoutStopper(this, startedSize, _tilesStoppedRendering);
+    
+              for (int i = 0; i < startedSize; i++)
+              {
+                final Tile tile = _tilesStartedRendering.get(i);
+                final String tileID = tile._id;
+                if (_visibleTiles.containsKey(tileID))
+                {
+                  throw new RuntimeException("Logic error");
+                }
+                _visibleTiles.put(tileID, new PointCloudsRenderer.TileLayout(this, _cloudName, tileID, BingMapsLayer.getQuadKey(tile), stopper));
+                _visibleTilesNeedsInitialization = true;
+              }
+    
+              stopper._release();
+            }
+            else
+            {
+              // just initialize the started
+              //ILogger::instance()->logInfo("===> case 2: %d %d", startedSize, stoppedSize);
+    
+              for (int i = 0; i < startedSize; i++)
+              {
+                final Tile tile = _tilesStartedRendering.get(i);
+                final String tileID = tile._id;
+                if (_visibleTiles.containsKey(tileID))
+                {
+                  throw new RuntimeException("Logic error");
+                }
+                _visibleTiles.put(tileID, new PointCloudsRenderer.TileLayout(this, _cloudName, tileID, BingMapsLayer.getQuadKey(tile), null));
+                _visibleTilesNeedsInitialization = true;
+              }
+            }
           }
+          else
+          {
+            // proceed with the stopped
+            // ILogger::instance()->logInfo("===> case 3: %d %d", startedSize, stoppedSize);
+            stopTiles(_tilesStoppedRendering);
+          }
+    
+          _tilesStartedRendering.clear();
+          _tilesStoppedRendering.clear();
         }
       }
     }
 
+    public final void createNode(String nodeID)
+    {
+      ILogger.instance().logInfo(" creating node: %s", nodeID);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DGD at work!
+    }
+    public final void removeNode(String nodeID)
+    {
+      ILogger.instance().logInfo(" removing node: %s", nodeID);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DGD at work!
+    }
+
+    public final void stopTiles(java.util.ArrayList<String> tilesToStop)
+    {
+    
+      final int tilesToStopSize = tilesToStop.size();
+      for (int i = 0; i < tilesToStopSize; i++)
+      {
+        final String tileID = tilesToStop.get(i);
+    
+        if (_visibleTiles.containsKey(tileID))
+        {
+          PointCloudsRenderer.TileLayout tileLayout = _visibleTiles.get(tileID);
+          tileLayout.cancel();
+          tileLayout._release();
+          _visibleTiles.remove(tileID);
+        }
+      }
+    
+    }
   }
 
 
