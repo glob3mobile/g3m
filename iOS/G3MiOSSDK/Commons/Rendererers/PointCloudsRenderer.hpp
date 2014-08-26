@@ -63,6 +63,8 @@ private:
   public:
     TileLayoutBufferDownloadListener(TileLayout* tileLayout);
 
+    ~TileLayoutBufferDownloadListener();
+
     void onDownload(const URL& url,
                     IByteBuffer* buffer,
                     bool expired);
@@ -79,6 +81,28 @@ private:
   };
 
 
+  class TileLayoutStopper : public RCObject {
+  private:
+    PointCloud* _pointCloud;
+    const int _totalSteps;
+    std::vector<std::string> _tilesToStop;
+
+    int _stepsDone;
+
+    ~TileLayoutStopper() {
+      
+    }
+
+  public:
+    TileLayoutStopper(PointCloud* pointCloud,
+                      int totalSteps,
+                      const std::vector<std::string>& tilesToStop);
+
+
+    void stepDone();
+  };
+
+
   class TileLayout : public RCObject {
   private:
     PointCloud* _pointCloud;
@@ -86,6 +110,7 @@ private:
     const std::string _cloudName;
     const std::string _tileID;
     const std::string _tileQuadKey;
+    TileLayoutStopper* _stopper;
 
     bool _isInitialized;
 
@@ -103,7 +128,8 @@ private:
     TileLayout(PointCloud* pointCloud,
                const std::string& cloudName,
                const std::string& tileID,
-               const std::string& tileQuadKey);
+               const std::string& tileQuadKey,
+               TileLayoutStopper* stopper);
 
 
     bool isInitialized() const {
@@ -158,6 +184,8 @@ private:
     double _minHeight;
     double _maxHeight;
 
+    std::vector<const Tile*> _tilesStartedRendering;
+    std::vector<std::string> _tilesStoppedRendering;
     std::map<std::string, TileLayout*> _visibleTiles;
     bool _visibleTilesNeedsInitialization;
     ITimer* _initializationTimer;
@@ -181,7 +209,7 @@ private:
     _sector(NULL),
     _minHeight(0),
     _maxHeight(0),
-    _visibleTilesNeedsInitialization(false),
+//    _visibleTilesNeedsInitialization(false),
     _initializationTimer(NULL)
     {
     }
@@ -205,6 +233,7 @@ private:
     void createNode(const std::string& nodeID);
     void removeNode(const std::string& nodeID);
 
+    void stopTiles(const std::vector<std::string>& tilesToStop);
   };
 
 
