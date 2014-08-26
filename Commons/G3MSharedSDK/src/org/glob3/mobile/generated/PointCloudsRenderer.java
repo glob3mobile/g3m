@@ -434,7 +434,14 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
     
         _visibleTilesNeedsInitialization = false;
-          for (final TileLayout tileLayout : _visibleTiles.values()) {
+    ///#ifdef C_CODE
+        for (java.util.Iterator<String, TileLayout> it = _visibleTiles.iterator(); it.hasNext();)
+        {
+          TileLayout tileLayout = it.next().getValue();
+    ///#endif
+    ///#ifdef JAVA_CODE
+    //      for (final TileLayout tileLayout : _visibleTiles.values()) {
+    ///#endif
           if (!tileLayout.isInitialized())
           {
             tileLayout.initialize(rc, _serverURL, _downloadPriority, _timeToCache, _readExpired);
@@ -446,6 +453,17 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
       }
+    
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DGD at work: render nodes
+    
+    //  for (std::map<std::string, TileLayout*>::iterator it = _visibleTiles.begin();
+    //       it != _visibleTiles.end();
+    //       it++) {
+    //    TileLayout* tileLayout = it->second;
+    //    tileLayout->render(rc, glState);
+    //  }
+    }
 
     public final void changedTilesRendering(java.util.ArrayList<Tile> tilesStartedRendering, java.util.ArrayList<String> tilesStoppedRendering)
     {
@@ -728,14 +746,4 @@ public class PointCloudsRenderer extends DefaultRenderer
     return _tileRenderingListener;
   }
 
-}
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DGD at work: render nodes
-
-//  for (std::map<std::string, TileLayout*>::iterator it = _visibleTiles.begin();
-//       it != _visibleTiles.end();
-//       it++) {
-//    TileLayout* tileLayout = it->second;
-//    tileLayout->render(rc, glState);
-//  }
 }
