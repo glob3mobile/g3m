@@ -423,15 +423,11 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
     }
 
     _visibleTilesNeedsInitialization = false;
-//#ifdef C_CODE
+#ifdef C_CODE
     for (std::map<std::string, TileLayout*>::iterator it = _visibleTiles.begin();
          it != _visibleTiles.end();
          it++) {
       TileLayout* tileLayout = it->second;
-//#endif
-//#ifdef JAVA_CODE
-//      for (final TileLayout tileLayout : _visibleTiles.values()) {
-//#endif
       if (!tileLayout->isInitialized()) {
         tileLayout->initialize(rc, _serverURL, _downloadPriority, _timeToCache, _readExpired);
         if (_initializationTimer->elapsedTimeInMilliseconds() > 20) {
@@ -440,6 +436,18 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
         }
       }
     }
+#endif
+#ifdef JAVA_CODE
+    for (final TileLayout tileLayout : _visibleTiles.values()) {
+      if (!tileLayout.isInitialized()) {
+        tileLayout.initialize(rc, _serverURL, _downloadPriority, _timeToCache, _readExpired);
+        if (_initializationTimer.elapsedTimeInMilliseconds() > 20) {
+          _visibleTilesNeedsInitialization = true; // force another initialization lap for the next frame
+          break;
+        }
+      }
+    }
+#endif
   }
 
 #warning DGD at work: render nodes
