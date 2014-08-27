@@ -8,6 +8,8 @@
 
 #include "Plane.hpp"
 
+#include "Vector2D.hpp"
+
 Plane Plane::transformedByTranspose(const MutableMatrix44D& M) const {
   //int TODO_Multiplication_with_Matrix;
 
@@ -173,5 +175,48 @@ Angle Plane::vectorRotationForAxis(const Vector3D& vector, const Vector3D& axis)
 
   return Angle::fromRadians(solution);
 
+}
+
+Vector2D Plane::rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& point) const{
+  
+  IMathUtils* mu = IMathUtils::instance();
+  double a = _normal._x;
+  double b = _normal._y;
+  double c = _normal._z;
+  double xb = point._x;
+  double yb = point._y;
+  double zb = point._z;
+  double A = a*xb + b*yb;
+  double B = b*xb - a*yb;
+  double C = c*zb;
+  
+  Vector2D sol = mu->solveSecondDegreeEquation(A*A + B*B, 2*B*C, C*C - A*A); //A, B, C
+  if (sol.isNan()){
+    return Vector2D::nan();
+  }
+  
+//  double angle1 = mu->asin(sol._x);
+//  double angle2 = mu->asin(sol._y);
+  
+  
+  
+//  double ap = A*A + B*B;
+//  double bp = 2*B*C;
+//  double cp = C*C - A*A;
+//  double root = bp*bp - 4*ap*cp;
+//  if (root<0) return Angle::nan();
+  
+//  double squareRoot = mu->sqrt(root);
+  double sinTita1 = sol._x;
+  double sinTita2 = sol._y;
+  double cosTita1 = - (C + B*sinTita1) / A;
+  double cosTita2 = - (C + B*sinTita2) / A;
+  double angle1 = mu->atan2(sinTita1, cosTita1);// / 3.14159 * 180;
+  double angle2 = mu->atan2(sinTita2, cosTita2);// / 3.14159 * 180;
+  
+  
+  return Vector2D(angle1, angle2);
+  
+  
 }
 

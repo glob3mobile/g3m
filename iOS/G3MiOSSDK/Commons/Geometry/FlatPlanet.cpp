@@ -185,7 +185,7 @@ void FlatPlanet::beginDoubleDrag(const Vector3D& origin,
  SOBRE EL DRAGGED INITIAL POINT, QUE AHORA SOLO ES TRASLACION, PERO LUEGO SERA UNA MATRIZ
  DE CAMBIO DE SISTEMA
  *****/
-MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
+/*MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
                                         const Vector3D& finalRay1,
                                         bool allowRotation) const
 {
@@ -276,6 +276,94 @@ MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
   
   return matrix;
 }
+*/
+
+//JM VERSION: JUST TO CLARIFY A FEW THINGS
+MutableMatrix44D FlatPlanet::doubleDrag(const Vector3D& finalRay0,
+                                        const Vector3D& finalRay1,
+                                        bool allowRotation) const
+{
+  // test if initialPoints are valid
+  if (_initialPoint0.isNan() || _initialPoint1.isNan())
+    return MutableMatrix44D::invalid();
+  
+  // init params
+  const IMathUtils* mu = IMathUtils::instance();
+  const Vector3D origin = _origin.asVector3D();
+  MutableVector3D positionCamera = _origin;
+  
+  // compute final points
+  Vector3D finalPoint0 = Plane::intersectionXYPlaneWithRay(origin, finalRay0, _dragHeight0); //A1
+  if (finalPoint0.isNan()) return MutableMatrix44D::invalid();
+  
+  // drag initial point 0 to final point 0
+  MutableMatrix44D matrix = MutableMatrix44D::createTranslationMatrix(_initialPoint0.sub(finalPoint0));
+  
+  // transform points to set axis origin in initialPoint0
+  // (en el mundo plano es solo una traslacion)
+  // (en el esférico será un cambio de sistema de referencia: traslacion + rotacion, usando el sistema local normal en ese punto)
+  {
+    
+    Vector3D draggedCameraPos = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+    Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(draggedCameraPos, finalRay1.transformedBy(matrix,0), _dragHeight1); //B1
+    
+    //Taking whole system to origin
+    MutableMatrix44D traslation = MutableMatrix44D::createTranslationMatrix(_initialPoint0.times(-1).asVector3D());
+    Vector3D transformedInitialPoint1 = _initialPoint1.transformedBy(traslation, 1.0).asVector3D();
+    Vector3D transformedFinalPoint1 = finalPoint1.transformedBy(traslation, 1.0);
+    Vector3D transformedCameraPos = draggedCameraPos.transformedBy(traslation, 1.0);
+    Vector3D v0 = transformedFinalPoint1.sub(transformedCameraPos);
+
+    //Angles to rotate transformedInitialPoint1 to adjust the plane that contains origin, TFP1 and TCP
+    Vector3D planeNormal = transformedCameraPos.cross(v0).normalized();
+    
+    Plane plane(planeNormal, v0);
+    Vector2D angles = plane.rotationAngleAroundZAxisToFixPointInRadians(transformedInitialPoint1);
+    
+    //Selecting best angle to rotate (smallest)
+    double angulo1 = TO_DEGREES(angles._x);
+    double angulo2 = TO_DEGREES(angles._y);
+    
+    double dif1 = mu->abs(angulo1-_lastDoubleDragAngle);
+    if (dif1 > 180) dif1 = 360 - dif1;
+    double dif2 = mu->abs(angulo2-_lastDoubleDragAngle);
+    if (dif2 > 180) dif2 = 360 - dif2;
+    _lastDoubleDragAngle = (dif1 < dif2)? angulo1 : angulo2;
+    
+    Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
+    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(-_lastDoubleDragAngle),
+                                                                              normal0, _initialPoint0.asVector3D());
+    matrix = rotation.multiply(matrix);
+    
+  }
+  
+  // zoom camera (see chuleta en pdf)
+  // ahora mismo lo que se hace es buscar cuánto acercar para que el angulo de las dos parejas de vectores
+  // sea el mismo
+  {
+    Vector3D P0   = positionCamera.transformedBy(matrix, 1.0).asVector3D();
+    Vector3D B    = _initialPoint1.asVector3D();
+    Vector3D B0   = B.sub(P0);
+    Vector3D Ra   = finalRay0.transformedBy(matrix, 0.0).normalized();
+    Vector3D Rb   = finalRay1.transformedBy(matrix, 0.0).normalized();
+    double b      = -2 * (B0.dot(Ra));
+    double c      = B0.squaredLength();
+    double k      = Ra.dot(B0);
+    double RaRb2  = Ra.dot(Rb) * Ra.dot(Rb);
+    double at     = RaRb2 - 1;
+    double bt     = b*RaRb2 + 2*k;
+    double ct     = c*RaRb2 - k*k;
+    double root   = bt*bt - 4*at*ct;
+    if (root<0) return MutableMatrix44D::invalid();
+    double squareRoot = mu->sqrt(root);
+    double t = (-bt + squareRoot) / (2*at);
+    MutableMatrix44D zoom = MutableMatrix44D::createTranslationMatrix(Ra.times(t));
+    matrix = zoom.multiply(matrix);
+  }
+  
+  return matrix;
+}
+
 
 
 /*

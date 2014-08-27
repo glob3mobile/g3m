@@ -12,6 +12,7 @@
 #include <string>
 #include <cstdio>
 #include "ILogger.hpp"
+class Vector2D;
 
 #ifdef C_CODE
 
@@ -239,7 +240,8 @@ public:
 
     return fracPart * denominator;
   }
-
+  
+  Vector2D solveSecondDegreeEquation(double A, double B, double C) const;
 
 };
 

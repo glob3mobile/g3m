@@ -99,6 +99,8 @@ public:
   Vector3D getNormal() const{
     return _normal;
   }
+  
+  Vector2D rotationAngleAroundZAxisToFixPointInRadians(const Vector3D& point) const;
 
   
 };
