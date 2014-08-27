@@ -340,65 +340,18 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
     double squareRoot = mu->sqrt(root);
     double sinTita1 = (-bp + squareRoot) / (2*ap);
     double sinTita2 = (-bp - squareRoot) / (2*ap);
-    double cosTita1 = sqrt(1-sinTita1*sinTita1);
-    double cosTita2 = sqrt(1-sinTita2*sinTita2);
-    double eq1 = A*cosTita1 + B*sinTita1+C;
-    double eq2 = -A*cosTita1 + B*sinTita1+C;
-    double eq3 = A*cosTita2 + B*sinTita2+C;
-    double eq4 = -A*cosTita2 + B*sinTita2+C;
-    
-    // estimamos el angulo entre dedos para decidir cual de las 4 soluciones trigonométricas escoger
-    double fingerAngle;
-    {
-      Vector3D finalPoint1 = Plane::intersectionXYPlaneWithRay(origin, finalRay1, _dragHeight1);
-      Vector3D draggedCenterRay = _centerRay.asVector3D().transformedBy(matrix, 0.0);
-      Vector3D projectedV0 = finalPoint1.sub(finalPoint0).projectionInPlane(draggedCenterRay);
-      Vector3D projectedV1 = _initialPoint1.sub(_initialPoint0.asVector3D()).projectionInPlane(draggedCenterRay);
-      fingerAngle = projectedV0.angleBetween(projectedV1)._degrees;
-      double sign = projectedV0.cross(projectedV1).dot(draggedCenterRay);
-      if (sign<0) fingerAngle = -fingerAngle;
-    }
-    
-    printf ("cosTita1=%f cosTita2=%f    sinTita1=%f sinTita2=%f    eq1=%f eq2=%f eq3=%f eq4=%f\n",
-            cosTita1, cosTita2, sinTita1, sinTita2, eq1, eq2, eq3, eq4);
-    double angulo, angulo1, angulo2;
-    if (mu->abs(eq1)<mu->abs(eq2))
-      angulo1 = atan2(sinTita1, cosTita1);
-    else
-      angulo1 = atan2(sinTita1, -cosTita1);
-    if (mu->abs(eq3)<mu->abs(eq4))
-      angulo2 = atan2(sinTita2, cosTita2);
-    else
-      angulo2 = atan2(sinTita2, -cosTita2);
-    
-    if (fingerAngle > 45)
-      angulo = angulo1;
-    else if (fingerAngle < -45)
-      angulo = angulo2;
-    else
-      angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo1 : angulo2;
-    
-    
-    double halfPi = 3.14159/2;
-    double difAngles = mu->abs(angulo1+angulo2);
-    /*
-     if (difAngles > halfPi)
-     angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo1 : angulo2;
-     else
-     angulo = (mu->abs(eq1)<mu->abs(eq2))? angulo2 : angulo1;*/
-    
-    /* if (mu->abs(eq1)<mu->abs(eq2))
-     angulo = angulo1;
-     //angulo = (mu->abs(angulo1)<3.14159/4)? angulo1 : angulo2;
-     else
-     angulo = angulo2;
-     //angulo = (mu->abs(angulo2)<3.14159/4)? angulo2 : angulo1;*/
-    
-    printf ("    angulo1=%.2f  angulo2=%.2f  ANGULO FINAL = %.2f   fingersAngle=%.2f, difAngles=%.2f\n",
-            angulo1/3.14159*180, angulo2/3.14159*180, angulo/3.14159*180, fingerAngle, difAngles/3.14159*180);
-    
+    double cosTita1 = - (C + B*sinTita1) / A;
+    double cosTita2 = - (C + B*sinTita2) / A;
+    double angulo1 = atan2(sinTita1, cosTita1) / 3.14159 * 180;
+    double angulo2 = atan2(sinTita2, cosTita2) / 3.14159 * 180;
+    double dif1 = mu->abs(angulo1-_lastDoubleDragAngle);
+    if (dif1 > 180) dif1 = 360 - dif1;
+    double dif2 = mu->abs(angulo2-_lastDoubleDragAngle);
+    if (dif2 > 180) dif2 = 360 - dif2;
+    _lastDoubleDragAngle = (dif1 < dif2)? angulo1 : angulo2;
     Vector3D normal0 = geodeticSurfaceNormal(_initialPoint0);
-    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromRadians(-angulo), normal0, _initialPoint0.asVector3D());
+    MutableMatrix44D rotation = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(-_lastDoubleDragAngle),
+                                                                              normal0, _initialPoint0.asVector3D());
     matrix = rotation.multiply(matrix);
   }
   

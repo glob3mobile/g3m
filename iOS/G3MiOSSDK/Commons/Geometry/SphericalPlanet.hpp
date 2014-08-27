@@ -42,6 +42,7 @@ private:
   mutable double          _dragHeight0;
   mutable double          _dragHeight1;
   mutable double          _distanceBetweenInitialPoints;
+  mutable double          _lastDoubleDragAngle;
 
   
 
