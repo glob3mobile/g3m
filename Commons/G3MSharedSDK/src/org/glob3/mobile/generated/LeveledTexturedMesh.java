@@ -177,9 +177,7 @@ public class LeveledTexturedMesh extends Mesh
     LazyTextureMapping mapping = getCurrentTextureMapping();
     if (mapping == null)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning uncomment
-      //ILogger::instance()->logError("LeveledTexturedMesh: No Texture Mapping");
+      ILogger.instance().logError("LeveledTexturedMesh: No Texture Mapping");
       _mesh.render(rc, parentGLState);
     }
     else

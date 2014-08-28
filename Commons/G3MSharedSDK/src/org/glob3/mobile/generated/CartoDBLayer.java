@@ -68,7 +68,7 @@ public class CartoDBLayer extends MercatorTiledLayer
   }
   public CartoDBLayer(String userName, String table, TimeInterval timeToCache, boolean readExpired, float transparency, boolean isTransparent, LayerCondition condition, String disclaimerInfo)
   {
-     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), 2, 17, isTransparent, transparency, condition, disclaimerInfo);
+     super("http://", "tiles.cartocdn.com/" + userName + "/tiles/" + table, getSubdomains(), "png", timeToCache, readExpired, 2, 17, isTransparent, transparency, condition, disclaimerInfo);
      _userName = userName;
      _table = table;
   }

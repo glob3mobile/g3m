@@ -74,7 +74,7 @@ public class DefaultTileTexturizer extends TileTexturizer
   }
 
   public final Mesh texturize(G3MRenderContext rc, TileTessellator tessellator, LayerTilesRenderParameters layerTilesRenderParameters, LayerSet layerSet, boolean forceFullRender, long tileDownloadPriority, Tile tile, Mesh tessellatorMesh, Mesh previousMesh, boolean logTilesPetitions)
-  //                                       TileRasterizer* tileRasterizer,
+                                         //                                       TileRasterizer* tileRasterizer,
   {
     DTT_TileTextureBuilderHolder builderHolder = (DTT_TileTextureBuilderHolder) tile.getTexturizerData();
   

@@ -40,7 +40,7 @@ public class MapQuestLayer extends MercatorTiledLayer
   }
   private MapQuestLayer(String domain, java.util.ArrayList<String> subdomains, int initialLevel, int maxLevel, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, String disclaimerInfo) // isTransparent
   {
-     super("http://", domain, subdomains, "jpg", timeToCache, readExpired, Sector.fullSphere(), initialLevel, maxLevel, false, transparency, condition, disclaimerInfo);
+     super("http://", domain, subdomains, "jpg", timeToCache, readExpired, initialLevel, maxLevel, false, transparency, condition, disclaimerInfo);
   }
 
 

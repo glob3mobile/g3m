@@ -24,6 +24,7 @@ public class URLTemplateLayer extends RasterLayer
 {
   private final String _urlTemplate;
   private final boolean _isTransparent;
+  private final boolean _tiled;
 
   private IMathUtils   _mu;
   private IStringUtils _su;
@@ -110,21 +111,13 @@ public class URLTemplateLayer extends RasterLayer
     {
       return null;
     }
-    else if (_dataSector.fullContains(requestedImageSector) && (tile == tileP))
+  
+    if (tile == tileP && (_dataSector.fullContains(requestedImageSector) || _tiled))
     {
-      //Most common case tile of suitable level being fully coveraged by layer
       return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.fullCoverageTransparent(_transparency) : TileImageContribution.fullCoverageOpaque());
     }
-    else
-    {
-      final Sector contributionSector = _dataSector.intersection(requestedImageSector);
-      if (contributionSector.hasNoArea())
-      {
-        return null;
-      }
   
-      return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(contributionSector, _transparency) : TileImageContribution.partialCoverageOpaque(contributionSector));
-    }
+    return ((_isTransparent || (_transparency < 1)) ? TileImageContribution.partialCoverageTransparent(requestedImageSector, _transparency) : TileImageContribution.partialCoverageOpaque(requestedImageSector));
   }
 
   protected final URL createURL(Tile tile)
@@ -231,6 +224,7 @@ public class URLTemplateLayer extends RasterLayer
      _isTransparent = isTransparent;
      _su = null;
      _mu = null;
+     _tiled = true;
   }
 
   public final String description()

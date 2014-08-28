@@ -182,20 +182,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     private FrameTasksExecutor _frameTasksExecutor;
 
-    private RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
-    {
-      if (wholeSector.isNan() || innerSector.isNan() || wholeSector.isEquals(innerSector))
-      {
-        return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
-      }
-    
-      final double widthFactor = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
-      final double heightFactor = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
-    
-      final Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
-    
-      return new RectangleF((float)(lowerUV._x * wholeSectorWidth), (float)(lowerUV._y * wholeSectorHeight), (float)(widthFactor * wholeSectorWidth), (float)(heightFactor * wholeSectorHeight));
-    }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//    RectangleF getInnerRectangle(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector);
 
     private final Sector _tileSector ;
 
@@ -284,34 +272,50 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     
       canvas.initialize(_width, _height);
     
-      String imageId = "";
+      IStringBuilder imageId = IStringBuilder.newStringBuilder();
     
       for (int i = 0; i < _contributionsSize; i++)
       {
         final ChildResult result = _results.get(i);
-        imageId += result._imageId + "|";
+    
+    
+        imageId.addString(result._imageId);
+        imageId.addString("|");
     
         final IImage image = result._image;
+    
         final float alpha = result._contribution._alpha;
-        final Sector imageSector = result._contribution.getSector();
     
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning Question: I (vtp) think it is ! necessary to do this check: I think it is ! necessary to do this check inside the "if clause": imageSector->isNan()
-    
-        if (result._contribution.isFullCoverageAndOpaque())
+        if (result._contribution.isFullCoverage())
         {
-          canvas.drawImage(image, 0, 0);
+          if (result._contribution.isOpaque())
+          {
+            canvas.drawImage(image, 0, 0, _width, _height);
+          }
+          else
+          {
+            imageId.addFloat(alpha);
+            imageId.addString("|");
+    
+            canvas.drawImage(image, 0, 0, _width, _height, alpha);
+          }
         }
         else
         {
+          final Sector imageSector = result._contribution.getSector();
           final Sector visibleContributionSector = imageSector.intersection(_tileSector);
-          imageId += "_" + visibleContributionSector.description();
     
-          final RectangleF srcRect = getInnerRectangle(_width, _height, imageSector, visibleContributionSector);
+          imageId.addString(visibleContributionSector.id());
+          imageId.addString("|");
     
-          final RectangleF destRect = getInnerRectangle(_width, _height, _tileSector, visibleContributionSector);
-          //We add "destRect->description()" to "imageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
-          imageId += "_" + destRect.description();
+          final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector);
+    
+          final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(_width, _height, _tileSector, visibleContributionSector);
+    
+          //We add "destRect->id()" to "imageId" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
+    
+          imageId.addString(destRect.id());
+          imageId.addString("|");
     
           canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, destRect._x, destRect._y, destRect._width, destRect._height, alpha);
                             //SRC RECT
@@ -323,7 +327,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
              srcRect.dispose();
         }
       }
-      _imageId = imageId;
+      _imageId = imageId.getString();
+    
+      if (imageId != null)
+         imageId.dispose();
     
       canvas.createImage(new ComposerImageListener(this), true);
     

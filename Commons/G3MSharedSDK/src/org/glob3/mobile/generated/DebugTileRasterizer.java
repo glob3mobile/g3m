@@ -112,7 +112,7 @@ public class DebugTileRasterizer extends CanvasTileRasterizer
   
     canvas.removeShadow();
   
-    canvas.drawImage(image, 0.f, 0.f);
+    canvas.drawImage(image, 0.f, 0.f, image.getWidth(), image.getHeight());
   
     if (_showTileBounds)
     {

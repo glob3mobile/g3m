@@ -62,7 +62,7 @@ public class OSMLayer extends MercatorTiledLayer
   }
   public OSMLayer(TimeInterval timeToCache, boolean readExpired, int initialLevel, float transparency, LayerCondition condition, String disclaimerInfo) // isTransparent
   {
-     super("http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, readExpired, Sector.fullSphere(), initialLevel, 18, false, transparency, condition, disclaimerInfo);
+     super("http://", "tile.openstreetmap.org", getSubdomains(), "png", timeToCache, readExpired, initialLevel, 18, false, transparency, condition, disclaimerInfo);
   }
 
   public final String description()

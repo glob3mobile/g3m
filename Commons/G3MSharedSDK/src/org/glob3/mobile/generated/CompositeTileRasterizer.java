@@ -89,7 +89,7 @@ public class CompositeTileRasterizer extends CanvasTileRasterizer implements Cha
   
       ICanvas canvas = getCanvas(width, height);
   
-      canvas.drawImage(image, 0, 0);
+      canvas.drawImage(image, 0, 0, width, height);
   
       canvas.createImage(new CompositeTileRasterizer_ChildImageListener(0, _children, trc, listener, autodeleteListener), true);
     }

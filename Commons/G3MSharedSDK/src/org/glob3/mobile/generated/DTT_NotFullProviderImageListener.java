@@ -24,7 +24,6 @@ public class DTT_NotFullProviderImageListener extends IImageListener
 
   public final void imageCreated(IImage image)
   {
-    ILogger.instance().logInfo("Image %s", image.description());
     _builder.imageCreated(image, _imageId, _contribution);
   }
 }
